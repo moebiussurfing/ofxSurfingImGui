@@ -11,7 +11,7 @@ ofxSurfingImGui
 ### Screenshots
 
 ![image](/docs/1_Widgets.jpg?raw=true "image")  
-![image](/docs/2_Layout.PNG?raw=true "image")  
+![image](/docs/2_Layouts.PNG?raw=true "image")  
 
 ### 1_Widgets
 * Layout example, full/half width buttons, range sliders and DearWidgets. 
