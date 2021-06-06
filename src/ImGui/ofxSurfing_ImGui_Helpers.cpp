@@ -1102,35 +1102,35 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values
 	return result;
 }
 
-////--------------------------------------------------------------
-//void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
-//{
-//	ofxSurfing::AddImage(hasTexture.getTexture(), size);
-//}
-//
-////--------------------------------------------------------------
-//void ofxSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
-//{
-//	ImTextureID textureID = GetImTextureID2(texture);
-//	ImGui::Image(textureID, size);
-//}
-//
-//#if OF_VERSION_MINOR >= 10
-//
-////--------------------------------------------------------------
-//void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
-//{
-//	ofxSurfing::AddImage(hasTexture.getTexture(), size);
-//}
-//
-////--------------------------------------------------------------
-//void ofxSurfing::AddImage(const ofTexture& texture, const glm::vec2& size)
-//{
-//	ImTextureID textureID = GetImTextureID2(texture);
-//	ImGui::Image(textureID, size);
-//}
-//
-//#endif
+//--------------------------------------------------------------
+void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
+{
+	ofxSurfing::AddImage(hasTexture.getTexture(), size);
+}
+
+//--------------------------------------------------------------
+void ofxSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
+{
+	ImTextureID textureID = GetImTextureID2(texture);
+	ImGui::Image(textureID, size);
+}
+
+#if OF_VERSION_MINOR >= 10
+
+//--------------------------------------------------------------
+void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
+{
+	ofxSurfing::AddImage(hasTexture.getTexture(), size);
+}
+
+//--------------------------------------------------------------
+void ofxSurfing::AddImage(const ofTexture& texture, const glm::vec2& size)
+{
+	ImTextureID textureID = GetImTextureID2(texture);
+	ImGui::Image(textureID, size);
+}
+
+#endif
 
 static auto vector_getter = [](void* vec, int idx, const char** out_text)
 {

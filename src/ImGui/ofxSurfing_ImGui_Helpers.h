@@ -70,7 +70,7 @@ namespace ofxSurfing
 	//void EndTree(Settings& settings);
 
 	//void AddGroup(ofParameterGroup& group, Settings& settings);
-	
+
 	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);
 
 	//NEW: add flags and clean all the old settings
@@ -133,31 +133,31 @@ namespace ofxSurfing
 	template<typename DataType>
 	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue);
 
-	//	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size);
-	//	void AddImage(const ofTexture& texture, const ofVec2f& size);
-	//#if OF_VERSION_MINOR >= 10
-	//    void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size);
-	//    void AddImage(const ofTexture& texture, const glm::vec2& size);
-	//#endif
+	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size);
+	void AddImage(const ofTexture& texture, const ofVec2f& size);
+#if OF_VERSION_MINOR >= 10
+	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size);
+	void AddImage(const ofTexture& texture, const glm::vec2& size);
+#endif
 }
 
-//static ImTextureID GetImTextureID2(const ofTexture& texture)
-//{
-//    return (ImTextureID)(uintptr_t)texture.texData.textureID;
-//}
-//
-//static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
-//{
-//    
-//    return GetImTextureID2(hasTexture.getTexture());
-//}
-//
-//static ImTextureID GetImTextureID2(GLuint glID)
-//{
-//    
-//    return (ImTextureID)(uintptr_t)glID;
-//
-//}
+static ImTextureID GetImTextureID2(const ofTexture& texture)
+{
+	return (ImTextureID)(uintptr_t)texture.texData.textureID;
+}
+
+static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
+{
+
+	return GetImTextureID2(hasTexture.getTexture());
+}
+
+static ImTextureID GetImTextureID2(GLuint glID)
+{
+
+	return (ImTextureID)(uintptr_t)glID;
+
+}
 
 //--------------------------------------------------------------
 template<typename ParameterType>
