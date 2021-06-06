@@ -5,7 +5,24 @@
 #include "imconfig.h"
 #define M_PI 3.14159265358979323846264338327950288
 
+//TODO:
+//WIP
 // to add more uncoming new widgets here
+
+//cute widgets !
+//https://github.com/soufianekhiat/DearWidgets
+
+//spin arrows widget
+//https://github.com/ocornut/imgui/issues/2649
+
+//spinners, loading bars 
+//https://github.com/ocornut/imgui/issues/1901#issuecomment-552185000
+//https://github.com/ocornut/imgui/issues/1901
+
+//Rotating text and icon demo for dear imgui 
+//https://gist.github.com/ice1000/865c7666d13b945628254aa00bd9d62d
+
+//-
 
 namespace ofxImGui
 {
@@ -175,33 +192,29 @@ namespace ofxImGui
 
 	//----
 
-			////TODO:
-		////snap engine
-		//auto snap = [=](float value, float snap_threshold) -> float {
-		//	float modulo = std::fmodf(value, snap_threshold);
-		//	float moduloRatio = std::fabsf(modulo) / snap_threshold;
-		//	if (moduloRatio < 0.5f)
-		//		value -= modulo;
-		//	else if (moduloRatio > (1.f - 0.5f))
-		//		value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
-		//	return value;
-		//};
-		////ImGui::Begin(name.data());
-		////if (ImGui::IsItemActive()) 
-		//{
-		//	auto p = ImGui::GetWindowPos();
-		//	auto size = ImGui::GetWindowSize();
+	////TODO:
+	////snap engine
+	//auto snap = [=](float value, float snap_threshold) -> float {
+	//	float modulo = std::fmodf(value, snap_threshold);
+	//	float moduloRatio = std::fabsf(modulo) / snap_threshold;
+	//	if (moduloRatio < 0.5f)
+	//		value -= modulo;
+	//	else if (moduloRatio > (1.f - 0.5f))
+	//		value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
+	//	return value;
+	//};
+	////ImGui::Begin(name.data());
+	////if (ImGui::IsItemActive()) 
+	//{
+	//	auto p = ImGui::GetWindowPos();
+	//	auto size = ImGui::GetWindowSize();
 
-		//	float x = snap(p.x, 16.f);
-		//	float y = snap(p.y, 16.f);
-		//	float sizex = snap(size.x, 16.f);
-		//	float sizey = snap(size.y, 16.f);
-		//	ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
-		//}
-
-
-
-
+	//	float x = snap(p.x, 16.f);
+	//	float y = snap(p.y, 16.f);
+	//	float sizex = snap(size.x, 16.f);
+	//	float sizey = snap(size.y, 16.f);
+	//	ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
+	//}
 };
 
 //-----
@@ -365,7 +378,6 @@ namespace ofxSurfingHelpers {
 	//	}
 	//	return false;
 	//}
-
 };
 
 //-----

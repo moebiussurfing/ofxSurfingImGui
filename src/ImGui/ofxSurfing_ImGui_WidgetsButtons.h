@@ -2,20 +2,8 @@
 
 #include "ofMain.h"
 
-//#define PANEL_WIDGETS_WIDTH 250
-//#define PANEL_WIDGETS_HEIGHT 100
-//#define BUTTON_BIG_HEIGHT 50
-//#define BUTTON_COLOR_SIZE 40
-//#define BUTTON_SLIM_HEIGHT2 20
-//#define COLOR_STRIP_COLOR_HEIGHT 15
-//#define WIDGETS_HEIGHT 50
-//
-//#define TEXT_INACTIVE_ALPHA 0.20f // for use on toggle buttons
-
-
 //links
 //https://github.com/nem0/LumixEngine/blob/timeline_gui/external/imgui/imgui_user.inl#L814
-
 
 //------------------------------
 //
@@ -124,8 +112,6 @@ namespace ofxSurfingHelpers {
 
 		//--
 
-	// button toggle
-
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
@@ -229,8 +215,6 @@ namespace ofxSurfingHelpers {
 		ImGuiStyle *style = &ImGui::GetStyle();
 
 		//--
-
-		// button toggle
 
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 
@@ -341,14 +325,13 @@ namespace ofxSurfingHelpers {
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 
 		//TODO:
-
 		ImGui::PushID(1);
-		//ImGui::SliderFloat(namename.c_str(), &parameter.get(), parameter.getMin(), parameter.getMax(), "ratio = %.3f");
-		//if (ImGui::SliderFloat(namename.c_str(), parameter.get(),  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
+		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), "ratio = %.3f"))
+		//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
 		{
 			ofLogNotice(__FUNCTION__) << name << ": BANG";
 
-			tmpRef = parameter.get();
+			//tmpRef = parameter.get();
 			parameter.set(tmpRef);
 
 			bChanged = true;
@@ -552,19 +535,6 @@ namespace ofxSurfingHelpers {
 	//}
 
 	//}
-
-	//cute widgets !
-	//https://github.com/soufianekhiat/DearWidgets
-
-	//spin arrows widget
-	//https://github.com/ocornut/imgui/issues/2649
-
-	//spinners, loading bars 
-	//https://github.com/ocornut/imgui/issues/1901#issuecomment-552185000
-	//https://github.com/ocornut/imgui/issues/1901
-
-	//Rotating text and icon demo for dear imgui 
-	//https://gist.github.com/ice1000/865c7666d13b945628254aa00bd9d62d
 
 
 	// rounded toggle buttons: bool & ofParameter<bool>

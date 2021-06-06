@@ -40,34 +40,42 @@ void ofApp::draw() {
 
 		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
 		{
-			float _spcx;
-			float _spcy;
-			float _w100;
-			float _h100;
-			float _w99;
-			float _w50;
-			float _w33;
-			float _w25;
-			float _h;
+			float _spcx; // space between widgets
+			float _spcy; // space between widgets
+			float _w100; // full width
+			float _h100; // full height
+			float _w99; // a bit less than full width
+			float _w50; // half width
+			float _w33; // third width
+			float _w25; // quarter width
+			float _h; // standard height
+
+			// a window but using my ofxSurfing_ImGui_LayoutManager.h class
 
 			bool bOpen1 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			guiManager.beginWindow("window 1", &bOpen1, window_flags);
 			{
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
+				// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
+				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-				if (ofxSurfingHelpers::AddBigButton(bEnable, _w100, _h)) {}
+				if (ofxSurfingHelpers::AddBigToggle(bEnable)) {}// this is full width (_w100) with standard height (_h)
+				if (ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h/2)) {} // same width but half height
 
+				// 50% with / two widgets same line/row
 				if (ofxSurfingHelpers::AddBigButton(bPrevious, _w50, _h)) {
+					lineWidth -= 0.1;
 					bPrevious = false;
 				}
 				ImGui::SameLine();
 				if (ofxSurfingHelpers::AddBigButton(bNext, _w50, _h)) {
+					lineWidth += 0.1;
 					bNext = false;
 				}
 
 				ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
 
+				// group parameter with customized tree/folder type
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
 				flags |= ImGuiTreeNodeFlags_DefaultOpen;
@@ -81,7 +89,7 @@ void ofApp::draw() {
 
 		// window 2
 
-		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
+		// using my own simpler helpers API: ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
 		{
 			bool bOpen2 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;

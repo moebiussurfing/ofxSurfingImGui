@@ -148,7 +148,9 @@ namespace ofxSurfing
 	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size);
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
-}
+
+}//namespace ofxSurfing
+
 
 static ImTextureID GetImTextureID2(const ofTexture& texture)
 {
@@ -164,6 +166,7 @@ static ImTextureID GetImTextureID2(GLuint glID)
 {
 	return (ImTextureID)(uintptr_t)glID;
 }
+
 
 //--------------------------------------------------------------
 template<typename ParameterType>
@@ -277,7 +280,5 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& value
 
 }
 
-//class
-
-//};
+//}; // class
 
