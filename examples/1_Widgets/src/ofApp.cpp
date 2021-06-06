@@ -4,7 +4,7 @@
 void ofApp::setup() {
 	ofSetFrameRate(25);
 
-	//guiManager.setup(gui); // can be instantiated out of the class, localy
+	//guiManager.setup(gui); // can be instantiated out of the class, locally
 	guiManager.setup();
 
 	// parameters

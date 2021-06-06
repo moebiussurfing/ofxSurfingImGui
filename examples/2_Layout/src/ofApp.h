@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfing_ImGuiBundle.h"
+#include "ofxSurfingImGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -10,7 +10,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void draw();
 
-		//ofxImGui::Gui gui; // can be instantiated outside the class
+		ofxImGui::Gui gui; // can be instantiated outside the class
 		ofxSurfing_ImGui_LayoutManager guiManager; // gui will be instatiated inside the class
 		void drawWidgets();
 

@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfing_ImGuiBundle.h"
-//#include "demo.h"
+#include "ofxSurfingImGui.h"
 
 using namespace ImWidgets;
 
