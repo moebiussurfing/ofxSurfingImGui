@@ -2,7 +2,7 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-**ofxSurfingImGui** is a helper add-on with _/Snippets/Helpers/LayoutManagement/Widgets_ to easy integrate **ImGui** into **openFrameworks**.
+**ofxSurfingImGui** is a helper add-on with _Snippets / Helpers / LayoutManagement / Widgets_ to easy integrate **ImGui** into **openFrameworks**.
 
 ## Features 
 * Requires the _awesome_ @**Daandelange**'s fork: 
