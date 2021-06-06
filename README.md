@@ -10,7 +10,7 @@ ofxSurfingImGui
 * **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 
-* IMPORTANT CHANGES vs ofxImGui
+### IMPORTANT CHANGES | ofxImGui
 	- Simplified **OF Helpers** to use **ofParameters** easy. 
 	- _ImHelpers.h_ rewritted to _ofxSurfing_ImGui_Helpers.h_. 
 	- Removed all the WindowOpen/Settings stuff.
