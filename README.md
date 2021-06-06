@@ -4,9 +4,12 @@ ofxSurfingImGui
 ## Overview
 **ofxSurfingImGui** is a helper add-on with _/Snippets/Helpers/LayoutManagement/Widgets_ to integrate **ImGui** into **openFrameworks**.
 
-## ImGui Widgets/Helpers
+## Features 
+* ImGui Widgets: big toggles and buttons, range sliders...etc.
+* Simplified OF Helpers to use ofParameters easy.
+* Layout Manager to speed up window creation and widgets fit-width sizes.
 
-### Screenshots
+## Screenshots
 
 ### 1_Widgets
 * Layout example, full/half width buttons, range sliders and DearWidgets.  
