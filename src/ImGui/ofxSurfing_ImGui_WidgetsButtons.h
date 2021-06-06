@@ -27,215 +27,6 @@
 
 namespace ofxSurfingHelpers {
 
-	//----------------------------------------
-	// snippets to include when using ofxImgui
-	//----------------------------------------
-
-	//--
-
-	// snippets
-
-	// basic layout
-	// copy paste all this to your ofApp
-	// or you can use ofxSurfing_ImGui_LayoutManager that bundles all this code
-	/*
-	//ofApp.h
-
-	//#include "ofxSurfing_ImGui.h"
-
-	void setup_ImGui();
-	void draw_ImGui();
-	ofxImGui::Gui gui;
-	ofxImGui::Settings mainSettings = ofxImGui::Settings();
-	ImFont* customFont = nullptr;
-	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> auto_resize{ "Auto Resize", true };
-	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
-	ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
-
-
-	//ofApp.cpp
-	void setup_ImGui();
-	void draw_ImGui();
-	//--------------------------------------------------------------
-	void ofApp::setup_ImGui()
-	{
-		ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
-		bool bAutoDraw = true;
-		bool bRestore = true;
-		bool bMouse = false;
-		gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
-
-		auto &io = ImGui::GetIO();
-		auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
-
-		//-
-
-		// font
-		std::string fontName;
-		float fontSizeParam;
-		fontName = "telegrama_render.otf"; //  WARNING: will crash if font not present!
-		fontSizeParam = 11;
-
-		//-
-
-		std::string _path = "assets/fonts/"; // assets folder
-		customFont = gui.addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
-		io.FontDefault = customFont;
-
-		// theme
-		ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
-		//ofxSurfingHelpers::ImGui_ThemeModernDark();
-	}
-
-	//--------------------------------------------------------------
-	void ofApp::draw_ImGui()
-	{
-		gui.begin();
-		{
-			//panels sizes
-			float xx = 10;
-			float yy = 10;
-			float ww = PANEL_WIDGETS_WIDTH;
-			float hh = PANEL_WIDGETS_HEIGHT;
-
-			//widgets sizes
-			float _spcx;
-			float _spcy;
-			float _w100;
-			float _h100;
-			float _w99;
-			float _w50;
-			float _w33;
-			float _w25;
-			float _h;
-			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-
-			static bool auto_resize = true;
-
-			ImGuiWindowFlags flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-
-			//flagsw |= ImGuiCond_FirstUseEver;
-			//if (auto_lockToBorder) flagsw |= ImGuiCond_Always;
-			//else flagsw |= ImGuiCond_FirstUseEver;
-			//ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsw);
-			//ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsw);
-
-			ImGui::PushFont(customFont);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
-			{
-				std::string n = "myPanelName";
-				if (ofxImGui::BeginWindow(n.c_str(), mainSettings, flagsw))
-				{
-					ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-
-					//ImGui::PushItemWidth(-100);
-					//ofxImGui::AddParameter(_param);
-					//ImGui::PopItemWidth();
-
-					//if (ImGui::Button("_Button", ImVec2(_w100, _h / 2))) {}
-					//ofxImGui::AddGroup(_group, mainSettings);
-					//ofxSurfingHelpers::AddBigToggle(_param, _w100, _h);
-
-					//ImGui::PushButtonRepeat(true);
-					//float __w = ofxSurfingHelpers::getImGui_WidgetWidth(w, 2);
-					//if (ImGui::Button("<", ImVec2(__w, _h))) {} ImGui::SameLine();
-					//if (ImGui::Button(">", ImVec2(__w, _h))) {}
-					//ImGui::PopButtonRepeat();
-
-					//ImGui::Dummy(ImVec2(0.0f, 2.0f));
-
-					//--
-
-					//mouse lockers
-					bLockMouseByImGui = false;
-					bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-					bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-					bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-
-					//ImGui::Dummy(ImVec2(0.0f, 2.0f));
-					//if (ImGui::CollapsingHeader("ADVANCED"))
-					//{
-					//	ofxImGui::AddParameter(auto_resize);
-					//	ofxImGui::AddParameter(bLockMouseByImGui);
-					//	//ofxImGui::AddParameter(auto_lockToBorder);
-					//}
-				ofxImGui::EndWindow(mainSettings);
-			}
-			ImGui::PopStyleVar();
-			ImGui::PopFont();
-		}
-		gui.end();
-
-		//gui.draw();
-	}
-	*/
-
-	//-----
-
-	//--
-
-	// 1. window, panels, and sub panels/trees
-
-	/*
-
-	// 1.1 window
-	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-	string name = "myWindow";
-	if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-	{
-		//..
-	}
-	ofxImGui::EndWindow(mainSettings);
-
-	//tree
-	if (ImGui::TreeNode("_Tree"))
-	{
-		//..
-		ImGui::TreePop();
-	}
-
-	// 1.2 collapsing panel
-	bool bOpen = false;
-	ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-	if (ImGui::CollapsingHeader("_Collapsing", _flagw))
-	{
-		//..
-	}
-
-	// 1.3 treeEx
-	bool bOpen = true;
-	ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-	_flagw |= ImGuiTreeNodeFlags_Framed;
-	if (ImGui::TreeNodeEx("_TreeEx", _flagw)) {
-		//..
-		ImGui::TreePop();
-	}
-	*/
-
-	//-----
-
-
-	//--------------------------------------------------------------
-	// helpers to assist layout widget sizes to fit panel width or height
-	// example: 
-	// declare size vars for typical sizes 100%, 50%, 33% ..etc
-	// pass external variables as references
-
-	// snippet to use inside ImGui window/tree adapting for his shape
-	/*
-	float _spcx;
-	float _spcy;
-	float _w100;
-	float _h100;
-	float _w99;
-	float _w50;
-	float _w33;
-	float _w25;
-	float _h;
-	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-	*/
-
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 	{
@@ -251,7 +42,7 @@ namespace ofxSurfingHelpers {
 	}
 
 	// example: 
-	// allows to make exact width of n widgets to fit panel size for two buttons:
+	// allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
 	//float __w = getImGui_WidgetWidth(__ww, 2);
 	//if (ImGui::Button("_Button", ImVec2(__w, _h))) {}
 	//--------------------------------------------------------------
@@ -277,18 +68,15 @@ namespace ofxSurfingHelpers {
 	//--------------------------------------------------------------
 	////https://github.com/ocornut/imgui/issues/1537
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<bool>& parameter, float w = 100, float h = 30)// button but using a bool not void param
+	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
 		bool bPre = tmpRef;
 
-		//if (w == -1)
-		//{
-		//	w = ImGui::GetWindowContentRegionWidth() * 0.9;
-		//	h = 70;
-		//}
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -316,16 +104,13 @@ namespace ofxSurfingHelpers {
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddSmallButton(ofParameter<bool>& parameter, float w = 50, float h = 20)// button but using a bool not void param
+	inline bool AddSmallButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		//if (w == -1)
-		//{
-		//	w = ImGui::GetWindowContentRegionWidth() * 0.85;
-		//	h = 70;
-		//}
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -363,20 +148,24 @@ namespace ofxSurfingHelpers {
 
 	// TODO: seems not working well linked to the param.. requires better unique name?
 	//--------------------------------------------------------------
-	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = 100, float h = 30, bool border = true)
+	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = true)
 	{
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
 
 		bool bPre = tmpRef;
 
-		//--
-
 		ImGuiStyle *style = &ImGui::GetStyle();
 
-		// button toggle
+		//--
+
+	// button toggle
+
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
 		// border to selected
+
 		const ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
 
 		float borderLineWidth = 1.0;
@@ -394,6 +183,16 @@ namespace ofxSurfingHelpers {
 				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 			}
 
+			// warning: in this case we need to use the name to became the toggle functional
+			// that means that we can mayube collide not unique names! 
+			string n = "#"+ name + ofToString(1);
+			ImGui::PushID(n.c_str());
+
+			//ImGui::PushID(name.c_str()); 
+			//ImGui::PushID(1);// fail
+			//ImGui::PushID(name.c_str(), 1); // fail
+			//ImGui::PushID(1, name.c_str()); // fail 
+
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
@@ -403,7 +202,6 @@ namespace ofxSurfingHelpers {
 			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover2);
 
-			ImGui::PushID(1);
 			ImGui::Button(name.c_str(), ImVec2(w, h));
 			if (ImGui::IsItemClicked(0))
 			{
@@ -411,9 +209,10 @@ namespace ofxSurfingHelpers {
 				tmpRef = _boolToggle;
 				parameter.set(tmpRef);
 			}
-			ImGui::PopID();
 
 			ImGui::PopStyleColor(3);
+
+			ImGui::PopID();
 
 			//-
 
@@ -425,14 +224,11 @@ namespace ofxSurfingHelpers {
 		}
 		else// disabled
 		{
-			ImGuiStyle *style = &ImGui::GetStyle();
-
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
-			colorTextDisabled = 
-				ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
+			colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
 				colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
@@ -464,6 +260,8 @@ namespace ofxSurfingHelpers {
 		string name = parameter.getName();
 
 		bool bPre = tmpRef;
+		
+		ImGuiStyle *style = &ImGui::GetStyle();
 
 		//--
 
@@ -471,8 +269,8 @@ namespace ofxSurfingHelpers {
 
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 
-		if (w == -1) w = ImGui::GetWindowWidth() - 20;
-		if (h == -1) h = 30;//TODO: get widget height
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
 		if (nameTrue == "-1") nameTrue = name;
 		if (nameFalse == "-1") nameFalse = name;
@@ -484,7 +282,6 @@ namespace ofxSurfingHelpers {
 		// enabled
 		if (_boolToggle == true)
 		{
-			ImGuiStyle *style = &ImGui::GetStyle();
 			const ImVec4 colorActive = style->Colors[ImGuiCol_Separator];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
@@ -509,7 +306,6 @@ namespace ofxSurfingHelpers {
 		// disabled
 		else
 		{
-			ImGuiStyle *style = &ImGui::GetStyle();
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -545,7 +341,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRefi = parameter.get();
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
-		
+
 		ImGui::PushID(1);
 		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 		{
@@ -560,8 +356,11 @@ namespace ofxSurfingHelpers {
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, float w = 100, float h = 30)// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+
 		bool bChanged = false;
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
@@ -571,7 +370,7 @@ namespace ofxSurfingHelpers {
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
-		
+
 		ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
@@ -624,7 +423,6 @@ namespace ofxSurfingHelpers {
 	//{
 	//	{
 	//		int _selected = -1;
-
 	//		//preset selector
 	//		//toggle button matrix
 	//		ImVec2 button_sz(40, 40);
@@ -663,7 +461,6 @@ namespace ofxSurfingHelpers {
 	//			if (n + 1 < _amtButtons && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
 	//			ImGui::PopID();
 	//		}
-
 	//		return _selected;
 	//	}
 	//}
@@ -1074,6 +871,7 @@ namespace ofxSurfingHelpers {
 
 
 //-----
+
 
 //TODO:
 //extra widgets
