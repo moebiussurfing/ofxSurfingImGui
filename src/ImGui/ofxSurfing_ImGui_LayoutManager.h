@@ -135,6 +135,7 @@ public:
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel() {
 		ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
 			ofxImGui::AddParameter(auto_resize);

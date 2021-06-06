@@ -431,7 +431,8 @@ namespace ofxSurfingHelpers {
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
-			colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
+			colorTextDisabled = 
+				ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
 				colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);

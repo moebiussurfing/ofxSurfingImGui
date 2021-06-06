@@ -2,14 +2,15 @@
 
 #include "ofxImGui.h"
 
+// TODO:
+// TESTING TOGGLE TYPES
+#include "ofxSurfing_ImGui_WidgetsTypes.h"
+
 /*
 
 	NOTE from moebiusSurfing:
-
 	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
-	
 	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
-	
 	- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
 
 */
@@ -28,6 +29,15 @@
 // namespace ofxImGui
 namespace ofxSurfing
 {
+	//// TODO:
+	//// TESTING TOGGLE TYPES
+	//class SurfingImGuiHelpers {
+	//public:
+	//	SurfingImGuiHelpers() {};
+	//	~SurfingImGuiHelpers() {};
+
+	//--
+
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
@@ -201,6 +211,13 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		return false;
 	}
 
+	//// TODO:
+	//// TESTING TOGGLE TYPES
+	//if (info == typeid(bool))
+	//{
+
+	//}
+
 	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 	return false;
 }
@@ -257,4 +274,10 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& value
 		}
 	}
 	return result;
+
 }
+
+//class
+
+//};
+

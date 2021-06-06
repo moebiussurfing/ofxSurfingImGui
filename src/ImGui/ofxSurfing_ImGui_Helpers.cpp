@@ -183,6 +183,7 @@
 ////	ImGui::TreePop();
 ////}
 
+//TODO: settings + flag
 //void ofxSurfing::AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags )
 
 //TODO:
