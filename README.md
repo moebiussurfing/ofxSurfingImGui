@@ -31,7 +31,6 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
-- **macOS High Sierra** / **Xcode 9/10** / **OF ~0.11**
 
 ## Author
 moebiusSurfing, 2020-2021. 
