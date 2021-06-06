@@ -5,9 +5,13 @@ ofxSurfingImGui
 **ofxSurfingImGui** is a helper add-on with _/Snippets/Helpers/LayoutManagement/Widgets_ to easy integrate **ImGui** into **openFrameworks**.
 
 ## Features 
-* ImGui Widgets: big toggles and buttons, range sliders...etc.
-* Simplified **OF Helpers** to use **ofParameters** easy.
-* **Layout Manager** to speed up **window creation** and widgets-fit-width sizes.
+* Based on the _awesome_ @**Daandelange**'s fork: easy to update to new ImGui version and multi context/instances.
+* **ImGui Widgets**: big toggles and buttons, range sliders...etc.
+* Simplified **OF Helpers** to use **ofParameters** easy. 
+* _ImHelpers.h_ > _ofxSurfing_ImGui_Helpers.h_.
+* Removed all old _GetUniqueName_ engine from **ofxImGui**.
+* **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
+* Dark theme.
 
 ## Screenshots
 
@@ -35,6 +39,10 @@ https://github.com/njazz/AutomationCurveEditor
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 
+## TODO
+* Finish adding of images/textures helpers.
+* Add more examples.
+
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
 
@@ -42,4 +50,4 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 moebiusSurfing, 2020-2021. 
 
 ## License
-*MIT License.*
+**MIT License**
