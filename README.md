@@ -21,7 +21,7 @@ ofxSurfingImGui
 * Speed up ImGui layouts with ofParameter helpers  
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test)
+[ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) from @**Daandelange**  
 
 #### USEFUL LINKS
 https://github.com/soufianekhiat/DearWidgets  
