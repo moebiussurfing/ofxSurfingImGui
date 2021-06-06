@@ -22,16 +22,14 @@ ofxSurfingImGui
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) from @**Daandelange**  
 
-#### USEFUL LINKS
+## USEFUL LINKS
 https://github.com/soufianekhiat/DearWidgets  
 https://github.com/yumataesu/ImGui_Widgets  
 https://github.com/njazz/AutomationCurveEditor  
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 
----------------
-
-## Tested systems
+## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
 
 ## Author
