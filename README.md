@@ -40,6 +40,7 @@ ofxSurfingImGui
 [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) from @**Daandelange**  
 
 ## Useful Links
+https://github.com/HankiDesign/awesome-dear-imgui  
 https://github.com/soufianekhiat/DearWidgets  
 https://github.com/yumataesu/ImGui_Widgets  
 https://github.com/njazz/AutomationCurveEditor  
