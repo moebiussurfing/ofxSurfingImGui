@@ -1,0 +1,137 @@
+#########################
+# general patterns
+#########################
+
+docs/html
+docs/tagfile.xml
+
+*/bin/*
+!*/bin/data/
+
+*.bat
+*.ps1
+
+# for bin folder in root
+/bin/*
+!/bin/data/
+
+*.XML
+*.xml
+*.JSON
+*.json
+
+[Bb]uild/
+[Oo]bj/
+*.o
+[Dd]ebug*/
+[Rr]elease*/
+*.mode*
+*.app/
+*.pyc
+.svn/
+
+#########################
+# IDE
+#########################
+
+# VS2017
+*.vcxproj
+*.vcxproj.*
+icon.rc
+*.vs
+*.vs/
+*.vs/*
+*.vs/
+*.sln
+*.filters
+*.user
+
+# XCode
+*.xcodeproj
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+#XCode 4
+xcuserdata
+*.xcworkspace
+*.xcodeproj/project.pbxproj
+*.xcodeproj/xcshareddata/xcschemes/
+
+# AppCode
+*.idea
+*.idea/
+*.idea/*
+*.idea/
+*/.idea/workspace.xml
+
+# Code::Blocks
+*.depend
+*.layout
+*.cbTemp
+
+# Visual Studio
+*.sdf
+*.opensdf
+*.suo
+*.pdb
+*.ilk
+*.aps
+ipch/
+
+# Eclipse
+.metadata
+local.properties
+.externalToolBuilders
+
+# Codelite
+*.session
+*.tags
+*.workspace.*
+
+#########################
+# operating system
+#########################
+
+# Linux
+*~
+# KDE
+.directory
+.AppleDouble
+
+# OSX
+.DS_Store
+*.swp
+*~.nib
+# Thumbnails
+._*
+
+# Windows
+# Windows image file caches
+Thumbs.db
+# Folder config file
+Desktop.ini
+
+#Android
+.csettings
+
+#########################
+# packages
+#########################
+
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
