@@ -2,6 +2,16 @@
 
 #include "ofxImGui.h"
 
+/*
+
+	NOTE from moebiusSurfing:
+	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
+		- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
+		- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
+
+*/
+
+
 //#include "ofGLBaseTypes.h"
 //#include "ofParameter.h"
 //#include "ofRectangle.h"
@@ -16,9 +26,8 @@
 // namespace ofxImGui
 namespace ofxSurfing
 {
-	//bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
-	//bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
-
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
+	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
 	//struct WindowOpen
 	//{
@@ -61,10 +70,11 @@ namespace ofxSurfing
 	//void EndTree(Settings& settings);
 
 	//void AddGroup(ofParameterGroup& group, Settings& settings);
+	
+	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);
 
 	//NEW: add flags and clean all the old settings
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags);
-	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -106,23 +116,23 @@ namespace ofxSurfing
 	bool AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed = 0.01f);
 #endif
 
-	//#if OF_VERSION_MINOR >= 10
-	//	bool AddValues(const std::string& name, std::vector<glm::ivec2>& values, int minValue = 0, int maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<glm::ivec3>& values, int minValue = 0, int maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<glm::ivec4>& values, int minValue = 0, int maxValue = 0);
-	//
-	//	bool AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue = 0, float maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue = 0, float maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue = 0, float maxValue = 0);
-	//#endif
-	//
-	//	bool AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue = 0, float maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue = 0, float maxValue = 0);
-	//	bool AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue = 0, float maxValue = 0);
-	//
-	//	template<typename DataType>
-	//	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue);
-	//
+#if OF_VERSION_MINOR >= 10
+	bool AddValues(const std::string& name, std::vector<glm::ivec2>& values, int minValue = 0, int maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<glm::ivec3>& values, int minValue = 0, int maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<glm::ivec4>& values, int minValue = 0, int maxValue = 0);
+
+	bool AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue = 0, float maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue = 0, float maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue = 0, float maxValue = 0);
+#endif
+
+	bool AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue = 0, float maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue = 0, float maxValue = 0);
+	bool AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue = 0, float maxValue = 0);
+
+	template<typename DataType>
+	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue);
+
 	//	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size);
 	//	void AddImage(const ofTexture& texture, const ofVec2f& size);
 	//#if OF_VERSION_MINOR >= 10
@@ -217,32 +227,38 @@ bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 	return true;
 }
 
-////--------------------------------------------------------------
-//template<typename DataType>
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
-//{
-//	auto result = false;
-//	const auto& info = typeid(DataType);
-//	for (int i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (info == typeid(float))
-//		{
-//			result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
-//		}
-//		else if (info == typeid(int))
-//		{
-//			result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
-//		}
-//		else if (info == typeid(bool))
-//		{
-//			result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
-//		}
-//		else
-//		{
-//			ofLogWarning("Gui::AddValues") << "Could not create GUI element for type " << info.name();
-//			return false;
-//		}
-//	}
-//	return result;
-//}
+//--------------------------------------------------------------
+template<typename DataType>
+bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
+{
+	auto result = false;
+	const auto& info = typeid(DataType);
+	for (int i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		if (info == typeid(float))
+		{
+			ImGui::PopID();
+			result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
+			ImGui::PopID();
+		}
+		else if (info == typeid(int))
+		{
+			ImGui::PopID();
+			result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
+			ImGui::PopID();
+		}
+		else if (info == typeid(bool))
+		{
+			ImGui::PopID();
+			result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
+			ImGui::PopID();
+		}
+		else
+		{
+			ofLogWarning(__FUNCTIONS__) << "Could not create GUI element for type " << info.name();
+			return false;
+		}
+	}
+	return result;
+}

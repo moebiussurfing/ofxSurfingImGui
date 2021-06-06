@@ -183,13 +183,20 @@
 ////	ImGui::TreePop();
 ////}
 
+//void ofxSurfing::AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags )
+
+//TODO:
+//not used but should we include to reuse old methods or bakcwards compatible ?
+//ofxSurfing::Settings settings = ofxSurfing::Settings();
+
+//TODO:
+// add customization for nested groups
+// pass some list of arguments to customize items/groups to be rendered with differents design...
+//https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
+
 //--------------------------------------------------------------
 void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
-//void ofxSurfing::AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags )
 {
-	//TODO:
-	//not used but for reuse old methods
-	//ofxSurfing::Settings settings = ofxSurfing::Settings();
 
 	//if (ImGui::CollapsingHeader(group.getName().c_str(), flags))
 	if (ImGui::TreeNodeEx(group.getName().c_str(), flags))
@@ -200,9 +207,10 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 			if (parameterGroup)
 			{
-				//TODO:
 				// Recurse through contents.
 				ofxSurfing::AddGroup(*parameterGroup, flags);
+
+				//TODO:
 				//ofxSurfing::AddGroup(*parameterGroup, settings, flags);
 				//ofxSurfing::AddGroup(*parameterGroup, settings);//we
 				continue;
@@ -838,14 +846,14 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& param
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	ImGui::PushID(1);
 	if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 	{
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	if (result)
 	{
 		parameterMin.set(tmpRefMin);
@@ -868,28 +876,28 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& param
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	ImGui::PushID(1);
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	ImGui::PushID(1);
 	if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 	{
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	ImGui::PushID(1);
 	if (ImGui::DragFloatRange2((name + " W").c_str(), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
 	{
 		result |= true;
 	}
 	ImGui::PopID();
-	
+
 	if (result)
 	{
 		parameterMin.set(tmpRefMin);
@@ -901,181 +909,199 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& param
 
 #endif
 
-//#if OF_VERSION_MINOR >= 10
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragInt2(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderInt2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragInt3(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderInt3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragInt4(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderInt4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat2(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat3(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat4(GetUniqueName(iname), glm::value_ptr(values[i]));
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-//#endif
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat2(GetUniqueName(iname), values[i].getPtr());
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat2(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat3(GetUniqueName(iname), values[i].getPtr());
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat3(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
-////--------------------------------------------------------------
-//bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
-//{
-//	auto result = false;
-//	for (size_t i = 0; i < values.size(); ++i)
-//	{
-//		const auto iname = name + " " + ofToString(i);
-//		if (minValue == 0 && maxValue == 0)
-//		{
-//			result |= ImGui::DragFloat4(GetUniqueName(iname), values[i].getPtr());
-//		}
-//		else
-//		{
-//			result |= ImGui::SliderFloat4(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
-//		}
-//	}
-//	return result;
-//}
-//
+#if OF_VERSION_MINOR >= 10
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragInt2(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderInt2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragInt3(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderInt3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragInt4(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderInt4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat2(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderFloat2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat3(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderFloat3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat4(iname.c_str(), glm::value_ptr(values[i]));
+		}
+		else
+		{
+			result |= ImGui::SliderFloat4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+#endif
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat2(iname.c_str(), values[i].getPtr());
+		}
+		else
+		{
+			result |= ImGui::SliderFloat2(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat3(iname.c_str(), values[i].getPtr());
+		}
+		else
+		{
+			result |= ImGui::SliderFloat3(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
+{
+	auto result = false;
+	for (size_t i = 0; i < values.size(); ++i)
+	{
+		const auto iname = name + " " + ofToString(i);
+		ImGui::PushID(1);
+		if (minValue == 0 && maxValue == 0)
+		{
+			result |= ImGui::DragFloat4(iname.c_str(), values[i].getPtr());
+		}
+		else
+		{
+			result |= ImGui::SliderFloat4(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+		}
+		ImGui::PopID();
+	}
+	return result;
+}
+
 ////--------------------------------------------------------------
 //void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 //{
@@ -1105,26 +1131,26 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& param
 //}
 //
 //#endif
-//
-//static auto vector_getter = [](void* vec, int idx, const char** out_text)
-//{
-//	auto& vector = *static_cast<std::vector<std::string>*>(vec);
-//	if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-//	*out_text = vector.at(idx).c_str();
-//	return true;
-//};
-//
-//bool ofxSurfing::VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
-//{
-//	if (values.empty()) { return false; }
-//	return ImGui::Combo(label, currIndex, vector_getter,
-//		static_cast<void*>(&values), values.size());
-//}
-//
-//bool ofxSurfing::VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
-//{
-//	if (values.empty()) { return false; }
-//	return ImGui::ListBox(label, currIndex, vector_getter,
-//		static_cast<void*>(&values), values.size());
-//}
+
+static auto vector_getter = [](void* vec, int idx, const char** out_text)
+{
+	auto& vector = *static_cast<std::vector<std::string>*>(vec);
+	if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+	*out_text = vector.at(idx).c_str();
+	return true;
+};
+
+bool ofxSurfing::VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
+{
+	if (values.empty()) { return false; }
+	return ImGui::Combo(label, currIndex, vector_getter,
+		static_cast<void*>(&values), values.size());
+}
+
+bool ofxSurfing::VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
+{
+	if (values.empty()) { return false; }
+	return ImGui::ListBox(label, currIndex, vector_getter,
+		static_cast<void*>(&values), values.size());
+}
 
