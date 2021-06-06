@@ -577,6 +577,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 {
 	auto tmpRef = parameter.get();
+
 	ImGui::PushID(1);
 	if (alpha)
 	{
@@ -593,14 +594,13 @@ bool ofxSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 		ImGui::PopID();
 		return true;
 	}
+	ImGui::PopID();
 	return false;
 }
 
 //--------------------------------------------------------------
 bool ofxSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 {
-	//auto tmpRef = parameter.get();
-
 	ofParameter<ofFloatColor> c;
 	c.set(parameter.getName(),
 		ofFloatColor(parameter.get().r / 255.f, parameter.get().g / 255.f, parameter.get().b / 255.f, parameter.get().a / 255.f),
@@ -626,6 +626,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 		ImGui::PopID();
 		return true;
 	}
+	ImGui::PopID();
 	return false;
 }
 
@@ -653,6 +654,7 @@ bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxCha
 	}
 	delete[] cString;
 	ImGui::PopID();
+
 	return result;
 }
 
@@ -667,6 +669,7 @@ bool ofxSurfing::AddParameter(ofParameter<void>& parameter, float width)
 		return true;
 	}
 	ImGui::PopID();
+
 	return false;
 }
 
@@ -677,6 +680,7 @@ bool ofxSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> 
 	ImGui::Text("%s", uniqueName);
 	auto result = false;
 	auto tmpRef = parameter.get();
+
 	ImGui::PushID(uniqueName);
 	{
 		ImGui::Columns(columns);
@@ -688,6 +692,7 @@ bool ofxSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> 
 		ImGui::Columns(1);
 	}
 	ImGui::PopID();
+
 	if (result)
 	{
 		parameter.set(tmpRef);
@@ -725,6 +730,7 @@ bool ofxSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> 
 		parameter.set(tmpRef);
 	}
 	ImGui::PopID();
+
 	return result;
 }
 
@@ -741,6 +747,7 @@ bool ofxSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 		return true;
 	}
 	ImGui::PopID();
+
 	return false;
 }
 
@@ -757,6 +764,7 @@ bool ofxSurfing::AddSlider(ofParameter<float>& parameter, const char* format, fl
 		return true;
 	}
 	ImGui::PopID();
+
 	return false;
 }
 
@@ -775,6 +783,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMi
 		return true;
 	}
 	ImGui::PopID();
+
 	return false;
 }
 
@@ -783,6 +792,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<float>& parameter
 {
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
+
 	ImGui::PushID(1);
 	if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 	{
@@ -792,6 +802,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<float>& parameter
 		return true;
 	}
 	ImGui::PopID();
+
 	return false;
 }
 
@@ -817,6 +828,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& param
 		result |= true;
 	}
 	ImGui::PopID();
+
 	if (result)
 	{
 		parameterMin.set(tmpRefMin);

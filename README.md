@@ -9,11 +9,14 @@ ofxSurfingImGui
 	- easy to update to new ImGui versions and multi context/instances.
 * **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
-* Simplified **OF Helpers** to use **ofParameters** easy. 
+
+* IMPORTANT DIFFERENCES TO ofxImGui
+	- Simplified **OF Helpers** to use **ofParameters** easy. 
 	- _ImHelpers.h_ rewritted to _ofxSurfing_ImGui_Helpers.h_. 
 	- Removed all the WindowOpen/Settings stuff.
-* Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
+	- Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
 	- Now using PushId(1)/PopID() on each widget.
+	- Removed old windows/tree methods. Now must use RAW ImGui code.
 * Included my Dark Theme.
 
 ## Screenshots

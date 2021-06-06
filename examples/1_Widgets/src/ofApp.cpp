@@ -54,7 +54,8 @@ void ofApp::draw() {
 		}
 		ofxImGui::EndWindow(mainSettings);
 
-		//demo.h
+		//TODO:
+		//demo.h from DearWidgets
 		//mostly ported but some errors like c++17 related and others
 		//_flagw = ImGuiWindowFlags_None;
 		//name = "DearWidgets_ShowDemo";
