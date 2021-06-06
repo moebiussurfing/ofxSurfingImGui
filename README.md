@@ -11,13 +11,14 @@ ofxSurfingImGui
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
-### IMPORTANT CHANGES vs ofxImGui  
+### IMPORTANT CHANGES (vs ofxImGui helper)  
+- Simplified **OF Helpers** to use **ofParameters** easy. 
+	* _ImHelpers.h_ has been rewritted to _ofxSurfing_ImGui_Helpers.h_.
+	* Widgets, windows and tree now are more customizable. 
 - Removed old windows/tree methods. Now must use **RAW ImGui** code.
 - Removed all the WindowOpen/Settings stuff.
 - Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
-- Now using PushId(1)/PopID() on each widget.
-- Simplified **OF Helpers** to use **ofParameters** easy. 
-- _ImHelpers.h_ rewritted to _ofxSurfing_ImGui_Helpers.h_. 
+	* Now using PushId(1)/PopID() on each widget.
 
 ## Screenshots
 
