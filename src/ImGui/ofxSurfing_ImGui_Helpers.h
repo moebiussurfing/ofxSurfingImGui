@@ -5,9 +5,12 @@
 /*
 
 	NOTE from moebiusSurfing:
+
 	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
-		- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
-		- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
+	
+	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
+	
+	- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
 
 */
 
@@ -19,9 +22,8 @@
 //#include "ofGLBaseTypes.h"
 //#include "imgui.h"
 //#include <stack> // Needed for Arch Linux
-//
-//static const int kImGuiMargin2 = 10;
 
+//static const int kImGuiMargin2 = 10;
 
 // namespace ofxImGui
 namespace ofxSurfing
@@ -39,7 +41,6 @@ namespace ofxSurfing
 	//struct Settings
 	//{
 	//	Settings();
-
 	//	ofVec2f windowPos;
 	//	ofVec2f windowSize;
 	//	bool lockPosition;
@@ -47,7 +48,6 @@ namespace ofxSurfing
 	//	bool mouseOverGui;
 	//	bool windowBlock;
 	//	int treeLevel;
-
 	//	ofRectangle totalBounds;
 	//	ofRectangle screenBounds;
 	//};
@@ -70,8 +70,7 @@ namespace ofxSurfing
 	//void EndTree(Settings& settings);
 
 	//void AddGroup(ofParameterGroup& group, Settings& settings);
-
-	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);
+	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);//TODO: settings + flags
 
 	//NEW: add flags and clean all the old settings
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags);
@@ -148,15 +147,12 @@ static ImTextureID GetImTextureID2(const ofTexture& texture)
 
 static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
 {
-
 	return GetImTextureID2(hasTexture.getTexture());
 }
 
 static ImTextureID GetImTextureID2(GLuint glID)
 {
-
 	return (ImTextureID)(uintptr_t)glID;
-
 }
 
 //--------------------------------------------------------------

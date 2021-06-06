@@ -2,14 +2,12 @@
 
 #include "ofMain.h"
 
-//#include "ofxImGui.h"
 #include "ofxSurfing_ImGui_Themes.h"
-
-//#include "range_slider.h"
 
 //using namespace ImGui;
 //namespace ofxSurfingHelpers
 //{
+
 class ofxSurfing_ImGui_LayoutManager
 {
 
@@ -60,9 +58,11 @@ public:
 	//-
 
 public:
+	
 	// Force autodraw
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; }//must be called befor setup!
+
 	// Force shared context
 	//--------------------------------------------------------------
 	void setSharedMode(bool b) { gui.setSharedMode(b); }
