@@ -22,6 +22,9 @@ ofxSurfingImGui
 
 ![image](/docs/2_Layouts.PNG?raw=true "image")  
 
+## Usage
+* Look the examples.
+
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) from @**Daandelange**  
 
