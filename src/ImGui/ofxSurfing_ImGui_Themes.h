@@ -17,7 +17,7 @@
 #define TEXT_INACTIVE_ALPHA 0.20f // for use on toggle buttons
 
 //------------------------------
-//
+
 namespace ofxSurfingHelpers {
 
 	//----

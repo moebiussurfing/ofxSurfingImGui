@@ -5,8 +5,43 @@
 #include "ofxSurfing_ImGui_Themes.h"
 
 //using namespace ImGui;
-//namespace ofxSurfingHelpers
-//{
+namespace ofxSurfingHelpers
+{
+	//--------------------------------------------------------------
+	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
+	{
+		__spcx = ImGui::GetStyle().ItemSpacing.x;
+		__spcy = ImGui::GetStyle().ItemSpacing.y;
+		__w100 = ImGui::GetContentRegionAvail().x;
+		__h100 = ImGui::GetContentRegionAvail().y;
+		__w99 = __w100 - __spcx;
+		__w50 = __w100 / 2 - __spcx / 2;
+		__w33 = __w100 / 3 - __spcx / 3;
+		__w25 = __w100 / 4 - __spcx / 4;
+		__h = BUTTON_BIG_HEIGHT;
+	}
+
+	// example: 
+	// allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
+	//float __w = getImGui_WidgetWidth(__ww, 2);
+	//if (ImGui::Button("_Button", ImVec2(__w, _h))) {}
+	//--------------------------------------------------------------
+	inline void getImGui_WidgetWidth(float &w, int amntColumns)
+	{
+		float __spcx = ImGui::GetStyle().ItemSpacing.x;
+		float __w100 = ImGui::GetContentRegionAvail().x;
+		w = __w100 / amntColumns - __spcx / amntColumns;
+	}
+	//--------------------------------------------------------------
+	inline void getImGui_WidgetHeight(float &h, int amntRows)
+	{
+		float __spcy = ImGui::GetStyle().ItemSpacing.y;
+		float __h100 = ImGui::GetContentRegionAvail().y;
+		h = __h100 / amntRows - __spcy / amntRows;
+	}
+}
+
+//----
 
 class ofxSurfing_ImGui_LayoutManager
 {
@@ -58,7 +93,7 @@ public:
 	//-
 
 public:
-	
+
 	// Force autodraw
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; }//must be called befor setup!
