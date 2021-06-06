@@ -11,6 +11,8 @@
 #include "ofxSurfing_ImGui_Themes.h"
 #include "imgui_internal.h"
 
+//namespace ofxSurfing = ofxSurfingHelpers;//? short alias
+
 //----
 
 namespace ofxSurfingHelpers {
