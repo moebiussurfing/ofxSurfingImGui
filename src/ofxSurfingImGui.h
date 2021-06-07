@@ -8,7 +8,7 @@
 
 #include "ImGui/ofxSurfing_ImGui_Helpers.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
-#include "ImGui/ofxSurfing_ImGui_Widgets.h"
+#include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
 #include "ImGui/ofxSurfing_ImGui_Themes.h"
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"

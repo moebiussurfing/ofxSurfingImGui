@@ -43,7 +43,7 @@
 namespace ofxSurfing
 {
 	// TODO:
-	// TESTING TOGGLE TYPES
+	// TESTING CUSTOMIZE TYPES
 	static ofxSurfing::ImSurfingWidgetsType widgetsManager;
 
 	//--

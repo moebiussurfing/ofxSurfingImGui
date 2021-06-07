@@ -1,11 +1,49 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup() {
-	ofSetFrameRate(25);
+void ofApp::setup_ImGui()
+{
+	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
+	bool bRestore = true;
+	bool bMouse = false;
+	bool bAutoDraw = true; // it seems that must be false when multiple ImGui instances created!
 
-	//guiManager.setup(gui); // can be instantiated out of the class, locally
-	guiManager.setup();
+	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
+
+	auto &io = ImGui::GetIO();
+	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
+
+	//-
+
+	// font
+	std::string fontName;
+	float fontSize;
+
+	//fontSize = 11;
+	//fontName = "telegrama_render.otf";
+
+	fontSize= 16;
+	fontName = "overpass-mono-bold.otf";
+
+	std::string _path = "assets/fonts/"; // assets folder
+	ofFile fileToRead(_path + fontName); // a file that exists
+	bool b = fileToRead.exists();
+	if (b) {
+		customFont = gui.addFont(_path + fontName, fontSize, nullptr, normalCharRanges);
+	}
+	if (customFont != nullptr) io.FontDefault = customFont;
+
+	//-
+
+	// theme
+	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+}
+
+//--------------------------------------------------------------
+void ofApp::setup() {
+	ofSetFrameRate(60);
+
+	setup_ImGui();
 
 	// parameters
 	params.setName("paramsGroup");// main container
@@ -32,11 +70,15 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	guiManager.begin();
+	gui.begin();
 	{
 		auto mainSettings = ofxImGui::Settings();
 		ImGuiColorEditFlags _flagw;
 		string name;
+
+		//--
+
+		// 1. dear widgets
 
 		_flagw = ImGuiWindowFlags_None;
 		name = "DearWidgets";
@@ -55,7 +97,7 @@ void ofApp::draw() {
 		ofxImGui::EndWindow(mainSettings);
 
 		//TODO:
-		//demo.h from DearWidgets
+		//raw demo.h from DearWidgets
 		//mostly ported but some errors like c++17 related and others
 		//_flagw = ImGuiWindowFlags_None;
 		//name = "DearWidgets_ShowDemo";
@@ -64,23 +106,32 @@ void ofApp::draw() {
 		//	ImWidgets::ShowDemo();
 		//}
 		//ofxImGui::EndWindow(mainSettings);
+
+		//--
+
+		// 2. surfing widgets
+		_flagw = ImGuiWindowFlags_None;
+		name = "SurfingWidgets";
+		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+		{
+			draw_SurfingWidgets();
+		}
+		ofxImGui::EndWindow(mainSettings);
+
 	}
-
-	//static bool show_app_metrics = false;
-	//ImGui::ShowMetricsWindow(&show_app_metrics);
-
-	guiManager.end();
+	gui.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_DearWidgets() {
 
 	// Dear Widgets
+	// raw ImGui code
 	{
 		static const float fZero = 0.0f;
 		static float length = 16.0f;
-		static ImWidgetsLengthUnit currentUnit = ImWidgetsLengthUnit_Metric;
-		DragLengthScalar("DragLengthScalar", ImGuiDataType_Float, &length, &currentUnit, 1.0f, &fZero, nullptr, ImGuiSliderFlags_None);
+		static ImWidgets::ImWidgetsLengthUnit currentUnit = ImWidgets::ImWidgetsLengthUnit_Metric;
+		ImWidgets::DragLengthScalar("DragLengthScalar", ImGuiDataType_Float, &length, &currentUnit, 1.0f, &fZero, nullptr, ImGuiSliderFlags_None);
 	}
 	{
 		static ImVec2 slider2D;
@@ -133,7 +184,7 @@ void ofApp::draw_DearWidgets() {
 			ImWidgets::LineSlider("##LineSliderValue",
 				center + dir * ImVec2(32.0f, 32.0f),
 				center + dir * ImVec2(width * 0.5f, width * 0.5f),
-				IM_COL32(255, 128, 0, 255), ImGuiDataType_Float, &fValue, &fZero, &fOne, ImWidgetsPointer_Up);
+				IM_COL32(255, 128, 0, 255), ImGuiDataType_Float, &fValue, &fZero, &fOne, ImWidgets::ImWidgetsPointer_Up);
 			ImGui::PopID();
 		}
 		ImGui::SliderFloat("##LineSliderSlodersdgf", &fValue, fZero, fOne);
@@ -141,7 +192,7 @@ void ofApp::draw_DearWidgets() {
 }
 
 //--------------------------------------------------------------
-void ofApp::drawWidgets() {
+void ofApp::draw_SurfingWidgets() {
 
 	auto mainSettings = ofxImGui::Settings();
 
@@ -155,55 +206,65 @@ void ofApp::drawWidgets() {
 	float _w33;
 	float _w25;
 	float _h;
-	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
+	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
+	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-	// an ofParameterGroup
-	ofxImGui::AddGroup(params3, mainSettings);
+	// 1. an ofParameterGroup
+	ofxImGui::AddGroup(params3, mainSettings); 
+	// -> notice that when using ofxGui helpers, AddGroup must be inside of:
+	// if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw)){..}ofxImGui::EndWindow(mainSettings);
+
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
 
 	//-
 
-	//    // range_slider.h
-	//
-	//    static float v1 = 0;
-	//    static float v2 = 1;
-	//    static float v_min = 0;
-	//    static float v_max = 1;
-	//    static float v3 = 0;
-	//    static float v4 = 1;
-	//    ImGui::RangeSliderFloat("range1", &v1, &v2, v_min, v_max);
-	//    ImGui::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
-	//
-	//    //vanilla
-	//    static float begin = 10, end = 90;
-	//    static int begin_i = 100, end_i = 1000;
-	//    ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	//    ImGui::DragIntRange2("range int (no bounds)", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+	// 2. ranges using float types
+
+	// range_slider.h
+	static float v1 = 0;
+	static float v2 = 1;
+	static float v_min = 0;
+	static float v_max = 1;
+	static float v3 = 0;
+	static float v4 = 1;
+	ImGui::RangeSliderFloat("range1", &v1, &v2, v_min, v_max);
+	ImGui::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
+
+	// vanilla ranges
+	static float begin = 10, end = 90;
+	static int begin_i = 100, end_i = 1000;
+	ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+	ImGui::DragIntRange2("range int (no bounds)", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
 
 	//-
 
-	//    // add big toggle full width
-	//    ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h / 2);
-	//    ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
-	//
-	//    // two buttons on same line
-	//    ofxImGui::AddGroup(params2, mainSettings);
-	//    if (ofxSurfingHelpers::AddBigButton(bPrevious, _w50, _h)) {
-	//        bPrevious = false;
-	//    }
-	//    ImGui::SameLine();
-	//    ofxSurfingHelpers::AddBigButton(bNext, _w50, _h);
-	//    ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
-	//
-	//    // full width buttons. half height
-	//    if (ImGui::Button("RANDOMIZE!", ImVec2(_w100, _h / 2)))
-	//    {
-	//    }
-	//    if (ImGui::Button("RESET", ImVec2(_w100, _h / 2)))
-	//    {
-	//    }
-	//    ofxImGui::AddGroup(params, mainSettings);
+	// 3. toggle buttons using ofParameter<bool>
 
+	// add big toggle full width
+	ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h / 2);
+	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
+
+	// a params group
+	ofxImGui::AddGroup(params2, mainSettings);
+
+	// two buttons on same line
+	if (ofxSurfingHelpers::AddBigButton(bPrevious, _w50, _h)) {
+		bPrevious = false;
+	}
+	ImGui::SameLine();
+	ofxSurfingHelpers::AddBigButton(bNext, _w50, _h);
+	ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
+
+	// full width buttons. half height
+	if (ImGui::Button("RANDOMIZE!", ImVec2(_w100, _h / 2)))
+	{
+	}
+	if (ImGui::Button("RESET", ImVec2(_w100, _h / 2)))
+	{
+	}
+
+	// another params group
+	ofxImGui::AddGroup(params, mainSettings);
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 }
@@ -213,6 +274,8 @@ void ofApp::draw_DearWidgetsColors()
 {
 	if (ImGui::TreeNode("Widgets"))
 	{
+		// -> use ImWidgets:: namespace for DearWidgets
+
 		if (ImGui::TreeNode("Hue Selector"))
 		{
 			float const width = ImGui::GetContentRegionAvail().x;
@@ -232,19 +295,19 @@ void ofApp::draw_DearWidgetsColors()
 			static float featherRight = 0.125f;
 			ImGui::DragFloat("featherLeft", &featherLeft, 0.0f, 0.0f, 0.5f);
 			ImGui::DragFloat("featherRight", &featherRight, 0.0f, 0.0f, 0.5f);
-			HueSelector("Hue Selector", ImVec2(width, height), &hueCenter, &hueWidth, &featherLeft, &featherRight, division, alphaHue, alphaHideHue, offset);
+			ImWidgets::HueSelector("Hue Selector", ImVec2(width, height), &hueCenter, &hueWidth, &featherLeft, &featherRight, division, alphaHue, alphaHideHue, offset);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Density Plot Nearest"))
 		{
-			DensityPlotNearest("Dense SS N", [](float x, float y) -> float { return std::sin(x) * std::sin(y); }, 32, 32, -4.0f, 4.0f, -3.0f, 3.0f);
-			DensityPlotNearest("Dense S N", [](float x, float y) -> float { return std::sin(x * y); }, 32, 32, 0.0f, 4.0f, 0.0f, 4.0f);
+			ImWidgets::DensityPlotNearest("Dense SS N", [](float x, float y) -> float { return std::sin(x) * std::sin(y); }, 32, 32, -4.0f, 4.0f, -3.0f, 3.0f);
+			ImWidgets::DensityPlotNearest("Dense S N", [](float x, float y) -> float { return std::sin(x * y); }, 32, 32, 0.0f, 4.0f, 0.0f, 4.0f);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Density Plot Bilinear"))
 		{
-			DensityPlotBilinear("Dense SS B", [](float x, float y) -> float { return std::sin(x) * std::sin(y); }, 32, 32, -4.0f, 4.0f, -3.0f, 3.0f);
-			DensityPlotBilinear("Dense S B", [](float x, float y) -> float { return std::sin(x * y); }, 32, 32, 0.0f, 4.0f, 0.0f, 4.0f);
+			ImWidgets::DensityPlotBilinear("Dense SS B", [](float x, float y) -> float { return std::sin(x) * std::sin(y); }, 32, 32, -4.0f, 4.0f, -3.0f, 3.0f);
+			ImWidgets::DensityPlotBilinear("Dense S B", [](float x, float y) -> float { return std::sin(x * y); }, 32, 32, 0.0f, 4.0f, 0.0f, 4.0f);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("Isoline"))
@@ -284,8 +347,8 @@ void ofApp::draw_DearWidgetsColors()
 			if (ImGui::ColorEdit4("##IsoColor3", &col.x))
 				cols[3] = ImGui::ColorConvertFloat4ToU32(col);
 
-			DensityIsolinePlotBilinear("IsoLine 0", [](float x, float y) -> float { return 1.01f * std::sin(x) * std::sin(y); }, bShowSurface, &isoLines[0], 4, &cols[0], 4, resolution, resolution, -4.0f, 4.0f, -3.0f, 3.0f);
-			DensityIsolinePlotBilinear("IsoLine 1", [](float x, float y) -> float { return 1.01f * std::sin(x * y); }, bShowSurface, &isoLines[0], 4, &cols[0], 4, resolution, resolution, -4.0f, 4.0f, -3.0f, 3.0f);
+			ImWidgets::DensityIsolinePlotBilinear("IsoLine 0", [](float x, float y) -> float { return 1.01f * std::sin(x) * std::sin(y); }, bShowSurface, &isoLines[0], 4, &cols[0], 4, resolution, resolution, -4.0f, 4.0f, -3.0f, 3.0f);
+			ImWidgets::DensityIsolinePlotBilinear("IsoLine 1", [](float x, float y) -> float { return 1.01f * std::sin(x * y); }, bShowSurface, &isoLines[0], 4, &cols[0], 4, resolution, resolution, -4.0f, 4.0f, -3.0f, 3.0f);
 
 			ImGui::TreePop();
 		}
@@ -315,7 +378,7 @@ void ofApp::draw_DearWidgetsColors()
 			ImGui::DragFloat("Max X", &maxX, 0.01f, fMinX + 0.01f, 16.0f);
 			ImGui::Text("DearWidgets:Plot with Dynamic Resampling (Init Samples Count: 8)");
 			ImGui::Dummy(ImVec2(1.0f, ImGui::GetTextLineHeightWithSpacing()));
-			AnalyticalPlot("Analytical", [](float const x) { return sin(x * x * x) * sin(x); }, minX, maxX, initSampleCount);
+			ImWidgets::AnalyticalPlot("Analytical", [](float const x) { return sin(x * x * x) * sin(x); }, minX, maxX, initSampleCount);
 			ImGui::Dummy(ImVec2(1.0f, ImGui::GetTextLineHeightWithSpacing()));
 			ImGui::Dummy(ImVec2(1.0f, ImGui::GetTextLineHeightWithSpacing()));
 
@@ -378,7 +441,7 @@ void ofApp::draw_DearWidgetsColors()
 
 				ImVec2 curPos = ImGui::GetCursorScreenPos();
 				ImGui::InvisibleButton("##Zone", ImVec2(width, width), 0);
-				DrawChromaticPlotBilinear(
+				ImWidgets::DrawChromaticPlotBilinear(
 					pDrawList,
 					curPos,
 					width, width,

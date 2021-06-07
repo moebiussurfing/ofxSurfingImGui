@@ -1,5 +1,6 @@
 #pragma once
 #include "ofMain.h"
+
 #include "ofxImGui.h"
 #include <imgui.h>
 

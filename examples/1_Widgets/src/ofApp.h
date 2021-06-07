@@ -2,9 +2,16 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfingImGui.h"
+#include "ofxImGui.h" // requires  https://github.com/Daandelange/ofxImGui or https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test
 
-using namespace ImWidgets;
+#include "ImGui/dear_widgets/dear_widgets.h"		// -> to use Dearwidgets
+#include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"	// -> to use my custom toggle/buttons widgets and more
+#include "ImGui/ofxSurfing_ImGui_RangeSlider.h"		// -> to use int/float ranges
+#include "ImGui/ofxSurfing_ImGui_LayoutManager.h"	// -> required to use layouting methods like ofxSurfingHelpers::refreshImGui_WidgetsSizes(..
+// ofxSurfing_ImGui_LayoutManager.h has more window/multi instance tools too. But we are using "clean" ofxImGui here.
+
+//#include "ofxSurfingImGui.h"	// -> This header includes ALL the above classes and some others. 
+//You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
 
 class ofApp : public ofBaseApp{
     
@@ -12,9 +19,13 @@ public:
     void setup();
     void draw();
     
-    ofxSurfing_ImGui_LayoutManager guiManager;
-    
-    void drawWidgets();
+	// for a typical ofxImGui "clean" setup
+	void setup_ImGui();
+	ofxImGui::Gui gui;
+	ofxImGui::Settings mainSettings = ofxImGui::Settings();
+	ImFont* customFont = nullptr;
+
+    void draw_SurfingWidgets();
     void draw_DearWidgets();
     void draw_DearWidgetsColors();
 
