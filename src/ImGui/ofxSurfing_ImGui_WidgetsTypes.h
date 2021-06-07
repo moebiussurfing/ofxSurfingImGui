@@ -25,7 +25,8 @@ namespace ofxSurfing {
 		float _w25;
 		float _h;
 		
-		void refreshPanelWidth()
+		// refresh current panel shape
+		void refreshPanelShape()
 		{
 			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 		}
@@ -47,8 +48,11 @@ namespace ofxSurfing {
 
 		class ImWidgetSurfingELEMENT {
 		public:
-			ImWidgetSurfingTYPE type;
-			std::string name;
+			ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT;
+			std::string name = "";
+			int amtPerRow = 1;
+			bool bSameLine = false;
+			int spacing = -1;
 		};
 
 		vector<ImWidgetSurfingELEMENT> widgetsConfs;
@@ -57,22 +61,27 @@ namespace ofxSurfing {
 			widgetsConfs.clear();
 		}
 		
-		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type) {
-			string name = aparam.getName();
+		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		{
 			ImWidgetSurfingELEMENT e;
-			e.name = name;
+			e.name = aparam.getName();
 			e.type = type;
+			e.amtPerRow = amtPerRow;
+			e.bSameLine = bSameLine;
+			e.spacing = spacing;
+			
 			widgetsConfs.push_back(e);
 		}
 
-		void AddWidgetConf(string name, ImWidgetSurfingTYPE type) {
-			ImWidgetSurfingELEMENT e;
-			e.name = name;
-			e.type = type;
-			widgetsConfs.push_back(e);
-		}
+		//void AddWidgetConf(string name, ImWidgetSurfingTYPE type) {
+		//	ImWidgetSurfingELEMENT e;
+		//	e.name = name;
+		//	e.type = type;
+		//	widgetsConfs.push_back(e);
+		//}
 
-		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam) {
+		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam) 
+		{
 			string name = aparam.getName();
 			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(IMGUI_WIDGET_TYPE_DEFAULT);
 
@@ -91,7 +100,8 @@ namespace ofxSurfing {
 			return rtype;
 		}
 
-		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1) {
+		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1) 
+		{
 			auto ptype = aparam.type();
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool bReturn = false;

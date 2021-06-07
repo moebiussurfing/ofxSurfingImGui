@@ -4,6 +4,15 @@
 
 #include "ofxSurfingImGui.h"
 
+
+/*
+
+NOTE:
+Set if (1) to the window you want to draw/test
+
+*/
+
+
 using namespace ofxSurfing;
 
 class ofApp : public ofBaseApp{

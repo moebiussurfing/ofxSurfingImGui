@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofSetFrameRate(25);
+	ofSetFrameRate(60);
 
 	guiManager.setup(gui); // can be instantiated out of the class, locally
 	//guiManager.setup(); // or inside the class, the we can forgot of declare here (ofApp scope).
@@ -33,65 +33,73 @@ void ofApp::setup() {
 	params.add(params2);
 
 	// customize widgets
-	widgetsManager.AddWidgetConf(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL);
-	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL);
-	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG);
+	widgetsManager.AddWidgetConf(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG);
+	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, true);
+	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, false, 20);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
 	guiManager.begin();
 	{
-		//--
+		//---------
 
 		// window 1
 
-		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
+		// using my own simpler helpers API: 
+		// ofxSurfing_ImGui_Helpers.h
+
 		if (1)
 		{
-			// a window but using my ofxSurfing_ImGui_LayoutManager.h class
+			// a window but using my ofxSurfing_ImGui_LayoutManager.h class helper
 
 			static bool bOpen1 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 
 			guiManager.beginWindow("window 1", &bOpen1, window_flags);
 			{
-				widgetsManager.refreshPanelWidth();
+				// single params
+				{
+					widgetsManager.refreshPanelShape(); // update sizes to current window shape
 
-				widgetsManager.Add(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL); // full width
+					widgetsManager.Add(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL); // full width
 
-				widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, true); // half width + same line
-				widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, false, 20);// half width + 20px vert spacing
-				
-				//ImGui::Dummy(ImVec2(0, 20));// spacing
-				
-				// three widgets in one same row with 20px vert spacing before the next row
-				widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
-				widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
-				widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, false, 20);
+					widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, true); // half width + same line
+					widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, false, 20);// half width + 20px vert spacing
+					//ImGui::Dummy(ImVec2(0, 20));// spacing
 
-				//ImGui::Dummy(ImVec2(0, 20);// spacing
+					// three widgets in one same row with 20px vert spacing before the next row
+					widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
+					widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
+					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, false, 20);
+					//ImGui::Dummy(ImVec2(0, 20);// spacing
+				}
 
 				//-
 
-				// group of parameters with customized tree/folder type
-				// will be applied to all nested groups inside this parent
-				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-				flags |= ImGuiTreeNodeFlags_Framed;//uncomment to draw dark tittle bar
-				//flags |= ImGuiTreeNodeFlags_DefaultOpen;//comment to start closed
-				ofxSurfing::AddGroup(params, flags);
+				// group
+				{
+					// group of parameters with customized tree/folder type
+					// will be applied to all nested groups inside this parent
+
+					ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+					flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
+					//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
+
+					ofxSurfing::AddGroup(params, flags);
+				}
 			}
 			guiManager.endWindow();
 		}
 
-		//--
+		//---------
 
 		// window 2
 
 		// using my own simpler helpers API: ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
-		if (1)
+
+		if (0)
 		{
 			bool bOpen2 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
@@ -108,30 +116,38 @@ void ofApp::draw()
 			guiManager.endWindow();
 		}
 
-		//--
+		//---------
 
 		// window 3
 
 		// using the old ofxGui original API: (Settings/ofxImGui::AddGroup)
+
 		if (0)
 		{
+			string name = "window 3";
 			auto mainSettings = ofxImGui::Settings();
 			ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-			string name = "window 3";
 
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
 			{
+				// add more widgets and groupParams but using the old ofxImGui workflow
+				// using the old
 				drawWidgets();
-				ofxSurfingHelpers::AddBigButton(bPrevious, 100, 30);
+
+				// fill the panel area
+				float __w100 = ImGui::GetContentRegionAvail().x;
+				float __h100 = ImGui::GetContentRegionAvail().y;
+				ofxSurfingHelpers::AddBigButton(bPrevious, __w100, __h100);
 			}
 			ofxImGui::EndWindow(mainSettings);
 		}
 
-		//--
+		//---------
 
 		// window 4
 
 		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
+
 		if (0)
 		{
 			float _spcx; // space between widgets
@@ -195,43 +211,49 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawWidgets() {
 
-	//// these are pure widgets without window/tree/container
+	// these are pure widgets without window/tree/container
 
-	//auto mainSettings = ofxImGui::Settings();
+	auto mainSettings = ofxImGui::Settings();
 
-	//// typical width sizes from 1 (_w100) to 4 (_w25) widgets per row
-	//float _spcx;
-	//float _spcy;
-	//float _w100;
-	//float _h100;
-	//float _w99;
-	//float _w50;
-	//float _w33;
-	//float _w25;
-	//float _h;
-	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
+	// typical width sizes from 1 (_w100) to 4 (_w25) widgets per row
+	float _spcx;
+	float _spcy;
+	float _w100;
+	float _h100;
+	float _w99;
+	float _w50;
+	float _w33;
+	float _w25;
+	float _h;
 
-	//// an ofParameterGroup
-	//ofxImGui::AddGroup(params3, mainSettings);
-	//ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
+	// update to current window shape
+	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
 
-	////-
+	// add an ofParameterGroup
+	ofxImGui::AddGroup(params3, mainSettings);
 
-	//// range_slider.h
-	//static float v1 = 0;
-	//static float v2 = 1;
-	//static float v_min = 0;
-	//static float v_max = 1;
-	//static float v3 = 0;
-	//static float v4 = 1;
-	//ImGui::RangeSliderFloat("range1", &v1, &v2, v_min, v_max, "%.3f  %.3f", 1.0f);
-	//ImGui::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
+	// spacing
+	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
 
-	//// vanilla slider
-	//static float begin = 10, end = 90;
-	//static int begin_i = 100, end_i = 1000;
-	//ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	//ImGui::DragIntRange2("range int (no bounds)", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+	//-
 
-	//ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	// some custom widgets
+
+	// range_slider.h
+	static float v1 = 0;
+	static float v2 = 1;
+	static float v_min = 0;
+	static float v_max = 1;
+	static float v3 = 0;
+	static float v4 = 1;
+	ImGui::RangeSliderFloat("range1", &v1, &v2, v_min, v_max, "%.3f  %.3f", 1.0f);
+	ImGui::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
+
+	// vanilla range slider
+	static float begin = 10, end = 90;
+	static int begin_i = 100, end_i = 1000;
+	ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+	ImGui::DragIntRange2("range int (no bounds)", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+
+	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 }

@@ -7,6 +7,9 @@
 
 #define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT 100
+#define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
+#define PANEL_WIDGETS_HEIGHT_MIN 20
+
 #define BUTTON_BIG_HEIGHT 50
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20

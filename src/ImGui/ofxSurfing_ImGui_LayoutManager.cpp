@@ -88,9 +88,8 @@ void ofxSurfing_ImGui_LayoutManager::end() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	float ww = PANEL_WIDGETS_WIDTH;
-	float hh = 20;
-	//float hh = PANEL_WIDGETS_HEIGHT;
+	float ww = PANEL_WIDGETS_WIDTH_MIN;
+	float hh = PANEL_WIDGETS_HEIGHT_MIN;
 
 	////widgets sizes
 	//float _spcx;
@@ -104,7 +103,7 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 	//float _h;
 	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-	static bool auto_resize = true;
+	//static bool auto_resize = true;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 
@@ -115,7 +114,7 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 	//static bool no_move = false;
 	//static bool no_resize = false;
 	//static bool no_collapse = false;
-	//static bool no_close = false;
+	static bool no_close = false;
 	//static bool no_nav = false;
 	//static bool no_background = false;
 	//static bool no_bring_to_front = false;
@@ -133,7 +132,7 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 	//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
 	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-	//if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
+	if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
 
 	//// We specify a default position/size in case there's no data in the .ini file.
 	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.
@@ -149,13 +148,15 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 		//return;
 	}
 
-	// e.g. Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
+	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_LayoutManager::endWindow()
 {
+	//ImGui::PopItemWidth();
+	
 	ImGui::PopStyleVar();
 
 	ImGui::End();
