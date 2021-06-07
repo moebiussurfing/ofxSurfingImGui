@@ -160,7 +160,7 @@ void ofApp::draw()
 
 			guiManager.beginWindow("window 2", &bOpen2, window_flags);
 			{
-				//widgetsManager.refreshPanelShape();
+				widgetsManager.refreshPanelShape();
 
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
@@ -252,7 +252,7 @@ void ofApp::draw()
 				ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
 
 				// do not updates for below group. Must call:
-				//widgetsManager.refreshPanelShape();
+				widgetsManager.refreshPanelShape();
 
 				// group parameter with customized tree/folder type
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
