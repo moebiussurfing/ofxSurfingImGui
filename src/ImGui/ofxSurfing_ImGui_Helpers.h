@@ -13,6 +13,19 @@
 	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
 	- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
 
+	//-
+
+	TODO:
+	important BUG !
+	
+	should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	to use on ImGui::pushId(index) !
+	why? bc when some widgets has the same name or maybe when you populate many times the same parameter
+	i.e with different desing/widget type (slider/drag/stepper)
+	
+	That's a problem bc we need to star count the widgets when window begins.
+	So we will need to create windows here like on ofxImGui ?
+
 */
 
 
@@ -48,10 +61,7 @@ namespace ofxSurfing
 	// TODO:
 	// important BUG !
 	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
-	// to use on ImGui::pushId(index) !
-	// why? bc when some widgets has the same name or maybe when you populate many times the same parameter
-	// i.e with different desing/widget type (slider/drag/stepper)
-	static int index = 0;
+	//static int index = 0;
 
 	//--
 
@@ -99,7 +109,8 @@ namespace ofxSurfing
 	//void AddGroup(ofParameterGroup& group, Settings& settings);
 	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);//TODO: settings + flags
 
-	//NEW: add flags and clean all the old settings
+	// NEW: 
+	// added flags and cleaned all the old settings
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags);
 
 #if OF_VERSION_MINOR >= 10
@@ -215,7 +226,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		auto c = widgetsManager.getWidgetConf(p);
 		if (c.name != "-1")
 		{
-			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 		}
 		return bReturn;
 	}
@@ -240,7 +251,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		auto c = widgetsManager.getWidgetConf(p);
 		if (c.name != "-1")
 		{
-			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 		}
 		return bReturn;
 	}
@@ -267,7 +278,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		auto c = widgetsManager.getWidgetConf(p);
 		if (c.name != "-1") 
 		{ 
-			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow,c.spacing);
 		}
 		return bReturn;
 	}

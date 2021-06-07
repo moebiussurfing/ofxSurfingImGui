@@ -17,7 +17,21 @@ namespace ofxSurfing {
 
 	class ImWidgetSurfingType {
 
+		//-
+
+		//TODO:
+		// a getUniqueName alternative
 	public:
+		int index = 0;
+		void resetIndex() {
+			index = 0;
+		}
+		std::string getTag(ofAbstractParameter& aparam) {
+			string tag = aparam.getName() + ofToString(index++);
+			return tag;
+		}
+
+		//-
 
 		// widgets sizes
 		float _spcx;
@@ -104,13 +118,13 @@ namespace ofxSurfing {
 		//-
 
 		// queue a customization config for future populate a param widget
-		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			surfingImWidgetConf c;
 			c.name = aparam.getName();
 			c.type = type;
-			c.amtPerRow = amtPerRow;
 			c.bSameLine = bSameLine;
+			c.amtPerRow = amtPerRow;
 			c.spacing = spacing;
 
 			widgetsConfs.push_back(c);
@@ -155,9 +169,16 @@ namespace ofxSurfing {
 
 		//-
 
-		// populate a parameter ImGui widget
-		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		// populate now a parameter ImGui widget
+		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
+		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
+			////getUniqueName workaround
+			//string tag = widgetsManager.getTag(aparam);
+			//ImGui::PushID(tag.c_str());
+
+			//----
+
 			auto ptype = aparam.type();
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
@@ -291,7 +312,7 @@ namespace ofxSurfing {
 
 				case IMGUI_WIDGET_TYPE_DRAG:
 				{
-					const float speed = 1;
+					const float speed = 0.1;
 					ImGui::PushID(1);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
@@ -329,7 +350,10 @@ namespace ofxSurfing {
 				ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
 			}
 
-			//-
+			//----
+
+			////getUniqueName workaround
+			//ImGui::PopID();
 
 			return bReturn;
 		}

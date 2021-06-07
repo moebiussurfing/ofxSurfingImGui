@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfing_ImGui_Themes.h"
+#include "ofxSurfing_ImGui_WidgetsButtons.h"
 //#include "ofxSurfing_ImGui_Helpers.h" //TODO: breaks addvanced/widgets items..
 
 //using namespace ImGui;
@@ -36,9 +37,16 @@ namespace ofxSurfingHelpers
 	//--------------------------------------------------------------
 	inline void getImGui_WidgetHeight(float &h, int amntRows)
 	{
-		float __spcy = ImGui::GetStyle().ItemSpacing.y;
-		float __h100 = ImGui::GetContentRegionAvail().y;
-		h = __h100 / amntRows - __spcy / amntRows;
+		if (amntRows == -1)
+		{
+			h = BUTTON_BIG_HEIGHT;
+		}
+		else
+		{
+			float __spcy = ImGui::GetStyle().ItemSpacing.y;
+			float __h100 = ImGui::GetContentRegionAvail().y;
+			h = __h100 / amntRows - __spcy / amntRows;
+		}
 	}
 
 }//namespace ofxSurfingHelpers
@@ -178,10 +186,21 @@ public:
 
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
-			ImGui::Button("TEST");
+			//ofxSurfingHelpers::refreshImGui_WidgetsSizes();
 
+			float _w;
+			float _h;
+			// this is full width (_w100) with standard height (_h)
+			ofxSurfingHelpers::getImGui_WidgetWidth(_w, 1);
+			ofxSurfingHelpers::getImGui_WidgetHeight(_h, -1);
+
+			ImGui::Button("TEST", ImVec2(_w, _h));
+
+			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h/2);
+			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h/2);
 			//ofxSurfing::AddParameter(auto_resize);
 			//ofxSurfing::AddParameter(bLockMouseByImGui);
+
 			//ofxSurfing::AddParameter(auto_lockToBorder);
 		}
 	}

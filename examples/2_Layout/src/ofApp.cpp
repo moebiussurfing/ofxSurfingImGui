@@ -41,17 +41,17 @@ void ofApp::setup() {
 	
 	//bools
 	widgetsManager.AddWidgetConf(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG);
-	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, true);
-	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, false, 20);
-	widgetsManager.AddWidgetConf(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK, 1, false, 10);
+	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, false, 2, 20);
+	widgetsManager.AddWidgetConf(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK, false, 1, 10);
 	//floats
 	widgetsManager.AddWidgetConf(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
 	widgetsManager.AddWidgetConf(separation, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
-	widgetsManager.AddWidgetConf(speed, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, 1, false, 10);
+	widgetsManager.AddWidgetConf(speed, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, false, 1, 10);
 	//ints
 	widgetsManager.AddWidgetConf(shapeType, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
 	widgetsManager.AddWidgetConf(size, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
-	widgetsManager.AddWidgetConf(amount, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, 1, false, 10);
+	widgetsManager.AddWidgetConf(amount, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, false, 1, 10);
 }
 
 //--------------------------------------------------------------
@@ -59,6 +59,8 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
+		widgetsManager.resetIndex();
+
 		static bool bOpen1 = true;
 		static bool bOpen2 = false;
 		static bool bOpen3 = false;
@@ -86,17 +88,17 @@ void ofApp::draw()
 					widgetsManager.refreshPanelShape(); // update sizes to current window shape
 
 					widgetsManager.Add(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL); // full width
-					widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, true); // half width + same line
-					widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, false, 20);// half width + 20px vert spacing
+					widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, true, 2); // half width + same line
+					widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, false, 2, 20);// half width + 20px vert spacing
 
-					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
-					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG);
-					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER, 2, false, 20);
+					//widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
+					//widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG);
+					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER, false, 2, 20);
 
 					// three widgets in one same row with 20px vert spacing before the next row
-					widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
-					widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
-					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, false, 2);
+					widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, false, 3, 2);
 					widgetsManager.Add(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK);
 					//ImGui::Dummy(ImVec2(0, 20);// spacing
 				}
@@ -125,13 +127,16 @@ void ofApp::draw()
 
 		// window 2
 
-		// using my own simpler helpers API: ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
+		// using my own simpler helpers API: 
+		// ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
 
 		if (bOpen2)
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			guiManager.beginWindow("window 2", &bOpen2, window_flags);
 			{
+				widgetsManager.refreshPanelShape();
+
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
 				flags |= ImGuiTreeNodeFlags_DefaultOpen;
@@ -147,7 +152,8 @@ void ofApp::draw()
 
 		// window 3
 
-		// using the old ofxGui original API: (Settings/ofxImGui::AddGroup)
+		// using the old ofxGui original API:
+		// (Settings/ofxImGui::AddGroup)
 
 		if (bOpen3)
 		{
@@ -157,6 +163,8 @@ void ofApp::draw()
 
 			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
 			{
+				widgetsManager.refreshPanelShape();
+				
 				// add more widgets and groupParams but using the old ofxImGui workflow
 				// using the old
 				drawWidgets();
@@ -289,8 +297,8 @@ void ofApp::drawWidgets() {
 	// vanilla range slider
 	static float begin = 10, end = 90;
 	static int begin_i = 100, end_i = 1000;
-	ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	ImGui::DragIntRange2("range int (no bounds)", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+	ImGui::DragFloatRange2("range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+	ImGui::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 }

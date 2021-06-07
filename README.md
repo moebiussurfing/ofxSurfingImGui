@@ -26,6 +26,7 @@ ofxSurfingImGui
 * **ofParameter** helpers with full/half width buttons, range sliders and DearWidgets.  
 
 ![image](/docs/Capture1.PNG?raw=true "image")  
+
 ![image](/docs/Capture2.PNG?raw=true "image")  
 
 ### 2_Layout

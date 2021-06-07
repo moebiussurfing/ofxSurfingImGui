@@ -25,7 +25,7 @@ void ofxSurfing_ImGui_LayoutManager::setup_ImGui()
 {
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
-	bool bMouse = true;
+	bool bMouse = false;
 
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
@@ -121,7 +121,7 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 	//static bool no_docking = false;
 
 	////ImGuiWindowFlags window_flags = false;
-	//if (auto_resize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//if (auto_resize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
 	//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
 	//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
 	//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
