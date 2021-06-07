@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfing_ImGui_Themes.h"
+//#include "ofxSurfing_ImGui_Helpers.h" //TODO: breaks addvanced/widgets items..
 
 //using namespace ImGui;
 namespace ofxSurfingHelpers
@@ -39,7 +40,8 @@ namespace ofxSurfingHelpers
 		float __h100 = ImGui::GetContentRegionAvail().y;
 		h = __h100 / amntRows - __spcy / amntRows;
 	}
-}
+
+}//namespace ofxSurfingHelpers
 
 //----
 
@@ -133,7 +135,9 @@ private:
 	//float hh = PANEL_WIDGETS_HEIGHT;
 
 	/*
-	//snippet
+
+	// SNIPPET
+
 	guiManager.begin();
 	{
 		auto mainSettings = ofxImGui::Settings();
@@ -162,6 +166,7 @@ private:
 		ofxImGui::EndWindow(mainSettings);
 	}
 	guiManager.end();
+
 	*/
 
 	//-
@@ -173,9 +178,11 @@ public:
 
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
-			ofxImGui::AddParameter(auto_resize);
-			ofxImGui::AddParameter(bLockMouseByImGui);
-			//ofxImGui::AddParameter(auto_lockToBorder);
+			ImGui::Button("TEST");
+
+			//ofxSurfing::AddParameter(auto_resize);
+			//ofxSurfing::AddParameter(bLockMouseByImGui);
+			//ofxSurfing::AddParameter(auto_lockToBorder);
 		}
 	}
 
@@ -187,4 +194,5 @@ public:
 	//	bUseAdvancedSubPanel = b;
 	//}
 };
-//};
+
+//}//namespace ofxSurfingHelpers

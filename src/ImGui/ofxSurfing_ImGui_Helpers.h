@@ -31,6 +31,13 @@ namespace ofxSurfing
 {
 	//// TODO:
 	//// TESTING TOGGLE TYPES
+	//static vector<ofxSurfing::ImWidgetSurfingELEMENT> widgetsConfs;
+	//static vector<ImWidgetSurfingType::ImWidgetSurfingELEMENT> widgetsConfs;
+	
+	static ofxSurfing::ImWidgetSurfingType widgetsManager;
+
+	//--
+
 	//class SurfingImGuiHelpers {
 	//public:
 	//	SurfingImGuiHelpers() {};
@@ -201,25 +208,28 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		return false;
 	}
 
-	if (info == typeid(bool))
-	{
-		ImGui::PushID(1);
-		if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
-		{
-			parameter.set(tmpRef);
-			ImGui::PopID();
-			return true;
-		}
-		ImGui::PopID();
-		return false;
-	}
-
-	//// TODO:
-	//// TESTING TOGGLE TYPES
+	// TODO:
+	// TESTING TOGGLE TYPES
 	//if (info == typeid(bool))
 	//{
-
+	//	ImGui::PushID(1);
+	//	if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
+	//	{
+	//		parameter.set(tmpRef);
+	//		ImGui::PopID();
+	//		return true;
+	//	}
+	//	ImGui::PopID();
+	//	return false;
 	//}
+
+	// TODO:
+	// TESTING TOGGLE TYPES
+	if (info == typeid(bool))
+	{
+		ofParameter<bool> &p = parameter.cast<bool>();
+		return (ofxSurfingHelpers::AddBigToggle(p));
+	}
 
 	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 	return false;

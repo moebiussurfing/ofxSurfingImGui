@@ -23,7 +23,6 @@ namespace ofxSurfingHelpers {
 	//----
 
 	//TODO:
-
 	// WIP
 	// fonts management
 	//--------------------------------------------------------------
@@ -490,4 +489,5 @@ namespace ofxSurfingHelpers {
 		style->WindowRounding = 4.0f;
 
 	}
-};
+
+};//namespace ofxSurfingHelpers

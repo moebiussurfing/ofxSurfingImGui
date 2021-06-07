@@ -4,6 +4,8 @@
 
 #include "ofxSurfingImGui.h"
 
+using namespace ofxSurfing;
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -11,13 +13,17 @@ class ofApp : public ofBaseApp{
 		void draw();
 
 		ofxImGui::Gui gui; // can be instantiated outside the class
-		ofxSurfing_ImGui_LayoutManager guiManager; // gui will be instatiated inside the class
+		ofxSurfing_ImGui_LayoutManager guiManager; // or gui will be instatiated inside the class
+
 		void drawWidgets();
 
 		// parameters
 		ofParameterGroup params;
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;
+		ofParameter<bool> bMode1;
+		ofParameter<bool> bMode2;
+		ofParameter<bool> bMode3;
 		ofParameter<bool> bNext;
 		ofParameter<float> lineWidth;
 		ofParameter<float> separation;
