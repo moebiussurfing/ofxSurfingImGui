@@ -8,6 +8,7 @@
 using namespace ofxSurfing;
 
 // TODO:
+// auto-resize fails /gro bc widgets refresh is no working on group tree but on window begin
 // nested group spacing fails
 // should pass the refresh widtgets object.. or simplify
 
