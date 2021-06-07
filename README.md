@@ -32,7 +32,7 @@ ofxSurfingImGui
 * Speed up ImGui layouts with ofParameter helpers  
 
 ![image](/docs/2_Layouts.PNG?raw=true "image")  
-![image](/docs/2_Layouts2.PNG?raw=true "image")  
+![image](/docs/2_Layouts_2.PNG?raw=true "image")  
 
 ## Usage
 * Look at the examples.
