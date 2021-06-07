@@ -28,14 +28,21 @@ namespace ofxSurfingHelpers
 	//float __w = getImGui_WidgetWidth(__ww, 2);
 	//if (ImGui::Button("_Button", ImVec2(__w, _h))) {}
 	//--------------------------------------------------------------
-	inline void getImGui_WidgetWidth(float &w, int amntColumns)
+	inline void getImGui_WidgetWidth(float &w, int amntColumns = -1)
 	{
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
 		float __w100 = ImGui::GetContentRegionAvail().x;
-		w = __w100 / amntColumns - __spcx / amntColumns;
+		if (amntColumns == -1)
+		{
+			w = __w100;
+		}
+		else
+		{
+			w = __w100 / amntColumns - __spcx / amntColumns;
+		}
 	}
 	//--------------------------------------------------------------
-	inline void getImGui_WidgetHeight(float &h, int amntRows)
+	inline void getImGui_WidgetHeight(float &h, int amntRows = -1)
 	{
 		if (amntRows == -1)
 		{
@@ -72,33 +79,6 @@ public:
 
 	void beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags);
 	void endWindow();
-
-	//-
-
-	// TODO:
-	// windows helpers...
-	// problems bc if(ofxImGui)
-
-	//void beginWindow(string name);
-	//void endWindow();
-	//void beginWindow(string name){
-	//static bool auto_resize = true;
-
-	//ImGuiWindowFlags flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-
-	////flagsw |= ImGuiCond_FirstUseEver;
-	////if (auto_lockToBorder) flagsw |= ImGuiCond_Always;
-	////else flagsw |= ImGuiCond_FirstUseEver;
-	////ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsw);
-	////ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsw);
-
-	//ImGui::PushFont(customFont);
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
-	//{
-	//	std::string n = "myPanelName";
-	//	if (ofxImGui::BeginWindow(n.c_str(), mainSettings, flagsw))
-	//	{
-	//	}
 
 	//-
 
@@ -142,6 +122,35 @@ private:
 	float hh = 20;
 	//float hh = PANEL_WIDGETS_HEIGHT;
 
+	//-
+
+public:
+	//--------------------------------------------------------------
+	void drawAdvancedSubPanel() {
+		ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+		if (ImGui::CollapsingHeader("ADVANCED"))
+		{
+			//ofxSurfingHelpers::refreshImGui_WidgetsSizes();//fails
+
+			float _w;
+			float _h;
+			// this is full width (_w100) with standard height (_h)
+			ofxSurfingHelpers::getImGui_WidgetWidth(_w, 1);
+			ofxSurfingHelpers::getImGui_WidgetHeight(_h, -1);
+
+			ImGui::Button("TEST", ImVec2(_w, _h));
+
+			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h / 2);
+			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
+			//ofxSurfing::AddParameter(auto_resize);
+			//ofxSurfing::AddParameter(bLockMouseByImGui);
+
+			//ofxSurfing::AddParameter(auto_lockToBorder);
+		}
+	}
+
+
 	/*
 
 	// SNIPPET
@@ -177,41 +186,40 @@ private:
 
 	*/
 
-	//-
-
-public:
 	//--------------------------------------------------------------
-	void drawAdvancedSubPanel() {
-		ImGui::Dummy(ImVec2(0.0f, 2.0f));
-
-		if (ImGui::CollapsingHeader("ADVANCED"))
-		{
-			//ofxSurfingHelpers::refreshImGui_WidgetsSizes();
-
-			float _w;
-			float _h;
-			// this is full width (_w100) with standard height (_h)
-			ofxSurfingHelpers::getImGui_WidgetWidth(_w, 1);
-			ofxSurfingHelpers::getImGui_WidgetHeight(_h, -1);
-
-			ImGui::Button("TEST", ImVec2(_w, _h));
-
-			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h/2);
-			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h/2);
-			//ofxSurfing::AddParameter(auto_resize);
-			//ofxSurfing::AddParameter(bLockMouseByImGui);
-
-			//ofxSurfing::AddParameter(auto_lockToBorder);
-		}
-	}
-
-	//--------------------------------------------------------------
-//    void drawRangue();
+	//    void drawRangue();
 
 	//--------------------------------------------------------------
 	//void setUseAdvancedSubPanel(bool b) {
 	//	bUseAdvancedSubPanel = b;
 	//}
+
+	//-
+
+	// TODO:
+	// windows helpers...
+	// problems bc if(ofxImGui)
+
+	//void beginWindow(string name);
+	//void endWindow();
+	//void beginWindow(string name){
+	//static bool auto_resize = true;
+
+	//ImGuiWindowFlags flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+
+	////flagsw |= ImGuiCond_FirstUseEver;
+	////if (auto_lockToBorder) flagsw |= ImGuiCond_Always;
+	////else flagsw |= ImGuiCond_FirstUseEver;
+	////ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsw);
+	////ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsw);
+
+	//ImGui::PushFont(customFont);
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
+	//{
+	//	std::string n = "myPanelName";
+	//	if (ofxImGui::BeginWindow(n.c_str(), mainSettings, flagsw))
+	//	{
+	//	}
 };
 
 //}//namespace ofxSurfingHelpers

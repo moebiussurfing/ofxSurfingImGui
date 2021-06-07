@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 
-//#include "ranges.h"
 #include <list>
 #include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
@@ -15,7 +14,7 @@
 
 namespace ofxSurfing {
 
-	class ImWidgetSurfingType {
+	class ImSurfingWidgetsType {
 
 		//-
 
@@ -56,27 +55,28 @@ namespace ofxSurfing {
 
 		enum ImWidgetSurfingTYPE
 		{
-			IMGUI_WIDGET_TYPE_DEFAULT = 0,
+			IM_DEFAULT = 0,
+			IM_HIDDEN,
 			//bool
-			IMGUI_WIDGET_TYPE_BOOL_CHECK,
-			IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL,
-			IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG,
-			IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL,
-			IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG,
+			IM_CHECKBOX,
+			IM_BUTTON_SMALL,
+			IM_BUTTON_BIG,
+			IM_TOGGLE_SMALL,
+			IM_TOGGLE_BIG,
 			//float/int
-			IMGUI_WIDGET_TYPE_SLIDER,
-			IMGUI_WIDGET_TYPE_STEPPER,
-			IMGUI_WIDGET_TYPE_DRAG,
-			//IMGUI_WIDGET_TYPE_TEXT_BIG,
-			NUM_IMWIDGET_TYPES
+			IM_SLIDER,
+			IM_STEPPER,
+			IM_DRAG,
+			//IM_TEXT_BIG,
+			NUM_IM_TYPES
 		};
 
 		//-
 
 		class surfingImWidgetConf {
 		public:
-			ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT;
-			std::string name = "";
+			ImWidgetSurfingTYPE type = IM_DEFAULT;
+			std::string name = "-1";
 			int amtPerRow = 1;
 			bool bSameLine = false;
 			int spacing = -1;
@@ -86,7 +86,7 @@ namespace ofxSurfing {
 
 		vector<surfingImWidgetConf> widgetsConfs;
 
-		ImWidgetSurfingType::ImWidgetSurfingType() {
+		ImSurfingWidgetsType::ImSurfingWidgetsType() {
 			widgetsConfs.clear();
 		}
 
@@ -111,14 +111,13 @@ namespace ofxSurfing {
 			}
 
 			surfingImWidgetConf confError;
-			confError.name = "-1";
 			return confError;
 		}
 
 		//-
 
 		// queue a customization config for future populate a param widget
-		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			surfingImWidgetConf c;
 			c.name = aparam.getName();
@@ -132,8 +131,8 @@ namespace ofxSurfing {
 
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, ImWidgetSurfingType type) {
-		//	Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
+		//bool Add(ofAbstractParameter& aparam, ImSurfingWidgetsType type) {
+		//	Add(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-
@@ -150,7 +149,7 @@ namespace ofxSurfing {
 		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam)
 		{
 			string name = aparam.getName();
-			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(IMGUI_WIDGET_TYPE_DEFAULT);
+			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(IM_DEFAULT);
 
 			auto type = aparam.type();
 			bool isBool = type == typeid(ofParameter<bool>).name();
@@ -171,8 +170,24 @@ namespace ofxSurfing {
 
 		// populate now a parameter ImGui widget
 		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
-		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IMGUI_WIDGET_TYPE_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
+			bool bDone = false;
+
+			// if setted as hidden dont draw, but apply same line and spacing
+			if (type == IM_HIDDEN)
+			{
+				// extra options
+				if (bSameLine) ImGui::SameLine();
+				if (spacing != -1) {
+					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+				}
+
+				return false;
+			}
+
+			//-
+
 			////getUniqueName workaround
 			//string tag = widgetsManager.getTag(aparam);
 			//ImGui::PushID(tag.c_str());
@@ -186,10 +201,10 @@ namespace ofxSurfing {
 			bool bReturn = false;
 
 			float _ww;
-			if (amtPerRow == 1) _ww = _w100;
-			else if (amtPerRow == 2) _ww = _w50;
+			if (amtPerRow == 2) _ww = _w50;
 			else if (amtPerRow == 3) _ww = _w33;
 			else if (amtPerRow == 4) _ww = _w25;
+			else _ww = _w100;
 
 			if (isBool)
 			{
@@ -198,25 +213,25 @@ namespace ofxSurfing {
 
 				switch (type)
 				{
-				case IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL:
+				case IM_BUTTON_SMALL:
 					bReturn = ofxSurfingHelpers::AddBigButton(p, _ww, _h / 2);
 					break;
 
-				case IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG:
+				case IM_BUTTON_BIG:
 					bReturn = ofxSurfingHelpers::AddBigButton(p, _ww, _h);
 					break;
 
-				case IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL:
+				case IM_TOGGLE_SMALL:
 					bReturn = ofxSurfingHelpers::AddBigToggle(p, _ww, _h / 2);
 					break;
 
-				case IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG:
+				case IM_TOGGLE_BIG:
 					bReturn = ofxSurfingHelpers::AddBigToggle(p, _ww, _h);
 					break;
 
-				case IMGUI_WIDGET_TYPE_DEFAULT:
-				case IMGUI_WIDGET_TYPE_BOOL_CHECK:
-				default:
+				case IM_DEFAULT:
+				case IM_CHECKBOX:
+					//default:
 				{
 					ImGui::PushID(1);
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
@@ -230,19 +245,21 @@ namespace ofxSurfing {
 				}
 				break;
 				}
+
+				bDone = true;
 			}
 
 			//-
 
-			if (isFloat)
+			else if (isFloat)
 			{
 				ofParameter<float> p = aparam.cast<float>();
 				auto tmpRef = p.get();
 
 				switch (type)
 				{
-				case IMGUI_WIDGET_TYPE_DEFAULT:
-				case IMGUI_WIDGET_TYPE_SLIDER:
+				case IM_DEFAULT:
+				case IM_SLIDER:
 				{
 					ImGui::PushID(1);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
@@ -255,7 +272,7 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 
-				case IMGUI_WIDGET_TYPE_DRAG:
+				case IM_DRAG:
 				{
 					const float speed = 0.01f;
 					ImGui::PushID(1);
@@ -269,7 +286,7 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 
-				case IMGUI_WIDGET_TYPE_STEPPER:
+				case IM_STEPPER:
 				{
 					const float step = 0.001f;
 					const float stepFast = 0.1f;
@@ -285,19 +302,21 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 				}
+
+				bDone = true;
 			}
 
 			//-
 
-			if (isInt)
+			else if (isInt)
 			{
 				ofParameter<int> p = aparam.cast<int>();
 				auto tmpRef = p.get();
 
 				switch (type)
 				{
-				case IMGUI_WIDGET_TYPE_DEFAULT:
-				case IMGUI_WIDGET_TYPE_SLIDER:
+				case IM_DEFAULT:
+				case IM_SLIDER:
 				{
 					ImGui::PushID(1);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
@@ -310,7 +329,7 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 
-				case IMGUI_WIDGET_TYPE_DRAG:
+				case IM_DRAG:
 				{
 					const float speed = 0.1;
 					ImGui::PushID(1);
@@ -324,7 +343,7 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 
-				case IMGUI_WIDGET_TYPE_STEPPER:
+				case IM_STEPPER:
 				{
 					const int step = 1;
 					const int stepFast = 5;
@@ -340,14 +359,19 @@ namespace ofxSurfing {
 					bReturn = false;
 				} break;
 				}
+
+				bDone = true;
 			}
 
 			//-
 
-			// extra options
-			if (bSameLine) ImGui::SameLine();
-			if (spacing != -1) {
-				ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+			if (bDone)
+			{
+				// extra options
+				if (bSameLine) ImGui::SameLine();
+				if (spacing != -1) {
+					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+				}
 			}
 
 			//----

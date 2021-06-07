@@ -17,12 +17,12 @@
 
 	TODO:
 	important BUG !
-	
+
 	should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
 	to use on ImGui::pushId(index) !
 	why? bc when some widgets has the same name or maybe when you populate many times the same parameter
 	i.e with different desing/widget type (slider/drag/stepper)
-	
+
 	That's a problem bc we need to star count the widgets when window begins.
 	So we will need to create windows here like on ofxImGui ?
 
@@ -42,12 +42,9 @@
 // namespace ofxImGui
 namespace ofxSurfing
 {
-	//// TODO:
-	//// TESTING TOGGLE TYPES
-	//static vector<ofxSurfing::surfingImWidgetConf> widgetsConfs;
-	//static vector<ImWidgetSurfingType::surfingImWidgetConf> widgetsConfs;
-
-	static ofxSurfing::ImWidgetSurfingType widgetsManager;
+	// TODO:
+	// TESTING TOGGLE TYPES
+	static ofxSurfing::ImSurfingWidgetsType widgetsManager;
 
 	//--
 
@@ -55,7 +52,7 @@ namespace ofxSurfing
 	//public:
 	//	SurfingImGuiHelpers() {};
 	//	~SurfingImGuiHelpers() {};
-	
+
 	//--
 
 	// TODO:
@@ -198,6 +195,7 @@ static ImTextureID GetImTextureID2(GLuint glID)
 	return (ImTextureID)(uintptr_t)glID;
 }
 
+//----
 
 //--------------------------------------------------------------
 template<typename ParameterType>
@@ -224,7 +222,8 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		bool bReturn = false;
 		ofParameter<float> &p = parameter.cast<float>();
 		auto c = widgetsManager.getWidgetConf(p);
-		if (c.name != "-1")
+		// if the parameter widget is not added explicitly, will be populated as the default appearance
+		//if (c.name != "-1")
 		{
 			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 		}
@@ -249,7 +248,8 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		bool bReturn = false;
 		ofParameter<int> &p = parameter.cast<int>();
 		auto c = widgetsManager.getWidgetConf(p);
-		if (c.name != "-1")
+		// if the parameter widget is not added explicitly, will be populated as the default appearance
+		//if (c.name != "-1")
 		{
 			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 		}
@@ -276,9 +276,10 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		bool bReturn = false;
 		ofParameter<bool> &p = parameter.cast<bool>();
 		auto c = widgetsManager.getWidgetConf(p);
-		if (c.name != "-1") 
-		{ 
-			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow,c.spacing);
+		// if the parameter widget is not added explicitly, will be populated as the default appearance
+		//if (c.name != "-1") 
+		{
+			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 		}
 		return bReturn;
 	}

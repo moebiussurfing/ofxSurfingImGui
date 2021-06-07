@@ -37,21 +37,34 @@ void ofApp::setup() {
 
 	//-
 
-	// queue widgets to customize  when they will be drawn inside an ofParameterGroup
-	
+	// queue widgets to customize when they will be drawn inside an ofParameterGroup
+	// if the parameter widget is not added explicitly, will be populated as the default appearance
+
 	//bools
-	widgetsManager.AddWidgetConf(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG);
-	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, true, 2);
-	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, false, 2, 20);
-	widgetsManager.AddWidgetConf(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK, false, 1, 10);
+	widgetsManager.AddWidgetConf(bEnable, ImSurfingWidgetsType::IM_TOGGLE_BIG);
+	widgetsManager.AddWidgetConf(bPrevious, ImSurfingWidgetsType::IM_BUTTON_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bNext, ImSurfingWidgetsType::IM_BUTTON_SMALL, false, 2, 20);
+	//widgetsManager.AddWidgetConf(bMode4, ImSurfingWidgetsType::IM_CHECKBOX, false, 1, 10);
 	//floats
-	widgetsManager.AddWidgetConf(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
-	widgetsManager.AddWidgetConf(separation, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
-	widgetsManager.AddWidgetConf(speed, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, false, 1, 10);
+	//widgetsManager.AddWidgetConf(lineWidth, ImSurfingWidgetsType::IM_SLIDER);
+	widgetsManager.AddWidgetConf(separation, ImSurfingWidgetsType::IM_STEPPER);
+	widgetsManager.AddWidgetConf(speed, ImSurfingWidgetsType::IM_DRAG, false, 1, 10);
 	//ints
-	widgetsManager.AddWidgetConf(shapeType, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
-	widgetsManager.AddWidgetConf(size, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
-	widgetsManager.AddWidgetConf(amount, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, false, 1, 10);
+	widgetsManager.AddWidgetConf(shapeType, ImSurfingWidgetsType::IM_SLIDER);
+	widgetsManager.AddWidgetConf(size, ImSurfingWidgetsType::IM_STEPPER);
+	widgetsManager.AddWidgetConf(amount, ImSurfingWidgetsType::IM_DRAG, false, 1, 10);
+	//bools
+	widgetsManager.AddWidgetConf(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bMode2, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 2);
+	widgetsManager.AddWidgetConf(bMode3, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bMode4, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 2);
+
+	//hide
+	widgetsManager.AddWidgetConf(speed3, ImSurfingWidgetsType::IM_HIDDEN, false, -1, 50);
+	widgetsManager.AddWidgetConf(size2, ImSurfingWidgetsType::IM_HIDDEN, false, -1, 50);
+	widgetsManager.AddWidgetConf(bPrevious, ImSurfingWidgetsType::IM_HIDDEN);
+	widgetsManager.AddWidgetConf(bNext, ImSurfingWidgetsType::IM_HIDDEN);
+	widgetsManager.AddWidgetConf(lineWidth, ImSurfingWidgetsType::IM_HIDDEN);
 }
 
 //--------------------------------------------------------------
@@ -78,6 +91,7 @@ void ofApp::draw()
 			// a window but using my ofxSurfing_ImGui_LayoutManager.h class helper
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			guiManager.beginWindow("window 1", &bOpen1, window_flags);//bOpen1 not working..
 			{
@@ -86,20 +100,28 @@ void ofApp::draw()
 				// (instant populate)
 				{
 					widgetsManager.refreshPanelShape(); // update sizes to current window shape
+					widgetsManager.Add(bEnable, ImSurfingWidgetsType::IM_TOGGLE_SMALL); // full width
 
-					widgetsManager.Add(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL); // full width
-					widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, true, 2); // half width + same line
-					widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, false, 2, 20);// half width + 20px vert spacing
+					if (widgetsManager.Add(bPrevious, ImSurfingWidgetsType::IM_BUTTON_BIG, true, 2)) // half width + same line
+					{
+						lineWidth.setWithoutEventNotifications(lineWidth.get() - 0.1f);//fail
+					}
+					if (widgetsManager.Add(bNext, ImSurfingWidgetsType::IM_BUTTON_BIG, false, 2, 20))// half width + 20px vert spacing
+					{
+						lineWidth.setWithoutEventNotifications(lineWidth.get() + 0.1f);//fail
+					}
 
-					//widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
-					//widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG);
-					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER, false, 2, 20);
+					//widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_SLIDER);
+					//widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_DRAG);
+					widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_STEPPER, false, 2, 20);
 
 					// three widgets in one same row with 20px vert spacing before the next row
-					widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, true, 3);
-					widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, true, 3);
-					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, false, 3, 2);
-					widgetsManager.Add(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK);
+					widgetsManager.refreshPanelShape(); // update sizes to current window shape
+					widgetsManager.Add(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode2, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode3, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 3, 2);
+
+					widgetsManager.Add(bMode4, ImSurfingWidgetsType::IM_CHECKBOX);
 					//ImGui::Dummy(ImVec2(0, 20);// spacing
 				}
 
@@ -117,6 +139,7 @@ void ofApp::draw()
 					flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 					flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 
+					//widgetsManager.refreshPanelShape(); // update sizes to current window shape
 					ofxSurfing::AddGroup(params, flags);
 				}
 			}
@@ -133,9 +156,11 @@ void ofApp::draw()
 		if (bOpen2)
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
 			guiManager.beginWindow("window 2", &bOpen2, window_flags);
 			{
-				widgetsManager.refreshPanelShape();
+				//widgetsManager.refreshPanelShape();
 
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
@@ -159,12 +184,13 @@ void ofApp::draw()
 		{
 			string name = "window 3";
 			auto mainSettings = ofxImGui::Settings();
-			ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, window_flags))
 			{
-				widgetsManager.refreshPanelShape();
-				
+				//widgetsManager.refreshPanelShape();
+
 				// add more widgets and groupParams but using the old ofxImGui workflow
 				// using the old
 				drawWidgets();
@@ -198,11 +224,14 @@ void ofApp::draw()
 			// a window but using my ofxSurfing_ImGui_LayoutManager.h class
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			guiManager.beginWindow("window 4", &bOpen4, window_flags);
 			{
 				// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
 				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+
+				//-
 
 				if (ofxSurfingHelpers::AddBigToggle(bEnable)) {}// this is full width (_w100) with standard height (_h)
 				if (ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
@@ -222,6 +251,9 @@ void ofApp::draw()
 
 				ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
 
+				// do not updates for below group. Must call:
+				//widgetsManager.refreshPanelShape();
+
 				// group parameter with customized tree/folder type
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
@@ -237,18 +269,33 @@ void ofApp::draw()
 		}
 
 		//--
-		
-		ImGui::Begin("Show Windows");
+
 		{
-			ImGui::Checkbox("bOpen1", &bOpen1);
-			ImGui::Checkbox("bOpen2", &bOpen2);
-			ImGui::Checkbox("bOpen3", &bOpen3);
-			ImGui::Checkbox("bOpen4", &bOpen4);
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			static bool bOpen0 = true;
+			ImGui::Begin("Show Windows", &bOpen0, window_flags);
+			{
+				// round toggles
+
+				ofxSurfingHelpers::ToggleButton("bOpen1", &bOpen1);
+				ofxSurfingHelpers::ToggleButton("bOpen2", &bOpen2);
+				ofxSurfingHelpers::ToggleButton("bOpen3", &bOpen3);
+				ofxSurfingHelpers::ToggleButton("bOpen4", &bOpen4);
+
+				//ImGui::Checkbox("bOpen1", &bOpen1);
+				//ImGui::Checkbox("bOpen2", &bOpen2);
+				//ImGui::Checkbox("bOpen3", &bOpen3);
+				//ImGui::Checkbox("bOpen4", &bOpen4);
+
+				ImGui::Dummy(ImVec2(0, 5));
+
+				ofxSurfingHelpers::AddToggleRounded(guiManager.auto_resize);
+			}
+			ImGui::End();
 		}
-		ImGui::End();
 
 		//-
-
 	}
 	guiManager.end();
 }

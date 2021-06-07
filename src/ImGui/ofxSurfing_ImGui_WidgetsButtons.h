@@ -2,8 +2,12 @@
 
 #include "ofMain.h"
 
-//links
-//https://github.com/nem0/LumixEngine/blob/timeline_gui/external/imgui/imgui_user.inl#L814
+// links
+// https://github.com/nem0/LumixEngine/blob/timeline_gui/external/imgui/imgui_user.inl#L814
+
+// ImGui Widgets
+// toogles and buttons
+// - bool and ofParameter<bool> types
 
 //------------------------------
 //
@@ -17,12 +21,6 @@
 
 namespace ofxSurfingHelpers {
 
-	//--------------------------------------------------------------
-	// ImGui Widgets
-	// why? my custom ImGui helpers
-	//--------------------------------------------------------------
-	////https://github.com/ocornut/imgui/issues/1537
-	//--------------------------------------------------------------
 	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
@@ -138,13 +136,8 @@ namespace ofxSurfingHelpers {
 
 			// warning: in this case we need to use the name to became the toggle functional
 			// that means that we can mayube collide not unique names! 
-			string n = "#"+ name + ofToString(1);
+			string n = "#" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
-
-			//ImGui::PushID(name.c_str()); 
-			//ImGui::PushID(1);// fail
-			//ImGui::PushID(name.c_str(), 1); // fail
-			//ImGui::PushID(1, name.c_str()); // fail 
 
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
@@ -213,7 +206,7 @@ namespace ofxSurfingHelpers {
 		string name = parameter.getName();
 
 		bool bPre = tmpRef;
-		
+
 		ImGuiStyle *style = &ImGui::GetStyle();
 
 		//--
@@ -329,7 +322,7 @@ namespace ofxSurfingHelpers {
 		//TODO:
 		ImGui::PushID(1);
 		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), "ratio = %.3f"))
-		//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
+			//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
 		{
 			ofLogNotice(__FUNCTION__) << name << ": BANG";
 
@@ -367,7 +360,195 @@ namespace ofxSurfingHelpers {
 
 	//--
 
+	//--------------------------------------------------------------
+	// rounded toggle buttons: 
+	// https://github.com/ocornut/imgui/issues/1537
+	// bool & ofParameter<bool>
+	//--------------------------------------------------------------
+	inline void ToggleButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
+	{
+		ImGui::PushID(1);
+
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+		float width;
+		float radius;
+		float height;
+
+		if (vv.x == -1 && vv.y == -1)
+		{
+			height = ImGui::GetFrameHeight();
+			width = height * 1.55f;
+			radius = height * 0.50f;
+		}
+		else
+		{
+			width = vv.x;
+			radius = vv.y * 0.5f;
+			height = vv.y;
+		}
+
+		ImGui::InvisibleButton(str_id, ImVec2(width, height));
+		if (ImGui::IsItemClicked()) *v = !*v;
+
+		ImGuiContext& gg = *GImGui;
+		float ANIM_SPEED = 0.085f;
+		if (gg.LastActiveId == gg.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
+
+		if (ImGui::IsItemHovered())
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				ImGui::GetColorU32(*v ?
+					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+		else
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				ImGui::GetColorU32(*v ?
+					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+
+		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
+			p.y + radius), radius - 1.5f, c1);
+
+		ImGui::SameLine();
+		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
+		ImGui::Text(str_id);
+
+		ImGui::PopID();
+	}
+
+	// ofParameter bool toggle
+	//--------------------------------------------------------------
+	inline bool AddToggleRounded(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
+	{
+		ImGui::PushID(1);
+
+		auto tmpRef = parameter.get();
+		std::string name = parameter.getName();
+
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+		float width;
+		float radius;
+		float height;
+
+		if (v.x == -1 && v.y == -1)
+		{
+			height = ImGui::GetFrameHeight();
+			width = height * 1.55f;
+			radius = height * 0.50f;
+		}
+		else
+		{
+			width = v.x;
+			radius = v.y * 0.5f;
+			height = v.y;
+		}
+
+		ImGui::InvisibleButton(name.c_str(), ImVec2(width, height));
+		if (ImGui::IsItemClicked())
+		{
+			tmpRef = !tmpRef;
+
+			parameter.set(tmpRef);
+		}
+
+		ImGuiContext& gg = *GImGui;
+		float ANIM_SPEED = 0.085f;
+		if (gg.LastActiveId == gg.CurrentWindow->GetID(name.c_str()))// && g.LastActiveIdTimer < ANIM_SPEED)
+			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
+
+		if (ImGui::IsItemHovered())
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				ImGui::GetColorU32(tmpRef ?
+					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+		else
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				ImGui::GetColorU32(tmpRef ?
+					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+
+		draw_list->AddCircleFilled(ImVec2(p.x + radius + (tmpRef ? 1 : 0) * (width - radius * 2.0f),
+			p.y + radius), radius - 1.5f, c1);
+
+		//-
+
+		ImGui::SameLine();
+		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
+		ImGui::Text(name.c_str());
+
+		ImGui::PopID();
+
+		return tmpRef;// used
+
+		//--
+
+		/*
+		//label
+
+		//// Render
+		//const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		//RenderNavHighlight(bb, id);
+		//RenderFrame(bb.Min, bb.Max, col, true, style.FrameRounding);
+
+		//ImVec2 pos = window->DC.CursorPos;
+		//if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrLineTextBaseOffset) // Try to vertically align buttons that are smaller/have no padding so that text baseline matches (bit hacky, since it shouldn't be a flag)
+		//	pos.y += window->DC.CurrLineTextBaseOffset - style.FramePadding.y;
+		//ImVec2 size = CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
+
+		//const ImRect bb(pos, pos + size);
+		//ImGui::RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
+		//ImGui::RenderTextClipped(.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
+
+		////ImGui::SameLine(0, 10);
+		////ImGui::SameLine(0, 0.5);
+		//ImGui::SameLine();
+		////ImGui::Dummy(ImVec2(-1.0f, 10.0f));
+		//ImGui::Text(name.c_str());
+
+
+		//TODO. aligning
+		//const char* fmt;
+		//va_list args;
+		//ImVec2 size_arg(100, 30);
+		//ImVec2 align(0, 0);
+
+		//ImGuiWindow* window = ImGui::GetCurrentWindow();
+
+		////ImGuiContext& g = *GetCurrentContext();
+		////
+		////auto g = ImGui::GetStyle();
+		////const ImGuiStyle& style = g.Style;
+		////const char* text_end = g.TempBuffer + ImFormatStringV(g.TempBuffer, IM_ARRAYSIZE(g.TempBuffer), fmt, args);
+		////const ImVec2 label_size = ImGui::CalcTextSize(g.TempBuffer, text_end, true, 0.0f);
+		////const ImGuiID id = window->GetID(g.TempBuffer, text_end);
+
+		//ImVec2 pos = window->DC.CursorPos;
+		////if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrentLineTextBaseOffset)
+		//	//pos.y += window->DC.CurrentLineTextBaseOffset - style.FramePadding.y;
+		//ImVec2 size = ImGui::CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
+
+
+		//const ImRect bb(pos, pos + size);
+		//ImGui::ItemSize(bb, style.FramePadding.y);
+		//ImGui::RenderTextClipped(bb.Min, bb.Max, g.TempBuffer, text_end, &label_size, align);
+
+
+		ImGui::PopID();
+
+		return tmpRef;// used
+		*/
+	}
+
+	//-
+
 	//// TODO:
+
 	////--------------------------------------------------------------
 	//inline int ImGui_ButtonsMatrix(int amountButtons, ofParameter<int> selectorTarget, string name)
 	//{
@@ -416,6 +597,8 @@ namespace ofxSurfingHelpers {
 	//}
 
 	//--
+
+	//// TODO:
 
 	// spinner progress indicator
 	//https://github.com/ocornut/imgui/issues/1901
@@ -504,8 +687,11 @@ namespace ofxSurfingHelpers {
 	//	}
 	//
 	//}
-		//namespace ImGui 
-		//{
+
+	//-
+
+	//namespace ImGui 
+	//{
 	//using ComVec4 = const ImVec4 &;
 	//auto Spinner(float radius, float thickness, int num_segments, float speed, ComVec4 color) -> void {
 	//	//auto ImGui::Spinner(float radius, float thickness, int num_segments, float speed, ComVec4 color) -> void {
@@ -535,157 +721,6 @@ namespace ofxSurfingHelpers {
 	//	}
 	//	window->DrawList->PathStroke(GetColorU32(color), false, thickness);
 	//}
-
 	//}
-
-
-	// rounded toggle buttons: bool & ofParameter<bool>
-	//--------------------------------------------------------------
-	inline void ToggleButton(const char* str_id, bool* v)
-	{
-		ImGui::PushID(1);
-
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		ImVec2 p = ImGui::GetCursorScreenPos();
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-		float height = ImGui::GetFrameHeight();
-		float width = height * 1.55f;
-		float radius = height * 0.50f;
-
-		ImGui::InvisibleButton(str_id, ImVec2(width, height));
-		if (ImGui::IsItemClicked()) *v = !*v;
-		ImGuiContext& gg = *GImGui;
-		float ANIM_SPEED = 0.085f;
-		if (gg.LastActiveId == gg.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
-			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
-		if (ImGui::IsItemHovered())
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : ImVec4(0.78f, 0.78f, 0.78f, 1.0f)), height * 0.5f);
-		else
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), ImGui::GetColorU32(*v ? colors[ImGuiCol_Button] : ImVec4(0.85f, 0.85f, 0.85f, 1.0f)), height * 0.50f);
-		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
-
-		ImGui::SameLine();
-		ImGui::Text(str_id);
-
-		ImGui::PopID();
-	}
-
-	// ofParameter bool toggle
-	//--------------------------------------------------------------
-	inline bool AddToggleRounded(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
-	{
-		ImGui::PushID(1);
-
-		auto tmpRef = parameter.get();
-		std::string name = parameter.getName();
-
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		ImVec2 p = ImGui::GetCursorScreenPos();
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-		float width;
-		float radius;
-		float height;
-
-		if (v.x == -1 && v.y == -1)
-		{
-			height = ImGui::GetFrameHeight();
-			width = height * 1.55f;
-			radius = height * 0.50f;
-		}
-		else
-		{
-			width = v.x;
-			radius = v.y * 0.5f;
-			height = v.y;
-		}
-
-		ImGui::InvisibleButton(name.c_str(), ImVec2(width, height));
-		if (ImGui::IsItemClicked())
-		{
-			tmpRef = !tmpRef;
-
-			parameter.set(tmpRef);
-		}
-
-		ImGuiContext& gg = *GImGui;
-		float ANIM_SPEED = 0.085f;
-		if (gg.LastActiveId == gg.CurrentWindow->GetID(name.c_str()))// && g.LastActiveIdTimer < ANIM_SPEED)
-			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
-
-		if (ImGui::IsItemHovered())
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(tmpRef ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-		else
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(tmpRef ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-
-		//draw_list->AddCircleFilled(ImVec2(p.x + radius + (tmpRef ? 1 : 0) * (width - radius * 2.0f), 
-		//	p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
-
-		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
-
-		draw_list->AddCircleFilled(ImVec2(p.x + radius + (tmpRef ? 1 : 0) * (width - radius * 2.0f),
-			p.y + radius), radius - 1.5f, c1);
-
-		//--
-
-		//label
-
-		//// Render
-		//const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
-		//RenderNavHighlight(bb, id);
-		//RenderFrame(bb.Min, bb.Max, col, true, style.FrameRounding);
-
-		//ImVec2 pos = window->DC.CursorPos;
-		//if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrLineTextBaseOffset) // Try to vertically align buttons that are smaller/have no padding so that text baseline matches (bit hacky, since it shouldn't be a flag)
-		//	pos.y += window->DC.CurrLineTextBaseOffset - style.FramePadding.y;
-		//ImVec2 size = CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
-
-		//const ImRect bb(pos, pos + size);
-		//ImGui::RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
-		//ImGui::RenderTextClipped(.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
-
-		//ImGui::SameLine(0, 10);
-		//ImGui::SameLine(0, 0.5);
-		ImGui::SameLine();
-		//ImGui::Dummy(ImVec2(-1.0f, 10.0f));
-		ImGui::Text(name.c_str());
-
-
-		//TODO. aligning
-		//const char* fmt;
-		//va_list args;
-		//ImVec2 size_arg(100, 30);
-		//ImVec2 align(0, 0);
-
-		//ImGuiWindow* window = ImGui::GetCurrentWindow();
-
-		////ImGuiContext& g = *GetCurrentContext();
-		////
-		////auto g = ImGui::GetStyle();
-		////const ImGuiStyle& style = g.Style;
-		////const char* text_end = g.TempBuffer + ImFormatStringV(g.TempBuffer, IM_ARRAYSIZE(g.TempBuffer), fmt, args);
-		////const ImVec2 label_size = ImGui::CalcTextSize(g.TempBuffer, text_end, true, 0.0f);
-		////const ImGuiID id = window->GetID(g.TempBuffer, text_end);
-
-		//ImVec2 pos = window->DC.CursorPos;
-		////if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrentLineTextBaseOffset)
-		//	//pos.y += window->DC.CurrentLineTextBaseOffset - style.FramePadding.y;
-		//ImVec2 size = ImGui::CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
-
-
-		//const ImRect bb(pos, pos + size);
-		//ImGui::ItemSize(bb, style.FramePadding.y);
-		//ImGui::RenderTextClipped(bb.Min, bb.Max, g.TempBuffer, text_end, &label_size, align);
-
-
-		ImGui::PopID();
-
-		return tmpRef;// used
-	}
 
 };

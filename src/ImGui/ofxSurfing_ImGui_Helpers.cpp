@@ -198,8 +198,8 @@
 //--------------------------------------------------------------
 void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
-	//TODO:
-	//widgetsManager.refreshPanelShape();
+	////TODO:
+	//widgetsManager.refreshPanelShape(); // fails
 
 	//TODO:
 	//maybe should add different types of groups: collaspe/tree/treeEx
@@ -217,12 +217,14 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 			if (parameterGroup)
 			{
+				widgetsManager.refreshPanelShape();
+
 				// Recurse through contents.
 				ofxSurfing::AddGroup(*parameterGroup, flags);
 
 				//TODO:
-				//ofxSurfing::AddGroup(*parameterGroup, settings, flags);
-				//ofxSurfing::AddGroup(*parameterGroup, settings);//we
+				//ofxSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
+				//ofxSurfing::AddGroup(*parameterGroup, settings);//old
 				continue;
 			}
 
