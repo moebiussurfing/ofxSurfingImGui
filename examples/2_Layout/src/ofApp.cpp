@@ -7,6 +7,8 @@ void ofApp::setup() {
 	guiManager.setup(gui); // can be instantiated out of the class, locally
 	//guiManager.setup(); // or inside the class, the we can forgot of declare here (ofApp scope).
 
+	//-
+
 	// parameters
 	params.setName("paramsGroup");// main container
 	params2.setName("paramsGroup2");// nested
@@ -14,6 +16,7 @@ void ofApp::setup() {
 	params.add(bMode1.set("Mode1", false));
 	params.add(bMode2.set("Mode2", false));
 	params.add(bMode3.set("Mode3", false));
+	params.add(bMode4.set("Mode4", false));
 	params.add(bPrevious.set("<", false));
 	params.add(bNext.set(">", false));
 	params.add(bEnable.set("Enable", false));
@@ -32,10 +35,23 @@ void ofApp::setup() {
 	params2.add(params3);
 	params.add(params2);
 
-	// customize widgets
+	//-
+
+	// queue widgets to customize  when they will be drawn inside an ofParameterGroup
+	
+	//bools
 	widgetsManager.AddWidgetConf(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_BIG);
 	widgetsManager.AddWidgetConf(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, true);
 	widgetsManager.AddWidgetConf(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_SMALL, 2, false, 20);
+	widgetsManager.AddWidgetConf(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK, 1, false, 10);
+	//floats
+	widgetsManager.AddWidgetConf(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
+	widgetsManager.AddWidgetConf(separation, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
+	widgetsManager.AddWidgetConf(speed, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, 1, false, 10);
+	//ints
+	widgetsManager.AddWidgetConf(shapeType, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
+	widgetsManager.AddWidgetConf(size, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER);
+	widgetsManager.AddWidgetConf(amount, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG, 1, false, 10);
 }
 
 //--------------------------------------------------------------
@@ -43,6 +59,11 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
+		static bool bOpen1 = true;
+		static bool bOpen2 = false;
+		static bool bOpen3 = false;
+		static bool bOpen4 = false;
+
 		//---------
 
 		// window 1
@@ -50,42 +71,49 @@ void ofApp::draw()
 		// using my own simpler helpers API: 
 		// ofxSurfing_ImGui_Helpers.h
 
-		if (1)
+		if (bOpen1)
 		{
 			// a window but using my ofxSurfing_ImGui_LayoutManager.h class helper
 
-			static bool bOpen1 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 
-			guiManager.beginWindow("window 1", &bOpen1, window_flags);
+			guiManager.beginWindow("window 1", &bOpen1, window_flags);//bOpen1 not working..
 			{
-				// single params
+				// 1. single params
+
+				// (instant populate)
 				{
 					widgetsManager.refreshPanelShape(); // update sizes to current window shape
 
 					widgetsManager.Add(bEnable, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL); // full width
-
 					widgetsManager.Add(bPrevious, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, true); // half width + same line
 					widgetsManager.Add(bNext, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_BUTTON_BIG, 2, false, 20);// half width + 20px vert spacing
-					//ImGui::Dummy(ImVec2(0, 20));// spacing
+
+					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_SLIDER);
+					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_DRAG);
+					widgetsManager.Add(lineWidth, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_STEPPER, 2, false, 20);
 
 					// three widgets in one same row with 20px vert spacing before the next row
 					widgetsManager.Add(bMode1, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
 					widgetsManager.Add(bMode2, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, true);
-					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, false, 20);
+					widgetsManager.Add(bMode3, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_TOGGLE_SMALL, 3, false, 2);
+					widgetsManager.Add(bMode4, ImWidgetSurfingType::IMGUI_WIDGET_TYPE_BOOL_CHECK);
 					//ImGui::Dummy(ImVec2(0, 20);// spacing
 				}
 
 				//-
 
-				// group
+				// 2. group of params
+
+				// (queue to populate after)
 				{
 					// group of parameters with customized tree/folder type
 					// will be applied to all nested groups inside this parent
+					// customization is defined above on setup(): widgetsManager.AddWidgetConf(..
 
 					ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 					flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
-					//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
+					flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 
 					ofxSurfing::AddGroup(params, flags);
 				}
@@ -99,9 +127,8 @@ void ofApp::draw()
 
 		// using my own simpler helpers API: ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
 
-		if (0)
+		if (bOpen2)
 		{
-			bool bOpen2 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			guiManager.beginWindow("window 2", &bOpen2, window_flags);
 			{
@@ -122,7 +149,7 @@ void ofApp::draw()
 
 		// using the old ofxGui original API: (Settings/ofxImGui::AddGroup)
 
-		if (0)
+		if (bOpen3)
 		{
 			string name = "window 3";
 			auto mainSettings = ofxImGui::Settings();
@@ -148,7 +175,7 @@ void ofApp::draw()
 
 		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
 
-		if (0)
+		if (bOpen4)
 		{
 			float _spcx; // space between widgets
 			float _spcy; // space between widgets
@@ -162,7 +189,6 @@ void ofApp::draw()
 
 			// a window but using my ofxSurfing_ImGui_LayoutManager.h class
 
-			static bool bOpen4 = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 
 			guiManager.beginWindow("window 4", &bOpen4, window_flags);
@@ -201,6 +227,17 @@ void ofApp::draw()
 			}
 			guiManager.endWindow();
 		}
+
+		//--
+		
+		ImGui::Begin("Show Windows");
+		{
+			ImGui::Checkbox("bOpen1", &bOpen1);
+			ImGui::Checkbox("bOpen2", &bOpen2);
+			ImGui::Checkbox("bOpen3", &bOpen3);
+			ImGui::Checkbox("bOpen4", &bOpen4);
+		}
+		ImGui::End();
 
 		//-
 

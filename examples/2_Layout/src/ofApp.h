@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+#include "ofxWindowApp.h"
 
 
 /*
@@ -33,6 +34,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> bMode1;
 		ofParameter<bool> bMode2;
 		ofParameter<bool> bMode3;
+		ofParameter<bool> bMode4;
 		ofParameter<bool> bNext;
 		ofParameter<float> lineWidth;
 		ofParameter<float> separation;
@@ -49,4 +51,6 @@ class ofApp : public ofBaseApp{
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;
 		ofParameter<int> shapeType3;
+
+		ofxWindowApp windowApp;
 };

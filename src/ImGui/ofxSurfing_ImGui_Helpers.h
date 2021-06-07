@@ -31,9 +31,9 @@ namespace ofxSurfing
 {
 	//// TODO:
 	//// TESTING TOGGLE TYPES
-	//static vector<ofxSurfing::ImWidgetSurfingELEMENT> widgetsConfs;
-	//static vector<ImWidgetSurfingType::ImWidgetSurfingELEMENT> widgetsConfs;
-	
+	//static vector<ofxSurfing::surfingImWidgetConf> widgetsConfs;
+	//static vector<ImWidgetSurfingType::surfingImWidgetConf> widgetsConfs;
+
 	static ofxSurfing::ImWidgetSurfingType widgetsManager;
 
 	//--
@@ -42,6 +42,16 @@ namespace ofxSurfing
 	//public:
 	//	SurfingImGuiHelpers() {};
 	//	~SurfingImGuiHelpers() {};
+	
+	//--
+
+	// TODO:
+	// important BUG !
+	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	// to use on ImGui::pushId(index) !
+	// why? bc when some widgets has the same name or maybe when you populate many times the same parameter
+	// i.e with different desing/widget type (slider/drag/stepper)
+	static int index = 0;
 
 	//--
 
@@ -159,6 +169,9 @@ namespace ofxSurfing
 }//namespace ofxSurfing
 
 
+//----
+
+
 static ImTextureID GetImTextureID2(const ofTexture& texture)
 {
 	return (ImTextureID)(uintptr_t)texture.texData.textureID;
@@ -182,34 +195,59 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	auto tmpRef = parameter.get();
 	const auto& info = typeid(ParameterType);
 
+	// float
+	//if (info == typeid(float))
+	//{
+	//	ImGui::PushID(1);
+	//	if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//	{
+	//		parameter.set(tmpRef);
+	//		ImGui::PopID();
+	//		return true;
+	//	}
+	//	ImGui::PopID();
+	//	return false;
+	//}
 	if (info == typeid(float))
 	{
-		ImGui::PushID(1);
-		if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+		bool bReturn = false;
+		ofParameter<float> &p = parameter.cast<float>();
+		auto c = widgetsManager.getWidgetConf(p);
+		if (c.name != "-1")
 		{
-			parameter.set(tmpRef);
-			ImGui::PopID();
-			return true;
+			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 		}
-		ImGui::PopID();
-		return false;
+		return bReturn;
 	}
 
+	// int
+	//if (info == typeid(int))
+	//{
+	//	ImGui::PushID(1);
+	//	if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//	{
+	//		parameter.set(tmpRef);
+	//		ImGui::PopID();
+	//		return true;
+	//	}
+	//	ImGui::PopID();
+	//	return false;
+	//}
 	if (info == typeid(int))
 	{
-		ImGui::PushID(1);
-		if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+		bool bReturn = false;
+		ofParameter<int> &p = parameter.cast<int>();
+		auto c = widgetsManager.getWidgetConf(p);
+		if (c.name != "-1")
 		{
-			parameter.set(tmpRef);
-			ImGui::PopID();
-			return true;
+			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 		}
-		ImGui::PopID();
-		return false;
+		return bReturn;
 	}
 
-	// TODO:
-	// TESTING TOGGLE TYPES
+	// bool
+	//// TODO:
+	//// TESTING TOGGLE TYPES
 	//if (info == typeid(bool))
 	//{
 	//	ImGui::PushID(1);
@@ -222,16 +260,20 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	//	ImGui::PopID();
 	//	return false;
 	//}
-
-	// TODO:
-	// TESTING TOGGLE TYPES
 	if (info == typeid(bool))
 	{
+		bool bReturn = false;
 		ofParameter<bool> &p = parameter.cast<bool>();
-		return (ofxSurfingHelpers::AddBigToggle(p));
+		auto c = widgetsManager.getWidgetConf(p);
+		if (c.name != "-1") 
+		{ 
+			bReturn = widgetsManager.Add(p, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+		}
+		return bReturn;
 	}
 
 	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+
 	return false;
 }
 
@@ -286,8 +328,8 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& value
 			return false;
 		}
 	}
-	return result;
 
+	return result;
 }
 
 //}; // class

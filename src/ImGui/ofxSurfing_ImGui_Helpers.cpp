@@ -198,10 +198,16 @@
 //--------------------------------------------------------------
 void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
-
+	//TODO:
+	//maybe should add different types of groups: collaspe/tree/treeEx
 	//if (ImGui::CollapsingHeader(group.getName().c_str(), flags))
+
 	if (ImGui::TreeNodeEx(group.getName().c_str(), flags))
 	{
+		widgetsManager.refreshPanelShape();
+
+		//-
+
 		for (auto parameter : group)
 		{
 			// Group.

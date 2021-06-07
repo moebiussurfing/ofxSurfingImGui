@@ -20,19 +20,19 @@ ofxSurfingImGui
 - Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
 	* Now using PushId(1)/PopID() on each widget.
 
-## Screenshots
+## Examples Screenshots
 
 ### 1_Widgets
-* Layout example, full/half width buttons, range sliders and DearWidgets.  
+* **ofParameter** helpers with full/half width buttons, range sliders and DearWidgets.  
 
-![image](/docs/1_Widgets.jpg?raw=true "image")  
+![image](/docs/Capture1.PNG?raw=true "image")  
+![image](/docs/Capture2.PNG?raw=true "image")  
 
 ### 2_Layout
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
-* Speed up ImGui layouts with ofParameter helpers  
+* Speed up ImGui layouts with **ofParameter** helpers.  
 
-![image](/docs/2_Layouts.PNG?raw=true "image")  
-![image](/docs/2_Layouts_2.PNG?raw=true "image")  
+![image](/docs/Capture3.PNG?raw=true "image")  
 
 ## Usage
 * Look at the examples.
