@@ -1,12 +1,13 @@
 ofxSurfingImGui
 =============================
 
+#### WORK IN PROGRESS
+* BUG: WHEN ADDING MANY TIMES A PRAMETER OR OTHER WITH A NOT UNIQUE NAME.  
+* BUG: LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS.
+-----------
+
 ## Overview
 **ofxSurfingImGui** is a helper add-on with _Snippets / Helpers / LayoutManagement / Widgets_ to easy integrate **ImGui** into **openFrameworks**.
-
-#### WORK IN PROGRESS
-* BUG: WHEN ADDING MANY TIMES A PRAMETER WITH SAME NOT UNIQUE NAME.  
-* BUG: LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS.
 
 ## Features 
 * Requires the _awesome_ @**Daandelange**'s fork: 
