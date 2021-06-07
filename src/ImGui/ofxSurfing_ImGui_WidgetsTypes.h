@@ -198,6 +198,16 @@ namespace ofxSurfing {
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
+
+			// is not called with groups here..
+			//bool isGroup = ptype == typeid(ofParameterGroup).name();
+			//if (isGroup) 
+			//{
+			//	refreshPanelShape();
+			//	return false;
+			//}
+
+
 			bool bReturn = false;
 
 			float _ww;

@@ -198,13 +198,13 @@
 //--------------------------------------------------------------
 void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
-	////TODO:
+	//TODO:
 	//widgetsManager.refreshPanelShape(); // fails
 
 	//TODO:
 	//maybe should add different types of groups: collaspe/tree/treeEx
 	//if (ImGui::CollapsingHeader(group.getName().c_str(), flags))
-
+	//if (ImGui::TreeNode(group.getName().c_str()))
 	if (ImGui::TreeNodeEx(group.getName().c_str(), flags))
 	{
 		widgetsManager.refreshPanelShape();
@@ -217,7 +217,8 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 			if (parameterGroup)
 			{
-				widgetsManager.refreshPanelShape();
+				//TODO:
+				//widgetsManager.refreshPanelShape();
 
 				// Recurse through contents.
 				ofxSurfing::AddGroup(*parameterGroup, flags);
@@ -307,7 +308,7 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
 
-		ImGui::TreePop();
+		ImGui::TreePop();//not required when using collapsing
 	}
 }
 

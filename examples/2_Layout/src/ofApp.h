@@ -7,6 +7,10 @@
 
 using namespace ofxSurfing;
 
+// TODO:
+// nested group spacing fails
+// should pass the refresh widtgets object.. or simplify
+
 class ofApp : public ofBaseApp{
 
 	public:
