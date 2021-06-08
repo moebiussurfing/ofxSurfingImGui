@@ -90,9 +90,9 @@ void ofApp::draw() {
             if (AddBigButton(b4, _w50, _h)) {}
 
             // Or using raw ImGui
-			if (ImGui::Button("START", ImVec2(_w50, _h))) {}
-			ImGui::SameLine();
-			if (ImGui::Button("STOP", ImVec2(_w50, _h))) {}
+            if (ImGui::Button("START", ImVec2(_w50, _h))) {}
+            ImGui::SameLine();
+            if (ImGui::Button("STOP", ImVec2(_w50, _h))) {}
 
             // An extra panel for useful config: auto resize window, mouseOverGui..
             guiManager.drawAdvancedSubPanel();
