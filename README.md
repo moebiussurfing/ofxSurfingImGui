@@ -67,10 +67,12 @@ void ofApp::draw() {
     {
         guiManager.beginWindow("Window1", &bOpen1, window_flags1);
         {
-            // precalculate widgets sizes to fit window "responsive"
+            // precalculate common widgets sizes to fit window "responsive"
+            // (includes the ImGui spacing between widgets)
             float _w100 = getImGui_WidgetWidth(1); // 1 widget full width
             float _w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
             float _w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
+            float _w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
             float _h = WIDGETS_HEIGHT;
 
             /* Draw ImGui widgets */
@@ -131,13 +133,13 @@ void ofApp::setup()
     // two widgets in the same line with 10px of spacing at end
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
-    // a float parameter presented with number and +/- controls
+    // a widget presented with number and +/- controls
     widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
-    // the same float parameter but as a slider and 10px spacing at the end
+    // the same parameter but as a slider and 10px spacing at the end
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-    // an int as slider 
+    // a widget as slider 
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
-    // an int as stepper
+    // an widget as stepper
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
 void ofApp::drawWidgets() 
