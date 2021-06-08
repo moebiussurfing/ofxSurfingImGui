@@ -140,7 +140,8 @@ void ofApp::setup()
     // feed bool, float and int parameters into an ofParameterGroup
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
-    // queue style for each parameter
+    // Workflow A
+    // Queue conf style for each parameter
 
     // format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
@@ -165,7 +166,8 @@ void ofApp::setup()
 }
 void ofApp::drawWidgets() 
 {
-    // instant draw each parameter
+    // Workflow B
+    // Instant draw each parameter
 
     // format:
     // bool Add(ofAbstractParameter& aparam, 
