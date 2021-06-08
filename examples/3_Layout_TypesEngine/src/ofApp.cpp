@@ -46,32 +46,33 @@ void ofApp::setup() {
 	//-
 
 	// Queue widgets styles to customize when they will be drawn inside an ofParameterGroup
-	// if the parameter widget is not added explicitly, will be populated with the default appearance.
+	// If the parameter widget is not added explicitly, will be populated with the default appearance.
+
+	// NOTE:
+	// This added style conf will be applied in all the appearances of the param widgets inside all groups.
+	// We can overwrite this customization only draing the simple param "by hand".
+	// ie:
+	// widgetsManager.Add(bMode3, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 3, 2);+
+
 	if (bCustom2)
 	{
-		// bools
 		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
 
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20);
 
-		//widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_CHECKBOX, false, 1, 10);
-
-		// floats
-		//widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(separation, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(speed, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
+		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
 
-		// ints
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(size, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(amount, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
 
-		// bools
-		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
-		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
-		widgetsManager.AddWidgetConf(bMode3, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
-		widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
+		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
+		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 2);
+		widgetsManager.AddWidgetConf(bMode3, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
+		widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 2);
 
 		// hide some params from any on-param-group appearance
 		widgetsManager.AddWidgetConf(speed3, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
@@ -177,11 +178,11 @@ void ofApp::drawWindow1() {
 				}
 
 				// 1.3 A float param
-				//ofxSurfing::AddParameter(lineWidth);// default
-				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_SLIDER);
+				//ofxSurfing::AddParameter(lineWidth); // default but will not drawn bc its configured as hidden on setup
+				widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_SLIDER); // froce draw
 				//BUG: duplicated params collide bc UniqueName troubles..
 				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_DRAG);
-				widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
+				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_STEPPER, false, 2, 20); // crashes?
 
 				// 1.4 Three small toggle widgets in one row
 				// with 20px vert spacing at end
@@ -230,9 +231,9 @@ void ofApp::drawWindow1() {
 			// 3. Another widgets pack
 			{
 				static bool bMore = false;
-				ImGui::Dummy(ImVec2(0, 20));// spacing
+				ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ImGui::Separator();
-				ImGui::Dummy(ImVec2(0, 20));// spacing
+				ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ImGui::Text("MORE WIDGETS");
 				ToggleRoundedButton("draw", &bMore);
 				if (bMore) drawMoreWidgets();

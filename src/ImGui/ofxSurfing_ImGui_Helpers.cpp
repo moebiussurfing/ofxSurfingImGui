@@ -203,9 +203,16 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 
 	//TODO:
 	//maybe should add different types of groups: collaspe/tree/treeEx
-	//if (ImGui::CollapsingHeader(group.getName().c_str(), flags))
-	//if (ImGui::TreeNode(group.getName().c_str()))
-	if (ImGui::TreeNodeEx(group.getName().c_str(), flags))
+
+	//TODO: BUG
+	//if (ImGui::TreeNodeEx(group.getName().c_str(), flags)) // -> that's the desired tree but having sizing BUG
+	//if (ImGui::TreeNode(group.getName().c_str())) // -> tree 
+	// remeber to uncomment ImGui::TreePop(); below! 
+
+	//TODO: 
+	// workaround solution using this bc refreshPanelShape() not working well!
+	if (ImGui::CollapsingHeader(group.getName().c_str(), flags)) // -> do not adds indentation
+
 	{
 		widgetsManager.refreshPanelShape();
 
@@ -308,7 +315,7 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
 
-		ImGui::TreePop();//not required when using collapsing
+		//ImGui::TreePop();// must disable when using CollapsingHeader(
 	}
 }
 

@@ -48,13 +48,13 @@ namespace ofxSurfing
 
 	//--
 
-	// TODO:
-	// important BUG !
-	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
-	static int index = 0;
-	static void resetIndex() {
-		index = 0;
-	}
+	//// TODO:
+	//// important BUG !
+	//// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	//static int index = 0;
+	//static void resetIndex() {
+	//	index = 0;
+	//}
 
 	//--
 
