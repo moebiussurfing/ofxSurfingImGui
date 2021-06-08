@@ -36,10 +36,11 @@ API will change and I am still having some problems yet.
 ## Examples Screenshots
 
 ### 1_Widgets
-* Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 ![image](/docs/Capture1.PNG?raw=true "image")  
 <!-- <img src="docs/Capture1.PNG" width="80%" height="80%"> -->
+
+* Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 ---------------------------------------------------------
 
@@ -121,6 +122,16 @@ void ofApp::draw() {
 * Especially useful when params are into an **ofParameterGroup**.
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
 
+#### Available customization options:
+```c++
+void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+```
+    - Hide the parameter.  
+    - Set an ImGui::SameLine after the widget.  
+    - Add a final vertical spacing after the widget.  
+    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
+
 #### Usage Code
 ```.cpp
 void ofApp::setup() 
@@ -178,16 +189,6 @@ void ofApp::drawWidgets()
     ofxSurfing::AddGroup(params, flags);
 }
 ```
-
-#### Available customization options:
-```c++
-void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-```
-    - Hide the parameter.  
-    - Set an ImGui::SameLine after the widget.  
-    - Add a final vertical spacing after the widget.  
-    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
 
 ---------------------------------------------------------
 
