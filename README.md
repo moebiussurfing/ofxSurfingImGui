@@ -50,6 +50,8 @@ API will change and I am still having some problems yet.
 
 ![image](/docs/Capture2.PNG?raw=true "image")  
 <!-- <img src="docs/Capture2.PNG" width="80%" height="80%"> -->
+
+#### Code
 ```.cpp
 //ofApp.h
 #include "ofxSurfingImGui.h"
