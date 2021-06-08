@@ -79,7 +79,7 @@ void ofApp::draw() {
             float _w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
             float _h = WIDGETS_HEIGHT;
 
-            /* Draw raw ImGui or my Surfing widgets */
+            /* Draw raw ImGui or my Surfing widgets with ofParameters*/
 
             // One widget full with and half height
             if (AddBigToggle(b1, _w100, _h / 2)) {} 
