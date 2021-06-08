@@ -27,7 +27,7 @@
 
 // typical basic usage
 // copy paste all this to your ofApp
-// or you can use ofxSurfing_ImGui_LayoutManager that bundles all this code
+// or you can use ofxSurfing_ImGui_Manager that bundles all this code
 
 /*
 

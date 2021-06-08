@@ -60,20 +60,21 @@ namespace ofxSurfingHelpers
 
 //----
 
-class ofxSurfing_ImGui_LayoutManager
+class ofxSurfing_ImGui_Manager
 {
 
 public:
-	ofxSurfing_ImGui_LayoutManager();
-	~ofxSurfing_ImGui_LayoutManager();
+	ofxSurfing_ImGui_Manager();
+	~ofxSurfing_ImGui_Manager();
 
 	//-
 
 	// main API
 
 public:
-	void setup();
-	void setup(ofxImGui::Gui & gui);
+	void setup();  // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
+
 	void begin();
 	void end();
 
@@ -99,7 +100,7 @@ private:
 	ofxImGui::Gui * guiPtr = NULL;
 	ofxImGui::Gui gui;
 
-	ofxImGui::Settings mainSettings = ofxImGui::Settings();
+	ofxImGui::Settings mainSettings = ofxImGui::Settings();// should remove..
 	ImFont* customFont = nullptr;
 
 public:
@@ -135,14 +136,16 @@ public:
 
 			float _w;
 			float _h;
+
 			// this is full width (_w100) with standard height (_h)
 			ofxSurfingHelpers::getImGui_WidgetWidth(_w, 1);
 			ofxSurfingHelpers::getImGui_WidgetHeight(_h, -1);
 
-			ImGui::Button("TEST", ImVec2(_w, _h));
+			//ImGui::Button("TEST", ImVec2(_w, _h));
 
 			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h / 2);
 			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
+
 			//ofxSurfing::AddParameter(auto_resize);
 			//ofxSurfing::AddParameter(bLockMouseByImGui);
 
@@ -150,76 +153,10 @@ public:
 		}
 	}
 
-
-	/*
-
-	// SNIPPET
-
-	guiManager.begin();
-	{
-		auto mainSettings = ofxImGui::Settings();
-		ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-		string name = "myWindow";
-
-		////widgets sizes
-		//float _spcx;
-		//float _spcy;
-		//float _w100;
-		//float _h100;
-		//float _w99;
-		//float _w50;
-		//float _w33;
-		//float _w25;
-		//float _h;
-
-		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-		{
-			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-
-			//drawParams();
-
-			guiManager.drawAdvancedSubPanel();
-		}
-		ofxImGui::EndWindow(mainSettings);
-	}
-	guiManager.end();
-
-	*/
-
-	//--------------------------------------------------------------
-	//    void drawRangue();
-
 	//--------------------------------------------------------------
 	//void setUseAdvancedSubPanel(bool b) {
 	//	bUseAdvancedSubPanel = b;
 	//}
-
-	//-
-
-	// TODO:
-	// windows helpers...
-	// problems bc if(ofxImGui)
-
-	//void beginWindow(string name);
-	//void endWindow();
-	//void beginWindow(string name){
-	//static bool auto_resize = true;
-
-	//ImGuiWindowFlags flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-
-	////flagsw |= ImGuiCond_FirstUseEver;
-	////if (auto_lockToBorder) flagsw |= ImGuiCond_Always;
-	////else flagsw |= ImGuiCond_FirstUseEver;
-	////ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsw);
-	////ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsw);
-
-	//ImGui::PushFont(customFont);
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
-	//{
-	//	std::string n = "myPanelName";
-	//	if (ofxImGui::BeginWindow(n.c_str(), mainSettings, flagsw))
-	//	{
-	//	}
 };
 
 //}//namespace ofxSurfingHelpers

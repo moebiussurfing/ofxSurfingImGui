@@ -14,7 +14,27 @@
 
 namespace ofxSurfing {
 
-	class ImSurfingWidgetsType {
+	//namespace ImTypes {
+	//	enum ImWidgetSurfingTYPE
+	//	{
+	//		IM_DEFAULT = 0,
+	//		IM_HIDDEN,
+	//		//bool
+	//		IM_CHECKBOX,
+	//		IM_BUTTON_SMALL,
+	//		IM_BUTTON_BIG,
+	//		IM_TOGGLE_SMALL,
+	//		IM_TOGGLE_BIG,
+	//		//float/int
+	//		IM_SLIDER,
+	//		IM_STEPPER,
+	//		IM_DRAG,
+	//		//IM_TEXT_BIG,
+	//		NUM_IM_TYPES
+	//	};
+	//}
+
+	class ImGuiWidgetsTypesManager {
 
 		//-
 
@@ -86,7 +106,7 @@ namespace ofxSurfing {
 
 		vector<surfingImWidgetConf> widgetsConfs;
 
-		ImSurfingWidgetsType::ImSurfingWidgetsType() {
+		ImGuiWidgetsTypesManager::ImGuiWidgetsTypesManager() {
 			widgetsConfs.clear();
 		}
 
@@ -110,8 +130,15 @@ namespace ofxSurfing {
 				}
 			}
 
-			surfingImWidgetConf confError;
-			return confError;
+			//surfingImWidgetConf confError;
+			//return confError;
+
+			surfingImWidgetConf confDefault;
+			confDefault.name = aparam.getName();
+			confDefault.bSameLine = false;
+			confDefault.amtPerRow = 1;
+			confDefault.spacing = -1;
+			return confDefault;
 		}
 
 		//-
@@ -129,10 +156,16 @@ namespace ofxSurfing {
 			widgetsConfs.push_back(c);
 		}
 
+		// if we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
+		// then we will populate each widget type as the default appearance!
+		bool isOperative() {
+			return (widgetsConfs.size() > 0);
+		}
+
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, ImSurfingWidgetsType type) {
-		//	Add(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, 3, true);
+		//bool Add(ofAbstractParameter& aparam, ImGuiWidgetsTypesManager type) {
+		//	Add(bMode1, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-

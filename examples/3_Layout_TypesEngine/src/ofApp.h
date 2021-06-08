@@ -2,10 +2,12 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfingImGui.h"
-#include "ofxWindowApp.h"
+#include "ofxSurfingImGui.h"	// -> Adds all the add-on classes. You can also simplify picking what you want to use.
+
+#include "ofxWindowApp.h"		// -> not required
 
 using namespace ofxSurfing;
+//namespace ofxSurfing = ofxSurfing::ImGuiWidgetsTypesManager;
 
 // TODO:
 // auto-resize fails /gro bc widgets refresh is no working on group tree but on window begin
@@ -18,8 +20,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void draw();
 
-		ofxImGui::Gui gui; // can be instantiated outside the class
-		ofxSurfing_ImGui_LayoutManager guiManager; // or gui will be instatiated inside the class
+		ofxSurfing_ImGui_Manager guiManager; 
 
 		void drawWidgets();
 

@@ -44,7 +44,7 @@ namespace ofxSurfing
 {
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
-	static ofxSurfing::ImSurfingWidgetsType widgetsManager;
+	static ofxSurfing::ImGuiWidgetsTypesManager widgetsManager;
 
 	//--
 
@@ -204,19 +204,56 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	auto tmpRef = parameter.get();
 	const auto& info = typeid(ParameterType);
 
-	// float
-	//if (info == typeid(float))
-	//{
-	//	ImGui::PushID(1);
-	//	if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//	{
-	//		parameter.set(tmpRef);
-	//		ImGui::PopID();
-	//		return true;
-	//	}
-	//	ImGui::PopID();
-	//	return false;
-	//}
+	//TODO:
+	// If there's no added AddWidgetConf, we use default widgets adders
+	// if we have not used the Type Engines we bypass all the related stuff.
+	if (!widgetsManager.isOperative() && true)
+	{
+		// float
+		if (info == typeid(float))
+		{
+			ImGui::PushID(1);
+			if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			{
+				parameter.set(tmpRef);
+				ImGui::PopID();
+				return true;
+			}
+			ImGui::PopID();
+			return false;
+		}
+
+		// int
+		if (info == typeid(int))
+		{
+			ImGui::PushID(1);
+			if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			{
+				parameter.set(tmpRef);
+				ImGui::PopID();
+				return true;
+			}
+			ImGui::PopID();
+			return false;
+		}
+
+		// bool
+		if (info == typeid(bool))
+		{
+			ImGui::PushID(1);
+			if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
+			{
+				parameter.set(tmpRef);
+				ImGui::PopID();
+				return true;
+			}
+			ImGui::PopID();
+			return false;
+		}
+	}
+
+	//--
+
 	if (info == typeid(float))
 	{
 		bool bReturn = false;
@@ -231,18 +268,6 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	}
 
 	// int
-	//if (info == typeid(int))
-	//{
-	//	ImGui::PushID(1);
-	//	if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//	{
-	//		parameter.set(tmpRef);
-	//		ImGui::PopID();
-	//		return true;
-	//	}
-	//	ImGui::PopID();
-	//	return false;
-	//}
 	if (info == typeid(int))
 	{
 		bool bReturn = false;
@@ -257,20 +282,6 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	}
 
 	// bool
-	//// TODO:
-	//// TESTING TOGGLE TYPES
-	//if (info == typeid(bool))
-	//{
-	//	ImGui::PushID(1);
-	//	if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
-	//	{
-	//		parameter.set(tmpRef);
-	//		ImGui::PopID();
-	//		return true;
-	//	}
-	//	ImGui::PopID();
-	//	return false;
-	//}
 	if (info == typeid(bool))
 	{
 		bool bReturn = false;

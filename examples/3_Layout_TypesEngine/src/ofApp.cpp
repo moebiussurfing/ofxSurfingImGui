@@ -4,8 +4,7 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 
-	guiManager.setup(gui); // can be instantiated out of the class, locally
-	//guiManager.setup(); // or inside the class, the we can forgot of declare here (ofApp scope).
+	guiManager.setup();
 
 	//-
 
@@ -13,26 +12,26 @@ void ofApp::setup() {
 	params.setName("paramsGroup");// main container
 	params2.setName("paramsGroup2");// nested
 	params3.setName("paramsGroup3");// nested
-	params.add(bMode1.set("Mode1", false));
-	params.add(bMode2.set("Mode2", false));
-	params.add(bMode3.set("Mode3", false));
-	params.add(bMode4.set("Mode4", false));
-	params.add(bPrevious.set("<", false));
-	params.add(bNext.set(">", false));
-	params.add(bEnable.set("Enable", false));
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params.add(separation.set("separation", 50, 1, 100));
 	params.add(speed.set("speed", 0.5, 0, 1));
 	params.add(shapeType.set("shapeType", 0, -50, 50));
 	params.add(size.set("size", 100, 0, 100));
 	params.add(amount.set("amount", 10, 0, 25));
+	params2.add(bMode1.set("Mode1", false));
+	params2.add(bMode2.set("Mode2", false));
+	params2.add(bMode3.set("Mode3", false));
+	params2.add(bMode4.set("Mode4", false));
+	params2.add(bPrevious.set("<", false));
+	params2.add(bNext.set(">", false));
+	params2.add(bEnable.set("Enable", false));
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
-	params2.add(params3);
+	params.add(params3);
 	params.add(params2);
 
 	//-
@@ -41,30 +40,33 @@ void ofApp::setup() {
 	// if the parameter widget is not added explicitly, will be populated as the default appearance
 
 	//bools
-	widgetsManager.AddWidgetConf(bEnable, ImSurfingWidgetsType::IM_TOGGLE_BIG);
-	widgetsManager.AddWidgetConf(bPrevious, ImSurfingWidgetsType::IM_BUTTON_SMALL, true, 2);
-	widgetsManager.AddWidgetConf(bNext, ImSurfingWidgetsType::IM_BUTTON_SMALL, false, 2, 20);
-	//widgetsManager.AddWidgetConf(bMode4, ImSurfingWidgetsType::IM_CHECKBOX, false, 1, 10);
+	widgetsManager.AddWidgetConf(bEnable, ImGuiWidgetsTypesManager::IM_TOGGLE_BIG);
+	widgetsManager.AddWidgetConf(bPrevious, ImGuiWidgetsTypesManager::IM_BUTTON_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bNext, ImGuiWidgetsTypesManager::IM_BUTTON_SMALL, false, 2, 20);
+	//widgetsManager.AddWidgetConf(bMode4, ImGuiWidgetsTypesManager::IM_CHECKBOX, false, 1, 10);
 	//floats
-	//widgetsManager.AddWidgetConf(lineWidth, ImSurfingWidgetsType::IM_SLIDER);
-	widgetsManager.AddWidgetConf(separation, ImSurfingWidgetsType::IM_STEPPER);
-	widgetsManager.AddWidgetConf(speed, ImSurfingWidgetsType::IM_DRAG, false, 1, 10);
+	//widgetsManager.AddWidgetConf(lineWidth, ImGuiWidgetsTypesManager::IM_SLIDER);
+	widgetsManager.AddWidgetConf(separation, ImGuiWidgetsTypesManager::IM_STEPPER);
+	widgetsManager.AddWidgetConf(speed, ImGuiWidgetsTypesManager::IM_DRAG, false, 1, 10);
 	//ints
-	widgetsManager.AddWidgetConf(shapeType, ImSurfingWidgetsType::IM_SLIDER);
-	widgetsManager.AddWidgetConf(size, ImSurfingWidgetsType::IM_STEPPER);
-	widgetsManager.AddWidgetConf(amount, ImSurfingWidgetsType::IM_DRAG, false, 1, 10);
+	widgetsManager.AddWidgetConf(shapeType, ImGuiWidgetsTypesManager::IM_SLIDER);
+	widgetsManager.AddWidgetConf(size, ImGuiWidgetsTypesManager::IM_STEPPER);
+	widgetsManager.AddWidgetConf(amount, ImGuiWidgetsTypesManager::IM_DRAG, false, 1, 10);
 	//bools
-	widgetsManager.AddWidgetConf(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 2);
-	widgetsManager.AddWidgetConf(bMode2, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 2);
-	widgetsManager.AddWidgetConf(bMode3, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 2);
-	widgetsManager.AddWidgetConf(bMode4, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 2);
+	widgetsManager.AddWidgetConf(bMode1, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bMode2, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, false, 2);
+	widgetsManager.AddWidgetConf(bMode3, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, true, 2);
+	widgetsManager.AddWidgetConf(bMode4, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, false, 2);
 
 	//hide
-	widgetsManager.AddWidgetConf(speed3, ImSurfingWidgetsType::IM_HIDDEN, false, -1, 50);
-	widgetsManager.AddWidgetConf(size2, ImSurfingWidgetsType::IM_HIDDEN, false, -1, 50);
-	widgetsManager.AddWidgetConf(bPrevious, ImSurfingWidgetsType::IM_HIDDEN);
-	widgetsManager.AddWidgetConf(bNext, ImSurfingWidgetsType::IM_HIDDEN);
-	widgetsManager.AddWidgetConf(lineWidth, ImSurfingWidgetsType::IM_HIDDEN);
+	widgetsManager.AddWidgetConf(speed3, ImGuiWidgetsTypesManager::IM_HIDDEN, false, -1, 50);
+	widgetsManager.AddWidgetConf(size2, ImGuiWidgetsTypesManager::IM_HIDDEN, false, -1, 50);
+	widgetsManager.AddWidgetConf(bPrevious, ImGuiWidgetsTypesManager::IM_HIDDEN);
+	widgetsManager.AddWidgetConf(bNext, ImGuiWidgetsTypesManager::IM_HIDDEN);
+	widgetsManager.AddWidgetConf(lineWidth, ImGuiWidgetsTypesManager::IM_HIDDEN);
+
+	//TODO: fails. fix
+	guiManager.auto_resize = false;
 }
 
 //--------------------------------------------------------------
@@ -72,13 +74,35 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
+		//TODO:
+		// trying workaround to fix getUniqueName troubles..
 		widgetsManager.resetIndex();
 
+		static bool bOpen0 = true;
 		static bool bOpen1 = true;
 		static bool bOpen2 = false;
-		static bool bOpen3 = false;
-		static bool bOpen4 = false;
 
+		//-----
+
+		// window 0 (main)
+
+		{
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+			ImGui::Begin("Show Windows", &bOpen0, window_flags);
+			{
+				// round toggles
+
+				ofxSurfingHelpers::ToggleButton("bOpen1", &bOpen1);
+				ofxSurfingHelpers::ToggleButton("bOpen2", &bOpen2);
+
+				ImGui::Dummy(ImVec2(0, 5));
+
+				ofxSurfingHelpers::AddToggleRounded(guiManager.auto_resize);
+			}
+			ImGui::End();
+		}
 		//---------
 
 		// window 1
@@ -100,28 +124,28 @@ void ofApp::draw()
 				// (instant populate)
 				{
 					widgetsManager.refreshPanelShape(); // update sizes to current window shape
-					widgetsManager.Add(bEnable, ImSurfingWidgetsType::IM_TOGGLE_SMALL); // full width
+					widgetsManager.Add(bEnable, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL); // full width
 
-					if (widgetsManager.Add(bPrevious, ImSurfingWidgetsType::IM_BUTTON_BIG, true, 2)) // half width + same line
+					if (widgetsManager.Add(bPrevious, ImGuiWidgetsTypesManager::IM_BUTTON_BIG, true, 2)) // half width + same line
 					{
 						lineWidth.setWithoutEventNotifications(lineWidth.get() - 0.1f);//fail
 					}
-					if (widgetsManager.Add(bNext, ImSurfingWidgetsType::IM_BUTTON_BIG, false, 2, 20))// half width + 20px vert spacing
+					if (widgetsManager.Add(bNext, ImGuiWidgetsTypesManager::IM_BUTTON_BIG, false, 2, 20))// half width + 20px vert spacing
 					{
 						lineWidth.setWithoutEventNotifications(lineWidth.get() + 0.1f);//fail
 					}
 
-					//widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_SLIDER);
-					//widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_DRAG);
-					widgetsManager.Add(lineWidth, ImSurfingWidgetsType::IM_STEPPER, false, 2, 20);
+					//widgetsManager.Add(lineWidth, ImGuiWidgetsTypesManager::IM_SLIDER);
+					//widgetsManager.Add(lineWidth, ImGuiWidgetsTypesManager::IM_DRAG);
+					widgetsManager.Add(lineWidth, ImGuiWidgetsTypesManager::IM_STEPPER, false, 2, 20);
 
 					// three widgets in one same row with 20px vert spacing before the next row
 					widgetsManager.refreshPanelShape(); // update sizes to current window shape
-					widgetsManager.Add(bMode1, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 3);
-					widgetsManager.Add(bMode2, ImSurfingWidgetsType::IM_TOGGLE_SMALL, true, 3);
-					widgetsManager.Add(bMode3, ImSurfingWidgetsType::IM_TOGGLE_SMALL, false, 3, 2);
+					widgetsManager.Add(bMode1, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode2, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, true, 3);
+					widgetsManager.Add(bMode3, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, false, 3, 2);
 
-					widgetsManager.Add(bMode4, ImSurfingWidgetsType::IM_CHECKBOX);
+					widgetsManager.Add(bMode4, ImGuiWidgetsTypesManager::IM_CHECKBOX);
 					//ImGui::Dummy(ImVec2(0, 20);// spacing
 				}
 
@@ -150,66 +174,9 @@ void ofApp::draw()
 
 		// window 2
 
-		// using my own simpler helpers API: 
-		// ofxSurfing_ImGui_LayoutManager.h and ofxSurfing_ImGui_Helpers.h to handle params
-
-		if (bOpen2)
-		{
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-			guiManager.beginWindow("window 2", &bOpen2, window_flags);
-			{
-				widgetsManager.refreshPanelShape();
-
-				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-				flags |= ImGuiTreeNodeFlags_Framed;
-				flags |= ImGuiTreeNodeFlags_DefaultOpen;
-
-				ofxSurfing::AddParameter(bEnable);
-				ofxSurfing::AddParameter(separation);
-				ofxSurfing::AddParameter(shapeType);
-			}
-			guiManager.endWindow();
-		}
-
-		//---------
-
-		// window 3
-
-		// using the old ofxGui original API:
-		// (Settings/ofxImGui::AddGroup)
-
-		if (bOpen3)
-		{
-			string name = "window 3";
-			auto mainSettings = ofxImGui::Settings();
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, window_flags))
-			{
-				//widgetsManager.refreshPanelShape();
-
-				// add more widgets and groupParams but using the old ofxImGui workflow
-				// using the old
-				drawWidgets();
-
-				// fill the panel area
-				float __w100 = ImGui::GetContentRegionAvail().x;
-				float __h100 = ImGui::GetContentRegionAvail().y;
-				ofxSurfingHelpers::AddBigButton(bPrevious, __w100, __h100);
-			}
-			ofxImGui::EndWindow(mainSettings);
-		}
-
-		//---------
-
-		// window 4
-
 		// using my own simpler helpers API: ofxSurfing_ImGui_Helpers.h
 
-		if (bOpen4)
+		if (bOpen2)
 		{
 			float _spcx; // space between widgets
 			float _spcy; // space between widgets
@@ -226,7 +193,7 @@ void ofApp::draw()
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			guiManager.beginWindow("window 4", &bOpen4, window_flags);
+			guiManager.beginWindow("window 2", &bOpen2, window_flags);
 			{
 				// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
 				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
@@ -258,7 +225,7 @@ void ofApp::draw()
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
 				flags |= ImGuiTreeNodeFlags_DefaultOpen;
-				ofxSurfing::AddGroup(params, flags);
+				ofxSurfing::AddGroup(params2, flags);
 
 				//-
 
@@ -266,33 +233,6 @@ void ofApp::draw()
 				guiManager.drawAdvancedSubPanel();
 			}
 			guiManager.endWindow();
-		}
-
-		//--
-
-		{
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-			static bool bOpen0 = true;
-			ImGui::Begin("Show Windows", &bOpen0, window_flags);
-			{
-				// round toggles
-
-				ofxSurfingHelpers::ToggleButton("bOpen1", &bOpen1);
-				ofxSurfingHelpers::ToggleButton("bOpen2", &bOpen2);
-				ofxSurfingHelpers::ToggleButton("bOpen3", &bOpen3);
-				ofxSurfingHelpers::ToggleButton("bOpen4", &bOpen4);
-
-				//ImGui::Checkbox("bOpen1", &bOpen1);
-				//ImGui::Checkbox("bOpen2", &bOpen2);
-				//ImGui::Checkbox("bOpen3", &bOpen3);
-				//ImGui::Checkbox("bOpen4", &bOpen4);
-
-				ImGui::Dummy(ImVec2(0, 5));
-
-				ofxSurfingHelpers::AddToggleRounded(guiManager.auto_resize);
-			}
-			ImGui::End();
 		}
 
 		//-

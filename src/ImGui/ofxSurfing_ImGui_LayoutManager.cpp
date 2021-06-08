@@ -1,27 +1,27 @@
 #include "ofxSurfing_ImGui_LayoutManager.h"
 
 //--------------------------------------------------------------
-ofxSurfing_ImGui_LayoutManager::ofxSurfing_ImGui_LayoutManager() {
+ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 };
 
 //--------------------------------------------------------------
-ofxSurfing_ImGui_LayoutManager::~ofxSurfing_ImGui_LayoutManager() {
+ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 };
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::setup() {//using internal instantiated gui
+void ofxSurfing_ImGui_Manager::setup() {//using internal instantiated gui
 	setup_ImGui();
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::setup(ofxImGui::Gui & _gui) {//using external instantiated gui
+void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) {//using external instantiated gui
 	guiPtr = &_gui;
 
 	setup_ImGui();
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::setup_ImGui()
+void ofxSurfing_ImGui_Manager::setup_ImGui()
 {
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
@@ -61,7 +61,7 @@ void ofxSurfing_ImGui_LayoutManager::setup_ImGui()
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::begin() {
+void ofxSurfing_ImGui_Manager::begin() {
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
 
@@ -70,7 +70,7 @@ void ofxSurfing_ImGui_LayoutManager::begin() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::end() {
+void ofxSurfing_ImGui_Manager::end() {
 
 	ImGui::PopStyleVar();//minimal size
 	if (customFont != nullptr) ImGui::PopFont();
@@ -86,11 +86,8 @@ void ofxSurfing_ImGui_LayoutManager::end() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
+void ofxSurfing_ImGui_Manager::beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	float ww = PANEL_WIDGETS_WIDTH_MIN;
-	float hh = PANEL_WIDGETS_HEIGHT_MIN;
-
 	////widgets sizes
 	//float _spcx;
 	//float _spcy;
@@ -103,9 +100,13 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 	//float _h;
 	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
+	// auto_resize mode
 	//static bool auto_resize = true;
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
+	// minimal sizes
+	//float ww = PANEL_WIDGETS_WIDTH_MIN;
+	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
+	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 
 	//// Demonstrate the various window flags. Typically you would just use the default!
 	//static bool no_titlebar = false;
@@ -153,11 +154,11 @@ void ofxSurfing_ImGui_LayoutManager::beginWindow(string name, bool* p_open, ImGu
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_LayoutManager::endWindow()
+void ofxSurfing_ImGui_Manager::endWindow()
 {
 	//ImGui::PopItemWidth();
 	
-	ImGui::PopStyleVar();
+	//ImGui::PopStyleVar();
 
 	ImGui::End();
 }

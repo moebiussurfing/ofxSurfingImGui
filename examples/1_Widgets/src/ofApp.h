@@ -3,7 +3,6 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h" // requires  https://github.com/Daandelange/ofxImGui or https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test
-
 #include "ImGui/dear_widgets/dear_widgets.h"		// -> to use Dearwidgets
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"	// -> to use my custom toggle/buttons widgets and more
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"		// -> to use int/float ranges
@@ -24,6 +23,7 @@ public:
 	ofxImGui::Gui gui;
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	ImFont* customFont = nullptr;
+	// NOTE: on the example 2_Layout_Basic you will see how to use ofxSurfing_ImGui_LayoutManager.hh to speed up the ofxImGui instantiation and avoid the above lines.
 
     void draw_SurfingWidgets();
     void draw_DearWidgets();
