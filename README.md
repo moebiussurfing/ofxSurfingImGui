@@ -170,8 +170,32 @@ void ofApp::setup()
     // An widget as stepper
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
+
+void ofApp::draw()
+{
+    guiManager.begin();
+    {
+        guiManager.beginWindow("Window", &bOpen, window_flags);
+        {
+            drawWidgets();
+        }
+        guiManager.endWindow();
+    }
+    guiManager.end();
+}
+
 void ofApp::drawWidgets() 
 {
+    // Workflow A
+    // Draw a group of params with previously queued param styles on setup() 
+    // Use flags to customize tree/folder
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+    flags |= ImGuiTreeNodeFlags_Framed; // dark border box on the group name
+    flags |= ImGuiTreeNodeFlags_DefaultOpen; // collapsing: default open or closed if commented
+    ofxSurfing::AddGroup(params, flags);
+
+    //-
+
     // Workflow B
     // "Instant" draw each single parameter
 
@@ -189,16 +213,6 @@ void ofApp::drawWidgets()
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
     // A stepper with half window width size and 20px of spacing at end
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
-
-    //-
-
-    // Workflow A
-    // Draw a group of params with previously queued param styles on setup() 
-    // Use flags to customize tree/folder
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-    flags |= ImGuiTreeNodeFlags_Framed; // dark border box on the group name
-    flags |= ImGuiTreeNodeFlags_DefaultOpen; // collapsing: default open or closed if commented
-    ofxSurfing::AddGroup(params, flags);
 }
 ```
 
