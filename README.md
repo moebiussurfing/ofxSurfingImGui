@@ -9,7 +9,8 @@ ofxSurfingImGui
 	* Layout engine fails a bit on nesting indented groups.  
 	* Broken width recalculation and "unlimited" growing when auto-size.  
 	* Workaround fix using CollapsingHeader instead of TreeNodeEx but I would like the indented nested groups.
------------
+
+---------------------------------------------------------
 
 ## Overview
 **ofxSurfingImGui** is a helper add-on with _Snippets / Helpers / LayoutManagement / Widgets_ to easy integrate **ImGui** into **openFrameworks**.
@@ -36,8 +37,9 @@ ofxSurfingImGui
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 <!-- ![image](/docs/Capture1.PNG?raw=true "image")   -->
-<img src="docs/Capture1.PNG" width="80%" height="80%">
--------------
+<img src="docs/Capture1.PNG" width="60%" height="60%">
+
+---------------------------------------------------------
 
 ### 2_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
@@ -45,8 +47,9 @@ ofxSurfingImGui
 * Includes **ofParameter** helpers and extra widgets.  
 
 <!-- ![image](/docs/Capture2.PNG?raw=true "image")   -->
-<img src="docs/Capture2.PNG" width="80%" height="80%">
--------------
+<img src="docs/Capture2.PNG" width="60%" height="60%">
+
+---------------------------------------------------------
 
 ### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
@@ -64,8 +67,9 @@ ofxSurfingImGui
     * Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.
 
 <!-- ![image](/docs/Capture3.PNG?raw=true "image")   -->
-<img src="docs/Capture3.PNG" width="80%" height="80%">
--------------
+<img src="docs/Capture3.PNG" width="60%" height="60%">
+
+---------------------------------------------------------
 
 ## Usage
 * Look at the examples.
