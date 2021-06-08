@@ -6,22 +6,37 @@
 #include "imconfig.h"
 #define M_PI 3.14159265358979323846264338327950288
 
-//TODO:
-//WIP
+// TODO:
+// WIP
 // to add more uncoming new widgets here
 
-//cute widgets !
+// cute widgets !
 //https://github.com/soufianekhiat/DearWidgets
 
-//spin arrows widget
+// spin arrows widget
 //https://github.com/ocornut/imgui/issues/2649
 
-//spinners, loading bars 
+// spinners, loading bars 
 //https://github.com/ocornut/imgui/issues/1901#issuecomment-552185000
 //https://github.com/ocornut/imgui/issues/1901
 
-//Rotating text and icon demo for dear imgui 
-//https://gist.github.com/ice1000/865c7666d13b945628254aa00bd9d62d
+// Rotating text and icon demo for dear imgui 
+//https://g
+
+// Mosaic project
+//https://github.com/d3cod3/ofxVisualProgramming
+//https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/core/imgui_plot.cpp
+//https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/core/imgui_helpers.h
+
+//-
+
+namespace ImGuiEx {
+
+	bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
+
+	// Minimal implementation modified from: https://github.com/ocornut/imgui/issues/942
+	bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
+}
 
 //-
 

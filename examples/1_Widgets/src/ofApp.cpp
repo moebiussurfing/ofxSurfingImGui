@@ -196,18 +196,46 @@ void ofApp::draw_SurfingWidgets() {
 
 	auto mainSettings = ofxImGui::Settings();
 
-	// typical width sizes from 1 (_w100) to 4 (_w25) widgets per row
-	float _spcx;
-	float _spcy;
+	// common width sizes from 1 (_w100) to 4 (_w25) widgets per row
 	float _w100;
-	float _h100;
-	float _w99;
 	float _w50;
 	float _w33;
 	float _w25;
 	float _h;
+
+	// Precalculate common widgets sizes to fit current window "to be responsive"
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
-	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+	
+	// MODE A
+	// (Takes care of ImGui spacing between widgets)
+	_w100 = getImGui_WidgetWidth(1); // 1 widget full width
+	_w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
+	_w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
+	_w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
+	_h = WIDGETS_HEIGHT;
+
+	//// MODE B
+	//// that's for update all the size using one single line. Useful if you use several sizes and multiple times, or with too much widh changes on your layout..
+	//float _spcx;
+	//float _spcy;
+	//float _w100;
+	//float _h100;
+	//float _w99;
+	//float _w50;
+	//float _w33;
+	//float _w25;
+	//float _h;
+	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+
+	//-
+
+	// 0.
+
+	//ImDrawList dl;
+	//bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
+	Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
+
+	//-
 
 	// 1. an ofParameterGroup
 	ofxImGui::AddGroup(params3, mainSettings);
@@ -269,7 +297,14 @@ void ofApp::draw_SurfingWidgets() {
 	ofxImGui::AddGroup(params, mainSettings);
 
 	// 8. some buttons in a row
-	ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);//not required if since the last time was called the panel window width didn't changed. 
+
+	// Update sizes
+	// Is not required if (since the last time was calculated) the panel window width didn't changed. 
+	_w100 = getImGui_WidgetWidth(1); // 1 widget full width
+	_w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
+	_w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
+	_w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
+
 	static int amnt = 2;
 	ImGui::SliderInt("Amount Buttons", &amnt, 1, 4);
 	float w;

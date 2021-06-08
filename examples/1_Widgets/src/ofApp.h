@@ -12,6 +12,10 @@
 //#include "ofxSurfingImGui.h"	// -> This header includes ALL the above classes and some others. 
 //You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
 
+// simplify with namespaces
+//using namespace ofxSurfing;
+using namespace ofxSurfingHelpers;
+
 class ofApp : public ofBaseApp{
     
 public:
