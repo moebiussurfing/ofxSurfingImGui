@@ -2,8 +2,11 @@ ofxSurfingImGui
 =============================
 
 #### WORK IN PROGRESS
-* **BUG**: WHEN ADDING MANY TIMES A PARAMETER OR OTHER WITH A NOT UNIQUE NAME.  
-* **BUG**: LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS.
+**BUG**: WHEN ADDING MANY TIMES A PARAMETER OR OTHER WITH A NOT UNIQUE NAME. 
+	- Widgets collides bewteen them.  
+**BUG**: LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS. 
+	- Broken width recalculation and "unlimited" width growing when auto-size.  
+
 -----------
 
 ## Overview
@@ -34,9 +37,11 @@ ofxSurfingImGui
 
 ### 2_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
-* Speed up ofxImGui instantiation, windows and layouts. Includes **ofParameter** helpers and extra widgets.  
+* Speed up ofxImGui instantiation, windows and layouts. 
+* Includes **ofParameter** helpers and extra widgets.  
 
 ![image](/docs/Capture2.PNG?raw=true "image")  
+-------------
 
 ### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
@@ -54,6 +59,7 @@ ofxSurfingImGui
     * Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.
 
 ![image](/docs/Capture3.PNG?raw=true "image")  
+-------------
 
 ## Usage
 * Look at the examples.
