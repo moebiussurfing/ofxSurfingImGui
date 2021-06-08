@@ -16,7 +16,6 @@ ofxSurfingImGui
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
-### IMPORTANT CHANGES (vs ofxImGui helper)  
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
