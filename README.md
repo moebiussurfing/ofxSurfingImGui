@@ -8,7 +8,8 @@ ofxSurfingImGui
 ### **BUG 2**:  
     * Layout engine fails a bit on nesting indented groups.  
     * Broken width recalculation and "unlimited" growing when auto-size.  
-    * Workaround fix using CollapsingHeader instead of TreeNodeEx but I would prefer the indented nested groups.
+    * Workaround fix using CollapsingHeader instead of TreeNodeEx  
+	but I would prefer the indented nested groups.
 
 ---------------------------------------------------------
 
