@@ -44,14 +44,15 @@ API will change and I am still having some problems yet.
 ---------------------------------------------------------
 
 ### 2_Layout_Basic
-* Uses **ofxSurfing_ImGui_LayoutManager.h**  
-* Speed up ofxImGui instantiation, windows and layouts. 
-* Includes **ofParameter** helpers and extra widgets.  
 
 ![image](/docs/Capture2.PNG?raw=true "image")  
 <!-- <img src="docs/Capture2.PNG" width="80%" height="80%"> -->
 
-#### Code
+* Uses **ofxSurfing_ImGui_LayoutManager.h**  
+* Speed up ofxImGui instantiation, windows and layouts. 
+* Includes **ofParameter** helpers and extra widgets.  
+
+#### Usage Code
 ```.cpp
 //ofApp.h
 #include "ofxSurfingImGui.h"
@@ -104,9 +105,14 @@ void ofApp::draw() {
     guiManager.end();
 }
 ```
+
 ---------------------------------------------------------
 
 ### 3_Layout_TypesEngine
+
+![image](/docs/Capture4.PNG?raw=true "image")  
+<!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
+
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
 * Draw each **ofParameter** types with different appearance.
@@ -115,20 +121,7 @@ void ofApp::draw() {
 * Especially useful when params are into an **ofParameterGroup**.
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
 
-#### Available customization options:
-```c++
-void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-```
-    - Hide the parameter.  
-    - Set an ImGui::SameLine after the widget.  
-    - Add a final vertical spacing after the widget.  
-    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
-
-![image](/docs/Capture4.PNG?raw=true "image")  
-<!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
-
-#### Code
+#### Usage Code
 ```.cpp
 void ofApp::setup() 
 {
@@ -185,6 +178,16 @@ void ofApp::drawWidgets()
     ofxSurfing::AddGroup(params, flags);
 }
 ```
+
+#### Available customization options:
+```c++
+void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+```
+    - Hide the parameter.  
+    - Set an ImGui::SameLine after the widget.  
+    - Add a final vertical spacing after the widget.  
+    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
 
 ---------------------------------------------------------
 
