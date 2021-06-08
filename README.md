@@ -140,6 +140,8 @@ void ofApp::setup()
     // Feed bool, float and int ofParameters into an ofParameterGroup
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
+    //-
+    
     // Workflow A
     // Queue config style for each parameter
 
@@ -183,6 +185,8 @@ void ofApp::drawWidgets()
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
     // A stepper with half window width size and 20px of spacing at end
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
+
+    //-
 
     // Workflow A
     // Draw a group of params with previously queued param styles on setup() 
