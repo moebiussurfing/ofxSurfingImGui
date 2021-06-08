@@ -37,7 +37,7 @@ ofxSurfingImGui
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 <!-- ![image](/docs/Capture1.PNG?raw=true "image")   -->
-<img src="docs/Capture1.PNG" width="60%" height="60%">
+<img src="docs/Capture1.PNG" width="80%" height="80%">
 
 ---------------------------------------------------------
 
@@ -47,7 +47,7 @@ ofxSurfingImGui
 * Includes **ofParameter** helpers and extra widgets.  
 
 <!-- ![image](/docs/Capture2.PNG?raw=true "image")   -->
-<img src="docs/Capture2.PNG" width="60%" height="60%">
+<img src="docs/Capture2.PNG" width="80%" height="80%">
 
 ---------------------------------------------------------
 
@@ -67,7 +67,7 @@ ofxSurfingImGui
     * Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.
 
 <!-- ![image](/docs/Capture3.PNG?raw=true "image")   -->
-<img src="docs/Capture3.PNG" width="60%" height="60%">
+<img src="docs/Capture3.PNG" width="80%" height="80%">
 
 ---------------------------------------------------------
 
