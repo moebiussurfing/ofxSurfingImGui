@@ -124,10 +124,14 @@ void ofApp::setup()
     //                    int amtPerRow = 1, 
     //                    int spacing = -1)
 
+    // one full width widget with 20px vertical spacing at end
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
+    // two widgets in the same line with 10px of spacing at end
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
+    // a float parameter presented with number and +/- controls
     widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
+    // the same float parameter but as a slider and 10px spacing at the end
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
