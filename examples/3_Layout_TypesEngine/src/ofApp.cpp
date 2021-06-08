@@ -89,10 +89,10 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
-		//TODO:
-		// trying a workaround to fix getUniqueName troubles..
-		ofxSurfing::resetIndex();
-		//widgetsManager.resetIndex();
+		////TODO:
+		//// trying a workaround to fix getUniqueName troubles..
+		//ofxSurfing::resetIndex();
+		////widgetsManager.resetIndex();
 
 		drawWindow0();
 		drawWindow1();

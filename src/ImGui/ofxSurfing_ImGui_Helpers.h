@@ -222,42 +222,42 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		// float
 		if (info == typeid(float))
 		{
-			ImGui::PushID(index++);
+			//ImGui::PushID(index++);
 			if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
-				ImGui::PopID();
+				//ImGui::PopID();
 				return true;
 			}
-			ImGui::PopID();
+			//ImGui::PopID();
 			return false;
 		}
 
 		// int
 		if (info == typeid(int))
 		{
-			ImGui::PushID(index++);
+			//ImGui::PushID(index++);
 			if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
-				ImGui::PopID();
+				//ImGui::PopID();
 				return true;
 			}
-			ImGui::PopID();
+			//ImGui::PopID();
 			return false;
 		}
 
 		// bool
 		if (info == typeid(bool))
 		{
-			ImGui::PushID(index++);
+			//ImGui::PushID(index++);
 			if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
 			{
 				parameter.set(tmpRef);
-				ImGui::PopID();
+				//ImGui::PopID();
 				return true;
 			}
-			ImGui::PopID();
+			//ImGui::PopID();
 			return false;
 		}
 	}
@@ -279,14 +279,14 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(index++);
+				//ImGui::PushID(index++);
 				if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = true;
 				}
-				ImGui::PopID();
+				//ImGui::PopID();
 				bReturn = false;
 			}
 			return bReturn;
@@ -304,14 +304,14 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(index++);
+				//ImGui::PushID(index++);
 				if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = true;
 				}
-				ImGui::PopID();
+				//ImGui::PopID();
 				bReturn = false;
 			}
 			return bReturn;
@@ -329,14 +329,14 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(index++);
+				//ImGui::PushID(index++);
 				if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
 				{
 					parameter.set(tmpRef);
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = true;
 				}
-				ImGui::PopID();
+				//ImGui::PopID();
 				bReturn = false;
 			}
 			return bReturn;
@@ -354,7 +354,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 template<typename ParameterType>
 bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 {
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (label)
 	{
 		ImGui::LabelText(parameter.getName().c_str(), ofToString(parameter.get()).c_str());
@@ -363,7 +363,7 @@ bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 	{
 		ImGui::Text(ofToString(parameter.get()).c_str());
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return true;
 }
@@ -379,21 +379,21 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& value
 		const auto iname = name + " " + ofToString(i);
 		if (info == typeid(float))
 		{
-			ImGui::PopID();
+			//ImGui::PopID();
 			result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
-			ImGui::PopID();
+			//ImGui::PopID();
 		}
 		else if (info == typeid(int))
 		{
-			ImGui::PopID();
+			//ImGui::PopID();
 			result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
-			ImGui::PopID();
+			//ImGui::PopID();
 		}
 		else if (info == typeid(bool))
 		{
-			ImGui::PopID();
+			//ImGui::PopID();
 			result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
-			ImGui::PopID();
+			//ImGui::PopID();
 		}
 		else
 		{

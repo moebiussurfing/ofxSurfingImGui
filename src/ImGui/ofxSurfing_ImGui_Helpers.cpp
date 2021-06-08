@@ -453,14 +453,15 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 bool ofxSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderInt2(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -468,14 +469,15 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderInt3(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -483,14 +485,15 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderInt4(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -498,14 +501,14 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat2(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -513,14 +516,15 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat3(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -528,14 +532,15 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat4(parameter.getName().c_str(), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -545,14 +550,15 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat2(parameter.getName().c_str(), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -560,14 +566,15 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat3(parameter.getName().c_str(), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -575,14 +582,14 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
 bool ofxSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
 {
 	auto tmpRef = parameter.get();
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat4(parameter.getName().c_str(), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -591,23 +598,23 @@ bool ofxSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 {
 	auto tmpRef = parameter.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (alpha)
 	{
 		if (ImGui::ColorEdit4(parameter.getName().c_str(), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
-			ImGui::PopID();
+			//ImGui::PopID();
 			return true;
 		}
 	}
 	else if (ImGui::ColorEdit3(parameter.getName().c_str(), &tmpRef.r))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -623,23 +630,23 @@ bool ofxSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 
 	auto tmpRef = c.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (alpha)
 	{
 		if (ImGui::ColorEdit4(parameter.getName().c_str(), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
-			ImGui::PopID();
+			//ImGui::PopID();
 			return true;
 		}
 	}
 	else if (ImGui::ColorEdit3(parameter.getName().c_str(), &tmpRef.r))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 	return false;
 }
 
@@ -651,7 +658,7 @@ bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxCha
 	strcpy(cString, tmpRef.c_str());
 	auto result = false;
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (multiline)
 	{
 		if (ImGui::InputTextMultiline(parameter.getName().c_str(), cString, maxChars))
@@ -666,7 +673,7 @@ bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxCha
 		result = true;
 	}
 	delete[] cString;
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return result;
 }
@@ -674,14 +681,14 @@ bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxCha
 //--------------------------------------------------------------
 bool ofxSurfing::AddParameter(ofParameter<void>& parameter, float width)
 {
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::Button(parameter.getName().c_str(), glm::vec2(width, 0.0f)))
 	{
 		parameter.trigger();
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return false;
 }
@@ -704,7 +711,7 @@ bool ofxSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> 
 		}
 		ImGui::Columns(1);
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	if (result)
 	{
@@ -719,7 +726,7 @@ bool ofxSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> 
 	auto result = false;
 	auto tmpRef = parameter.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::BeginCombo(parameter.getName().c_str(), labels.at(parameter.get()).c_str()))
 	{
 		for (size_t i = 0; i < labels.size(); ++i)
@@ -742,7 +749,7 @@ bool ofxSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> 
 	{
 		parameter.set(tmpRef);
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return result;
 }
@@ -752,14 +759,14 @@ bool ofxSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 {
 	auto tmpRef = parameter.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::InputInt(parameter.getName().c_str(), &tmpRef, step, stepFast))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return false;
 }
@@ -769,14 +776,14 @@ bool ofxSurfing::AddSlider(ofParameter<float>& parameter, const char* format, fl
 {
 	auto tmpRef = parameter.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::SliderFloat(parameter.getName().c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 	{
 		parameter.set(tmpRef);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return false;
 }
@@ -787,15 +794,15 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMi
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragIntRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 	{
 		parameterMin.set(tmpRefMin);
 		parameterMax.set(tmpRefMax);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return false;
 }
@@ -806,15 +813,15 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<float>& parameter
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 	{
 		parameterMin.set(tmpRefMin);
 		parameterMax.set(tmpRefMax);
-		ImGui::PopID();
+		//ImGui::PopID();
 		return true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	return false;
 }
@@ -828,19 +835,19 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& param
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	if (result)
 	{
@@ -858,26 +865,26 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& param
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	if (result)
 	{
@@ -895,33 +902,33 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& param
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
-	ImGui::PushID(index++);
+	//ImGui::PushID(index++);
 	if (ImGui::DragFloatRange2((name + " W").c_str(), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
 	{
 		result |= true;
 	}
-	ImGui::PopID();
+	//ImGui::PopID();
 
 	if (result)
 	{
@@ -943,7 +950,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragInt2(iname.c_str(), glm::value_ptr(values[i]));
@@ -952,7 +959,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>
 		{
 			result |= ImGui::SliderInt2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -964,7 +971,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragInt3(iname.c_str(), glm::value_ptr(values[i]));
@@ -973,7 +980,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>
 		{
 			result |= ImGui::SliderInt3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -985,7 +992,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragInt4(iname.c_str(), glm::value_ptr(values[i]));
@@ -994,7 +1001,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>
 		{
 			result |= ImGui::SliderInt4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1006,7 +1013,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& valu
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat2(iname.c_str(), glm::value_ptr(values[i]));
@@ -1015,7 +1022,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& valu
 		{
 			result |= ImGui::SliderFloat2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1027,7 +1034,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& valu
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat3(iname.c_str(), glm::value_ptr(values[i]));
@@ -1036,7 +1043,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& valu
 		{
 			result |= ImGui::SliderFloat3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1048,7 +1055,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& valu
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat4(iname.c_str(), glm::value_ptr(values[i]));
@@ -1057,7 +1064,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& valu
 		{
 			result |= ImGui::SliderFloat4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1071,7 +1078,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat2(iname.c_str(), values[i].getPtr());
@@ -1080,7 +1087,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values
 		{
 			result |= ImGui::SliderFloat2(iname.c_str(), values[i].getPtr(), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1092,7 +1099,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat3(iname.c_str(), values[i].getPtr());
@@ -1101,7 +1108,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values
 		{
 			result |= ImGui::SliderFloat3(iname.c_str(), values[i].getPtr(), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
@@ -1113,7 +1120,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values
 	for (size_t i = 0; i < values.size(); ++i)
 	{
 		const auto iname = name + " " + ofToString(i);
-		ImGui::PushID(index++);
+		//ImGui::PushID(index++);
 		if (minValue == 0 && maxValue == 0)
 		{
 			result |= ImGui::DragFloat4(iname.c_str(), values[i].getPtr());
@@ -1122,7 +1129,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values
 		{
 			result |= ImGui::SliderFloat4(iname.c_str(), values[i].getPtr(), minValue, maxValue);
 		}
-		ImGui::PopID();
+		//ImGui::PopID();
 	}
 	return result;
 }
