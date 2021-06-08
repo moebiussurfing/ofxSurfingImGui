@@ -137,31 +137,31 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 ```.cpp
 void ofApp::setup() 
 {
-    // feed bool, float and int parameters into an ofParameterGroup
+    // Feed bool, float and int ofParameters into an ofParameterGroup
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
     // Workflow A
-    // Queue conf style for each parameter
+    // Queue config style for each parameter
 
-    // format: 
+    // Format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
     //                    ImWidgetSurfingTYPE type = IM_DEFAULT, 
     //                    bool bSameLine = false, 
     //                    int amtPerRow = 1, 
     //                    int spacing = -1)
 
-    // one full width widget with 20px vertical spacing at end
+    // One full width widget with 20px vertical spacing at end
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
-    // two widgets in the same line with 10px of spacing at end
+    // Two widgets in the same line with 10px of spacing at end
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
-    // a widget presented with number and +/- controls
+    // A widget presented with number and +/- controls
     widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
-    // the same parameter but as a slider and 10px spacing at the end
+    // The same parameter but as a slider and 10px spacing at the end
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-    // a widget as slider 
+    // A widget as slider 
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
-    // an widget as stepper
+    // An widget as stepper
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
 void ofApp::drawWidgets() 
@@ -169,23 +169,24 @@ void ofApp::drawWidgets()
     // Workflow B
     // Instant draw each parameter
 
-    // format:
+    // Format:
     // bool Add(ofAbstractParameter& aparam, 
     //          ImWidgetSurfingTYPE type = IM_DEFAULT, 
     //          bool bSameLine = false, 
     //          int amtPerRow = 1, 
     //          int spacing = -1)
     
-    // two widgets same line
+    // Two widgets same line
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
     widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
-    // a slider
+    // A slider
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
-    // a stepper with half window width size and 20px of spacing at end
+    // A stepper with half window width size and 20px of spacing at end
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
-    // draw a group of params with previously queued param styles on setup() 
-    // with flags to customize tree/folder
+    // Workflow A
+    // Draw a group of params with previously queued param styles on setup() 
+    // Use flags to customize tree/folder
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
     flags |= ImGuiTreeNodeFlags_Framed; // dark border box on the group name
     flags |= ImGuiTreeNodeFlags_DefaultOpen; // collapsing: default open or closed if commented
