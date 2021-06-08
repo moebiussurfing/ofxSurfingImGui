@@ -64,9 +64,10 @@ void ofApp::draw() {
     {
         guiManager.beginWindow("Window1", &bOpen1, window_flags1);
         {
-            // precalculate widgets sizes
+            // precalculate widgets sizes to fit window "responsive"
             float _w100 = getImGui_WidgetWidth(1); // 1 widget full width
-            float _w50 = getImGui_WidgetWidth(2); // 2 widgets half width
+            float _w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
+            float _w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
             float _h = WIDGETS_HEIGHT;
 
             /* Draw ImGui widgets */
@@ -116,10 +117,10 @@ void ofApp::setup()
     // queue style for each parameter
     // format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
-    //            ImWidgetSurfingTYPE type = IM_DEFAULT, 
-    //            bool bSameLine = false, 
-    //            int amtPerRow = 1, 
-    //            int spacing = -1)
+    //                    ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //                    bool bSameLine = false, 
+    //                    int amtPerRow = 1, 
+    //                    int spacing = -1)
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
@@ -132,10 +133,10 @@ void ofApp::drawWidget()
 {
     // format:
     // bool Add(ofAbstractParameter& aparam, 
-    //            ImWidgetSurfingTYPE type = IM_DEFAULT, 
-    //            bool bSameLine = false, 
-    //            int amtPerRow = 1, 
-    //            int spacing = -1)
+    //          ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //          bool bSameLine = false, 
+    //          int amtPerRow = 1, 
+    //          int spacing = -1)
     
     // instant draw each parameter
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
