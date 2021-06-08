@@ -4,11 +4,11 @@ ofxSurfingImGui
 #### WORK IN PROGRESS
 ### **BUG 1**:  
 	* When adding many times a parameter or others with a not unique name.  
-	* Widgets collides between them. Only some instance work well.  
+	* Widgets collides between them. Only some instance work well. (Sometimes)  
 ### **BUG 2**:  
 	* Layout engine fails a bit on nesting indented groups.  
-	* Broken width recalculation and "unlimited" width growing when auto-size.  
-
+	* Broken width recalculation and "unlimited" growing when auto-size.  
+	* Workaround fix using CollapsingHeader instead of TreeNodeEx but I would like the indented nested groups.
 -----------
 
 ## Overview
