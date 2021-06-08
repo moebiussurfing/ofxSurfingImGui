@@ -64,11 +64,11 @@ void ofApp::setup() {
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(size, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(amount, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
 		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
 		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 2);
 		widgetsManager.AddWidgetConf(bMode3, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
 		widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 2);
+		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
 
 		// hide some params from any on-param-group appearance
 		widgetsManager.AddWidgetConf(speed3, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
@@ -218,7 +218,6 @@ void ofApp::drawWindow1() {
 				flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 
-				//widgetsManager.refreshPanelShape(); // update sizes to current window shape
 				ofxSurfing::AddGroup(params, flags);
 			}
 
@@ -259,8 +258,8 @@ void ofApp::drawWindow2() {
 			_w50 = getImGui_WidgetWidth(2);
 
 			// Two full width toggles
-			//if (AddBigToggle(bEnable)) {}// this is full width (_w100) with standard height (_h)
-			//if (AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
+			if (AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
+			if (AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
 
 			// Two widgets same line/row with the 50% of window panel width 
 			if (AddBigButton(bPrevious, _w50, _h)) {
