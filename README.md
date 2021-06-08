@@ -151,12 +151,15 @@ void ofApp::drawWidgets()
     //          int amtPerRow = 1, 
     //          int spacing = -1)
     
+    // two widgets same line
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
     widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
+    // a slider
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
+    // a stepper with half window width size and 20px of spacing at end
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
-    // draw a group of params with previously queued styles on setup() 
+    // draw a group of params with previously queued param styles on setup() 
     ofxSurfing::AddGroup(params);
 }
 ```
