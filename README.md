@@ -3,12 +3,12 @@ ofxSurfingImGui
 
 #### WORK IN PROGRESS
 ### **BUG 1**:  
-	* When adding many times a parameter or others with a not unique name.  
-	* Widgets collides between them. Only some instance work well. (Sometimes)  
+    * When adding many times a parameter or others with a not unique name.  
+    * Widgets collide between them. Only some instances work well. (Sometimes)  
 ### **BUG 2**:  
-	* Layout engine fails a bit on nesting indented groups.  
-	* Broken width recalculation and "unlimited" growing when auto-size.  
-	* Workaround fix using CollapsingHeader instead of TreeNodeEx but I would like the indented nested groups.
+    * Layout engine fails a bit on nesting indented groups.  
+    * Broken width recalculation and "unlimited" growing when auto-size.  
+    * Workaround fix using CollapsingHeader instead of TreeNodeEx but I would prefer the indented nested groups.
 
 ---------------------------------------------------------
 
@@ -26,9 +26,9 @@ ofxSurfingImGui
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
-	* Removed old windows/tree methods. Now must use **RAW ImGui** code.
-	* Removed all the WindowOpen/Settings stuff.
-	* Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
+    * Removed old windows/tree methods. Now must use **RAW ImGui** code.
+    * Removed all the WindowOpen/Settings stuff.
+    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId(1)/PopID() on each widget.
 
 ## Examples Screenshots
