@@ -129,7 +129,7 @@ void ofApp::setup()
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
-void ofApp::drawWidget() 
+void ofApp::drawWidgets() 
 {
     // format:
     // bool Add(ofAbstractParameter& aparam, 
