@@ -108,10 +108,10 @@ void ofApp::draw() {
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
 
 #### Available customization options:
-`.cpp
+```c++
 void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-`
+```
     - Hide the parameter.  
     - Set an ImGui::SameLine after the widget.  
     - Add a final vertical spacing after the widget.  
