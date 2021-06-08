@@ -133,7 +133,9 @@ void ofApp::setup()
     widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
     // the same float parameter but as a slider and 10px spacing at the end
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
+    // an int as slider 
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
+    // an int as stepper
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
 void ofApp::drawWidgets() 
@@ -152,8 +154,8 @@ void ofApp::drawWidgets()
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
-    // draw a group of params with previously queued styles
-    ofxSurfing::AddGroup(params, flags);
+    // draw a group of params with previously queued styles on setup() 
+    ofxSurfing::AddGroup(params);
 }
 ```
 
