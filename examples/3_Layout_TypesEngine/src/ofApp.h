@@ -13,11 +13,6 @@ using namespace ofxSurfingHelpers; // used to simple call inside ofxSurfing_ImGu
 //using namespace SurfingWidgetTypes; // used to simple call inside ofxSurfing_ImGui_WidgetsButtons
 //namespace ImTypes = SurfingWidgetTypes;
 
-// TODO:
-// auto-resize fails bc widgets refresh is no working on group tree but on window begin
-// nested group spacing fails
-// should pass the refresh widtgets object.. or simplify
-
 class ofApp : public ofBaseApp{
 
 	public:
@@ -34,7 +29,7 @@ class ofApp : public ofBaseApp{
 		void drawWindow0();
 		void drawWindow1();
 		void drawWindow2();
-		void drawWidgets();
+		void drawMoreWidgets();
 
 		// parameters
 		ofParameterGroup params;

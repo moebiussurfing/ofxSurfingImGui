@@ -2,10 +2,10 @@ ofxSurfingImGui
 =============================
 
 #### WORK IN PROGRESS
-* **BUG 1**: 
+### **BUG 1**:  
 	* WHEN ADDING MANY TIMES A PARAMETER OR OTHER WITH A NOT UNIQUE NAME.  
-	* Widgets collides bewteen them.  
-* **BUG 2**: 
+	* Widgets collides bewteen them. Only first instance workd well.  
+### **BUG 2**:  
 	* LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS.  
 	* Broken width recalculation and "unlimited" width growing when auto-size.  
 
@@ -50,8 +50,8 @@ ofxSurfingImGui
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
 * Draw each **ofParameter** types with different appearance. 
-    * Use 1: Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box.
-    * Use 2: Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions.
+    * Example 1: Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box.
+    * Example 2: Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions.
 * Especially useful when params are into an **ofParameterGroup**. 
 
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 

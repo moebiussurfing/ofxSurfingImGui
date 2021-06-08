@@ -120,8 +120,8 @@ namespace ofxSurfing {
 			//	std::cout << i << '\n';
 			//for (auto i : x)
 			//	std::cout << i << '\n';
+			//for (auto c : boost::adaptors::reverse(widgetsConfs)) // reverse?
 
-			//for (auto c : boost::adaptors::reverse(widgetsConfs))
 			for (auto c : widgetsConfs)
 			{
 				if (c.name == aparam.getName()) // param was added to the queue
@@ -130,15 +130,22 @@ namespace ofxSurfing {
 				}
 			}
 
-			//surfingImWidgetConf confError;
-			//return confError;
+			//-
 
-			surfingImWidgetConf confDefault;
-			confDefault.name = aparam.getName();
-			confDefault.bSameLine = false;
-			confDefault.amtPerRow = 1;
-			confDefault.spacing = -1;
-			return confDefault;
+			// if return has not been called yet here,
+			// then there's no conf added (AddWidgetConf) for the parameter
+			// we return a kind of error type to be detected
+			// and to be drawn with the default style.
+			surfingImWidgetConf cError;
+			cError.name = "-1";
+			return cError;
+
+			//surfingImWidgetConf confDefault;
+			//confDefault.name = aparam.getName();
+			//confDefault.bSameLine = false;
+			//confDefault.amtPerRow = 1;
+			//confDefault.spacing = -1;
+			//return confDefault;
 		}
 
 		//-

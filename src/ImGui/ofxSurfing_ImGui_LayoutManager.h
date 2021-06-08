@@ -191,7 +191,7 @@ public:
 	ofParameter<bool> auto_resize{ "Auto Resize", true };//auto resize panel
 
 private:
-	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };//mouse is over gui
+	ofParameter<bool> bLockMouseByImGui{ "Mouse OverGui", false };//mouse is over gui
 	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };//force position
 
 public:

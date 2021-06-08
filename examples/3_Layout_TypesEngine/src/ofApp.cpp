@@ -9,9 +9,7 @@ void ofApp::setup() {
 
 	// debug
 	bCustom1 = 1; // inmediate customized when populating
-	bCustom2 = 0; // pre configured to customize after (ie: inside a group)
-
-	guiManager.setup();// this instantiates ofxImGui inside the class object
+	bCustom2 = 1; // pre configured to customize after (ie: inside a group)
 
 	//-
 
@@ -43,30 +41,39 @@ void ofApp::setup() {
 
 	//-
 
-	// queue widgets to customize when they will be drawn inside an ofParameterGroup
-	// if the parameter widget is not added explicitly, will be populated as the default appearance
+	guiManager.setup(); // this instantiates and configurates ofxImGui inside the class object.
+
+	//-
+
+	// Queue widgets styles to customize when they will be drawn inside an ofParameterGroup
+	// if the parameter widget is not added explicitly, will be populated with the default appearance.
 	if (bCustom2)
 	{
 		// bools
 		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG);
+
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20);
+		
 		//widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_CHECKBOX, false, 1, 10);
+		
 		// floats
 		//widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(separation, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(speed, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
+		
 		// ints
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(size, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(amount, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
+		
 		// bools
 		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
 		widgetsManager.AddWidgetConf(bMode3, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
 
-		// hide
+		// hide some params from any on-param-group appearance
 		widgetsManager.AddWidgetConf(speed3, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
 		widgetsManager.AddWidgetConf(size2, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_HIDDEN);
@@ -74,7 +81,6 @@ void ofApp::setup() {
 		widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_HIDDEN);
 	}
 
-	//TODO: fails. fix?
 	guiManager.auto_resize = false;
 }
 
@@ -85,7 +91,7 @@ void ofApp::draw()
 	{
 		//TODO:
 		// trying a workaround to fix getUniqueName troubles..
-		//widgetsManager.resetIndex();
+		widgetsManager.resetIndex();
 
 		drawWindow0();
 		drawWindow1();
@@ -114,9 +120,10 @@ void ofApp::drawWindow0() {
 
 			ImGui::Dummy(ImVec2(0, 20));// spacing
 			ImGui::Separator();
+			ImGui::Dummy(ImVec2(0, 10));// spacing
 			ImGui::Text("DEBUG TYPES");
 			ToggleRoundedButton("bCustom1", &bCustom1);
-			//ToggleRoundedButton("bCustom2", &bCustom2);// readed on setup, cant be updated
+			ToggleRoundedButton("bCustom2", &bCustom2);// readed on setup only, cant be updated on runtime
 		}
 		ImGui::End();
 	}
@@ -137,8 +144,12 @@ void ofApp::drawWindow1() {
 		{
 			//-
 
-			// 1. Single parameters (out of a paramGroup)
+			// 0. Default bool param
+			ofxSurfing::AddParameter(bEnable);
+			
+			//-
 
+			// 1. Single parameters (out of a paramGroup)
 			// instant populate customized widgets
 			if (bCustom1)
 			{
@@ -151,27 +162,25 @@ void ofApp::drawWindow1() {
 				widgetsManager.Add(bEnable, SurfingWidgetTypes::IM_TOGGLE_SMALL);
 
 				// 1.2 Two buttons same line
-				if (widgetsManager.Add(bPrevious, SurfingWidgetTypes::IM_BUTTON_BIG, true, 2)) // half width + same line
+				if (widgetsManager.Add(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2)) // half width + same line
 				{
-					// fail?
 					float v = lineWidth.get() - 0.1f;
 					lineWidth = v;
 					if (bPrevious) bPrevious = false;// required bc no param callback
 				}
-				if (widgetsManager.Add(bNext, SurfingWidgetTypes::IM_BUTTON_BIG, false, 2, 20)) // half width + 20px vert spacing
+				if (widgetsManager.Add(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20)) // half width + 20px vert spacing
 				{
-					// fail?
 					float v = lineWidth.get() + 0.1f;
 					lineWidth = v;
 					if (bNext) bNext = false;// required bc no param callback
 				}
 
 				// 1.3 A float param
-				ofxSurfing::AddParameter(lineWidth);// default
+				//ofxSurfing::AddParameter(lineWidth);// default
 				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_SLIDER);
 				//BUG: duplicated params collide bc UniqueName troubles..
 				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_DRAG);
-				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
+				widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
 				// 1.4 Three widgets in one same row
 				// with 20px vert spacing at end
@@ -181,11 +190,13 @@ void ofApp::drawWindow1() {
 				widgetsManager.Add(bMode3, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 3, 2);
 
 				// 1.5 A check box
-				//widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_CHECKBOX);
-				ofxSurfing::AddParameter(bMode4);
+				//this force the style no matter if a conf is added (AddWidgetConf) for this param
+				widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_CHECKBOX);
+				//this will be affected if there's an added conf (AddWidgetConf) for this param
+				//ofxSurfing::AddParameter(bMode4);
 
 				// 1.6 spacing
-				ImGui::Dummy(ImVec2(0, 20));// spacing
+				ImGui::Dummy(ImVec2(0, 20)); // spacing
 
 				// 1.7 A row of four toggles
 				widgetsManager.Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 4);
@@ -194,10 +205,11 @@ void ofApp::drawWindow1() {
 				widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 4);
 			}
 
+			ImGui::Dummy(ImVec2(0, 10));// spacing
+
 			//-
 
 			// 2. Parameters inside an ofParameterGroup
-
 			// queue params configs to populate after when drawing they container group
 			{
 				// group of parameters with customized tree/folder type
@@ -221,8 +233,8 @@ void ofApp::drawWindow1() {
 				ImGui::Separator();
 				ImGui::Dummy(ImVec2(0, 20));// spacing
 				ImGui::Text("MORE WIDGETS");
-				ToggleRoundedButton("More", &bMore);
-				if (bMore) drawWidgets();
+				ToggleRoundedButton("draw", &bMore);
+				if (bMore) drawMoreWidgets();
 			}
 		}
 		guiManager.endWindow();
@@ -247,10 +259,11 @@ void ofApp::drawWindow2() {
 			_w100 = getImGui_WidgetWidth(1);
 			_w50 = getImGui_WidgetWidth(2);
 
-			if (AddBigToggle(bEnable)) {}// this is full width (_w100) with standard height (_h)
-			if (AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
+			// Two full width toggles
+			//if (AddBigToggle(bEnable)) {}// this is full width (_w100) with standard height (_h)
+			//if (AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
 
-			// 50% with / two widgets same line/row
+			// Two widgets same line/row with the 50% of window panel width 
 			if (AddBigButton(bPrevious, _w50, _h)) {
 				lineWidth -= 0.1;
 				bPrevious = false;
@@ -284,7 +297,7 @@ void ofApp::drawWindow2() {
 }
 
 //--------------------------------------------------------------
-void ofApp::drawWidgets() {
+void ofApp::drawMoreWidgets() {
 
 	// these are pure widgets without window/tree/container
 
@@ -321,7 +334,7 @@ void ofApp::drawWidgets() {
 	static float begin = 10, end = 90;
 	static int begin_i = 100, end_i = 1000;
 	ImGui::DragFloatRange2("range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	ImGui::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0fcm", "Max: %.0fcm");
+	ImGui::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 }

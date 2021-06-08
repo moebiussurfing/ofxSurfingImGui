@@ -7,7 +7,6 @@
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
 /*
-
 	NOTE:
 
 	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
@@ -27,9 +26,7 @@
 
 	That's a problem bc we need to star count the widgets when window begins.
 	So we will need to create windows here like on ofxImGui ?
-
 */
-
 
 //#include "ofGLBaseTypes.h"
 //#include "ofParameter.h"
@@ -110,7 +107,7 @@ namespace ofxSurfing
 	//void AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags);//TODO: settings + flags
 
 	// NEW: 
-	// added flags and cleaned all the old settings
+	// added group flags and cleaned all the old settings
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags);
 
 #if OF_VERSION_MINOR >= 10
@@ -207,10 +204,15 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	auto tmpRef = parameter.get();
 	const auto& info = typeid(ParameterType);
 
+	//--
+
+	// A. If  there's not config for this parameter
+	// this checks is for speed up and fast return when we have not added any style conf. (AddWidgetConf)
+
 	//TODO:
-	// If there's no added AddWidgetConf, we use default widgets adders
-	// if we have not used the Type Engines we bypass all the related stuff.
-	if (!widgetsManager.isOperative() && true)
+	// If there's no added AddWidgetConf (for none of the widgets), we use default widgets adders
+	// if we have not used the Type Engines we bypass all the related stuff running this:
+	if (!widgetsManager.isOperative() /*&& 1*/)
 	{
 		// float
 		if (info == typeid(float))
@@ -257,48 +259,88 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 
 	//--
 
-	if (info == typeid(float))
+	else 
 	{
-		bool bReturn = false;
-		ofParameter<float> &p = parameter.cast<float>();
-		auto c = widgetsManager.getWidgetConf(p);
-		// if the parameter widget is not added explicitly, will be populated as the default appearance
-		//if (c.name != "-1")
+		// B. if  there's a config already added for one or more parameters
+
+		if (info == typeid(float))
 		{
-			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+			bool bReturn = false;
+			ofParameter<float> &p = parameter.cast<float>();
+			auto c = widgetsManager.getWidgetConf(p);
+			// if the parameter widget is not added explicitly, will populate it as the default appearance
+			if (c.name != "-1")
+			{
+				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+			}
+			else { // default style
+				ImGui::PushID(1);
+				if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+				{
+					parameter.set(tmpRef);
+					ImGui::PopID();
+					bReturn = true;
+				}
+				ImGui::PopID();
+				bReturn = false;
+			}
+			return bReturn;
 		}
-		return bReturn;
+
+		// int
+		if (info == typeid(int))
+		{
+			bool bReturn = false;
+			ofParameter<int> &p = parameter.cast<int>();
+			auto c = widgetsManager.getWidgetConf(p);
+			// if the parameter widget is not added explicitly, will populate it as the default appearance
+			if (c.name != "-1")
+			{
+				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+			}
+			else { // default style
+				ImGui::PushID(1);
+				if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+				{
+					parameter.set(tmpRef);
+					ImGui::PopID();
+					bReturn = true;
+				}
+				ImGui::PopID();
+				bReturn = false;
+			}
+			return bReturn;
+		}
+
+		// bool
+		if (info == typeid(bool))
+		{
+			bool bReturn = false;
+			ofParameter<bool> &p = parameter.cast<bool>();
+			auto c = widgetsManager.getWidgetConf(p);
+			// if the parameter widget is not added explicitly, will populate it as the default appearance
+			if (c.name != "-1")
+			{
+				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+			}
+			else { // default style
+				ImGui::PushID(1);
+				if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
+				{
+					parameter.set(tmpRef);
+					ImGui::PopID();
+					bReturn = true;
+				}
+				ImGui::PopID();
+				bReturn = false;
+			}
+			return bReturn;
+		}
 	}
 
-	// int
-	if (info == typeid(int))
-	{
-		bool bReturn = false;
-		ofParameter<int> &p = parameter.cast<int>();
-		auto c = widgetsManager.getWidgetConf(p);
-		// if the parameter widget is not added explicitly, will be populated as the default appearance
-		//if (c.name != "-1")
-		{
-			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-		}
-		return bReturn;
-	}
+	//--
 
-	// bool
-	if (info == typeid(bool))
-	{
-		bool bReturn = false;
-		ofParameter<bool> &p = parameter.cast<bool>();
-		auto c = widgetsManager.getWidgetConf(p);
-		// if the parameter widget is not added explicitly, will be populated as the default appearance
-		//if (c.name != "-1") 
-		{
-			bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-		}
-		return bReturn;
-	}
-
-	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+	ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
 
 	return false;
 }
