@@ -1178,4 +1178,3 @@ bool ofxSurfing::VectorListBox(const char* label, int* currIndex, std::vector<st
 	return ImGui::ListBox(label, currIndex, vector_getter,
 		static_cast<void*>(&values), values.size());
 }
-

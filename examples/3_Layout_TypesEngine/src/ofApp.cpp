@@ -50,23 +50,23 @@ void ofApp::setup() {
 	if (bCustom2)
 	{
 		// bools
-		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG);
+		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
 
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20);
-		
+
 		//widgetsManager.AddWidgetConf(bMode4, SurfingWidgetTypes::IM_CHECKBOX, false, 1, 10);
-		
+
 		// floats
 		//widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(separation, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(speed, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-		
+
 		// ints
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(size, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(amount, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-		
+
 		// bools
 		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
@@ -142,20 +142,20 @@ void ofApp::drawWindow1() {
 
 		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 		{
+			// update sizes to current window shape
+			widgetsManager.refreshPanelShape();
+
 			//-
 
 			// 0. Default bool param
 			ofxSurfing::AddParameter(bEnable);
-			
+
 			//-
 
 			// 1. Single parameters (out of a paramGroup)
 			// instant populate customized widgets
 			if (bCustom1)
 			{
-				// 1.0 update sizes to current window shape
-				widgetsManager.refreshPanelShape(); 
-
 				//-
 
 				// 1.1 Toggle full width
@@ -182,7 +182,7 @@ void ofApp::drawWindow1() {
 				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_DRAG);
 				widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
-				// 1.4 Three widgets in one same row
+				// 1.4 Three small toggle widgets in one row
 				// with 20px vert spacing at end
 				//widgetsManager.refreshPanelShape(); // update sizes to current window shape
 				widgetsManager.Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 3);
@@ -196,13 +196,13 @@ void ofApp::drawWindow1() {
 				//ofxSurfing::AddParameter(bMode4);
 
 				// 1.6 spacing
-				ImGui::Dummy(ImVec2(0, 20)); // spacing
+				ImGui::Dummy(ImVec2(0, 10)); // spacing
 
-				// 1.7 A row of four toggles
-				widgetsManager.Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 4);
-				widgetsManager.Add(bMode2, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 4);
-				widgetsManager.Add(bMode3, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 4);
-				widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 4);
+				// 1.7 A row of four big toggles
+				widgetsManager.Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 4);
+				widgetsManager.Add(bMode2, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 4);
+				widgetsManager.Add(bMode3, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 4);
+				widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 4);
 			}
 
 			ImGui::Dummy(ImVec2(0, 10));// spacing
@@ -252,7 +252,8 @@ void ofApp::drawWindow2() {
 
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
-			// Helpers to calculate sizes
+			// Helpers to calculate sizes. 
+			// This is done with another approach different than refreshPanelShape()/ofxSurfingHelpers::refreshImGui_WidgetsSizes(..
 			float _w100;
 			float _w50;
 			float _h = WIDGETS_HEIGHT;
@@ -278,8 +279,11 @@ void ofApp::drawWindow2() {
 
 			ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
 
-			// do not updates for below group. Must call:
-			//widgetsManager.refreshPanelShape();
+			// workaround
+			// do not updates for below group. 
+			// inside AddGroup. Could be related to static widgetsManager instantiation..
+			// Must call:
+			widgetsManager.refreshPanelShape();
 
 			// group parameter with customized tree/folder type
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
@@ -287,7 +291,7 @@ void ofApp::drawWindow2() {
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
 			ofxSurfing::AddGroup(params2, flags);
 
-			//-
+			//--
 
 			// an advanced panels with some typical toggle for extra config (autosize, get mouse over, lock..etc)
 			guiManager.drawAdvancedSubPanel();

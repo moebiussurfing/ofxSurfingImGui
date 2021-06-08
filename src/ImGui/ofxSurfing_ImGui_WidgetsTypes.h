@@ -89,6 +89,11 @@ namespace ofxSurfing {
 		void refreshPanelShape()
 		{
 			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+
+			////TODO:
+			////confirm that is not actuating
+			//_w100 = ofRandom(500);
+			//_w50 = ofRandom(500);
 		}
 
 		//-
