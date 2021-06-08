@@ -178,7 +178,11 @@ void ofApp::drawWidgets()
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 
     // draw a group of params with previously queued param styles on setup() 
-    ofxSurfing::AddGroup(params);
+    // group parameter with flags to customized tree/folder type
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+    flags |= ImGuiTreeNodeFlags_Framed; // dark border box on the group name
+    flags |= ImGuiTreeNodeFlags_DefaultOpen; // collapsing: default open or closed
+    ofxSurfing::AddGroup(params, flags);
 }
 ```
 
