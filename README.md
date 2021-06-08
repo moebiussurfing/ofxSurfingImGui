@@ -152,8 +152,8 @@ void ofApp::drawWidgets()
     //          int spacing = -1)
     
     // two widgets same line
-    widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
-    widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
+    widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
+    widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
     // a slider
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
     // a stepper with half window width size and 20px of spacing at end
