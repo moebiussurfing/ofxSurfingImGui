@@ -116,10 +116,10 @@ void ofApp::setup()
     // queue style for each parameter
     // format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
-                ImWidgetSurfingTYPE type = IM_DEFAULT, 
-                bool bSameLine = false, 
-                int amtPerRow = 1, 
-                int spacing = -1)
+    //            ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //            bool bSameLine = false, 
+    //            int amtPerRow = 1, 
+    //            int spacing = -1)
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
@@ -132,10 +132,10 @@ void ofApp::drawWidget()
 {
     // format:
     // bool Add(ofAbstractParameter& aparam, 
-                ImWidgetSurfingTYPE type = IM_DEFAULT, 
-                bool bSameLine = false, 
-                int amtPerRow = 1, 
-                int spacing = -1)
+    //            ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //            bool bSameLine = false, 
+    //            int amtPerRow = 1, 
+    //            int spacing = -1)
     
     // instant draw each parameter
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
