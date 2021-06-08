@@ -7,14 +7,16 @@
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"	// -> to use my custom toggle/buttons widgets and more
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"		// -> to use int/float ranges
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"	// -> required to use layouting methods like ofxSurfingHelpers::refreshImGui_WidgetsSizes(..
+#include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"	// -> to use extra widgets
 // ofxSurfing_ImGui_LayoutManager.h has more window/multi instance tools too. But we are using "clean" ofxImGui here.
 
 //#include "ofxSurfingImGui.h"	// -> This header includes ALL the above classes and some others. 
 //You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
 
 // simplify with namespaces
-//using namespace ofxSurfing;
 using namespace ofxSurfingHelpers;
+
+//-
 
 class ofApp : public ofBaseApp{
     

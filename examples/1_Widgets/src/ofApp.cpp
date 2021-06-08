@@ -229,14 +229,6 @@ void ofApp::draw_SurfingWidgets() {
 
 	//-
 
-	// 0.
-
-	//ImDrawList dl;
-	//bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
-	Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
-
-	//-
-
 	// 1. an ofParameterGroup
 	ofxImGui::AddGroup(params3, mainSettings);
 	// -> notice that when using ofxGui helpers, ofxImGui::AddGroup must be inside of:
@@ -333,6 +325,26 @@ void ofApp::draw_SurfingWidgets() {
 	if (ImGui::Button("b3", ImVec2(_wThird, _hh))) {}
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+	//----
+
+	// TESTING
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::Text("TEST More Widgets");
+	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+	////ImDrawList dl;
+	////bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
+	//static float vx = 50;
+	//static float vy = 50;
+	//ImGuiEx::Pad2D(&dl, 100, 100, &vx, &vy);
+	//if (ImGuiEx::Pad2D(ImGui::getNodeDrawList(), 0, ImGui::GetWindowSize().y - 26, &_x, &_y)) {
+	//	this->setCustomVar(static_cast<float>(_x), "XPOS");
+	//	this->setCustomVar(static_cast<float>(_y), "YPOS");
+	//}
+	ImGuiEx::HelpMarker("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
+	ImGuiEx::ObjectInfo("myObject Info", "http://google.com");
 }
 
 //--------------------------------------------------------------
