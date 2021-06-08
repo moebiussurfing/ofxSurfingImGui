@@ -59,7 +59,8 @@ ofxSurfing_ImGui_Manager guiManager;
 
 //ofApp.cpp
 void ofApp::setup() { 
-    guiManager.setup(); // instantiates and configures ofxImGui inside.
+    guiManager.setup(); 
+    // instantiates and configures ofxImGui inside.
     // font, theme and other customizations.
 }
 void ofApp::draw() { 
