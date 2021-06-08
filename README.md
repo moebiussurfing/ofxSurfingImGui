@@ -115,12 +115,14 @@ void ofApp::setup()
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
     // queue style for each parameter
+
     // format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
     //                    ImWidgetSurfingTYPE type = IM_DEFAULT, 
     //                    bool bSameLine = false, 
     //                    int amtPerRow = 1, 
     //                    int spacing = -1)
+
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
@@ -131,6 +133,8 @@ void ofApp::setup()
 }
 void ofApp::drawWidgets() 
 {
+    // instant draw each parameter
+
     // format:
     // bool Add(ofAbstractParameter& aparam, 
     //          ImWidgetSurfingTYPE type = IM_DEFAULT, 
@@ -138,7 +142,6 @@ void ofApp::drawWidgets()
     //          int amtPerRow = 1, 
     //          int spacing = -1)
     
-    // instant draw each parameter
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
     widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
