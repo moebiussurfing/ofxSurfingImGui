@@ -36,6 +36,7 @@ ofxSurfingImGui
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 ![image](/docs/Capture1.PNG?raw=true "image")  
+-------------
 
 ### 2_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
