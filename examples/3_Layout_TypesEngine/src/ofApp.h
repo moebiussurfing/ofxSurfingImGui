@@ -2,9 +2,9 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfingImGui.h"	// -> Adds all the add-on classes. You can also simplify picking what you want to use.
+#include "ofxSurfingImGui.h" // -> Adds all the add-on classes. You can also simplify picking what you want to use.
 
-#include "ofxWindowApp.h"		// -> not required
+#include "ofxWindowApp.h" // -> not required
 
 using namespace ofxSurfing;
 //namespace ofxSurfing = ofxSurfing::ImGuiWidgetsTypesManager;
@@ -48,6 +48,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;
 		ofParameter<int> shapeType3;
+
+		bool bCustom;
 
 		ofxWindowApp windowApp;
 };
