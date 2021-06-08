@@ -167,7 +167,7 @@ void ofApp::setup()
 void ofApp::drawWidgets() 
 {
     // Workflow B
-    // Instant draw each parameter
+    // "Instant" draw each single parameter
 
     // Format:
     // bool Add(ofAbstractParameter& aparam, 
