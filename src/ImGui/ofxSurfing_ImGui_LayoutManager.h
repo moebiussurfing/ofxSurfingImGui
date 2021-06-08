@@ -17,7 +17,6 @@ TODO:
 //#include "ofxSurfing_ImGui_Themes.h"
 //#include "ofxSurfing_ImGui_Helpers.h" //TODO: breaks addvanced/widgets items..
 
-//namespace ofxSurfing = ofxSurfing::ImGuiWidgetsTypesManager;
 //namespace ofxSurfing = ofxSurfingHelpers;
 
 //using namespace ImGui;
@@ -36,9 +35,9 @@ namespace ofxSurfingHelpers
 		__w100 = ImGui::GetContentRegionAvail().x;
 		__h100 = ImGui::GetContentRegionAvail().y;
 		__w99 = __w100 - __spcx;
-		__w50 = __w100 / 2 - __spcx / 2;
-		__w33 = __w100 / 3 - __spcx / 3;
-		__w25 = __w100 / 4 - __spcx / 4;
+		__w50 = (__w100 - __spcx * 1) / 2;
+		__w33 = (__w100 - __spcx * 2) / 3;
+		__w25 = (__w100 - __spcx * 3) / 4;
 		__h = BUTTON_BIG_HEIGHT;
 	}
 
@@ -84,13 +83,14 @@ namespace ofxSurfingHelpers
 		float w;
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
 		float __w100 = ImGui::GetContentRegionAvail().x;
-		if (amntColumns == -1)
+		if (amntColumns == -1 || amntColumns == 1)
 		{
 			w = __w100;
 		}
 		else
 		{
-			w = __w100 / amntColumns - __spcx / amntColumns;
+			//w = __w100 / amntColumns - __spcx / amntColumns;
+			w = (__w100 - __spcx * (amntColumns - 1)) / amntColumns;
 		}
 
 		return w;
@@ -122,7 +122,7 @@ class ofxSurfing_ImGui_Manager
 
 	//	//TODO:
 	//public:
-	//	ImGuiWidgetsTypesManager widgetsManager;
+	//	SurfingWidgetTypes widgetsManager;
 		//void refreshShape() {
 		//	widgetsManager.refreshPanelShape(); // update sizes to current window shape
 		//}

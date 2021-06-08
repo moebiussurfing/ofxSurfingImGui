@@ -46,8 +46,8 @@ namespace ofxSurfing
 {
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
-	static ofxSurfing::ImGuiWidgetsTypesManager widgetsManager;
-	//ImGuiWidgetsTypesManager widgetsManager;
+	static ofxSurfing::SurfingWidgetTypes widgetsManager;
+	//SurfingWidgetTypes widgetsManager;
 
 	//--
 

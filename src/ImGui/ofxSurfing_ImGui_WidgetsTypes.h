@@ -34,7 +34,27 @@ namespace ofxSurfing {
 	//	};
 	//}
 
-	class ImGuiWidgetsTypesManager {
+	class SurfingWidgetTypes {
+
+		//-
+
+	public:
+		//TODO: make simpler namespace. move outside the class?
+		enum ImWidgetSurfingTYPE
+		{
+			IM_DEFAULT = 0,
+			IM_HIDDEN,
+			IM_CHECKBOX,//bool
+			IM_BUTTON_SMALL,
+			IM_BUTTON_BIG,
+			IM_TOGGLE_SMALL,
+			IM_TOGGLE_BIG,
+			IM_SLIDER,//float/int
+			IM_STEPPER,
+			IM_DRAG,
+			//IM_TEXT_BIG,
+			NUM_IM_TYPES
+		};
 
 		//-
 
@@ -73,26 +93,6 @@ namespace ofxSurfing {
 
 		//-
 
-		enum ImWidgetSurfingTYPE
-		{
-			IM_DEFAULT = 0,
-			IM_HIDDEN,
-			//bool
-			IM_CHECKBOX,
-			IM_BUTTON_SMALL,
-			IM_BUTTON_BIG,
-			IM_TOGGLE_SMALL,
-			IM_TOGGLE_BIG,
-			//float/int
-			IM_SLIDER,
-			IM_STEPPER,
-			IM_DRAG,
-			//IM_TEXT_BIG,
-			NUM_IM_TYPES
-		};
-
-		//-
-
 		class surfingImWidgetConf {
 		public:
 			ImWidgetSurfingTYPE type = IM_DEFAULT;
@@ -106,7 +106,7 @@ namespace ofxSurfing {
 
 		vector<surfingImWidgetConf> widgetsConfs;
 
-		ImGuiWidgetsTypesManager::ImGuiWidgetsTypesManager() {
+		SurfingWidgetTypes::SurfingWidgetTypes() {
 			widgetsConfs.clear();
 		}
 
@@ -167,8 +167,8 @@ namespace ofxSurfing {
 
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, ImGuiWidgetsTypesManager type) {
-		//	Add(bMode1, ImGuiWidgetsTypesManager::IM_TOGGLE_SMALL, 3, true);
+		//bool Add(ofAbstractParameter& aparam, SurfingWidgetTypes type) {
+		//	Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-
