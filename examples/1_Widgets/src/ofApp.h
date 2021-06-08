@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 
+//-
+
 #include "ofxImGui.h" // requires  https://github.com/Daandelange/ofxImGui or https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test
 #include "ImGui/dear_widgets/dear_widgets.h"		// -> to use Dearwidgets
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"	// -> to use my custom toggle/buttons widgets and more
@@ -11,7 +13,7 @@
 // ofxSurfing_ImGui_LayoutManager.h has more window/multi instance tools too. But we are using "clean" ofxImGui here.
 
 //#include "ofxSurfingImGui.h"	// -> This header includes ALL the above classes and some others. 
-//You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
+// You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
 
 // simplify with namespaces
 using namespace ofxSurfingHelpers;
@@ -29,7 +31,8 @@ public:
 	ofxImGui::Gui gui;
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	ImFont* customFont = nullptr;
-	// NOTE: on the example 2_Layout_Basic you will see how to use ofxSurfing_ImGui_LayoutManager.hh to speed up the ofxImGui instantiation and avoid the above lines.
+
+	// NOTE: on the example 2_Layout_Basic you will see how to use ofxSurfing_ImGui_LayoutManager.h to speed up the ofxImGui instantiation and avoid the above lines.
 
     void draw_SurfingWidgets();
     void draw_DearWidgets();

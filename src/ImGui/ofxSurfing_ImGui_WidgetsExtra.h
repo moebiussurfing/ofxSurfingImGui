@@ -30,9 +30,11 @@
 
 //-
 
-// Take from
+// Taken from
 // https://github.com/d3cod3/ofxVisualProgramming
 namespace ImGuiEx {
+	//TODO:
+	//how to handle ImDrawList?
 
 	bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
 
@@ -76,6 +78,43 @@ namespace ImGuiEx {
 			}
 		}
 	}
+
+	//--------------------------------------------------------------
+	inline void drawOFTexture(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH) {
+#define IMGUI_EX_NODE_HEADER_HEIGHT 20
+
+		if (tex->isAllocated()) {
+			if (tex->getWidth() / tex->getHeight() >= _tw / _th) {
+				if (tex->getWidth() > tex->getHeight()) {   // horizontal texture
+					drawW = _tw;
+					drawH = (_tw / tex->getWidth())*tex->getHeight();
+					posX = 0;
+					posY = (_th - drawH) / 2.0f;
+				}
+				else { // vertical texture
+					drawW = (tex->getWidth()*_th) / tex->getHeight();
+					drawH = _th;
+					posX = (_tw - drawW) / 2.0f;
+					posY = 0;
+				}
+			}
+			else { // always considered vertical texture
+				drawW = (tex->getWidth()*_th) / tex->getHeight();
+				drawH = _th;
+				posX = (_tw - drawW) / 2.0f;
+				posY = 0;
+			}
+
+			ImVec2 cursor_pos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(posX, posY + IMGUI_EX_NODE_HEADER_HEIGHT));
+
+			ofxImGui::AddImage(*tex, ofVec2f(drawW, drawH));
+
+			ImGui::SetCursorPos(cursor_pos);
+
+		}
+	}
+
 
 	////--------------------------------------------------------------
 	//inline void drawTimecode(ImDrawList* drawList, int seconds, std::string pre = "", bool onDrawList = false, ImVec2 pos = ImVec2(0, 0), float fontScale = 1.0f) {
