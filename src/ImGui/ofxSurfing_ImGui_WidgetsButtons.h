@@ -365,7 +365,7 @@ namespace ofxSurfingHelpers {
 	// https://github.com/ocornut/imgui/issues/1537
 	// bool & ofParameter<bool>
 	//--------------------------------------------------------------
-	inline void ToggleButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
+	inline void ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
 	{
 		ImGui::PushID(1);
 
@@ -412,6 +412,7 @@ namespace ofxSurfingHelpers {
 		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
 			p.y + radius), radius - 1.5f, c1);
 
+		//ImGui::SameLine(0,10);
 		ImGui::SameLine();
 		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
 		ImGui::Text(str_id);
@@ -421,7 +422,7 @@ namespace ofxSurfingHelpers {
 
 	// ofParameter bool toggle
 	//--------------------------------------------------------------
-	inline bool AddToggleRounded(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
 	{
 		ImGui::PushID(1);
 
@@ -480,6 +481,8 @@ namespace ofxSurfingHelpers {
 
 		ImGui::SameLine();
 		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
+		//ImGui::SameLine(0, -50);//fix align?
+
 		ImGui::Text(name.c_str());
 
 		ImGui::PopID();

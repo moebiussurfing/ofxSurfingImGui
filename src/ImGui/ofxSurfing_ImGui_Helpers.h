@@ -8,9 +8,11 @@
 
 /*
 
-	NOTE from moebiusSurfing:
+	NOTE:
+
 	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
-	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget.
+
+	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget. [ BUG FAIL ]
 	- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
 
 	//-
@@ -45,6 +47,7 @@ namespace ofxSurfing
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
 	static ofxSurfing::ImGuiWidgetsTypesManager widgetsManager;
+	//ImGuiWidgetsTypesManager widgetsManager;
 
 	//--
 

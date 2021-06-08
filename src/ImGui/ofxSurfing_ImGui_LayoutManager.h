@@ -2,15 +2,34 @@
 
 #include "ofMain.h"
 
+/*
+
+TODO:
+
++ improve unified namespaces
+
+*/
+
+
+#include "ofxImGui.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
+//#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_Themes.h"
 //#include "ofxSurfing_ImGui_Helpers.h" //TODO: breaks addvanced/widgets items..
+
+//namespace ofxSurfing = ofxSurfing::ImGuiWidgetsTypesManager;
+//namespace ofxSurfing = ofxSurfingHelpers;
 
 //using namespace ImGui;
 namespace ofxSurfingHelpers
 {
+	//--
+
+	// useful layout helpers
+
+	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
+	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
 	{
 		__spcx = ImGui::GetStyle().ItemSpacing.x;
 		__spcy = ImGui::GetStyle().ItemSpacing.y;
@@ -23,12 +42,15 @@ namespace ofxSurfingHelpers
 		__h = BUTTON_BIG_HEIGHT;
 	}
 
+	//--
+
 	// example: 
 	// allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
-	//float __w = getImGui_WidgetWidth(__ww, 2);
-	//if (ImGui::Button("_Button", ImVec2(__w, _h))) {}
+	//float w = getImGui_WidgetWidth(2); // half width button
+	//if (ImGui::Button("_Button", ImVec2(w, h))) {}
+
 	//--------------------------------------------------------------
-	inline void getImGui_WidgetWidth(float &w, int amntColumns = -1)
+	inline void refreshImGui_WidgetWidth(float &w, int amntColumns = -1)
 	{
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
 		float __w100 = ImGui::GetContentRegionAvail().x;
@@ -42,7 +64,7 @@ namespace ofxSurfingHelpers
 		}
 	}
 	//--------------------------------------------------------------
-	inline void getImGui_WidgetHeight(float &h, int amntRows = -1)
+	inline void refreshImGui_WidgetHeight(float &h, int amntRows = -1)
 	{
 		if (amntRows == -1)
 		{
@@ -56,12 +78,56 @@ namespace ofxSurfingHelpers
 		}
 	}
 
+	//--------------------------------------------------------------
+	inline float getImGui_WidgetWidth(int amntColumns = -1)
+	{
+		float w;
+		float __spcx = ImGui::GetStyle().ItemSpacing.x;
+		float __w100 = ImGui::GetContentRegionAvail().x;
+		if (amntColumns == -1)
+		{
+			w = __w100;
+		}
+		else
+		{
+			w = __w100 / amntColumns - __spcx / amntColumns;
+		}
+
+		return w;
+	}
+	//--------------------------------------------------------------
+	inline float getImGui_WidgetHeight(int amntRows = -1)
+	{
+		float h;
+		if (amntRows == -1)
+		{
+			h = BUTTON_BIG_HEIGHT;
+		}
+		else
+		{
+			float __spcy = ImGui::GetStyle().ItemSpacing.y;
+			float __h100 = ImGui::GetContentRegionAvail().y;
+			h = __h100 / amntRows - __spcy / amntRows;
+		}
+
+		return h;
+	}
+
 }//namespace ofxSurfingHelpers
 
 //----
 
 class ofxSurfing_ImGui_Manager
 {
+
+	//	//TODO:
+	//public:
+	//	ImGuiWidgetsTypesManager widgetsManager;
+		//void refreshShape() {
+		//	widgetsManager.refreshPanelShape(); // update sizes to current window shape
+		//}
+
+		//--
 
 public:
 	ofxSurfing_ImGui_Manager();
@@ -103,18 +169,12 @@ private:
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();// should remove..
 	ImFont* customFont = nullptr;
 
-public:
-	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> auto_resize{ "Auto Resize", true };//auto resize panel
-	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };//mouse is over gui
-	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };//force position
-
 	bool isMouseOverGui() {
 		return bLockMouseByImGui;
 	}
 
 private:
-	bool bUseAdvancedSubPanel = false;//enable advanced sub panel
+	bool bUseAdvancedSubPanel = true;//enable advanced sub panel
 
 	//panels minimal sizes
 	float xx = 10;
@@ -125,9 +185,27 @@ private:
 
 	//-
 
+	// exposed useful public params
 public:
+	ofParameter<bool> bGui{ "Show Gui", true };
+	ofParameter<bool> auto_resize{ "Auto Resize", true };//auto resize panel
+
+private:
+	ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };//mouse is over gui
+	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };//force position
+
+public:
+
+	// an extra common panel with some usefull toggles:
+	// auto-resize, debug mouse over gui, ...
+
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel() {
+
+		if (!bUseAdvancedSubPanel) return;
+
+		//--
+
 		ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 		if (ImGui::CollapsingHeader("ADVANCED"))
@@ -138,25 +216,21 @@ public:
 			float _h;
 
 			// this is full width (_w100) with standard height (_h)
-			ofxSurfingHelpers::getImGui_WidgetWidth(_w, 1);
-			ofxSurfingHelpers::getImGui_WidgetHeight(_h, -1);
-
-			//ImGui::Button("TEST", ImVec2(_w, _h));
+			_w = ofxSurfingHelpers::getImGui_WidgetWidth(1);
+			_h = ofxSurfingHelpers::getImGui_WidgetHeight(-1);
 
 			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h / 2);
 			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
 
-			//ofxSurfing::AddParameter(auto_resize);
-			//ofxSurfing::AddParameter(bLockMouseByImGui);
-
+			//ImGui::Button("TEST", ImVec2(_w, _h));
 			//ofxSurfing::AddParameter(auto_lockToBorder);
 		}
 	}
 
 	//--------------------------------------------------------------
-	//void setUseAdvancedSubPanel(bool b) {
-	//	bUseAdvancedSubPanel = b;
-	//}
+	void setUseAdvancedSubPanel(bool b) {
+		bUseAdvancedSubPanel = b;
+	}
 };
 
 //}//namespace ofxSurfingHelpers

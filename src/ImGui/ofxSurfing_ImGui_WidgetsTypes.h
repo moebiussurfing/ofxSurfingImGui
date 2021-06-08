@@ -142,6 +142,9 @@ namespace ofxSurfing {
 		}
 
 		//-
+		
+		//TODO:
+		// add remover element?
 
 		// queue a customization config for future populate a param widget
 		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
