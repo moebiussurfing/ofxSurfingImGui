@@ -56,8 +56,8 @@ ofxSurfing_ImGui_Manager guiManager;
 
 //ofApp.cpp
 void ofApp::setup() { 
-    guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
-    // includes font, theme and other customizations.
+    guiManager.setup(); // instantiates and configures ofxImGui inside.
+    // font, theme and other customizations.
 }
 void ofApp::draw() { 
     guiManager.begin();
@@ -66,18 +66,18 @@ void ofApp::draw() {
         {
             // precalculate widgets sizes
             float _w100 = getImGui_WidgetWidth(1); // 1 widget full width
-			float _w50 = getImGui_WidgetWidth(2); // 2 widgets half width
+            float _w50 = getImGui_WidgetWidth(2); // 2 widgets half width
             float _h = WIDGETS_HEIGHT;
 
             /* Draw ImGui widgets */
 
             // One widget full with and half height
-			if (AddBigToggle(b1, _w100, _h / 2)) {} 
+            if (AddBigToggle(b1, _w100, _h / 2)) {} 
 
-			// Two widgets same line/row with the 50% of window panel width 
-			if (AddBigButton(b3, _w50, _h)) {}
-			ImGui::SameLine();
-			if (AddBigButton(b4, _w50, _h)) {}
+            // Two widgets same line/row with the 50% of window panel width 
+            if (AddBigButton(b3, _w50, _h)) {}
+            ImGui::SameLine();
+            if (AddBigButton(b4, _w50, _h)) {}
 
             // An extra panel for useful config: auto resize window, mouseOverGui..
             guiManager.drawAdvancedSubPanel();
@@ -112,7 +112,6 @@ void ofApp::setup()
 {
     // feed bool, float and int parameters into an ofParameterGroup
     params.add(b1, b2, b3, f1, f2, i1, i2);
-    ..
 
     // queue style for each parameter
     // void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
@@ -123,7 +122,6 @@ void ofApp::setup()
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
-    ..
 }
 void ofApp::drawWidget() 
 {
@@ -134,7 +132,7 @@ void ofApp::drawWidget()
     widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
-    ..
+
     // draw a group of params with previously queued styles
     ofxSurfing::AddGroup(params, flags);
 }
