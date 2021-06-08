@@ -3,9 +3,9 @@ ofxSurfingImGui
 
 #### WORK IN PROGRESS
 **BUG**: WHEN ADDING MANY TIMES A PARAMETER OR OTHER WITH A NOT UNIQUE NAME. 
-	- Widgets collides bewteen them.  
+	* Widgets collides bewteen them.  
 **BUG**: LAYOUT ENGINE FAILS ON NESTING INDENTED GROUPS. 
-	- Broken width recalculation and "unlimited" width growing when auto-size.  
+	* Broken width recalculation and "unlimited" width growing when auto-size.  
 
 -----------
 
