@@ -18,7 +18,7 @@ API will change and I am still having some problems yet.
 **ofxSurfingImGui** is a helper add-on with _Snippets / Helpers / LayoutManagement / Widgets_ to easy integrate **ImGui** into **openFrameworks**.
 
 ## Features 
-* Requires the _awesome_ [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) @**Daandelange**'s fork: 
+* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
     - Why? Easy to update to future **new ImGui** versions and multi context/instances.
 * **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
