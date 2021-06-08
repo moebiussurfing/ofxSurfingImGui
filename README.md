@@ -91,17 +91,17 @@ void ofApp::draw() {
 ### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
-- Draw each **ofParameter** types with different appearance.
-    * Example 1: Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box.
-    * Example 2: Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions.
-- Especially useful when params are into an **ofParameterGroup**.
-- Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
+* Draw each **ofParameter** types with different appearance.
+    * EXAMPLE 1: _Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box._
+    * EXAMPLE 2: _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._
+* Especially useful when params are into an **ofParameterGroup**.
+* Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
 
-* Available customization options:
-- Hide the parameter.  
-- Set an **ImGui::SameLine** after the widget.  
-- Add a final vertical spacing after the widget.  
-- Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
+#### Available customization options:
+    - Hide the parameter.  
+    - Set an **ImGui::SameLine** after the widget.  
+    - Add a final vertical spacing after the widget.  
+    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
 
 ![image](/docs/Capture4.PNG?raw=true "image")  
 <!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
@@ -114,7 +114,12 @@ void ofApp::setup()
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
     // queue style for each parameter
-    // void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+    // format: 
+    // void AddWidgetConf(ofAbstractParameter& aparam, 
+                ImWidgetSurfingTYPE type = IM_DEFAULT, 
+                bool bSameLine = false, 
+                int amtPerRow = 1, 
+                int spacing = -1)
     widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
     widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
     widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
@@ -125,7 +130,12 @@ void ofApp::setup()
 }
 void ofApp::drawWidget() 
 {
-    // bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+    // format:
+    // bool Add(ofAbstractParameter& aparam, 
+                ImWidgetSurfingTYPE type = IM_DEFAULT, 
+                bool bSameLine = false, 
+                int amtPerRow = 1, 
+                int spacing = -1)
     
     // instant draw each parameter
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
