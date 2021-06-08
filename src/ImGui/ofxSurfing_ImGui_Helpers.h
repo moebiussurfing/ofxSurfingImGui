@@ -48,17 +48,22 @@ namespace ofxSurfing
 
 	//--
 
-	//class SurfingImGuiHelpers {
-	//public:
-	//	SurfingImGuiHelpers() {};
-	//	~SurfingImGuiHelpers() {};
+	// TODO:
+	// important BUG !
+	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	static int index = 0;
+	static void resetIndex() {
+		index = 0;
+	}
 
 	//--
 
 	// TODO:
-	// important BUG !
-	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
-	//static int index = 0;
+	// should convert all this to a class ?
+	//class SurfingImGuiHelpers {
+	//public:
+	//	SurfingImGuiHelpers() {};
+	//	~SurfingImGuiHelpers() {};
 
 	//--
 
@@ -217,7 +222,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		// float
 		if (info == typeid(float))
 		{
-			ImGui::PushID(1);
+			ImGui::PushID(index++);
 			if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
@@ -231,7 +236,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		// int
 		if (info == typeid(int))
 		{
-			ImGui::PushID(1);
+			ImGui::PushID(index++);
 			if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
@@ -245,7 +250,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 		// bool
 		if (info == typeid(bool))
 		{
-			ImGui::PushID(1);
+			ImGui::PushID(index++);
 			if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
 			{
 				parameter.set(tmpRef);
@@ -274,7 +279,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(1);
+				ImGui::PushID(index++);
 				if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
@@ -299,7 +304,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(1);
+				ImGui::PushID(index++);
 				if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
@@ -324,7 +329,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
 			}
 			else { // default style
-				ImGui::PushID(1);
+				ImGui::PushID(index++);
 				if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
 				{
 					parameter.set(tmpRef);
@@ -349,7 +354,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 template<typename ParameterType>
 bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 {
-	ImGui::PushID(1);
+	ImGui::PushID(index++);
 	if (label)
 	{
 		ImGui::LabelText(parameter.getName().c_str(), ofToString(parameter.get()).c_str());

@@ -60,18 +60,19 @@ namespace ofxSurfing {
 
 		//TODO:
 		// a getUniqueName alternative
-	public:
-		int index = 0;
-		void resetIndex() {
-			index = 0;
-		}
-		std::string getTag(ofAbstractParameter& aparam) {
-			string tag = aparam.getName() + ofToString(index++);
-			return tag;
-		}
+	//public:
+	//	int index = 0;
+	//	void resetIndex() {
+	//		index = 0;
+	//	}
+	//	std::string getTag(ofAbstractParameter& aparam) {
+	//		string tag = aparam.getName() + ofToString(index++);
+	//		return tag;
+	//	}
 
 		//-
 
+	public:
 		// widgets sizes
 		float _spcx;
 		float _spcy;
@@ -154,7 +155,7 @@ namespace ofxSurfing {
 		}
 
 		//-
-		
+
 		//TODO:
 		// add remover element?
 

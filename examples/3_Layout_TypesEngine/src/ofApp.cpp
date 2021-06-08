@@ -91,7 +91,8 @@ void ofApp::draw()
 	{
 		//TODO:
 		// trying a workaround to fix getUniqueName troubles..
-		widgetsManager.resetIndex();
+		ofxSurfing::resetIndex();
+		//widgetsManager.resetIndex();
 
 		drawWindow0();
 		drawWindow1();

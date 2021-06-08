@@ -49,10 +49,10 @@ ofxSurfingImGui
 ### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
-* Draw each **ofParameter** types with different appearance. 
+* Draw each **ofParameter** types with different appearance.
     * Example 1: Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box.
     * Example 2: Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions.
-* Especially useful when params are into an **ofParameterGroup**. 
+* Especially useful when params are into an **ofParameterGroup**.
 
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
 * Available customization options:
