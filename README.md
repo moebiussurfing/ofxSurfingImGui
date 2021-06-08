@@ -66,8 +66,8 @@ ofxSurfingImGui
     * Add a final vertical spacing after the widget.
     * Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.
 
-<!-- ![image](/docs/Capture3.PNG?raw=true "image")   -->
-<img src="docs/Capture3.PNG" width="80%" height="80%">
+<!-- ![image](/docs/Capture4.PNG?raw=true "image")   -->
+<img src="docs/Capture4.PNG" width="80%" height="80%">
 
 ---------------------------------------------------------
 
