@@ -41,7 +41,7 @@ void ofApp::setup() {
 
 	//-
 
-	guiManager.setup(); // this instantiates and configurates ofxImGui inside the class object.
+	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
 
 	//-
 
@@ -271,6 +271,11 @@ void ofApp::drawWindow2() {
 				lineWidth += 0.1;
 				bNext = false;
 			}
+
+			// raw ImGui
+			if (ImGui::Button("START", ImVec2(_w50, _h / 2))) {}
+			ImGui::SameLine();
+			if (ImGui::Button("STOP", ImVec2(_w50, _h / 2))) {}
 
 			//-
 

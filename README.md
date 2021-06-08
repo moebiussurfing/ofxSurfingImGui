@@ -79,7 +79,7 @@ void ofApp::draw() {
             float _w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
             float _h = WIDGETS_HEIGHT;
 
-            /* Draw ImGui widgets */
+            /* Draw raw ImGui or my Surfing widgets */
 
             // One widget full with and half height
             if (AddBigToggle(b1, _w100, _h / 2)) {} 
@@ -88,6 +88,11 @@ void ofApp::draw() {
             if (AddBigButton(b3, _w50, _h)) {}
             ImGui::SameLine();
             if (AddBigButton(b4, _w50, _h)) {}
+
+            // Or using raw ImGui
+			if (ImGui::Button("START", ImVec2(_w50, _h))) {}
+			ImGui::SameLine();
+			if (ImGui::Button("STOP", ImVec2(_w50, _h))) {}
 
             // An extra panel for useful config: auto resize window, mouseOverGui..
             guiManager.drawAdvancedSubPanel();
