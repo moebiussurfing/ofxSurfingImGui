@@ -57,18 +57,14 @@ void ofApp::setup() {
 	if (bCustom2)
 	{
 		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
-
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
 		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20);
-
 		widgetsManager.AddWidgetConf(separation, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(speed, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
-
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
 		widgetsManager.AddWidgetConf(size, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(amount, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-
+		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
 		widgetsManager.AddWidgetConf(bMode1, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
 		widgetsManager.AddWidgetConf(bMode2, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 2);
 		widgetsManager.AddWidgetConf(bMode3, SurfingWidgetTypes::IM_TOGGLE_BIG, true, 2);
