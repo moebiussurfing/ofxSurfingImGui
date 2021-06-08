@@ -2,6 +2,7 @@ ofxSurfingImGui
 =============================
 
 #### WORK IN PROGRESS
+API will change and I am still having some problems yet.  
 ### **BUG 1**:  
     * When adding many times a parameter or others with a not unique name.  
     * Widgets collide between them. Only some instances work well. (Sometimes)  
