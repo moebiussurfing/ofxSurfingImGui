@@ -73,15 +73,17 @@ void ofApp::draw() {
     {
         guiManager.beginWindow("Window1", &bOpen1, window_flags1);
         {
-            // precalculate common widgets sizes to fit window "responsive"
-            // (includes the ImGui spacing between widgets)
+            // Precalculate common widgets sizes to fit current window "to be responsive"
+            // (Takes care of ImGui spacing between widgets)
             float _w100 = getImGui_WidgetWidth(1); // 1 widget full width
             float _w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
             float _w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
             float _w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
             float _h = WIDGETS_HEIGHT;
 
-            /* Draw raw ImGui or my Surfing widgets with ofParameters*/
+            //-
+
+            // Draw RAW ImGui or my SurfingWidgets with ofParameters
 
             // One widget full with and half height
             if (AddBigToggle(b1, _w100, _h / 2)) {} 
@@ -98,6 +100,8 @@ void ofApp::draw() {
             if (ImGui::Button("STOP", ImVec2(_w33, _h))) {}
             ImGui::SameLine();
             if (ImGui::Button("REPLAY", ImVec2(_w33, _h))) {}
+
+            //-
 
             // An extra panel for useful config: auto resize window, mouseOverGui..
             guiManager.drawAdvancedSubPanel();
@@ -141,7 +145,7 @@ void ofApp::setup()
     params.add(b1, b2, b3, f1, f2, i1, i2);
 
     //-
-    
+
     // Workflow A
     // Queue config style for each parameter
 
