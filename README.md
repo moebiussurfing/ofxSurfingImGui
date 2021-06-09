@@ -17,7 +17,7 @@ API will change and I am still having some problems yet.
 ---------------------------------------------------------
 
 ## Overview
-**ofxSurfingImGui** is a helper add-on with _ofParameter Helpers, Setup and Layout Management, ported to OF Widgets and useful Snippets_ to easy integrate **ImGui** into **openFrameworks** projects.
+**ofxSurfingImGui** is a helper add-on with ofParameter Helpers, Setup and Layout Management, RAW ImGui Widgets ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.
 
 ## Features 
 * Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
