@@ -5,7 +5,8 @@ ofxSurfingImGui
 API will change and I am still having some problems yet.  
 ### **BUG 1**:  
     * When adding many times a parameter or others with a not unique name.  
-    * Widgets collide between them. Only some instances work well. (Usualy first repeated widget in each panel)  
+    * Widgets collide between them. Only some instances work well.  
+    * (Usualy the first repeated widget in each panel works fine.)  
     * SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
 ### **BUG 2**:  
     * Layout engine fails a bit on nesting indented groups.  
