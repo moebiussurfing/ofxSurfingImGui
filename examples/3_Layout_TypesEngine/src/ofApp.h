@@ -32,6 +32,8 @@ class ofApp : public ofBaseApp{
 
 		// parameters
 		ofParameterGroup params;
+		ofParameterGroup params2;
+		ofParameterGroup params3;
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;//to use as button. kind of void type
 		ofParameter<bool> bNext;//to use as button. kind of void type
@@ -45,11 +47,9 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> shapeType;
 		ofParameter<int> amount;
 		ofParameter<int> size;
-		ofParameterGroup params2;
 		ofParameter<int> shapeType2;
 		ofParameter<int> amount2;
 		ofParameter<int> size2;
-		ofParameterGroup params3;
 		ofParameter<float> lineWidth3;
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;

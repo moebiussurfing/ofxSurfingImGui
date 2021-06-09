@@ -417,6 +417,17 @@ namespace ofxSurfingHelpers {
 		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
 		ImGui::Text(str_id);
 
+		//ImGui::SameLine();
+		//float fontSize = ImGui::GetFontSize();
+		//const ImVec2 p1 = ImGui::GetCursorScreenPos();
+		//const float offset_x = 0;
+		//const float offset_y = height / 2 - fontSize / 2;
+		//const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+		//const ImVec2 pt = ImVec2(p1.x + offset_x, p1.y + offset_y);
+		//draw_list->AddText(pt, ct, str_id);
+
+		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
+
 		ImGui::PopID();
 	}
 
@@ -479,16 +490,43 @@ namespace ofxSurfingHelpers {
 
 		//-
 
+		//ImGui::Text(name.c_str());
+
 		ImGui::SameLine();
-		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
-		//ImGui::SameLine(0, -50);//fix align?
-
-		ImGui::Text(name.c_str());
-
+		float fontSize = ImGui::GetFontSize();
+		const ImVec2 p1 = ImGui::GetCursorScreenPos();
+		const float offset_x = 0;
+		const float offset_y = height / 2 - fontSize / 2;
+		//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
+		//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
+		const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+		const ImVec2 pt = ImVec2(p1.x + offset_x, p1.y + offset_y);
+		//draw_list->AddCircle(pt, 2, cc);
+		draw_list->AddText(pt, ct, name.c_str());
+		
 		ImGui::PopID();
 
 		return tmpRef;// used
 
+		//-
+
+		//// fix align
+
+		//ImVec2 alignment = ImVec2(100, 100);
+
+		////char name[32];
+		////sprintf(name, "(%.1f,%.1f)", alignment.x, alignment.y);
+		////if (x > 0) ImGui::SameLine();
+		////ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, alignment);
+		////ImGui::Selectable(name, &selected[3 * y + x], ImGuiSelectableFlags_None, ImVec2(80, 80));
+		////ImGui::PopStyleVar();
+
+		//ImGui::SameLine();
+		//ImGui::Text(name.c_str(), alignment.x, alignment.y);
+		//ImGui::PopID();
+
+		//return tmpRef;
+		
 		//--
 
 		/*
@@ -530,6 +568,8 @@ namespace ofxSurfingHelpers {
 		////const char* text_end = g.TempBuffer + ImFormatStringV(g.TempBuffer, IM_ARRAYSIZE(g.TempBuffer), fmt, args);
 		////const ImVec2 label_size = ImGui::CalcTextSize(g.TempBuffer, text_end, true, 0.0f);
 		////const ImGuiID id = window->GetID(g.TempBuffer, text_end);
+
+
 
 		//ImVec2 pos = window->DC.CursorPos;
 		////if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrentLineTextBaseOffset)

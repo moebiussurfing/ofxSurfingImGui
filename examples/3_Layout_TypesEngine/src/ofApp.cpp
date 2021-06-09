@@ -293,7 +293,7 @@ void ofApp::drawWindow2() {
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
 			ofxSurfing::AddGroup(params2, flags);
 
-			//// without flags
+			//// without flags (default)
 			//ofxSurfing::AddGroup(params2);
 
 			//--

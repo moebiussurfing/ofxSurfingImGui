@@ -243,6 +243,7 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 
 				// TESTING
 				// https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
+
 				if (parameterGroup)
 				{
 					// Recurse through contents.

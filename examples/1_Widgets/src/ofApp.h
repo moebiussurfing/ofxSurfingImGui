@@ -37,6 +37,7 @@ public:
     void draw_SurfingWidgets();
     void draw_DearWidgets();
     void draw_DearWidgetsColors();
+    void draw_MoreWidgets();
 
     // parameters
     ofParameterGroup params;

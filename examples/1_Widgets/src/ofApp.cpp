@@ -6,7 +6,8 @@ void ofApp::setup_ImGui()
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
 	bool bMouse = false;
-	bool bAutoDraw = true; // NOTE: it seems that must be false when multiple ImGui instances created!
+	bool bAutoDraw = true;
+	// NOTE: it seems that must be false when multiple ImGui instances created!
 
 	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 
@@ -118,6 +119,10 @@ void ofApp::draw() {
 		}
 		ofxImGui::EndWindow(mainSettings);
 
+		//--
+
+		// TESTING MORE WIDGETS
+		draw_MoreWidgets();
 	}
 	gui.end();
 }
@@ -194,6 +199,9 @@ void ofApp::draw_DearWidgets() {
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets() {
 
+	// NOTE:
+	// only required when using window management from ofxImGui::BeginWindow(.. 
+	// instead of the ofxSurfing_ImGui_LayoutManager as you can see on the example 2_Layout_Basic
 	auto mainSettings = ofxImGui::Settings();
 
 	// common width sizes from 1 (_w100) to 4 (_w25) widgets per row
@@ -203,9 +211,9 @@ void ofApp::draw_SurfingWidgets() {
 	float _w25;
 	float _h;
 
-	// Precalculate common widgets sizes to fit current window "to be responsive"
+	// Precalculate common widgets % sizes to fit current window "to be responsive"
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
-	
+
 	// MODE A
 	// (Takes care of ImGui spacing between widgets)
 	_w100 = getImGui_WidgetWidth(1); // 1 widget full width
@@ -324,27 +332,49 @@ void ofApp::draw_SurfingWidgets() {
 	ImGui::SameLine();
 	if (ImGui::Button("b3", ImVec2(_wThird, _hh))) {}
 
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 	//----
+}
 
-	// TESTING
+//--------------------------------------------------------------
+void ofApp::draw_MoreWidgets()
+{
+	if (ImGui::TreeNode("TEST More Widgets"))
+	{
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
-	ImGui::Text("TEST More Widgets");
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+		// knob crash
+		float v0 = 0;
+		float *p_value = &v0;
+		//static float v = 0;
+		static float v_min = 0.0f;
+		static float v_max = 100.0f;
+		ImU32 c = ImGui::GetColorU32(ImVec4(0.3f, 0.3f, 0.7f, 0.65f));
+		//bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
+		ImGuiEx::KnobFloat(draw_list, 30, c, "myKnob", p_value, v_min, v_max);
 
-	////ImDrawList dl;
-	////bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
-	//static float vx = 50;
-	//static float vy = 50;
-	//ImGuiEx::Pad2D(&dl, 100, 100, &vx, &vy);
-	//if (ImGuiEx::Pad2D(ImGui::getNodeDrawList(), 0, ImGui::GetWindowSize().y - 26, &_x, &_y)) {
-	//	this->setCustomVar(static_cast<float>(_x), "XPOS");
-	//	this->setCustomVar(static_cast<float>(_y), "YPOS");
-	//}
-	ImGuiEx::HelpMarker("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
-	ImGuiEx::ObjectInfo("myObject Info", "http://google.com");
+		//// pad - not working
+		////bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
+		//static float _x = 50;
+		//static float _y = 50;
+		////ImGuiEx::Pad2D(draw_list, 100, 100, &_x, &_y);
+		//if (ImGuiEx::Pad2D(draw_list, 100, 100, &_x, &_y)) {
+		//	cout << "XPOS " << _x;
+		//	cout << "YPOS " << _y;
+		//}
+
+		ImGuiEx::drawTimecode(draw_list, ofGetElapsedTimef());
+		ImGuiEx::HelpMarker("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
+		ImGuiEx::ObjectInfo("Open URL Info", "http://google.com");
+
+		ImGui::TextWrapped(
+			"This text should automatically wrap on the edge of the window. The current implementation "
+			"for text wrapping follows simple rules suitable for English and possibly other languages.");
+		ImGui::Spacing();
+
+		ImGui::TreePop();
+	}
 }
 
 //--------------------------------------------------------------

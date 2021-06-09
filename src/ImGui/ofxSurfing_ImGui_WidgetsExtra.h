@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ofMain.h"
+
 #include "ofxImGui.h"
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -44,11 +46,9 @@ namespace ImGuiEx {
 	////--------------------------------------------------------------
 	//inline bool getFileDialog(imgui_addons::ImGuiFileBrowser& fileDialog, bool show, std::string text, imgui_addons::ImGuiFileBrowser::DialogMode mode, std::string valid_types, std::string nameProposal = "", float retinaScale = 1.0f) {
 	//	if (show) ImGui::OpenPopup(text.c_str());
-
 	//	if (fileDialog.showFileDialog(text.c_str(), mode, ImVec2(700 * retinaScale, 380 * retinaScale), valid_types.c_str(), nameProposal)) {
 	//		return true;
 	//	}
-
 	//	return false;
 	//}
 
@@ -116,46 +116,44 @@ namespace ImGuiEx {
 	}
 
 
-	////--------------------------------------------------------------
-	//inline void drawTimecode(ImDrawList* drawList, int seconds, std::string pre = "", bool onDrawList = false, ImVec2 pos = ImVec2(0, 0), float fontScale = 1.0f) {
-	//	int _hours = static_cast<int>(ceil(seconds) / 3600);
-	//	int _minutes = static_cast<int>(ceil(seconds) / 60);
-	//	int _seconds = static_cast<int>(round(seconds)) % 60;
+	//--------------------------------------------------------------
+	inline void drawTimecode(ImDrawList* drawList, int seconds, std::string pre = "", bool onDrawList = false, ImVec2 pos = ImVec2(0, 0), float fontScale = 1.0f) {
+		int _hours = static_cast<int>(ceil(seconds) / 3600);
+		int _minutes = static_cast<int>(ceil(seconds) / 60);
+		int _seconds = static_cast<int>(round(seconds)) % 60;
 
-	//	string _sh, _sm, _ss;
+		string _sh, _sm, _ss;
 
-	//	if (_hours < 10) {
-	//		_sh = "0" + ofToString(_hours);
-	//	}
-	//	else {
-	//		_sh = ofToString(_hours);
-	//	}
+		if (_hours < 10) {
+			_sh = "0" + ofToString(_hours);
+		}
+		else {
+			_sh = ofToString(_hours);
+		}
 
-	//	if (_minutes < 10) {
-	//		_sm = "0" + ofToString(_minutes);
-	//	}
-	//	else {
-	//		_sm = ofToString(_minutes);
-	//	}
+		if (_minutes < 10) {
+			_sm = "0" + ofToString(_minutes);
+		}
+		else {
+			_sm = ofToString(_minutes);
+		}
 
-	//	if (_seconds < 10) {
-	//		_ss = "0" + ofToString(_seconds);
-	//	}
-	//	else {
-	//		_ss = ofToString(_seconds);
-	//	}
+		if (_seconds < 10) {
+			_ss = "0" + ofToString(_seconds);
+		}
+		else {
+			_ss = ofToString(_seconds);
+		}
 
-	//	if (onDrawList) {
-	//		char temp[256];
-	//		sprintf(temp, "%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
-	//		drawList->AddText(ImGui::GetFont(), ImGui::GetFontSize()*fontScale, pos, IM_COL32_WHITE, temp, NULL, 0.0f);
-	//	}
-	//	else {
-	//		ImGui::Text("%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
-	//	}
-
-	//}
-
+		if (onDrawList) {
+			char temp[256];
+			sprintf(temp, "%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
+			drawList->AddText(ImGui::GetFont(), ImGui::GetFontSize()*fontScale, pos, IM_COL32_WHITE, temp, NULL, 0.0f);
+		}
+		else {
+			ImGui::Text("%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
+		}
+	}
 }
 
 //-

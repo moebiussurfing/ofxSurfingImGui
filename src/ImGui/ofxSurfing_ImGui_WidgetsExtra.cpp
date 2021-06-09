@@ -129,7 +129,8 @@ namespace ImGuiEx {
 		snprintf(buffer, sizeof buffer, "%.2f", *p_value);
 		draw_list->AddText(ImVec2(pos.x + gap + (((radius_outer * 2) - ImGui::CalcTextSize(buffer).x) / 2.0f), pos.y + labelGap + radius_outer * 2 + style.ItemInnerSpacing.y), ImGui::GetColorU32(ImGuiCol_Text), buffer);
 
-		/*if (is_active || is_hovered)
+		//tooltip
+		if (is_active || is_hovered)
 		{
 			ImGui::SetNextWindowPos(ImVec2(pos.x + gap - style.WindowPadding.x, pos.y + labelGap + radius_outer));
 			ImGui::BeginTooltip();
@@ -137,7 +138,7 @@ namespace ImGuiEx {
 			ImGui::DragFloat("",p_value);
 			ImGui::PopItemWidth();
 			ImGui::EndTooltip();
-		}*/
+		}
 
 
 		return value_changed;
