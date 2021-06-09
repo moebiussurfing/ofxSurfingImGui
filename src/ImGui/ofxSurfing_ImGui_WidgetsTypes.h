@@ -257,7 +257,7 @@ namespace ofxSurfing {
 			//	refreshPanelShape();
 			//	return false;
 			//}
-			
+
 			bool bReturn = false;
 
 			float _ww;
@@ -321,28 +321,32 @@ namespace ofxSurfing {
 				case IM_DEFAULT:
 				case IM_SLIDER:
 				{
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##SLDRf_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 
 				case IM_DRAG:
 				{
 					const float speed = 0.01f;
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##DRAGf_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 
@@ -351,14 +355,16 @@ namespace ofxSurfing {
 					const float step = 0.001f;
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##STPRf_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 				}
@@ -378,28 +384,31 @@ namespace ofxSurfing {
 				case IM_DEFAULT:
 				case IM_SLIDER:
 				{
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##SLDRi_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 
 				case IM_DRAG:
 				{
 					const float speed = 0.1;
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##DRAGi_" + name + ofToString(1);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 
@@ -408,14 +417,16 @@ namespace ofxSurfing {
 					const int step = 1;
 					const int stepFast = 5;
 					auto tmpRef = p.get();
-					//ImGui::PushID(1);
+					string name = p.getName();
+					string n = "##STPRi_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				} break;
 				}

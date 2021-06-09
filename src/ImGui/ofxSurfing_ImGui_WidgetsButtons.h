@@ -33,7 +33,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "##BB" + name + ofToString(1);
+		string n = "##BGBb" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		bool bPre = tmpRef;
@@ -72,7 +72,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "##SB" + name + ofToString(1);
+		string n = "##SMBb" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
@@ -140,7 +140,7 @@ namespace ofxSurfingHelpers {
 			// that means that we can maybe collide not unique names! 
 			//string n = "#BT" + name + ofToString(counterBigToggle++);
 			//ofLogNotice(__FUNCITON__) << n;
-			string n = "##BT_on_" + name + ofToString(1);
+			string n = "##BGT_on_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 
 			// border to selected
@@ -181,7 +181,7 @@ namespace ofxSurfingHelpers {
 		}
 		else // was disabled
 		{
-			string n = "##BT_off_" + name + ofToString(1);
+			string n = "##BGT_off_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
@@ -232,8 +232,8 @@ namespace ofxSurfingHelpers {
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
-		if (nameTrue == "-1") nameTrue = "##on_" + name;
-		if (nameFalse == "-1") nameFalse = "##off_" + name;
+		if (nameTrue == "-1") nameTrue = "##TNon_" + name;
+		if (nameFalse == "-1") nameFalse = "##TNoff_" + name;
 
 		//--
 
@@ -305,7 +305,7 @@ namespace ofxSurfingHelpers {
 		static bool inputs_step = true;
 
 		string name = parameter.getName();
-		string n = "##IS" + name + ofToString(1);
+		string n = "##STi" + name + ofToString(1);
 
 		ImGui::PushID(n.c_str());
 
@@ -332,7 +332,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "##BS" + name + ofToString(1);
+		string n = "##BGSf" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -371,7 +371,7 @@ namespace ofxSurfingHelpers {
 		string name = parameter.getName();
 		float v_speed = 0.001f;//1ms
 
-		string n = "##FS" + name + ofToString(1);
+		string n = "##DGSLf" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		//bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
@@ -397,7 +397,7 @@ namespace ofxSurfingHelpers {
 	{
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
-		string n = "##TRB" + ofToString(1);
+		string n = "##TGRBb" + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
@@ -481,7 +481,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
 
-		string n = "##TRBP" + name + ofToString(1);
+		string n = "##TGRBp" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
