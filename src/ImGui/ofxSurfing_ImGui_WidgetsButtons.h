@@ -20,11 +20,17 @@
 //----
 
 namespace ofxSurfingHelpers {
+	//TODO:
+	//test an unique name workaround..
+	static int counterBigToggle = 0;
 
 	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
+
+		string n = "#BB" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
 
 		bool bPre = tmpRef;
 
@@ -40,7 +46,6 @@ namespace ofxSurfingHelpers {
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 
-		ImGui::PushID(1);
 		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 		{
 			ofLogVerbose(__FUNCTION__) << name << ": BANG";
@@ -48,9 +53,10 @@ namespace ofxSurfingHelpers {
 			tmpRef = true;
 			parameter.set(tmpRef);
 		}
-		ImGui::PopID();
 
 		ImGui::PopStyleColor(3);
+
+		ImGui::PopID();
 
 		if (bPre != parameter) return true;
 		else return false;
@@ -61,6 +67,9 @@ namespace ofxSurfingHelpers {
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
+
+		string n = "#SB" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
@@ -73,16 +82,15 @@ namespace ofxSurfingHelpers {
 		ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
-
-		ImGui::PushID(1);
 		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 		{
 			tmpRef = true;
 			parameter.set(tmpRef);
 		}
-		ImGui::PopID();
 
 		ImGui::PopStyleColor(3);
+
+		ImGui::PopID();
 
 		return tmpRef;
 	}
@@ -135,8 +143,10 @@ namespace ofxSurfingHelpers {
 			}
 
 			// warning: in this case we need to use the name to became the toggle functional
-			// that means that we can mayube collide not unique names! 
-			string n = "#" + name + ofToString(1);
+			// that means that we can maybe collide not unique names! 
+			//string n = "#BT" + name + ofToString(counterBigToggle++);
+			//ofLogNotice(__FUNCITON__) << n;
+			string n = "#BT" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
@@ -158,8 +168,6 @@ namespace ofxSurfingHelpers {
 
 			ImGui::PopStyleColor(3);
 
-			ImGui::PopID();
-
 			//-
 
 			if (bDrawBorder && border)
@@ -167,6 +175,8 @@ namespace ofxSurfingHelpers {
 				ImGui::PopStyleColor();
 				ImGui::PopStyleVar(1);
 			}
+
+			ImGui::PopID();
 		}
 		else// disabled
 		{
@@ -177,21 +187,24 @@ namespace ofxSurfingHelpers {
 			colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
 				colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
 
+			string n = "#BT" + name + ofToString(1);
+			ImGui::PushID(n.c_str());
+
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
 
-			ImGui::PushID(1);
 			if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 			{
 				_boolToggle = true;
 				tmpRef = _boolToggle;
 				parameter.set(tmpRef);
 			}
-			ImGui::PopID();
 
 			ImGui::PopStyleColor(4);
+
+			ImGui::PopID();
 		}
 
 		if (parameter.get() != bPre) return true;
@@ -231,6 +244,7 @@ namespace ofxSurfingHelpers {
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
 
 			ImGui::PushID(nameTrue.c_str());
+
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
@@ -244,6 +258,7 @@ namespace ofxSurfingHelpers {
 			}
 
 			ImGui::PopStyleColor(3);
+
 			ImGui::PopID();
 		}
 
@@ -256,20 +271,22 @@ namespace ofxSurfingHelpers {
 			ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
 
 			ImGui::PushID(nameTrue.c_str());
+
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
 
-			ImGui::PushID(1);
+			//ImGui::PushID(1);
 			if (ImGui::Button(nameFalse.c_str(), ImVec2(w, h))) {
 				_boolToggle = true;
 				tmpRef = _boolToggle;
 				parameter.set(tmpRef);
 			}
-			ImGui::PopID();
+			//ImGui::PopID();
 
 			ImGui::PopStyleColor(4);
+
 			ImGui::PopID();
 		}
 
@@ -286,7 +303,11 @@ namespace ofxSurfingHelpers {
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		ImGui::PushID(1);
+		string name = parameter.getName();
+		string n = "#IS" + name + ofToString(1);
+
+		ImGui::PushID(n.c_str());
+
 		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 		{
 			tmpRefi = ofClamp(tmpRefi, parameter.getMin(), parameter.getMax());
@@ -294,6 +315,7 @@ namespace ofxSurfingHelpers {
 
 			bChanged = true;
 		}
+
 		ImGui::PopID();
 
 		return bChanged;
@@ -309,6 +331,9 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
+		string n = "#BS" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+
 		ImGuiStyle *style = &ImGui::GetStyle();
 
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -319,8 +344,6 @@ namespace ofxSurfingHelpers {
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 
-		//TODO:
-		ImGui::PushID(1);
 		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), "ratio = %.3f"))
 			//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
 		{
@@ -331,9 +354,10 @@ namespace ofxSurfingHelpers {
 
 			bChanged = true;
 		}
-		ImGui::PopID();
 
 		ImGui::PopStyleColor(3);
+
+		ImGui::PopID();
 
 		return bChanged;
 	}
@@ -346,13 +370,16 @@ namespace ofxSurfingHelpers {
 		string name = parameter.getName();
 		float v_speed = 0.001f;//1ms
 
-		ImGui::PushID(1);
+		string n = "#FS" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+
 		//bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 		if (ImGui::DragFloat(name.c_str(), &tmpRef, v_speed, parameter.getMin(), parameter.getMax()))
 		{
 			parameter.set(tmpRef);
 			bChanged = true;
 		}
+
 		ImGui::PopID();
 
 		return bChanged;
@@ -367,7 +394,10 @@ namespace ofxSurfingHelpers {
 	//--------------------------------------------------------------
 	inline void ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
 	{
-		ImGui::PushID(1);
+		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
+
+		string n = "#TRB" + ofToString(1);
+		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		ImVec2 p = ImGui::GetCursorScreenPos();
@@ -412,33 +442,46 @@ namespace ofxSurfingHelpers {
 		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
 			p.y + radius), radius - 1.5f, c1);
 
-		//ImGui::SameLine(0,10);
-		ImGui::SameLine();
-		ImGui::AlignTextToFramePadding();//BUG: bad alignment..
-		ImGui::Text(str_id);
-
+		////ImGui::SameLine(0,10);
 		//ImGui::SameLine();
-		//float fontSize = ImGui::GetFontSize();
-		//const ImVec2 p1 = ImGui::GetCursorScreenPos();
-		//const float offset_x = 0;
-		//const float offset_y = height / 2 - fontSize / 2;
-		//const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-		//const ImVec2 pt = ImVec2(p1.x + offset_x, p1.y + offset_y);
-		//draw_list->AddText(pt, ct, str_id);
+		//ImGui::AlignTextToFramePadding();//BUG: bad alignment..
+		//ImGui::Text(str_id);
+
+		ImGui::SameLine();
+		float fontSize = ImGui::GetFontSize();
+		const ImVec2 p1 = ImGui::GetCursorScreenPos();
+		const float offset_xt = 0;
+		const float offset_yt = height / 2 - fontSize / 2;
+		//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
+		//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
+		const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+		const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
+		//draw_list->AddCircle(pt, 2, cc);
+		draw_list->AddText(pt, ct, str_id);
+
+		const float offset_xc = 0;
+		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
+		ImGui::SetCursorScreenPos(pc);
 
 		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
 
 		ImGui::PopID();
+
+		//TODO: add return
 	}
 
 	// ofParameter bool toggle
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
 	{
-		ImGui::PushID(1);
+		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
+
+		string n = "#TRBP" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		ImVec2 p = ImGui::GetCursorScreenPos();
@@ -495,15 +538,20 @@ namespace ofxSurfingHelpers {
 		ImGui::SameLine();
 		float fontSize = ImGui::GetFontSize();
 		const ImVec2 p1 = ImGui::GetCursorScreenPos();
-		const float offset_x = 0;
-		const float offset_y = height / 2 - fontSize / 2;
+		const float offset_xt = 0;
+		const float offset_yt = height / 2 - fontSize / 2;
 		//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
 		//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
 		const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-		const ImVec2 pt = ImVec2(p1.x + offset_x, p1.y + offset_y);
+		const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
 		//draw_list->AddCircle(pt, 2, cc);
 		draw_list->AddText(pt, ct, name.c_str());
-		
+
+		const float offset_xc = 0;
+		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
+		ImGui::SetCursorScreenPos(pc);
+
 		ImGui::PopID();
 
 		return tmpRef;// used
@@ -526,7 +574,7 @@ namespace ofxSurfingHelpers {
 		//ImGui::PopID();
 
 		//return tmpRef;
-		
+
 		//--
 
 		/*
@@ -765,5 +813,4 @@ namespace ofxSurfingHelpers {
 	//	window->DrawList->PathStroke(GetColorU32(color), false, thickness);
 	//}
 	//}
-
 };

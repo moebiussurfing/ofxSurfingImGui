@@ -115,13 +115,14 @@ void ofApp::drawWindow0() {
 			ImGui::Dummy(ImVec2(0, 5));
 
 			AddToggleRoundedButton(guiManager.auto_resize, ImVec2(50, 30));
+			AddToggleRoundedButton(bEnable, ImVec2(50, 30));
 
-			ImGui::Dummy(ImVec2(0, 20));// spacing
+			ImGui::Dummy(ImVec2(0, 10)); // spacing
 			ImGui::Separator();
-			ImGui::Dummy(ImVec2(0, 10));// spacing
+			ImGui::Dummy(ImVec2(0, 10)); // spacing
 			ImGui::Text("DEBUG TYPES");
 			ToggleRoundedButton("bCustom1", &bCustom1);
-			ToggleRoundedButton("bCustom2", &bCustom2);// readed on setup only, cant be updated on runtime
+			ToggleRoundedButton("bCustom2", &bCustom2); // readed on setup only, cant be updated on runtime
 		}
 		ImGui::End();
 	}
