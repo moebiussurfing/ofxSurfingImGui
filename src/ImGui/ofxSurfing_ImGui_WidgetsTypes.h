@@ -223,7 +223,7 @@ namespace ofxSurfing {
 		{
 			bool bDone = false;
 
-			// if setted as hidden dont draw, but apply same line and spacing
+			// if setted as hidden dont draw, but apply same line and spacing and return
 			if (type == IM_HIDDEN)
 			{
 				// extra options
@@ -235,7 +235,7 @@ namespace ofxSurfing {
 				return false;
 			}
 
-			//-
+			//--
 
 			////getUniqueName workaround
 			//string tag = widgetsManager.getTag(aparam);
@@ -255,8 +255,7 @@ namespace ofxSurfing {
 			//	refreshPanelShape();
 			//	return false;
 			//}
-
-
+			
 			bool bReturn = false;
 
 			float _ww;

@@ -41,7 +41,9 @@ public:
 
     // parameters
     ofParameterGroup params;
-    ofParameter<bool> bEnable;
+    ofParameter<bool> bEnable1;
+    ofParameter<bool> bEnable2;
+    ofParameter<bool> bEnable3;
     ofParameter<bool> bPrevious;
     ofParameter<bool> bNext;
     ofParameter<float> lineWidth;

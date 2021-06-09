@@ -52,7 +52,9 @@ void ofApp::setup() {
 	params3.setName("paramsGroup3");// nested
 	params.add(bPrevious.set("<", false));
 	params.add(bNext.set(">", false));
-	params.add(bEnable.set("Enable", false));
+	params.add(bEnable1.set("Enable1", false));
+	params.add(bEnable2.set("Enable2", false));
+	params.add(bEnable3.set("Enable3", false));
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params.add(separation.set("separation", 50, 1, 100));
 	params.add(speed.set("speed", 0.5, 0, 1));
@@ -77,52 +79,58 @@ void ofApp::draw() {
 		ImGuiColorEditFlags _flagw;
 		string name;
 
-		//--
-
-		// 1. dear widgets
-
-		_flagw = ImGuiWindowFlags_None;
-		name = "DearWidgets Ranges";
-		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-		{
-			draw_DearWidgets();
-		}
-		ofxImGui::EndWindow(mainSettings);
-
-		_flagw = ImGuiWindowFlags_None;
-		name = "DearWidgets Colors";
-		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-		{
-			draw_DearWidgetsColors();
-		}
-		ofxImGui::EndWindow(mainSettings);
-
-		//TODO:
-		//raw demo.h from DearWidgets
-		//mostly ported but some errors like c++17 related and others
-		//_flagw = ImGuiWindowFlags_None;
-		//name = "DearWidgets_ShowDemo";
-		//if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-		//{
-		//	ImWidgets::ShowDemo();
-		//}
-		//ofxImGui::EndWindow(mainSettings);
+		//ofxSurfingHelpers::AddBigToggle(bEnable1, 100, 50, true);
 
 		//--
 
-		// 2. surfing widgets
-		_flagw = ImGuiWindowFlags_None;
-		name = "SurfingWidgets";
-		if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+		//if (0)
 		{
-			draw_SurfingWidgets();
+
+			// 1. dear widgets
+
+			_flagw = ImGuiWindowFlags_None;
+			name = "DearWidgets Ranges";
+			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			{
+				draw_DearWidgets();
+			}
+			ofxImGui::EndWindow(mainSettings);
+
+			_flagw = ImGuiWindowFlags_None;
+			name = "DearWidgets Colors";
+			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			{
+				draw_DearWidgetsColors();
+			}
+			ofxImGui::EndWindow(mainSettings);
+
+			//TODO:
+			//raw demo.h from DearWidgets
+			//mostly ported but some errors like c++17 related and others
+			//_flagw = ImGuiWindowFlags_None;
+			//name = "DearWidgets_ShowDemo";
+			//if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			//{
+			//	ImWidgets::ShowDemo();
+			//}
+			//ofxImGui::EndWindow(mainSettings);
+
+			//--
+
+			// 2. surfing widgets
+			_flagw = ImGuiWindowFlags_None;
+			name = "SurfingWidgets";
+			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			{
+				draw_SurfingWidgets();
+			}
+			ofxImGui::EndWindow(mainSettings);
+
+			//--
+
+			// TESTING MORE WIDGETS
+			draw_MoreWidgets();
 		}
-		ofxImGui::EndWindow(mainSettings);
-
-		//--
-
-		// TESTING MORE WIDGETS
-		draw_MoreWidgets();
 	}
 	gui.end();
 }
@@ -269,7 +277,11 @@ void ofApp::draw_SurfingWidgets() {
 	// 3. toggle buttons using ofParameter<bool>
 
 	// add big toggle full width
-	ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h / 2);
+	ofxSurfingHelpers::AddBigToggle(bEnable1, _w100, _h / 2);
+	ofxSurfingHelpers::AddBigToggle(bEnable2, _w50, _h);
+	ImGui::SameLine();
+	ofxSurfingHelpers::AddBigToggle(bEnable3, _w50, _h);
+
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
 
 	// 4. a params group

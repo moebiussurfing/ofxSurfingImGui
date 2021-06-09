@@ -2,11 +2,11 @@
 
 #include "ofMain.h"
 
-// links
+// Useful links
 // https://github.com/nem0/LumixEngine/blob/timeline_gui/external/imgui/imgui_user.inl#L814
 
 // ImGui Widgets
-// toogles and buttons
+// - toogles and buttons
 // - bool and ofParameter<bool> types
 
 //------------------------------
@@ -20,16 +20,20 @@
 //----
 
 namespace ofxSurfingHelpers {
+
 	//TODO:
 	//test an unique name workaround..
 	static int counterBigToggle = 0;
 
+	//-
+
+	//--------------------------------------------------------------
 	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "#BB" + name + ofToString(1);
+		string n = "##BB" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		bool bPre = tmpRef;
@@ -68,7 +72,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "#SB" + name + ofToString(1);
+		string n = "##SB" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
@@ -111,43 +115,41 @@ namespace ofxSurfingHelpers {
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = true)
 	{
-		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
-
+		auto tmpRef = parameter.get();
 		bool bPre = tmpRef;
-
-		ImGuiStyle *style = &ImGui::GetStyle();
 
 		//--
 
+		// default
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		if (h == -1) h = BUTTON_BIG_HEIGHT;
 
-		// border to selected
-
-		const ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
-
+		// border when selected
+		ImGuiStyle *style = &ImGui::GetStyle();
+		ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
 		float borderLineWidth = 1.0;
 		bool bDrawBorder = false;
 
 		bool _boolToggle = tmpRef;  // default pre value, the button is disabled 
 
-		if (_boolToggle == true)// enabled
+		if (_boolToggle) // enabled
 		{
+			// Warning: notice that each state has a different button, so we need to push different ID's!
+			// Warning: in this case we need to use the name to became the toggle functional
+			// that means that we can maybe collide not unique names! 
+			//string n = "#BT" + name + ofToString(counterBigToggle++);
+			//ofLogNotice(__FUNCITON__) << n;
+			string n = "##BT_on_" + name + ofToString(1);
+			ImGui::PushID(n.c_str());
+
 			// border to selected
-			if (_boolToggle && border)
+			if (border)
 			{
 				bDrawBorder = true;
 				ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
 				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 			}
-
-			// warning: in this case we need to use the name to became the toggle functional
-			// that means that we can maybe collide not unique names! 
-			//string n = "#BT" + name + ofToString(counterBigToggle++);
-			//ofLogNotice(__FUNCITON__) << n;
-			string n = "#BT" + name + ofToString(1);
-			ImGui::PushID(n.c_str());
 
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
@@ -159,17 +161,16 @@ namespace ofxSurfingHelpers {
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover2);
 
 			ImGui::Button(name.c_str(), ImVec2(w, h));
-			if (ImGui::IsItemClicked(0))
+
+			if (ImGui::IsItemClicked(0)) // powerOff
 			{
-				_boolToggle = !_boolToggle;
-				tmpRef = _boolToggle;
+				_boolToggle = false;
+				tmpRef = false;
 				parameter.set(tmpRef);
 			}
 
 			ImGui::PopStyleColor(3);
-
-			//-
-
+		
 			if (bDrawBorder && border)
 			{
 				ImGui::PopStyleColor();
@@ -178,8 +179,11 @@ namespace ofxSurfingHelpers {
 
 			ImGui::PopID();
 		}
-		else// disabled
+		else // disabled
 		{
+			string n = "##BT_off_" + name + ofToString(1);
+			ImGui::PushID(n.c_str());
+
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -187,14 +191,10 @@ namespace ofxSurfingHelpers {
 			colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
 				colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
 
-			string n = "#BT" + name + ofToString(1);
-			ImGui::PushID(n.c_str());
-
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
-
 			if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 			{
 				_boolToggle = true;
@@ -207,7 +207,10 @@ namespace ofxSurfingHelpers {
 			ImGui::PopID();
 		}
 
-		if (parameter.get() != bPre) return true;
+		//-
+
+
+		if (parameter.get() != bPre) return true; // changed
 		else return false;
 	}
 
@@ -229,8 +232,8 @@ namespace ofxSurfingHelpers {
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 
-		if (nameTrue == "-1") nameTrue = name;
-		if (nameFalse == "-1") nameFalse = name;
+		if (nameTrue == "-1") nameTrue = "##on_" + name;
+		if (nameFalse == "-1") nameFalse = "##off_" + name;
 
 		//--
 
@@ -239,11 +242,11 @@ namespace ofxSurfingHelpers {
 		// enabled
 		if (_boolToggle == true)
 		{
+			ImGui::PushID(nameTrue.c_str());
+
 			const ImVec4 colorActive = style->Colors[ImGuiCol_Separator];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
-
-			ImGui::PushID(nameTrue.c_str());
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
@@ -265,25 +268,23 @@ namespace ofxSurfingHelpers {
 		// disabled
 		else
 		{
+			ImGui::PushID(nameTrue.c_str());
+
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
-
-			ImGui::PushID(nameTrue.c_str());
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
 
-			//ImGui::PushID(1);
 			if (ImGui::Button(nameFalse.c_str(), ImVec2(w, h))) {
 				_boolToggle = true;
 				tmpRef = _boolToggle;
 				parameter.set(tmpRef);
 			}
-			//ImGui::PopID();
 
 			ImGui::PopStyleColor(4);
 
@@ -304,7 +305,7 @@ namespace ofxSurfingHelpers {
 		static bool inputs_step = true;
 
 		string name = parameter.getName();
-		string n = "#IS" + name + ofToString(1);
+		string n = "##IS" + name + ofToString(1);
 
 		ImGui::PushID(n.c_str());
 
@@ -331,7 +332,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		string n = "#BS" + name + ofToString(1);
+		string n = "##BS" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -344,8 +345,8 @@ namespace ofxSurfingHelpers {
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 
+		//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
 		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), "ratio = %.3f"))
-			//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
 		{
 			ofLogNotice(__FUNCTION__) << name << ": BANG";
 
@@ -370,7 +371,7 @@ namespace ofxSurfingHelpers {
 		string name = parameter.getName();
 		float v_speed = 0.001f;//1ms
 
-		string n = "#FS" + name + ofToString(1);
+		string n = "##FS" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		//bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
@@ -396,7 +397,7 @@ namespace ofxSurfingHelpers {
 	{
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
-		string n = "#TRB" + ofToString(1);
+		string n = "##TRB" + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
@@ -480,7 +481,7 @@ namespace ofxSurfingHelpers {
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
 
-		string n = "#TRBP" + name + ofToString(1);
+		string n = "##TRBP" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
