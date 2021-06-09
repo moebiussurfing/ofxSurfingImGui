@@ -85,7 +85,7 @@ void ofApp::draw() {
 
             //-
 
-            // Draw RAW ImGui or my SurfingWidgets with ofParameters
+            // Draw RAW ImGui or SurfingWidgets with ofParameters
 
             // One widget full with and half height
             if (AddBigToggle(b1, _w100, _h / 2)) {} 
