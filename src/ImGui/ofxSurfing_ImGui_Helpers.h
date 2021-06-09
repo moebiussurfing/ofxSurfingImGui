@@ -6,6 +6,8 @@
 // TESTING TOGGLE TYPES
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
+#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
+
 /*
 	NOTE:
 
@@ -113,7 +115,7 @@ namespace ofxSurfing
 
 	// NEW: 
 	// added group flags and cleaned all the old settings
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);

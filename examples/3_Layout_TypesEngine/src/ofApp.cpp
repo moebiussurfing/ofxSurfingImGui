@@ -15,14 +15,13 @@ void ofApp::setup() {
 
 	// prepare parameters
 	params.setName("paramsGroup");// main group container
-	params2.setName("paramsGroup2");// nested group
-	params3.setName("paramsGroup3");// nested group
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params.add(separation.set("separation", 50, 1, 100));
 	params.add(speed.set("speed", 0.5, 0, 1));
 	params.add(shapeType.set("shapeType", 0, -50, 50));
 	params.add(size.set("size", 100, 0, 100));
 	params.add(amount.set("amount", 10, 0, 25));
+	params2.setName("paramsGroup2");// nested group
 	params2.add(bMode1.set("Mode1", false));
 	params2.add(bMode2.set("Mode2", false));
 	params2.add(bMode3.set("Mode3", false));
@@ -33,6 +32,7 @@ void ofApp::setup() {
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
+	params3.setName("paramsGroup3");// nested group
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
@@ -56,9 +56,9 @@ void ofApp::setup() {
 
 	if (bCustom2)
 	{
-		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
+		widgetsManager.AddWidgetConf(bEnable, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 10);
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
-		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 20);
+		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
 		widgetsManager.AddWidgetConf(separation, SurfingWidgetTypes::IM_STEPPER);
 		widgetsManager.AddWidgetConf(speed, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
 		widgetsManager.AddWidgetConf(shapeType, SurfingWidgetTypes::IM_SLIDER);
@@ -71,8 +71,8 @@ void ofApp::setup() {
 		//widgetsManager.AddWidgetConf(lineWidth3, SurfingWidgetTypes::IM_DRAG); // not works?
 
 		// hide some params from any on-param-group appearance
-		widgetsManager.AddWidgetConf(speed3, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
-		widgetsManager.AddWidgetConf(size2, SurfingWidgetTypes::IM_HIDDEN, false, -1, 50);
+		widgetsManager.AddWidgetConf(speed3, SurfingWidgetTypes::IM_HIDDEN, false, -1, 20);
+		widgetsManager.AddWidgetConf(size2, SurfingWidgetTypes::IM_HIDDEN, false, -1, 20);
 		widgetsManager.AddWidgetConf(bPrevious, SurfingWidgetTypes::IM_HIDDEN);
 		widgetsManager.AddWidgetConf(bNext, SurfingWidgetTypes::IM_HIDDEN);
 		widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_HIDDEN);
@@ -292,6 +292,9 @@ void ofApp::drawWindow2() {
 			flags |= ImGuiTreeNodeFlags_Framed;
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
 			ofxSurfing::AddGroup(params2, flags);
+
+			//// without flags
+			//ofxSurfing::AddGroup(params2);
 
 			//--
 
