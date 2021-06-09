@@ -167,9 +167,9 @@ void ofApp::setup()
     widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
     // The same parameter but as a slider and 10px spacing at the end
     widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
-    // A widget as slider 
+    // A widget as slider with full width size
     widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
-    // An widget as stepper
+    // An widget as stepper with full width size
     widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
 }
 
@@ -211,9 +211,9 @@ void ofApp::drawWidgets()
     // Two widgets same line
     widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
     widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
-    // A slider
+    // A slider with full width size
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
-    // A stepper with half window width size and 20px of spacing at end
+    // A stepper with half width size and 20px of spacing at end
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 }
 ```
