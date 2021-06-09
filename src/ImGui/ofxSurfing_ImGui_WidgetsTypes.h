@@ -12,6 +12,8 @@
 #include "ofxSurfing_ImGui_LayoutManager.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 
+//#include "ofxSurfing_ImGui_Helpers.h" // ?
+
 namespace ofxSurfing {
 
 	//namespace ImTypes {

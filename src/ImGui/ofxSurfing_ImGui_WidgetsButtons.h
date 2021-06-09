@@ -133,7 +133,7 @@ namespace ofxSurfingHelpers {
 
 		bool _boolToggle = tmpRef;  // default pre value, the button is disabled 
 
-		if (_boolToggle) // enabled
+		if (_boolToggle) // was enabled
 		{
 			// Warning: notice that each state has a different button, so we need to push different ID's!
 			// Warning: in this case we need to use the name to became the toggle functional
@@ -179,7 +179,7 @@ namespace ofxSurfingHelpers {
 
 			ImGui::PopID();
 		}
-		else // disabled
+		else // was disabled
 		{
 			string n = "##BT_off_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
@@ -195,6 +195,7 @@ namespace ofxSurfingHelpers {
 			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
+
 			if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 			{
 				_boolToggle = true;
@@ -209,12 +210,11 @@ namespace ofxSurfingHelpers {
 
 		//-
 
-
 		if (parameter.get() != bPre) return true; // changed
 		else return false;
 	}
 
-	// two states names
+	// Two states with two names
 	//--------------------------------------------------------------
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1")
 	{

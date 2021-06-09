@@ -91,6 +91,43 @@ void ofApp::draw()
 		//ofxSurfing::resetIndex();
 		////widgetsManager.resetIndex();
 
+		//-
+
+		/*
+		// window tester
+		{
+			ImGuiCond flagsc = ImGuiCond_Appearing;
+			static int type = 0;
+			if (type == 0) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));      // Vertical only
+			if (type == 1) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1));      // Horizontal only
+			if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
+			if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1), ImVec2(500, -1));          // Width 400-500
+			if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 400), ImVec2(-1, 500));          // Height 400-500
+			ImGui::SetNextWindowPos(ImVec2(10, 10), flagsc);
+			ImGui::SetNextWindowSize(ImVec2(100, 100), flagsc);
+			ImGui::Begin("Window Control");
+			{
+				ImGui::SliderInt("TypeConstraints", &type, 0, 4);
+
+				int open_action = -1;
+				if (ImGui::Button("Expand"))
+					open_action = 0;
+				ImGui::SameLine();
+				if (ImGui::Button("collapse"))
+					open_action = 1;
+				ImGui::SameLine();
+
+				if (open_action != -1) {
+					ImGui::SetNextWindowCollapsed(open_action != 0);
+					//ImGui::SetNextItemOpen(open_action != 0);
+				}
+			}
+			ImGui::End();
+		}
+		*/
+
+		//-
+
 		drawWindow0();
 		drawWindow1();
 		drawWindow2();
@@ -106,9 +143,14 @@ void ofApp::drawWindow0() {
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		ImGui::Begin("Show Windows", &bOpen0, window_flags);
+		//static bool no_close = true;
+		//if (no_close) ImGui::Begin("Show Windows", NULL, window_flags);
+		//else ImGui::Begin("Show Windows", &bOpen0, window_flags);
+
+		ImGui::Begin("Show Windows");
 		{
 			// round toggles
+			//ToggleRoundedButton("Avoid Close", &no_close);
 			ToggleRoundedButton("Show Window 1", &bOpen1);
 			ToggleRoundedButton("Show Window 2", &bOpen2);
 
@@ -141,7 +183,9 @@ void ofApp::drawWindow1() {
 
 		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 		{
-			// update sizes to current window shape
+			// Update sizes to current window shape.
+			// Warning! Must be called before we use the above API widgetsManager.Add(.. methods!
+			// This is to calculate the widgets types sizes to current panel window size.
 			widgetsManager.refreshPanelShape();
 
 			//-

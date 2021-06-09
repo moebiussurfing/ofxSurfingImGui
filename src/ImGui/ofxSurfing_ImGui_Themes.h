@@ -17,7 +17,7 @@
 #define WIDGETS_HEIGHT 50 // will be applied to tbuttons/toggles heights
 #define WIDGET_PARAM_PADDING 110 // will be applied to the ofParams sliders. 110 must be the max labels width of params names
 
-#define TEXT_INACTIVE_ALPHA 0.20f // for use on toggle buttons
+#define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
 
 //------------------------------
 
