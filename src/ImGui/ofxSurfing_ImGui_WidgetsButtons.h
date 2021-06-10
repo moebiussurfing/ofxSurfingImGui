@@ -19,7 +19,8 @@
 
 //----
 
-namespace ofxSurfingHelpers {
+namespace ofxSurfing {
+//namespace ofxSurfingHelpers {
 
 	//TODO:
 	//test an unique name workaround..
@@ -108,7 +109,7 @@ namespace ofxSurfingHelpers {
 	//if (b) a = ofxSurfingHelpers::getFadeBlink();
 	//else a = 1.0f;
 	//if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));//white blink border
-	//ofxSurfingHelpers::AddBigToggle(myToggleState, _w100, _h, false);
+	//ofxSurfing::AddBigToggle(myToggleState, _w100, _h, false);
 	//if (b) ImGui::PopStyleColor();
 
 	// TODO: seems not working well linked to the param.. requires better unique name?

@@ -64,12 +64,12 @@ void ofApp::draw()
 			ImGui::Begin("Show Windows", &bOpen0, window_flags);
 			{
 				// round toggles widgets
-				ofxSurfingHelpers::ToggleButton("Show Window 1", &bOpen1);
-				ofxSurfingHelpers::ToggleButton("Show Window 2", &bOpen2);
+				ofxSurfingHelpers::ToggleRoundedButton("Show Window 1", &bOpen1);
+				ofxSurfingHelpers::ToggleRoundedButton("Show Window 2", &bOpen2);
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-				ofxSurfingHelpers::AddToggleRounded(ImGuiManager.auto_resize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+				ofxSurfingHelpers::AddToggleRoundedButton(ImGuiManager.auto_resize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 			}
 			ImGui::End();
 		}

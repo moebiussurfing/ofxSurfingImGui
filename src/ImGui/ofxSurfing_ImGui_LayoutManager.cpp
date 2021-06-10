@@ -86,7 +86,7 @@ void ofxSurfing_ImGui_Manager::end() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
+void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	////widgets sizes
 	//float _spcx;
@@ -98,7 +98,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name, bool* p_open, ImGuiWindo
 	//float _w33;
 	//float _w25;
 	//float _h;
-	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+	//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 	// auto_resize mode
 	//static bool auto_resize = true;

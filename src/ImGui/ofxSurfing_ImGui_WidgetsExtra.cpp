@@ -2,7 +2,7 @@
 #include "ofxSurfing_ImGui_WidgetsExtra.h"
 
 namespace ImGuiEx {
-	bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y) {
+	static inline bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y) {
 
 		// visuals
 		enum { LINE_WIDTH = 2 }; // handlers: small lines width
@@ -72,7 +72,7 @@ namespace ImGuiEx {
 
 	}
 
-	bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step) {
+	static inline bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step) {
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 

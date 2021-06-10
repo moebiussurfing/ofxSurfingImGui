@@ -20,7 +20,8 @@ TODO:
 //namespace ofxSurfing = ofxSurfingHelpers;
 
 //using namespace ImGui;
-namespace ofxSurfingHelpers
+namespace ofxSurfing
+//namespace ofxSurfingHelpers
 {
 	//--
 
@@ -144,7 +145,7 @@ public:
 	void begin();
 	void end();
 
-	void beginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags);
+	void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	void endWindow();
 
 	//-
@@ -189,6 +190,7 @@ private:
 public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> auto_resize{ "Auto Resize", true };//auto resize panel
+	ofParameter<bool> bExtra{ "Extra", false};//auto resize panel
 
 private:
 	ofParameter<bool> bLockMouseByImGui{ "Mouse OverGui", false };//mouse is over gui
@@ -210,17 +212,18 @@ public:
 
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
-			//ofxSurfingHelpers::refreshImGui_WidgetsSizes();//fails
+			//ofxSurfing::refreshImGui_WidgetsSizes();//fails
 
 			float _w;
 			float _h;
 
 			// this is full width (_w100) with standard height (_h)
-			_w = ofxSurfingHelpers::getImGui_WidgetWidth(1);
-			_h = ofxSurfingHelpers::getImGui_WidgetHeight(-1);
+			_w = ofxSurfing::getImGui_WidgetWidth(1);
+			_h = ofxSurfing::getImGui_WidgetHeight(-1);
 
-			ofxSurfingHelpers::AddBigToggle(auto_resize, _w, _h / 2);
-			ofxSurfingHelpers::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
+			ofxSurfing::AddBigToggle(auto_resize, _w, _h / 2);
+			ofxSurfing::AddBigToggle(bExtra, _w, _h / 2);
+			ofxSurfing::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
 
 			//ImGui::Button("TEST", ImVec2(_w, _h));
 			//ofxSurfing::AddParameter(auto_lockToBorder);

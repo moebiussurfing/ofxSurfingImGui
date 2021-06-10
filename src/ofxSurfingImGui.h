@@ -12,7 +12,6 @@
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
 #include "ImGui/ofxSurfing_ImGui_Themes.h"
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"
-
 #include "ImGui/dear_widgets/dear_widgets.h"
 
 // short alias
@@ -85,19 +84,33 @@ void ofApp::setup_ImGui()
 //--------------------------------------------------------------
 void ofApp::draw_ImGui()
 {
-	gui.begin();
+	guiManager.begin();
 	{
 		// panels minimal sizes
 		float xx = 10;
 		float yy = 10;
 		float ww = PANEL_WIDGETS_WIDTH;
 		float hh = PANEL_WIDGETS_HEIGHT;
+		int pad = 10;
 
 		// helpers to assist layout widget sizes to fit panel width or height
 		// example:
 		// declare size vars for typical sizes 100%, 50%, 33% ..etc
 		// pass external variables as references
 
+		// APPROACH A
+		// widgets sizes
+		float _w100;
+		float _w50;
+		float _w33;
+		float _w25;
+		float _h = WIDGETS_HEIGHT;
+		_w100 = getImGui_WidgetWidth(1);
+		_w50 = getImGui_WidgetWidth(2);
+		_w33 = getImGui_WidgetWidth(3);
+		_w25 = getImGui_WidgetWidth(4);
+
+		// APPROACH B
 		// widgets sizes
 		float _spcx; // space between widgets
 		float _spcy; // space between widgets
@@ -111,65 +124,70 @@ void ofApp::draw_ImGui()
 
 		// snippet to use inside ImGui window/tree adapting for his shape
 		// every indented sub tree/folder of a gui window panel can have different/less width, so we need to update sizes with the below method:
-		ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+		ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-		// customize auto resize
-		static bool auto_resize = true;
-		ImGuiWindowFlags flagsw = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+		//--
 
-		// customize window positioning:
-		//flagsw |= ImGuiCond_FirstUseEver;
-		//if (auto_lockToBorder) flagsw |= ImGuiCond_Always;
-		//else flagsw |= ImGuiCond_FirstUseEver;
-		//ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsw);
-		//ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsw);
+		ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
+		if (guiManager.auto_resize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+		flagsw |= ImGuiCond_FirstUseEver;
 
-		// customize font
-		ImGui::PushFont(customFont);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
+		// whindow shape
+		ImGuiCond flagsCond = ImGuiCond_None;
+		flagsCond |= ImGuiCond_FirstUseEver;
+		ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
+		ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
+		// xx + = ww + pad;
+
+		// window
+		n = params.getName();
+	
+		guiManager.beginWindow(n.c_str(), &bOpen0, flagsw);
 		{
-			std::string n = "myPanelName";
-			if (ofxImGui::BeginWindow(n.c_str(), mainSettings, flagsw))
-			{
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			widgetsManager.refreshPanelShape();
 
-				// 1. param
-				//ImGui::PushItemWidth(-100);
-				//ofxImGui::AddParameter(_param);
-				//ImGui::PopItemWidth();
+			// A
+			_w100 = getImGui_WidgetWidth(1);
+			_w50 = getImGui_WidgetWidth(2);
+			_w33 = getImGui_WidgetWidth(3);
+			_w25 = getImGui_WidgetWidth(4);
 
-				// 2. buttons
-				//if (ImGui::Button("_Button", ImVec2(_w100, _h / 2))) {}
+			// B
+			//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-				// 3. param toggle
-				//ofxSurfingHelpers::AddBigToggle(_param, _w100, _h);
+			// 1. param
+			//ImGui::PushItemWidth(-100);
+			//ofxImGui::AddParameter(_param);
+			//ImGui::PopItemWidth();
 
-				// 4. buttons
-				//ImGui::PushButtonRepeat(true);
-				//float __w = ofxSurfingHelpers::getImGui_WidgetWidth(w, 2); // get width for two widgets per row
-				//if (ImGui::Button("<", ImVec2(__w, _h))) {} ImGui::SameLine();
-				//if (ImGui::Button(">", ImVec2(__w, _h))) {}
-				//ImGui::PopButtonRepeat();
+			// 2. buttons
+			//if (ImGui::Button("_Button", ImVec2(_w100, _h / 2))) {}
 
-				// 5. spacing
-				//ImGui::Dummy(ImVec2(0.0f, 2.0f));
+			// 3. param toggle
+			//ofxSurfing::AddBigToggle(_param, _w100, _h);
 
-				// group
-				ImGuiTreeNodeFlags flagst;
-				flagst = ImGuiTreeNodeFlags_None;
-				flagst |= ImGuiTreeNodeFlags_DefaultOpen;
-				flagst |= ImGuiTreeNodeFlags_Framed;
-				ofxSurfing::AddGroup(params, flagst);
+			// 4. buttons
+			//ImGui::PushButtonRepeat(true);
+			//float __w = ofxSurfing::getImGui_WidgetWidth(w, 2); // get width for two widgets per row
+			//if (ImGui::Button("<", ImVec2(__w, _h))) {} ImGui::SameLine();
+			//if (ImGui::Button(">", ImVec2(__w, _h))) {}
+			//ImGui::PopButtonRepeat();
 
-			ofxImGui::EndWindow(mainSettings);
+			// 5. spacing
+			//ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+			// group
+			ImGuiTreeNodeFlags flagst;
+			flagst = ImGuiTreeNodeFlags_None;
+			flagst |= ImGuiTreeNodeFlags_DefaultOpen;
+			flagst |= ImGuiTreeNodeFlags_Framed;
+			ofxSurfing::AddGroup(params, flagst);
+
 		}
-		ImGui::PopStyleVar();
-		ImGui::PopFont();
+		guiManager.endWindow();
 	}
-	gui.end();
+	guiManager.end();
 
-	//gui.draw();
-}
 */
 
 //-----

@@ -91,7 +91,7 @@ namespace ofxSurfing {
 		// refresh current panel shape to update widgets sizes
 		void refreshPanelShape()
 		{
-			ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 			////TODO:
 			////confirm that is not actuating
@@ -274,33 +274,35 @@ namespace ofxSurfing {
 				switch (type)
 				{
 				case IM_BUTTON_SMALL:
-					bReturn = ofxSurfingHelpers::AddBigButton(p, _ww, _h / 2);
+					bReturn = ofxSurfing::AddBigButton(p, _ww, _h / 2);
 					break;
 
 				case IM_BUTTON_BIG:
-					bReturn = ofxSurfingHelpers::AddBigButton(p, _ww, _h);
+					bReturn = ofxSurfing::AddBigButton(p, _ww, _h);
 					break;
 
 				case IM_TOGGLE_SMALL:
-					bReturn = ofxSurfingHelpers::AddBigToggle(p, _ww, _h / 2);
+					bReturn = ofxSurfing::AddBigToggle(p, _ww, _h / 2);
 					break;
 
 				case IM_TOGGLE_BIG:
-					bReturn = ofxSurfingHelpers::AddBigToggle(p, _ww, _h);
+					bReturn = ofxSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
 				case IM_DEFAULT:
 				case IM_CHECKBOX:
-					//default:
 				{
-					//ImGui::PushID(1);
+					// default:
+					string name = p.getName();
+					string n = "##CHKBb_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
+						ImGui::PopID();
 						bReturn = true;
 					}
-					//ImGui::PopID();
+					ImGui::PopID();
 					bReturn = false;
 				}
 				break;
