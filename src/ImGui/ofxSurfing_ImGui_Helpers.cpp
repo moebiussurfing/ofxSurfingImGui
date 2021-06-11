@@ -1,7 +1,7 @@
 #include "ofxSurfing_ImGui_Helpers.h"
 
 ////--------------------------------------------------------------
-//ofxSurfing::Settings::Settings()
+//ofxImGuiSurfing::Settings::Settings()
 //	: windowPos(kImGuiMargin2, kImGuiMargin2)
 //	, windowSize(ofVec2f::zero())
 //	, lockPosition(false)
@@ -9,19 +9,19 @@
 //	, treeLevel(0)
 //{}
 //
-//bool ofxSurfing::IsMouseOverGui()
+//bool ofxImGuiSurfing::IsMouseOverGui()
 //{
 //	return ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 //}
 //
 ////--------------------------------------------------------------
-//const char * ofxSurfing::GetUniqueName(ofAbstractParameter& parameter)
+//const char * ofxImGuiSurfing::GetUniqueName(ofAbstractParameter& parameter)
 //{
 //	return GetUniqueName(parameter.getName());
 //}
 //
 ////--------------------------------------------------------------
-//const char * ofxSurfing::GetUniqueName(const std::string& candidate)
+//const char * ofxImGuiSurfing::GetUniqueName(const std::string& candidate)
 //{
 //	std::string result = candidate;
 //	while (std::find(windowOpen.usedNames.top().begin(), windowOpen.usedNames.top().end(), result) != windowOpen.usedNames.top().end())
@@ -33,14 +33,14 @@
 //}
 //
 ////--------------------------------------------------------------
-//void ofxSurfing::SetNextWindow(Settings& settings)
+//void ofxImGuiSurfing::SetNextWindow(Settings& settings)
 //{
 //	settings.windowSize.x = 0;
 //	settings.windowPos.y += settings.windowSize.y + kImGuiMargin2;
 //}
 //
 ////--------------------------------------------------------------
-//bool ofxSurfing::BeginWindow(ofParameter<bool>& parameter, Settings& settings, bool collapse)
+//bool ofxImGuiSurfing::BeginWindow(ofParameter<bool>& parameter, Settings& settings, bool collapse)
 //{
 //	if (settings.windowBlock)
 //	{
@@ -52,13 +52,13 @@
 //	windowOpen.parameter = std::dynamic_pointer_cast<ofParameter<bool>>(parameter.newReference());
 //	windowOpen.value = parameter.get();
 //
-//	auto result = ofxSurfing::BeginWindow(parameter.getName(), settings, collapse, &windowOpen.value);
+//	auto result = ofxImGuiSurfing::BeginWindow(parameter.getName(), settings, collapse, &windowOpen.value);
 //	parameter = windowOpen.value;
 //	return result;
 //}
 //
 ////--------------------------------------------------------------
-//bool ofxSurfing::BeginWindow(const std::string& name, Settings& settings, bool collapse, bool * open)
+//bool ofxImGuiSurfing::BeginWindow(const std::string& name, Settings& settings, bool collapse, bool * open)
 //{
 //	if (settings.windowBlock)
 //	{
@@ -78,7 +78,7 @@
 //}
 //
 ////--------------------------------------------------------------
-//bool ofxSurfing::BeginWindow(const std::string& name, Settings& settings, ImGuiWindowFlags flags, bool * open)
+//bool ofxImGuiSurfing::BeginWindow(const std::string& name, Settings& settings, ImGuiWindowFlags flags, bool * open)
 //{
 //	if (settings.windowBlock)
 //	{
@@ -98,7 +98,7 @@
 //}
 //
 ////--------------------------------------------------------------
-//void ofxSurfing::EndWindow(Settings& settings)
+//void ofxImGuiSurfing::EndWindow(Settings& settings)
 //{
 //	if (!settings.windowBlock)
 //	{
@@ -133,13 +133,13 @@
 //}
 //
 ////--------------------------------------------------------------
-//bool ofxSurfing::BeginTree(ofAbstractParameter& parameter, Settings& settings)
+//bool ofxImGuiSurfing::BeginTree(ofAbstractParameter& parameter, Settings& settings)
 //{
-//	return ofxSurfing::BeginTree(parameter.getName(), settings);
+//	return ofxImGuiSurfing::BeginTree(parameter.getName(), settings);
 //}
 //
 ////--------------------------------------------------------------
-//bool ofxSurfing::BeginTree(const std::string& name, Settings& settings)
+//bool ofxImGuiSurfing::BeginTree(const std::string& name, Settings& settings)
 //{
 //	bool result;
 //	ImGui::SetNextItemOpen(true, ImGuiCond_Appearing);
@@ -162,7 +162,7 @@
 //}
 //
 ////--------------------------------------------------------------
-//void ofxSurfing::EndTree(Settings& settings)
+//void ofxImGuiSurfing::EndTree(Settings& settings)
 //{
 //	ImGui::TreePop();
 //
@@ -184,11 +184,11 @@
 ////}
 
 //TODO: settings + flag
-//void ofxSurfing::AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags )
+//void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, Settings& settings, ImGuiTreeNodeFlags flags )
 
 //TODO:
 //not used but should we include to reuse old methods or bakcwards compatible ?
-//ofxSurfing::Settings settings = ofxSurfing::Settings();
+//ofxImGuiSurfing::Settings settings = ofxImGuiSurfing::Settings();
 
 //TODO:
 // add customization for nested groups
@@ -196,7 +196,7 @@
 //https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
 
 //--------------------------------------------------------------
-void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
 	//TODO:
 	//widgetsManager.refreshPanelShape(); // fails
@@ -233,11 +233,11 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 				//	//widgetsManager.refreshPanelShape();
 
 				//	// Recurse through contents.
-				//	ofxSurfing::AddGroup(*parameterGroup, flags);
+				//	ofxImGuiSurfing::AddGroup(*parameterGroup, flags);
 
 				//	//TODO:
-				//	//ofxSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
-				//	//ofxSurfing::AddGroup(*parameterGroup, settings);//old
+				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
+				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings);//old
 				//	continue;
 				//}
 
@@ -251,26 +251,26 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 					// Styles
 
 					// 0.
-					ofxSurfing::AddGroup(*parameterGroup);
+					ofxImGuiSurfing::AddGroup(*parameterGroup);
 
 					//// 1. yumataesu (per group scroll bar)
 					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
 					//	auto& style = ImGui::GetStyle();
 					//	int h = style.FramePadding.y + style.ItemSpacing.y + 14;
 					//	ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-					//	ofxSurfing::AddGroup(*parameterGroup);
+					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
 					//	ImGui::EndChild();
 					//}
 
 					//// 2. collapse (per window scroll bar)
 					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-					//	ofxSurfing::AddGroup(*parameterGroup);
+					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
 					//}
 
 					//// 3. tree (indented + per window scroll bar)
 					//if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags)) {
 					//	widgetsManager.refreshPanelShape(); // required bc indent changes window width!
-					//	ofxSurfing::AddGroup(*parameterGroup);
+					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
 					//	ImGui::TreePop();
 					//}
 
@@ -284,74 +284,74 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
 				if (parameterVec2f)
 				{
-					ofxSurfing::AddParameter(*parameterVec2f);
+					ofxImGuiSurfing::AddParameter(*parameterVec2f);
 					continue;
 				}
 				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
 				if (parameterVec3f)
 				{
-					ofxSurfing::AddParameter(*parameterVec3f);
+					ofxImGuiSurfing::AddParameter(*parameterVec3f);
 					continue;
 				}
 				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
 				if (parameterVec4f)
 				{
-					ofxSurfing::AddParameter(*parameterVec4f);
+					ofxImGuiSurfing::AddParameter(*parameterVec4f);
 					continue;
 				}
 #endif
 				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
 				if (parameterOfVec2f)
 				{
-					ofxSurfing::AddParameter(*parameterOfVec2f);
+					ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
 					continue;
 				}
 				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
 				if (parameterOfVec3f)
 				{
-					ofxSurfing::AddParameter(*parameterOfVec3f);
+					ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
 					continue;
 				}
 				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
 				if (parameterOfVec4f)
 				{
-					ofxSurfing::AddParameter(*parameterOfVec4f);
+					ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
 					continue;
 				}
 				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 				if (parameterFloatColor)
 				{
-					ofxSurfing::AddParameter(*parameterFloatColor);
+					ofxImGuiSurfing::AddParameter(*parameterFloatColor);
 					continue;
 				}
 				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
 				if (parameterColor)
 				{
-					ofxSurfing::AddParameter(*parameterColor);
+					ofxImGuiSurfing::AddParameter(*parameterColor);
 					continue;
 				}
 				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
 				if (parameterFloat)
 				{
-					ofxSurfing::AddParameter(*parameterFloat);
+					ofxImGuiSurfing::AddParameter(*parameterFloat);
 					continue;
 				}
 				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 				if (parameterInt)
 				{
-					ofxSurfing::AddParameter(*parameterInt);
+					ofxImGuiSurfing::AddParameter(*parameterInt);
 					continue;
 				}
 				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 				if (parameterBool)
 				{
-					ofxSurfing::AddParameter(*parameterBool);
+					ofxImGuiSurfing::AddParameter(*parameterBool);
 					continue;
 				}
 				auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
 				if (parameterString)
 				{
-					ofxSurfing::AddParameter(*parameterString);
+					ofxImGuiSurfing::AddParameter(*parameterString);
 					continue;
 				}
 
@@ -369,22 +369,22 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 //// OLD: original helper from jvcleave
 //// but modified to hardcode collapsed by default
 ////--------------------------------------------------------------
-//void ofxSurfing::AddGroup(ofParameterGroup& group, Settings& settings)
+//void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, Settings& settings)
 //{
 //	////TODO:
 //	//bool prevWindowBlock = settings.windowBlock;
 //	//if (settings.windowBlock)
 //	//{
-//	//	if (!ofxSurfing::BeginTree(group, settings))
+//	//	if (!ofxImGuiSurfing::BeginTree(group, settings))
 //	//	{
 //	//		return;
 //	//	}
 //	//}
 //	//else
 //	//{
-//	//	if (!ofxSurfing::BeginWindow(group.getName().c_str(), settings))
+//	//	if (!ofxImGuiSurfing::BeginWindow(group.getName().c_str(), settings))
 //	//	{
-//	//		ofxSurfing::EndWindow(settings);
+//	//		ofxImGuiSurfing::EndWindow(settings);
 //	//		return;
 //	//	}
 //	//}
@@ -402,7 +402,7 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 //			if (parameterGroup)
 //			{
 //				// Recurse through contents.
-//				ofxSurfing::AddGroup(*parameterGroup, settings);
+//				ofxImGuiSurfing::AddGroup(*parameterGroup, settings);
 //				continue;
 //			}
 //
@@ -411,74 +411,74 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 //			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
 //			if (parameterVec2f)
 //			{
-//				ofxSurfing::AddParameter(*parameterVec2f);
+//				ofxImGuiSurfing::AddParameter(*parameterVec2f);
 //				continue;
 //			}
 //			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
 //			if (parameterVec3f)
 //			{
-//				ofxSurfing::AddParameter(*parameterVec3f);
+//				ofxImGuiSurfing::AddParameter(*parameterVec3f);
 //				continue;
 //			}
 //			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
 //			if (parameterVec4f)
 //			{
-//				ofxSurfing::AddParameter(*parameterVec4f);
+//				ofxImGuiSurfing::AddParameter(*parameterVec4f);
 //				continue;
 //			}
 //#endif
 //			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
 //			if (parameterOfVec2f)
 //			{
-//				ofxSurfing::AddParameter(*parameterOfVec2f);
+//				ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
 //				continue;
 //			}
 //			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
 //			if (parameterOfVec3f)
 //			{
-//				ofxSurfing::AddParameter(*parameterOfVec3f);
+//				ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
 //				continue;
 //			}
 //			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
 //			if (parameterOfVec4f)
 //			{
-//				ofxSurfing::AddParameter(*parameterOfVec4f);
+//				ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
 //				continue;
 //			}
 //			auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 //			if (parameterFloatColor)
 //			{
-//				ofxSurfing::AddParameter(*parameterFloatColor);
+//				ofxImGuiSurfing::AddParameter(*parameterFloatColor);
 //				continue;
 //			}
 //			auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
 //			if (parameterColor)
 //			{
-//				ofxSurfing::AddParameter(*parameterColor);
+//				ofxImGuiSurfing::AddParameter(*parameterColor);
 //				continue;
 //			}
 //			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
 //			if (parameterFloat)
 //			{
-//				ofxSurfing::AddParameter(*parameterFloat);
+//				ofxImGuiSurfing::AddParameter(*parameterFloat);
 //				continue;
 //			}
 //			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 //			if (parameterInt)
 //			{
-//				ofxSurfing::AddParameter(*parameterInt);
+//				ofxImGuiSurfing::AddParameter(*parameterInt);
 //				continue;
 //			}
 //			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 //			if (parameterBool)
 //			{
-//				ofxSurfing::AddParameter(*parameterBool);
+//				ofxImGuiSurfing::AddParameter(*parameterBool);
 //				continue;
 //			}
 //			auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
 //			if (parameterString)
 //			{
-//				ofxSurfing::AddParameter(*parameterString);
+//				ofxImGuiSurfing::AddParameter(*parameterString);
 //				continue;
 //			}
 //
@@ -492,19 +492,19 @@ void ofxSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 //	//if (settings.windowBlock && !prevWindowBlock)
 //	//{
 //	//	// End window if we created it.
-//	//	ofxSurfing::EndWindow(settings);
+//	//	ofxImGuiSurfing::EndWindow(settings);
 //	//}
 //	//else
 //	//{
 //	//	// End tree.
-//	//	ofxSurfing::EndTree(settings);
+//	//	ofxImGuiSurfing::EndTree(settings);
 //	//}
 //}
 
 #if OF_VERSION_MINOR >= 10
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -520,7 +520,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -536,7 +536,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -552,7 +552,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
 {
 	auto tmpRef = parameter.get();
 	//ImGui::PushID(index++);
@@ -567,7 +567,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -583,7 +583,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -601,7 +601,7 @@ bool ofxSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
 #endif
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -617,7 +617,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
 {
 	auto tmpRef = parameter.get();
 
@@ -633,7 +633,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
 {
 	auto tmpRef = parameter.get();
 	//ImGui::PushID(index++);
@@ -648,7 +648,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 {
 	auto tmpRef = parameter.get();
 
@@ -673,7 +673,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 {
 	ofParameter<ofFloatColor> c;
 	c.set(parameter.getName(),
@@ -705,7 +705,7 @@ bool ofxSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
+bool ofxImGuiSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
 {
 	auto tmpRef = parameter.get();
 	char * cString = new char[maxChars];
@@ -733,7 +733,7 @@ bool ofxSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxCha
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddParameter(ofParameter<void>& parameter, float width)
+bool ofxImGuiSurfing::AddParameter(ofParameter<void>& parameter, float width)
 {
 	//ImGui::PushID(index++);
 	if (ImGui::Button(parameter.getName().c_str(), glm::vec2(width, 0.0f)))
@@ -748,7 +748,7 @@ bool ofxSurfing::AddParameter(ofParameter<void>& parameter, float width)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
+bool ofxImGuiSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
 {
 	auto uniqueName = parameter.getName().c_str();
 	ImGui::Text("%s", uniqueName);
@@ -775,7 +775,7 @@ bool ofxSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> 
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
+bool ofxImGuiSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
 {
 	auto result = false;
 	auto tmpRef = parameter.get();
@@ -809,14 +809,15 @@ bool ofxSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> 
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
+bool ofxImGuiSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 {
 	auto tmpRef = parameter.get();
 
 	//ImGui::PushID(index++);
 	if (ImGui::InputInt(parameter.getName().c_str(), &tmpRef, step, stepFast))
 	{
-		parameter.set(tmpRef);
+		parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
+		//parameter.set(tmpRef);
 		//ImGui::PopID();
 		return true;
 	}
@@ -826,7 +827,7 @@ bool ofxSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddSlider(ofParameter<float>& parameter, const char* format, float power)
+bool ofxImGuiSurfing::AddSlider(ofParameter<float>& parameter, const char* format, float power)
 {
 	auto tmpRef = parameter.get();
 
@@ -843,7 +844,7 @@ bool ofxSurfing::AddSlider(ofParameter<float>& parameter, const char* format, fl
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, int speed)
+bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, int speed)
 {
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
@@ -862,7 +863,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMi
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
+bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
 {
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
@@ -883,7 +884,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<float>& parameter
 #if OF_VERSION_MINOR >= 10
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& parameterMin, ofParameter<glm::vec2>& parameterMax, float speed)
+bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& parameterMin, ofParameter<glm::vec2>& parameterMax, float speed)
 {
 	auto result = false;
 	auto tmpRefMin = parameterMin.get();
@@ -913,7 +914,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& param
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& parameterMin, ofParameter<glm::vec3>& parameterMax, float speed)
+bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& parameterMin, ofParameter<glm::vec3>& parameterMax, float speed)
 {
 	auto result = false;
 	auto tmpRefMin = parameterMin.get();
@@ -950,7 +951,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& param
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed)
+bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed)
 {
 	auto result = false;
 	auto tmpRefMin = parameterMin.get();
@@ -998,7 +999,7 @@ bool ofxSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& param
 #if OF_VERSION_MINOR >= 10
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1019,7 +1020,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1040,7 +1041,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1061,7 +1062,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1082,7 +1083,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& valu
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1103,7 +1104,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& valu
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1126,7 +1127,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& valu
 #endif
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1147,7 +1148,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1168,7 +1169,7 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
 {
 	auto result = false;
 	for (size_t i = 0; i < values.size(); ++i)
@@ -1189,13 +1190,13 @@ bool ofxSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values
 }
 
 //--------------------------------------------------------------
-void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
+void ofxImGuiSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 {
-	ofxSurfing::AddImage(hasTexture.getTexture(), size);
+	ofxImGuiSurfing::AddImage(hasTexture.getTexture(), size);
 }
 
 //--------------------------------------------------------------
-void ofxSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
+void ofxImGuiSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
 {
 	ImTextureID textureID = GetImTextureID2(texture);
 	ImGui::Image(textureID, size);
@@ -1204,13 +1205,13 @@ void ofxSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
 #if OF_VERSION_MINOR >= 10
 
 //--------------------------------------------------------------
-void ofxSurfing::AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
+void ofxImGuiSurfing::AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
 {
-	ofxSurfing::AddImage(hasTexture.getTexture(), size);
+	ofxImGuiSurfing::AddImage(hasTexture.getTexture(), size);
 }
 
 //--------------------------------------------------------------
-void ofxSurfing::AddImage(const ofTexture& texture, const glm::vec2& size)
+void ofxImGuiSurfing::AddImage(const ofTexture& texture, const glm::vec2& size)
 {
 	ImTextureID textureID = GetImTextureID2(texture);
 	ImGui::Image(textureID, size);
@@ -1226,14 +1227,14 @@ static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	return true;
 };
 
-bool ofxSurfing::VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
+bool ofxImGuiSurfing::VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
 {
 	if (values.empty()) { return false; }
 	return ImGui::Combo(label, currIndex, vector_getter,
 		static_cast<void*>(&values), values.size());
 }
 
-bool ofxSurfing::VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
+bool ofxImGuiSurfing::VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 {
 	if (values.empty()) { return false; }
 	return ImGui::ListBox(label, currIndex, vector_getter,

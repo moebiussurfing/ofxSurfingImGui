@@ -16,7 +16,8 @@
 // You can simplify the workflow just adding only this header if you are planning to use many of the classes of this add-on.
 
 // simplify with namespaces
-using namespace ofxSurfingHelpers;
+//using namespace ofxSurfingHelpers;
+using namespace ofxImGuiSurfing;
 
 //-
 

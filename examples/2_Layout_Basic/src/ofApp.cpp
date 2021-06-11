@@ -64,12 +64,12 @@ void ofApp::draw()
 			ImGui::Begin("Show Windows", &bOpen0, window_flags);
 			{
 				// round toggles widgets
-				ofxSurfingHelpers::ToggleRoundedButton("Show Window 1", &bOpen1);
-				ofxSurfingHelpers::ToggleRoundedButton("Show Window 2", &bOpen2);
+				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
+				ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-				ofxSurfingHelpers::AddToggleRoundedButton(ImGuiManager.auto_resize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+				ofxImGuiSurfing::AddToggleRoundedButton(ImGuiManager.auto_resize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 			}
 			ImGui::End();
 		}
@@ -98,7 +98,7 @@ void ofApp::draw()
 				flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 				flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 
-				ofxSurfing::AddGroup(params, flags);
+				ofxImGuiSurfing::AddGroup(params, flags);
 
 				//-
 
@@ -138,32 +138,32 @@ void ofApp::draw()
 
 				// We will update the sizes on any gui drawing required point, 
 				// like inside a new foldered sub-window that could be indendeted and full-width size is being smaller.
-				ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 				// Here we will add some ofParamaters usign customized responsive layout of many widgets types!
 
 				//-
 
 				// Two custom toggles
-				if (ofxSurfingHelpers::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
-				if (ofxSurfingHelpers::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
+				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
+				if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
 
 				// Two custom buttons in the same line/row
 				// 50% width aka two widgets on current same line/row
-				if (ofxSurfingHelpers::AddBigButton(bPrevious, _w50, _h)) {
+				if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h)) {
 					lineWidth -= 0.1;
 					bPrevious = false;
 				}
 				ImGui::SameLine();
-				if (ofxSurfingHelpers::AddBigButton(bNext, _w50, _h)) {
+				if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h)) {
 					lineWidth += 0.1;
 					bNext = false;
 				}
 
 				// Three standard widget params
-				ofxSurfing::AddParameter(bEnable);
-				ofxSurfing::AddParameter(separation);
-				ofxSurfing::AddParameter(shapeType);
+				ofxImGuiSurfing::AddParameter(bEnable);
+				ofxImGuiSurfing::AddParameter(separation);
+				ofxImGuiSurfing::AddParameter(shapeType);
 
 				//-
 
@@ -174,7 +174,7 @@ void ofApp::draw()
 				// A button filling the below panel area
 				float __w100 = ImGui::GetContentRegionAvail().x;
 				float __h100 = ImGui::GetContentRegionAvail().y;
-				ofxSurfingHelpers::AddBigButton(bPrevious, __w100, __h100);
+				ofxImGuiSurfing::AddBigButton(bPrevious, __w100, __h100);
 			}
 			ImGuiManager.endWindow();
 
@@ -214,8 +214,8 @@ void ofApp::drawWidgets() {
 	static float v_max = 1;
 	static float v3 = 0;
 	static float v4 = 1;
-	ImGui::RangeSliderFloat("range1", &v1, &v2, v_min, v_max, "%.3f  %.3f", 1.0f);
-	ImGui::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
+	ofxImGuiSurfing::RangeSliderFloat("range1", &v1, &v2, v_min, v_max, "%.3f  %.3f", 1.0f);
+	ofxImGuiSurfing::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
 
 	// spacing
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
@@ -223,8 +223,8 @@ void ofApp::drawWidgets() {
 	// vanilla range slider
 	static float begin = 10, end = 90;
 	static int begin_i = 100, end_i = 1000;
-	ImGui::DragFloatRange2("range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	ImGui::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+	ofxImGuiSurfing::DragFloatRange2("range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+	ofxImGuiSurfing::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 }

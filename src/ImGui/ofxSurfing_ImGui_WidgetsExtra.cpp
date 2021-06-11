@@ -1,7 +1,9 @@
 
 #include "ofxSurfing_ImGui_WidgetsExtra.h"
 
-namespace ImGuiEx {
+namespace ofxImGuiSurfing
+//namespace ImGuiEx 
+{
 	static inline bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y) {
 
 		// visuals

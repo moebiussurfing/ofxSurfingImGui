@@ -56,8 +56,7 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	//-
 
 	// theme
-	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
-	//ofxSurfingHelpers::ImGui_ThemeModernDark();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
 }
 
 //--------------------------------------------------------------

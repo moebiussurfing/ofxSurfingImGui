@@ -8,8 +8,10 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
+using namespace ImGui;
 
-namespace ImGui
+namespace ofxImGuiSurfing
+//namespace ImGui
 {
 	//--------------
 	// range sliders

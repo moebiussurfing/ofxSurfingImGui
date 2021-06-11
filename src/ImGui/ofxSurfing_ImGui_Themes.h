@@ -21,7 +21,10 @@
 
 //------------------------------
 
-namespace ofxSurfingHelpers {
+namespace ofxImGuiSurfing
+//namespace ofxSurfing 
+{
+//namespace ofxSurfingHelpers 
 
 	//----
 

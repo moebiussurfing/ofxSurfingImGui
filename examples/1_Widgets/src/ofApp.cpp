@@ -37,7 +37,7 @@ void ofApp::setup_ImGui()
 	//-
 
 	// theme
-	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
 }
 
 //--------------------------------------------------------------
@@ -79,7 +79,7 @@ void ofApp::draw() {
 		ImGuiColorEditFlags _flagw;
 		string name;
 
-		//ofxSurfingHelpers::AddBigToggle(bEnable1, 100, 50, true);
+		//ofxImGuiSurfing::AddBigToggle(bEnable1, 100, 50, true);
 
 		//--
 
@@ -224,10 +224,10 @@ void ofApp::draw_SurfingWidgets() {
 
 	// MODE A
 	// (Takes care of ImGui spacing between widgets)
-	_w100 = getImGui_WidgetWidth(1); // 1 widget full width
-	_w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
-	_w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
-	_w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
+	_w100 = ofxImGuiSurfing::getImGui_WidgetWidth(1); // 1 widget full width
+	_w50 = ofxImGuiSurfing::getImGui_WidgetWidth(2);  // 2 widgets half width
+	_w33 = ofxImGuiSurfing::getImGui_WidgetWidth(3);  // 3 widgets third width
+	_w25 = ofxImGuiSurfing::getImGui_WidgetWidth(4);  // 4 widgets quarter width
 	_h = WIDGETS_HEIGHT;
 
 	//// MODE B
@@ -241,7 +241,7 @@ void ofApp::draw_SurfingWidgets() {
 	//float _w33;
 	//float _w25;
 	//float _h;
-	//ofxSurfingHelpers::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+	//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 	//-
 
@@ -263,8 +263,8 @@ void ofApp::draw_SurfingWidgets() {
 	static float v_max = 1;
 	static float v3 = 0;
 	static float v4 = 1;
-	ImGui::RangeSliderFloat("range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
-	ImGui::RangeSliderFloat("range 2", &v3, &v4, v_min, v_max);
+	ofxImGuiSurfing::RangeSliderFloat("range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
+	ofxImGuiSurfing::RangeSliderFloat("range 2", &v3, &v4, v_min, v_max);
 
 	// vanilla ranges
 	static float begin = 10, end = 90;
@@ -272,15 +272,15 @@ void ofApp::draw_SurfingWidgets() {
 	ImGui::DragFloatRange2("range", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
 	ImGui::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
 
-	//-
+	//-ofxImGuiSurfing::getImGui_WidgetWidth
 
 	// 3. toggle buttons using ofParameter<bool>
 
 	// add big toggle full width
-	ofxSurfingHelpers::AddBigToggle(bEnable1, _w100, _h / 2);
-	ofxSurfingHelpers::AddBigToggle(bEnable2, _w50, _h);
+	ofxImGuiSurfing::AddBigToggle(bEnable1, _w100, _h / 2);
+	ofxImGuiSurfing::AddBigToggle(bEnable2, _w50, _h);
 	ImGui::SameLine();
-	ofxSurfingHelpers::AddBigToggle(bEnable3, _w50, _h);
+	ofxImGuiSurfing::AddBigToggle(bEnable3, _w50, _h);
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
 
@@ -290,11 +290,11 @@ void ofApp::draw_SurfingWidgets() {
 	// if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw)){..}ofxImGui::EndWindow(mainSettings);
 
 	// 5. Two buttons on same line
-	if (ofxSurfingHelpers::AddBigButton(bPrevious, _w50, _h)) {
+	if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h)) {
 		bPrevious = false;
 	}
 	ImGui::SameLine();
-	ofxSurfingHelpers::AddBigButton(bNext, _w50, _h);
+	ofxImGuiSurfing::AddBigButton(bNext, _w50, _h);
 	ImGui::Dummy(ImVec2(0.0f, 5.0f));// spacing
 
 	// 6. Full width buttons. half height
@@ -312,10 +312,10 @@ void ofApp::draw_SurfingWidgets() {
 
 	// Update sizes
 	// Is not required if (since the last time was calculated) the panel window width didn't changed. 
-	_w100 = getImGui_WidgetWidth(1); // 1 widget full width
-	_w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
-	_w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
-	_w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
+	_w100 = ofxImGuiSurfing::getImGui_WidgetWidth(1); // 1 widget full width
+	_w50 = ofxImGuiSurfing::getImGui_WidgetWidth(2);  // 2 widgets half width
+	_w33 = ofxImGuiSurfing::getImGui_WidgetWidth(3);  // 3 widgets third width
+	_w25 = ofxImGuiSurfing::getImGui_WidgetWidth(4);  // 4 widgets quarter width
 
 	static int amnt = 2;
 	ImGui::SliderInt("Amount Buttons", &amnt, 1, 4);
@@ -336,13 +336,12 @@ void ofApp::draw_SurfingWidgets() {
 	ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
 	// 10. Three widgets using another width-layouting approach
-	float _wThird = ofxSurfingHelpers::getImGui_WidgetWidth(3);
 	float _hh = 60;
-	if (ImGui::Button("b1", ImVec2(_wThird, _hh))) {}
+	if (ImGui::Button("b1", ImVec2(_w33, _hh))) {}
 	ImGui::SameLine();
-	if (ImGui::Button("b2", ImVec2(_wThird, _hh))) {}
+	if (ImGui::Button("b2", ImVec2(_w33, _hh))) {}
 	ImGui::SameLine();
-	if (ImGui::Button("b3", ImVec2(_wThird, _hh))) {}
+	if (ImGui::Button("b3", ImVec2(_w33, _hh))) {}
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
@@ -356,29 +355,29 @@ void ofApp::draw_MoreWidgets()
 	{
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-		// knob crash
-		float v0 = 0;
-		float *p_value = &v0;
-		//static float v = 0;
-		static float v_min = 0.0f;
-		static float v_max = 100.0f;
-		ImU32 c = ImGui::GetColorU32(ImVec4(0.3f, 0.3f, 0.7f, 0.65f));
-		//bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
-		ImGuiEx::KnobFloat(draw_list, 30, c, "myKnob", p_value, v_min, v_max);
+		//// knob crash
+		//float v0 = 0;
+		//float *p_value = &v0;
+		////static float v = 0;
+		//static float v_min = 0.0f;
+		//static float v_max = 100.0f;
+		//ImU32 c = ImGui::GetColorU32(ImVec4(0.3f, 0.3f, 0.7f, 0.65f));
+		////bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
+		//ofxImGuiSurfing::KnobFloat(draw_list, 30, c, "myKnob", p_value, v_min, v_max);
 
 		//// pad - not working
 		////bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
 		//static float _x = 50;
 		//static float _y = 50;
-		////ImGuiEx::Pad2D(draw_list, 100, 100, &_x, &_y);
-		//if (ImGuiEx::Pad2D(draw_list, 100, 100, &_x, &_y)) {
+		////ofxImGuiSurfing::Pad2D(draw_list, 100, 100, &_x, &_y);
+		//if (ofxImGuiSurfing::Pad2D(draw_list, 100, 100, &_x, &_y)) {
 		//	cout << "XPOS " << _x;
 		//	cout << "YPOS " << _y;
 		//}
 
-		ImGuiEx::drawTimecode(draw_list, ofGetElapsedTimef());
-		ImGuiEx::HelpMarker("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
-		ImGuiEx::ObjectInfo("Open URL Info", "http://google.com");
+		ofxImGuiSurfing::drawTimecode(draw_list, ofGetElapsedTimef());
+		ofxImGuiSurfing::HelpMarker("Urbs, Virus y Bits se propone como un piloto de lo que imaginamos como una escuela que se aproxime a la ciudad desde las humanidades ambientales. Propone un acercamiento a las humanidades ambientales desde las prácticas digitales, artísticas y de invención de ciudad, respondiendo a los desafíos climáticos y de justicia ambiental.");
+		ofxImGuiSurfing::ObjectInfo("Open URL Info", "http://google.com");
 
 		ImGui::TextWrapped(
 			"This text should automatically wrap on the edge of the window. The current implementation "

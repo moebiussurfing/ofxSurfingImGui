@@ -88,7 +88,7 @@ void ofApp::draw()
 	{
 		////TODO:
 		//// trying a workaround to fix getUniqueName troubles..
-		//ofxSurfing::resetIndex();
+		//ofxImGuiSurfing::resetIndex();
 		////widgetsManager.resetIndex();
 
 		//-
@@ -191,7 +191,7 @@ void ofApp::drawWindow1() {
 			//-
 
 			// 0. Default bool param
-			ofxSurfing::AddParameter(bEnable);
+			ofxImGuiSurfing::AddParameter(bEnable);
 
 			//-
 
@@ -219,7 +219,7 @@ void ofApp::drawWindow1() {
 				}
 
 				// 1.3 A float param
-				//ofxSurfing::AddParameter(lineWidth); // default but will not drawn bc its configured as hidden on setup
+				//ofxImGuiSurfing::AddParameter(lineWidth); // default but will not drawn bc its configured as hidden on setup
 				widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_SLIDER); // froce draw
 				//BUG: duplicated params collide bc UniqueName troubles..
 				//widgetsManager.Add(lineWidth, SurfingWidgetTypes::IM_DRAG);
@@ -236,7 +236,7 @@ void ofApp::drawWindow1() {
 				//this force the style no matter if a conf is added (AddWidgetConf) for this param
 				widgetsManager.Add(bMode4, SurfingWidgetTypes::IM_CHECKBOX);
 				//this will be affected if there's an added conf (AddWidgetConf) for this param
-				//ofxSurfing::AddParameter(bMode4);
+				//ofxImGuiSurfing::AddParameter(bMode4);
 
 				// 1.6 spacing
 				ImGui::Dummy(ImVec2(0, 10)); // spacing
@@ -263,7 +263,7 @@ void ofApp::drawWindow1() {
 				flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 
-				ofxSurfing::AddGroup(params, flags);
+				ofxImGuiSurfing::AddGroup(params, flags);
 			}
 
 			//-
@@ -336,10 +336,10 @@ void ofApp::drawWindow2() {
 			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 			flags |= ImGuiTreeNodeFlags_Framed;
 			flags |= ImGuiTreeNodeFlags_DefaultOpen;
-			ofxSurfing::AddGroup(params2, flags);
+			ofxImGuiSurfing::AddGroup(params2, flags);
 
 			//// without flags (default)
-			//ofxSurfing::AddGroup(params2);
+			//ofxImGuiSurfing::AddGroup(params2);
 
 			//--
 
@@ -361,7 +361,7 @@ void ofApp::drawMoreWidgets() {
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
-	ofxSurfing::AddGroup(params3, flags);
+	ofxImGuiSurfing::AddGroup(params3, flags);
 
 	//// B
 	//auto mainSettings = ofxImGui::Settings();
@@ -381,8 +381,8 @@ void ofApp::drawMoreWidgets() {
 	static float v_max = 1;
 	static float v3 = 0;
 	static float v4 = 1;
-	ImGui::RangeSliderFloat("range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
-	ImGui::RangeSliderFloat("range 2", &v3, &v4, v_min, v_max);
+	ofxImGuiSurfing::RangeSliderFloat("range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
+	ofxImGuiSurfing::RangeSliderFloat("range 2", &v3, &v4, v_min, v_max);
 
 	// vanilla range slider
 	static float begin = 10, end = 90;

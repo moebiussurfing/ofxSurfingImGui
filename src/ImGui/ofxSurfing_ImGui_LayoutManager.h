@@ -20,7 +20,8 @@ TODO:
 //namespace ofxSurfing = ofxSurfingHelpers;
 
 //using namespace ImGui;
-namespace ofxSurfing
+namespace ofxImGuiSurfing
+//namespace ofxSurfing
 //namespace ofxSurfingHelpers
 {
 	//--
@@ -212,21 +213,21 @@ public:
 
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
-			//ofxSurfing::refreshImGui_WidgetsSizes();//fails
+			//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
 
 			float _w;
 			float _h;
 
 			// this is full width (_w100) with standard height (_h)
-			_w = ofxSurfing::getImGui_WidgetWidth(1);
-			_h = ofxSurfing::getImGui_WidgetHeight(-1);
+			_w = ofxImGuiSurfing::getImGui_WidgetWidth(1);
+			_h = ofxImGuiSurfing::getImGui_WidgetHeight(-1);
 
-			ofxSurfing::AddBigToggle(auto_resize, _w, _h / 2);
-			ofxSurfing::AddBigToggle(bExtra, _w, _h / 2);
-			ofxSurfing::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
+			ofxImGuiSurfing::AddBigToggle(auto_resize, _w, _h / 2);
+			ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
+			ofxImGuiSurfing::AddBigToggle(bLockMouseByImGui, _w, _h / 2);
 
 			//ImGui::Button("TEST", ImVec2(_w, _h));
-			//ofxSurfing::AddParameter(auto_lockToBorder);
+			//ofxImGuiSurfing::AddParameter(auto_lockToBorder);
 		}
 	}
 

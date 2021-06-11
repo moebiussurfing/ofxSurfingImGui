@@ -14,7 +14,8 @@
 
 //#include "ofxSurfing_ImGui_Helpers.h" // ?
 
-namespace ofxSurfing {
+namespace ofxImGuiSurfing {
+//namespace ofxSurfing {
 
 	//namespace ImTypes {
 	//	enum ImWidgetSurfingTYPE
@@ -91,7 +92,7 @@ namespace ofxSurfing {
 		// refresh current panel shape to update widgets sizes
 		void refreshPanelShape()
 		{
-			ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 			////TODO:
 			////confirm that is not actuating
@@ -274,19 +275,19 @@ namespace ofxSurfing {
 				switch (type)
 				{
 				case IM_BUTTON_SMALL:
-					bReturn = ofxSurfing::AddBigButton(p, _ww, _h / 2);
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h / 2);
 					break;
 
 				case IM_BUTTON_BIG:
-					bReturn = ofxSurfing::AddBigButton(p, _ww, _h);
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
 					break;
 
 				case IM_TOGGLE_SMALL:
-					bReturn = ofxSurfing::AddBigToggle(p, _ww, _h / 2);
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h / 2);
 					break;
 
 				case IM_TOGGLE_BIG:
-					bReturn = ofxSurfing::AddBigToggle(p, _ww, _h);
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
 				case IM_DEFAULT:

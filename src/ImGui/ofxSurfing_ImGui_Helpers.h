@@ -40,12 +40,14 @@
 
 //static const int kImGuiMargin2 = 10;
 
-// namespace ofxImGui
-namespace ofxSurfing
+ namespace ofxImGuiSurfing
+ //namespace ofxImGui
+//namespace ofxSurfing
 {
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
-	static ofxSurfing::SurfingWidgetTypes widgetsManager;
+	static ofxImGuiSurfing::SurfingWidgetTypes widgetsManager;
+	//static ofxSurfing::SurfingWidgetTypes widgetsManager;
 	//SurfingWidgetTypes widgetsManager;
 
 	//--
@@ -206,7 +208,7 @@ static ImTextureID GetImTextureID2(GLuint glID)
 
 //--------------------------------------------------------------
 template<typename ParameterType>
-bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
+bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 {
 	auto tmpRef = parameter.get();
 	const auto& info = typeid(ParameterType);
@@ -354,7 +356,7 @@ bool ofxSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 
 //--------------------------------------------------------------
 template<typename ParameterType>
-bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
+bool ofxImGuiSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 {
 	//ImGui::PushID(index++);
 	if (label)
@@ -372,7 +374,7 @@ bool ofxSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
 
 //--------------------------------------------------------------
 template<typename DataType>
-bool ofxSurfing::AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
+bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
 {
 	auto result = false;
 	const auto& info = typeid(DataType);

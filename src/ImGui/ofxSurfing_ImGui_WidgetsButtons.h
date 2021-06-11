@@ -19,8 +19,10 @@
 
 //----
 
-namespace ofxSurfing {
-//namespace ofxSurfingHelpers {
+namespace ofxImGuiSurfing
+{
+//namespace ofxSurfing 
+//namespace ofxSurfingHelpers 
 
 	//TODO:
 	//test an unique name workaround..

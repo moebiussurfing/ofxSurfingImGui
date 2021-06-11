@@ -34,7 +34,9 @@
 
 // file selector
 
-namespace Surfing
+namespace ofxImGuiSurfing
+//namespace ofxImGui
+//namespace Surfing
 {
 	using namespace ImGui;
 
@@ -84,7 +86,8 @@ namespace Surfing
 // Spin Input Widget - Int/Float/Double 
 // https://github.com/ocornut/imgui/issues/2649
 
-namespace Surfing
+namespace ofxImGuiSurfing
+//namespace Surfing
 {
 	IMGUI_API bool SpinScaler(const char* label, ImGuiDataType data_type, void* data_ptr, const void* step, const void* step_fast, const char* format, ImGuiInputTextFlags flags);
 	IMGUI_API bool SpinInt(const char* label, int* v, int step = 1, int step_fast = 100, ImGuiInputTextFlags flags = 0);
@@ -92,10 +95,12 @@ namespace Surfing
 	IMGUI_API bool SpinDouble(const char* label, double* v, double step = 0.0, double step_fast = 0.0, const char* format = "%.6f", ImGuiInputTextFlags flags = 0);
 };
 
-namespace Surfing {
+//namespace Surfing 
+namespace ofxImGuiSurfing
+{
 	using namespace ImGui;
 
-	static inline bool Surfing::SpinScaler(const char* label, ImGuiDataType data_type, void* data_ptr, const void* step, const void* step_fast, const char* format, ImGuiInputTextFlags flags)
+	static inline bool ofxImGuiSurfing::SpinScaler(const char* label, ImGuiDataType data_type, void* data_ptr, const void* step, const void* step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		ImGuiWindow* window = GetCurrentWindow();
 		if (window->SkipItems)
@@ -187,20 +192,20 @@ namespace Surfing {
 		return value_changed;
 	}
 
-	static inline bool Surfing::SpinInt(const char* label, int* v, int step, int step_fast, ImGuiInputTextFlags flags)
+	static inline bool ofxImGuiSurfing::SpinInt(const char* label, int* v, int step, int step_fast, ImGuiInputTextFlags flags)
 	{
 		// Hexadecimal input provided as a convenience but the flag name is awkward. Typically you'd use InputText() to parse your own data, if you want to handle prefixes.
 		const char* format = (flags & ImGuiInputTextFlags_CharsHexadecimal) ? "%08X" : "%d";
 		return SpinScaler(label, ImGuiDataType_S32, (void*)v, (void*)(step > 0 ? &step : NULL), (void*)(step_fast > 0 ? &step_fast : NULL), format, flags);
 	}
 
-	static inline bool Surfing::SpinFloat(const char* label, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
+	static inline bool ofxImGuiSurfing::SpinFloat(const char* label, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		flags |= ImGuiInputTextFlags_CharsScientific;
 		return SpinScaler(label, ImGuiDataType_Float, (void*)v, (void*)(step > 0.0f ? &step : NULL), (void*)(step_fast > 0.0f ? &step_fast : NULL), format, flags);
 	}
 
-	static inline bool Surfing::SpinDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
+	static inline bool ofxImGuiSurfing::SpinDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		flags |= ImGuiInputTextFlags_CharsScientific;
 		return SpinScaler(label, ImGuiDataType_Double, (void*)v, (void*)(step > 0.0 ? &step : NULL), (void*)(step_fast > 0.0 ? &step_fast : NULL), format, flags);
@@ -211,7 +216,10 @@ namespace Surfing {
 
 // Taken from
 // https://github.com/d3cod3/ofxVisualProgramming
-namespace ImGuiEx {
+
+namespace ofxImGuiSurfing
+//namespace ImGuiEx 
+{
 	//TODO:
 	//how to handle ImDrawList?
 
@@ -335,7 +343,7 @@ namespace ImGuiEx {
 
 //-
 
-namespace ofxImGui
+namespace ofxImGuiSurfing
 {
 	//bool RangeSliderFloat(const char* label, float* v1, float* v2, float v_min, float v_max, const char* display_format = "(%.3f, %.3f)", float power = 1.0f);
 
@@ -407,13 +415,11 @@ namespace ofxImGui
 		return touched;
 	}
 
-
-	///
-
-
+	//-
 
 	//https://gist.github.com/nariakiiwatani/dabf4cd2d04ad015bb6fabdedef7b2aa
-	//namespace ImGui
+
+	//namespace ofxImGuiSurfing
 	//{
 	//	static bool SelectFile(const std::string &path, std::string &selected, const std::vector<std::string> &ext = {}) {
 	//		bool ret = false;
@@ -533,7 +539,9 @@ namespace ofxImGui
 //TODO:
 //extra widgets
 //https://github.com/MacFurax/ofxImGui/blob/docking/libs/imgui/src/imgui_widgets.cpp
-namespace ImGui {
+namespace ofxImGuiSurfing 
+//namespace ImGui 
+{
 	//used by AddKnob
 	inline bool KnobNeedleTrail(const char* label, float* p_value, float v_min, float v_max, float trailZero, float radius = 20, float incPrecision = 0.001)
 	{
@@ -630,7 +638,9 @@ namespace ImGui {
 
 //-----
 
-namespace ofxSurfingHelpers {
+namespace ofxImGuiSurfing
+//namespace ofxSurfingHelpers 
+{
 
 	//TODO:
 	//knob
@@ -646,7 +656,7 @@ namespace ofxSurfingHelpers {
 		//string name = parameter.getName();
 
 		auto tmpRef = parameter.get();
-		if (ImGui::KnobNeedleTrail(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin()))
+		if (ofxImGuiSurfing::KnobNeedleTrail(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin()))
 		{
 			parameter.set(tmpRef);
 			return true;
@@ -658,7 +668,7 @@ namespace ofxSurfingHelpers {
 	//{
 	//	string name = parameter.getName();
 	//	auto tmpRef = parameter.get();
-	//	if (ImGui::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef))
+	//	if (ofxImGuiSurfing::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef))
 	//	{
 	//		parameter.set(tmpRef);
 	//		return true;
@@ -670,7 +680,7 @@ namespace ofxSurfingHelpers {
 	//{
 	//	string name = parameter.getName();
 	//	auto tmpRef = parameter.get();
-	//	if (ImGui::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin()))
+	//	if (ofxImGuiSurfing::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin()))
 	//	{
 	//		parameter.set(tmpRef);
 	//		return true;
@@ -682,7 +692,7 @@ namespace ofxSurfingHelpers {
 	//{
 	//	string name = parameter.getName();
 	//	auto tmpRef = parameter.get();
-	//	if (ImGui::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef))
+	//	if (ofxImGuiSurfing::KnobNeedleTrail(name, &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef))
 	//	{
 	//		parameter.set(tmpRef);
 	//		return true;

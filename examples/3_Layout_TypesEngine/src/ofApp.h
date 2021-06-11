@@ -3,8 +3,9 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h" // -> Adds all the add-on classes. You can also simplify picking what you want to use.
-using namespace ofxSurfing; // used to simple call inside ofxSurfing_ImGui_LayoutManager/widgetsManager
-using namespace ofxSurfingHelpers; // used to simple call inside ofxSurfing_ImGui_WidgetsButtons
+using namespace ofxImGuiSurfing; // used to simple call inside ofxSurfing_ImGui_LayoutManager/widgetsManager
+//using namespace ofxSurfing; // used to simple call inside ofxSurfing_ImGui_LayoutManager/widgetsManager
+//using namespace ofxSurfingHelpers; // used to simple call inside ofxSurfing_ImGui_WidgetsButtons
 
 #include "ofxWindowApp.h" // not required
 
