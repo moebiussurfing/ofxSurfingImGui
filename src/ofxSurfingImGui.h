@@ -14,6 +14,8 @@
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"
 #include "ImGui/dear_widgets/dear_widgets.h"
 
+using namespace ofxImGuiSurfing;
+
 // short alias
 //using ofxSurfing = ofxSurfingHelpers::ImGui;//?
 //using ofxSurfingHelpers = ofxSurfingHelpers::ImGui;
@@ -40,8 +42,8 @@ ofxImGui::Gui gui;
 ofxImGui::Settings mainSettings = ofxImGui::Settings();
 ImFont* customFont = nullptr;
 ofParameter<bool> bGui{ "Show Gui", true };
-ofParameter<bool> auto_resize{ "Auto Resize", true };
-ofParameter<bool> bLockMouseByImGui{ "Mouse Locked", false };
+ofParameter<bool> bAutoResize{ "Auto Resize", true };
+ofParameter<bool> bMouseOverGui{ "Mouse Locked", false };
 ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
 
 
@@ -105,10 +107,10 @@ void ofApp::draw_ImGui()
 		float _w33;
 		float _w25;
 		float _h = WIDGETS_HEIGHT;
-		_w100 = getImGui_WidgetWidth(1);
-		_w50 = getImGui_WidgetWidth(2);
-		_w33 = getImGui_WidgetWidth(3);
-		_w25 = getImGui_WidgetWidth(4);
+		_w100 = getWidgetsWidth(1);
+		_w50 = getWidgetsWidth(2);
+		_w33 = getWidgetsWidth(3);
+		_w25 = getWidgetsWidth(4);
 
 		// APPROACH B
 		// widgets sizes
@@ -129,7 +131,7 @@ void ofApp::draw_ImGui()
 		//--
 
 		ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
-		if (guiManager.auto_resize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (guiManager.bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 		flagsw |= ImGuiCond_FirstUseEver;
 
 		// whindow shape
@@ -147,10 +149,10 @@ void ofApp::draw_ImGui()
 			widgetsManager.refreshPanelShape();
 
 			// A
-			_w100 = getImGui_WidgetWidth(1);
-			_w50 = getImGui_WidgetWidth(2);
-			_w33 = getImGui_WidgetWidth(3);
-			_w25 = getImGui_WidgetWidth(4);
+			_w100 = getWidgetsWidth(1);
+			_w50 = getWidgetsWidth(2);
+			_w33 = getWidgetsWidth(3);
+			_w25 = getWidgetsWidth(4);
 
 			// B
 			//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
@@ -168,7 +170,7 @@ void ofApp::draw_ImGui()
 
 			// 4. buttons
 			//ImGui::PushButtonRepeat(true);
-			//float __w = ofxSurfing::getImGui_WidgetWidth(w, 2); // get width for two widgets per row
+			//float __w = ofxSurfing::getWidgetsWidth(w, 2); // get width for two widgets per row
 			//if (ImGui::Button("<", ImVec2(__w, _h))) {} ImGui::SameLine();
 			//if (ImGui::Button(">", ImVec2(__w, _h))) {}
 			//ImGui::PopButtonRepeat();
