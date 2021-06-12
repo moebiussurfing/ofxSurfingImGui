@@ -224,10 +224,10 @@ void ofApp::draw_SurfingWidgets() {
 
 	// MODE A
 	// (Takes care of ImGui spacing between widgets)
-	_w100 = ofxImGuiSurfing::getImGui_WidgetWidth(1); // 1 widget full width
-	_w50 = ofxImGuiSurfing::getImGui_WidgetWidth(2);  // 2 widgets half width
-	_w33 = ofxImGuiSurfing::getImGui_WidgetWidth(3);  // 3 widgets third width
-	_w25 = ofxImGuiSurfing::getImGui_WidgetWidth(4);  // 4 widgets quarter width
+	_w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+	_w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
+	_w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
+	_w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
 	_h = WIDGETS_HEIGHT;
 
 	//// MODE B
@@ -312,10 +312,10 @@ void ofApp::draw_SurfingWidgets() {
 
 	// Update sizes
 	// Is not required if (since the last time was calculated) the panel window width didn't changed. 
-	_w100 = ofxImGuiSurfing::getImGui_WidgetWidth(1); // 1 widget full width
-	_w50 = ofxImGuiSurfing::getImGui_WidgetWidth(2);  // 2 widgets half width
-	_w33 = ofxImGuiSurfing::getImGui_WidgetWidth(3);  // 3 widgets third width
-	_w25 = ofxImGuiSurfing::getImGui_WidgetWidth(4);  // 4 widgets quarter width
+	_w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+	_w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
+	_w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
+	_w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
 
 	static int amnt = 2;
 	ImGui::SliderInt("Amount Buttons", &amnt, 1, 4);
@@ -355,15 +355,28 @@ void ofApp::draw_MoreWidgets()
 	{
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
+		// knob1
+		//TODO:broken mouse..
+		ofxImGuiSurfing::AddKnob(lineWidth, 0.001, 30, 0.1);
+
+		//// knob2
+		//ImGui::SameLine();
+		//const ImU32 color = ImGui::GetColorU32(ImGuiCol_ButtonActive);
+		//float width = 30;
+		//float v_min = 0;
+		//float v_max = 1;
+		//float v_step = 0.001f;
+		//static float p_value = 0.5f;
+		//ofxImGuiSurfing::KnobFloat(draw_list, width, color, "Value", &p_value, v_min, v_max, v_step);
+
 		//// knob crash
 		//float v0 = 0;
-		//float *p_value = &v0;
+		////float *p_value = &v0;
 		////static float v = 0;
-		//static float v_min = 0.0f;
-		//static float v_max = 100.0f;
-		//ImU32 c = ImGui::GetColorU32(ImVec4(0.3f, 0.3f, 0.7f, 0.65f));
-		////bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
-		//ofxImGuiSurfing::KnobFloat(draw_list, 30, c, "myKnob", p_value, v_min, v_max);
+		////static float v_min = 0.0f;
+		////static float v_max = 100.0f;
+		//////bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
+		//ofxImGuiSurfing::KnobFloat(draw_list, 30, color, "myKnob", &p_value, v_min, v_max, 50);
 
 		//// pad - not working
 		////bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);

@@ -26,7 +26,7 @@ namespace ofxImGuiSurfing
 		__h = BUTTON_BIG_HEIGHT;
 	}
 	//--------------------------------------------------------------
-	// just the more relevant
+	// just the more relevant sizes
 	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
 	{
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
@@ -38,7 +38,6 @@ namespace ofxImGuiSurfing
 		__w25 = (__w100 - __spcx * 3) / 4;
 		__h = BUTTON_BIG_HEIGHT;
 	}
-
 
 	//--
 
@@ -189,6 +188,7 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };//auto resize panel
 	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
 private:
@@ -213,16 +213,24 @@ public:
 		{
 			//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
 
-			float _w;
-			float _h;
 
 			// this is full width (_w100) with standard height (_h)
-			_w = ofxImGuiSurfing::getWidgetsWidth(1);
-			_h = ofxImGuiSurfing::getWidgetsHeight(-1);
+			//float _w;
+			//float _h;
+			//_w = ofxImGuiSurfing::getWidgetsWidth(1);
+			//_h = ofxImGuiSurfing::getWidgetsHeight(-1);
+			//ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
+			//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
+			//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
 
-			ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
-			ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
-			ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
+			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+			ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
+			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+
+			ImGui::Dummy(ImVec2(0.0f, 1.0f));
+			ofxImGui::AddParameter(bMouseOverGui);
+			//ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+
 
 			//ImGui::Button("TEST", ImVec2(_w, _h));
 			//ofxImGuiSurfing::AddParameter(auto_lockToBorder);

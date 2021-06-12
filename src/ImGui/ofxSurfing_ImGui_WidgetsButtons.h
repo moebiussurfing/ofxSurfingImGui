@@ -15,15 +15,10 @@
 #include "ofxSurfing_ImGui_Themes.h"
 #include "imgui_internal.h"
 
-//namespace ofxSurfing = ofxSurfingHelpers;//? short alias
-
 //----
 
 namespace ofxImGuiSurfing
 {
-//namespace ofxSurfing 
-//namespace ofxSurfingHelpers 
-
 	//TODO:
 	//test an unique name workaround..
 	static int counterBigToggle = 0;
