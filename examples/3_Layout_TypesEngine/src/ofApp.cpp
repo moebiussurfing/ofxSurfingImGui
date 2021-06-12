@@ -78,7 +78,7 @@ void ofApp::setup() {
 		widgetsManager.AddWidgetConf(lineWidth, SurfingWidgetTypes::IM_HIDDEN);
 	}
 
-	guiManager.auto_resize = false;
+	guiManager.bAutoResize = false;
 }
 
 //--------------------------------------------------------------
@@ -141,7 +141,7 @@ void ofApp::drawWindow0() {
 	// window 0 (main)
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		//static bool no_close = true;
 		//if (no_close) ImGui::Begin("Show Windows", NULL, window_flags);
@@ -156,7 +156,7 @@ void ofApp::drawWindow0() {
 
 			ImGui::Dummy(ImVec2(0, 5));
 
-			AddToggleRoundedButton(guiManager.auto_resize, ImVec2(50, 30));
+			AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(50, 30));
 			AddToggleRoundedButton(bEnable, ImVec2(50, 30));
 
 			ImGui::Dummy(ImVec2(0, 10)); // spacing
@@ -179,7 +179,7 @@ void ofApp::drawWindow1() {
 		// a window but using my ofxSurfing_ImGui_LayoutManager.h class helper
 
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 		{
@@ -290,7 +290,7 @@ void ofApp::drawWindow2() {
 	if (bOpen2)
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
@@ -299,8 +299,8 @@ void ofApp::drawWindow2() {
 			float _w100;
 			float _w50;
 			float _h = WIDGETS_HEIGHT;
-			_w100 = getImGui_WidgetWidth(1);
-			_w50 = getImGui_WidgetWidth(2);
+			_w100 = getWidgetsWidth(1);
+			_w50 = getWidgetsWidth(2);
 
 			// Two full width toggles
 			if (AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)

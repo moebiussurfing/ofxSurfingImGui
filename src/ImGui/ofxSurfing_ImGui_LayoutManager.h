@@ -233,4 +233,4 @@ public:
 	void setUseAdvancedSubPanel(bool b) {
 		bUseAdvancedSubPanel = b;
 	}
-};// namespace ofxImGuiSurfing
+};
