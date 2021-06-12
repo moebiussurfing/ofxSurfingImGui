@@ -75,10 +75,10 @@ void ofxSurfing_ImGui_Manager::end() {
 	if (customFont != nullptr) ImGui::PopFont();
 
 	//mouse lockers
-	bLockMouseByImGui = false;
-	bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-	bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-	bLockMouseByImGui = bLockMouseByImGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+	bMouseOverGui = false;
+	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
@@ -99,8 +99,8 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//float _h;
 	//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
-	// auto_resize mode
-	//static bool auto_resize = true;
+	// bAutoResize mode
+	//static bool bAutoResize = true;
 
 	// minimal sizes
 	//float ww = PANEL_WIDGETS_WIDTH_MIN;
@@ -121,7 +121,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//static bool no_docking = false;
 
 	////ImGuiWindowFlags window_flags = false;
-	//if (auto_resize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
+	//if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
 	//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
 	//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
 	//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
