@@ -241,9 +241,9 @@ if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 // 2.3 treeEx
 
 bool bOpen = true;
-ImGuiTreeNodeFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-_flagw |= ImGuiTreeNodeFlags_Framed;
-if (ImGui::TreeNodeEx("_TreeEx", _flagw)) {
+ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+_flagt |= ImGuiTreeNodeFlags_Framed;
+if (ImGui::TreeNodeEx("_TreeEx", _flagt)) {
 	..
 	ImGui::TreePop();
 }

@@ -224,13 +224,12 @@ public:
 			//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
 
 			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
-			ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
+			//ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
 			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 
-			ImGui::Dummy(ImVec2(0.0f, 1.0f));
-			ofxImGui::AddParameter(bMouseOverGui);
-			//ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-
+			//ImGui::Dummy(ImVec2(0.0f, 1.0f));
+			//ofxImGuiSurfing::AddParameter(bMouseOverGui);
+			ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 
 			//ImGui::Button("TEST", ImVec2(_w, _h));
 			//ofxImGuiSurfing::AddParameter(auto_lockToBorder);

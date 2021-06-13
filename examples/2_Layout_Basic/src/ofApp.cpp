@@ -59,7 +59,7 @@ void ofApp::draw()
 		// A raw standard raw ImGui window
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			ImGui::Begin("Show Windows", &bOpen0, window_flags);
 			{
@@ -69,7 +69,7 @@ void ofApp::draw()
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-				ofxImGuiSurfing::AddToggleRoundedButton(ImGuiManager.auto_resize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+				ofxImGuiSurfing::AddToggleRoundedButton(ImGuiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 			}
 			ImGui::End();
 		}
@@ -87,7 +87,7 @@ void ofApp::draw()
 		if (bOpen1)
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			ImGuiManager.beginWindow("Window 1", &bOpen1, window_flags);
 			{
@@ -121,7 +121,7 @@ void ofApp::draw()
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			ImGuiManager.beginWindow("Window 2", &bOpen2, window_flags);
 			{
