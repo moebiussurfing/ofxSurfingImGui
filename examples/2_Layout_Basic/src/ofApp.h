@@ -16,7 +16,7 @@ public:
 			
 		//-
 		
-		ofxSurfing_ImGui_Manager ImGuiManager; // In MODE A ofxGui will be instatiated inside the class
+		ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
 		// then you can simplify the ofxImGui setup procces and:
 		// - initialize ofxImGui 
 		// - speed up creation of windows and trees

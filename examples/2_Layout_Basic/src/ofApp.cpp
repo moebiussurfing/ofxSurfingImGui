@@ -9,10 +9,10 @@ void ofApp::setup() {
 	// Must uncomment only one mode!
 
 	// MODE A
-	ImGuiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 
 	// MODE B
-	//ImGuiManager.setup(gui); // can be instantiated out of the class, locally
+	//guiManager.setup(gui); // can be instantiated out of the class, locally
 
 	//-
 
@@ -46,7 +46,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ImGuiManager.begin(); // global begin
+	guiManager.begin(); // global begin
 	{
 		static bool bOpen0 = true;
 		static bool bOpen1 = true;
@@ -59,7 +59,7 @@ void ofApp::draw()
 		// A raw standard raw ImGui window
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			ImGui::Begin("Show Windows", &bOpen0, window_flags);
 			{
@@ -69,7 +69,7 @@ void ofApp::draw()
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-				ofxImGuiSurfing::AddToggleRoundedButton(ImGuiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
+				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 			}
 			ImGui::End();
 		}
@@ -87,9 +87,9 @@ void ofApp::draw()
 		if (bOpen1)
 		{
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			ImGuiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 			{
 				// A group of parameters with customized tree/folder type
 				// will be applied to all nested groups inside this parent group
@@ -104,9 +104,9 @@ void ofApp::draw()
 
 				// An advanced panel with some typical toggles for extra config 
 				// (autosize, get mouse over, lock..etc)
-				ImGuiManager.drawAdvancedSubPanel();
+				guiManager.drawAdvancedSubPanel();
 			}
-			ImGuiManager.endWindow();
+			guiManager.endWindow();
 		}
 
 		//---------
@@ -121,9 +121,9 @@ void ofApp::draw()
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (ImGuiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			ImGuiManager.beginWindow("Window 2", &bOpen2, window_flags);
+			guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 			{
 				// Snippet to handle common widgets sizes:
 				float _spcx;	// space between widgets
@@ -176,7 +176,7 @@ void ofApp::draw()
 				float __h100 = ImGui::GetContentRegionAvail().y;
 				ofxImGuiSurfing::AddBigButton(bPrevious, __w100, __h100);
 			}
-			ImGuiManager.endWindow();
+			guiManager.endWindow();
 
 			ImGui::PopStyleVar();
 		}
@@ -184,7 +184,7 @@ void ofApp::draw()
 		//-----
 	}
 
-	ImGuiManager.end(); // global end
+	guiManager.end(); // global end
 }
 
 //--------------------------------------------------------------
@@ -192,13 +192,17 @@ void ofApp::drawWidgets() {
 
 	// These are pure widgets without window/tree/container
 
-	//// Add an ofParameterGroup that uses and requires ImHelpers.h from ofxImGui 
+	//-
+
 	//// Warning: 
+	//// Add an ofParameterGroup that uses and requires ImHelpers.h from ofxImGui 
 	//// Notice that this will crash the app bc this is not being drawnd inside an ofxImGui::BeginWindow(..
 	//{
 	//	auto mainSettings = ofxImGui::Settings();
 	//	ofxImGui::AddGroup(params3, mainSettings);
 	//}
+
+	//-
 
 	// spacing
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing

@@ -5,6 +5,44 @@
 #include "ofxImGui.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 
+
+/*
+
+// EXAMPLE SNIPPET:
+
+#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
+
+ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
+
+guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+
+void ofApp::draw() {
+
+	guiManager.begin(); // global begin
+	{
+		static bool bOpen0 = true;
+
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		guiManager.beginWindow("Show Windows", &bOpen0, window_flags);
+		{
+			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
+
+			ImGui::Dummy(ImVec2(0, 5)); // spacing
+
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+			if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+		}
+		guiManager.endWindow();
+
+	}
+	guiManager.end(); // global end
+}
+
+*/
+
+
 namespace ofxImGuiSurfing
 {
 	//--
@@ -117,7 +155,6 @@ namespace ofxImGuiSurfing
 
 class ofxSurfing_ImGui_Manager
 {
-
 	////TODO:
 	//public:
 	//SurfingWidgetTypes widgetsManager;
