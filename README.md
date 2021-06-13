@@ -59,8 +59,6 @@ API will change and I am still having some problems yet.
 ```.cpp
 //ofApp.h
 #include "ofxSurfingImGui.h"
-using namespace ofxSurfing;
-using namespace ofxSurfingHelpers;
 
 ofxSurfing_ImGui_Manager guiManager;
 
