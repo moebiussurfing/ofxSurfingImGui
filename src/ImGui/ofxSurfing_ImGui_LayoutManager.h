@@ -6,43 +6,6 @@
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 
 
-/*
-
-// EXAMPLE SNIPPET:
-
-#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
-
-ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
-
-guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-
-void ofApp::draw() {
-
-	guiManager.begin(); // global begin
-	{
-		static bool bOpen0 = true;
-
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-		guiManager.beginWindow("Show Windows", &bOpen0, window_flags);
-		{
-			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
-
-			ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-			if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
-		}
-		guiManager.endWindow();
-
-	}
-	guiManager.end(); // global end
-}
-
-*/
-
-
 namespace ofxImGuiSurfing
 {
 	//--
@@ -63,6 +26,7 @@ namespace ofxImGuiSurfing
 		__w25 = (__w100 - __spcx * 3) / 4;
 		__h = BUTTON_BIG_HEIGHT;
 	}
+
 	//--------------------------------------------------------------
 	// just the more relevant sizes
 	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
@@ -98,6 +62,7 @@ namespace ofxImGuiSurfing
 			w = __w100 / amntColumns - __spcx / amntColumns;
 		}
 	}
+
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetHeight(float &h, int amntRows = -1)
 	{
@@ -179,6 +144,7 @@ public:
 	void begin();
 	void end();
 
+	void beginWindow(std::string name = "Window"); // -> simpler
 	void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	void endWindow();
 
@@ -192,11 +158,11 @@ public:
 
 	// Force shared context
 	//--------------------------------------------------------------
-	void setSharedMode(bool b) { gui.setSharedMode(b); }
+	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
 private:
 	void setup_ImGui();
-	bool bAutoDraw = true; // must be false when multiple ImGui instances created!
+	bool bAutoDraw; // must be false when multiple ImGui instances created!
 
 	ofxImGui::Gui * guiPtr = NULL;
 	ofxImGui::Gui gui;
@@ -225,6 +191,7 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };//auto resize panel
 	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
@@ -240,17 +207,20 @@ public:
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel() {
 
+		if (!bAdvanced) return;
 		if (!bUseAdvancedSubPanel) return;
 
 		//--
 
 		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
-		if (ImGui::CollapsingHeader("ADVANCED"))
+		//if (ImGui::CollapsingHeader("ADVANCED"))
 		{
+			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+			ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+
 			//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
-
-
 			// this is full width (_w100) with standard height (_h)
 			//float _w;
 			//float _h;
@@ -259,17 +229,6 @@ public:
 			//ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
 			//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
 			//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
-
-			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
-			//ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
-			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-
-			//ImGui::Dummy(ImVec2(0.0f, 1.0f));
-			//ofxImGuiSurfing::AddParameter(bMouseOverGui);
-			ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-
-			//ImGui::Button("TEST", ImVec2(_w, _h));
-			//ofxImGuiSurfing::AddParameter(auto_lockToBorder);
 		}
 	}
 

@@ -9,12 +9,12 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 };
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setup() {//using internal instantiated gui
+void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	setup_ImGui();
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) {//using external instantiated gui
+void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external instantiated gui
 	guiPtr = &_gui;
 
 	setup_ImGui();
@@ -23,6 +23,9 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) {//using external ins
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup_ImGui()
 {
+	bAutoDraw = false;
+	//bAutoDraw = true;
+	
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
 	bool bMouse = false;
@@ -40,7 +43,7 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	// font
 	std::string fontName;
 	float fontSizeParam;
-	fontName = "telegrama_render.otf"; //  WARNING: will crash if font not present!
+	fontName = "telegrama_render.otf"; // WARNING: will crash if font not present!
 	fontSizeParam = 11;
 
 	std::string _path = "assets/fonts/"; // assets folder
@@ -65,13 +68,13 @@ void ofxSurfing_ImGui_Manager::begin() {
 	else gui.begin();
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));//minimal size
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
 
-	ImGui::PopStyleVar();//minimal size
+	ImGui::PopStyleVar(); // minimal size
 	if (customFont != nullptr) ImGui::PopFont();
 
 	//mouse lockers
@@ -82,6 +85,12 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::beginWindow(string name)
+{
+	beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------

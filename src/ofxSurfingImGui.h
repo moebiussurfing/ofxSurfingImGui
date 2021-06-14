@@ -1,10 +1,16 @@
 #pragma once
 
-//t this header includes all the ImGui classes: layout, helpers and widgets
+// this header includes all the ImGui classes: layout, helpers and widgets
 
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+
+//-
+
+//---------
+// HEADERS
+//---------
 
 #include "ImGui/ofxSurfing_ImGui_Helpers.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
@@ -16,21 +22,74 @@
 
 using namespace ofxImGuiSurfing;
 
-// short alias
-//using ofxSurfing = ofxSurfingHelpers::ImGui;//?
-//using ofxSurfingHelpers = ofxSurfingHelpers::ImGui;
-
 //-
 
-//---------
+//----------
 // SNIPPETS
-//---------
+//----------
 
 // typical basic usage
 // copy paste all this to your ofApp
 // or you can use ofxSurfing_ImGui_Manager that bundles all this code
 
+//-
+
 /*
+
+// EXAMPLE SNIPPET:
+
+// . LAYOUT MANGER
+
+#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
+
+ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
+
+guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+
+void ofApp::draw() {
+
+	guiManager.begin(); // global begin
+	{
+		static bool bOpen0 = true;
+
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		guiManager.beginWindow("Show Windows", &bOpen0, window_flags);
+		{
+			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
+
+			ImGui::Dummy(ImVec2(0, 5)); // spacing
+
+				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+				if (guiManager.bExtra)
+					//if (ImGui::CollapsingHeader("EXTRA", flagst))
+					{
+						ImGui::Indent();
+
+						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+
+						ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
+
+						ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+						if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+
+						ImGui::Unindent();
+					}
+		}
+		guiManager.endWindow();
+
+	}
+	guiManager.end(); // global end
+}
+
+*/
+
+//-
+
+/*
+
+// . ofxGui Basic boilerplate
 
 //ofApp.h
 
@@ -46,6 +105,7 @@ ofParameter<bool> bAutoResize{ "Auto Resize", true };
 ofParameter<bool> bMouseOverGui{ "Mouse Locked", false };
 ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
 
+//-
 
 //ofApp.cpp
 
@@ -159,7 +219,7 @@ void ofApp::draw_ImGui()
 
 			// 1. param
 			//ImGui::PushItemWidth(-100);
-			//ofxImGui::AddParameter(_param);
+			//ofxSurfing::AddParameter(_param);
 			//ImGui::PopItemWidth();
 
 			// 2. buttons
@@ -194,7 +254,8 @@ void ofApp::draw_ImGui()
 
 //-----
 
-// 1. window, panels, and sub panels different trees modes
+// . raw ImGui
+// WINDOW, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
 
 /*
 
@@ -205,58 +266,55 @@ void ofApp::draw_ImGui()
 ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 string name = "myWindow";
 if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-{
-	..
-}
+{..}
 ofxImGui::EndWindow(mainSettings);
 
 
 // 1.2 window using RAW ImGui
 ImGui::Begin("name");
-{
-	..
-}
+{..}
 ImGui::End();
 
-//--
+//-
 
 // 2. trees
 
 // 2.1 tree
 if (ImGui::TreeNode("_Tree"))
-{
-	..
+{..
 	ImGui::TreePop();
 }
+
+//-
 
 // 2.2 collapsing panel
 
 bool bOpen = false;
 ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 if (ImGui::CollapsingHeader("_Collapsing", _flagw))
-{
-	..
-}
+{..}
 
 // 2.3 treeEx
 
 bool bOpen = true;
 ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 _flagt |= ImGuiTreeNodeFlags_Framed;
-if (ImGui::TreeNodeEx("_TreeEx", _flagt)) {
-	..
+if (ImGui::TreeNodeEx("_TreeEx", _flagt)) 
+{..
 	ImGui::TreePop();
 }
 
 */
 
-//-----
+//-
 
 /*
 
+// . WINDOW PANEL SHAPE 
 // Get window position/shape of a window panel. for advanced layout paired position
 
 //.h
+
 //standalone window not handled by .ini layout
 //but for the app settings
 float widthGuiLayout;
@@ -267,7 +325,10 @@ glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
 	glm::vec2(ofGetWidth(), ofGetHeight())
 };
 
+//-
+
 //.cpp
+
 //get window position for advanced layout paired position
 auto posx = ImGui::GetWindowPos().x;
 auto posy = ImGui::GetWindowPos().y;
