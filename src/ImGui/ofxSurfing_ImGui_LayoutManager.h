@@ -211,7 +211,7 @@ public:
 		//--
 
 		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
-
+		ImGui::Indent();
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
 			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
@@ -228,6 +228,7 @@ public:
 			//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
 			//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
 		}
+		ImGui::Unindent();
 	}
 
 	//--------------------------------------------------------------

@@ -101,14 +101,27 @@ namespace ofxImGuiSurfing
 
 					// customize colors
 					{
-						if (_index.get() == n) // when selected
+						// when selected / active
+						if (_index.get() == n) 
 						{
-							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered]; // changes the color
+							// changes the colors
+							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered]; 
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
+							// border with alpha
+							//const ImVec4 c = style2.Colors[ImGuiCol_BorderShadow]; // TODO: get black from theme
+							//const ImVec4 colorBorder = ImVec4(c.x, c.y, c.z, c.w * 1);
+							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
+							//const ImVec4 c = style2.Colors[ImGuiCol_TextDisabled]; 
+							//const ImVec4 colorBorder = ImVec4(c.x, c.y, c.z, c.w * 0.15f);
+							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
-						else {
-							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button]; // do not changes the color
+						else 
+						{
+							// do not changes the colors
+							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+							const ImVec4 colorBorder = style2.Colors[ImGuiCol_Border];
+							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 
 						// draw button
@@ -120,7 +133,7 @@ namespace ofxImGuiSurfing
 						}
 
 						// customize colors
-						ImGui::PopStyleColor();
+						ImGui::PopStyleColor(2);
 					}
 
 					float last_button_x2 = ImGui::GetItemRectMax().x;
