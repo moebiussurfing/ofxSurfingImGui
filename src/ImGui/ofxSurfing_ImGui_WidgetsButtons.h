@@ -470,7 +470,13 @@ namespace ofxImGuiSurfing
 		//TODO: add return
 	}
 
+	//-
+
 	// ofParameter bool toggle
+	//TODO:
+	// there's a bug that when using 
+	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	// after the button it adds more spacing
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
 	{
@@ -547,7 +553,8 @@ namespace ofxImGuiSurfing
 		draw_list->AddText(pt, ct, name.c_str());
 
 		const float offset_xc = 0;
-		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+		//int ypad = 2;
+		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y * 2;
 		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
 		ImGui::SetCursorScreenPos(pc);
 

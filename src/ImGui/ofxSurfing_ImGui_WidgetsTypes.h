@@ -15,27 +15,27 @@
 //#include "ofxSurfing_ImGui_Helpers.h" // ?
 
 namespace ofxImGuiSurfing {
-//namespace ofxSurfing {
+	//namespace ofxSurfing {
 
-	//namespace ImTypes {
-	//	enum ImWidgetSurfingTYPE
-	//	{
-	//		IM_DEFAULT = 0,
-	//		IM_HIDDEN,
-	//		//bool
-	//		IM_CHECKBOX,
-	//		IM_BUTTON_SMALL,
-	//		IM_BUTTON_BIG,
-	//		IM_TOGGLE_SMALL,
-	//		IM_TOGGLE_BIG,
-	//		//float/int
-	//		IM_SLIDER,
-	//		IM_STEPPER,
-	//		IM_DRAG,
-	//		//IM_TEXT_BIG,
-	//		NUM_IM_TYPES
-	//	};
-	//}
+		//namespace ImTypes {
+		//	enum ImWidgetSurfingTYPE
+		//	{
+		//		IM_DEFAULT = 0,
+		//		IM_HIDDEN,
+		//		//bool
+		//		IM_CHECKBOX,
+		//		IM_BUTTON_SMALL,
+		//		IM_BUTTON_BIG,
+		//		IM_TOGGLE_SMALL,
+		//		IM_TOGGLE_BIG,
+		//		//float/int
+		//		IM_SLIDER,
+		//		IM_STEPPER,
+		//		IM_DRAG,
+		//		//IM_TEXT_BIG,
+		//		NUM_IM_TYPES
+		//	};
+		//}
 
 	class SurfingWidgetTypes {
 
@@ -90,6 +90,7 @@ namespace ofxImGuiSurfing {
 		//-
 
 		// refresh current panel shape to update widgets sizes
+		//--------------------------------------------------------------
 		void refreshPanelShape()
 		{
 			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
@@ -102,6 +103,7 @@ namespace ofxImGuiSurfing {
 
 		//-
 
+		//--------------------------------------------------------------
 		class surfingImWidgetConf {
 		public:
 			ImWidgetSurfingTYPE type = IM_DEFAULT;
@@ -121,6 +123,7 @@ namespace ofxImGuiSurfing {
 
 		//-
 
+		//--------------------------------------------------------------
 		surfingImWidgetConf getWidgetConf(ofAbstractParameter& aparam) {
 
 			// https://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
@@ -163,6 +166,7 @@ namespace ofxImGuiSurfing {
 		// add remover element?
 
 		// queue a customization config for future populate a param widget
+		//--------------------------------------------------------------
 		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			surfingImWidgetConf c;
@@ -222,6 +226,7 @@ namespace ofxImGuiSurfing {
 
 		// populate now a parameter ImGui widget
 		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
+		//--------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			bool bDone = false;
@@ -300,7 +305,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -330,7 +335,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -346,7 +351,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -364,7 +369,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -393,7 +398,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -408,7 +413,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -426,7 +431,7 @@ namespace ofxImGuiSurfing {
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						ImGui::PopID();
+						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -456,4 +461,4 @@ namespace ofxImGuiSurfing {
 			return bReturn;
 		}
 	};
-}// namespace ofxSurfing
+} // namespace ofxSurfing

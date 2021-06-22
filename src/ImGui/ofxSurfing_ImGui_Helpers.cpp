@@ -199,7 +199,7 @@
 void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
 	//TODO:
-	//widgetsManager.refreshPanelShape(); // fails
+	//widgetsManager.refreshPanelShape(); // fails?
 
 	//TODO:
 	//maybe should add different types of groups: collaspe/tree/treeEx
@@ -218,7 +218,7 @@ void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags
 		if (ImGui::CollapsingHeader(group.getName().data(), flags)) // -> do not adds indentation. to avoid layout bug
 #endif
 		{
-			//widgetsManager.refreshPanelShape(); // not working
+			widgetsManager.refreshPanelShape(); // not working?
 
 			//-
 

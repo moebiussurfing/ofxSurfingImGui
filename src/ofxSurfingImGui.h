@@ -38,46 +38,87 @@ using namespace ofxImGuiSurfing;
 
 // EXAMPLE SNIPPET:
 
-// . LAYOUT MANGER
+// 1. LAYOUT MANGER
 
+// .h
 #include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
-
 ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
 
+// setup()
+guiManager.setImGuiAutodraw(true);
 guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 
-void ofApp::draw() {
-
+//--------------------------------------------------------------
+void drawImGui() 
+void ofApp::drawImGui() 
+{
 	guiManager.begin(); // global begin
 	{
-		static bool bOpen0 = true;
-
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-		guiManager.beginWindow("Show Windows", &bOpen0, window_flags);
 		{
-			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
+			string n = "Show Windows";
+			static bool bOpen0 = true;
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			guiManager.beginWindow(n.c_str(), &bOpen0, window_flags);
+			{
+				float _h = WIDGETS_HEIGHT;
+				float _w100 = getWidgetsWidth(1);
+				float _w50 = getWidgetsWidth(2);
 
-			ImGui::Dummy(ImVec2(0, 5)); // spacing
+				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
 
-				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-				if (guiManager.bExtra)
-					//if (ImGui::CollapsingHeader("EXTRA", flagst))
+				//-
+
+				// EXTRA MENU
+				{
+					ImGui::Dummy(ImVec2(0, 5)); // spacing
+
+					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+					if (guiManager.bExtra)
 					{
 						ImGui::Indent();
 
-						ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
+						// add your extra (hidden by default) controls
+						//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
 
-						ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
+						//--
 
 						ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 						if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
 
 						ImGui::Unindent();
 					}
+				}
+			}
+			guiManager.endWindow();
 		}
-		guiManager.endWindow();
+
+		{
+			static bool bOpen0 = true;
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			string n = "Window 4";
+			guiManager.beginWindow(n.c_str(), &bOpen0, window_flags);
+			{
+				// PARAMS GHROUP
+				{
+					bool bOpen = true;
+					ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+					_flagt |= ImGuiTreeNodeFlags_Framed;
+					if (ImGui::TreeNodeEx("Block Render", _flagt))
+					{
+						ImGuiTreeNodeFlags flagst;
+						flagst = ImGuiTreeNodeFlags_None;
+						flagst |= ImGuiTreeNodeFlags_DefaultOpen;
+						flagst |= ImGuiTreeNodeFlags_Framed;
+						ofxImGuiSurfing::AddGroup(params_Render, flagst);
+
+						ImGui::TreePop();
+					}
+				}
+			}
+			guiManager.endWindow();
+		}
 
 	}
 	guiManager.end(); // global end
@@ -89,7 +130,7 @@ void ofApp::draw() {
 
 /*
 
-// . ofxGui Basic boilerplate
+// 2. "RAW" ofxImGui BASIC BOILERPLATE
 
 //ofApp.h
 
@@ -171,22 +212,21 @@ void ofApp::draw_ImGui()
 		_w50 = getWidgetsWidth(2);
 		_w33 = getWidgetsWidth(3);
 		_w25 = getWidgetsWidth(4);
-
-		// APPROACH B
-		// widgets sizes
-		float _spcx; // space between widgets
-		float _spcy; // space between widgets
-		float _w100; // full width
-		float _h100; // full height
-		float _w99; // a bit less than full width
-		float _w50; // half width
-		float _w33; // third width
-		float _w25; // quarter width
-		float _h; // standard height
-
-		// snippet to use inside ImGui window/tree adapting for his shape
-		// every indented sub tree/folder of a gui window panel can have different/less width, so we need to update sizes with the below method:
-		ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+		
+		//// APPROACH B
+		//// widgets sizes
+		//float _spcx; // space between widgets
+		//float _spcy; // space between widgets
+		//float _w100; // full width
+		//float _h100; // full height
+		//float _w99; // a bit less than full width
+		//float _w50; // half width
+		//float _w33; // third width
+		//float _w25; // quarter width
+		//float _h; // standard height
+		//// snippet to use inside ImGui window/tree adapting for his shape
+		//// every indented sub tree/folder of a gui window panel can have different/less width, so we need to update sizes with the below method:
+		//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 		//--
 
@@ -215,18 +255,18 @@ void ofApp::draw_ImGui()
 			_w25 = getWidgetsWidth(4);
 
 			// B
-			//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 			// 1. param
 			//ImGui::PushItemWidth(-100);
-			//ofxSurfing::AddParameter(_param);
+			//ofxImGuiSurfing::AddParameter(_param);
 			//ImGui::PopItemWidth();
 
 			// 2. buttons
 			//if (ImGui::Button("_Button", ImVec2(_w100, _h / 2))) {}
 
 			// 3. param toggle
-			//ofxSurfing::AddBigToggle(_param, _w100, _h);
+			//ofxImGuiSurfing::AddBigToggle(_param, _w100, _h);
 
 			// 4. buttons
 			//ImGui::PushButtonRepeat(true);
@@ -243,8 +283,7 @@ void ofApp::draw_ImGui()
 			flagst = ImGuiTreeNodeFlags_None;
 			flagst |= ImGuiTreeNodeFlags_DefaultOpen;
 			flagst |= ImGuiTreeNodeFlags_Framed;
-			ofxSurfing::AddGroup(params, flagst);
-
+			ofxImGuiSurfing::AddGroup(params, flagst);
 		}
 		guiManager.endWindow();
 	}
@@ -254,7 +293,7 @@ void ofApp::draw_ImGui()
 
 //-----
 
-// . raw ImGui
+// 3. RAW ImGui
 // WINDOW, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
 
 /*

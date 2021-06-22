@@ -2,6 +2,22 @@
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
+	params_Advanced.add(bAdvanced);
+	params_Advanced.add(bAutoResize);
+	params_Advanced.add(bExtra);
+	params_Advanced.add(bMinimize);
+
+	// must be here to allow to be changed before setup!
+	//// EXAMPLE
+	//guiManager.setImGuiAutodraw(true);
+	//guiManager.setup(); // this instantiates and configurates ofxImGui inside the class object.
+
+	// -> TODO: BUG?: 
+	// it seems than requires to be false when using multi-context/instances
+	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
+	bAutoDraw = false; 
+	
+	//bAutoDraw = true;
 };
 
 //--------------------------------------------------------------
@@ -23,9 +39,6 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external i
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup_ImGui()
 {
-	bAutoDraw = false;
-	//bAutoDraw = true;
-	
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
 	bool bMouse = false;

@@ -10,7 +10,10 @@ namespace ofxImGuiSurfing
 {
 	//--
 
-	// useful layout helpers
+	/* LAYOUT HELPERS */
+
+	// useful layout helpers 
+	// to update sizes/width to panel window shape
 
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
@@ -114,21 +117,15 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
-}//namespace ofxImGuiSurfing
+} // namespace ofxImGuiSurfing
 
 //----
 
+/* LAYOUT MANGAGER ENGINE */
+
+//--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
-	////TODO:
-	//public:
-	//SurfingWidgetTypes widgetsManager;
-	//void refreshShape() {
-	//widgetsManager.refreshPanelShape(); // update sizes to current window shape
-	//}
-
-	//--
-
 public:
 	ofxSurfing_ImGui_Manager();
 	~ofxSurfing_ImGui_Manager();
@@ -151,11 +148,9 @@ public:
 	//-
 
 public:
-
 	// Force autodraw
 	//--------------------------------------------------------------
-	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called befor setup!
-
+	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	// Force shared context
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
@@ -170,6 +165,7 @@ private:
 	ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
 	ImFont* customFont = nullptr;
 
+	//--------------------------------------------------------------
 	bool isMouseOverGui() {
 		return bMouseOverGui;
 	}
@@ -180,24 +176,26 @@ private:
 	// panels minimal sizes
 	float xx = 10;
 	float yy = 10;
-	float ww = PANEL_WIDGETS_WIDTH;
+	float ww = PANEL_WIDGETS_WIDTH_MIN;
 	float hh = 20;
-	//float hh = PANEL_WIDGETS_HEIGHT;
+	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
 
 	//-
 
 	// exposed useful public params
 public:
+	ofParameterGroup params_Advanced{ "ADVANCED" };
+
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bAutoResize{ "Auto Resize", true };//auto resize panel
+	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
 
 private:
-	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false };//mouse is over gui
-	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };//force position
+	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
+	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
 
 public:
 
@@ -214,7 +212,7 @@ public:
 
 		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
-		//if (ImGui::CollapsingHeader("ADVANCED"))
+		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
 			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
@@ -236,4 +234,13 @@ public:
 	void setUseAdvancedSubPanel(bool b) {
 		bUseAdvancedSubPanel = b;
 	}
+
+	//-
+
+	////TODO:
+	//public:
+	//SurfingWidgetTypes widgetsManager;
+	//void refreshShape() {
+	//widgetsManager.refreshPanelShape(); // update sizes to current window shape
+	//}
 };
