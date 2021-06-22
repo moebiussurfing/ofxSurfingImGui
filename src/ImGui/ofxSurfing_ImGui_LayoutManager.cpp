@@ -15,8 +15,8 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 	// -> TODO: BUG?: 
 	// it seems than requires to be false when using multi-context/instances
 	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
-	bAutoDraw = false; 
-	
+	bAutoDraw = false;
+
 	//bAutoDraw = true;
 };
 
@@ -60,7 +60,7 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	fontSizeParam = 11;
 
 	std::string _path = "assets/fonts/"; // assets folder
-	ofFile fileToRead(_path+ fontName); // a file that exists
+	ofFile fileToRead(_path + fontName); // a file that exists
 	bool b = fileToRead.exists();
 	if (b) {
 		if (guiPtr != nullptr) customFont = guiPtr->addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
@@ -109,6 +109,9 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	// force
+	//window_flags |= ImGuiWindowFlags_NoDecoration;
+
 	////widgets sizes
 	//float _spcx;
 	//float _spcy;
@@ -136,7 +139,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//static bool no_move = false;
 	//static bool no_resize = false;
 	//static bool no_collapse = false;
-	//static bool no_close = false;
+	static bool no_close = true;
 	//static bool no_nav = false;
 	//static bool no_background = false;
 	//static bool no_bring_to_front = false;
@@ -154,7 +157,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
 	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-	//if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
+	if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
 
 	//// We specify a default position/size in case there's no data in the .ini file.
 	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.
@@ -178,7 +181,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 void ofxSurfing_ImGui_Manager::endWindow()
 {
 	//ImGui::PopItemWidth();
-	
+
 	//ImGui::PopStyleVar();
 
 	ImGui::End();

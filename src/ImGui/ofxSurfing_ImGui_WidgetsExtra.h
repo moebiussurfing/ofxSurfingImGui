@@ -37,14 +37,15 @@ namespace ofxImGuiSurfing
 
 	// preset clicker matrix buttons
 	// index will change when a box is clicked
-	inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4)
+	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
 	{
 		bool cChanged = false;
 
-		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-		_flagt |= ImGuiTreeNodeFlags_Framed;
+		//ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+		//_flagt |= ImGuiTreeNodeFlags_Framed;
 
-		if (ImGui::TreeNodeEx(label.c_str(), _flagt))
+		//if (ImGui::TreeNodeEx(label.c_str(), _flagt))
 		{
 			int gap = 1;
 			float __spcx = ImGui::GetStyle().ItemSpacing.x;
@@ -74,7 +75,7 @@ namespace ofxImGuiSurfing
 				}
 				else
 				{
-					_sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+					sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
 					//sizex = __w100 / _amt - __spcx / _amt - __spcx;
 				}
 			}
@@ -102,10 +103,10 @@ namespace ofxImGuiSurfing
 					// customize colors
 					{
 						// when selected / active
-						if (_index.get() == n) 
+						if (_index.get() == n)
 						{
 							// changes the colors
-							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered]; 
+							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
 							// border with alpha
 							//const ImVec4 c = style2.Colors[ImGuiCol_BorderShadow]; // TODO: get black from theme
@@ -115,7 +116,7 @@ namespace ofxImGuiSurfing
 							//const ImVec4 colorBorder = ImVec4(c.x, c.y, c.z, c.w * 0.15f);
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
-						else 
+						else
 						{
 							// do not changes the colors
 							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
@@ -144,7 +145,7 @@ namespace ofxImGuiSurfing
 				ImGui::PopID();
 			}
 
-			ImGui::TreePop();
+			//ImGui::TreePop();
 		}
 
 		return cChanged;
