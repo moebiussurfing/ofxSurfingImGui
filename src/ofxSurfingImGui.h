@@ -22,21 +22,89 @@
 
 using namespace ofxImGuiSurfing;
 
-//-
+//-----
+/*
 
-//----------
-// SNIPPETS
-//----------
+	EXAMPLE SNIPPETS
+	----------------
+	
+	Typical basic usage
+	
+	Copy paste all this to your ofApp
+	or you can use ofxSurfing_ImGui_Manager that bundles all this code
+	 
+	Content:
+	1. LAYOUT MANGER: simplify the window/panels/layout process.
+	2. ofxImGui basic boilerplate.
+	3. RAW ImGui: window, panels, and sub panels and different trees modes.
+	4. WINDOW PANEL SHAPE: Get window position for advanced layout linked to other windows/gui's.
 
-// typical basic usage
-// copy paste all this to your ofApp
-// or you can use ofxSurfing_ImGui_Manager that bundles all this code
+*/
 
-//-
+
+//-----
+
+
+
+//-----
+
+
+// 3. RAW ImGui
+
+// window, panels, and sub panels and different trees modes
 
 /*
 
-// EXAMPLE SNIPPET:
+// 1. windows
+
+// 1.1 window using ofxImGui
+
+ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+string name = "myWindow";
+if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+{..}
+ofxImGui::EndWindow(mainSettings);
+
+
+// 1.2 window using RAW ImGui
+ImGui::Begin("name");
+{..}
+ImGui::End();
+
+//-
+
+// 2. trees
+
+// 2.1 tree
+if (ImGui::TreeNode("_Tree"))
+{..
+	ImGui::TreePop();
+}
+
+//-
+
+// 2.2 collapsing panel
+
+bool bOpen = false;
+ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+if (ImGui::CollapsingHeader("_Collapsing", _flagw))
+{..}
+
+// 2.3 treeEx
+
+bool bOpen = true;
+ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+_flagt |= ImGuiTreeNodeFlags_Framed;
+if (ImGui::TreeNodeEx("_TreeEx", _flagt))
+{..
+	ImGui::TreePop();
+}
+
+*/
+
+//----
+
+/*
 
 // 1. LAYOUT MANGER
 
@@ -126,7 +194,9 @@ void ofApp::drawImGui()
 
 */
 
-//-
+
+//----
+
 
 /*
 
@@ -291,89 +361,28 @@ void ofApp::draw_ImGui()
 
 */
 
-//-----
 
-// 3. RAW ImGui
-// WINDOW, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
+//----
+
 
 /*
 
-// 1. windows
+// 4. WINDOW PANEL SHAPE 
 
-// 1.1 window using ofxImGui
+// Get window position for advanced layout linked position
 
-ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-string name = "myWindow";
-if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-{..}
-ofxImGui::EndWindow(mainSettings);
-
-
-// 1.2 window using RAW ImGui
-ImGui::Begin("name");
-{..}
-ImGui::End();
-
-//-
-
-// 2. trees
-
-// 2.1 tree
-if (ImGui::TreeNode("_Tree"))
-{..
-	ImGui::TreePop();
+static bool bLockMappgingPanel = true;
+ofxImGuiSurfing::ToggleRoundedButton("Lock Mapping panel", &bLockMappgingPanel);
+if (bLockMappgingPanel)
+{
+	float pad = 0;
+	auto posx = ImGui::GetWindowPos().x;
+	auto posy = ImGui::GetWindowPos().y;
+	float __w = ImGui::GetWindowWidth();
+	float __h = ImGui::GetWindowHeight();
+	pos.x = posx + __w + pad;
+	pos.y = posy;
 }
-
-//-
-
-// 2.2 collapsing panel
-
-bool bOpen = false;
-ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-if (ImGui::CollapsingHeader("_Collapsing", _flagw))
-{..}
-
-// 2.3 treeEx
-
-bool bOpen = true;
-ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-_flagt |= ImGuiTreeNodeFlags_Framed;
-if (ImGui::TreeNodeEx("_TreeEx", _flagt)) 
-{..
-	ImGui::TreePop();
-}
-
-*/
-
-//-
-
-/*
-
-// . WINDOW PANEL SHAPE 
-// Get window position/shape of a window panel. for advanced layout paired position
-
-//.h
-
-//standalone window not handled by .ini layout
-//but for the app settings
-float widthGuiLayout;
-float heightGuiLayout;
-ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
-glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
-	glm::vec2(0,0),
-	glm::vec2(ofGetWidth(), ofGetHeight())
-};
-
-//-
-
-//.cpp
-
-//get window position for advanced layout paired position
-auto posx = ImGui::GetWindowPos().x;
-auto posy = ImGui::GetWindowPos().y;
-widthGuiLayout = ImGui::GetWindowWidth();
-heightGuiLayout = ImGui::GetWindowHeight();
-positionGuiLayout = glm::vec2(posx, posy);
 
 //-
 
