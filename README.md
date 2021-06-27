@@ -44,6 +44,9 @@ API will change and I am still having some problems yet.
 
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
+### 1_Widgets_Curve
+![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
+
 ---------------------------------------------------------
 
 ### 2_Layout_Basic
