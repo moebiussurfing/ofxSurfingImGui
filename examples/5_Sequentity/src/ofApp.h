@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"	
-#include "Surfing_ImSequencer.h"	
+//#include "Surfing_ImSequencer.h"	
 
 class ofApp : public ofBaseApp{
 
@@ -28,7 +28,7 @@ class ofApp : public ofBaseApp{
 		void drawWidgets();
 		void drawTimeline();
 
-		Surfing_ImSequencer sequencer;
+		//Surfing_ImSequencer sequencer;
 
 		bool bOpen0 = true;
 		bool bOpen1 = true;

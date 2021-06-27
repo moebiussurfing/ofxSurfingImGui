@@ -7,13 +7,13 @@ void ofApp::setup() {
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
 
-	sequencer.setup();
+	//sequencer.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	if (bPlay) {
-		sequencer.nextFrame();
+		//sequencer.nextFrame();
 		//sequencer.setFrame(int frame);
 	}
 }
@@ -62,7 +62,7 @@ void ofApp::drawTimeline()
 
 		ImGui::Begin("Timeline", &bOpen1, window_flags);
 		{
-			sequencer.draw();
+			//sequencer.draw();
 
 			//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);// a public bool variable to allow handle auto-resize. Applied here to all the windows.
 		}
