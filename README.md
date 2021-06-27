@@ -37,11 +37,11 @@ API will change and I am still having some problems yet.
 
 ## Examples Screenshots
 
-#### Widgets
+#### WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 ### 1_Widgets
-![image](/docs/Capture1.PNG?raw=true "image")  
+![image](/docs/1_Widgets.PNG?raw=true "image")  
 
 ### 1_Widgets_Curve
 ![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
@@ -51,14 +51,25 @@ API will change and I am still having some problems yet.
 
 ---------------------------------------------------------
 
-### 2_Layout_Basic
+#### LAYOUT
 
-![image](/docs/Capture2.PNG?raw=true "image")  
-<!-- <img src="docs/Capture2.PNG" width="80%" height="80%"> -->
-
+### 2_1_Layout_Basic
+![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
+
+### 2_2_Layout_TypesEngine
+* Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.
+![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
+
+### 2_3_Layout_ImTools
+<!-- ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")   -->
+<img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%">
+<br> 
+ 
+* Uses [ImTools from @aiekick](https://github.com/aiekick/ImTools)  
+* **WIP** porting to use into my OF projects.  
 
 #### Usage Code
 ```.cpp

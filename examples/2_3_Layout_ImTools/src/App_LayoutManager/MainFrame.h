@@ -24,9 +24,9 @@ SOFTWARE.
 #pragma once
 
 #include "ofxImGui.h"
-#include "imgui.h"
 #include "imgui_internal.h"
-#include "imconfig.h"
+//#include "imgui.h"
+//#include "imconfig.h"
 
 //#include <imgui/imgui.h>
 

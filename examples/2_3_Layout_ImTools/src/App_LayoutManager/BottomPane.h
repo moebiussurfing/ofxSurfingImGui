@@ -25,9 +25,9 @@ SOFTWARE.
 
 #include "ofMain.h"
 #include "ofxImGui.h"
-#include "imgui.h"
 #include "imgui_internal.h"
-#include "imconfig.h"
+//#include "imgui.h"
+//#include "imconfig.h"
 
 
 #include <LayoutManager/AbstractPane.h>
