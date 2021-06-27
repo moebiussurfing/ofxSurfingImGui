@@ -37,12 +37,11 @@ API will change and I am still having some problems yet.
 
 ## Examples Screenshots
 
+#### Widgets
+* Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
+
 ### 1_Widgets
-
 ![image](/docs/Capture1.PNG?raw=true "image")  
-<!-- <img src="docs/Capture1.PNG" width="80%" height="80%"> -->
-
-* Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders and ofxImGui standard params.  
 
 ### 1_Widgets_Curve
 ![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
