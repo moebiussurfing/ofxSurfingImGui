@@ -25,9 +25,8 @@ SOFTWARE.
 
 #include "ofMain.h"
 #include "ofxImGui.h"
-#include "imgui.h"
+#include "ofxSurfingImGui.h"
 #include "imgui_internal.h"
-#include "imconfig.h"
 
 
 #include <LayoutManager/AbstractPane.h>
@@ -63,5 +62,19 @@ protected:
 	CentralPane(const CentralPane&) = delete;
 	CentralPane& operator =(const CentralPane&) = delete;
 	~CentralPane(); // Prevent unwanted destruction};
+
+
+
+public:
+	ofParameterGroup params;
+	void addParams(ofParameterGroup &group) {
+		params = group;
+	}
+	void drawParams() {
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+		flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
+		flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
+		ofxImGuiSurfing::AddGroup(params, flags);
+	}
 };
 

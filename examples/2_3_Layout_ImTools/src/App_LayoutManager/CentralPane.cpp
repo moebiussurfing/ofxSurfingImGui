@@ -66,6 +66,13 @@ int CentralPane::DrawPanes(int vWidgetId, std::string vUserDatas)
 			ImGuiWindowFlags_NoBringToFrontOnFocus))
 		{
 			ImGui::Text("Hello World");
+
+			ImGui::Text("Hello World2");
+			ImGui::Text("Hello World3");
+			ImGui::Text("Hello World4");
+			ImGui::Text("Hello World5");
+
+			drawParams();
 		}
 
 		ImGui::End();

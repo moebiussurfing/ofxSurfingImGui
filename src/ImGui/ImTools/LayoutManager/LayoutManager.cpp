@@ -73,7 +73,11 @@ void LayoutManager::Init(const char* vMenuLabel, const char* vDefautlMenuLabel)
 	strncpy(m_DefaultMenuLabel, vDefautlMenuLabel, ct::mini((size_t)PANE_NAME_BUFFER_SIZE, strlen(vDefautlMenuLabel)));
 
 	////TODO:
+	//by pass FileHelper
 	//if (!FileHelper::Instance()->IsFileExist("imgui.ini"))
+	ofFile ifile = ofFile("imgui.ini");
+	bool b = ifile.exists();
+	if (b)
 	{
 		m_FirstLayout = true; // need default layout
 		printf("We will apply default layout :)");

@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include "MainFrame.h"
 
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 #include <LayoutManager/LayoutManager.h>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -44,7 +44,7 @@ SOFTWARE.
 void MainFrame::Init()
 {
 	LoadConfigFile("config.xml");
-	
+
 	LayoutManager::Instance()->Init("Layouts", "Default Layout");
 	LayoutManager::Instance()->AddPane(LeftPane::Instance(), "Left", (1 << 0), PaneDisposal::LEFT, true, true);
 	LayoutManager::Instance()->AddPane(RightPane::Instance(), "Right", (1 << 1), PaneDisposal::RIGHT, true, true);
@@ -52,6 +52,9 @@ void MainFrame::Init()
 	LayoutManager::Instance()->AddPane(TopPane::Instance(), "Top", (1 << 3), PaneDisposal::TOP, true, true);
 	LayoutManager::Instance()->AddPane(CentralPane::Instance(), "Central", (1 << 4), PaneDisposal::CENTRAL, true, true);
 	LayoutManager::Instance()->AddPane(SamplePane::Instance(), "Sample", (1 << 5), PaneDisposal::RIGHT, true, false);
+
+	//LayoutManager::Instance()->AddSpecificPaneToExisting
+
 }
 
 void MainFrame::Unit()
@@ -68,21 +71,31 @@ void MainFrame::Display(ImVec2 vSize)
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		// auto generates menu for layouts
 		LayoutManager::Instance()->DisplayMenu(vSize);
 
-		if (ImGui::BeginMenu("ImGui"))
-		{
-			ImGui::MenuItem("Show ImGui", "", &m_ShowImGui);
-			ImGui::MenuItem("Show ImGui Metric/Debug", "", &m_ShowMetric);
+		static bool bDebug = false;
+		if (bDebug)
+			if (ImGui::BeginMenu("ImGui"))
+			{
+				ImGui::MenuItem("Show ImGui", "", &m_ShowImGui);
+				ImGui::MenuItem("Show ImGui Metric/Debug", "", &m_ShowMetric);
 
-			ImGui::EndMenu();
-		}
+				ImGui::EndMenu();
+			}
 
 		// ImGui Infos
 		auto io = ImGui::GetIO();
-		const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
-		const auto size = ImGui::CalcTextSize(label.c_str());
+		//const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+		//const auto size = ImGui::CalcTextSize(label.c_str());
+		std::string label;
+		if (bDebug) label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+		else label = ct::toStr("ofxSurfingImGui");
+		
+		ImVec2 size = ImGui::CalcTextSize(label.c_str());
+
 		ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
+		ImGui::Checkbox("Debug", &bDebug);
 		ImGui::Text("%s", label.c_str());
 
 		ImGui::EndMainMenuBar();
@@ -114,7 +127,7 @@ std::string MainFrame::getXml(const std::string& vOffset, const std::string& vUs
 	std::string str;
 
 	str += LayoutManager::Instance()->getXml(vOffset, "app");
-	
+
 	return str;
 }
 
@@ -134,6 +147,6 @@ bool MainFrame::setFromXml(tinyxml2::XMLElement* vElem, tinyxml2::XMLElement* vP
 		strParentName = vParent->Value();
 
 	LayoutManager::Instance()->setFromXml(vElem, vParent, "app");
-	
+
 	return true;
 }

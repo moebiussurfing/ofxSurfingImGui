@@ -24,8 +24,6 @@ public:
 		mainFrame.Init();
 	}
 
-	//----
-
 	void draw()
 	{
 		int display_w, display_h;
@@ -37,6 +35,7 @@ public:
 		//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		 //  
 
+		//TODO: should get ofWindow size..
 		display_w = 1280;
 		display_h = 720;
 
@@ -58,7 +57,8 @@ public:
 		mainFrame.Display(ImVec2(display_w, display_h));
 	}
 
-	void exit() {
+	void exit()
+	{
 		mainFrame.Unit();
 	}
 
