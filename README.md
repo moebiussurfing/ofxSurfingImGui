@@ -227,7 +227,7 @@ void ofApp::drawWidgets()
 * Look at the examples.
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) from @**Daandelange**  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/) from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [Not required. For some examples only]  
 
 ## Useful Links

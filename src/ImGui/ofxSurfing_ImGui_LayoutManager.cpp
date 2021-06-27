@@ -76,6 +76,11 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 }
 
 //--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::draw() {
+		if (customFont == nullptr) gui.draw();
+}
+
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();

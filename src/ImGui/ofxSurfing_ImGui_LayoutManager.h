@@ -145,6 +145,8 @@ public:
 	void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	void endWindow();
 
+	void draw(); // to manual draw..
+
 	//-
 
 public:
