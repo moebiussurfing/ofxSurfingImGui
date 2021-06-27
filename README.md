@@ -65,6 +65,7 @@ API will change and I am still having some problems yet.
 
 ### /examples/2_3_Layout_ImTools
 * Uses [ImTools from @aiekick](https://github.com/aiekick/ImTools)  
+* "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."
 * **WIP** porting to use into my OF projects.  
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
 <!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
