@@ -3,12 +3,12 @@ ofxSurfingImGui
 
 #### WORK IN PROGRESS
 API will change and I am still having some problems yet.  
-### **BUG 1**:  
+### **BUG 1**: (ofxSurfing_ImGui_Helpers.h & ofxSurfing_ImGui_WidgetsButtons.h)  
     * When adding many times a parameter or others with a not unique name.  
     * Widgets collide between them. Only some instances work well.  
     * Usually, the first repeated widget in each panel works fine.  
     * SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
-### **BUG 2**:  
+### **BUG 2**: (ofxSurfing_ImGui_WidgetsTypes.h)  
     * Layout engine fails a bit on nesting indented groups.  
     * Broken width recalculation and "unlimited" growing when auto-size.  
     * Workaround fixed using CollapsingHeader instead of TreeNodeEx  
@@ -40,36 +40,35 @@ API will change and I am still having some problems yet.
 #### WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
-### 1_Widgets
+### /examples/1_Widgets
 ![image](/docs/1_Widgets.PNG?raw=true "image")  
 
-### 1_Widgets_Curve
+### /examples/1_Widgets_Curve
 ![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
 
-### 1_Widgets_Spinner
+### /examples/1_Widgets_Spinner
 ![image](/docs/1_Widgets_Spinner.PNG?raw=true "image")  
 
 ---------------------------------------------------------
 
 #### LAYOUT
 
-### 2_1_Layout_Basic
-![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
+### /examples/2_1_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
+![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
-### 2_2_Layout_TypesEngine
+### /examples/2_2_Layout_TypesEngine
 * Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
 
-### 2_3_Layout_ImTools
-<!-- ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")   -->
-<img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%">
-<br> 
- 
+### /examples/2_3_Layout_ImTools
 * Uses [ImTools from @aiekick](https://github.com/aiekick/ImTools)  
 * **WIP** porting to use into my OF projects.  
+![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+<!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
+<!-- <br>  -->
 
 #### Usage Code
 ```.cpp
