@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-#include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
+#include "ImGui/ofxSurfing_ImGui_WidgetsSpinner.h"
 
 #include "ofxImGui.h" // requires  https://github.com/Daandelange/ofxImGui
 #include "ImGui/ofxSurfing_ImGui_Themes.h"

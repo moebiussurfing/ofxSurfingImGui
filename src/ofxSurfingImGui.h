@@ -18,6 +18,7 @@
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
 #include "ImGui/ofxSurfing_ImGui_Themes.h"
 #include "ImGui/ofxSurfing_ImGui_RangeSlider.h"
+#include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
 #include "ImGui/dear_widgets/dear_widgets.h"
 
 using namespace ofxImGuiSurfing;

@@ -47,6 +47,9 @@ API will change and I am still having some problems yet.
 ### 1_Widgets_Curve
 ![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
 
+### 1_Widgets_Spinner
+![image](/docs/1_Widgets_Spinner.PNG?raw=true "image")  
+
 ---------------------------------------------------------
 
 ### 2_Layout_Basic
