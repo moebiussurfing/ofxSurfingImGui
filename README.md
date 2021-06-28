@@ -4,9 +4,9 @@ ofxSurfingImGui
 ## Overview
 **ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.
 
-#### WORK IN PROGRESS. 
-#### USABLE BUT NOT FINISHED.
-#### API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  
+**WORK IN PROGRESS...  **
+**USABLE BUT NOT FINISHED.  **
+**API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  **
 
 <details>
   <summary>BUGS</summary>
@@ -32,7 +32,8 @@ ofxSurfingImGui
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
-### IMPORTANT OF-RELATED CHANGES (vs ofxImGui helpers)  
+### IMPORTANT OF-RELATED CHANGES  
+(vs ofxImGui helpers)  
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
@@ -43,7 +44,9 @@ ofxSurfingImGui
 
 ## Examples Screenshots
 
-#### A. WIDGETS
+---------------------------------------------------------
+
+## A. WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 ### /examples/1_1_Widgets_DearWidgets
@@ -64,7 +67,7 @@ ofxSurfingImGui
 
 ---------------------------------------------------------
 
-#### B. LAYOUT
+## B. LAYOUT
 
 ### /examples/2_1_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
@@ -148,7 +151,7 @@ void ofApp::draw() {
 
 ---------------------------------------------------------
 
-#### C. TYPES ENGINE
+## C. TYPES ENGINE
 
 ### /examples/3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
