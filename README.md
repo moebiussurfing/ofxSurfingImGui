@@ -1,7 +1,8 @@
 ofxSurfingImGui
 =============================
 
-#### WORK IN PROGRESS
+#### WORK IN PROGRESS. USABLE BUT NOT FINISHED.
+
 API will change and I am still having some problems yet.  
 ### **BUG 1**: (ofxSurfing_ImGui_Helpers.h & ofxSurfing_ImGui_WidgetsButtons.h)  
     * When adding many times a parameter or others with a not unique name.  
@@ -12,12 +13,12 @@ API will change and I am still having some problems yet.
     * Layout engine fails a bit on nesting indented groups.  
     * Broken width recalculation and "unlimited" growing when auto-size.  
     * Workaround fixed using CollapsingHeader instead of TreeNodeEx  
-	but I would prefer the indented nested groups.
+    but I would prefer the indented nested groups.
 
 ---------------------------------------------------------
 
 ## Overview
-**ofxSurfingImGui** is a helper add-on with ofParameter Helpers, Setup and Layout Management, RAW ImGui Widgets ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.
+**ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.
 
 ## Features 
 * Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
@@ -40,14 +41,19 @@ API will change and I am still having some problems yet.
 #### WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
-### /examples/1_Widgets
-![image](/docs/1_Widgets.PNG?raw=true "image")  
+### /examples/1_1_Widgets_DearWidgets
+![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
+* Includes the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**
 
-### /examples/1_Widgets_Curve
-![image](/docs/1_Widgets_Curve.PNG?raw=true "image")  
+### /examples/1_2_Widgets_Curve
+![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
-### /examples/1_Widgets_Spinner
-![image](/docs/1_Widgets_Spinner.PNG?raw=true "image")  
+### /examples/1_3_Widgets_Spinner
+![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
+
+### /examples/1_4_Widgets_Surfing
+![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
+* Includes the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)
 
 ---------------------------------------------------------
 
@@ -59,19 +65,10 @@ API will change and I am still having some problems yet.
 * Includes **ofParameter** helpers and extra widgets.  
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
-### /examples/2_2_Layout_TypesEngine
-* Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.
-![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
-
-### /examples/2_3_Layout_ImTools
-* Uses [ImTools from @aiekick](https://github.com/aiekick/ImTools)  
-* "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."
-* **WIP** porting to use into my OF projects.  
-![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
-<!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
-<!-- <br>  -->
-
-#### Usage Code
+<details>
+  <summary>Code</summary>
+  <p>
+  
 ```.cpp
 //ofApp.h
 #include "ofxSurfingImGui.h"
@@ -126,18 +123,32 @@ void ofApp::draw() {
     guiManager.end();
 }
 ```
+  </p>
+</details>
+
+### /examples/2_2_Layout_TypesEngine
+* Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.
+![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
+
+### /examples/2_3_Layout_ImTools
+* Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
+* "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."
+* **WIP** porting to use into my OF projects.  
+![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+<!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
+<!-- <br>  -->
 
 ---------------------------------------------------------
 
-### 3_Layout_TypesEngine
+#### TYPES ENGINE
 
-![image](/docs/Capture4.PNG?raw=true "image")  
+### /examples/3_Layout_TypesEngine
+![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image")  
 <!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
-
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
 * Draw each **ofParameter** types with different appearance.
-    * EXAMPLE 1: _Draw a **float parameter** as slider (default), drag nuber or/and +/- stepper box._
+    * EXAMPLE 1: _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._
     * EXAMPLE 2: _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._
 * Especially useful when params are into an **ofParameterGroup**.
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
@@ -152,8 +163,10 @@ void ofApp::draw() {
 void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 ```
+<details>
+  <summary>Code</summary>
+  <p>
 
-#### Usage Code
 ```.cpp
 void ofApp::setup() 
 {
@@ -231,6 +244,8 @@ void ofApp::drawWidgets()
     widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
 }
 ```
+  </p>
+</details>
 
 ---------------------------------------------------------
 
@@ -238,19 +253,34 @@ void ofApp::drawWidgets()
 * Look at the examples.
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/) from @**Daandelange**  
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [Not required. For some examples only]  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/) fork from @**Daandelange**  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [Not required but for some examples only]  
 
-## Useful Links
+<details>
+  <summary>Useful Links</summary>
+  <p>
+
 https://github.com/HankiDesign/awesome-dear-imgui  
 https://github.com/soufianekhiat/DearWidgets  
 https://github.com/yumataesu/ImGui_Widgets  
 https://github.com/njazz/AutomationCurveEditor  
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
+  </p>
+</details>
 
-## TODO
-* Add more examples and ImGui RAW widgets.
+<details>
+  <summary>TODO</summary>
+  <p>
+
+* Add more ImGui RAW widgets with examples.
+* Convert to ofParameters for some widgets.
+* Pack some bigger widgets like matrix clicker just passing an int as index only.
+* Fix and solve final ofParams helpers workflow.
+* Mark/disable some widgets that could use modern C++17.
+* Add multiple layouts presets engine from Paletto.
+  </p>
+</details>
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
@@ -258,6 +288,9 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 ## Author
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
+
+## Thanks
+All source snippets from other authors are linked into header files. Thanks!
 
 ## License
 **MIT License**

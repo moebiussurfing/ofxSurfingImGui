@@ -10,17 +10,17 @@
 // - bool and ofParameter<bool> types
 
 //------------------------------
-//
+
 #include "ofxImGui.h"
 #include "ofxSurfing_ImGui_Themes.h"
 #include "imgui_internal.h"
 
-//----
+//------------------------------
 
 namespace ofxImGuiSurfing
 {
 	//TODO:
-	//test an unique name workaround..
+	//test an unique_name_engine workaround..
 	static int counterBigToggle = 0;
 
 	//-

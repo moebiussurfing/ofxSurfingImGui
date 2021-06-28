@@ -1,12 +1,13 @@
 #pragma once
 
-// this header includes all the ImGui classes: layout, helpers and widgets
-
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+#include "imgui_internal.h"
 
-//-
+//--------------------------------------------------------------
+
+// this header includes all the ImGui classes: layout, helpers and all my Surfing widgets.
 
 //---------
 // HEADERS
@@ -21,89 +22,109 @@
 #include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
 #include "ImGui/dear_widgets/dear_widgets.h"
 
+
 using namespace ofxImGuiSurfing;
 
-//-----
-/*
+//--------------------------------------------------------------
 
+/*
 	EXAMPLE SNIPPETS
 	----------------
-	
+
 	Typical basic usage
-	
+
 	Copy paste all this to your ofApp
 	or you can use ofxSurfing_ImGui_Manager that bundles all this code
-	 
-	Content:
-	1. LAYOUT MANGER: simplify the window/panels/layout process.
-	2. ofxImGui basic boilerplate.
-	3. RAW ImGui: window, panels, and sub panels and different trees modes.
-	4. WINDOW PANEL SHAPE: Get window position for advanced layout linked to other windows/gui's.
 
+	Content:
+	1. LAYOUT MANGER: SIMPLIFY THE WINDOW/PANELS/LAYOUT PROCESS.
+	2. ofxImGui BASIC BOILERPLATE.
+	3. RAW IMGUI: WINDOW, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES.
+	4. WINDOW PANEL SHAPE: GET WINDOW POSITION FOR ADVANCED LAYOUT LINKED TO OTHER WINDOWS/GUI'S.
+	5. MORE RAW IMGUI SNIPPETS
 */
 
 
-//-----
+//--------------------------------------------------------------
 
 
-
-//-----
-
-
-// 3. RAW ImGui
-
-// window, panels, and sub panels and different trees modes
+// LEARN HOW TO CREATE
+// WINDOWS, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
 
 /*
+//--
 
-// 1. windows
+// 1. CREATE A WINDOW
 
-// 1.1 window using ofxImGui
+	// WINDOWS USING RAW ImGui
 
-ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-string name = "myWindow";
-if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
-{..}
-ofxImGui::EndWindow(mainSettings);
+	// 1.0 SIMPLE
+	ImGui::Begin("myWindow);
+	{ }
+	ImGui::End();
 
+	//--
 
-// 1.2 window using RAW ImGui
-ImGui::Begin("name");
-{..}
-ImGui::End();
+	// 1.1 NAME WITH FLAGS
+	string _name = "myWindow";
+	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+	ImGui::Begin(_name.c_str(), NULL, _flagw);
+	{ }
+	ImGui::End();
 
-//-
+	//--
 
-// 2. trees
+	// 1.2 WINDOW USING ofxImGui
+	// (DEPRECATED. Better to not use like this)
 
-// 2.1 tree
-if (ImGui::TreeNode("_Tree"))
-{..
-	ImGui::TreePop();
-}
+	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+	string _name = "myWindow";
+	ofxImGui::Settings mainSettings = ofxImGui::Settings();
+	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
+	{ }
+	ofxImGui::EndWindow(mainSettings);
 
-//-
+//--
 
-// 2.2 collapsing panel
+// 2. TREES
 
-bool bOpen = false;
-ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-if (ImGui::CollapsingHeader("_Collapsing", _flagw))
-{..}
+	// 2.1 TREE
 
-// 2.3 treeEx
+	if (ImGui::TreeNode("_Tree"))
+	{
+		//..
+		ImGui::TreePop();
+	}
 
-bool bOpen = true;
-ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-_flagt |= ImGuiTreeNodeFlags_Framed;
-if (ImGui::TreeNodeEx("_TreeEx", _flagt))
-{..
-	ImGui::TreePop();
-}
+	//--
 
+	// 2.2 COLLAPSING PANEL
+
+	bool bOpen = false;
+	ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+	if (ImGui::CollapsingHeader("_Collapsing", _flagw))
+	{
+		//..
+	}
+
+	//--
+
+	// 2.3 treeEx
+	// TREE WITH FLAGS
+
+	bool bOpen = true;
+	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+	_flagt |= ImGuiTreeNodeFlags_Framed;
+	if (ImGui::TreeNodeEx("_TreeEx", _flagt))
+	{
+		//..
+		ImGui::TreePop();
+	}
 */
 
-//----
+
+//--------------------------------------------------------------
+
 
 /*
 
@@ -113,13 +134,14 @@ if (ImGui::TreeNodeEx("_TreeEx", _flagt))
 #include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
 ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
 
+// .cpp
 // setup()
-guiManager.setImGuiAutodraw(true);
+guiManager.setImGuiAutodraw(true); // -> required when one single ImGui instance only to respect autodraw and mouse interaction!
 guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 
 //--------------------------------------------------------------
-void drawImGui() 
-void ofApp::drawImGui() 
+void drawImGui()
+void ofApp::drawImGui()
 {
 	guiManager.begin(); // global begin
 	{
@@ -196,7 +218,7 @@ void ofApp::drawImGui()
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
@@ -283,7 +305,7 @@ void ofApp::draw_ImGui()
 		_w50 = getWidgetsWidth(2);
 		_w33 = getWidgetsWidth(3);
 		_w25 = getWidgetsWidth(4);
-		
+
 		//// APPROACH B
 		//// widgets sizes
 		//float _spcx; // space between widgets
@@ -314,7 +336,7 @@ void ofApp::draw_ImGui()
 
 		// window
 		n = params.getName();
-	
+
 		guiManager.beginWindow(n.c_str(), &bOpen0, flagsw);
 		{
 			widgetsManager.refreshPanelShape();
@@ -363,15 +385,15 @@ void ofApp::draw_ImGui()
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
-/*
 
 // 4. WINDOW PANEL SHAPE 
 
 // Get window position for advanced layout linked position
 
+/*
 static bool bLockMappgingPanel = true;
 ofxImGuiSurfing::ToggleRoundedButton("Lock Mapping panel", &bLockMappgingPanel);
 if (bLockMappgingPanel)
@@ -384,7 +406,22 @@ if (bLockMappgingPanel)
 	pos.x = posx + __w + pad;
 	pos.y = posy;
 }
+*/
 
 //-
 
+
+
+//--------------------------------------------------------------
+
+
+// 5. MORE RAW IMGUI
+
+/*
+// 5.1 How to set colors
+static float b = 1.0f;
+static float c = 0.5f;
+static int i = 3;// hue colors are from 0 to 7
+ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
+ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 */

@@ -6,6 +6,7 @@ void ofApp::setup_ImGui()
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bRestore = true;
 	bool bMouse = false;
+
 	bool bAutoDraw = true;
 	// NOTE: it seems that must be false when multiple ImGui instances created!
 
@@ -75,7 +76,6 @@ void ofApp::setup() {
 void ofApp::draw() {
 	gui.begin();
 	{
-		auto mainSettings = ofxImGui::Settings();
 		ImGuiColorEditFlags _flagw;
 		string name;
 
@@ -90,19 +90,19 @@ void ofApp::draw() {
 
 			_flagw = ImGuiWindowFlags_None;
 			name = "DearWidgets Ranges";
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			ImGui::Begin(name.c_str(), NULL, _flagw);
 			{
 				draw_DearWidgets();
 			}
-			ofxImGui::EndWindow(mainSettings);
+			ImGui::End();
 
 			_flagw = ImGuiWindowFlags_None;
 			name = "DearWidgets Colors";
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			ImGui::Begin(name.c_str(), NULL, _flagw);
 			{
 				draw_DearWidgetsColors();
 			}
-			ofxImGui::EndWindow(mainSettings);
+			ImGui::End();
 
 			//TODO:
 			//raw demo.h from DearWidgets
@@ -120,11 +120,11 @@ void ofApp::draw() {
 			// 2. surfing widgets
 			_flagw = ImGuiWindowFlags_None;
 			name = "SurfingWidgets";
-			if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw))
+			ImGui::Begin(name.c_str(), NULL, _flagw);
 			{
 				draw_SurfingWidgets();
 			}
-			ofxImGui::EndWindow(mainSettings);
+			ImGui::End();
 
 			//--
 
@@ -208,9 +208,8 @@ void ofApp::draw_DearWidgets() {
 void ofApp::draw_SurfingWidgets() {
 
 	// NOTE:
-	// only required when using window management from ofxImGui::BeginWindow(.. 
-	// instead of the ofxSurfing_ImGui_LayoutManager as you can see on the example 2_Layout_Basic
-	auto mainSettings = ofxImGui::Settings();
+	// auto mainSettings = ofxImGui::Settings();
+	// Is only required when using window management from ofxImGui::BeginWindow(.. 
 
 	// common width sizes from 1 (_w100) to 4 (_w25) widgets per row
 	float _w100;
@@ -246,8 +245,8 @@ void ofApp::draw_SurfingWidgets() {
 	//-
 
 	// 1. an ofParameterGroup
-	ofxImGui::AddGroup(params3, mainSettings);
-	// -> notice that when using ofxGui helpers, ofxImGui::AddGroup must be inside of:
+	ofxImGuiSurfing::AddGroup(params3);
+	// -> NOTICE that when using ofxGui helpers, ofxImGui::AddGroup must be inside of:
 	// if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw)){..}ofxImGui::EndWindow(mainSettings);
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
@@ -285,7 +284,8 @@ void ofApp::draw_SurfingWidgets() {
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
 
 	// 4. a params group
-	ofxImGui::AddGroup(params2, mainSettings);
+	ofxImGuiSurfing::AddGroup(params2);
+	//ofxImGui::AddGroup(params2, mainSettings);
 	// -> notice that when using ofxGui helpers, ofxImGui::AddGroup must be inside of:
 	// if (ofxImGui::BeginWindow(name.c_str(), mainSettings, _flagw)){..}ofxImGui::EndWindow(mainSettings);
 
@@ -305,8 +305,19 @@ void ofApp::draw_SurfingWidgets() {
 	{
 	}
 
-	// 7. another params group
-	ofxImGui::AddGroup(params, mainSettings);
+	//--
+
+	//// 7. Another params group. (Will crash here)
+	//// This only works inside ofxImGui::BeginWindow(..
+	//// but using the old ofxImGui helpers
+	//// that I have deprecated on my projects.
+	//// reasons to deprecate:
+	//// - lost of layout ini handling
+	//// - avoid ofxImGui::Settings() to simplify
+	//auto mainSettings = ofxImGui::Settings();
+	//ofxImGui::AddGroup(params, mainSettings);
+
+	//--
 
 	// 8. some buttons in a row
 

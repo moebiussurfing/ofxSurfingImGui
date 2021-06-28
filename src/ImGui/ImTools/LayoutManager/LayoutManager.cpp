@@ -114,8 +114,10 @@ bool LayoutManager::BeginDockSpace(ImGuiDockNodeFlags vFlags)
 
 	m_LastSize = viewport->Size;
 
-	ImGui::SetNextWindowPos(viewport->WorkPos);
-	ImGui::SetNextWindowSize(viewport->WorkSize);
+	//ImGui::SetNextWindowPos(viewport->WorkPos);
+	//ImGui::SetNextWindowSize(viewport->WorkSize);
+	//ImGui::SetNextWindowPos(viewport->GetWorkPos());
+	//ImGui::SetNextWindowSize(viewport->GetWorkSize);
 	ImGui::SetNextWindowViewport(viewport->ID);
 
 	auto host_window_flags = 0;

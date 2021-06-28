@@ -8,6 +8,8 @@
 #include "imconfig.h"
 #define M_PI 3.14159265358979323846264338327950288
 
+#include "colors/imgui_color_gradient.h"
+
 // TODO:
 // WIP
 // to add more uncoming new widgets here
@@ -37,13 +39,16 @@ namespace ofxImGuiSurfing
 
 	// preset clicker matrix buttons
 	// index will change when a box is clicked
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4)
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4)
 	{
 		bool cChanged = false;
 
 		//ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 		//_flagt |= ImGuiTreeNodeFlags_Framed;
+
+		string sid = "##MatrixClicker_" + _index.getName();
+		ImGui::PushID(sid.c_str());
 
 		//if (ImGui::TreeNodeEx(label.c_str(), _flagt))
 		{
@@ -147,6 +152,8 @@ namespace ofxImGuiSurfing
 
 			//ImGui::TreePop();
 		}
+
+		ImGui::PopID();
 
 		return cChanged;
 	}
@@ -270,7 +277,9 @@ namespace ofxImGuiSurfing
 //--
 
 // Spin Input Widget - Int/Float/Double 
+// with arrows selectors
 // https://github.com/ocornut/imgui/issues/2649
+// TODO: add ofParams
 
 namespace ofxImGuiSurfing
 {
@@ -400,7 +409,7 @@ namespace ofxImGuiSurfing
 	}
 };
 
-//-
+//------------------------------------------------
 
 // Taken from
 // https://github.com/d3cod3/ofxVisualProgramming
@@ -408,13 +417,12 @@ namespace ofxImGuiSurfing
 namespace ofxImGuiSurfing
 {
 	//TODO:
-	//how to handle ImDrawList?
+	//not working
 
 	//inline bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y);
 
 	//// Minimal implementation modified from: https://github.com/ocornut/imgui/issues/942
 	//inline bool KnobFloat(ImDrawList* draw_list, float width, ImU32 color, const char* label, float* p_value, float v_min, float v_max, float v_step = 50.f);
-
 
 	//namespace ofxImGuiSurfing
 	//{
@@ -596,7 +604,7 @@ namespace ofxImGuiSurfing
 		if (ImGui::CollapsingHeader("INFO", ImGuiTreeNodeFlags_None)) {
 			ImGui::TextWrapped("%s", desc);
 			ImGui::Spacing();
-			if (ImGui::Button("Reference")) {
+			if (ImGui::Button("Open Browser")) {
 				ofLaunchBrowser(url);
 			}
 		}
@@ -1041,10 +1049,3 @@ namespace ofxImGuiSurfing
 };
 
 //-----
-
-// how to set colors
-//static float b = 1.0f;
-//static float c = 0.5f;
-//static int i = 3;// hue colors are from 0 to 7
-//ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
-//ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
