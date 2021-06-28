@@ -158,17 +158,6 @@ void ofApp::draw() {
     * EXAMPLE 2: _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._
 * Especially useful when params are into an **ofParameterGroup**.
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
-
-#### AVAILABLE CUSTOMIZATIONS:
-    - Hide the parameter.  
-    - Set an ImGui::SameLine after the widget.  
-    - Add a final vertical spacing after the widget.  
-    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
-#### API
-```c++
-void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
-bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
-```
 <details>
   <summary>Code</summary>
   <p>
@@ -252,6 +241,17 @@ void ofApp::drawWidgets()
 ```
   </p>
 </details>
+
+#### AVAILABLE CUSTOMIZATIONS:
+    - Hide the parameter.  
+    - Set an ImGui::SameLine after the widget.  
+    - Add a final vertical spacing after the widget.  
+    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
+#### API
+```c++
+void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+```
 
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image")  
 <!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
