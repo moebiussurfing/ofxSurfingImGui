@@ -252,6 +252,7 @@ void ofApp::drawWidgets()
 ```
   </p>
 </details>
+
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image")  
 <!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
 
@@ -277,10 +278,11 @@ All source snippets from other authors are linked into header files. Thanks!
 ## License
 **MIT License**
 
+
 <details>
   <summary>Useful Links</summary>
   <p>
-  
+
 https://github.com/HankiDesign/awesome-dear-imgui  
 https://github.com/soufianekhiat/DearWidgets  
 https://github.com/yumataesu/ImGui_Widgets  
