@@ -274,7 +274,7 @@ All source snippets from other authors are linked into header files. Thanks!
 ## License
 **MIT License**
 
-<BR><BR>
+<BR>
 
 <details>
   <summary>Useful Links</summary>
