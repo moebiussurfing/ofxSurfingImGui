@@ -49,20 +49,22 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 ### 1_1_Widgets_DearWidgets
-Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
+Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 
 ### 1_2_Widgets_Curve
 Includes bezier curves and usable tween/easing functions.  
+
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
 ### 1_3_Widgets_Spinner
 Includes wait a progression spinners.  
+
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
 ### 1_4_Widgets_Surfing
-Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
+Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 
@@ -270,8 +272,8 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
 
-## Thanks
-All source snippets from other authors are linked into header files. Thanks!
+### Thanks
+_All source snippets from other authors are linked into header files. Thanks!_
 
 ## License
 **MIT License**
