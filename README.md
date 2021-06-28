@@ -44,7 +44,6 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId(1)/PopID() on each widget.
 
----------------------------------------------------------
 
 ## Examples Screenshots
 
@@ -67,7 +66,6 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 
----------------------------------------------------------
 
 ## B. LAYOUT
 
@@ -152,7 +150,6 @@ void ofApp::draw() {
 <!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
 <!-- <br>  -->
 
----------------------------------------------------------
 
 ## C. TYPES ENGINE
 
@@ -262,11 +259,6 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image")  
 <!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
 
----------------------------------------------------------
-
-## Usage
-* Look at the examples.
-
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [Not required but for some examples only]  
@@ -284,7 +276,7 @@ All source snippets from other authors are linked into header files. Thanks!
 ## License
 **MIT License**
 
-<BR>
+<BR><BR>
 
 <details>
   <summary>Useful Links</summary>
