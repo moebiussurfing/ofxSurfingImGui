@@ -60,7 +60,7 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
 ### 1_4_Widgets_Surfing
-* Includes the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
+* Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 
