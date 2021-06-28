@@ -59,7 +59,7 @@ Includes bezier curves and usable tween/easing functions.
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
 ### 1_3_Widgets_Spinner
-Includes wait a progression spinners.  
+Includes wait and progression spinners.  
 
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
