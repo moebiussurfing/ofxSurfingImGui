@@ -48,18 +48,18 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 ## A. WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
-### /examples/1_1_Widgets_DearWidgets
+### 1_1_Widgets_DearWidgets
 * Includes the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 
-### /examples/1_2_Widgets_Curve
+### 1_2_Widgets_Curve
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
-### /examples/1_3_Widgets_Spinner
+### 1_3_Widgets_Spinner
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
-### /examples/1_4_Widgets_Surfing
+### 1_4_Widgets_Surfing
 * Includes the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
@@ -67,7 +67,7 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 
 ## B. LAYOUT
 
-### /examples/2_1_Layout_Basic
+### 2_1_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
@@ -134,12 +134,12 @@ void ofApp::draw() {
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
-### /examples/2_2_Layout_TypesEngine
+### 2_2_Layout_TypesEngine
 * Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
 
-### /examples/2_3_Layout_ImTools
+### 2_3_Layout_ImTools
 * Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
@@ -151,7 +151,7 @@ void ofApp::draw() {
 
 ## C. TYPES ENGINE
 
-### /examples/3_Layout_TypesEngine
+### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 * A more powerfull **Layout Engine** to improve "responsive" layouts.
 * Draw each **ofParameter** types with different appearance.
