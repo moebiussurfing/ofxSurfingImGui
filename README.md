@@ -49,14 +49,16 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 ### 1_1_Widgets_DearWidgets
-* Includes the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
+* Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 
 ### 1_2_Widgets_Curve
+* Includes bezier curves and usable tween/easing functions. 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
 ### 1_3_Widgets_Spinner
+* Includes wait a progression spinners. 
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
 ### 1_4_Widgets_Surfing
