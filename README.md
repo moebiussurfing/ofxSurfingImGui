@@ -141,8 +141,6 @@ void ofApp::draw() {
 ### 2_2_Layout_TypesEngine
 Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
-![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
-
 ### 2_3_Layout_ImTools
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
@@ -257,9 +255,6 @@ void ofApp::drawWidgets()
 void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 ```
-
-![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image")  
-<!-- <img src="docs/Capture4.PNG" width="80%" height="80%"> -->
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
