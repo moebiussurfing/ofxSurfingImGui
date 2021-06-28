@@ -4,8 +4,8 @@ ofxSurfingImGui
 ## Overview
 **ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
 
+## WORK IN PROGRESS!  
 ```
-WORK IN PROGRESS...  
 USABLE BUT NOT FINISHED.  
 API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  
 ```
@@ -44,8 +44,6 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId(1)/PopID() on each widget.
 
-
-## Examples Screenshots
 
 ## A. WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
