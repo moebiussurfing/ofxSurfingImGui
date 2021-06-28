@@ -280,6 +280,7 @@ All source snippets from other authors are linked into header files. Thanks!
 <details>
   <summary>Useful Links</summary>
   <p>
+  
 https://github.com/HankiDesign/awesome-dear-imgui  
 https://github.com/soufianekhiat/DearWidgets  
 https://github.com/yumataesu/ImGui_Widgets  
@@ -291,6 +292,7 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 <details>
   <summary>TODO</summary>
   <p>
+
 * Add more ImGui RAW widgets with examples.
 * Convert to ofParameters for some widgets.
 * Pack some bigger widgets like matrix clicker just passing an int as index only.
