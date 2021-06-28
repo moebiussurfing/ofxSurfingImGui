@@ -46,23 +46,23 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 
 
 ## A. WIDGETS
-* Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
+Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 ### 1_1_Widgets_DearWidgets
-* Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
+Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**  
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 
 ### 1_2_Widgets_Curve
-* Includes bezier curves and usable tween/easing functions. 
+Includes bezier curves and usable tween/easing functions.  
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 
 ### 1_3_Widgets_Spinner
-* Includes wait a progression spinners. 
+Includes wait a progression spinners.  
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
 
 ### 1_4_Widgets_Surfing
-* Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
+Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112)  
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 
@@ -137,12 +137,12 @@ void ofApp::draw() {
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
 ### 2_2_Layout_TypesEngine
-* Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
+Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
 ![image](/docs/2_2_Layout_TypesEngine.PNG?raw=true "image") 
 
 ### 2_3_Layout_ImTools
-* Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
 
