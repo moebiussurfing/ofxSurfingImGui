@@ -4,9 +4,11 @@ ofxSurfingImGui
 ## Overview
 **ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.
 
-**WORK IN PROGRESS...  **
-**USABLE BUT NOT FINISHED.  **
-**API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  **
+::: warning
+WORK IN PROGRESS...  
+USABLE BUT NOT FINISHED.  
+API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  
+:::
 
 <details>
   <summary>BUGS</summary>
@@ -42,9 +44,9 @@ ofxSurfingImGui
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId(1)/PopID() on each widget.
 
-## Examples Screenshots
-
 ---------------------------------------------------------
+
+## Examples Screenshots
 
 ## A. WIDGETS
 * Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
@@ -133,6 +135,7 @@ void ofApp::draw() {
 ```
   </p>
 </details>
+
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
 ### /examples/2_2_Layout_TypesEngine
@@ -142,8 +145,8 @@ void ofApp::draw() {
 
 ### /examples/2_3_Layout_ImTools
 * Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
-* "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."
-* **WIP** porting to use into my OF projects.  
+"Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
+**WIP** porting to use into my OF projects.  
 
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
 <!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
@@ -281,6 +284,7 @@ All source snippets from other authors are linked into header files. Thanks!
 ## License
 **MIT License**
 
+<BR>
 
 <details>
   <summary>Useful Links</summary>
