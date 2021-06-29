@@ -75,68 +75,79 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
+
+![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
+
 <details>
-  <summary>Code</summary>
+  <summary>Example Code</summary>
   <p>
   
+  ![image](/docs/2_1_2_Layout_Basic.PNG?raw=true "image")  
+
 ```.cpp
 //ofApp.h
 #include "ofxSurfingImGui.h"
 
 ofxSurfing_ImGui_Manager guiManager;
+bool bOpen3 = false;
+ofParameter<bool> b1{ "b1", false };
+ofParameter<bool> b2{ "b2", false };
+ofParameter<bool> b3{ "b3", false };
 
 //ofApp.cpp
 void ofApp::setup() { 
     guiManager.setup(); 
-    // instantiates and configures ofxImGui inside.
-    // font, theme and other customizations.
+    // Instantiates and configures all the required ofxImGui stuff inside:
+    // font, theme, autodraw, handle layout, and other customizations.
 }
 void ofApp::draw() { 
     guiManager.begin();
     {
-        guiManager.beginWindow("Window1", &bOpen1, window_flags1);
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+        guiManager.beginWindow("Window3", &bOpen3, window_flags);
         {
-            // Precalculate common widgets sizes to fit current window "to be responsive"
-            // (Takes care of ImGui spacing between widgets)
-            float _w100 = getImGui_WidgetWidth(1); // 1 widget full width
-            float _w50 = getImGui_WidgetWidth(2);  // 2 widgets half width
-            float _w33 = getImGui_WidgetWidth(3);  // 3 widgets third width
-            float _w25 = getImGui_WidgetWidth(4);  // 4 widgets quarter width
-            float _h = WIDGETS_HEIGHT;
+            ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
+            if (bEnable)
+            {
+                // Precalculate common widgets sizes to fit current window, "to be responsive".
+                // Takes care of ImGui spacing between widgets.
+                // Remeber to recall when panel is indented or inside an smaller tree!
+                float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+                float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
+                float _w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
+                float _w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
+                float _h = WIDGETS_HEIGHT;
 
-            //-
+                //-
 
-            // Draw RAW ImGui or SurfingWidgets with ofParameters
+                // Draw RAW ImGui or SurfingWidgets with ofParameters
 
-            // One widget full with and half height
-            if (AddBigToggle(b1, _w100, _h / 2)) {} 
+                // One widget full with and half height
+                if (AddBigToggle(b1, _w100, _h / 2)) {}
 
-            // Two widgets same line/row with the 50% of window panel width 
-            if (AddBigButton(b3, _w50, _h)) {}
-            ImGui::SameLine();
-            if (AddBigButton(b4, _w50, _h)) {}
+                // Two widgets same line/row with the 50% of window panel width 
+                if (AddBigButton(b2, _w50, _h)) {}
+                ImGui::SameLine();
+                if (AddBigButton(b3, _w50, _h)) {}
 
-            // Or using raw ImGui
-            // Three widgets and fit width in one line
-            if (ImGui::Button("START", ImVec2(_w33, _h))) {}
-            ImGui::SameLine();
-            if (ImGui::Button("STOP", ImVec2(_w33, _h))) {}
-            ImGui::SameLine();
-            if (ImGui::Button("REPLAY", ImVec2(_w33, _h))) {}
-
-            //-
-
-            // An extra panel for useful config: auto resize window, mouseOverGui..
-            guiManager.drawAdvancedSubPanel();
+                // Or using raw ImGui
+                // Three widgets and fit width in one line
+                if (ImGui::Button("START", ImVec2(_w33, _h))) {}
+                ImGui::SameLine();
+                if (ImGui::Button("STOP", ImVec2(_w33, _h))) {}
+                ImGui::SameLine();
+                if (ImGui::Button("REPLAY", ImVec2(_w33, _h))) {}
+            }
         }
         guiManager.endWindow();
+    }
     guiManager.end();
 }
 ```
   </p>
 </details>
-
-![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
 
 ### 2_2_Layout_TypesEngine
 Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  

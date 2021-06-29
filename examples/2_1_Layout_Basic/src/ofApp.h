@@ -5,7 +5,7 @@
 #include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
 // Now you can use the included ofxSurfing_ImGui_Helpers.h to improve the handling of ofParameters.
 
-//#include "ofxWindowApp.h"		// -> not required
+//-
 
 class ofApp : public ofBaseApp{
 
@@ -30,11 +30,19 @@ public:
 		// MODE B
 		//ofxImGui::Gui gui; // can be instantiated outside the class (locally to maybe share with other classes)
 
-		void drawWidgets();
+		//-
+
+		void drawWidgets(); // -> some widgets
+		
+		void drawWindow3(); // -> a panel window with widgets
+		bool bOpen3 = false;
+		ofParameter<bool> b1{ "b1", false };
+		ofParameter<bool> b2{ "b2", false };
+		ofParameter<bool> b3{ "b3", false };
 
 		//-
 
-		// parameters
+		// ofParameters
 		ofParameterGroup params;
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;
@@ -58,8 +66,4 @@ public:
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;
 		ofParameter<int> shapeType3;
-
-		//-
-
-		//ofxWindowApp windowApp;
 };
