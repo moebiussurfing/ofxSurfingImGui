@@ -38,7 +38,7 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
   <summary>IMPORTANT OF-RELATED CHANGES</summary>
   <p>
 
-##### vs ofxImGui helpers  
+#### vs ofxImGui helpers  
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
