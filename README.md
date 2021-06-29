@@ -15,14 +15,14 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
   <p>
 
 ### **BUG 1**: (ofxSurfing_ImGui_Helpers.h & ofxSurfing_ImGui_WidgetsButtons.h)  
-    * When adding many times a parameter or others with a not unique name.  
-    * Widgets collide between them. Only some instances work well.  
-    * Usually, the first repeated widget in each panel works fine.  
-    * SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
+    - When adding many times a parameter or others with a not unique name.  
+    - Widgets collide between them. Only some instances work well.  
+    - Usually, the first repeated widget in each panel works fine.  
+    - SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
 ### **BUG 2**: (ofxSurfing_ImGui_WidgetsTypes.h)  
-    * Layout engine fails a bit on nesting indented groups.  
-    * Broken width recalculation and "unlimited" growing when auto-size.  
-    * Workaround fixed using CollapsingHeader instead of TreeNodeEx  
+    - Layout engine fails a bit on nesting indented groups.  
+    - Broken width recalculation and "unlimited" growing when auto-size.  
+    - Workaround fixed using CollapsingHeader instead of TreeNodeEx  
     but I would prefer the indented nested groups.
   </p>
 </details>
