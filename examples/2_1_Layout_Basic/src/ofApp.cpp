@@ -274,6 +274,7 @@ void ofApp::drawWidgets() {
 					ofxImGuiSurfing::AddToggleRoundedButton(bMode2);
 					ofxImGuiSurfing::AddToggleRoundedButton(bMode3);
 					//ofxImGuiSurfing::AddParameter(shapeType);
+
 					ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 					//--

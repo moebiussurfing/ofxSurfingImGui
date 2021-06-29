@@ -34,8 +34,11 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
-### IMPORTANT OF-RELATED CHANGES  
-(vs ofxImGui helpers)  
+<details>
+  <summary>IMPORTANT OF-RELATED CHANGES</summary>
+  <p>
+
+##### vs ofxImGui helpers  
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
@@ -43,7 +46,8 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
     * Removed all the WindowOpen/Settings stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId(1)/PopID() on each widget.
-
+  </p>
+</details>
 
 ## A. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  

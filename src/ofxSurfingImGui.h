@@ -323,18 +323,26 @@ void ofApp::draw_ImGui()
 
 		//--
 
-		ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-		flagsw |= ImGuiCond_FirstUseEver;
+		// SET POSITION AND SIZE OF A WINDOW PANEL
 
-		// whindow shape
+		float xx = 0;
+		float yy = 0;
+		float ww = 0;
+		float hh = 0;
 		ImGuiCond flagsCond = ImGuiCond_None;
 		flagsCond |= ImGuiCond_FirstUseEver;
 		ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
 		ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
 		// xx + = ww + pad;
 
-		// window
+		//--
+
+		// CREATE WINDOW
+	
+		ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
+		if (guiManager.bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+		flagsw |= ImGuiCond_FirstUseEver;
+
 		n = params.getName();
 
 		guiManager.beginWindow(n.c_str(), &bOpen0, flagsw);
