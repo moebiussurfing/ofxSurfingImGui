@@ -89,11 +89,14 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 #include "ofxSurfingImGui.h"
 
 ofxSurfing_ImGui_Manager guiManager;
+
 bool bOpen3 = false;
+ofParameter<bool> bEnable{ "Enable", true };
 ofParameter<bool> b1{ "b1", false };
 ofParameter<bool> b2{ "b2", false };
 ofParameter<bool> b3{ "b3", false };
-
+```
+```.c++
 //ofApp.cpp
 void ofApp::setup() { 
     guiManager.setup(); 
