@@ -35,10 +35,9 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
 * Included my **Dark Theme**.
 
 <details>
-  <summary>IMPORTANT OF-RELATED CHANGES</summary>
+  <summary>IMPORTANT OF-RELATED CHANGES (_vs ofxImGui helpers_)</summary>
   <p>
 
-#### vs ofxImGui helpers  
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
     * Widgets, windows/trees now are more customizable. 
