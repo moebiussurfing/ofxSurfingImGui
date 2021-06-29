@@ -108,7 +108,8 @@ void ofApp::setup()
     // font, theme, autodraw, handle layout, and other customizations.
 }
     
-void ofApp::draw() { 
+void ofApp::draw() 
+{ 
     guiManager.begin();
     {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
