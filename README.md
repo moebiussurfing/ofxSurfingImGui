@@ -27,15 +27,8 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
   </p>
 </details>
 
-## Features 
-* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
-    - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
-* **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
-* Included my **Dark Theme**.
-
 <details>
-  <summary>IMPORTANT OF-RELATED CHANGES (_vs ofxImGui helpers_)</summary>
+  <summary>IMPORTANT OF-RELATED CHANGES (vs ofxImGui ofParam Helpers)</summary>
   <p>
 
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
@@ -47,6 +40,13 @@ API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.
     * Now using PushId(1)/PopID() on each widget.
   </p>
 </details>
+
+## Features 
+* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
+    - Why? Easy to update to future **new ImGui** versions and multi context/instances.
+* **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
+* **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
+* Included my **Dark Theme**.
 
 ## A. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
