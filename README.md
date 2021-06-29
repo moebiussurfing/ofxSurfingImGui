@@ -101,11 +101,13 @@ ofParameter<bool> b3{ "b3", false };
 ```
 ofApp.cpp
 ```.c++
-void ofApp::setup() { 
+void ofApp::setup() 
+{ 
     guiManager.setup(); 
     // Instantiates and configures all the required ofxImGui stuff inside:
     // font, theme, autodraw, handle layout, and other customizations.
 }
+    
 void ofApp::draw() { 
     guiManager.begin();
     {
