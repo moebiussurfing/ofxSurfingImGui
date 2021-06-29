@@ -9,6 +9,7 @@ void ofApp::setup() {
 	// Must uncomment only one mode!
 
 	// MODE A
+	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
 	guiManager.setup(); // ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 
 	// MODE B
@@ -16,7 +17,7 @@ void ofApp::setup() {
 
 	//-
 
-	// parameters
+	// ofParameters
 	params.setName("paramsGroup");// main container
 	params2.setName("paramsGroup2");// nested
 	params3.setName("paramsGroup3");// nested
@@ -49,8 +50,8 @@ void ofApp::draw()
 	guiManager.begin(); // global begin
 	{
 		static bool bOpen0 = true;
-		static bool bOpen1 = true;
-		static bool bOpen2 = false;
+		static bool bOpen1 = false;
+		static bool bOpen2 = true;
 
 		//---------
 
@@ -144,6 +145,8 @@ void ofApp::draw()
 
 				//-
 
+				ImGui::Text("Responsive Widgets:");
+
 				// Two custom toggles
 				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
 				if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
@@ -160,13 +163,23 @@ void ofApp::draw()
 					bNext = false;
 				}
 
+				ImGui::Dummy(ImVec2(0.0f, 20.0f)); // spacing
+
 				// Three standard widget params
+
+				ImGui::Text("Some ofParameters:");
 				ofxImGuiSurfing::AddParameter(bEnable);
 				ofxImGuiSurfing::AddParameter(separation);
 				ofxImGuiSurfing::AddParameter(shapeType);
 
 				//-
 
+				// spacing
+				ImGui::Dummy(ImVec2(0.0f, 20.0f)); // spacing
+
+				//-
+
+				// more widgets inside this window
 				drawWidgets();
 
 				//-
@@ -191,44 +204,69 @@ void ofApp::draw()
 void ofApp::drawWidgets() {
 
 	// These are pure widgets without window/tree/container
-
-	//-
-
-	//// Warning: 
-	//// Add an ofParameterGroup that uses and requires ImHelpers.h from ofxImGui 
-	//// Notice that this will crash the app bc this is not being drawnd inside an ofxImGui::BeginWindow(..
-	//{
-	//	auto mainSettings = ofxImGui::Settings();
-	//	ofxImGui::AddGroup(params3, mainSettings);
-	//}
-
-	//-
-
-	// spacing
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
+	// to be drawn inside a panel window
 
 	//-
 
 	// Some custom widgets
+	ImGui::Text("Custom Range Sliders:");
 
 	// range_slider.h
-	static float v1 = 0;
-	static float v2 = 1;
-	static float v_min = 0;
+	static float v_min = 0; // limits
 	static float v_max = 1;
-	static float v3 = 0;
-	static float v4 = 1;
-	ofxImGuiSurfing::RangeSliderFloat("range1", &v1, &v2, v_min, v_max, "%.3f  %.3f", 1.0f);
-	ofxImGuiSurfing::RangeSliderFloat("range2", &v3, &v4, v_min, v_max);
+
+	static float v1min = 0.4;
+	static float v1max = 0.9;
+	ofxImGuiSurfing::RangeSliderFloat("Range 1", &v1min, &v1max, v_min, v_max, "%.3f  %.3f", 1.0f);
+
+	static float v2min = 0.1;
+	static float v2max = 0.6;
+	ofxImGuiSurfing::RangeSliderFloat("Range 2", &v2min, &v2max, v_min, v_max);
 
 	// spacing
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
+	ImGui::Dummy(ImVec2(0.0f, 10.0f)); // spacing
 
-	// vanilla range slider
-	static float begin = 10, end = 90;
-	static int begin_i = 100, end_i = 1000;
-	ofxImGuiSurfing::DragFloatRange2("range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	ofxImGuiSurfing::DragIntRange2("range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+	//-
 
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	// This is a typical extra menu with advanced options
+	{
+		ImGui::Dummy(ImVec2(0, 5)); // spacing
+		{
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+			if (guiManager.bExtra)
+			{
+				ImGui::Indent();
+				{
+					//--
+
+					ImGui::Text("Some ofParameters:");
+
+					ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
+					ofxImGuiSurfing::AddParameter(shapeType);
+					ofxImGuiSurfing::AddToggleRoundedButton(bMode1);
+					ofxImGuiSurfing::AddToggleRoundedButton(bMode2);
+					ofxImGuiSurfing::AddToggleRoundedButton(bMode3);
+					ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+					//--
+
+					ImGui::Text("Vanilla Range Sliders:");
+
+					static float begin = 10, end = 90;
+					static int begin_i = 100, end_i = 1000;
+					ofxImGuiSurfing::DragFloatRange2("Range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+					ofxImGuiSurfing::DragIntRange2("Range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+					ImGui::Dummy(ImVec2(0.0f, 10.0f));
+
+					//--
+
+					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+					if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+				}
+				ImGui::Unindent();
+			}
+		}
+	}
+
+	ImGui::Dummy(ImVec2(0.0f, 40.0f)); // spacing
 }
