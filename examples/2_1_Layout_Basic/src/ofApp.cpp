@@ -55,7 +55,7 @@ void ofApp::draw()
 
 		//---------
 
-		// Window 0
+		// Main Window
 
 		// A raw standard raw ImGui window
 		{
@@ -174,18 +174,20 @@ void ofApp::draw()
 				ofxImGuiSurfing::AddParameter(shapeType);
 
 				//-
-
-				// spacing
+				
 				ImGui::Dummy(ImVec2(0.0f, 20.0f)); // spacing
 
 				//-
 
 				// more widgets inside this window
+
 				drawWidgets();
 
 				//-
 
-				// A button filling the below panel area
+				// A responsive button. filling the below panel area
+
+				ImGui::Text("A responsive button:");
 				float __w100 = ImGui::GetContentRegionAvail().x;
 				float __h100 = ImGui::GetContentRegionAvail().y;
 				ofxImGuiSurfing::AddBigButton(bPrevious, __w100, __h100);
@@ -204,7 +206,6 @@ void ofApp::draw()
 
 	guiManager.end(); // global end
 }
-
 
 //--------------------------------------------------------------
 void ofApp::drawWidgets() {
@@ -229,8 +230,27 @@ void ofApp::drawWidgets() {
 	static float v2max = 0.6;
 	ofxImGuiSurfing::RangeSliderFloat("Range 2", &v2min, &v2max, v_min, v_max);
 
-	// spacing
 	ImGui::Dummy(ImVec2(0.0f, 10.0f)); // spacing
+
+	//--
+
+	bool bOpen = true;
+	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+	_flagt |= ImGuiTreeNodeFlags_Framed;
+
+	if (ImGui::TreeNodeEx("A folder opened", _flagt))
+	{
+		ImGui::Text("Vanilla Range Sliders:");
+
+		static float begin = 10, end = 90;
+		static int begin_i = 100, end_i = 1000;
+		ofxImGuiSurfing::DragFloatRange2("Range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+		ofxImGuiSurfing::DragIntRange2("Range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+
+		ImGui::TreePop();
+	}
+
+	ImGui::Dummy(ImVec2(0.0f, 20.0f)); // spacing
 
 	//-
 
@@ -238,6 +258,10 @@ void ofApp::drawWidgets() {
 	{
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 		{
+
+			ImGui::Text("A hidden by default Extra section");
+			ImGui::Text("An Advanced section inside to debug:");
+
 			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
 			if (guiManager.bExtra)
 			{
@@ -245,23 +269,11 @@ void ofApp::drawWidgets() {
 				{
 					//--
 
-					ImGui::Text("Some ofParameters:");
-
 					ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
-					ofxImGuiSurfing::AddParameter(shapeType);
 					ofxImGuiSurfing::AddToggleRoundedButton(bMode1);
 					ofxImGuiSurfing::AddToggleRoundedButton(bMode2);
 					ofxImGuiSurfing::AddToggleRoundedButton(bMode3);
-					ImGui::Dummy(ImVec2(0.0f, 10.0f));
-
-					//--
-
-					ImGui::Text("Vanilla Range Sliders:");
-
-					static float begin = 10, end = 90;
-					static int begin_i = 100, end_i = 1000;
-					ofxImGuiSurfing::DragFloatRange2("Range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-					ofxImGuiSurfing::DragIntRange2("Range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
+					//ofxImGuiSurfing::AddParameter(shapeType);
 					ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
 					//--

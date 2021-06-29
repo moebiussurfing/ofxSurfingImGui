@@ -4,13 +4,13 @@
 
 #include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
 // Now you can use the included ofxSurfing_ImGui_Helpers.h to improve the handling of ofParameters.
+// NOTE: Inside the header file, there's some snippets and tutorials than you can use to learn or to use by yourself.
 
 //-
 
 class ofApp : public ofBaseApp{
 
 public:
-
 		void setup();
 		void draw();
 			
