@@ -131,12 +131,12 @@ void ofApp::draw() {
                 // Draw RAW ImGui or SurfingWidgets with ofParameters
 
                 // One widget full with and half height
-                if (AddBigToggle(b1, _w100, _h / 2)) {}
+                if (ofxImGuiSurfing::AddBigToggle(b1, _w100, _h / 2)) {}
 
                 // Two widgets same line/row with the 50% of window panel width 
-                if (AddBigButton(b2, _w50, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b2, _w50, _h)) {}
                 ImGui::SameLine();
-                if (AddBigButton(b3, _w50, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b3, _w50, _h)) {}
 
                 // Or using raw ImGui
                 // Three widgets and fit width in one line
