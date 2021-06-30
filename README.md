@@ -7,14 +7,15 @@ ofxSurfingImGui
 ## WORK IN PROGRESS!  
 ```
 USABLE BUT NOT FINISHED.  
-API WILL CHANGE AND I AM STILL HAVING SOME PROBLEMS YET.  
+API WILL CHANGE.  
+I AM STILL HAVING SOME PROBLEMS YET.  
 ```
 
 <details>
   <summary>BUGS</summary>
   <p>
 
-### **BUG 1**: (ofxSurfing_ImGui_Helpers.h & ofxSurfing_ImGui_WidgetsButtons.h)  
+### **BUG 1**: (ofxSurfing_ImGui_Helpers.h)  
     - When adding many times a parameter or others with a not unique name.  
     - Widgets collide between them. Only some instances work well.  
     - Usually, the first repeated widget in each panel works fine.  
@@ -93,7 +94,6 @@ ofApp.h
 
 ofxSurfing_ImGui_Manager guiManager;
 
-bool bOpen3 = false;
 ofParameter<bool> bEnable{ "Enable", true };
 ofParameter<bool> b1{ "b1", false };
 ofParameter<bool> b2{ "b2", false };
@@ -105,49 +105,44 @@ void ofApp::setup()
 { 
     guiManager.setup(); 
     // Instantiates and configures all the required ofxImGui stuff inside:
-    // font, theme, autodraw, handle layout, and other customizations.
+    // Font, theme, autodraw, layout store/recall, multi context/instances, ofParams Helpers and other customizations.
 }
     
 void ofApp::draw() 
 { 
     guiManager.begin();
     {
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-        if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-        guiManager.beginWindow("Window3", &bOpen3, window_flags);
+        guiManager.beginWindow("Window", NULL, ImGuiWindowFlags_None);
         {
             ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
             if (bEnable)
             {
                 // Precalculate common widgets sizes to fit current window, "to be responsive".
-                // Takes care of ImGui spacing between widgets.
-                // Remeber to recall when panel is indented or inside an smaller tree!
-                float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
-                float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
-                float _w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
-                float _w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
+                float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+                float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
+                float _w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
+                float _w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
                 float _h = WIDGETS_HEIGHT;
 
                 //-
 
-                // Draw RAW ImGui or SurfingWidgets with ofParameters
+                /* Draw RAW ImGui or SurfingWidgets with ofParameters */
 
                 // One widget full with and half height
-                if (ofxImGuiSurfing::AddBigToggle(b1, _w100, _h / 2)) {}
+                if (ofxImGuiSurfing::AddBigToggle(b1, _w1, _h / 2)) {}
 
                 // Two widgets same line/row with the 50% of window panel width 
-                if (ofxImGuiSurfing::AddBigButton(b2, _w50, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b2, _w2, _h)) {}
                 ImGui::SameLine();
-                if (ofxImGuiSurfing::AddBigButton(b3, _w50, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b3, _w2, _h)) {}
 
                 // Or using raw ImGui
                 // Three widgets and fit width in one line
-                if (ImGui::Button("START", ImVec2(_w33, _h))) {}
+                if (ImGui::Button("START", ImVec2(_w3, _h))) {}
                 ImGui::SameLine();
-                if (ImGui::Button("STOP", ImVec2(_w33, _h))) {}
+                if (ImGui::Button("STOP", ImVec2(_w3, _h))) {}
                 ImGui::SameLine();
-                if (ImGui::Button("REPLAY", ImVec2(_w33, _h))) {}
+                if (ImGui::Button("REPLAY", ImVec2(_w3, _h))) {}
             }
         }
         guiManager.endWindow();
@@ -185,6 +180,19 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
   <summary>Code</summary>
   <p>
 
+ofApp.h
+```.cpp
+ofParameterGroup params{ "group" };
+ofParameter<bool> b1{ "b1", false };
+ofParameter<bool> b2{ "b2", false };
+ofParameter<bool> b3{ "b3", false };
+ofParameter<float> f1{ "f1", 0, 0, 1.0f };
+ofParameter<float> f2{ "f2", 0, 0, 1.0f };
+ofParameter<int> i1{ "i1", 0, 0, 10 };
+ofParameter<int> i2{ "i2", 0, 0, 10 };
+´´´
+
+ofApp.cpp
 ```.cpp
 void ofApp::setup() 
 {
@@ -222,7 +230,7 @@ void ofApp::draw()
 {
     guiManager.begin();
     {
-        guiManager.beginWindow("Window", &bOpen, window_flags);
+        guiManager.beginWindow("Window", NULL, ImGuiWindowFlags_None);
         {
             drawWidgets();
         }
