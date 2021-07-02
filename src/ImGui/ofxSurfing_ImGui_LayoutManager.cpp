@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
+
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
@@ -62,7 +63,8 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	std::string _path = "assets/fonts/"; // assets folder
 	ofFile fileToRead(_path + fontName); // a file that exists
 	bool b = fileToRead.exists();
-	if (b) {
+	if (b) 
+	{
 		if (guiPtr != nullptr) customFont = guiPtr->addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
 		else customFont = gui.addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
 	}
@@ -77,7 +79,7 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::draw() {
-		if (customFont == nullptr) gui.draw();
+	if (customFont == nullptr) gui.draw();
 }
 
 //--------------------------------------------------------------

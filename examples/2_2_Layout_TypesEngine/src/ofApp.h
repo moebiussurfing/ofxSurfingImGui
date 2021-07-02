@@ -15,17 +15,13 @@ class ofApp : public ofBaseApp{
 
 		ofxSurfing_ImGui_Manager guiManager; 
 
-		bool bOpen0 = true;
-		bool bOpen1 = true;
-		bool bOpen2 = true;
-
 		void drawWindow0();
 		void drawWindow1();
 		void drawWindow2();
 		void drawMoreWidgets();
 
 		// parameters
-		ofParameterGroup params;
+		ofParameterGroup params1;
 		ofParameterGroup params2;
 		ofParameterGroup params3;
 		ofParameter<bool> bEnable;
@@ -52,6 +48,10 @@ class ofApp : public ofBaseApp{
 		// debug
 		bool bCustom1;
 		bool bCustom2;
+
+		bool bOpen0;
+		bool bOpen1;
+		bool bOpen2;
 
 		ofxWindowApp windowApp;
 };

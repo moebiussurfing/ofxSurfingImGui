@@ -199,174 +199,182 @@
 void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 {
 	//TODO:
-	//widgetsManager.refreshPanelShape(); // fails?
-
-	//TODO:
 	//maybe should add different types of groups: collaspe/tree/treeEx
 
-#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-	//TODO: BUG
-	// remeber to uncomment ImGui::TreePop(); below! 
-	if (ImGui::TreeNodeEx(group.getName().c_str(), flags)) // -> that's the desired tree but having sizing BUG
-	//if (ImGui::TreeNode(group.getName().c_str())) // -> tree 
-#endif
+//#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
+//	//TODO: BUG
+//	// remeber to uncomment ImGui::TreePop(); below! 
+//	if (ImGui::TreeNodeEx(group.getName().c_str(), flags)) // -> that's the desired tree but having sizing BUG
+//	//if (ImGui::TreeNode(group.getName().c_str())) // -> tree 
+//	{
+//#endif
 
 	//TODO: 
 	// workaround solution using this bc refreshPanelShape() not working well!
 	// TESTING
 #ifdef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-		if (ImGui::CollapsingHeader(group.getName().data(), flags)) // -> do not adds indentation. to avoid layout bug
+	if (ImGui::CollapsingHeader(group.getName().data(), flags)) // -> do not adds indentation. to avoid layout bug
+	{
+
+		//#ifdef USE_IM_GUI_INDENT
+		//		ImGui::Indent();
+		//#endif
+		//		widgetsManager.refreshPanelShape(); // not working?
 #endif
+
+		//-
+
+		for (auto parameter : group)
 		{
-			widgetsManager.refreshPanelShape(); // not working?
+			// group
+			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 
-			//-
+			//if (parameterGroup)
+			//{
+			//	//TODO:
+			//	//widgetsManager.refreshPanelShape();
+			//	// Recurse through contents.
+			//	ofxImGuiSurfing::AddGroup(*parameterGroup, flags);
+			//	//TODO:
+			//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
+			//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings);//old
+			//	continue;
+			//}
+			// TESTING
+			// https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
 
-			for (auto parameter : group)
+			if (parameterGroup)
 			{
-				// Group.
-				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+				// Recurse through contents.
 
-				//if (parameterGroup)
-				//{
-				//	//TODO:
-				//	//widgetsManager.refreshPanelShape();
+				// Styles
 
-				//	// Recurse through contents.
-				//	ofxImGuiSurfing::AddGroup(*parameterGroup, flags);
+#ifdef USE_IM_GUI_INDENT
+				ImGui::Indent();
+#endif
+				widgetsManager.refreshPanelShape(); // not working?
 
-				//	//TODO:
-				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
-				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings);//old
-				//	continue;
-				//}
+				// 0.
+				string n = "##GROUP_" + parameterGroup->getName();
+				ImGui::PushID(n.data());
+				ofxImGuiSurfing::AddGroup(*parameterGroup);
+				ImGui::PopID();
 
-				// TESTING
-				// https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
-
-				if (parameterGroup)
-				{
-					// Recurse through contents.
-
-					// Styles
-
-					// 0.
-					string n = "##" + parameterGroup->getName();
-					ImGui::PushID(n.data());
-					ofxImGuiSurfing::AddGroup(*parameterGroup);
-					ImGui::PopID();
-
-					//// 1. yumataesu (per group scroll bar)
-					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-					//	auto& style = ImGui::GetStyle();
-					//	int h = style.FramePadding.y + style.ItemSpacing.y + 14;
-					//	ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//	ImGui::EndChild();
-					//}
-
-					//// 2. collapse (per window scroll bar)
-					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//}
-
-					//// 3. tree (indented + per window scroll bar)
-					//if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags)) {
-					//	widgetsManager.refreshPanelShape(); // required bc indent changes window width!
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//	ImGui::TreePop();
-					//}
-
-					continue;
-				}
-
+#ifdef USE_IM_GUI_INDENT
+				ImGui::Unindent();
+#endif
 				//-
 
-				// Parameter, try everything we know how to handle.
-#if OF_VERSION_MINOR >= 10
-				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-				if (parameterVec2f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterVec2f);
-					continue;
-				}
-				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-				if (parameterVec3f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterVec3f);
-					continue;
-				}
-				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-				if (parameterVec4f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterVec4f);
-					continue;
-				}
-#endif
-				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-				if (parameterOfVec2f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
-					continue;
-				}
-				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-				if (parameterOfVec3f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
-					continue;
-				}
-				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-				if (parameterOfVec4f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
-					continue;
-				}
-				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-				if (parameterFloatColor)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterFloatColor);
-					continue;
-				}
-				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-				if (parameterColor)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterColor);
-					continue;
-				}
-				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-				if (parameterFloat)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterFloat);
-					continue;
-				}
-				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-				if (parameterInt)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterInt);
-					continue;
-				}
-				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-				if (parameterBool)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterBool);
-					continue;
-				}
-				auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-				if (parameterString)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterString);
-					continue;
-				}
+				//// 1. yumataesu (per group scroll bar)
+				//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
+				//	auto& style = ImGui::GetStyle();
+				//	int h = style.FramePadding.y + style.ItemSpacing.y + 14;
+				//	ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+				//	ofxImGuiSurfing::AddGroup(*parameterGroup);
+				//	ImGui::EndChild();
+				//}
 
-				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+				//// 2. collapse (per window scroll bar)
+				//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
+				//	ofxImGuiSurfing::AddGroup(*parameterGroup);
+				//}
+
+				//// 3. tree (indented + per window scroll bar)
+				//if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags)) {
+				//	widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+				//	ofxImGuiSurfing::AddGroup(*parameterGroup);
+				//	ImGui::TreePop();
+				//}
+
+				continue;
 			}
 
 			//-
 
-#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-			ImGui::TreePop(); // must disable when using CollapsingHeader(..
-#endif	
+			// Parameter, try everything we know how to handle.
+#if OF_VERSION_MINOR >= 10
+			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+			if (parameterVec2f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterVec2f);
+				continue;
+			}
+			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+			if (parameterVec3f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterVec3f);
+				continue;
+			}
+			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+			if (parameterVec4f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterVec4f);
+				continue;
+			}
+#endif
+			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+			if (parameterOfVec2f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
+				continue;
+			}
+			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+			if (parameterOfVec3f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
+				continue;
+			}
+			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+			if (parameterOfVec4f)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
+				continue;
+			}
+			auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+			if (parameterFloatColor)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterFloatColor);
+				continue;
+			}
+			auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+			if (parameterColor)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterColor);
+				continue;
+			}
+			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+			if (parameterFloat)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterFloat);
+				continue;
+			}
+			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+			if (parameterInt)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterInt);
+				continue;
+			}
+			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+			if (parameterBool)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterBool);
+				continue;
+			}
+			auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+			if (parameterString)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterString);
+				continue;
+			}
+
+			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
+
+	}
+	//#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
+	//		ImGui::TreePop(); // must disable when using CollapsingHeader(..
+	//	}
+	//#endif
 }
 
 //// OLD: original helper from jvcleave
@@ -631,7 +639,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
 		//ImGui::PopID();
 		return true;
 	}
-	//ImGui::PopID();
+	ImGui::PopID();
 	return false;
 }
 
@@ -671,7 +679,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool al
 		//ImGui::PopID();
 		return true;
 	}
-	//ImGui::PopID();
+	ImGui::PopID();
 	return false;
 }
 
@@ -768,7 +776,7 @@ bool ofxImGuiSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::str
 		}
 		ImGui::Columns(1);
 	}
-	//ImGui::PopID();
+	ImGui::PopID();
 
 	if (result)
 	{
@@ -824,7 +832,7 @@ bool ofxImGuiSurfing::AddStepper(ofParameter<int>& parameter, int step, int step
 	{
 		parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 		//parameter.set(tmpRef);
-	
+
 		ImGui::PopID();
 		return true;
 	}
@@ -843,7 +851,7 @@ bool ofxImGuiSurfing::AddSlider(ofParameter<float>& parameter, const char* forma
 	if (ImGui::SliderFloat(parameter.getName().c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 	{
 		parameter.set(tmpRef);
-		
+
 		ImGui::PopID();
 		return true;
 	}
@@ -864,7 +872,7 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<int>& parame
 	{
 		parameterMin.set(tmpRefMin);
 		parameterMax.set(tmpRefMax);
-		
+
 		ImGui::PopID();
 		return true;
 	}
@@ -885,7 +893,7 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<float>& para
 	{
 		parameterMin.set(tmpRefMin);
 		parameterMax.set(tmpRefMax);
-	
+
 		ImGui::PopID();
 		return true;
 	}
@@ -903,7 +911,7 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& 
 	auto tmpRefMin = parameterMin.get();
 	auto tmpRefMax = parameterMax.get();
 
-	
+
 	string n = "##RANGE" + name + " x";
 	ImGui::PushID(n.data());
 	if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
@@ -911,8 +919,8 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& 
 		result |= true;
 	}
 	ImGui::PopID();
-	
-	 n = "##RANGE" + name + " Y";
+
+	n = "##RANGE" + name + " Y";
 	ImGui::PushID(n.data());
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
@@ -944,7 +952,7 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& 
 	}
 	ImGui::PopID();
 
-	 n = "##RANGE" + name + " Y";
+	n = "##RANGE" + name + " Y";
 	ImGui::PushID(n.data());
 	if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 	{
@@ -952,7 +960,7 @@ bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& 
 	}
 	ImGui::PopID();
 
-	 n = "##RANGE" + name + " Z";
+	n = "##RANGE" + name + " Z";
 	ImGui::PushID(n.data());
 	if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 	{

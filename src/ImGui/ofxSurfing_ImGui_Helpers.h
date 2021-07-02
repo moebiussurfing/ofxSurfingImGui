@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "ofxImGui.h"
@@ -6,9 +7,12 @@
 // TESTING TOGGLE TYPES
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
-#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
+#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW //-> choice between tree or collapsed group window
+//#define USE_IM_GUI_INDENT //-> fails on su groups layout..
+
 
 /*
+
 	NOTE:
 
 	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
@@ -28,7 +32,9 @@
 
 	That's a problem bc we need to star count the widgets when window begins.
 	So we will need to create windows here like on ofxImGui ?
+
 */
+
 
 //#include "ofGLBaseTypes.h"
 //#include "ofParameter.h"
@@ -40,26 +46,9 @@
 
 //static const int kImGuiMargin2 = 10;
 
- namespace ofxImGuiSurfing
- //namespace ofxImGui
-//namespace ofxSurfing
+//namespace ofxImGui
+namespace ofxImGuiSurfing
 {
-	// TODO:
-	// TESTING CUSTOMIZE TYPES
-	static ofxImGuiSurfing::SurfingWidgetTypes widgetsManager;
-	//static ofxSurfing::SurfingWidgetTypes widgetsManager;
-	//SurfingWidgetTypes widgetsManager;
-
-	//--
-
-	//// TODO:
-	//// important BUG !
-	//// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
-	//static int index = 0;
-	//static void resetIndex() {
-	//	index = 0;
-	//}
-
 	//--
 
 	// TODO:
@@ -68,6 +57,30 @@
 	//public:
 	//	SurfingImGuiHelpers() {};
 	//	~SurfingImGuiHelpers() {};
+
+	//--
+
+	// TODO:
+	// TESTING CUSTOMIZE TYPES
+	static ofxImGuiSurfing::SurfingTypes widgetsManager;
+	//SurfingTypes widgetsManager;
+
+	//struct Widgets
+	//{
+	//	SurfingTypes widgetsManager;
+	//};
+
+	//--
+
+	// TODO:
+	// important BUG !
+	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	static int index = 0;
+	static void resetIndex()
+	{
+		ofLogVerbose(__FUNCTION__) << index;
+		index = 0;
+	}
 
 	//--
 
@@ -96,6 +109,8 @@
 	//};
 
 	//static WindowOpen windowOpen;
+
+	//-
 
 	//bool IsMouseOverGui();
 
@@ -183,11 +198,9 @@
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
 
-}//namespace ofxSurfing
-
+} // namespace ofxSurfing
 
 //----
-
 
 static ImTextureID GetImTextureID2(const ofTexture& texture)
 {
@@ -221,129 +234,159 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	//TODO:
 	// If there's no added AddWidgetConf (for none of the widgets), we use default widgets adders
 	// if we have not used the Type Engines we bypass all the related stuff running this:
-	if (!widgetsManager.isOperative() /*&& 1*/)
-	{
-		// float
-		if (info == typeid(float))
-		{
-			//ImGui::PushID(index++);
-			if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-			{
-				parameter.set(tmpRef);
-				//ImGui::PopID();
-				return true;
-			}
-			//ImGui::PopID();
-			return false;
-		}
+	//if (!widgetsManager.isOperative()) // check if no widget configs queued. the use default styles! 
+	//{
+	//	// float
+	//	if (info == typeid(float))
+	//	{
+	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		//ImGui::PushID(index++);
+	//		if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//		{
+	//			parameter.set(tmpRef);
+	//			//ImGui::PopID();
+	//			ImGui::PopItemWidth();
+	//			return true;
+	//		}
+	//		//ImGui::PopID();
+	//		ImGui::PopItemWidth();
+	//		return false;
+	//	}
 
-		// int
-		if (info == typeid(int))
-		{
-			//ImGui::PushID(index++);
-			if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-			{
-				parameter.set(tmpRef);
-				//ImGui::PopID();
-				return true;
-			}
-			//ImGui::PopID();
-			return false;
-		}
+	//	// int
+	//	if (info == typeid(int))
+	//	{
+	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		//ImGui::PushID(index++);
+	//		if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//		{
+	//			parameter.set(tmpRef);
+	//			//ImGui::PopID();
+	//			ImGui::PopItemWidth();
+	//			return true;
+	//		}
+	//		//ImGui::PopID();
+	//		ImGui::PopItemWidth();
+	//		return false;
+	//	}
 
-		// bool
-		if (info == typeid(bool))
-		{
-			//ImGui::PushID(index++);
-			if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
-			{
-				parameter.set(tmpRef);
-				//ImGui::PopID();
-				return true;
-			}
-			//ImGui::PopID();
-			return false;
-		}
-	}
+	//	// bool
+	//	if (info == typeid(bool))
+	//	{
+	//		//ImGui::PushID(index++);
+	//		if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
+	//		{
+	//			parameter.set(tmpRef);
+	//			//ImGui::PopID();
+	//			return true;
+	//		}
+	//		//ImGui::PopID();
+	//		return false;
+	//	}
+	//}
 
 	//--
 
-	else 
+	// customized styles
+	//else
 	{
 		// B. if  there's a config already added for one or more parameters
 
+		// float
 		if (info == typeid(float))
 		{
 			bool bReturn = false;
 			ofParameter<float> &p = parameter.cast<float>();
 			auto c = widgetsManager.getWidgetConf(p);
+
 			// if the parameter widget is not added explicitly, will populate it as the default appearance
 			if (c.name != "-1")
 			{
-				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-			}
-			else { // default style
 				//ImGui::PushID(index++);
+				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+				//ImGui::PopID();
+				return bReturn;
+			}
+
+			// default style
+			else
+			{
+				//ImGui::PushID(index++);
+				ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 				if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
-					//ImGui::PopID();
 					bReturn = true;
 				}
+				else bReturn = false;
+				ImGui::PopItemWidth();
 				//ImGui::PopID();
-				bReturn = false;
+				return bReturn;
 			}
-			return bReturn;
 		}
 
 		// int
-		if (info == typeid(int))
+		else if (info == typeid(int))
 		{
 			bool bReturn = false;
 			ofParameter<int> &p = parameter.cast<int>();
 			auto c = widgetsManager.getWidgetConf(p);
+
 			// if the parameter widget is not added explicitly, will populate it as the default appearance
 			if (c.name != "-1")
 			{
-				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-			}
-			else { // default style
 				//ImGui::PushID(index++);
+				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+				//ImGui::PopID();
+				return bReturn;
+			}
+
+			// default style
+			else
+			{
+				//ImGui::PushID(index++);
+				ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 				if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
-					//ImGui::PopID();
 					bReturn = true;
 				}
+				else bReturn = false;
+				ImGui::PopItemWidth();
 				//ImGui::PopID();
-				bReturn = false;
+				return bReturn;
 			}
-			return bReturn;
 		}
 
 		// bool
-		if (info == typeid(bool))
+		else if (info == typeid(bool))
 		{
 			bool bReturn = false;
 			ofParameter<bool> &p = parameter.cast<bool>();
 			auto c = widgetsManager.getWidgetConf(p);
+
 			// if the parameter widget is not added explicitly, will populate it as the default appearance
 			if (c.name != "-1")
 			{
+				//ImGui::PushID(index++);
 				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+				//ImGui::PopID(); 
+				return bReturn;
 			}
-			else { // default style
+
+			// default style
+			else
+			{
 				//ImGui::PushID(index++);
 				if (ImGui::Checkbox(parameter.getName().c_str(), (bool *)&tmpRef))
 				{
 					parameter.set(tmpRef);
-					//ImGui::PopID();
 					bReturn = true;
 				}
+				else bReturn = false;
 				//ImGui::PopID();
-				bReturn = false;
+				return bReturn;
 			}
-			return bReturn;
 		}
 	}
 
@@ -410,4 +453,3 @@ bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<DataType>& 
 }
 
 //}; // class
-

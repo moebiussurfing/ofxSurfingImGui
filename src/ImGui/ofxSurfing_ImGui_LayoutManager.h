@@ -5,16 +5,14 @@
 #include "ofxImGui.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 
+//-------
 
+/* LAYOUT HELPERS */
+
+// useful layout helpers 
+// to update sizes/width to panel window shape
 namespace ofxImGuiSurfing
 {
-	//--
-
-	/* LAYOUT HELPERS */
-
-	// useful layout helpers 
-	// to update sizes/width to panel window shape
-
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
@@ -29,7 +27,6 @@ namespace ofxImGuiSurfing
 		__w25 = (__w100 - __spcx * 3) / 4;
 		__h = BUTTON_BIG_HEIGHT;
 	}
-
 	//--------------------------------------------------------------
 	// just the more relevant sizes
 	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
@@ -65,7 +62,6 @@ namespace ofxImGuiSurfing
 			w = __w100 / amntColumns - __spcx / amntColumns;
 		}
 	}
-
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetHeight(float &h, int amntRows = -1)
 	{
@@ -80,7 +76,6 @@ namespace ofxImGuiSurfing
 			h = __h100 / amntRows - __spcy / amntRows;
 		}
 	}
-
 	//--------------------------------------------------------------
 	inline float getWidgetsWidth(int amntColumns = -1)
 	{
@@ -93,7 +88,6 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
-			//w = __w100 / amntColumns - __spcx / amntColumns;
 			w = (__w100 - __spcx * (amntColumns - 1)) / amntColumns;
 		}
 
@@ -119,13 +113,14 @@ namespace ofxImGuiSurfing
 
 } // namespace ofxImGuiSurfing
 
-//----
+//-------
 
 /* LAYOUT MANGAGER ENGINE */
 
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
+
 public:
 	ofxSurfing_ImGui_Manager();
 	~ofxSurfing_ImGui_Manager();
@@ -135,7 +130,7 @@ public:
 	// main API
 
 public:
-	void setup();  // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
 	void begin();
@@ -242,7 +237,7 @@ public:
 
 	////TODO:
 	//public:
-	//SurfingWidgetTypes widgetsManager;
+	//SurfingTypes widgetsManager;
 	//void refreshShape() {
 	//widgetsManager.refreshPanelShape(); // update sizes to current window shape
 	//}

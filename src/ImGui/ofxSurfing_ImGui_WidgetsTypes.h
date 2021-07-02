@@ -9,40 +9,20 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutManager.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
+#include "ofxSurfing_ImGui_LayoutManager.h"
 
 //#include "ofxSurfing_ImGui_Helpers.h" // ?
 
-namespace ofxImGuiSurfing {
-	//namespace ofxSurfing {
+//namespace ofxSurfing 
+namespace ofxImGuiSurfing
+{
+	//-
 
-		//namespace ImTypes {
-		//	enum ImWidgetSurfingTYPE
-		//	{
-		//		IM_DEFAULT = 0,
-		//		IM_HIDDEN,
-		//		//bool
-		//		IM_CHECKBOX,
-		//		IM_BUTTON_SMALL,
-		//		IM_BUTTON_BIG,
-		//		IM_TOGGLE_SMALL,
-		//		IM_TOGGLE_BIG,
-		//		//float/int
-		//		IM_SLIDER,
-		//		IM_STEPPER,
-		//		IM_DRAG,
-		//		//IM_TEXT_BIG,
-		//		NUM_IM_TYPES
-		//	};
-		//}
-
-	class SurfingWidgetTypes {
-
-		//-
+	class SurfingTypes {
 
 	public:
-		//TODO: make simpler namespace. move outside the class?
+		//TODO: make simpler namespace. or move outside the class?
 		enum ImWidgetSurfingTYPE
 		{
 			IM_DEFAULT = 0,
@@ -63,15 +43,15 @@ namespace ofxImGuiSurfing {
 
 		//TODO:
 		// a getUniqueName alternative
-	//public:
-	//	int index = 0;
-	//	void resetIndex() {
-	//		index = 0;
-	//	}
-	//	std::string getTag(ofAbstractParameter& aparam) {
-	//		string tag = aparam.getName() + ofToString(index++);
-	//		return tag;
-	//	}
+		//public:
+		//	int index = 0;
+		//	void resetIndex() {
+		//		index = 0;
+		//	}
+		//	std::string getTag(ofAbstractParameter& aparam) {
+		//		string tag = aparam.getName() + ofToString(index++);
+		//		return tag;
+		//	}
 
 		//-
 
@@ -86,6 +66,17 @@ namespace ofxImGuiSurfing {
 		float _w33;
 		float _w25;
 		float _h;
+
+		//// widgets sizes
+		//static float _spcx;
+		//static float _spcy;
+		//static float _w100;
+		//static float _h100;
+		//static float _w99;
+		//static float _w50;
+		//static float _w33;
+		//static float _w25;
+		//static float _h;
 
 		//-
 
@@ -117,7 +108,8 @@ namespace ofxImGuiSurfing {
 
 		vector<surfingImWidgetConf> widgetsConfs;
 
-		SurfingWidgetTypes::SurfingWidgetTypes() {
+		//--------------------------------------------------------------
+		SurfingTypes::SurfingTypes() {
 			widgetsConfs.clear();
 		}
 
@@ -134,7 +126,7 @@ namespace ofxImGuiSurfing {
 			//	std::cout << i << '\n';
 			//for (auto c : boost::adaptors::reverse(widgetsConfs)) // reverse?
 
-			for (auto c : widgetsConfs)
+			for (auto &c : widgetsConfs)
 			{
 				if (c.name == aparam.getName()) // param was added to the queue
 				{
@@ -181,14 +173,20 @@ namespace ofxImGuiSurfing {
 
 		// if we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
 		// then we will populate each widget type as the default appearance!
-		bool isOperative() {
+		//--------------------------------------------------------------
+		bool isOperative()
+		{
 			return (widgetsConfs.size() > 0);
+		}
+
+		void clear() {
+			widgetsConfs.clear();
 		}
 
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, SurfingWidgetTypes type) {
-		//	Add(bMode1, SurfingWidgetTypes::IM_TOGGLE_SMALL, 3, true);
+		//bool Add(ofAbstractParameter& aparam, SurfingTypes type) {
+		//	Add(bMode1, SurfingTypes::IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-
@@ -202,6 +200,7 @@ namespace ofxImGuiSurfing {
 
 		//-
 
+		//--------------------------------------------------------------
 		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam)
 		{
 			string name = aparam.getName();
@@ -236,7 +235,8 @@ namespace ofxImGuiSurfing {
 			{
 				// extra options
 				if (bSameLine) ImGui::SameLine();
-				if (spacing != -1) {
+				if (spacing != -1)
+				{
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
 				}
 
@@ -300,12 +300,11 @@ namespace ofxImGuiSurfing {
 				{
 					// default:
 					string name = p.getName();
-					string n = "##CHKBb_" + name + ofToString(1);
+					string n = "##CHECKBOX_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
 					ImGui::PopID();
@@ -330,33 +329,37 @@ namespace ofxImGuiSurfing {
 				case IM_SLIDER:
 				{
 					string name = p.getName();
-					string n = "##SLDRf_" + name + ofToString(1);
+					string n = "##SLIDER_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				} 
+				break;
 
 				case IM_DRAG:
 				{
 					const float speed = 0.01f;
 					string name = p.getName();
-					string n = "##DRAGf_" + name + ofToString(1);
+					string n = "##DRAG_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				} 
+				break;
 
 				case IM_STEPPER:
 				{
@@ -364,17 +367,19 @@ namespace ofxImGuiSurfing {
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					string n = "##STPRf_" + name + ofToString(1);
+					string n = "##STEPPER_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				}
+				break;
 				}
 
 				bDone = true;
@@ -393,32 +398,37 @@ namespace ofxImGuiSurfing {
 				case IM_SLIDER:
 				{
 					string name = p.getName();
-					string n = "##SLDRi_" + name + ofToString(1);
+					string n = "##SLIDER_i_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				} 
+				break;
 
 				case IM_DRAG:
 				{
 					const float speed = 0.1;
 					string name = p.getName();
-					string n = "##DRAGi_" + name + ofToString(1);
+					string n = "##DRAG_i_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				} 
+				break;
 
 				case IM_STEPPER:
 				{
@@ -426,17 +436,19 @@ namespace ofxImGuiSurfing {
 					const int stepFast = 5;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					string n = "##STPRi_" + name + ofToString(1);
+					string n = "##STEPPER_i_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
+					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
-						//ImGui::PopID();
 						bReturn = true;
 					}
+					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} break;
+				} 
+				break;
 				}
 
 				bDone = true;
@@ -448,7 +460,8 @@ namespace ofxImGuiSurfing {
 			{
 				// extra options
 				if (bSameLine) ImGui::SameLine();
-				if (spacing != -1) {
+				if (spacing != -1)
+				{
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
 				}
 			}
