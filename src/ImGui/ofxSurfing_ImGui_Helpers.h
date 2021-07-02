@@ -239,7 +239,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	//	// float
 	//	if (info == typeid(float))
 	//	{
-	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 	//		//ImGui::PushID(index++);
 	//		if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
@@ -256,7 +256,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 	//	// int
 	//	if (info == typeid(int))
 	//	{
-	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 	//		//ImGui::PushID(index++);
 	//		if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
@@ -312,7 +312,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 			else
 			{
 				//ImGui::PushID(index++);
-				ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 				if (ImGui::SliderFloat(parameter.getName().c_str(), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);
@@ -345,7 +345,7 @@ bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
 			else
 			{
 				//ImGui::PushID(index++);
-				ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 				if (ImGui::SliderInt(parameter.getName().c_str(), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 				{
 					parameter.set(tmpRef);

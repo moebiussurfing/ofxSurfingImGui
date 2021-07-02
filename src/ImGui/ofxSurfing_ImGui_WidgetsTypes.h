@@ -331,7 +331,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##SLIDER_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
@@ -349,7 +349,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##DRAG_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
@@ -369,7 +369,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##STEPPER_f_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
@@ -400,7 +400,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##SLIDER_i_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
@@ -418,7 +418,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##DRAG_i_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
@@ -438,7 +438,7 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					string n = "##STEPPER_i_" + name + ofToString(1);
 					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
