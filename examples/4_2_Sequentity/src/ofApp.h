@@ -3,7 +3,13 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"	
+
+#include "Surfing_Sequentity.h"	
 //#include "Surfing_ImSequencer.h"	
+
+
+/* NOT WORKING */
+
 
 class ofApp : public ofBaseApp{
 

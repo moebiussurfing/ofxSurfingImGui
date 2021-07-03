@@ -14,6 +14,9 @@ void ofApp::setup() {
 
 	// MODE B
 	//guiManager.setup(gui); // can be instantiated out of the class, locally
+	
+	// pick a theme
+	ofxImGuiSurfing::ImGui_ThemeSequentity();
 
 	//-
 
@@ -52,6 +55,7 @@ void ofApp::draw()
 		static bool bOpen0 = true;
 		static bool bOpen1 = false;
 		static bool bOpen2 = true;
+		static bool show_app_style_editor = false;
 
 		//---------
 
@@ -68,6 +72,7 @@ void ofApp::draw()
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 3", &bOpen3);
+				ofxImGuiSurfing::ToggleRoundedButton("Editor", &show_app_style_editor);
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
@@ -149,7 +154,7 @@ void ofApp::draw()
 				ImGui::Text("Responsive Widgets:");
 
 				// Two custom toggles
-				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
+				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w1) with standard height (_h)
 				if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
 
 				// Two custom buttons in the same line/row
@@ -202,6 +207,13 @@ void ofApp::draw()
 		if (bOpen3) drawWindow3();
 
 		//-----
+
+		if (show_app_style_editor)
+		{
+			ImGui::Begin("Dear ImGui Style Editor", &show_app_style_editor);
+			ofxImGuiSurfing::ShowStyleEditor2(NULL);
+			ImGui::End();
+		}
 	}
 
 	guiManager.end(); // global end
@@ -304,10 +316,10 @@ void ofApp::drawWindow3()
 			// Precalculate common widgets sizes to fit current window, "to be responsive".
 			// Takes care of ImGui spacing between widgets.
 			// Remeber to recall when panel is indented or inside an smaller tree!
-			float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
-			float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
-			float _w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
-			float _w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
+			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
+			float _w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
+			float _w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
 			float _h = WIDGETS_HEIGHT;
 
 			//-
@@ -315,20 +327,20 @@ void ofApp::drawWindow3()
 			// Draw RAW ImGui or SurfingWidgets with ofParameters
 
 			// One widget full with and half height
-			if (AddBigToggle(b1, _w100, _h / 2)) {}
+			if (AddBigToggle(b1, _w1, _h / 2)) {}
 
 			// Two widgets same line/row with the 50% of window panel width 
-			if (AddBigButton(b2, _w50, _h)) {}
+			if (AddBigButton(b2, _w2, _h)) {}
 			ImGui::SameLine();
-			if (AddBigButton(b3, _w50, _h)) {}
+			if (AddBigButton(b3, _w2, _h)) {}
 
 			// Or using raw ImGui
 			// Three widgets and fit width in one line
-			if (ImGui::Button("START", ImVec2(_w33, _h))) {}
+			if (ImGui::Button("START", ImVec2(_w3, _h))) {}
 			ImGui::SameLine();
-			if (ImGui::Button("STOP", ImVec2(_w33, _h))) {}
+			if (ImGui::Button("STOP", ImVec2(_w3, _h))) {}
 			ImGui::SameLine();
-			if (ImGui::Button("REPLAY", ImVec2(_w33, _h))) {}
+			if (ImGui::Button("REPLAY", ImVec2(_w3, _h))) {}
 		}
 	}
 	guiManager.endWindow();

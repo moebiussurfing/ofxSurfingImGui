@@ -15,6 +15,11 @@ before you include this file in *one* C++ (17 and above) file to create the impl
 #ifndef SEQUENTITY_H
 #define SEQUENTITY_H
 
+
+#include "ofMain.h"
+#include "ofxSurfingImGui.h"	
+
+
 #include <vector>
 #include <unordered_map>
 #include <functional> // std::function

@@ -5,6 +5,9 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
+using namespace ImGui;
+//using namespace ofxImGuiSurfing;
+
 #define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
@@ -22,10 +25,7 @@
 //------------------------------
 
 namespace ofxImGuiSurfing
-//namespace ofxSurfing 
 {
-//namespace ofxSurfingHelpers 
-
 	//----
 
 	//TODO:
@@ -119,7 +119,7 @@ namespace ofxImGuiSurfing
 		style->Colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
 		style->Colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);
 		style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-		
+
 		style->Colors[ImGuiCol_FrameBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.54f);
 		style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.1f, 0.1f, 0.1f, 0.68f);
 		style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.15f, 0.15f, 0.15f, 0.67f);

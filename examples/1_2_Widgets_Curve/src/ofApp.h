@@ -14,8 +14,13 @@ class ofApp : public ofBaseApp{
 public:
     void setup();
     void draw();
+    void keyPressed(int key);
     
 	void setup_ImGui();
 	ofxImGui::Gui gui;
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
+
+
+	ofxImGuiSurfing::SurfingCurve surfingCurve;
+	ofParameter<float> value{ "Value", 0, 0, 1 };
 };

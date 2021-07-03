@@ -31,6 +31,10 @@
 #include <imgui_internal.h>
 #include <time.h>
 
+#include "ofMain.h"
+#include "ofxSurfing_ImGui_WidgetsButtons.h"
+#include "ofxSurfing_ImGui_Helpers.h"
+
 namespace ImGui
 {
 	template<int steps>
@@ -280,4 +284,78 @@ namespace ImGui
 	inline void ShowBezierDemo() {
 		{ static float v[5] = { 0.950f, 0.050f, 0.795f, 0.035f }; Bezier("easeInExpo", v); }
 	}
+}
+
+namespace ofxImGuiSurfing
+{
+	class SurfingCurve {
+
+	//public:
+	private:
+		ofParameter<int> duration{ "Duration", 1000, 10, 4000 };
+		ofParameter<float> value{ "Value", 0, 0, 1 };
+		ofParameter<bool> bStart{ "Start", false };
+		ofParameter<float> dt{ "Input", 0, 0, 1 };
+	private:
+		int timerStart = 0;
+		int timer = 0;
+		bool bRunning = false;
+
+	public:
+		float gerPercent() { return dt; };
+		float gerValue() { return value; };
+	private:
+		// curve tensors
+		float v[5] = { 0.50f, 0.020f, 0.95f, 0.35f };
+		// input
+		//int duration = 1000;
+
+	public:
+		void setup(ofParameter<float> &param) {
+			value.makeReferenceTo(param);
+		}
+
+	private:
+		void update() {
+			if (bRunning) {
+				timer = ofGetElapsedTimeMillis() - timerStart;
+				if (timer < duration) dt = ofMap(timer, 0, duration, 0, 1, true);
+				else bRunning = false;
+			}
+		}
+
+	public:
+		void start() {
+			bRunning = true;
+			timerStart = ofGetElapsedTimeMillis();
+		}
+
+	public:
+		void draw() {
+			update();
+
+			ofxImGuiSurfing::AddParameter(duration);
+
+			if (ofxImGuiSurfing::AddBigButton(bStart)) {
+				bStart = false;
+				start();
+			}
+			//if(ImGui::Button("Stop", ImVec2(ofxImGuiSurfing::getWidgetsWidth(1), ofxImGuiSurfing::getWidgetsHeight()))) 
+			//{
+			//	bRunning = false;
+			//	timer = 0;
+			//	dt = 0;
+			//}
+
+			ImGui::Bezier("SurfingCurve", v);
+			
+			// output
+			float o = ImGui::BezierValue(dt, v); // x delta in [0..1] range
+			value = o;
+			
+			ofxImGuiSurfing::AddParameter(dt);
+
+			ofxImGuiSurfing::AddParameter(value);
+		}
+	};
 }
