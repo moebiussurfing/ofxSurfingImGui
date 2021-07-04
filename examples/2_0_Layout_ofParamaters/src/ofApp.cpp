@@ -74,16 +74,19 @@ void ofApp::draw()
 
 		//---------
 
-		window_flags = ImGuiWindowFlags_None;
-		//window_flags |= ImGuiWindowFlags_; 
-
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+		if (bOpen1)//should work standalone
 		{
-			drawWidgets();
+			window_flags = ImGuiWindowFlags_None;
+			//window_flags |= ImGuiWindowFlags_; 
+
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			{
+				drawWidgets();
+			}
+			guiManager.endWindow();
 		}
-		guiManager.endWindow();
 	}
 	guiManager.end(); // global end
 }
