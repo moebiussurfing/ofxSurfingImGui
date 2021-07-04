@@ -18,7 +18,7 @@ using namespace ImGui;
 #define SLIDER_HEIGHT 20
 #define COLOR_STRIP_COLOR_HEIGHT 15
 #define WIDGETS_HEIGHT 50 // will be applied to tbuttons/toggles heights
-#define WIDGET_PARAM_PADDING 110 // will be applied to the ofParams sliders. 110 must be the max labels width of params names
+#define WIDGET_PARAM_PADDING 120 // will be applied to the ofParams sliders. 110 must be the max labels width of params names
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
 

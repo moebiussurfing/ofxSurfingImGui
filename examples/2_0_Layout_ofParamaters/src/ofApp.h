@@ -12,10 +12,23 @@ public:
 			
 		ofxSurfing_ImGui_Manager guiManager; 
 
-		void drawWidgets(); // -> some widgets
+		// debug flags
+		ofParameter<int> typeGroups;
+		ofParameter<int> typeFlags;
+		string flagInfo;
+
+		void drawWidgets(); // -> populate some widgets from ofParameters
+
+		//--
 
 		// ofParameters
-		ofParameterGroup params;
+		
+		// groups
+		ofParameterGroup params2;
+		ofParameterGroup params1;
+		ofParameterGroup params3;
+
+		// params
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;
 		ofParameter<bool> bMode1;
@@ -29,11 +42,9 @@ public:
 		ofParameter<int> shapeType;
 		ofParameter<int> amount;
 		ofParameter<int> size;
-		ofParameterGroup params2;
 		ofParameter<int> shapeType2;
 		ofParameter<int> amount2;
 		ofParameter<int> size2;
-		ofParameterGroup params3;
 		ofParameter<float> lineWidth3;
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;

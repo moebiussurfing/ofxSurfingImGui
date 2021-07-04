@@ -7,7 +7,7 @@
 // TESTING TOGGLE TYPES
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
-#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW //-> choice between tree or collapsed group window
+//#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW //-> choice between tree or collapsed group window
 //#define USE_IM_GUI_INDENT //-> fails on su groups layout..
 
 
@@ -36,16 +36,6 @@
 */
 
 
-//#include "ofGLBaseTypes.h"
-//#include "ofParameter.h"
-//#include "ofRectangle.h"
-//#include "ofTexture.h"
-//#include "ofGLBaseTypes.h"
-//#include "imgui.h"
-//#include <stack> // Needed for Arch Linux
-
-//static const int kImGuiMargin2 = 10;
-
 //--
 
 // TODO:
@@ -55,18 +45,44 @@
 //	SurfingImGuiHelpers() {};
 //	~SurfingImGuiHelpers() {};
 
+//--
+
 namespace ofxImGuiSurfing
 {
+	//--
+
+	// unique name engine
 	const char* GetUniqueName(ofAbstractParameter& parameter);
 	const char* GetUniqueName(const std::string& candidate);
-
 	struct WindowOpen
 	{
 		std::stack<std::vector<std::string>> usedNames;
 		std::shared_ptr<ofParameter<bool>> parameter;
 		bool value;
+		int treeLevel = 0;
+
+		//not works
+		void resetNames() {
+			// Unlink the referenced ofParameter.
+			parameter.reset();
+			// Clear the list of names from the stack.
+			if (usedNames.size() != 0) usedNames.pop();
+			treeLevel = 0;
+			//cout << "-" << endl;
+		}
 	};
 	static WindowOpen windowOpen;
+
+	//--
+
+	//static void resetNames() {
+	//	// Unlink the referenced ofParameter.
+	//	windowOpen.parameter.reset();
+	//	// Clear the list of names from the stack.
+	//	windowOpen.usedNames.pop();
+	//	windowOpen.treeLevel = 0;
+	//	//cout << "-" << endl;
+	//}
 
 	//--
 
@@ -82,22 +98,27 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// TODO:
-	// important BUG !
-	// should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
-	static int index = 0;
-	static void resetIndex()
+	enum SurfingTypesGroups
 	{
-		ofLogVerbose(__FUNCTION__) << index;
-		index = 0;
-	}
+		IM_GUI_GROUP_DEFAULT = 0,
+		IM_GUI_GROUP_TREE_EX,
+		IM_GUI_GROUP_TREE,
+		IM_GUI_GROUP_COLLAPSED,
+		IM_GUI_GROUP_SCROLLABLE,
+		IM_GUI_GROUP_ONLY_FIRST_HEADER,
+		IM_GUI_GROUP_HIDDE_ALL_HEADERS,
+
+		IM_GUI_GROUP_AMOUNT
+	};
 
 	//--
+
+	// ofParams helpers
 
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingTypesGroups typeGroup = IM_GUI_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -170,182 +191,232 @@ namespace ofxImGuiSurfing
 
 //----
 
-static ImTextureID GetImTextureID2(const ofTexture& texture)
+namespace ofxImGuiSurfing
 {
-	return (ImTextureID)(uintptr_t)texture.texData.textureID;
-}
+	static ImTextureID GetImTextureID2(const ofTexture& texture)
+	{
+		return (ImTextureID)(uintptr_t)texture.texData.textureID;
+	}
 
-static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
-{
-	return GetImTextureID2(hasTexture.getTexture());
-}
+	static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
+	{
+		return GetImTextureID2(hasTexture.getTexture());
+	}
 
-static ImTextureID GetImTextureID2(GLuint glID)
-{
-	return (ImTextureID)(uintptr_t)glID;
+	static ImTextureID GetImTextureID2(GLuint glID)
+	{
+		return (ImTextureID)(uintptr_t)glID;
+	}
 }
 
 //----
 
-//--------------------------------------------------------------
-template<typename ParameterType>
-bool ofxImGuiSurfing::AddParameter(ofParameter<ParameterType>& parameter)
+namespace ofxImGuiSurfing
 {
-	auto tmpRef = parameter.get();
-	const auto& info = typeid(ParameterType);
-
-	//--
-
-	// customized styles
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddParameter(ofParameter<ParameterType>& parameter)
 	{
-		// B. if  there's a config already added for one or more parameters
-
-		// float
+		auto tmpRef = parameter.get();
+		const auto& info = typeid(ParameterType);
 		if (info == typeid(float))
 		{
-			bool bReturn = false;
-			ofParameter<float> &p = parameter.cast<float>();
-			auto c = widgetsManager.getWidgetConf(p);
-
-			// if the parameter widget is not added explicitly, will populate it as the default appearance
-			if (c.name != "-1")
+			ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+			if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
-				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-				return bReturn;
-			}
-
-			// default style
-			else
-			{
-
-				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-				if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-				{
-					parameter.set(tmpRef);
-					bReturn = true;
-				}
-				else bReturn = false;
+				parameter.set(tmpRef);
 				ImGui::PopItemWidth();
-				return bReturn;
+				return true;
 			}
+			ImGui::PopItemWidth();
+			return false;
 		}
-
-		// int
-		else if (info == typeid(int))
+		if (info == typeid(int))
 		{
-			bool bReturn = false;
-			ofParameter<int> &p = parameter.cast<int>();
-			auto c = widgetsManager.getWidgetConf(p);
-
-			// if the parameter widget is not added explicitly, will populate it as the default appearance
-			if (c.name != "-1")
+			ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+			if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
-				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-				return bReturn;
-			}
-
-			// default style
-			else
-			{
-
-				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-				if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-				{
-					parameter.set(tmpRef);
-					bReturn = true;
-				}
-				else bReturn = false;
+				parameter.set(tmpRef);
 				ImGui::PopItemWidth();
-
-				return bReturn;
+				return true;
 			}
+			ImGui::PopItemWidth();
+			return false;
 		}
-
-		// bool
-		else if (info == typeid(bool))
+		if (info == typeid(bool))
 		{
-			bool bReturn = false;
-			ofParameter<bool> &p = parameter.cast<bool>();
-			auto c = widgetsManager.getWidgetConf(p);
-
-			// if the parameter widget is not added explicitly, will populate it as the default appearance
-			if (c.name != "-1")
+			if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
 			{
-				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-				return bReturn;
+				parameter.set(tmpRef);
+				return true;
 			}
-
-			// default style
-			else
-			{
-				if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-				{
-					parameter.set(tmpRef);
-					bReturn = true;
-				}
-				else bReturn = false;
-
-				return bReturn;
-			}
+			return false;
 		}
+
+		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+		return false;
 	}
 
-	//--
+	////--------------------------------------------------------------
+	//template<typename ParameterType>
+	//bool AddParameter(ofParameter<ParameterType>& parameter)
+	//{
+	//	auto tmpRef = parameter.get();
+	//	const auto& info = typeid(ParameterType);
 
-	ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
+	//	//--
 
-	return false;
-}
+	//	// customized styles
+	//	{
+	//		// B. if  there's a config already added for one or more parameters
 
-//--------------------------------------------------------------
-template<typename ParameterType>
-bool ofxImGuiSurfing::AddText(ofParameter<ParameterType>& parameter, bool label)
-{
+	//		// float
+	//		if (info == typeid(float))
+	//		{
+	//			bool bReturn = false;
+	//			ofParameter<float> &p = parameter.cast<float>();
+	//			auto c = widgetsManager.getWidgetConf(p);
 
-	if (label)
+	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
+	//			if (c.name != "-1")
+	//			{
+	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+	//				return bReturn;
+	//			}
+
+	//			// default style
+	//			else
+	//			{
+
+	//				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+	//				if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//				{
+	//					parameter.set(tmpRef);
+	//					bReturn = true;
+	//				}
+	//				else bReturn = false;
+	//				ImGui::PopItemWidth();
+	//				return bReturn;
+	//			}
+	//		}
+
+	//		// int
+	//		else if (info == typeid(int))
+	//		{
+	//			bool bReturn = false;
+	//			ofParameter<int> &p = parameter.cast<int>();
+	//			auto c = widgetsManager.getWidgetConf(p);
+
+	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
+	//			if (c.name != "-1")
+	//			{
+	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+
+	//				return bReturn;
+	//			}
+
+	//			// default style
+	//			else
+	//			{
+
+	//				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+	//				if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//				{
+	//					parameter.set(tmpRef);
+	//					bReturn = true;
+	//				}
+	//				else bReturn = false;
+	//				ImGui::PopItemWidth();
+
+	//				return bReturn;
+	//			}
+	//		}
+
+	//		// bool
+	//		else if (info == typeid(bool))
+	//		{
+	//			bool bReturn = false;
+	//			ofParameter<bool> &p = parameter.cast<bool>();
+	//			auto c = widgetsManager.getWidgetConf(p);
+
+	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
+	//			if (c.name != "-1")
+	//			{
+	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+
+	//				return bReturn;
+	//			}
+
+	//			// default style
+	//			else
+	//			{
+	//				if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
+	//				{
+	//					parameter.set(tmpRef);
+	//					bReturn = true;
+	//				}
+	//				else bReturn = false;
+
+	//				return bReturn;
+	//			}
+	//		}
+	//	}
+
+	//	//--
+
+	//	ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
+
+	//	return false;
+	//}
+
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddText(ofParameter<ParameterType>& parameter, bool label)
 	{
-		ImGui::LabelText(GetUniqueName(parameter), ofToString(parameter.get()).c_str());
-	}
-	else
-	{
-		ImGui::Text(ofToString(parameter.get()).c_str());
-	}
 
-
-	return true;
-}
-
-//--------------------------------------------------------------
-template<typename DataType>
-bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
-{
-	auto result = false;
-	const auto& info = typeid(DataType);
-
-	for (int i = 0; i < values.size(); ++i)
-	{
-		const auto iname = name + " " + ofToString(i);
-		if (info == typeid(float))
+		if (label)
 		{
-			result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
-		}
-		else if (info == typeid(int))
-		{
-			result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
-		}
-		else if (info == typeid(bool))
-		{
-
-			result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
+			ImGui::LabelText(GetUniqueName(parameter), ofToString(parameter.get()).c_str());
 		}
 		else
 		{
-			ofLogWarning(__FUNCTIONS__) << "Could not create GUI element for type " << info.name();
-			return false;
+			ImGui::Text(ofToString(parameter.get()).c_str());
 		}
+
+
+		return true;
 	}
 
-	return result;
+	//--------------------------------------------------------------
+	template<typename DataType>
+	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
+	{
+		auto result = false;
+		const auto& info = typeid(DataType);
+
+		for (int i = 0; i < values.size(); ++i)
+		{
+			const auto iname = name + " " + ofToString(i);
+			if (info == typeid(float))
+			{
+				result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
+			}
+			else if (info == typeid(int))
+			{
+				result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
+			}
+			else if (info == typeid(bool))
+			{
+
+				result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
+			}
+			else
+			{
+				ofLogWarning(__FUNCTIONS__) << "Could not create GUI element for type " << info.name();
+				return false;
+			}
+		}
+
+		return result;
+	}
 }

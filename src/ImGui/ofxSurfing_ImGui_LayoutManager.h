@@ -234,7 +234,7 @@ public:
 		ImGui::Indent();
 		if (ImGui::CollapsingHeader("ADVANCED"))
 		{
-			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+			//ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 			ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 

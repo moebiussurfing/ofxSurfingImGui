@@ -1,5 +1,12 @@
 #include "ofxSurfing_ImGui_Helpers.h"
 
+//TODO:
+// add customization for nested groups
+// pass some list of arguments to customize items/groups to be rendered with differents design...
+//https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
+
+//--
+
 namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
@@ -10,6 +17,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	const char* GetUniqueName(const std::string& candidate)
 	{
+		if (windowOpen.usedNames.size() == 0) return candidate.c_str(); // this fix allows paras out a group/window
+
 		std::string result = candidate;
 		while (std::find(windowOpen.usedNames.top().begin(), windowOpen.usedNames.top().end(), result) != windowOpen.usedNames.top().end())
 		{
@@ -21,247 +30,266 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	/*
-	////--------------------------------------------------------------
-	//bool ofxImGuiSurfing::BeginTree(ofAbstractParameter& parameter, Settings& settings)
-	//{
-	//	return ofxImGuiSurfing::BeginTree(parameter.getName(), settings);
-	//}
-	//
-	////--------------------------------------------------------------
-	//bool ofxImGuiSurfing::BeginTree(const std::string& name, Settings& settings)
-	//{
-	//	bool result;
-	//	ImGui::SetNextItemOpen(true, ImGuiCond_Appearing);
-	//	if (settings.treeLevel == 0)
-	//	{
-	//		result = ImGui::TreeNodeEx(GetUniqueName(name), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog);
-	//	}
-	//	else
-	//	{
-	//		result = ImGui::TreeNode(GetUniqueName(name));
-	//	}
-	//	if (result)
-	//	{
-	//		settings.treeLevel += 1;
-	//
-	//		// Push a new list of names onto the stack.
-	//		windowOpen.usedNames.push(std::vector<std::string>());
-	//	}
-	//	return result;
-	//}
-	//
-	////--------------------------------------------------------------
-	//void ofxImGuiSurfing::EndTree(Settings& settings)
-	//{
-	//	ImGui::TreePop();
-	//
-	//	settings.treeLevel = std::max(0, settings.treeLevel - 1);
-	//
-	//	// Clear the list of names from the stack.
-	//	windowOpen.usedNames.pop();
-	//}
-	//
-	////NEW: add flags and clean all the old settings
-	////BUG: BROKEN: crashes..
-	//////treeEx
-	////bool bOpen = true;
-	////ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-	////_flagw |= ImGuiTreeNodeFlags_Framed;
-	////if (ImGui::TreeNodeEx("_TreeEx", _flagw)) {
-	////	//..
-	////	ImGui::TreePop();
-	////}
-	*/
-
-	//--
-
-	//TODO:
-	// add customization for nested groups
-	// pass some list of arguments to customize items/groups to be rendered with differents design...
-	//https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
-
 	//--------------------------------------------------------------
-	void ofxImGuiSurfing::AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypesGroups typeGroup)
 	{
-		// Push a new list of names onto the stack.
+		// push a new list of names onto the stack.
 		windowOpen.usedNames.push(std::vector<std::string>());
+		auto& style = ImGui::GetStyle();
+		//static bool b1 = false;
+
+		cout << "usedNames: " << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel << endl;
+
+		if (windowOpen.treeLevel == 0 &&
+			typeGroup != IM_GUI_GROUP_HIDDE_ALL_HEADERS
+			)
+		{
+			bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+			if (!b)
+			{
+				return;
+			}
+			windowOpen.treeLevel++;
+		}
 
 		//-
 
-		//TODO:
-		//maybe should add different types of groups: collaspe/tree/treeEx
-
-		//#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-		//	//TODO: BUG
-		//	// remeber to uncomment ImGui::TreePop(); below! 
-		//	if (ImGui::TreeNodeEx(group.getName().c_str(), flags)) // -> that's the desired tree but having sizing BUG
-		//	//if (ImGui::TreeNode(group.getName().c_str())) // -> tree 
-		//	{
-		//#endif
-
-		//TODO: 
-		// workaround solution using this bc refreshPanelShape() not working well!
-		// TESTING
-#ifdef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-		if (ImGui::CollapsingHeader(group.getName().data(), flags)) // -> do not adds indentation. to avoid layout bug
+		/*
+		//// for all the groups types, the first one (parent group will be a collapse type
+		//if (typeGroup == IM_GUI_GROUP_DEFAULT ||
+		//	typeGroup == IM_GUI_GROUP_TREE_EX ||
+		//	typeGroup == IM_GUI_GROUP_TREE ||
+		//	typeGroup == IM_GUI_GROUP_COLLAPSED ||
+		//	typeGroup == IM_GUI_GROUP_SCROLLABLE)
 		{
+			cout << "windowOpen.treeLevel:" << windowOpen.treeLevel << endl;
 
-			//#ifdef USE_IM_GUI_INDENT
-			//		ImGui::Indent();
-			//#endif
-			//		widgetsManager.refreshPanelShape(); // not working?
-#endif
-			//-
+			//if (windowOpen.treeLevel == 0 || (windowOpen.treeLevel != 0 && typeGroup != IM_GUI_GROUP_HIDDEN_HEADER))
 
-			for (auto parameter : group)
+			if (windowOpen.treeLevel == 1)
 			{
-				// group
-				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-
-				//if (parameterGroup)
-				//{
-				//	//TODO:
-				//	//widgetsManager.refreshPanelShape();
-				//	// Recurse through contents.
-				//	ofxImGuiSurfing::AddGroup(*parameterGroup, flags);
-				//	//TODO:
-				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings, flags);//olf+flags
-				//	//ofxImGuiSurfing::AddGroup(*parameterGroup, settings);//old
-				//	continue;
-				//}
-
-				// TESTING
-				// https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
-
-				if (parameterGroup)
+				if (typeGroup == IM_GUI_GROUP_DEFAULT ||
+					typeGroup == IM_GUI_GROUP_TREE ||
+					typeGroup == IM_GUI_GROUP_TREE_EX
+					)
 				{
-					// Recurse through contents.
-
-					// Styles
-
-#ifdef USE_IM_GUI_INDENT
-					ImGui::Indent();
-#endif
-					widgetsManager.refreshPanelShape(); // not working?
-
-					// 0.
-					string n = "##GROUP_" + parameterGroup->getName();
-					ImGui::PushID(n.data());
-					ofxImGuiSurfing::AddGroup(*parameterGroup);
-					ImGui::PopID();
-
-#ifdef USE_IM_GUI_INDENT
-					ImGui::Unindent();
-#endif
-					//-
-
-					//// 1. yumataesu (per group scroll bar)
-					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-					//	auto& style = ImGui::GetStyle();
-					//	int h = style.FramePadding.y + style.ItemSpacing.y + 14;
-					//	ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//	ImGui::EndChild();
-					//}
-
-					//// 2. collapse (per window scroll bar)
-					//if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//}
-
-					//// 3. tree (indented + per window scroll bar)
-					//if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags)) {
-					//	widgetsManager.refreshPanelShape(); // required bc indent changes window width!
-					//	ofxImGuiSurfing::AddGroup(*parameterGroup);
-					//	ImGui::TreePop();
-					//}
-
-					continue;
+					bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+					if (!b)
+					{
+						return;
+					}
 				}
+			}
+			else {
+				switch (typeGroup)
+				{
+
+				case  IM_GUI_GROUP_DEFAULT: //  draw header on all nested groups
+				{
+					{
+						bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+						if (!b)
+						{
+							return;
+						}
+					}
+				}
+				break;
+
+				case  IM_GUI_GROUP_ONLY_FIRST_HEADER: // draw header only on parent group
+				{
+					if (windowOpen.treeLevel == 1)
+					{
+						bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+						if (!b)
+						{
+							return;
+						}
+					}
+				}
+				break;
+
+				case  IM_GUI_GROUP_HIDDE_ALL_HEADERS: // do not draw any header of any group
+				{
+				}
+				break;
+
+				//case  IM_GUI_GROUP_TREE_EX:
+				//{
+				//	b1 = ImGui::TreeNodeEx(group.getName().data(), flags);
+				//}
+				//break;
+
+				//case  IM_GUI_GROUP_TREE: // bug. that's why ofxGui uses levels!
+				//{
+				//	b1 = ImGui::TreeNode(group.getName().data());
+				//}
+				//break;
 
 				//-
 
-				// Parameter, try everything we know how to handle.
-#if OF_VERSION_MINOR >= 10
-				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-				if (parameterVec2f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterVec2f);
-					continue;
+				default: break;
+
 				}
-				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-				if (parameterVec3f)
+			}
+		}
+		*/
+
+		// -> do not adds indentation. to avoid layout bug
+		//ImGui::Indent();
+		//widgetsManager.refreshPanelShape(); // not working?
+
+		//-
+
+		for (auto parameter : group)
+		{
+			// group
+
+			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+
+			if (parameterGroup)
+			{
+				//ImGui::Indent();
+				//ImGui::Unindent();
+				//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
+				if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
 				{
-					ofxImGuiSurfing::AddParameter(*parameterVec3f);
-					continue;
+					ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 				}
-				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-				if (parameterVec4f)
+				else
 				{
-					ofxImGuiSurfing::AddParameter(*parameterVec4f);
-					continue;
-				}
-#endif
-				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-				if (parameterOfVec2f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
-					continue;
-				}
-				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-				if (parameterOfVec3f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
-					continue;
-				}
-				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-				if (parameterOfVec4f)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
-					continue;
-				}
-				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-				if (parameterFloatColor)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterFloatColor);
-					continue;
-				}
-				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-				if (parameterColor)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterColor);
-					continue;
-				}
-				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-				if (parameterFloat)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterFloat);
-					continue;
-				}
-				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-				if (parameterInt)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterInt);
-					continue;
-				}
-				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-				if (parameterBool)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterBool);
-					continue;
-				}
-				auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-				if (parameterString)
-				{
-					ofxImGuiSurfing::AddParameter(*parameterString);
-					continue;
+					if (typeGroup == IM_GUI_GROUP_HIDDE_ALL_HEADERS)
+					{
+						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+					}
+
+					else if (typeGroup == IM_GUI_GROUP_COLLAPSED)
+					{
+						bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+						if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+					}
+
+					else if (typeGroup == IM_GUI_GROUP_DEFAULT)
+					{
+						bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+						if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+					}
+
+					else if (typeGroup == IM_GUI_GROUP_TREE)
+					{
+						if (ImGui::TreeNode(parameterGroup->getName().data()))
+						{
+							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+							ImGui::TreePop();
+						}
+					}
+
+					else if (typeGroup == IM_GUI_GROUP_TREE_EX)
+					{
+						if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
+						{
+							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+							ImGui::TreePop();
+						}
+					}
+
+					else if (typeGroup == IM_GUI_GROUP_SCROLLABLE)
+					{
+						auto& style = ImGui::GetStyle();
+						int h = style.FramePadding.y + style.ItemSpacing.y + 14;
+						ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+						AddGroup(*parameterGroup);
+						ImGui::EndChild();
+					}
 				}
 
-				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+				continue;
 			}
 
+			//-
+
+			// Parameter, try everything we know how to handle.
+#if OF_VERSION_MINOR >= 10
+			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+			if (parameterVec2f)
+			{
+				AddParameter(*parameterVec2f);
+				continue;
+			}
+			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+			if (parameterVec3f)
+			{
+				AddParameter(*parameterVec3f);
+				continue;
+			}
+			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+			if (parameterVec4f)
+			{
+				AddParameter(*parameterVec4f);
+				continue;
+			}
+#endif
+			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+			if (parameterOfVec2f)
+			{
+				AddParameter(*parameterOfVec2f);
+				continue;
+			}
+			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+			if (parameterOfVec3f)
+			{
+				AddParameter(*parameterOfVec3f);
+				continue;
+			}
+			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+			if (parameterOfVec4f)
+			{
+				AddParameter(*parameterOfVec4f);
+				continue;
+			}
+			auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+			if (parameterFloatColor)
+			{
+				AddParameter(*parameterFloatColor);
+				continue;
+			}
+			auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+			if (parameterColor)
+			{
+				AddParameter(*parameterColor);
+				continue;
+			}
+			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+			if (parameterFloat)
+			{
+				AddParameter(*parameterFloat);
+				continue;
+			}
+			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+			if (parameterInt)
+			{
+				AddParameter(*parameterInt);
+				continue;
+			}
+			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+			if (parameterBool)
+			{
+				AddParameter(*parameterBool);
+				continue;
+			}
+			auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+			if (parameterString)
+			{
+				AddParameter(*parameterString);
+				continue;
+			}
+
+			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
+
+		//--
+
 		//#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
 		//		ImGui::TreePop(); // must disable when using CollapsingHeader(..
 		//	}
@@ -271,137 +299,130 @@ namespace ofxImGuiSurfing
 
 		// Unlink the referenced ofParameter.
 		windowOpen.parameter.reset();
-
 		// Clear the list of names from the stack.
 		windowOpen.usedNames.pop();
+		windowOpen.treeLevel = 0;
+		//cout << "-" << endl;
 	}
-
 
 #if OF_VERSION_MINOR >= 10
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec2<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec2<int>>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderInt2(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec3<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec3<int>>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderInt3(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::tvec4<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec4<int>>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderInt4(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec2>& parameter)
+	bool AddParameter(ofParameter<glm::vec2>& parameter)
 	{
 		auto tmpRef = parameter.get();
-		
+
 		if (ImGui::SliderFloat2(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec3>& parameter)
+	bool AddParameter(ofParameter<glm::vec3>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderFloat3(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<glm::vec4>& parameter)
+	bool AddParameter(ofParameter<glm::vec4>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderFloat4(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 #endif
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec2f>& parameter)
+	bool AddParameter(ofParameter<ofVec2f>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderFloat2(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec3f>& parameter)
+	bool AddParameter(ofParameter<ofVec3f>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (ImGui::SliderFloat3(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
 		ImGui::PopID();
@@ -409,47 +430,47 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<ofVec4f>& parameter)
+	bool AddParameter(ofParameter<ofVec4f>& parameter)
 	{
 		auto tmpRef = parameter.get();
-		
+
 		if (ImGui::SliderFloat4(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
+	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 	{
 		auto tmpRef = parameter.get();
 
-		
 		if (alpha)
 		{
 			if (ImGui::ColorEdit4(GetUniqueName(parameter), &tmpRef.r))
 			{
 				parameter.set(tmpRef);
-				
+
 				return true;
 			}
 		}
 		else if (ImGui::ColorEdit3(GetUniqueName(parameter), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
 		ImGui::PopID();
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<ofColor>& parameter, bool alpha)
+	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha)
 	{
 		ofParameter<ofFloatColor> c;
 		c.set(parameter.getName(),
@@ -460,34 +481,33 @@ namespace ofxImGuiSurfing
 
 		auto tmpRef = c.get();
 
-		
 		if (alpha)
 		{
 			if (ImGui::ColorEdit4(GetUniqueName(parameter), &tmpRef.r))
 			{
 				parameter.set(tmpRef);
-				
+
 				return true;
 			}
 		}
 		else if (ImGui::ColorEdit3(GetUniqueName(parameter), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
+	bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
 	{
 		auto tmpRef = parameter.get();
 		char * cString = new char[maxChars];
 		strcpy(cString, tmpRef.c_str());
 		auto result = false;
-		
+
 		if (multiline)
 		{
 			if (ImGui::InputTextMultiline(GetUniqueName(parameter), cString, maxChars))
@@ -507,21 +527,20 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddParameter(ofParameter<void>& parameter, float width)
+	bool AddParameter(ofParameter<void>& parameter, float width)
 	{
-		
 		if (ImGui::Button(GetUniqueName(parameter), glm::vec2(width, 0.0f)))
 		{
 			parameter.trigger();
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
+	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
 	{
 		auto uniqueName = GetUniqueName(parameter);
 		ImGui::Text("%s", uniqueName);
@@ -548,7 +567,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
+	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
 	{
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -584,37 +603,30 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddStepper(ofParameter<int>& parameter, int step, int stepFast)
+	bool AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 	{
 		auto tmpRef = parameter.get();
 
-		string n = "##STEPPER" + parameter.getName();
-		ImGui::PushID(n.data());
 		if (ImGui::InputInt(GetUniqueName(parameter), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 			//parameter.set(tmpRef);
 
-			ImGui::PopID();
 			return true;
 		}
 
-		ImGui::PopID();
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddSlider(ofParameter<float>& parameter, const char* format, float power)
+	bool AddSlider(ofParameter<float>& parameter, const char* format, float power)
 	{
 		auto tmpRef = parameter.get();
 
-		//string n = "##SLIDER" + parameter.getName();
-		//ImGui::PushID(n.data());
 		if (ImGui::SliderFloat(GetUniqueName(parameter), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 		{
 			parameter.set(tmpRef);
 
-			
 			return true;
 		}
 
@@ -622,66 +634,57 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, int speed)
+	bool AddRange(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, int speed)
 	{
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		//string n = "##RANGE" + parameterMin.getName();
-		//ImGui::PushID(n.data());
 		if (ImGui::DragIntRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
+	bool AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed)
 	{
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		//string n = "##RANGE" + parameterMin.getName();
-		//ImGui::PushID(n.data());
 		if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 #if OF_VERSION_MINOR >= 10
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec2>& parameterMin, ofParameter<glm::vec2>& parameterMax, float speed)
+	bool AddRange(const std::string& name, ofParameter<glm::vec2>& parameterMin, ofParameter<glm::vec2>& parameterMax, float speed)
 	{
 		auto result = false;
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		//string n = "##RANGE" + name + " x";
-		//ImGui::PushID(n.data());
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
 
-		//n = "##RANGE" + name + " Y";
-		//ImGui::PushID(n.data());
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
-		
 
 		if (result)
 		{
@@ -693,35 +696,26 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec3>& parameterMin, ofParameter<glm::vec3>& parameterMax, float speed)
+	bool AddRange(const std::string& name, ofParameter<glm::vec3>& parameterMin, ofParameter<glm::vec3>& parameterMax, float speed)
 	{
 		auto result = false;
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		//string n = "##RANGE" + name + " X";
-		//ImGui::PushID(n.data());
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
-		
 
-		//n = "##RANGE" + name + " Y";
-		//ImGui::PushID(n.data());
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
-		
 
-		//n = "##RANGE" + name + " Z";
-		//ImGui::PushID(n.data());
-		if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Z"), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 		{
 			result |= true;
 		}
-		
 
 		if (result)
 		{
@@ -733,29 +727,28 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed)
+	bool AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed)
 	{
 		auto result = false;
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
-		
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
-		
-		if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
+
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Z"), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 		{
 			result |= true;
 		}
-		
-		if (ImGui::DragFloatRange2((name + " W").c_str(), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
+
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " W"), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
 		{
 			result |= true;
 		}
@@ -774,204 +767,197 @@ namespace ofxImGuiSurfing
 #if OF_VERSION_MINOR >= 10
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::tvec2<int>>& values, int minValue, int maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt2(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt2(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::tvec3<int>>& values, int minValue, int maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt3(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt3(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::tvec4<int>>& values, int minValue, int maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt4(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt4(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::vec2>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat2(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat2(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::vec3>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat3(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat3(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<glm::vec4>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat4(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat4(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
-			
 		}
 		return result;
 	}
-
 #endif
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<ofVec2f>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat2(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat2(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat2(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat2(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
-			
+
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat3(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat3(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat3(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat3(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
-			
+
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool ofxImGuiSurfing::AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
+	bool AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue, float maxValue)
 	{
 		auto result = false;
 		for (size_t i = 0; i < values.size(); ++i)
 		{
 			const auto iname = name + " " + ofToString(i);
-			
+
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat4(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat4(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat4(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat4(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
-			
+
 		}
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	void ofxImGuiSurfing::AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
+	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 	{
-		ofxImGuiSurfing::AddImage(hasTexture.getTexture(), size);
+		AddImage(hasTexture.getTexture(), size);
 	}
 
 	//--------------------------------------------------------------
-	void ofxImGuiSurfing::AddImage(const ofTexture& texture, const ofVec2f& size)
+	void AddImage(const ofTexture& texture, const ofVec2f& size)
 	{
 		ImTextureID textureID = GetImTextureID2(texture);
 		ImGui::Image(textureID, size);
@@ -980,13 +966,13 @@ namespace ofxImGuiSurfing
 #if OF_VERSION_MINOR >= 10
 
 	//--------------------------------------------------------------
-	void ofxImGuiSurfing::AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
+	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
 	{
-		ofxImGuiSurfing::AddImage(hasTexture.getTexture(), size);
+		AddImage(hasTexture.getTexture(), size);
 	}
 
 	//--------------------------------------------------------------
-	void ofxImGuiSurfing::AddImage(const ofTexture& texture, const glm::vec2& size)
+	void AddImage(const ofTexture& texture, const glm::vec2& size)
 	{
 		ImTextureID textureID = GetImTextureID2(texture);
 		ImGui::Image(textureID, size);
@@ -996,6 +982,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	// list
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
 		auto& vector = *static_cast<std::vector<std::string>*>(vec);
@@ -1004,14 +991,14 @@ namespace ofxImGuiSurfing
 		return true;
 	};
 
-	bool ofxImGuiSurfing::VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
 		if (values.empty()) { return false; }
 		return ImGui::Combo(label, currIndex, vector_getter,
 			static_cast<void*>(&values), values.size());
 	}
 
-	bool ofxImGuiSurfing::VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
+	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
 		if (values.empty()) { return false; }
 		return ImGui::ListBox(label, currIndex, vector_getter,
@@ -1020,7 +1007,12 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	// extra begin/end
+	// with snapping
 	void Begin(const std::string& name) {
+		const int snapSz = 20;
+		//const int snapSz = 16;
+
 		auto snap = [=](float value, float snap_threshold) -> float {
 			float modulo = std::fmodf(value, snap_threshold);
 			float moduloRatio = std::fabsf(modulo) / snap_threshold;
@@ -1030,15 +1022,16 @@ namespace ofxImGuiSurfing
 				value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
 			return value;
 		};
+
 		ImGui::Begin(name.data());
 		if (ImGui::IsItemActive()) {
 			auto p = ImGui::GetWindowPos();
 			auto size = ImGui::GetWindowSize();
 
-			float x = snap(p.x, 16.f);
-			float y = snap(p.y, 16.f);
-			float sizex = snap(size.x, 16.f);
-			float sizey = snap(size.y, 16.f);
+			float x = snap(p.x, snapSz);
+			float y = snap(p.y, snapSz);
+			float sizex = snap(size.x, snapSz);
+			float sizey = snap(size.y, snapSz);
 			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
 		}
 	}
@@ -1047,3 +1040,60 @@ namespace ofxImGuiSurfing
 		ImGui::End();
 	}
 }
+
+
+
+//--
+
+/*
+////--------------------------------------------------------------
+//bool BeginTree(ofAbstractParameter& parameter, Settings& settings)
+//{
+//	return BeginTree(parameter.getName(), settings);
+//}
+//
+////--------------------------------------------------------------
+//bool BeginTree(const std::string& name, Settings& settings)
+//{
+//	bool result;
+//	ImGui::SetNextItemOpen(true, ImGuiCond_Appearing);
+//	if (settings.treeLevel == 0)
+//	{
+//		result = ImGui::TreeNodeEx(GetUniqueName(name), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog);
+//	}
+//	else
+//	{
+//		result = ImGui::TreeNode(GetUniqueName(name));
+//	}
+//	if (result)
+//	{
+//		settings.treeLevel += 1;
+//
+//		// Push a new list of names onto the stack.
+//		windowOpen.usedNames.push(std::vector<std::string>());
+//	}
+//	return result;
+//}
+//
+////--------------------------------------------------------------
+//void EndTree(Settings& settings)
+//{
+//	ImGui::TreePop();
+//
+//	settings.treeLevel = std::max(0, settings.treeLevel - 1);
+//
+//	// Clear the list of names from the stack.
+//	windowOpen.usedNames.pop();
+//}
+//
+////NEW: add flags and clean all the old settings
+////BUG: BROKEN: crashes..
+//////treeEx
+////bool bOpen = true;
+////ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+////_flagw |= ImGuiTreeNodeFlags_Framed;
+////if (ImGui::TreeNodeEx("_TreeEx", _flagw)) {
+////	//..
+////	ImGui::TreePop();
+////}
+*/
