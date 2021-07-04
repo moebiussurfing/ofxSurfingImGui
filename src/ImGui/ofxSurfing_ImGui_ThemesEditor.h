@@ -135,7 +135,7 @@ namespace ofxImGuiSurfing
 	inline bool ShowStyleSelector2(const char* label)
 	{
 		static int style_idx = -1;
-		if (ImGui::Combo(label, &style_idx, "Dark\0Light\0Classic\0MoebiusSurfing\0ModernDark\0Grey\0Sequentity\0"))
+		if (ImGui::Combo(label, &style_idx, "Dark\0Light\0Classic\0MoebiusSurfing\0ModernDark\0Grey\0Sequentity\0Olekristensen\0"))
 		{
 			switch (style_idx)
 			{
@@ -146,6 +146,7 @@ namespace ofxImGuiSurfing
 			case 4: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
 			case 5: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
 			case 6: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;
+			case 7: ofxImGuiSurfing::ImGui_ThemeOlekristensen(); break;
 			}
 			return true;
 		}

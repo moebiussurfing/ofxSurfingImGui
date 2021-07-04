@@ -208,6 +208,7 @@ void ofApp::draw()
 
 		//-----
 
+		// theme editor
 		if (show_app_style_editor)
 		{
 			ImGui::Begin("Dear ImGui Style Editor", &show_app_style_editor);

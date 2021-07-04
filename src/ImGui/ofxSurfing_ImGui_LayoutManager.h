@@ -142,6 +142,8 @@ public:
 
 	void draw(); // to manual draw..
 
+	bool addFont(std::string path, int size);
+
 	//-
 
 public:

@@ -38,6 +38,29 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external i
 }
 
 //--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::addFont(std::string path, int size)
+{
+	//TODO:
+	// should be a vector with several customFont to allow hot reloading..
+	// if not, last added font will be used
+
+	auto &io = ImGui::GetIO();
+	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
+
+	ofFile fileToRead(path); // a file that exists
+	bool b = fileToRead.exists();
+	if (b)
+	{
+		if (guiPtr != nullptr) customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
+		else customFont = gui.addFont(path, size, nullptr, normalCharRanges);
+	}
+
+	if (customFont != nullptr) io.FontDefault = customFont;
+
+	return b;
+}
+
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup_ImGui()
 {
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
@@ -47,29 +70,25 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 
-	auto &io = ImGui::GetIO();
-	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
-
 	//-
 
 	//TODO: crashes if font not present!
 
 	// font
-	std::string fontName;
-	float fontSizeParam;
-	fontName = "telegrama_render.otf"; // WARNING: will crash if font not present!
-	fontSizeParam = 11;
-
+	std::string _fontName;
+	float _fontSizeParam;
+	_fontName = "telegrama_render.otf"; // WARNING: will crash if font not present!
+	_fontSizeParam = 11;
 	std::string _path = "assets/fonts/"; // assets folder
-	ofFile fileToRead(_path + fontName); // a file that exists
-	bool b = fileToRead.exists();
-	if (b) 
-	{
-		if (guiPtr != nullptr) customFont = guiPtr->addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
-		else customFont = gui.addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
-	}
 
-	if (customFont != nullptr) io.FontDefault = customFont;
+	addFont(_path + _fontName, _fontSizeParam);
+
+	//// extra fonts
+	//addFont(_path + "OpenSans-Light.ttf", 16);
+	//addFont(_path + "OpenSans-Regular.ttf", 16);
+	//addFont(_path + "OpenSans-Light.ttf", 32);
+	//addFont(_path + "OpenSans-Regular.ttf", 11);
+	//addFont(_path + "OpenSans-Bold.ttf", 11);
 
 	//-
 
