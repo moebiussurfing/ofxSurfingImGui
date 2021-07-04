@@ -16,7 +16,7 @@ void ofApp::setup() {
 	//guiManager.setup(gui); // can be instantiated out of the class, locally
 	
 	// pick a theme
-	ofxImGuiSurfing::ImGui_ThemeSequentity();
+	//ofxImGuiSurfing::ImGui_ThemeSequentity();
 
 	//-
 
@@ -72,7 +72,7 @@ void ofApp::draw()
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 				ofxImGuiSurfing::ToggleRoundedButton("Show Window 3", &bOpen3);
-				ofxImGuiSurfing::ToggleRoundedButton("Editor", &show_app_style_editor);
+				ofxImGuiSurfing::ToggleRoundedButton("Theme Editor", &show_app_style_editor);
 
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
@@ -155,7 +155,7 @@ void ofApp::draw()
 
 				// Two custom toggles
 				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w1) with standard height (_h)
-				if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
+				//if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
 
 				// Two custom buttons in the same line/row
 				// 50% width aka two widgets on current same line/row
@@ -247,7 +247,7 @@ void ofApp::drawWidgets() {
 
 	//--
 
-	bool bOpen = true;
+	bool bOpen = false;
 	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 	_flagt |= ImGuiTreeNodeFlags_Framed;
 
@@ -257,7 +257,7 @@ void ofApp::drawWidgets() {
 
 		static float begin = 10, end = 90;
 		static int begin_i = 100, end_i = 1000;
-		ofxImGuiSurfing::DragFloatRange2("Range float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+		ofxImGuiSurfing::DragFloatRange2("Range float", &begin, &end, 0.25f, 0.0f, 100.0f);
 		ofxImGuiSurfing::DragIntRange2("Range int", &begin_i, &end_i, 5, 0, 0, "Min: %.0f units", "Max: %.0f units");
 
 		ImGui::TreePop();

@@ -142,7 +142,8 @@ namespace ofxImGuiSurfing
 			case 0: ImGui::StyleColorsDark(); break;
 			case 1: ImGui::StyleColorsLight(); break;
 			case 2: ImGui::StyleColorsClassic(); break;
-			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
+			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); break;
+			//case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
 			case 4: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
 			case 5: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
 			case 6: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;

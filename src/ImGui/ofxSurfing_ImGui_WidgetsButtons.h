@@ -113,6 +113,9 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = true)
 	{
+		bool bDrawBorder = true;
+		//bool bDrawBorder = false;
+
 		std::string name = parameter.getName();
 		auto tmpRef = parameter.get();
 		bool bPre = tmpRef;
@@ -127,7 +130,7 @@ namespace ofxImGuiSurfing
 		ImGuiStyle *style = &ImGui::GetStyle();
 		ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
 		float borderLineWidth = 1.0;
-		bool bDrawBorder = false;
+
 
 		bool _boolToggle = tmpRef;  // default pre value, the button is disabled 
 
@@ -152,7 +155,11 @@ namespace ofxImGuiSurfing
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
-			ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 0.75);
+			//enabled color
+			//ImVec4 colorHover2 = style->Colors[ImGuiCol_CheckMark];
+			//ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y*0, colorHover.z*0, colorHover.w * 1.0);
+			//ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 0.75);
+			ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 1.0);
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorHover2);
 			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
@@ -168,7 +175,7 @@ namespace ofxImGuiSurfing
 			}
 
 			ImGui::PopStyleColor(3);
-		
+
 			if (bDrawBorder && border)
 			{
 				ImGui::PopStyleColor();
@@ -182,15 +189,24 @@ namespace ofxImGuiSurfing
 			string n = "##BIGTOGGLE_off_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 
+			//const ImVec4 colorOn = style->Colors[ImGuiCol_SliderGrabActive];
+			//const ImVec4 colorOn = style->Colors[ImGuiCol_CheckMark];
+			//const ImVec4 colorOn = { 1,0,0,1 };
+			const ImVec4 colorOn = style->Colors[ImGuiCol_FrameBg];
+			//const ImVec4 colorOn = style->Colors[ImGuiCol_ButtonActive];
+			//const ImVec4 colorOn = style->Colors[ImGuiCol_ButtonHovered];
+
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
-			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
-			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			//const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			//const ImVec4 colorHover = colorOn;
+			//const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
 			colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
 				colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
-			ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_Button, colorOn);
+			//ImGui::PushStyleColor(ImGuiCol_Button, colorHover);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorActive);
 			ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
 
@@ -427,19 +443,67 @@ namespace ofxImGuiSurfing
 		if (gg.LastActiveId == gg.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
 			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
 
+		//--
+
+		// 1. bg
+
+		// hover
 		if (ImGui::IsItemHovered())
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(*v ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-		else
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(*v ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+		{
+			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_FrameBgActive] : colors[ImGuiCol_FrameBg]), height * 0.5f);
 
-		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+			ImU32 c1;
+			if (*v) {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			else {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+		}
 
+		// no hover
+		else {
+			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_FrameBgActive]), height * 0.5f);
+
+			ImU32 c1;
+			if (*v) {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			else {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+		}
+
+		//colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+		//-
+
+		// 2. circle
+
+		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
+		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
 		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
 			p.y + radius), radius - 1.5f, c1);
+
+		//----
+
+		//if (ImGui::IsItemHovered())
+		//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+		//		ImGui::GetColorU32(*v ?
+		//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+		//else
+		//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+		//		ImGui::GetColorU32(*v ?
+		//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+
+		//draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
+		//	p.y + radius), radius - 1.5f, c1);
 
 		////ImGui::SameLine(0,10);
 		//ImGui::SameLine();
@@ -522,21 +586,53 @@ namespace ofxImGuiSurfing
 		if (gg.LastActiveId == gg.CurrentWindow->GetID(name.c_str()))// && g.LastActiveIdTimer < ANIM_SPEED)
 			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
 
+		//--
+
+		// 1. bg
+
+		// hover
 		if (ImGui::IsItemHovered())
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(tmpRef ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-		else
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-				ImGui::GetColorU32(tmpRef ?
-					colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+		{
+			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_FrameBgActive] : colors[ImGuiCol_FrameBg]), height * 0.5f);
 
-		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+			ImU32 c1;
+			if (tmpRef) {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			else {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+		}
 
+		// no hover
+		else {
+			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_FrameBgActive]), height * 0.5f);
+
+			ImU32 c1;
+			if (tmpRef) {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			else {
+				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			}
+			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+		}
+
+		//colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+		//-
+
+		// 2. circle
+
+		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
+		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
 		draw_list->AddCircleFilled(ImVec2(p.x + radius + (tmpRef ? 1 : 0) * (width - radius * 2.0f),
 			p.y + radius), radius - 1.5f, c1);
 
-		//-
+		//----
 
 		//ImGui::Text(name.c_str());
 

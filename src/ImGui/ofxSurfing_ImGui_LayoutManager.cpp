@@ -93,7 +93,8 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	//-
 
 	// theme
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
+	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }
 
 //--------------------------------------------------------------
@@ -135,6 +136,9 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	//static bool no_close = true;
+	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
+
 	// force
 	//window_flags |= ImGuiWindowFlags_NoDecoration;
 
@@ -165,7 +169,6 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//static bool no_move = false;
 	//static bool no_resize = false;
 	//static bool no_collapse = false;
-	static bool no_close = true;
 	//static bool no_nav = false;
 	//static bool no_background = false;
 	//static bool no_bring_to_front = false;
@@ -183,7 +186,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
 	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-	if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
+
 
 	//// We specify a default position/size in case there's no data in the .ini file.
 	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.

@@ -200,7 +200,28 @@ public:
 
 	// an extra common panel with some usefull toggles:
 	// auto-resize, debug mouse over gui, ...
+	//-
 
+	//// EXTRA MENU
+	//{
+	//	ImGui::Dummy(ImVec2(0, 5)); // spacing
+
+	//	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+	//	if (guiManager.bExtra)
+	//	{
+	//		ImGui::Indent();
+
+	//		// add your extra (hidden by default) controls
+	//		//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
+
+	//		//--
+
+	//		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+	//		if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+
+	//		ImGui::Unindent();
+	//	}
+	//}
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel() {
 
