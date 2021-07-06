@@ -85,14 +85,20 @@ Includes wait and progression spinners.
 ### 1_4_Widgets_Surfing
 Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
+<details>
+  <summary>Screenshot</summary>
+  <p>
+
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
   </p>
 </details>
+
 ## B. LAYOUT
 
 ### 2_0_Layout_ofParamaters
 * Uses **ofxSurfing_ImGui_Helpers.h**  
 * Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
+
 <details>
   <summary>Screenshot</summary>
   <p>
@@ -105,6 +111,7 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
+
 <details>
   <summary>Screenshot</summary>
   <p>
@@ -191,8 +198,14 @@ Fast ofParams widgets layout: width, height, items per row and differnt styles f
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
 
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+  </p>
+</details>
+
 <!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
 <!-- <br>  -->
 

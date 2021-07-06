@@ -12,7 +12,7 @@ public:
 			
 		ofxSurfing_ImGui_Manager guiManager; 
 
-		// debug flags
+		// debug ImGui flags
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
 		string flagInfo;

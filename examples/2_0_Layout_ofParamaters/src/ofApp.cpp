@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
+	ofSetWindowPosition(1920, 25);
 
 	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
 	guiManager.setup();
@@ -108,7 +109,7 @@ void ofApp::draw()
 				else if (typeGroups == 5) groupInfo = "IM_GUI_GROUP_ONLY_FIRST_HEADER";
 				else if (typeGroups == 6) groupInfo = "IM_GUI_GROUP_HIDDE_ALL_HEADERS";
 				ImGui::Text(groupInfo.c_str());
-				
+
 				ofxImGuiSurfing::ToggleRoundedButton("AutoResize", &bAutoResize);
 
 				//-
@@ -141,11 +142,21 @@ void ofApp::draw()
 			window_flags = ImGuiWindowFlags_None;
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			//-
+
+			ofxImGuiSurfing::BeginWindow("Window 1", &bOpen1, window_flags);
 			{
 				drawWidgets();
 			}
-			guiManager.endWindow();
+			ofxImGuiSurfing::EndWindow();
+
+			//-
+
+			//guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+			//{
+			//	drawWidgets();
+			//}
+			//guiManager.endWindow();
 
 			//-
 

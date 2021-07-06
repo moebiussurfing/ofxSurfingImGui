@@ -38,7 +38,7 @@ namespace ofxImGuiSurfing
 		auto& style = ImGui::GetStyle();
 		//static bool b1 = false;
 
-		cout << "usedNames: " << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel << endl;
+		ofLogNotice(__FUNCTION__) << "usedNames: " << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
 
 		if (windowOpen.treeLevel == 0 &&
 			typeGroup != IM_GUI_GROUP_HIDDE_ALL_HEADERS
@@ -54,90 +54,11 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		/*
-		//// for all the groups types, the first one (parent group will be a collapse type
-		//if (typeGroup == IM_GUI_GROUP_DEFAULT ||
-		//	typeGroup == IM_GUI_GROUP_TREE_EX ||
-		//	typeGroup == IM_GUI_GROUP_TREE ||
-		//	typeGroup == IM_GUI_GROUP_COLLAPSED ||
-		//	typeGroup == IM_GUI_GROUP_SCROLLABLE)
-		{
-			cout << "windowOpen.treeLevel:" << windowOpen.treeLevel << endl;
-
-			//if (windowOpen.treeLevel == 0 || (windowOpen.treeLevel != 0 && typeGroup != IM_GUI_GROUP_HIDDEN_HEADER))
-
-			if (windowOpen.treeLevel == 1)
-			{
-				if (typeGroup == IM_GUI_GROUP_DEFAULT ||
-					typeGroup == IM_GUI_GROUP_TREE ||
-					typeGroup == IM_GUI_GROUP_TREE_EX
-					)
-				{
-					bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
-					if (!b)
-					{
-						return;
-					}
-				}
-			}
-			else {
-				switch (typeGroup)
-				{
-
-				case  IM_GUI_GROUP_DEFAULT: //  draw header on all nested groups
-				{
-					{
-						bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
-						if (!b)
-						{
-							return;
-						}
-					}
-				}
-				break;
-
-				case  IM_GUI_GROUP_ONLY_FIRST_HEADER: // draw header only on parent group
-				{
-					if (windowOpen.treeLevel == 1)
-					{
-						bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
-						if (!b)
-						{
-							return;
-						}
-					}
-				}
-				break;
-
-				case  IM_GUI_GROUP_HIDDE_ALL_HEADERS: // do not draw any header of any group
-				{
-				}
-				break;
-
-				//case  IM_GUI_GROUP_TREE_EX:
-				//{
-				//	b1 = ImGui::TreeNodeEx(group.getName().data(), flags);
-				//}
-				//break;
-
-				//case  IM_GUI_GROUP_TREE: // bug. that's why ofxGui uses levels!
-				//{
-				//	b1 = ImGui::TreeNode(group.getName().data());
-				//}
-				//break;
-
-				//-
-
-				default: break;
-
-				}
-			}
-		}
-		*/
-
-		// -> do not adds indentation. to avoid layout bug
+		//TODO:
+		// do not adds indentation. to avoid layout bug
 		//ImGui::Indent();
-		//widgetsManager.refreshPanelShape(); // not working?
+		//ImGui::Unindent();
+		//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 		//-
 
@@ -149,10 +70,6 @@ namespace ofxImGuiSurfing
 
 			if (parameterGroup)
 			{
-				//ImGui::Indent();
-				//ImGui::Unindent();
-				//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
-
 				if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
 				{
 					ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
@@ -203,6 +120,17 @@ namespace ofxImGuiSurfing
 						ImGui::EndChild();
 					}
 				}
+
+				//-
+
+				////TODO: is not called..¿?
+				//windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
+				//windowOpen.usedNames.pop(); // Clear the list of names from the stack.
+				//windowOpen.treeLevel = 0;
+				////cout << "-" << endl;
+				////ofLogWarning(__FUNCTION__) << "-" << endl;
+
+				//-
 
 				continue;
 			}
@@ -290,19 +218,13 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		//#ifndef	USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW
-		//		ImGui::TreePop(); // must disable when using CollapsingHeader(..
-		//	}
-		//#endif
-
-		//--
-
-		// Unlink the referenced ofParameter.
-		windowOpen.parameter.reset();
-		// Clear the list of names from the stack.
-		windowOpen.usedNames.pop();
-		windowOpen.treeLevel = 0;
-		//cout << "-" << endl;
+		//resetNames();
+		////TODO: is not called..¿?
+		//windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
+		//windowOpen.usedNames.pop(); // Clear the list of names from the stack.
+		//windowOpen.treeLevel = 0;
+		////cout << "-" << endl;
+		////ofLogWarning(__FUNCTION__) << "-" << endl;
 	}
 
 #if OF_VERSION_MINOR >= 10
@@ -425,7 +347,7 @@ namespace ofxImGuiSurfing
 
 			return true;
 		}
-		ImGui::PopID();
+
 		return false;
 	}
 
@@ -464,7 +386,6 @@ namespace ofxImGuiSurfing
 
 			return true;
 		}
-		ImGui::PopID();
 
 		return false;
 	}
@@ -572,8 +493,9 @@ namespace ofxImGuiSurfing
 		auto result = false;
 		auto tmpRef = parameter.get();
 
-		string n = "##COMBO" + parameter.getName();
-		ImGui::PushID(n.data());
+		auto uniqueName = GetUniqueName(parameter);
+
+		ImGui::PushID(uniqueName);
 		if (ImGui::BeginCombo(GetUniqueName(parameter), labels.at(parameter.get()).c_str()))
 		{
 			for (size_t i = 0; i < labels.size(); ++i)
@@ -610,7 +532,6 @@ namespace ofxImGuiSurfing
 		if (ImGui::InputInt(GetUniqueName(parameter), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
-			//parameter.set(tmpRef);
 
 			return true;
 		}
@@ -639,7 +560,9 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragIntRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
+		auto uniqueName = GetUniqueName(name);
+
+		if (ImGui::DragIntRange2(uniqueName, &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
@@ -656,7 +579,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
+		if (ImGui::DragFloatRange2(GetUniqueName(name), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
@@ -676,12 +599,12 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(GetUniqueName(name + " X")), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(GetUniqueName(name + " Y")), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
@@ -950,34 +873,32 @@ namespace ofxImGuiSurfing
 		return result;
 	}
 
+	//--
+
+	// image
 	//--------------------------------------------------------------
 	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 	{
 		AddImage(hasTexture.getTexture(), size);
 	}
-
 	//--------------------------------------------------------------
 	void AddImage(const ofTexture& texture, const ofVec2f& size)
 	{
 		ImTextureID textureID = GetImTextureID2(texture);
 		ImGui::Image(textureID, size);
 	}
-
 #if OF_VERSION_MINOR >= 10
-
 	//--------------------------------------------------------------
 	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size)
 	{
 		AddImage(hasTexture.getTexture(), size);
 	}
-
 	//--------------------------------------------------------------
 	void AddImage(const ofTexture& texture, const glm::vec2& size)
 	{
 		ImTextureID textureID = GetImTextureID2(texture);
 		ImGui::Image(textureID, size);
 	}
-
 #endif
 
 	//--
@@ -990,14 +911,12 @@ namespace ofxImGuiSurfing
 		*out_text = vector.at(idx).c_str();
 		return true;
 	};
-
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
 		if (values.empty()) { return false; }
 		return ImGui::Combo(label, currIndex, vector_getter,
 			static_cast<void*>(&values), values.size());
 	}
-
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
 		if (values.empty()) { return false; }
@@ -1009,6 +928,7 @@ namespace ofxImGuiSurfing
 
 	// extra begin/end
 	// with snapping
+	//--------------------------------------------------------------
 	void Begin(const std::string& name) {
 		const int snapSz = 20;
 		//const int snapSz = 16;
@@ -1035,13 +955,39 @@ namespace ofxImGuiSurfing
 			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
 		}
 	}
-
+	//--------------------------------------------------------------
 	void End() {
 		ImGui::End();
 	}
+
+	//--
+
+	//TODO:
+
+	//--------------------------------------------------------------
+	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
+	{
+		//// Reference this ofParameter until EndWindow().
+		//windowOpen.parameter = std::dynamic_pointer_cast<ofParameter<bool>>(parameter.newReference());
+		//windowOpen.value = parameter.get();
+
+		// Push a new list of names onto the stack.
+		windowOpen.usedNames.push(std::vector<std::string>());
+
+		return ImGui::Begin(name.c_str(), p_open, flags);
+	}
+	//--------------------------------------------------------------
+	void EndWindow()
+	{
+		ImGui::End();
+
+		// Unlink the referenced ofParameter.
+		windowOpen.parameter.reset();
+
+		// Clear the list of names from the stack.
+		windowOpen.usedNames.pop();
+	}
 }
-
-
 
 //--
 

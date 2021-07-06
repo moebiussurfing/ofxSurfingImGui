@@ -109,6 +109,11 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
+
+	//TODO:
+	//names engine
+	//ofxImGuiSurfing::resetNames();
+	//ofxImGuiSurfing::windowOpen.resetNames();
 }
 
 //--------------------------------------------------------------
