@@ -78,7 +78,7 @@ Includes wait and progression spinners.
   <summary>Screenshot</summary>
   <p>
 
-![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
+![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
   </p>
 </details>
 

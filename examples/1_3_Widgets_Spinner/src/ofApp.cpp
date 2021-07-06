@@ -18,10 +18,14 @@ void ofApp::setup_ImGui()
 
 	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 
+	// customize font
+	std::string path = "assets/fonts/telegrama_render.otf"; // assets folder
+	ofxImGuiSurfing::setDefaultFont(gui, path, 12);
+
 	//-
 
 	// theme
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }
 
 //--------------------------------------------------------------
@@ -31,16 +35,17 @@ void ofApp::draw() {
 	{
 		ImGui::Begin("Progress Indicators");
 
-		const ImU32 col = ImGui::GetColorU32(ImGuiCol_ButtonHovered);
-		const ImU32 bg = ImGui::GetColorU32(ImGuiCol_Button);
-
-		ImGui::Spinner("##spinner", 15, 6, col);
-		ImGui::BufferingBar("##buffer_bar", 0.7f, ImVec2(400, 6), bg, col);
-
+		const ImU32 col1 = ImGui::GetColorU32(ImGuiCol_Text);
+		const ImU32 col2 = ImGui::GetColorU32(ImGuiCol_Text);
+		ImGui::Spinner("##spinner", 15, 6, col1);
+		ImGui::BufferingBar("##buffer_bar", 0.7f, ImVec2(400, 6), col2, col1);
+		
 		ImGui::Dummy(ImVec2(0, 30));
-		ImGui::LoadingIndicatorCircle("loading", 40, ImVec4(1, 0, 0, 1), ImVec4(0, 1, 0, 1), 10, 5);
-
-		//ImGui::Spinner2("label", 40, 5, col);
+		
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		ImVec4 col3 = colors[ImGuiCol_Text];
+		ImVec4 col4 = colors[ImGuiCol_Text];
+		ImGui::LoadingIndicatorCircle("loading", 40, col3, col4, 10, 5);
 
 		ImGui::End();
 	}

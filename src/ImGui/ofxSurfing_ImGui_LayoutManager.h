@@ -110,7 +110,7 @@ namespace ofxImGuiSurfing
 		}
 
 		return h;
-	}
+	}	
 
 } // namespace ofxImGuiSurfing
 
@@ -145,6 +145,8 @@ namespace ofxImGuiSurfing
 		void draw(); // to manual draw..
 
 		bool addFont(std::string path, int size);
+
+
 
 		//-
 
