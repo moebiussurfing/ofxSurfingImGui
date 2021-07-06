@@ -18,6 +18,11 @@ public:
 		string flagInfo;
 
 		void drawWidgets(); // -> populate some widgets from ofParameters
+		void drawMainWindow();
+
+		bool bOpen0 = true;
+		bool bOpen1 = true;
+		bool bAutoResize = true;
 
 		//--
 

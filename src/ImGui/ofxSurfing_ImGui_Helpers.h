@@ -49,13 +49,26 @@
 
 namespace ofxImGuiSurfing
 {
-	//--
-
 //public:
 
 	// unique name engine
 	const char* GetUniqueName(ofAbstractParameter& parameter);
 	const char* GetUniqueName(const std::string& candidate);
+
+	//--
+
+	//class WindowOpen
+	//{
+	//public:
+	//	std::stack<std::vector<std::string>> usedNames;
+	//	std::shared_ptr<ofParameter<bool>> parameter;
+	//	bool value;
+	//	int treeLevel = 0;
+	//};
+	//WindowOpen windowOpen;
+
+	//--
+
 	struct WindowOpen
 	{
 		std::stack<std::vector<std::string>> usedNames;
@@ -64,20 +77,30 @@ namespace ofxImGuiSurfing
 		int treeLevel = 0;
 	};
 	static WindowOpen windowOpen;
-	
+
+	//--
+
 	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	void EndWindow();
 
 	//--
 
+	//--------------------------------------------------------------
 	static void resetNames() {
-		if (windowOpen.usedNames.size() == 0) return;
-		else
+		//if (windowOpen.usedNames.size() == 0) return;
+		//else
 		{
-			//TODO: is not called..¿?
-			windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
-			windowOpen.usedNames.pop(); // Clear the list of names from the stack.
 			windowOpen.treeLevel = 0;
+			windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
+			//windowOpen.usedNames.pop(); // Clear the list of names from the stack.
+
+			while (!windowOpen.usedNames.empty()) {
+				//cout << ' ' << windowOpen.usedNames.top();
+				windowOpen.usedNames.pop();
+			}
+
+			//windowOpen = WindowOpen();
+
 			ofLogWarning(__FUNCTION__) << "-";
 		}
 	}

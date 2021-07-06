@@ -103,7 +103,7 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
   <summary>Screenshot</summary>
   <p>
 
-![image](/docs/2_0_Layout_ofParamaters.PNG?raw=true "image")  
+![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
   </p>
 </details>
 
