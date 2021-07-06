@@ -71,15 +71,19 @@ void ofApp::drawMainWindow()
 	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	// using ofxImGui original helpers
-	if (1)
 	{
+		// Old ofxImGui previous Helpers usage:
 		//auto mainSettings = ofxImGui::Settings();
 		//if (ofxImGui::BeginWindow("Show Windows", mainSettings, false))
+		//{
+		//	//... ofParams widgets
+		//}
+		//ofxImGui::EndWindow(mainSettings);
+
+		//-
+
 		ImGui::Begin("Show Windows", &bOpen0, window_flags);
 		{
-			// Push a new list of names onto the stack.
-			//ofxImGuiSurfing::windowOpen.usedNames.push(std::vector<std::string>());
-
 			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
 
 			ImGui::Dummy(ImVec2(0, 10)); // spacing
@@ -124,7 +128,6 @@ void ofApp::drawMainWindow()
 			}
 		}
 		ImGui::End();
-		//ofxImGui::EndWindow(mainSettings);
 	}
 }
 
@@ -133,12 +136,6 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
-		////TODO:
-		//// names engine
-		//ofxImGuiSurfing::resetNames();
-
-		//--
-
 		drawMainWindow();
 
 		//--
@@ -150,6 +147,14 @@ void ofApp::draw()
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 			
 			// window
+
+			//-
+
+			ofxImGuiSurfing::BeginWindow("Window 1");
+			{
+				drawWidgets();
+			}
+			ofxImGuiSurfing::EndWindow();
 
 			//-
 
@@ -197,22 +202,21 @@ void ofApp::draw()
 			//ofxImGuiSurfing::End();
 
 			//-
-
-			ofxImGuiSurfing::BeginWindow("Window 1");
-			{
-				drawWidgets();
-			}
-			ofxImGuiSurfing::EndWindow();
 		}
 	}
 	guiManager.end();
 }
 
 //--------------------------------------------------------------
-void ofApp::drawWidgets() {
+void ofApp::drawWidgets() 
+{
+	//// Simple usage:
+	//ofxImGuiSurfing::AddGroup(params1);
 
-	// A group of parameters with customized tree/folder type
-	// will be applied to all nested groups inside this parent group
+	//-
+
+	// A group of parameters with customized tree/folder types
+	// will be applied to all the nested groups inside this parent/root ofParameterGroup
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	if (typeFlags == 0) { flagInfo = "ImGuiTreeNodeFlags_None"; }
 	if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed

@@ -86,69 +86,60 @@ namespace ofxImGuiSurfing
 
 			if (parameterGroup)
 			{
-				ImGui::PushID(parameterGroup->getName().c_str());
-
-				if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
+				ImGui::PushID(parameterGroup->getName().c_str()); // -> finally fix unique id for repeated params inside many groups
 				{
-					ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-				}
-				else
-				{
-					if (typeGroup == IM_GUI_GROUP_HIDDE_ALL_HEADERS)
+					if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
 					{
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
-
-					else if (typeGroup == IM_GUI_GROUP_COLLAPSED)
+					else
 					{
-						bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
-						if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-					}
-
-					else if (typeGroup == IM_GUI_GROUP_DEFAULT)
-					{
-						bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
-						if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-					}
-
-					else if (typeGroup == IM_GUI_GROUP_TREE)
-					{
-						if (ImGui::TreeNode(parameterGroup->getName().data()))
+						if (typeGroup == IM_GUI_GROUP_HIDDE_ALL_HEADERS)
 						{
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-							ImGui::TreePop();
 						}
-					}
 
-					else if (typeGroup == IM_GUI_GROUP_TREE_EX)
-					{
-						if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
+						else if (typeGroup == IM_GUI_GROUP_COLLAPSED)
 						{
-							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-							ImGui::TreePop();
+							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
-					}
 
-					else if (typeGroup == IM_GUI_GROUP_SCROLLABLE)
-					{
-						auto& style = ImGui::GetStyle();
-						int h = style.FramePadding.y + style.ItemSpacing.y + 14;
-						ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-						AddGroup(*parameterGroup);
-						ImGui::EndChild();
+						else if (typeGroup == IM_GUI_GROUP_DEFAULT)
+						{
+							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+						}
+
+						else if (typeGroup == IM_GUI_GROUP_TREE)
+						{
+							if (ImGui::TreeNode(parameterGroup->getName().data()))
+							{
+								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::TreePop();
+							}
+						}
+
+						else if (typeGroup == IM_GUI_GROUP_TREE_EX)
+						{
+							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
+							{
+								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::TreePop();
+							}
+						}
+
+						else if (typeGroup == IM_GUI_GROUP_SCROLLABLE)
+						{
+							auto& style = ImGui::GetStyle();
+							int h = style.FramePadding.y + style.ItemSpacing.y + 14;
+							ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+							AddGroup(*parameterGroup);
+							ImGui::EndChild();
+						}
 					}
 				}
-
 				ImGui::PopID();
-
-				//-
-
-				////TODO: is not called..¿?
-				//windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
-				//windowOpen.usedNames.pop(); // Clear the list of names from the stack.
-				//windowOpen.treeLevel = 0;
-				////cout << "-" << endl;
-				////ofLogWarning(__FUNCTION__) << "-" << endl;
 
 				//-
 
