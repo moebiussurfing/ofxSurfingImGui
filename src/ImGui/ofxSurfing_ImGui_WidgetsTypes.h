@@ -12,8 +12,6 @@
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_LayoutManager.h"
 
-//#include "ofxSurfing_ImGui_Helpers.h" // ?
-
 namespace ofxImGuiSurfing
 {
 	//-
@@ -55,6 +53,7 @@ namespace ofxImGuiSurfing
 		//-
 
 	public:
+
 		// widgets sizes
 		float _spcx;
 		float _spcy;
@@ -75,7 +74,35 @@ namespace ofxImGuiSurfing
 		//static float _w50;
 		//static float _w33;
 		//static float _w25;
-		//static float _h;
+		//static float _h;	
+		
+		// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
+		//--------------------------------------------------------------
+		inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
+		{
+			__spcx = ImGui::GetStyle().ItemSpacing.x;
+			__spcy = ImGui::GetStyle().ItemSpacing.y;
+			__w100 = ImGui::GetContentRegionAvail().x;
+			__h100 = ImGui::GetContentRegionAvail().y;
+			__w99 = __w100 - __spcx;
+			__w50 = (__w100 - __spcx * 1) / 2;
+			__w33 = (__w100 - __spcx * 2) / 3;
+			__w25 = (__w100 - __spcx * 3) / 4;
+			__h = BUTTON_BIG_HEIGHT;
+		}
+		//--------------------------------------------------------------
+		// just the more relevant sizes
+		inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
+		{
+			float __spcx = ImGui::GetStyle().ItemSpacing.x;
+			float __spcy = ImGui::GetStyle().ItemSpacing.y;
+			__w100 = ImGui::GetContentRegionAvail().x;
+			float __h100 = ImGui::GetContentRegionAvail().y;
+			__w50 = (__w100 - __spcx * 1) / 2;
+			__w33 = (__w100 - __spcx * 2) / 3;
+			__w25 = (__w100 - __spcx * 3) / 4;
+			__h = BUTTON_BIG_HEIGHT;
+		}
 
 		//-
 
@@ -83,7 +110,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void refreshPanelShape()
 		{
-			//ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 			////TODO:
 			////confirm that is not actuating
@@ -222,7 +249,7 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		// populate now a parameter ImGui widget
+		// render now a parameter ImGui widget
 		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
 		//--------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
@@ -271,6 +298,10 @@ namespace ofxImGuiSurfing
 			else if (amtPerRow == 4) _ww = _w25;
 			else _ww = _w100;
 
+			//-
+
+			// bool
+
 			if (isBool)
 			{
 				ofParameter<bool> p = aparam.cast<bool>();
@@ -317,6 +348,8 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			// float
+
 			else if (isFloat)
 			{
 				ofParameter<float> p = aparam.cast<float>();
@@ -339,7 +372,7 @@ namespace ofxImGuiSurfing
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} 
+				}
 				break;
 
 				case IM_DRAG:
@@ -357,7 +390,7 @@ namespace ofxImGuiSurfing
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} 
+				}
 				break;
 
 				case IM_STEPPER:
@@ -386,6 +419,8 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			// int
+
 			else if (isInt)
 			{
 				ofParameter<int> p = aparam.cast<int>();
@@ -408,7 +443,7 @@ namespace ofxImGuiSurfing
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} 
+				}
 				break;
 
 				case IM_DRAG:
@@ -426,7 +461,7 @@ namespace ofxImGuiSurfing
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} 
+				}
 				break;
 
 				case IM_STEPPER:
@@ -446,7 +481,7 @@ namespace ofxImGuiSurfing
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 					bReturn = false;
-				} 
+				}
 				break;
 				}
 
@@ -461,7 +496,7 @@ namespace ofxImGuiSurfing
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1)
 				{
-					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+					ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 				}
 			}
 

@@ -9,9 +9,14 @@ void ofApp::setup() {
 	guiManager.setup();
 	guiManager.bAutoResize = false;
 
-	int sz = (int)SurfingTypesGroups::IM_GUI_GROUP_AMOUNT - 1;
-	typeGroups.set("typeGroups", 0, 0, sz);
-	typeFlags.set("typeFlags", 1, 0, 4);
+	//-
+
+	// debug ImGui flags
+	{
+		int sz = (int)SurfingTypesGroups::IM_GUI_GROUP_AMOUNT - 1;
+		typeGroups.set("typeGroups", 0, 0, sz);
+		typeFlags.set("typeFlags", 1, 0, 4);
+	}
 
 	//-
 
@@ -90,21 +95,24 @@ void ofApp::drawMainWindow()
 
 			//-
 
-			// test customize group/window folders and flags
-			ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
-			ofxImGuiSurfing::AddParameter(typeFlags);
-			ImGui::Text(flagInfo.c_str());
+			// debug ImGui flags
+			{
+				// test customize group/window folders and flags
+				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
+				ofxImGuiSurfing::AddParameter(typeFlags);
+				ImGui::Text(flagInfo.c_str());
 
-			ofxImGuiSurfing::AddParameter(typeGroups);
-			string groupInfo;
-			if (typeGroups == 0) groupInfo = "IM_GUI_GROUP_DEFAULT";
-			else if (typeGroups == 1) groupInfo = "IM_GUI_GROUP_TREE_EX";
-			else if (typeGroups == 2) groupInfo = "IM_GUI_GROUP_TREE";
-			else if (typeGroups == 3) groupInfo = "IM_GUI_GROUP_COLLAPSED";
-			else if (typeGroups == 4) groupInfo = "IM_GUI_GROUP_SCROLLABLE";
-			else if (typeGroups == 5) groupInfo = "IM_GUI_GROUP_ONLY_FIRST_HEADER";
-			else if (typeGroups == 6) groupInfo = "IM_GUI_GROUP_HIDDE_ALL_HEADERS";
-			ImGui::Text(groupInfo.c_str());
+				ofxImGuiSurfing::AddParameter(typeGroups);
+				string groupInfo;
+				if (typeGroups == 0) groupInfo = "IM_GUI_GROUP_DEFAULT";
+				else if (typeGroups == 1) groupInfo = "IM_GUI_GROUP_TREE_EX";
+				else if (typeGroups == 2) groupInfo = "IM_GUI_GROUP_TREE";
+				else if (typeGroups == 3) groupInfo = "IM_GUI_GROUP_COLLAPSED";
+				else if (typeGroups == 4) groupInfo = "IM_GUI_GROUP_SCROLLABLE";
+				else if (typeGroups == 5) groupInfo = "IM_GUI_GROUP_ONLY_FIRST_HEADER";
+				else if (typeGroups == 6) groupInfo = "IM_GUI_GROUP_HIDDE_ALL_HEADERS";
+				ImGui::Text(groupInfo.c_str());
+			}
 
 			ofxImGuiSurfing::ToggleRoundedButton("AutoResize", &bAutoResize);
 
@@ -145,7 +153,7 @@ void ofApp::draw()
 			ImGuiWindowFlags window_flags;
 			window_flags = ImGuiWindowFlags_None;
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-			
+
 			// window
 
 			// different ways for creating a window with ofParameters inside:
@@ -210,7 +218,7 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawWidgets() 
+void ofApp::drawWidgets()
 {
 	//// Simple default usage:
 	//ofxImGuiSurfing::AddGroup(params1);
@@ -220,14 +228,17 @@ void ofApp::drawWidgets()
 
 	//-
 
-	// A group of parameters with customized tree/folder types
-	// will be applied to all the nested groups inside this parent/root ofParameterGroup
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-	if (typeFlags == 0) { flagInfo = "ImGuiTreeNodeFlags_None"; }
-	if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
-	if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
-	if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
-	if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
+	// debug ImGui flags
+	{
+		// A group of parameters with customized tree/folder types
+		// will be applied to all the nested groups inside this parent/root ofParameterGroup
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+		if (typeFlags == 0) { flagInfo = "ImGuiTreeNodeFlags_None"; }
+		if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
+		if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
+		if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
+		if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
 
-	ofxImGuiSurfing::AddGroup(params1, flags, SurfingTypesGroups(typeGroups.get()));
+		ofxImGuiSurfing::AddGroup(params1, flags, SurfingTypesGroups(typeGroups.get()));
+	}
 }

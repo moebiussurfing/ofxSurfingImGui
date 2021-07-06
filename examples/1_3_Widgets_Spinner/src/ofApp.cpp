@@ -44,7 +44,7 @@ void ofApp::draw() {
 		
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		ImVec4 col3 = colors[ImGuiCol_Text];
-		ImVec4 col4 = colors[ImGuiCol_Text];
+		ImVec4 col4 = colors[ImGuiCol_TextDisabled];
 		ImGui::LoadingIndicatorCircle("loading", 40, col3, col4, 10, 5);
 
 		ImGui::End();

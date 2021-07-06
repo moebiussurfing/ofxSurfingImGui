@@ -100,7 +100,6 @@ namespace ImGui {
 		window->DrawList->PathStroke(color, false, thickness);
 	}
 
-
 	//----
 
 	//https://github.com/ocornut/imgui/issues/1901#issuecomment-444929973

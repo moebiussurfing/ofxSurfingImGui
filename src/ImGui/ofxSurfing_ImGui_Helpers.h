@@ -233,161 +233,164 @@ namespace ofxImGuiSurfing
 
 namespace ofxImGuiSurfing
 {
-	//--------------------------------------------------------------
-	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter)
-	{
-		auto tmpRef = parameter.get();
-		const auto& info = typeid(ParameterType);
-		if (info == typeid(float))
-		{
-			ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-			if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-			{
-				parameter.set(tmpRef);
-				ImGui::PopItemWidth();
-				return true;
-			}
-			ImGui::PopItemWidth();
-			return false;
-		}
-		if (info == typeid(int))
-		{
-			ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-			if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-			{
-				parameter.set(tmpRef);
-				ImGui::PopItemWidth();
-				return true;
-			}
-			ImGui::PopItemWidth();
-			return false;
-		}
-		if (info == typeid(bool))
-		{
-			if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-			{
-				parameter.set(tmpRef);
-				return true;
-			}
-			return false;
-		}
-
-		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
-		return false;
-	}
-
+	//// clean of styles
 	////--------------------------------------------------------------
 	//template<typename ParameterType>
 	//bool AddParameter(ofParameter<ParameterType>& parameter)
 	//{
 	//	auto tmpRef = parameter.get();
 	//	const auto& info = typeid(ParameterType);
-
-	//	//--
-
-	//	// customized styles
+	//	if (info == typeid(float))
 	//	{
-	//		// B. if  there's a config already added for one or more parameters
-
-	//		// float
-	//		if (info == typeid(float))
+	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
-	//			bool bReturn = false;
-	//			ofParameter<float> &p = parameter.cast<float>();
-	//			auto c = widgetsManager.getWidgetConf(p);
-
-	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
-	//			if (c.name != "-1")
-	//			{
-	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-	//				return bReturn;
-	//			}
-
-	//			// default style
-	//			else
-	//			{
-
-	//				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-	//				if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//				{
-	//					parameter.set(tmpRef);
-	//					bReturn = true;
-	//				}
-	//				else bReturn = false;
-	//				ImGui::PopItemWidth();
-	//				return bReturn;
-	//			}
+	//			parameter.set(tmpRef);
+	//			ImGui::PopItemWidth();
+	//			return true;
 	//		}
-
-	//		// int
-	//		else if (info == typeid(int))
+	//		ImGui::PopItemWidth();
+	//		return false;
+	//	}
+	//	if (info == typeid(int))
+	//	{
+	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
+	//		if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
-	//			bool bReturn = false;
-	//			ofParameter<int> &p = parameter.cast<int>();
-	//			auto c = widgetsManager.getWidgetConf(p);
-
-	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
-	//			if (c.name != "-1")
-	//			{
-	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-	//				return bReturn;
-	//			}
-
-	//			// default style
-	//			else
-	//			{
-
-	//				ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-	//				if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//				{
-	//					parameter.set(tmpRef);
-	//					bReturn = true;
-	//				}
-	//				else bReturn = false;
-	//				ImGui::PopItemWidth();
-
-	//				return bReturn;
-	//			}
+	//			parameter.set(tmpRef);
+	//			ImGui::PopItemWidth();
+	//			return true;
 	//		}
-
-	//		// bool
-	//		else if (info == typeid(bool))
+	//		ImGui::PopItemWidth();
+	//		return false;
+	//	}
+	//	if (info == typeid(bool))
+	//	{
+	//		if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
 	//		{
-	//			bool bReturn = false;
-	//			ofParameter<bool> &p = parameter.cast<bool>();
-	//			auto c = widgetsManager.getWidgetConf(p);
-
-	//			// if the parameter widget is not added explicitly, will populate it as the default appearance
-	//			if (c.name != "-1")
-	//			{
-	//				bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-	//				return bReturn;
-	//			}
-
-	//			// default style
-	//			else
-	//			{
-	//				if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-	//				{
-	//					parameter.set(tmpRef);
-	//					bReturn = true;
-	//				}
-	//				else bReturn = false;
-
-	//				return bReturn;
-	//			}
+	//			parameter.set(tmpRef);
+	//			return true;
 	//		}
+	//		return false;
 	//	}
 
-	//	//--
-
-	//	ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
-
+	//	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 	//	return false;
 	//}
+
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddParameter(ofParameter<ParameterType>& parameter)
+	{
+		auto tmpRef = parameter.get();
+		const auto& info = typeid(ParameterType);
+
+		//--
+
+		// customized styles
+		{
+			// B. if  there's a config already added for one or more parameters
+
+			// float
+			if (info == typeid(float))
+			{
+				bool bReturn = false;
+				ofParameter<float> &p = parameter.cast<float>();
+				auto c = widgetsManager.getWidgetConf(p);
+
+				// if the parameter widget is not added explicitly, will populate it as the default appearance
+				if (c.name != "-1")
+				{
+					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+					return bReturn;
+				}
+
+				// default style
+				else
+				{
+
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+					{
+						parameter.set(tmpRef);
+						bReturn = true;
+					}
+					else bReturn = false;
+					ImGui::PopItemWidth();
+					return bReturn;
+				}
+			}
+
+			// int
+			else if (info == typeid(int))
+			{
+				bool bReturn = false;
+				ofParameter<int> &p = parameter.cast<int>();
+				auto c = widgetsManager.getWidgetConf(p);
+
+				// if the parameter widget is not added explicitly, will populate it as the default appearance
+				if (c.name != "-1")
+				{
+					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+
+					return bReturn;
+				}
+
+				// default style
+				else
+				{
+
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+					{
+						parameter.set(tmpRef);
+						bReturn = true;
+					}
+					else bReturn = false;
+					ImGui::PopItemWidth();
+
+					return bReturn;
+				}
+			}
+
+			// bool
+			else if (info == typeid(bool))
+			{
+				bool bReturn = false;
+				ofParameter<bool> &p = parameter.cast<bool>();
+				auto c = widgetsManager.getWidgetConf(p);
+
+				// if the parameter widget is not added explicitly, will populate it as the default appearance
+				if (c.name != "-1")
+				{
+					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+
+					return bReturn;
+				}
+
+				// default style
+				else
+				{
+					if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
+					{
+						parameter.set(tmpRef);
+						bReturn = true;
+					}
+					else bReturn = false;
+
+					return bReturn;
+				}
+			}
+		}
+
+		//--
+
+		ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
+
+		return false;
+	}
+
+	//--
 
 	//--------------------------------------------------------------
 	template<typename ParameterType>

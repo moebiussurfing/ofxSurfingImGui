@@ -400,12 +400,12 @@ void ofApp::draw_ImGui()
 //--------------------------------------------------------------
 
 
-
 // 4. WINDOW PANEL SHAPE 
 
 // Get window position for advanced layout linked position
 
 /*
+glm::vec2 pos;
 static bool bLockMappgingPanel = true;
 ofxImGuiSurfing::ToggleRoundedButton("Lock Mapping panel", &bLockMappgingPanel);
 if (bLockMappgingPanel)
@@ -421,7 +421,6 @@ if (bLockMappgingPanel)
 */
 
 //-
-
 
 
 //--------------------------------------------------------------

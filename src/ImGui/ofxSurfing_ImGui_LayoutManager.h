@@ -12,6 +12,7 @@
 
 // useful layout helpers 
 // to update sizes/width to panel window shape
+
 namespace ofxImGuiSurfing
 {
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
@@ -132,6 +133,7 @@ namespace ofxImGuiSurfing
 		// main API
 
 	public:
+
 		void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 		void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
@@ -142,18 +144,16 @@ namespace ofxImGuiSurfing
 		void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 		void endWindow();
 
-		void draw(); // to manual draw..
-
-		bool addFont(std::string path, int size);
-
-
+		void draw(); // to manual draw...
 
 		//-
 
 	public:
+
 		// Force autodraw
 		//--------------------------------------------------------------
 		void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
+
 		// Force shared context
 		//--------------------------------------------------------------
 		void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
@@ -167,6 +167,9 @@ namespace ofxImGuiSurfing
 
 		ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
 		ImFont* customFont = nullptr;
+
+	public:
+		bool addFont(std::string path, int size);
 
 		//--------------------------------------------------------------
 		bool isMouseOverGui() {
@@ -226,6 +229,7 @@ namespace ofxImGuiSurfing
 		//		ImGui::Unindent();
 		//	}
 		//}
+
 		//--------------------------------------------------------------
 		void drawAdvancedSubPanel() {
 

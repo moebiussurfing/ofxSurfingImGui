@@ -53,5 +53,16 @@ class ofApp : public ofBaseApp{
 		bool bOpen1;
 		bool bOpen2;
 
+		bool bReset1;
+		bool bReset2;
+		bool bReset3;
+
+		glm::vec2 pos;
+
 		ofxWindowApp windowApp;
+
+		// debug ImGui flags
+		ofParameter<int> typeGroups;
+		ofParameter<int> typeFlags;
+		string flagInfo;
 };

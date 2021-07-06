@@ -58,23 +58,28 @@ namespace ofxImGuiSurfing
 		pushName();
 		//windowOpen.usedNames.push(std::vector<std::string>());
 
+
 		// first root group always has a tree collapsed header
 		if (windowOpen.treeLevel == 0 && typeGroup != IM_GUI_GROUP_HIDDE_ALL_HEADERS)
 		{
 			bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+
+			//TODO:
+			// do not adds indentation. to avoid layout bug
+			//ImGui::Indent();
+			//ImGui::Unindent();
+			if (b) widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
 			if (!b)
 			{
+				windowOpen.treeLevel++;
 				return;
 			}
-			windowOpen.treeLevel++;
+			//windowOpen.treeLevel++;
 		}
 
-		//-
+		windowOpen.treeLevel++;
 
-		//TODO:
-		// do not adds indentation. to avoid layout bug
-		//ImGui::Indent();
-		//ImGui::Unindent();
 		//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 		//-
@@ -85,18 +90,20 @@ namespace ofxImGuiSurfing
 
 			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 
-			if (parameterGroup)
+			if (parameterGroup) // detects nested groups
 			{
 				ImGui::PushID(parameterGroup->getName().c_str()); // -> finally fix unique id for repeated params inside many groups
 				{
 					if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
 					{
+						widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
 					else
 					{
 						if (typeGroup == IM_GUI_GROUP_HIDDE_ALL_HEADERS)
 						{
+							widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
@@ -108,15 +115,27 @@ namespace ofxImGuiSurfing
 
 						else if (typeGroup == IM_GUI_GROUP_DEFAULT)
 						{
+							//ImGui::Indent();
+
 							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
 							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+
+							//ImGui::Unindent();
 						}
 
 						else if (typeGroup == IM_GUI_GROUP_TREE)
 						{
 							if (ImGui::TreeNode(parameterGroup->getName().data()))
 							{
+								//TODO:
+								//ImGui::Indent();
+
+								widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
+								//ImGui::Unindent();
+
 								ImGui::TreePop();
 							}
 						}
@@ -125,7 +144,10 @@ namespace ofxImGuiSurfing
 						{
 							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
 							{
+								widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
 								ImGui::TreePop();
 							}
 						}
@@ -137,6 +159,9 @@ namespace ofxImGuiSurfing
 							int hh = 40;
 							int h = style.FramePadding.y + style.ItemSpacing.y + hh;
 							ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+
+							//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
 							AddGroup(*parameterGroup);
 							ImGui::EndChild();
 						}
@@ -149,7 +174,7 @@ namespace ofxImGuiSurfing
 				continue;
 			}
 
-			//-
+			//----
 
 			// Parameter, try everything we know how to handle.
 #if OF_VERSION_MINOR >= 10
