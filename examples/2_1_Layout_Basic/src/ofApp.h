@@ -31,19 +31,30 @@ public:
 		//ofxImGui::Gui gui; // can be instantiated outside the class (locally to maybe share with other classes)
 
 		//-
+		
+		void drawMainWindow(); // -> a panel window with widgets
+		void drawWindow1(); // -> a panel window with widgets
+		void drawWindow2(); // -> a panel window with widgets
+		void drawWindow3(); // -> a panel window with widgets
 
 		void drawWidgets(); // -> some widgets
 		
-		void drawWindow3(); // -> a panel window with widgets
+		bool bOpen0 = true;
+		bool bOpen1 = false;
+		bool bOpen2 = true;
 		bool bOpen3 = false;
-		ofParameter<bool> b1{ "b1", false };
-		ofParameter<bool> b2{ "b2", false };
-		ofParameter<bool> b3{ "b3", false };
+		bool show_app_style_editor = false;
 
 		//-
 
 		// ofParameters
-		ofParameterGroup params;
+
+		ofParameterGroup params1;
+		ofParameterGroup params2;
+		ofParameterGroup params3;
+		ofParameter<bool> b1{ "b1", false };
+		ofParameter<bool> b2{ "b2", false };
+		ofParameter<bool> b3{ "b3", false };
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;
 		ofParameter<bool> bMode1;
@@ -57,11 +68,9 @@ public:
 		ofParameter<int> shapeType;
 		ofParameter<int> amount;
 		ofParameter<int> size;
-		ofParameterGroup params2;
 		ofParameter<int> shapeType2;
 		ofParameter<int> amount2;
 		ofParameter<int> size2;
-		ofParameterGroup params3;
 		ofParameter<float> lineWidth3;
 		ofParameter<float> separation3;
 		ofParameter<float> speed3;

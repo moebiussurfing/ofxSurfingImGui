@@ -110,10 +110,10 @@ void ofxSurfing_ImGui_Manager::begin() {
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
 
-	//TODO:
-	//names engine
-	//ofxImGuiSurfing::resetNames();
-	//ofxImGuiSurfing::windowOpen.resetNames();
+	//-
+
+	ofxImGuiSurfing::clearNames();
+	ofxImGuiSurfing::pushName();
 }
 
 //--------------------------------------------------------------
@@ -130,6 +130,11 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
+
+	//-
+
+	ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
+	//ofxImGuiSurfing::popName();
 }
 
 //--------------------------------------------------------------
@@ -141,6 +146,10 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	// Push a new list of names onto the stack.
+	//ofxImGuiSurfing::windowOpen.usedNames.push(std::vector<std::string>());
+	ofxImGuiSurfing::pushName();
+
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
 
@@ -215,8 +224,12 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 void ofxSurfing_ImGui_Manager::endWindow()
 {
 	//ImGui::PopItemWidth();
-
 	//ImGui::PopStyleVar();
 
 	ImGui::End();
+
+	// Clear the list of names from the stack.
+	//ofxImGuiSurfing::windowOpen.usedNames.pop();
+	//ofxImGuiSurfing::popName();
+	ofxImGuiSurfing::clearNames();
 }

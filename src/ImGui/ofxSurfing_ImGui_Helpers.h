@@ -49,23 +49,13 @@
 
 namespace ofxImGuiSurfing
 {
-//public:
-
 	// unique name engine
+	// NOTE: this engine seems that avoid duplicated names on the same group/tree
+	// but we will use PushID too for each groups. This will allow to repeat a parameter several times
+	// also in different groups/trees
+
 	const char* GetUniqueName(ofAbstractParameter& parameter);
 	const char* GetUniqueName(const std::string& candidate);
-
-	//--
-
-	//class WindowOpen
-	//{
-	//public:
-	//	std::stack<std::vector<std::string>> usedNames;
-	//	std::shared_ptr<ofParameter<bool>> parameter;
-	//	bool value;
-	//	int treeLevel = 0;
-	//};
-	//WindowOpen windowOpen;
 
 	//--
 
@@ -80,28 +70,42 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	// An extra begin/end pair
+	// with snapping
 	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	void EndWindow();
 
 	//--
 
+	// names engine
+
 	//--------------------------------------------------------------
-	static void resetNames() {
-		//if (windowOpen.usedNames.size() == 0) return;
-		//else
-		{
-			windowOpen.treeLevel = 0;
-			windowOpen.parameter.reset(); // Unlink the referenced ofParameter.
-			//windowOpen.usedNames.pop(); // Clear the list of names from the stack.
+	static void pushName()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
 
-			while (!windowOpen.usedNames.empty()) {
-				//cout << ' ' << windowOpen.usedNames.top();
-				windowOpen.usedNames.pop();
-			}
+		// Push a new list of names onto the stack.
+		windowOpen.usedNames.push(std::vector<std::string>());
+	}
 
-			//windowOpen = WindowOpen();
+	//--------------------------------------------------------------
+	static void popName()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
+		windowOpen.usedNames.pop();
+	}
 
-			ofLogWarning(__FUNCTION__) << "-";
+	//--------------------------------------------------------------
+	static void clearNames()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
+
+		windowOpen.treeLevel = 0;
+		// Unlink the referenced ofParameter.
+		windowOpen.parameter.reset();
+		// Clear the list of names from the stack.
+		while (!windowOpen.usedNames.empty()) {
+			windowOpen.usedNames.pop();
 		}
 	}
 
@@ -110,12 +114,6 @@ namespace ofxImGuiSurfing
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
 	static ofxImGuiSurfing::SurfingTypes widgetsManager;
-	//SurfingTypes widgetsManager;
-
-	//struct Widgets
-	//{
-	//	SurfingTypes widgetsManager;
-	//};
 
 	//--
 
@@ -138,7 +136,7 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingTypesGroups typeGroup = IM_GUI_GROUP_DEFAULT);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypesGroups typeGroup = IM_GUI_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -229,7 +227,7 @@ namespace ofxImGuiSurfing
 	{
 		return (ImTextureID)(uintptr_t)glID;
 	}
-}
+} // namespace ofxSurfing
 
 //----
 
@@ -440,4 +438,4 @@ namespace ofxImGuiSurfing
 
 		return result;
 	}
-}
+} // namespace ofxSurfing

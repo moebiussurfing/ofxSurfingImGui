@@ -148,6 +148,8 @@ void ofApp::draw()
 			
 			// window
 
+			// different ways for creating a window with ofParameters inside:
+
 			//-
 
 			ofxImGuiSurfing::BeginWindow("Window 1");
@@ -210,8 +212,11 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawWidgets() 
 {
-	//// Simple usage:
+	//// Simple default usage:
 	//ofxImGuiSurfing::AddGroup(params1);
+
+	//// Customized usage:
+	//ofxImGuiSurfing::AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, IM_GUI_GROUP_TREE_EX);
 
 	//-
 

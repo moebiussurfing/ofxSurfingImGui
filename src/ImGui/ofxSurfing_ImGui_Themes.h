@@ -70,7 +70,6 @@ namespace ofxImGuiSurfing
 		style->ItemSpacing = ImVec2(6, 4);
 		style->Alpha = 0.97f;
 		style->WindowRounding = 0;
-		style->FrameBorderSize = 1;
 		style->FrameRounding = 4;
 		style->ColumnsMinSpacing = 50;
 		style->GrabMinSize = 18;
@@ -81,11 +80,16 @@ namespace ofxImGuiSurfing
 		style->GrabRounding = 2;
 		style->IndentSpacing = 5;
 
+		style->FrameBorderSize = 1;
+		style->WindowBorderSize= 1;
+		style->TabBorderSize = 1;
+
 		ImVec4* colors = ImGui::GetStyle().Colors;
+
 
 		colors[ImGuiCol_Text] = ImVec4(0.76f, 0.76f, 0.76f, 0.94f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.63f, 0.63f, 0.63f, 1.00f);
-		colors[ImGuiCol_WindowBg] = ImVec4(0.19f, 0.19f, 0.19f, 1.00f);
+		colors[ImGuiCol_WindowBg] = ImVec4(0.19f, 0.19f, 0.19f, 0.96f);
 		colors[ImGuiCol_ChildBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.13f, 0.13f, 0.13f, 0.94f);
 		colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);

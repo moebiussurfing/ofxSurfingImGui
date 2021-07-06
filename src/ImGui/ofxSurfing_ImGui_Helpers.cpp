@@ -52,10 +52,11 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypesGroups typeGroup)
 	{
-		ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
+		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
 
 		// push a new list of names onto the stack.
-		windowOpen.usedNames.push(std::vector<std::string>());
+		pushName();
+		//windowOpen.usedNames.push(std::vector<std::string>());
 
 		// first root group always has a tree collapsed header
 		if (windowOpen.treeLevel == 0 && typeGroup != IM_GUI_GROUP_HIDDE_ALL_HEADERS)
@@ -132,7 +133,9 @@ namespace ofxImGuiSurfing
 						else if (typeGroup == IM_GUI_GROUP_SCROLLABLE)
 						{
 							auto& style = ImGui::GetStyle();
-							int h = style.FramePadding.y + style.ItemSpacing.y + 14;
+							//int hh = 14;
+							int hh = 40;
+							int h = style.FramePadding.y + style.ItemSpacing.y + hh;
 							ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
 							AddGroup(*parameterGroup);
 							ImGui::EndChild();
@@ -229,9 +232,8 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		//TODO:
 		// names engine
-		ofxImGuiSurfing::resetNames();
+		clearNames();
 	}
 
 #if OF_VERSION_MINOR >= 10
@@ -933,9 +935,8 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// extra begin/end
+	// An extra begin/end pair
 	// with snapping
-
 	//--------------------------------------------------------------
 	void Begin(const std::string& name) {
 		const int snapSz = 20;
@@ -963,7 +964,6 @@ namespace ofxImGuiSurfing
 			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
 		}
 	}
-
 	//--------------------------------------------------------------
 	void End() {
 		ImGui::End();
@@ -971,15 +971,10 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//TODO:
-
+	// Another extra begin/end pair
 	//--------------------------------------------------------------
 	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
 	{
-		//// Reference this ofParameter until EndWindow().
-		//windowOpen.parameter = std::dynamic_pointer_cast<ofParameter<bool>>(parameter.newReference());
-		//windowOpen.value = parameter.get();
-
 		// Push a new list of names onto the stack.
 		windowOpen.usedNames.push(std::vector<std::string>());
 
