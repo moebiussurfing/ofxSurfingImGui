@@ -6,9 +6,9 @@ ofxSurfingImGui
 
 ## WORK IN PROGRESS!  
 ```
-USABLE BUT NOT FINISHED.  
-API WILL CHANGE.  
-I AM STILL HAVING SOME PROBLEMS YET.  
+USABLE BUT NOT FINISHED  
+API WILL CHANGE  
+I AM STILL HAVING SOME PROBLEMS YET  
 ```
 
 <details>
@@ -54,33 +54,64 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
 
 ### 1_1_Widgets_DearWidgets
 Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
+  </p>
+</details>
 
 ### 1_2_Widgets_Curve
 Includes bezier curves and usable tween/easing functions.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
+  </p>
+</details>
 
 ### 1_3_Widgets_Spinner
 Includes wait and progression spinners.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
 
 ![image](/docs/1_3_Widgets_Spinner.PNG?raw=true "image")  
+  </p>
+</details>
 
 ### 1_4_Widgets_Surfing
 Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
-
-
+  </p>
+</details>
 ## B. LAYOUT
+
+### 2_0_Layout_ofParamaters
+* Uses **ofxSurfing_ImGui_Helpers.h**  
+* Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
+<details>
+  <summary>Screenshot</summary>
+  <p>
+
+![image](/docs/2_0_Layout_ofParamaters.PNG?raw=true "image")  
+  </p>
+</details>
 
 ### 2_1_Layout_Basic
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
+  </p>
+</details>
 
 <details>
   <summary>Example Code</summary>
