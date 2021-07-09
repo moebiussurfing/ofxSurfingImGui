@@ -220,6 +220,13 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawWidgets()
 {
+	// some params before and out of the group
+	ofxImGuiSurfing::AddParameter(bMode3);
+	ofxImGuiSurfing::AddParameter(lineWidth);
+	ImGui::Dummy(ImVec2(0, 10)); // spacing
+
+	//--
+
 	//// Simple default usage:
 	//ofxImGuiSurfing::AddGroup(params1);
 
@@ -241,4 +248,12 @@ void ofApp::drawWidgets()
 
 		ofxImGuiSurfing::AddGroup(params1, flags, SurfingTypesGroups(typeGroups.get()));
 	}
+
+	//--
+
+	// some params after and out of the group
+	ImGui::Dummy(ImVec2(0, 10)); // spacing
+	ofxImGuiSurfing::AddParameter(bMode3);
+	ofxImGuiSurfing::AddParameter(lineWidth);
+
 }

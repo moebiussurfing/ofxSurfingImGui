@@ -37,6 +37,54 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external i
 	setup_ImGui();
 }
 
+//----
+
+// fonts
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
+{
+	if (customFonts.size() == 0) return;
+
+	currFont = ofClamp(index, 0, customFonts.size() - 1);
+	customFont = customFonts[currFont];
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
+{
+	//TODO:
+	// should be a vector with several customFont to allow hot reloading..
+	// if not, last added font will be used
+	ofLogNotice(__FUNCTION__) << path << ":" << size;
+
+	auto &io = ImGui::GetIO();
+	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
+
+	ofFile fileToRead(path); // a file that exists
+	bool b = fileToRead.exists();
+	if (b)
+	{
+		ImFont* _customFont = nullptr;
+		if (guiPtr != nullptr) {
+			_customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
+		}
+		else {
+			_customFont = gui.addFont(path, size, nullptr, normalCharRanges);
+		}
+
+		if (_customFont != nullptr)
+		{
+			customFonts.push_back(_customFont);
+			customFont = _customFont;
+			currFont = customFonts.size() - 1;
+		}
+	}
+	if (customFont != nullptr) io.FontDefault = customFont;
+
+	return b;
+}
+
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::addFont(std::string path, int size)
 {
@@ -59,6 +107,70 @@ bool ofxSurfing_ImGui_Manager::addFont(std::string path, int size)
 
 	return b;
 }
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::pushStyleFont(int index)
+{
+	if (index <= customFonts.size() - 1)
+	{
+		if (customFonts[index] != nullptr)
+			ImGui::PushFont(customFonts[index]);
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::popStyleFont()
+{
+	ImGui::PopFont();
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::processOpenFileSelection(ofFileDialogResult openFileResult, int size = 10) {
+
+	string path = openFileResult.getPath();
+
+	ofLogNotice(__FUNCTION__) << "getName(): " << openFileResult.getName();
+	ofLogNotice(__FUNCTION__) << "getPath(): " << path;
+
+	ofFile file(path);
+
+	if (file.exists())
+	{
+		ofLogNotice(__FUNCTION__) << ("The file exists - now checking the type via file extension");
+		string fileExtension = ofToUpper(file.getExtension());
+
+		//We only want images
+		if (fileExtension == "TTF" || fileExtension == "OTF") {
+
+			ofLogNotice(__FUNCTION__) << ("TTF or OTF found!");
+
+			pushFont(path, size);
+		}
+		else ofLogError(__FUNCTION__) << ("TTF or OTF not found!");
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::openFileFont(int size)
+{
+	//Open the Open File Dialog
+	ofFileDialogResult openFileResult = ofSystemLoadDialog("Select a font file, ttf or otf to add to ImGui", false, ofToDataPath(""));
+
+	//Check if the user opened a file
+	if (openFileResult.bSuccess) {
+
+		ofLogNotice(__FUNCTION__) << ("User selected a file");
+
+		//We have a file, check it and process it
+		processOpenFileSelection(openFileResult, size);
+
+	}
+	else {
+		ofLogNotice(__FUNCTION__) << ("User hit cancel");
+	}
+}
+
+//----
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup_ImGui()
@@ -112,6 +224,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//-
 
+	//TODO:
 	ofxImGuiSurfing::clearNames();
 	ofxImGuiSurfing::pushName();
 }
@@ -228,6 +341,7 @@ void ofxSurfing_ImGui_Manager::endWindow()
 
 	ImGui::End();
 
+	//TODO: move up?
 	// Clear the list of names from the stack.
 	//ofxImGuiSurfing::windowOpen.usedNames.pop();
 	//ofxImGuiSurfing::popName();

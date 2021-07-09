@@ -206,8 +206,15 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
   </p>
 </details>
 
-<!-- <img src="docs/2_3_Layout_ImTools.PNG" width="80%" height="80%"> -->
-<!-- <br>  -->
+### 2_4_Layout_ThemeEditor
+This is a helper for tweaking your own themes: testings sizes, layout and colors and, alternate fonts.  
+<details>
+  <summary>Screenshot</summary>
+  <p>
+
+![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
+  </p>
+</details>
 
 
 ## C. TYPES ENGINE

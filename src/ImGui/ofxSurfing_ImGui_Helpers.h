@@ -308,7 +308,6 @@ namespace ofxImGuiSurfing
 				// default style
 				else
 				{
-
 					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
@@ -339,7 +338,6 @@ namespace ofxImGuiSurfing
 				// default style
 				else
 				{
-
 					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
@@ -371,12 +369,16 @@ namespace ofxImGuiSurfing
 				// default style
 				else
 				{
-					if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
-					{
-						parameter.set(tmpRef);
-						bReturn = true;
-					}
-					else bReturn = false;
+					// Surfing customization
+					bReturn = (AddBigToggle(p));
+
+					// ofxImGui pattern
+					//if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
+					//{
+					//	parameter.set(tmpRef);
+					//	bReturn = true;
+					//}
+					//else bReturn = false;
 
 					return bReturn;
 				}

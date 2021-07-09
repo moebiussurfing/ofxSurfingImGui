@@ -173,6 +173,7 @@ namespace ofxImGuiSurfing
 
 		if (ofxImGuiSurfing::ShowStyleSelector2("Colors##Selector"))
 			ref_saved_style = style;
+		
 		ImGui::ShowFontSelector("Fonts##Selector");
 
 		// Simplified Settings (expose floating-pointer border sizes as boolean representing 0.0f or 1.0f)
@@ -412,8 +413,6 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopItemWidth();
 	}
-
-
 
 
 };//namespace

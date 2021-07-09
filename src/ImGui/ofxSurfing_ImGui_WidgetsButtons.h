@@ -124,7 +124,7 @@ namespace ofxImGuiSurfing
 
 		// default
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;
+		if (h == -1) h = BUTTON_BIG_HEIGHT / 2;
 
 		// border when selected
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -152,8 +152,11 @@ namespace ofxImGuiSurfing
 				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 			}
 
-			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
-			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonHovered];
+			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
+			//const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+			//const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
+
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
 			//enabled color
 			//ImVec4 colorHover2 = style->Colors[ImGuiCol_CheckMark];
@@ -258,8 +261,12 @@ namespace ofxImGuiSurfing
 		{
 			ImGui::PushID(nameTrue.c_str());
 
-			const ImVec4 colorActive = style->Colors[ImGuiCol_Separator];
-			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
+			//const ImVec4 colorActive = style->Colors[ImGuiCol_Separator];
+			//const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
+			//const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
+
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonHovered];
+			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
 
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);

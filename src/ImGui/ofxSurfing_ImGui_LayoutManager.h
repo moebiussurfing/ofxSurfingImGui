@@ -153,6 +153,7 @@ namespace ofxImGuiSurfing
 		// Force autodraw
 		//--------------------------------------------------------------
 		void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
+		void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
 
 		// Force shared context
 		//--------------------------------------------------------------
@@ -167,9 +168,25 @@ namespace ofxImGuiSurfing
 
 		ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
 		ImFont* customFont = nullptr;
+		vector<ImFont*> customFonts;
 
+		//-
+
+		// fonts runtime mangement 
 	public:
 		bool addFont(std::string path, int size);
+		bool pushFont(std::string path, int size);
+		int currFont = 0;
+		void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
+		void openFileFont(int size = 10);
+
+		void setDefaultFontIndex(int index);
+		int getNumFonts() { return customFonts.size(); }
+		
+		void pushStyleFont(int index);
+		void popStyleFont();
+
+		//-
 
 		//--------------------------------------------------------------
 		bool isMouseOverGui() {
@@ -242,7 +259,7 @@ namespace ofxImGuiSurfing
 			ImGui::Indent();
 			if (ImGui::CollapsingHeader("ADVANCED"))
 			{
-				//ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 				ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 
