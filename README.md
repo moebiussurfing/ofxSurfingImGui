@@ -207,7 +207,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
 </details>
 
 ### 2_4_Layout_ThemeEditor
-This is a helper for tweaking your own themes: testings sizes, layout and colors and, alternate fonts.  
+This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
 <details>
   <summary>Screenshot</summary>
   <p>
