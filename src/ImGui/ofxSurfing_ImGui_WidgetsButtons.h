@@ -37,7 +37,7 @@ namespace ofxImGuiSurfing
 		bool bPre = tmpRef;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		if (h == -1) h = BUTTON_BIG_HEIGHT / 2;//TODO: get widget height
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -414,7 +414,7 @@ namespace ofxImGuiSurfing
 	// https://github.com/ocornut/imgui/issues/1537
 	// bool & ofParameter<bool>
 	//--------------------------------------------------------------
-	inline void ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
+	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
 	{
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
@@ -530,7 +530,9 @@ namespace ofxImGuiSurfing
 		draw_list->AddText(pt, ct, str_id);
 
 		const float offset_xc = 0;
-		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+		const float _yy = 4;
+		//const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y + _yy;
 		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
 		ImGui::SetCursorScreenPos(pc);
 
@@ -539,6 +541,9 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 
 		//TODO: add return
+
+		return (bool*)v;
+		//ImGui::Dummy(ImVec2(0, 2));
 	}
 
 	//-
@@ -657,7 +662,8 @@ namespace ofxImGuiSurfing
 
 		const float offset_xc = 0;
 		//int ypad = 2;
-		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y * 2;
+		const float _yy = 4;
+		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y * 2 + _yy;
 		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
 		ImGui::SetCursorScreenPos(pc);
 

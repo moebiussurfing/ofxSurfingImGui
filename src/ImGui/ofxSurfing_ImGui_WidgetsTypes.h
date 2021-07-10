@@ -10,6 +10,7 @@
 #include "imgui_internal.h"
 
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
+#include "ofxSurfing_ImGui_WidgetsExtra.h"
 #include "ofxSurfing_ImGui_LayoutManager.h"
 
 namespace ofxImGuiSurfing
@@ -30,6 +31,7 @@ namespace ofxImGuiSurfing
 			IM_TOGGLE_SMALL,
 			IM_TOGGLE_BIG,
 			IM_SLIDER,//float/int
+			IM_PROGRESS_BAR,
 			IM_STEPPER,
 			IM_DRAG,
 			//IM_TEXT_BIG,
@@ -375,6 +377,17 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
+				case IM_PROGRESS_BAR:
+				{
+					string name = p.getName();
+					string n = "##PROGRESS_f_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
+					ofxImGuiSurfing::AddProgressBar(p);
+					ImGui::PopID();
+					bReturn = false;
+				}
+				break;
+
 				case IM_DRAG:
 				{
 					const float speed = 0.01f;
@@ -428,6 +441,7 @@ namespace ofxImGuiSurfing
 
 				switch (type)
 				{
+
 				case IM_DEFAULT:
 				case IM_SLIDER:
 				{
@@ -483,6 +497,18 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
+
+				case IM_PROGRESS_BAR:
+				{
+					string name = p.getName();
+					string n = "##PROGRESS_i_" + name + ofToString(1);
+					ImGui::PushID(n.c_str());
+					ofxImGuiSurfing::AddProgressBar(p);
+					ImGui::PopID();
+					bReturn = false;
+				}
+				break;
+
 				}
 
 				bDone = true;
@@ -494,7 +520,7 @@ namespace ofxImGuiSurfing
 			{
 				// extra options
 				if (bSameLine) ImGui::SameLine();
-				if (spacing != -1)
+				if (spacing != -1 && spacing != 0)
 				{
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 				}

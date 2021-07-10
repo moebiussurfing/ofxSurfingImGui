@@ -40,9 +40,19 @@ namespace ofxImGuiSurfing
 	// preset clicker matrix buttons
 	// index will change when a box is clicked
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false)
 	{
 		bool cChanged = false;
+
+		//if (bDrawBorder) 
+		//{
+		ImGuiStyle *style = &ImGui::GetStyle();
+		float a = 0.3;
+		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
+		//ImVec4 borderLineColor = style->Colors[ImGuiCol_Border];
+		//ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
+		float borderLineWidth = 1.0;
+		//}
 
 		//ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 		//_flagt |= ImGuiTreeNodeFlags_Framed;
@@ -101,6 +111,8 @@ namespace ofxImGuiSurfing
 
 			for (int n = 0; n < _amt; n++)
 			{
+				bool bBorder = false;
+
 				ImGui::PushID(n);
 				{
 					string name = ofToString(ofToString(n));
@@ -110,8 +122,11 @@ namespace ofxImGuiSurfing
 						// when selected / active
 						if (_index.get() == n)
 						{
+							if (bDrawBorder) bBorder = true;
+
 							// changes the colors
-							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered];
+							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
+							//const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
 							// border with alpha
 							//const ImVec4 c = style2.Colors[ImGuiCol_BorderShadow]; // TODO: get black from theme
@@ -130,12 +145,28 @@ namespace ofxImGuiSurfing
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 
+						// border
+						if (bBorder)
+						{
+							//uint32_t _time = ofGetElapsedTimeMillis();
+							//float a = ofMap(_time % randomizeDuration, 0, randomizeDuration, 0.8, 0.4);
+							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
+							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+						}
+
 						// draw button
 						if (ImGui::Button(name.c_str(), sizebt))
 						{
 							_index = n;
 							//load(n); // trig load preset
 							cChanged = true;
+						}
+
+						// border
+						if (bBorder)
+						{
+							ImGui::PopStyleVar(1);
+							ImGui::PopStyleColor();
 						}
 
 						// customize colors
@@ -157,15 +188,10 @@ namespace ofxImGuiSurfing
 
 		return cChanged;
 	}
-}
 
-//-
+	//-
 
-// file selector
-
-namespace ofxImGuiSurfing
-{
-	using namespace ImGui;
+	// file selector
 
 	// from https://gist.github.com/nariakiiwatani/dabf4cd2d04ad015bb6fabdedef7b2aa
 	// buttons selector for files on a folder:
@@ -567,7 +593,6 @@ namespace ofxImGuiSurfing
 		//	ImGui::PopItemWidth();
 		//	ImGui::EndTooltip();
 		//}
-
 
 		return value_changed;
 	}
@@ -1046,6 +1071,74 @@ namespace ofxImGuiSurfing
 	//	}
 	//	return false;
 	//}
+};
+
+//-----
+
+namespace ofxImGuiSurfing
+{
+	//--------------------------------------------------------------
+	inline void ProgressBar2(float valuePrc, float max = 1.0f)
+	{
+		const float _w100 = ImGui::GetContentRegionAvail().x;
+		const float pad = 0;
+
+		// draw progress bar
+		float _prc;
+		ImGuiStyle *style = &ImGui::GetStyle();
+		ImVec4 color;
+
+		//ImGui::PushID("prog");
+		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+		
+		if (max == 1.0f) _prc = valuePrc;
+		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
+
+		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
+
+		ImGui::PopStyleColor();
+		//ImGui::PopID();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddProgressBar(ofParameter<float> valuePrc, float max = -1.0f)
+	{
+		//allways starts on 0.0f but max can be 1.0f, 100..
+		if (max == -1.0f) ofxImGuiSurfing::ProgressBar2(valuePrc.get(), valuePrc.getMax());
+		else ofxImGuiSurfing::ProgressBar2(valuePrc.get(), 1.0f);
+	}
+
+	//--------------------------------------------------------------
+	inline void ProgressBar2(int valuePrc, int max = 100)
+	{
+		float _w100 = ImGui::GetContentRegionAvail().x;
+		float pad = 0;
+
+		// draw progress bar
+		float _prc;
+		ImGuiStyle *style = &ImGui::GetStyle();
+		ImVec4 color;
+
+		//ImGui::PushID("prog");
+		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
+
+		if (max == 100) _prc = valuePrc/100.f;
+		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
+
+		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
+		ImGui::PopStyleColor();
+		//ImGui::PopID();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddProgressBar(ofParameter<int> valuePrc, int max = -1)
+	{
+		//allways starts on 0.0f but max can be 1.0f, 100..
+		if (max == -1) AddProgressBar(valuePrc.get(), valuePrc.getMax());
+		else AddProgressBar(valuePrc.get(), 100);
+	}
 };
 
 //-----
