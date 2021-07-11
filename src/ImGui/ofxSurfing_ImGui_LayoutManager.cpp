@@ -257,6 +257,18 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name)
 }
 
 //--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
+{
+	beginWindow(p.getName().c_str(), (bool*)&p.get(), ImGuiWindowFlags_None);
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
+{
+	beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
+}
+
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	// Push a new list of names onto the stack.

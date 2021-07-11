@@ -40,7 +40,7 @@ namespace ofxImGuiSurfing
 	// preset clicker matrix buttons
 	// index will change when a box is clicked
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = WIDGETS_HEIGHT)
 	{
 		bool cChanged = false;
 
@@ -76,7 +76,8 @@ namespace ofxImGuiSurfing
 			}
 
 			int _amt = _index.getMax() + 1;
-			float sizex, sizey;
+			float sizex;
+			//float  sizey;
 
 			if (_amt > amountBtRow)
 			{
@@ -95,7 +96,7 @@ namespace ofxImGuiSurfing
 				}
 			}
 
-			sizey = 40;
+			//sizey = 40;
 			sizex = MAX(5, sizex);
 
 			//-
@@ -1078,6 +1079,20 @@ namespace ofxImGuiSurfing
 namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
+	inline void AddVoidWidget()
+	{
+		float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+		ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+		//ImGui::Dummy(ImVec2(0, 2 * ImGui::GetStyle().ItemSpacing.y + 2 * ImGui::GetStyle().ItemInnerSpacing.y)); // hide widget
+	}
+
+};
+
+//-----
+
+namespace ofxImGuiSurfing
+{
+	//--------------------------------------------------------------
 	inline void ProgressBar2(float valuePrc, float max = 1.0f)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
@@ -1091,7 +1106,7 @@ namespace ofxImGuiSurfing
 		//ImGui::PushID("prog");
 		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
-		
+
 		if (max == 1.0f) _prc = valuePrc;
 		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
 
@@ -1124,7 +1139,7 @@ namespace ofxImGuiSurfing
 		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
-		if (max == 100) _prc = valuePrc/100.f;
+		if (max == 100) _prc = valuePrc / 100.f;
 		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
 
 		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
@@ -1136,8 +1151,8 @@ namespace ofxImGuiSurfing
 	inline void AddProgressBar(ofParameter<int> valuePrc, int max = -1)
 	{
 		//allways starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1) AddProgressBar(valuePrc.get(), valuePrc.getMax());
-		else AddProgressBar(valuePrc.get(), 100);
+		if (max == -1) ProgressBar2(valuePrc.get(), valuePrc.getMax());
+		else ProgressBar2(valuePrc.get(), max);
 	}
 };
 

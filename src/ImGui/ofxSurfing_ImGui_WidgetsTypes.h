@@ -23,19 +23,21 @@ namespace ofxImGuiSurfing
 		//TODO: make simpler namespace. or move outside the class?
 		enum ImWidgetSurfingTYPE
 		{
-			IM_DEFAULT = 0,
-			IM_HIDDEN,
-			IM_CHECKBOX,//bool
-			IM_BUTTON_SMALL,
-			IM_BUTTON_BIG,
-			IM_TOGGLE_SMALL,
-			IM_TOGGLE_BIG,
-			IM_SLIDER,//float/int
-			IM_PROGRESS_BAR,
-			IM_STEPPER,
-			IM_DRAG,
-			//IM_TEXT_BIG,
-			NUM_IM_TYPES
+			OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
+			OFX_IM_HIDDEN,		// omit widget. don't let spacing there
+			OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
+			OFX_IM_INACTIVE,	// make it inactive. disables mouse control
+			OFX_IM_CHECKBOX,	// bool
+			OFX_IM_BUTTON_SMALL,
+			OFX_IM_BUTTON_BIG,
+			OFX_IM_TOGGLE_SMALL,
+			OFX_IM_TOGGLE_BIG,
+			OFX_IM_SLIDER,		// float/int
+			OFX_IM_PROGRESS_BAR,
+			OFX_IM_STEPPER,
+			OFX_IM_DRAG,
+			//OFX_IM_TEXT_BIG,
+			OFX_IM_NUM_TYPES
 		};
 
 		//-
@@ -77,7 +79,7 @@ namespace ofxImGuiSurfing
 		//static float _w33;
 		//static float _w25;
 		//static float _h;	
-		
+
 		// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 		//--------------------------------------------------------------
 		inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
@@ -125,7 +127,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		class surfingImWidgetConf {
 		public:
-			ImWidgetSurfingTYPE type = IM_DEFAULT;
+			ImWidgetSurfingTYPE type = OFX_IM_DEFAULT;
 			std::string name = "-1";
 			int amtPerRow = 1;
 			bool bSameLine = false;
@@ -187,7 +189,7 @@ namespace ofxImGuiSurfing
 
 		// queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
-		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			surfingImWidgetConf c;
 			c.name = aparam.getName();
@@ -214,7 +216,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//bool Add(ofAbstractParameter& aparam, SurfingTypes type) {
-		//	Add(bMode1, SurfingTypes::IM_TOGGLE_SMALL, 3, true);
+		//	Add(bMode1, SurfingTypes::OFX_IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-
@@ -232,7 +234,7 @@ namespace ofxImGuiSurfing
 		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam)
 		{
 			string name = aparam.getName();
-			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(IM_DEFAULT);
+			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(OFX_IM_DEFAULT);
 
 			auto type = aparam.type();
 			bool isBool = type == typeid(ofParameter<bool>).name();
@@ -254,12 +256,12 @@ namespace ofxImGuiSurfing
 		// render now a parameter ImGui widget
 		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
 		//--------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			bool bDone = false;
 
 			// if setted as hidden dont draw, but apply same line and spacing and return
-			if (type == IM_HIDDEN)
+			if (type == OFX_IM_HIDDEN)
 			{
 				// extra options
 				if (bSameLine) ImGui::SameLine();
@@ -269,6 +271,26 @@ namespace ofxImGuiSurfing
 				}
 
 				return false;
+			}
+
+			// if setted as hidden dont draw, but apply same line and spacing and return
+			else if (type == OFX_IM_DISABLED)
+			{
+				// extra options
+				if (bSameLine) ImGui::SameLine();
+				if (spacing != -1)
+				{
+					float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+
+					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+				}
+
+				return false;
+			}
+			else if (type == OFX_IM_INACTIVE)
+			{
+					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			}
 
 			//--
@@ -311,24 +333,10 @@ namespace ofxImGuiSurfing
 
 				switch (type)
 				{
-				case IM_BUTTON_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h / 2);
-					break;
 
-				case IM_BUTTON_BIG:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
-					break;
-
-				case IM_TOGGLE_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h / 2);
-					break;
-
-				case IM_TOGGLE_BIG:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
-					break;
-
-				case IM_DEFAULT:
-				case IM_CHECKBOX:
+				case OFX_IM_DEFAULT:
+				case OFX_IM_CHECKBOX:
+				case OFX_IM_INACTIVE:
 				{
 					// default:
 					string name = p.getName();
@@ -343,6 +351,22 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
+
+				case OFX_IM_BUTTON_SMALL:
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h / 2);
+					break;
+
+				case OFX_IM_BUTTON_BIG:
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
+					break;
+
+				case OFX_IM_TOGGLE_SMALL:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h / 2);
+					break;
+
+				case OFX_IM_TOGGLE_BIG:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+					break;
 				}
 
 				bDone = true;
@@ -359,8 +383,9 @@ namespace ofxImGuiSurfing
 
 				switch (type)
 				{
-				case IM_DEFAULT:
-				case IM_SLIDER:
+				case OFX_IM_DEFAULT:
+				case OFX_IM_SLIDER:
+				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
 					string n = "##SLIDER_f_" + name + ofToString(1);
@@ -377,7 +402,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_PROGRESS_BAR:
+				case OFX_IM_PROGRESS_BAR:
 				{
 					string name = p.getName();
 					string n = "##PROGRESS_f_" + name + ofToString(1);
@@ -388,7 +413,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_DRAG:
+				case OFX_IM_DRAG:
 				{
 					const float speed = 0.01f;
 					string name = p.getName();
@@ -406,7 +431,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_STEPPER:
+				case OFX_IM_STEPPER:
 				{
 					const float step = 0.001f;
 					const float stepFast = 0.1f;
@@ -442,8 +467,9 @@ namespace ofxImGuiSurfing
 				switch (type)
 				{
 
-				case IM_DEFAULT:
-				case IM_SLIDER:
+				case OFX_IM_DEFAULT:
+				case OFX_IM_SLIDER:
+				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
 					string n = "##SLIDER_i_" + name + ofToString(1);
@@ -460,7 +486,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_DRAG:
+				case OFX_IM_DRAG:
 				{
 					const float speed = 0.1;
 					string name = p.getName();
@@ -478,7 +504,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_STEPPER:
+				case OFX_IM_STEPPER:
 				{
 					const int step = 1;
 					const int stepFast = 5;
@@ -498,7 +524,7 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
-				case IM_PROGRESS_BAR:
+				case OFX_IM_PROGRESS_BAR:
 				{
 					string name = p.getName();
 					string n = "##PROGRESS_i_" + name + ofToString(1);
@@ -524,6 +550,11 @@ namespace ofxImGuiSurfing
 				{
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 				}
+			}
+
+			if (type == OFX_IM_INACTIVE)
+			{
+					ImGui::PopItemFlag();
 			}
 
 			//----

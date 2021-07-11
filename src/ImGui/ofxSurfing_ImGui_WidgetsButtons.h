@@ -344,7 +344,31 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1)// button but using a bool not void param
+	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f))
+	{
+		bool bChanged = false;
+		auto tmpRef = parameter.get();
+		string name = parameter.getName();
+
+		float w = ImGui::GetContentRegionAvail().x;
+		float h = ImGui::GetContentRegionAvail().y;
+
+		if (sz.x == -1) sz.x = w;
+		if (sz.y == -1) sz.y = h;
+
+
+		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
+		{
+			parameter.set(tmpRef);
+
+			bChanged = true;
+		}
+
+		return bChanged;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string format = "%.3f")// button but using a bool not void param
 	{
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
@@ -367,7 +391,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 
 		//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
-		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), "ratio = %.3f"))
+		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 		{
 			ofLogNotice(__FUNCTION__) << name << ": BANG";
 

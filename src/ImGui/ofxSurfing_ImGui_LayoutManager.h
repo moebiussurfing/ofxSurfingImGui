@@ -137,12 +137,21 @@ namespace ofxImGuiSurfing
 		void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 		void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
-		void begin();
+		// global
+		// all the windows are feeded between
+		void begin(); 
 		void end();
 
+		// begin a window
 		void beginWindow(std::string name = "Window"); // -> simpler
+		void beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
+		void beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 		void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
+
+		// end a window
 		void endWindow();
+
+		//-
 
 		void draw(); // to manual draw...
 
@@ -160,6 +169,7 @@ namespace ofxImGuiSurfing
 		void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
 	private:
+
 		void setup_ImGui();
 		bool bAutoDraw; // must be false when multiple ImGui instances created!
 
@@ -173,7 +183,9 @@ namespace ofxImGuiSurfing
 		//-
 
 		// fonts runtime mangement 
+
 	public:
+
 		bool addFont(std::string path, int size);
 		bool pushFont(std::string path, int size);
 		int currFont = 0;
@@ -194,6 +206,7 @@ namespace ofxImGuiSurfing
 		}
 
 	private:
+
 		bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
 		// panels minimal sizes
@@ -206,7 +219,9 @@ namespace ofxImGuiSurfing
 		//-
 
 		// exposed useful public params
+
 	public:
+
 		ofParameterGroup params_Advanced{ "ADVANCED" };
 
 		ofParameter<bool> bGui{ "Show Gui", true };
@@ -217,6 +232,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bMinimize{ "Minimize", false };
 
 	private:
+
 		ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 		//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
 
