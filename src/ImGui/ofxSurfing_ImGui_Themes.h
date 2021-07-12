@@ -7,12 +7,17 @@
 
 using namespace ImGui;
 
+//#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
+
 #define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT_MIN 20
 
+//#ifdef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
 #define BUTTON_BIG_HEIGHT 50
+//#endif
+
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20
 #define SLIDER_HEIGHT 20
@@ -26,6 +31,11 @@ using namespace ImGui;
 
 namespace ofxImGuiSurfing
 {
+
+//#ifndef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
+//	static const float BUTTON_BIG_HEIGHT = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+//#endif
+
 	//----
 
 	//TODO:

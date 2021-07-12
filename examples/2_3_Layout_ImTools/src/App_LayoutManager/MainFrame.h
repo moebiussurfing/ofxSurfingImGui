@@ -49,5 +49,10 @@ public:
 	// configuration
 	std::string getXml(const std::string& vOffset, const std::string& vUserDatas = "");
 	bool setFromXml(tinyxml2::XMLElement* vElem, tinyxml2::XMLElement* vParent, const std::string& vUserDatas = "");
+
+	////TODO:
+	//void get() {
+	//	LayoutManager::Instance()->m_Pane_Shown
+	//}
 };
 

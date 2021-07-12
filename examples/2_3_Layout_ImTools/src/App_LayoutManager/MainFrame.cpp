@@ -41,9 +41,11 @@ SOFTWARE.
 #include "CentralPane.h"
 #include <LayoutManager/SamplePane.h>
 
+#define IMGUI_IMTOOLS_PATH_CONFIG "imguiLayout.xml"
+
 void MainFrame::Init()
 {
-	LoadConfigFile("config.xml");
+	LoadConfigFile(IMGUI_IMTOOLS_PATH_CONFIG);
 
 	LayoutManager::Instance()->Init("Layouts", "Default Layout");
 	LayoutManager::Instance()->AddPane(LeftPane::Instance(), "Left", (1 << 0), PaneDisposal::LEFT, true, true);
@@ -59,7 +61,7 @@ void MainFrame::Init()
 
 void MainFrame::Unit()
 {
-	SaveConfigFile("config.xml");
+	SaveConfigFile(IMGUI_IMTOOLS_PATH_CONFIG);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -86,13 +88,13 @@ void MainFrame::Display(ImVec2 vSize)
 
 		// ImGui Infos
 		auto io = ImGui::GetIO();
-		//const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
-		//const auto size = ImGui::CalcTextSize(label.c_str());
-		std::string label;
-		if (bDebug) label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
-		else label = ct::toStr("ofxSurfingImGui");
-		
-		ImVec2 size = ImGui::CalcTextSize(label.c_str());
+		const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+		const auto size = ImGui::CalcTextSize(label.c_str());
+
+		//std::string label;
+		//if (bDebug) label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+		//else label = ct::toStr("ofxSurfingImGui");
+		//ImVec2 size = ImGui::CalcTextSize(label.c_str());
 
 		ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
 		ImGui::Checkbox("Debug", &bDebug);
@@ -118,6 +120,9 @@ void MainFrame::Display(ImVec2 vSize)
 		ImGui::ShowDemoWindow(&m_ShowImGui);
 	if (m_ShowMetric)
 		ImGui::ShowMetricsWindow(&m_ShowMetric);
+
+	////TODO:
+	//LayoutManager::Instance()->DrawWidgets
 }
 
 std::string MainFrame::getXml(const std::string& vOffset, const std::string& vUserDatas)

@@ -111,7 +111,27 @@ namespace ofxImGuiSurfing
 		}
 
 		return h;
-	}	
+	}
+
+	//--------------------------------------------------------------
+	inline float getWidgetsHeightRelative(int amntRows = -1)
+	{
+		float h;
+		if (amntRows == -1)
+		{
+			//h = BUTTON_BIG_HEIGHT;
+			h = 4 * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2); // multiply the them widget height
+		}
+		else
+		{
+			float __spcy = ImGui::GetStyle().ItemSpacing.y;
+			float __h100 = ImGui::GetContentRegionAvail().y;
+			h = __h100 / amntRows - __spcy / amntRows;
+		}
+
+		return h;
+	}
+
 
 } // namespace ofxImGuiSurfing
 
@@ -121,189 +141,199 @@ namespace ofxImGuiSurfing
 //namespace ofxImGuiSurfing
 //{
 	//--------------------------------------------------------------
-	class ofxSurfing_ImGui_Manager
-	{
+class ofxSurfing_ImGui_Manager
+{
 
-	public:
-		ofxSurfing_ImGui_Manager();
-		~ofxSurfing_ImGui_Manager();
+public:
+	ofxSurfing_ImGui_Manager();
+	~ofxSurfing_ImGui_Manager();
 
-		//-
+	//-
 
-		// main API
+	// main API
 
-	public:
+public:
 
-		void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-		void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
+	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
-		// global
-		// all the windows are feeded between
-		void begin(); 
-		void end();
+	// global
+	// all the windows are feeded between
+	void begin();
+	void end();
 
-		// begin a window
-		void beginWindow(std::string name = "Window"); // -> simpler
-		void beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
-		void beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
-		void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
+	// begin a window
+	void beginWindow(std::string name = "Window"); // -> simpler
+	void beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
+	void beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
+	void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 
-		// end a window
-		void endWindow();
+	// end a window
+	void endWindow();
 
-		//-
+	//-
 
-		void draw(); // to manual draw...
+	void draw(); // to manual draw...
 
-		//-
+	//-
 
-	public:
+public:
 
-		// Force autodraw
-		//--------------------------------------------------------------
-		void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
-		void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
+	// Force autodraw
+	//--------------------------------------------------------------
+	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
+	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
 
-		// Force shared context
-		//--------------------------------------------------------------
-		void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
+	// Force shared context
+	//--------------------------------------------------------------
+	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
-	private:
+private:
 
-		void setup_ImGui();
-		bool bAutoDraw; // must be false when multiple ImGui instances created!
+	void setup_ImGui();
+	bool bAutoDraw; // must be false when multiple ImGui instances created!
 
-		ofxImGui::Gui * guiPtr = NULL;
-		ofxImGui::Gui gui;
+	ofxImGui::Gui * guiPtr = NULL;
+	ofxImGui::Gui gui;
 
-		ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
-		ImFont* customFont = nullptr;
-		vector<ImFont*> customFonts;
+	ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
+	ImFont* customFont = nullptr;
+	vector<ImFont*> customFonts;
 
-		//-
+	//-
 
-		// fonts runtime mangement 
+	// fonts runtime mangement 
 
-	public:
+public:
 
-		bool addFont(std::string path, int size);
-		bool pushFont(std::string path, int size);
-		int currFont = 0;
-		void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
-		void openFileFont(int size = 10);
+	bool addFont(std::string path, int size);
+	bool pushFont(std::string path, int size);
+	int currFont = 0;
+	void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
+	void openFileFont(int size = 10);
 
-		void setDefaultFontIndex(int index);
-		int getNumFonts() { return customFonts.size(); }
-		
-		void pushStyleFont(int index);
-		void popStyleFont();
+	void setDefaultFontIndex(int index);
+	int getNumFonts() { return customFonts.size(); }
 
-		//-
+	void pushStyleFont(int index);
+	void popStyleFont();
 
-		//--------------------------------------------------------------
-		bool isMouseOverGui() {
-			return bMouseOverGui;
-		}
+	//-
 
-	private:
+	//--------------------------------------------------------------
+	bool isMouseOverGui() {
+		return bMouseOverGui;
+	}
 
-		bool bUseAdvancedSubPanel = true; // enable advanced sub panel
+private:
 
-		// panels minimal sizes
-		float xx = 10;
-		float yy = 10;
-		float ww = PANEL_WIDGETS_WIDTH_MIN;
-		float hh = 20;
-		//float hh = PANEL_WIDGETS_HEIGHT_MIN;
+	bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
-		//-
+	// panels minimal sizes
+	float xx = 10;
+	float yy = 10;
+	float ww = PANEL_WIDGETS_WIDTH_MIN;
+	float hh = 20;
+	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
 
-		// exposed useful public params
+	//-
 
-	public:
+	// exposed useful public params
 
-		ofParameterGroup params_Advanced{ "ADVANCED" };
+public:
 
-		ofParameter<bool> bGui{ "Show Gui", true };
-		ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
-		ofParameter<bool> bExtra{ "Extra", false };
-		ofParameter<bool> bAdvanced{ "Advanced", false };
-		ofParameter<bool> bDebug{ "Debug", false };
-		ofParameter<bool> bMinimize{ "Minimize", false };
+	ofParameterGroup params_Advanced{ "ADVANCED" };
 
-	private:
+	ofParameter<bool> bGui{ "Show Gui", true };
+	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
+	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bDebug{ "Debug", false };
+	ofParameter<bool> bMinimize{ "Minimize", false };
 
-		ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
-		//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
+private:
 
-	public:
+	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
+	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
 
-		// an extra common panel with some usefull toggles:
-		// auto-resize, debug mouse over gui, ...
-		//-
+public:
 
-		//// EXTRA MENU
-		//{
-		//	ImGui::Dummy(ImVec2(0, 5)); // spacing
+	// an extra common panel with some usefull toggles:
+	// auto-resize, debug mouse over gui, ...
+	//-
 
-		//	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-		//	if (guiManager.bExtra)
-		//	{
-		//		ImGui::Indent();
+	//// EXTRA MENU
+	//{
+	//	ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		//		// add your extra (hidden by default) controls
-		//		//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
+	//	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+	//	if (guiManager.bExtra)
+	//	{
+	//		ImGui::Indent();
 
-		//		//--
+	//		// add your extra (hidden by default) controls
+	//		//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
 
-		//		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-		//		if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+	//		//--
 
-		//		ImGui::Unindent();
-		//	}
-		//}
+	//		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+	//		if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
 
-		//--------------------------------------------------------------
-		void drawAdvancedSubPanel() {
+	//		ImGui::Unindent();
+	//	}
+	//}
 
-			if (!bAdvanced) return;
-			if (!bUseAdvancedSubPanel) return;
+	//--------------------------------------------------------------
+	void drawAdvancedSubPanel(bool bHeader = true) {
 
-			//--
+		if (!bAdvanced) return;
+		if (!bUseAdvancedSubPanel) return;
 
-			//ImGui::Dummy(ImVec2(0.0f, 2.0f));
-			ImGui::Indent();
-			if (ImGui::CollapsingHeader("ADVANCED"))
-			{
+		//--
+
+		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
+
+		ImGui::Indent();
+		{
+			if (bHeader) {
+				if (ImGui::CollapsingHeader("ADVANCED", ImGuiTreeNodeFlags_None))
+				{
+					ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+					ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+				}
+			}
+			else {
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 				ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-
-				//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
-				// this is full width (_w100) with standard height (_h)
-				//float _w;
-				//float _h;
-				//_w = ofxImGuiSurfing::getWidgetsWidth(1);
-				//_h = ofxImGuiSurfing::getWidgetsHeight(-1);
-				//ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
-				//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
-				//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
 			}
-			ImGui::Unindent();
 		}
+		ImGui::Unindent();
 
-		//--------------------------------------------------------------
-		void setUseAdvancedSubPanel(bool b) {
-			bUseAdvancedSubPanel = b;
-		}
+		//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
+		// this is full width (_w100) with standard height (_h)
+		//float _w;
+		//float _h;
+		//_w = ofxImGuiSurfing::getWidgetsWidth(1);
+		//_h = ofxImGuiSurfing::getWidgetsHeight(-1);
+		//ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
+		//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
+		//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
+	}
 
-		//-
+	//--------------------------------------------------------------
+	void setUseAdvancedSubPanel(bool b) {
+		bUseAdvancedSubPanel = b;
+	}
 
-		////TODO:
-		//public:
-		//SurfingTypes widgetsManager;
-		//void refreshShape() {
-		//widgetsManager.refreshPanelShape(); // update sizes to current window shape
-		//}
-	};
+	//-
+
+	////TODO:
+	//public:
+	//SurfingTypes widgetsManager;
+	//void refreshShape() {
+	//widgetsManager.refreshPanelShape(); // update sizes to current window shape
+	//}
+};
 //} // namespace ofxImGuiSurfing

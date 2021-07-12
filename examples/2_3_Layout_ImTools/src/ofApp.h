@@ -4,7 +4,7 @@
 
 #include "ofxImGui.h"	
 
-#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
+#include "ofxSurfingImGui.h" // -> Add all classes. You can also simplify picking what you want to use.
 // Now you can use the included ofxSurfing_ImGui_Helpers.h to improve the handling of ofParameters.
 
 #include "ofxWindowApp.h" // -> not required
@@ -22,11 +22,7 @@ public:
 
 	//-
 
-	ofxSurfing_ImGui_Manager guiManager; // In MODE A ofxGui will be instatiated inside the class
-	// MODE B
-	//ofxImGui::Gui gui; // can be instantiated outside the class (locally to maybe share with other classes)
-
-	//void drawWidgets();
+	ofxSurfing_ImGui_Manager guiManager;
 
 	//-
 
