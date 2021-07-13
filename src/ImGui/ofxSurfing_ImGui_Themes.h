@@ -5,27 +5,9 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
+//#include "ofxSurfing_ImGui_LayoutHelpers.h"
+
 using namespace ImGui;
-
-//#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
-
-#define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
-#define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
-#define PANEL_WIDGETS_HEIGHT_MIN 20
-
-//#ifdef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
-#define BUTTON_BIG_HEIGHT 50
-//#endif
-
-#define BUTTON_COLOR_SIZE 40
-#define BUTTON_SLIM_HEIGHT2 20
-#define SLIDER_HEIGHT 20
-#define COLOR_STRIP_COLOR_HEIGHT 15
-#define WIDGETS_HEIGHT 50 // will be applied to tbuttons/toggles heights
-#define WIDGET_PARAM_PADDING 120 // will be applied to the ofParams sliders. 110 must be the max labels width of params names
-
-#define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
 
 //------------------------------
 
@@ -41,10 +23,12 @@ namespace ofxImGuiSurfing
 	//TODO:
 	// WIP
 	// fonts management
+
 	//--------------------------------------------------------------
 	inline void ImGui_FontCustom() {
 		ofLogNotice(__FUNCTION__);
 	}
+
 	//--------------------------------------------------------------
 	inline void ImGui_FontCustom(ofxImGui::Gui &gui, ImFont* customFont, string path = "assets/fonts/telegrama_render.otf", float size = 10.f) {
 		ofLogNotice(__FUNCTION__);

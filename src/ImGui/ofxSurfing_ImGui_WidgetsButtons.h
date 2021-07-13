@@ -12,16 +12,18 @@
 //------------------------------
 
 #include "ofxImGui.h"
-#include "ofxSurfing_ImGui_Themes.h"
 #include "imgui_internal.h"
+
+#include "ofxSurfing_ImGui_Themes.h"
+#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
 //------------------------------
 
 namespace ofxImGuiSurfing
 {
-	//TODO:
-	//test an unique_name_engine workaround..
-	static int counterBigToggle = 0;
+	////TODO:
+	////test an unique_name_engine workaround..
+	//static int counterBigToggle = 0;
 
 	//-
 
@@ -36,8 +38,8 @@ namespace ofxImGuiSurfing
 
 		bool bPre = tmpRef;
 
-		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT / 2;//TODO: get widget height
+		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
+		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -64,6 +66,23 @@ namespace ofxImGuiSurfing
 		else return false;
 	}
 
+	// ambiguous..
+
+	////--------------------------------------------------------------
+	//inline bool AddBigButton(ofParameter<bool>& parameter)// button but using a bool not void param
+	//{
+	//	ImVec2 sz = ImVec2(-1.f, -1.f);
+	//	AddBigButton(parameter, sz);
+	//}
+
+	////--------------------------------------------------------------
+	//inline bool AddBigButton(ofParameter<bool>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f))// button but using a bool not void param
+	//{
+	//	AddBigButton(parameter, sz.x, sz.y);
+	//}
+
+	//-
+
 	//--------------------------------------------------------------
 	inline bool AddSmallButton(ofParameter<bool>& parameter, float w = -1, float h = -1)// button but using a bool not void param
 	{
@@ -74,7 +93,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(n.c_str());
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -124,7 +143,8 @@ namespace ofxImGuiSurfing
 
 		// default
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT / 2;
+		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
+		//if (h == -1) h = BUTTON_BIG_HEIGHT / 2;
 
 		// border when selected
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -247,7 +267,8 @@ namespace ofxImGuiSurfing
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		//if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		if (nameTrue == "-1") nameTrue = "##BIGTOGGLENAMED_on_" + name;
 		if (nameFalse == "-1") nameFalse = "##BIGTOGGLENAMED_off_" + name;
@@ -409,6 +430,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	{
+		AddBigSlider(parameter, sz.x, sz.y, format);
+	}
+
+	//--------------------------------------------------------------
 	inline bool AddDragFloatSlider(ofParameter<float>& parameter/*, float w = 100*/)// button but using a bool not void param
 	{
 		bool bChanged = false;
@@ -437,6 +464,7 @@ namespace ofxImGuiSurfing
 	// rounded toggle buttons: 
 	// https://github.com/ocornut/imgui/issues/1537
 	// bool & ofParameter<bool>
+
 	//--------------------------------------------------------------
 	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
 	{
@@ -574,7 +602,32 @@ namespace ofxImGuiSurfing
 
 	// ofParameter bool toggle
 	//TODO:
-	// there's a bug that when using 
+	// there's a bug that when using
+	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	// after the button it adds more spacing
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 vv = ImVec2(-1, -1))
+	{
+		bool bReturn = false;
+		auto tmpRef = parameter.get();
+
+		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, vv))
+		{
+			parameter.set(tmpRef);
+			bReturn = true;
+		}
+		else bReturn = false;
+
+		return bReturn;
+	}
+
+	//--
+
+	/*
+
+	// ofParameter bool toggle
+	//TODO:
+	// there's a bug that when using
 	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
 	// after the button it adds more spacing
 	//--------------------------------------------------------------
@@ -773,183 +826,4 @@ namespace ofxImGuiSurfing
 
 		return tmpRef;// used
 		*/
-	}
-
-	//-
-
-	//// TODO:
-
-	////--------------------------------------------------------------
-	//inline int ImGui_ButtonsMatrix(int amountButtons, ofParameter<int> selectorTarget, string name)
-	//{
-	//	{
-	//		int _selected = -1;
-	//		//preset selector
-	//		//toggle button matrix
-	//		ImVec2 button_sz(40, 40);
-	//		//Manually wrapping
-	//		//(we should eventually provide this as an automatic layout feature, but for now you can do it manually)
-	//		//ImGui::Text("PRESET SELECTOR:");
-	//		ImGuiStyle& style = ImGui::GetStyle();
-	//		int _amtButtons = mainGroupAmtPresetsFav;
-	//		float _windowVisible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
-	//		for (int n = 0; n < _amtButtons; n++)
-	//		{
-	//			ImGui::PushID(n);
-	//			//string name = ofToString((char)(bKeys[0][n]));
-	//			//customize colors
-	//			{
-	//				if (PRESET_Selected_IndexMain.get() == n)//when selected
-	//				{
-	//					const ImVec4 colorActive = style.Colors[ImGuiCol_ButtonHovered];//changes the color
-	//					ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
-	//				}
-	//				else {
-	//					const ImVec4 colorButton = style.Colors[ImGuiCol_Button];//do not changes the color
-	//					ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
-	//				}
-	//				//draw button
-	//				if (ImGui::Button(name.c_str(), button_sz))
-	//				{
-	//					//populatePreset(n);//trig load preset
-	//					_selected = n;
-	//				}
-	//				//customize colors
-	//				ImGui::PopStyleColor();
-	//			}
-	//			float last_button_x2 = ImGui::GetItemRectMax().x;
-	//			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + button_sz.x; // Expected position if next button was on same line
-	//			if (n + 1 < _amtButtons && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
-	//			ImGui::PopID();
-	//		}
-	//		return _selected;
-	//	}
-	//}
-
-	//--
-
-	//// TODO:
-
-	// spinner progress indicator
-	//https://github.com/ocornut/imgui/issues/1901
-	//https://discourse.dearimgui.org/t/spinner-modified-code-from-issue-1901/22
-
-	//namespace ImGui {
-	//
-	//	bool BufferingBar(const char* label, float value, const ImVec2& size_arg, const ImU32& bg_col, const ImU32& fg_col) {
-	//		ImGuiWindow* window = GetCurrentWindow();
-	//		if (window->SkipItems)
-	//			return false;
-	//
-	//		ImGuiContext& g = *GImGui;
-	//		const ImGuiStyle& style = g.Style;
-	//		const ImGuiID id = window->GetID(label);
-	//
-	//		ImVec2 pos = window->DC.CursorPos;
-	//		ImVec2 size = size_arg;
-	//		size.x -= style.FramePadding.x * 2;
-	//
-	//		const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
-	//		ItemSize(bb, style.FramePadding.y);
-	//		if (!ItemAdd(bb, id))
-	//			return false;
-	//
-	//		// Render
-	//		const float circleStart = size.x * 0.7f;
-	//		const float circleEnd = size.x;
-	//		const float circleWidth = circleEnd - circleStart;
-	//
-	//		window->DrawList->AddRectFilled(bb.Min, ImVec2(pos.x + circleStart, bb.Max.y), bg_col);
-	//		window->DrawList->AddRectFilled(bb.Min, ImVec2(pos.x + circleStart * value, bb.Max.y), fg_col);
-	//
-	//		const float t = g.Time;
-	//		const float r = size.y / 2;
-	//		const float speed = 1.5f;
-	//
-	//		const float a = speed * 0;
-	//		const float b = speed * 0.333f;
-	//		const float c = speed * 0.666f;
-	//
-	//		const float o1 = (circleWidth + r) * (t + a - speed * (int)((t + a) / speed)) / speed;
-	//		const float o2 = (circleWidth + r) * (t + b - speed * (int)((t + b) / speed)) / speed;
-	//		const float o3 = (circleWidth + r) * (t + c - speed * (int)((t + c) / speed)) / speed;
-	//
-	//		window->DrawList->AddCircleFilled(ImVec2(pos.x + circleEnd - o1, bb.Min.y + r), r, bg_col);
-	//		window->DrawList->AddCircleFilled(ImVec2(pos.x + circleEnd - o2, bb.Min.y + r), r, bg_col);
-	//		window->DrawList->AddCircleFilled(ImVec2(pos.x + circleEnd - o3, bb.Min.y + r), r, bg_col);
-	//	}
-	//
-	//	bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
-	//		ImGuiWindow* window = GetCurrentWindow();
-	//		if (window->SkipItems)
-	//			return false;
-	//
-	//		ImGuiContext& g = *GImGui;
-	//		const ImGuiStyle& style = g.Style;
-	//		const ImGuiID id = window->GetID(label);
-	//
-	//		ImVec2 pos = window->DC.CursorPos;
-	//		ImVec2 size((radius) * 2, (radius + style.FramePadding.y) * 2);
-	//
-	//		const ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
-	//		ItemSize(bb, style.FramePadding.y);
-	//		if (!ItemAdd(bb, id))
-	//			return false;
-	//
-	//		// Render
-	//		window->DrawList->PathClear();
-	//
-	//		int num_segments = 30;
-	//		int start = abs(ImSin(g.Time*1.8f)*(num_segments - 5));
-	//
-	//		const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
-	//		const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
-	//
-	//		const ImVec2 centre = ImVec2(pos.x + radius, pos.y + radius + style.FramePadding.y);
-	//
-	//		for (int i = 0; i < num_segments; i++) {
-	//			const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
-	//			window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a + g.Time * 8) * radius,
-	//				centre.y + ImSin(a + g.Time * 8) * radius));
-	//		}
-	//
-	//		window->DrawList->PathStroke(color, false, thickness);
-	//	}
-	//
-	//}
-
-	//-
-
-	//namespace ImGui 
-	//{
-	//using ComVec4 = const ImVec4 &;
-	//auto Spinner(float radius, float thickness, int num_segments, float speed, ComVec4 color) -> void {
-	//	//auto ImGui::Spinner(float radius, float thickness, int num_segments, float speed, ComVec4 color) -> void {
-	//	auto window = GetCurrentWindow();
-	//	if (window->SkipItems)
-	//		return;
-	//
-	//	auto &g = *GImGui;
-	//	const auto &style = g.Style;
-	//	auto &&pos = ImGui::GetCursorPos();
-	//	ImVec2 size{ radius * 2, radius * 2 };
-	//	const ImRect bb{ pos, pos + size };
-	//	ItemSize(bb);
-	//	if (!ItemAdd(bb, 0))
-	//		return;
-	//
-	//	auto time = static_cast<float>(g.Time) * speed;
-	//	window->DrawList->PathClear();
-	//	int start = static_cast<int>(abs(ImSin(time) * (num_segments - 5)));
-	//	const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
-	//	const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
-	//	const auto &&centre = pos + radius;
-	//	for (auto i = 0; i < num_segments; i++) {
-	//		const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
-	//		window->DrawList->PathLineTo({ centre.x + ImCos(a + time * 8) * radius,
-	//									  centre.y + ImSin(a + time * 8) * radius });
-	//	}
-	//	window->DrawList->PathStroke(GetColorU32(color), false, thickness);
-	//}
-	//}
 };

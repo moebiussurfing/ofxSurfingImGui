@@ -1,3 +1,8 @@
+
+#pragma once
+
+#include "ofMain.h"
+
 // Taken from
 // https://github.com/ocornut/imgui/issues/786#issuecomment-479539045
 
@@ -31,9 +36,9 @@
 #include <imgui_internal.h>
 #include <time.h>
 
-#include "ofMain.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
 namespace ImGui
 {

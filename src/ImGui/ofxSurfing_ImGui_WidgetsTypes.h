@@ -9,9 +9,10 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
+#include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_WidgetsExtra.h"
-#include "ofxSurfing_ImGui_LayoutManager.h"
+//#include "ofxSurfing_ImGui_LayoutManager.h"
 
 namespace ofxImGuiSurfing
 {
@@ -20,13 +21,15 @@ namespace ofxImGuiSurfing
 	class SurfingTypes {
 
 	public:
+
 		//TODO: make simpler namespace. or move outside the class?
 		enum ImWidgetSurfingTYPE
 		{
 			OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
 			OFX_IM_HIDDEN,		// omit widget. don't let spacing there
 			OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
-			OFX_IM_INACTIVE,	// make it inactive. disables mouse control
+			OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
+
 			OFX_IM_CHECKBOX,	// bool
 			OFX_IM_BUTTON_SMALL,
 			OFX_IM_BUTTON_BIG,
@@ -37,6 +40,7 @@ namespace ofxImGuiSurfing
 			OFX_IM_STEPPER,
 			OFX_IM_DRAG,
 			//OFX_IM_TEXT_BIG,
+
 			OFX_IM_NUM_TYPES
 		};
 
@@ -69,57 +73,13 @@ namespace ofxImGuiSurfing
 		float _w25;
 		float _h;
 
-		//// widgets sizes
-		//static float _spcx;
-		//static float _spcy;
-		//static float _w100;
-		//static float _h100;
-		//static float _w99;
-		//static float _w50;
-		//static float _w33;
-		//static float _w25;
-		//static float _h;	
-
-		// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
-		//--------------------------------------------------------------
-		inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
-		{
-			__spcx = ImGui::GetStyle().ItemSpacing.x;
-			__spcy = ImGui::GetStyle().ItemSpacing.y;
-			__w100 = ImGui::GetContentRegionAvail().x;
-			__h100 = ImGui::GetContentRegionAvail().y;
-			__w99 = __w100 - __spcx;
-			__w50 = (__w100 - __spcx * 1) / 2;
-			__w33 = (__w100 - __spcx * 2) / 3;
-			__w25 = (__w100 - __spcx * 3) / 4;
-			__h = BUTTON_BIG_HEIGHT;
-		}
-		//--------------------------------------------------------------
-		// just the more relevant sizes
-		inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
-		{
-			float __spcx = ImGui::GetStyle().ItemSpacing.x;
-			float __spcy = ImGui::GetStyle().ItemSpacing.y;
-			__w100 = ImGui::GetContentRegionAvail().x;
-			float __h100 = ImGui::GetContentRegionAvail().y;
-			__w50 = (__w100 - __spcx * 1) / 2;
-			__w33 = (__w100 - __spcx * 2) / 3;
-			__w25 = (__w100 - __spcx * 3) / 4;
-			__h = BUTTON_BIG_HEIGHT;
-		}
-
 		//-
 
 		// refresh current panel shape to update widgets sizes
 		//--------------------------------------------------------------
 		void refreshPanelShape()
 		{
-			refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-
-			////TODO:
-			////confirm that is not actuating
-			//_w100 = ofRandom(500);
-			//_w50 = ofRandom(500);
+			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 		}
 
 		//-
@@ -290,7 +250,7 @@ namespace ofxImGuiSurfing
 			}
 			else if (type == OFX_IM_INACTIVE)
 			{
-					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			}
 
 			//--
@@ -554,7 +514,7 @@ namespace ofxImGuiSurfing
 
 			if (type == OFX_IM_INACTIVE)
 			{
-					ImGui::PopItemFlag();
+				ImGui::PopItemFlag();
 			}
 
 			//----

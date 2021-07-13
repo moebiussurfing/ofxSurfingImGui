@@ -291,6 +291,8 @@ namespace ofxImGuiSurfing
 		{
 			// B. if  there's a config already added for one or more parameters
 
+			//-
+
 			// float
 			if (info == typeid(float))
 			{
@@ -319,6 +321,8 @@ namespace ofxImGuiSurfing
 					return bReturn;
 				}
 			}
+
+			//-
 
 			// int
 			else if (info == typeid(int))
@@ -351,7 +355,10 @@ namespace ofxImGuiSurfing
 				}
 			}
 
+			//-
+
 			// bool
+
 			else if (info == typeid(bool))
 			{
 				bool bReturn = false;

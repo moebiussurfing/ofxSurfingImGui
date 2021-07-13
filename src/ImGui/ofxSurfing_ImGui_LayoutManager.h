@@ -3,141 +3,14 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+
+#include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_Helpers.h"
 
 //-------
 
-/* LAYOUT HELPERS */
-
-// useful layout helpers 
-// to update sizes/width to panel window shape
-
-namespace ofxImGuiSurfing
-{
-	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
-	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
-	{
-		__spcx = ImGui::GetStyle().ItemSpacing.x;
-		__spcy = ImGui::GetStyle().ItemSpacing.y;
-		__w100 = ImGui::GetContentRegionAvail().x;
-		__h100 = ImGui::GetContentRegionAvail().y;
-		__w99 = __w100 - __spcx;
-		__w50 = (__w100 - __spcx * 1) / 2;
-		__w33 = (__w100 - __spcx * 2) / 3;
-		__w25 = (__w100 - __spcx * 3) / 4;
-		__h = BUTTON_BIG_HEIGHT;
-	}
-	//--------------------------------------------------------------
-	// just the more relevant sizes
-	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
-	{
-		float __spcx = ImGui::GetStyle().ItemSpacing.x;
-		float __spcy = ImGui::GetStyle().ItemSpacing.y;
-		__w100 = ImGui::GetContentRegionAvail().x;
-		float __h100 = ImGui::GetContentRegionAvail().y;
-		__w50 = (__w100 - __spcx * 1) / 2;
-		__w33 = (__w100 - __spcx * 2) / 3;
-		__w25 = (__w100 - __spcx * 3) / 4;
-		__h = BUTTON_BIG_HEIGHT;
-	}
-
-	//--
-
-	// example: 
-	// allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
-	//float w = getWidgetsWidth(2); // half width button
-	//if (ImGui::Button("_Button", ImVec2(w, h))) {}
-
-	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetWidth(float &w, int amntColumns = -1)
-	{
-		float __spcx = ImGui::GetStyle().ItemSpacing.x;
-		float __w100 = ImGui::GetContentRegionAvail().x;
-		if (amntColumns == -1)
-		{
-			w = __w100;
-		}
-		else
-		{
-			w = __w100 / amntColumns - __spcx / amntColumns;
-		}
-	}
-	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetHeight(float &h, int amntRows = -1)
-	{
-		if (amntRows == -1 || amntRows == 1)
-		{
-			h = BUTTON_BIG_HEIGHT;
-		}
-		else
-		{
-			float __spcy = ImGui::GetStyle().ItemSpacing.y;
-			float __h100 = ImGui::GetContentRegionAvail().y;
-			h = __h100 / amntRows - __spcy / amntRows;
-		}
-	}
-	//--------------------------------------------------------------
-	inline float getWidgetsWidth(int amntColumns = -1)
-	{
-		float w;
-		float __spcx = ImGui::GetStyle().ItemSpacing.x;
-		float __w100 = ImGui::GetContentRegionAvail().x;
-		if (amntColumns == -1 || amntColumns == 1)
-		{
-			w = __w100;
-		}
-		else
-		{
-			w = (__w100 - __spcx * (amntColumns - 1)) / amntColumns;
-		}
-
-		return w;
-	}
-	//--------------------------------------------------------------
-	inline float getWidgetsHeight(int amntRows = -1)
-	{
-		float h;
-		if (amntRows == -1)
-		{
-			h = BUTTON_BIG_HEIGHT;
-		}
-		else
-		{
-			float __spcy = ImGui::GetStyle().ItemSpacing.y;
-			float __h100 = ImGui::GetContentRegionAvail().y;
-			h = __h100 / amntRows - __spcy / amntRows;
-		}
-
-		return h;
-	}
-
-	//--------------------------------------------------------------
-	inline float getWidgetsHeightRelative(int amntRows = -1)
-	{
-		float h;
-		if (amntRows == -1)
-		{
-			//h = BUTTON_BIG_HEIGHT;
-			h = 4 * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2); // multiply the them widget height
-		}
-		else
-		{
-			float __spcy = ImGui::GetStyle().ItemSpacing.y;
-			float __h100 = ImGui::GetContentRegionAvail().y;
-			h = __h100 / amntRows - __spcy / amntRows;
-		}
-
-		return h;
-	}
-
-
-} // namespace ofxImGuiSurfing
-
-//-------
-
-/* LAYOUT MANGAGER ENGINE */
+/* Layout Mangager Engine */
 //namespace ofxImGuiSurfing
 //{
 	//--------------------------------------------------------------
@@ -246,6 +119,7 @@ public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
+	ofParameter<bool> bReset_Window{ "Reset Window", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
@@ -256,36 +130,59 @@ private:
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
 
-public:
-
-	// an extra common panel with some usefull toggles:
-	// auto-resize, debug mouse over gui, ...
 	//-
 
-	//// EXTRA MENU
-	//{
-	//	ImGui::Dummy(ImVec2(0, 5)); // spacing
+public:
 
-	//	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-	//	if (guiManager.bExtra)
-	//	{
-	//		ImGui::Indent();
+	// An extra common panel with some usefull toggles:
+	// auto-resize, debug mouse over gui, ...
 
-	//		// add your extra (hidden by default) controls
-	//		//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
+	// snippet to copy/paste
+	/*
+	// EXTRA MENU
+	{
+		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-	//		//--
+		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+		if (guiManager.bExtra)
+		{
+			ImGui::Indent();
 
-	//		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-	//		if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+			// add your extra (hidden by default) controls
+			//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
 
-	//		ImGui::Unindent();
-	//	}
-	//}
+			//--
+
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+			if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+
+			ImGui::Unindent();
+		}
+	}
+	*/
 
 	//--------------------------------------------------------------
-	void drawAdvancedSubPanel(bool bHeader = true) {
+	void resetWindow(bool pos = true, bool size = true)
+	{
+		float xx = 10;
+		float yy = 10;
+		//float ww = PANEL_WIDGETS_WIDTH_MIN;
+		//float hh = PANEL_WIDGETS_HEIGHT;
+		float ww = 200;
+		float hh = 600;
 
+		ImGuiCond flagsCond = ImGuiCond_None;
+		flagsCond |= ImGuiCond_Always;
+		if (size)ImGui::SetWindowSize(ImVec2(ww, hh), flagsCond);
+		if (pos)ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
+	}
+
+	//--
+
+	// snippet to copy/paste
+	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+	//--------------------------------------------------------------
+	void drawAdvancedSubPanel(bool bHeader = true) {
 		if (!bAdvanced) return;
 		if (!bUseAdvancedSubPanel) return;
 
@@ -295,15 +192,16 @@ public:
 
 		ImGui::Indent();
 		{
-			if (bHeader) {
-				if (ImGui::CollapsingHeader("ADVANCED", ImGuiTreeNodeFlags_None))
-				{
-					ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
-					ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+			bool b = false;
+			if (bHeader) b = ImGui::CollapsingHeader("Advanced", ImGuiTreeNodeFlags_None);
+			if (!bHeader || (bHeader && b))
+			{
+				// reset window
+				if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
+					if (bReset_Window) bReset_Window = false;
+					resetWindow(false, true);
 				}
-			}
-			else {
+
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 				ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);

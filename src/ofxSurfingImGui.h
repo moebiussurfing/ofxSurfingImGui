@@ -17,6 +17,7 @@
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
+//#include "ImGui/ofxSurfing_ImGui_LayoutHelpers.h"
 
 #include "ImGui/ofxSurfing_ImGui_Themes.h"
 #include "ImGui/ofxSurfing_ImGui_ThemesEditor.h"
