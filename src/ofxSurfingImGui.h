@@ -59,7 +59,7 @@ using namespace ofxImGuiSurfing;
 /*
 //--
 
-// 1. CREATE A WINDOW
+	// 1. CREATE A WINDOW
 
 	// WINDOWS USING RAW ImGui
 
@@ -91,7 +91,7 @@ using namespace ofxImGuiSurfing;
 
 //--
 
-// 2. TREES
+	// 2. TREES
 
 	// 2.1 TREE
 

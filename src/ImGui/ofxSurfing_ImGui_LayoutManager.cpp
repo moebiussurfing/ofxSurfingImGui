@@ -337,7 +337,8 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
 
 	// Main body of the Demo window starts here.
-	if (!ImGui::Begin(name.c_str(), p_open, window_flags))
+	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
+	if (!b)
 	{
 		//// Early out if the window is collapsed, as an optimization.
 		//ImGui::End();
@@ -346,6 +347,8 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+
+	//return b;
 }
 
 //--------------------------------------------------------------
