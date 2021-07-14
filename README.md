@@ -132,6 +132,8 @@ ofApp.h
 
 ofxSurfing_ImGui_Manager guiManager;
 
+ofParameter<bool> bGui{ "Show Gui", true };
+
 ofParameter<bool> bEnable{ "Enable", true };
 ofParameter<bool> b1{ "b1", false };
 ofParameter<bool> b2{ "b2", false };
@@ -149,8 +151,9 @@ void ofApp::setup()
 void ofApp::draw() 
 { 
     guiManager.begin();
+    if (bGui) // -> This param makes the close button functional
     {
-        guiManager.beginWindow("Window", NULL, ImGuiWindowFlags_None);
+        guiManager.beginWindow("Window", (bool *)&bGui.get(), ImGuiWindowFlags_None);
         {
             ofxImGuiSurfing::AddToggleRoundedButton(bEnable);
             if (bEnable)
@@ -160,19 +163,23 @@ void ofApp::draw()
                 float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
                 float _w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
                 float _w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
-                float _h = WIDGETS_HEIGHT;
+                float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // one unit height relative to ImGui theme
 
                 //-
 
                 /* Draw RAW ImGui or SurfingWidgets with ofParameters */
 
-                // One widget full with and half height
-                if (ofxImGuiSurfing::AddBigToggle(b1, _w1, _h / 2)) {}
+                // One widget full with and theme height. Callback is handled by the param listeners.
+                ofxImGuiSurfing::AddBigToggle(b1); 
 
                 // Two widgets same line/row with the 50% of window panel width 
-                if (ofxImGuiSurfing::AddBigButton(b2, _w2, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b2, _w2, _h)) {
+                  /* This acts as callback. No parameter listener required. */
+                }
                 ImGui::SameLine();
-                if (ofxImGuiSurfing::AddBigButton(b3, _w2, _h)) {}
+                if (ofxImGuiSurfing::AddBigButton(b3, _w2, _h)) {
+                  
+                }
 
                 // Or using raw ImGui
                 // Three widgets and fit width in one line

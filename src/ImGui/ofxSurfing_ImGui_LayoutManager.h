@@ -7,18 +7,22 @@
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfingHelpers.h"
 
 //-------
 
 /* Layout Mangager Engine */
 //namespace ofxImGuiSurfing
 //{
-	//--------------------------------------------------------------
+
+//--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
 
 public:
+
 	ofxSurfing_ImGui_Manager();
+
 	~ofxSurfing_ImGui_Manager();
 
 	//-
@@ -115,7 +119,7 @@ private:
 
 public:
 
-	ofParameterGroup params_Advanced{ "ADVANCED" };
+	ofParameterGroup params_Advanced{ "Advanced" };
 
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
@@ -162,7 +166,7 @@ public:
 	*/
 
 	//--------------------------------------------------------------
-	void resetWindow(bool pos = true, bool size = true)
+	void resetWindowImGui(bool pos = true, bool size = true)
 	{
 		float xx = 10;
 		float yy = 10;
@@ -171,9 +175,10 @@ public:
 		float ww = 200;
 		float hh = 600;
 
-		ImGuiCond flagsCond = ImGuiCond_None;
-		flagsCond |= ImGuiCond_Always;
-		if (size)ImGui::SetWindowSize(ImVec2(ww, hh), flagsCond);
+		ImGuiCond flagsCond = ImGuiCond_Appearing;
+		//flagsCond |= ImGuiCond_Appearing;
+		//flagsCond |= ImGuiCond_Once;
+		if (size) ImGui::SetWindowSize(ImVec2(ww, hh), flagsCond);
 		if (pos)ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
 	}
 
@@ -193,13 +198,15 @@ public:
 		ImGui::Indent();
 		{
 			bool b = false;
-			if (bHeader) b = ImGui::CollapsingHeader("Advanced", ImGuiTreeNodeFlags_None);
+			if (bHeader) b = ImGui::CollapsingHeader(params_Advanced.getName().c_str(), ImGuiTreeNodeFlags_None);
 			if (!bHeader || (bHeader && b))
 			{
 				// reset window
 				if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
-					if (bReset_Window) bReset_Window = false;
-					resetWindow(false, true);
+					if (bReset_Window) {
+						bReset_Window = false;
+						resetWindowImGui(false, true);
+					}
 				}
 
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
@@ -226,6 +233,10 @@ public:
 	}
 
 	//-
+
+	// settings
+	string path_Settings = "imgui_SurfingLayout.xml";
+	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
 
 	////TODO:
 	//public:

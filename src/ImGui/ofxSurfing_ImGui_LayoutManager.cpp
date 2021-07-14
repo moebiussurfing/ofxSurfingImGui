@@ -19,10 +19,13 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 	bAutoDraw = false;
 
 	//bAutoDraw = true;
+
+	ofxSurfingHelpers::loadGroup(params_AppSettings, path_Settings);
 };
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
+		ofxSurfingHelpers::saveGroup(params_AppSettings, path_Settings);
 };
 
 //--------------------------------------------------------------

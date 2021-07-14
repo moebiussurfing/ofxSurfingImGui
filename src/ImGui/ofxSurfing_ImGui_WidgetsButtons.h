@@ -16,6 +16,7 @@
 
 #include "ofxSurfing_ImGui_Themes.h"
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ofxSurfingHelpers.h" // -> for blink fadings
 
 //------------------------------
 
@@ -251,23 +252,45 @@ namespace ofxImGuiSurfing
 		else return false;
 	}
 
-	// Two states with two names
+	//--
+
+	// Two states with two names. also with blinking with swetteable alplha border
 	//--------------------------------------------------------------
-	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1")
+	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
+		
+		//-
 
 		bool bPre = tmpRef;
 
 		ImGuiStyle *style = &ImGui::GetStyle();
+
+		//-
+
+		bool b = tmpRef;
+
+		if (bBlink) {
+			const ImVec4 c_= style->Colors[ImGuiCol_TextDisabled];
+
+			if (blinkValue == -1) {
+				blinkValue = ofxSurfingHelpers::getFadeBlink();
+			}
+			float a;
+			if (b) a = blinkValue;
+			//if (b) a = 1 - tn;
+			else a = 1.0f;
+			a = ofClamp(a, 0, 1);
+			if (b) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(c_.x, c_.y, c_.z, c_.w * a));
+			//if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));
+		}
 
 		//--
 
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		//if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
 		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		if (nameTrue == "-1") nameTrue = "##BIGTOGGLENAMED_on_" + name;
@@ -281,10 +304,6 @@ namespace ofxImGuiSurfing
 		if (_boolToggle == true)
 		{
 			ImGui::PushID(nameTrue.c_str());
-
-			//const ImVec4 colorActive = style->Colors[ImGuiCol_Separator];
-			//const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonHovered];
-			//const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
 
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonHovered];
 			const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
@@ -331,6 +350,12 @@ namespace ofxImGuiSurfing
 			ImGui::PopStyleColor(4);
 
 			ImGui::PopID();
+		}
+
+		//-
+
+		if (bBlink && b) {
+			ImGui::PopStyleColor();
 		}
 
 		//--

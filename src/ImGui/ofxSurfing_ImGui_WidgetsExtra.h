@@ -40,9 +40,14 @@ namespace ofxImGuiSurfing
 	// preset clicker matrix buttons
 	// index will change when a box is clicked
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = WIDGETS_HEIGHT)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
 	{
 		bool cChanged = false;
+
+		if (sizey == -1)
+		{
+			sizey = ofxImGuiSurfing::getWidgetsHeightRelative();
+		}
 
 		//if (bDrawBorder) 
 		//{

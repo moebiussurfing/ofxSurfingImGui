@@ -313,19 +313,19 @@ namespace ofxImGuiSurfing
 				break;
 
 				case OFX_IM_BUTTON_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h / 2);
-					break;
-
-				case OFX_IM_BUTTON_BIG:
 					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
 					break;
 
+				case OFX_IM_BUTTON_BIG:
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
+					break;
+
 				case OFX_IM_TOGGLE_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h / 2);
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
 				case OFX_IM_TOGGLE_BIG:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
 					break;
 				}
 
