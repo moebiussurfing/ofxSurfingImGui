@@ -99,7 +99,7 @@ namespace ofxImGuiSurfing
 		vector<surfingImWidgetConf> widgetsConfs;
 
 		//--------------------------------------------------------------
-		SurfingTypes::SurfingTypes() {
+        SurfingTypes() {
 			widgetsConfs.clear();
 		}
 

@@ -297,7 +297,7 @@ namespace ofxImGuiSurfing
 			if (info == typeid(float))
 			{
 				bool bReturn = false;
-				ofParameter<float> &p = parameter.cast<float>();
+                ofParameter<float> &p = parameter.template cast<float>();
 				auto c = widgetsManager.getWidgetConf(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -328,7 +328,7 @@ namespace ofxImGuiSurfing
 			else if (info == typeid(int))
 			{
 				bool bReturn = false;
-				ofParameter<int> &p = parameter.cast<int>();
+                ofParameter<int> &p = parameter.template cast<int>();
 				auto c = widgetsManager.getWidgetConf(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -362,7 +362,7 @@ namespace ofxImGuiSurfing
 			else if (info == typeid(bool))
 			{
 				bool bReturn = false;
-				ofParameter<bool> &p = parameter.cast<bool>();
+                ofParameter<bool> &p = parameter.template cast<bool>();
 				auto c = widgetsManager.getWidgetConf(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -443,7 +443,7 @@ namespace ofxImGuiSurfing
 			}
 			else
 			{
-				ofLogWarning(__FUNCTIONS__) << "Could not create GUI element for type " << info.name();
+				ofLogWarning(/*__FUNCTIONS__*/) << "Could not create GUI element for type " << info.name();
 				return false;
 			}
 		}

@@ -1043,7 +1043,7 @@ namespace ofxImGuiSurfing
 	using namespace ImGui;
 
 	//--------------------------------------------------------------
-	static inline bool ofxImGuiSurfing::SpinScaler(const char* label, ImGuiDataType data_type, void* data_ptr, const void* step, const void* step_fast, const char* format, ImGuiInputTextFlags flags)
+	/*static*/ inline bool ofxImGuiSurfing::SpinScaler(const char* label, ImGuiDataType data_type, void* data_ptr, const void* step, const void* step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		ImGuiWindow* window = GetCurrentWindow();
 		if (window->SkipItems)
@@ -1136,7 +1136,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	static inline bool ofxImGuiSurfing::SpinInt(const char* label, int* v, int step, int step_fast, ImGuiInputTextFlags flags)
+	/*static*/ inline bool ofxImGuiSurfing::SpinInt(const char* label, int* v, int step, int step_fast, ImGuiInputTextFlags flags)
 	{
 		// Hexadecimal input provided as a convenience but the flag name is awkward. Typically you'd use InputText() to parse your own data, if you want to handle prefixes.
 		const char* format = (flags & ImGuiInputTextFlags_CharsHexadecimal) ? "%08X" : "%d";
@@ -1144,14 +1144,14 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	static inline bool ofxImGuiSurfing::SpinFloat(const char* label, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
+	/*static*/ inline bool ofxImGuiSurfing::SpinFloat(const char* label, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		flags |= ImGuiInputTextFlags_CharsScientific;
 		return SpinScaler(label, ImGuiDataType_Float, (void*)v, (void*)(step > 0.0f ? &step : NULL), (void*)(step_fast > 0.0f ? &step_fast : NULL), format, flags);
 	}
 
 	//--------------------------------------------------------------
-	static inline bool ofxImGuiSurfing::SpinDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
+	/*static*/ inline bool ofxImGuiSurfing::SpinDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
 	{
 		flags |= ImGuiInputTextFlags_CharsScientific;
 		return SpinScaler(label, ImGuiDataType_Double, (void*)v, (void*)(step > 0.0 ? &step : NULL), (void*)(step_fast > 0.0 ? &step_fast : NULL), format, flags);
