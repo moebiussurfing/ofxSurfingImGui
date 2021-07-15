@@ -9,7 +9,8 @@ void ofApp::setup_ImGui()
 	bool bAutoDraw = true;
 	// NOTE: it seems that must be false when multiple ImGui instances created!
 
-	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
+	gui.setImGuiAutodraw(true);
+	gui.setup();
 
 	//-
 
@@ -85,6 +86,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	ofBackground(24);
 
 	float i = surfingCurve.gerPercent();
 	float o = surfingCurve.gerValue();
@@ -92,15 +94,14 @@ void ofApp::draw() {
 	// draw
 	int pad = 5;
 	float hh = 30;
-	float y = ofGetHeight() - hh - pad;
-	ofRectangle ro(pad, y, ofGetWidth()* o - 2 * pad, hh);
-	ofRectangle ri(ofGetWidth()* i + pad, y - 3, pad, hh + 2 * 3);
+	float y = ofGetHeight() - 2 * (hh + pad);
+	ofRectangle ri(pad, y, ofGetWidth() * i - 2 * pad, hh);
+	ofRectangle ro(pad, y + hh + 1, ofGetWidth() * o - 2 * pad, hh);
 
 	ofPushStyle();
 	ofFill();
 	ofSetColor(ofColor(255, 255));
 	ofDrawRectangle(ro);
-	ofSetColor(ofColor(0, 255));
 	ofDrawRectangle(ri);
 	ofPopStyle();
 
@@ -116,11 +117,13 @@ void ofApp::draw() {
 		_flagw = ImGuiWindowFlags_None;
 
 		name = "Window";
-		if (ImGui::Begin(name.c_str(), &bOpen, _flagw))
+		gui.beginWindow(name.c_str(), &bOpen, _flagw);
+		//if (ImGui::Begin(name.c_str(), &bOpen, _flagw))
 		{
 			surfingCurve.draw();
 		}
-		ImGui::End();
+		//ImGui::End();
+		gui.endWindow();
 	}
 	gui.end();
 }

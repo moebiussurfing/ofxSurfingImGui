@@ -79,7 +79,7 @@ namespace ImGui
 		enum { LINE_WIDTH = 1 }; // handlers: small lines width
 		enum { GRAB_RADIUS = 8 }; // handlers: circle radius
 		enum { GRAB_BORDER = 2 }; // handlers: circle border width
-		enum { AREA_CONSTRAINED = true }; // should grabbers be constrained to grid area?
+		enum { AREA_CONSTRAINED = false }; // should grabbers be constrained to grid area?
 		enum { AREA_WIDTH = 128 }; // area width in pixels. 0 for adaptive size (will use max avail width)
 
 		// curve presets
@@ -341,7 +341,11 @@ namespace ofxImGuiSurfing
 
 			ofxImGuiSurfing::AddParameter(duration);
 
-			if (ofxImGuiSurfing::AddBigButton(bStart)) {
+			float _w = ofxImGuiSurfing::getWidgetsWidth(1);
+			float _h = ofxImGuiSurfing::getWidgetsHeightRelative() * 2;
+
+			if (ofxImGuiSurfing::AddBigButton(bStart, _w, _h))
+			{
 				bStart = false;
 				start();
 			}

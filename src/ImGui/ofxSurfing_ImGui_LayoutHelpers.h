@@ -48,8 +48,8 @@ namespace ofxImGuiSurfing
 			const int proportional = 1;
 			//const int proportional = 2;
 
-			//h = BUTTON_BIG_HEIGHT;
-			h = proportional * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2); // multiply the them widget height
+			if (ImGui::GetIO().FontDefault == nullptr) h = BUTTON_BIG_HEIGHT; // avoid crash when not customized font
+			else h = proportional * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2); // multiply the them widget height
 		}
 		else
 		{

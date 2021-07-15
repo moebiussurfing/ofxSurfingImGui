@@ -4,10 +4,7 @@
 
 #include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
 
-#include "ofxImGui.h" // requires  https://github.com/Daandelange/ofxImGui
-#include "ImGui/ofxSurfing_ImGui_Themes.h"
-//#include "ofxSurfingImGui.h" // -> this headers includes all the available sttuff
-//using namespace ofxImGuiSurfing;
+#include "ofxSurfingImGui.h" // -> this headers includes all the available sttuff
 
 class ofApp : public ofBaseApp{
     
@@ -17,9 +14,8 @@ public:
     void keyPressed(int key);
     
 	void setup_ImGui();
-	ofxImGui::Gui gui;
-	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 
+	ofxSurfing_ImGui_Manager gui;
 
 	ofxImGuiSurfing::SurfingCurve surfingCurve;
 	ofParameter<float> value{ "Value", 0, 0, 1 };

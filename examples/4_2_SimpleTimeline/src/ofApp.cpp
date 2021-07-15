@@ -56,6 +56,7 @@ void ofApp::drawWidgets()
 //--------------------------------------------------------------
 void ofApp::drawTimeline()
 {
+	if(bOpen1)
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
