@@ -205,9 +205,6 @@ void ofApp::draw()
   </p>
 </details>
 
-### 2_2_Layout_TypesEngine
-Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
-
 
 <details>
   <summary>2_3_Layout_ImTools</summary>
@@ -241,10 +238,10 @@ Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
 A more powerfull **Layout Engine** to improve "responsive" layouts.  
 Draw each **ofParameter** types with different appearance.  
 
-*EXAMPLE 1*:  
+**EXAMPLE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
 
-*EXAMPLE 2*:  
+**EXAMPLE 2**:  
 _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
 Especially useful when params are into an **ofParameterGroup**.  
 Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
@@ -345,6 +342,10 @@ void ofApp::drawWidgets()
 ```
   </p>
 </details>
+
+### 3_1_Layout_TypesEngine
+Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
+
 
 #### AVAILABLE CUSTOMIZATIONS:
     - Hide the parameter.  
