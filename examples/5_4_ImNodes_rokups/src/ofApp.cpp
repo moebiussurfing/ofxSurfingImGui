@@ -25,9 +25,9 @@ void ofApp::draw()
 		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 		//ImGui::Begin("Panels", &bOpen0, window_flags);
 		//{
-			ofxImGuiSurfing::ToggleRoundedButton("Show 0", &bOpen0);
-			ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
-			ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
+		ofxImGuiSurfing::ToggleRoundedButton("Show 0", &bOpen0);
+		ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
+		ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
 		//}
 		//ImGui::End();
 	}
@@ -50,6 +50,9 @@ void ofApp::drawHelloWorld()
 				bool selected{};
 				ImNodes::Ez::SlotInfo inputs[1];
 				ImNodes::Ez::SlotInfo outputs[1];
+
+				//ImNodes::Ez::SlotInfo inputs2[1];
+				//ImNodes::Ez::SlotInfo outputs2[1];
 			};
 
 			static Node nodes[3] = {
@@ -57,6 +60,11 @@ void ofApp::drawHelloWorld()
 				{{250, 50}, false, {{"In", 1}}, {{"Out", 1}}},
 				{{250, 100}, false, {{"In", 1}}, {{"Out", 1}}},
 			};
+
+	//		static Node nodes[3] = {
+	//{{50, 100}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}},
+	//{{250, 50}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}},
+	//{{250, 100}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}} };
 
 			for (Node& node : nodes)
 			{
@@ -86,8 +94,8 @@ void ofApp::drawWidgets()
 		{
 		}
 	}
-	
-	if(bOpen1)drawHelloWorld();
+
+	if (bOpen1)drawHelloWorld();
 
 	//ImGui::ShowDemoWindowNodes(&bOpen0);
 	//ImGui::ShowDemoWindowNodes(NULL);
