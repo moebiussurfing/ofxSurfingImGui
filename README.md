@@ -52,6 +52,7 @@ I AM STILL HAVING SOME PROBLEMS YET
 ## A. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
+
 <details>
   <summary>1_1_Widgets_DearWidgets</summary>
   <p>
@@ -59,6 +60,7 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
   </p>
 </details>
+
 Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 
 
@@ -106,6 +108,7 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 
 * Uses **ofxSurfing_ImGui_Helpers.h**  
 * Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
+
 
 <details>
   <summary>2_1_Layout_Basic</summary>
