@@ -377,7 +377,7 @@ For example: A simple patch-bay to route some values from an audio analyzer to t
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
-<BR>
+
 <details>
   <summary>5_2_ImNodes_rokups</summary>
   <p>
