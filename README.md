@@ -233,7 +233,7 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 
 ## 3. TYPES ENGINE [WIP]
 
-### 3_Layout_TypesEngine
+### 3_0_Layout_TypesEngine
 Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
 A more powerfull **Layout Engine** to improve "responsive" layouts.  
 Draw each **ofParameter** types with different appearance.  
