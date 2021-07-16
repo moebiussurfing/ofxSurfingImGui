@@ -322,6 +322,8 @@ namespace ofxImGuiSurfing
 		return value_changed;
 	}
 
+
+
 	//----
 
 	// ofParameters helpers
@@ -357,6 +359,21 @@ namespace ofxImGuiSurfing
 		}
 		return false;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//-----------
 	

@@ -95,9 +95,31 @@ void ofApp::draw() {
 			name = "SurfingWidgets 1";
 			ImGui::Begin(name.c_str(), NULL, _flagw);
 			{
+				//static float f1 = -0.5f, f2 = 0.75f;
+				//ofxImGuiSurfing::RangeSliderFloat2("range slider float", &f1, &f2, -1.0f, 1.0f, "(%.3f, %.3f)");
+
+				// v sliders
+				ofxImGuiSurfing::AddVSlider2(valueKnob1, ImVec2(20, 100), false);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
+				//ImGui::SameLine();
+				//ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
+				//ImGui::SameLine();
+				//ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
+				//ImGui::SameLine();
+				//ofxImGuiSurfing::AddVSlider2(valueKnob1, ImVec2(20, 100));
+
+				// knobs
+				ofxImGuiSurfing::AddKnob(valueKnob1);
+				//ImGui::SameLine();
+				//ofxImGuiSurfing::AddKnob(valueKnob2, true);
+
+				// more
 				draw_SurfingWidgets1();
 			}
 			ImGui::End();
+
+			//-
 
 			// surfing widgets 2
 			_flagw = ImGuiWindowFlags_None;
@@ -115,19 +137,19 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets1() {
 
-	// Common width sizes from 1 (_w100) to 4 (_w25) widgets per row
+	// Common width sizes from 1 (_w1) to 4 (_w4) widgets per row
 	// Precalculate common widgets % sizes to fit current window "to be responsive"
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being smaller.
 	// Internally takes care of ImGui spacing between widgets.
-	float _w100;
-	float _w50;
-	float _w33;
-	float _w25;
+	float _w1;
+	float _w2;
+	float _w3;
+	float _w4;
 	float _h;
-	_w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
-	_w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
-	_w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets third width
-	_w25 = ofxImGuiSurfing::getWidgetsWidth(4);  // 4 widgets quarter width
+	_w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+	_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
+	_w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
+	_w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
 	_h = WIDGETS_HEIGHT;
 
 	//--
@@ -140,13 +162,13 @@ void ofApp::draw_SurfingWidgets1() {
 		if (ImGui::TreeNodeEx("An Index Selector", _flagt))
 		{
 			// 1.1 Two buttons on same line
-			if (ImGui::Button("<", ImVec2(_w50, _h / 2)))
+			if (ImGui::Button("<", ImVec2(_w2, _h / 2)))
 			{
 				indexPreset--;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
 			}
 			ImGui::SameLine();
-			if (ImGui::Button(">", ImVec2(_w50, _h / 2)))
+			if (ImGui::Button(">", ImVec2(_w2, _h / 2)))
 			{
 				indexPreset++;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
@@ -260,17 +282,17 @@ void ofApp::draw_SurfingWidgets2()
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 		//// presets
-		//if (ImGui::Button("Gradient1", ImVec2(_w33, _h / 2)))
+		//if (ImGui::Button("Gradient1", ImVec2(_w3, _h / 2)))
 		//{
 		//	indexPreset = 0;
 		//}
 		//ImGui::SameLine();
-		//if (ImGui::Button("Gradient2", ImVec2(_w33, _h / 2)))
+		//if (ImGui::Button("Gradient2", ImVec2(_w3, _h / 2)))
 		//{
 		//	indexPreset = 2;
 		//}
 		//ImGui::SameLine();
-		//if (ImGui::Button("Gradient3", ImVec2(_w33, _h / 2)))
+		//if (ImGui::Button("Gradient3", ImVec2(_w3, _h / 2)))
 		//{
 		//	indexPreset = 3;
 		//}

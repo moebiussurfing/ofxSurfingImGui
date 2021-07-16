@@ -6,6 +6,7 @@
 
 //#include "Surfing_ImSequencer.h"	
 #include "imgui_LumixEngine.h"	
+#include "simpleTimeline2.h"	
 
 class ofApp : public ofBaseApp{
 
@@ -27,14 +28,15 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		ofxSurfing_ImGui_Manager guiManager;
+
 		void drawWidgets();
 		void drawTimeline();
-
-		//Surfing_ImSequencer sequencer;
 
 		bool bOpen0 = true;
 		bool bOpen1 = true;
 		bool bOpen2 = false;
 
 		bool bPlay = false;
+
+		//Surfing_ImSequencer sequencer;
 };

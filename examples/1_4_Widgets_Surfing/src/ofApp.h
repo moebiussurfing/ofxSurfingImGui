@@ -5,6 +5,8 @@
 #include "ofxSurfingImGui.h" // -> This header includes ALL the classes. 
 using namespace ofxImGuiSurfing;
 
+#include "SurfingRangeSlider.h" 
+
 class ofApp : public ofBaseApp{
     
 public:
@@ -42,6 +44,9 @@ public:
     ofParameter<float> separation3;
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
+	
+	ofParameter<float> valueKnob1{ "Value1", 0.5f, 0.f, 1.0f };
+	ofParameter<float> valueKnob2{ "Value2", 5.f, -10.f, 10.0f };
 
 	ImGradient gradient;
 	float prcGrad = 0.5f;
