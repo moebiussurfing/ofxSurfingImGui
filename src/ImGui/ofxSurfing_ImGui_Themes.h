@@ -1,5 +1,8 @@
 #pragma once
 
+// Users Themes
+// https://github.com/ocornut/imgui/issues/707
+
 #include "ofMain.h"
 
 #include "ofxImGui.h"
