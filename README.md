@@ -69,6 +69,7 @@ Includes range sliders with ofParams, responsive button/toggles and the awesome 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
   </p>
 </details>
+
 Includes bezier curves and usable tween/easing functions.  
 
 
@@ -79,6 +80,7 @@ Includes bezier curves and usable tween/easing functions.
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
   </p>
 </details>
+
 Includes wait and progression spinners.  
 
 
@@ -101,6 +103,7 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 ![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
   </p>
 </details>
+
 * Uses **ofxSurfing_ImGui_Helpers.h**  
 * Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
 
@@ -111,6 +114,7 @@ Includes a matrix button clicker selector linked to an int ofParam (aka preset i
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
   </p>
 </details>
+
 * Uses **ofxSurfing_ImGui_LayoutManager.h**  
 * Speed up ofxImGui instantiation, windows and layouts. 
 * Includes **ofParameter** helpers and extra widgets.  
@@ -204,6 +208,7 @@ Fast ofParams widgets layout: width, height, items per row and differnt styles f
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
   </p>
 </details>
+
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
