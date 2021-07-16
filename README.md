@@ -127,7 +127,6 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
 Uses **ofxSurfing_ImGui_LayoutManager.h**  
 Speed up ofxImGui instantiation, windows and layouts.  
 Includes **ofParameter** helpers and extra widgets.  
-
 <details>
   <summary>Example Code</summary>
   <p>
@@ -241,10 +240,12 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
 A more powerfull **Layout Engine** to improve "responsive" layouts.  
 Draw each **ofParameter** types with different appearance.  
-    * EXAMPLE 1:  
-    _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
-    * EXAMPLE 2:  
-    _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
+
+*EXAMPLE 1*:  
+_Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
+
+*EXAMPLE 2*:  
+_Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
 Especially useful when params are into an **ofParameterGroup**.  
 Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
 
