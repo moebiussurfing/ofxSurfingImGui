@@ -61,6 +61,7 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
 </details>
 Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 
+
 <details>
   <summary>1_2_Widgets_Curve</summary>
   <p>
@@ -69,6 +70,7 @@ Includes range sliders with ofParams, responsive button/toggles and the awesome 
   </p>
 </details>
 Includes bezier curves and usable tween/easing functions.  
+
 
 <details>
   <summary>1_3_Widgets_Spinner</summary>
@@ -79,6 +81,7 @@ Includes bezier curves and usable tween/easing functions.
 </details>
 Includes wait and progression spinners.  
 
+
 <details>
   <summary>1_4_Widgets_Surfing</summary>
   <p>
@@ -86,6 +89,7 @@ Includes wait and progression spinners.
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
   </p>
 </details>
+
 Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 ## B. LAYOUT
@@ -192,6 +196,7 @@ void ofApp::draw()
 ### 2_2_Layout_TypesEngine
 Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
+
 <details>
   <summary>2_3_Layout_ImTools</summary>
   <p>
@@ -203,6 +208,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
 
+
 <details>
   <summary>2_4_Layout_ThemeEditor</summary>
   <p>
@@ -210,6 +216,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
 ![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
 </details>
+
 This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
 
 
@@ -223,6 +230,7 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
     * EXAMPLE 2: _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._
 * Especially useful when params are into an **ofParameterGroup**.
 * Queue settings for a parameter to define configurations to be applied when the widget is drawn. 
+
 <details>
   <summary>Code</summary>
   <p>
@@ -338,6 +346,7 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 ![image](/docs/5_1_ImNodes_save_load.PNG?raw=true "image")  
   </p>
 </details>
+
 This is a testing with ImNodes examples.  
 
 ## Dependencies
