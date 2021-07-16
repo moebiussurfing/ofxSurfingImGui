@@ -49,7 +49,7 @@ I AM STILL HAVING SOME PROBLEMS YET
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
-## A. WIDGETS
+## 1. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
 
@@ -96,7 +96,7 @@ Includes wait and progression spinners.
 
 Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
-## B. LAYOUT
+## 2. LAYOUT
 
 <details>
   <summary>2_0_Layout_ofParamaters</summary>
@@ -228,7 +228,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
 This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
 
 
-## C. TYPES ENGINE
+## 3. TYPES ENGINE [WIP]
 
 ### 3_Layout_TypesEngine
 * Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**
@@ -347,6 +347,10 @@ void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DE
 bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 ```
 
+## 4. TIMELINES AND SEQUENCERS [WIP]
+
+## 5. NODES [WIP]
+
 <details>
   <summary>5_1_ImNodes_save_load</summary>
   <p>
@@ -356,6 +360,7 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 </details>
 
 This is a testing with ImNodes examples.  
+
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
