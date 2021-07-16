@@ -368,7 +368,7 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 
 These are testing projects with nodes/graph/patching.  
 My target is to build a simple engine to patch between ofParameters.  
-For example: A simple patch bay to route an audio analyzer to a scene ofParameters.   
+For example: A simple patch-bay to route some values from an audio analyzer to the scene ofParameters.   
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
@@ -377,9 +377,7 @@ For example: A simple patch bay to route an audio analyzer to a scene ofParamete
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
-
 <BR>
-
 <details>
   <summary>5_2_ImNodes_rokups</summary>
   <p>
