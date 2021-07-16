@@ -2,7 +2,7 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-**ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
+**ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF, some projects just for testing, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
 ```
@@ -52,73 +52,64 @@ I AM STILL HAVING SOME PROBLEMS YET
 ## A. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
 
-### 1_1_Widgets_DearWidgets
-Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 <details>
-  <summary>Screenshot</summary>
+  <summary>1_1_Widgets_DearWidgets</summary>
   <p>
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
   </p>
 </details>
+Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 
-### 1_2_Widgets_Curve
-Includes bezier curves and usable tween/easing functions.  
 <details>
-  <summary>Screenshot</summary>
+  <summary>1_2_Widgets_Curve</summary>
   <p>
 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
   </p>
 </details>
+Includes bezier curves and usable tween/easing functions.  
 
-### 1_3_Widgets_Spinner
-Includes wait and progression spinners.  
 <details>
-  <summary>Screenshot</summary>
+  <summary>1_3_Widgets_Spinner</summary>
   <p>
 
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
   </p>
 </details>
-
-### 1_4_Widgets_Surfing
-Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
+Includes wait and progression spinners.  
 
 <details>
-  <summary>Screenshot</summary>
+  <summary>1_4_Widgets_Surfing</summary>
   <p>
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
   </p>
 </details>
+Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 ## B. LAYOUT
 
-### 2_0_Layout_ofParamaters
-* Uses **ofxSurfing_ImGui_Helpers.h**  
-* Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
-
 <details>
-  <summary>Screenshot</summary>
+  <summary>2_0_Layout_ofParamaters</summary>
   <p>
 
 ![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
   </p>
 </details>
-
-### 2_1_Layout_Basic
-* Uses **ofxSurfing_ImGui_LayoutManager.h**  
-* Speed up ofxImGui instantiation, windows and layouts. 
-* Includes **ofParameter** helpers and extra widgets.  
+* Uses **ofxSurfing_ImGui_Helpers.h**  
+* Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
 
 <details>
-  <summary>Screenshot</summary>
+  <summary>2_1_Layout_Basic</summary>
   <p>
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
   </p>
 </details>
+* Uses **ofxSurfing_ImGui_LayoutManager.h**  
+* Speed up ofxImGui instantiation, windows and layouts. 
+* Includes **ofParameter** helpers and extra widgets.  
 
 <details>
   <summary>Example Code</summary>
@@ -201,27 +192,25 @@ void ofApp::draw()
 ### 2_2_Layout_TypesEngine
 Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
-### 2_3_Layout_ImTools
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
-"Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
-**WIP** porting to use into my OF projects.  
 <details>
-  <summary>Screenshot</summary>
+  <summary>2_3_Layout_ImTools</summary>
   <p>
 
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
   </p>
 </details>
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
+"Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
+**WIP** porting to use into my OF projects.  
 
-### 2_4_Layout_ThemeEditor
-This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
 <details>
-  <summary>Screenshot</summary>
+  <summary>2_4_Layout_ThemeEditor</summary>
   <p>
 
 ![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
 </details>
+This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
 
 
 ## C. TYPES ENGINE
@@ -341,6 +330,15 @@ void ofApp::drawWidgets()
 void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 ```
+
+<details>
+  <summary>5_1_ImNodes_save_load</summary>
+  <p>
+
+![image](/docs/5_1_ImNodes_save_load.PNG?raw=true "image")  
+  </p>
+</details>
+This is a testing with ImNodes examples.  
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
