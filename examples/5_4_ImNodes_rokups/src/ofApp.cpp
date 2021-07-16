@@ -25,9 +25,10 @@ void ofApp::draw()
 		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 		//ImGui::Begin("Panels", &bOpen0, window_flags);
 		//{
-		ofxImGuiSurfing::ToggleRoundedButton("Show 0", &bOpen0);
+		//ofxImGuiSurfing::ToggleRoundedButton("Show 0", &bOpen0);
 		ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
 		ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
+		if (bOpen1 && bOpen2) bOpen2 = false;
 		//}
 		//ImGui::End();
 	}
@@ -40,7 +41,7 @@ void ofApp::drawHelloWorld()
 	{
 		static ImNodes::CanvasState canvas;
 
-		if (ImGui::Begin("ImNodes", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+		if (ImGui::Begin("rokups/ImNodes 1", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 		{
 			ImNodes::BeginCanvas(&canvas);
 
@@ -50,9 +51,6 @@ void ofApp::drawHelloWorld()
 				bool selected{};
 				ImNodes::Ez::SlotInfo inputs[1];
 				ImNodes::Ez::SlotInfo outputs[1];
-
-				//ImNodes::Ez::SlotInfo inputs2[1];
-				//ImNodes::Ez::SlotInfo outputs2[1];
 			};
 
 			static Node nodes[3] = {
@@ -60,11 +58,6 @@ void ofApp::drawHelloWorld()
 				{{250, 50}, false, {{"In", 1}}, {{"Out", 1}}},
 				{{250, 100}, false, {{"In", 1}}, {{"Out", 1}}},
 			};
-
-	//		static Node nodes[3] = {
-	//{{50, 100}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}},
-	//{{250, 50}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}},
-	//{{250, 100}, false, {{"In", 1}}, {{"Out", 1}}, {{"In2", 1}}, {{"Out2", 1}}} };
 
 			for (Node& node : nodes)
 			{
@@ -95,10 +88,118 @@ void ofApp::drawWidgets()
 		}
 	}
 
-	if (bOpen1)drawHelloWorld();
+	if (bOpen1) drawHelloWorld();
 
 	//ImGui::ShowDemoWindowNodes(&bOpen0);
-	//ImGui::ShowDemoWindowNodes(NULL);
+	if (bOpen2) 
+	{
+		// Canvas must be created after ImGui initializes, because constructor accesses ImGui style to configure default colors.
+		static ImNodes::CanvasState canvas{};
+
+		if (ImGui::Begin("rokups/ImNodes 2", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+		{
+			// We probably need to keep some state, like positions of nodes/slots for rendering connections.
+			ImNodes::BeginCanvas(&canvas);
+			for (auto it = nodes.begin(); it != nodes.end();)
+			{
+				MyNode* node = *it;
+
+				// Start rendering node
+				if (ImNodes::Ez::BeginNode(node, node->Title, &node->Pos, &node->Selected))
+				{
+					// Render input nodes first (order is important)
+					ImNodes::Ez::InputSlots(node->InputSlots.data(), node->InputSlots.size());
+
+					// Custom node content may go here
+					ImGui::Text("Content of %s", node->Title);
+
+					// Render output nodes first (order is important)
+					ImNodes::Ez::OutputSlots(node->OutputSlots.data(), node->OutputSlots.size());
+
+					// Store new connections when they are created
+					Connection new_connection;
+					if (ImNodes::GetNewConnection(&new_connection.InputNode, &new_connection.InputSlot,
+						&new_connection.OutputNode, &new_connection.OutputSlot))
+					{
+						((MyNode*)new_connection.InputNode)->Connections.push_back(new_connection);
+						((MyNode*)new_connection.OutputNode)->Connections.push_back(new_connection);
+					}
+
+					// Render output connections of this node
+					for (const Connection& connection : node->Connections)
+					{
+						// Node contains all it's connections (both from output and to input slots). This means that multiple
+						// nodes will have same connection. We render only output connections and ensure that each connection
+						// will be rendered once.
+						if (connection.OutputNode != node)
+							continue;
+
+						if (!ImNodes::Connection(connection.InputNode, connection.InputSlot, connection.OutputNode,
+							connection.OutputSlot))
+						{
+							// Remove deleted connections
+							((MyNode*)connection.InputNode)->DeleteConnection(connection);
+							((MyNode*)connection.OutputNode)->DeleteConnection(connection);
+						}
+					}
+				}
+				// Node rendering is done. This call will render node background based on size of content inside node.
+				ImNodes::Ez::EndNode();
+
+				if (node->Selected && ImGui::IsKeyPressedMap(ImGuiKey_Delete))
+				{
+					// Deletion order is critical: first we delete connections to us
+					for (auto& connection : node->Connections)
+					{
+						if (connection.OutputNode == node)
+						{
+							((MyNode*)connection.InputNode)->DeleteConnection(connection);
+						}
+						else
+						{
+							((MyNode*)connection.OutputNode)->DeleteConnection(connection);
+						}
+					}
+					// Then we delete our own connections, so we don't corrupt the list
+					node->Connections.clear();
+
+					delete node;
+					it = nodes.erase(it);
+				}
+				else
+					++it;
+			}
+
+			if (ImGui::IsMouseReleased(1) && ImGui::IsWindowHovered() && !ImGui::IsMouseDragging(1))
+			{
+				ImGui::FocusWindow(ImGui::GetCurrentWindow());
+				ImGui::OpenPopup("NodesContextMenu");
+			}
+
+			if (ImGui::BeginPopup("NodesContextMenu"))
+			{
+				for (const auto& desc : available_nodes)
+				{
+					if (ImGui::MenuItem(desc.first.c_str()))
+					{
+						nodes.push_back(desc.second());
+						ImNodes::AutoPositionNode(nodes.back());
+					}
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Reset Zoom"))
+					canvas.Zoom = 1;
+
+				if (ImGui::IsAnyMouseDown() && !ImGui::IsWindowHovered())
+					ImGui::CloseCurrentPopup();
+				ImGui::EndPopup();
+			}
+
+			ImNodes::EndCanvas();
+		}
+		ImGui::End();
+
+	}
 }
 
 //--------------------------------------------------------------

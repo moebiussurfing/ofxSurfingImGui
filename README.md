@@ -366,17 +366,30 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 
 ## 5. NODES [WIP]
 
+These are testing projects with nodes/graph/patching.  
+My target is to build a simple engine to patch between ofParameters.  
+For example: A simple patch bay to route an audio analyzer to a scene ofParameters.   
+
 <details>
-  <summary>5_1_ImNodes_save_load</summary>
+  <summary>5_1_ImNodes_Nelarius</summary>
   <p>
 
-![image](/docs/5_1_ImNodes_save_load.PNG?raw=true "image")  
+![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
 
-This is a testing with ImNodes examples.  
+<BR>
+
+<details>
+  <summary>5_2_ImNodes_rokups</summary>
+  <p>
+
+![image](/docs/5_2_ImNodes_rokups.PNG?raw=true "image")  
+  </p>
+</details>
 
 <BR>
+
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
