@@ -8,7 +8,6 @@ void ofApp::setup() {
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
 
-	ImNodes::CreateContext();
 }
 
 //--------------------------------------------------------------
@@ -26,7 +25,9 @@ void ofApp::draw()
 		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 		//ImGui::Begin("Panels", &bOpen0, window_flags);
 		//{
-		//	ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
+			ofxImGuiSurfing::ToggleRoundedButton("Show 0", &bOpen0);
+			ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
+			ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
 		//}
 		//ImGui::End();
 	}
@@ -34,23 +35,67 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
+void ofApp::drawHelloWorld()
+{
+	{
+		static ImNodes::CanvasState canvas;
+
+		if (ImGui::Begin("ImNodes", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+		{
+			ImNodes::BeginCanvas(&canvas);
+
+			struct Node
+			{
+				ImVec2 pos{};
+				bool selected{};
+				ImNodes::Ez::SlotInfo inputs[1];
+				ImNodes::Ez::SlotInfo outputs[1];
+			};
+
+			static Node nodes[3] = {
+				{{50, 100}, false, {{"In", 1}}, {{"Out", 1}}},
+				{{250, 50}, false, {{"In", 1}}, {{"Out", 1}}},
+				{{250, 100}, false, {{"In", 1}}, {{"Out", 1}}},
+			};
+
+			for (Node& node : nodes)
+			{
+				if (ImNodes::Ez::BeginNode(&node, "Node Title", &node.pos, &node.selected))
+				{
+					ImNodes::Ez::InputSlots(node.inputs, 1);
+					ImNodes::Ez::OutputSlots(node.outputs, 1);
+					ImNodes::Ez::EndNode();
+				}
+			}
+
+			ImNodes::Connection(&nodes[1], "In", &nodes[0], "Out");
+			ImNodes::Connection(&nodes[2], "In", &nodes[0], "Out");
+
+			ImNodes::EndCanvas();
+		}
+		ImGui::End();
+	}
+}
+
+
+//--------------------------------------------------------------
 void ofApp::drawWidgets()
 {
 	if (!initialized) {
 		initialized = true;
 		{
-			ImNodesIO& io = ImNodes::GetIO();
-			io.LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;
 		}
 	}
+	
+	if(bOpen1)drawHelloWorld();
 
-	color_editor.show();
+	//ImGui::ShowDemoWindowNodes(&bOpen0);
+	//ImGui::ShowDemoWindowNodes(NULL);
 }
 
 //--------------------------------------------------------------
 void ofApp::exit() {
 	{
-		ImNodes::DestroyContext();
 	}
 }
 
