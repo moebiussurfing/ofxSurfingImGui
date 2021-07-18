@@ -361,7 +361,9 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 ## 4. TIMELINES AND SEQUENCERS [WIP]
 
 These are testing projects to try to build an operative basic timeline to run very simple animations.  
-Still very raw yet, not functional: I need to finish the engine to get the values. (https://github.com/CedricGuillemet/ImGuizmo/issues/185)
+Still very raw yet, not functional:  
+I need to finish the engine to get the values.  
+(https://github.com/CedricGuillemet/ImGuizmo/issues/185)  
 
 <details>
   <summary>4_1_ImSequencer</summary>
@@ -381,9 +383,6 @@ These are testing projects with nodes/graph/patching.
 My target is to build a simple engine to patch between **ofParameters**.  
 **For example**: _A simple patch-bay to route some values from an audio analyzer to the scene ofParameters._   
 (Some ImGui/Nodes projects: https://github.com/ocornut/imgui/issues/306)  
-5_1_ImNodes_color_node_editor [BROKEN]  
-5_5_ImNodes_thedmd-Blueprints [BROKEN]  
-5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
@@ -393,8 +392,6 @@ My target is to build a simple engine to patch between **ofParameters**.
   </p>
 </details>
 
-<BR>
-
 <details>
   <summary>5_2_ofNodeEditor</summary>
   <p>
@@ -402,8 +399,6 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
   </p>
 </details>
-
-<BR>
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
@@ -413,8 +408,6 @@ My target is to build a simple engine to patch between **ofParameters**.
   </p>
 </details>
 
-<BR>
-
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
   <p>
@@ -422,6 +415,10 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
   </p>
 </details>
+
+5_1_ImNodes_color_node_editor [BROKEN]  
+5_5_ImNodes_thedmd-Blueprints [BROKEN]  
+5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 
 <BR>
 
