@@ -215,7 +215,7 @@ void ofApp::draw()
 </details>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
-"Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
+"_Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..._"  
 **WIP** porting to use into my OF projects.  
 
 <details>
