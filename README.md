@@ -45,7 +45,7 @@ I AM STILL HAVING SOME PROBLEMS YET
 <BR>
 
 ## Features 
-* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test) fork: 
+* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
     - Why? Easy to update to future **new ImGui** versions and multi context/instances.
 * **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
