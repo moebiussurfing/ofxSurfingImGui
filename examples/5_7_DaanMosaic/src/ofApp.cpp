@@ -7,8 +7,9 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	ofSetWindowPosition(-1920, 25);
 
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	//guiManager.setImGuiAutodraw(true);
+	//guiManager.setup();
+	this->gui.setup();
 
 	//-
 
@@ -71,24 +72,8 @@ void ofApp::draw()
 	ofSetLineWidth(1);
 
 
-
-	guiManager.begin();
+	this->gui.begin();
 	{
-		//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-		//ImGui::Begin("Panels", &bOpen0, window_flags);
-		//{
-		//	ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
-		//	ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
-		//}
-		//ImGui::End();
-
-		//-
-
-		//drawWidgets();
-
-		//-
-
 		ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
 		bool isCanvasVisible = nodeCanvas.Begin("ofxVPNodeCanvas");
@@ -111,10 +96,9 @@ void ofApp::draw()
 
 		// Close canvas
 		if (isCanvasVisible) nodeCanvas.End();
-
-		// We're done drawing to IMGUI
 	}
-	guiManager.end();
+	// We're done drawing to IMGUI
+	this->gui.end();
 
 
 
@@ -131,20 +115,6 @@ void ofApp::draw()
 
 	// LIVE PATCHING SESSION
 	//drawLivePatchingSession();
-}
-
-//--------------------------------------------------------------
-void ofApp::drawWidgets()
-{
-	if (!initialized) {
-		initialized = true;
-	}
-
-	ImGui::Begin("simple node editor");
-	{
-
-	}
-	ImGui::End();
 }
 
 //--------------------------------------------------------------
