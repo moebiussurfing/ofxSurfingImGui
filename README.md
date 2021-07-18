@@ -218,7 +218,6 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
 "Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..."  
 **WIP** porting to use into my OF projects.  
 
-
 <details>
   <summary>2_4_Layout_ThemeEditor</summary>
   <p>
@@ -237,14 +236,14 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
 A more powerfull **Layout Engine** to improve "responsive" layouts.  
 Draw each **ofParameter** types with different appearance.  
+Especially useful when params are into an **ofParameterGroup**.  
+Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
 
 **EXAMPLE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
 
 **EXAMPLE 2**:  
 _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
-Especially useful when params are into an **ofParameterGroup**.  
-Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
 
 <details>
   <summary>Code</summary>
@@ -346,7 +345,6 @@ void ofApp::drawWidgets()
 ### 3_1_Layout_TypesEngine
 Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
 
-
 #### AVAILABLE CUSTOMIZATIONS:
     - Hide the parameter.  
     - Set an ImGui::SameLine after the widget.  
@@ -362,13 +360,24 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 
 ## 4. TIMELINES AND SEQUENCERS [WIP]
 
+These are testing projects to try to build an operative basic timeline to run very simple animations.  
+
+<details>
+  <summary>4_1_ImSequencer</summary>
+  <p>
+
+![image](/docs/4_1_ImSequencer.PNG?raw=true "image")  
+  </p>
+</details>
+
 <BR>
 
 ## 5. NODES [WIP]
 
 These are testing projects with nodes/graph/patching.  
-My target is to build a simple engine to patch between ofParameters.  
-For example: A simple patch-bay to route some values from an audio analyzer to the scene ofParameters.   
+My target is to build a simple engine to patch between **ofParameters**.  
+**For example**: _A simple patch-bay to route some values from an audio analyzer to the scene ofParameters._   
+(Some ImGui/Nodes projects: https://github.com/ocornut/imgui/issues/306)  
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
@@ -378,16 +387,37 @@ For example: A simple patch-bay to route some values from an audio analyzer to t
   </p>
 </details>
 
+<BR>
+
 <details>
-  <summary>5_2_ImNodes_rokups</summary>
+  <summary>5_2_ofNodeEditor</summary>
   <p>
 
-![image](/docs/5_2_ImNodes_rokups.PNG?raw=true "image")  
+![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
   </p>
 </details>
 
 <BR>
 
+<details>
+  <summary>5_4_ImNodes_rokups</summary>
+  <p>
+
+![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
+  </p>
+</details>
+
+<BR>
+
+<details>
+  <summary>5_5_ImNodes_thedmd</summary>
+  <p>
+
+![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
+  </p>
+</details>
+
+<BR>
 
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
