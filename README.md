@@ -239,10 +239,10 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 4. Especially useful when ofParams are into an **ofParameterGroup**.  
 5. Queue settings for a parameter to define configurations to be applied when the widget is drawn when drawing a group.  
 
-**EXAMPLE 1**:  
+**CASE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
 
-**EXAMPLE 2**:  
+**CASE 2**:  
 _Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
 
 <details>
@@ -360,11 +360,10 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT,
 
 ## 4. TIMELINES AND SEQUENCERS [WIP]
 
-These are testing projects to try to build an operative basic timeline to run very simple animations.  
-Still very raw yet, not functional:  
-I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to get the values.  
+These are testing projects trying to build an operative but very basic timeline, to run very simple animations:  
+* A kind of note on/off or clip start/end behaviour.
+* A curve editor for a float variable automation. 
   
-
 <details>
   <summary>4_1_ImSequencer</summary>
   <p>
@@ -373,7 +372,13 @@ I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the e
   </p>
 </details>
 
+Based on [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
+Still very raw yet, not functional:  
+I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
+
 4_3_Sequentity [BROKEN]  
+Based on [Sequentity](https://github.com/alanjfs/sequentity)  
+It's being hard to port because some dependencies...
 
 <BR>
 
