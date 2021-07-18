@@ -234,10 +234,10 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 
 ### 3_0_Layout_TypesEngine
 1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
-2. A more powerfull **Layout Engine** to improve "responsive" layouts.  
-3. Draw each **ofParameter** types with different appearance.  
-4. Especially useful when params are into an **ofParameterGroup**.  
-5. Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
+2. A more powerfull **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+3. Draw each **ofParameter** types with a different styles. (Instead of the ofxImGui behaviour, where you can't change the the param widget style.)  
+4. Especially useful when ofParams are into an **ofParameterGroup**.  
+5. Queue settings for a parameter to define configurations to be applied when the widget is drawn when drawing a group.  
 
 **EXAMPLE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
@@ -362,8 +362,8 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 
 These are testing projects to try to build an operative basic timeline to run very simple animations.  
 Still very raw yet, not functional:  
-I need to finish the engine to get the values.  
-(https://github.com/CedricGuillemet/ImGuizmo/issues/185)  
+I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to get the values.  
+  
 
 <details>
   <summary>4_1_ImSequencer</summary>
