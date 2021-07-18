@@ -233,11 +233,11 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 ## 3. TYPES ENGINE [WIP]
 
 ### 3_0_Layout_TypesEngine
-* 1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
-* 1. A more powerfull **Layout Engine** to improve "responsive" layouts.  
-* 1. Draw each **ofParameter** types with different appearance.  
-* 1. Especially useful when params are into an **ofParameterGroup**.  
-* 1. Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
+1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
+2. A more powerfull **Layout Engine** to improve "responsive" layouts.  
+3. Draw each **ofParameter** types with different appearance.  
+4. Especially useful when params are into an **ofParameterGroup**.  
+5. Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
 
 **EXAMPLE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
