@@ -384,10 +384,9 @@ It's being hard to port because some dependencies...
 
 ## 5. NODES [WIP]
 
-These are testing projects with nodes/graph/patching.  
+These are testing [projects](https://github.com/ocornut/imgui/issues/306) with nodes/graph/patching.  
 My target is to build a simple engine to patch between **ofParameters**.  
 **For example**: _A simple patch-bay to route some values from an audio analyzer to the scene ofParameters._   
-(Some ImGui/Nodes projects: https://github.com/ocornut/imgui/issues/306)  
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
@@ -396,6 +395,7 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
+
 Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
 
 <details>
@@ -413,6 +413,7 @@ Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
 ![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
   </p>
 </details>
+
 Based on [rokups/ImNodes](https://github.com/rokups/ImNodes)  
 
 <details>
@@ -422,6 +423,7 @@ Based on [rokups/ImNodes](https://github.com/rokups/ImNodes)
 ![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
   </p>
 </details>
+
 Based on [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
 
 5_1_ImNodes_color_node_editor [BROKEN]  
