@@ -117,6 +117,9 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO:
+	//centralize name types
+	//try to mix ImHelpers with ImTypes..
 	enum SurfingTypesGroups
 	{
 		IM_GUI_GROUP_DEFAULT = 0,

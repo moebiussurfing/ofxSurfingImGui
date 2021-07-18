@@ -9,7 +9,12 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ofxSurfing_ImGui_Helpers.h"
+
+//TODO:
+//collides!
+//#include "ofxSurfing_ImGui_LayoutHelpers.h"
+
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_WidgetsExtra.h"
 //#include "ofxSurfing_ImGui_LayoutManager.h"
@@ -39,7 +44,9 @@ namespace ofxImGuiSurfing
 			OFX_IM_PROGRESS_BAR,
 			OFX_IM_STEPPER,
 			OFX_IM_DRAG,
-			//OFX_IM_TEXT_BIG,
+			OFX_IM_TEXT_DISPLAY,
+			OFX_IM_TEXT_INPUT,
+			OFX_IM_TEXT_BIG,
 
 			OFX_IM_NUM_TYPES
 		};
@@ -99,7 +106,7 @@ namespace ofxImGuiSurfing
 		vector<surfingImWidgetConf> widgetsConfs;
 
 		//--------------------------------------------------------------
-        SurfingTypes() {
+		SurfingTypes() {
 			widgetsConfs.clear();
 		}
 
@@ -161,6 +168,7 @@ namespace ofxImGuiSurfing
 			widgetsConfs.push_back(c);
 		}
 
+		//TODO:
 		// if we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
 		// then we will populate each widget type as the default appearance!
 		//--------------------------------------------------------------
@@ -169,9 +177,37 @@ namespace ofxImGuiSurfing
 			return (widgetsConfs.size() > 0);
 		}
 
+		//--------------------------------------------------------------
 		void clear() {
 			widgetsConfs.clear();
 		}
+
+		////TODO: GetUniqueName?
+		////--------------------------------------------------------------
+		//bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars = 255, bool multiline = false)
+		//{
+		//	auto tmpRef = parameter.get();
+		//	char * cString = new char[maxChars];
+		//	strcpy(cString, tmpRef.c_str());
+		//	auto result = false;
+
+		//	if (multiline)
+		//	{
+		//		if (ImGui::InputTextMultiline(GetUniqueName(parameter), cString, maxChars))
+		//		{
+		//			parameter.set(cString);
+		//			result = true;
+		//		}
+		//	}
+		//	else if (ImGui::InputText(GetUniqueName(parameter), cString, maxChars))
+		//	{
+		//		parameter.set(cString);
+		//		result = true;
+		//	}
+		//	delete[] cString;
+
+		//	return result;
+		//}
 
 		//-
 
@@ -265,6 +301,7 @@ namespace ofxImGuiSurfing
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
+			bool isString = ptype == typeid(ofParameter<string>).name();
 
 			// is not called with groups here..
 			//bool isGroup = ptype == typeid(ofParameterGroup).name();
@@ -330,6 +367,39 @@ namespace ofxImGuiSurfing
 				}
 
 				bDone = true;
+			}
+
+			//-
+
+			// string
+
+			else if (isString)
+			{
+				ofParameter<string> p = aparam.cast<string>();
+				auto tmpRef = p.get();
+
+				switch (type)
+				{
+				case OFX_IM_DEFAULT:
+				case OFX_IM_TEXT_DISPLAY:
+				{
+					ImGui::Text(tmpRef.c_str());
+				}
+				break;
+
+				case OFX_IM_TEXT_INPUT:
+				{
+					ImGui::Text(tmpRef.c_str());
+					//ofxImGuiSurfing::AddParameter(p);//cant be included?
+				}
+				break;
+
+				case OFX_IM_TEXT_BIG:
+				{
+					ImGui::TextWrapped(tmpRef.c_str());
+				}
+				break;
+				}
 			}
 
 			//-

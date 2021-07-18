@@ -496,132 +496,142 @@ namespace ofxImGuiSurfing
 	{
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
+		bool bchanged = false;
+		bool bref = v;
+
 		string n = "##TOGGLEBUTTON" + ofToString(1);
 		ImGui::PushID(n.c_str());
-
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		ImVec2 p = ImGui::GetCursorScreenPos();
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-		float width;
-		float radius;
-		float height;
-
-		if (vv.x == -1 && vv.y == -1)
 		{
-			height = ImGui::GetFrameHeight();
-			width = height * 1.55f;
-			radius = height * 0.50f;
-		}
-		else
-		{
-			width = vv.x;
-			radius = vv.y * 0.5f;
-			height = vv.y;
-		}
+			ImVec4* colors = ImGui::GetStyle().Colors;
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-		ImGui::InvisibleButton(str_id, ImVec2(width, height));
-		if (ImGui::IsItemClicked()) *v = !*v;
+			float width;
+			float radius;
+			float height;
 
-		ImGuiContext& gg = *GImGui;
-		float ANIM_SPEED = 0.085f;
-		if (gg.LastActiveId == gg.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
-			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
-
-		//--
-
-		// 1. bg
-
-		// hover
-		if (ImGui::IsItemHovered())
-		{
-			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_FrameBgActive] : colors[ImGuiCol_FrameBg]), height * 0.5f);
-
-			ImU32 c1;
-			if (*v) {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			if (vv.x == -1 && vv.y == -1)
+			{
+				height = ImGui::GetFrameHeight();
+				width = height * 1.55f;
+				radius = height * 0.50f;
 			}
-			else {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+			else
+			{
+				width = vv.x;
+				radius = vv.y * 0.5f;
+				height = vv.y;
 			}
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+
+			ImGui::InvisibleButton(str_id, ImVec2(width, height));
+			if (ImGui::IsItemClicked()) {
+				*v = !*v;
+				bchanged = true;
+			}
+
+			ImGuiContext& gg = *GImGui;
+			float ANIM_SPEED = 0.085f;
+			if (gg.LastActiveId == gg.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+				float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
+
+			//--
+
+			// 1. bg
+
+			// hover
+			if (ImGui::IsItemHovered())
+			{
+				//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				//	ImGui::GetColorU32(*v ? colors[ImGuiCol_FrameBgActive] : colors[ImGuiCol_FrameBg]), height * 0.5f);
+
+				ImU32 c1;
+				if (*v) {
+					c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+				}
+				else {
+					c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+				}
+				draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+			}
+
+			// no hover
+			else
+			{
+				//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+				//	ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_FrameBgActive]), height * 0.5f);
+
+				ImU32 c1;
+				if (*v) {
+					c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+				}
+				else {
+					c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
+				}
+				draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
+			}
+
+			//colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+			//-
+
+			// 2. circle
+
+			ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
+			//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+			draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
+				p.y + radius), radius - 1.5f, c1);
+
+			//----
+
+			//if (ImGui::IsItemHovered())
+			//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//		ImGui::GetColorU32(*v ?
+			//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+			//else
+			//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
+			//		ImGui::GetColorU32(*v ?
+			//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
+
+			//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
+
+			//draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
+			//	p.y + radius), radius - 1.5f, c1);
+
+			////ImGui::SameLine(0,10);
+			//ImGui::SameLine();
+			//ImGui::AlignTextToFramePadding();//BUG: bad alignment..
+			//ImGui::Text(str_id);
+
+			ImGui::SameLine();
+			float fontSize = ImGui::GetFontSize();
+			const ImVec2 p1 = ImGui::GetCursorScreenPos();
+			const float offset_xt = 0;
+			const float offset_yt = height / 2 - fontSize / 2;
+			//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
+			//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
+			const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+			const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
+			//draw_list->AddCircle(pt, 2, cc);
+			draw_list->AddText(pt, ct, str_id);
+
+			const float offset_xc = 0;
+			const float _yy = 4;
+			//const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+			const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y + _yy;
+			const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
+			ImGui::SetCursorScreenPos(pc);
+
+			//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
 		}
-
-		// no hover
-		else {
-			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_FrameBgActive]), height * 0.5f);
-
-			ImU32 c1;
-			if (*v) {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			else {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
-		}
-
-		//colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-
-		//-
-
-		// 2. circle
-
-		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
-		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
-		draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
-			p.y + radius), radius - 1.5f, c1);
-
-		//----
-
-		//if (ImGui::IsItemHovered())
-		//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-		//		ImGui::GetColorU32(*v ?
-		//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-		//else
-		//	draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-		//		ImGui::GetColorU32(*v ?
-		//			colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-
-		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
-
-		//draw_list->AddCircleFilled(ImVec2(p.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f),
-		//	p.y + radius), radius - 1.5f, c1);
-
-		////ImGui::SameLine(0,10);
-		//ImGui::SameLine();
-		//ImGui::AlignTextToFramePadding();//BUG: bad alignment..
-		//ImGui::Text(str_id);
-
-		ImGui::SameLine();
-		float fontSize = ImGui::GetFontSize();
-		const ImVec2 p1 = ImGui::GetCursorScreenPos();
-		const float offset_xt = 0;
-		const float offset_yt = height / 2 - fontSize / 2;
-		//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
-		//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
-		const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-		const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
-		//draw_list->AddCircle(pt, 2, cc);
-		draw_list->AddText(pt, ct, str_id);
-
-		const float offset_xc = 0;
-		const float _yy = 4;
-		//const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
-		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y + _yy;
-		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
-		ImGui::SetCursorScreenPos(pc);
-
-		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
-
 		ImGui::PopID();
 
-		//TODO: add return
-
-		return (bool*)v;
 		//ImGui::Dummy(ImVec2(0, 2));
+		
+		//TODO: add return
+		// look into check box widget
+		return bchanged;
+
+		//return (bool*)v;
 	}
 
 	//-
@@ -644,6 +654,9 @@ namespace ofxImGuiSurfing
 		}
 		else bReturn = false;
 
+
+		//fix
+		//return (tmpRef != parameter.get());
 		return bReturn;
 	}
 

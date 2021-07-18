@@ -14,6 +14,7 @@
 //---------
 
 #include "ImGui/ofxSurfing_ImGui_Helpers.h"
+
 #include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsKnob.h"
@@ -57,20 +58,22 @@ using namespace ofxImGuiSurfing;
 // WINDOWS, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
 
 /*
-//--
+	//--
 
 	// 1. CREATE A WINDOW
 
 	// WINDOWS USING RAW ImGui
 
 	// 1.0 SIMPLE
+
 	ImGui::Begin("myWindow);
 	{ }
 	ImGui::End();
 
 	//--
 
-	// 1.1 NAME WITH FLAGS
+	// 1.1 WINDOW WITH NAME WITH FLAGS
+
 	string _name = "myWindow";
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
@@ -80,6 +83,7 @@ using namespace ofxImGuiSurfing;
 	//--
 
 	// 1.2 WINDOW USING ofxImGui
+
 	// (DEPRECATED. Better to not use like this)
 
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
@@ -89,7 +93,7 @@ using namespace ofxImGuiSurfing;
 	{ }
 	ofxImGui::EndWindow(mainSettings);
 
-//--
+	//--
 
 	// 2. TREES
 
@@ -114,8 +118,7 @@ using namespace ofxImGuiSurfing;
 
 	//--
 
-	// 2.3 treeEx
-	// TREE WITH FLAGS
+	// 2.3 treeEx - TREE WITH FLAGS
 
 	bool bOpen = true;
 	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
@@ -125,6 +128,9 @@ using namespace ofxImGuiSurfing;
 		//..
 		ImGui::TreePop();
 	}
+
+	//--
+
 */
 
 

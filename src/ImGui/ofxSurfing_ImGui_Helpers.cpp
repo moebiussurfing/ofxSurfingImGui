@@ -910,7 +910,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	// image
-	//--------------------------------------------------------------
+	//--------------------------------------------------------------IM_GUI_GROUP_DEFAULT
 	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 	{
 		AddImage(hasTexture.getTexture(), size);

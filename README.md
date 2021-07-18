@@ -259,7 +259,7 @@ ofParameter<float> f1{ "f1", 0, 0, 1.0f };
 ofParameter<float> f2{ "f2", 0, 0, 1.0f };
 ofParameter<int> i1{ "i1", 0, 0, 10 };
 ofParameter<int> i2{ "i2", 0, 0, 10 };
-´´´
+```
 
 ofApp.cpp
 ```.cpp
@@ -275,24 +275,24 @@ void ofApp::setup()
 
     // Format: 
     // void AddWidgetConf(ofAbstractParameter& aparam, 
-    //                    ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //                    ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, 
     //                    bool bSameLine = false, 
     //                    int amtPerRow = 1, 
     //                    int spacing = -1)
 
     // One full width widget with 20px vertical spacing at end
-    widgetsManager.AddWidgetConf(b1, SurfingWidgetTypes::IM_TOGGLE_BIG, false, 1, 20);
+    widgetsManager.AddWidgetConf(b1, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 1, 20);
     // Two widgets in the same line with 10px of spacing at end
-    widgetsManager.AddWidgetConf(b2, SurfingWidgetTypes::IM_BUTTON_SMALL, true, 2);
-    widgetsManager.AddWidgetConf(b3, SurfingWidgetTypes::IM_BUTTON_SMALL, false, 2, 10);
+    widgetsManager.AddWidgetConf(b2, SurfingTypes::OFX_IM_BUTTON_SMALL, true, 2);
+    widgetsManager.AddWidgetConf(b3, SurfingTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
     // A widget presented with number and +/- controls
-    widgetsManager.AddWidgetConf(f1, SurfingWidgetTypes::IM_STEPPER);
+    widgetsManager.AddWidgetConf(f1, SurfingTypes::OFX_IM_STEPPER);
     // The same parameter but as a slider and 10px spacing at the end
-    widgetsManager.AddWidgetConf(f2, SurfingWidgetTypes::IM_DRAG, false, 1, 10);
+    widgetsManager.AddWidgetConf(f2, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
     // A widget as slider with full width size
-    widgetsManager.AddWidgetConf(i1, SurfingWidgetTypes::IM_SLIDER);
+    widgetsManager.AddWidgetConf(i1, SurfingTypes::OFX_IM_SLIDER);
     // An widget as stepper with full width size
-    widgetsManager.AddWidgetConf(i2, SurfingWidgetTypes::IM_STEPPER);
+    widgetsManager.AddWidgetConf(i2, SurfingTypes::OFX_IM_STEPPER);
 }
 
 void ofApp::draw()
@@ -325,18 +325,18 @@ void ofApp::drawWidgets()
 
     // Format:
     // bool Add(ofAbstractParameter& aparam, 
-    //          ImWidgetSurfingTYPE type = IM_DEFAULT, 
+    //          ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, 
     //          bool bSameLine = false, 
     //          int amtPerRow = 1, 
     //          int spacing = -1)
     
     // Two widgets same line
-    widgetsManager.Add(b1, SurfingWidgetTypes::IM_TOGGLE_SMALL, true, 2);
-    widgetsManager.Add(b2, SurfingWidgetTypes::IM_TOGGLE_SMALL, false, 2);
+    widgetsManager.Add(b1, SurfingTypes::IM_TOGGLE_SMALL, true, 2);
+    widgetsManager.Add(b2, SurfingTypes::IM_TOGGLE_SMALL, false, 2);
     // A slider with full width size
-    widgetsManager.Add(i1, SurfingWidgetTypes::IM_SLIDER);
+    widgetsManager.Add(i1, SurfingTypes::OFX_IM_SLIDER);
     // A stepper with half width size and 20px of spacing at end
-    widgetsManager.Add(i1, SurfingWidgetTypes::IM_STEPPER, false, 2, 20);
+    widgetsManager.Add(i1, SurfingTypes::OFX_IM_STEPPER, false, 2, 20);
 }
 ```
   </p>
@@ -352,8 +352,8 @@ Fast ofParams widgets layout: width, height, items per row and differnt styles f
     - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
 #### API
 ```c++
-void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
-bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 ```
 
 <BR>
