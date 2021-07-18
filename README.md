@@ -396,6 +396,7 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
 </details>
+Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
 
 <details>
   <summary>5_2_ofNodeEditor</summary>
@@ -412,6 +413,7 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
   </p>
 </details>
+Based on [rokups/ImNodes](https://github.com/rokups/ImNodes)  
 
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
@@ -420,6 +422,7 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
   </p>
 </details>
+Based on [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
 
 5_1_ImNodes_color_node_editor [BROKEN]  
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
@@ -428,8 +431,8 @@ My target is to build a simple engine to patch between **ofParameters**.
 <BR>
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/) Fork from @**Daandelange**  
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [Not required but for some examples only]  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/) FORK from @**Daandelange**  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [For some examples only]  
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
