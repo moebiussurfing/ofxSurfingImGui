@@ -373,12 +373,10 @@ These are testing projects trying to build an operative but very basic timeline,
 </details>
 
 Based on [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
-Still very raw yet, not functional:  
-I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
+Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
 
 4_3_Sequentity [BROKEN]  
-Based on [Sequentity](https://github.com/alanjfs/sequentity)  
-It's being hard to port because some dependencies...
+Based on [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because some dependencies...
 
 <BR>
 
@@ -405,6 +403,8 @@ Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
 ![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
   </p>
 </details>
+
+Based on [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
