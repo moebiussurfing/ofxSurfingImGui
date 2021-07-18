@@ -233,11 +233,11 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 ## 3. TYPES ENGINE [WIP]
 
 ### 3_0_Layout_TypesEngine
-Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
-A more powerfull **Layout Engine** to improve "responsive" layouts.  
-Draw each **ofParameter** types with different appearance.  
-Especially useful when params are into an **ofParameterGroup**.  
-Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
+1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
+2. A more powerfull **Layout Engine** to improve "responsive" layouts.  
+3. Draw each **ofParameter** types with different appearance.  
+4. Especially useful when params are into an **ofParameterGroup**.  
+5. Queue settings for a parameter to define configurations to be applied when the widget is drawn.  
 
 **EXAMPLE 1**:  
 _Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
@@ -361,6 +361,7 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = IM_DEFAULT, boo
 ## 4. TIMELINES AND SEQUENCERS [WIP]
 
 These are testing projects to try to build an operative basic timeline to run very simple animations.  
+Still very raw yet, not functional: I need to finish the engine to get the values. (https://github.com/CedricGuillemet/ImGuizmo/issues/185)
 
 <details>
   <summary>4_1_ImSequencer</summary>
@@ -370,6 +371,8 @@ These are testing projects to try to build an operative basic timeline to run ve
   </p>
 </details>
 
+4_3_Sequentity [BROKEN]  
+
 <BR>
 
 ## 5. NODES [WIP]
@@ -378,6 +381,9 @@ These are testing projects with nodes/graph/patching.
 My target is to build a simple engine to patch between **ofParameters**.  
 **For example**: _A simple patch-bay to route some values from an audio analyzer to the scene ofParameters._   
 (Some ImGui/Nodes projects: https://github.com/ocornut/imgui/issues/306)  
+5_1_ImNodes_color_node_editor [BROKEN]  
+5_5_ImNodes_thedmd-Blueprints [BROKEN]  
+5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
