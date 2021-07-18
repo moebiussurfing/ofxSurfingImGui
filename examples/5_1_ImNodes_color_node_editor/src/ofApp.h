@@ -1,15 +1,32 @@
 #pragma once
 
+//TODO; broken
+
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"	
 
-#include "blueprints-example.cpp"
-//https://github.com/thedmd/imgui-node-editor
-// WIP. Broken! Not finished ->
-// Requires to uses another ImGui branch: https://github.com/thedmd/imgui/tree/feature/layout
+#include "node_editor.h"
+#include <imnodes.h>
+#include <imgui.h>
+
+//-
+
+#include "color_node_editor.cpp"
+
+#include <algorithm>
+#include <cassert>
+#include <fstream>
+#include <ios> // for std::streamsize
+#include <stddef.h>
+#include <vector>
+
+//static SaveLoadEditor editor;
+
+//-
 
 class ofApp : public ofBaseApp {
+public:
 
 public:
 	void setup();
@@ -19,8 +36,6 @@ public:
 	void keyPressed(int key);
 
 	ofxSurfing_ImGui_Manager guiManager;
-	
-	Example example;
 
 	void drawWidgets();
 

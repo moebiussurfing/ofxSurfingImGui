@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
-	ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
@@ -44,34 +44,12 @@ void ofApp::drawWidgets()
 	if (!initialized) {
 		initialized = true;
 
-		//// simple-example
-		//g_Context = ed::CreateEditor();
-
 		// basic-interaction-example
 		example.Application_Initialize();
 	}
 
 	ImGui::Begin("thedmd/imgui-node-editor");
 	{
-		//// simple-example
-		//{
-		//	ed::SetCurrentEditor(g_Context);
-		//	ed::Begin("My Editor");
-		//	int uniqueId = 1;
-		//	// Start drawing nodes.
-		//	ed::BeginNode(uniqueId++);
-		//	ImGui::Text("Node A");
-		//	ed::BeginPin(uniqueId++, ed::PinKind::Input);
-		//	ImGui::Text("-> In");
-		//	ed::EndPin();
-		//	ImGui::SameLine();
-		//	ed::BeginPin(uniqueId++, ed::PinKind::Output);
-		//	ImGui::Text("Out ->");
-		//	ed::EndPin();
-		//	ed::EndNode();
-		//	ed::End();
-		//}
-
 		// basic-interaction-example
 		example.Application_Frame();
 	}
@@ -80,9 +58,6 @@ void ofApp::drawWidgets()
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-	//// simple-example
-	//ed::DestroyEditor(g_Context);
-	
 	// basic-interaction-example
 	example.Application_Finalize();
 }
