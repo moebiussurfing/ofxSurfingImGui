@@ -390,7 +390,7 @@ Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to po
 
 These are testing [projects](https://github.com/ocornut/imgui/issues/306) with nodes/graph/patching.  
 My target is to build a simple engine to patch between **ofParameters**.  
-**For example**: _A simple patch-bay to route some values from an audio analyzer to the scene ofParameters._   
+**For example**: _A simple patch-bay to route some **ofParameters** from an audio analyzer to the render scene **ofParameters**._   
 
 <details>
   <summary>5_1_ImNodes_Nelarius</summary>
