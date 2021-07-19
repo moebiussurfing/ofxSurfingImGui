@@ -2,7 +2,8 @@
 
 #include "ofMain.h"
 
-#include "ofxImGui.h"
+//#include "ofxImGui.h"
+#include "imgui.h"
 #include "imgui_internal.h"
 
 // This class have widgets size constants ands method to get the window panel sizes.
@@ -165,6 +166,33 @@ namespace ofxImGuiSurfing
 		}
 
 		return h;
+	}
+
+	// Get ImVec2 size for fast populate buttons
+	//--------------------------------------------------------------
+	inline ImVec2 getWidgetsShapeDefault()
+	{
+		ImVec2 vv (getWidgetsWidth(), getWidgetsHeight());
+
+		return vv;
+	}
+	//--------------------------------------------------------------
+	inline ImVec2 getWidgetsShapeBig()
+	{
+		return getWidgetsShapeDefault();
+	}
+	//--------------------------------------------------------------
+	inline ImVec2 getWidgetsShapeSmall()
+	{
+		ImVec2 vv (getWidgetsWidth(), getWidgetsHeight()/2);
+
+		return vv;
+	}
+
+	//--------------------------------------------------------------
+	inline void AddSpaceY(int spacingy = 2)
+	{
+		ImGui::Dummy(ImVec2(0, spacingy)); // spacing
 	}
 
 } // namespace ofxImGuiSurfing

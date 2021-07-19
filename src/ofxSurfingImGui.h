@@ -160,16 +160,16 @@ void ofApp::drawImGui()
 	{
 		{
 			string n = "Show Windows";
-			static bool bOpen0 = true;
+			static bool bOpenMain = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-			guiManager.beginWindow(n.c_str(), &bOpen0, window_flags);
+			guiManager.beginWindow(n.c_str(), &bOpenMain, window_flags);
 			{
 				float _h = WIDGETS_HEIGHT;
 				float _w100 = getWidgetsWidth(1);
 				float _w50 = getWidgetsWidth(2);
 
-				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen0);
+				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpenMain);
 
 				//-
 
@@ -198,11 +198,11 @@ void ofApp::drawImGui()
 		}
 
 		{
-			static bool bOpen0 = true;
+			static bool bOpenMain = true;
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 			string n = "Window 4";
-			guiManager.beginWindow(n.c_str(), &bOpen0, window_flags);
+			guiManager.beginWindow(n.c_str(), &bOpenMain, window_flags);
 			{
 				// PARAMS GHROUP
 				{
@@ -358,7 +358,7 @@ void ofApp::draw_ImGui()
 
 		n = params.getName();
 
-		guiManager.beginWindow(n.c_str(), &bOpen0, flagsw);
+		guiManager.beginWindow(n.c_str(), &bOpenMain, flagsw);
 		{
 			widgetsManager.refreshPanelShape();
 

@@ -6,14 +6,11 @@
 #include "imgui_internal.h"
 
 #include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_Widgets.h"
 
 //TODO:
 //collides!
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
-
-#include "ofxSurfing_ImGui_Widgets.h"
-//#include "ofxSurfing_ImGui_WidgetsButtons.h"
-//#include "ofxSurfing_ImGui_WidgetsExtra.h"
 //#include "ofxSurfing_ImGui_LayoutManager.h"
 
 #include <list>
@@ -95,7 +92,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		class surfingImWidgetConf {
+		class SurfingImGuiStyle {
 		public:
 			ImWidgetSurfingTYPE type = OFX_IM_DEFAULT;
 			std::string name = "-1";
@@ -106,17 +103,17 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		vector<surfingImWidgetConf> widgetsConfs;
+		vector<SurfingImGuiStyle> widgetsStyles;
 
 		//--------------------------------------------------------------
 		SurfingTypes() {
-			widgetsConfs.clear();
+			widgetsStyles.clear();
 		}
 
 		//-
 
 		//--------------------------------------------------------------
-		surfingImWidgetConf getWidgetConf(ofAbstractParameter& aparam) {
+		SurfingImGuiStyle getWidgetConf(ofAbstractParameter& aparam) {
 
 			// https://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
 			//std::list<int> x{ 2, 3, 5, 7, 11, 13, 17, 19 };
@@ -124,9 +121,9 @@ namespace ofxImGuiSurfing
 			//	std::cout << i << '\n';
 			//for (auto i : x)
 			//	std::cout << i << '\n';
-			//for (auto c : boost::adaptors::reverse(widgetsConfs)) // reverse?
+			//for (auto c : boost::adaptors::reverse(widgetsStyles)) // reverse?
 
-			for (auto &c : widgetsConfs)
+			for (auto &c : widgetsStyles)
 			{
 				if (c.name == aparam.getName()) // param was added to the queue
 				{
@@ -137,14 +134,14 @@ namespace ofxImGuiSurfing
 			//-
 
 			// if return has not been called yet here,
-			// then there's no conf added (AddWidgetConf) for the parameter
+			// then there's no conf added (AddStyle) for the parameter
 			// we return a kind of error type to be detected
 			// and to be drawn with the default style.
-			surfingImWidgetConf cError;
+			SurfingImGuiStyle cError;
 			cError.name = "-1";
 			return cError;
 
-			//surfingImWidgetConf confDefault;
+			//SurfingImGuiStyle confDefault;
 			//confDefault.name = aparam.getName();
 			//confDefault.bSameLine = false;
 			//confDefault.amtPerRow = 1;
@@ -159,16 +156,16 @@ namespace ofxImGuiSurfing
 
 		// queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
-		void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddStyle(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
-			surfingImWidgetConf c;
+			SurfingImGuiStyle c;
 			c.name = aparam.getName();
 			c.type = type;
 			c.bSameLine = bSameLine;
 			c.amtPerRow = amtPerRow;
 			c.spacing = spacing;
 
-			widgetsConfs.push_back(c);
+			widgetsStyles.push_back(c);
 		}
 
 		//TODO:
@@ -177,12 +174,12 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		bool isOperative()
 		{
-			return (widgetsConfs.size() > 0);
+			return (widgetsStyles.size() > 0);
 		}
 
 		//--------------------------------------------------------------
 		void clear() {
-			widgetsConfs.clear();
+			widgetsStyles.clear();
 		}
 
 		////TODO: GetUniqueName?
@@ -220,11 +217,11 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//void AddWidgetConf(string name, ImWidgetSurfingTYPE type) {
-		//	surfingImWidgetConf e;
+		//void AddStyle(string name, ImWidgetSurfingTYPE type) {
+		//	SurfingImGuiStyle e;
 		//	e.name = name;
 		//	e.type = type;
-		//	widgetsConfs.push_back(e);
+		//	widgetsStyles.push_back(e);
 		//}
 
 		//-
@@ -239,7 +236,7 @@ namespace ofxImGuiSurfing
 			bool isBool = type == typeid(ofParameter<bool>).name();
 			if (!isBool) return rtype;
 
-			for (auto w : widgetsConfs)
+			for (auto w : widgetsStyles)
 			{
 				if (w.name == name)
 				{

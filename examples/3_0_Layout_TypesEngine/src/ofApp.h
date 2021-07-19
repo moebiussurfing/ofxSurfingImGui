@@ -15,7 +15,7 @@ class ofApp : public ofBaseApp{
 
 		ofxSurfing_ImGui_Manager guiManager; 
 
-		void drawWindow0();
+		void drawWindowMain();
 		void drawWindow1();
 		void drawWindow2();
 		void drawMoreWidgets();
@@ -31,6 +31,10 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> bMode2;
 		ofParameter<bool> bMode3;
 		ofParameter<bool> bMode4;
+		ofParameter<bool> bModeA;
+		ofParameter<bool> bModeB;
+		ofParameter<bool> bModeC;
+		ofParameter<bool> bModeD;
 		ofParameter<float> lineWidth;
 		ofParameter<float> separation;
 		ofParameter<float> speed;
@@ -49,7 +53,7 @@ class ofApp : public ofBaseApp{
 		bool bCustom1;
 		bool bCustom2;
 
-		bool bOpen0;
+		bool bOpenMain;
 		bool bOpen1;
 		bool bOpen2;
 
@@ -57,7 +61,9 @@ class ofApp : public ofBaseApp{
 		bool bReset2;
 		bool bReset3;
 
-		glm::vec2 pos;
+		glm::vec2 pos0;
+		glm::vec2 pos1;
+		glm::vec2 pos2;
 
 		ofxWindowApp windowApp;
 
