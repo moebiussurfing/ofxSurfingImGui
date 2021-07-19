@@ -406,10 +406,12 @@ void ofApp::draw_ImGui()
 */
 
 
+
 //--------------------------------------------------------------
 
+// NOTES
 
-// 4. WINDOW PANEL SHAPE 
+// WINDOW PANEL SHAPE 
 
 // Get window position for advanced layout linked position
 
@@ -431,11 +433,9 @@ if (bLockMappgingPanel)
 
 //-
 
-
 //--------------------------------------------------------------
 
-
-// 5. MORE RAW IMGUI
+// MORE RAW IMGUI
 
 /*
 // 5.1 How to set colors
@@ -444,4 +444,39 @@ static float c = 0.5f;
 static int i = 3;// hue colors are from 0 to 7
 ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
 ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
+*/
+
+//-
+
+/*
+// WINDOW TESTER
+{
+	ImGuiCond flagsc = ImGuiCond_Appearing;
+	static int type = 0;
+	if (type == 0) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));      // Vertical only
+	if (type == 1) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1));      // Horizontal only
+	if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
+	if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1), ImVec2(500, -1));          // Width 400-500
+	if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 400), ImVec2(-1, 500));          // Height 400-500
+	ImGui::SetNextWindowPos(ImVec2(10, 10), flagsc);
+	ImGui::SetNextWindowSize(ImVec2(100, 100), flagsc);
+	ImGui::Begin("Window Control");
+	{
+		ImGui::SliderInt("TypeConstraints", &type, 0, 4);
+
+		int open_action = -1;
+		if (ImGui::Button("Expand"))
+			open_action = 0;
+		ImGui::SameLine();
+		if (ImGui::Button("collapse"))
+			open_action = 1;
+		ImGui::SameLine();
+
+		if (open_action != -1) {
+			ImGui::SetNextWindowCollapsed(open_action != 0);
+			//ImGui::SetNextItemOpen(open_action != 0);
+		}
+	}
+	ImGui::End();
+}
 */
