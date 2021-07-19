@@ -5,12 +5,12 @@
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
-#include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_Widgets.h"
 
 #include "ofxSurfing_Timers.h"
 
-//-------
+//---------------------
 
 /* some helper tools */
 
@@ -297,9 +297,16 @@ public:
 
 	//-
 
+private:
 	// settings
 	string path_Settings = "imgui_SurfingLayout.xml";
 	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
+	bool bAutoSaveSettings = false;
+	
+public:
+	void setAutoSaveSettings(bool b) {//call befor setup
+		bAutoSaveSettings = b;
+	}
 
 	////TODO:
 	//public:

@@ -3,12 +3,7 @@
 
 #include "ofxImGui.h"
 
-// TODO:
-// TESTING TOGGLE TYPES
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
-
-//#define USE_FIX_BUG_2__WRONG_INDENT_UNLIMITED_GROW //-> choice between tree or collapsed group window
-//#define USE_IM_GUI_INDENT //-> fails on su groups layout..
 
 
 /*
@@ -92,6 +87,7 @@ namespace ofxImGuiSurfing
 	static void popName()
 	{
 		//ofLogWarning(__FUNCTION__) << "-"; 
+
 		windowOpen.usedNames.pop();
 	}
 
@@ -113,33 +109,19 @@ namespace ofxImGuiSurfing
 
 	// TODO:
 	// TESTING CUSTOMIZE TYPES
+	// this instance of widgetsTypes will be shared and unique (?)
+	// should be moved to guiManager layout class ?
+
 	static ofxImGuiSurfing::SurfingTypes widgetsManager;
-
+	
 	//--
 
-	//TODO:
-	//centralize name types
-	//try to mix ImHelpers with ImTypes..
-	enum SurfingTypesGroups
-	{
-		IM_GUI_GROUP_DEFAULT = 0,
-		IM_GUI_GROUP_TREE_EX,
-		IM_GUI_GROUP_TREE,
-		IM_GUI_GROUP_COLLAPSED,
-		IM_GUI_GROUP_SCROLLABLE,
-		IM_GUI_GROUP_ONLY_FIRST_HEADER,
-		IM_GUI_GROUP_HIDDE_ALL_HEADERS,
-		IM_GUI_GROUP_AMOUNT
-	};
-
-	//--
-
-	// ofParams helpers
+	// ofParams Helpers
 
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypesGroups typeGroup = IM_GUI_GROUP_DEFAULT);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypes::SurfingTypesGroups typeGroup = SurfingTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -210,7 +192,7 @@ namespace ofxImGuiSurfing
 	void Begin(const std::string& name);
 	void End();
 
-} // namespace ofxSurfing
+} // namespace ofxImGuiSurfing
 
 //----
 
@@ -230,7 +212,7 @@ namespace ofxImGuiSurfing
 	{
 		return (ImTextureID)(uintptr_t)glID;
 	}
-} // namespace ofxSurfing
+} // namespace ofxImGuiSurfing
 
 //----
 
@@ -276,7 +258,6 @@ namespace ofxImGuiSurfing
 	//		}
 	//		return false;
 	//	}
-
 	//	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 	//	return false;
 	//}
@@ -297,16 +278,18 @@ namespace ofxImGuiSurfing
 			//-
 
 			// float
+
 			if (info == typeid(float))
 			{
 				bool bReturn = false;
                 ofParameter<float> &p = parameter.template cast<float>();
-				auto c = widgetsManager.getWidgetConf(p);
+				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
 				if (c.name != "-1")
 				{
 					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+
 					return bReturn;
 				}
 
@@ -321,6 +304,7 @@ namespace ofxImGuiSurfing
 					}
 					else bReturn = false;
 					ImGui::PopItemWidth();
+
 					return bReturn;
 				}
 			}
@@ -328,11 +312,12 @@ namespace ofxImGuiSurfing
 			//-
 
 			// int
+
 			else if (info == typeid(int))
 			{
 				bool bReturn = false;
                 ofParameter<int> &p = parameter.template cast<int>();
-				auto c = widgetsManager.getWidgetConf(p);
+				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
 				if (c.name != "-1")
@@ -366,7 +351,7 @@ namespace ofxImGuiSurfing
 			{
 				bool bReturn = false;
                 ofParameter<bool> &p = parameter.template cast<bool>();
-				auto c = widgetsManager.getWidgetConf(p);
+				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
 				if (c.name != "-1")
@@ -408,7 +393,6 @@ namespace ofxImGuiSurfing
 	template<typename ParameterType>
 	bool AddText(ofParameter<ParameterType>& parameter, bool label)
 	{
-
 		if (label)
 		{
 			ImGui::LabelText(GetUniqueName(parameter), ofToString(parameter.get()).c_str());
@@ -453,4 +437,5 @@ namespace ofxImGuiSurfing
 
 		return result;
 	}
-} // namespace ofxSurfing
+
+} // namespace ofxImGuiSurfing

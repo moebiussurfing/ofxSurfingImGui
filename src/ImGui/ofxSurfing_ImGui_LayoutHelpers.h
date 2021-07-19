@@ -8,20 +8,18 @@
 
 // This class have widgets size constants ands method to get the window panel sizes.
 
-//-------
+//----------
 
 // CONSTANTS
 
-//#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
+//#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme. not implemented
 
 #define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT_MIN 20
 
-//#ifdef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
 #define BUTTON_BIG_HEIGHT 50
-//#endif
 
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20
@@ -32,8 +30,8 @@
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
 
-//-------
 
+//------------------
 
 /* Layout Helpers */
 
@@ -43,7 +41,7 @@
 namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
-	inline float getWidgetsHeightRelative(int amntRows = -1)
+	inline float getWidgetsHeightRelative(int amntRows = -1) // height is relative to ImGui theme
 	{
 		float h;
 		if (amntRows == -1)

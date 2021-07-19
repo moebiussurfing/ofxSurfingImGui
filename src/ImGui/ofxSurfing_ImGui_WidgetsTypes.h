@@ -5,7 +5,7 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_Widgets.h"
 
 //TODO:
@@ -38,17 +38,39 @@ namespace ofxImGuiSurfing
 			OFX_IM_CHECKBOX,	// bool
 			OFX_IM_BUTTON_SMALL,
 			OFX_IM_BUTTON_BIG,
+			OFX_IM_BUTTON_BIG_XXL,
 			OFX_IM_TOGGLE_SMALL,
 			OFX_IM_TOGGLE_BIG,
+			OFX_IM_TOGGLE_BIG_XXL,
+
 			OFX_IM_SLIDER,		// float/int
 			OFX_IM_PROGRESS_BAR,
 			OFX_IM_STEPPER,
 			OFX_IM_DRAG,
-			OFX_IM_TEXT_DISPLAY,
+
+			OFX_IM_TEXT_DISPLAY, // strings
 			OFX_IM_TEXT_INPUT,
 			OFX_IM_TEXT_BIG,
 
 			OFX_IM_NUM_TYPES
+		};
+
+		//-
+
+		//TODO:
+		//centralize name types
+		//try to mix ImHelpers with ImTypes..
+		enum SurfingTypesGroups
+		{
+			OFX_IM_GROUP_DEFAULT = 0,
+			OFX_IM_GROUP_TREE_EX,
+			OFX_IM_GROUP_TREE,
+			OFX_IM_GROUP_COLLAPSED,
+			OFX_IM_GROUP_SCROLLABLE,
+			OFX_IM_GROUP_ONLY_FIRST_HEADER,
+			OFX_IM_GROUP_HIDDE_ALL_HEADERS,
+
+			OFX_IM_GROUP_NUM_TYPES
 		};
 
 		//-
@@ -113,7 +135,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		SurfingImGuiStyle getWidgetConf(ofAbstractParameter& aparam) {
+		SurfingImGuiStyle getStyle(ofAbstractParameter& aparam) {
 
 			// https://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
 			//std::list<int> x{ 2, 3, 5, 7, 11, 13, 17, 19 };
@@ -357,12 +379,20 @@ namespace ofxImGuiSurfing
 					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
 					break;
 
+				case OFX_IM_BUTTON_BIG_XXL:
+					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
+					break;
+
 				case OFX_IM_TOGGLE_SMALL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
 				case OFX_IM_TOGGLE_BIG:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
+					break;
+
+				case OFX_IM_TOGGLE_BIG_XXL:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
 					break;
 				}
 

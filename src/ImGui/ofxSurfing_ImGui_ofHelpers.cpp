@@ -1,4 +1,4 @@
-#include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
 
 //TODO:
 // add customization for nested groups
@@ -50,7 +50,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypesGroups typeGroup)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingTypesGroups typeGroup)
 	{
 		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
 
@@ -60,7 +60,7 @@ namespace ofxImGuiSurfing
 
 
 		// first root group always has a tree collapsed header
-		if (windowOpen.treeLevel == 0 && typeGroup != IM_GUI_GROUP_HIDDE_ALL_HEADERS)
+		if (windowOpen.treeLevel == 0 && typeGroup != SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 		{
 			bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
 
@@ -94,26 +94,26 @@ namespace ofxImGuiSurfing
 			{
 				ImGui::PushID(parameterGroup->getName().c_str()); // -> finally fix unique id for repeated params inside many groups
 				{
-					if (typeGroup == IM_GUI_GROUP_ONLY_FIRST_HEADER)
+					if (typeGroup == SurfingTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 					{
 						widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
 					else
 					{
-						if (typeGroup == IM_GUI_GROUP_HIDDE_ALL_HEADERS)
+						if (typeGroup == SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 						{
 							widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
-						else if (typeGroup == IM_GUI_GROUP_COLLAPSED)
+						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_COLLAPSED)
 						{
 							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
 							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
-						else if (typeGroup == IM_GUI_GROUP_DEFAULT)
+						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_DEFAULT)
 						{
 							//ImGui::Indent();
 
@@ -123,7 +123,7 @@ namespace ofxImGuiSurfing
 							//ImGui::Unindent();
 						}
 
-						else if (typeGroup == IM_GUI_GROUP_TREE)
+						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_TREE)
 						{
 							if (ImGui::TreeNode(parameterGroup->getName().data()))
 							{
@@ -140,7 +140,7 @@ namespace ofxImGuiSurfing
 							}
 						}
 
-						else if (typeGroup == IM_GUI_GROUP_TREE_EX)
+						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_TREE_EX)
 						{
 							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
 							{
@@ -152,7 +152,7 @@ namespace ofxImGuiSurfing
 							}
 						}
 
-						else if (typeGroup == IM_GUI_GROUP_SCROLLABLE)
+						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_SCROLLABLE)
 						{
 							auto& style = ImGui::GetStyle();
 							//int hh = 14;
@@ -910,7 +910,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	// image
-	//--------------------------------------------------------------IM_GUI_GROUP_DEFAULT
+	//--------------------------------------------------------------
 	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size)
 	{
 		AddImage(hasTexture.getTexture(), size);

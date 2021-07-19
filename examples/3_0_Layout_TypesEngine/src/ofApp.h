@@ -6,6 +6,8 @@
 
 #include "ofxWindowApp.h" // not required
 
+// Remove ImNodes, ImGuizmo folder from Solution Explorer
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -21,9 +23,11 @@ class ofApp : public ofBaseApp{
 		void drawMoreWidgets();
 
 		// parameters
+		
 		ofParameterGroup params1;
 		ofParameterGroup params2;
 		ofParameterGroup params3;
+
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;//to use as button. kind of void type
 		ofParameter<bool> bNext;//to use as button. kind of void type

@@ -19,18 +19,18 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 	bAutoDraw = false;
 
 	//bAutoDraw = true;
-
-	loadGroup(params_AppSettings, path_Settings);
+	if(bAutoSaveSettings) loadGroup(params_AppSettings, path_Settings);
 };
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
-	saveGroup(params_AppSettings, path_Settings);
 };
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	setup_ImGui();
+
+	if (bAutoSaveSettings) saveGroup(params_AppSettings, path_Settings);
 }
 
 //--------------------------------------------------------------

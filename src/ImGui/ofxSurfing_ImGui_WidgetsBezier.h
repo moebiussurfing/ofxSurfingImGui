@@ -1,7 +1,7 @@
 
 #pragma once
 
-//TODO:
+//TODO: WIP
 //DEBUG
 #if(0)
 
@@ -41,7 +41,7 @@
 #include <time.h>
 
 #include "ofxSurfing_ImGui_WidgetsButtons.h"
-#include "ofxSurfing_ImGui_Helpers.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 
 namespace ImGui

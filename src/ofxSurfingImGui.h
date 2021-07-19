@@ -13,7 +13,7 @@
 // HEADERS
 //---------
 
-#include "ImGui/ofxSurfing_ImGui_Helpers.h"
+#include "ImGui/ofxSurfing_ImGui_ofHelpers.h"
 
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
 
