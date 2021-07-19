@@ -54,7 +54,7 @@ I AM STILL HAVING SOME PROBLEMS YET
 <BR>
 
 ## 1. WIDGETS
-Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators and ofxImGui standard params.  
+Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators, and ofxImGui standard params.  
 
 
 <details>
@@ -98,7 +98,7 @@ Includes wait and progression spinners.
   </p>
 </details>
 
-Includes a matrix button clicker selector linked to an int ofParam (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
+Includes a matrix button clicker selector linked to an int ofParameter (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 <BR>
 
@@ -176,7 +176,7 @@ void ofApp::draw()
 
                 /* Draw RAW ImGui or SurfingWidgets with ofParameters */
 
-                // One widget full with and theme height. Callback is handled by the param listeners.
+                // One widget full with and theme height. The callback is handled by the param listeners.
                 ofxImGuiSurfing::AddBigToggle(b1); 
 
                 // Two widgets same line/row with the 50% of window panel width 
@@ -215,7 +215,7 @@ void ofApp::draw()
 </details>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
-"_Its a class for manage docking panes in a easy way, display (panes, menu, pane dialog), load/save, autolayout, etc..._"  
+"_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._"  
 **WIP** porting to use into my OF projects.  
 
 <details>
@@ -226,7 +226,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**
   </p>
 </details>
 
-This is a helper for tweaking your own themes: testings sizes, layout and colors, and alternate fonts.  
+This is a helper for tweaking your themes: testings sizes, layout, and colors, and alternate fonts.  
 
 <BR>
 
@@ -234,9 +234,9 @@ This is a helper for tweaking your own themes: testings sizes, layout and colors
 
 ### 3_0_Layout_TypesEngine
 1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
-2. A more powerfull **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-3. Draw each **ofParameter** types with a different styles. (Instead of the ofxImGui behaviour, where you can't change the the param widget style.)  
-4. Especially useful when ofParams are into an **ofParameterGroup**.  
+2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+3. Draw each **ofParameter** types with different styles. (Instead of the ofxImGui behavior, where you can't change the param widget style.)  
+4. Especially useful when ofParameters are into an **ofParameterGroup**.  
 5. Queue settings for a parameter to define configurations to be applied when the widget is drawn when drawing a group.  
 
 **CASE 1**:  
@@ -343,7 +343,7 @@ void ofApp::drawWidgets()
 </details>
 
 ### 3_1_Layout_TypesEngine
-Fast ofParams widgets layout: width, height, items per row and differnt styles for same types or even repeated params.  
+Fast ofParams widgets layout: width, height, items per row, and different styles for same types or even repeated params.  
 
 #### AVAILABLE CUSTOMIZATIONS:
     - Hide the parameter.  
@@ -361,7 +361,7 @@ bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT,
 ## 4. TIMELINES AND SEQUENCERS [WIP]
 
 These are testing projects trying to build an operative but very basic timeline, to run very simple animations:  
-* A kind of note on/off or clip start/end behaviour.
+* A kind of note on/off or clip start/end behavior.
 * A curve editor for a float variable automation. 
   
 <details>
@@ -376,7 +376,7 @@ Based on [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
 
 4_3_Sequentity [BROKEN]  
-Based on [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because some dependencies...
+Based on [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
 
 <BR>
 
