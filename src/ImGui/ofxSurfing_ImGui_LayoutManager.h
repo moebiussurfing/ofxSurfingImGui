@@ -6,7 +6,10 @@
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_ofHelpers.h"
+
 #include "ofxSurfing_ImGui_Widgets.h"
+//#include "ofxSurfing_ImGui_WidgetsTypes.h"
+#include "ofxSurfing_ImGui_Themes.h"
 
 #include "ofxSurfing_Timers.h"
 
@@ -97,6 +100,12 @@ public:
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
+	//-
+
+	void draw(); // to manual draw...
+
+	//-
+
 	// global
 	// all the windows are feeded between
 	void begin();
@@ -113,10 +122,6 @@ public:
 
 	//-
 
-	void draw(); // to manual draw...
-
-	//-
-
 public:
 
 	// Force autodraw
@@ -128,30 +133,37 @@ public:
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
+	//-
+
 private:
 
 	void setup_ImGui();
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 
-	ofxImGui::Gui * guiPtr = NULL;
-	ofxImGui::Gui gui;
+	// with have two mode for instantiate ImGui
+	ofxImGui::Gui * guiPtr = NULL; // passed by reference
+	ofxImGui::Gui gui; // inside the addon
 
-	ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
-	ImFont* customFont = nullptr;
-	vector<ImFont*> customFonts;
+	//ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
 
 	//-
 
 	// fonts runtime mangement 
 
-public:
+private:
+	ImFont* customFont = nullptr;
+	vector<ImFont*> customFonts;
 
+public:
 	bool addFont(std::string path, int size);
 	bool pushFont(std::string path, int size);
+
+private:
 	int currFont = 0;
 	void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
 	void openFileFont(int size = 10);
 
+public:
 	void setDefaultFontIndex(int index);
 	int getNumFonts() { return customFonts.size(); }
 
@@ -160,6 +172,7 @@ public:
 
 	//-
 
+public:
 	//--------------------------------------------------------------
 	bool isMouseOverGui() {
 		return bMouseOverGui;
@@ -199,7 +212,7 @@ private:
 
 	//-
 
-public:
+//public:
 
 	// An extra common panel with some usefull toggles:
 	// auto-resize, debug mouse over gui, ...
@@ -228,25 +241,28 @@ public:
 	}
 	*/
 
+public:
 	//--------------------------------------------------------------
 	void resetWindowImGui(bool pos = true, bool size = true)
 	{
 		float xx = 10;
 		float yy = 10;
-		//float ww = PANEL_WIDGETS_WIDTH_MIN;
-		//float hh = PANEL_WIDGETS_HEIGHT;
 		float ww = 200;
 		float hh = 600;
+		//float ww = PANEL_WIDGETS_WIDTH_MIN;
+		//float hh = PANEL_WIDGETS_HEIGHT;
 
 		ImGuiCond flagsCond = ImGuiCond_Appearing;
 		//flagsCond |= ImGuiCond_Appearing;
 		//flagsCond |= ImGuiCond_Once;
+
 		if (size) ImGui::SetWindowSize(ImVec2(ww, hh), flagsCond);
 		if (pos)ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
 	}
 
 	//--
 
+public:
 	// snippet to copy/paste
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//--------------------------------------------------------------
@@ -302,9 +318,9 @@ private:
 	string path_Settings = "imgui_SurfingLayout.xml";
 	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
 	bool bAutoSaveSettings = false;
-	
+
 public:
-	void setAutoSaveSettings(bool b) {//call befor setup
+	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
 	}
 

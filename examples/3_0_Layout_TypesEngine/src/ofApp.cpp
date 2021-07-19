@@ -86,8 +86,7 @@ void ofApp::setup() {
 	// widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
 
 	// -> not checked on runtime! ONLY ON SETUP
-	if (bCustom2)
-	{
+	if (bCustom2) {
 		SetupStyles();
 	}
 	else {
@@ -201,15 +200,14 @@ void ofApp::drawWindowMain() {
 			ImGui::Dummy(ImVec2(0, 5));
 
 			// round toggles
-			//ToggleRoundedButton("Avoid Close", &no_close);
 			ToggleRoundedButton("Show Window 1", &bOpen1);
 			ToggleRoundedButton("Show Window 2", &bOpen2);
 
-			//ImGui::Dummy(ImVec2(0, 5));
+			ImGui::Dummy(ImVec2(0, 5));
 
 			AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(50, 30));
 
-			ImGui::Dummy(ImVec2(0, 30)); // spacing
+			ImGui::Dummy(ImVec2(0, 40)); // spacing
 
 			//-
 
@@ -242,7 +240,7 @@ void ofApp::drawWindowMain() {
 				}
 			}
 
-			ImGui::TextWrapped("Custom Style for Window 2 Group.");
+			ImGui::TextWrapped("Customized Style for Window 2 Group.");
 
 			//-
 
@@ -250,7 +248,8 @@ void ofApp::drawWindowMain() {
 			ImGui::Separator();
 			ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-			ImGui::TextWrapped("Customize Styles for Groups/Trees");
+			ImGui::TextWrapped("Customize Styles for Groups/Trees:");
+			ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 			// debug ImGui flags
 			{
@@ -276,12 +275,11 @@ void ofApp::drawWindowMain() {
 
 			// get position
 			{
-				float pad = 0;
 				auto posx = ImGui::GetWindowPos().x;
 				auto posy = ImGui::GetWindowPos().y;
 				float __w = ImGui::GetWindowWidth();
 				float __h = ImGui::GetWindowHeight();
-				pos0.x = posx + __w + pad;
+				pos0.x = posx + __w + PADDING_PANELS;
 				pos0.y = posy;
 			}
 
@@ -323,10 +321,12 @@ void ofApp::drawWindow1() {
 
 		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 		{
+#ifdef IM_GUI_REFRESH_LOCAL
 			// Update sizes to current window shape.
 			// Warning! Must be called before we use the above API widgetsManager.Add(.. methods!
 			// This is to calculate the widgets types sizes to current panel window size.
-			widgetsManager.refreshPanelShape();
+			widgetsManager.refresh();
+#endif
 
 			//--
 
@@ -382,6 +382,7 @@ void ofApp::drawWindow1() {
 			{
 				ImGui::Text("* bCustom1 = true");
 				ImGui::Text("customized");
+				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 				// This is the defalut helpers ussage for the official ofxImGui Helpers:
 				//ofxImGuiSurfing::AddParameter(lineWidth); 
@@ -407,7 +408,7 @@ void ofApp::drawWindow1() {
 
 				// 1.3 Three small toggle widgets in one row
 				// with 20px vert spacing at end
-				//widgetsManager.refreshPanelShape(); // update sizes to current window shape
+				//widgetsManager.refresh(); // update sizes to current window shape
 				widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_TOGGLE_SMALL, true, 3);
 				widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_SMALL, true, 3);
 				widgetsManager.Add(bModeC, SurfingTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);
@@ -420,6 +421,7 @@ void ofApp::drawWindow1() {
 			{
 				ImGui::Text("* bCustom1 = false");
 				ImGui::Text("default style");
+				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeB);
@@ -438,12 +440,11 @@ void ofApp::drawWindow1() {
 
 			// get position
 			{
-				float pad = 0;
 				auto posx = ImGui::GetWindowPos().x;
 				auto posy = ImGui::GetWindowPos().y;
 				float __w = ImGui::GetWindowWidth();
 				float __h = ImGui::GetWindowHeight();
-				pos1.x = posx + __w + pad;
+				pos1.x = posx + __w + PADDING_PANELS;
 				pos1.y = posy;
 			}
 		}
@@ -475,13 +476,21 @@ void ofApp::drawWindow2() {
 		// A. without flags (default)
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
+#ifdef IM_GUI_REFRESH_LOCAL
+			widgetsManager.refresh();
+#endif
+
+			//-
+
 			if (bCustom2) {
 				ImGui::Text("* bCustom1 = true");
 				ImGui::Text("customized");
+				ImGui::Dummy(ImVec2(0, 5)); // spacing
 			}
 			else {
 				ImGui::Text("* bCustom2 = false");
 				ImGui::Text("default style");
+				ImGui::Dummy(ImVec2(0, 5)); // spacing
 			}
 
 			ofxImGuiSurfing::AddGroup(params2);
@@ -491,12 +500,6 @@ void ofApp::drawWindow2() {
 			/*
 			// B. using flags
 			{
-				// workaround
-				// do not updates for below group.
-				// inside AddGroup. Could be related to static widgetsManager instantiation..
-				// Must call:
-				widgetsManager.refreshPanelShape();
-
 				// group parameter with customized tree/folder type
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				flags |= ImGuiTreeNodeFlags_Framed;
@@ -512,30 +515,38 @@ void ofApp::drawWindow2() {
 			// Another widgets pack
 			{
 				static bool bMore = false;
-				ImGui::Dummy(ImVec2(0, 20)); // spacing
+				ofxImGuiSurfing::AddSpaceY();
+				//ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ImGui::Separator();
-				ImGui::Dummy(ImVec2(0, 20)); // spacing
+				ofxImGuiSurfing::AddSpaceY();
+				//ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ImGui::Text("MORE WIDGETS");
+				ofxImGuiSurfing::AddSpaceY(5);
+				//ImGui::Dummy(ImVec2(0, 5)); // spacing
 				ofxImGuiSurfing::ToggleRoundedButton("Draw", &bMore);
 				if (bMore) drawMoreWidgets();
 			}
 
+			//// 1.4 spacing
+			//ImGui::Dummy(ImVec2(0, 10)); // spacing
+
+			//// 1.5 A row of four big toggles
+			//widgetsManager.Add(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 4);
+
 		}
 		guiManager.endWindow();
-
-		//// 1.4 spacing
-		//ImGui::Dummy(ImVec2(0, 10)); // spacing
-
-		//// 1.5 A row of four big toggles
-		//widgetsManager.Add(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 4);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawMoreWidgets() {
+	
+#ifdef IM_GUI_REFRESH_LOCAL
+	ofxImGuiSurfing::widgetsManager.refresh(); // is static
+#endif
 
 	// these are pure widgets without window/tree/container
 
@@ -552,7 +563,7 @@ void ofApp::drawMoreWidgets() {
 	//ofxImGui::AddGroup(params3, mainSettings);
 
 	// spacing
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));// spacing
+	ImGui::Dummy(ImVec2(0.0f, 2.0f)); // spacing
 
 	//-
 
@@ -583,6 +594,8 @@ void ofApp::drawMoreWidgets() {
 		// A row of four big toggles
 		ImGui::Text("* bCustom1 = true");
 		ImGui::Text("customized");
+		ImGui::Dummy(ImVec2(0, 5)); // spacing
+
 		widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
 		widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
 		widgetsManager.Add(bModeC, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
@@ -592,6 +605,8 @@ void ofApp::drawMoreWidgets() {
 	{
 		ImGui::Text("* bCustom1 = false");
 		ImGui::Text("default style");
+		ImGui::Dummy(ImVec2(0, 5)); // spacing
+
 		ofxImGuiSurfing::AddParameter(bModeA);
 		ofxImGuiSurfing::AddParameter(bModeB);
 		ofxImGuiSurfing::AddParameter(bModeC);

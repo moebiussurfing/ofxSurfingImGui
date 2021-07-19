@@ -44,6 +44,7 @@ namespace ofxImGuiSurfing
 			result += " ";
 		}
 		windowOpen.usedNames.top().push_back(result);
+
 		return windowOpen.usedNames.top().back().c_str();
 	}
 
@@ -52,12 +53,13 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingImGuiTypesGroups typeGroup)
 	{
+		//ofxImGuiSurfing::widgetsManager.refresh(); // is static
+
 		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
 
 		// push a new list of names onto the stack.
-		pushName();
+		pushNames();
 		//windowOpen.usedNames.push(std::vector<std::string>());
-
 
 		// first root group always has a tree collapsed header
 		if (windowOpen.treeLevel == 0 && typeGroup != SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)

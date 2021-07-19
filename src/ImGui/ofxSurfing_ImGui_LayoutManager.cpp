@@ -228,8 +228,8 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//-
 
 	//TODO:
-	ofxImGuiSurfing::clearNames();
-	ofxImGuiSurfing::pushName();
+	//ofxImGuiSurfing::clearNames();
+	//ofxImGuiSurfing::pushNames();
 }
 
 //--------------------------------------------------------------
@@ -249,7 +249,7 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	//-
 
-	ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
+	//ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
 	//ofxImGuiSurfing::popName();
 }
 
@@ -276,7 +276,9 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 {
 	// Push a new list of names onto the stack.
 	//ofxImGuiSurfing::windowOpen.usedNames.push(std::vector<std::string>());
-	ofxImGuiSurfing::pushName();
+	//ofxImGuiSurfing::pushNames();
+
+	//-
 
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
@@ -329,6 +331,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
 
+	//-
 
 	//// We specify a default position/size in case there's no data in the .ini file.
 	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.
@@ -338,17 +341,22 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	// Main body of the Demo window starts here.
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
-	if (!b)
-	{
-		//// Early out if the window is collapsed, as an optimization.
-		//ImGui::End();
-		//return;
-	}
+
+	//if (!b)
+	//{
+	//	//// Early out if the window is collapsed, as an optimization.
+	//	//ImGui::End();
+	//	//return;
+	//}
 
 	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
 	//return b;
+
+	//-
+
+	ofxImGuiSurfing::widgetsManager.refresh(); // is static
 }
 
 //--------------------------------------------------------------
@@ -363,5 +371,5 @@ void ofxSurfing_ImGui_Manager::endWindow()
 	// Clear the list of names from the stack.
 	//ofxImGuiSurfing::windowOpen.usedNames.pop();
 	//ofxImGuiSurfing::popName();
-	ofxImGuiSurfing::clearNames();
+	//ofxImGuiSurfing::clearNames();
 }

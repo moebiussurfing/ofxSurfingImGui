@@ -86,7 +86,7 @@ namespace ofxImGuiSurfing
 	// names engine
 
 	//--------------------------------------------------------------
-	static void pushName()
+	static void pushNames()
 	{
 		//ofLogWarning(__FUNCTION__) << "-"; 
 

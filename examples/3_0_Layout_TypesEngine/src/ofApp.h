@@ -6,7 +6,15 @@
 
 #include "ofxWindowApp.h" // not required
 
-// Remove ImNodes, ImGuizmo folder from Solution Explorer
+
+//#define IM_GUI_REFRESH_LOCAL
+
+
+// NOTE:
+// If you get some errors on compiling, could be related to some -not required- included files.
+// Go to 'Solution Explorer' and remove manually from 'addons/ofxSurfingImGui/src/ImGui/' 
+// /ImNodes/, /ImGuizmo/ !!
+
 
 class ofApp : public ofBaseApp{
 
@@ -15,19 +23,16 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void draw();
 
-		ofxSurfing_ImGui_Manager guiManager; 
-
 		void drawWindowMain();
 		void drawWindow1();
 		void drawWindow2();
 		void drawMoreWidgets();
 
-		// parameters
-		
+		// groups
 		ofParameterGroup params1;
 		ofParameterGroup params2;
 		ofParameterGroup params3;
-
+		// parameters
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious;//to use as button. kind of void type
 		ofParameter<bool> bNext;//to use as button. kind of void type
@@ -53,9 +58,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<float> speed3;
 		ofParameter<int> shapeType3;
 
-		// debug
-		bool bCustom1;
-		bool bCustom2;
+		//-
 
 		bool bOpenMain;
 		bool bOpen1;
@@ -69,13 +72,23 @@ class ofApp : public ofBaseApp{
 		glm::vec2 pos1;
 		glm::vec2 pos2;
 
-		ofxWindowApp windowApp;
+		//-
 
-		// debug ImGui flags
+		ofxSurfing_ImGui_Manager guiManager;
+
+		// debug customize
+
+		bool bCustom1;
+		bool bCustom2;
+
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
 		string flagInfo;
 
 		void SetupStyles();
 		void ClearStyles();
+
+		//-
+
+		ofxWindowApp windowApp;
 };

@@ -120,6 +120,11 @@ namespace ofxImGuiSurfing
 		{
 			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 		}
+		//--------------------------------------------------------------
+		void refresh()
+		{
+			refreshPanelShape();
+		}
 
 		//-
 

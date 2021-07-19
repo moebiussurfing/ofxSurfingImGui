@@ -14,9 +14,7 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_Themes.h"
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
-//#include "ofxSurfingHelpers.h" // -> for blink fadings
 #include "ofxSurfing_Timers.h"
 
 //------------------------------
