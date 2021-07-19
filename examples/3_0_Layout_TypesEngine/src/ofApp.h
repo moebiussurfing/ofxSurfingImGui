@@ -75,4 +75,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
 		string flagInfo;
+
+		void SetupStyles();
+		void ClearStyles();
 };

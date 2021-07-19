@@ -44,6 +44,17 @@
 
 namespace ofxImGuiSurfing
 {
+	//--
+
+	// TODO:
+	// TESTING CUSTOMIZE TYPES
+	// this instance of widgetsTypes will be shared and unique (?)
+	// should be moved to guiManager layout class ?
+
+	static SurfingTypes widgetsManager;
+
+	//--
+
 	// unique name engine
 	// NOTE: this engine seems that avoid duplicated names on the same group/tree
 	// but we will use PushID too for each groups. This will allow to repeat a parameter several times
@@ -104,15 +115,6 @@ namespace ofxImGuiSurfing
 			windowOpen.usedNames.pop();
 		}
 	}
-
-	//--
-
-	// TODO:
-	// TESTING CUSTOMIZE TYPES
-	// this instance of widgetsTypes will be shared and unique (?)
-	// should be moved to guiManager layout class ?
-
-	static ofxImGuiSurfing::SurfingTypes widgetsManager;
 	
 	//--
 
@@ -121,7 +123,7 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypes::SurfingTypesGroups typeGroup = SurfingTypes::OFX_IM_GROUP_DEFAULT);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypes::SurfingImGuiTypesGroups typeGroup = SurfingTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);

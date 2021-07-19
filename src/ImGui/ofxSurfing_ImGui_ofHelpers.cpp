@@ -50,7 +50,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingTypesGroups typeGroup)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingImGuiTypesGroups typeGroup)
 	{
 		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
 

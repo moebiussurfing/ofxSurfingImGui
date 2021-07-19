@@ -8,11 +8,6 @@
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_Widgets.h"
 
-//TODO:
-//collides!
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
-//#include "ofxSurfing_ImGui_LayoutManager.h"
-
 #include <list>
 #include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
@@ -27,8 +22,9 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		//TODO: make simpler namespace. or move outside the class?
-		enum ImWidgetSurfingTYPE
+		//TODO: 
+		//make simpler namespace. or move outside the class?
+		enum SurfingImGuiTypes
 		{
 			OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
 			OFX_IM_HIDDEN,		// omit widget. don't let spacing there
@@ -55,12 +51,12 @@ namespace ofxImGuiSurfing
 			OFX_IM_NUM_TYPES
 		};
 
-		//-
+		//--
 
 		//TODO:
 		//centralize name types
 		//try to mix ImHelpers with ImTypes..
-		enum SurfingTypesGroups
+		enum SurfingImGuiTypesGroups
 		{
 			OFX_IM_GROUP_DEFAULT = 0,
 			OFX_IM_GROUP_TREE_EX,
@@ -87,12 +83,13 @@ namespace ofxImGuiSurfing
 		//		return tag;
 		//	}
 
-		//-
+		//--
+
+		// widgets sizes
 
 	//public:
 	private:
 
-		// widgets sizes
 		float _spcx;
 		float _spcy;
 		float _w100;
@@ -103,7 +100,6 @@ namespace ofxImGuiSurfing
 		float _w25;
 		float _h;
 
-		//// widgets sizes
 		//static float _spcx;
 		//static float _spcy;
 		//static float _w100;
@@ -114,9 +110,10 @@ namespace ofxImGuiSurfing
 		//static float _w25;
 		//static float _h;
 
-		//-
+		//--
 
 	public:
+
 		// refresh current panel shape to update widgets sizes
 		//--------------------------------------------------------------
 		void refreshPanelShape()
@@ -127,9 +124,10 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		class SurfingImGuiStyle {
+		class SurfingImGuiStyle
+		{
 		public:
-			ImWidgetSurfingTYPE type = OFX_IM_DEFAULT;
+			SurfingImGuiTypes type = OFX_IM_DEFAULT;
 			std::string name = "-1";
 			int amtPerRow = 1;
 			bool bSameLine = false;
@@ -138,10 +136,12 @@ namespace ofxImGuiSurfing
 
 		//-
 
+		// To queue the styles for each param here
 		vector<SurfingImGuiStyle> widgetsStyles;
 
 		//--------------------------------------------------------------
-		SurfingTypes() {
+		SurfingTypes()
+		{
 			widgetsStyles.clear();
 		}
 
@@ -191,7 +191,7 @@ namespace ofxImGuiSurfing
 
 		// queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
-		void AddStyle(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			SurfingImGuiStyle c;
 			c.name = aparam.getName();
@@ -252,7 +252,7 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//void AddStyle(string name, ImWidgetSurfingTYPE type) {
+		//void AddStyle(string name, SurfingImGuiTypes type) {
 		//	SurfingImGuiStyle e;
 		//	e.name = name;
 		//	e.type = type;
@@ -262,10 +262,10 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		ImWidgetSurfingTYPE getType(ofAbstractParameter& aparam)
+		SurfingImGuiTypes getType(ofAbstractParameter& aparam)
 		{
 			string name = aparam.getName();
-			ImWidgetSurfingTYPE rtype = ImWidgetSurfingTYPE(OFX_IM_DEFAULT);
+			SurfingImGuiTypes rtype = SurfingImGuiTypes(OFX_IM_DEFAULT);
 
 			auto type = aparam.type();
 			bool isBool = type == typeid(ofParameter<bool>).name();
@@ -275,7 +275,7 @@ namespace ofxImGuiSurfing
 			{
 				if (w.name == name)
 				{
-					rtype = ImWidgetSurfingTYPE(w.type);
+					rtype = SurfingImGuiTypes(w.type);
 				}
 			}
 
@@ -287,7 +287,7 @@ namespace ofxImGuiSurfing
 		// render now a parameter ImGui widget
 		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
 		//--------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			bool bDone = false;
 

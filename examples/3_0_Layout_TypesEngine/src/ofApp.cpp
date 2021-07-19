@@ -15,7 +15,7 @@ void ofApp::setup() {
 
 	// debug ImGui flags
 	{
-		int sz = (int)SurfingTypes::SurfingTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
+		int sz = (int)SurfingTypes::SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
 		typeGroups.set("typeGroups", 0, 0, sz);
 		typeFlags.set("typeFlags", 1, 0, 4);
 	}
@@ -85,53 +85,68 @@ void ofApp::setup() {
 	// ie:
 	// widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
 
-	if (bCustom2) // -> not checked on runtime! ONLY ON SETUP
+	// -> not checked on runtime! ONLY ON SETUP
+	if (bCustom2)
 	{
-		widgetsManager.clear(); // TODO: -> call from beginWindow/group
-
-		widgetsManager.AddStyle(shapeType2, SurfingTypes::OFX_IM_STEPPER);
-		widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_STEPPER);
-		widgetsManager.AddStyle(amount2, SurfingTypes::OFX_IM_DRAG);
-
-		widgetsManager.AddStyle(bEnable, SurfingTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
-
-		// two widgets same line small
-		widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_SMALL, true, 2);
-		widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
-
-		// two widgets same line big
-		//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_BIG, true, 2);
-		//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
-
-		// two widgets same line
-		widgetsManager.AddStyle(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
-		widgetsManager.AddStyle(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
-		// two widgets same line
-		widgetsManager.AddStyle(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
-		widgetsManager.AddStyle(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
-
-		// more widgets
-		widgetsManager.AddStyle(lineWidth3, SurfingTypes::OFX_IM_STEPPER);
-		widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_DRAG);
-		widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_INACTIVE);
-		//widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_STEPPER);
-
-		//// hide some params from any on-param-group appearance
-		//widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
-		//widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
-		//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_HIDDEN);
-		//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_HIDDEN);
-		//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_HIDDEN);
-		//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_DRAG); // not works?
-		//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
-		//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
-		//widgetsManager.AddStyle(speed, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
-		//widgetsManager.AddStyle(shapeType, SurfingTypes::OFX_IM_DRAG);
-		//widgetsManager.AddStyle(size, SurfingTypes::OFX_IM_STEPPER);
-		//widgetsManager.AddStyle(amount, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
+		SetupStyles();
+	}
+	else {
+		ClearStyles();
 	}
 
 	guiManager.bAutoResize = false;
+}
+
+//--------------------------------------------------------------
+void ofApp::SetupStyles() {
+
+	widgetsManager.clear(); // TODO: -> call from beginWindow/group
+
+	//widgetsManager.AddStyle(bEnable, SurfingTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
+
+	widgetsManager.AddStyle(shapeType2, SurfingTypes::OFX_IM_STEPPER);
+	widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_STEPPER);
+	widgetsManager.AddStyle(amount2, SurfingTypes::OFX_IM_DRAG);
+
+	// two widgets same line small
+	widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_SMALL, true, 2);
+	widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
+
+	// two widgets same line big
+	//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_BIG, true, 2);
+	//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
+
+	// two widgets same line
+	widgetsManager.AddStyle(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
+	widgetsManager.AddStyle(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
+	// two widgets same line
+	widgetsManager.AddStyle(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
+	widgetsManager.AddStyle(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
+
+	// more widgets
+	widgetsManager.AddStyle(lineWidth3, SurfingTypes::OFX_IM_STEPPER);
+	widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_DRAG);
+	widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_INACTIVE);
+	//widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_STEPPER);
+
+	//// hide some params from any on-param-group appearance
+	//widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
+	//widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
+	//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_HIDDEN);
+	//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_HIDDEN);
+	//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_HIDDEN);
+	//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_DRAG); // not works?
+	//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
+	//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
+	//widgetsManager.AddStyle(speed, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
+	//widgetsManager.AddStyle(shapeType, SurfingTypes::OFX_IM_DRAG);
+	//widgetsManager.AddStyle(size, SurfingTypes::OFX_IM_STEPPER);
+	//widgetsManager.AddStyle(amount, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
+}
+
+//--------------------------------------------------------------
+void ofApp::ClearStyles() {
+	widgetsManager.clear(); // TODO: -> call from beginWindow/group
 }
 
 //--------------------------------------------------------------
@@ -216,8 +231,18 @@ void ofApp::drawWindowMain() {
 
 			//-
 
-			ToggleRoundedButton("bCustom2", &bCustom2); // readed on setup only, cant be updated on runtime
-			ImGui::TextWrapped("Custom Style for Window 2 Group. Only called at setup()!!");
+			// readed on setup only, cant be updated on runtime
+			if (ToggleRoundedButton("bCustom2", &bCustom2))
+			{
+				if (bCustom2) {
+					SetupStyles();
+				}
+				else {
+					ClearStyles();
+				}
+			}
+
+			ImGui::TextWrapped("Custom Style for Window 2 Group.");
 
 			//-
 
@@ -338,8 +363,8 @@ void ofApp::drawWindow1() {
 					if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
 					if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
 
-					//ofxImGuiSurfing::AddGroup(params3, flags, SurfingTypesGroups(typeGroups.get()));
-					ofxImGuiSurfing::AddGroup(params1, flags, SurfingTypesGroups(typeGroups.get()));
+					//ofxImGuiSurfing::AddGroup(params3, flags, SurfingImGuiTypesGroups(typeGroups.get()));
+					ofxImGuiSurfing::AddGroup(params1, flags, SurfingImGuiTypesGroups(typeGroups.get()));
 				}
 			}
 			*/
@@ -450,6 +475,15 @@ void ofApp::drawWindow2() {
 		// A. without flags (default)
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
+			if (bCustom2) {
+				ImGui::Text("* bCustom1 = true");
+				ImGui::Text("customized");
+			}
+			else {
+				ImGui::Text("* bCustom2 = false");
+				ImGui::Text("default style");
+			}
+
 			ofxImGuiSurfing::AddGroup(params2);
 
 			//-
