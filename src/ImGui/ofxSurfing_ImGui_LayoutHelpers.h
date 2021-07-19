@@ -5,6 +5,8 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
+// This class have widgets size constants ands method to get the window panel sizes.
+
 //-------
 
 // CONSTANTS

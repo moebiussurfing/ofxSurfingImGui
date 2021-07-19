@@ -2,10 +2,6 @@
 
 #include "ofMain.h"
 
-#include <list>
-#include <iostream>
-#include <boost/range/adaptor/reversed.hpp>
-
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
@@ -15,9 +11,16 @@
 //collides!
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
-#include "ofxSurfing_ImGui_WidgetsButtons.h"
-#include "ofxSurfing_ImGui_WidgetsExtra.h"
+#include "ofxSurfing_ImGui_Widgets.h"
+//#include "ofxSurfing_ImGui_WidgetsButtons.h"
+//#include "ofxSurfing_ImGui_WidgetsExtra.h"
 //#include "ofxSurfing_ImGui_LayoutManager.h"
+
+#include <list>
+#include <iostream>
+#include <boost/range/adaptor/reversed.hpp>
+
+//-
 
 namespace ofxImGuiSurfing
 {

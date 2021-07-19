@@ -2,6 +2,13 @@
 
 #include "ofMain.h"
 
+#include "ofxImGui.h"
+#include "imgui_internal.h"
+
+#include "ofxSurfing_ImGui_Themes.h"
+#include "ImGui/themes/ThemeSequentity.inl"
+#include "ImGui/themes/FlatDryWineGreenTheme.h"
+
 // Helpers macros
 // We normally try to not use many helpers in imgui_demo.cpp in order to make code easier to copy and paste,
 // but making an exception here as those are largely simplifying code...
@@ -9,11 +16,6 @@
 #define IM_MIN(A, B)            (((A) < (B)) ? (A) : (B))
 #define IM_MAX(A, B)            (((A) >= (B)) ? (A) : (B))
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
-
-#include "ofxImGui.h"
-#include "imgui_internal.h"
-#include "ofxSurfing_ImGui_Themes.h"
-#include "ImGui/themes/ThemeSequentity.inl"
 
 using namespace ImGui;
 //using namespace ofxImGuiSurfing;
@@ -72,6 +74,7 @@ namespace ofxImGuiSurfing
 				if (const ImFontConfig* cfg = &font->ConfigData[config_i])
 					ImGui::BulletText("Input %d: \'%s\', Oversample: (%d,%d), PixelSnapH: %d, Offset: (%.1f,%.1f)",
 						config_i, cfg->Name, cfg->OversampleH, cfg->OversampleV, cfg->PixelSnapH, cfg->GlyphOffset.x, cfg->GlyphOffset.y);
+
 		if (ImGui::TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
 		{
 			// Display all glyphs of the fonts in separate pages of 256 characters
@@ -135,7 +138,7 @@ namespace ofxImGuiSurfing
 	inline bool ShowStyleSelector2(const char* label)
 	{
 		static int style_idx = -1;
-		if (ImGui::Combo(label, &style_idx, "Dark\0Light\0Classic\0MoebiusSurfing\0ModernDark\0Grey\0Sequentity\0Olekristensen\0"))
+		if (ImGui::Combo(label, &style_idx, "Dark\0Light\0Classic\0MoebiusSurfingV2\0MoebiusSurfing\0ModernDark\0Grey\0Sequentity\0Olekristensen\0FlatDryWineGreenTheme\0"))
 		{
 			switch (style_idx)
 			{
@@ -143,11 +146,12 @@ namespace ofxImGuiSurfing
 			case 1: ImGui::StyleColorsLight(); break;
 			case 2: ImGui::StyleColorsClassic(); break;
 			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); break;
-			//case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
-			case 4: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
-			case 5: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
-			case 6: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;
-			case 7: ofxImGuiSurfing::ImGui_ThemeOlekristensen(); break;
+			case 4: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
+			case 5: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
+			case 6: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
+			case 7: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;
+			case 8: ofxImGuiSurfing::ImGui_ThemeOlekristensen(); break;
+			case 9: ofxImGuiSurfing::FlatDryWineGreenTheme(); break;
 			}
 			return true;
 		}
@@ -413,6 +417,5 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopItemWidth();
 	}
-
 
 };//namespace

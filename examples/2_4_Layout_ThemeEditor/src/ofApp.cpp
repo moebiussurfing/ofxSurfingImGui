@@ -133,7 +133,7 @@ void ofApp::drawMainWindow() {
 		string s = ofToString(fontIndex) + "/" + ofToString(fontIndex.getMax());
 		ImGui::Text(s.c_str());
 
-		ofxImGuiSurfing::ToggleRoundedButton("Style Fonts", &bStyleFonts); // -> will crash if styles are not queued!
+		ofxImGuiSurfing::ToggleRoundedButton("Stylize Fonts", &bStyleFonts); // -> will crash if styles are not queued!
 
 		//-
 

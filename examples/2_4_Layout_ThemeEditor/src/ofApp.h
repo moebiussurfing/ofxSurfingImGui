@@ -4,7 +4,15 @@
 
 #include "ofxSurfingImGui.h"
 
-// This is a kind of helper to edit your own themes.
+/*
+
+ABOUT THIS EXAMPLE:
+This is a kind of helper to edit your own themes.
+
+IMPORTANT:
+Must remove /ofxSurfingImGui/ImGui/node folder from the project!
+
+*/
 
 //-
 

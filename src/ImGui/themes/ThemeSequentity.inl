@@ -7,7 +7,6 @@
 
 namespace ofxImGuiSurfing
 {
-
 	inline void ImGui_ThemeSequentity() 
 	{
 	ofLogNotice(__FUNCTION__);

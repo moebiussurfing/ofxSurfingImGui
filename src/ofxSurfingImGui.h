@@ -15,18 +15,20 @@
 
 #include "ImGui/ofxSurfing_ImGui_Helpers.h"
 
-#include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
-#include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"
-#include "ImGui/ofxSurfing_ImGui_WidgetsKnob.h"
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
 
-#include "ImGui/ofxSurfing_ImGui_Themes.h"
-#include "ImGui/ofxSurfing_ImGui_ThemesEditor.h"
-#include "ImGui/themes/ThemeSequentity.inl"
+#include "ImGui/ofxSurfing_ImGui_Widgets.h"
+//#include "ImGui/ofxSurfing_ImGui_WidgetsButtons.h"
+//#include "ImGui/ofxSurfing_ImGui_WidgetsExtra.h"
+//#include "ImGui/ofxSurfing_ImGui_WidgetsKnob.h"
+//#include "ImGui/ofxSurfing_ImGui_WidgetsRangeSlider.h"
+//#include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
+//#include "ImGui/dear_widgets/dear_widgets.h"
 
-#include "ImGui/ofxSurfing_ImGui_RangeSlider.h"
-#include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
-#include "ImGui/dear_widgets/dear_widgets.h"
+#include "ImGui/ofxSurfing_ImGui_ThemesEditor.h"
+//#include "ImGui/ofxSurfing_ImGui_Themes.h"
+//#include "ImGui/themes/ThemeSequentity.inl"
+
 
 
 using namespace ofxImGuiSurfing;

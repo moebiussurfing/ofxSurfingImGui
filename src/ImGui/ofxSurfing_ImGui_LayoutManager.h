@@ -5,15 +5,16 @@
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
-#include "ofxSurfing_ImGui_WidgetsButtons.h"
 #include "ofxSurfing_ImGui_Helpers.h"
-//#include "ofxSurfingHelpers.h"
+#include "ofxSurfing_ImGui_Widgets.h"
+
 #include "ofxSurfing_Timers.h"
 
 //-------
 
+/* some helper tools */
 
-
+// serializers
 //--------------------------------------------------------------
 inline bool loadGroup(ofParameterGroup &g, string path = "", bool debug = true)
 {
@@ -85,7 +86,6 @@ class ofxSurfing_ImGui_Manager
 public:
 
 	ofxSurfing_ImGui_Manager();
-
 	~ofxSurfing_ImGui_Manager();
 
 	//-

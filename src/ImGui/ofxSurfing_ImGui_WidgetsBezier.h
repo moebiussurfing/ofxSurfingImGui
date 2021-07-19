@@ -1,6 +1,10 @@
 
 #pragma once
 
+//TODO:
+//DEBUG
+#if(0)
+
 #include "ofMain.h"
 
 // Taken from
@@ -368,3 +372,5 @@ namespace ofxImGuiSurfing
 		}
 	};
 }
+
+#endif
