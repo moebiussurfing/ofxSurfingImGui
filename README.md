@@ -2,7 +2,8 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-**ofxSurfingImGui** is a helper add-on with **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF, some projects just for testing, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
+An ImGui helper for openFrameworks with:  
+**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF, some projects just for testing, sequencer, node patching, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
 ```
