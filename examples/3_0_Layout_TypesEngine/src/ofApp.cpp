@@ -355,7 +355,8 @@ void ofApp::drawWindow1() {
 			// A
 			if (bCustom1)
 			{
-				ImGui::Text("* bCustom1");
+				ImGui::Text("* bCustom1 = true");
+				ImGui::Text("customized");
 
 				// This is the defalut helpers ussage for the official ofxImGui Helpers:
 				//ofxImGuiSurfing::AddParameter(lineWidth); 
@@ -392,6 +393,9 @@ void ofApp::drawWindow1() {
 			// default ofxImGui styles
 			else
 			{
+				ImGui::Text("* bCustom1 = false");
+				ImGui::Text("default style");
+
 				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeB);
 
@@ -540,11 +544,11 @@ void ofApp::drawMoreWidgets() {
 
 	//-
 
-
 	if (bCustom1)
 	{
 		// A row of four big toggles
-		ImGui::Text("* bCustom1");
+		ImGui::Text("* bCustom1 = true");
+		ImGui::Text("customized");
 		widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
 		widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
 		widgetsManager.Add(bModeC, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
@@ -552,6 +556,8 @@ void ofApp::drawMoreWidgets() {
 	}
 	else // default ofxImGui styles
 	{
+		ImGui::Text("* bCustom1 = false");
+		ImGui::Text("default style");
 		ofxImGuiSurfing::AddParameter(bModeA);
 		ofxImGuiSurfing::AddParameter(bModeB);
 		ofxImGuiSurfing::AddParameter(bModeC);

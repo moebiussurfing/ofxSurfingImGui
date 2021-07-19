@@ -89,7 +89,8 @@ namespace ofxImGuiSurfing
 
 		//-
 
-	public:
+	//public:
+	private:
 
 		// widgets sizes
 		float _spcx;
@@ -102,8 +103,20 @@ namespace ofxImGuiSurfing
 		float _w25;
 		float _h;
 
+		//// widgets sizes
+		//static float _spcx;
+		//static float _spcy;
+		//static float _w100;
+		//static float _h100;
+		//static float _w99;
+		//static float _w50;
+		//static float _w33;
+		//static float _w25;
+		//static float _h;
+
 		//-
 
+	public:
 		// refresh current panel shape to update widgets sizes
 		//--------------------------------------------------------------
 		void refreshPanelShape()

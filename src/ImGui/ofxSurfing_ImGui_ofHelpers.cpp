@@ -68,7 +68,7 @@ namespace ofxImGuiSurfing
 			// do not adds indentation. to avoid layout bug
 			//ImGui::Indent();
 			//ImGui::Unindent();
-			if (b) widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+			//if (b) widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 			if (!b)
 			{
@@ -96,14 +96,14 @@ namespace ofxImGuiSurfing
 				{
 					if (typeGroup == SurfingTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 					{
-						widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+						//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
 					else
 					{
 						if (typeGroup == SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 						{
-							widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+							//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
@@ -130,7 +130,7 @@ namespace ofxImGuiSurfing
 								//TODO:
 								//ImGui::Indent();
 
-								widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
@@ -144,7 +144,7 @@ namespace ofxImGuiSurfing
 						{
 							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
 							{
-								widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
