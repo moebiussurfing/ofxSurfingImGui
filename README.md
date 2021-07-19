@@ -377,11 +377,11 @@ These are testing projects trying to build an operative but very basic timeline,
   </p>
 </details>
 
-Based on [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
+Using [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
 
 4_3_Sequentity [BROKEN]  
-Based on [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
+Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
 
 <BR>
 
@@ -399,7 +399,7 @@ My target is to build a simple engine to patch between **ofParameters**.
   </p>
 </details>
 
-Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
+Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
 
 <details>
   <summary>5_2_ofNodeEditor</summary>
@@ -409,7 +409,7 @@ Based on [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
   </p>
 </details>
 
-Based on [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
+Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
@@ -419,7 +419,7 @@ Based on [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)
   </p>
 </details>
 
-Based on [rokups/ImNodes](https://github.com/rokups/ImNodes)  
+Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
 
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
@@ -429,7 +429,7 @@ Based on [rokups/ImNodes](https://github.com/rokups/ImNodes)
   </p>
 </details>
 
-Based on [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
+Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
 
 5_1_ImNodes_color_node_editor [BROKEN]  
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
