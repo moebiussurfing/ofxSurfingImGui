@@ -16,7 +16,7 @@ I AM STILL HAVING SOME PROBLEMS YET
   <p>
 
 ### **BUG 1**: (ofxSurfing_ImGui_Helpers.h)  
-    - When adding many times a parameter or others with a not unique name.  
+    - When adding many times a ofParameter or others with a not unique name.  
     - Widgets collide between them. Only some instances work well.  
     - Usually, the first repeated widget in each panel works fine.  
     - SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
@@ -29,7 +29,7 @@ I AM STILL HAVING SOME PROBLEMS YET
 </details>
 
 <details>
-  <summary>IMPORTANT OF-RELATED CHANGES (vs ofxImGui ofParam Helpers)</summary>
+  <summary>IMPORTANT OF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
   <p>
 
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
@@ -37,8 +37,8 @@ I AM STILL HAVING SOME PROBLEMS YET
     * Widgets, windows/trees now are more customizable. 
     * Removed old windows/tree methods. Now must use **RAW ImGui** code.
     * Removed all the WindowOpen/Settings stuff.
-    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
-    * Now using PushId(1)/PopID() on each widget.
+    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. [?] 
+    * Now using PushId(1)/PopID() on each widget. [?]
   </p>
 </details>
 
@@ -237,13 +237,18 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
 3. Draw each **ofParameter** types with different styles. (Instead of the ofxImGui behavior, where you can't change the param widget style.)  
 4. Especially useful when ofParameters are into an **ofParameterGroup**.  
-5. Queue settings for a parameter to define configurations to be applied when the widget is drawn when drawing a group.  
+5. Queue settings for an ofParameter to define configurations to be applied when the widget is drawn when drawing a group. 
+6. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+7. You can customize how ofParameterGroup / ImGui::Tree are presented.
 
 **CASE 1**:  
-_Draw a **float parameter** as slider (default), drag number or/and +/- stepper box._  
+_Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
 
 **CASE 2**:  
-_Draw a **bool parameter** as a check box (default), or as a big toggle button with custom dimensions._  
+_Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
+
+**CASE 3**:  
+_You added an **ofParameter<bool>** inside an **ofParameterGroup**. You want to customize how it will be drawn (instead of using the default style)._  
 
 <details>
   <summary>Code</summary>
@@ -469,7 +474,7 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 
 * Add more ImGui RAW widgets with examples.
 * Convert to ofParameters for some widgets.
-* Pack some bigger widgets like matrix clicker just passing an int as index only.
+* Pack some bigger widgets like matrix clicker just passing an int as an index only.
 * Fix and solve final ofParams helpers workflow.
 * Mark/disable some widgets that could use modern C++17.
 * Add multiple layouts presets engine from Paletto.
