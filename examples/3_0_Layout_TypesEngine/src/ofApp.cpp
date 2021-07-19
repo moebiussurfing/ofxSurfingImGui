@@ -239,8 +239,8 @@ void ofApp::drawWindowMain() {
 					ClearStyles();
 				}
 			}
-
-			ImGui::TextWrapped("Customized Style for Window 2 Group.");
+			if (bCustom2) ImGui::TextWrapped("Customized Style for Window 2 Group.");
+			else ImGui::TextWrapped("Default Style for Window 2 Group.");
 
 			//-
 

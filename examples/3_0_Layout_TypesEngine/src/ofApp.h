@@ -7,7 +7,8 @@
 #include "ofxWindowApp.h" // not required
 
 
-//#define IM_GUI_REFRESH_LOCAL
+//#define IM_GUI_REFRESH_LOCAL // -> TODO: TEST
+// refresh can be called onyl from here. not from helpers nor from layout
 
 
 // NOTE:

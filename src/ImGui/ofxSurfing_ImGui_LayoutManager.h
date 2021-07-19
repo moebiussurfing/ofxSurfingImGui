@@ -5,13 +5,15 @@
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
-#include "ofxSurfing_ImGui_ofHelpers.h"
-
-#include "ofxSurfing_ImGui_Widgets.h"
-//#include "ofxSurfing_ImGui_WidgetsTypes.h"
 #include "ofxSurfing_ImGui_Themes.h"
 
-#include "ofxSurfing_Timers.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofxSurfing_ImGui_Widgets.h"
+#include "ofxSurfing_ImGui_WidgetsTypes.h"
+
+
+using namespace ofxImGuiSurfing;
+
 
 //---------------------
 
@@ -77,6 +79,7 @@ inline bool saveGroup(ofParameterGroup &g, string path = "", bool debug = true)
 
 //-
 
+//static SurfingTypes widgetsManager;
 
 /* Layout Mangager Engine */
 //namespace ofxImGuiSurfing
@@ -136,7 +139,7 @@ public:
 	//-
 
 private:
-
+	// initiate ofxImGui
 	void setup_ImGui();
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 
@@ -241,6 +244,8 @@ private:
 	}
 	*/
 
+	//-
+
 public:
 	//--------------------------------------------------------------
 	void resetWindowImGui(bool pos = true, bool size = true)
@@ -320,15 +325,20 @@ private:
 	bool bAutoSaveSettings = false;
 
 public:
+	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
 	}
 
-	////TODO:
-	//public:
+	//-
+
+	//TODO:
 	//SurfingTypes widgetsManager;
-	//void refreshShape() {
-	//widgetsManager.refreshPanelShape(); // update sizes to current window shape
-	//}
+public:
+	//--------------------------------------------------------------
+	void refresh() 
+	{
+		widgetsManager.refresh(); // update sizes to current window shape
+	}
 };
 //} // namespace ofxImGuiSurfing

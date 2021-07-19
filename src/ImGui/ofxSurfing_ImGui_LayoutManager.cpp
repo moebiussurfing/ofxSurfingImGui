@@ -26,6 +26,8 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 };
 
+//--
+
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	setup_ImGui();
@@ -274,6 +276,8 @@ void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	widgetsManager.refresh(); //->not acting..
+
 	// Push a new list of names onto the stack.
 	//ofxImGuiSurfing::windowOpen.usedNames.push(std::vector<std::string>());
 	//ofxImGuiSurfing::pushNames();
@@ -356,7 +360,8 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	//-
 
-	ofxImGuiSurfing::widgetsManager.refresh(); // is static
+	refresh();
+	//ofxImGuiSurfing::widgetsManager.refresh(); // is static. not works
 }
 
 //--------------------------------------------------------------

@@ -51,6 +51,7 @@ namespace ofxImGuiSurfing
 	// this instance of widgetsTypes will be shared and unique (?)
 	// should be moved to guiManager layout class ?
 
+	//SurfingTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 	static SurfingTypes widgetsManager;
 
 	//--
@@ -76,10 +77,15 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	/*
 	// An extra begin/end pair
 	// with snapping
 	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	void EndWindow();
+
+	void Begin(const std::string& name);
+	void End();
+	*/
 
 	//--
 
@@ -190,9 +196,6 @@ namespace ofxImGuiSurfing
 	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size);
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
-
-	void Begin(const std::string& name);
-	void End();
 
 } // namespace ofxImGuiSurfing
 

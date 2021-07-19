@@ -53,10 +53,9 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingImGuiTypesGroups typeGroup)
 	{
-		//ofxImGuiSurfing::widgetsManager.refresh(); // is static
+		//ofxImGuiSurfing::widgetsManager.refresh(); // is static -> not works
 
 		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
-
 		// push a new list of names onto the stack.
 		pushNames();
 		//windowOpen.usedNames.push(std::vector<std::string>());
@@ -962,6 +961,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	/*
 	// An extra begin/end pair
 	// with snapping
 	//--------------------------------------------------------------
@@ -1013,6 +1013,7 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::End();
 	}
+	*/
 }
 
 //--

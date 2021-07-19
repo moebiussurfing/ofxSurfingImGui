@@ -8,8 +8,6 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
-
 using namespace ImGui;
 
 //------------------------------
@@ -72,6 +70,8 @@ namespace ofxImGuiSurfing
 	{
 		ofLogNotice(__FUNCTION__);
 
+		//-
+
 		ImGuiStyle *style = &ImGui::GetStyle();
 
 		style->FramePadding = ImVec2(6, 4);
@@ -93,8 +93,9 @@ namespace ofxImGuiSurfing
 		style->WindowBorderSize= 1;
 		style->TabBorderSize = 1;
 
-		ImVec4* colors = ImGui::GetStyle().Colors;
+		//-
 
+		ImVec4* colors = ImGui::GetStyle().Colors;
 
 		colors[ImGuiCol_Text] = ImVec4(0.76f, 0.76f, 0.76f, 0.94f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.63f, 0.63f, 0.63f, 1.00f);
