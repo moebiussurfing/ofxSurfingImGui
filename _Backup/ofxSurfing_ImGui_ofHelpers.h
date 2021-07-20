@@ -3,9 +3,34 @@
 
 #include "ofxImGui.h"
 
-#include "ofxSurfing_ImGui_Widgets.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ofxSurfing_ImGui_Widgets.h"
+
+
+/*
+
+	NOTE:
+
+	This is a cleaner modified version of ImHelpers.h from the original ofxImGui with these modifications:
+
+	- Deprecated GetUniqueName engine. Now using ImGui::PushId(1) | ImGui::PopID() for each parameter widget. [ BUG FAIL ]
+	- Deprecated all old window/settings/tree management. Now much simpler and closer to raw ImGui.
+
+	//-
+
+	TODO:
+	important BUG !
+
+	should recreate a kind of the old ofxImGui getUniqueName or a count indexes of added params
+	to use on ImGui::pushId(index) !
+	why? bc when some widgets has the same name or maybe when you populate many times the same parameter
+	i.e with different desing/widget type (slider/drag/stepper)
+
+	That's a problem bc we need to star count the widgets when window begins.
+	So we will need to create windows here like on ofxImGui ?
+
+*/
+
 
 //--
 
@@ -22,8 +47,81 @@ namespace ofxImGuiSurfing
 {
 	//--
 
+	// TODO:
+	// TESTING CUSTOMIZE TYPES
+	// this instance of widgetsTypes will be shared and unique (?)
+	// should be moved to guiManager layout class ?
+
 	//SurfingTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 	static SurfingTypes widgetsManager;
+
+	//--
+
+	// unique name engine
+	// NOTE: this engine seems that avoid duplicated names on the same group/tree
+	// but we will use PushID too for each groups. This will allow to repeat a parameter several times
+	// also in different groups/trees
+
+	const char* GetUniqueName(ofAbstractParameter& parameter);
+	const char* GetUniqueName(const std::string& candidate);
+
+	//--
+
+	struct WindowOpen
+	{
+		std::stack<std::vector<std::string>> usedNames;
+		std::shared_ptr<ofParameter<bool>> parameter;
+		bool value;
+		int treeLevel = 0;
+	};
+	static WindowOpen windowOpen;
+
+	//--
+
+	/*
+	// An extra begin/end pair
+	// with snapping
+	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
+	void EndWindow();
+
+	void Begin(const std::string& name);
+	void End();
+	*/
+
+	//--
+
+	// names engine
+
+	//--------------------------------------------------------------
+	static void pushNames()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
+
+		// Push a new list of names onto the stack.
+		windowOpen.usedNames.push(std::vector<std::string>());
+	}
+
+	//--------------------------------------------------------------
+	static void popName()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
+
+		windowOpen.usedNames.pop();
+	}
+
+	//--------------------------------------------------------------
+	static void clearNames()
+	{
+		//ofLogWarning(__FUNCTION__) << "-"; 
+
+		windowOpen.treeLevel = 0;
+		// Unlink the referenced ofParameter.
+		windowOpen.parameter.reset();
+		// Clear the list of names from the stack.
+		while (!windowOpen.usedNames.empty()) {
+			windowOpen.usedNames.pop();
+		}
+	}
 	
 	//--
 
@@ -120,7 +218,6 @@ namespace ofxImGuiSurfing
 	{
 		return (ImTextureID)(uintptr_t)glID;
 	}
-
 } // namespace ofxImGuiSurfing
 
 //----
@@ -137,7 +234,7 @@ namespace ofxImGuiSurfing
 	//	if (info == typeid(float))
 	//	{
 	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-	//		if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//		if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
 	//			parameter.set(tmpRef);
 	//			ImGui::PopItemWidth();
@@ -149,7 +246,7 @@ namespace ofxImGuiSurfing
 	//	if (info == typeid(int))
 	//	{
 	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-	//		if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+	//		if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 	//		{
 	//			parameter.set(tmpRef);
 	//			ImGui::PopItemWidth();
@@ -160,7 +257,7 @@ namespace ofxImGuiSurfing
 	//	}
 	//	if (info == typeid(bool))
 	//	{
-	//		if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
+	//		if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
 	//		{
 	//			parameter.set(tmpRef);
 	//			return true;
@@ -206,7 +303,7 @@ namespace ofxImGuiSurfing
 				else
 				{
 					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-					if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+					if (ImGui::SliderFloat(GetUniqueName(parameter), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
 						parameter.set(tmpRef);
 						bReturn = true;
@@ -240,7 +337,7 @@ namespace ofxImGuiSurfing
 				else
 				{
 					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-					if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+					if (ImGui::SliderInt(GetUniqueName(parameter), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
 						parameter.set(tmpRef);
 						bReturn = true;
@@ -277,7 +374,7 @@ namespace ofxImGuiSurfing
 					bReturn = (AddBigToggle(p));
 
 					// ofxImGui pattern
-					//if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
+					//if (ImGui::Checkbox(GetUniqueName(parameter), (bool *)&tmpRef))
 					//{
 					//	parameter.set(tmpRef);
 					//	bReturn = true;
@@ -304,7 +401,7 @@ namespace ofxImGuiSurfing
 	{
 		if (label)
 		{
-			ImGui::LabelText((parameter.getName().c_str()), ofToString(parameter.get()).c_str());
+			ImGui::LabelText(GetUniqueName(parameter), ofToString(parameter.get()).c_str());
 		}
 		else
 		{

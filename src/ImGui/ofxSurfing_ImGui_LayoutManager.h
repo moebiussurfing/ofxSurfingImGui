@@ -8,11 +8,12 @@
 #include "ofxSurfing_ImGui_Themes.h"
 
 #include "ofxSurfing_ImGui_ofHelpers.h"
-#include "ofxSurfing_ImGui_Widgets.h"
-#include "ofxSurfing_ImGui_WidgetsTypes.h"
+//#include "ofxSurfing_ImGui_WidgetsTypes.h"
+//#include "ofxSurfing_ImGui_Widgets.h"
+
+//-
 
 using namespace ofxImGuiSurfing;
-
 
 //---------------------
 
@@ -122,7 +123,7 @@ public:
 	// end a window
 	void endWindow();
 
-	//-
+	//----
 
 public:
 
@@ -148,7 +149,7 @@ private:
 
 	//ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
 
-	//-
+	//----
 
 	// fonts runtime mangement 
 
@@ -172,9 +173,10 @@ public:
 	void pushStyleFont(int index);
 	void popStyleFont();
 
-	//-
+	//----
 
 public:
+
 	//--------------------------------------------------------------
 	bool isMouseOverGui() {
 		return bMouseOverGui;
@@ -333,11 +335,12 @@ public:
 
 	//TODO:
 	//SurfingTypes widgetsManager;
-public:
-	//--------------------------------------------------------------
-	void refresh() 
-	{
-		widgetsManager.refresh(); // update sizes to current window shape
-	}
+
+//public:
+//	//--------------------------------------------------------------
+//	void refresh() 
+//	{
+//		widgetsManager.refresh(); // update sizes to current window shape
+//	}
 };
 //} // namespace ofxImGuiSurfing

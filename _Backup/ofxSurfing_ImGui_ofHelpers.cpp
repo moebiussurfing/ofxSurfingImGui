@@ -9,12 +9,79 @@
 
 namespace ofxImGuiSurfing
 {
+	//--------------------------------------------------------------
+	const char* GetUniqueName(ofAbstractParameter& parameter)
+	{
+		return GetUniqueName(parameter.getName());
+	}
+	//--------------------------------------------------------------
+	const char* GetUniqueName(const std::string& candidate)
+	{
+		std::string result = candidate;
+
+		// this fix allows paras out a group/window
+		{
+			if (windowOpen.usedNames.size() == 0) windowOpen.usedNames.push(std::vector<std::string>());
+
+			//if (windowOpen.usedNames.size() == 0) {
+			//	result = candidate;
+			//	windowOpen.usedNames.top().push_back(result);
+			//	return windowOpen.usedNames.top().back().c_str();
+			//}
+
+			//if (windowOpen.usedNames.size() == 0) result = candidate.c_str();
+			//else
+			//	while (std::find(windowOpen.usedNames.top().begin(), windowOpen.usedNames.top().end(), result) != windowOpen.usedNames.top().end())
+			//	{
+			//		result += " ";
+			//	}
+			//windowOpen.usedNames.top().push_back(result);
+			//return windowOpen.usedNames.top().back().c_str();
+		}
+
+		while (std::find(windowOpen.usedNames.top().begin(), windowOpen.usedNames.top().end(), result) != windowOpen.usedNames.top().end())
+		{
+			result += " ";
+		}
+		windowOpen.usedNames.top().push_back(result);
+
+		return windowOpen.usedNames.top().back().c_str();
+	}
+
 	//--
 
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingImGuiTypesGroups typeGroup)
 	{
 		//ofxImGuiSurfing::widgetsManager.refresh(); // is static -> not works
+
+		//ofLogNotice(__FUNCTION__) << "usedNames:" << windowOpen.usedNames.size() << " level:" << windowOpen.treeLevel;
+		// push a new list of names onto the stack.
+		pushNames();
+		//windowOpen.usedNames.push(std::vector<std::string>());
+
+		// first root group always has a tree collapsed header
+		if (windowOpen.treeLevel == 0 && typeGroup != SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+		{
+			bool b = ImGui::CollapsingHeader(group.getName().data(), flags);
+
+			//TODO:
+			// do not adds indentation. to avoid layout bug
+			//ImGui::Indent();
+			//ImGui::Unindent();
+			//if (b) widgetsManager.refreshPanelShape(); // required bc indent changes window width!
+
+			if (!b)
+			{
+				windowOpen.treeLevel++;
+				return;
+			}
+			//windowOpen.treeLevel++;
+		}
+
+		windowOpen.treeLevel++;
+
+		//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 		//-
 
@@ -30,12 +97,14 @@ namespace ofxImGuiSurfing
 				{
 					if (typeGroup == SurfingTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 					{
+						//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
 					else
 					{
 						if (typeGroup == SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 						{
+							//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
@@ -62,7 +131,9 @@ namespace ofxImGuiSurfing
 								//TODO:
 								//ImGui::Indent();
 
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 								//ImGui::Unindent();
 
@@ -74,7 +145,9 @@ namespace ofxImGuiSurfing
 						{
 							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
 							{
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
+								//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 								ImGui::TreePop();
 							}
@@ -83,10 +156,12 @@ namespace ofxImGuiSurfing
 						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_SCROLLABLE)
 						{
 							auto& style = ImGui::GetStyle();
+							//int hh = 14;
 							int hh = 40;
 							int h = style.FramePadding.y + style.ItemSpacing.y + hh;
 							ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
 
+							//widgetsManager.refreshPanelShape(); // required bc indent changes window width!
 
 							AddGroup(*parameterGroup);
 							ImGui::EndChild();
@@ -180,6 +255,11 @@ namespace ofxImGuiSurfing
 
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
+
+		//--
+
+		// names engine
+		clearNames();
 	}
 
 #if OF_VERSION_MINOR >= 10
@@ -189,7 +269,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderInt2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderInt2(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -204,7 +284,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderInt3((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderInt3(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -219,7 +299,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderInt4((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderInt4(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -234,7 +314,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat2(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -249,7 +329,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat3((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat3(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -264,7 +344,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat4((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat4(GetUniqueName(parameter), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -281,7 +361,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat2((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat2(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -296,7 +376,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat3((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat3(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -311,7 +391,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat4((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
+		if (ImGui::SliderFloat4(GetUniqueName(parameter), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
@@ -328,14 +408,14 @@ namespace ofxImGuiSurfing
 
 		if (alpha)
 		{
-			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r))
+			if (ImGui::ColorEdit4(GetUniqueName(parameter), &tmpRef.r))
 			{
 				parameter.set(tmpRef);
 
 				return true;
 			}
 		}
-		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r))
+		else if (ImGui::ColorEdit3(GetUniqueName(parameter), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
 
@@ -359,14 +439,14 @@ namespace ofxImGuiSurfing
 
 		if (alpha)
 		{
-			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r))
+			if (ImGui::ColorEdit4(GetUniqueName(parameter), &tmpRef.r))
 			{
 				parameter.set(tmpRef);
 
 				return true;
 			}
 		}
-		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r))
+		else if (ImGui::ColorEdit3(GetUniqueName(parameter), &tmpRef.r))
 		{
 			parameter.set(tmpRef);
 
@@ -386,13 +466,13 @@ namespace ofxImGuiSurfing
 
 		if (multiline)
 		{
-			if (ImGui::InputTextMultiline((parameter.getName().c_str()), cString, maxChars))
+			if (ImGui::InputTextMultiline(GetUniqueName(parameter), cString, maxChars))
 			{
 				parameter.set(cString);
 				result = true;
 			}
 		}
-		else if (ImGui::InputText((parameter.getName().c_str()), cString, maxChars))
+		else if (ImGui::InputText(GetUniqueName(parameter), cString, maxChars))
 		{
 			parameter.set(cString);
 			result = true;
@@ -405,7 +485,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<void>& parameter, float width)
 	{
-		if (ImGui::Button((parameter.getName().c_str()), glm::vec2(width, 0.0f)))
+		if (ImGui::Button(GetUniqueName(parameter), glm::vec2(width, 0.0f)))
 		{
 			parameter.trigger();
 
@@ -418,7 +498,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns)
 	{
-		auto uniqueName = (parameter.getName().c_str());
+		auto uniqueName = GetUniqueName(parameter);
 		ImGui::Text("%s", uniqueName);
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -448,10 +528,10 @@ namespace ofxImGuiSurfing
 		auto result = false;
 		auto tmpRef = parameter.get();
 
-		auto uniqueName = (parameter.getName().c_str());
+		auto uniqueName = GetUniqueName(parameter);
 
 		ImGui::PushID(uniqueName);
-		if (ImGui::BeginCombo((parameter.getName().c_str()), labels.at(parameter.get()).c_str()))
+		if (ImGui::BeginCombo(GetUniqueName(parameter), labels.at(parameter.get()).c_str()))
 		{
 			for (size_t i = 0; i < labels.size(); ++i)
 			{
@@ -484,7 +564,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::InputInt((parameter.getName().c_str()), &tmpRef, step, stepFast))
+		if (ImGui::InputInt(GetUniqueName(parameter), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 
@@ -499,7 +579,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
+		if (ImGui::SliderFloat(GetUniqueName(parameter), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 		{
 			parameter.set(tmpRef);
 
@@ -515,7 +595,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		auto uniqueName = name.c_str();
+		auto uniqueName = GetUniqueName(name);
 
 		if (ImGui::DragIntRange2(uniqueName, &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
@@ -534,7 +614,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
+		if (ImGui::DragFloatRange2(GetUniqueName(name), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
@@ -554,12 +634,12 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(GetUniqueName(name + " X")), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(GetUniqueName(name + " Y")), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
@@ -580,17 +660,17 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Z"), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 		{
 			result |= true;
 		}
@@ -611,22 +691,22 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " X"), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " Y").c_str(), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Y"), &tmpRefMin.y, &tmpRefMax.y, speed, parameterMin.getMin().y, parameterMax.getMax().y))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " Z").c_str(), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " Z"), &tmpRefMin.z, &tmpRefMax.z, speed, parameterMin.getMin().z, parameterMax.getMax().z))
 		{
 			result |= true;
 		}
 
-		if (ImGui::DragFloatRange2((name + " W").c_str(), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
+		if (ImGui::DragFloatRange2(GetUniqueName(name + " W"), &tmpRefMin.w, &tmpRefMax.w, speed, parameterMin.getMin().w, parameterMax.getMax().w))
 		{
 			result |= true;
 		}
@@ -654,11 +734,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt2(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt2(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -674,11 +754,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt3(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt3(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -694,11 +774,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragInt4(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragInt4(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderInt4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderInt4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -714,11 +794,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat2(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat2(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat2(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat2(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -734,11 +814,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat3(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat3(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat3(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat3(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -754,11 +834,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat4(iname.c_str(), glm::value_ptr(values[i]));
+				result |= ImGui::DragFloat4(GetUniqueName(iname), glm::value_ptr(values[i]));
 			}
 			else
 			{
-				result |= ImGui::SliderFloat4(iname.c_str(), glm::value_ptr(values[i]), minValue, maxValue);
+				result |= ImGui::SliderFloat4(GetUniqueName(iname), glm::value_ptr(values[i]), minValue, maxValue);
 			}
 		}
 		return result;
@@ -775,11 +855,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat2(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat2(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat2(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat2(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
 
 		}
@@ -796,11 +876,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat3(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat3(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat3(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat3(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
 
 		}
@@ -817,11 +897,11 @@ namespace ofxImGuiSurfing
 
 			if (minValue == 0 && maxValue == 0)
 			{
-				result |= ImGui::DragFloat4(iname.c_str(), values[i].getPtr());
+				result |= ImGui::DragFloat4(GetUniqueName(iname), values[i].getPtr());
 			}
 			else
 			{
-				result |= ImGui::SliderFloat4(iname.c_str(), values[i].getPtr(), minValue, maxValue);
+				result |= ImGui::SliderFloat4(GetUniqueName(iname), values[i].getPtr(), minValue, maxValue);
 			}
 
 		}
@@ -878,6 +958,115 @@ namespace ofxImGuiSurfing
 		return ImGui::ListBox(label, currIndex, vector_getter,
 			static_cast<void*>(&values), values.size());
 	}
+
+	//--
+
+	/*
+	// An extra begin/end pair
+	// with snapping
+	//--------------------------------------------------------------
+	void Begin(const std::string& name) {
+		const int snapSz = 20;
+		//const int snapSz = 16;
+
+		auto snap = [=](float value, float snap_threshold) -> float {
+			float modulo = std::fmodf(value, snap_threshold);
+			float moduloRatio = std::fabsf(modulo) / snap_threshold;
+			if (moduloRatio < 0.5f)
+				value -= modulo;
+			else if (moduloRatio > (1.f - 0.5f))
+				value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
+			return value;
+		};
+
+		ImGui::Begin(name.data());
+		if (ImGui::IsItemActive()) {
+			auto p = ImGui::GetWindowPos();
+			auto size = ImGui::GetWindowSize();
+
+			float x = snap(p.x, snapSz);
+			float y = snap(p.y, snapSz);
+			float sizex = snap(size.x, snapSz);
+			float sizey = snap(size.y, snapSz);
+			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
+		}
+	}
+	//--------------------------------------------------------------
+	void End() {
+		ImGui::End();
+	}
+
+	//--
+
+	// Another extra begin/end pair
+	//--------------------------------------------------------------
+	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
+	{
+		// Push a new list of names onto the stack.
+		windowOpen.usedNames.push(std::vector<std::string>());
+
+		return ImGui::Begin(name.c_str(), p_open, flags);
+	}
+
+	//--------------------------------------------------------------
+	void EndWindow()
+	{
+		ImGui::End();
+	}
+	*/
 }
 
 //--
+
+/*
+////--------------------------------------------------------------
+//bool BeginTree(ofAbstractParameter& parameter, Settings& settings)
+//{
+//	return BeginTree(parameter.getName(), settings);
+//}
+//
+////--------------------------------------------------------------
+//bool BeginTree(const std::string& name, Settings& settings)
+//{
+//	bool result;
+//	ImGui::SetNextItemOpen(true, ImGuiCond_Appearing);
+//	if (settings.treeLevel == 0)
+//	{
+//		result = ImGui::TreeNodeEx(GetUniqueName(name), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_NoAutoOpenOnLog);
+//	}
+//	else
+//	{
+//		result = ImGui::TreeNode(GetUniqueName(name));
+//	}
+//	if (result)
+//	{
+//		settings.treeLevel += 1;
+//
+//		// Push a new list of names onto the stack.
+//		windowOpen.usedNames.push(std::vector<std::string>());
+//	}
+//	return result;
+//}
+//
+////--------------------------------------------------------------
+//void EndTree(Settings& settings)
+//{
+//	ImGui::TreePop();
+//
+//	settings.treeLevel = std::max(0, settings.treeLevel - 1);
+//
+//	// Clear the list of names from the stack.
+//	windowOpen.usedNames.pop();
+//}
+//
+////NEW: add flags and clean all the old settings
+////BUG: BROKEN: crashes..
+//////treeEx
+////bool bOpen = true;
+////ImGuiColorEditFlags _flagw = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+////_flagw |= ImGuiTreeNodeFlags_Framed;
+////if (ImGui::TreeNodeEx("_TreeEx", _flagw)) {
+////	//..
+////	ImGui::TreePop();
+////}
+*/

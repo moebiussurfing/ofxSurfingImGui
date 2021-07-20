@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 
-
 #include <random>
 #include <iostream>
 
@@ -11,7 +10,7 @@ using namespace std;
 namespace ofxSurfingHelpers {
 
 	//------------------------------------------------------------------------------
-	//animator functions taken from 
+	// animator functions taken from 
 	//https://github.com/tcoppex/ofxFontSampler/blob/main/example/src/ofApp.cpp
 
 	namespace {
@@ -29,37 +28,36 @@ namespace ofxSurfingHelpers {
 
 		/* Noise function used by the gradient scaling. */
 		float Noise(const ofPoint &vertex) {
-//            return /*24.0f **/ ofNoise(0.005f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.0002f);
+			//return /*24.0f **/ ofNoise(0.005f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.0002f);
 
-            return ofNoise(0.05f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.002f);
-        }
+			return ofNoise(0.05f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.002f);
+		}
 
 		static constexpr int32_t kCharsetSize = 26;
 
 	}  // namespace
 
-    //--
+	//--
 
-        inline float NextGaussian(const float center, const float standard_dev)
-        {
-            std::random_device rd;
-            std::mt19937 mt(rd());
-            std::normal_distribution<float> distribution(center, standard_dev);
-            return distribution(mt);
-        }
-        inline float NextReal(const float lower, const float upper)
-        {
-            std::random_device rd;
-            std::mt19937 mt(rd());
-            std::uniform_real_distribution<float> distribution(lower, upper);
-            return distribution(mt);
-        }
-
+	inline float NextGaussian(const float center, const float standard_dev)
+	{
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::normal_distribution<float> distribution(center, standard_dev);
+		return distribution(mt);
+	}
+	inline float NextReal(const float lower, const float upper)
+	{
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::uniform_real_distribution<float> distribution(lower, upper);
+		return distribution(mt);
+	}
 
 	//
 
-	//get a blink faded to use as alpha on gui button when "active-listening-mode" enabled
-	//ie: blink when a new preset is editing
+	// get a blink faded to use as alpha on gui button when "active-listening-mode" enabled
+	// ie: blink when a new preset is editing
 	//--------------------------------------------------------------
 	inline float getFadeBlink(float min = 0.20, float max = 0.80, float freq = 0.15) {
 

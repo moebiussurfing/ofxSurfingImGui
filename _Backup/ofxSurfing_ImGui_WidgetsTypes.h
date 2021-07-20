@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "ofMain.h"
@@ -6,13 +5,8 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
-
 #include "ofxSurfing_ImGui_ofHelpers.h"
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
-//#include "ofxSurfing_ImGui_Widgets.h"
-
-//-
+#include "ofxSurfing_ImGui_Widgets.h"
 
 #include <list>
 #include <iostream>

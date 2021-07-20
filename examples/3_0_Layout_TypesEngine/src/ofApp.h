@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "ofMain.h"
@@ -86,8 +87,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> typeFlags;
 		string flagInfo;
 
-		void SetupStyles();
-		void ClearStyles();
+		//void SetupStyles();
+		//void ClearStyles();
 
 		//-
 

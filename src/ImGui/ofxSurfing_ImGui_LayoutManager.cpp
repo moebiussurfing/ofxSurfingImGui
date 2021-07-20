@@ -360,7 +360,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	//-
 
-	refresh();
+	//refresh();
 	//ofxImGuiSurfing::widgetsManager.refresh(); // is static. not works
 }
 

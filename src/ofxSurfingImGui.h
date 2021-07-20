@@ -480,3 +480,71 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 	ImGui::End();
 }
 */
+
+
+
+//--
+
+/*
+// An extra begin/end pair
+// with snapping
+//--------------------------------------------------------------
+void Begin(const std::string& name) {
+	const int snapSz = 20;
+	//const int snapSz = 16;
+
+	auto snap = [=](float value, float snap_threshold) -> float {
+		float modulo = std::fmodf(value, snap_threshold);
+		float moduloRatio = std::fabsf(modulo) / snap_threshold;
+		if (moduloRatio < 0.5f)
+			value -= modulo;
+		else if (moduloRatio > (1.f - 0.5f))
+			value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
+		return value;
+	};
+
+	ImGui::Begin(name.data());
+	if (ImGui::IsItemActive()) {
+		auto p = ImGui::GetWindowPos();
+		auto size = ImGui::GetWindowSize();
+
+		float x = snap(p.x, snapSz);
+		float y = snap(p.y, snapSz);
+		float sizex = snap(size.x, snapSz);
+		float sizey = snap(size.y, snapSz);
+		ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
+	}
+}
+//--------------------------------------------------------------
+void End() {
+	ImGui::End();
+}
+
+//--
+
+// Another extra begin/end pair
+//--------------------------------------------------------------
+bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
+{
+	return ImGui::Begin(name.c_str(), p_open, flags);
+}
+
+//--------------------------------------------------------------
+void EndWindow()
+{
+	ImGui::End();
+}
+*/
+
+
+//--
+
+/*
+// An extra begin/end pair
+// with snapping
+bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
+void EndWindow();
+
+void Begin(const std::string& name);
+void End();
+*/
