@@ -12,7 +12,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingTypes::SurfingImGuiTypesGroups typeGroup)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup)
 	{
 		//ofxImGuiSurfing::widgetsManager.refresh(); // is static -> not works
 
@@ -28,24 +28,24 @@ namespace ofxImGuiSurfing
 			{
 				ImGui::PushID(parameterGroup->getName().c_str()); // -> finally fix unique id for repeated params inside many groups
 				{
-					if (typeGroup == SurfingTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
+					if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 					{
 						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 					}
 					else
 					{
-						if (typeGroup == SurfingTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+						if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 						{
 							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
-						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_COLLAPSED)
+						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_COLLAPSED)
 						{
 							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
 							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
 						}
 
-						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_DEFAULT)
+						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT)
 						{
 							//ImGui::Indent();
 
@@ -55,7 +55,7 @@ namespace ofxImGuiSurfing
 							//ImGui::Unindent();
 						}
 
-						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_TREE)
+						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_TREE)
 						{
 							if (ImGui::TreeNode(parameterGroup->getName().data()))
 							{
@@ -70,7 +70,7 @@ namespace ofxImGuiSurfing
 							}
 						}
 
-						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_TREE_EX)
+						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_TREE_EX)
 						{
 							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
 							{
@@ -80,7 +80,7 @@ namespace ofxImGuiSurfing
 							}
 						}
 
-						else if (typeGroup == SurfingTypes::OFX_IM_GROUP_SCROLLABLE)
+						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_SCROLLABLE)
 						{
 							auto& style = ImGui::GetStyle();
 							int hh = 40;

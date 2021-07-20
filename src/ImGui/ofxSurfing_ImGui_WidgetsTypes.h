@@ -24,7 +24,7 @@ namespace ofxImGuiSurfing
 {
 	//-
 
-	class SurfingTypes {
+	class ofxSurfing_ImGui_WidgetsTypes {
 
 	public:
 
@@ -60,8 +60,8 @@ namespace ofxImGuiSurfing
 		//--
 
 		//TODO:
-		//centralize name types
-		//try to mix ImHelpers with ImTypes..
+		// centralize name types
+		// try to mix ImHelpers with ImTypes..
 		enum SurfingImGuiTypesGroups
 		{
 			OFX_IM_GROUP_DEFAULT = 0,
@@ -151,7 +151,7 @@ namespace ofxImGuiSurfing
 		vector<SurfingImGuiStyle> widgetsStyles;
 
 		//--------------------------------------------------------------
-		SurfingTypes()
+		ofxSurfing_ImGui_WidgetsTypes()
 		{
 			widgetsStyles.clear();
 		}
@@ -222,7 +222,11 @@ namespace ofxImGuiSurfing
 		{
 			return (widgetsStyles.size() > 0);
 		}
-
+		//--------------------------------------------------------------
+		bool isEmpty()
+		{
+			return (!isOperative());
+		}
 		//--------------------------------------------------------------
 		void clear() {
 			widgetsStyles.clear();
@@ -257,8 +261,8 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, SurfingTypes type) {
-		//	Add(bMode1, SurfingTypes::OFX_IM_TOGGLE_SMALL, 3, true);
+		//bool Add(ofAbstractParameter& aparam, ofxSurfing_ImGui_WidgetsTypes type) {
+		//	Add(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-

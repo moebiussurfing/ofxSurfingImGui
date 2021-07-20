@@ -4,6 +4,7 @@
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_Widgets.h"
+
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
@@ -22,8 +23,8 @@ namespace ofxImGuiSurfing
 {
 	//--
 
-	//SurfingTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
-	static SurfingTypes widgetsManager;
+	//ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
+	static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 	
 	//--
 
@@ -32,7 +33,7 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, SurfingTypes::SurfingImGuiTypesGroups typeGroup = SurfingTypes::OFX_IM_GROUP_DEFAULT);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);

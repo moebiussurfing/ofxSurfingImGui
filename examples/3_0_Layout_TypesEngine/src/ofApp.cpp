@@ -15,7 +15,7 @@ void ofApp::setup() {
 
 	// debug ImGui flags
 	{
-		int sz = (int)SurfingTypes::SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
+		int sz = (int)ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
 		typeGroups.set("typeGroups", 0, 0, sz);
 		typeFlags.set("typeFlags", 1, 0, 4);
 	}
@@ -83,7 +83,7 @@ void ofApp::setup() {
 	// This added style conf will be applied in all the appearances of the param widgets inside all groups.
 	// We can overwrite this customization only draing the simple param "by hand".
 	// ie:
-	// widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
+	// widgetsManager.Add(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
 
 	//// -> not checked on runtime! ONLY ON SETUP
 	//if (bCustom2) {
@@ -101,46 +101,46 @@ void ofApp::setup() {
 //
 //	widgetsManager.clear(); // TODO: -> call from beginWindow/group
 //
-//	//widgetsManager.AddStyle(bEnable, SurfingTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
+//	//widgetsManager.AddStyle(bEnable, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
 //
-//	widgetsManager.AddStyle(shapeType2, SurfingTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(amount2, SurfingTypes::OFX_IM_DRAG);
+//	widgetsManager.AddStyle(shapeType2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	widgetsManager.AddStyle(size2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	widgetsManager.AddStyle(amount2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
 //
 //	// two widgets same line small
-//	widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_SMALL, true, 2);
-//	widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
+//	widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_SMALL, true, 2);
+//	widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
 //
 //	// two widgets same line big
-//	//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_BUTTON_BIG, true, 2);
-//	//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
+//	//widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG, true, 2);
+//	//widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
 //
 //	// two widgets same line
-//	widgetsManager.AddStyle(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
-//	widgetsManager.AddStyle(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
+//	widgetsManager.AddStyle(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 2);
+//	widgetsManager.AddStyle(bMode2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 2);
 //	// two widgets same line
-//	widgetsManager.AddStyle(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 2);
-//	widgetsManager.AddStyle(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 2);
+//	widgetsManager.AddStyle(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 2);
+//	widgetsManager.AddStyle(bMode4, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 2);
 //
 //	// more widgets
-//	widgetsManager.AddStyle(lineWidth3, SurfingTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_DRAG);
-//	widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_INACTIVE);
-//	//widgetsManager.AddStyle(separation3, SurfingTypes::OFX_IM_STEPPER);
+//	widgetsManager.AddStyle(lineWidth3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	widgetsManager.AddStyle(speed3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
+//	widgetsManager.AddStyle(separation3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_INACTIVE);
+//	//widgetsManager.AddStyle(separation3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
 //
 //	//// hide some params from any on-param-group appearance
-//	//widgetsManager.AddStyle(speed3, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
-//	//widgetsManager.AddStyle(size2, SurfingTypes::OFX_IM_HIDDEN, false, -1, 20);
-//	//widgetsManager.AddStyle(bPrevious, SurfingTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(bNext, SurfingTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(lineWidth, SurfingTypes::OFX_IM_DRAG); // not works?
-//	//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(separation, SurfingTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(speed, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
-//	//widgetsManager.AddStyle(shapeType, SurfingTypes::OFX_IM_DRAG);
-//	//widgetsManager.AddStyle(size, SurfingTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(amount, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
+//	//widgetsManager.AddStyle(speed3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN, false, -1, 20);
+//	//widgetsManager.AddStyle(size2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN, false, -1, 20);
+//	//widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
+//	//widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
+//	//widgetsManager.AddStyle(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
+//	//widgetsManager.AddStyle(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG); // not works?
+//	//widgetsManager.AddStyle(separation, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	//widgetsManager.AddStyle(separation, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	//widgetsManager.AddStyle(speed, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG, false, 1, 10);
+//	//widgetsManager.AddStyle(shapeType, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
+//	//widgetsManager.AddStyle(size, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
+//	//widgetsManager.AddStyle(amount, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG, false, 1, 10);
 //}
 //
 ////--------------------------------------------------------------
@@ -395,23 +395,23 @@ void ofApp::drawWindow1() {
 				////ofxImGuiSurfing::AddParameter(bMode4);
 				//// 1.0.2
 				//// This forces the style no matter if a conf is added (AddStyle) for this param
-				//widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_BUTTON_BIG); // -> now this is the default bool 
-				////widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_CHECKBOX); // -> deprecated check box as default bool
+				//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG); // -> now this is the default bool 
+				////widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_CHECKBOX); // -> deprecated check box as default bool
 
 				//// 1.1 Toggle full width
-				//widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_BIG);
+				//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG);
 
 				//// 1.2 A float param
-				//widgetsManager.Add(lineWidth, SurfingTypes::OFX_IM_SLIDER); // force draw
-				//widgetsManager.Add(lineWidth, SurfingTypes::OFX_IM_DRAG);
-				//widgetsManager.Add(lineWidth, SurfingTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
+				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_SLIDER); // force draw
+				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
+				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
 
 				//// 1.3 Three small toggle widgets in one row
 				//// with 20px vert spacing at end
 				////widgetsManager.refresh(); // update sizes to current window shape
-				//widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_TOGGLE_SMALL, true, 3);
-				//widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_SMALL, true, 3);
-				//widgetsManager.Add(bModeC, SurfingTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);
+				//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, true, 3);
+				//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, true, 3);
+				//widgetsManager.Add(bModeC, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);
 				//widgetsManager.Add(bModeD);
 			}
 
@@ -532,10 +532,10 @@ void ofApp::drawWindow2() {
 			//ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 			//// 1.5 A row of four big toggles
-			//widgetsManager.Add(bMode1, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode2, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode3, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode4, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 4);
+			//widgetsManager.Add(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//widgetsManager.Add(bMode4, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 4);
 
 		}
 		guiManager.endWindow();
@@ -570,6 +570,7 @@ void ofApp::drawMoreWidgets() {
 
 	// some custom widgets
 
+	// params
 	// range_slider.h
 	static float v1 = 0;
 	static float v2 = 1;
@@ -580,11 +581,12 @@ void ofApp::drawMoreWidgets() {
 	ofxImGuiSurfing::RangeSliderFloat("Range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
 	ofxImGuiSurfing::RangeSliderFloat("Range 2", &v3, &v4, v_min, v_max);
 
+	// float/int types
 	// vanilla range slider
 	static float begin = 10, end = 90;
 	static int begin_i = 100, end_i = 1000;
-	ImGui::DragFloatRange2("Range Float", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
-	ImGui::DragIntRange2("Range Int", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
+	ImGui::DragFloatRange2("Range 3", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
+	ImGui::DragIntRange2("Range 4", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
@@ -597,10 +599,10 @@ void ofApp::drawMoreWidgets() {
 		//ImGui::Text("customized");
 		//ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		//widgetsManager.Add(bModeA, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeB, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeC, SurfingTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeD, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 4);
+		//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//widgetsManager.Add(bModeC, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//widgetsManager.Add(bModeD, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 4);
 	}
 	else // default ofxImGui styles
 	{

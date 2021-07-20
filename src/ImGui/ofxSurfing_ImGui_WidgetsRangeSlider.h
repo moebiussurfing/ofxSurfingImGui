@@ -323,7 +323,6 @@ namespace ofxImGuiSurfing
 	}
 
 
-
 	//----
 
 	// ofParameters helpers

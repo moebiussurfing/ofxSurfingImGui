@@ -8,7 +8,7 @@
 #include "ofxSurfing_ImGui_Themes.h"
 
 #include "ofxSurfing_ImGui_ofHelpers.h"
-//#include "ofxSurfing_ImGui_WidgetsTypes.h"
+////#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_Widgets.h"
 
 //-
@@ -79,7 +79,7 @@ inline bool saveGroup(ofParameterGroup &g, string path = "", bool debug = true)
 
 //-
 
-//static SurfingTypes widgetsManager;
+//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 
 /* Layout Mangager Engine */
 //namespace ofxImGuiSurfing
@@ -334,7 +334,7 @@ public:
 	//-
 
 	//TODO:
-	//SurfingTypes widgetsManager;
+	//ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 
 //public:
 //	//--------------------------------------------------------------
