@@ -387,14 +387,14 @@ namespace ofxImGuiSurfing
 				{
 					// default:
 					string name = p.getName();
-					string n = "##CHECKBOX_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
+					//string n = "##CHECKBOX_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -476,16 +476,16 @@ namespace ofxImGuiSurfing
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
-					string n = "##SLIDER_f_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##SLIDER_f_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -493,10 +493,10 @@ namespace ofxImGuiSurfing
 				case OFX_IM_PROGRESS_BAR:
 				{
 					string name = p.getName();
-					string n = "##PROGRESS_f_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
+					//string n = "##PROGRESS_f_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
 					ofxImGuiSurfing::AddProgressBar(p);
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -505,16 +505,16 @@ namespace ofxImGuiSurfing
 				{
 					const float speed = 0.01f;
 					string name = p.getName();
-					string n = "##DRAG_f_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##DRAG_f_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -525,16 +525,16 @@ namespace ofxImGuiSurfing
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					string n = "##STEPPER_f_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##STEPPER_f_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -560,16 +560,16 @@ namespace ofxImGuiSurfing
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
-					string n = "##SLIDER_i_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##SLIDER_i_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -578,16 +578,16 @@ namespace ofxImGuiSurfing
 				{
 					const float speed = 0.1;
 					string name = p.getName();
-					string n = "##DRAG_i_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##DRAG_i_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -598,16 +598,16 @@ namespace ofxImGuiSurfing
 					const int stepFast = 5;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					string n = "##STEPPER_i_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//string n = "##STEPPER_i_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					ImGui::PopItemWidth();
-					ImGui::PopID();
+					//ImGui::PopItemWidth();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -615,10 +615,10 @@ namespace ofxImGuiSurfing
 				case OFX_IM_PROGRESS_BAR:
 				{
 					string name = p.getName();
-					string n = "##PROGRESS_i_" + name + ofToString(1);
-					ImGui::PushID(n.c_str());
+					//string n = "##PROGRESS_i_" + name + ofToString(1);
+					//ImGui::PushID(n.c_str());
 					ofxImGuiSurfing::AddProgressBar(p);
-					ImGui::PopID();
+					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;

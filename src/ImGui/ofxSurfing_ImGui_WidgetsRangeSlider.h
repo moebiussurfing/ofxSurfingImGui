@@ -11,7 +11,7 @@
 using namespace ImGui;
 
 namespace ofxImGuiSurfing
-//namespace ImGui
+	//namespace ImGui
 {
 	//--------------
 	// range sliders
@@ -327,18 +327,24 @@ namespace ofxImGuiSurfing
 
 	// ofParameters helpers
 	//--------------------------------------------------------------
-	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "(%.3f, %.3f)", float power = 1.0f)
+	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f)
 	{
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
+
+		//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 
 		//if (ImGui::DragFloatRange2(GetUniqueName(name), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
+			//ImGui::PopItemWidth();
+
 			return true;
 		}
+		//ImGui::PopItemWidth();
+
 		return false;
 	}
 
@@ -348,14 +354,20 @@ namespace ofxImGuiSurfing
 		float tmpRefMin = parameterMin.get();
 		float tmpRefMax = parameterMax.get();
 
+		//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+
 		//if (ImGui::DragIntRange2(GetUniqueName(name), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		//if (RangeSliderInt(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
+			//ImGui::PopItemWidth();
+
 			return true;
 		}
+		//ImGui::PopItemWidth();
+		
 		return false;
 	}
 
@@ -375,7 +387,7 @@ namespace ofxImGuiSurfing
 
 
 	//-----------
-	
+
 //    // 2. timeline
 //    //snippet
 //    static float v[]{0,1};

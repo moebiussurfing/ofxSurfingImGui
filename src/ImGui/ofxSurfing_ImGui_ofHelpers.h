@@ -23,8 +23,8 @@ namespace ofxImGuiSurfing
 {
 	//--
 
-	//ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 	static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
+	//ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 	
 	//--
 
@@ -206,14 +206,14 @@ namespace ofxImGuiSurfing
 				// default style
 				else
 				{
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
 						parameter.set(tmpRef);
 						bReturn = true;
 					}
 					else bReturn = false;
-					ImGui::PopItemWidth();
+					//ImGui::PopItemWidth();
 
 					return bReturn;
 				}
@@ -240,14 +240,14 @@ namespace ofxImGuiSurfing
 				// default style
 				else
 				{
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 					{
 						parameter.set(tmpRef);
 						bReturn = true;
 					}
 					else bReturn = false;
-					ImGui::PopItemWidth();
+					//ImGui::PopItemWidth();
 
 					return bReturn;
 				}

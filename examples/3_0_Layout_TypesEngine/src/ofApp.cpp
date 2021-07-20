@@ -46,7 +46,8 @@ void ofApp::setup() {
 	params1.add(bEnable);
 
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
-	params3.add(separation3.set("separation3", 50, 1, 100));
+	params3.add(separation3min.set("separation3 min", 25.f, 1, 100));
+	params3.add(separation3max.set("separation3 max", 75.f, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 	params3.add(bEnable);
 
@@ -207,7 +208,7 @@ void ofApp::drawWindowMain() {
 
 			AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(50, 30));
 
-			ImGui::Dummy(ImVec2(0, 40)); // spacing
+			ImGui::Dummy(ImVec2(0, 150)); // spacing
 
 			//-
 
@@ -484,7 +485,7 @@ void ofApp::drawWindow2() {
 			//-
 
 			if (bCustom2) {
-				ImGui::Text("* bCustom1 = true");
+				ImGui::Text("* bCustom2 = true");
 				ImGui::Text("customized");
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 			}
@@ -516,14 +517,12 @@ void ofApp::drawWindow2() {
 			// Another widgets pack
 			{
 				static bool bMore = false;
-				ofxImGuiSurfing::AddSpaceY();
 				//ImGui::Dummy(ImVec2(0, 20)); // spacing
+				ofxImGuiSurfing::AddSpaceY(); // simplified above Dummy
 				ImGui::Separator();
 				ofxImGuiSurfing::AddSpaceY();
-				//ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ImGui::Text("MORE WIDGETS");
 				ofxImGuiSurfing::AddSpaceY(5);
-				//ImGui::Dummy(ImVec2(0, 5)); // spacing
 				ofxImGuiSurfing::ToggleRoundedButton("Draw", &bMore);
 				if (bMore) drawMoreWidgets();
 			}
@@ -570,7 +569,8 @@ void ofApp::drawMoreWidgets() {
 
 	// some custom widgets
 
-	// params
+	ImGui::Text("Range Sliders | int/float types");
+
 	// range_slider.h
 	static float v1 = 0;
 	static float v2 = 1;
@@ -590,6 +590,14 @@ void ofApp::drawMoreWidgets() {
 
 	ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
+	//-
+
+	ImGui::Text("Range Sliders | ofParameters");
+
+	AddRangeParam("Separation3", separation3min, separation3max, "%.3f  %.3f", 1.0f);
+
+	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	
 	//-
 
 	if (bCustom1)

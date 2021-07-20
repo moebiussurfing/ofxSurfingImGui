@@ -56,7 +56,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> amount2;
 		ofParameter<int> size2;
 		ofParameter<float> lineWidth3;
-		ofParameter<float> separation3;
+		ofParameter<float> separation3min;
+		ofParameter<float> separation3max;
 		ofParameter<float> speed3;
 		ofParameter<int> shapeType3;
 
