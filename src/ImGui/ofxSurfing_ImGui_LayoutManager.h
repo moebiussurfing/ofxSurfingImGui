@@ -11,7 +11,6 @@
 #include "ofxSurfing_ImGui_Widgets.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
-
 using namespace ofxImGuiSurfing;
 
 
