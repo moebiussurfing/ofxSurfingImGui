@@ -45,10 +45,10 @@ void ofApp::setup() {
 	params1.add(amount.set("amount", 10, 0, 25));
 	params1.add(bEnable);
 
-	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3min.set("separation3 min", 25.f, 1, 100));
 	params3.add(separation3max.set("separation3 max", 75.f, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
+	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(bEnable);
 
 	params1.add(params3);
@@ -322,18 +322,18 @@ void ofApp::drawWindow1() {
 
 		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 		{
-//#ifdef IM_GUI_REFRESH_LOCAL
-//			// Update sizes to current window shape.
-//			// Warning! Must be called before we use the above API widgetsManager.Add(.. methods!
-//			// This is to calculate the widgets types sizes to current panel window size.
-//			widgetsManager.refresh();
-//#endif
+			//#ifdef IM_GUI_REFRESH_LOCAL
+			//			// Update sizes to current window shape.
+			//			// Warning! Must be called before we use the above API widgetsManager.Add(.. methods!
+			//			// This is to calculate the widgets types sizes to current panel window size.
+			//			widgetsManager.refresh();
+			//#endif
 
-			//--
+						//--
 
-			// using widgets
+						// using widgets
 
-			// 0. Default bool param
+						// 0. Default bool param
 			ofxImGuiSurfing::AddParameter(bEnable);
 
 			ImGui::Dummy(ImVec2(0, 10)); // spacing
@@ -478,11 +478,11 @@ void ofApp::drawWindow2() {
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
 
-//#ifdef IM_GUI_REFRESH_LOCAL
-//			widgetsManager.refresh();
-//#endif
+			//#ifdef IM_GUI_REFRESH_LOCAL
+			//			widgetsManager.refresh();
+			//#endif
 
-			//-
+						//-
 
 			if (bCustom2) {
 				ImGui::Text("* bCustom2 = true");
@@ -495,6 +495,7 @@ void ofApp::drawWindow2() {
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 			}
 
+			//ofxImGuiSurfing::AddSpaceY(10);
 			ofxImGuiSurfing::AddGroup(params2);
 
 			//-
@@ -524,6 +525,7 @@ void ofApp::drawWindow2() {
 				ImGui::Text("MORE WIDGETS");
 				ofxImGuiSurfing::AddSpaceY(5);
 				ofxImGuiSurfing::ToggleRoundedButton("Draw", &bMore);
+
 				if (bMore) drawMoreWidgets();
 			}
 
@@ -543,16 +545,16 @@ void ofApp::drawWindow2() {
 
 //--------------------------------------------------------------
 void ofApp::drawMoreWidgets() {
-	
-//#ifdef IM_GUI_REFRESH_LOCAL
-//	ofxImGuiSurfing::widgetsManager.refresh(); // is static
-//#endif
 
-	// these are pure widgets without window/tree/container
+	//#ifdef IM_GUI_REFRESH_LOCAL
+	//	ofxImGuiSurfing::widgetsManager.refresh(); // is static
+	//#endif
 
-	// add an ofParameterGroup
+		// these are pure widgets without window/tree/container
 
-	// A
+		// add an ofParameterGroup
+
+		// A
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
@@ -563,7 +565,7 @@ void ofApp::drawMoreWidgets() {
 	//ofxImGui::AddGroup(params3, mainSettings);
 
 	// spacing
-	ImGui::Dummy(ImVec2(0.0f, 2.0f)); // spacing
+	ofxImGuiSurfing::AddSpaceY(20);
 
 	//-
 
@@ -597,7 +599,7 @@ void ofApp::drawMoreWidgets() {
 	AddRangeParam("Separation3", separation3min, separation3max, "%.3f  %.3f", 1.0f);
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
-	
+
 	//-
 
 	if (bCustom1)

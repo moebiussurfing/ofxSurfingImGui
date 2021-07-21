@@ -192,7 +192,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddSpaceY(int spacingy = 2)
 	{
-		ImGui::Dummy(ImVec2(0, spacingy)); // spacing
+		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
 
 } // namespace ofxImGuiSurfing
