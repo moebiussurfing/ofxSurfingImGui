@@ -5,7 +5,7 @@
 
 #include "ofxSurfing_ImGui_Widgets.h"
 
-#include "ofxSurfing_ImGui_WidgetsTypes.h"
+//#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
 //--
@@ -23,7 +23,7 @@ namespace ofxImGuiSurfing
 {
 	//--
 
-	static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
+	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 	//ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 	
 	//--
@@ -33,7 +33,8 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -101,12 +102,12 @@ namespace ofxImGuiSurfing
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
 
-} // namespace ofxImGuiSurfing
+//} // namespace ofxImGuiSurfing
 
 //----
 
-namespace ofxImGuiSurfing
-{
+//namespace ofxImGuiSurfing
+//{
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{
 		return (ImTextureID)(uintptr_t)texture.texData.textureID;
@@ -122,56 +123,59 @@ namespace ofxImGuiSurfing
 		return (ImTextureID)(uintptr_t)glID;
 	}
 
-} // namespace ofxImGuiSurfing
+//} // namespace ofxImGuiSurfing
 
 //----
 
-namespace ofxImGuiSurfing
-{
-	//// clean of styles
-	////--------------------------------------------------------------
-	//template<typename ParameterType>
-	//bool AddParameter(ofParameter<ParameterType>& parameter)
-	//{
-	//	auto tmpRef = parameter.get();
-	//	const auto& info = typeid(ParameterType);
-	//	if (info == typeid(float))
-	//	{
-	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-	//		if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//		{
-	//			parameter.set(tmpRef);
-	//			ImGui::PopItemWidth();
-	//			return true;
-	//		}
-	//		ImGui::PopItemWidth();
-	//		return false;
-	//	}
-	//	if (info == typeid(int))
-	//	{
-	//		ImGui::PushItemWidth(WIDGET_PARAM_PADDING);
-	//		if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-	//		{
-	//			parameter.set(tmpRef);
-	//			ImGui::PopItemWidth();
-	//			return true;
-	//		}
-	//		ImGui::PopItemWidth();
-	//		return false;
-	//	}
-	//	if (info == typeid(bool))
-	//	{
-	//		if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
-	//		{
-	//			parameter.set(tmpRef);
-	//			return true;
-	//		}
-	//		return false;
-	//	}
-	//	ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
-	//	return false;
-	//}
+//namespace ofxImGuiSurfing
+//{
 
+	// clean of styles
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddParameter(ofParameter<ParameterType>& parameter)
+	{
+		auto tmpRef = parameter.get();
+		const auto& info = typeid(ParameterType);
+		if (info == typeid(float))
+		{
+			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			{
+				parameter.set(tmpRef);
+
+				return true;
+			}
+			
+			return false;
+		}
+		if (info == typeid(int))
+		{
+			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			{
+				parameter.set(tmpRef);
+
+				return true;
+			}
+
+			return false;
+		}
+		if (info == typeid(bool))
+		{
+			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
+			{
+				parameter.set(tmpRef);
+				return true;
+			}
+			
+			return false;
+		}
+
+		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+		
+		return false;
+	}
+
+	/*
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& parameter)
@@ -296,7 +300,8 @@ namespace ofxImGuiSurfing
 
 		return false;
 	}
-
+	*/
+	
 	//--
 
 	//--------------------------------------------------------------

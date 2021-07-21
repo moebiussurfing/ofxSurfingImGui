@@ -45,8 +45,8 @@ void ofApp::setup() {
 	params1.add(amount.set("amount", 10, 0, 25));
 	params1.add(bEnable);
 
-	params3.add(separation3min.set("separation3 min", 25.f, 1, 100));
-	params3.add(separation3max.set("separation3 max", 75.f, 1, 100));
+	params3.add(separation3min.set("separation3min", 25.f, 1, 100));
+	params3.add(separation3max.set("separation3max", 75.f, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(bEnable);
@@ -210,7 +210,7 @@ void ofApp::drawWindowMain() {
 
 			ImGui::Dummy(ImVec2(0, 150)); // spacing
 
-			//-
+			//----
 
 			ImGui::Text("DEBUG STYLES TYPES");
 
@@ -477,12 +477,11 @@ void ofApp::drawWindow2() {
 		// A. without flags (default)
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
-
 			//#ifdef IM_GUI_REFRESH_LOCAL
 			//			widgetsManager.refresh();
 			//#endif
 
-						//-
+			//-
 
 			if (bCustom2) {
 				ImGui::Text("* bCustom2 = true");
@@ -550,11 +549,11 @@ void ofApp::drawMoreWidgets() {
 	//	ofxImGuiSurfing::widgetsManager.refresh(); // is static
 	//#endif
 
-		// these are pure widgets without window/tree/container
+	// these are pure widgets without window/tree/container
 
-		// add an ofParameterGroup
+	// add an ofParameterGroup
 
-		// A
+	// A
 	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed

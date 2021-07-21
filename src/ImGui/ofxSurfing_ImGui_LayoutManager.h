@@ -12,6 +12,8 @@
 ////#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_Widgets.h"
 
+#include "ofxSurfing_ImGui_WidgetsTypes.h"
+
 //-
 
 using namespace ofxImGuiSurfing;
@@ -96,8 +98,13 @@ public:
 	~ofxSurfing_ImGui_Manager();
 
 	//-
+	
+private:
 
-	// main API
+	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
+	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
+	
+	//-
 
 public:
 
@@ -105,6 +112,20 @@ public:
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
 	//-
+
+private:
+
+	// initiate ofxImGui
+	void setup_ImGui();
+	bool bAutoDraw; // must be false when multiple ImGui instances created!
+
+	// with have two mode for instantiate ImGui
+	ofxImGui::Gui * guiPtr = NULL; // passed by reference
+	ofxImGui::Gui gui; // inside the addon
+
+	//-
+
+public:
 
 	void draw(); // to manual draw...
 
@@ -137,37 +158,28 @@ public:
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
-	//-
-
-private:
-	// initiate ofxImGui
-	void setup_ImGui();
-	bool bAutoDraw; // must be false when multiple ImGui instances created!
-
-	// with have two mode for instantiate ImGui
-	ofxImGui::Gui * guiPtr = NULL; // passed by reference
-	ofxImGui::Gui gui; // inside the addon
-
-	//ofxImGui::Settings mainSettings = ofxImGui::Settings(); // should remove..
-
 	//----
 
-	// fonts runtime mangement 
+	// Fonts runtime mangement 
 
 private:
+
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
 
 public:
+
 	bool addFont(std::string path, int size);
 	bool pushFont(std::string path, int size);
 
 private:
+
 	int currFont = 0;
 	void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
 	void openFileFont(int size = 10);
 
 public:
+
 	void setDefaultFontIndex(int index);
 	int getNumFonts() { return customFonts.size(); }
 
@@ -249,6 +261,7 @@ private:
 	//-
 
 public:
+
 	//--------------------------------------------------------------
 	void resetWindowImGui(bool pos = true, bool size = true)
 	{
@@ -256,6 +269,7 @@ public:
 		float yy = 10;
 		float ww = 200;
 		float hh = 600;
+
 		//float ww = PANEL_WIDGETS_WIDTH_MIN;
 		//float hh = PANEL_WIDGETS_HEIGHT;
 
@@ -270,6 +284,7 @@ public:
 	//--
 
 public:
+
 	// snippet to copy/paste
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//--------------------------------------------------------------
@@ -321,12 +336,16 @@ public:
 	//-
 
 private:
+
 	// settings
 	string path_Settings = "imgui_SurfingLayout.xml";
 	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
 	bool bAutoSaveSettings = false;
 
+	//-
+
 public:
+
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
@@ -344,4 +363,5 @@ public:
 //		widgetsManager.refresh(); // update sizes to current window shape
 //	}
 };
+
 //} // namespace ofxImGuiSurfing

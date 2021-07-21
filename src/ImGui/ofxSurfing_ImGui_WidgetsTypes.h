@@ -22,8 +22,6 @@
 
 namespace ofxImGuiSurfing
 {
-	//-
-
 	class ofxSurfing_ImGui_WidgetsTypes {
 
 	public:

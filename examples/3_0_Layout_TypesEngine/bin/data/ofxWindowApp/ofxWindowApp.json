@@ -2,12 +2,12 @@
     {
         "Preset": "Big",
         "position": {
-            "x": 1922.0,
+            "x": 0.0,
             "y": 25.0
         },
         "size": {
-            "height": 1053,
-            "width": 1916
+            "height": 1055,
+            "width": 1920
         },
         "window_mode": "OF_WINDOW"
     },

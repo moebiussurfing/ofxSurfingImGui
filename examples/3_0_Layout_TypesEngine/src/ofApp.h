@@ -36,8 +36,8 @@ class ofApp : public ofBaseApp{
 		ofParameterGroup params3;
 		// parameters
 		ofParameter<bool> bEnable;
-		ofParameter<bool> bPrevious;//to use as button. kind of void type
-		ofParameter<bool> bNext;//to use as button. kind of void type
+		ofParameter<bool> bPrevious; // to use as button. kind of void type
+		ofParameter<bool> bNext; // to use as button. kind of void type
 		ofParameter<bool> bMode1;
 		ofParameter<bool> bMode2;
 		ofParameter<bool> bMode3;
