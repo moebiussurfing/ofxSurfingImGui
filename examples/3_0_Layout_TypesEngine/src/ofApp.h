@@ -4,9 +4,9 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h" // -> Adds all the add-on classes. You can also simplify picking what you want to use.
+using namespace ofxImGuiSurfing;
 
 #include "ofxWindowApp.h" // not required
-
 
 //#define IM_GUI_REFRESH_LOCAL // -> TODO: TEST
 // refresh can be called onyl from here. not from helpers nor from layout
@@ -34,6 +34,7 @@ class ofApp : public ofBaseApp{
 		ofParameterGroup params1;
 		ofParameterGroup params2;
 		ofParameterGroup params3;
+
 		// parameters
 		ofParameter<bool> bEnable;
 		ofParameter<bool> bPrevious; // to use as button. kind of void type
@@ -88,8 +89,8 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> typeFlags;
 		string flagInfo;
 
-		//void SetupStyles();
-		//void ClearStyles();
+		void SetupStyles();
+		void ClearStyles();
 
 		//-
 

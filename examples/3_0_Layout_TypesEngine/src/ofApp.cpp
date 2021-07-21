@@ -15,7 +15,7 @@ void ofApp::setup() {
 
 	// debug ImGui flags
 	{
-		int sz = (int)ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
+		int sz = (int)SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
 		typeGroups.set("typeGroups", 0, 0, sz);
 		typeFlags.set("typeFlags", 1, 0, 4);
 	}
@@ -84,7 +84,7 @@ void ofApp::setup() {
 	// This added style conf will be applied in all the appearances of the param widgets inside all groups.
 	// We can overwrite this customization only draing the simple param "by hand".
 	// ie:
-	// widgetsManager.Add(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
+	// guiManager.Add(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
 
 	//// -> not checked on runtime! ONLY ON SETUP
 	//if (bCustom2) {
@@ -97,63 +97,67 @@ void ofApp::setup() {
 	guiManager.bAutoResize = false;
 }
 
-////--------------------------------------------------------------
-//void ofApp::SetupStyles() {
-//
-//	widgetsManager.clear(); // TODO: -> call from beginWindow/group
-//
-//	//widgetsManager.AddStyle(bEnable, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
-//
-//	widgetsManager.AddStyle(shapeType2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(size2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(amount2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
-//
-//	// two widgets same line small
-//	widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_SMALL, true, 2);
-//	widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
-//
-//	// two widgets same line big
-//	//widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG, true, 2);
-//	//widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
-//
-//	// two widgets same line
-//	widgetsManager.AddStyle(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 2);
-//	widgetsManager.AddStyle(bMode2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 2);
-//	// two widgets same line
-//	widgetsManager.AddStyle(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 2);
-//	widgetsManager.AddStyle(bMode4, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 2);
-//
-//	// more widgets
-//	widgetsManager.AddStyle(lineWidth3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	widgetsManager.AddStyle(speed3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
-//	widgetsManager.AddStyle(separation3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_INACTIVE);
-//	//widgetsManager.AddStyle(separation3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//
-//	//// hide some params from any on-param-group appearance
-//	//widgetsManager.AddStyle(speed3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN, false, -1, 20);
-//	//widgetsManager.AddStyle(size2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN, false, -1, 20);
-//	//widgetsManager.AddStyle(bPrevious, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(bNext, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_HIDDEN);
-//	//widgetsManager.AddStyle(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG); // not works?
-//	//widgetsManager.AddStyle(separation, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(separation, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(speed, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG, false, 1, 10);
-//	//widgetsManager.AddStyle(shapeType, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
-//	//widgetsManager.AddStyle(size, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER);
-//	//widgetsManager.AddStyle(amount, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG, false, 1, 10);
-//}
-//
-////--------------------------------------------------------------
-//void ofApp::ClearStyles() {
-//	widgetsManager.clear(); // TODO: -> call from beginWindow/group
-//}
+//--------------------------------------------------------------
+void ofApp::SetupStyles() {
+
+	guiManager.clear(); // TODO: -> call from beginWindow/group
+
+	//guiManager.AddStyle(bEnable, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG_XXL, false, 1, 10);
+
+	guiManager.AddStyle(shapeType2, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(size2, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(amount2, SurfingImGuiTypes::OFX_IM_DRAG);
+
+	// two widgets same line small
+	guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_SMALL, true, 2);
+	guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
+
+	// two widgets same line big
+	//guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, true, 2);
+	//guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
+
+	// two widgets same line
+	guiManager.AddStyle(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
+	guiManager.AddStyle(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2);
+	// two widgets same line
+	guiManager.AddStyle(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
+	guiManager.AddStyle(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2);
+
+	// more widgets
+	guiManager.AddStyle(lineWidth3, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(speed3, SurfingImGuiTypes::OFX_IM_DRAG);
+	guiManager.AddStyle(separation3min, SurfingImGuiTypes::OFX_IM_INACTIVE);
+	guiManager.AddStyle(separation3max, SurfingImGuiTypes::OFX_IM_INACTIVE);
+	//guiManager.AddStyle(separation3, SurfingImGuiTypes::OFX_IM_STEPPER);
+
+	//// hide some params from any on-param-group appearance
+	//guiManager.AddStyle(speed3, SurfingImGuiTypes::OFX_IM_HIDDEN, false, -1, 20);
+	//guiManager.AddStyle(size2, SurfingImGuiTypes::OFX_IM_HIDDEN, false, -1, 20);
+	//guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_HIDDEN);
+	//guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_HIDDEN);
+	//guiManager.AddStyle(lineWidth, SurfingImGuiTypes::OFX_IM_HIDDEN);
+	//guiManager.AddStyle(lineWidth, SurfingImGuiTypes::OFX_IM_DRAG); // not works?
+	//guiManager.AddStyle(separation, SurfingImGuiTypes::OFX_IM_STEPPER);
+	//guiManager.AddStyle(separation, SurfingImGuiTypes::OFX_IM_STEPPER);
+	//guiManager.AddStyle(speed, SurfingImGuiTypes::OFX_IM_DRAG, false, 1, 10);
+	//guiManager.AddStyle(shapeType, SurfingImGuiTypes::OFX_IM_DRAG);
+	//guiManager.AddStyle(size, SurfingImGuiTypes::OFX_IM_STEPPER);
+	//guiManager.AddStyle(amount, SurfingImGuiTypes::OFX_IM_DRAG, false, 1, 10);
+}
+
+//--------------------------------------------------------------
+void ofApp::ClearStyles() {
+	guiManager.clear(); // TODO: -> call from beginWindow/group
+}
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
 	guiManager.begin();
 	{
+		//cout << "num widgets: " << guiManager
+		guiManager.reset();
+
 		//TODO:
 		// trying a workaround to fix getUniqueName troubles..
 		//ofxImGuiSurfing::resetIndex();
@@ -324,16 +328,16 @@ void ofApp::drawWindow1() {
 		{
 			//#ifdef IM_GUI_REFRESH_LOCAL
 			//			// Update sizes to current window shape.
-			//			// Warning! Must be called before we use the above API widgetsManager.Add(.. methods!
+			//			// Warning! Must be called before we use the above API guiManager.Add(.. methods!
 			//			// This is to calculate the widgets types sizes to current panel window size.
-			//			widgetsManager.refresh();
+			//			guiManager.refresh();
 			//#endif
 
-						//--
+			//--
 
-						// using widgets
+			// using widgets
 
-						// 0. Default bool param
+			// 0. Default bool param
 			ofxImGuiSurfing::AddParameter(bEnable);
 
 			ImGui::Dummy(ImVec2(0, 10)); // spacing
@@ -346,7 +350,7 @@ void ofApp::drawWindow1() {
 			{
 				// group of parameters with customized tree/folder type
 				// will be applied to all nested groups inside this parent
-				// customization is defined above on setup(): widgetsManager.AddStyle(..
+				// customization is defined above on setup(): guiManager.AddStyle(..
 
 				//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
@@ -381,39 +385,41 @@ void ofApp::drawWindow1() {
 			// A
 			if (bCustom1)
 			{
-				//ImGui::Text("* bCustom1 = true");
-				//ImGui::Text("customized");
-				//ImGui::Dummy(ImVec2(0, 5)); // spacing
+				guiManager.refresh();
 
-				//// This is the defalut helpers ussage for the official ofxImGui Helpers:
-				////ofxImGuiSurfing::AddParameter(lineWidth); 
-				//// (Notice that this will be affected if there's an added conf (AddStyle) for this param)
+				ImGui::Text("* bCustom1 = true");
+				ImGui::Text("customized");
+				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-				//// 1.0 A check box
+				// This is the defalut helpers ussage for the official ofxImGui Helpers:
+				//ofxImGuiSurfing::AddParameter(lineWidth); 
+				// (Notice that this will be affected if there's an added conf (AddStyle) for this param)
 
-				//// These lines with draw/render the same style widgets:
-				//// 1.0.1
-				////ofxImGuiSurfing::AddParameter(bMode4);
-				//// 1.0.2
-				//// This forces the style no matter if a conf is added (AddStyle) for this param
-				//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_BUTTON_BIG); // -> now this is the default bool 
-				////widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_CHECKBOX); // -> deprecated check box as default bool
+				// 1.0 A check box
 
-				//// 1.1 Toggle full width
-				//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG);
+				// These lines with draw/render the same style widgets:
+				// 1.0.1
+				//ofxImGuiSurfing::AddParameter(bMode4);
+				// 1.0.2
+				// This forces the style no matter if a conf is added (AddStyle) for this param
+				guiManager.Add(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG); // -> now this is the default bool 
+				guiManager.Add(bModeA, SurfingImGuiTypes::OFX_IM_CHECKBOX); // -> deprecated check box as default bool
 
-				//// 1.2 A float param
-				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_SLIDER); // force draw
-				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_DRAG);
-				//widgetsManager.Add(lineWidth, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
+				// 1.1 Toggle full width
+				guiManager.Add(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG);
 
-				//// 1.3 Three small toggle widgets in one row
-				//// with 20px vert spacing at end
-				////widgetsManager.refresh(); // update sizes to current window shape
-				//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, true, 3);
-				//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, true, 3);
-				//widgetsManager.Add(bModeC, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);
-				//widgetsManager.Add(bModeD);
+				// 1.2 A float param
+				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_SLIDER); // force draw
+				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_DRAG);
+				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
+
+				// 1.3 Three small toggle widgets in one row
+				// with 20px vert spacing at end
+				//guiManager.refresh(); // update sizes to current window shape
+				guiManager.Add(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, true, 3);
+				guiManager.Add(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, true, 3);
+				guiManager.Add(bModeC, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);
+				guiManager.Add(bModeD);
 			}
 
 			// B
@@ -424,6 +430,7 @@ void ofApp::drawWindow1() {
 				ImGui::Text("default style");
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
+				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeB);
 
@@ -478,7 +485,7 @@ void ofApp::drawWindow2() {
 		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
 		{
 			//#ifdef IM_GUI_REFRESH_LOCAL
-			//			widgetsManager.refresh();
+			//			guiManager.refresh();
 			//#endif
 
 			//-
@@ -532,10 +539,10 @@ void ofApp::drawWindow2() {
 			//ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 			//// 1.5 A row of four big toggles
-			//widgetsManager.Add(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode2, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode3, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//widgetsManager.Add(bMode4, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 4);
+			//guiManager.Add(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//guiManager.Add(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//guiManager.Add(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+			//guiManager.Add(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 4);
 
 		}
 		guiManager.endWindow();
@@ -546,7 +553,7 @@ void ofApp::drawWindow2() {
 void ofApp::drawMoreWidgets() {
 
 	//#ifdef IM_GUI_REFRESH_LOCAL
-	//	ofxImGuiSurfing::widgetsManager.refresh(); // is static
+	//	ofxImGuiSurfing::guiManager.refresh(); // is static
 	//#endif
 
 	// these are pure widgets without window/tree/container
@@ -608,10 +615,10 @@ void ofApp::drawMoreWidgets() {
 		//ImGui::Text("customized");
 		//ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		//widgetsManager.Add(bModeA, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeB, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeC, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, true, 4);
-		//widgetsManager.Add(bModeD, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_BIG, false, 4);
+		//guiManager.Add(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//guiManager.Add(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//guiManager.Add(bModeC, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
+		//guiManager.Add(bModeD, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 4);
 	}
 	else // default ofxImGui styles
 	{

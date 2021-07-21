@@ -13,6 +13,8 @@
 //#include "ofxSurfing_ImGui_Widgets.h"
 
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
+#include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
+
 
 //-
 
@@ -98,12 +100,46 @@ public:
 	~ofxSurfing_ImGui_Manager();
 
 	//-
-	
-private:
+
+//private:
+public:
 
 	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
-	
+
+	ofParamUniqueName uniqueName;
+
+	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	{
+		return widgetsManager.Add(aparam, type, bSameLine, amtPerRow, spacing);
+	}
+	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	{
+		widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
+	}
+
+	//-
+
+	//TODO:
+	//ofxSurfing_ImGui_WidgetsTypes widgetsManager;
+
+public:
+	//--------------------------------------------------------------
+	void refresh()
+	{
+		widgetsManager.refresh(); // update sizes to current window shape
+	}
+	//--------------------------------------------------------------
+	void clear()
+	{
+		widgetsManager.clear(); // update sizes to current window shape
+	}
+	//--------------------------------------------------------------
+	void reset()
+	{
+		widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	}
+
 	//-
 
 public:
@@ -350,18 +386,6 @@ public:
 	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
 	}
-
-	//-
-
-	//TODO:
-	//ofxSurfing_ImGui_WidgetsTypes widgetsManager;
-
-//public:
-//	//--------------------------------------------------------------
-//	void refresh() 
-//	{
-//		widgetsManager.refresh(); // update sizes to current window shape
-//	}
 };
 
 //} // namespace ofxImGuiSurfing

@@ -12,6 +12,9 @@
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 //#include "ofxSurfing_ImGui_Widgets.h"
 
+#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
+
 //-
 
 #include <list>
@@ -23,55 +26,6 @@
 namespace ofxImGuiSurfing
 {
 	class ofxSurfing_ImGui_WidgetsTypes {
-
-	public:
-
-		//TODO: 
-		// make simpler namespace. or move outside the class?
-		enum SurfingImGuiTypes
-		{
-			OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
-			OFX_IM_HIDDEN,		// omit widget. don't let spacing there
-			OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
-			OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
-
-			OFX_IM_CHECKBOX,	// bool
-			OFX_IM_BUTTON_SMALL,
-			OFX_IM_BUTTON_BIG,
-			OFX_IM_BUTTON_BIG_XXL,
-			OFX_IM_TOGGLE_SMALL,
-			OFX_IM_TOGGLE_BIG,
-			OFX_IM_TOGGLE_BIG_XXL,
-
-			OFX_IM_SLIDER,		// float/int
-			OFX_IM_PROGRESS_BAR,
-			OFX_IM_STEPPER,
-			OFX_IM_DRAG,
-
-			OFX_IM_TEXT_DISPLAY, // strings
-			OFX_IM_TEXT_INPUT,
-			OFX_IM_TEXT_BIG,
-
-			OFX_IM_NUM_TYPES
-		};
-
-		//--
-
-		//TODO:
-		// centralize name types
-		// try to mix ImHelpers with ImTypes..
-		enum SurfingImGuiTypesGroups
-		{
-			OFX_IM_GROUP_DEFAULT = 0,
-			OFX_IM_GROUP_TREE_EX,
-			OFX_IM_GROUP_TREE,
-			OFX_IM_GROUP_COLLAPSED,
-			OFX_IM_GROUP_SCROLLABLE,
-			OFX_IM_GROUP_ONLY_FIRST_HEADER,
-			OFX_IM_GROUP_HIDDE_ALL_HEADERS,
-
-			OFX_IM_GROUP_NUM_TYPES
-		};
 
 		//-
 
@@ -148,10 +102,19 @@ namespace ofxImGuiSurfing
 		// To queue the styles for each param here
 		vector<SurfingImGuiStyle> widgetsStyles;
 
+		// to queue all the rendered params to pushId's
+		ofParamUniqueName uniqueName;
+
+		void resetUniqueNames() {
+			uniqueName.reset();
+		}
+
 		//--------------------------------------------------------------
 		ofxSurfing_ImGui_WidgetsTypes()
 		{
 			widgetsStyles.clear();
+
+			uniqueName.reset();
 		}
 
 		//-
@@ -307,6 +270,8 @@ namespace ofxImGuiSurfing
 			// if setted as hidden dont draw, but apply same line and spacing and return
 			if (type == OFX_IM_HIDDEN)
 			{
+				uniqueName.push();
+
 				// extra options
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1)
@@ -314,12 +279,15 @@ namespace ofxImGuiSurfing
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
 				}
 
+				uniqueName.pop();
 				return false;
 			}
 
 			// if setted as hidden dont draw, but apply same line and spacing and return
 			else if (type == OFX_IM_DISABLED)
 			{
+				uniqueName.push();
+
 				// extra options
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1)
@@ -330,8 +298,11 @@ namespace ofxImGuiSurfing
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
 				}
 
+				uniqueName.pop();
 				return false;
 			}
+
+			// disable mouse interaction
 			else if (type == OFX_IM_INACTIVE)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -376,6 +347,8 @@ namespace ofxImGuiSurfing
 				ofParameter<bool> p = aparam.cast<bool>();
 				auto tmpRef = p.get();
 
+				uniqueName.push();
+
 				switch (type)
 				{
 
@@ -387,11 +360,13 @@ namespace ofxImGuiSurfing
 					string name = p.getName();
 					//string n = "##CHECKBOX_" + name + ofToString(1);
 					//ImGui::PushID(n.c_str());
+
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
+					uniqueName.pop();
 					//ImGui::PopID();
 					bReturn = false;
 				}
@@ -422,6 +397,8 @@ namespace ofxImGuiSurfing
 					break;
 				}
 
+				uniqueName.pop();
+
 				bDone = true;
 			}
 
@@ -433,6 +410,8 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<string> p = aparam.cast<string>();
 				auto tmpRef = p.get();
+
+				uniqueName.push();
 
 				switch (type)
 				{
@@ -456,6 +435,10 @@ namespace ofxImGuiSurfing
 				}
 				break;
 				}
+
+				uniqueName.pop();
+
+				bDone = true;
 			}
 
 			//-
@@ -466,6 +449,8 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<float> p = aparam.cast<float>();
 				auto tmpRef = p.get();
+
+				uniqueName.push();
 
 				switch (type)
 				{
@@ -538,6 +523,8 @@ namespace ofxImGuiSurfing
 				break;
 				}
 
+				uniqueName.pop();
+
 				bDone = true;
 			}
 
@@ -549,6 +536,7 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<int> p = aparam.cast<int>();
 				auto tmpRef = p.get();
+				uniqueName.push();
 
 				switch (type)
 				{
@@ -623,6 +611,8 @@ namespace ofxImGuiSurfing
 
 				}
 
+				uniqueName.pop();
+				
 				bDone = true;
 			}
 
