@@ -216,6 +216,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void clear() {
 			widgetsStyles.clear();
+			groupsStyles.clear();
 		}
 
 		////TODO: GetUniqueName?
@@ -640,8 +641,23 @@ namespace ofxImGuiSurfing
 //--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
-			ImGui::CollapsingHeader(group.getName().data());
-
+			// handle names/pushID's
+			if (uniqueName.getLevel() == 0)
+			{
+				ImGui::PushID(group.getName().c_str());
+				bool b = false;
+				
+				b = ImGui::CollapsingHeader(group.getName().c_str());
+				
+				uniqueName.pushGroup();
+				if (!b) {
+					ImGui::PopID();
+					return;
+				}
+				ImGui::PopID();
+			}
+			
+			// measure layout sizes
 			refreshLayout();
 
 			//--
@@ -669,7 +685,6 @@ namespace ofxImGuiSurfing
 
 				if (parameterGroup) // detects nested groups
 				{
-
 					//uniqueName.getTag // TODO: to improve a bit more secured
 					// ->  unique id for repeated params inside many groups
 
@@ -682,7 +697,27 @@ namespace ofxImGuiSurfing
 						}
 						else
 						{
+							SurfingImGuiTypesGroups typeGroup_PRE = typeGroup;
+							bool bRestore = false;
+							auto c = getStyleGroup(*parameterGroup);
+							if (c.name != "-1")
+							{
+								// overwrite main type
+								typeGroup = SurfingImGuiTypesGroups(c.type);
+								bRestore = true;
+							}
+							else
+							{
+							}
+
+							//--
+
 							if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+							{
+								AddGroup(*parameterGroup, flags, typeGroup);
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
 							{
 								AddGroup(*parameterGroup, flags, typeGroup);
 							}
@@ -726,7 +761,7 @@ namespace ofxImGuiSurfing
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 							{
 								auto& style = ImGui::GetStyle();
-								int hh = 40;
+								int hh = 14;
 								int h = style.FramePadding.y + style.ItemSpacing.y + hh;
 
 								ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
@@ -735,6 +770,12 @@ namespace ofxImGuiSurfing
 
 								ImGui::EndChild();
 							}
+
+							//-
+											
+							// restore previous type
+							if (bRestore) typeGroup = typeGroup_PRE;
+
 						}
 					}
 
