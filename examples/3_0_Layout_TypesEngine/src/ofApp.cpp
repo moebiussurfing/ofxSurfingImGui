@@ -455,12 +455,15 @@ void ofApp::drawWindow2() {
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 			}
 
+			//-
+
+			// A. using global flags
 			guiManager.AddGroup(params2, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
 			//-
 
 			/*
-			// B. using flags
+			// B. using custom flags
 			{
 				// group parameter with customized tree/folder type
 				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
@@ -477,7 +480,6 @@ void ofApp::drawWindow2() {
 			// Another widgets pack
 			{
 				static bool bMore = false;
-				//ImGui::Dummy(ImVec2(0, 20)); // spacing
 				ofxImGuiSurfing::AddSpaceY(); // simplified above Dummy
 				ImGui::Separator();
 				ofxImGuiSurfing::AddSpaceY();
@@ -487,16 +489,6 @@ void ofApp::drawWindow2() {
 
 				if (bMore) drawMoreWidgets();
 			}
-
-			//// 1.4 spacing
-			//ImGui::Dummy(ImVec2(0, 10)); // spacing
-
-			//// 1.5 A row of four big toggles
-			//guiManager.Add(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//guiManager.Add(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//guiManager.Add(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
-			//guiManager.Add(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 4);
-
 		}
 		guiManager.endWindow();
 	}
@@ -511,7 +503,7 @@ void ofApp::drawMoreWidgets() {
 
 	ImGui::Text("Range Sliders | ofParameters");
 
-	AddRangeParam("separation3", separation3min, separation3max, "%.3f  %.3f", 1.0f);
+	AddRangeParam("separation3", separation3min, separation3max, "%.2f  %.2f", 1.0f);
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
@@ -530,13 +522,17 @@ void ofApp::drawMoreWidgets() {
 	// currently we can customize the tree/group types passing tree flags, 
 	// and also these Surfing styles from "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 
+	// A. Custom flags
 	//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 	//guiManager.AddGroup(params3, flags, SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT);
 
+	// B. Global flags
 	// we will use the gui selectable debugger styles
 	guiManager.AddGroup(params3, typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+
+	//-
 
 	// spacing
 	ofxImGuiSurfing::AddSpaceY(20);

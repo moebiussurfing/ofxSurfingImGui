@@ -25,7 +25,7 @@
 
 namespace ofxImGuiSurfing
 {
-	class ofxSurfing_ImGui_WidgetsTypes 
+	class ofxSurfing_ImGui_WidgetsTypes
 	{
 
 		//--
@@ -573,6 +573,23 @@ namespace ofxImGuiSurfing
 
 		// groups
 
+		//TODO:
+	public:
+		void AddGroup(ofParameterGroup& group)
+		{
+			AddGroup(group, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
+		}
+		void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+		{
+			AddGroup(group, ImGuiTreeNodeFlags_None, typeGroup);
+		}
+		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		{
+			AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
+		}
+
+	public:
+		//private:
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			refreshLayout();
@@ -588,9 +605,9 @@ namespace ofxImGuiSurfing
 				if (parameterGroup) // detects nested groups
 				{
 					//uniqueName.getTag // TODO: to improve a bit more secured
-					ImGui::PushID(parameterGroup->getName().c_str()); 
 					// ->  unique id for repeated params inside many groups
-					
+					ImGui::PushID(parameterGroup->getName().c_str());
+
 					{
 						if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 						{
@@ -647,7 +664,7 @@ namespace ofxImGuiSurfing
 
 								ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
 
-								AddGroup(*parameterGroup);
+								AddGroup(*parameterGroup, flags, typeGroup);
 
 								ImGui::EndChild();
 							}
@@ -667,56 +684,63 @@ namespace ofxImGuiSurfing
 
 				// Parameter, try everything we know how to handle.
 
-//#if OF_VERSION_MINOR >= 10
-//				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-//				if (parameterVec2f)
-//				{
-//					AddParameter(*parameterVec2f);
-//					continue;
-//				}
-//				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-//				if (parameterVec3f)
-//				{
-//					AddParameter(*parameterVec3f);
-//					continue;
-//				}
-//				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-//				if (parameterVec4f)
-//				{
-//					AddParameter(*parameterVec4f);
-//					continue;
-//				}
-//#endif
-//				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-//				if (parameterOfVec2f)
-//				{
-//					AddParameter(*parameterOfVec2f);
-//					continue;
-//				}
-//				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-//				if (parameterOfVec3f)
-//				{
-//					AddParameter(*parameterOfVec3f);
-//					continue;
-//				}
-//				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-//				if (parameterOfVec4f)
-//				{
-//					AddParameter(*parameterOfVec4f);
-//					continue;
-//				}
-//				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-//				if (parameterFloatColor)
-//				{
-//					AddParameter(*parameterFloatColor);
-//					continue;
-//				}
-//				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-//				if (parameterColor)
-//				{
-//					AddParameter(*parameterColor);
-//					continue;
-//				}
+				//TODO:
+				// no styles yet for unknow types!
+
+#if OF_VERSION_MINOR >= 10
+				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+				if (parameterVec2f)
+				{
+					AddParameter(*parameterVec2f);
+					continue;
+				}
+				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+				if (parameterVec3f)
+				{
+					AddParameter(*parameterVec3f);
+					continue;
+				}
+				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+				if (parameterVec4f)
+				{
+					AddParameter(*parameterVec4f);
+					continue;
+				}
+#endif
+				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+				if (parameterOfVec2f)
+				{
+					AddParameter(*parameterOfVec2f);
+					continue;
+				}
+				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+				if (parameterOfVec3f)
+				{
+					AddParameter(*parameterOfVec3f);
+					continue;
+				}
+				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+				if (parameterOfVec4f)
+				{
+					AddParameter(*parameterOfVec4f);
+					continue;
+				}
+				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+				if (parameterFloatColor)
+				{
+					AddParameter(*parameterFloatColor);
+					continue;
+				}
+				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+				if (parameterColor)
+				{
+					AddParameter(*parameterColor);
+					continue;
+				}
+
+				//-
+
+				// known styles for know types
 
 				// float
 				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
@@ -735,7 +759,7 @@ namespace ofxImGuiSurfing
 					}
 					continue;
 				}
-				
+
 				// int
 				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 				if (parameterInt)
