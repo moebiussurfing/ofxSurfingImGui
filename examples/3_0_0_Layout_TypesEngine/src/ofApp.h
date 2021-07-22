@@ -8,28 +8,13 @@ using namespace ofxImGuiSurfing;
 
 #include "ofxWindowApp.h" // not required
 
-//#define IM_GUI_REFRESH_LOCAL // -> TODO: TEST
-// refresh can be called onyl from here. not from helpers nor from layout
-
-
-// NOTE:
-// If you get some errors on compiling, could be related to some -not required- included files.
-// Go to 'Solution Explorer' and remove manually from 'addons/ofxSurfingImGui/src/ImGui/' 
-// /ImNodes/
-// /ImGuizmo/ !!
-
-
 class ofApp : public ofBaseApp{
 
 	public:
 
 		void setup();
 		void draw();
-
-		void drawWindowMain();
-		void drawWindow1();
-		void drawWindow2();
-		void drawMoreWidgets();
+		void drawWindow();
 
 		// groups
 		ofParameterGroup params1;
@@ -39,8 +24,8 @@ class ofApp : public ofBaseApp{
 		// parameters
 		ofParameter<bool> bEnable;
 		ofParameter<int> shapeType;
-		ofParameter<bool> bPrevious; // to use as button. kind of void type
-		ofParameter<bool> bNext; // to use as button. kind of void type
+		ofParameter<bool> bPrevious;
+		ofParameter<bool> bNext;
 		ofParameter<bool> bMode1;
 		ofParameter<bool> bMode2;
 		ofParameter<bool> bMode3;
@@ -64,33 +49,17 @@ class ofApp : public ofBaseApp{
 
 		//-
 
-		bool bOpenMain;
-		bool bOpen1;
-		bool bOpen2;
-
-		bool bReset1;
-		bool bReset2;
-		bool bReset3;
-#define MAX_WINDOW_HEIGHT 950
-
-		glm::vec2 pos0;
-		glm::vec2 pos1;
-		glm::vec2 pos2;
-
-		//-
-
 		ofxSurfing_ImGui_Manager guiManager;
 
-		// debug customize
-
+		// customize groups
 		bool bCustom1;
 		bool bCustom2;
-
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
 		ImGuiTreeNodeFlags flags_typeFlags = ImGuiTreeNodeFlags_None;
 		string flagInfo;
 
+		// add styles
 		void SetupStyles();
 		void ClearStyles();
 
