@@ -232,7 +232,7 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 ## 3. TYPES ENGINE [WIP]
 
 <details>
-  <summary>2_4_Layout_ThemeEditor</summary>
+  <summary>3_0_Layout_TypesEngine</summary>
   <p>
 
 ![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
@@ -240,7 +240,7 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 </details>
 
 <details>
-  <summary>2_4_Layout_ThemeEditor</summary>
+  <summary>3_1_Layout_TypesEngine</summary>
   <p>
 
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
