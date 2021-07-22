@@ -25,27 +25,13 @@
 
 namespace ofxImGuiSurfing
 {
-	class ofxSurfing_ImGui_WidgetsTypes {
-
-		//-
-
-		//TODO:
-		// a getUniqueName alternative
-		//public:
-		//	int index = 0;
-		//	void resetIndex() {
-		//		index = 0;
-		//	}
-		//	std::string getTag(ofAbstractParameter& aparam) {
-		//		string tag = aparam.getName() + ofToString(index++);
-		//		return tag;
-		//	}
+	class ofxSurfing_ImGui_WidgetsTypes 
+	{
 
 		//--
 
 		// widgets sizes
 
-	//public:
 	private:
 
 		float _spcx;
@@ -57,16 +43,6 @@ namespace ofxImGuiSurfing
 		float _w25;
 		float _h100;
 		float _h;
-
-		//static float _spcx;
-		//static float _spcy;
-		//static float _w100;
-		//static float _w99;
-		//static float _w50;
-		//static float _w33;
-		//static float _w25;
-		//static float _h100;
-		//static float _h;
 
 		//--
 
@@ -80,6 +56,11 @@ namespace ofxImGuiSurfing
 		}
 		//--------------------------------------------------------------
 		void refresh() // short name
+		{
+			refreshPanelShape();
+		}
+		//--------------------------------------------------------------
+		void refreshLayout() // short name
 		{
 			refreshPanelShape();
 		}
@@ -223,7 +204,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//bool Add(ofAbstractParameter& aparam, ofxSurfing_ImGui_WidgetsTypes type) {
-		//	Add(bMode1, ofxSurfing_ImGui_WidgetsTypes::OFX_IM_TOGGLE_SMALL, 3, true);
+		//	Add(bMode1, SurfingImGuiTypesGroups::OFX_IM_TOGGLE_SMALL, 3, true);
 		//}
 
 		//-
@@ -308,12 +289,6 @@ namespace ofxImGuiSurfing
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			}
 
-			//--
-
-			////getUniqueName workaround
-			//string tag = widgetsManager.getTag(aparam);
-			//ImGui::PushID(tag.c_str());
-
 			//----
 
 			auto ptype = aparam.type();
@@ -332,6 +307,7 @@ namespace ofxImGuiSurfing
 
 			bool bReturn = false;
 
+			// set widget width/size reading from the function arguments
 			float _ww;
 			if (amtPerRow == 2) _ww = _w50;
 			else if (amtPerRow == 3) _ww = _w33;
@@ -358,16 +334,12 @@ namespace ofxImGuiSurfing
 				{
 					// default:
 					string name = p.getName();
-					//string n = "##CHECKBOX_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-
 					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
 					uniqueName.pop();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -459,27 +431,18 @@ namespace ofxImGuiSurfing
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
-					//string n = "##SLIDER_f_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
 
 				case OFX_IM_PROGRESS_BAR:
 				{
-					string name = p.getName();
-					//string n = "##PROGRESS_f_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
 					ofxImGuiSurfing::AddProgressBar(p);
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -487,17 +450,11 @@ namespace ofxImGuiSurfing
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.01f;
-					string name = p.getName();
-					//string n = "##DRAG_f_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -508,16 +465,11 @@ namespace ofxImGuiSurfing
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					//string n = "##STEPPER_f_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -545,17 +497,11 @@ namespace ofxImGuiSurfing
 				case OFX_IM_SLIDER:
 				case OFX_IM_INACTIVE:
 				{
-					string name = p.getName();
-					//string n = "##SLIDER_i_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -563,17 +509,11 @@ namespace ofxImGuiSurfing
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.1;
-					string name = p.getName();
-					//string n = "##DRAG_i_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -583,17 +523,11 @@ namespace ofxImGuiSurfing
 					const int step = 1;
 					const int stepFast = 5;
 					auto tmpRef = p.get();
-					string name = p.getName();
-					//string n = "##STEPPER_i_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//ImGui::PopItemWidth();
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -601,10 +535,7 @@ namespace ofxImGuiSurfing
 				case OFX_IM_PROGRESS_BAR:
 				{
 					string name = p.getName();
-					//string n = "##PROGRESS_i_" + name + ofToString(1);
-					//ImGui::PushID(n.c_str());
 					ofxImGuiSurfing::AddProgressBar(p);
-					//ImGui::PopID();
 					bReturn = false;
 				}
 				break;
@@ -612,7 +543,7 @@ namespace ofxImGuiSurfing
 				}
 
 				uniqueName.pop();
-				
+
 				bDone = true;
 			}
 
@@ -635,11 +566,232 @@ namespace ofxImGuiSurfing
 
 			//----
 
-			////getUniqueName workaround
-			////ImGui::PopID();
-
 			return bReturn;
 		}
+
+		//--
+
+		// groups
+
+		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+		{
+			refreshLayout();
+
+			//--
+
+			for (auto parameter : group)
+			{
+				// group
+
+				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+
+				if (parameterGroup) // detects nested groups
+				{
+					//uniqueName.getTag // TODO: to improve a bit more secured
+					ImGui::PushID(parameterGroup->getName().c_str()); 
+					// ->  unique id for repeated params inside many groups
+					
+					{
+						if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
+						{
+							AddGroup(*parameterGroup, flags, typeGroup);
+						}
+						else
+						{
+							if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+							{
+								AddGroup(*parameterGroup, flags, typeGroup);
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							{
+								bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
+							{
+								ImGui::Indent();
+								bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::Unindent();
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+							{
+								if (ImGui::TreeNode(parameterGroup->getName().data()))
+								{
+									ImGui::Indent();
+									AddGroup(*parameterGroup, flags, typeGroup);
+									ImGui::Unindent();
+
+									ImGui::TreePop();
+								}
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+							{
+								if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
+								{
+									AddGroup(*parameterGroup, flags, typeGroup);
+
+									ImGui::TreePop();
+								}
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+							{
+								auto& style = ImGui::GetStyle();
+								int hh = 40;
+								int h = style.FramePadding.y + style.ItemSpacing.y + hh;
+
+								ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+
+								AddGroup(*parameterGroup);
+
+								ImGui::EndChild();
+							}
+						}
+					}
+
+					ImGui::PopID();
+
+					//-
+
+					continue;
+				}
+
+				//----
+
+				// Uses "ofxSurfing_ImGui_ofHelpers.h"
+
+				// Parameter, try everything we know how to handle.
+
+//#if OF_VERSION_MINOR >= 10
+//				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+//				if (parameterVec2f)
+//				{
+//					AddParameter(*parameterVec2f);
+//					continue;
+//				}
+//				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+//				if (parameterVec3f)
+//				{
+//					AddParameter(*parameterVec3f);
+//					continue;
+//				}
+//				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+//				if (parameterVec4f)
+//				{
+//					AddParameter(*parameterVec4f);
+//					continue;
+//				}
+//#endif
+//				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+//				if (parameterOfVec2f)
+//				{
+//					AddParameter(*parameterOfVec2f);
+//					continue;
+//				}
+//				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+//				if (parameterOfVec3f)
+//				{
+//					AddParameter(*parameterOfVec3f);
+//					continue;
+//				}
+//				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+//				if (parameterOfVec4f)
+//				{
+//					AddParameter(*parameterOfVec4f);
+//					continue;
+//				}
+//				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+//				if (parameterFloatColor)
+//				{
+//					AddParameter(*parameterFloatColor);
+//					continue;
+//				}
+//				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+//				if (parameterColor)
+//				{
+//					AddParameter(*parameterColor);
+//					continue;
+//				}
+
+				// float
+				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+				if (parameterFloat)
+				{
+					auto c = getStyle(*parameterFloat);
+					// if the parameter widget is not added explicitly, will populate it as the default appearance
+					if (c.name != "-1")
+					{
+						Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+					}
+					// default style
+					else
+					{
+						AddParameter(*parameterFloat);
+					}
+					continue;
+				}
+				
+				// int
+				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+				if (parameterInt)
+				{
+					auto c = getStyle(*parameterInt);
+					if (c.name != "-1")
+					{
+						Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+					}
+					else
+					{
+						AddParameter(*parameterInt);
+					}
+					continue;
+				}
+
+				// bool
+				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+				if (parameterBool)
+				{
+					auto c = getStyle(*parameterBool);
+					if (c.name != "-1")
+					{
+						Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+					}
+					else
+					{
+						AddParameter(*parameterBool);
+					}
+					continue;
+				}
+
+				// string
+				auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+				if (parameterString)
+				{
+					auto c = getStyle(*parameterString);
+					if (c.name != "-1")
+					{
+						Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+					}
+					else
+					{
+						AddParameter(*parameterString);
+					}
+					continue;
+				}
+
+				//--
+
+				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+			}
+		}
+
 	};
+
+	//--
 
 } // namespace ofxSurfing

@@ -225,22 +225,22 @@ void ofxSurfing_ImGui_Manager::begin() {
 	else gui.begin();
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
+
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
 
 	//-
 
-	//TODO:
-	//ofxImGuiSurfing::clearNames();
-	//ofxImGuiSurfing::pushNames();
+	resetIDs(); // reset names
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
 
 	ImGui::PopStyleVar(); // minimal size
+
 	if (customFont != nullptr) ImGui::PopFont();
 
-	//mouse lockers
+	// mouse lockers
 	bMouseOverGui = false;
 	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
@@ -248,11 +248,6 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
-
-	//-
-
-	//ofxImGuiSurfing::clearNames(); //-> required when usign raw begin/end pair instead of guiManager.begin/end
-	//ofxImGuiSurfing::popName();
 }
 
 //--------------------------------------------------------------
@@ -276,11 +271,7 @@ void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	//widgetsManager.refresh(); //->not acting..
-
-	// Push a new list of names onto the stack.
-	//ofxImGuiSurfing::windowOpen.usedNames.push(std::vector<std::string>());
-	//ofxImGuiSurfing::pushNames();
+	//widgetsManager.refresh(); 
 
 	//-
 
@@ -357,11 +348,6 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
 	//return b;
-
-	//-
-
-	//refresh();
-	//ofxImGuiSurfing::widgetsManager.refresh(); // is static. not works
 }
 
 //--------------------------------------------------------------
@@ -371,10 +357,4 @@ void ofxSurfing_ImGui_Manager::endWindow()
 	//ImGui::PopStyleVar();
 
 	ImGui::End();
-
-	//TODO: move up?
-	// Clear the list of names from the stack.
-	//ofxImGuiSurfing::windowOpen.usedNames.pop();
-	//ofxImGuiSurfing::popName();
-	//ofxImGuiSurfing::clearNames();
 }

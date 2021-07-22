@@ -5,6 +5,7 @@
 
 #include "ofxSurfing_ImGui_Widgets.h"
 
+#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 //#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
@@ -33,7 +34,8 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
@@ -102,12 +104,8 @@ namespace ofxImGuiSurfing
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
 
-//} // namespace ofxImGuiSurfing
+	//----
 
-//----
-
-//namespace ofxImGuiSurfing
-//{
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{
 		return (ImTextureID)(uintptr_t)texture.texData.textureID;
@@ -123,12 +121,7 @@ namespace ofxImGuiSurfing
 		return (ImTextureID)(uintptr_t)glID;
 	}
 
-//} // namespace ofxImGuiSurfing
-
-//----
-
-//namespace ofxImGuiSurfing
-//{
+	//----
 
 	// clean of styles
 	//--------------------------------------------------------------
@@ -137,6 +130,8 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
+
+		//float
 		if (info == typeid(float))
 		{
 			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
@@ -148,6 +143,8 @@ namespace ofxImGuiSurfing
 			
 			return false;
 		}
+		
+		//int
 		if (info == typeid(int))
 		{
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
@@ -159,6 +156,8 @@ namespace ofxImGuiSurfing
 
 			return false;
 		}
+
+		//bool
 		if (info == typeid(bool))
 		{
 			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
@@ -174,11 +173,12 @@ namespace ofxImGuiSurfing
 		
 		return false;
 	}
-
+	
 	/*
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter)
+	bool AddParameter(ofParameter<ParameterType>& parameter, SurfingImGuiTypes type = OFX_IM_DEFAULT)
+	//bool AddParameter(ofParameter<ParameterType>& parameter)
 	{
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
@@ -301,7 +301,7 @@ namespace ofxImGuiSurfing
 		return false;
 	}
 	*/
-	
+
 	//--
 
 	//--------------------------------------------------------------

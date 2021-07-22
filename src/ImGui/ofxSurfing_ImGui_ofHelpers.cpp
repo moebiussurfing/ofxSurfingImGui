@@ -13,13 +13,16 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 
-//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	//--------------------------------------------------------------
+	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
 		if (!ImGui::TreeNode(group.getName().c_str()))
 		{
 			return;
 		}
+
+		//-
 
 		for (auto parameter : group)
 		{
@@ -28,7 +31,7 @@ namespace ofxImGuiSurfing
 			if (parameterGroup)
 			{
 				// Recurse through contents.
-				AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None);
+				AddGroupRaw(*parameterGroup, ImGuiTreeNodeFlags_None);
 				continue;
 			}
 
@@ -98,7 +101,6 @@ namespace ofxImGuiSurfing
 
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
-
 
 		{
 			// End tree.

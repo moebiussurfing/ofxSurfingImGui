@@ -101,21 +101,34 @@ public:
 
 	//-
 
-//private:
-public:
+private:
+//public:
 
 	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
 
 	ofParamUniqueName uniqueName;
 
+	//-
+
+public:
+
+	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 	{
 		return widgetsManager.Add(aparam, type, bSameLine, amtPerRow, spacing);
 	}
+
+	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
+	}
+
+	//--------------------------------------------------------------
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	{
+		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
 	//-
@@ -136,6 +149,11 @@ public:
 	}
 	//--------------------------------------------------------------
 	void reset()
+	{
+		widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	}
+	//--------------------------------------------------------------
+	void resetIDs()
 	{
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
@@ -239,8 +257,8 @@ private:
 	float xx = 10;
 	float yy = 10;
 	float ww = PANEL_WIDGETS_WIDTH_MIN;
-	float hh = 20;
-	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
+	float hh = PANEL_WIDGETS_HEIGHT_MIN;
+	//float hh = 50;
 
 	//-
 
