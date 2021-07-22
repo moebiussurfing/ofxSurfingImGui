@@ -235,6 +235,9 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
   <summary>3_0_Layout_TypesEngine</summary>
   <p>
 
+* Fast **ofParameters** widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
+* Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different ImGui::Tree settings, collapsed and nested.  
+
 ![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
@@ -246,9 +249,6 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
-
-* Fast **ofParameters** widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
-* Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different ImGui::Tree settings, collapsed and nested.  
 
 1. Uses **ofxSurfing_ImGui_WidgetsTypes.h**, **ofxSurfing_ImGui_ofHelpers.h** and **ofxSurfing_ImGui_LayoutManager.h**  
 2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
