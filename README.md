@@ -7,39 +7,21 @@ An ImGui helper for openFrameworks with:
 
 ## WORK IN PROGRESS!  
 ```
-SOME FEATURES ARE USABLE BUT NOT FINISHED  
-API WILL CHANGE  
-I AM STILL HAVING SOME PROBLEMS YET  
+ALMOST DONE!
+API WILL CHANGE A BIT  
 ```
-
-<details>
-  <summary>BUGS</summary>
-  <p>
-
-### **BUG 1**: (ofxSurfing_ImGui_Helpers.h)  
-    - When adding many times a ofParameter or others with a not unique name.  
-    - Widgets collide between them. Only some instances work well.  
-    - Usually, the first repeated widget in each panel works fine.  
-    - SOLUTION: Restore old getUniqueName engine from ofxGui. Do not duplicate adding params or names.
-### **BUG 2**: (ofxSurfing_ImGui_WidgetsTypes.h)  
-    - Layout engine fails a bit on nesting indented groups.  
-    - Broken width recalculation and "unlimited" growing when auto-size.  
-    - Workaround fixed using CollapsingHeader instead of TreeNodeEx  
-    but I would prefer the indented nested groups.
-  </p>
-</details>
 
 <details>
   <summary>IMPORTANT OF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
   <p>
 
-- Simplified **OF Helpers** to use **ofParameters** easy and better. 
-    * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_Helpers.h_.
+- Simplified **oF Helpers** to use **ofParameters** easy and better. 
+    * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
     * Widgets, windows/trees now are more customizable. 
     * Removed old windows/tree methods. Now must use **RAW ImGui** code.
     * Removed all the WindowOpen/Settings stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. [?] 
-    * Now using PushId(1)/PopID() on each widget. [?]
+    * Now using PushId()/PopID() on each widget. [?]
   </p>
 </details>
 
@@ -66,7 +48,7 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
   </p>
 </details>
 
-Includes range sliders with ofParams, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
+Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 
 
 <details>
@@ -99,7 +81,7 @@ Includes wait and progression spinners.
   </p>
 </details>
 
-Includes a matrix button clicker selector linked to an int ofParameter (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
+Includes a matrix button clicker selector linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 <BR>
 
@@ -114,7 +96,7 @@ Includes a matrix button clicker selector linked to an int ofParameter (aka pres
 </details>
 
 Uses **ofxSurfing_ImGui_Helpers.h**  
-Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, ImGui::Tree/ImGui::TreeEx...etc.    
+Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.    
 
 
 <details>
@@ -126,7 +108,7 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
 </details>
 
 Uses **ofxSurfing_ImGui_LayoutManager.h**  
-Speed up ofxImGui instantiation, windows and layouts.  
+Speed up **ofxImGui** instantiation, windows and layouts.  
 Includes **ofParameter** helpers and extra widgets.  
 <details>
   <summary>Example Code</summary>
