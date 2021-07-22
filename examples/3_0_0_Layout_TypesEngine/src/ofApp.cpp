@@ -8,8 +8,7 @@ void ofApp::setup() {
 	//-
 
 	// debug custom types
-	bCustom1 = 1; // inmediate customized when populating
-	bCustom2 = 1; // constant. pre configured to customize after (ie: inside a group)
+	bCustom2 = true;
 
 	//-
 
@@ -55,6 +54,7 @@ void ofApp::setup() {
 	params3.add(size3.set("size3", 100, 0, 100));
 	params3.add(amount3.set("amount3", 10, 0, 25));
 	params3.add(bEnable);
+	params3.add(shapeType);
 
 	params2.add(params3);
 	params1.add(params2);
@@ -66,7 +66,7 @@ void ofApp::setup() {
 	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
 	//guiManager.bAutoResize = false;
 
-	//-
+	//--
 
 	// -> not checked on runtime! ONLY ON SETUP
 	if (bCustom2) {
@@ -85,10 +85,12 @@ void ofApp::SetupStyles() {
 	// two widgets same line
 	guiManager.AddStyle(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2);
+
 	// two widgets same line
 	guiManager.AddStyle(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2, 10);
 
+	// one line per widget
 	guiManager.AddStyle(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeC, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
@@ -136,26 +138,8 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawWindow() 
 {
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-	//-
-
 	guiManager.beginWindow();
 	{
-		//ImGui::Text("DEBUG STYLES TYPES");
-
-		////ImGui::Dummy(ImVec2(0, 10)); // spacing
-		////ToggleRoundedButton("bCustom1", &bCustom1);
-		////if (bCustom1) ImGui::TextWrapped("Customized style for some ofParams Widgets");
-		////else ImGui::TextWrapped("Default Style for ofParams Widgets");
-
-		//ImGui::Dummy(ImVec2(0, 5)); // spacing
-		//ImGui::Separator();
-		//ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-		//-
-
 		// readed on setup only, cant be updated on runtime
 		if (ToggleRoundedButton("bCustom2", &bCustom2))
 		{
@@ -169,19 +153,22 @@ void ofApp::drawWindow()
 		if (bCustom2) ImGui::TextWrapped("Customized Style for the Group.");
 		else ImGui::TextWrapped("Default Style for the Group.");
 
-		//-
-
 		//ImGui::Dummy(ImVec2(0, 5)); // spacing
 		ofxImGuiSurfing::AddSpaceY(5); // same than above line
+
+		//-
+
 		ImGui::Separator();
 		ofxImGuiSurfing::AddSpaceY(5);
-
 		ImGui::TextWrapped("Customize Styles for Groups/Trees:");
 		ofxImGuiSurfing::AddSpaceY(5);
 
-		// To debug ImGui flags when rendering groups
+		//-
+
+		// To debug ImGui group flags when rendering groups
 		{
 			// test customize group/window folders and flags
+
 			ofxImGuiSurfing::AddParameter(typeFlags);
 			ImGui::Text(flagInfo.c_str());
 
@@ -203,11 +190,11 @@ void ofApp::drawWindow()
 		//-
 
 		ofxImGuiSurfing::AddSpaceY(10);
-		//AddToggleRoundedButton(bEnable, ImVec2(50, 30));
 
 		//-
 
 		// render group
+		
 		guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 		//guiManager.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 	}

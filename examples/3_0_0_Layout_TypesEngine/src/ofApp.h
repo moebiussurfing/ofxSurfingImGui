@@ -52,7 +52,6 @@ class ofApp : public ofBaseApp{
 		ofxSurfing_ImGui_Manager guiManager;
 
 		// customize groups
-		bool bCustom1;
 		bool bCustom2;
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
