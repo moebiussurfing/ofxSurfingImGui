@@ -2,8 +2,8 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-An ImGui helper for openFrameworks with:  
-**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to OF, some projects just for testing, sequencer, node patching, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
+An ImGui toolkit for openFrameworks with:  
+**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, some projects just for testing, sequencer, node patching, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
 ```
@@ -12,7 +12,7 @@ API WILL CHANGE A BIT
 ```
 
 <details>
-  <summary>IMPORTANT OF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
+  <summary>IMPORTANT oF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
   <p>
 
 - Simplified **oF Helpers** to use **ofParameters** easy and better. 
@@ -20,8 +20,8 @@ API WILL CHANGE A BIT
     * Widgets, windows/trees now are more customizable. 
     * Removed old windows/tree methods. Now must use **RAW ImGui** code.
     * Removed all the WindowOpen/Settings stuff.
-    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. [?] 
-    * Now using PushId()/PopID() on each widget. [?]
+    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
+    * Now using PushId()/PopID() on each widget.
   </p>
 </details>
 
@@ -213,8 +213,8 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 
 ## 3. TYPES ENGINE [WIP]
 
-* Fast **ofParameters** widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
-* Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different ImGui::Tree settings, collapsed and nested.  
+* Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
+* Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
 <details>
   <summary>3_0_Layout_TypesEngine</summary>
@@ -273,15 +273,15 @@ ofApp.cpp
 
 #### AVAILABLE CUSTOMIZATIONS:
     - Hide the parameter widget respecting the void space or not, or make it inactive sibaling mouse interation.  
-    - Set an **ImGui::SameLine(** after the widget, to draw more next params at the same line.  
+    - Set an ImGui::SameLine( after the widget, to draw more next params at the same line.  
     - Add a final vertical spacing after the widget.  
     - Set the widget width to fit the panel width, passing the amount of widgets per row/line.  
 
 #### API
 ```c++
-void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT);
 ```
 
 <BR>
