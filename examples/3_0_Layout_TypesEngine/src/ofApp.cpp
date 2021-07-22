@@ -38,43 +38,43 @@ void ofApp::setup() {
 	bEnable.set("Enable", false);
 	shapeType.set("shapeType", 0, -50, 50);
 
-	params1.add(lineWidth.set("lineWidth", 0.5, 0, 1));
-	params1.add(separation.set("separation", 50, 1, 100));
-	params1.add(speed.set("speed", 0.5, 0, 1));
-	params1.add(size.set("size", 100, 0, 100));
-	params1.add(amount.set("amount", 10, 0, 25));
-	//params1.add(shapeType);
-	//params1.add(bEnable);
+	params1.add(lineWidth1.set("lineWidth1", 0.5, 0, 1));
+	params1.add(separation1.set("separation1", 50, 1, 100));
+	params1.add(speed1.set("speed1", 0.5, 0, 1));
+	params1.add(size1.set("size1", 100, 0, 100));
+	params1.add(amount1.set("amount1", 10, 0, 25));
 
-	params3.add(separation3min.set("separation3min", 25.f, 1, 100));
-	params3.add(separation3max.set("separation3max", 75.f, 1, 100));
-	params3.add(speed3.set("speed3", 0.5, 0, 1));
-	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
-	params3.add(bEnable);
+	params2.add(separation2min.set("separation2min", 25.f, 1, 100));
+	params2.add(separation2max.set("separation2max", 75.f, 1, 100));
+	params2.add(speed2.set("speed2", 0.5, 0, 1));
+	params2.add(lineWidth2.set("lineWidth2", 0.5, 0, 1));
+	params2.add(bEnable);
 
-	params1.add(params3);
+	params1.add(params2);
 
 	//-
 
-	params2.add(bMode1.set("Mode1", false));
-	params2.add(bMode2.set("Mode2", false));
-	params2.add(bMode3.set("Mode3", false));
-	params2.add(bMode4.set("Mode4", false));
-	params2.add(bModeA.set("ModeA", false));
-	params2.add(bModeB.set("ModeB", false));
-	params2.add(bModeC.set("ModeC", false));
-	params2.add(bModeD.set("ModeD", false));
-	params2.add(bPrevious.set("<", false));
-	params2.add(bNext.set(">", false));
-	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
-	params2.add(size2.set("size2", 100, 0, 100));
-	params2.add(amount2.set("amount2", 10, 0, 25));
-	params2.add(bEnable);
+	params3.add(bMode1.set("Mode1", false));
+	params3.add(bMode2.set("Mode2", false));
+	params3.add(bMode3.set("Mode3", false));
+	params3.add(bMode4.set("Mode4", false));
+	params3.add(bModeA.set("ModeA", false));
+	params3.add(bModeB.set("ModeB", false));
+	params3.add(bModeC.set("ModeC", false));
+	params3.add(bModeD.set("ModeD", false));
+	params3.add(bPrevious.set("<", false));
+	params3.add(bNext.set(">", false));
+	params3.add(shapeType3.set("shapeType3", 0, -50, 50));
+	params3.add(size3.set("size3", 100, 0, 100));
+	params3.add(amount3.set("amount3", 10, 0, 25));
+	params3.add(bEnable);
 
 	//--
 
+	//guiManager.setAutoSaveSettings(true); // -> enables stor/recall some settings from previous app session
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
+	//guiManager.bAutoResize = false;
 
 	//-
 
@@ -96,8 +96,6 @@ void ofApp::setup() {
 	else {
 		ClearStyles();
 	}
-
-	guiManager.bAutoResize = false;
 }
 
 //--------------------------------------------------------------
@@ -124,17 +122,17 @@ void ofApp::SetupStyles() {
 	guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, true, 2);
 	guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
 
-	guiManager.AddStyle(shapeType2, SurfingImGuiTypes::OFX_IM_STEPPER);
-	guiManager.AddStyle(size2, SurfingImGuiTypes::OFX_IM_STEPPER);
-	guiManager.AddStyle(amount2, SurfingImGuiTypes::OFX_IM_DRAG, false, 2, 10);
+	guiManager.AddStyle(shapeType3, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(size3, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(amount3, SurfingImGuiTypes::OFX_IM_DRAG, false, 2, 10);
 
 	// more widgets
-	guiManager.AddStyle(lineWidth3, SurfingImGuiTypes::OFX_IM_STEPPER);
-	guiManager.AddStyle(speed3, SurfingImGuiTypes::OFX_IM_DRAG);
+	guiManager.AddStyle(lineWidth2, SurfingImGuiTypes::OFX_IM_STEPPER);
+	guiManager.AddStyle(speed2, SurfingImGuiTypes::OFX_IM_DRAG);
 
 	//enable this to disable mouse interaction for these widgets
-	//guiManager.AddStyle(separation3min, SurfingImGuiTypes::OFX_IM_INACTIVE);
-	//guiManager.AddStyle(separation3max, SurfingImGuiTypes::OFX_IM_INACTIVE, false, 10);
+	//guiManager.AddStyle(separation2min, SurfingImGuiTypes::OFX_IM_INACTIVE);
+	//guiManager.AddStyle(separation2max, SurfingImGuiTypes::OFX_IM_INACTIVE, false, 10);
 }
 
 //--------------------------------------------------------------
@@ -153,6 +151,8 @@ void ofApp::draw()
 	if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags_typeFlags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
 	if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags_typeFlags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
 	if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
+
+	//-
 
 	guiManager.begin();
 	{
@@ -254,6 +254,7 @@ void ofApp::drawWindowMain() {
 				ImGui::Text(flagInfo.c_str());
 
 				ofxImGuiSurfing::AddParameter(typeGroups);
+
 				string groupInfo;
 				if (typeGroups == 0) groupInfo = "OFX_IM_GROUP_DEFAULT";
 				else if (typeGroups == 1) groupInfo = "OFX_IM_GROUP_TREE_EX";
@@ -262,8 +263,8 @@ void ofApp::drawWindowMain() {
 				else if (typeGroups == 4) groupInfo = "OFX_IM_GROUP_SCROLLABLE";
 				else if (typeGroups == 5) groupInfo = "OFX_IM_GROUP_ONLY_FIRST_HEADER";
 				else if (typeGroups == 6) groupInfo = "OFX_IM_GROUP_HIDDE_ALL_HEADERS";
-				ImGui::Text(groupInfo.c_str());
 
+				ImGui::Text(groupInfo.c_str());
 				ImGui::TextWrapped("Custom Group/Tree Styles");
 			}
 
@@ -330,8 +331,10 @@ void ofApp::drawWindow1() {
 			// 2. Parameters inside an ofParameterGroup
 			// queue params configs to populate after when drawing they container group
 			{
+				// A.
 				guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
+				// B.
 				//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 				//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
@@ -355,7 +358,7 @@ void ofApp::drawWindow1() {
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 				// This is the defalut helpers ussage for the official ofxImGui Helpers:
-				//ofxImGuiSurfing::AddParameter(lineWidth); 
+				//ofxImGuiSurfing::AddParameter(lineWidth1); 
 				// (Notice that this will be affected if there's an added conf (AddStyle) for this param)
 
 				// 1.0.1
@@ -369,9 +372,9 @@ void ofApp::drawWindow1() {
 				guiManager.Add(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG);
 
 				// 1.2 A float param
-				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_SLIDER); // force draw
-				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_DRAG);
-				guiManager.Add(lineWidth, SurfingImGuiTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
+				guiManager.Add(lineWidth1, SurfingImGuiTypes::OFX_IM_SLIDER); // force draw
+				guiManager.Add(lineWidth1, SurfingImGuiTypes::OFX_IM_DRAG);
+				guiManager.Add(lineWidth1, SurfingImGuiTypes::OFX_IM_STEPPER, false, 2, 20); // crashes?
 
 				// 1.3 Three small toggle widgets in one row
 				// with 20px vert spacing at end
@@ -394,9 +397,9 @@ void ofApp::drawWindow1() {
 				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeB);
 
-				ofxImGuiSurfing::AddParameter(lineWidth);
-				ofxImGuiSurfing::AddParameter(lineWidth);
-				ofxImGuiSurfing::AddParameter(lineWidth);
+				ofxImGuiSurfing::AddParameter(lineWidth1);
+				ofxImGuiSurfing::AddParameter(lineWidth1);
+				ofxImGuiSurfing::AddParameter(lineWidth1);
 
 				ofxImGuiSurfing::AddParameter(bModeA);
 				ofxImGuiSurfing::AddParameter(bModeB);
@@ -458,7 +461,7 @@ void ofApp::drawWindow2() {
 			//-
 
 			// A. using global flags
-			guiManager.AddGroup(params2, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+			guiManager.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
 			//-
 
@@ -470,7 +473,7 @@ void ofApp::drawWindow2() {
 				flags |= ImGuiTreeNodeFlags_Framed;
 				flags |= ImGuiTreeNodeFlags_DefaultOpen;
 
-				ofxImGuiSurfing::AddGroup(params2, flags);
+				ofxImGuiSurfing::AddGroup(params3, flags);
 			}
 			*/
 
@@ -486,6 +489,7 @@ void ofApp::drawWindow2() {
 				ImGui::Text("MORE WIDGETS");
 				ofxImGuiSurfing::AddSpaceY(5);
 				ofxImGuiSurfing::ToggleRoundedButton("Draw", &bMore);
+				ofxImGuiSurfing::AddSpaceY(5);
 
 				if (bMore) drawMoreWidgets();
 			}
@@ -503,7 +507,7 @@ void ofApp::drawMoreWidgets() {
 
 	ImGui::Text("Range Sliders | ofParameters");
 
-	AddRangeParam("separation3", separation3min, separation3max, "%.2f  %.2f", 1.0f);
+	AddRangeParam("separation3", separation2min, separation2max, "%.2f  %.2f", 1.0f);
 
 	ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
@@ -511,11 +515,11 @@ void ofApp::drawMoreWidgets() {
 
 	// add an ofParameterGroup
 
-	ImGui::Text("An ofParameterGroup | params3");
+	ImGui::Text("An ofParameterGroup | params2");
 
 	//// Rememeber the "old" notation from original ofxGui:
 	//auto mainSettings = ofxImGui::Settings();
-	//ofxImGui::AddGroup(params3, mainSettings);
+	//ofxImGui::AddGroup(params2, mainSettings);
 
 	//-
 
@@ -526,11 +530,11 @@ void ofApp::drawMoreWidgets() {
 	//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 	//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 	//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
-	//guiManager.AddGroup(params3, flags, SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT);
+	//guiManager.AddGroup(params2, flags, SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT);
 
 	// B. Global flags
 	// we will use the gui selectable debugger styles
-	guiManager.AddGroup(params3, typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+	guiManager.AddGroup(params2, typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
 
 	//-
 

@@ -68,7 +68,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		class SurfingImGuiStyle
+		class SurfingImGuiTypes_Style
 		{
 		public:
 			SurfingImGuiTypes type = OFX_IM_DEFAULT;
@@ -80,8 +80,21 @@ namespace ofxImGuiSurfing
 
 		//-
 
+		//--------------------------------------------------------------
+		class SurfingImGuiTypesGroup_Style
+		{
+		public:
+			SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+			std::string name = "-1";
+		};
+
+		//-
+
 		// To queue the styles for each param here
-		vector<SurfingImGuiStyle> widgetsStyles;
+		vector<SurfingImGuiTypes_Style> widgetsStyles;
+
+		// To queue the group styles
+		vector<SurfingImGuiTypesGroup_Style> groupsStyles;
 
 		// to queue all the rendered params to pushId's
 		ofParamUniqueName uniqueName;
@@ -101,7 +114,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		SurfingImGuiStyle getStyle(ofAbstractParameter& aparam) {
+		SurfingImGuiTypes_Style getStyle(ofAbstractParameter& aparam) {
 
 			// https://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
 			//std::list<int> x{ 2, 3, 5, 7, 11, 13, 17, 19 };
@@ -125,11 +138,11 @@ namespace ofxImGuiSurfing
 			// then there's no conf added (AddStyle) for the parameter
 			// we return a kind of error type to be detected
 			// and to be drawn with the default style.
-			SurfingImGuiStyle cError;
+			SurfingImGuiTypes_Style cError;
 			cError.name = "-1";
 			return cError;
 
-			//SurfingImGuiStyle confDefault;
+			//SurfingImGuiTypes_Style confDefault;
 			//confDefault.name = aparam.getName();
 			//confDefault.bSameLine = false;
 			//confDefault.amtPerRow = 1;
@@ -140,13 +153,31 @@ namespace ofxImGuiSurfing
 		//-
 
 		//TODO:
+		//--------------------------------------------------------------
+		SurfingImGuiTypesGroup_Style getStyleGroup(ofParameterGroup& group) {
+			for (auto &c : groupsStyles)
+			{
+				if (c.name == group.getName()) // param was added to the queue
+				{
+					return c;
+				}
+			}
+
+			SurfingImGuiTypesGroup_Style cError;
+			cError.name = "-1";
+			return cError;
+		}
+
+		//--
+
+		//TODO:
 		// add remover element?
 
 		// queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
 		void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
-			SurfingImGuiStyle c;
+			SurfingImGuiTypes_Style c;
 			c.name = aparam.getName();
 			c.type = type;
 			c.bSameLine = bSameLine;
@@ -155,6 +186,19 @@ namespace ofxImGuiSurfing
 
 			widgetsStyles.push_back(c);
 		}
+
+		// queue a customization config for future populate a group
+		//--------------------------------------------------------------
+		void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT)
+		{
+			SurfingImGuiTypesGroup_Style c;
+			c.name = group.getName();
+			c.type = type;
+
+			groupsStyles.push_back(c);
+		}
+
+		//--
 
 		//TODO:
 		// if we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
@@ -210,7 +254,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//void AddStyle(string name, SurfingImGuiTypes type) {
-		//	SurfingImGuiStyle e;
+		//	SurfingImGuiTypes_Style e;
 		//	e.name = name;
 		//	e.type = type;
 		//	widgetsStyles.push_back(e);
@@ -575,14 +619,17 @@ namespace ofxImGuiSurfing
 
 		//TODO:
 	public:
+		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group)
 		{
 			AddGroup(group, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
 		}
+		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			AddGroup(group, ImGuiTreeNodeFlags_None, typeGroup);
 		}
+		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
 			AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
@@ -590,8 +637,11 @@ namespace ofxImGuiSurfing
 
 	public:
 		//private:
+//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
+			ImGui::CollapsingHeader(group.getName().data());
+
 			refreshLayout();
 
 			//--
@@ -602,10 +652,27 @@ namespace ofxImGuiSurfing
 
 				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 
+				//TODO: test
+				//if (parameterGroup)
+				//{
+				//	// Recurse through contents.
+				//	if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
+				//		auto& style = ImGui::GetStyle();
+				//		int h = style.FramePadding.y + style.ItemSpacing.y + 20;
+				//		ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+				//		AddGroup(*parameterGroup, flags, typeGroup);
+				//		ImGui::EndChild();
+				//	}
+				//	continue;
+				//}
+				//if (0)
+
 				if (parameterGroup) // detects nested groups
 				{
+
 					//uniqueName.getTag // TODO: to improve a bit more secured
 					// ->  unique id for repeated params inside many groups
+
 					ImGui::PushID(parameterGroup->getName().c_str());
 
 					{

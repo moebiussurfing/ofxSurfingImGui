@@ -11,22 +11,8 @@
 
 //--
 
-// TODO:
-// should convert all this to a class ?
-//class SurfingImGuiHelpers {
-//public:
-//	SurfingImGuiHelpers() {};
-//	~SurfingImGuiHelpers() {};
-
-//--
-
 namespace ofxImGuiSurfing
 {
-	//--
-
-	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
-	//ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
-	
 	//--
 
 	// ofParams Helpers

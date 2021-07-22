@@ -14,9 +14,12 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 
 	//--------------------------------------------------------------
-	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
+		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!
+		// but these methods should work too.
+
 		if (!ImGui::TreeNode(group.getName().c_str()))
 		{
 			return;
