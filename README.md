@@ -3,34 +3,35 @@ ofxSurfingImGui
 
 ## Overview
 An ImGui toolkit for openFrameworks with:  
-**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, some projects just for testing, sequencer, node patching, and useful Snippets to easy integrate **ImGui** into **openFrameworks** projects.  
+**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, and useful Snippets, some projects WIP / just-for-testing like Sequencer or Node patching... to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
 ```
 ALMOST DONE!
-API WILL CHANGE A BIT  
+API WILL CHANGE A BIT.  
 ```
 
 <details>
-  <summary>IMPORTANT oF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
+  <summary>RELEVANT oF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
   <p>
 
 - Simplified **oF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
     * Widgets, windows/trees now are more customizable. 
-    * Removed old windows/tree methods. Now must use **RAW ImGui** code.
-    * Removed all the WindowOpen/Settings stuff.
+    * Removed old windows/tree methods.
+    * Removed all the _WindowOpen/Settings_ stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
-    * Now using PushId()/PopID() on each widget.
+    * Now using PushId()/PopID() approach on each widget.
+    * NEW: All the Layout/Styles Management.
   </p>
 </details>
 
 <BR>
 
-## Features 
+## FEATURES 
 * Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
     - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets...etc.
+* **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets ...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
@@ -81,7 +82,7 @@ Includes wait and progression spinners.
   </p>
 </details>
 
-Includes a matrix button clicker selector linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
+Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 <BR>
 
