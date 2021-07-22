@@ -215,9 +215,7 @@ void ofApp::draw()
   </p>
 </details>
 
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**  
-"_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._"  
-**WIP** porting to use into my OF projects.  
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
 
 <details>
   <summary>2_4_Layout_ThemeEditor</summary>
@@ -233,14 +231,36 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 
 ## 3. TYPES ENGINE [WIP]
 
-### 3_0_Layout_TypesEngine
-1. Uses **ofxSurfing_ImGui_WidgetsTypes.h** and **ofxSurfing_ImGui_Helpers.h**  
+<details>
+  <summary>2_4_Layout_ThemeEditor</summary>
+  <p>
+
+![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
+  </p>
+</details>
+
+<details>
+  <summary>2_4_Layout_ThemeEditor</summary>
+  <p>
+
+![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
+  </p>
+</details>
+
+Fast **ofParameters** widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
+Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different ImGui::Tree settings, collapsed and nested.  
+
+1. Uses **ofxSurfing_ImGui_WidgetsTypes.h**, **ofxSurfing_ImGui_ofHelpers.h** and **ofxSurfing_ImGui_LayoutManager.h**  
 2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-3. Draw each **ofParameter** types with different styles. (Instead of the ofxImGui behavior, where you can't change the param widget style.)  
-4. Especially useful when ofParameters are into an **ofParameterGroup**.  
-5. Queue settings for an ofParameter to define configurations to be applied when the widget is drawn when drawing a group. 
+3. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
+4. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
+5. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
 6. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
-7. You can customize how ofParameterGroup / ImGui::Tree are presented.
+7. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+
+<details>
+  <summary>USAGE CASES</summary>
+  <p>
 
 **CASE 1**:  
 _Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
@@ -249,7 +269,9 @@ _Draw an **ofParameter<float>** as slider (default), drag number or/and +/- step
 _Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
 
 **CASE 3**:  
-_You added an **ofParameter<bool>** inside an **ofParameterGroup**. You want to customize how it will be drawn (instead of using the default style)._  
+_You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
+  </p>
+</details>
 
 <details>
   <summary>Code</summary>
@@ -257,109 +279,27 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. You want to 
 
 ofApp.h
 ```.cpp
-ofParameterGroup params{ "group" };
-ofParameter<bool> b1{ "b1", false };
-ofParameter<bool> b2{ "b2", false };
-ofParameter<bool> b3{ "b3", false };
-ofParameter<float> f1{ "f1", 0, 0, 1.0f };
-ofParameter<float> f2{ "f2", 0, 0, 1.0f };
-ofParameter<int> i1{ "i1", 0, 0, 10 };
-ofParameter<int> i2{ "i2", 0, 0, 10 };
+
 ```
 
 ofApp.cpp
 ```.cpp
-void ofApp::setup() 
-{
-    // Feed bool, float and int ofParameters into an ofParameterGroup
-    params.add(b1, b2, b3, f1, f2, i1, i2);
 
-    //-
-
-    // Workflow A
-    // Queue config style for each parameter
-
-    // Format: 
-    // void AddWidgetConf(ofAbstractParameter& aparam, 
-    //                    ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, 
-    //                    bool bSameLine = false, 
-    //                    int amtPerRow = 1, 
-    //                    int spacing = -1)
-
-    // One full width widget with 20px vertical spacing at end
-    widgetsManager.AddWidgetConf(b1, SurfingTypes::OFX_IM_TOGGLE_BIG, false, 1, 20);
-    // Two widgets in the same line with 10px of spacing at end
-    widgetsManager.AddWidgetConf(b2, SurfingTypes::OFX_IM_BUTTON_SMALL, true, 2);
-    widgetsManager.AddWidgetConf(b3, SurfingTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
-    // A widget presented with number and +/- controls
-    widgetsManager.AddWidgetConf(f1, SurfingTypes::OFX_IM_STEPPER);
-    // The same parameter but as a slider and 10px spacing at the end
-    widgetsManager.AddWidgetConf(f2, SurfingTypes::OFX_IM_DRAG, false, 1, 10);
-    // A widget as slider with full width size
-    widgetsManager.AddWidgetConf(i1, SurfingTypes::OFX_IM_SLIDER);
-    // An widget as stepper with full width size
-    widgetsManager.AddWidgetConf(i2, SurfingTypes::OFX_IM_STEPPER);
-}
-
-void ofApp::draw()
-{
-    guiManager.begin();
-    {
-        guiManager.beginWindow("Window", NULL, ImGuiWindowFlags_None);
-        {
-            drawWidgets();
-        }
-        guiManager.endWindow();
-    }
-    guiManager.end();
-}
-
-void ofApp::drawWidgets() 
-{
-    // Workflow A
-    // Draw a group of params with previously queued param styles on setup() 
-    // Use flags to customize tree/folder
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-    flags |= ImGuiTreeNodeFlags_Framed; // dark border box on the group name
-    flags |= ImGuiTreeNodeFlags_DefaultOpen; // collapsing: default open or closed if commented
-    ofxSurfing::AddGroup(params, flags);
-
-    //-
-
-    // Workflow B
-    // "Instant" draw each single parameter
-
-    // Format:
-    // bool Add(ofAbstractParameter& aparam, 
-    //          ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, 
-    //          bool bSameLine = false, 
-    //          int amtPerRow = 1, 
-    //          int spacing = -1)
-    
-    // Two widgets same line
-    widgetsManager.Add(b1, SurfingTypes::IM_TOGGLE_SMALL, true, 2);
-    widgetsManager.Add(b2, SurfingTypes::IM_TOGGLE_SMALL, false, 2);
-    // A slider with full width size
-    widgetsManager.Add(i1, SurfingTypes::OFX_IM_SLIDER);
-    // A stepper with half width size and 20px of spacing at end
-    widgetsManager.Add(i1, SurfingTypes::OFX_IM_STEPPER, false, 2, 20);
-}
 ```
   </p>
 </details>
 
-### 3_1_Layout_TypesEngine
-Fast ofParams widgets layout: width, height, items per row, and different styles for same types or even repeated params.  
-
 #### AVAILABLE CUSTOMIZATIONS:
-    - Hide the parameter.  
-    - Set an ImGui::SameLine after the widget.  
+    - Hide the parameter widget respecting the void space or not, or make it inactive sibaling mouse interation.  
+    - Set an **ImGui::SameLine(** after the widget, to draw more next params at the same line.  
     - Add a final vertical spacing after the widget.  
-    - Set the widget width to divide the panel width and fit a defined amount of widgets per row/line.  
+    - Set the widget width to fit the panel width, passing the amount of widgets per row/line.  
+
 #### API
 ```c++
-void AddWidgetConf(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
-bool Add(ofAbstractParameter& aparam, ImWidgetSurfingTYPE type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
+void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 ```
 
 <BR>
