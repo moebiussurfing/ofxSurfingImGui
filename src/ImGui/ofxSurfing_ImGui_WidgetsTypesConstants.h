@@ -41,15 +41,31 @@ namespace ofxImGuiSurfing
 	enum SurfingImGuiTypesGroups
 	{
 		OFX_IM_GROUP_DEFAULT = 0,
+		OFX_IM_GROUP_COLLAPSED,
 		OFX_IM_GROUP_TREE_EX,
 		OFX_IM_GROUP_TREE,
-		OFX_IM_GROUP_COLLAPSED,
 		OFX_IM_GROUP_SCROLLABLE,
-		OFX_IM_GROUP_HIDDEN,
+		OFX_IM_GROUP_HIDDEN_HEADER, // hide hider
+		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
 		OFX_IM_GROUP_ONLY_FIRST_HEADER,
 		OFX_IM_GROUP_HIDDE_ALL_HEADERS,
 
 		OFX_IM_GROUP_NUM_TYPES
 	};
+
+	inline static std::string getSurfingImGuiTypesGroupsName(int i)
+	{
+		string _groupInfo;
+		if (i == 0) _groupInfo = "OFX_IM_GROUP_DEFAULT";
+		else if (i == 1) _groupInfo = "OFX_IM_GROUP_COLLAPSED";
+		else if (i == 2) _groupInfo = "OFX_IM_GROUP_TREE_EX";
+		else if (i == 3) _groupInfo = "OFX_IM_GROUP_TREE";
+		else if (i == 4) _groupInfo = "OFX_IM_GROUP_SCROLLABLE";
+		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
+		else if (i == 6) _groupInfo = "OFX_IM_GROUP_ONLY_FIRST_HEADER";
+		else if (i == 7) _groupInfo = "OFX_IM_GROUP_HIDDE_ALL_HEADERS";
+
+		return _groupInfo;
+	}
 }

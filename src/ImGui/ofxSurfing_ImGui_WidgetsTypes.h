@@ -71,8 +71,8 @@ namespace ofxImGuiSurfing
 		class SurfingImGuiTypes_Style
 		{
 		public:
-			SurfingImGuiTypes type = OFX_IM_DEFAULT;
 			std::string name = "-1";
+			SurfingImGuiTypes type = OFX_IM_DEFAULT;
 			int amtPerRow = 1;
 			bool bSameLine = false;
 			int spacing = -1;
@@ -84,8 +84,9 @@ namespace ofxImGuiSurfing
 		class SurfingImGuiTypesGroup_Style
 		{
 		public:
-			SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 			std::string name = "-1";
+			SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 		};
 
 		//-
@@ -189,11 +190,12 @@ namespace ofxImGuiSurfing
 
 		// queue a customization config for future populate a group
 		//--------------------------------------------------------------
-		void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT)
+		void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
 			SurfingImGuiTypesGroup_Style c;
 			c.name = group.getName();
 			c.type = type;
+			c.flags = flags;
 
 			groupsStyles.push_back(c);
 		}
@@ -646,9 +648,9 @@ namespace ofxImGuiSurfing
 			{
 				ImGui::PushID(group.getName().c_str());
 				bool b = false;
-				
+
 				b = ImGui::CollapsingHeader(group.getName().c_str());
-				
+
 				uniqueName.pushGroup();
 				if (!b) {
 					ImGui::PopID();
@@ -656,7 +658,7 @@ namespace ofxImGuiSurfing
 				}
 				ImGui::PopID();
 			}
-			
+
 			// measure layout sizes
 			refreshLayout();
 
@@ -704,6 +706,7 @@ namespace ofxImGuiSurfing
 							{
 								// overwrite main type
 								typeGroup = SurfingImGuiTypesGroups(c.type);
+								flags = c.flags;
 								bRestore = true;
 							}
 							else
@@ -712,33 +715,36 @@ namespace ofxImGuiSurfing
 
 							//--
 
+							// hidden
 							if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 							{
 								AddGroup(*parameterGroup, flags, typeGroup);
 							}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
 								AddGroup(*parameterGroup, flags, typeGroup);
 							}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
 							{
-								bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
-								if (b) AddGroup(*parameterGroup, flags, typeGroup);
 							}
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
 							{
 								ImGui::Indent();
-								bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
+								bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
 								if (b) AddGroup(*parameterGroup, flags, typeGroup);
 								ImGui::Unindent();
 							}
 
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							{
+								bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
+								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 							{
-								if (ImGui::TreeNode(parameterGroup->getName().data()))
+								if (ImGui::TreeNode(parameterGroup->getName().c_str()))
 								{
 									ImGui::Indent();
 									AddGroup(*parameterGroup, flags, typeGroup);
@@ -750,7 +756,7 @@ namespace ofxImGuiSurfing
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 							{
-								if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
+								if (ImGui::TreeNodeEx(parameterGroup->getName().c_str(), flags))
 								{
 									AddGroup(*parameterGroup, flags, typeGroup);
 
@@ -761,18 +767,28 @@ namespace ofxImGuiSurfing
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 							{
 								auto& style = ImGui::GetStyle();
+								float hratio = 1.0;
 								int hh = 14;
 								int h = style.FramePadding.y + style.ItemSpacing.y + hh;
+								int hhh = parameterGroup->size() * hratio * h;
 
-								ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
+								ImGui::Indent();
+								//ImGui::Text((parameterGroup->getName() + ":").c_str());
+								bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
+								if (b) 
+								{
+									ImGui::BeginChild(parameterGroup->getName().c_str(), ImVec2(0, hhh), false);
 
-								AddGroup(*parameterGroup, flags, typeGroup);
+									AddGroup(*parameterGroup, flags, typeGroup);
 
-								ImGui::EndChild();
+									ImGui::EndChild();
+
+									ImGui::Unindent();
+								}
 							}
 
 							//-
-											
+
 							// restore previous type
 							if (bRestore) typeGroup = typeGroup_PRE;
 

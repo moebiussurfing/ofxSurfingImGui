@@ -60,9 +60,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT)
+	void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.AddGroupStyle(group, type);
+		widgetsManager.AddGroupStyle(group, type, flags);
 	}
 
 	//--------------------------------------------------------------
