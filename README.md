@@ -3,7 +3,7 @@ ofxSurfingImGui
 
 ## Overview
 An ImGui toolkit for openFrameworks.  
-#### Features:    
+#### FEATURES:    
 **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, and useful Snippets, some projects WIP / just-for-testing like Sequencer or Node patching... to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
@@ -234,6 +234,8 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
+
+#### FEATURES
 
 1. Uses **ofxSurfing_ImGui_WidgetsTypes.h**, **ofxSurfing_ImGui_ofHelpers.h** and **ofxSurfing_ImGui_LayoutManager.h**  
 2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
