@@ -640,24 +640,110 @@ namespace ofxImGuiSurfing
 
 	public:
 		//private:
-//--------------------------------------------------------------
+
+			//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			// handle names/pushID's
 			if (uniqueName.getLevel() == 0)
 			{
 				ImGui::PushID(group.getName().c_str());
-				bool b = false;
 
-				b = ImGui::CollapsingHeader(group.getName().c_str());
+				bool bCloseTree = false;
+				bool bOpen = false;
+
+				auto c = getStyleGroup(group);
+				if (c.name != "-1")
+				{
+					typeGroup = SurfingImGuiTypesGroups(c.type);
+					flags = c.flags;
+				}
+
+				//bool bHide = false;
+				bool bHide = (
+					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS ||
+					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
+					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
+
+				if (bHide)
+				{
+					//AddGroup(group, flags, typeGroup); // skip rendering any header, just the content
+				}
+
+				// 1. openings
+				if (!bHide)
+				{
+					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+					{
+						bOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+					{
+						bOpen = ImGui::TreeNode(group.getName().c_str());
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+					{
+						bOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+					{
+						//// A. height variable to amount widgets..
+						////auto& style = ImGui::GetStyle();
+						////float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+						////int h = 14;
+						////int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+						////int hhh = parameterGroup->size() * hratio * hh;
+						//// B. height hardcoded
+						//int hhh = 200;
+
+						//bOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+						//if (bOpen)
+						//{
+						//	ImGui::Indent();
+						//	ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
+						//	//AddGroup(*parameterGroup, flags, typeGroup);
+						//}
+					}
+				}
 
 				uniqueName.pushGroup();
-				if (!b) {
+
+				// 2. closings
+				if (!bOpen)
+				{
 					ImGui::PopID();
 					return;
 				}
+				else
+				{
+					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+					{
+						// do not requires closing/pop
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+					{
+						ImGui::TreePop();
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+					{
+						ImGui::TreePop();
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+					{
+						//ImGui::EndChild();
+						//ImGui::Unindent();
+					}
+				}
+
+				//-
+
 				ImGui::PopID();
+				return;
 			}
+
+			//--
 
 			// measure layout sizes
 			refreshLayout();
@@ -687,30 +773,26 @@ namespace ofxImGuiSurfing
 
 				if (parameterGroup) // detects nested groups
 				{
-					//uniqueName.getTag // TODO: to improve a bit more secured
 					// ->  unique id for repeated params inside many groups
-
 					ImGui::PushID(parameterGroup->getName().c_str());
 
 					{
 						if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 						{
-							AddGroup(*parameterGroup, flags, typeGroup);
+							AddGroup(*parameterGroup, flags, typeGroup); // skip rendering any header, just the content
 						}
 						else
 						{
 							SurfingImGuiTypesGroups typeGroup_PRE = typeGroup;
+							ImGuiTreeNodeFlags flags_PRE = flags;
+
 							bool bRestore = false;
 							auto c = getStyleGroup(*parameterGroup);
 							if (c.name != "-1")
 							{
-								// overwrite main type
-								typeGroup = SurfingImGuiTypesGroups(c.type);
+								typeGroup = SurfingImGuiTypesGroups(c.type); // overwrite main type
 								flags = c.flags;
 								bRestore = true;
-							}
-							else
-							{
 							}
 
 							//--
@@ -766,32 +848,37 @@ namespace ofxImGuiSurfing
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 							{
-								auto& style = ImGui::GetStyle();
-								float hratio = 1.0;
-								int hh = 14;
-								int h = style.FramePadding.y + style.ItemSpacing.y + hh;
-								int hhh = parameterGroup->size() * hratio * h;
+								// A. height variable to amount widgets..
+								//auto& style = ImGui::GetStyle();
+								//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+								//int h = 14;
+								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+								//int hhh = parameterGroup->size() * hratio * hh;
+								// B. height hardcoded
+								int hhh = 200;
 
-								ImGui::Indent();
 								//ImGui::Text((parameterGroup->getName() + ":").c_str());
 								bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
-								if (b) 
+								if (b)
 								{
+									ImGui::Indent();
 									ImGui::BeginChild(parameterGroup->getName().c_str(), ImVec2(0, hhh), false);
 
 									AddGroup(*parameterGroup, flags, typeGroup);
 
 									ImGui::EndChild();
-
 									ImGui::Unindent();
 								}
 							}
 
 							//-
 
+							// TODO: this is not being used...
 							// restore previous type
-							if (bRestore) typeGroup = typeGroup_PRE;
-
+							if (bRestore) {
+								typeGroup = typeGroup_PRE;
+								flags = flags_PRE;
+							}
 						}
 					}
 

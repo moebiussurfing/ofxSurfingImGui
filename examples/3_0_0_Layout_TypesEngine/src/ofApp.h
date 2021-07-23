@@ -18,8 +18,6 @@ public:
 	void drawImGui();
 
 	// groups
-	ofParameterGroup paramsSettings;
-
 	ofParameterGroup params1;
 	ofParameterGroup params3;
 	ofParameterGroup params2;
@@ -54,11 +52,13 @@ public:
 
 	ofxSurfing_ImGui_Manager guiManager;
 
+	//-
+
 	// customize groups
 	bool bCustom;
 
-	//-
-
+	void setupCustomizators();
+	
 	ofParameter<int> typeGroup1;
 	ofParameter<int> typeGroup2;
 	ofParameter<int> typeGroup3;
@@ -67,6 +67,8 @@ public:
 	ofParameter<int> typeFlags2;
 	ofParameter<int> typeFlags3;
 	
+	ofParameterGroup paramsSettings;
+
 	void Changed_Params(ofAbstractParameter &e);
 
 	ImGuiTreeNodeFlags flags_typeFlags1 = ImGuiTreeNodeFlags_None;
@@ -82,22 +84,7 @@ public:
 	// add styles
 	void setupStyles();
 	void clearStyles();
-
-	//std::string getGroupInfo(int i)
-	//{
-	//	string _groupInfo;
-	//	if (i == 0) _groupInfo = "OFX_IM_GROUP_DEFAULT";
-	//	else if (i == 1) _groupInfo = "OFX_IM_GROUP_COLLAPSED";
-	//	else if (i == 2) _groupInfo = "OFX_IM_GROUP_TREE_EX";
-	//	else if (i == 3) _groupInfo = "OFX_IM_GROUP_TREE";
-	//	else if (i == 4) _groupInfo = "OFX_IM_GROUP_SCROLLABLE";
-	//	else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
-	//	else if (i == 6) _groupInfo = "OFX_IM_GROUP_ONLY_FIRST_HEADER";
-	//	else if (i == 7) _groupInfo = "OFX_IM_GROUP_HIDDE_ALL_HEADERS";
-
-	//	return _groupInfo;
-	//}
-
+	
 	//-
 
 	ofxWindowApp windowApp;

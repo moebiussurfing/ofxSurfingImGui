@@ -12,7 +12,7 @@ namespace ofxImGuiSurfing {
 //--------------------------------------------------------------
 inline bool loadGroup(ofParameterGroup &g, string path = "", bool debug = true)
 {
-	if (path == "") path = "settings.json";
+	if (path == "") path = "Settings.json";
 
 	if (debug)
 	{
@@ -42,7 +42,7 @@ inline bool loadGroup(ofParameterGroup &g, string path = "", bool debug = true)
 //--------------------------------------------------------------
 inline bool saveGroup(ofParameterGroup &g, string path = "", bool debug = true)
 {
-	if (path == "") path = "settings.json";
+	if (path == "") path = "Settings.json";
 
 	if (debug) {
 		ofLogNotice(__FUNCTION__) << g.getName() << " to " << path;

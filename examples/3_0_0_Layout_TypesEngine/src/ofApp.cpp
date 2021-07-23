@@ -7,30 +7,6 @@ void ofApp::setup() {
 
 	//-
 
-	// debug custom types and group flags
-	bCustom = true;
-
-	typeFlags1.set("typeFlags1", 1, 0, 4);
-	typeFlags2.set("typeFlags2", 1, 0, 4);
-	typeFlags3.set("typeFlags3", 1, 0, 4);
-
-	int sz = (int)SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES;
-	typeGroup1.set("typeGroup1", 0, 0, sz - 2);
-	typeGroup2.set("typeGroup2", 0, 0, sz - 2);
-	typeGroup3.set("typeGroup3", 0, 0, sz - 2);
-
-	ofAddListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
-
-	paramsSettings.setName("Settings");
-	paramsSettings.add(typeFlags1);
-	paramsSettings.add(typeFlags2);
-	paramsSettings.add(typeFlags3);
-	paramsSettings.add(typeGroup1);
-	paramsSettings.add(typeGroup2);
-	paramsSettings.add(typeGroup3);
-
-	//-
-
 	// prepare parameters
 
 	params1.setName("paramsGroup1");
@@ -73,15 +49,40 @@ void ofApp::setup() {
 
 	//--
 
-	//guiManager.setAutoSaveSettings(true); // -> enables stor/recall some settings from previous app session
+	guiManager.setAutoSaveSettings(true); // -> enables stor/recall some settings from previous app session
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
-	//guiManager.bAutoResize = false;
 
-	//--
+	//-
 
-	// settings
-	ofxImGuiSurfing::loadGroup(paramsSettings);
+	setupCustomizators();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupCustomizators() {
+
+	// debug custom types and group flags
+	bCustom = true;
+
+	typeFlags1.set("typeFlags1", 1, 0, 4);
+	typeFlags2.set("typeFlags2", 1, 0, 4);
+	typeFlags3.set("typeFlags3", 1, 0, 4);
+
+	int sz = (int)SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES;
+	typeGroup1.set("typeGroup1", 0, 0, sz - 2);
+	typeGroup2.set("typeGroup2", 0, 0, sz - 2);
+	typeGroup3.set("typeGroup3", 0, 0, sz - 2);
+
+	ofAddListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
+
+	paramsSettings.setName("Settings");
+	paramsSettings.add(typeFlags1);
+	paramsSettings.add(typeFlags2);
+	paramsSettings.add(typeFlags3);
+	paramsSettings.add(typeGroup1);
+	paramsSettings.add(typeGroup2);
+	paramsSettings.add(typeGroup3);
+	paramsSettings.add(guiManager.bAutoResize);
 
 	//--
 
@@ -127,12 +128,6 @@ void ofApp::setupStyles() {
 
 	//--
 
-	//// customize groups
-	//guiManager.AddGroupStyle(params3, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE);
-	//guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX);
-	////guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER);
-	////guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE);
-
 	// customize groups
 	guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups(typeGroup1.get()), flags_typeFlags1);
 	guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups(typeGroup2.get()), flags_typeFlags2);
@@ -145,7 +140,7 @@ void ofApp::clearStyles() {
 }
 
 //--------------------------------------------------------------
-void ofApp::refreshFlag(int indexType, ImGuiTreeNodeFlags &flag, std::string &flagInfo) {
+void ofApp::refreshFlag(int indexFlagType, ImGuiTreeNodeFlags &flag, std::string &flagInfo) {
 
 	std::string s0 = "ImGuiTreeNodeFlags_None";
 	std::string s1 = "ImGuiTreeNodeFlags_DefaultOpen";
@@ -154,19 +149,28 @@ void ofApp::refreshFlag(int indexType, ImGuiTreeNodeFlags &flag, std::string &fl
 	std::string s4 = "ImGuiTreeNodeFlags_NoTreePushOnOpen";
 	
 	ImGuiTreeNodeFlags fg = ImGuiTreeNodeFlags_None;
-	if (indexType == 0) { flagInfo = s0; }
-	else if (indexType == 1) { flagInfo = s1; fg |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
-	else if (indexType == 2) { flagInfo = s2; fg |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
-	else if (indexType == 3) { flagInfo = s3; fg |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
-	else if (indexType == 4) { flagInfo = s4; fg |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
+	if (indexFlagType == 0) { flagInfo = s0; }
+	else if (indexFlagType == 1) { flagInfo = s1; fg |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
+	else if (indexFlagType == 2) { flagInfo = s2; fg |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
+	else if (indexFlagType == 3) { flagInfo = s3; fg |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
+	else if (indexFlagType == 4) { flagInfo = s4; fg |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
 	else flagInfo = s0;
 
-	ofLogNotice(__FUNCTION__) << indexType << "," << flag << "," << flagInfo;
+	flag = fg;
+
+	ofLogNotice(__FUNCTION__) << indexFlagType << ", " << flag << ", " << flagInfo;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	if (ofGetFrameNum() == 120) {
+		// settings
+		ofxImGuiSurfing::loadGroup(paramsSettings);
+	}
+
+	//--
+
 	guiManager.begin();
 	{
 		drawImGui();
@@ -209,9 +213,11 @@ void ofApp::drawImGui()
 			{
 				if (bReset) {
 					bReset = false;
+
 					typeGroup1 = 0;
 					typeGroup2 = 0;
 					typeGroup3 = 0;
+
 					typeFlags1 = 1;
 					typeFlags2 = 1;
 					typeFlags3 = 1;
@@ -225,28 +231,25 @@ void ofApp::drawImGui()
 			{
 				ofxImGuiSurfing::AddSpaceY(5);
 
-				// group types and flags
+				// set group types and flags
 
 				ofxImGuiSurfing::AddParameter(typeGroup1);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup1).c_str());
-				//ImGui::Text(getGroupInfo(typeGroup1).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags1);
 				ImGui::Text(flagInfo1.c_str());
-				ofxImGuiSurfing::AddSpaceY();
+				ofxImGuiSurfing::AddSpaceY(5);
 
 				ofxImGuiSurfing::AddParameter(typeGroup2);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup2).c_str());
-				//ImGui::Text(getGroupInfo(typeGroup2).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags2);
 				ImGui::Text(flagInfo2.c_str());
-				ofxImGuiSurfing::AddSpaceY();
+				ofxImGuiSurfing::AddSpaceY(5);
 
 				ofxImGuiSurfing::AddParameter(typeGroup3);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup3).c_str());
-				//ImGui::Text(getGroupInfo(typeGroup3).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags3);
 				ImGui::Text(flagInfo3.c_str());
-				ofxImGuiSurfing::AddSpaceY();
+				ofxImGuiSurfing::AddSpaceY(5);
 			}
 		}
 	}
@@ -257,31 +260,25 @@ void ofApp::drawImGui()
 	guiManager.beginWindow("ofParameterGroup", NULL, flags);
 	{
 		ofxImGuiSurfing::AddSpaceY(10);
-		ImGui::TextWrapped("ofParameterGroup render:");
+		ImGui::TextWrapped("ofParameterGroup render ->");
+		ofxImGuiSurfing::AddSpaceY(10);
+		ImGui::Separator();
 		ofxImGuiSurfing::AddSpaceY(10);
 
 		//-
 
 		// Render group
 
-		// A. direct
+		// A. direct styled
 		//guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup1.get()));
 		////guiManager.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup2.get()));
 
-		// B. styled
+		// B. styled previously on setup
 		guiManager.AddGroup(params1);
 		//guiManager.AddGroup(params2);
 		//guiManager.AddGroup(params3);
 	}
 	guiManager.endWindow();
-}
-
-//--------------------------------------------------------------
-void ofApp::exit() {
-
-	ofRemoveListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
-
-	ofxImGuiSurfing::saveGroup(paramsSettings);
 }
 
 // callback for a parameter group  
@@ -291,11 +288,20 @@ void ofApp::Changed_Params(ofAbstractParameter &e)
 	string name = e.getName();
 	ofLogNotice(__FUNCTION__) << name << " : " << e;
 
-	// group type
-	if (name == typeGroup1.getName() ||
-		name == typeGroup2.getName() ||
-		name == typeGroup3.getName())
+	// group style type
+	if (name == typeGroup1.getName())
 	{
+		refreshFlag(typeFlags1, flags_typeFlags1, flagInfo1);
+		setupStyles();
+	}
+	if (name == typeGroup2.getName())
+	{
+		refreshFlag(typeFlags2, flags_typeFlags2, flagInfo2);
+		setupStyles();
+	}
+	if (name == typeGroup3.getName())
+	{
+		refreshFlag(typeFlags3, flags_typeFlags3, flagInfo3);
 		setupStyles();
 	}
 
@@ -312,7 +318,15 @@ void ofApp::Changed_Params(ofAbstractParameter &e)
 	}
 	if (name == typeFlags3.getName())
 	{
-		refreshFlag(typeFlags2, flags_typeFlags3, flagInfo3);
+		refreshFlag(typeFlags3, flags_typeFlags3, flagInfo3);
 		setupStyles();
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+
+	ofRemoveListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
+
+	ofxImGuiSurfing::saveGroup(paramsSettings);
 }
