@@ -2,13 +2,15 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-An ImGui toolkit for openFrameworks with:  
+An ImGui toolkit for openFrameworks.  
+#### Features:    
 **ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, and useful Snippets, some projects WIP / just-for-testing like Sequencer or Node patching... to easy integrate **ImGui** into **openFrameworks** projects.  
 
 ## WORK IN PROGRESS!  
 ```
 ALMOST DONE!
 API WILL CHANGE A BIT.  
+I AM GETTING SOME EXCEPTIONS ON SECTION 3. TYPES ENGINE  
 ```
 
 <details>
@@ -18,7 +20,7 @@ API WILL CHANGE A BIT.
 - Simplified **oF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
     * Widgets, windows/trees now are more customizable. 
-    * Removed old windows/tree methods.
+    * Removed all old windows/tree methods.
     * Removed all the _WindowOpen/Settings_ stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using PushId()/PopID() approach on each widget.

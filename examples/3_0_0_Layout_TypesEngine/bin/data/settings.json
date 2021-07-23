@@ -1,11 +1,11 @@
 {
     "Settings": {
         "Auto_Resize": "1",
-        "typeFlags1": "4",
-        "typeFlags2": "4",
-        "typeFlags3": "4",
-        "typeGroup1": "7",
-        "typeGroup2": "0",
-        "typeGroup3": "7"
+        "typeFlags1": "1",
+        "typeFlags2": "1",
+        "typeFlags3": "1",
+        "typeGroup1": "2",
+        "typeGroup2": "5",
+        "typeGroup3": "5"
     }
 }

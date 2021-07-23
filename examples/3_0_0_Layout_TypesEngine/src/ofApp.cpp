@@ -56,6 +56,10 @@ void ofApp::setup() {
 	//-
 
 	setupCustomizators();
+
+	resetStyles(); // -> workaround: loading settings not working..
+
+	ofxImGuiSurfing::loadGroup(paramsSettings, "Settings.json");
 }
 
 //--------------------------------------------------------------
@@ -73,8 +77,6 @@ void ofApp::setupCustomizators() {
 	typeGroup2.set("typeGroup2", 0, 0, sz - 2);
 	typeGroup3.set("typeGroup3", 0, 0, sz - 2);
 
-	ofAddListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
-
 	paramsSettings.setName("Settings");
 	paramsSettings.add(typeFlags1);
 	paramsSettings.add(typeFlags2);
@@ -83,6 +85,8 @@ void ofApp::setupCustomizators() {
 	paramsSettings.add(typeGroup2);
 	paramsSettings.add(typeGroup3);
 	paramsSettings.add(guiManager.bAutoResize);
+
+	ofAddListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
 
 	//--
 
@@ -140,6 +144,17 @@ void ofApp::clearStyles() {
 }
 
 //--------------------------------------------------------------
+void ofApp::resetStyles() {
+	typeGroup1 = 0;
+	typeGroup2 = 0;
+	typeGroup3 = 0;
+
+	typeFlags1 = 1;
+	typeFlags2 = 1;
+	typeFlags3 = 1;
+}
+
+//--------------------------------------------------------------
 void ofApp::refreshFlag(int indexFlagType, ImGuiTreeNodeFlags &flag, std::string &flagInfo) {
 
 	std::string s0 = "ImGuiTreeNodeFlags_None";
@@ -147,7 +162,7 @@ void ofApp::refreshFlag(int indexFlagType, ImGuiTreeNodeFlags &flag, std::string
 	std::string s2 = "ImGuiTreeNodeFlags_Framed";
 	std::string s3 = "ImGuiTreeNodeFlags_Bullet";
 	std::string s4 = "ImGuiTreeNodeFlags_NoTreePushOnOpen";
-	
+
 	ImGuiTreeNodeFlags fg = ImGuiTreeNodeFlags_None;
 	if (indexFlagType == 0) { flagInfo = s0; }
 	else if (indexFlagType == 1) { flagInfo = s1; fg |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
@@ -164,13 +179,6 @@ void ofApp::refreshFlag(int indexFlagType, ImGuiTreeNodeFlags &flag, std::string
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	if (ofGetFrameNum() == 120) {
-		// settings
-		ofxImGuiSurfing::loadGroup(paramsSettings);
-	}
-
-	//--
-
 	guiManager.begin();
 	{
 		drawImGui();
@@ -214,42 +222,56 @@ void ofApp::drawImGui()
 				if (bReset) {
 					bReset = false;
 
-					typeGroup1 = 0;
-					typeGroup2 = 0;
-					typeGroup3 = 0;
-
-					typeFlags1 = 1;
-					typeFlags2 = 1;
-					typeFlags3 = 1;
+					resetStyles();
 				}
 			}
+
+			//-
+
+			static bool bLoadSettings = false;
+			if (ToggleRoundedButton("bLoadSettings", &bLoadSettings))
+			{
+				if (bLoadSettings) {
+					bLoadSettings = false;
+
+					ofxImGuiSurfing::loadGroup(paramsSettings, "Settings.json");
+					//setupStyles();
+				}
+			}
+
 
 			//-
 
 			// To debug ImGui group flags when rendering groups
 			// test customize group/window folders and flags
 			{
-				ofxImGuiSurfing::AddSpaceY(5);
+				ofxImGuiSurfing::AddSpaceY(10);
 
 				// set group types and flags
 
+				ImGui::Separator();
+				ImGui::Text(params1.getName().c_str());
 				ofxImGuiSurfing::AddParameter(typeGroup1);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup1).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags1);
 				ImGui::Text(flagInfo1.c_str());
-				ofxImGuiSurfing::AddSpaceY(5);
+				ofxImGuiSurfing::AddSpaceY(10);
 
+				ImGui::Separator();
+				ImGui::Text(params2.getName().c_str());
 				ofxImGuiSurfing::AddParameter(typeGroup2);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup2).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags2);
 				ImGui::Text(flagInfo2.c_str());
-				ofxImGuiSurfing::AddSpaceY(5);
+				ofxImGuiSurfing::AddSpaceY(10);
 
+				ImGui::Separator();
+				ImGui::Text(params3.getName().c_str());
 				ofxImGuiSurfing::AddParameter(typeGroup3);
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup3).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags3);
 				ImGui::Text(flagInfo3.c_str());
-				ofxImGuiSurfing::AddSpaceY(5);
+				ofxImGuiSurfing::AddSpaceY(10);
 			}
 		}
 	}
@@ -257,9 +279,22 @@ void ofApp::drawImGui()
 
 	//-
 
+	drawImGuiGroup();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiGroup()
+{
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	guiManager.beginWindow("ofParameterGroup", NULL, flags);
 	{
 		ofxImGuiSurfing::AddSpaceY(10);
+		ImGui::TextWrapped("NOTE\nNotice that some combinations of flags/styles can't be combined.\nOr some flags also should be queued and here only one type at the same time is used..");
+		//TODO:
+		// some headers still not working
+		ofxImGuiSurfing::AddSpaceY();
 		ImGui::TextWrapped("ofParameterGroup render ->");
 		ofxImGuiSurfing::AddSpaceY(10);
 		ImGui::Separator();
@@ -328,5 +363,5 @@ void ofApp::exit() {
 
 	ofRemoveListener(paramsSettings.parameterChangedE(), this, &ofApp::Changed_Params);
 
-	ofxImGuiSurfing::saveGroup(paramsSettings);
+	ofxImGuiSurfing::saveGroup(paramsSettings, "Settings.json");
 }

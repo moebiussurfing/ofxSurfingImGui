@@ -644,13 +644,17 @@ namespace ofxImGuiSurfing
 			//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
+			bool bOpen = false;
+
 			// handle names/pushID's
+			// this is the root/first group
+
 			if (uniqueName.getLevel() == 0)
 			{
-				ImGui::PushID(group.getName().c_str());
+				ImGui::PushID(("##0_" + group.getName()).c_str());
+				//ImGui::PushID(group.getName().c_str());
 
 				bool bCloseTree = false;
-				bool bOpen = false;
 
 				auto c = getStyleGroup(group);
 				if (c.name != "-1")
@@ -661,13 +665,13 @@ namespace ofxImGuiSurfing
 
 				//bool bHide = false;
 				bool bHide = (
-					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS ||
 					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
 					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
 
 				if (bHide)
 				{
 					//AddGroup(group, flags, typeGroup); // skip rendering any header, just the content
+					bOpen = true; // to avoid below skip. kind of open. just hidding header
 				}
 
 				// 1. openings
@@ -688,59 +692,37 @@ namespace ofxImGuiSurfing
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 					{
-						//// A. height variable to amount widgets..
-						////auto& style = ImGui::GetStyle();
-						////float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
-						////int h = 14;
-						////int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-						////int hhh = parameterGroup->size() * hratio * hh;
-						//// B. height hardcoded
-						//int hhh = 200;
+						// A. height variable to amount widgets..
+						//auto& style = ImGui::GetStyle();
+						//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+						//int h = 14;
+						//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+						//int hhh = parameterGroup->size() * hratio * hh;
+						// B. height hardcoded
+						int hhh = 200;
 
-						//bOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-						//if (bOpen)
-						//{
-						//	ImGui::Indent();
-						//	ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
-						//	//AddGroup(*parameterGroup, flags, typeGroup);
-						//}
+						bOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+						if (bOpen)
+						{
+							ImGui::Indent();
+							ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
+							//AddGroup(*parameterGroup, flags, typeGroup);
+						}
 					}
 				}
 
-				uniqueName.pushGroup();
+				uniqueName.pushGroup(); //TODO: should be in another place
 
-				// 2. closings
+				// 2. skip
 				if (!bOpen)
 				{
 					ImGui::PopID();
 					return;
 				}
-				else
-				{
-					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
-						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-					{
-						// do not requires closing/pop
-					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
-					{
-						ImGui::TreePop();
-					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
-					{
-						ImGui::TreePop();
-					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
-					{
-						//ImGui::EndChild();
-						//ImGui::Unindent();
-					}
-				}
 
 				//-
 
-				ImGui::PopID();
-				return;
+				//ImGui::PopID();
 			}
 
 			//--
@@ -750,26 +732,13 @@ namespace ofxImGuiSurfing
 
 			//--
 
+			// this is not the root/first group
+
 			for (auto parameter : group)
 			{
 				// group
 
 				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-
-				//TODO: test
-				//if (parameterGroup)
-				//{
-				//	// Recurse through contents.
-				//	if (ImGui::CollapsingHeader(parameterGroup->getName().data())) {
-				//		auto& style = ImGui::GetStyle();
-				//		int h = style.FramePadding.y + style.ItemSpacing.y + 20;
-				//		ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-				//		AddGroup(*parameterGroup, flags, typeGroup);
-				//		ImGui::EndChild();
-				//	}
-				//	continue;
-				//}
-				//if (0)
 
 				if (parameterGroup) // detects nested groups
 				{
@@ -777,11 +746,11 @@ namespace ofxImGuiSurfing
 					ImGui::PushID(parameterGroup->getName().c_str());
 
 					{
-						if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
-						{
-							AddGroup(*parameterGroup, flags, typeGroup); // skip rendering any header, just the content
-						}
-						else
+						//if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
+						//{
+						//	AddGroup(*parameterGroup, flags, typeGroup); // skip rendering any header, just the content
+						//}
+						//else
 						{
 							SurfingImGuiTypesGroups typeGroup_PRE = typeGroup;
 							ImGuiTreeNodeFlags flags_PRE = flags;
@@ -798,10 +767,13 @@ namespace ofxImGuiSurfing
 							//--
 
 							// hidden
-							if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
-							{
-								AddGroup(*parameterGroup, flags, typeGroup);
-							}
+
+							if (false) {}
+
+							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+							//{
+							//	AddGroup(*parameterGroup, flags, typeGroup);
+							//}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
 								AddGroup(*parameterGroup, flags, typeGroup);
@@ -809,6 +781,14 @@ namespace ofxImGuiSurfing
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
 							{
 							}
+
+							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
+							//{
+							//	ImGui::Indent();
+							//	bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
+							//	if (b) AddGroup(*parameterGroup, flags, typeGroup);
+							//	ImGui::Unindent();
+							//}
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
 							{
@@ -891,137 +871,170 @@ namespace ofxImGuiSurfing
 
 				//----
 
-				// Uses "ofxSurfing_ImGui_ofHelpers.h"
 
 				// Parameter, try everything we know how to handle.
-
-				//TODO:
-				// no styles yet for unknow types!
+				{
+					// Uses "ofxSurfing_ImGui_ofHelpers.h"
+					//TODO:
+					// no styles yet for unknow types!
 
 #if OF_VERSION_MINOR >= 10
-				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-				if (parameterVec2f)
-				{
-					AddParameter(*parameterVec2f);
-					continue;
-				}
-				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-				if (parameterVec3f)
-				{
-					AddParameter(*parameterVec3f);
-					continue;
-				}
-				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-				if (parameterVec4f)
-				{
-					AddParameter(*parameterVec4f);
-					continue;
-				}
+					auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+					if (parameterVec2f)
+					{
+						AddParameter(*parameterVec2f);
+						continue;
+					}
+					auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+					if (parameterVec3f)
+					{
+						AddParameter(*parameterVec3f);
+						continue;
+					}
+					auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+					if (parameterVec4f)
+					{
+						AddParameter(*parameterVec4f);
+						continue;
+					}
 #endif
-				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-				if (parameterOfVec2f)
-				{
-					AddParameter(*parameterOfVec2f);
-					continue;
+					auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+					if (parameterOfVec2f)
+					{
+						AddParameter(*parameterOfVec2f);
+						continue;
+					}
+					auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+					if (parameterOfVec3f)
+					{
+						AddParameter(*parameterOfVec3f);
+						continue;
+					}
+					auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+					if (parameterOfVec4f)
+					{
+						AddParameter(*parameterOfVec4f);
+						continue;
+					}
+					auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+					if (parameterFloatColor)
+					{
+						AddParameter(*parameterFloatColor);
+						continue;
+					}
+					auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+					if (parameterColor)
+					{
+						AddParameter(*parameterColor);
+						continue;
+					}
+
+					//-
+
+					// known styles for know types
+
+					// float
+					auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+					if (parameterFloat)
+					{
+						auto c = getStyle(*parameterFloat);
+						// if the parameter widget is not added explicitly, will populate it as the default appearance
+						if (c.name != "-1")
+						{
+							Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						// default style
+						else
+						{
+							AddParameter(*parameterFloat);
+						}
+						continue;
+					}
+
+					// int
+					auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+					if (parameterInt)
+					{
+						auto c = getStyle(*parameterInt);
+						if (c.name != "-1")
+						{
+							Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						else
+						{
+							AddParameter(*parameterInt);
+						}
+						continue;
+					}
+
+					// bool
+					auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+					if (parameterBool)
+					{
+						auto c = getStyle(*parameterBool);
+						if (c.name != "-1")
+						{
+							Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						else
+						{
+							AddParameter(*parameterBool);
+						}
+						continue;
+					}
+
+					// string
+					auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+					if (parameterString)
+					{
+						auto c = getStyle(*parameterString);
+						if (c.name != "-1")
+						{
+							Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						else
+						{
+							AddParameter(*parameterString);
+						}
+						continue;
+					}
+
+					//--
+
+					ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 				}
-				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-				if (parameterOfVec3f)
+			}
+
+			// 3. closings
+			// handle names/pushID's
+			if (uniqueName.getLevel() == 0)
+			{
+				if (bOpen)
 				{
-					AddParameter(*parameterOfVec3f);
-					continue;
-				}
-				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-				if (parameterOfVec4f)
-				{
-					AddParameter(*parameterOfVec4f);
-					continue;
-				}
-				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-				if (parameterFloatColor)
-				{
-					AddParameter(*parameterFloatColor);
-					continue;
-				}
-				auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-				if (parameterColor)
-				{
-					AddParameter(*parameterColor);
-					continue;
+					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+					{
+						// do not requires closing/pop
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+					{
+						ImGui::TreePop();
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+					{
+						ImGui::TreePop();
+					}
+					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+					{
+						ImGui::EndChild();
+						ImGui::Unindent();
+					}
 				}
 
 				//-
 
-				// known styles for know types
-
-				// float
-				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-				if (parameterFloat)
-				{
-					auto c = getStyle(*parameterFloat);
-					// if the parameter widget is not added explicitly, will populate it as the default appearance
-					if (c.name != "-1")
-					{
-						Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-					}
-					// default style
-					else
-					{
-						AddParameter(*parameterFloat);
-					}
-					continue;
-				}
-
-				// int
-				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-				if (parameterInt)
-				{
-					auto c = getStyle(*parameterInt);
-					if (c.name != "-1")
-					{
-						Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-					}
-					else
-					{
-						AddParameter(*parameterInt);
-					}
-					continue;
-				}
-
-				// bool
-				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-				if (parameterBool)
-				{
-					auto c = getStyle(*parameterBool);
-					if (c.name != "-1")
-					{
-						Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-					}
-					else
-					{
-						AddParameter(*parameterBool);
-					}
-					continue;
-				}
-
-				// string
-				auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-				if (parameterString)
-				{
-					auto c = getStyle(*parameterString);
-					if (c.name != "-1")
-					{
-						Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-					}
-					else
-					{
-						AddParameter(*parameterString);
-					}
-					continue;
-				}
-
-				//--
-
-				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+				ImGui::PopID();
+				//}
 			}
 		}
 

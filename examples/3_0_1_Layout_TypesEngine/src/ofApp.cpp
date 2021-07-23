@@ -8,14 +8,14 @@ void ofApp::setup() {
 	//-
 
 	// debug custom types
-	bCustom1 = 1; // inmediate customized when populating
-	bCustom2 = 1; // constant. pre configured to customize after (ie: inside a group)
+	bCustom1 = 0; // inmediate customized when populating
+	bCustom2 = 0; // constant. pre configured to customize after (ie: inside a group)
 
 	//-
 
 	// debug ImGui flags
 	{
-		int sz = (int)SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
+		int sz = (int)SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 2;
 		typeFlags.set("typeFlags", 1, 0, 4);
 		typeGroups.set("typeGroups", 0, 0, sz);
 	}
@@ -147,10 +147,11 @@ void ofApp::draw()
 	// Notice that will be applied to all the nested groups inside this parent/root ofParameterGroup
 	flags_typeFlags = ImGuiTreeNodeFlags_None;
 	if (typeFlags == 0) { flagInfo = "ImGuiTreeNodeFlags_None"; }
-	if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
-	if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags_typeFlags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
-	if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags_typeFlags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
-	if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
+	else if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
+	else if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags_typeFlags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
+	else if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags_typeFlags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
+	else if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
+	else { flagInfo = "UNKNOWN"; }
 
 	//-
 
@@ -158,7 +159,7 @@ void ofApp::draw()
 	{
 		if (bOpenMain) drawWindowMain();
 		if (bOpen1) drawWindow1();
-		if (bOpen2) drawWindow2();
+		//if (bOpen2) drawWindow2();
 	}
 	guiManager.end();
 }
@@ -173,13 +174,19 @@ void ofApp::drawWindowMain() {
 
 		// reset window
 		{
-			if (bReset1)
+			if (bReset0)
 			{
-				bReset1 = false;
-				bReset2 = true;
+				bReset0 = false;
+
+				guiManager.bAutoResize = false; // avoid bug
+
 				ImGuiCond flag = ImGuiCond_Always;
-				ImGui::SetNextWindowPos(ImVec2(10, 10));
+				pos0.x = 10;
+				pos0.y = 10;
+				ImGui::SetNextWindowPos(ImVec2(pos0.x, pos0.y));
 				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
+
+				bReset1 = true;
 			}
 		}
 
@@ -189,7 +196,7 @@ void ofApp::drawWindowMain() {
 		{
 			if (ImGui::Button("Reset Layout", ofxImGuiSurfing::getWidgetsShapeSmall()))
 			{
-				bReset1 = true;
+				bReset0 = true;
 			}
 
 			ImGui::Dummy(ImVec2(0, 5));
@@ -256,28 +263,23 @@ void ofApp::drawWindowMain() {
 				ofxImGuiSurfing::AddParameter(typeGroups);
 
 				string groupInfo;
-				if (typeGroups == 0) groupInfo = "OFX_IM_GROUP_DEFAULT";
-				else if (typeGroups == 1) groupInfo = "OFX_IM_GROUP_TREE_EX";
-				else if (typeGroups == 2) groupInfo = "OFX_IM_GROUP_TREE";
-				else if (typeGroups == 3) groupInfo = "OFX_IM_GROUP_COLLAPSED";
-				else if (typeGroups == 4) groupInfo = "OFX_IM_GROUP_SCROLLABLE";
-				else if (typeGroups == 5) groupInfo = "OFX_IM_GROUP_ONLY_FIRST_HEADER";
-				else if (typeGroups == 6) groupInfo = "OFX_IM_GROUP_HIDDE_ALL_HEADERS";
 
+				groupInfo = ofxImGuiSurfing::getSurfingImGuiTypesGroupsName(typeGroups.get());
 				ImGui::Text(groupInfo.c_str());
-				ImGui::TextWrapped("Custom Group/Tree Styles");
+				//ImGui::TextWrapped("Custom Group/Tree Styles");
 			}
 
 			//-
 
 			// get position
+			if (bReset1)
 			{
 				auto posx = ImGui::GetWindowPos().x;
 				auto posy = ImGui::GetWindowPos().y;
 				float __w = ImGui::GetWindowWidth();
 				float __h = ImGui::GetWindowHeight();
-				pos0.x = posx + __w + PADDING_PANELS;
-				pos0.y = posy;
+				pos1.x = posx + __w + PADDING_PANELS;
+				pos1.y = posy;
 			}
 
 			//-
@@ -305,13 +307,14 @@ void ofApp::drawWindow1() {
 
 		// reset window
 		{
-			if (bReset2)
+			if (bReset1)
 			{
-				bReset2 = false;
-				bReset3 = true;
+				bReset1 = false;
 				ImGuiCond flag = ImGuiCond_Always;
-				ImGui::SetNextWindowPos(ImVec2(pos0.x, pos0.y), flag);
+				ImGui::SetNextWindowPos(ImVec2(pos1.x, pos1.y), flag);
 				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
+
+				bReset2 = true;
 			}
 		}
 
@@ -339,11 +342,12 @@ void ofApp::drawWindow1() {
 				//flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
 				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 				//ofxImGuiSurfing::AddGroup(params1, flags);
+
+				//ImGui::Dummy(ImVec2(0, 10)); // spacing
 			}
 
 			//-
 
-			ImGui::Dummy(ImVec2(0, 10)); // spacing
 
 			// 1. Single parameters (out of a paramGroup)
 			// instant populate customized widgets
@@ -351,7 +355,7 @@ void ofApp::drawWindow1() {
 			// A
 			if (bCustom1)
 			{
-				guiManager.refresh();
+				//guiManager.refresh();
 
 				ImGui::Text("* bCustom1 = true");
 				ImGui::Text("customized");
@@ -410,13 +414,14 @@ void ofApp::drawWindow1() {
 			//-
 
 			// get position
+			if (bReset2)
 			{
 				auto posx = ImGui::GetWindowPos().x;
 				auto posy = ImGui::GetWindowPos().y;
 				float __w = ImGui::GetWindowWidth();
 				float __h = ImGui::GetWindowHeight();
-				pos1.x = posx + __w + PADDING_PANELS;
-				pos1.y = posy;
+				pos2.x = posx + __w + PADDING_PANELS;
+				pos2.y = posy;
 			}
 		}
 		guiManager.endWindow();
@@ -433,11 +438,11 @@ void ofApp::drawWindow2() {
 
 		// reset window
 		{
-			if (bReset3)
+			if (bReset2)
 			{
-				bReset3 = false;
+				bReset2 = false;
 				ImGuiCond flag = ImGuiCond_Always;
-				ImGui::SetNextWindowPos(ImVec2(pos1.x, pos1.y), flag);
+				ImGui::SetNextWindowPos(ImVec2(pos2.x, pos2.y), flag);
 				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
 			}
 		}

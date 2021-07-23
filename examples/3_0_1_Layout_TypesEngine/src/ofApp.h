@@ -3,21 +3,10 @@
 
 #include "ofMain.h"
 
-#include "ofxSurfingImGui.h" // -> Adds all the add-on classes. You can also simplify picking what you want to use.
+#include "ofxSurfingImGui.h" 
 using namespace ofxImGuiSurfing;
 
 #include "ofxWindowApp.h" // not required
-
-//#define IM_GUI_REFRESH_LOCAL // -> TODO: TEST
-// refresh can be called onyl from here. not from helpers nor from layout
-
-
-// NOTE:
-// If you get some errors on compiling, could be related to some -not required- included files.
-// Go to 'Solution Explorer' and remove manually from 'addons/ofxSurfingImGui/src/ImGui/' 
-// /ImNodes/
-// /ImGuizmo/ !!
-
 
 class ofApp : public ofBaseApp{
 
@@ -68,9 +57,9 @@ class ofApp : public ofBaseApp{
 		bool bOpen1;
 		bool bOpen2;
 
+		bool bReset0;
 		bool bReset1;
 		bool bReset2;
-		bool bReset3;
 #define MAX_WINDOW_HEIGHT 950
 
 		glm::vec2 pos0;

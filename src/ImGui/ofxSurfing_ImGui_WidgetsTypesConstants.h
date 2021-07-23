@@ -48,9 +48,6 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_HIDDEN_HEADER, // hide hider
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
-		OFX_IM_GROUP_ONLY_FIRST_HEADER,
-		OFX_IM_GROUP_HIDDE_ALL_HEADERS,
-
 		OFX_IM_GROUP_NUM_TYPES
 	};
 
@@ -63,8 +60,6 @@ namespace ofxImGuiSurfing
 		else if (i == 3) _groupInfo = "OFX_IM_GROUP_TREE";
 		else if (i == 4) _groupInfo = "OFX_IM_GROUP_SCROLLABLE";
 		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
-		else if (i == 6) _groupInfo = "OFX_IM_GROUP_ONLY_FIRST_HEADER";
-		else if (i == 7) _groupInfo = "OFX_IM_GROUP_HIDDE_ALL_HEADERS";
 
 		return _groupInfo;
 	}

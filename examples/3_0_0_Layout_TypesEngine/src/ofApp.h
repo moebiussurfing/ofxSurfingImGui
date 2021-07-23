@@ -16,6 +16,7 @@ public:
 	void draw();
 	void exit();
 	void drawImGui();
+	void drawImGuiGroup();
 
 	// groups
 	ofParameterGroup params1;
@@ -84,6 +85,7 @@ public:
 	// add styles
 	void setupStyles();
 	void clearStyles();
+	void resetStyles();
 	
 	//-
 
