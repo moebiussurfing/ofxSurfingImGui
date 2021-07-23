@@ -175,6 +175,7 @@ private:
 public:
 
 	void setDefaultFontIndex(int index);
+	void setDefaultFont();
 	int getNumFonts() { return customFonts.size(); }
 
 	void pushStyleFont(int index);
@@ -343,6 +344,11 @@ public:
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
+	}
+
+	//--------------------------------------------------------------
+	void setAutoResize(bool b) { // must call before setup
+		bAutoResize = b;
 	}
 };
 

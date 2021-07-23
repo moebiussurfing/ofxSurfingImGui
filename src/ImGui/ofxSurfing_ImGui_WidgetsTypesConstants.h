@@ -13,20 +13,25 @@ namespace ofxImGuiSurfing
 		OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
 		OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
 
-		OFX_IM_CHECKBOX,	// bool
+		// bool
+		// button
 		OFX_IM_BUTTON_SMALL,
 		OFX_IM_BUTTON_BIG,
 		OFX_IM_BUTTON_BIG_XXL,
+		// toggle
+		OFX_IM_CHECKBOX,	
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
 
-		OFX_IM_SLIDER,		// float/int
+		// float/int
+		OFX_IM_SLIDER,		
 		OFX_IM_PROGRESS_BAR,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
 
-		OFX_IM_TEXT_DISPLAY, // strings
+		// strings
+		OFX_IM_TEXT_DISPLAY, 
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
 
@@ -45,7 +50,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_TREE_EX,
 		OFX_IM_GROUP_TREE,
 		OFX_IM_GROUP_SCROLLABLE,
-		OFX_IM_GROUP_HIDDEN_HEADER, // hide hider
+		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
 		OFX_IM_GROUP_NUM_TYPES

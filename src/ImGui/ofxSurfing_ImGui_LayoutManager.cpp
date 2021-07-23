@@ -56,6 +56,12 @@ void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
 }
 
 //--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::setDefaultFont()
+{
+	setDefaultFontIndex(0);
+}
+
+//--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 {
 	//TODO:
@@ -198,6 +204,8 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	_fontSizeParam = 11;
 	std::string _path = "assets/fonts/"; // assets folder
 
+	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
+
 	addFont(_path + _fontName, _fontSizeParam);
 
 	//// extra fonts
@@ -225,6 +233,9 @@ void ofxSurfing_ImGui_Manager::begin() {
 	else gui.begin();
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
+
+	//TODO:
+	setDefaultFont();
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
 
