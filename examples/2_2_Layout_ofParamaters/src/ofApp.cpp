@@ -180,11 +180,11 @@ void ofApp::drawWidgets()
 
 	//--
 
-	//// Simple default usage:
+	// Simple default usage:
 	//guiManager.AddGroup(params1);
 
-	//// Customized usage:
-	//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, IM_GUI_GROUP_TREE_EX);
+	//// Customized hardcoded usage:
+	//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE_EX);
 
 	//-
 
