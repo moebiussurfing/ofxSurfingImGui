@@ -414,6 +414,14 @@ namespace ofxImGuiSurfing
 				case OFX_IM_TOGGLE_BIG_XXL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
 					break;
+
+				case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
+					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
+					break;
+
+				case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
+					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
+					break;
 				}
 
 				uniqueName.pop();
@@ -641,7 +649,7 @@ namespace ofxImGuiSurfing
 	public:
 		//private:
 
-			//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bOpen = false;
@@ -651,8 +659,8 @@ namespace ofxImGuiSurfing
 
 			if (uniqueName.getLevel() == 0)
 			{
-				ImGui::PushID(("##0_" + group.getName()).c_str());
-				//ImGui::PushID(group.getName().c_str());
+				ImGui::PushID(("##_" + group.getName()).c_str());
+				////ImGui::PushID(group.getName().c_str());
 
 				bool bCloseTree = false;
 
@@ -716,13 +724,13 @@ namespace ofxImGuiSurfing
 				// 2. skip
 				if (!bOpen)
 				{
-					ImGui::PopID();
+					//ImGui::PopID(); //TODO: BUG:
 					return;
 				}
 
 				//-
 
-				//ImGui::PopID();
+				ImGui::PopID(); //TODO: BUG:
 			}
 
 			//--
@@ -862,7 +870,7 @@ namespace ofxImGuiSurfing
 						}
 					}
 
-					ImGui::PopID();
+					ImGui::PopID(); // group iterated
 
 					//-
 
@@ -1033,7 +1041,7 @@ namespace ofxImGuiSurfing
 
 				//-
 
-				ImGui::PopID();
+				//ImGui::PopID(); // group main
 				//}
 			}
 		}

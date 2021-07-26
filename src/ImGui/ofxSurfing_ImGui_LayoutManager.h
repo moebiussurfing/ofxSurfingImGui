@@ -131,10 +131,10 @@ public:
 	void end();
 
 	// begin a window
-	void beginWindow(std::string name = "Window"); // -> simpler
-	void beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
-	void beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
-	void beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
+	bool beginWindow(std::string name = "Window"); // -> simpler
+	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
+	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
+	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 
 	// end a window
 	void endWindow();

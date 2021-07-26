@@ -262,30 +262,26 @@ void ofxSurfing_ImGui_Manager::end() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::beginWindow(string name)
+bool ofxSurfing_ImGui_Manager::beginWindow(string name)
 {
-	beginWindow(name, NULL, ImGuiWindowFlags_None);
+	return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
+bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 {
-	beginWindow(p.getName().c_str(), (bool*)&p.get(), ImGuiWindowFlags_None);
+	return beginWindow(p.getName().c_str(), (bool*)&p.get(), ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
+bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
 {
-	beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
+	return beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
+bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	//widgetsManager.refresh(); 
-
-	//-
-
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
 
@@ -347,7 +343,6 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	// Main body of the Demo window starts here.
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
-
 	//if (!b)
 	//{
 	//	//// Early out if the window is collapsed, as an optimization.
@@ -355,10 +350,16 @@ void ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//	//return;
 	//}
 
+	// refresh layout
+	widgetsManager.refresh(); 
+	
+	// set default font
+	setDefaultFont();
+
 	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
-	//return b;
+	return b;
 }
 
 //--------------------------------------------------------------

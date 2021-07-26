@@ -20,6 +20,7 @@
 
 namespace ImGui {
 
+	//--------------------------------------------------------------
 	inline bool BufferingBar(const char* label, float value, const ImVec2& size_arg, const ImU32& bg_col, const ImU32& fg_col) {
 		ImGuiWindow* window = GetCurrentWindow();
 		if (window->SkipItems)
@@ -63,6 +64,7 @@ namespace ImGui {
 		window->DrawList->AddCircleFilled(ImVec2(pos.x + circleEnd - o3, bb.Min.y + r), r, bg_col);
 	}
 
+	//--------------------------------------------------------------
 	inline bool Spinner(const char* label, float radius, int thickness, const ImU32& color) {
 		ImGuiWindow* window = GetCurrentWindow();
 		if (window->SkipItems)
@@ -102,7 +104,9 @@ namespace ImGui {
 
 	//----
 
-	//https://github.com/ocornut/imgui/issues/1901#issuecomment-444929973
+	// https://github.com/ocornut/imgui/issues/1901#issuecomment-444929973
+
+	//--------------------------------------------------------------
 	inline void LoadingIndicatorCircle(const char* label, const float indicator_radius,
 		const ImVec4& main_color, const ImVec4& backdrop_color,
 		const int circle_count, const float speed) {
@@ -113,7 +117,7 @@ namespace ImGui {
 
 		ImGuiContext& g = *GImGui;
 		const ImGuiID id = window->GetID(label);
-		
+
 		const ImGuiStyle& style = g.Style;
 
 		const ImVec2 pos = window->DC.CursorPos;
@@ -140,6 +144,78 @@ namespace ImGui {
 				circle_radius + growth * circle_radius,
 				GetColorU32(color));
 		}
+	}
+
+	//--
+
+	// A circle arc that can be controlled from 0 to 1
+	// TEST:
+	//const char* label = "label";
+	//static float control;
+	//static float radius = 40;
+	//static int thickness = 20;
+	//ImGui::SliderFloat("control", &control, 0, 1);
+	//ImGui::SliderFloat("radius", &radius, 10, 200);
+	//ImGui::SliderInt("thickness", &thickness, 0, 40);
+	//ofColor _color = ofColor(128, 200);
+	//static ImU32 color = ImGui::ColorConvertFloat4ToU32(_color);
+	//circleCycled(label, &control);
+	//circleCycled(label, &control, radius, false, thickness, color, 20);
+	//--------------------------------------------------------------
+	inline void circleCycled(const char* label, float *control, const float radius = 20, const bool filled = true, const int thickness = 10, const ImU32 color = IM_COL32(255, 255, 255, 200), int num_segments = 20)
+	{
+		static float startf = 0.0f;
+		static float endf = IM_PI * 2.0f;
+		static float offsetf = -IM_PI / 2.0f;
+		//static int num_segments = 40;
+
+		//float _thickness = ofMap(thickness, 0, 1, 0, radius / 2.0f);
+		float _radius;
+		float _thickness = thickness;
+
+		if (filled)	{
+			_radius = radius - _thickness;
+			_thickness = radius / 2.0f;
+		}
+		else {
+			_radius = (radius - _thickness) / 2.0f;
+		}
+
+		ImGui::SliderInt("num_segments", &num_segments, 0, 100);
+		//ImGui::SliderFloat("offsetf", &offsetf, 0, IM_PI * 2.0f);
+		//ImGui::SliderFloat("startf", &startf, 0, IM_PI * 2.0f);
+		//ImGui::SliderFloat("endf", &endf, 0, IM_PI * 2.0f);
+
+		ImGuiWindow* window = GetCurrentWindow();
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImGuiID id = window->GetID(label);
+
+		ImVec2 pos = window->DC.CursorPos;
+
+		ImVec2 size(
+			(radius) * 2 + style.FramePadding.x,
+			(radius + style.FramePadding.y) * 2);
+
+		const ImRect bb(pos, ImVec2(
+			pos.x + size.x,
+			pos.y + size.y));
+
+		ItemSize(bb, style.FramePadding.y);
+		if (!ItemAdd(bb, id)) {
+			return;
+		}
+
+		// Render
+		window->DrawList->PathClear();
+
+		const ImVec2 centre = ImVec2(
+			pos.x + radius + style.FramePadding.x,
+			pos.y + radius + style.FramePadding.y);
+
+		window->DrawList->PathArcTo(centre, _radius, startf + offsetf, *control * endf + offsetf, num_segments);
+
+		window->DrawList->PathStroke(color, ImDrawFlags_RoundCornersAll, _thickness);
 	}
 
 }
