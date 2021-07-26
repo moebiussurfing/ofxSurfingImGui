@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
-	ofSetWindowPosition(1920, 25);
+	//ofSetWindowPosition(1920, 25);
 
 	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
 	guiManager.setup();
@@ -13,7 +13,7 @@ void ofApp::setup() {
 
 	// debug ImGui flags
 	{
-		int sz = (int)SurfingTypesGroups::IM_GUI_GROUP_AMOUNT - 1;
+		int sz = SurfingImGuiTypesGroups::OFX_IM_GROUP_NUM_TYPES - 1;
 		typeGroups.set("typeGroups", 0, 0, sz);
 		typeFlags.set("typeFlags", 1, 0, 4);
 	}
@@ -75,9 +75,8 @@ void ofApp::drawMainWindow()
 	window_flags = ImGuiWindowFlags_None;
 	if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	// using ofxImGui original helpers
 	{
-		// Old ofxImGui previous Helpers usage:
+		// This was previously when using ofxImGui original helpers:
 		//auto mainSettings = ofxImGui::Settings();
 		//if (ofxImGui::BeginWindow("Show Windows", mainSettings, false))
 		//{
@@ -104,13 +103,7 @@ void ofApp::drawMainWindow()
 
 				ofxImGuiSurfing::AddParameter(typeGroups);
 				string groupInfo;
-				if (typeGroups == 0) groupInfo = "IM_GUI_GROUP_DEFAULT";
-				else if (typeGroups == 1) groupInfo = "IM_GUI_GROUP_TREE_EX";
-				else if (typeGroups == 2) groupInfo = "IM_GUI_GROUP_TREE";
-				else if (typeGroups == 3) groupInfo = "IM_GUI_GROUP_COLLAPSED";
-				else if (typeGroups == 4) groupInfo = "IM_GUI_GROUP_SCROLLABLE";
-				else if (typeGroups == 5) groupInfo = "IM_GUI_GROUP_ONLY_FIRST_HEADER";
-				else if (typeGroups == 6) groupInfo = "IM_GUI_GROUP_HIDDE_ALL_HEADERS";
+				groupInfo = ofxImGuiSurfing::getSurfingImGuiTypesGroupsName(typeGroups);
 				ImGui::Text(groupInfo.c_str());
 			}
 
@@ -155,28 +148,15 @@ void ofApp::draw()
 			if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 			// window
-
-			// different ways for creating a window with ofParameters inside:
-
-			//-
-
-			ofxImGuiSurfing::BeginWindow("Window 1");
+			guiManager.beginWindow("Window 1", &bOpen1, window_flags);
 			{
 				drawWidgets();
 			}
-			ofxImGuiSurfing::EndWindow();
+			guiManager.endWindow();
 
 			//-
 
-			//ofxImGuiSurfing::BeginWindow("Window 1", &bOpen1, window_flags);
-			//{
-			//	drawWidgets();
-			//}
-			//ofxImGuiSurfing::EndWindow();
-
-			//-
-
-			//// using ofxImGui original helpers
+			//// This was the API using ofxImGui original helpers
 			//{
 			//	auto mainSettings = ofxImGui::Settings();
 			//	if (ofxImGui::BeginWindow("Helpers", mainSettings, false))
@@ -185,33 +165,6 @@ void ofApp::draw()
 			//	}
 			//	ofxImGui::EndWindow(mainSettings);
 			//}
-
-			//-
-
-			//if (ofxImGui::BeginWindow("Window 1", &bOpen1, window_flags))
-			//{
-			//	ofxImGui::AddGroup(params1);
-			//}
-			//ofxImGui::EndWindow();
-
-			//-
-
-			//guiManager.beginWindow("Window 1", &bOpen1, window_flags);
-			//{
-			//	drawWidgets();
-			//}
-			//guiManager.endWindow();
-
-			//-
-
-			//// an snapped window
-			//ofxImGuiSurfing::Begin("Window 1");
-			//{
-			//	drawWidgets();
-			//}
-			//ofxImGuiSurfing::End();
-
-			//-
 		}
 	}
 	guiManager.end();
@@ -228,10 +181,10 @@ void ofApp::drawWidgets()
 	//--
 
 	//// Simple default usage:
-	//ofxImGuiSurfing::AddGroup(params1);
+	//guiManager.AddGroup(params1);
 
 	//// Customized usage:
-	//ofxImGuiSurfing::AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, IM_GUI_GROUP_TREE_EX);
+	//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_DefaultOpen, IM_GUI_GROUP_TREE_EX);
 
 	//-
 
@@ -246,7 +199,7 @@ void ofApp::drawWidgets()
 		if (typeFlags == 3) { flagInfo = "ImGuiTreeNodeFlags_Bullet"; flags |= ImGuiTreeNodeFlags_Bullet; } // bullet mark
 		if (typeFlags == 4) { flagInfo = "ImGuiTreeNodeFlags_NoTreePushOnOpen"; flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen; } // no push
 
-		ofxImGuiSurfing::AddGroup(params1, flags, SurfingTypesGroups(typeGroups.get()));
+		guiManager.AddGroup(params1, flags, SurfingImGuiTypesGroups(typeGroups.get()));
 	}
 
 	//--
@@ -255,5 +208,4 @@ void ofApp::drawWidgets()
 	ImGui::Dummy(ImVec2(0, 10)); // spacing
 	ofxImGuiSurfing::AddParameter(bMode3);
 	ofxImGuiSurfing::AddParameter(lineWidth);
-
 }

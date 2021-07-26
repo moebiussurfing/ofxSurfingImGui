@@ -134,6 +134,16 @@ public:
 		ImGui::Text("Out 3 ->");
 		ed::EndPin();
 
+		//TEST
+		//decorate
+		//auto& pin = node.Outputs[0];
+		//ed::PushStyleVar(ed::StyleVar_PinCorners, 3);
+		//ed::BeginPin(pin.ID, ed::PinKind::Output);
+		//ed::PinPivotRect(outputsRect.GetTL(), outputsRect.GetBR());
+		//ed::PinRect(outputsRect.GetTL(), outputsRect.GetBR());
+		//ed::EndPin();
+		//ed::PopStyleVar();
+
 		ed::BeginPin(nodeI_OutputPinId4, ed::PinKind::Output);
 		ImGui::Text("Out 4 ->");
 		ed::EndPin();

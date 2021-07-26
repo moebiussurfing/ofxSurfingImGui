@@ -8,9 +8,10 @@ An ImGui toolkit for openFrameworks.
 
 ## WORK IN PROGRESS!  
 ```
-ALMOST DONE!
+ALMOST DONE! BUT A BIT BUGGY YET.
+SOME EXAMPLES NEED TO BE UPDATED TO API CHANGES.
 API WILL CHANGE A BIT.  
-I AM GETTING SOME EXCEPTIONS ON SECTION 3. TYPES ENGINE  
+I AM GETTING SOME EXCEPTIONS MAINLY ON SECTION 3. TYPES ENGINE  
 ```
 
 <details>
@@ -359,7 +360,6 @@ Using [rokups/ImNodes](https://github.com/rokups/ImNodes)
 
 Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
 
-5_1_ImNodes_color_node_editor [BROKEN]  
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
 5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 
