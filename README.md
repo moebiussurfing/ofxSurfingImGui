@@ -8,10 +8,9 @@ An ImGui toolkit for openFrameworks.
 
 ## WORK IN PROGRESS!  
 ```
-ALMOST DONE! BUT A BIT BUGGY YET.
+A BIT BUGGY.
 SOME EXAMPLES NEED TO BE UPDATED TO API CHANGES.
 API WILL CHANGE A BIT.  
-I AM GETTING SOME EXCEPTIONS MAINLY ON SECTION 3. TYPES ENGINE  
 ```
 
 <details>
@@ -213,6 +212,8 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a cl
 
 This is a helper for tweaking your themes: testings sizes, layout, and colors, and alternate fonts.  
 
+2_3_Layout_ImTools [BROKEN]  
+
 <BR>
 
 ## 3. TYPES ENGINE [WIP]
@@ -238,13 +239,12 @@ This is a helper for tweaking your themes: testings sizes, layout, and colors, a
 
 #### FEATURES
 
-1. Uses **ofxSurfing_ImGui_WidgetsTypes.h**, **ofxSurfing_ImGui_ofHelpers.h** and **ofxSurfing_ImGui_LayoutManager.h**  
-2. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-3. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
-4. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
-5. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
-6. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
-7. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+1. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+2. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
+3. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
+4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
+5. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
 
 <details>
   <summary>USAGE CASES</summary>

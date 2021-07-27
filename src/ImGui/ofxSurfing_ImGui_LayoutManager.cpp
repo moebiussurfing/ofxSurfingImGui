@@ -186,9 +186,12 @@ void ofxSurfing_ImGui_Manager::openFileFont(int size)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup_ImGui()
 {
-	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
+	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
+
 	bool bRestore = true;
 	bool bMouse = false;
+
+	if (bDocking) flags += ImGuiConfigFlags_DockingEnable;
 
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
@@ -351,8 +354,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//}
 
 	// refresh layout
-	widgetsManager.refresh(); 
-	
+	widgetsManager.refresh();
+
 	// set default font
 	setDefaultFont();
 

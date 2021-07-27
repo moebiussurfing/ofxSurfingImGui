@@ -16,14 +16,6 @@
 
 using namespace ofxImGuiSurfing;
 
-//-
-
-//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
-
-/* Layout Mangager Engine */
-//namespace ofxImGuiSurfing
-//{
-
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
@@ -36,12 +28,8 @@ public:
 	//-
 
 private:
-//public:
 
-	//static ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
-
-	//ofParamUniqueName uniqueName;
 
 	//-
 
@@ -216,6 +204,7 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
+	bool bDocking = true;
 
 private:
 
@@ -280,6 +269,7 @@ public:
 
 public:
 
+	// advanced panel
 	// snippet to copy/paste
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//--------------------------------------------------------------
@@ -341,6 +331,8 @@ private:
 
 public:
 
+	// some tweak modes
+
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup
 		bAutoSaveSettings = b;
@@ -350,6 +342,64 @@ public:
 	void setAutoResize(bool b) { // must call before setup
 		bAutoResize = b;
 	}
-};
 
-//} // namespace ofxImGuiSurfing
+	//--------------------------------------------------------------
+	void setDocking(bool b) { // must call before setup
+		bDocking = b;
+	}
+
+	//-
+
+	// windows management
+
+public:
+
+	//--------------------------------------------------------------
+	void clearWindows() {
+		bGuis.clear();
+	}
+	//--------------------------------------------------------------
+	void addWindow(ofParameter<bool> _bGui) {
+		bGuis.push_back(_bGui);
+	}
+	//--------------------------------------------------------------
+	void addWindow(std::string name) {
+		ofParameter<bool> _bGui{ name, true };
+		bGuis.push_back(_bGui);
+	}
+	//--------------------------------------------------------------
+	bool beginWindow(int index) {
+		if (index > bGuis.size()-1) {
+			ofLogError(__FUNCTION__) << "out of range index for queued windows";
+			return false;
+		}
+
+		bool b = false;;
+		if (bGuis[index].get()) 
+		{
+			b = beginWindow(bGuis[index]);
+		}
+
+		return b;
+		//return bGuis[index].get();
+	}
+	//--------------------------------------------------------------
+	//ofParameter<bool> *getShow(int index) {
+	//ofParameter<bool> getShow(int index) {
+	ofParameter<bool> &getShow(int index) {
+		if (index > bGuis.size() - 1) {
+			ofLogError(__FUNCTION__) << "out of range index for queued windows";
+			return ofParameter<bool>{"-1", false};
+			//return &ofParameter<bool>{"-1", false};
+		}
+
+		return bGuis[index];
+		//return &bGuis[index];
+	}
+
+private:
+
+	vector<ofParameter<bool>> bGuis; // we queue here the bool paramms that enables the show/hide for each queued window
+
+	//-
+};
