@@ -164,7 +164,7 @@ public:
 		virtual const char* GetItemLabel(int index) const
 		{
 			static char tmps[512];
-			sprintf_s(tmps, "[%02d] %s", index, SequencerItemTypeNames[myItems[index].mType]);
+			sprintf(tmps, "[%02d] %s", index, SequencerItemTypeNames[myItems[index].mType]);
 			return tmps;
 		}
 
