@@ -90,6 +90,15 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 
 ## 2. LAYOUT
 
+**2_1_Layout_Basic1**  
+**2_1_Layout_Basic2**  
+**2_1_Layout_Basic3**  
+**2_1_Layout_Basic4**  
+
+Uses **ofxSurfing_ImGui_LayoutManager.h**  
+Speed up **ofxImGui** instantiation, windows and layouts.  
+Includes **ofParameter** helpers, widget sizes and extra widgets.  
+
 <details>
   <summary>2_0_Layout_ofParamaters</summary>
   <p>
@@ -110,9 +119,6 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
   </p>
 </details>
 
-Uses **ofxSurfing_ImGui_LayoutManager.h**  
-Speed up **ofxImGui** instantiation, windows and layouts.  
-Includes **ofParameter** helpers and extra widgets.  
 <details>
   <summary>Example Code</summary>
   <p>

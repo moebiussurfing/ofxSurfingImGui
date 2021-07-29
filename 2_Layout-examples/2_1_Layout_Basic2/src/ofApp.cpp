@@ -149,6 +149,7 @@ void ofApp::drawWindow1()
 				// We will update the sizes on any gui drawing required point, 
 				// like inside a new foldered sub-window that could be indendeted and full-width size is being smaller.
 				ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w1, _w2, _w3, _w4, _h);
+				_h *= 2;
 
 				// Here we will add some ofParamaters usign customized responsive layout of many widgets types!
 
