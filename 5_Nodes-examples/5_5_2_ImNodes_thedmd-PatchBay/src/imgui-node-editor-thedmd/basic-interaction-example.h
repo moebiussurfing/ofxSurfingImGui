@@ -1,5 +1,7 @@
 ﻿#pragma once
-//#include "ofMain.h"
+
+#include "ofMain.h"
+
 //#include "ofxSurfingImGui.h"	
 #include <imgui.h>
 
@@ -29,6 +31,14 @@ static int                  g_NextLinkId = 100;     // Counter to help generate 
 class Example
 {
 public:
+	// backward engine
+	ofParameter<bool>bNewLink{ "bNewLink", false };
+	ofParameter<bool>bRemovedLink{ "bNewLink", false };
+	int lastId = -1;
+	int lastPinFrom = -1;
+	int lastPinTo = -1;
+
+	//--
 
 	const char* Application_GetName()
 	{
@@ -74,11 +84,11 @@ public:
 	//	ed::BeginNode(uniqueId++);
 	//	ImGui::Text("Node A");
 	//	ed::BeginPin(uniqueId++, ed::PinKind::Input);
-	//	ImGui::Text("-> In");
+	//	ImGui::Text("> In");
 	//	ed::EndPin();
 	//	ImGui::SameLine();
 	//	ed::BeginPin(uniqueId++, ed::PinKind::Output);
-	//	ImGui::Text("Out ->");
+	//	ImGui::Text("Out >");
 	//	ed::EndPin();
 	//	ed::EndNode();
 	//	ed::End();
@@ -123,15 +133,15 @@ public:
 		ImGuiEx_NextColumn();
 
 		ed::BeginPin(nodeI_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out 1 ->");
+		ImGui::Text("Out 1 >");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_OutputPinId2, ed::PinKind::Output);
-		ImGui::Text("Out 2 ->");
+		ImGui::Text("Out 2 >");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_OutputPinId3, ed::PinKind::Output);
-		ImGui::Text("Out 3 ->");
+		ImGui::Text("Out 3 >");
 		ed::EndPin();
 
 		//TEST
@@ -145,7 +155,7 @@ public:
 		//ed::PopStyleVar();
 
 		ed::BeginPin(nodeI_OutputPinId4, ed::PinKind::Output);
-		ImGui::Text("Out 4 ->");
+		ImGui::Text("Out 4 >");
 		ed::EndPin();
 
 		ImGuiEx_EndColumn();
@@ -170,25 +180,26 @@ public:
 		//ImGui::SameLine();
 
 		ed::BeginPin(nodeI_InputPinId1, ed::PinKind::Input);
-		ImGui::Text("-> In1");
+		ImGui::Text("> In1");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId2, ed::PinKind::Input);
-		ImGui::Text("-> In2");
+		ImGui::Text("> In2");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId3, ed::PinKind::Input);
-		ImGui::Text("-> In3");
+		ImGui::Text("> In3");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId4, ed::PinKind::Input);
-		ImGui::Text("-> In4");
+		ImGui::Text("> In4");
 		ed::EndPin();
 
 		ed::EndNode();
 
 		//-
 
+		/*
 		if (0) {
 			// Submit Node A
 			ed::NodeId nodeA_Id = uniqueId++;
@@ -201,11 +212,11 @@ public:
 
 			ImGui::Text("Node A");
 			ed::BeginPin(nodeA_InputPinId, ed::PinKind::Input);
-			ImGui::Text("-> In");
+			ImGui::Text("> In");
 			ed::EndPin();
 			ImGui::SameLine();
 			ed::BeginPin(nodeA_OutputPinId, ed::PinKind::Output);
-			ImGui::Text("Out ->");
+			ImGui::Text("Out >");
 			ed::EndPin();
 
 			ed::EndNode();
@@ -233,36 +244,37 @@ public:
 			ImGui::Text("Node B");
 			ImGuiEx_BeginColumn();
 			ed::BeginPin(nodeB_InputPinId1, ed::PinKind::Input);
-			ImGui::Text("-> In1");
+			ImGui::Text("> In1");
 			ed::EndPin();
 			ed::BeginPin(nodeB_InputPinId2, ed::PinKind::Input);
-			ImGui::Text("-> In2");
+			ImGui::Text("> In2");
 			ed::EndPin();
 			ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
-			ImGui::Text("-> In3");
+			ImGui::Text("> In3");
 			ed::EndPin();
 			ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
-			ImGui::Text("-> In4");
+			ImGui::Text("> In4");
 			ed::EndPin();
 
 			ImGuiEx_NextColumn();
 
 			ed::BeginPin(nodeB_OutputPinId1, ed::PinKind::Output);
-			ImGui::Text("Out1 ->");
+			ImGui::Text("Out1 >");
 			ed::EndPin();
 			ed::BeginPin(nodeB_OutputPinId2, ed::PinKind::Output);
-			ImGui::Text("Out2 ->");
+			ImGui::Text("Out2 >");
 			ed::EndPin();
 			ed::BeginPin(nodeB_OutputPinId3, ed::PinKind::Output);
-			ImGui::Text("Out3 ->");
+			ImGui::Text("Out3 >");
 			ed::EndPin();
 			ed::BeginPin(nodeB_OutputPinId4, ed::PinKind::Output);
-			ImGui::Text("Out4 ->");
+			ImGui::Text("Out4 >");
 			ed::EndPin();
 
 			ImGuiEx_EndColumn();
 			ed::EndNode();
 		}
+		*/
 
 		//-
 
@@ -302,6 +314,23 @@ public:
 
 						// Draw new link.
 						ed::Link(g_Links.back().Id, g_Links.back().InputId, g_Links.back().OutputId);
+						
+
+						auto ii = inputPinId;
+						int i = (int)ii.Get();
+
+						auto oo = outputPinId;
+						int o = (int)oo.Get();
+
+						//TODO:
+						lastId = g_NextLinkId;
+						lastPinFrom = i;
+						lastPinTo = o;
+						bNewLink = true;
+
+						//lastPinFrom = inputPinId.AsPointer();
+						//lastPinFrom = inputPinId.cast<int>();
+						//lastPinFrom = inputPinId.AsPointer();
 					}
 
 					// You may choose to reject connection between these nodes
@@ -391,16 +420,16 @@ public:
 
 		//ImGuiEx_NextColumn();
 		ed::BeginPin(nodeA_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out1 ->");
+		ImGui::Text("Out1 >");
 		ed::EndPin();
 		ed::BeginPin(nodeA_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out2 ->");
+		ImGui::Text("Out2 >");
 		ed::EndPin();
 		ed::BeginPin(nodeA_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out3 ->");
+		ImGui::Text("Out3 >");
 		ed::EndPin();
 		ed::BeginPin(nodeA_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out4 ->");
+		ImGui::Text("Out4 >");
 		ed::EndPin();
 
 		//ImGuiEx_EndColumn();
@@ -426,16 +455,16 @@ public:
 		//ImGuiEx_BeginColumn();
 
 		ed::BeginPin(nodeB_InputPinId1, ed::PinKind::Input);
-		ImGui::Text("-> In1");
+		ImGui::Text("> In1");
 		ed::EndPin();
 		ed::BeginPin(nodeB_InputPinId2, ed::PinKind::Input);
-		ImGui::Text("-> In2");
+		ImGui::Text("> In2");
 		ed::EndPin();
 		ed::BeginPin(nodeB_InputPinId3, ed::PinKind::Input);
-		ImGui::Text("-> In3");
+		ImGui::Text("> In3");
 		ed::EndPin();
 		ed::BeginPin(nodeB_InputPinId4, ed::PinKind::Input);
-		ImGui::Text("-> In4");
+		ImGui::Text("> In4");
 		ed::EndPin();
 
 		//ImGuiEx_EndColumn();

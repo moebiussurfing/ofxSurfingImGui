@@ -224,7 +224,7 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a cl
 
 This is a helper for tweaking your Themes: testings sizes, layout, and colors, and alternate fonts.  
 Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
-There's not a automatic-fully-functional theme designer!  
+There's not an automatic-fully-functional, save preset/load theme designer!  
 </details>
 
 <BR>
@@ -338,40 +338,40 @@ My target is to build a simple engine to patch between **ofParameters**.
   <p>
 
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
+Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
   </p>
 </details>
 
-Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
 
 <details>
   <summary>5_2_ofNodeEditor</summary>
   <p>
 
 ![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
+Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
   </p>
 </details>
 
-Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
   <p>
 
 ![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
+Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
   </p>
 </details>
 
-Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
 
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
   <p>
 
 ![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
+Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
   </p>
 </details>
 
-Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
 
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
 5_6_ImNodes-Graph-ImGuizmo [BROKEN]  

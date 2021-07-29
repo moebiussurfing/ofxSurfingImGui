@@ -1,2 +1,4 @@
+ofxGui
 ofxImGui
+ofxPatchbayParams
 ofxSurfingImGui
