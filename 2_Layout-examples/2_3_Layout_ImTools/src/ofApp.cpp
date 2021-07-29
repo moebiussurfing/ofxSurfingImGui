@@ -30,110 +30,119 @@ void ofApp::setup() {
 
 	//-
 
+	guiManager.setImGuiDockingModeCentered(false); // -> required to allow custom docking layout. 
+	// instead of the default centralized.
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup(); 
-	
-	app_LayoutManager.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
 	guiManager.begin(); // global begin
-
-	// Run the Coking Layout manager!
-	app_LayoutManager.draw();
-	
 	{
-		static bool bOpen0 = true;
-		static bool bOpen1 = true;
-		static bool bOpen2 = true;
-
-		//---------
-
-		// Main Window
-
-		// A raw standard raw ImGui window
-		{
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-			ImGui::Begin("Show Windows", &bOpen0, window_flags);
-			{
-				// round toggles widgets
-				ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
-				ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
-
-				ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
-			}
-			ImGui::End();
+		if (!binitiated) {
+			binitiated = true;
+			app_LayoutManager.setup();
 		}
 
-		//--------
+		app_LayoutManager.mainFrame.
+		// Run the Coking Layout manager!
+		app_LayoutManager.draw();
 
-		// Place intems inside:
-		// Dock Window Top
-
-		//TODO: how to check if a pane is visible?
-		//TODO: how to draw widgets inside the pane?
-		//app_LayoutManager.mainFrame.
-
-		if (bOpen1)
 		{
-			guiManager.beginWindow("Top", NULL, ImGuiWindowFlags_None);
+			static bool bOpen0 = true;
+			static bool bOpen1 = true;
+			static bool bOpen2 = true;
+
+			//---------
+
+			// Main Window
+
+			// A raw standard raw ImGui window
 			{
-				//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-				////flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
-				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
-				//ofxImGuiSurfing::AddGroup(params3, flags);
+				ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+				if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-				guiManager.drawAdvancedSubPanel();
-			}
-			guiManager.endWindow();
-		}
+				ImGui::Begin("Show Windows", &bOpen0, window_flags);
+				{
+					// round toggles widgets
+					ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
+					ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 
-		//---------
+					ImGui::Dummy(ImVec2(0, 5)); // spacing
 
-		// Place intems inside:
-		// Dock Window Central
-
-		if (bOpen2)
-		{
-			guiManager.beginWindow("Central", NULL, ImGuiWindowFlags_None);
-			{
-				float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-				float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-				float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
-
-				// Two custom toggles
-				if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
-				if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h / 2)) {} // same width but half height
-
-				// Two custom buttons in the same line/row
-				// 50% width aka two widgets on current same line/row
-				if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h)) {
-					lineWidth -= 0.1;
-					bPrevious = false;
+					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize); // a public bool variable to allow handle auto-resize. Applied here to all the windows.
 				}
-				ImGui::SameLine();
-				if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h)) {
-					lineWidth += 0.1;
-					bNext = false;
-				}
-
-				// Three standard widget params
-				ofxImGuiSurfing::AddParameter(bEnable);
-				ofxImGuiSurfing::AddParameter(separation);
-				ofxImGuiSurfing::AddParameter(shapeType);
+				ImGui::End();
 			}
-			guiManager.endWindow();
-		}
 
-		//-----
+			//--------
+
+			// Place intems inside:
+			// Dock Window Top
+
+			//TODO: how to check if a pane is visible?
+			//TODO: how to draw widgets inside the pane?
+			//TODO: how to use from outside the class object??
+			//app_LayoutManager.mainFrame.
+
+			if (bOpen1)
+			{
+				guiManager.beginWindow("Top", &bOpen1, ImGuiWindowFlags_None);
+				{
+					//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+					////flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
+					//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
+					//ofxImGuiSurfing::AddGroup(params3, flags);
+
+					guiManager.AddGroup(params3);
+
+					guiManager.drawAdvancedSubPanel();
+				}
+				guiManager.endWindow();
+			}
+
+			//---------
+
+			// Place intems inside:
+			// Dock Window Central
+
+			if (bOpen2)
+			{
+				guiManager.beginWindow("Central", &bOpen2, ImGuiWindowFlags_None);
+				{
+					float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
+					float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
+					float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
+
+					// Two custom toggles
+					if (ofxImGuiSurfing::AddBigToggle(bEnable)) {} // this is full width (_w100) with standard height (_h)
+					//if (ofxImGuiSurfing::AddBigToggle(bEnable, _w100, _h)) {} // same width but half height
+
+					// Two custom buttons in the same line/row
+					// 50% width aka two widgets on current same line/row
+					if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h*2)) {
+						lineWidth -= 0.1;
+						bPrevious = false;
+					}
+					ImGui::SameLine();
+					if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h*2)) {
+						lineWidth += 0.1;
+						bNext = false;
+					}
+
+					// Three standard widget params
+					ofxImGuiSurfing::AddParameter(bEnable);
+					ofxImGuiSurfing::AddParameter(separation);
+					ofxImGuiSurfing::AddParameter(shapeType);
+				}
+				guiManager.endWindow();
+			}
+
+			//-----
+		}
 	}
-
 	guiManager.end(); // global end
 }
 

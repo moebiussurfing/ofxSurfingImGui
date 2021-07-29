@@ -536,7 +536,6 @@ void EndWindow()
 }
 */
 
-
 //--
 
 /*
@@ -547,4 +546,15 @@ void EndWindow();
 
 void Begin(const std::string& name);
 void End();
+*/
+
+//--
+
+/*		
+// ImGui Infos
+auto io = ImGui::GetIO();
+const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+const auto size = ImGui::CalcTextSize(label.c_str());
+ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
+ImGui::Text("%s", label.c_str());
 */

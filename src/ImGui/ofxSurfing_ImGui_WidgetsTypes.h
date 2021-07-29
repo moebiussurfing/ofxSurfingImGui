@@ -653,6 +653,7 @@ namespace ofxImGuiSurfing
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bOpen = false;
+			bool bHide = false;
 
 			// handle names/pushID's
 			// this is the root/first group
@@ -672,7 +673,7 @@ namespace ofxImGuiSurfing
 				}
 
 				//bool bHide = false;
-				bool bHide = (
+				bHide = (
 					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
 					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
 
@@ -1018,6 +1019,7 @@ namespace ofxImGuiSurfing
 			if (uniqueName.getLevel() == 0)
 			{
 				if (bOpen)
+				//if (bOpen)
 				{
 					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
@@ -1026,10 +1028,12 @@ namespace ofxImGuiSurfing
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 					{
+						if (!bHide)
 						ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 					{
+						if (!bHide)
 						ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)

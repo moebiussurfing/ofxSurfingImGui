@@ -71,7 +71,7 @@ void MainFrame::Display(ImVec2 vSize)
 
 		if (ImGui::BeginMenu("ImGui"))
 		{
-			ImGui::MenuItem("Show ImGui", "", &m_ShowImGui);
+			ImGui::MenuItem("Show ImGui Demo", "", &m_ShowImGui);
 			ImGui::MenuItem("Show ImGui Metric/Debug", "", &m_ShowMetric);
 
 			ImGui::EndMenu();
@@ -100,10 +100,8 @@ void MainFrame::Display(ImVec2 vSize)
 
 	LayoutManager::Instance()->DrawDialogsAndPopups();
 
-	if (m_ShowImGui)
-		ImGui::ShowDemoWindow(&m_ShowImGui);
-	if (m_ShowMetric)
-		ImGui::ShowMetricsWindow(&m_ShowMetric);
+	if (m_ShowImGui) ImGui::ShowDemoWindow(&m_ShowImGui);
+	if (m_ShowMetric) ImGui::ShowMetricsWindow(&m_ShowMetric);
 }
 
 std::string MainFrame::getXml(const std::string& vOffset, const std::string& vUserDatas)

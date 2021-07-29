@@ -192,9 +192,18 @@ void ofxSurfing_ImGui_Manager::setup_ImGui()
 	bool bMouse = false;
 
 	if (bDocking) flags += ImGuiConfigFlags_DockingEnable;
+	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
+	// Setup imgui with the appropriate config flags
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
+
+	// Uncomment below to perform docking with SHIFT key
+	// Gives a better user experience, matter of opinion.
+	if (bDocking) ImGui::GetIO().ConfigDockingWithShift = true;
+
+	// Uncomment below to "force" all imgui windows to be standalone
+	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
 
 	//-
 
@@ -244,6 +253,57 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//-
 
+	// docking
+	if (bDocking && bDockingModeCentered)
+	{
+		ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
+		ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, dockingFlags); // Also draws the docked windows
+
+		ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
+		if (dockNode)
+		{
+			ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
+
+			// debug scene viewport
+			if (bPreviewSceneViewport)
+			{
+				// Verifies if the central node is empty (visible empty space for oF)
+				if (centralNode && centralNode->IsEmpty()) {
+					ImRect availableSpace = centralNode->Rect();
+					//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
+					ImGui::GetForegroundDrawList()->AddRect(availableSpace.GetTL() + ImVec2(8, 8), availableSpace.GetBR() - ImVec2(8, 8), IM_COL32(255, 50, 50, 255));
+
+					ImVec2 viewCenter = availableSpace.GetCenter();
+					// Depending on the viewports flag, the XY is either absolute or relative to the oF window.
+					if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) viewCenter = viewCenter - ImVec2(ofGetWindowPositionX(), ofGetWindowPositionY());
+					ofPushStyle();
+					ofSetRectMode(OF_RECTMODE_CENTER);
+					ofSetColor(255, 0, 0, 2);
+					ofNoFill();
+
+					ofDrawRectangle(
+						viewCenter.x,
+						viewCenter.y,
+						availableSpace.GetSize().x - 6,
+						availableSpace.GetSize().y - 6
+					);
+					//ofNoFill();
+					//ofSetColor(255, 255, 255, 30);
+					//ofDrawRectangle(
+					//	(viewCenter.x),
+					//	(viewCenter.y),
+					//	(availableSpace.GetSize().x - 20)*fmodf(abs(sin(ofGetElapsedTimef())), 1.f),
+					//	(availableSpace.GetSize().y - 20)*fmodf(abs(sin(ofGetElapsedTimef())), 1.f)
+					//);
+					ofSetRectMode(OF_RECTMODE_CORNER);
+					ofPopStyle();
+				}
+			}
+		}
+	}
+
+	//-
+
 	resetIDs(); // reset names
 }
 
@@ -269,7 +329,10 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name)
 {
 	return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
-
+//--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open) {
+	return beginWindow(name, p_open, ImGuiWindowFlags_None);
+}
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 {

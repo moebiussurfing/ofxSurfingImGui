@@ -55,5 +55,7 @@ public:
 
 	//-
 
+	bool binitiated = false;
+
 	ofxWindowApp windowApp;
 };

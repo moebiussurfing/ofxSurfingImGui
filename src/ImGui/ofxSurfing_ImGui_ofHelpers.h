@@ -20,7 +20,7 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
 

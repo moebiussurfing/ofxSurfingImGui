@@ -99,11 +99,24 @@ private:
 
 	// initiate ofxImGui
 	void setup_ImGui();
-	bool bAutoDraw; // must be false when multiple ImGui instances created!
 
 	// with have two mode for instantiate ImGui
 	ofxImGui::Gui * guiPtr = NULL; // passed by reference
 	ofxImGui::Gui gui; // inside the addon
+
+public:
+	// To share Gui with other add-ons
+	//--------------------------------------------------------------
+	ofxImGui::Gui* getGuiPtr() {
+		if (guiPtr == NULL) return &gui;
+		else return guiPtr;
+	}
+
+	//--------------------------------------------------------------
+	ofxImGui::Gui& getGui() {
+		if (guiPtr == NULL) return gui;
+		else return *guiPtr;
+	}
 
 	//-
 
@@ -119,15 +132,23 @@ public:
 	void end();
 
 	// begin a window
-	bool beginWindow(std::string name = "Window"); // -> simpler
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
+	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
+	bool beginWindow(std::string name, bool* p_open);
 
 	// end a window
 	void endWindow();
 
 	//----
+
+private:
+	bool bAutoDraw; // must be false when multiple ImGui instances created!
+	bool bViewport = false;
+	bool bDocking = true;
+	bool bDockingModeCentered = true; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
+	bool bPreviewSceneViewport = false;
 
 public:
 
@@ -135,6 +156,11 @@ public:
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
+	void setImGuiViewPort(bool b) { bViewport = b; } // must be called before setup! 
+	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
+	void setImGuiDocking(bool b) { // must call before setup
+		setDocking(b);
+	}
 
 	// Force shared context
 	//--------------------------------------------------------------
@@ -204,7 +230,6 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
-	bool bDocking = true;
 
 private:
 
@@ -272,6 +297,12 @@ public:
 	// advanced panel
 	// snippet to copy/paste
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+	//guiManager.drawAdvancedSubPanel();
+	//--------------------------------------------------------------
+	void drawAdvanced() { // -> simpler call
+		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
+		drawAdvancedSubPanel();
+	}
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel(bool bHeader = true) {
 		if (!bAdvanced) return;
@@ -284,7 +315,11 @@ public:
 		ImGui::Indent();
 		{
 			bool b = false;
-			if (bHeader) b = ImGui::CollapsingHeader(params_Advanced.getName().c_str(), ImGuiTreeNodeFlags_None);
+			if (!bUseAdvancedSubPanel) {
+				if (bHeader) b = ImGui::CollapsingHeader(params_Advanced.getName().c_str(), ImGuiTreeNodeFlags_None);
+			}
+			else b = true;
+
 			if (!bHeader || (bHeader && b))
 			{
 				// reset window
@@ -297,7 +332,12 @@ public:
 
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-				ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+				if (bDebug) {
+					ImGui::Indent();
+					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+					ofxImGuiSurfing::ToggleRoundedButton("Scene Viewport", &bPreviewSceneViewport);
+					ImGui::Unindent();
+				}
 			}
 		}
 		ImGui::Unindent();
@@ -358,36 +398,56 @@ public:
 	void clearWindows() {
 		bGuis.clear();
 	}
+
 	//--------------------------------------------------------------
-	void addWindow(ofParameter<bool> _bGui) {
+	void addWindow(ofParameter<bool>& _bGui) {
 		bGuis.push_back(_bGui);
 	}
+
 	//--------------------------------------------------------------
 	void addWindow(std::string name) {
 		ofParameter<bool> _bGui{ name, true };
 		bGuis.push_back(_bGui);
 	}
+
 	//--------------------------------------------------------------
 	bool beginWindow(int index) {
-		if (index > bGuis.size()-1) {
-			ofLogError(__FUNCTION__) << "out of range index for queued windows";
+		if (index > bGuis.size() - 1 || index == -1) {
+			ofLogError(__FUNCTION__) << "out of range index for queued windows, " << index;
 			return false;
 		}
 
-		bool b = false;;
-		if (bGuis[index].get()) 
+		// maximize window
+		float x = 10;
+		float y = 10;
+		float w = 200;
+		float h = 600;
+
+		ImGuiCond cond = ImGuiCond_None;
+		cond |= ImGuiCond_FirstUseEver;
+		//cond |= ImGuiCond_Appearing;
+
+		ImGui::SetNextWindowPos(ImVec2(x, y), cond);
+		ImGui::SetNextWindowSize(ImVec2(w, h), cond);
+
+		bool b = false;
+		//if ((bool)bGuis[index].get()) // -> fails
 		{
-			b = beginWindow(bGuis[index]);
+			b = beginWindow(bGuis[index].getName().c_str(), (bool*)&bGuis[index].get(), ImGuiWindowFlags_None);
+			//b = beginWindow(bGuis[index], ImGuiWindowFlags_None);
 		}
+
+		//if(!b) endWindow();
 
 		return b;
 		//return bGuis[index].get();
 	}
+
 	//--------------------------------------------------------------
-	//ofParameter<bool> *getShow(int index) {
-	//ofParameter<bool> getShow(int index) {
-	ofParameter<bool> &getShow(int index) {
-		if (index > bGuis.size() - 1) {
+	//ofParameter<bool> *getVisible(int index) {
+	//ofParameter<bool> getVisible(int index) {
+	ofParameter<bool>& getVisible(int index) {
+		if (index > bGuis.size() - 1 || index == -1) {
 			ofLogError(__FUNCTION__) << "out of range index for queued windows";
 			return ofParameter<bool>{"-1", false};
 			//return &ofParameter<bool>{"-1", false};

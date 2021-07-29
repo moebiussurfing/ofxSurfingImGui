@@ -15,7 +15,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
-	void AddGroupRaw(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
 		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!
 		// but these methods should work too.
@@ -34,7 +34,7 @@ namespace ofxImGuiSurfing
 			if (parameterGroup)
 			{
 				// Recurse through contents.
-				AddGroupRaw(*parameterGroup, ImGuiTreeNodeFlags_None);
+				AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None);
 				continue;
 			}
 

@@ -191,6 +191,14 @@ void ofApp::draw()
   </p>
 </details>
 
+<details>
+  <summary>2_2_Layout_Docking</summary>
+  <p>
+
+![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
+  </p>
+</details>
+
 
 <details>
   <summary>2_3_Layout_ImTools</summary>
@@ -211,8 +219,8 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a cl
 </details>
 
 This is a helper for tweaking your themes: testings sizes, layout, and colors, and alternate fonts.  
-
-2_3_Layout_ImTools [BROKEN]  
+Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
+There's not a automatic-fully-functional theme designer!  
 
 <BR>
 
