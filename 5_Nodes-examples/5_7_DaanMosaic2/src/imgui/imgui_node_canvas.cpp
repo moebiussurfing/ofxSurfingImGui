@@ -215,7 +215,7 @@ void ImGuiEx::NodeCanvas::End(){
     IM_ASSERT(isDrawingCanvas == true); // // Begin() wasn't called
     IM_ASSERT(isDrawingNode == false); // Forgot to call EndNode()
 
-    isAnyCanvasNodeHovered = ImGui::IsAnyWindowHovered();
+    isAnyCanvasNodeHovered = ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 
     // Got links (selection) to delete ?
 //    if( ImGui::GetIO().KeysDown[ImGui::GetIO().KeyMap[ImGuiKey_Delete]] && selectedLinks.size()>0 && !ImGui::IsAnyItemFocused() ){

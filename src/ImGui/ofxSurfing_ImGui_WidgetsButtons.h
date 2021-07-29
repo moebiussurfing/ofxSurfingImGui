@@ -456,7 +456,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
 	{
-		AddBigSlider(parameter, sz.x, sz.y, format);
+		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 
 	//--------------------------------------------------------------
