@@ -100,22 +100,20 @@ Speed up **ofxImGui** instantiation, windows and layouts.
 Includes **ofParameter** helpers, widget sizes and extra widgets.  
 
 <details>
-  <summary>2_0_Layout_ofParamaters</summary>
-  <p>
-
-![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
-  </p>
-</details>
-
-Uses **ofxSurfing_ImGui_Helpers.h**  
-Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.    
-
-
-<details>
   <summary>2_1_Layout_Basic</summary>
   <p>
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
+  </p>
+</details>
+
+<details>
+  <summary>2_0_Layout_ofParamaters</summary>
+  <p>
+
+![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
+Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
+[BROKEN]  
   </p>
 </details>
 
@@ -202,6 +200,7 @@ void ofApp::draw()
   <p>
 
 ![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
+Learn to Split layout spaces by code.  
   </p>
 </details>
 
@@ -212,9 +211,9 @@ void ofApp::draw()
 
 ![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
   </p>
-</details>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
+</details>
 
 <details>
   <summary>2_4_Layout_ThemeEditor</summary>
@@ -222,11 +221,11 @@ Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a cl
 
 ![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
-</details>
 
-This is a helper for tweaking your themes: testings sizes, layout, and colors, and alternate fonts.  
+This is a helper for tweaking your Themes: testings sizes, layout, and colors, and alternate fonts.  
 Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
 There's not a automatic-fully-functional theme designer!  
+</details>
 
 <BR>
 
