@@ -318,16 +318,16 @@ namespace ofxImGuiSurfing
 			const auto iname = name + " " + ofToString(i);
 			if (info == typeid(float))
 			{
-				result |= ImGui::SliderFloat(GetUniqueName(iname), *values[i], minValue, maxValue);
+				result |= ImGui::SliderFloat(GetUniqueName2(iname), *values[i], minValue, maxValue);
 			}
 			else if (info == typeid(int))
 			{
-				result |= ImGui::SliderInt(GetUniqueName(iname), *values[i], minValue, maxValue);
+				result |= ImGui::SliderInt(GetUniqueName2(iname), *values[i], minValue, maxValue);
 			}
 			else if (info == typeid(bool))
 			{
 
-				result |= ImGui::Checkbox(GetUniqueName(iname), *values[i]);
+				result |= ImGui::Checkbox(GetUniqueName2(iname), *values[i]);
 			}
 			else
 			{

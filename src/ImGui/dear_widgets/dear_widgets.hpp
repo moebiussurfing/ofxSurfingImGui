@@ -142,7 +142,7 @@ void DrawColorDensityPlotEx(ImDrawList* pDrawList, FuncType func, float minX, fl
 	{
 		float x0;
 		float x1;
-		if constexpr (IsBilinear)
+		if /*constexpr*/ (IsBilinear)
 		{
 			x0 = ScaleFromNormalized(((float)i + 0) * dx, minX, maxX);
 			x1 = ScaleFromNormalized(((float)i + 1) * dx, minX, maxX);
@@ -156,7 +156,7 @@ void DrawColorDensityPlotEx(ImDrawList* pDrawList, FuncType func, float minX, fl
 		{
 			float y0;
 			float y1;
-			if constexpr (IsBilinear)
+			if /*constexpr*/ (IsBilinear)
 			{
 				y0 = ScaleFromNormalized(((float)(j + 0) * dy), maxY, minY);
 				y1 = ScaleFromNormalized(((float)(j + 1) * dy), maxY, minY);
@@ -167,7 +167,7 @@ void DrawColorDensityPlotEx(ImDrawList* pDrawList, FuncType func, float minX, fl
 			}
 
 			ImU32 const col00 = func(x0, y0);
-			if constexpr (IsBilinear)
+			if /*constexpr*/ (IsBilinear)
 			{
 				ImU32 const col01 = func(x0, y1);
 				ImU32 const col10 = func(x1, y0);
@@ -257,7 +257,7 @@ void	DrawColorRingEx(ImDrawList* pDrawList, ImVec2 const curPos, ImVec2 const si
 		float const t0 = std::fmodf(colorOffset + ((float)i) / ((float)division), 1.0f);
 		ImU32 const uCol0 = func(t0);
 
-		if constexpr (IsBilinear)
+		if /*constexpr*/ (IsBilinear)
 		{
 			float const t1 = std::fmodf(colorOffset + ((float)(i + 1)) / ((float)division), 1.0f);
 			ImU32 const uCol1 = func(t1);
@@ -292,7 +292,7 @@ void DrawChromaticPlotEx(ImDrawList* pDrawList,
 	float minX, float maxX,
 	float minY, float maxY)
 {
-	if constexpr (IsBilinear)
+	if /*constexpr*/ (IsBilinear)
 		DrawChromaticPlotBilinear(
 			pDrawList,
 			vPos, width, heigth,

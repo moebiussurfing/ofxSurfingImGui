@@ -449,8 +449,10 @@ public:
 	ofParameter<bool>& getVisible(int index) {
 		if (index > bGuis.size() - 1 || index == -1) {
 			ofLogError(__FUNCTION__) << "out of range index for queued windows";
-			return ofParameter<bool>{"-1", false};
+			//return ofParameter<bool>{"-1", false};
 			//return &ofParameter<bool>{"-1", false};
+			static ofParameter<bool> staticFalseResponse = ofParameter<bool>{"-1", false};
+			return staticFalseResponse;
 		}
 
 		return bGuis[index];
