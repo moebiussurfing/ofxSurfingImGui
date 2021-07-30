@@ -2,14 +2,15 @@ ofxSurfingImGui
 =============================
 
 ## Overview
-An ImGui toolkit for openFrameworks.  
+An **ImGui** toolkit for **openFrameworks** projects.  
 #### FEATURES:    
-**ofParameter Helpers**, Setup and Layout Management, **RAW ImGui Widgets** ported to oF, and useful Snippets, some projects WIP / just-for-testing like Sequencer or Node patching... to easy integrate **ImGui** into **openFrameworks** projects.  
+Setup and Layout Management, **RAW ImGui Widgets** ported to oF, **ofParameter Helpers**, and useful Snippets, some WIP or testing projects like Docking helpers, Sequencer or Node patching...   
 
 ## WORK IN PROGRESS!  
 ```
-A BIT BUGGY.
-SOME EXAMPLES NEED TO BE UPDATED TO API CHANGES.
+NOT FINISHED. A BIT BUGGY.
+SOME EXAMPLES CAN BE REDUNDANT,  
+OR NEED TO BE UPDATED TO API CHANGES.
 API WILL CHANGE A BIT.  
 ```
 
@@ -391,7 +392,7 @@ _All source snippets from other authors are linked into header files. Thanks!_
 <BR>
 
 <details>
-  <summary>Useful Links</summary>
+  <summary>Some reference links</summary>
   <p>
 
 https://github.com/HankiDesign/awesome-dear-imgui  
@@ -408,9 +409,7 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager
 
 * Add more ImGui RAW widgets with examples.
 * Convert to ofParameters for some widgets.
-* Pack some bigger widgets like matrix clicker just passing an int as an index only.
 * Fix and solve final ofParams helpers workflow.
-* Mark/disable some widgets that could use modern C++17.
 * Add multiple layouts presets engine from Paletto.
   </p>
 </details>

@@ -46,7 +46,7 @@ void ofApp::draw()
 			app_LayoutManager.setup();
 		}
 
-		app_LayoutManager.mainFrame.
+		//app_LayoutManager.mainFrame.
 		// Run the Coking Layout manager!
 		app_LayoutManager.draw();
 
