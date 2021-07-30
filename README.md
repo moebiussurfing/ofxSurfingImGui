@@ -165,11 +165,6 @@ void ofApp::draw()
   </p>
 </details>
 
-**2_1_Layout_Basic1**  
-**2_1_Layout_Basic2**  
-**2_1_Layout_Basic3**  
-**2_1_Layout_Basic4**  
-
 <details>
   <summary>2_1_Layout_Basic</summary>
   <p>
@@ -224,6 +219,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 ## 3. TYPES ENGINE [WIP]
 
+One step forward for ofHelpers:  
 Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
 Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 

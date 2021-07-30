@@ -120,13 +120,13 @@ void ofApp::draw()
 			{
 				ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
 				ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
-				//ImGui::Dummy(ImVec2(0, 2)); // spacing
-				ofxImGuiSurfing::ToggleRoundedButton("Generators", &bGenerators);
-				ofxImGuiSurfing::ToggleRoundedButton("Log", &bLog);
 
+				//ImGui::Dummy(ImVec2(0, 2)); // spacing
 				if (ImGui::Button("Disconnect All")) {
 					patchbay.disconnectAll();
 				}
+				ofxImGuiSurfing::ToggleRoundedButton("Generators", &bGenerators);
+				ofxImGuiSurfing::ToggleRoundedButton("Log", &bLog);
 				
 				ImGui::Dummy(ImVec2(0, 10)); // spacing
 			}

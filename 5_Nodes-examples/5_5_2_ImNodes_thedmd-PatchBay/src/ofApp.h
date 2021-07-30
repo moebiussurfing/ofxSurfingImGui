@@ -13,7 +13,6 @@
 
 /*
 
-+	add signals generators
 +	add plots
 +	add pins during runtime
 
