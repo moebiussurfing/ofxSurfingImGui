@@ -3,11 +3,13 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"	
+#include "ofxSurfing_ofxGui.h"	
 
 #include "basic-interaction-example.h" // -> here is the patching code
 
 #include "ofxPatchbay.h"
 #include "ofxGui.h"
+#include "ofxMyUtilImGui.h"
 
 /*
 
@@ -21,8 +23,12 @@
 class ofApp : public ofBaseApp {
 
 public:
+	ofxMyUtil::Im::ImGuiLogWindow ImLog;
+
+public:
 	void setup();
 	void update();
+	void updateGenerators();
 	void draw();
 	void exit();
 	void keyPressed(int key);
@@ -34,12 +40,18 @@ public:
 	void drawWidgets();
 
 	bool bOpen0 = true;
+	bool bLog= true;
 	bool bOpen1 = true;
 	bool bOpen2 = false;
+	bool bGenerators = true;
 
 	bool initialized = false;
 
-	ofEventListener listener;
+	ofEventListener listener_NewLink;
+	ofEventListener listener_RemovedLink;
+
+	void Changed_Params(ofAbstractParameter &e);
+	ofParameterGroup params{ "Params" };
 
 	//-
 	
@@ -74,4 +86,6 @@ public:
 	ofRectangle rect;
 	float scale;
 	ofColor color = ofColor(255, 0, 0);
+
+
 };

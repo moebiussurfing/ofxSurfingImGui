@@ -48,43 +48,36 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
   <p>
 
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
+Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
   </p>
 </details>
-
-Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
-
 
 <details>
   <summary>1_2_Widgets_Curve</summary>
   <p>
 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
+Includes bezier curves and usable tween/easing functions.  
   </p>
 </details>
-
-Includes bezier curves and usable tween/easing functions.  
-
 
 <details>
   <summary>1_3_Widgets_Spinner</summary>
   <p>
 
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
+Includes wait and progression spinners.  
   </p>
 </details>
-
-Includes wait and progression spinners.  
-
 
 <details>
   <summary>1_4_Widgets_Surfing</summary>
   <p>
 
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
+Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
   </p>
 </details>
-
-Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
 
 <BR>
 
@@ -342,7 +335,6 @@ Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
   </p>
 </details>
 
-
 <details>
   <summary>5_2_ofNodeEditor</summary>
   <p>
@@ -351,7 +343,6 @@ Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
 Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
   </p>
 </details>
-
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
@@ -362,7 +353,6 @@ Using [rokups/ImNodes](https://github.com/rokups/ImNodes)
   </p>
 </details>
 
-
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
   <p>
@@ -372,6 +362,14 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   </p>
 </details>
 
+<details>
+  <summary>5_5_2_ImNodes_thedmd-PatchBay</summary>
+  <p>
+
+![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
+Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
+  </p>
+</details>
 
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
 5_6_ImNodes-Graph-ImGuizmo [BROKEN]  

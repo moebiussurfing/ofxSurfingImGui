@@ -5,23 +5,104 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(-1920, 25);
 
+	ofxSurfingHelpers::setThemeDark_ofxGui();
+
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
 
 	setupPatches();
 
-	listener = example.bNewLink.newListener([this](bool b) {
+	listener_NewLink = example.bNewLink.newListener([this](bool b) {
 		if (b) {
-			ofLogNotice(__FUNCTION__) << "New Link!" << example.lastPinFrom << ">" << example.lastPinTo;
 			b = false;
+			string msg = "New Link \t " + ofToString(example.lastPinFrom) + " > " + ofToString(example.lastPinTo);
+
+			int iController = -1;
+			int iTarget = -1;
+
+			// workaround hardcoded for 4 to 4 elements
+			if (example.lastPinFrom >= 2 && example.lastPinFrom <= 5)
+			{
+				iController = example.lastPinFrom - 2;
+			}
+			if (example.lastPinTo >= 7 && example.lastPinTo <= 10)
+			{
+				iTarget = example.lastPinTo - 7;
+			}
+
+			if (iController != -1 && iTarget != -1) {
+				string msg = "New Link \t " + ofToString(iController) + " > " + ofToString(iTarget);
+
+				patchbay.link(iController, iTarget);
+
+				ImLog.AddText(msg);
+				ofLogNotice(__FUNCTION__) << msg;
+			}
+			else {
+				ofLogError(__FUNCTION__) << "Out of range. Link invalid";
+			}
 		}
 	});
-	//example.bNewLink.addListener()
+
+	listener_RemovedLink = example.bRemovedLink.newListener([this](bool b) {
+		if (b) {
+			b = false;
+			string msg = "Removed Link \t " + ofToString(example.lastPinFrom) + " > " + ofToString(example.lastPinTo);
+
+			int iController = -1;
+			int iTarget = -1;
+
+			// workaround hardcoded for 4 to 4 elements
+			if (example.lastPinFrom >= 2 && example.lastPinFrom <= 5)
+			{
+				iController = example.lastPinFrom - 2;
+			}
+			if (example.lastPinTo >= 7 && example.lastPinTo <= 10)
+			{
+				iTarget = example.lastPinTo - 7;
+			}
+
+			if (iController != -1 && iTarget != -1) {
+				string msg = "Removed Link \t " + ofToString(iController) + " > " + ofToString(iTarget);
+
+				patchbay.unlink(iController, iTarget);
+
+				ImLog.AddText(msg);
+				ofLogNotice(__FUNCTION__) << msg;
+			}
+			else {
+				ofLogError(__FUNCTION__) << "Out of range. Link invalid";
+			}
+		}
+	});
+
+	ImLog.SetLogSize(50);
+
+	ofAddListener(params.parameterChangedE(), this, &ofApp::Changed_Params); // setup()
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	updatePatches();
+	if (bGenerators) updateGenerators();
+}
+
+//--------------------------------------------------------------
+void ofApp::updatePatches() {
+	patchbay.update();
+
+	guiControllers.setPosition(10, 10);
+	guiTargets.setPosition(ofGetWidth() - 200 - 10, 10);
+}
+
+//--------------------------------------------------------------
+void ofApp::updateGenerators() {
+	pController0 = ofxSurfingHelpers::Tick(2.0f);
+	pController1 = ofxSurfingHelpers::Bounce(3.0f);
+	pController2 = ofxSurfingHelpers::Noise(ofPoint(2, -1));
+	pController3 = ofxSurfingHelpers::Bounce(0.5f);
+	//pController3 = ofxSurfingHelpers::Noise(ofPoint(-0.5, -0.5));
 }
 
 //--------------------------------------------------------------
@@ -39,7 +120,14 @@ void ofApp::draw()
 			{
 				ofxImGuiSurfing::ToggleRoundedButton("Show 1", &bOpen1);
 				ofxImGuiSurfing::ToggleRoundedButton("Show 2", &bOpen2);
+				//ImGui::Dummy(ImVec2(0, 2)); // spacing
+				ofxImGuiSurfing::ToggleRoundedButton("Generators", &bGenerators);
+				ofxImGuiSurfing::ToggleRoundedButton("Log", &bLog);
 
+				if (ImGui::Button("Disconnect All")) {
+					patchbay.disconnectAll();
+				}
+				
 				ImGui::Dummy(ImVec2(0, 10)); // spacing
 			}
 			ImGui::End();
@@ -48,6 +136,12 @@ void ofApp::draw()
 		//-
 
 		if (bOpen1) drawWidgets();
+
+		if (bLog) {
+			ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver);
+			ImLog.ImGui("LOG", ImGuiWindowFlags_None, &bLog);
+		}
 	}
 	guiManager.end();
 }
@@ -93,12 +187,30 @@ void ofApp::drawWidgets()
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() {
+void ofApp::exit()
+{
+	ofRemoveListener(params.parameterChangedE(), this, &ofApp::Changed_Params); // exit()
+
 	//// simple-example
 	//ed::DestroyEditor(g_Context);
-	
+
 	// basic-interaction-example
 	example.Application_Finalize();
+}
+
+// callback for a parameter group  
+//--------------------------------------------------------------
+void ofApp::Changed_Params(ofAbstractParameter &e)
+{
+	string name = e.getName();
+	ofLogNotice() << "Changed parameter named: " << name << " : with value " << e;
+
+	string msg = ofToString(name) + " : " + ofToString(e);
+	ImLog.AddText(msg);
+
+	//if (name == SHOW_gui.getName())
+	//{
+	//}
 }
 
 //--------------------------------------------------------------
@@ -137,17 +249,23 @@ void ofApp::setupPatches() {
 
 	patchbay.setupParameters();
 
-	// connect
-	patchbay.link(0, 0);
-	patchbay.link(1, 1);
-	patchbay.link(2, 2);
-	patchbay.link(3, 3);
+	//-
 
-	str2 = "PRESET\n";
-	str2 += "0 -> 0\n";
-	str2 += "1 -> 1\n";
-	str2 += "2 -> 2\n";
-	str2 += "3 -> 3";
+	if (0)
+	{
+		// connect
+		patchbay.link(0, 0);
+
+		patchbay.link(1, 1);
+		patchbay.link(2, 2);
+		patchbay.link(3, 3);
+
+		str2 = "PRESET\n";
+		str2 += "0 -> 0\n";
+		str2 += "1 -> 1\n";
+		str2 += "2 -> 2\n";
+		str2 += "3 -> 3";
+	}
 
 	//-
 
@@ -158,14 +276,11 @@ void ofApp::setupPatches() {
 	guiTargets.add(gTargets);
 
 	rect = ofRectangle(0, 0, 100, 100);
-}
 
-//--------------------------------------------------------------
-void ofApp::updatePatches() {
-	patchbay.update();
+	//-
 
-	guiControllers.setPosition(10, 10);
-	guiTargets.setPosition(ofGetWidth() - 200 - 10, 10);
+	params.add(gControllers);
+	//params.add(gTargets);
 }
 
 //--------------------------------------------------------------

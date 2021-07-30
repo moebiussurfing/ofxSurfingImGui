@@ -5,7 +5,7 @@ void ofApp::setup() {
 
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofSetFrameRate(60);
-	ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 	ofSetWindowTitle("Mosaic Engine Tester");
 
 	//guiManager.setImGuiAutodraw(true);

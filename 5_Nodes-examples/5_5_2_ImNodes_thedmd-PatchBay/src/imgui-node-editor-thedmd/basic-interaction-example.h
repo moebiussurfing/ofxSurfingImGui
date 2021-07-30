@@ -127,21 +127,21 @@ public:
 			ed::SetNodePosition(nodeI_OutputId, ImVec2(10, 10));
 		ed::BeginNode(nodeI_OutputId);
 
-		ImGui::Text("Node Output");
+		ImGui::Text("Controllers");
 		//ImGui::BeginGroup();
 		ImGuiEx_BeginColumn();
 		ImGuiEx_NextColumn();
 
 		ed::BeginPin(nodeI_OutputPinId1, ed::PinKind::Output);
-		ImGui::Text("Out 1 >");
+		ImGui::Text("Out0");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_OutputPinId2, ed::PinKind::Output);
-		ImGui::Text("Out 2 >");
+		ImGui::Text("Out1");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_OutputPinId3, ed::PinKind::Output);
-		ImGui::Text("Out 3 >");
+		ImGui::Text("Out2");
 		ed::EndPin();
 
 		//TEST
@@ -155,7 +155,7 @@ public:
 		//ed::PopStyleVar();
 
 		ed::BeginPin(nodeI_OutputPinId4, ed::PinKind::Output);
-		ImGui::Text("Out 4 >");
+		ImGui::Text("Out3");
 		ed::EndPin();
 
 		ImGuiEx_EndColumn();
@@ -175,24 +175,24 @@ public:
 			ed::SetNodePosition(nodeI_InputId, ImVec2(300, 10));
 		ed::BeginNode(nodeI_InputId);
 
-		ImGui::Text("Node Input");
+		ImGui::Text("Targets");
 
 		//ImGui::SameLine();
 
 		ed::BeginPin(nodeI_InputPinId1, ed::PinKind::Input);
-		ImGui::Text("> In1");
+		ImGui::Text("In0");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId2, ed::PinKind::Input);
-		ImGui::Text("> In2");
+		ImGui::Text("In1");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId3, ed::PinKind::Input);
-		ImGui::Text("> In3");
+		ImGui::Text("In2");
 		ed::EndPin();
 
 		ed::BeginPin(nodeI_InputPinId4, ed::PinKind::Input);
-		ImGui::Text("> In4");
+		ImGui::Text("In3");
 		ed::EndPin();
 
 		ed::EndNode();
@@ -315,22 +315,20 @@ public:
 						// Draw new link.
 						ed::Link(g_Links.back().Id, g_Links.back().InputId, g_Links.back().OutputId);
 						
-
-						auto ii = inputPinId;
-						int i = (int)ii.Get();
-
-						auto oo = outputPinId;
-						int o = (int)oo.Get();
+						//-
 
 						//TODO:
+						//lastPinFrom = inputPinId.AsPointer();
+						//lastPinFrom = inputPinId.cast<int>();
+						//lastPinFrom = inputPinId.AsPointer();
+
+						int i = (int)inputPinId.Get();
+						int o = (int)outputPinId.Get();
+
 						lastId = g_NextLinkId;
 						lastPinFrom = i;
 						lastPinTo = o;
 						bNewLink = true;
-
-						//lastPinFrom = inputPinId.AsPointer();
-						//lastPinFrom = inputPinId.cast<int>();
-						//lastPinFrom = inputPinId.AsPointer();
 					}
 
 					// You may choose to reject connection between these nodes
@@ -358,6 +356,16 @@ public:
 						if (link.Id == deletedLinkId)
 						{
 							g_Links.erase(&link);
+
+							//-
+
+							//TODO:
+							int i = (int)link.InputId.Get();
+							int o = (int)link.OutputId.Get();
+							lastPinFrom = i;
+							lastPinTo = o;
+							bRemovedLink = true;
+
 							break;
 						}
 					}
