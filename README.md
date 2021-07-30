@@ -93,24 +93,6 @@ Speed up **ofxImGui** instantiation, windows and layouts.
 Includes **ofParameter** helpers, widget sizes and extra widgets.  
 
 <details>
-  <summary>2_1_Layout_Basic</summary>
-  <p>
-
-![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
-  </p>
-</details>
-
-<details>
-  <summary>2_0_Layout_ofParamaters</summary>
-  <p>
-
-![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
-Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
-[BROKEN]  
-  </p>
-</details>
-
-<details>
   <summary>Example Code</summary>
   <p>
   
@@ -189,6 +171,24 @@ void ofApp::draw()
 </details>
 
 <details>
+  <summary>2_1_Layout_Basic</summary>
+  <p>
+
+![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
+  </p>
+</details>
+
+<details>
+  <summary>2_0_Layout_ofParamaters</summary>
+  <p>
+
+![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
+Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
+[BROKEN]  
+  </p>
+</details>
+
+<details>
   <summary>2_2_Layout_Docking</summary>
   <p>
 
@@ -228,6 +228,21 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 * Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
 <details>
+  <summary>USAGE CASES</summary>
+  <p>
+
+**CASE 1**:  
+_Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
+
+**CASE 2**:  
+_Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
+
+**CASE 3**:  
+_You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
+  </p>
+</details>
+
+<details>
   <summary>3_0_Layout_TypesEngine</summary>
   <p>
 
@@ -251,21 +266,6 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
 5. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
 6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
-
-<details>
-  <summary>USAGE CASES</summary>
-  <p>
-
-**CASE 1**:  
-_Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
-
-**CASE 2**:  
-_Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
-
-**CASE 3**:  
-_You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
-  </p>
-</details>
 
 <details>
   <summary>Code</summary>
@@ -309,11 +309,10 @@ These are testing projects trying to build an operative but very basic timeline,
   <p>
 
 ![image](/docs/4_1_ImSequencer.PNG?raw=true "image")  
-  </p>
-</details>
-
 Using [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
+  </p>
+</details>
 
 4_3_Sequentity [BROKEN]  
 Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
@@ -367,7 +366,7 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   <p>
 
 ![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
-Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
+[**WIP**] Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
   </p>
 </details>
 
