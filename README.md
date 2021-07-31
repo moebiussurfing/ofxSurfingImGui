@@ -80,6 +80,10 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
   </p>
 </details>
 
+<details>
+  <summary>1_5_FileBrowser</summary>
+  <p>
+
 ![image](/docs/1_5_FileBrowser.PNG?raw=true "image")  
   </p>
 </details>
