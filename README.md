@@ -8,10 +8,11 @@ Setup and Layout Management, **RAW ImGui Widgets** ported to oF, **ofParameter H
 
 ## WORK IN PROGRESS!  
 ```
-NOT FINISHED. A BIT BUGGY.
-SOME EXAMPLES CAN BE REDUNDANT,  
-OR NEED TO BE UPDATED TO API CHANGES.
+NOT FINISHED. A BIT BUGGY YET...
 API WILL CHANGE A BIT.  
+SOME EXAMPLES CAN BE REDUNDANT  
+OR NOT FINISHED,  
+OR NEED TO BE UPDATED TO API CHANGES.
 ```
 
 <details>
@@ -42,7 +43,6 @@ API WILL CHANGE A BIT.
 
 ## 1. WIDGETS
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators, and ofxImGui standard params.  
-
 
 <details>
   <summary>1_1_Widgets_DearWidgets</summary>
@@ -87,6 +87,7 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 Uses **ofxSurfing_ImGui_LayoutManager.h**  
 Speed up **ofxImGui** instantiation, windows and layouts.  
 Includes **ofParameter** helpers, widget sizes and extra widgets.  
+_Notice that below at point **3. TYPES ENGINE**, there's a better NEW API!_ 
 
 <details>
   <summary>Example Code</summary>
@@ -401,6 +402,7 @@ https://github.com/yumataesu/ImGui_Widgets
 https://github.com/njazz/AutomationCurveEditor  
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
+https://github.com/Organic-Code/ImTerm  
   </p>
 </details>
 <details>
