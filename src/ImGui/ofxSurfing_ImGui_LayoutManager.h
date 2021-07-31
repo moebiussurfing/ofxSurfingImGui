@@ -65,6 +65,7 @@ public:
 	//ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 
 public:
+
 	//--------------------------------------------------------------
 	void refresh()
 	{
@@ -105,6 +106,7 @@ private:
 	ofxImGui::Gui gui; // inside the addon
 
 public:
+
 	// To share Gui with other add-ons
 	//--------------------------------------------------------------
 	ofxImGui::Gui* getGuiPtr() {
@@ -144,6 +146,7 @@ public:
 	//----
 
 private:
+
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 	bool bViewport = false;
 	bool bDocking = true;
@@ -157,11 +160,9 @@ public:
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiViewPort(bool b) { bViewport = b; } // must be called before setup! 
+	void setImGuiDocking(bool b) { setDocking(b); } // must call before setup
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
-	void setImGuiDocking(bool b) { // must call before setup
-		setDocking(b);
-	}
 
 	// Force shared context
 	//--------------------------------------------------------------
@@ -452,7 +453,7 @@ public:
 			ofLogError(__FUNCTION__) << "out of range index for queued windows";
 			//return ofParameter<bool>{"-1", false};
 			//return &ofParameter<bool>{"-1", false};
-			static ofParameter<bool> staticFalseResponse = ofParameter<bool>{"-1", false};
+			static ofParameter<bool> staticFalseResponse = ofParameter<bool>{ "-1", false };
 			return staticFalseResponse;
 		}
 
