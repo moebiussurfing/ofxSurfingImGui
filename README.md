@@ -222,8 +222,10 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 ## 3. TYPES ENGINE [WIP]
 
 One step forward for ofHelpers:  
-Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
-Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
+
+* Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
+
+* Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
 #### FEATURES
 
