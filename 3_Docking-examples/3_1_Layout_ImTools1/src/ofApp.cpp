@@ -30,10 +30,13 @@ void ofApp::setup() {
 
 	//-
 
-	guiManager.setImGuiDockingModeCentered(false); // -> required to allow custom docking layout. 
+	guiManager.setImGuiDocking(true);
+	// -> required false to allow custom docking layout. 
 	// instead of the default centralized.
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup(); 
+	guiManager.setImGuiDockingModeCentered(false);
+
+	guiManager.setImGuiAutodraw(true); // -> required when only one ImGui instance (= n oother addons using ImGui)
+	guiManager.setup();
 }
 
 //--------------------------------------------------------------
@@ -44,6 +47,7 @@ void ofApp::draw()
 		if (!binitiated) {
 			binitiated = true;
 			app_LayoutManager.setup();
+			ofLogNotice(__FUNCTION__) << "Initialized done";
 		}
 
 		//app_LayoutManager.mainFrame.
@@ -87,6 +91,7 @@ void ofApp::draw()
 			//TODO: how to use from outside the class object??
 			//app_LayoutManager.mainFrame.
 
+			/*
 			if (bOpen1)
 			{
 				guiManager.beginWindow("Top", &bOpen1, ImGuiWindowFlags_None);
@@ -102,12 +107,13 @@ void ofApp::draw()
 				}
 				guiManager.endWindow();
 			}
+			*/
 
 			//---------
 
 			// Place intems inside:
 			// Dock Window Central
-
+			/*
 			if (bOpen2)
 			{
 				guiManager.beginWindow("Central", &bOpen2, ImGuiWindowFlags_None);
@@ -139,6 +145,7 @@ void ofApp::draw()
 				}
 				guiManager.endWindow();
 			}
+			*/
 
 			//-----
 		}

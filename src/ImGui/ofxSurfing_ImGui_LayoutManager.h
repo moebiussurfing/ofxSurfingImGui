@@ -158,6 +158,7 @@ public:
 	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiViewPort(bool b) { bViewport = b; } // must be called before setup! 
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
+	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
 	void setImGuiDocking(bool b) { // must call before setup
 		setDocking(b);
 	}

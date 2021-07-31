@@ -1,4 +1,0 @@
-ofxXmlSettings
-ofxImGui
-ofxInfiniteCanvas
-ofxSurfingImGui

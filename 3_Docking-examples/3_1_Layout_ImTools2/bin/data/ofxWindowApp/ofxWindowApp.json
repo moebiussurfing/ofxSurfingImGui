@@ -1,0 +1,36 @@
+[
+    {
+        "Preset": "Big",
+        "position": {
+            "x": 2.0,
+            "y": 25.0
+        },
+        "size": {
+            "height": 1053,
+            "width": 1916
+        },
+        "window_mode": "OF_WINDOW"
+    },
+    {
+        "Preset": "Mini",
+        "position": {
+            "x": 20.0,
+            "y": 20.0
+        },
+        "size": {
+            "height": 200,
+            "width": 200
+        },
+        "window_mode": "OF_WINDOW"
+    },
+    {
+        "extra_settings": {
+            "debugPerformance": "1",
+            "fps": "60",
+            "lockMode": "0",
+            "miniPreset": "0",
+            "showInfo": "0",
+            "vsync": "0"
+        }
+    }
+]

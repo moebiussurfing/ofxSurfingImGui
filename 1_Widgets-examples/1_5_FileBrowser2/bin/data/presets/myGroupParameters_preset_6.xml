@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<myGroupParameters>
+	<shape>1</shape>
+	<num_squares>16</num_squares>
+	<separation>85</separation>
+	<square_side>22</square_side>
+</myGroupParameters>

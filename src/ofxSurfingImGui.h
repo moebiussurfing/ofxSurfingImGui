@@ -29,6 +29,7 @@
 //#include "ImGui/ofxSurfing_ImGui_Themes.h"
 //#include "ImGui/themes/ThemeSequentity.inl"
 
+#include "ofxSurfing_ImGui_WidgetsFileBrowser.h"
 
 
 using namespace ofxImGuiSurfing;

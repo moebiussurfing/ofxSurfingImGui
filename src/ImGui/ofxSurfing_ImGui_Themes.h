@@ -41,7 +41,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void setDefaultFont(ofxImGui::Gui & gui, std::string path, int size)
+	inline void setDefaultFont(ofxImGui::Gui & gui, std::string path = "assets/fonts/telegrama_render.otf", int size = 10)
 	{
 		//if (gui == nullptr) return;
 		auto customFont = gui.addFont(path, size, nullptr); // WARNING: will crash if font not present!

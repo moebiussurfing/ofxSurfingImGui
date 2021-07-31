@@ -1,0 +1,3 @@
+ofxXmlSettings
+localAddons/ofxImGui
+localAddons/ofxCurvesTool
