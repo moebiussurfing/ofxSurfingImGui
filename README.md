@@ -225,6 +225,15 @@ One step forward for ofHelpers:
 Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
 Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
+#### FEATURES
+
+1. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+2. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
+3. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
+4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
+5. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+
 <details>
   <summary>USAGE CASES</summary>
   <p>
@@ -255,15 +264,6 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
-
-#### FEATURES
-
-1. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-2. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
-3. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
-4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
-5. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
-6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
 
 <details>
   <summary>Code</summary>
