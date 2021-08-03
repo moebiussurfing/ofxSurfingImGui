@@ -7,7 +7,9 @@
 
 using namespace std;
 
-namespace ofxSurfingHelpers {
+namespace ofxSurfingHelpers
+//namespace ofxImGuiSurfing 
+{
 
 	//------------------------------------------------------------------------------
 	// animator functions taken from 

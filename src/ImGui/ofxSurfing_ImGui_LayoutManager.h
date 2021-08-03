@@ -12,6 +12,8 @@
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
 
+#include "ofxSurfingHelpers.h"
+
 //-
 
 using namespace ofxImGuiSurfing;
@@ -94,6 +96,8 @@ public:
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
+	void update();
+
 	//-
 
 private:
@@ -137,8 +141,8 @@ public:
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
-	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
 	bool beginWindow(std::string name, bool* p_open);
+	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
 
 	// end a window
 	void endWindow();
@@ -366,6 +370,7 @@ private:
 
 	// settings
 	string path_Settings = "imgui_SurfingLayout.xml";
+	string path_SettingsLayout = "imgui_SurfingLayoutPresets.xml";
 	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
 	bool bAutoSaveSettings = false;
 
@@ -393,7 +398,8 @@ public:
 	//-
 
 	// windows management
-
+	// TODO:
+	// to populate windows only subscribing the toggle show/enabler
 public:
 
 	//--------------------------------------------------------------
@@ -466,4 +472,137 @@ private:
 	vector<ofParameter<bool>> bGuis; // we queue here the bool paramms that enables the show/hide for each queued window
 
 	//-
+
+
+public:
+	//ImGuiViewport* viewport = nullptr;
+	//ImGuiDockNodeFlags dockspace_flags;
+	////static ImGuiDockNodeFlags dockspace_flags;
+	//ImGuiIO& io = ImGui::GetIO();
+
+	void beginDocking();
+	void endDocking();
+
+	//ImGuiViewport& getDockingViewPort() {
+	//	return *viewport;
+	//}
+	//ImGuiDockNodeFlags getDockingFlags() {
+	//	return dockspace_flags;
+	//}
+
+
+
+//----
+
+
+
+//TODO:
+// ImGui layouts engine
+
+private:
+
+#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
+
+	//string path_Global;
+	string path_ImLayouts;
+
+	const char* ini_to_load = NULL;
+	const char* ini_to_save = NULL;
+	std::string ini_to_load_Str;
+	std::string ini_to_save_Str;
+
+	enum AppLayouts
+	{
+		APP_DEFAULT = 0,
+		APP_PRESETS,
+		APP_ENGINES,
+		APP_MINIMAL,
+		APP_USER,
+		APP_LAYOUTS_AMOUNT
+	};
+
+	void loadAppLayout(AppLayouts mode);
+	void saveAppLayout(AppLayouts mode);
+	ofParameter<int> appLayoutIndex{ "App Layout", 0, 0, APP_LAYOUTS_AMOUNT - 1 };
+	int appLayoutIndex_PRE = -1;
+
+	ofParameterGroup params_Layouts{ "Layout Presets" };
+
+	//-
+
+	ofParameter<bool> b0{ "DEFAULT", false };
+	ofParameter<bool> b1{ "PRESETS", false };
+	ofParameter<bool> b2{ "ENGINES", false };
+	ofParameter<bool> b3{ "MINIMAL", false };
+	ofParameter<bool> b4{ "USER", false };
+
+	void Changed_LayoutPanels(ofAbstractParameter &e);
+	ofParameterGroup params_LayoutSPanel{ "LAYOUTS PANEL" };
+
+	//--------------------------------------------------------------
+	std::string getLayoutName(AppLayouts mode) {
+		std::string s = "";
+
+		//switch (appLayoutIndex)
+		switch (mode)
+		{
+		case APP_DEFAULT: s = path_ImLayouts + "imgui_DEFAULT.ini"; break;
+		case APP_PRESETS: s = path_ImLayouts + "imgui_PRESETS.ini"; break;
+		case APP_ENGINES: s = path_ImLayouts + "imgui_ENGINES.ini"; break;
+		case APP_MINIMAL: s = path_ImLayouts + "imgui_MINIMAL.ini"; break;
+		case APP_USER: s = path_ImLayouts + "imgui_USER.ini"; break;
+		default:break;
+		}
+		return s;
+	}
+
+	//----
+
+public:
+	void setupLayoutPresets();
+	ofParameter<bool> bForceLayoutPosition{ "LAYOUT AUTO-POS", true };
+
+	ofRectangle rectangle_Central_MAX;
+	ofRectangle rectangle_Central;
+	ofRectangle rectangle_Central_Transposed;
+	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
+
+	void gui_LayoutsAdvanced();
+	void gui_LayoutsPresets();
+
+	//standalone window not handled by .ini layout
+	//but for the app settings
+	float widthGuiLayout;
+	ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
+	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
+		glm::vec2(0,0),
+		glm::vec2(ofGetWidth(), ofGetHeight())
+	};
+
+	ofParameter<bool> SHOW_LayoutsAdvanced{ "LAYOUTS ", false };
+	ofParameter<bool> SHOW_Layouts{ "LAYOUTS", false };
+	//shows advanced panels to tweak layout or workflow behaviour
+
+	ofParameter<bool> Lock_DockingLayout{ "LOCK", false };
+	ofParameter<bool> bAutoSave_Layout{ "AUTO SAVE", true };
+
+	ofParameterGroup params_LayoutPanelsState{ "LayoutPanels" };
+
+#define LAYOUT_WINDOW_WIDTH 150
+
+	ofParameter<bool> SHOW_Panels{ "PANELS", true };
+
+	void Changed_Controls(ofAbstractParameter &e);
+
+	ImGuiWindowFlags flagsWindowsLocked;
+	ofParameter<bool> bResponsive_Panels;
+
+	bool bUseLayout = false;
+	
+	void gui_Panels();
+
+public:
+	void setImGuiLayoutPresets(bool b) {
+		bUseLayout = b;
+	}
 };

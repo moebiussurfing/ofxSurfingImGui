@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "ofMain.h"
@@ -9,13 +10,13 @@
 #include "ofxWindowApp.h" // -> not required
 
 
-// docking help
+// Docking help
 // https://github.com/ocornut/imgui/issues/2109
 
-// docking demo
+// Docking demo
 // https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
 
-// toolbar example
+// Toolbar example
 // https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
 
 
@@ -66,13 +67,19 @@ public:
 
 	ofxWindowApp windowApp;
 	
-	bool bOpen0 = true;
-	bool bOpen1 = true;
-	bool bOpen2 = true;
-	bool bOpen3 = true;
-	bool bOpen4 = true;
+	//bool bOpen0 = true;
+	//bool bOpen1 = true;
+	//bool bOpen2 = true;
+	//bool bOpen3 = true;
+	//bool bOpen4 = true;
+
+	ofParameter<bool> bOpen0{ "Window 0", true };
+	ofParameter<bool> bOpen1{ "Window 1", true };
+	ofParameter<bool> bOpen2{ "Window 2", true };
+	ofParameter<bool> bOpen3{ "Window 3", true };
+	ofParameter<bool> bOpen4{ "Window 4", true };
+
 	bool bResetLayout = false;
-	void reset();
 
 	void drawMenu();
 
@@ -80,6 +87,8 @@ public:
 
 	//----
 
+	void dockingReset();
+	void dockingPopulate();
 
 	/*
 	// Flags for ImGui::DockSpace()
