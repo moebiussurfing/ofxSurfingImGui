@@ -2,6 +2,9 @@
 
 // Taken from: https://github.com/d3cod3/ofxVisualProgramming
 
+// https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.h
+// https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.cpp
+
 /*
 
 TODO:
