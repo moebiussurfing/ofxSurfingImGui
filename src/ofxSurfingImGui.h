@@ -243,7 +243,7 @@ void ofApp::drawImGui()
 
 //#include "ofxSurfingImGui.h"
 
-void setup_ImGui();
+void setupImGui();
 void draw_ImGui();
 ofxImGui::Gui gui;
 ofxImGui::Settings mainSettings = ofxImGui::Settings();
@@ -257,11 +257,11 @@ ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
 
 //ofApp.cpp
 
-setup_ImGui();
+setupImGui();
 draw_ImGui();
 
 //--------------------------------------------------------------
-void ofApp::setup_ImGui()
+void ofApp::setupImGui()
 {
 	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
 	bool bAutoDraw = true;

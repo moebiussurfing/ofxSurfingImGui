@@ -1,4 +1,21 @@
 
+/*
+
+TODO:
+
++ add keys to select layout presets
++ fix dockeable all windows or picke ones
++ add global reset
++ fix load app settings
++ add vertical responsive layout for panels window
++ add presets on runtime
++ add global reset
++ fix multiple dock spaces that are colliding/one over another
++ fix veiwport rectangle preview
+
+*/
+
+
 #pragma once
 
 #include "ofMain.h"
@@ -10,7 +27,6 @@
 #include "ofxSurfing_Serializer.h"
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
-//#include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
 
 #include "ofxSurfingHelpers.h"
 
@@ -61,11 +77,6 @@ public:
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
-	//-
-
-	//TODO:
-	//ofxSurfing_ImGui_WidgetsTypes widgetsManager;
-
 public:
 
 	//--------------------------------------------------------------
@@ -96,14 +107,13 @@ public:
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
-	void update();
 
 	//-
 
 private:
 
 	// initiate ofxImGui
-	void setup_ImGui();
+	void setupImGui();
 
 	// with have two mode for instantiate ImGui
 	ofxImGui::Gui * guiPtr = NULL; // passed by reference
@@ -153,13 +163,13 @@ private:
 
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 	bool bViewport = false;
-	bool bDocking = true;
+	//bool bDocking = true;
 	bool bDockingModeCentered = true; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
 	bool bPreviewSceneViewport = false;
 
 public:
 
-	// Force autodraw
+	// force autodraw
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
@@ -168,13 +178,13 @@ public:
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
-	// Force shared context
+	// force shared context
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
 	//----
 
-	// Fonts runtime mangement 
+	// fonts runtime mangement 
 
 private:
 
@@ -300,10 +310,11 @@ public:
 
 public:
 
-	// advanced panel
-	// snippet to copy/paste
+	// An advanced/extra common panel
+	// snippet to copy/paste into out orApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//guiManager.drawAdvancedSubPanel();
+
 	//--------------------------------------------------------------
 	void drawAdvanced() { // -> simpler call
 		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
@@ -369,10 +380,15 @@ public:
 private:
 
 	// settings
-	string path_Settings = "imgui_SurfingLayout.xml";
-	string path_SettingsLayout = "imgui_SurfingLayoutPresets.xml";
-	ofParameterGroup params_AppSettings{ "ofxSurfing_ImGui_LayoutManager" };
-	bool bAutoSaveSettings = false;
+	string path_Global;
+	string path_ImLayouts;
+	string path_AppSettings;
+	string path_LayoutSettings;
+
+	bool bAutoSaveSettings = true;
+	//bool bAutoSaveSettings = false;
+
+	ofParameterGroup params_AppSettings{ "AppSettings_Layout" };
 
 	//-
 
@@ -471,17 +487,19 @@ private:
 
 	vector<ofParameter<bool>> bGuis; // we queue here the bool paramms that enables the show/hide for each queued window
 
-	//-
+	//----
 
+	// docking helpers
 
 public:
+
+	void beginDocking();
+	void endDocking();
+
 	//ImGuiViewport* viewport = nullptr;
 	//ImGuiDockNodeFlags dockspace_flags;
 	////static ImGuiDockNodeFlags dockspace_flags;
 	//ImGuiIO& io = ImGui::GetIO();
-
-	void beginDocking();
-	void endDocking();
 
 	//ImGuiViewport& getDockingViewPort() {
 	//	return *viewport;
@@ -491,87 +509,94 @@ public:
 	//}
 
 
-
 //----
 
+// layout presets for docking engine
 
-
-//TODO:
 // ImGui layouts engine
+// on each layout preset we store:
+// 1. some parameters states
+// 2. ImGui ini positions
 
 private:
 
-#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
+	void drawMainWindow();
 
-	//string path_Global;
-	string path_ImLayouts;
+#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
 	const char* ini_to_load = NULL;
 	const char* ini_to_save = NULL;
 	std::string ini_to_load_Str;
 	std::string ini_to_save_Str;
 
-	enum AppLayouts
-	{
-		APP_DEFAULT = 0,
-		APP_PRESETS,
-		APP_ENGINES,
-		APP_MINIMAL,
-		APP_USER,
-		APP_LAYOUTS_AMOUNT
-	};
+	void loadAppLayout(int mode);
+	void saveAppLayout(int mode);
 
-	void loadAppLayout(AppLayouts mode);
-	void saveAppLayout(AppLayouts mode);
-	ofParameter<int> appLayoutIndex{ "App Layout", 0, 0, APP_LAYOUTS_AMOUNT - 1 };
+	void saveLayoutPreset(string path); //-> both group params and ImGui ini files
+	void loadLayoutPreset(string path);
+	void saveLayoutImGuiIni(string path);
+	void loadLayoutImGuiIni(string path);
+	void saveLayoutPresetGroup(string path);
+	void loadLayoutPresetGroup(string path);
+
+	ofParameter<int> appLayoutIndex{ "App Layout", 0, 0, -1 };
 	int appLayoutIndex_PRE = -1;
 
 	ofParameterGroup params_Layouts{ "Layout Presets" };
 
 	//-
 
-	ofParameter<bool> b0{ "DEFAULT", false };
-	ofParameter<bool> b1{ "PRESETS", false };
-	ofParameter<bool> b2{ "ENGINES", false };
-	ofParameter<bool> b3{ "MINIMAL", false };
-	ofParameter<bool> b4{ "USER", false };
-
-	void Changed_LayoutPanels(ofAbstractParameter &e);
-	ofParameterGroup params_LayoutSPanel{ "LAYOUTS PANEL" };
+	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
+	void Changed_Params(ofAbstractParameter &e);
+	ofParameterGroup params_LayoutSPanel{ "Layouts Panel" };
 
 	//--------------------------------------------------------------
-	std::string getLayoutName(AppLayouts mode) {
+	std::string getLayoutName(int mode) {
 		std::string s = "";
 
-		//switch (appLayoutIndex)
-		switch (mode)
-		{
-		case APP_DEFAULT: s = path_ImLayouts + "imgui_DEFAULT.ini"; break;
-		case APP_PRESETS: s = path_ImLayouts + "imgui_PRESETS.ini"; break;
-		case APP_ENGINES: s = path_ImLayouts + "imgui_ENGINES.ini"; break;
-		case APP_MINIMAL: s = path_ImLayouts + "imgui_MINIMAL.ini"; break;
-		case APP_USER: s = path_ImLayouts + "imgui_USER.ini"; break;
-		default:break;
-		}
-		return s;
+		if (mode > bLayoutPresets.size() - 1) return "-1";
+
+		s = bLayoutPresets[mode].getName();
+		//s += ".ini";
+		string _path = s;
+		return _path;
 	}
 
 	//----
 
 public:
-	void setupLayoutPresets();
-	ofParameter<bool> bForceLayoutPosition{ "LAYOUT AUTO-POS", true };
 
+	void setupLayout(); //-> must call manually after adding windows and layout presets
+
+	//--------------------------------------------------------------
+	void setImGuiLayoutPresets(bool b) {
+		bUseLayoutPresetsManager = b;
+	}
+	
+	ofParameter<bool> bGui_MainWindow{ "Main Window", true };
+	ofParameter<bool> bGui_Menu{ "Menu", true };
+
+private:
+
+#define LAYOUT_WINDOW_WIDTH 150
+
+	void updateLayout();
+	
+	void drawLayoutsAdvanced();
+	void drawLayoutsPresets();
+	void drawLayout();
+
+	void drawPanels();
+
+	ofParameter<bool> bForceLayoutPosition{ "Force Auto-Pos", true };
+
+	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central;
 	ofRectangle rectangle_Central_Transposed;
-	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
 
-	void gui_LayoutsAdvanced();
-	void gui_LayoutsPresets();
-
-	//standalone window not handled by .ini layout
-	//but for the app settings
+	// standalone window not handled by .ini layout
+	// but for the app settings
 	float widthGuiLayout;
 	ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
 	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
@@ -579,30 +604,35 @@ public:
 		glm::vec2(ofGetWidth(), ofGetHeight())
 	};
 
-	ofParameter<bool> SHOW_LayoutsAdvanced{ "LAYOUTS ", false };
-	ofParameter<bool> SHOW_Layouts{ "LAYOUTS", false };
+	ofParameter<bool> bGui_Panels{ "Panels", true };
+	ofParameter<bool> bGui_Layouts{ "Layouts", false };
+	ofParameter<bool> bGui_LayoutsAdvanced{ "Layouts Extra", false };
 	//shows advanced panels to tweak layout or workflow behaviour
 
-	ofParameter<bool> Lock_DockingLayout{ "LOCK", false };
-	ofParameter<bool> bAutoSave_Layout{ "AUTO SAVE", true };
+	ofParameter<bool> bLock_DockingLayout{ "Lock", false };
+	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 
-	ofParameterGroup params_LayoutPanelsState{ "LayoutPanels" };
+	ofParameter<bool> bResponsive_Panels;
+	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };
+	ofParameter<bool> bDocking{ "bDocking", true };
 
-#define LAYOUT_WINDOW_WIDTH 150
-
-	ofParameter<bool> SHOW_Panels{ "PANELS", true };
-
-	void Changed_Controls(ofAbstractParameter &e);
+	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 
 	ImGuiWindowFlags flagsWindowsLocked;
-	ofParameter<bool> bResponsive_Panels;
-
-	bool bUseLayout = false;
-	
-	void gui_Panels();
-
-public:
-	void setImGuiLayoutPresets(bool b) {
-		bUseLayout = b;
-	}
 };
+
+
+/*
+// Flags for ImGui::DockSpace()
+enum ImGuiDockNodeFlags_
+{
+ImGuiDockNodeFlags_None                         = 0,
+ImGuiDockNodeFlags_KeepAliveOnly                = 1 << 0,   // Don't display the dockspace node but keep it alive. Windows docked into this dockspace node won't be undocked.
+//ImGuiDockNodeFlags_NoCentralNode              = 1 << 1,   // Disable Central Node (the node which can stay empty)
+ImGuiDockNodeFlags_NoDockingInCentralNode       = 1 << 2,   // Disable docking inside the Central Node, which will be always kept empty. Note: when turned off, existing docked nodes will be preserved.
+ImGuiDockNodeFlags_NoSplit                      = 1 << 3,   // Disable splitting the node into smaller nodes. Useful e.g. when embedding dockspaces into a main root one (the root one may have splitting disabled to reduce confusion). Note: when turned off, existing splits will be preserved.
+ImGuiDockNodeFlags_NoResize                     = 1 << 4,   // Disable resizing child nodes using the splitter/separators. Useful with programatically setup dockspaces.
+ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
+ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
+};
+*/
