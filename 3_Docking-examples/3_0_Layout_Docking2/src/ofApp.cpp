@@ -150,7 +150,7 @@ void ofApp::drawLayout()
 
 	// a raw standard raw ImGui window
 	if (bOpen0) {
-		ImGuiWindowFlags window_flags;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		ImGui::Begin("Window 0", (bool*)&bOpen0.get(), window_flags);
