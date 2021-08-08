@@ -205,6 +205,35 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
+## 3. DOCKING [WIP]
+
+Examples to improve the layout of docking spaces. 
+
+* Learn to split docking spaces.
+* Engine manager to create layout presets.
+* docking helpers
+
+<details>
+  <summary>2_2_Layout_Docking</summary>
+  <p>
+
+![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
+Learn to Split layout spaces by code.  
+  </p>
+</details>
+
+<details>
+  <summary>2_3_Layout_ImTools</summary>
+  <p>
+
+![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+  </p>
+
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
+</details>
+
+<BR>
+
 ## 4. TYPES ENGINE [WIP]
 
 One step forward for ofHelpers:  
@@ -281,35 +310,6 @@ void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAU
 bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT);
 ```
-
-<BR>
-
-## 4. DOCKING [WIP]
-
-Examples to improve the layout of docking spaces. 
-
-* Learn to split docking spaces.
-* Engine manager to create layout presets.
-* docking helpers
-
-<details>
-  <summary>2_2_Layout_Docking</summary>
-  <p>
-
-![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
-Learn to Split layout spaces by code.  
-  </p>
-</details>
-
-<details>
-  <summary>2_3_Layout_ImTools</summary>
-  <p>
-
-![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
-  </p>
-
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
-</details>
 
 <BR>
 
