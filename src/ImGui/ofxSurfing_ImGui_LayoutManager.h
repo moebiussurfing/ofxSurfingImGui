@@ -544,6 +544,9 @@ private:
 
 	ofParameterGroup params_Layouts{ "Layout Presets" };
 
+	int numPresetsDefault;
+	void createLayoutPreset();
+
 	//-
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
@@ -566,7 +569,7 @@ private:
 
 public:
 
-	void setupLayout(); //-> must call manually after adding windows and layout presets
+	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
 	//--------------------------------------------------------------
 	void setImGuiLayoutPresets(bool b) {
@@ -582,9 +585,9 @@ private:
 
 	void updateLayout();
 	
-	void drawLayoutsAdvanced();
+	void drawLayoutsExtra();
 	void drawLayoutsPresets();
-	void drawLayout();
+	void drawLayoutScene();
 
 	void drawPanels();
 
@@ -606,10 +609,10 @@ private:
 
 	ofParameter<bool> bGui_Panels{ "Panels", true };
 	ofParameter<bool> bGui_Layouts{ "Layouts", false };
-	ofParameter<bool> bGui_LayoutsAdvanced{ "Layouts Extra", false };
+	ofParameter<bool> bGui_LayoutsExtra{ "Layouts Extra", false };
 	//shows advanced panels to tweak layout or workflow behaviour
 
-	ofParameter<bool> bLock_DockingLayout{ "Lock", false };
+	ofParameter<bool> bLockLayout{ "Lock", false };
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 
 	ofParameter<bool> bResponsive_Panels;

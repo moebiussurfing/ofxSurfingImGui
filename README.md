@@ -192,26 +192,6 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
 </details>
 
 <details>
-  <summary>2_2_Layout_Docking</summary>
-  <p>
-
-![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
-Learn to Split layout spaces by code.  
-  </p>
-</details>
-
-
-<details>
-  <summary>2_3_Layout_ImTools</summary>
-  <p>
-
-![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
-  </p>
-
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
-</details>
-
-<details>
   <summary>2_4_Layout_ThemeEditor</summary>
   <p>
 
@@ -225,7 +205,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
-## 3. TYPES ENGINE [WIP]
+## 4. TYPES ENGINE [WIP]
 
 One step forward for ofHelpers:  
 
@@ -304,7 +284,36 @@ void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeF
 
 <BR>
 
-## 4. TIMELINES AND SEQUENCERS [WIP]
+## 4. DOCKING [WIP]
+
+Examples to improve the layout of docking spaces. 
+
+* Learn to split docking spaces.
+* Engine manager to create layout presets.
+* docking helpers
+
+<details>
+  <summary>2_2_Layout_Docking</summary>
+  <p>
+
+![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
+Learn to Split layout spaces by code.  
+  </p>
+</details>
+
+<details>
+  <summary>2_3_Layout_ImTools</summary>
+  <p>
+
+![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+  </p>
+
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
+</details>
+
+<BR>
+
+## 5. TIMELINES AND SEQUENCERS [WIP]
 
 These are testing projects trying to build an operative but very basic timeline, to run very simple animations:  
 * A kind of note on/off or clip start/end behavior.
@@ -320,12 +329,12 @@ Still very raw yet, not functional: I need to [finish](https://github.com/Cedric
   </p>
 </details>
 
-4_3_Sequentity [BROKEN]  
+5_3_Sequentity [BROKEN]  
 Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
 
 <BR>
 
-## 5. NODES [WIP]
+## 6. NODES [WIP]
 
 These are testing [projects](https://github.com/ocornut/imgui/issues/306) with nodes/graph/patching.  
 My target is to build a simple engine to patch between **ofParameters**.  
