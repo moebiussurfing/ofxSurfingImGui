@@ -163,6 +163,7 @@ namespace ofxImGuiSurfing
 			float __spcy = ImGui::GetStyle().ItemSpacing.y;
 			float __h100 = ImGui::GetContentRegionAvail().y;
 			h = __h100 / amntRows - __spcy / amntRows;
+			h -= __spcy;
 		}
 
 		return h;

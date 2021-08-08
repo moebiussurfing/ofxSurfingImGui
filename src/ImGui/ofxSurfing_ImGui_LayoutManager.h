@@ -24,11 +24,11 @@ TODO:
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_Themes.h"
-#include "ofxSurfing_Serializer.h"
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
-#include "ofxSurfingHelpers.h"
+#include "ofxSurfing_Serializer.h"
+//#include "ofxSurfingHelpers.h"
 
 //-
 
@@ -107,6 +107,7 @@ public:
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
+	void keyPressed(int key);
 
 	//-
 
@@ -237,7 +238,7 @@ private:
 
 public:
 
-	ofParameterGroup params_Advanced{ "Advanced" };
+	ofParameterGroup params_Advanced{ "Params Advanced" };
 
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
@@ -388,7 +389,8 @@ private:
 	bool bAutoSaveSettings = true;
 	//bool bAutoSaveSettings = false;
 
-	ofParameterGroup params_AppSettings{ "AppSettings_Layout" };
+	ofParameterGroup params_AppSettings{ "AppSettings" };
+	ofParameterGroup params_LayoutSettings{ "LayoutSettings" };
 
 	//-
 
@@ -591,7 +593,9 @@ private:
 
 	void drawPanels();
 
-	ofParameter<bool> bForceLayoutPosition{ "Force Auto-Pos", true };
+	ofParameter<bool> bForceLayoutPosition{ "Forced", true };
+
+	ofParameter<bool> bDebugDocking{ "Docking Debug", false };
 
 	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
 	ofRectangle rectangle_Central_MAX;
@@ -622,6 +626,8 @@ private:
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 
 	ImGuiWindowFlags flagsWindowsLocked;
+
+	void loadAppSettings();
 };
 
 

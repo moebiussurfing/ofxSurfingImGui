@@ -69,48 +69,6 @@ void ofApp::dockingPopulate()
 //--------------------------------------------------------------
 void ofApp::dockingReset() // not works on runtime..?
 {
-	/*
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
-
-	ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
-	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
-	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
-
-	// split the dockspace into 2 nodes --
-	// DockBuilderSplitNode takes in the following args in the following order
-	//   window ID to split, direction, fraction (between 0 and 1),
-	// the final two setting let's us choose which id we want (which ever one we DON'T set as NULL,
-	// will be returned by the function)
-	// out_id_at_dir is the id of the node in the direction we specified earlier,
-	// out_id_at_opposite_dir is in the opposite direction
-
-	// preset0
-	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.1f, nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
-	auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
-	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
-	auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
-
-	//// preset1
-	//auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.5f, nullptr, &dockspace_id);
-	//auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.4f, nullptr, &dockspace_id);
-	//auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
-	//auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.5f, nullptr, &dockspace_id);
-	//auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.25f, nullptr, &dock_id_down);
-
-	// we now dock our windows into the docking node we made above
-	ImGui::DockBuilderDockWindow("Window1", dock_id_top);
-	ImGui::DockBuilderDockWindow("Left", dock_id_down);
-	ImGui::DockBuilderDockWindow("Down", dock_id_left);
-	ImGui::DockBuilderDockWindow("Window2", dock_id_left2);
-	ImGui::DockBuilderDockWindow("Window1", dock_id_down2);
-
-	ImGui::DockBuilderFinish(dockspace_id);
-	*/
-
-	///*
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -139,7 +97,6 @@ void ofApp::dockingReset() // not works on runtime..?
 	ImGui::DockBuilderDockWindow("Window1", dock_id_left2);
 	ImGui::DockBuilderDockWindow("Window2", dock_id_down2);
 	ImGui::DockBuilderFinish(dockspace_id);
-	//*/
 }
 
 //--------------------------------------------------------------
@@ -389,4 +346,10 @@ void ofApp::drawMenu()
 //--------------------------------------------------------------
 void ofApp::exit()
 {
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key)
+{
+	guiManager.keyPressed(key);
 }

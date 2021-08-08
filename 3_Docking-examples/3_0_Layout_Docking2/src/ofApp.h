@@ -26,6 +26,7 @@ public:
 
 	void setup();
 	void draw();
+	void keyPressed(int key);
 	void exit();
 
 	//-
