@@ -627,14 +627,16 @@ private:
 
 	//-
 
-//	// to callback reset
-//private:
-//	bool *bReset = nullptr;
-//
-//public:
-//	void setReset(bool *b) {
-//		bReset = b;
-//	}
+	// to callback reset
+private:
+	bool *bReset = nullptr;
+
+public:
+	//--------------------------------------------------------------
+	void setReset(bool *b) {
+		bReset = b;
+	}
+
 };
 
 

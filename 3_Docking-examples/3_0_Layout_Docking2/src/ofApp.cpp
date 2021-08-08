@@ -133,6 +133,7 @@ void ofApp::drawLayout()
 		if (bDockingReset)
 		{
 			bDockingReset = false;
+
 			dockingReset();
 		}
 
@@ -170,7 +171,6 @@ void ofApp::drawLayout()
 			if (ImGui::Button("Reset", ImVec2(_w, _h)))
 			{
 				bDockingReset = true; // flag to call on a preciste draw point
-				//dockingReset();
 			}
 
 			ImGui::Separator();

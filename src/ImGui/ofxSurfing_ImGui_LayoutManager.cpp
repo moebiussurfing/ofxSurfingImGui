@@ -285,7 +285,8 @@ void ofxSurfing_ImGui_Manager::drawMainWindow() {
 	if (_bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	if (beginWindow(bGui_MainWindow, window_flags))
+	//if (beginWindow(bGui_MainWindow, window_flags))
+	beginWindow(bGui_MainWindow, window_flags);
 	{
 		ImGui::Text("Layout Presets");
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
@@ -357,8 +358,9 @@ void ofxSurfing_ImGui_Manager::drawMainWindow() {
 			ImGui::Unindent();
 		}
 
-		endWindow();
+		//endWindow();
 	}
+	endWindow();
 }
 
 //--------------------------------------------------------------
@@ -506,10 +508,10 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 
 		//----
 
-		//TODO:
-		setDefaultFont();
+		////TODO:
+		//setDefaultFont();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
 
 		//-
 
@@ -600,6 +602,9 @@ void ofxSurfing_ImGui_Manager::begin() {
 	resetIDs(); // reset names
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
+	
+	//TODO:
+	setDefaultFont();
 
 	//----
 
@@ -609,7 +614,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
 
-	ImGui::PopStyleVar(); // minimal size
+	//ImGui::PopStyleVar(); // minimal size
 
 	if (customFont != nullptr) ImGui::PopFont();
 
@@ -652,18 +657,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	// force
 	//window_flags |= ImGuiWindowFlags_NoDecoration;
-
-	////widgets sizes
-	//float _spcx;
-	//float _spcy;
-	//float _w100;
-	//float _h100;
-	//float _w99;
-	//float _w50;
-	//float _w33;
-	//float _w25;
-	//float _h;
-	//ofxSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
 
 	// bAutoResize mode
 	//static bool bAutoResize = true;
@@ -1150,6 +1143,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		ImGui::SameLine();
 		ofxImGuiSurfing::AddBigToggle(bForceLayoutPosition, _w50, _h);
 		*/
+
+		ToggleRoundedButton("Auto Resize", &auto_resize);
 	}
 	endWindow();
 }
@@ -1383,16 +1378,12 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 			ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
-			if (ImGui::Button("Reset", ImVec2(_w100, _h)))
+			if (ImGui::Button("Reset Preset", ImVec2(_w100, _h)))
 			{
 				// toggle panels to true
 				for (int i = 0; i < bGuis.size(); i++) {
 					bGuis[i].set(true);
 				}
-
-				// or define a customized state..
-				////all params to false
-				//SHOW_Palette = false;
 
 				bLockLayout = false;
 
@@ -1488,6 +1479,7 @@ void ofxSurfing_ImGui_Manager::drawPanels()
 	//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, 400));
 
 	beginWindow(bGui_Panels, flags);
+
 	{
 		int NUM_WIDGETS = bGuis.size();//expected num widgets
 
@@ -1519,16 +1511,13 @@ void ofxSurfing_ImGui_Manager::drawPanels()
 			if (bLandscape) ImGui::SameLine();
 		}
 	}
+	
 	endWindow();
 
 	ImGui::PopStyleVar();
 }
 
-
 //--
-
-
-
 
 //TODO:
 //--------------------------------------------------------------

@@ -1,10 +1,10 @@
 {
     "Layout_Presets": {
-        "Menu": "1",
-        "Window_0": "0",
+        "Menu": "0",
+        "Window_0": "1",
         "Window_1": "1",
-        "Window_2": "0",
-        "Window_3": "0",
-        "Window_4": "0"
+        "Window_2": "1",
+        "Window_3": "1",
+        "Window_4": "1"
     }
 }
