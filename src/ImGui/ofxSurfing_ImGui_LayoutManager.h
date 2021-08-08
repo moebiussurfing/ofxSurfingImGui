@@ -3,15 +3,10 @@
 
 TODO:
 
-+ add keys to select layout presets
-+ fix dockeable all windows or picke ones
-+ add global reset
-+ fix load app settings
-+ add vertical responsive layout for panels window
-+ add presets on runtime
-+ add global reset
++ fix make dockeable all windows on same space
 + fix multiple dock spaces that are colliding/one over another
-+ fix veiwport rectangle preview
++ fix viewport rectangle preview
++ add global reset
 
 */
 
@@ -489,6 +484,8 @@ private:
 
 	vector<ofParameter<bool>> bGuis; // we queue here the bool paramms that enables the show/hide for each queued window
 
+	void loadAppSettings();
+
 	//----
 
 	// docking helpers
@@ -497,6 +494,8 @@ public:
 
 	void beginDocking();
 	void endDocking();
+
+	//----
 
 	//ImGuiViewport* viewport = nullptr;
 	//ImGuiDockNodeFlags dockspace_flags;
@@ -509,7 +508,6 @@ public:
 	//ImGuiDockNodeFlags getDockingFlags() {
 	//	return dockspace_flags;
 	//}
-
 
 //----
 
@@ -577,7 +575,7 @@ public:
 	void setImGuiLayoutPresets(bool b) {
 		bUseLayoutPresetsManager = b;
 	}
-	
+
 	ofParameter<bool> bGui_MainWindow{ "Main Window", true };
 	ofParameter<bool> bGui_Menu{ "Menu", true };
 
@@ -586,15 +584,15 @@ private:
 #define LAYOUT_WINDOW_WIDTH 150
 
 	void updateLayout();
-	
+
+	void drawLayouts();
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
 	void drawLayoutScene();
 
 	void drawPanels();
 
-	ofParameter<bool> bForceLayoutPosition{ "Forced", true };
-
+	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
 	ofParameter<bool> bDebugDocking{ "Docking Debug", false };
 
 	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
@@ -615,19 +613,28 @@ private:
 	ofParameter<bool> bGui_Layouts{ "Layouts", false };
 	ofParameter<bool> bGui_LayoutsExtra{ "Layouts Extra", false };
 	//shows advanced panels to tweak layout or workflow behaviour
-
 	ofParameter<bool> bLockLayout{ "Lock", false };
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-
-	ofParameter<bool> bResponsive_Panels;
-	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };
+	//ofParameter<bool> bResponsive_Panels;
+	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be cahgned on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 
 	ImGuiWindowFlags flagsWindowsLocked;
 
-	void loadAppSettings();
+	string titleWindowLabel;
+
+	//-
+
+//	// to callback reset
+//private:
+//	bool *bReset = nullptr;
+//
+//public:
+//	void setReset(bool *b) {
+//		bReset = b;
+//	}
 };
 
 

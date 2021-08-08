@@ -34,15 +34,19 @@ void ofApp::setup() {
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
 
-	// layouts presets
-	// -> this bool toggles will control the show of the added window
+	// -> layouts presets
+	// this bool toggles will control the show of the added window
 	// and will be added too to layout presets engine
 	guiManager.addWindow(bOpen0);
 	guiManager.addWindow(bOpen1);
 	guiManager.addWindow(bOpen2);
 	guiManager.addWindow(bOpen3);
 	guiManager.addWindow(bOpen4);
-	guiManager.setupLayout(); //-> initiates when adding finished
+
+	// -> initiates when adding finished
+	guiManager.setupLayout();
+
+	//guiManager.setReset((bool*)bDockingReset);
 }
 
 //--------------------------------------------------------------
@@ -70,7 +74,10 @@ void ofApp::dockingPopulate()
 void ofApp::dockingReset() // not works on runtime..?
 {
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
+
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 	ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
@@ -84,18 +91,25 @@ void ofApp::dockingReset() // not works on runtime..?
 	// will be returned by the function)
 	// out_id_at_dir is the id of the node in the direction we specified earlier,
 	// out_id_at_opposite_dir is in the opposite direction
-	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.1f, nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
-	auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
+	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2f, nullptr, &dockspace_id);
 	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
-	auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
+	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.15f, nullptr, &dockspace_id);
+	//auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
+	//auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
 
 	// we now dock our windows into the docking node we made above
-	ImGui::DockBuilderDockWindow("Window1", dock_id_top);
-	ImGui::DockBuilderDockWindow("Down", dock_id_down);
-	ImGui::DockBuilderDockWindow("Left", dock_id_left);
-	ImGui::DockBuilderDockWindow("Window1", dock_id_left2);
-	ImGui::DockBuilderDockWindow("Window2", dock_id_down2);
+
+	ImGui::DockBuilderDockWindow("Window 1", dock_id_top);
+	ImGui::DockBuilderDockWindow("Window 2", dock_id_right);
+	ImGui::DockBuilderDockWindow("Window 3", dock_id_left);
+	ImGui::DockBuilderDockWindow("Window 4", dock_id_down);
+
+	//ImGui::DockBuilderDockWindow("Window 0", dock_id_right);
+	//ImGui::DockBuilderDockWindow("Main Window", dock_id_left);
+	//ImGui::DockBuilderDockWindow("Layouts", dock_id_left);
+	//ImGui::DockBuilderDockWindow("Panels", dock_id_top);
+
 	ImGui::DockBuilderFinish(dockspace_id);
 }
 
@@ -105,7 +119,6 @@ void ofApp::drawLayout()
 	if (!binitiated)
 	{
 		binitiated = true;
-
 		//.. some ImGui addons may require
 	}
 
@@ -113,7 +126,7 @@ void ofApp::drawLayout()
 
 	guiManager.beginDocking();
 	{
-		dockingPopulate(); //-> initialize and "bypass" layout presets system if required
+		dockingPopulate(); // -> initialize and "bypass" layout presets system if required
 
 		//--
 
@@ -125,38 +138,13 @@ void ofApp::drawLayout()
 
 		//--
 
-		if (guiManager.bGui_Menu)
-			drawMenu();
-
-		//--
-
-		//// more windows
-		//// inside of the docking space. can be docked! ?
-		//if (0) {
-		//	if (bOpen3) {
-		//		ImGui::Begin("Left");
-		//		ImGui::Text("Hello, left!");
-		//		ImGui::Text("Hello, left!");
-		//		ImGui::Text("Hello, left!");
-		//		ImGui::End();
-		//	}
-
-		//	//--
-
-		//	if (bOpen4) {
-		//		ImGui::Begin("Down");
-		//		ImGui::Text("Hello, down!");
-		//		ImGui::Text("Hello, down!");
-		//		ImGui::Text("Hello, down!");
-		//		ImGui::Text("Hello, down!");
-		//		ImGui::Text("Hello, down!");
-		//		ImGui::End();
-		//	}
-		//}
+		if (guiManager.bGui_Menu) drawMenu();
 	}
 	guiManager.endDocking();
 
 	//---------
+
+	// -> render our windows now
 
 	// main Window
 
@@ -186,9 +174,10 @@ void ofApp::drawLayout()
 			}
 
 			ImGui::Separator();
+			ImGui::Spacing();
 
 			// tabs
-			if (ImGui::BeginTabBar("blah"))
+			if (ImGui::BeginTabBar("Blah"))
 			{
 				if (ImGui::BeginTabItem("Video"))
 				{
@@ -219,7 +208,7 @@ void ofApp::drawLayout()
 
 	if (bOpen1)
 	{
-		guiManager.beginWindow("Window1", (bool*)&bOpen1.get());
+		guiManager.beginWindow("Window 1", (bool*)&bOpen1.get());
 		{
 			ImGui::Text("Window1Window1Window1");
 
@@ -239,7 +228,7 @@ void ofApp::drawLayout()
 
 	if (bOpen2)
 	{
-		guiManager.beginWindow("Window2", (bool*)&bOpen2.get());
+		guiManager.beginWindow("Window 2", (bool*)&bOpen2.get());
 		{
 			ImGui::Text("Window2Window2Window2Window2");
 
@@ -269,26 +258,33 @@ void ofApp::drawLayout()
 
 	// more windows
 	// out of the docking space. cant be docked! ?
-	if (1) {
-		if (bOpen3) {
-			ImGui::Begin("Left");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::End();
-		}
 
-		//--
+	if (bOpen3) {
+		guiManager.beginWindow("Window 3", (bool*)&bOpen3.get());
+		{
+			//ImGui::Begin("Window 3");
+			ImGui::Text("Hello, left!");
+			ImGui::Text("Hello, left!");
+			ImGui::Text("Hello, left!");
+			//ImGui::End();
+		}	
+		guiManager.endWindow();
+	}
 
-		if (bOpen4) {
-			ImGui::Begin("Down");
+	//--
+
+	if (bOpen4) {
+		guiManager.beginWindow("Window 4", (bool*)&bOpen4.get());
+		//ImGui::Begin("Window 4");
+		{
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
-			ImGui::End();
 		}
+		//ImGui::End();
+		guiManager.endWindow();
 	}
 }
 
