@@ -486,12 +486,14 @@ namespace ofxImGuiSurfing
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
 					bReturn = false;
+					ImGui::PopItemWidth();
 				}
 				break;
 
@@ -552,12 +554,14 @@ namespace ofxImGuiSurfing
 				case OFX_IM_SLIDER:
 				case OFX_IM_INACTIVE:
 				{
+					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
 					bReturn = false;
+					ImGui::PopItemWidth();
 				}
 				break;
 
@@ -1019,7 +1023,7 @@ namespace ofxImGuiSurfing
 			if (uniqueName.getLevel() == 0)
 			{
 				if (bOpen)
-				//if (bOpen)
+					//if (bOpen)
 				{
 					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
@@ -1029,12 +1033,12 @@ namespace ofxImGuiSurfing
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 					{
 						if (!bHide)
-						ImGui::TreePop();
+							ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 					{
 						if (!bHide)
-						ImGui::TreePop();
+							ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 					{

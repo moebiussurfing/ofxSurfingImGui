@@ -835,6 +835,10 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endDocking()
 {
+	//if (bGui_Menu) drawMenu();
+	
+	//-
+
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
@@ -1590,10 +1594,60 @@ void ofxSurfing_ImGui_Manager::keyPressed(int key)
 		//{
 		//	if (appLayoutIndex > appLayoutIndex.getMin()) appLayoutIndex++;
 		//	else if (appLayoutIndex == appLayoutIndex.getMin()) appLayoutIndex = appLayoutIndex.getMax();
-
 		//	//if (appLayoutIndex < 3) loadAppLayout(AppLayouts(appLayoutIndex + 1));
 		//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
 		//}
 	}
 
 }
+
+////--------------------------------------------------------------
+//void ofxSurfing_ImGui_Manager::drawMenu()
+//{
+//	static bool opt_fullscreen = true;
+//	static bool opt_padding = false;
+//	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+//	static bool* p_open = NULL;
+//
+//	//-
+//
+//	// menu bar
+//
+//	// This is not operative. just for testing menus!
+//
+//	if (ImGui::BeginMenuBar())
+//	{
+//		if (ImGui::BeginMenu("Options"))
+//		{
+//			// Disabling fullscreen would allow the window to be moved to the front of other windows,
+//			// which we can't undo at the moment without finer window depth/z control.
+//			ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
+//			ImGui::MenuItem("Padding", NULL, &opt_padding);
+//			ImGui::Separator();
+//
+//			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
+//			if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
+//			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode; }
+//			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
+//			if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
+//			ImGui::Separator();
+//
+//			if (ImGui::MenuItem("Close", NULL, false, p_open != NULL))
+//				*p_open = false;
+//			ImGui::EndMenu();
+//		}
+//		ofxImGuiSurfing::HelpMarker(
+//			"This is not operative here. Just for testing menus!" "\n\n"
+//			"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
+//			"- Drag from window title bar or their tab to dock/undock." "\n"
+//			"- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
+//			"- Hold SHIFT to disable docking." "\n"
+//			"This demo app has nothing to do with it!" "\n\n"
+//			"This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window. This is useful so you can decorate your main application window (e.g. with a menu bar)." "\n\n"
+//			"ImGui::DockSpace() comes with one hard constraint: it needs to be submitted _before_ any window which may be docked into it. Therefore, if you use a dock spot as the central point of your application, you'll probably want it to be part of the very first window you are submitting to imgui every frame." "\n\n"
+//			"(NB: because of this constraint, the implicit \"Debug\" window can not be docked into an explicit DockSpace() node, because that window is submitted as part of the NewFrame() call. An easy workaround is that you can create your own implicit \"Debug##2\" window after calling DockSpace() and leave it in the window stack for anyone to use.)"
+//		);
+//
+//		ImGui::EndMenuBar();
+//	}
+//}

@@ -117,33 +117,40 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
 
-		//float
+
+		// float
 		if (info == typeid(float))
 		{
+			ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
+				ImGui::PopItemWidth();
 				return true;
 			}
-			
+
+			ImGui::PopItemWidth();
 			return false;
 		}
-		
-		//int
+
+		// int
 		if (info == typeid(int))
 		{
+			ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
+				ImGui::PopItemWidth();
 				return true;
 			}
 
+			ImGui::PopItemWidth();
 			return false;
 		}
 
-		//bool
+		// bool
 		if (info == typeid(bool))
 		{
 			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
@@ -151,15 +158,15 @@ namespace ofxImGuiSurfing
 				parameter.set(tmpRef);
 				return true;
 			}
-			
+
 			return false;
 		}
 
 		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
-		
+
 		return false;
 	}
-	
+
 	/*
 	//--------------------------------------------------------------
 	template<typename ParameterType>
@@ -182,7 +189,7 @@ namespace ofxImGuiSurfing
 			if (info == typeid(float))
 			{
 				bool bReturn = false;
-                ofParameter<float> &p = parameter.template cast<float>();
+				ofParameter<float> &p = parameter.template cast<float>();
 				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -216,7 +223,7 @@ namespace ofxImGuiSurfing
 			else if (info == typeid(int))
 			{
 				bool bReturn = false;
-                ofParameter<int> &p = parameter.template cast<int>();
+				ofParameter<int> &p = parameter.template cast<int>();
 				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -250,7 +257,7 @@ namespace ofxImGuiSurfing
 			else if (info == typeid(bool))
 			{
 				bool bReturn = false;
-                ofParameter<bool> &p = parameter.template cast<bool>();
+				ofParameter<bool> &p = parameter.template cast<bool>();
 				auto c = widgetsManager.getStyle(p);
 
 				// if the parameter widget is not added explicitly, will populate it as the default appearance
