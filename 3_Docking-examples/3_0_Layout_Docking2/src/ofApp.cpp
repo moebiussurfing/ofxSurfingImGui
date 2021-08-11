@@ -30,7 +30,7 @@ void ofApp::setup() {
 	// instead of the default centralized.
 	guiManager.setAutoSaveSettings(true);
 	guiManager.setImGuiDocking(true);
-	guiManager.setImGuiDockingModeCentered(false);
+	guiManager.setImGuiDockingModeCentered(true);
 	guiManager.setImGuiAutodraw(true);
 	guiManager.setup();
 

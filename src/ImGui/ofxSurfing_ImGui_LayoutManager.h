@@ -7,6 +7,11 @@ TODO:
 + fix multiple dock spaces that are colliding/one over another
 + fix viewport rectangle preview
 + add global reset
++ add minimal toggle
++ auto size per window
++ other window settings
++ layout ctrl+preset = solo
++ size debugger?
 
 */
 
@@ -160,7 +165,7 @@ private:
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 	bool bViewport = false;
 	//bool bDocking = true;
-	bool bDockingModeCentered = true; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
+	bool bDockingModeCentered = false; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
 	bool bPreviewSceneViewport = false;
 
 public:
@@ -236,12 +241,12 @@ public:
 	ofParameterGroup params_Advanced{ "Params Advanced" };
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bAutoResize{ "Auto Resize", true }; // auto resize panel
-	ofParameter<bool> bReset_Window{ "Reset Window", false };
+	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bMinimize{ "Minimize", false };
+	ofParameter<bool> bReset_Window{ "Reset Window", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
-	ofParameter<bool> bMinimize{ "Minimize", false };
 
 private:
 
@@ -381,8 +386,8 @@ private:
 	string path_AppSettings;
 	string path_LayoutSettings;
 
-	bool bAutoSaveSettings = true;
-	//bool bAutoSaveSettings = false;
+	//bool bAutoSaveSettings = true;
+	bool bAutoSaveSettings = false;
 
 	ofParameterGroup params_AppSettings{ "AppSettings" };
 	ofParameterGroup params_LayoutSettings{ "LayoutSettings" };
@@ -394,7 +399,7 @@ public:
 	// some tweak modes
 
 	//--------------------------------------------------------------
-	void setAutoSaveSettings(bool b) { // must call before setup
+	void setAutoSaveSettings(bool b) { // must call before setup. IMPORTANT: if you are using multiple instances of this addon, must set only one to true or settings will not be handled correctly!
 		bAutoSaveSettings = b;
 	}
 
@@ -417,24 +422,37 @@ public:
 
 	//--------------------------------------------------------------
 	void clearWindows() {
-		bGuis.clear();
+		windowAtributes.clear();
 	}
 
 	//--------------------------------------------------------------
-	void addWindow(ofParameter<bool>& _bGui) {
-		bGuis.push_back(_bGui);
+	void addWindow(ofParameter<bool>& _bGui, bool powered = false) {
+
+		WindowAtributes win;
+		win.bGui.makeReferenceTo(_bGui);
+		win.setPowered(powered);
+
+		windowAtributes.push_back(win);
+
+		params_Panels.add(_bGui);
+
 	}
 
 	//--------------------------------------------------------------
 	void addWindow(std::string name) {
 		ofParameter<bool> _bGui{ name, true };
-		bGuis.push_back(_bGui);
+
+		WindowAtributes win;
+		win.bGui.makeReferenceTo(_bGui);
+		win.setPowered(false);
+
+		windowAtributes.push_back(win);
 	}
 
 	//--------------------------------------------------------------
 	bool beginWindow(int index) {
-		if (index > bGuis.size() - 1 || index == -1) {
-			ofLogError(__FUNCTION__) << "out of range index for queued windows, " << index;
+		if (index > windowAtributes.size() - 1 || index == -1) {
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 			return false;
 		}
 
@@ -452,23 +470,25 @@ public:
 		ImGui::SetNextWindowSize(ImVec2(w, h), cond);
 
 		bool b = false;
-		//if ((bool)bGuis[index].get()) // -> fails
+		//if ((bool)windowAtributes[index].bGui.get()) // -> fails
 		{
-			b = beginWindow(bGuis[index].getName().c_str(), (bool*)&bGuis[index].get(), ImGuiWindowFlags_None);
-			//b = beginWindow(bGuis[index], ImGuiWindowFlags_None);
+			b = beginWindow(windowAtributes[index].bGui.getName().c_str(), (bool*)&windowAtributes[index].bGui.get(), ImGuiWindowFlags_None);
+			//b = beginWindow(windowAtributes[index].bGui, ImGuiWindowFlags_None);
 		}
 
 		//if(!b) endWindow();
 
 		return b;
-		//return bGuis[index].get();
+		//return windowAtributes[index].bGui.get();
 	}
 
 	//--------------------------------------------------------------
-	//ofParameter<bool> *getVisible(int index) {
-	//ofParameter<bool> getVisible(int index) {
-	ofParameter<bool>& getVisible(int index) {
-		if (index > bGuis.size() - 1 || index == -1) {
+	//ofParameter<bool> *getVisible(int index) 
+	//ofParameter<bool> getVisible(int index) 
+	ofParameter<bool>& getVisible(int index)
+	{
+		if (index > windowAtributes.size() - 1 || index == -1)
+		{
 			ofLogError(__FUNCTION__) << "out of range index for queued windows";
 			//return ofParameter<bool>{"-1", false};
 			//return &ofParameter<bool>{"-1", false};
@@ -476,15 +496,33 @@ public:
 			return staticFalseResponse;
 		}
 
-		return bGuis[index];
-		//return &bGuis[index];
+		return windowAtributes[index].bGui;
+		//return &windowAtributes[index].bGui;
 	}
 
 private:
+	struct WindowAtributes
+	{
+		// we queue here the bool paramms that enables the show/hide for each queued window
+		ofParameter<bool> bGui{ "Show Gui", true };
 
-	vector<ofParameter<bool>> bGuis; // we queue here the bool paramms that enables the show/hide for each queued window
+		ofParameter<bool> bPoweredWindow{ "bPoweredWindow", false }; // to include extra toggles when rendering
+
+		ofParameter<bool> bAutoResize{ "Auto Resize", true };
+		ofParameter<bool> bExtra{ "Extra", false };
+		ofParameter<bool> bMinimize{ "Minimize", false };
+		ofParameter<bool> bReset_Window{ "Reset Window", false };
+		ofParameter<bool> bAdvanced{ "Advanced", false };
+		ofParameter<bool> bDebug{ "Debug", false };
+
+		void setPowered(bool b) {
+			bPoweredWindow = b;
+		}
+	};
+	vector<WindowAtributes> windowAtributes;
 
 	void loadAppSettings();
+	void saveAppSettings();
 
 	//----
 
@@ -520,7 +558,7 @@ public:
 
 private:
 
-	void drawMainWindow();
+	void drawLayoutsManagerWindow();
 
 #define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
@@ -576,8 +614,8 @@ public:
 		bUseLayoutPresetsManager = b;
 	}
 
-	ofParameter<bool> bGui_MainWindow{ "Main Window", true };
-	ofParameter<bool> bGui_Menu{ "Menu", true };
+	ofParameter<bool> bGui_LayoutsManagerWindow{ "Layout Manager", false };
+	ofParameter<bool> bGui_Menu{ "Menu", false };
 
 private:
 
@@ -590,10 +628,10 @@ private:
 	void drawLayoutsPresets();
 	void drawLayoutScene();
 
-	void drawPanels();
+	void drawLayoutsPanels();
 
 	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
-	ofParameter<bool> bDebugDocking{ "Docking Debug", false };
+	ofParameter<bool> bDebugDocking{ "Debug", false };
 
 	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
 	ofRectangle rectangle_Central_MAX;
@@ -609,17 +647,32 @@ private:
 		glm::vec2(ofGetWidth(), ofGetHeight())
 	};
 
-	ofParameter<bool> bGui_Panels{ "Panels", true };
-	ofParameter<bool> bGui_Layouts{ "Layouts", false };
+	// customize titles
+public:
+	void setLabelLayoutPanels(string label) {
+		bGui_Panels.setName(label);
+	}
+	void setLabelLayoutMainWindow(string label) {
+		bGui_LayoutsManagerWindow.setName(label);
+	}
+
+	//-
+
+private:
+	ofParameter<bool> bGui_Panels{ "Layout Panels", true };
+	ofParameter<bool> bGui_LayoutsPresets{ "Layouts Presets", false };
 	ofParameter<bool> bGui_LayoutsExtra{ "Layouts Extra", false };
 	//shows advanced panels to tweak layout or workflow behaviour
 	ofParameter<bool> bLockLayout{ "Lock", false };
-	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
+	ofParameter<bool> bAutoSave_Layout{ "Auto Save Layout", true };
 	//ofParameter<bool> bResponsive_Panels;
-	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be cahgned on runtime. cant include into settings
+	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 
+	ofParameter<bool> bSolo{ "Solo", false };
+
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
+	ofParameterGroup params_Panels{ "Params Panels" };
 
 	ImGuiWindowFlags flagsWindowsLocked;
 

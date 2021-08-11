@@ -14,9 +14,10 @@
 
 //#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme. not implemented
 
-#define PANEL_WIDGETS_WIDTH 250 // will be applied as minimal panel shape
+#define PANEL_WIDGETS_WIDTH 200 // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 250 // will be applied as minimal panel shape
+#define PANEL_WIDGETS_WIDTH_MIN 200 // will be applied as minimal panel shape
+#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN // will be applied as minimal panel shape
 #define PANEL_WIDGETS_HEIGHT_MIN 20
 
 #define BUTTON_BIG_HEIGHT 50
