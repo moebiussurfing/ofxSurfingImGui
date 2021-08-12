@@ -452,6 +452,21 @@ public:
 		windowsAtributes.push_back(win);
 	}
 
+	//----
+	
+	// params to include into layout presets
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<bool>& param) {
+		params_Layouts.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
+		params_Layouts.add(param);
+	}
+	
+	//----
+
+	// window methods
 	//--------------------------------------------------------------
 	bool beginWindow(int index) {
 		if (index > windowsAtributes.size() - 1 || index == -1) {
@@ -633,7 +648,7 @@ private:
 
 	void drawLayoutsPanels();
 	ofParameter<bool> bAutoResizePanels{ "AutoResize ", false };
-	ofParameter<bool> bModeFreeStore{ "FreeStore", false };
+	ofParameter<bool> bModeFreeStore{ "FreeStore", true};
 
 	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
 	ofParameter<bool> bDebugDocking{ "Debug", false };

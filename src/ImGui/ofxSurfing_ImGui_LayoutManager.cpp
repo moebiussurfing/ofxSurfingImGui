@@ -47,7 +47,7 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	path_Global = "ImGuiLayout/";
 	ofxImGuiSurfing::CheckFolder(path_Global);
 
-	path_ImLayouts = path_Global + "presets/";
+	path_ImLayouts = path_Global + "Presets/";
 	ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 
 	path_AppSettings = path_Global + bGui_Panels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
@@ -295,6 +295,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
+		//flagCond = ImGuiCond_Always;
 		const int i = 2;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
@@ -890,7 +891,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 
 	// 1.1 define all the panel show toggles
 
-	params_Layouts.clear();
+	//params_Layouts.clear();
 	for (int i = 0; i < windowsAtributes.size(); i++)
 	{
 		params_Layouts.add(windowsAtributes[i].bGui);
@@ -1144,6 +1145,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
+		//flagCond = ImGuiCond_Always;
 		const int i = 0;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
@@ -1620,14 +1622,17 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	if (bAutoResizePanels) flags = ImGuiWindowFlags_AlwaysAutoResize;//TODO: bug
 	flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
 	//flags |= flagsWindowsLocked;
-
+	
+	/*
 	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(4 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
 	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
-
+	*/
+	
 	if(bModeFreeStore)
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
+		//flagCond = ImGuiCond_Always;
 		const int i = 1;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
@@ -1662,7 +1667,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		if (bLandscape) { // A. landscape
 			//_w = ofxImGuiSurfing::getWidgetsWidth(NUM_WIDGETS + 2);
 				const int amntColumns = NUM_WIDGETS + 2;
-				float __w100 = ImGui::GetContentRegionAvail().x - (4 * _spcx);//remove extra columns x spacing added!
+				float __w100 = ImGui::GetContentRegionAvail().x - (3 * _spcx);//remove extra columns x spacing added!
 				_w = (__w100 - _spcx * (amntColumns - 1)) / amntColumns;
 
 			_h = _h100 - _spcy;
@@ -1743,7 +1748,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		if (bLandscape) {//landscape
 			ImGui::NextColumn();
-			ImGui::SetColumnWidth(2, _w100 + _spcx);
+			ImGui::SetColumnWidth(2, _w100 + _spcx + _spcx);
 		}
 		else {//portrait
 			ImGui::Spacing();
@@ -1763,7 +1768,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	}
 	endWindow();
 
-	ImGui::PopStyleVar();
+	//ImGui::PopStyleVar();
 }
 
 //--
