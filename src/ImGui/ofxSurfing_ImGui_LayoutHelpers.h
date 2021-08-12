@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-// This class have widgets size constants ands method to get the window panel sizes.
+// This class have widgets size constants and methods to get the window panel sizes.
 
 //----------
 
@@ -14,11 +14,15 @@
 
 //#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme. not implemented
 
-#define PANEL_WIDGETS_WIDTH 200 // will be applied as minimal panel shape
+// will be applied as minimal panel shape
+#define PANEL_WIDGETS_WIDTH 200
 #define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 200 // will be applied as minimal panel shape
-#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN // will be applied as minimal panel shape
-#define PANEL_WIDGETS_HEIGHT_MIN 20
+#define PANEL_WIDGETS_WIDTH_MIN 200
+#define PANEL_WIDGETS_HEIGHT_MIN 100
+//#define PANEL_WIDGETS_HEIGHT_MIN 20
+
+#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
+#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
 #define BUTTON_BIG_HEIGHT 50
 #define BUTTON_COLOR_SIZE 40
@@ -34,6 +38,23 @@
 #define PADDING_WIDGETS 2 // space between some widgets or panels
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
+
+//-
+
+// default font
+
+//#define FONT_DEFAULT_SIZE 11
+//#define FONT_DEFAULT "telegrama_render.otf"
+
+#define FONT_DEFAULT_SIZE 13
+#define FONT_DEFAULT_FILE "PrgmtB.ttf"
+
+//#define FONT_DEFAULT_SIZE 13
+//#define FONT_DEFAULT_FILE "PrgmtR.ttf"
+
+//#define FONT_DEFAULT_SIZE 14
+//#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
+
 
 //------------------
 
@@ -196,6 +217,11 @@ namespace ofxImGuiSurfing
 	inline void AddSpaceY(int spacingy = 2)
 	{
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacing()
+	{
+		ImGui::Spacing();
 	}
 
 } // namespace ofxImGuiSurfing

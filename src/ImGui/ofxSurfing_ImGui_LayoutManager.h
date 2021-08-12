@@ -248,6 +248,9 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 
+	ofParameterGroup params_RectPanels{ "Rect Panels" };
+	vector<ofParameter<ofRectangle>> rectPanels;
+
 private:
 
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
@@ -422,7 +425,7 @@ public:
 
 	//--------------------------------------------------------------
 	void clearWindows() {
-		windowAtributes.clear();
+		windowsAtributes.clear();
 	}
 
 	//--------------------------------------------------------------
@@ -432,7 +435,7 @@ public:
 		win.bGui.makeReferenceTo(_bGui);
 		win.setPowered(powered);
 
-		windowAtributes.push_back(win);
+		windowsAtributes.push_back(win);
 
 		params_Panels.add(_bGui);
 
@@ -446,12 +449,12 @@ public:
 		win.bGui.makeReferenceTo(_bGui);
 		win.setPowered(false);
 
-		windowAtributes.push_back(win);
+		windowsAtributes.push_back(win);
 	}
 
 	//--------------------------------------------------------------
 	bool beginWindow(int index) {
-		if (index > windowAtributes.size() - 1 || index == -1) {
+		if (index > windowsAtributes.size() - 1 || index == -1) {
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 			return false;
 		}
@@ -470,16 +473,16 @@ public:
 		ImGui::SetNextWindowSize(ImVec2(w, h), cond);
 
 		bool b = false;
-		//if ((bool)windowAtributes[index].bGui.get()) // -> fails
+		//if ((bool)windowsAtributes[index].bGui.get()) // -> fails
 		{
-			b = beginWindow(windowAtributes[index].bGui.getName().c_str(), (bool*)&windowAtributes[index].bGui.get(), ImGuiWindowFlags_None);
-			//b = beginWindow(windowAtributes[index].bGui, ImGuiWindowFlags_None);
+			b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), ImGuiWindowFlags_None);
+			//b = beginWindow(windowsAtributes[index].bGui, ImGuiWindowFlags_None);
 		}
 
 		//if(!b) endWindow();
 
 		return b;
-		//return windowAtributes[index].bGui.get();
+		//return windowsAtributes[index].bGui.get();
 	}
 
 	//--------------------------------------------------------------
@@ -487,7 +490,7 @@ public:
 	//ofParameter<bool> getVisible(int index) 
 	ofParameter<bool>& getVisible(int index)
 	{
-		if (index > windowAtributes.size() - 1 || index == -1)
+		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "out of range index for queued windows";
 			//return ofParameter<bool>{"-1", false};
@@ -496,8 +499,8 @@ public:
 			return staticFalseResponse;
 		}
 
-		return windowAtributes[index].bGui;
-		//return &windowAtributes[index].bGui;
+		return windowsAtributes[index].bGui;
+		//return &windowsAtributes[index].bGui;
 	}
 
 private:
@@ -519,7 +522,7 @@ private:
 			bPoweredWindow = b;
 		}
 	};
-	vector<WindowAtributes> windowAtributes;
+	vector<WindowAtributes> windowsAtributes;
 
 	void loadAppSettings();
 	void saveAppSettings();
@@ -558,7 +561,7 @@ public:
 
 private:
 
-	void drawLayoutsManagerWindow();
+	void drawLayoutsManager();
 
 #define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
@@ -577,7 +580,7 @@ private:
 	void saveLayoutPresetGroup(string path);
 	void loadLayoutPresetGroup(string path);
 
-	ofParameter<int> appLayoutIndex{ "App Layout", 0, 0, -1 };
+	ofParameter<int> appLayoutIndex{ "App Layout", -1, -1, 0 };
 	int appLayoutIndex_PRE = -1;
 
 	ofParameterGroup params_Layouts{ "Layout Presets" };
@@ -614,7 +617,7 @@ public:
 		bUseLayoutPresetsManager = b;
 	}
 
-	ofParameter<bool> bGui_LayoutsManagerWindow{ "Layout Manager", false };
+	ofParameter<bool> bGui_LayoutsManager{ "Layout Manager", false };
 	ofParameter<bool> bGui_Menu{ "Menu", false };
 
 private:
@@ -629,6 +632,8 @@ private:
 	void drawLayoutScene();
 
 	void drawLayoutsPanels();
+	ofParameter<bool> bAutoResizePanels{ "AutoResize ", false };
+	ofParameter<bool> bModeFreeStore{ "FreeStore", false };
 
 	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
 	ofParameter<bool> bDebugDocking{ "Debug", false };
@@ -640,20 +645,27 @@ private:
 
 	// standalone window not handled by .ini layout
 	// but for the app settings
-	float widthGuiLayout;
+	//float widthGuiLayout;
+
 	ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
 	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
 		glm::vec2(0,0),
 		glm::vec2(ofGetWidth(), ofGetHeight())
 	};
 
+	ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",	
+		glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
+		glm::vec2(0,0),
+		glm::vec2(ofGetWidth(), ofGetHeight())
+	};
+
 	// customize titles
 public:
-	void setLabelLayoutPanels(string label) {
+	void setLabelLayoutPanels(string label) { // -> customize the app name for panels window label tittle
 		bGui_Panels.setName(label);
 	}
 	void setLabelLayoutMainWindow(string label) {
-		bGui_LayoutsManagerWindow.setName(label);
+		bGui_LayoutsManager.setName(label);
 	}
 
 	//-

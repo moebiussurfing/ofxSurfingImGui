@@ -234,8 +234,8 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	// font
 	std::string _fontName;
 	float _fontSizeParam;
-	_fontName = "telegrama_render.otf"; // WARNING: will crash if font not present!
-	_fontSizeParam = 11;
+	_fontName = FONT_DEFAULT_FILE; // WARNING: will crash if font not present!
+	_fontSizeParam = FONT_DEFAULT_SIZE;
 	std::string _path = "assets/fonts/"; // assets folder
 
 	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
@@ -244,7 +244,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	//-
 
-	// theme
+	// Theme: colors and sizes
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }
 
@@ -281,7 +281,7 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawLayoutsManagerWindow() {
+void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 	static bool _bAutoResize = true;
 	static ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
@@ -289,9 +289,27 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManagerWindow() {
 	//window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	window_flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
 
-	//if (beginWindow(bGui_LayoutsManagerWindow, window_flags))
-	beginWindow(bGui_LayoutsManagerWindow, window_flags);
+	//-
+
+	if (bModeFreeStore)
 	{
+		ImGuiCond flagCond;
+		flagCond = ImGuiCond_Appearing;
+		const int i = 2;
+		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
+		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
+	}
+
+	//-
+
+	beginWindow(bGui_LayoutsManager, window_flags);
+	//if (beginWindow(bGui_LayoutsManager, window_flags))
+	{
+		const int i = 2;
+		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
+
+		//-
+
 		//ImGui::Text("Layout Presets");
 
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
@@ -308,9 +326,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManagerWindow() {
 		//-
 
 		ImGui::Text("Panels");
-		for (int i = 0; i < windowAtributes.size(); i++)
+		for (int i = 0; i < windowsAtributes.size(); i++)
 		{
-			AddToggleRoundedButton(windowAtributes[i].bGui);
+			AddToggleRoundedButton(windowsAtributes[i].bGui);
 		}
 
 		//ImGui::Spacing();
@@ -319,9 +337,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManagerWindow() {
 		if (ImGui::Button("All", ImVec2(_w50, _h / 2)))
 		{
 			bool b = true;
-			for (int i = 0; i < windowAtributes.size(); i++)
+			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
-				windowAtributes[i].bGui.set(b);
+				windowsAtributes[i].bGui.set(b);
 			}
 			bGui_Menu = b;
 			bLockLayout = b;
@@ -333,9 +351,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManagerWindow() {
 		if (ImGui::Button("None", ImVec2(_w50, _h / 2)))
 		{
 			bool b = false;
-			for (int i = 0; i < windowAtributes.size(); i++)
+			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
-				windowAtributes[i].bGui.set(b);
+				windowsAtributes[i].bGui.set(b);
 			}
 			bGui_Menu = b;
 			bLockLayout = b;
@@ -384,7 +402,7 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 
-	if (bGui_LayoutsManagerWindow) drawLayoutsManagerWindow();
+	if (bGui_LayoutsManager) drawLayoutsManager();
 
 	//----
 
@@ -865,7 +883,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 
 	//-
 
-	bGui_LayoutsManagerWindow = true;
+	bGui_LayoutsManager = true;
 	//bGui_Menu = true;
 
 	//-
@@ -873,9 +891,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 	// 1.1 define all the panel show toggles
 
 	params_Layouts.clear();
-	for (int i = 0; i < windowAtributes.size(); i++)
+	for (int i = 0; i < windowsAtributes.size(); i++)
 	{
-		params_Layouts.add(windowAtributes[i].bGui);
+		params_Layouts.add(windowsAtributes[i].bGui);
 	}
 
 	// 1.2 add other settings that we want to store into each presets
@@ -934,7 +952,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 
 	// 4. app states for the next session
 
-	params_AppSettings.add(bGui_LayoutsManagerWindow);
+	params_AppSettings.add(bGui_LayoutsManager);
 
 	params_LayoutSettings.add(bGui_LayoutsPresets);
 	params_LayoutSettings.add(bGui_LayoutsExtra);
@@ -942,6 +960,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 	params_LayoutSettings.add(bAutoSave_Layout);
 	params_LayoutSettings.add(bForceLayoutPosition);
 	params_LayoutSettings.add(bLockLayout);
+	params_LayoutSettings.add(bModeFreeStore);
 	//params_LayoutSettings.add(bGui_Menu);
 	//params_LayoutSettings.add(bDebugRectCentral);
 	params_LayoutSettings.add(appLayoutIndex);
@@ -952,11 +971,29 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets)//-> must call manuall
 
 	//-
 
-	//-
 
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
+
+	//-
+
+	// initiate the 3 contrl windows
+
+	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(), ofRectangle(), ofRectangle() };
+	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(), ofRectangle(), ofRectangle() };
+	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(), ofRectangle(), ofRectangle() };
+
+	rectPanels.clear();
+	rectPanels.emplace_back(r1);
+	rectPanels.emplace_back(r2);
+	rectPanels.emplace_back(r3);
+
+	params_RectPanels.clear();
+	params_RectPanels.add(r1);
+	params_RectPanels.add(r2);
+	params_RectPanels.add(r3);
+	params_AppSettings.add(params_RectPanels);
 
 	//--
 
@@ -981,9 +1018,11 @@ void ofxSurfing_ImGui_Manager::saveAppSettings()
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::saveAppLayout(int mode)
+void ofxSurfing_ImGui_Manager::saveAppLayout(int _index)
 {
-	ini_to_save_Str = getLayoutName(mode);
+	if (_index == -1) return;
+
+	ini_to_save_Str = getLayoutName(_index);
 
 	ofLogNotice(__FUNCTION__) << ini_to_save_Str;
 
@@ -997,11 +1036,13 @@ void ofxSurfing_ImGui_Manager::saveAppLayout(int mode)
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::loadAppLayout(int mode)
+void ofxSurfing_ImGui_Manager::loadAppLayout(int _index)
 {
-	//if (appLayoutIndex == mode) return; // skip
+	if (_index == -1) return;
 
-	appLayoutIndex = ofClamp(mode, appLayoutIndex.getMin(), appLayoutIndex.getMax());
+	//if (appLayoutIndex == _index) return; // skip
+
+	appLayoutIndex = ofClamp(_index, appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
 	string _name = getLayoutName(appLayoutIndex.get());
 	ofLogNotice(__FUNCTION__) << appLayoutIndex << ":" << _name;
@@ -1016,7 +1057,7 @@ void ofxSurfing_ImGui_Manager::loadAppLayout(int mode)
 		for (int i = 0; i < bLayoutPresets.size(); i++) {
 			bLayoutPresets[i].set(false);
 		}
-		bLayoutPresets[mode].set(true);
+		bLayoutPresets[_index].set(true);
 	}
 
 	// window title
@@ -1063,48 +1104,62 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 	//xw = ofGetWidth() / 2 - ww / 2;
 	//yw = ofGetHeight() / 2 - hw / 2;
 
-	ImGuiCond flagCond;
-
-	if (bForceLayoutPosition)
+	if (!bModeFreeStore.get())
 	{
-		//// upper left
-		//glm::vec2 p = rectangle_Central_MAX.getTopLeft() + glm::vec2(-1, -1);
+		ImGuiCond flagCond;
 
-		// center upper left
-		int _pad = 10;
-		int _xx = rectangle_Central_MAX.getTopLeft().x + _pad;
-		int _yy = rectangle_Central_MAX.getTopLeft().y + rectangle_Central_MAX.getHeight() / 2 - hw / 2;
-		glm::vec2 p = glm::vec2(_xx, _yy);
+		if (bForceLayoutPosition)
+		{
+			//// upper left
+			//glm::vec2 p = rectangle_Central_MAX.getTopLeft() + glm::vec2(-1, -1);
 
-		// shape
-		xw = p.x;
-		yw = p.y;
+			// center upper left
+			int _pad = 10;
+			int _xx = rectangle_Central_MAX.getTopLeft().x + _pad;
+			int _yy = rectangle_Central_MAX.getTopLeft().y + rectangle_Central_MAX.getHeight() / 2 - hw / 2;
+			glm::vec2 p = glm::vec2(_xx, _yy);
 
-		flagCond = ImGuiCond_Always;
+			// shape
+			xw = p.x;
+			yw = p.y;
+
+			flagCond = ImGuiCond_Always;
+		}
+		else
+		{
+			//TODO:
+			//// shape
+			//xw = shapeGuiLayout.get().x;
+			//yw = shapeGuiLayout.get().y;
+			xw = positionGuiLayout.get().x;
+			yw = positionGuiLayout.get().y;
+
+			flagCond = ImGuiCond_Once;
+		}
+
+		ImGui::SetNextWindowPos(ofVec2f(xw, yw), flagCond);
+		//ImGui::SetNextWindowSize(ofVec2f(ww, hw), flagCond); // exclude shape
 	}
-	else
+	else // bModeFreeStore
 	{
-		// shape
-		xw = positionGuiLayout.get().x;
-		yw = positionGuiLayout.get().y;
-
-		flagCond = ImGuiCond_Once;
+		ImGuiCond flagCond;
+		flagCond = ImGuiCond_Appearing;
+		const int i = 0;
+		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
+		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
 	}
 
-	ImGui::SetNextWindowPos(ofVec2f(xw, yw), flagCond);
-	//ImGui::SetNextWindowSize(ofVec2f(ww, hw), flagCond); // exclude shape
 
 	//----
 
 	beginWindow(bGui_LayoutsPresets, window_flags);
 	{
 		// get window position for advanced layout paired position
-		auto posx = ImGui::GetWindowPos().x;
-		auto posy = ImGui::GetWindowPos().y;
-		auto w = ImGui::GetWindowWidth();
-		positionGuiLayout = glm::vec2(posx, posy);
-		//positionGuiLayout = glm::vec2(posx + w, posy);
-		widthGuiLayout = w;
+		positionGuiLayout = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+		shapeGuiLayout = glm::vec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+		const int i = 0;
+		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
 
 		//--
 
@@ -1173,6 +1228,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		ofxImGuiSurfing::AddBigToggle(bForceLayoutPosition, _w50, _h);
 		*/
 
+		AddToggleRoundedButton(bModeFreeStore);
 		ToggleRoundedButton("Auto Resize", &auto_resize);
 	}
 	endWindow();
@@ -1229,7 +1285,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 	// layout preset index
 	else if (name == appLayoutIndex.getName())
 	{
-		appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
+		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
 		if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) //changed
 		{
@@ -1264,6 +1320,17 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 		//-
 
+		// hide all modules/gui toggles
+		if (appLayoutIndex == -1) {
+			for (int i = 0; i < windowsAtributes.size(); i++)
+			{
+				windowsAtributes[i].bGui.set(false);
+			}
+			return; // not required bc loadAppLayout will be skipped when -1
+		}
+
+		//-
+
 		// 2. load layout
 		loadAppLayout(appLayoutIndex.get());
 	}
@@ -1293,7 +1360,12 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 							bAllFalse = false;
 						}
 					}
-					if (bAllFalse)bLayoutPresets[appLayoutIndex].set(true);
+					if (bAllFalse) {
+						////force back to true if it's there's no other enabled..
+						//bLayoutPresets[appLayoutIndex].set(true);
+						//set to -1
+						appLayoutIndex = -1;
+					}
 				}
 			}
 		}
@@ -1312,15 +1384,15 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 	// solo panels selectors
 	{
 		bool bSomeTrue = false;
-		for (int i = 0; i < windowAtributes.size(); i++)
+		for (int i = 0; i < windowsAtributes.size(); i++)
 		{
 			int iTrue = -1;
-			if (name == windowAtributes[i].bGui.getName() && windowAtributes[i].bGui.get()) {
+			if (name == windowsAtributes[i].bGui.getName() && windowsAtributes[i].bGui.get()) {
 				iTrue = i;
 				if (bSolo.get()) {
-					for (int i = 0; i < windowAtributes.size(); i++)
+					for (int i = 0; i < windowsAtributes.size(); i++)
 					{
-						if (iTrue != i && iTrue != -1) windowAtributes[i].bGui.set(false);
+						if (iTrue != i && iTrue != -1) windowsAtributes[i].bGui.set(false);
 					}
 					return;
 				}
@@ -1356,20 +1428,27 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 	yw = ofGetHeight() / 2 - hw / 2;
 
 	ImGuiCond _flagc;
-	//_flagc = ImGuiCond_Appearing;
-	//ImGui::SetNextWindowPos(ofVec2f(xw + ww + 2, yw), _flagc);
 	_flagc = ImGuiCond_Always;
+	//_flagc = ImGuiCond_FirstUseEver;
+	//_flagc = ImGuiCond_Appearing;
 
-	int _pad = 10;
-	ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x + widthGuiLayout + _pad, positionGuiLayout.get().y), _flagc);
+	int _pad = PADDING_PANELS;
+
+	//ImGui::SetNextWindowPos(ofVec2f(xw + ww + 2, yw), _flagc);
 	//ImGui::SetNextWindowSize(ofVec2f(ww, hw), _flagc);
+
+	//right
+	//ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x + shapeGuiLayout.get().x + _pad, positionGuiLayout.get().y), _flagc);
+
+	//down
+	ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x, positionGuiLayout.get().y + shapeGuiLayout.get().y + _pad), _flagc);
+
 
 	//----
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(max, CURRENT_WINDOW_MIN_HEIGHT));
 
 	beginWindow(bGui_LayoutsExtra, flags);
-
 	{
 		float _spcx;
 		float _spcy;
@@ -1450,8 +1529,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 			if (ImGui::Button("Reset Preset", ImVec2(_w100, _h)))
 			{
 				// toggle panels to true
-				for (int i = 0; i < windowAtributes.size(); i++) {
-					windowAtributes[i].bGui.set(true);
+				for (int i = 0; i < windowsAtributes.size(); i++) {
+					windowsAtributes[i].bGui.set(true);
 				}
 
 				bLockLayout = false;
@@ -1471,7 +1550,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//	ImGui::Checkbox("Auto-Resize", &auto_resize);
 		//}
 	}
-
 	endWindow();
 
 	//ImGui::PopStyleVar();
@@ -1536,21 +1614,35 @@ void ofxSurfing_ImGui_Manager::createLayoutPreset()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 {
-	static bool auto_resize = 1;
+	static bool bLandscape;
 
-	ImGuiWindowFlags flags = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-	//flags |= flagsWindowsLocked;
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (bAutoResizePanels) flags = ImGuiWindowFlags_AlwaysAutoResize;//TODO: bug
 	flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
+	//flags |= flagsWindowsLocked;
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7, PANEL_WIDGETS_WIDTH_MIN * 0.7));
+	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(4 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
+	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
 
-	//static bool bLandscape;
-	//if(bLandscape)ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(400, PANEL_WIDGETS_HEIGHT));
-	//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, 400));
+	if(bModeFreeStore)
+	{
+		ImGuiCond flagCond;
+		flagCond = ImGuiCond_Appearing;
+		const int i = 1;
+		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
+		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
+	}
 
 	beginWindow(bGui_Panels, flags);
 	{
-		int NUM_WIDGETS = windowAtributes.size(); // expected num widgets
+		const int i = 1;
+		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
+
+		//-
+
+		const int NUM_WIDGETS = windowsAtributes.size(); // expected num widgets
+		const int NUM_WIDGETS_EXTRA_LANDSCAPE = 5;
+		//const int NUM_WIDGETS_EXTRA_LANDSCAPE = 6;//with autoresize
 
 		float _spcx = ImGui::GetStyle().ItemSpacing.x;
 		float _spcy = ImGui::GetStyle().ItemSpacing.y;
@@ -1559,68 +1651,115 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		float _h;
 		float _w;
 
-		bool bLandscape = false;
+		//float _wUnit;
+		float _hWid;
+
+		bLandscape = false;
 		float __w = ImGui::GetWindowWidth();
 		float __h = ImGui::GetWindowHeight();
 		if (__w > __h) bLandscape = true;
 
-		if (bLandscape) { // landscape
-			_w = ofxImGuiSurfing::getWidgetsWidth(NUM_WIDGETS);
+		if (bLandscape) { // A. landscape
+			//_w = ofxImGuiSurfing::getWidgetsWidth(NUM_WIDGETS + 2);
+				const int amntColumns = NUM_WIDGETS + 2;
+				float __w100 = ImGui::GetContentRegionAvail().x - (4 * _spcx);//remove extra columns x spacing added!
+				_w = (__w100 - _spcx * (amntColumns - 1)) / amntColumns;
+
 			_h = _h100 - _spcy;
+			_hWid = (_h - _spcy) / 2;
+			//_hWid = (_h - _spcy) / 3;//with autoResize
 		}
-		else { // portrait
+		else { // B. portrait
+			_hWid = ofxImGuiSurfing::getWidgetsHeightRelative();
+			float _hTotal = _h100 - (_hWid * NUM_WIDGETS_EXTRA_LANDSCAPE + (NUM_WIDGETS_EXTRA_LANDSCAPE + 1) * _spcy);
 			_w = ofxImGuiSurfing::getWidgetsWidth();
-			//_h = ofxImGuiSurfing::getWidgetsHeight(NUM_WIDGETS);
-			_h = ofxImGuiSurfing::getWidgetsHeight() *(NUM_WIDGETS - 1.5f);
-			//_h = ofxImGuiSurfing::getWidgetsHeight(NUM_WIDGETS) + 1.5f * ofxImGuiSurfing::getWidgetsHeight();
-			//_h = ofxImGuiSurfing::getWidgetsHeight(NUM_WIDGETS);
+			_h = _hTotal / NUM_WIDGETS - _spcy;
 		}
 
-		for (int i = 0; i < windowAtributes.size(); i++)
+		if (bLandscape) {//landscape
+			ImGui::Columns(3);
+			ImGui::SetColumnWidth(0, _spcx + (_w + _spcx) * NUM_WIDGETS);
+		}
+
+		//-
+
+		// 1. populate all toggles
+
+		for (int i = 0; i < windowsAtributes.size(); i++)
 		{
-			ofxImGuiSurfing::AddBigToggle(windowAtributes[i].bGui, _w, _h);
+			ofxImGuiSurfing::AddBigToggle(windowsAtributes[i].bGui, _w, _h);
 			if (bLandscape) ImGui::SameLine();
 		}
 
 		//-
 
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
+		float _w100;
+		float _w50;
+		if (bLandscape) {//landscape
+			ImGui::SameLine();
+			_w100 = _w;
+			_w50 = (_w - _spcx) / 2.0f;
+		}
+		else {//portrait
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+			_w100 = ofxImGuiSurfing::getWidgetsWidth(1);
+			_w50 = ofxImGuiSurfing::getWidgetsWidth(2);
+		}
 
-		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1);
-		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);
+		if (bLandscape) {//landscape
+			ImGui::NextColumn();
+			ImGui::SetColumnWidth(1, _w100 + 2 * _spcx);
+		}
 
-		const int szRatio = 4;
-		if (ImGui::Button("All", ImVec2(_w50, _h / szRatio)))
+		//-
+
+		// 2. extra widgets
+
+		if (ImGui::Button("All", ImVec2(_w50, _hWid)))
 		{
 			bool b = true;
-			for (int i = 0; i < windowAtributes.size(); i++)
+			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
-				windowAtributes[i].bGui.set(b);
+				windowsAtributes[i].bGui.set(b);
 			}
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("None", ImVec2(_w50, _h / szRatio)))
+		if (ImGui::Button("None", ImVec2(_w50, _hWid)))
 		{
 			bool b = false;
-			for (int i = 0; i < windowAtributes.size(); i++)
+			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
-				windowAtributes[i].bGui.set(b);
+				windowsAtributes[i].bGui.set(b);
 			}
 		}
 
-		ofxImGuiSurfing::AddBigToggle(bSolo, _w100, _h / szRatio, true);
+		ofxImGuiSurfing::AddBigToggle(bSolo, _w100, _hWid, true);
 
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
+		//-
+
+		// 3. panels toggles
+
+		if (bLandscape) {//landscape
+			ImGui::NextColumn();
+			ImGui::SetColumnWidth(2, _w100 + _spcx);
+		}
+		else {//portrait
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
 
 		// layout
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresets, _w100, _h / szRatio, true);
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManagerWindow, _w100, _h / szRatio, true);
+		float _hUnit = ofxImGuiSurfing::getWidgetsHeightRelative();
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresets, _w100, _hWid, true);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, true);
+		//ofxImGuiSurfing::AddToggleRoundedButton(bAutoResizePanels);
 
-		//ToggleRoundedButton("Auto Resize", &auto_resize);
+		if (bLandscape) {//landscape
+			ImGui::Columns();
+		}
 	}
 	endWindow();
 

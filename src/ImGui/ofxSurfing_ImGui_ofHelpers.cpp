@@ -12,8 +12,6 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-
-	//--------------------------------------------------------------
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
@@ -602,13 +600,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
+		ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
 		if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 		{
 			parameter.set(tmpRef);
 
+			ImGui::PopItemWidth();
 			return true;
 		}
 
+		ImGui::PopItemWidth();
 		return false;
 	}
 
