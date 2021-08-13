@@ -2,13 +2,15 @@ ofxSurfingImGui
 =============================
 
 ## Overview
+
 An **ImGui** toolkit for **openFrameworks** projects.  
 
 Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to OF, Docking Helpers with a Layout Presets Engine, and useful Snippets.  
 
 Some WIP stuff like Sequencer or Node Patching testing projects.   
 
-## WORK IN PROGRESS!  
+## WORK IN PROGRESS!
+
 ```
 NOT FINISHED. A BIT BUGGY YET...
 API WILL CHANGE A BIT.  
@@ -22,35 +24,46 @@ OR NEED TO BE UPDATED TO API CHANGES.
   <p>
 
 - Simplified and improved **OF Helpers** to use **ofParameters**. 
-    * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
-    * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
-    * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
-    * Currently using a _PushId()/PopID()_ approach on each widget.  
+  
+  * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
+  * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
+  * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
+  * Currently using a _PushId()/PopID()_ approach on each widget.  
     
-- **NEW: All the Layout/Styles Management.**
-- **NEW: Docking helpers with Layout Presets Engine.**
-  </p>
-</details>
+    
+  * **NEW: All the Layout/Styles Management.**
+  * **NEW: Docking helpers with Layout Presets Engine.**
+    
+    </p>
+    </details>
 
-## FEATURES 
+## FEATURES
+
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
-    - Why? Easy to update to future **new ImGui** versions and multi context/instances.
+  - Why? Easy to update to future **new ImGui** versions and multi context/instances.
 * **ImGui Widgets**: Big toggles and buttons, Range sliders, Gradient Color Designer, Matrix selector, DearWidgets ...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * **Layout Presets Engine with Docking**.
 * Included my **Dark Theme**.
 
-## INDEX 
+## INDEX
+
 ### 1. [WIDGETS](#1-widgets-1)
+
 ### 2. [LAYOUT](#2-layout-1)
+
 ### 3. [DOCKING AND LAYOUT PRESETS ENGINE](#3-docking-and-layout-presets-engine-wip-1) [WIP]
+
 ### 4. [TYPES ENGINE](#4-types-engine-wip-1) [WIP]
+
 ### 5. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
+
 ### 6. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
 
 <BR>
 
 ## 1. WIDGETS
+
 Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators, and ofxImGui standard params.  
 
 <details>
@@ -60,6 +73,7 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
   </p>
+
 </details>
 
 <details>
@@ -69,6 +83,7 @@ Includes range sliders with **ofParameters**, responsive button/toggles and the 
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 Includes bezier curves and usable tween/easing functions.  
   </p>
+
 </details>
 
 <details>
@@ -78,6 +93,7 @@ Includes bezier curves and usable tween/easing functions.
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
 Includes wait and progression spinners.  
   </p>
+
 </details>
 
 <details>
@@ -87,6 +103,7 @@ Includes wait and progression spinners.
 ![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
   </p>
+
 </details>
 
 <details>
@@ -95,6 +112,7 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 
 ![image](/docs/1_5_FileBrowser.PNG?raw=true "image")  
   </p>
+
 </details>
 
 <BR>
@@ -109,10 +127,11 @@ _Notice that below at point **3. TYPES ENGINE**, there's a better NEW API!_
 <details>
   <summary>Example Code</summary>
   <p>
-  
+
   ![image](/docs/2_1_2_Layout_Basic.PNG?raw=true "image")  
 
 ofApp.h
+
 ```.cpp
 #include "ofxSurfingImGui.h"
 
@@ -125,7 +144,9 @@ ofParameter<bool> b1{ "b1", false };
 ofParameter<bool> b2{ "b2", false };
 ofParameter<bool> b3{ "b3", false };
 ```
+
 ofApp.cpp
+
 ```.c++
 void ofApp::setup() 
 { 
@@ -133,7 +154,7 @@ void ofApp::setup()
     // Instantiates and configures all the required ofxImGui stuff inside:
     // Font, theme, autodraw, layout store/recall, multi context/instances, ofParams Helpers and other customizations.
 }
-    
+
 void ofApp::draw() 
 { 
     guiManager.begin();
@@ -164,7 +185,7 @@ void ofApp::draw()
                 }
                 ImGui::SameLine();
                 if (ofxImGuiSurfing::AddBigButton(b3, _w2, _h)) {
-                  
+
                 }
 
                 // Or using raw ImGui
@@ -181,7 +202,8 @@ void ofApp::draw()
     guiManager.end();
 }
 ```
-  </p>
+
+</p>
 </details>
 
 <details>
@@ -190,6 +212,7 @@ void ofApp::draw()
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
   </p>
+
 </details>
 
 <details>
@@ -200,6 +223,7 @@ void ofApp::draw()
 Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
 [BROKEN]  
   </p>
+
 </details>
 
 <details>
@@ -212,6 +236,7 @@ This is a helper for tweaking your Themes: testings sizes, layout, and colors, a
 Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
 There's not an automatic-fully-functional, save preset/load theme designer!  
   </p>
+
 </details>
 
 <BR>
@@ -219,6 +244,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 ## 3. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
 
 Examples to improve the layout of docking spaces. 
+
 * Learn to split docking spaces by code, or using mouse control by the user.
 * Engine Manager to create layout presets.
 * Docking helpers
@@ -228,6 +254,7 @@ Examples to improve the layout of docking spaces.
   <p>
 
 #### LAYOUT PRESETS ENGINE
+
 * Fast adding of windows to the Gui Manager.
 * Auto populates control panels to handle layout presets.
 * Cute workflow for Management.
@@ -235,6 +262,7 @@ Examples to improve the layout of docking spaces.
 
 ![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
+
 </details>
 
 <details>
@@ -248,6 +276,7 @@ Nice to learn about ImGui Docking.
 
 ![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
   </p>
+
 </details>
 
 <BR>
@@ -282,6 +311,7 @@ _Draw an **ofParameter<bool>** as a check box (default), or as a big toggle butt
 **CASE 3**:  
 _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
   </p>
+
 </details>
 
 <details>
@@ -290,6 +320,7 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 
 ![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
+
 </details>
 
 <details>
@@ -298,6 +329,7 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
+
 </details>
 
 <details>
@@ -305,24 +337,29 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
   <p>
 
 ofApp.h
+
 ```.cpp
 
 ```
 
 ofApp.cpp
+
 ```.cpp
 
 ```
-  </p>
+
+</p>
 </details>
 
 #### AVAILABLE CUSTOMIZATIONS:
+
     - Hide the parameter widget respecting the void space or not, or make it inactive sibaling mouse interation.  
     - Set an ImGui::SameLine( after the widget, to draw more next params at the same line.  
     - Add a final vertical spacing after the widget.  
     - Set the widget width to fit the panel width, passing the amount of widgets per row/line.  
 
 #### API
+
 ```c++
 void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
@@ -334,9 +371,10 @@ void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeF
 ## 5. TIMELINES AND SEQUENCERS [WIP]
 
 These are testing projects trying to build an operative but very basic timeline, to run very simple animations:  
+
 * A kind of note on/off or clip start/end behavior.
 * A curve editor for a float variable automation. 
-  
+
 <details>
   <summary>4_1_ImSequencer</summary>
   <p>
@@ -345,6 +383,7 @@ These are testing projects trying to build an operative but very basic timeline,
 Using [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
   </p>
+
 </details>
 
 5_3_Sequentity [BROKEN]  
@@ -365,6 +404,7 @@ My target is to build a simple engine to patch between **ofParameters**.
 ![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
 Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
   </p>
+
 </details>
 
 <details>
@@ -374,6 +414,7 @@ Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
 ![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
 Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
   </p>
+
 </details>
 
 <details>
@@ -383,6 +424,7 @@ Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)
 ![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
 Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
   </p>
+
 </details>
 
 <details>
@@ -392,6 +434,7 @@ Using [rokups/ImNodes](https://github.com/rokups/ImNodes)
 ![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
 Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
   </p>
+
 </details>
 
 <details>
@@ -401,6 +444,7 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
 [**WIP**] Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
 ![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
   </p>
+
 </details>
 
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
@@ -409,20 +453,25 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
 <BR>
 
 ## Dependencies
+
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) FORK from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [For some examples only]  
 
 ## Tested Systems
+
 - **Windows10** / **VS2017** / **OF ~0.11**
 
 ## Author
+
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
 
 ### Thanks
+
 _All source snippets from other authors are linked into header files. Thanks!_
 
 ## License
+
 **MIT License**
 
 <BR>
@@ -439,6 +488,7 @@ https://github.com/leiradel/ImGuiAl
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 https://github.com/Organic-Code/ImTerm  
   </p>
+
 </details>
 <details>
   <summary>TODO</summary>
@@ -448,5 +498,6 @@ https://github.com/Organic-Code/ImTerm
 * Convert to ofParameters for some widgets.
 * Fix and solve final ofParams helpers workflow.
 * Add multiple layouts presets engine from Paletto.
+  
   </p>
-</details>
+  </details>
