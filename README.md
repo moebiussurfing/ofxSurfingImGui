@@ -25,9 +25,10 @@ OR NEED TO BE UPDATED TO API CHANGES.
     * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
     * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
     * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
-    * Currently using a _PushId()/PopID()_ approach on each widget.
-      * **NEW: All the Layout/Styles Management.**
-      * **NEW: Docking helpers with Layout Presets Engine.**
+    * Currently using a _PushId()/PopID()_ approach on each widget.  
+    
+- **NEW: All the Layout/Styles Management.**
+- **NEW: Docking helpers with Layout Presets Engine.**
   </p>
 </details>
 
