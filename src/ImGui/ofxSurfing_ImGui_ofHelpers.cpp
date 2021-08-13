@@ -423,6 +423,27 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	bool AddParameter(ofParameter<ofRectangle>& parameter)
+	{
+		auto result = false;
+		auto tmpRef = parameter.get();
+
+		float x = tmpRef.getX();
+		float y = tmpRef.getY();
+		float w = tmpRef.getWidth();
+		float h = tmpRef.getHeight();
+
+		result |= ImGui::SliderFloat(((parameter.getName() + " x").c_str()), &x, parameter.getMin().x, parameter.getMax().x);
+		result |= ImGui::SliderFloat(((parameter.getName() + " y").c_str()), &y, parameter.getMin().y, parameter.getMax().y);
+		result |= ImGui::SliderFloat(((parameter.getName() + " w").c_str()), &w, parameter.getMin().width, parameter.getMax().width);
+		result |= ImGui::SliderFloat(((parameter.getName() + " h").c_str()), &h, parameter.getMin().height, parameter.getMax().height);
+		
+		if(result) parameter.set(ofRectangle(x, y, w, h));
+
+		return result;
+	}
+
+	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
 	{
 		auto tmpRef = parameter.get();

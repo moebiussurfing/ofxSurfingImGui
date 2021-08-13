@@ -43,11 +43,11 @@
 
 // default font
 
-//#define FONT_DEFAULT_SIZE 11
-//#define FONT_DEFAULT "telegrama_render.otf"
+#define FONT_DEFAULT_SIZE 11
+#define FONT_DEFAULT_FILE "telegrama_render.otf"
 
-#define FONT_DEFAULT_SIZE 13
-#define FONT_DEFAULT_FILE "PrgmtB.ttf"
+//#define FONT_DEFAULT_SIZE 13
+//#define FONT_DEFAULT_FILE "PrgmtB.ttf"
 
 //#define FONT_DEFAULT_SIZE 13
 //#define FONT_DEFAULT_FILE "PrgmtR.ttf"

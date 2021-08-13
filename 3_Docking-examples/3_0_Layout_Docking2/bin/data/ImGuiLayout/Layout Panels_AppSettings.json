@@ -1,0 +1,26 @@
+{
+    "AppSettings": {
+        "LayoutSettings": {
+            "Auto_Save_Layout": "1",
+            "Forced": "0",
+            "FreeStore": "1",
+            "Layout_Panels": "1",
+            "Layout_Preset": "1",
+            "Layouts_Extra": "0",
+            "Layouts_Presets": "1",
+            "Lock": "0"
+        },
+        "Layout_Manager": "0",
+        "Params_Advanced": {
+            "Advanced": "0",
+            "Auto_Resize": "1",
+            "Extra": "0",
+            "Minimize": "0"
+        },
+        "Rect_Panels": {
+            "rect_Manager": "570, 277, 0, 160, 586",
+            "rect_Panels": "430, 235, 0, 956, 153",
+            "rect_Presets": "816, 408, 0, 180, 192"
+        }
+    }
+}

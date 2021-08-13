@@ -40,6 +40,8 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha = true);
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha = true);
 
+	bool AddParameter(ofParameter<ofRectangle>& parameter);
+
 	bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars = 255, bool multiline = false);
 
 	bool AddParameter(ofParameter<void>& parameter, float width = 0);

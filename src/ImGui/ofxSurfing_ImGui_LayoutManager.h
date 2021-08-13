@@ -419,8 +419,7 @@ public:
 	//-
 
 	// windows management
-	// TODO:
-	// to populate windows only subscribing the toggle show/enabler
+
 public:
 
 	//--------------------------------------------------------------
@@ -431,46 +430,64 @@ public:
 	//--------------------------------------------------------------
 	void addWindow(ofParameter<bool>& _bGui, bool powered = false) {
 
-		WindowAtributes win;
+		ImWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
 		win.setPowered(powered);
 
 		windowsAtributes.push_back(win);
 
 		params_Panels.add(_bGui);
-
 	}
 
 	//--------------------------------------------------------------
 	void addWindow(std::string name) {
 		ofParameter<bool> _bGui{ name, true };
 
-		WindowAtributes win;
+		ImWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
 		win.setPowered(false);
 
 		windowsAtributes.push_back(win);
+
+		params_Panels.add(_bGui);
 	}
 
 	//----
-	
-	// params to include into layout presets
+
+	// params to include packed into layout presets
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameterGroup& group) {
+		params_Layouts.add(group);
+	}
 	//--------------------------------------------------------------
 	void addParameterToLayoutPresets(ofParameter<bool>& param) {
+		params_Layouts.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<int>& param) {
+		params_Layouts.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<float>& param) {
 		params_Layouts.add(param);
 	}
 	//--------------------------------------------------------------
 	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
 		params_Layouts.add(param);
 	}
-	
+
 	//----
 
 	// window methods
 	//--------------------------------------------------------------
 	bool beginWindow(int index) {
-		if (index > windowsAtributes.size() - 1 || index == -1) {
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return false;
+		}
+
+		if (!windowsAtributes[index].bGui.get()) {
 			return false;
 		}
 
@@ -487,44 +504,32 @@ public:
 		ImGui::SetNextWindowPos(ImVec2(x, y), cond);
 		ImGui::SetNextWindowSize(ImVec2(w, h), cond);
 
-		bool b = false;
-		//if ((bool)windowsAtributes[index].bGui.get()) // -> fails
-		{
-			b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), ImGuiWindowFlags_None);
-			//b = beginWindow(windowsAtributes[index].bGui, ImGuiWindowFlags_None);
-		}
-
-		//if(!b) endWindow();
+		bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), ImGuiWindowFlags_None);
 
 		return b;
-		//return windowsAtributes[index].bGui.get();
 	}
 
 	//--------------------------------------------------------------
-	//ofParameter<bool> *getVisible(int index) 
-	//ofParameter<bool> getVisible(int index) 
 	ofParameter<bool>& getVisible(int index)
 	{
 		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
-			ofLogError(__FUNCTION__) << "out of range index for queued windows";
-			//return ofParameter<bool>{"-1", false};
-			//return &ofParameter<bool>{"-1", false};
-			static ofParameter<bool> staticFalseResponse = ofParameter<bool>{ "-1", false };
-			return staticFalseResponse;
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
+			return b;
 		}
 
 		return windowsAtributes[index].bGui;
-		//return &windowsAtributes[index].bGui;
 	}
 
 private:
-	struct WindowAtributes
+
+	struct ImWindowAtributes
 	{
 		// we queue here the bool paramms that enables the show/hide for each queued window
 		ofParameter<bool> bGui{ "Show Gui", true };
 
-		ofParameter<bool> bPoweredWindow{ "bPoweredWindow", false }; // to include extra toggles when rendering
+		ofParameter<bool> bPoweredWindow{ "bPoweredWindow", false }; // to include below extra toggles when rendering
 
 		ofParameter<bool> bAutoResize{ "Auto Resize", true };
 		ofParameter<bool> bExtra{ "Extra", false };
@@ -537,10 +542,16 @@ private:
 			bPoweredWindow = b;
 		}
 	};
-	vector<WindowAtributes> windowsAtributes;
+	vector<ImWindowAtributes> windowsAtributes;
 
 	void loadAppSettings();
 	void saveAppSettings();
+
+	//-
+
+	//TODO:
+	void beginExtra();
+	void endExtra();
 
 	//----
 
@@ -595,10 +606,10 @@ private:
 	void saveLayoutPresetGroup(string path);
 	void loadLayoutPresetGroup(string path);
 
-	ofParameter<int> appLayoutIndex{ "App Layout", -1, -1, 0 };
+	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; // index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "Layout Presets" };
+	ofParameterGroup params_Layouts{ "Layout Presets" }; // all these params will be stored on each layout preset
 
 	int numPresetsDefault;
 	void createLayoutPreset();
@@ -607,7 +618,7 @@ private:
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter &e);
-	ofParameterGroup params_LayoutSPanel{ "Layouts Panel" };
+	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
 	//--------------------------------------------------------------
 	std::string getLayoutName(int mode) {
@@ -627,6 +638,22 @@ public:
 
 	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
+	// some api simplificators
+	//--------------------------------------------------------------
+	void startup() {
+		setupLayout(4);
+	}
+
+	//--------------------------------------------------------------
+	void setupDocking() {
+		setupLayout(4);
+		setAutoSaveSettings(true);
+		setImGuiDocking(true);
+		setImGuiDockingModeCentered(true);
+		setImGuiAutodraw(true);
+		setup();
+	}
+
 	//--------------------------------------------------------------
 	void setImGuiLayoutPresets(bool b) {
 		bUseLayoutPresetsManager = b;
@@ -645,10 +672,10 @@ private:
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
 	void drawLayoutScene();
-
 	void drawLayoutsPanels();
+
 	ofParameter<bool> bAutoResizePanels{ "AutoResize ", false };
-	ofParameter<bool> bModeFreeStore{ "FreeStore", true};
+	ofParameter<bool> bModeFreeStore{ "FreeStore", true };
 
 	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
 	ofParameter<bool> bDebugDocking{ "Debug", false };
@@ -668,17 +695,23 @@ private:
 		glm::vec2(ofGetWidth(), ofGetHeight())
 	};
 
-	ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",	
+	ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",
 		glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
 		glm::vec2(0,0),
 		glm::vec2(ofGetWidth(), ofGetHeight())
 	};
 
+	//-
+
 	// customize titles
+
 public:
+
+	//--------------------------------------------------------------
 	void setLabelLayoutPanels(string label) { // -> customize the app name for panels window label tittle
 		bGui_Panels.setName(label);
 	}
+	//--------------------------------------------------------------
 	void setLabelLayoutMainWindow(string label) {
 		bGui_LayoutsManager.setName(label);
 	}
@@ -686,13 +719,13 @@ public:
 	//-
 
 private:
+
 	ofParameter<bool> bGui_Panels{ "Layout Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Layouts Presets", false };
 	ofParameter<bool> bGui_LayoutsExtra{ "Layouts Extra", false };
-	//shows advanced panels to tweak layout or workflow behaviour
+
 	ofParameter<bool> bLockLayout{ "Lock", false };
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save Layout", true };
-	//ofParameter<bool> bResponsive_Panels;
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 
@@ -708,29 +741,16 @@ private:
 	//-
 
 	// to callback reset
+
 private:
+
 	bool *bReset = nullptr;
 
 public:
+
 	//--------------------------------------------------------------
 	void setReset(bool *b) {
 		bReset = b;
 	}
 
 };
-
-
-/*
-// Flags for ImGui::DockSpace()
-enum ImGuiDockNodeFlags_
-{
-ImGuiDockNodeFlags_None                         = 0,
-ImGuiDockNodeFlags_KeepAliveOnly                = 1 << 0,   // Don't display the dockspace node but keep it alive. Windows docked into this dockspace node won't be undocked.
-//ImGuiDockNodeFlags_NoCentralNode              = 1 << 1,   // Disable Central Node (the node which can stay empty)
-ImGuiDockNodeFlags_NoDockingInCentralNode       = 1 << 2,   // Disable docking inside the Central Node, which will be always kept empty. Note: when turned off, existing docked nodes will be preserved.
-ImGuiDockNodeFlags_NoSplit                      = 1 << 3,   // Disable splitting the node into smaller nodes. Useful e.g. when embedding dockspaces into a main root one (the root one may have splitting disabled to reduce confusion). Note: when turned off, existing splits will be preserved.
-ImGuiDockNodeFlags_NoResize                     = 1 << 4,   // Disable resizing child nodes using the splitter/separators. Useful with programatically setup dockspaces.
-ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
-ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
-};
-*/

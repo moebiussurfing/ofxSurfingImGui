@@ -32,10 +32,6 @@ public:
 
 	//-
 
-	ofxSurfing_ImGui_Manager guiManager;
-
-	//-
-
 	// parameters
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
@@ -51,39 +47,39 @@ public:
 	ofParameter<int> shapeType;
 	ofParameter<int> amount;
 	ofParameter<int> size;
-
 	ofParameterGroup params2;
 	ofParameter<int> shapeType2;
 	ofParameter<int> amount2;
 	ofParameter<int> size2;
-	
 	ofParameterGroup params3;
 	ofParameter<float> lineWidth3;
 	ofParameter<float> separation3;
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
 
-	//-
+	ofParameter<ofRectangle> rectParam{ "Rect", ofRectangle(500,500,100,100), ofRectangle(1,1,1,1), ofRectangle(1920,1080,1920,1080) };
+	void Changed_Rect(ofRectangle & r);
 
-	bool binitiated = false; // runs once to perform some required initialization
+	//--
 
-	ofxWindowApp windowApp;
-	
-	ofParameter<bool> bOpen0{ "Window 0", false };
-	ofParameter<bool> bOpen1{ "Window 1", true };
-	ofParameter<bool> bOpen2{ "Window 2", true };
-	ofParameter<bool> bOpen3{ "Window 3", true };
-	ofParameter<bool> bOpen4{ "Window 4", true };
+	ofxSurfing_ImGui_Manager guiManager;
+
+	//--
 
 	void drawMenu();
 
-	void drawLayout();
+	void drawImGui();
 
-	//----
+	//--
 
-	void dockingReset();
-	void dockingPopulate();
+	bool binitiated = false; // runs once to perform some required initialization
 
-	bool bDockingReset = false;
+	void dockingReset1();
+	void dockingReset2();
+	bool bDockingReset1 = false;
+	bool bDockingReset2 = false;
 
+	//--
+
+	ofxWindowApp windowApp;
 };

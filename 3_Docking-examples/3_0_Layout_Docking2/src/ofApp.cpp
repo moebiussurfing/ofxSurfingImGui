@@ -4,7 +4,7 @@
 void ofApp::setup() {
 	ofSetFrameRate(60);
 
-	// parameters
+	// Parameters
 	params1.setName("paramsGroup1"); // container
 	params1.add(bPrevious.set("<", false));
 	params1.add(bNext.set(">", false));
@@ -15,37 +15,57 @@ void ofApp::setup() {
 	params1.add(shapeType.set("shapeType", 0, -50, 50));
 	params1.add(size.set("size", 100, 0, 100));
 	params1.add(amount.set("amount", 10, 0, 25));
-
 	params2.setName("paramsGroup2"); // nested
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
-
 	params3.setName("paramsGroup3"); // nested
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 
-	// -> required to allow custom docking layout. 
-	// instead of the default centralized.
-	guiManager.setAutoSaveSettings(true);
-	guiManager.setImGuiDocking(true);
-	guiManager.setImGuiDockingModeCentered(true);
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup();
+	// a rectangle parameter with callback
+	rectParam.addListener(this, &ofApp::Changed_Rect);
+
+	//-
+
+	// -> To allow the full engine:
+	// Custom docking layout with presets. 
+	guiManager.setupDocking();
+
+	//-
 
 	// -> layouts presets
-	// this bool toggles will control the show of the added window
-	// and will be added too to layout presets engine
-	guiManager.addWindow(bOpen0);
-	guiManager.addWindow(bOpen1);
-	guiManager.addWindow(bOpen2);
-	guiManager.addWindow(bOpen3);
-	guiManager.addWindow(bOpen4);
 
-	// -> initiates when adding finished
-	guiManager.setupLayout();
+	// 1. Add the windows:
+	// Pre add the window names that you will use and rememeber his index!
+	// Each added window will be added too to the layout presets engine
+	guiManager.addWindow("Window 0");
+	guiManager.addWindow("Window 1");
+	guiManager.addWindow("Window 2");
+	guiManager.addWindow("Window 3");
+	guiManager.addWindow("Window 4");
 
+	//-
+
+	// 2. Add parameters:
+	// -> Extra params to include into layout presets
+	guiManager.addParameterToLayoutPresets(params1);
+	guiManager.addParameterToLayoutPresets(rectParam);
+
+	//-
+
+	// -> Initiates after adding windows and parameters.
+	guiManager.startup();
+
+	// This will create 4 layout presets as default. 
+	// But you can customize the amount presets using other API methods like instead of startup.
+	// guiManager.setupLayout(6);
+
+	//-
+
+	//TODO:
+	// -> subscribe external button
 	//guiManager.setReset((bool*)bDockingReset);
 }
 
@@ -54,87 +74,50 @@ void ofApp::draw()
 {
 	guiManager.begin(); // global begin
 	{
-		drawLayout();
+		drawImGui(); // populate all the widgets and panels
 	}
 	guiManager.end(); // global end
+
+	//--
+
+	ofPushMatrix();
+	ofPushStyle();
+	const int a = ofMap(ofxSurfingHelpers::getFadeBlink(), 0, 1, 64, 96);
+	ofSetColor(ofColor(ofColor::orange, a));
+	ofFill();
+	ofDrawRectRounded(rectParam, 5);
+	ofPopStyle();
+	ofPopMatrix();
 }
 
 //--------------------------------------------------------------
-void ofApp::dockingPopulate()
-{
-	static auto bDockingFirstTime = true;
-	if (bDockingFirstTime)
-	{
-		bDockingFirstTime = false;
-		dockingReset();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::dockingReset() // not works on runtime..?
-{
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
-
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
-
-	ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
-	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
-	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
-
-	// split the dockspace into 2 nodes --
-	// DockBuilderSplitNode takes in the following args in the following order
-	//   window ID to split, direction, fraction (between 0 and 1),
-	// the final two setting let's us choose which id we want (which ever one we DON'T set as NULL,
-	// will be returned by the function)
-	// out_id_at_dir is the id of the node in the direction we specified earlier,
-	// out_id_at_opposite_dir is in the opposite direction
-	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2f, nullptr, &dockspace_id);
-	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
-	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.15f, nullptr, &dockspace_id);
-	//auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
-	//auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
-
-	// we now dock our windows into the docking node we made above
-
-	ImGui::DockBuilderDockWindow("Window 1", dock_id_top);
-	ImGui::DockBuilderDockWindow("Window 2", dock_id_right);
-	ImGui::DockBuilderDockWindow("Window 3", dock_id_left);
-	ImGui::DockBuilderDockWindow("Window 4", dock_id_down);
-
-	//ImGui::DockBuilderDockWindow("Window 0", dock_id_right);
-	//ImGui::DockBuilderDockWindow("Main Window", dock_id_left);
-	//ImGui::DockBuilderDockWindow("Layouts", dock_id_left);
-	//ImGui::DockBuilderDockWindow("Panels", dock_id_top);
-
-	ImGui::DockBuilderFinish(dockspace_id);
-}
-
-//--------------------------------------------------------------
-void ofApp::drawLayout()
+void ofApp::drawImGui()
 {
 	if (!binitiated)
 	{
 		binitiated = true;
-		//.. some ImGui addons may require
+		/* ... some ImGui add-ons may require to perform something once ... */
 	}
 
 	//--
 
 	guiManager.beginDocking();
 	{
-		dockingPopulate(); // -> initialize and "bypass" layout presets system if required
+		// Reset layout
+		// We can setup the docking layout using hardcoded methods
 
-		//--
-
-		if (bDockingReset)
+		// Layout 1
+		if (bDockingReset1)
 		{
-			bDockingReset = false;
+			bDockingReset1 = false;
+			dockingReset1();
+		}
 
-			dockingReset();
+		// Layout 2
+		if (bDockingReset2)
+		{
+			bDockingReset2 = false;
+			dockingReset2();
 		}
 
 		//--
@@ -145,112 +128,101 @@ void ofApp::drawLayout()
 
 	//---------
 
-	// -> render our windows now
+	// -> Render our windows now
 
-	// main Window
+	if (guiManager.beginWindow(0))
+	{
+		// Calculate layout sizes
+		float _w100 = ofxImGuiSurfing::getWidgetsWidth();
+		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);
+		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-	// a raw standard raw ImGui window
-	if (bOpen0) {
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		//-
 
-		ImGui::Begin("Window 0", (bool*)&bOpen0.get(), window_flags);
+		// We have access to the gui show toggles for the added windows
+		if (ImGui::CollapsingHeader("Added windows"))
 		{
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bGui_MainWindow);
-
-			ofxImGuiSurfing::AddToggleRoundedButton(bOpen1);
-			ofxImGuiSurfing::AddToggleRoundedButton(bOpen2);
-			ofxImGuiSurfing::AddToggleRoundedButton(bOpen3);
-			ofxImGuiSurfing::AddToggleRoundedButton(bOpen4);
-
-			ImGui::Separator();
-
-			// reset docking layout
-			float _w = ofxImGuiSurfing::getWidgetsWidth();
-			float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
-			if (ImGui::Button("Reset", ImVec2(_w, _h)))
-			{
-				bDockingReset = true; // flag to call on a preciste draw point
-			}
-
-			ImGui::Separator();
-			ImGui::Spacing();
-
-			// tabs
-			if (ImGui::BeginTabBar("Blah"))
-			{
-				if (ImGui::BeginTabItem("Video"))
-				{
-					std::string str = "Erqwcrqwecrqwecrqwecrqwecrqwecrqwecr qervev qervewecrqwecrqwecrqwecr qervev qerve";
-					ImGui::Text("Blah blah");
-					ImGui::TextWrapped(str.c_str());
-					ImGui::EndTabItem();
-				}
-				if (ImGui::BeginTabItem("Audio"))
-				{
-					std::string str = "Wcwcrqwcr1121233adqervewecrqwecrqwecrqwecr qervev qerve";
-					ImGui::Text("Blah blah");
-					ImGui::TextWrapped(str.c_str());
-					ImGui::EndTabItem();
-				}
-				if (ImGui::BeginTabItem("Controls"))
-				{
-					guiManager.drawAdvanced();
-					ImGui::EndTabItem();
-				}
-				ImGui::EndTabBar();
-			}
+			ImGui::TextWrapped("Auto created toggles to set each added window visible");
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(0));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(1));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(2));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(3));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(4));
 		}
-		ImGui::End();
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		//-
+
+		// We expose the paremeters we added to the layout manager on setup
+		ImGui::TextWrapped("The added parameters");
+		ofxImGuiSurfing::AddParameter(rectParam);
+		ofxImGuiSurfing::AddGroup(params1);
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		//-
+
+		// Reset docking layout
+		ImGui::TextWrapped("Reset Docking hardcoded layouts");
+		if (ImGui::Button("Reset1", ImVec2(_w50, _h)))
+		{
+			bDockingReset1 = true; // flag to call on a preciste draw point
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Reset2", ImVec2(_w50, _h)))
+		{
+			bDockingReset2 = true; // flag to call on a preciste draw point
+		}
+
+		//-
+
+		guiManager.endWindow(); // -> Notice that endWindow goes inside the beginWindow bracket!
 	}
 
 	//--------
 
-	if (bOpen1)
+	if (guiManager.beginWindow(1))
 	{
-		guiManager.beginWindow("Window 1", (bool*)&bOpen1.get());
-		{
-			ImGui::Text("Window1Window1Window1");
+		ImGui::Text("Window1 Window1 Window1");
 
-			//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
-			////flags |= ImGuiTreeNodeFlags_Framed; // uncomment to draw dark tittle bar
-			//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
-			//ofxImGuiSurfing::AddGroup(params3, flags);
+		guiManager.AddGroup(params2, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_COLLAPSED);
+		guiManager.AddGroup(params3);
 
-			//BUG: CRASHES
-			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
-			//guiManager.AddGroup(params3);
-		}
 		guiManager.endWindow();
 	}
 
 	//---------
 
-	if (bOpen2)
+	if (guiManager.beginWindow(2))
 	{
-		guiManager.beginWindow("Window 2", (bool*)&bOpen2.get());
-		{
-			ImGui::Text("Window2Window2Window2Window2");
+		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
+		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
+		float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
 
-			float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-			float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
+		//-
 
-			if (ofxImGuiSurfing::AddBigToggle(bEnable)) {}
-			if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h * 2)) {
-				lineWidth -= 0.1;
-				bPrevious = false;
-			}
-			ImGui::SameLine();
-			if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h * 2)) {
-				lineWidth += 0.1;
-				bNext = false;
-			}
+		ImGui::Text("Window2 Window2 Window2 Window2");
 
-			ofxImGuiSurfing::AddParameter(bEnable);
-			ofxImGuiSurfing::AddParameter(separation);
-			ofxImGuiSurfing::AddParameter(shapeType);
+		if (ofxImGuiSurfing::AddBigToggle(bEnable)) {}
+		if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h * 2)) {
+			lineWidth -= 0.1;
+			bPrevious = false;
 		}
+		ImGui::SameLine();
+		if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h * 2)) {
+			lineWidth += 0.1;
+			bNext = false;
+		}
+
+		ofxImGuiSurfing::AddParameter(bEnable);
+		ofxImGuiSurfing::AddParameter(separation);
+		ofxImGuiSurfing::AddParameter(shapeType);
+
 		guiManager.endWindow();
 	}
 
@@ -259,31 +231,25 @@ void ofApp::drawLayout()
 	// more windows
 	// out of the docking space. cant be docked! ?
 
-	if (bOpen3) {
-		guiManager.beginWindow("Window 3", (bool*)&bOpen3.get());
-		{
-			//ImGui::Begin("Window 3");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			//ImGui::End();
-		}	
+	if (guiManager.beginWindow(3))
+	{
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+
 		guiManager.endWindow();
 	}
 
 	//--
 
-	if (bOpen4) {
-		guiManager.beginWindow("Window 4", (bool*)&bOpen4.get());
-		//ImGui::Begin("Window 4");
-		{
-			ImGui::Text("Hello, down!");
-			ImGui::Text("Hello, down!");
-			ImGui::Text("Hello, down!");
-			ImGui::Text("Hello, down!");
-			ImGui::Text("Hello, down!");
-		}
-		//ImGui::End();
+	if (guiManager.beginWindow(4))
+	{
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+
 		guiManager.endWindow();
 	}
 }
@@ -298,7 +264,7 @@ void ofApp::drawMenu()
 
 	//-
 
-	// menu bar
+	// Menu bar
 
 	// This is not operative. just for testing menus!
 
@@ -340,12 +306,85 @@ void ofApp::drawMenu()
 }
 
 //--------------------------------------------------------------
-void ofApp::exit()
+void ofApp::keyPressed(int key)
 {
+	guiManager.keyPressed(key); // -> we have some layout presets that we can load using keys
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
+void ofApp::exit()
 {
-	guiManager.keyPressed(key);
+	rectParam.removeListener(this, &ofApp::Changed_Rect);
+}
+
+//--------------------------------------------------------------
+void ofApp::dockingReset1()
+{
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+
+	ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
+	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
+	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+
+	// split the dockspace into 2 nodes --
+	// DockBuilderSplitNode takes in the following args in the following order
+	//   window ID to split, direction, fraction (between 0 and 1),
+	// the final two setting let's us choose which id we want (which ever one we DON'T set as NULL,
+	// will be returned by the function)
+	// out_id_at_dir is the id of the node in the direction we specified earlier,
+	// out_id_at_opposite_dir is in the opposite direction
+	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2f, nullptr, &dockspace_id);
+	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
+	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.15f, nullptr, &dockspace_id);
+	//auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
+	//auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
+
+	// we now dock our windows into the docking node we made above
+
+	ImGui::DockBuilderDockWindow("Window 1", dock_id_top);
+	ImGui::DockBuilderDockWindow("Window 2", dock_id_right);
+	ImGui::DockBuilderDockWindow("Window 3", dock_id_left);
+	ImGui::DockBuilderDockWindow("Window 4", dock_id_down);
+
+	ImGui::DockBuilderFinish(dockspace_id);
+}
+
+//--------------------------------------------------------------
+void ofApp::dockingReset2()
+{
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+
+	ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
+	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
+	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
+
+	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.1f, nullptr, &dockspace_id);
+	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.1f, nullptr, &dockspace_id);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.1f, nullptr, &dockspace_id);
+	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.1f, nullptr, &dockspace_id);
+	//auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.1f, nullptr, &dock_id_left);
+	//auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.1f, nullptr, &dock_id_down);
+
+	// we now dock our windows into the docking node we made above
+	ImGui::DockBuilderDockWindow("Window 4", dock_id_top);
+	ImGui::DockBuilderDockWindow("Window 3", dock_id_right);
+	ImGui::DockBuilderDockWindow("Window 2", dock_id_left);
+	ImGui::DockBuilderDockWindow("Window 1", dock_id_down);
+
+	ImGui::DockBuilderFinish(dockspace_id);
+}
+
+//--------------------------------------------------------------
+void ofApp::Changed_Rect(ofRectangle & r)
+{
 }

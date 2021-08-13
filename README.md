@@ -205,28 +205,33 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
-## 3. DOCKING [WIP]
+## 3. DOCKING AND LAYOUT PRESETS ENGINE[WIP]
 
 Examples to improve the layout of docking spaces. 
+* Learn to split docking spaces by code, or using mouse control by the user.
+* Engine Manager to create layout presets.
+* Docking helpers
 
-* Learn to split docking spaces.
-* Engine manager to create layout presets.
-* docking helpers
+#### Layout Presets Engine
+* Fast adding of windows to the Gui Manager.
+* Auto populates control panels to handle layout presets.
+* Cute workflow for Management.
+* You can add parameters to the presets too. 
 
 <details>
-  <summary>2_2_Layout_Docking</summary>
+  <summary>3_0_Layout_Docking2</summary>
   <p>
 
-![image](/docs/2_2_Layout_Docking.PNG?raw=true "image")  
+![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
 Learn to Split layout spaces by code.  
   </p>
 </details>
 
 <details>
-  <summary>2_3_Layout_ImTools</summary>
+  <summary>3_1_Layout_ImTools1</summary>
   <p>
 
-![image](/docs/2_3_Layout_ImTools.PNG?raw=true "image")  
+![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
   </p>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  

@@ -1,10 +1,21 @@
 {
     "Layout_Presets": {
-        "Menu": "1",
+        "Menu": "0",
+        "Rect": "1449.66, 480.431, 0, 211.363, 343.451",
         "Window_0": "1",
         "Window_1": "1",
-        "Window_2": "1",
-        "Window_3": "1",
-        "Window_4": "1"
+        "Window_2": "0",
+        "Window_3": "0",
+        "Window_4": "1",
+        "paramsGroup1": {
+            "Enable": "0",
+            "_": "0",
+            "amount": "25",
+            "lineWidth": "0",
+            "separation": "100",
+            "shapeType": "50",
+            "size": "0",
+            "speed": "0"
+        }
     }
 }
