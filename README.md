@@ -38,12 +38,12 @@ OR NEED TO BE UPDATED TO API CHANGES.
 * Included my **Dark Theme**.
 
 ## INDEX 
-### 1. [WIDGETS](https://github.com/moebiussurfing/ofxSurfingImGui#3-docking-and-layout-presets-enginewip)
-### 2. [LAYOUT](https://github.com/moebiussurfing/ofxSurfingImGui#2-layout)
-### 3. [DOCKING AND LAYOUT PRESETS ENGINE](https://github.com/moebiussurfing/ofxSurfingImGui#3-docking-and-layout-presets-enginewip) [WIP]
-### 4. [TYPES ENGINE](https://github.com/moebiussurfing/ofxSurfingImGui#4-types-engine-wip) [WIP]
-### 5. [TIMELINES AND SEQUENCERS](https://github.com/moebiussurfing/ofxSurfingImGui#5-timelines-and-sequencers-wip) [WIP]
-### 6. [NODES PATCHING](https://github.com/moebiussurfing/ofxSurfingImGui#6-nodes-wip) [WIP]
+### 1. [WIDGETS](#1-widgets-1)
+### 2. [LAYOUT](#2-layout-1)
+### 3. [DOCKING AND LAYOUT PRESETS ENGINE](#3-docking-and-layout-presets-engine-wip-1) [WIP]
+### 4. [TYPES ENGINE](#4-types-engine-wip-1) [WIP]
+### 5. [TIMELINES AND SEQUENCERS](5-timelines-and-sequencers-wip-1) [WIP]
+### 6. [NODES PATCHING](6-nodes-patching-wip-1) [WIP]
 
 <BR>
 
@@ -204,11 +204,11 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
   <p>
 
 ![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
-  </p>
 
 This is a helper for tweaking your Themes: testings sizes, layout, and colors, and alternate fonts.  
 Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
 There's not an automatic-fully-functional, save preset/load theme designer!  
+  </p>
 </details>
 
 <BR>
@@ -231,7 +231,6 @@ Examples to improve the layout of docking spaces.
   <p>
 
 ![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
-Learn to Split layout spaces by code.  
   </p>
 </details>
 
@@ -239,12 +238,12 @@ Learn to Split layout spaces by code.
   <summary>3_1_Layout_ImTools1</summary>
   <p>
 
-![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
-  </p>
-
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
 An alternative to my Layout Engine but without presets and with more developement required.  
 Nice to learn about docking.  
+
+![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
+  </p>
 </details>
 
 <BR>
