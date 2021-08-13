@@ -10,11 +10,6 @@ void ofApp::setup()
 	// style
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 	ofxImGuiSurfing::setDefaultFont(gui);
-
-	// fix?
-	fileBrowser.current_path = ofToDataPath("", true);
-
-	//ofDirectory dataDirectory(ofToDataPath("", true));
 }
 
 //--------------------------------------------------------------
@@ -22,22 +17,43 @@ void ofApp::draw() {
 
 	ofSetBackgroundColor(24);
 
-	ofDrawBitmapStringHighlight(strPath, 20, 400);
-	ofDrawBitmapStringHighlight(strPathName, 20, 420);
+	ofDrawBitmapStringHighlight(strFileName, 20, ofGetHeight() - 20);
+	ofDrawBitmapStringHighlight(strPath, 20, ofGetHeight() - 40);
 
 	gui.begin();
+	{
+		ImGui::Begin("Browser");
+		{
+			ImGui::Checkbox("show", &show);
 
-	ImGui::Begin("Browser");
+			std::string valid_types;
+			//valid_types = "xml";
+			valid_types = "*.*";
+			//valid_types = ".xml";
+			
+			std::string nameProposal = "nameProposal";
+			std::string text = "Browse your files";
 
-	//std::string& label
-	//fileBrowser.setIsRetina(false);
+			mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::OPEN;
+			//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SAVE;
+			//mode = ofxImGuiSurfing::ImGuiFileBrowser::DialogMode::SELECT;
 
-	ImVec2 sz_xy = ImVec2(600, 600);
-	std::string valid_types = "xml";
-	std::string nameProposal = "nameProposal";
+			bool b = getFileDialog(fileBrowser, &show, text, mode, valid_types);
+			if (b) {
+				strPath = fileBrowser.selected_fn;
+				strFileName = fileBrowser.selected_path;
+			}
+		}
+		ImGui::End();
+	}
+	gui.end();
+}
 
-	fileBrowser.showFileDialog("label", imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, sz_xy, valid_types);
-    
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
+	show = !show;
+}
+
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/objects/data/FileToData.cpp
 //    // file dialog
 //    if(ImGuiEx::getFileDialog(fileDialog, openFileFlag, "Open a previously saved Mosaic data file", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ".txt", "", scaleFactor)){
@@ -48,15 +64,10 @@ void ofApp::draw() {
 //        loadDataFile(filepath);
 //    }
 
-	//if (ofxImGuiSurfing::drawGui_FileDialog()) 
-	//{
-	//	ofLogWarning(__FUNCTION__) << "filePath     : " << ofxImGuiSurfing::filePath;
-	//	ofLogWarning(__FUNCTION__) << "filePathName : " << ofxImGuiSurfing::filePathName;
-	//	strPath = filePath;
-	//	strPathName = filePathName;
-	//}
-
-	ImGui::End();
-
-	gui.end();
-}
+//if (ofxImGuiSurfing::drawGui_FileDialog()) 
+//{
+//	ofLogWarning(__FUNCTION__) << "filePath     : " << ofxImGuiSurfing::filePath;
+//	ofLogWarning(__FUNCTION__) << "filePathName : " << ofxImGuiSurfing::filePathName;
+//	strPath = filePath;
+//	strPathName = filePathName;
+//}

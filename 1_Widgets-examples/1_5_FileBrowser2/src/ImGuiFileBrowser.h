@@ -7,8 +7,10 @@
 #include <string>
 #include <vector>
 
-namespace imgui_addons
+namespace ofxImGuiSurfing
+//namespace imgui_addons
 {
+
 	class ImGuiFileBrowser
 	{
 	public:
@@ -135,5 +137,17 @@ namespace imgui_addons
 	};
 }
 
+
+//TODO:
+//--------------------------------------------------------------
+inline bool getFileDialog(ofxImGuiSurfing::ImGuiFileBrowser& fileDialog, bool show, std::string text, ofxImGuiSurfing::ImGuiFileBrowser::DialogMode mode, std::string valid_types) {
+	if (show) ImGui::OpenPopup(text.c_str());
+
+	if (fileDialog.showFileDialog(text.c_str(), mode, ImVec2(700, 380), valid_types.c_str())) {
+		return true;
+	}
+
+	return false;
+}
 
 #endif // IMGUIFILEBROWSER_H

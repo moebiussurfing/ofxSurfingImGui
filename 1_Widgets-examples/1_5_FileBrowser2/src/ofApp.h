@@ -1,3 +1,4 @@
+
 #pragma once
 
 // Taken from: https://github.com/d3cod3/ofxVisualProgramming
@@ -10,7 +11,7 @@
 TODO:
 WIP
 not working..
-nothing appears
+nothing appears.
 
 */
 
@@ -26,11 +27,16 @@ class ofApp : public ofBaseApp {
 public:
 	void setup();
 	void draw();
+	void keyPressed(int key);
 
 	ofxImGui::Gui gui;
 
-	imgui_addons::ImGuiFileBrowser fileBrowser;
+	ofxImGuiSurfing::ImGuiFileBrowser fileBrowser;
 
 	string strPath = "";
-	string strPathName = "";
+	string strFileName = "";
+	
+	ofxImGuiSurfing::ImGuiFileBrowser::DialogMode mode;
+
+	bool show = false;
 };

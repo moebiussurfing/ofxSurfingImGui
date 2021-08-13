@@ -28,7 +28,8 @@
 #include <dirent.h>
 #endif // defined (WIN32) || defined (_WIN32)
 
-namespace imgui_addons
+namespace ofxImGuiSurfing
+//namespace imgui_addons
 {
     ImGuiFileBrowser::ImGuiFileBrowser()
     {
