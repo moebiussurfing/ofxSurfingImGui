@@ -17,17 +17,18 @@ OR NEED TO BE UPDATED TO API CHANGES.
 ```
 
 <details>
-  <summary>RELEVANT OF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
+  <summary>RELEVANT CHANGES vs official ofxImGui ofParameter/ImHelpers</summary>
   <p>
 
 - Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
-    * Widgets, windows/trees now are more customizable. 
-    * Removed all old windows/tree methods.
+    * Widgets, _windows/trees_ now are more customizable. 
+    * Removed all old _windows/tree_ methods.
     * Removed all the _WindowOpen/Settings_ stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
-    * Now using PushId()/PopID() approach on each widget.
-    * NEW: All the Layout/Styles Management.
+    * Now using _PushId()/PopID()_ approach on each widget.
+    * **NEW: All the Layout/Styles Management.**
+    * **NEW: Docking helpers with Layout Presets Engine.**
   </p>
 </details>
 
