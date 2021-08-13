@@ -5,6 +5,7 @@ ofxSurfingImGui
 An **ImGui** toolkit for **openFrameworks** projects.  
 
 Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to OF, Docking Helpers with a Layout Presets Engine, and useful Snippets.  
+
 Some WIP stuff like Sequencer or Node Patching testing projects.   
 
 ## WORK IN PROGRESS!  
