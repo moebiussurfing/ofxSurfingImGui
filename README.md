@@ -235,6 +235,8 @@ Learn to Split layout spaces by code.
   </p>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
+An alternative to my Layout Engine but without presets and with more developement required.  
+Nice to learn about docking.  
 </details>
 
 <BR>
