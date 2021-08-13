@@ -4,7 +4,8 @@ ofxSurfingImGui
 ## Overview
 An **ImGui** toolkit for **openFrameworks** projects.  
 
-Setup and Layout Management, **RAW ImGui Widgets** ported to oF, **ofParameter Helpers**, and useful Snippets, some WIP or testing projects like Docking helpers, Sequencer or Node patching...   
+Setup and Layout Management, **RAW ImGui Widgets** ported to OF, **ofParameter Helpers**, Docking helpers with a Laayout Presets Engine, and useful Snippets.  
+Some WIP or testing projects like Sequencer or Node Patching.   
 
 ## WORK IN PROGRESS!  
 ```
@@ -16,10 +17,10 @@ OR NEED TO BE UPDATED TO API CHANGES.
 ```
 
 <details>
-  <summary>RELEVANT oF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
+  <summary>RELEVANT OF-RELATED CHANGES (vs official ofxImGui ofParameter/ImHelpers)</summary>
   <p>
 
-- Simplified **oF Helpers** to use **ofParameters** easy and better. 
+- Simplified **OF Helpers** to use **ofParameters** easy and better. 
     * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
     * Widgets, windows/trees now are more customizable. 
     * Removed all old windows/tree methods.
@@ -31,10 +32,11 @@ OR NEED TO BE UPDATED TO API CHANGES.
 </details>
 
 ## FEATURES 
-* Requires the _awesome_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
+* Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
     - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: big toggles and buttons, range sliders, DearWidgets ...etc.
+* **ImGui Widgets**: Big toggles and buttons, range sliders, DearWidgets ...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
+* **Layout Presets Engine with Docking**.
 * Included my **Dark Theme**.
 
 ## INDEX 
@@ -42,8 +44,8 @@ OR NEED TO BE UPDATED TO API CHANGES.
 ### 2. [LAYOUT](#2-layout-1)
 ### 3. [DOCKING AND LAYOUT PRESETS ENGINE](#3-docking-and-layout-presets-engine-wip-1) [WIP]
 ### 4. [TYPES ENGINE](#4-types-engine-wip-1) [WIP]
-### 5. [TIMELINES AND SEQUENCERS](5-timelines-and-sequencers-wip-1) [WIP]
-### 6. [NODES PATCHING](6-nodes-patching-wip-1) [WIP]
+### 5. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
+### 6. [NODES PATCHING](#6-nodes-patching-wip-1) [WIP]
 
 <BR>
 
@@ -220,15 +222,15 @@ Examples to improve the layout of docking spaces.
 * Engine Manager to create layout presets.
 * Docking helpers
 
-#### Layout Presets Engine
+<details>
+  <summary>3_0_Layout_Docking2</summary>
+  <p>
+
+#### LAYOUT PRESETS ENGINE
 * Fast adding of windows to the Gui Manager.
 * Auto populates control panels to handle layout presets.
 * Cute workflow for Management.
 * You can add parameters to the presets too. 
-
-<details>
-  <summary>3_0_Layout_Docking2</summary>
-  <p>
 
 ![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
@@ -394,8 +396,8 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   <summary>5_5_2_ImNodes_thedmd-PatchBay</summary>
   <p>
 
-![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
 [**WIP**] Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
+![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
   </p>
 </details>
 
