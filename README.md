@@ -28,8 +28,8 @@ OR NEED TO BE UPDATED TO API CHANGES.
     * Removed all the _WindowOpen/Settings_ stuff.
     * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
     * Now using _PushId()/PopID()_ approach on each widget.
-    * **NEW: All the Layout/Styles Management.**
-    * **NEW: Docking helpers with Layout Presets Engine.**
+      * **NEW: All the Layout/Styles Management.**
+      * **NEW: Docking helpers with Layout Presets Engine.**
   </p>
 </details>
 
@@ -243,8 +243,9 @@ Examples to improve the layout of docking spaces.
   <p>
 
 Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
-An alternative to my Layout Engine but without presets and with more developement required.  
-Nice to learn about docking.  
+
+An alternative to my Docking Layout Engine but without presets and with more developement required.  
+Nice to learn about ImGui Docking.  
 
 ![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
   </p>
