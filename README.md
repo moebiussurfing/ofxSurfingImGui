@@ -329,7 +329,6 @@ ofApp.cpp
 ```.cpp
 
 ```
-
 </p>
 </details>
 
@@ -434,17 +433,14 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
 <BR>
 
 ## Dependencies
-
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) FORK from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [For some examples only]  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) [For some examples only]  
 
 ## Tested Systems
-
 - **Windows10** / **VS2017** / **OF ~0.11**
 
 ## Author
-
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
 
@@ -467,8 +463,8 @@ https://github.com/njazz/AutomationCurveEditor
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 https://github.com/Organic-Code/ImTerm  
-https://github.com/d3cod3/ofxVisualProgramming
-https://github.com/d3cod3/Mosaic
+https://github.com/d3cod3/ofxVisualProgramming  
+https://github.com/d3cod3/Mosaic  
   </p>
 </details>
 
@@ -476,9 +472,8 @@ https://github.com/d3cod3/Mosaic
   <summary>TODO</summary>
   <p>
 
-* Add more ImGui RAW widgets with examples.
-* Convert to ofParameters for some widgets.
-* Fix and solve final ofParams helpers workflow.
-* Add multiple layouts presets engine from Paletto.
+* Create some selected examples to simplify learning.
+* Add more ImGui raw widgets / add-ons with examples.
+* Convert some widgets to ofParameters.
   </p>
 </details>
