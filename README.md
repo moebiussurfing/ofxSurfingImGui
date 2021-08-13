@@ -21,13 +21,11 @@ OR NEED TO BE UPDATED TO API CHANGES.
   <summary>RELEVANT CHANGES vs official ofxImGui ofParameter/ImHelpers</summary>
   <p>
 
-- Simplified **OF Helpers** to use **ofParameters** easy and better. 
-    * _ImHelpers.h_ has been rewritten to ofxSurfing_ImGui_ofHelpers.h_.
-    * Widgets, _windows/trees_ now are more customizable. 
-    * Removed all old _windows/tree_ methods.
-    * Removed all the _WindowOpen/Settings_ stuff.
-    * Removed all the old _GetUniqueName_ engine from **ofxImGui**. 
-    * Now using _PushId()/PopID()_ approach on each widget.
+- Simplified and improved **OF Helpers** to use **ofParameters**. 
+    * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
+    * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
+    * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
+    * Currently using a _PushId()/PopID()_ approach on each widget.
       * **NEW: All the Layout/Styles Management.**
       * **NEW: Docking helpers with Layout Presets Engine.**
   </p>
@@ -36,7 +34,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
 ## FEATURES 
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
     - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: Big toggles and buttons, range sliders, DearWidgets ...etc.
+* **ImGui Widgets**: Big toggles and buttons, Range sliders, Gradient Color Designer, Matrix selector, DearWidgets ...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * **Layout Presets Engine with Docking**.
 * Included my **Dark Theme**.
