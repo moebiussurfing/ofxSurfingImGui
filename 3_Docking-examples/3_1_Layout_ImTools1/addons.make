@@ -1,3 +1,0 @@
-ofxImGui
-ofxSurfingImGui
-ofxWindowApp
