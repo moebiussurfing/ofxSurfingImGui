@@ -5,9 +5,9 @@ ofxSurfingImGui
 
 An **ImGui** toolkit for **openFrameworks** projects.  
 
-Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to OF, Docking Helpers with a Layout Presets Engine, and useful Snippets.  
+Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to **OF**, Docking Helpers with a Layout Presets Engine, and useful snippets.  
 
-Some WIP stuff like Sequencer or Node Patching testing projects.   
+Some **WIP** stuff like Sequencer or Node Patching testing projects.   
 
 ## WORK IN PROGRESS!
 
@@ -24,16 +24,13 @@ OR NEED TO BE UPDATED TO API CHANGES.
   <p>
 
 - Simplified and improved **OF Helpers** to use **ofParameters**. 
-  
   * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
   * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
   * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
   * Currently using a _PushId()/PopID()_ approach on each widget.  
     
-    
-  * **NEW: All the Layout/Styles Management.**
-  * **NEW: Docking helpers with Layout Presets Engine.**
-    
+- **NEW: _All the Layout/Styles Management_.**
+- **NEW: _Docking helpers with Layout Presets Engine_.**
     </p>
     </details>
 
@@ -70,40 +67,36 @@ Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggle
   <summary>1_1_Widgets_DearWidgets</summary>
   <p>
 
-![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
 Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
+![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>1_2_Widgets_Curve</summary>
   <p>
 
-![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
 Includes bezier curves and usable tween/easing functions.  
+![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>1_3_Widgets_Spinner</summary>
   <p>
 
+Includes waiting and progression spinners.  
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
-Includes wait and progression spinners.  
   </p>
-
 </details>
 
 <details>
   <summary>1_4_Widgets_Surfing</summary>
   <p>
 
-![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
 Includes a **matrix button clicker selector** linked to an **ofParameter<int>** (aka preset index), small tooltips, spin clicker, and the awesome gradient engine from [@galloscript](https://twitter.com/galloscript) from his [Github Gist](https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112).  
+![image](/docs/1_4_Widgets_Surfing.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
@@ -112,7 +105,6 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 
 ![image](/docs/1_5_FileBrowser.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <BR>
@@ -202,7 +194,6 @@ void ofApp::draw()
     guiManager.end();
 }
 ```
-
 </p>
 </details>
 
@@ -212,31 +203,28 @@ void ofApp::draw()
 
 ![image](/docs/2_1_Layout_Basic.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>2_0_Layout_ofParamaters</summary>
   <p>
 
-![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
 Includes **ofParameter** and **ofParameterGroup** helpers and customize how groups are presented: collapsed/expanded, hidden header, **ImGui::Tree/ImGui::TreeEx** ...etc.  
 [BROKEN]  
+![image](/docs/2_0_Layout_ofParamaters.gif?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>2_4_Layout_ThemeEditor</summary>
   <p>
 
-![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
-
 This is a helper for tweaking your Themes: testings sizes, layout, and colors, and alternate fonts.  
+
 Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
 There's not an automatic-fully-functional, save preset/load theme designer!  
+![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <BR>
@@ -248,7 +236,6 @@ Examples to improve the layout of docking spaces.
 * Learn to split docking spaces by code, or using mouse control by the user.
 * Engine Manager to create layout presets.
 * Docking helpers
-
 <details>
   <summary>3_0_Layout_Docking2</summary>
   <p>
@@ -262,7 +249,6 @@ Examples to improve the layout of docking spaces.
 
 ![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
-
 </details>
 
 <details>
@@ -276,7 +262,6 @@ Nice to learn about ImGui Docking.
 
 ![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <BR>
@@ -311,7 +296,6 @@ _Draw an **ofParameter<bool>** as a check box (default), or as a big toggle butt
 **CASE 3**:  
 _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
   </p>
-
 </details>
 
 <details>
@@ -320,7 +304,6 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 
 ![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
@@ -329,7 +312,6 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 
 ![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
@@ -379,15 +361,19 @@ These are testing projects trying to build an operative but very basic timeline,
   <summary>4_1_ImSequencer</summary>
   <p>
 
-![image](/docs/4_1_ImSequencer.PNG?raw=true "image")  
 Using [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)  
 Still very raw yet, not functional: I need to [finish](https://github.com/CedricGuillemet/ImGuizmo/issues/185) the engine to read the values when frames are playing.  
+![image](/docs/4_1_ImSequencer.PNG?raw=true "image")  
   </p>
-
 </details>
 
-5_3_Sequentity [BROKEN]  
+<details>
+  <summary>5_3_Sequentity [BROKEN]</summary>
+  <p>
+  
 Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to port because of some dependencies...
+  </p>
+</details>
 
 <BR>
 
@@ -401,40 +387,36 @@ My target is to build a simple engine to patch between **ofParameters**.
   <summary>5_1_ImNodes_Nelarius</summary>
   <p>
 
-![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
 Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)  
+![image](/docs/5_1_ImNodes_Nelarius.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>5_2_ofNodeEditor</summary>
   <p>
 
-![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
 Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
+![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>5_4_ImNodes_rokups</summary>
   <p>
 
-![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
 Using [rokups/ImNodes](https://github.com/rokups/ImNodes)  
+![image](/docs/5_4_ImNodes_rokups.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
   <summary>5_5_ImNodes_thedmd</summary>
   <p>
 
-![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
 Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)  
+![image](/docs/5_5_ImNodes_thedmd.PNG?raw=true "image")  
   </p>
-
 </details>
 
 <details>
@@ -444,7 +426,6 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
 [**WIP**] Using [ofxPatchbayParams](https://github.com/moebiussurfing/ofxPatchbayParams)  
 ![image](/docs/5_5_2_ImNodes_thedmd-PatchBay.PNG?raw=true "image")  
   </p>
-
 </details>
 
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
@@ -456,6 +437,7 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
 
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) FORK from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) [For some examples only]  
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) [For some examples only]  
 
 ## Tested Systems
 
@@ -467,11 +449,9 @@ An addon by **@moebiusSurfing**
 *( ManuMolina ) 2021*  
 
 ### Thanks
-
 _All source snippets from other authors are linked into header files. Thanks!_
 
-## License
-
+### License
 **MIT License**
 
 <BR>
@@ -487,9 +467,11 @@ https://github.com/njazz/AutomationCurveEditor
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 https://github.com/Organic-Code/ImTerm  
+https://github.com/d3cod3/ofxVisualProgramming
+https://github.com/d3cod3/Mosaic
   </p>
-
 </details>
+
 <details>
   <summary>TODO</summary>
   <p>
@@ -498,6 +480,5 @@ https://github.com/Organic-Code/ImTerm
 * Convert to ofParameters for some widgets.
 * Fix and solve final ofParams helpers workflow.
 * Add multiple layouts presets engine from Paletto.
-  
   </p>
-  </details>
+</details>
