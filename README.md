@@ -37,6 +37,14 @@ OR NEED TO BE UPDATED TO API CHANGES.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * Included my **Dark Theme**.
 
+## INDEX 
+### 1. [WIDGETS](https://github.com/moebiussurfing/ofxSurfingImGui#3-docking-and-layout-presets-enginewip)
+### 2. [LAYOUT](https://github.com/moebiussurfing/ofxSurfingImGui#2-layout)
+### 3. [DOCKING AND LAYOUT PRESETS ENGINE](https://github.com/moebiussurfing/ofxSurfingImGui#3-docking-and-layout-presets-enginewip) [WIP]
+### 4. [TYPES ENGINE](https://github.com/moebiussurfing/ofxSurfingImGui#4-types-engine-wip) [WIP]
+### 5. [TIMELINES AND SEQUENCERS](https://github.com/moebiussurfing/ofxSurfingImGui#5-timelines-and-sequencers-wip) [WIP]
+### 6. [NODES PATCHING](https://github.com/moebiussurfing/ofxSurfingImGui#6-nodes-wip) [WIP]
+
 <BR>
 
 ## 1. WIDGETS
@@ -205,7 +213,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
-## 3. DOCKING AND LAYOUT PRESETS ENGINE[WIP]
+## 3. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
 
 Examples to improve the layout of docking spaces. 
 * Learn to split docking spaces by code, or using mouse control by the user.
@@ -341,7 +349,7 @@ Using [Sequentity](https://github.com/alanjfs/sequentity). It's being hard to po
 
 <BR>
 
-## 6. NODES [WIP]
+## 6. NODES PATCHING [WIP]
 
 These are testing [projects](https://github.com/ocornut/imgui/issues/306) with nodes/graph/patching.  
 My target is to build a simple engine to patch between **ofParameters**.  
