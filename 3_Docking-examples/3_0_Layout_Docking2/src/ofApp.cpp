@@ -5,7 +5,7 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 
 	// Parameters
-	params1.setName("paramsGroup1"); // container
+	params1.setName("paramsGroup1"); 
 	params1.add(bPrevious.set("<", false));
 	params1.add(bNext.set(">", false));
 	params1.add(bEnable.set("Enable", false));
@@ -15,11 +15,11 @@ void ofApp::setup() {
 	params1.add(shapeType.set("shapeType", 0, -50, 50));
 	params1.add(size.set("size", 100, 0, 100));
 	params1.add(amount.set("amount", 10, 0, 25));
-	params2.setName("paramsGroup2"); // nested
+	params2.setName("paramsGroup2"); 
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
-	params3.setName("paramsGroup3"); // nested
+	params3.setName("paramsGroup3"); 
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
@@ -80,6 +80,7 @@ void ofApp::draw()
 
 	//--
 
+	// -> OF scene
 	ofPushMatrix();
 	ofPushStyle();
 	const int a = ofMap(ofxSurfingHelpers::getFadeBlink(), 0, 1, 64, 96);

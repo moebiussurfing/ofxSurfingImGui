@@ -174,6 +174,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline float getWidgetsHeightUnit()
+	{
+		return getWidgetsHeightRelative();
+	}
+
+	//--------------------------------------------------------------
 	inline float getWidgetsHeight(int amntRows = -1)
 	{
 		float h;

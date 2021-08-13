@@ -337,30 +337,12 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);
 		if (ImGui::Button("All", ImVec2(_w50, _h / 2)))
 		{
-			bool b = true;
-			for (int i = 0; i < windowsAtributes.size(); i++)
-			{
-				windowsAtributes[i].bGui.set(b);
-			}
-			bGui_Menu = b;
-			bLockLayout = b;
-			bGui_Panels = b;
-			bGui_LayoutsPresets = b;
-			bGui_LayoutsExtra = false;
+			setShowAllPanels(true);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("None", ImVec2(_w50, _h / 2)))
 		{
-			bool b = false;
-			for (int i = 0; i < windowsAtributes.size(); i++)
-			{
-				windowsAtributes[i].bGui.set(b);
-			}
-			bGui_Menu = b;
-			bLockLayout = b;
-			bGui_Panels = b;
-			bGui_LayoutsPresets = b;
-			bGui_LayoutsExtra = false;
+			setShowAllPanels(false);
 		}
 
 		ImGui::Separator();
@@ -880,11 +862,11 @@ void ofxSurfing_ImGui_Manager::endDocking()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manually after adding windows and layout presets
 {
-	numPresetsDefault = numPresets;//default is 4
+	numPresetsDefault = numPresets; // default is 4 presets with names P0, P1, P2, P3
 
 	//-
 
-	bGui_LayoutsManager = true;
+	//bGui_LayoutsManager = true;
 	//bGui_Menu = true;
 
 	//-
@@ -1655,10 +1637,10 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
 	//flags |= flagsWindowsLocked;
 
-	/*
+#ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
 	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(4 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
 	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
-	*/
+#endif
 
 	if (bModeFreeStore)
 	{
@@ -1756,6 +1738,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		if (ImGui::Button("All", ImVec2(_w50, _hWid)))
 		{
+			//wokflow
+			if (bSolo) bSolo.set(false);
+
 			bool b = true;
 			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
@@ -1800,7 +1785,11 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	}
 	endWindow();
 
-	//ImGui::PopStyleVar();
+	//-
+
+#ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
+	ImGui::PopStyleVar();
+#endif
 }
 
 //--

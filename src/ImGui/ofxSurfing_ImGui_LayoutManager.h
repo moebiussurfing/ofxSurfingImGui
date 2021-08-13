@@ -16,6 +16,17 @@ TODO:
 */
 
 
+
+// Docking help
+// https://github.com/ocornut/imgui/issues/2109
+
+// Docking demo
+// https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
+
+// Toolbar example
+// https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
+
+
 #pragma once
 
 #include "ofMain.h"
@@ -29,6 +40,8 @@ TODO:
 
 #include "ofxSurfing_Serializer.h"
 //#include "ofxSurfingHelpers.h"
+
+#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
 //-
 
@@ -440,6 +453,17 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	string getWindowName(int index) {
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return "-1";
+		}
+
+		return windowsAtributes[index].bGui.getName();
+	}
+
+	//--------------------------------------------------------------
 	void addWindow(std::string name) {
 		ofParameter<bool> _bGui{ name, true };
 
@@ -751,6 +775,19 @@ public:
 	//--------------------------------------------------------------
 	void setReset(bool *b) {
 		bReset = b;
+	}
+
+	//--------------------------------------------------------------
+	void setShowAllPanels(bool b) {
+		for (int i = 0; i < windowsAtributes.size(); i++)
+		{
+			windowsAtributes[i].bGui.set(b);
+		}
+		bGui_Menu = b;
+		bLockLayout = b;
+		bGui_Panels = b;
+		bGui_LayoutsPresets = b;
+		bGui_LayoutsExtra = false;
 	}
 
 };

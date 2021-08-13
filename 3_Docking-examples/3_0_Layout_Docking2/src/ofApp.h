@@ -3,22 +3,9 @@
 
 #include "ofMain.h"
 
-#include "ofxImGui.h"	
-
 #include "ofxSurfingImGui.h"
 
 #include "ofxWindowApp.h" // -> not required
-
-
-// Docking help
-// https://github.com/ocornut/imgui/issues/2109
-
-// Docking demo
-// https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
-
-// Toolbar example
-// https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
-
 
 //--------------------------------------------------------------
 class ofApp : public ofBaseApp {
