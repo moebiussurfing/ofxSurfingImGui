@@ -750,6 +750,7 @@ public:
 	ofParameter<bool> bGui_Menu{ "Menu", false };
 
 private:
+	ofParameter<bool> bKeys{ "Keys", true};
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true};
@@ -780,13 +781,13 @@ private:
 
 private:
 
-	bool *bReset = nullptr;
+	bool *bResetPtr = nullptr;
 
 public:
 
 	//--------------------------------------------------------------
 	void setReset(bool *b) {
-		bReset = b;
+		bResetPtr = b;
 	}
 
 	//--------------------------------------------------------------

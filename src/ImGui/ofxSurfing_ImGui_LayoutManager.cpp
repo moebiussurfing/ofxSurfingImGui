@@ -7,6 +7,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bMinimize);
+	params_Advanced.add(bKeys);
 
 	//-
 
@@ -31,8 +32,6 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 	ofRemoveListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
 	if (bAutoSaveSettings) saveAppSettings();
-	//if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings);
-	//if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings);//now into layout presets
 }
 
 //--
@@ -303,7 +302,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 	//-
 
-	//beginWindow(bGui_LayoutsManager, window_flags);
 	if (beginWindow(bGui_LayoutsManager, window_flags))
 	{
 		const int i = 2;
@@ -371,7 +369,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 		endWindow();
 	}
-	//endWindow();
 }
 
 //--------------------------------------------------------------
@@ -946,9 +943,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_LayoutSettings.add(bForceLayoutPosition);
 	params_LayoutSettings.add(bLockLayout);
 	params_LayoutSettings.add(bModeFreeStore);
+	params_LayoutSettings.add(appLayoutIndex);
 	//params_LayoutSettings.add(bGui_Menu);
 	//params_LayoutSettings.add(bDebugRectCentral);
-	params_LayoutSettings.add(appLayoutIndex);
 
 	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_LayoutSettings);
@@ -1150,7 +1147,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 	//----
 
-	//beginWindow(bGui_LayoutsPresets, window_flags);
 	if (beginWindow(bGui_LayoutsPresets, window_flags))
 	{
 		// get window position for advanced layout paired position
@@ -1240,7 +1236,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 		endWindow();
 	}
-	//endWindow();
 }
 
 //--------------------------------------------------------------
@@ -1368,7 +1363,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 			{
 				if (bLayoutPresets[i].get()) // true
 				{
-					//workflow
+					// workflow
 					if (bSolo.get()) bSolo = false;
 
 					appLayoutIndex = i;
@@ -1384,11 +1379,11 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 						}
 					}
 					if (bAllFalse) {
-						//workflow A
+						// workflow A
 						////force back to true if it's there's no other enabled..
 						//bLayoutPresets[appLayoutIndex].set(true);
 
-						//workflow B
+						// workflow B
 						//set to -1
 						appLayoutIndex = -1;
 					}
@@ -1474,7 +1469,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(max, CURRENT_WINDOW_MIN_HEIGHT));
 
-	//beginWindow(bGui_LayoutsExtra, flags);
 	if (beginWindow(bGui_LayoutsExtra, flags))
 	{
 		float _spcx;
@@ -1510,6 +1504,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 			ImGui::Indent();
 			AddToggleRoundedButton(bMinimize);
 			AddToggleRoundedButton(bExtra);
+			AddToggleRoundedButton(bKeys);
 			AddToggleRoundedButton(bAutoResize);
 			ImGui::Unindent();
 		}
@@ -1569,33 +1564,25 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 			ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
-			if (ImGui::Button("Reset Preset", ImVec2(_w100, _h)))
+			if (ImGui::Button("Reset", ImVec2(_w100, _h)))
 			{
+				if (bResetPtr != nullptr) {
+					*bResetPtr = true;
+				}
+
 				// toggle panels to true
 				for (int i = 0; i < windowsAtributes.size(); i++) {
 					windowsAtributes[i].bGui.set(true);
 				}
-
 				bLockLayout = false;
-
 				saveAppLayout((appLayoutIndex.get()));
 			}
 		}
 
 		//--
 
-		//if (ImGui::CollapsingHeader("EXTRA", ImGuiWindowFlags_None))
-		//{
-		//	//ofxImGuiSurfing::AddBigToggle(SHOW_Engines, _w100, _h);
-		//	//ofxImGuiSurfing::AddBigToggle(SHOW_MenuBar, _w100, _h);
-		//	//ofxImGuiSurfing::AddBigToggle(SHOW_Advanced, _w100, _h);
-		//	////ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w100, _h);
-		//	ImGui::Checkbox("Auto-Resize", &auto_resize);
-		//}
-
 		endWindow();
 	}
-	//endWindow();
 
 	//ImGui::PopStyleVar();
 }
@@ -1682,7 +1669,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	}
 
 	if (beginWindow(bGui_LayoutsPanels, flags))
-		//beginWindow(bGui_LayoutsPanels, flags);
 	{
 		const int i = 1;
 		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -1815,7 +1801,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		endWindow();
 	}
-	//endWindow();
 
 	//-
 
@@ -1830,6 +1815,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::keyPressed(int key)
 {
+	if (!bKeys) return;
+
 	//const int key = eventArgs.key;
 
 	//// modifiers

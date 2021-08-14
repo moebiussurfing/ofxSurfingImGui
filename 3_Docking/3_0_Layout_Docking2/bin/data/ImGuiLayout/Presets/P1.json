@@ -1,0 +1,22 @@
+{
+    "Layout_Presets": {
+        "FreeStore": "1",
+        "Menu": "1",
+        "Rect": "500, 500, 0, 100, 100",
+        "Window_0": "1",
+        "Window_1": "0",
+        "Window_2": "1",
+        "Window_3": "0",
+        "Window_4": "1",
+        "paramsGroup1": {
+            "Enable": "0",
+            "_": "0",
+            "amount": "10",
+            "lineWidth": "0.5",
+            "separation": "50",
+            "shapeType": "0",
+            "size": "100",
+            "speed": "0.5"
+        }
+    }
+}

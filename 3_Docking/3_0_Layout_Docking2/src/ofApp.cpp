@@ -65,8 +65,9 @@ void ofApp::setup() {
 	//-
 
 	//TODO:
-	// -> subscribe external button
-	//guiManager.setReset((bool*)bDockingReset);
+	// -> Subscribe external button that will be called to call / flab a bool to a method to reset the layout
+	guiManager.setReset(&bDockingReset1);
+	//guiManager.setReset((bool*)bDockingReset1);
 }
 
 //--------------------------------------------------------------
