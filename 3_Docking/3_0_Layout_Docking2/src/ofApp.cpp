@@ -98,6 +98,8 @@ void ofApp::drawImGui()
 	{
 		binitiated = true;
 		/* ... some ImGui add-ons may require to perform something once ... */
+
+		bDockingReset1 = true;
 	}
 
 	//--
@@ -140,6 +142,24 @@ void ofApp::drawImGui()
 
 		//-
 
+		// Reset docking layout
+		ImGui::TextWrapped("Reset Docking hardcoded layouts");
+		if (ImGui::Button("Reset1", ImVec2(_w50, _h)))
+		{
+			bDockingReset1 = true; // flag to call on a preciste draw point
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Reset2", ImVec2(_w50, _h)))
+		{
+			bDockingReset2 = true; // flag to call on a preciste draw point
+		}
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		//-
+
 		// We have access to the gui show toggles for the added windows
 		if (ImGui::CollapsingHeader("Added windows"))
 		{
@@ -161,24 +181,6 @@ void ofApp::drawImGui()
 		ImGui::TextWrapped("The added parameters");
 		ofxImGuiSurfing::AddParameter(rectParam);
 		ofxImGuiSurfing::AddGroup(params1);
-
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
-
-		//-
-
-		// Reset docking layout
-		ImGui::TextWrapped("Reset Docking hardcoded layouts");
-		if (ImGui::Button("Reset1", ImVec2(_w50, _h)))
-		{
-			bDockingReset1 = true; // flag to call on a preciste draw point
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Reset2", ImVec2(_w50, _h)))
-		{
-			bDockingReset2 = true; // flag to call on a preciste draw point
-		}
 
 		//-
 
@@ -352,6 +354,7 @@ void ofApp::dockingReset1()
 	ImGui::DockBuilderDockWindow("Window 2", dock_id_right);
 	ImGui::DockBuilderDockWindow("Window 3", dock_id_left);
 	ImGui::DockBuilderDockWindow("Window 4", dock_id_down);
+	ImGui::DockBuilderDockWindow("Window 0", dock_id_top);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }
@@ -381,6 +384,7 @@ void ofApp::dockingReset2()
 	ImGui::DockBuilderDockWindow("Window 3", dock_id_right);
 	ImGui::DockBuilderDockWindow("Window 2", dock_id_left);
 	ImGui::DockBuilderDockWindow("Window 1", dock_id_down);
+	ImGui::DockBuilderDockWindow("Window 0", dock_id_top);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }

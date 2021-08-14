@@ -50,7 +50,7 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	path_ImLayouts = path_Global + "Presets/";
 	ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 
-	path_AppSettings = path_Global + bGui_Panels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
 
@@ -303,8 +303,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 	//-
 
-	beginWindow(bGui_LayoutsManager, window_flags);
-	//if (beginWindow(bGui_LayoutsManager, window_flags))
+	//beginWindow(bGui_LayoutsManager, window_flags);
+	if (beginWindow(bGui_LayoutsManager, window_flags))
 	{
 		const int i = 2;
 		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -316,9 +316,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-		AddBigToggle(bGui_Panels, _w, _h, true);
+		AddBigToggle(bGui_LayoutsPanels, _w, _h, true);
 		AddBigToggle(bGui_LayoutsPresets, _w, _h, true);
-		//AddToggleRoundedButton(bGui_Panels);
+		//AddToggleRoundedButton(bGui_LayoutsPanels);
 		//AddToggleRoundedButton(bGui_LayoutsPresets);
 		//AddToggleRoundedButton(bGui_LayoutsExtra);
 
@@ -367,9 +367,11 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 			ImGui::Unindent();
 		}
 
-		//endWindow();
+		//-
+
+		endWindow();
 	}
-	endWindow();
+	//endWindow();
 }
 
 //--------------------------------------------------------------
@@ -379,7 +381,7 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 	// how to make all windows dockeable in the same space?
 	if (bGui_LayoutsExtra) drawLayoutsExtra();
 	if (bGui_LayoutsPresets) drawLayoutsPresets();
-	if (bGui_Panels) drawLayoutsPanels();
+	if (bGui_LayoutsPanels) drawLayoutsPanels();
 }
 
 //--------------------------------------------------------------
@@ -512,7 +514,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 				}
 			}
 
-			//endWindow();
 		}
 
 		//----
@@ -871,7 +872,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	//-
 
-	// 1.1 define all the panel show toggles
+	// 1.1 store all the window panels show toggles
 
 	//params_Layouts.clear();
 	for (int i = 0; i < windowsAtributes.size(); i++)
@@ -881,6 +882,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// 1.2 add other settings that we want to store into each presets
 	params_Layouts.add(bGui_Menu);
+	params_Layouts.add(bModeFreeStore);
 
 	//-
 
@@ -938,7 +940,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// the main control windows
 	params_LayoutSettings.add(bGui_LayoutsPresets);
 	params_LayoutSettings.add(bGui_LayoutsExtra);
-	params_LayoutSettings.add(bGui_Panels);
+	params_LayoutSettings.add(bGui_LayoutsPanels);
 
 	params_LayoutSettings.add(bAutoSave_Layout);
 	params_LayoutSettings.add(bForceLayoutPosition);
@@ -969,9 +971,15 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// initiate the 3 control windows
 	// we store the shapes using ofrectangles to split them from ImGui .ini store manager..
 
-	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(), ofRectangle(), ofRectangle() };
-	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(), ofRectangle(), ofRectangle() };
-	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(), ofRectangle(), ofRectangle() };
+	float x, y, w, h, pad;
+	x = ofGetWidth() * 0.4;
+	y = ofGetHeight() * 0.3;
+	w = 200;
+	h = 1;
+	pad = 2;
+	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(x, y, w, h), ofRectangle(), ofRectangle() };
+	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(x + (pad + w), y, w, h), ofRectangle(), ofRectangle() };
+	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(x + 2 * (pad + w), y, w, h), ofRectangle(), ofRectangle() };
 
 	rectPanels.clear();
 	rectPanels.emplace_back(r1);
@@ -1142,7 +1150,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 	//----
 
-	beginWindow(bGui_LayoutsPresets, window_flags);
+	//beginWindow(bGui_LayoutsPresets, window_flags);
+	if (beginWindow(bGui_LayoutsPresets, window_flags))
 	{
 		// get window position for advanced layout paired position
 		positionGuiLayout = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
@@ -1215,8 +1224,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		_h /= 2;
 
 		// one row
-		ofxImGuiSurfing::AddBigToggle(bGui_Panels, _w, _h);
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, 2 * _h);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, 2 * _h);
 
 		/*
 		ofxImGuiSurfing::AddBigToggle(bLockLayout, _w50, _h);
@@ -1226,8 +1235,12 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 		//AddToggleRoundedButton(bModeFreeStore);
 		ToggleRoundedButton("Auto Resize", &auto_resize);
+
+		//-
+
+		endWindow();
 	}
-	endWindow();
+	//endWindow();
 }
 
 //--------------------------------------------------------------
@@ -1461,7 +1474,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(max, CURRENT_WINDOW_MIN_HEIGHT));
 
-	beginWindow(bGui_LayoutsExtra, flags);
+	//beginWindow(bGui_LayoutsExtra, flags);
+	if (beginWindow(bGui_LayoutsExtra, flags))
 	{
 		float _spcx;
 		float _spcy;
@@ -1479,8 +1493,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 		//----
 
-		ofxImGuiSurfing::AddBigToggle(bGui_Panels, _w100, _h);
+		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w100, 2*_h);
 		ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w100, _h);
+
 		ofxImGuiSurfing::AddBigToggle(bModeFreeStore, _w100, _h);
 		//AddToggleRoundedButton(bModeFreeStore);
 
@@ -1488,8 +1503,20 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		ImGui::SameLine();
 		ofxImGuiSurfing::AddBigToggle(bForceLayoutPosition, _w50, _h);
 
+		AddToggleRoundedButton(bGui_Menu);
+
+		AddToggleRoundedButton(bAdvanced);
+		if (bAdvanced) {
+			ImGui::Indent();
+			AddToggleRoundedButton(bMinimize);
+			AddToggleRoundedButton(bExtra);
+			AddToggleRoundedButton(bAutoResize);
+			ImGui::Unindent();
+		}
+
 		//----
 
+		//ImGui::Spacing();
 		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 		if (ImGui::CollapsingHeader("Presets", ImGuiWindowFlags_None))
@@ -1565,8 +1592,10 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//	////ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w100, _h);
 		//	ImGui::Checkbox("Auto-Resize", &auto_resize);
 		//}
+
+		endWindow();
 	}
-	endWindow();
+	//endWindow();
 
 	//ImGui::PopStyleVar();
 }
@@ -1652,7 +1681,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
 	}
 
-	beginWindow(bGui_Panels, flags);
+	if (beginWindow(bGui_LayoutsPanels, flags))
+		//beginWindow(bGui_LayoutsPanels, flags);
 	{
 		const int i = 1;
 		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -1782,8 +1812,10 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		if (bLandscape) {//landscape
 			ImGui::Columns();
 		}
+
+		endWindow();
 	}
-	endWindow();
+	//endWindow();
 
 	//-
 
@@ -1843,7 +1875,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(int key)
 
 		if (key == OF_KEY_F10)//panels
 		{
-			bGui_Panels = !bGui_Panels;
+			bGui_LayoutsPanels = !bGui_LayoutsPanels;
 		}
 
 		else if (key == OF_KEY_F11)//

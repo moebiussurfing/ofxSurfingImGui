@@ -4,14 +4,13 @@
 TODO:
 
 + fix make dockeable all windows on same space
-+ fix multiple dock spaces that are colliding/one over another
-+ fix viewport rectangle preview
+	+ fix multiple dock spaces that are colliding/one over another
+	+ fix viewport rectangle preview
+
 + add global reset
 + add minimal toggle
 + auto size per window
 + other window settings
-+ layout ctrl+preset = solo
-+ size debugger?
 
 */
 
@@ -571,11 +570,18 @@ private:
 	void loadAppSettings();
 	void saveAppSettings();
 
-	//-
+	//----
 
 	//TODO:
+
 	void beginExtra();
 	void endExtra();
+
+	void beginAdvanced();
+	void endAdvanced();
+
+	void beginMenu();
+	void endMenu();
 
 	//----
 
@@ -683,9 +689,6 @@ public:
 		bUseLayoutPresetsManager = b;
 	}
 
-	ofParameter<bool> bGui_LayoutsManager{ "Layout Manager", false };
-	ofParameter<bool> bGui_Menu{ "Menu", false };
-
 private:
 
 #define LAYOUT_WINDOW_WIDTH 150
@@ -733,7 +736,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setLabelLayoutPanels(string label) { // -> customize the app name for panels window label tittle
-		bGui_Panels.setName(label);
+		bGui_LayoutsPanels.setName(label);
 	}
 	//--------------------------------------------------------------
 	void setLabelLayoutMainWindow(string label) {
@@ -742,18 +745,26 @@ public:
 
 	//-
 
+public:
+
+	ofParameter<bool> bGui_Menu{ "Menu", false };
+
 private:
 
-	ofParameter<bool> bGui_Panels{ "Layout Panels", true };
-	ofParameter<bool> bGui_LayoutsPresets{ "Layouts Presets", false };
-	ofParameter<bool> bGui_LayoutsExtra{ "Layouts Extra", false };
+	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
+	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true};
+	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
+	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
+	
 
 	ofParameter<bool> bLockLayout{ "Lock", false };
-	ofParameter<bool> bAutoSave_Layout{ "Auto Save Layout", true };
+	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 
 	ofParameter<bool> bSolo{ "Solo", false };
+
+	//-
 
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 	ofParameterGroup params_Panels{ "Params Panels" };
@@ -764,6 +775,7 @@ private:
 
 	//-
 
+	//TODO: learn to use lambda functions
 	// to callback reset
 
 private:
@@ -785,7 +797,7 @@ public:
 		}
 		bGui_Menu = b;
 		bLockLayout = b;
-		bGui_Panels = b;
+		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresets = b;
 		bGui_LayoutsExtra = false;
 	}

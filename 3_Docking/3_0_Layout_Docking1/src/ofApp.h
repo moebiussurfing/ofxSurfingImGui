@@ -20,6 +20,8 @@ public:
 
 	void drawImGui();
 
+	//-
+
 	void dockingReset();
 	bool bDockingReset = false;
 

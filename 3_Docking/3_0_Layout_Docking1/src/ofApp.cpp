@@ -107,131 +107,136 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
-	// Reset Layout
-	ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
-ImGui:Begin("Debug", NULL, flags);
-{
-	// Reset docking layout
-	ImGui::TextWrapped("Reset Docking hardcoded layouts");
-	float _w = ofxImGuiSurfing::getWidgetsWidth();
-	float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
-	if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
+	// Hardcoded Layout
 	{
-		bDockingReset = true; // flag to call on a preciste draw point
-	}
-	// Randomize docking layout
-	if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
+		ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
+		flags |= ImGuiWindowFlags_NoSavedSettings; // -> exclude from layout presets
+
+	ImGui:Begin("Debug", NULL, flags);
 	{
-		bDockingRandom = true; // flag to call on a preciste draw point
-	}
-	// Show all Panels
-	if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
-	{
-		guiManager.setShowAllPanels(true);
-	}
-}
-ImGui::End();
+		ImGui::TextWrapped("Reset Docking hardcoded layouts");
+		float _w = ofxImGuiSurfing::getWidgetsWidth();
+		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
-//---------
-
-if (guiManager.beginWindow(0)) // -> This is our helpers to render windows
-{
-	//-
-
-	ImGui::Spacing();
-
-	ImGui::Text("Hello, left!");
-	ImGui::Text("Hello, left!");
-	ImGui::Text("Hello, left!");
-	ImGui::Text("Hello, left!");
-	ImGui::Text("Hello, left!");
-
-	guiManager.endWindow(); // -> Must be called inside the if / beginWindow brackets!
-}
-
-//---------
-
-if (guiManager.beginWindow(1))
-{
-	ImGui::Text("Hello, down!");
-	ImGui::Text("Hello, down!");
-	ImGui::Text("Hello, down!");
-	ImGui::Text("Hello, down!");
-	ImGui::Text("Hello, down!");
-
-	guiManager.endWindow();
-}
-
-//---------
-
-if (guiManager.beginWindow(2))
-{
-	if (ImGui::BeginTabBar("myTabs"))
-	{
-		if (ImGui::BeginTabItem("Video"))
+		// Reset docking layout
+		if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
 		{
-			string str = "weqweqr qc wcrqw crqwecrqwec rqwec rqwe crqwecrqwecr qervev qervew ecrqwecr qwecrqwe cr qervev qerve";
-			ImGui::Text("Blah blah");
-			ImGui::TextWrapped(str.c_str());
-			ImGui::EndTabItem();
+			bDockingReset = true; // flag to call on a preciste draw point
 		}
-		if (ImGui::BeginTabItem("Audio"))
+		// Randomize docking layout
+		if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
 		{
-			string str = "weq12341 234w eqrqcwcrqwcr 112 1233a dqervewecr qwecrqwe crqw ecr qervev qerve";
-			ImGui::Text("Blah blah");
-			ImGui::TextWrapped(str.c_str());
-			ImGui::EndTabItem();
+			bDockingRandom = true; // flag to call on a preciste draw point
 		}
-		if (ImGui::BeginTabItem("Controls"))
+		// Show all Panels
+		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
 		{
-			guiManager.drawAdvanced();
-			ImGui::EndTabItem();
+			guiManager.setShowAllPanels(true);
+		}
+	}
+	ImGui::End();
+	}
+
+	//---------
+
+	if (guiManager.beginWindow(0)) // -> This is our helpers to render windows
+	{
+		//-
+
+		ImGui::Spacing();
+
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+		ImGui::Text("Hello, left!");
+
+		guiManager.endWindow(); // -> Must be called inside the if / beginWindow brackets!
+	}
+
+	//---------
+
+	if (guiManager.beginWindow(1))
+	{
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+		ImGui::Text("Hello, down!");
+
+		guiManager.endWindow();
+	}
+
+	//---------
+
+	if (guiManager.beginWindow(2))
+	{
+		if (ImGui::BeginTabBar("myTabs"))
+		{
+			if (ImGui::BeginTabItem("Video"))
+			{
+				string str = "weqweqr qc wcrqw crqwecrqwec rqwec rqwe crqwecrqwecr qervev qervew ecrqwecr qwecrqwe cr qervev qerve";
+				ImGui::Text("Blah blah");
+				ImGui::TextWrapped(str.c_str());
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Audio"))
+			{
+				string str = "weq12341 234w eqrqcwcrqwcr 112 1233a dqervewecr qwecrqwe crqw ecr qervev qerve";
+				ImGui::Text("Blah blah");
+				ImGui::TextWrapped(str.c_str());
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Controls"))
+			{
+				guiManager.drawAdvanced();
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
 		}
 
-		ImGui::EndTabBar();
+		guiManager.endWindow();
 	}
 
-	guiManager.endWindow();
-}
+	//--------
 
-//--------
+	if (guiManager.beginWindow(3))
+	{
+		ImGui::Text("myWindow3");
+		guiManager.AddGroup(params1);
+		guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
-if (guiManager.beginWindow(3))
-{
-	ImGui::Text("myWindow3");
-	guiManager.AddGroup(params1);
-	guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
-
-	guiManager.endWindow();
-}
-
-//---------
-
-if (guiManager.beginWindow(4))
-{
-	ImGui::Text("myWindow4");
-
-	float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-	float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-	float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
-
-	if (ofxImGuiSurfing::AddBigToggle(bEnable)) {}
-	if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h * 2)) {
-		lineWidth -= 0.1;
-		bPrevious = false;
-	}
-	ImGui::SameLine();
-	if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h * 2)) {
-		lineWidth += 0.1;
-		bNext = false;
+		guiManager.endWindow();
 	}
 
-	ofxImGuiSurfing::AddParameter(bEnable);
-	ofxImGuiSurfing::AddParameter(separation);
-	ofxImGuiSurfing::AddParameter(shapeType);
+	//---------
 
-	guiManager.endWindow();
-}
+	if (guiManager.beginWindow(4))
+	{
+		ImGui::Text("myWindow4");
+
+		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
+		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
+		float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
+
+		if (ofxImGuiSurfing::AddBigToggle(bEnable)) {}
+		if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h * 2)) {
+			lineWidth -= 0.1;
+			bPrevious = false;
+		}
+		ImGui::SameLine();
+		if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h * 2)) {
+			lineWidth += 0.1;
+			bNext = false;
+		}
+
+		ofxImGuiSurfing::AddParameter(bEnable);
+		ofxImGuiSurfing::AddParameter(separation);
+		ofxImGuiSurfing::AddParameter(shapeType);
+
+		guiManager.endWindow();
+	}
 }
 
 // We can setup the docking layout using hardcoded methods:

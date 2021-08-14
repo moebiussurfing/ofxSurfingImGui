@@ -392,15 +392,6 @@ Using [Nelarius/imnodes](https://github.com/Nelarius/imnodes)
 </details>
 
 <details>
-  <summary>5_2_ofNodeEditor</summary>
-  <p>
-
-Using [sphaero/ofNodeEditor](https://github.com/sphaero/ofNodeEditor)  
-![image](/docs/5_2_ofNodeEditor.PNG?raw=true "image")  
-  </p>
-</details>
-
-<details>
   <summary>5_4_ImNodes_rokups</summary>
   <p>
 

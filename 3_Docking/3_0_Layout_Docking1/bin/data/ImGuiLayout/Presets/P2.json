@@ -2,8 +2,9 @@
     "Layout_Presets": {
         "Advanced": "1",
         "Audio_Window": "1",
+        "FreeStore": "0",
         "Main_Window": "1",
-        "Menu": "1",
+        "Menu": "0",
         "Video_2": "1",
         "Video_3": "1"
     }

@@ -4,9 +4,9 @@
             "Auto_Save_Layout": "1",
             "Forced": "0",
             "FreeStore": "1",
-            "Layout_Panels": "0",
-            "Layout_Preset": "1",
-            "Layouts_Extra": "0",
+            "Layout_Panels": "1",
+            "Layout_Preset": "0",
+            "Layouts_Extra": "1",
             "Layouts_Presets": "1",
             "Lock": "1"
         },
@@ -19,8 +19,8 @@
         },
         "Rect_Panels": {
             "rect_Manager": "0, 0, 0, 0, 0",
-            "rect_Panels": "665, 261, 0, 800, 100",
-            "rect_Presets": "956, 383, 0, 160, 192"
+            "rect_Panels": "688, 306, 0, 927, 116",
+            "rect_Presets": "468, 290, 0, 160, 192"
         }
     }
 }
