@@ -1,8 +1,10 @@
 
 /*
 
-TODO:
+BUG:
+! debug mode crashes
 
+TODO:
 + fix make dockeable all windows on same space
 	+ fix multiple dock spaces that are colliding/one over another
 	+ fix viewport rectangle preview
@@ -14,7 +16,10 @@ TODO:
 
 */
 
+//#define FIXING_DOCKING // -> Need to fix yet
+#define FIXING_DRAW_VIEWPORT // -> To debug free space
 
+//-
 
 // Docking help
 // https://github.com/ocornut/imgui/issues/2109
@@ -25,6 +30,7 @@ TODO:
 // Toolbar example
 // https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
 
+//-
 
 #pragma once
 
@@ -40,7 +46,10 @@ TODO:
 #include "ofxSurfing_Serializer.h"
 //#include "ofxSurfingHelpers.h"
 
-#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
+//#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
+
+#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
+
 
 //-
 
@@ -119,18 +128,19 @@ public:
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 
-	void keyPressed(int key);
+	void keyPressed(ofKeyEventArgs &eventArgs);
+	void keyReleased(ofKeyEventArgs &eventArgs);
 
 	//-
 
 private:
 
+	// with have two mode for instantiate ImGui
+	ofxImGui::Gui * guiPtr = NULL; // To be used when ImGui is passed by reference
+	ofxImGui::Gui gui; // ImGui is inside the addon
+
 	// initiate ofxImGui
 	void setupImGui();
-
-	// with have two mode for instantiate ImGui
-	ofxImGui::Gui * guiPtr = NULL; // passed by reference
-	ofxImGui::Gui gui; // inside the addon
 
 public:
 
@@ -160,12 +170,15 @@ public:
 	void begin();
 	void end();
 
+	// window methods
+	
 	// begin a window
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
 	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
+	bool beginWindow(int index); // -> If you added windows to the engine you can begin the window passing his index
 
 	// end a window
 	void endWindow();
@@ -176,11 +189,14 @@ private:
 
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 	bool bViewport = false;
-	//bool bDocking = true;
 	bool bDockingModeCentered = false; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
-	bool bPreviewSceneViewport = false;
+
+	ofParameter<bool> bPreviewSceneViewport{ "Viewport", false };
+	//bool bPreviewSceneViewport = false;
 
 public:
+
+	// some api configs
 
 	// force autodraw
 	//--------------------------------------------------------------
@@ -197,7 +213,7 @@ public:
 
 	//----
 
-	// fonts runtime mangement 
+	// fonts runtime management 
 
 private:
 
@@ -270,37 +286,6 @@ private:
 
 	//-
 
-//public:
-
-	// An extra common panel with some usefull toggles:
-	// auto-resize, debug mouse over gui, ...
-
-	// snippet to copy/paste
-	/*
-	// EXTRA MENU
-	{
-		ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
-		if (guiManager.bExtra)
-		{
-			ImGui::Indent();
-
-			// add your extra (hidden by default) controls
-			//ofxImGuiSurfing::AddBigToggle(SHOW_Plot, _w100, _h / 2, false);
-
-			//--
-
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-			if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
-
-			ImGui::Unindent();
-		}
-	}
-	*/
-
-	//-
-
 public:
 
 	//--------------------------------------------------------------
@@ -368,22 +353,13 @@ public:
 				if (bDebug) {
 					ImGui::Indent();
 					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-					ofxImGuiSurfing::ToggleRoundedButton("Scene Viewport", &bPreviewSceneViewport);
+					//ofxImGuiSurfing::ToggleRoundedButton("Scene Viewport", &bPreviewSceneViewport);
+					AddToggleRoundedButton(bPreviewSceneViewport);
 					ImGui::Unindent();
 				}
 			}
 		}
 		ImGui::Unindent();
-
-		//ofxImGuiSurfing::refreshImGui_WidgetsSizes();//fails
-		// this is full width (_w100) with standard height (_h)
-		//float _w;
-		//float _h;
-		//_w = ofxImGuiSurfing::getWidgetsWidth(1);
-		//_h = ofxImGuiSurfing::getWidgetsHeight(-1);
-		//ofxImGuiSurfing::AddBigToggle(bAutoResize, _w, _h / 2);
-		//ofxImGuiSurfing::AddBigToggle(bExtra, _w, _h / 2);
-		//ofxImGuiSurfing::AddBigToggle(bMouseOverGui, _w, _h / 2);
 	}
 
 	//--------------------------------------------------------------
@@ -405,7 +381,7 @@ private:
 	bool bAutoSaveSettings = false;
 
 	ofParameterGroup params_AppSettings{ "AppSettings" };
-	ofParameterGroup params_LayoutSettings{ "LayoutSettings" };
+	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" };
 
 	//-
 
@@ -501,37 +477,6 @@ public:
 
 	//----
 
-	// window methods
-	//--------------------------------------------------------------
-	bool beginWindow(int index) {
-		if (index > windowsAtributes.size() - 1 || index == -1)
-		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-			return false;
-		}
-
-		if (!windowsAtributes[index].bGui.get()) {
-			return false;
-		}
-
-		// maximize window
-		float x = 10;
-		float y = 10;
-		float w = 200;
-		float h = 600;
-
-		ImGuiCond cond = ImGuiCond_None;
-		cond |= ImGuiCond_FirstUseEver;
-		//cond |= ImGuiCond_Appearing;
-
-		ImGui::SetNextWindowPos(ImVec2(x, y), cond);
-		ImGui::SetNextWindowSize(ImVec2(w, h), cond);
-
-		bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), ImGuiWindowFlags_None);
-
-		return b;
-	}
-
 	//--------------------------------------------------------------
 	ofParameter<bool>& getVisible(int index)
 	{
@@ -552,18 +497,21 @@ private:
 		// we queue here the bool paramms that enables the show/hide for each queued window
 		ofParameter<bool> bGui{ "Show Gui", true };
 
-		ofParameter<bool> bPoweredWindow{ "bPoweredWindow", false }; // to include below extra toggles when rendering
+		ofParameter<bool> bPoweredWindow{ "_bPoweredWindow", false }; // to include below extra toggles when rendering
 
 		ofParameter<bool> bAutoResize{ "Auto Resize", true };
 		ofParameter<bool> bExtra{ "Extra", false };
 		ofParameter<bool> bMinimize{ "Minimize", false };
-		ofParameter<bool> bReset_Window{ "Reset Window", false };
 		ofParameter<bool> bAdvanced{ "Advanced", false };
 		ofParameter<bool> bDebug{ "Debug", false };
 
+		ofParameter<bool> bReset_Window{ "Reset Window", false };
 		void setPowered(bool b) {
 			bPoweredWindow = b;
 		}
+
+		ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
+
 	};
 	vector<ImWindowAtributes> windowsAtributes;
 
@@ -573,6 +521,7 @@ private:
 	//----
 
 	//TODO:
+	//to be marked outside the scope to populate widgets inside this execution point... ?
 
 	void beginExtra();
 	void endExtra();
@@ -592,23 +541,9 @@ public:
 	void beginDocking();
 	void endDocking();
 
-	//----
-
-	//ImGuiViewport* viewport = nullptr;
-	//ImGuiDockNodeFlags dockspace_flags;
-	////static ImGuiDockNodeFlags dockspace_flags;
-	//ImGuiIO& io = ImGui::GetIO();
-
-	//ImGuiViewport& getDockingViewPort() {
-	//	return *viewport;
-	//}
-	//ImGuiDockNodeFlags getDockingFlags() {
-	//	return dockspace_flags;
-	//}
-
 //----
 
-// layout presets for docking engine
+// Docking Layout Engine for Layout presets
 
 // ImGui layouts engine
 // on each layout preset we store:
@@ -618,8 +553,6 @@ public:
 private:
 
 	void drawLayoutsManager();
-
-#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
 	const char* ini_to_load = NULL;
 	const char* ini_to_save = NULL;
@@ -639,7 +572,9 @@ private:
 	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; // index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "Layout Presets" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_Layouts{ "_LayoutsPresets" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsVisible{ "_LayoutsVisible" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsExtra{ "_LayoutsExtra" }; // all these params will be stored on each layout preset
 
 	int numPresetsDefault;
 	void createLayoutPreset();
@@ -676,7 +611,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setupDocking() {
-		setupLayout(4);
+		//setupLayout(4);
 		setAutoSaveSettings(true);
 		setImGuiDocking(true);
 		setImGuiDockingModeCentered(true);
@@ -698,35 +633,43 @@ private:
 	void drawLayouts();
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
-	void drawLayoutScene();
 	void drawLayoutsPanels();
+	
+	void drawLayoutEngine();
+	void drawOFnative();
 
-	ofParameter<bool> bAutoResizePanels{ "AutoResize ", false };
-	ofParameter<bool> bModeFreeStore{ "FreeStore", true };
+	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels ", false };
 
-	ofParameter<bool> bForceLayoutPosition{ "Forced", false };
-	ofParameter<bool> bDebugDocking{ "Debug", false };
+	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
+	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
+	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
+	ofParameter<bool> bModeLock1{ "Lock1", false }; // -> Cant be moved. To be used in presets panel
+	ofParameter<bool> bModeLockControls{ "Lock Controls", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	ofParameter<bool> bModeLockPreset{ "Lock Preset", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	//TODO: it's a problem if .ini files are already present... We must ingore loading.
+
+	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
 	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
 	ofRectangle rectangle_Central_MAX;
-	ofRectangle rectangle_Central;
+	ofRectangle rectangle_Central; // current free space viewport updated when changes
 	ofRectangle rectangle_Central_Transposed;
 
 	// standalone window not handled by .ini layout
 	// but for the app settings
 	//float widthGuiLayout;
 
-	ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
-	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
-		glm::vec2(0,0),
-		glm::vec2(ofGetWidth(), ofGetHeight())
-	};
+	//ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
+	//glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
+	//	glm::vec2(0,0),
+	//	glm::vec2(ofGetWidth(), ofGetHeight())
+	//};
 
-	ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",
-		glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
-		glm::vec2(0,0),
-		glm::vec2(ofGetWidth(), ofGetHeight())
-	};
+	//ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",
+	//	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
+	//	glm::vec2(0,0),
+	//	glm::vec2(ofGetWidth(), ofGetHeight())
+	//};
 
 	//-
 
@@ -750,19 +693,17 @@ public:
 	ofParameter<bool> bGui_Menu{ "Menu", false };
 
 private:
+
 	ofParameter<bool> bKeys{ "Keys", true};
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true};
 	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
-	
 
-	ofParameter<bool> bLockLayout{ "Lock", false };
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
-
 	ofParameter<bool> bSolo{ "Solo", false };
 
 	//-
@@ -770,7 +711,9 @@ private:
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 	ofParameterGroup params_Panels{ "Params Panels" };
 
-	ImGuiWindowFlags flagsWindowsLocked;
+	ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
+	ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
+	ImGuiWindowFlags flagsWindowsModeFreeStore;
 
 	string titleWindowLabel;
 
@@ -778,7 +721,7 @@ private:
 
 	//TODO: learn to use lambda functions
 	// to callback reset
-
+	// -> subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
 private:
 
 	bool *bResetPtr = nullptr;
@@ -797,7 +740,7 @@ public:
 			windowsAtributes[i].bGui.set(b);
 		}
 		bGui_Menu = b;
-		bLockLayout = b;
+		bModeLockControls = b;
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresets = b;
 		bGui_LayoutsExtra = false;

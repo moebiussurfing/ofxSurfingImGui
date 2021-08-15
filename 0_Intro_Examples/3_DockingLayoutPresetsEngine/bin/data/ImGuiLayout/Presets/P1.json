@@ -1,0 +1,14 @@
+{
+    "_LayoutsPresets": {
+        "_LayoutsExtra": {
+            "Menu": "0"
+        },
+        "_LayoutsVisible": {
+            "Advanced": "1",
+            "Audio_Window": "1",
+            "Main_Window": "1",
+            "Video_2": "1",
+            "Video_3": "1"
+        }
+    }
+}

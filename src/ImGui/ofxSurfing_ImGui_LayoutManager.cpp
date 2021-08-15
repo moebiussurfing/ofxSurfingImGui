@@ -2,12 +2,15 @@
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
+	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bKeys);
+
+	bExtra.setSerializable(false);
 
 	//-
 
@@ -27,6 +30,9 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
+
+	ofRemoveListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
+
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -282,15 +288,16 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
-	static bool _bAutoResize = true;
-	static ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (_bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	//window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	window_flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
+	static bool auto_resize = true;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+	if (auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	//-
+	window_flags |= flagsWindowsModeFreeStore;
+	window_flags |= flagsWindowsLocked2;
 
-	if (bModeFreeStore)
+	//--
+
+	if (bModeFree)
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
@@ -348,7 +355,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		//-
 
 		ImGui::Text("Parameters");
-		AddToggleRoundedButton(bGui_Menu);
+		AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+		//AddGroup(params_LayoutsExtra);
+
 		ImGui::Separator();
 
 		//-
@@ -357,10 +366,11 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		AddToggleRoundedButton(bDebugDocking);
 		if (bDebugDocking) {
 			ImGui::Indent();
-			//AddToggleRoundedButton(bUseLayoutPresetsManager);
+			AddToggleRoundedButton(bUseLayoutPresetsManager);
 			AddToggleRoundedButton(bDocking);
 			ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
-			ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
+			AddToggleRoundedButton(bPreviewSceneViewport);
+			//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
 			AddToggleRoundedButton(bDebugRectCentral);
 			ImGui::Unindent();
 		}
@@ -379,12 +389,14 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 	if (bGui_LayoutsExtra) drawLayoutsExtra();
 	if (bGui_LayoutsPresets) drawLayoutsPresets();
 	if (bGui_LayoutsPanels) drawLayoutsPanels();
+	// draws all sections except drawLayoutsManager();
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawLayoutScene() {
+void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
 
-	if (bGui_LayoutsManager) drawLayoutsManager();
+	if (bUseLayoutPresetsManager)
+		if (bGui_LayoutsManager) drawLayoutsManager();
 
 	//----
 
@@ -392,15 +404,13 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 	{
 		updateLayout();
 
-		//drawLayouts();
-
 		//----
 
-		ImGuiDockNodeFlags flagsDock;
+		//ImGuiDockNodeFlags flagsDock;
 		ImGuiID dockNodeID;
-		ImGuiDockNode* centralNode;
 		ImGuiDockNode* dockNode;
-		ImGuiDockNodeFlags dockingFlags;
+		//ImGuiDockNode* centralNode;
+		//ImGuiDockNodeFlags dockingFlags;
 
 		if (bDocking)
 		{
@@ -416,19 +426,23 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 
 			// b. Lockable settings 
 
-			// Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
-			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
-			flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
-			if (bLockLayout)
-			{
-				flagsDock |= ImGuiDockNodeFlags_NoResize;
-				flagsDock |= ImGuiDockNodeFlags_NoCloseButton;
-				//flagsDock |= ImGuiDockNodeFlags_NoTabBar;
-				//flagsDock |= ImGuiDockNodeFlags_NoWindowMenuButton;
-				//flagsDock |= ImGuiDockNodeFlags_NoMove__;
-			}
-			dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
-			//ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
+			//// Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+			////ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
+			//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
+			//if (bModeLockControls)
+			//{
+			//	flagsDock |= ImGuiDockNodeFlags_NoResize;
+			//	flagsDock |= ImGuiDockNodeFlags_NoCloseButton;
+			//	//flagsDock |= ImGuiDockNodeFlags_NoTabBar;
+			//	//flagsDock |= ImGuiDockNodeFlags_NoWindowMenuButton;
+			//	//flagsDock |= ImGuiDockNodeFlags_NoMove__;
+			//}
+
+			//TODO:
+			//dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
+			dockNodeID = ImGui::GetID("MyDockSpace");
+			//dockNodeID = ImGui::GetID("DockSpace");
+
 			//ImGui::PopStyleColor();
 
 			//----
@@ -438,9 +452,11 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 			//ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
 
 			ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
+
 			if (dockNode)
 			{
 				ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
+
 				// Verifies if the central node is empty (visible empty space for oF)
 				if (centralNode && centralNode->IsEmpty())
 				{
@@ -466,7 +482,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 						ofSetRectMode(OF_RECTMODE_CENTER);
 
 						int g = 0;
-						ofColor cl(0, 255, 255, 200);
+						//ofColor cl(0, 255, 255, 200);
+						ofColor cl = ofColor::orange;
 
 						//int g = 255 * ofxSurfingHelpers::Bounce(0.5);
 						int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
@@ -477,9 +494,10 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 						ofNoFill();
 						ofSetLineWidth(_wl);
 
-						ofRectangle rDebug;
 						float ww = availableSpace.GetSize().x - pad;
 						float hh = availableSpace.GetSize().y - pad;
+
+						ofRectangle rDebug;
 						rDebug = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
 						ofDrawRectangle(rDebug);
 
@@ -493,7 +511,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 					//-
 
 					static ofRectangle rectangle_Central_MAX_PRE;
-					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX) {//update when layout canges..
+					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX) { // updates when layout canges..
 						rectangle_Central_MAX_PRE = rectangle_Central_MAX;
 
 						// fit exact rectangle to borders and scaled to fit
@@ -510,77 +528,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 					}
 				}
 			}
-
 		}
 
 		//----
-
-		////TODO:
-		//setDefaultFont();
-
-		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh)); // minimal size
-
-		//-
-
-		/*
-		// docking
-		if (bDocking && bDockingModeCentered)
-		{
-			dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
-			dockNodeID = ImGui::DockSpaceOverViewport(NULL, dockingFlags); // Also draws the docked windows
-			dockNode = ImGui::DockBuilderGetNode(dockNodeID);
-
-			//ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
-			//ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, dockingFlags); // Also draws the docked windows
-			//ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
-
-			if (dockNode)
-			{
-				ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
-
-				// debug scene viewport
-				if (bPreviewSceneViewport)
-				{
-					// Verifies if the central node is empty (visible empty space for oF)
-					if (centralNode && centralNode->IsEmpty())
-					{
-						ImRect availableSpace = centralNode->Rect();
-						//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
-						ImGui::GetForegroundDrawList()->AddRect(availableSpace.GetTL() + ImVec2(8, 8), availableSpace.GetBR() - ImVec2(8, 8), IM_COL32(255, 50, 50, 255));
-
-						ImVec2 viewCenter = availableSpace.GetCenter();
-						// Depending on the viewports flag, the XY is either absolute or relative to the oF window.
-						if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) viewCenter = viewCenter - ImVec2(ofGetWindowPositionX(), ofGetWindowPositionY());
-						ofPushStyle();
-						ofSetRectMode(OF_RECTMODE_CENTER);
-						ofSetColor(255, 0, 0, 200);
-						ofNoFill();
-
-						static int pad = 15;
-
-						ofDrawRectangle(
-							viewCenter.x,
-							viewCenter.y,
-							availableSpace.GetSize().x - pad,
-							availableSpace.GetSize().y - pad
-						);
-						//ofNoFill();
-						//ofSetColor(255, 255, 255, 30);
-						//ofDrawRectangle(
-						//	(viewCenter.x),
-						//	(viewCenter.y),
-						//	(availableSpace.GetSize().x - 20)*fmodf(abs(sin(ofGetElapsedTimef())), 1.f),
-						//	(availableSpace.GetSize().y - 20)*fmodf(abs(sin(ofGetElapsedTimef())), 1.f)
-						//);
-						ofSetRectMode(OF_RECTMODE_CORNER);
-						ofPopStyle();
-					}
-				}
-			}
-		}
-		*/
-
-		//-
 
 		//// b. Lockable settings 
 
@@ -588,7 +538,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 		////ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 		//ImGuiDockNodeFlags flagsDock;
 		//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
-		//if (bLockLayout)
+		//if (bModeLockControls)
 		//{
 		//	flagsDock |= ImGuiDockNodeFlags_NoResize;
 		//	flagsDock |= ImGuiDockNodeFlags_NoCloseButton;
@@ -601,6 +551,74 @@ void ofxSurfing_ImGui_Manager::drawLayoutScene() {
 	}
 }
 
+#ifdef FIXING_DRAW_VIEWPORT
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::drawOFnative() {
+
+	//TODO: debug viewport. freew space for OF drawing
+
+	ImGuiDockNodeFlags __dockingFlags;
+	__dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode;
+
+	//ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+	//auto dockNodeID = ImGui::DockSpaceOverViewport(NULL, __dockingFlags);
+	//auto dockNodeID = ImGui::GetID("DockSpace");
+	auto dockNodeID = ImGui::GetID("MyDockSpace");
+
+	ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
+	if (dockNode)
+	{
+		ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
+		if (centralNode) 
+		//if (centralNode && centralNode->IsEmpty()) 
+		{
+			ImRect availableSpace = centralNode->Rect();
+			//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
+			//ImGui::GetForegroundDrawList()->AddRect(availableSpace.GetTL() + ImVec2(8, 8), availableSpace.GetBR() - ImVec2(8, 8), IM_COL32(255, 50, 50, 255));
+
+			ImVec2 viewCenter = availableSpace.GetCenter();
+
+			// Depending on the viewports flag, the XY is either absolute or relative to the oF window.
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) viewCenter = viewCenter - ImVec2(ofGetWindowPositionX(), ofGetWindowPositionY());
+
+			// create rectangle
+			rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, availableSpace.GetWidth(), availableSpace.GetHeight());
+			float v = ofxSurfingHelpers::Bounce(1);
+			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
+		}
+	}
+	else //get the OF viewport
+	{
+		auto view = ofGetCurrentViewport();
+		auto viewCenter = view.getCenter();
+		rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
+		float v = ofxSurfingHelpers::Bounce(1);
+		rectangle_Central.setSize(view.getWidth() * v, view.getHeight() * v);
+	}
+
+	ofPushStyle();
+	{
+		ofSetRectMode(OF_RECTMODE_CENTER);
+		ofSetLineWidth(4);
+		ofColor cl = ofColor::yellow;
+		int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+		ofColor c = ofColor(cl.r, cl.g, cl.b, a);
+		ofSetColor(c);
+		ofFill();
+		ofDrawCircle(rectangle_Central.getCenter().x, rectangle_Central.getCenter().y, 3);
+		ofNoFill();
+		ofDrawRectangle(rectangle_Central);
+
+		ofSetRectMode(OF_RECTMODE_CORNER);
+	}
+	ofPopStyle();
+}
+#endif
+
+//----
+
+// Global ImGui being/end like ofxImGui
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 	if (guiPtr != nullptr) guiPtr->begin();
@@ -613,13 +631,20 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//TODO:
 	setDefaultFont();
 
-	//----
+	//--
 
-	drawLayoutScene();
+	if (bDocking)
+		drawLayoutEngine();
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
+#ifdef FIXING_DRAW_VIEWPORT
+	if(bPreviewSceneViewport)
+	drawOFnative();
+#endif
+
+	//--
 
 	//ImGui::PopStyleVar(); // minimal size
 
@@ -627,12 +652,16 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	// mouse lockers
 	bMouseOverGui = false;
-	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-	bMouseOverGui = bMouseOverGui | ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
+
+	//--
+
+	// Out of ImGui begin/end
 }
 
 //--------------------------------------------------------------
@@ -640,10 +669,12 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name)
 {
 	return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
+
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open) {
 	return beginWindow(name, p_open, ImGuiWindowFlags_None);
 }
+
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 {
@@ -728,6 +759,40 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 }
 
 //--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindow(int index) {
+	if (index > windowsAtributes.size() - 1 || index == -1)
+	{
+		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+		return false;
+	}
+
+	if (!windowsAtributes[index].bGui.get()) {
+		return false;
+	}
+
+	// default shape window
+	float x = 10;
+	float y = 10;
+	float w = 200;
+	float h = 600;
+	ImGuiCond cond = ImGuiCond_None;
+	cond |= ImGuiCond_FirstUseEver;
+	//cond |= ImGuiCond_Appearing;
+	ImGui::SetNextWindowPos(ImVec2(x, y), cond);
+	ImGui::SetNextWindowSize(ImVec2(w, h), cond);
+
+	ImGuiWindowFlags _flags = ImGuiWindowFlags_None;
+	//_flags |= ImGuiWindowFlags_None;
+
+	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), _flags);
+
+	// get window position
+	windowsAtributes[index].rectShapeWindow.set(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
+
+	return b;
+}
+
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endWindow()
 {
 	//ImGui::PopItemWidth();
@@ -738,6 +803,30 @@ void ofxSurfing_ImGui_Manager::endWindow()
 
 //--
 
+
+#ifdef FIXING_DOCKING
+// docking helpers
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::beginDocking()
+{
+	// Make windows transparent, to demonstrate drawing behind them.
+	//ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(200, 200, 200, 128)); // This styles the docked windows
+
+	ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
+	// Fixes imgui to expected behaviour, having a transparent central node in passthru mode.
+	// Alternative: Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+	//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
+
+	//dockingFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode; // Uncomment to always keep an empty "central node" (a visible oF space)
+	//dockingFlags |= ImGuiDockNodeFlags_NoTabBar; // Uncomment to disable creating tabs in the main view
+
+	// Define the ofWindow as a docking space
+	ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, dockingFlags); // Also draws the docked windows
+	//ImGui::PopStyleColor(2);
+}
+#endif
+
+#ifndef FIXING_DOCKING
 // docking helpers
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::beginDocking()
@@ -752,8 +841,8 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	if (bGui_Menu) window_flags |= ImGuiWindowFlags_MenuBar;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//viewport = ImGui::GetMainViewport();
 
+	// fit full viewport
 	ImGui::SetNextWindowPos(viewport->Pos);
 	ImGui::SetNextWindowSize(viewport->Size);
 	ImGui::SetNextWindowViewport(viewport->ID);
@@ -781,12 +870,14 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("DockSpace", nullptr, window_flags);
 
-	//----
+	ImGui::Begin("MyDockSpace", nullptr, window_flags);
+	//ImGui::Begin("DockSpace", nullptr, window_flags);
 
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar(2);
+
+	//----
 
 	// DockSpace
 	ImGuiIO& io = ImGui::GetIO();
@@ -795,63 +886,47 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 		//dockspace_flags |= ImGuiConfigFlags_DockingEnable
 
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		//ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-
-		//--
-
-		// original code example:
-		//	static auto first_time = true;
-		//	if (first_time)
-		//	{
-		//		first_time = false;
-		//		ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
-		//		ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
-		//		ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
-		//		// split the dockspace into 2 nodes -- 
-		//		// DockBuilderSplitNode takes in the following args in the following order
-		//		//   window ID to split, direction, fraction (between 0 and 1), 
-		//		// the final two setting let's us choose which id we want (which ever one we DON'T set as NULL, 
-		//		// will be returned by the function)
-		//		// out_id_at_dir is the id of the node in the direction we specified earlier, 
-		//		// out_id_at_opposite_dir is in the opposite direction
-		//		auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.1f, nullptr, &dockspace_id);
-		//		auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
-		//		auto dock_id_left2 = ImGui::DockBuilderSplitNode(dock_id_left, ImGuiDir_Down, 0.2f, nullptr, &dock_id_left);
-		//		auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
-		//		auto dock_id_down2 = ImGui::DockBuilderSplitNode(dock_id_down, ImGuiDir_Right, 0.15f, nullptr, &dock_id_down);
-		//		// we now dock our windows into the docking node we made above
-		//		ImGui::DockBuilderDockWindow("Window1", dock_id_top);
-		//		ImGui::DockBuilderDockWindow("Down", dock_id_down);
-		//		ImGui::DockBuilderDockWindow("Left", dock_id_left);
-		//		ImGui::DockBuilderDockWindow("Window1", dock_id_left2);
-		//		ImGui::DockBuilderDockWindow("Window2", dock_id_down2);
-		//		ImGui::DockBuilderFinish(dockspace_id);
-		//	}
-		//}
-		//ImGui::End();
+	}
+	else
+	{
+		// Docking is DISABLED - Show a warning message
+		//ShowDockingDisabledMessage();
 	}
 
-	//--
+	//----
 
 	drawLayouts();
 
+	// All windows goes here before endDocking()
 }
+#endif
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endDocking()
 {
+#ifdef FIXING_DOCKING
+	return;
+#endif
+
 	//if (bGui_Menu) draw_ImGuiMenu();
 
 	//-
 
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-	{
-	}
+	//ImGuiIO& io = ImGui::GetIO();
+	//if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	//{
+	//}
 
-	ImGui::End();
+	 // End the parent window that contains the Dockspace:
+	ImGui::End(); // ?
+
+	//-
+
+	//ImGui::PopStyleVar();
+	//ImGui::PopStyleVar(2);
 }
 
 //----
@@ -864,8 +939,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	//-
 
-	//bGui_LayoutsManager = true;
-	//bGui_Menu = true;
+	params_Layouts.clear();
+	params_LayoutsExtra.clear();
+	params_LayoutsVisible.clear();
 
 	//-
 
@@ -874,16 +950,26 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//params_Layouts.clear();
 	for (int i = 0; i < windowsAtributes.size(); i++)
 	{
-		params_Layouts.add(windowsAtributes[i].bGui);
+		params_LayoutsVisible.add(windowsAtributes[i].bGui);
 	}
 
 	// 1.2 add other settings that we want to store into each presets
-	params_Layouts.add(bGui_Menu);
-	params_Layouts.add(bModeFreeStore);
+	params_LayoutsExtra.add(bGui_Menu);
+
+	// 1.3 applied to control windows
+	//params_LayoutsExtra.add(bModeFree);
+	//params_LayoutsExtra.add(bModeForced);
+	//params_LayoutsExtra.add(bModeLock1);
+	//params_LayoutsExtra.add(bModeLockControls);
+
+	// pack both groups
+	params_Layouts.add(params_LayoutsVisible);
+	params_Layouts.add(params_LayoutsExtra);
 
 	//-
 
 	/*
+
 	// 2. define the layouts presets
 	// adds toggles to preset states
 
@@ -916,6 +1002,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 		params_LayoutPresetsStates.add(bLayoutPresets[i]);
 	}
 	//params_LayoutPresetsStates.add(b0, b1, b2, b3, b4);
+
 	*/
 
 	//--
@@ -935,27 +1022,33 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// 4. app states for the next session
 
 	// the main control windows
-	params_LayoutSettings.add(bGui_LayoutsPresets);
-	params_LayoutSettings.add(bGui_LayoutsExtra);
-	params_LayoutSettings.add(bGui_LayoutsPanels);
+	params_AppSettingsLayout.add(bGui_LayoutsPresets);
+	params_AppSettingsLayout.add(bGui_LayoutsExtra);
+	params_AppSettingsLayout.add(bGui_LayoutsPanels);
 
-	params_LayoutSettings.add(bAutoSave_Layout);
-	params_LayoutSettings.add(bForceLayoutPosition);
-	params_LayoutSettings.add(bLockLayout);
-	params_LayoutSettings.add(bModeFreeStore);
-	params_LayoutSettings.add(appLayoutIndex);
-	//params_LayoutSettings.add(bGui_Menu);
-	//params_LayoutSettings.add(bDebugRectCentral);
+
+	params_AppSettingsLayout.add(bAutoSave_Layout);
+
+	params_AppSettingsLayout.add(bModeFree);
+	params_AppSettingsLayout.add(bModeForced);
+	params_AppSettingsLayout.add(bModeLock1);
+	params_AppSettingsLayout.add(bModeLockControls);
+	params_AppSettingsLayout.add(bModeLockPreset);
+	params_AppSettingsLayout.add(bPreviewSceneViewport);
+
+	params_AppSettingsLayout.add(appLayoutIndex);
+	//params_AppSettingsLayout.add(bGui_Menu);
+	//params_AppSettingsLayout.add(bDebugRectCentral);
 
 	params_AppSettings.add(bGui_LayoutsManager);
-	params_AppSettings.add(params_LayoutSettings);
+	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(params_Advanced);
+	params_AppSettings.add(bSolo);
 
 	//-
 
 	// exclude from settings but to use the grouped callback
 	bSolo.setSerializable(false);
-	params_AppSettings.add(bSolo);
 
 	//-
 
@@ -966,7 +1059,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//-
 
 	// initiate the 3 control windows
-	// we store the shapes using ofrectangles to split them from ImGui .ini store manager..
+	// we store the shapes using ofRectangles to "split" them from ImGui .ini store manager...
 
 	float x, y, w, h, pad;
 	x = ofGetWidth() * 0.4;
@@ -974,9 +1067,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	w = 200;
 	h = 1;
 	pad = 2;
-	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(x, y, w, h), ofRectangle(), ofRectangle() };
-	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(x + (pad + w), y, w, h), ofRectangle(), ofRectangle() };
-	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(x + 2 * (pad + w), y, w, h), ofRectangle(), ofRectangle() };
+	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(x, y, w, h), ofRectangle(), ofRectangle(w, h, w, h) };
+	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(x + (pad + w), y, w, h), ofRectangle(), ofRectangle(w, h, w, h) };
+	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(x + 2 * (pad + w), y, w, h), ofRectangle(), ofRectangle(w, h, w, h) };
 
 	rectPanels.clear();
 	rectPanels.emplace_back(r1);
@@ -992,7 +1085,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//--
 
 	setImGuiLayoutPresets(true);
-	//setAutoSaveSettings(true);
 
 	// startup
 	loadAppSettings();
@@ -1008,7 +1100,6 @@ void ofxSurfing_ImGui_Manager::loadAppSettings()
 void ofxSurfing_ImGui_Manager::saveAppSettings()
 {
 	if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
-	//if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
 }
 
 //--------------------------------------------------------------
@@ -1076,10 +1167,19 @@ void ofxSurfing_ImGui_Manager::loadAppLayout(int _index)
 void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 {
 	static bool auto_resize = true;
-	ImGuiWindowFlags window_flags = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-	window_flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
-	//window_flags |= ImGuiWindowFlags_NoSavedSettings;//exclude from restore layouts
-	//window_flags |= flagsWindowsLocked;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+	if (auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+	if (bModeLockPreset) {
+		window_flags |= ImGuiWindowFlags_NoMove;
+		window_flags |= ImGuiWindowFlags_NoSavedSettings;
+	}
+	
+	//if (bModeLock1)
+	////window_flags |= flagsWindowsModeFreeStore;
+	//window_flags |= flagsWindowsLocked1;
+
+	//--
 
 	static float CURRENT_WINDOW_MIN_HEIGHT = 220;
 
@@ -1098,12 +1198,23 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 	//xw = ofGetWidth() / 2 - ww / 2;
 	//yw = ofGetHeight() / 2 - hw / 2;
 
-	if (!bModeFreeStore.get())
+	ImGuiCond flagCond;
+
+	// bModeFree. Get window shape from settings. Unlinked from ImGui .ini
+	if (bModeFree.get())
 	{
 		ImGuiCond flagCond;
-
-		if (bForceLayoutPosition)
+		flagCond = ImGuiCond_Appearing;
+		//flagCond = ImGuiCond_Always;
+		const int i = 0;
+		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
+		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
+	}
+	else
+		if (bModeForced)
 		{
+			// forced inside a free viewport
+
 			//// upper left
 			//glm::vec2 p = rectangle_Central_MAX.getTopLeft() + glm::vec2(-1, -1);
 
@@ -1118,40 +1229,17 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			yw = p.y;
 
 			flagCond = ImGuiCond_Always;
+			ImGui::SetNextWindowPos(ofVec2f(xw, yw), flagCond);
+			//ImGui::SetNextWindowSize(ofVec2f(ww, hw), flagCond); // exclude shape
 		}
-		else
-		{
-			//TODO:
-			//// shape
-			//xw = shapeGuiLayout.get().x;
-			//yw = shapeGuiLayout.get().y;
-			xw = positionGuiLayout.get().x;
-			yw = positionGuiLayout.get().y;
-
-			flagCond = ImGuiCond_Once;
-		}
-
-		ImGui::SetNextWindowPos(ofVec2f(xw, yw), flagCond);
-		//ImGui::SetNextWindowSize(ofVec2f(ww, hw), flagCond); // exclude shape
-	}
-	else // bModeFreeStore
-	{
-		ImGuiCond flagCond;
-		flagCond = ImGuiCond_Appearing;
-		//flagCond = ImGuiCond_Always;
-		const int i = 0;
-		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
-		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
-	}
-
 
 	//----
 
 	if (beginWindow(bGui_LayoutsPresets, window_flags))
 	{
 		// get window position for advanced layout paired position
-		positionGuiLayout = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-		shapeGuiLayout = glm::vec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		//positionGuiLayout = glm::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+		//shapeGuiLayout = glm::vec2(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 		const int i = 0;
 		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -1172,7 +1260,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		float _h;
 		_w = ofxImGuiSurfing::getWidgetsWidth(2);
 		_h = ofxImGuiSurfing::getWidgetsHeightRelative() * 2;
-		//_h = ofxImGuiSurfing::getWidgetsHeight();
 
 		for (int i = 0; i < bLayoutPresets.size(); i++) {
 			ofxImGuiSurfing::AddBigToggle(bLayoutPresets[i], _w, _h);
@@ -1188,10 +1275,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		{
 			ImGuiStyle *style = &ImGui::GetStyle();
 
-			//TODO: get color from button/theme
 			ImVec4 butColor = style->Colors[ImGuiCol_FrameBg];
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(butColor.x, butColor.y, butColor.z, butColor.w * a));
-			//ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.5f, 0.0f, 0.0f, a));
 
 			// border
 			ImVec4 borderLineColor = style->Colors[ImGuiCol_SliderGrab];
@@ -1217,19 +1302,22 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		//-
 
 		_w = ofxImGuiSurfing::getWidgetsWidth(1);
-		_h /= 2;
+		//_h /= 2;
 
 		// one row
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, 2 * _h);
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, 2 * _h);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, _h);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w, _h);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h / 2);
 
 		/*
-		ofxImGuiSurfing::AddBigToggle(bLockLayout, _w50, _h);
-		ImGui::SameLine();
-		ofxImGuiSurfing::AddBigToggle(bForceLayoutPosition, _w50, _h);
+		ofxImGuiSurfing::AddBigToggle(bModeForced, _w50, _h);
+		ofxImGuiSurfing::AddBigToggle(bModeLock1, _w50, _h);
+		ofxImGuiSurfing::AddBigToggle(bModeLockControls, _w50, _h);
 		*/
 
-		//AddToggleRoundedButton(bModeFreeStore);
+		AddToggleRoundedButton(bModeLockPreset);
+
+		//AddToggleRoundedButton(bModeFree);
 		ToggleRoundedButton("Auto Resize", &auto_resize);
 
 		//-
@@ -1274,26 +1362,63 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 		}
 	}
 
-	//-
+	//--
 
-	// lock layout
-	else if (name == bLockLayout.getName())
+	// special behaviour to control windows
+
+	// free layout
+	else if (name == bModeFree.getName())
 	{
-		if (!bLockLayout)
+		if (bModeFree)
 		{
-			flagsWindowsLocked = ImGuiWindowFlags_None;
+			flagsWindowsModeFreeStore = ImGuiWindowFlags_None;
 		}
 		else
 		{
-			flagsWindowsLocked = ImGuiWindowFlags_NoMove;
-			//flagsWindowsLocked |= ImGuiWindowFlags_NoResize;
-			//flagsWindowsLocked |= ImGuiWindowFlags_NoTitleBar;
-			//flagsWindowsLocked |= ImGuiWindowFlags_NoCollapse;
-			//flagsWindowsLocked |= ImGuiWindowFlags_NoDecoration;
-			//flagsWindowsLocked |= ImGuiWindowFlags_NoBackground;
-			//flagsWindowsLocked |= ImGuiDockNodeFlags_AutoHideTabBar;
-			//flagsWindowsLocked |= ImGuiDockNodeFlags_NoTabBar;
-			//flagsWindowsLocked |= ImGuiDockNodeFlags_NoCloseButton;
+			flagsWindowsModeFreeStore = ImGuiWindowFlags_NoSavedSettings;
+		}
+	}
+
+	//-
+
+	// lock layout
+	else if (name == bModeLock1.getName())
+	{
+		if (!bModeLock1)
+		{
+			flagsWindowsLocked1 = ImGuiWindowFlags_None;
+		}
+		else
+		{
+			flagsWindowsLocked1 = ImGuiWindowFlags_NoMove;
+			flagsWindowsLocked1 |= ImGuiWindowFlags_NoSavedSettings;
+			//flagsWindowsLocked1 |= ImGuiWindowFlags_NoResize;
+			//flagsWindowsLocked1 |= ImGuiWindowFlags_NoTitleBar;
+			//flagsWindowsLocked1 |= ImGuiWindowFlags_NoCollapse;
+			//flagsWindowsLocked1 |= ImGuiWindowFlags_NoDecoration;
+			//flagsWindowsLocked1 |= ImGuiWindowFlags_NoBackground;
+			//flagsWindowsLocked1 |= ImGuiDockNodeFlags_AutoHideTabBar;
+			//flagsWindowsLocked1 |= ImGuiDockNodeFlags_NoTabBar;
+			//flagsWindowsLocked1 |= ImGuiDockNodeFlags_NoCloseButton;
+		}
+	}
+	else if (name == bModeLockControls.getName())
+	{
+		if (!bModeLockControls)
+		{
+			flagsWindowsLocked2 = ImGuiWindowFlags_None;
+		}
+		else
+		{
+			flagsWindowsLocked2 = ImGuiWindowFlags_NoMove;
+			//flagsWindowsLocked2 |= ImGuiWindowFlags_NoResize;
+			//flagsWindowsLocked2 |= ImGuiWindowFlags_NoTitleBar;
+			//flagsWindowsLocked2 |= ImGuiWindowFlags_NoCollapse;
+			//flagsWindowsLocked2 |= ImGuiWindowFlags_NoDecoration;
+			//flagsWindowsLocked2 |= ImGuiWindowFlags_NoBackground;
+			//flagsWindowsLocked2 |= ImGuiDockNodeFlags_AutoHideTabBar;
+			//flagsWindowsLocked2 |= ImGuiDockNodeFlags_NoTabBar;
+			//flagsWindowsLocked2 |= ImGuiDockNodeFlags_NoCloseButton;
 		}
 	}
 
@@ -1428,32 +1553,37 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 {
 	static bool auto_resize = true;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+	if (auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	ImGuiWindowFlags flags = auto_resize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
-	flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
-	//flags |= flagsWindowsLocked;
+	//window_flags |= flagsWindowsModeFreeStore;
+	//window_flags |= flagsWindowsLocked2;
+
+	window_flags |= ImGuiWindowFlags_NoTitleBar;//hide header
+
+	//--
 
 	bool bMin = false; // hide load buttons to simplify
 	float max = (bMin ? 150 : 175);
 
 	//----
 
-	static float CURRENT_WINDOW_MIN_HEIGHT = 100;
+	//static float CURRENT_WINDOW_MIN_HEIGHT = 100;
 
-	// position is linked to main layout window
-	// is excluded from .ini
-	float xw, yw, ww, hw;
-	ww = LAYOUT_WINDOW_WIDTH;
-	hw = CURRENT_WINDOW_MIN_HEIGHT;
-	xw = ofGetWidth() / 2 - ww / 2;
-	yw = ofGetHeight() / 2 - hw / 2;
+	//// position is linked to main layout window
+	//// is excluded from .ini
+	//float xw, yw, ww, hw;
+	//ww = LAYOUT_WINDOW_WIDTH;
+	//hw = CURRENT_WINDOW_MIN_HEIGHT;
+	//xw = ofGetWidth() / 2 - ww / 2;
+	//yw = ofGetHeight() / 2 - hw / 2;
+
+	int _pad = PADDING_PANELS;
 
 	ImGuiCond _flagc;
 	_flagc = ImGuiCond_Always;
 	//_flagc = ImGuiCond_FirstUseEver;
 	//_flagc = ImGuiCond_Appearing;
-
-	int _pad = PADDING_PANELS;
 
 	//ImGui::SetNextWindowPos(ofVec2f(xw + ww + 2, yw), _flagc);
 	//ImGui::SetNextWindowSize(ofVec2f(ww, hw), _flagc);
@@ -1462,14 +1592,17 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 	//ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x + shapeGuiLayout.get().x + _pad, positionGuiLayout.get().y), _flagc);
 
 	//down
-	ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x, positionGuiLayout.get().y + shapeGuiLayout.get().y + _pad), _flagc);
+	//ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x, positionGuiLayout.get().y + shapeGuiLayout.get().y + _pad), _flagc);
 
+	const int i = 0;
+	ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY() + rectPanels[i].get().getHeight() + _pad), _flagc);
+	//ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), _flagc);
 
 	//----
 
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(max, CURRENT_WINDOW_MIN_HEIGHT));
 
-	if (beginWindow(bGui_LayoutsExtra, flags))
+	if (beginWindow(bGui_LayoutsExtra, window_flags))
 	{
 		float _spcx;
 		float _spcy;
@@ -1481,35 +1614,24 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		float _w25;
 		float _h;
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
-		//_h = _h / 2;
 
 		int _id = 0;
 
 		//----
 
-		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w100, 2*_h);
 		ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w100, _h);
 
-		ofxImGuiSurfing::AddBigToggle(bModeFreeStore, _w100, _h);
-		//AddToggleRoundedButton(bModeFreeStore);
-
-		ofxImGuiSurfing::AddBigToggle(bLockLayout, _w50, _h);
+		ofxImGuiSurfing::AddBigToggle(bModeFree, _w50, _h);
 		ImGui::SameLine();
-		ofxImGuiSurfing::AddBigToggle(bForceLayoutPosition, _w50, _h);
+		ofxImGuiSurfing::AddBigToggle(bModeForced, _w50, _h);
 
-		AddToggleRoundedButton(bGui_Menu);
+		ofxImGuiSurfing::AddBigToggle(bModeLock1, _w50, _h);
+		ImGui::SameLine();
+		ofxImGuiSurfing::AddBigToggle(bModeLockControls, _w50, _h);
 
-		AddToggleRoundedButton(bAdvanced);
-		if (bAdvanced) {
-			ImGui::Indent();
-			AddToggleRoundedButton(bMinimize);
-			AddToggleRoundedButton(bExtra);
-			AddToggleRoundedButton(bKeys);
-			AddToggleRoundedButton(bAutoResize);
-			ImGui::Unindent();
-		}
+		//AddToggleRoundedButton(bGui_Menu);
 
-		//----
+		//--
 
 		//ImGui::Spacing();
 		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
@@ -1557,7 +1679,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 				}
 
 				ImGui::PopID();
-
 			}
 
 			//--
@@ -1574,9 +1695,38 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 				for (int i = 0; i < windowsAtributes.size(); i++) {
 					windowsAtributes[i].bGui.set(true);
 				}
-				bLockLayout = false;
+				bModeLock1 = false;
+				bModeLockControls = false;
 				saveAppLayout((appLayoutIndex.get()));
 			}
+
+			if (ImGui::Button("Clear", ImVec2(_w100, _h)))
+			{
+				// remove all the settings folder
+				const filesystem::path path = path_Global;
+				ofDirectory::removeDirectory(path, true, true);
+
+				// remove ini file
+				const filesystem::path file = ofToDataPath("../imgui.ini");
+				ofFile::removeFile(file, true);
+			}
+		}
+
+		//--
+
+		AddToggleRoundedButton(bExtra);
+		if (bExtra) {
+			ImGui::Indent();
+			AddToggleRoundedButton(bMinimize);
+			AddToggleRoundedButton(bKeys);
+			AddToggleRoundedButton(bAdvanced);
+			if (bAdvanced) {
+				ImGui::Indent();
+				AddToggleRoundedButton(bAutoResize);
+				AddToggleRoundedButton(bAutoResizePanels);
+				ImGui::Unindent();
+			}
+			ImGui::Unindent();
 		}
 
 		//--
@@ -1646,19 +1796,22 @@ void ofxSurfing_ImGui_Manager::createLayoutPreset()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 {
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+	if (bAutoResizePanels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+	window_flags |= flagsWindowsModeFreeStore;
+	window_flags |= flagsWindowsLocked2;
+
+	//--
+
 	static bool bLandscape;
 
-	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-	if (bAutoResizePanels) flags = ImGuiWindowFlags_AlwaysAutoResize;//TODO: bug
-	flags |= ImGuiWindowFlags_NoSavedSettings; // exclude from restore preset layouts
-	//flags |= flagsWindowsLocked;
-
 #ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
-	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(4 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
+	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(3 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
 	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
 #endif
 
-	if (bModeFreeStore)
+	if (bModeFree)
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
@@ -1668,7 +1821,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
 	}
 
-	if (beginWindow(bGui_LayoutsPanels, flags))
+	if (beginWindow(bGui_LayoutsPanels, window_flags))
 	{
 		const int i = 1;
 		rectPanels[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -1809,38 +1962,29 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 #endif
 }
 
-//--
-
-//TODO:
+//keys
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::keyPressed(int key)
+void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 {
 	if (!bKeys) return;
 
-	//const int key = eventArgs.key;
+	const int &key = eventArgs.key;
+	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
 
-	//// modifiers
-	//bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
-	//bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
-	//bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
-	//bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+	//modifiers
+	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
-	//bool bDebug = true;
-	//if (bDebug)
-	//{
-	//	if (!ENABLE_keys || bBlockedKeys) {
-	//		ofLogError(__FUNCTION__) << "Key commands are disabled!";
-	//		ofLogError(__FUNCTION__) << "ENABLE_keys: " << (ENABLE_keys ? "TRUE" : "FALSE");
-	//		ofLogError(__FUNCTION__) << "bBlockedKeys : " << (bBlockedKeys ? "TRUE" : "FALSE");
-	//	}
-	//	else
-	//		ofLogNotice(__FUNCTION__)
-	//		<< "keycode: " << key
-	//		<< " char: " << (char)key
-	//		<< (mod_CONTROL ? " + CONTROL" : "")
-	//		<< (mod_SHIFT ? " + SHIFT" : "")
-	//		<< (mod_ALT ? " + ALT" : "");
-	//}
+	bool debug = false;
+	if (debug)
+	{
+		ofLogNotice(__FUNCTION__) << "mod_COMMAND: " << (mod_COMMAND ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_CONTROL: " << (mod_CONTROL ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_ALT: " << (mod_ALT ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_SHIFT: " << (mod_SHIFT ? "ON" : "OFF");
+	}	if (!bKeys) return;
 
 	{
 		switch (key)
@@ -1870,10 +2014,14 @@ void ofxSurfing_ImGui_Manager::keyPressed(int key)
 			bGui_LayoutsExtra = !bGui_LayoutsExtra;
 		}
 
-		// unlock dock Ctrl+Alt+a
-		else if ((key == 'L' || key == 'l')) //&& mod_CONTROL && !mod_ALT)
+		// unlock dock 
+		else if (key == 'l')
 		{
-			bLockLayout = !bLockLayout;
+			bModeLock1 = !bModeLock1;
+		}
+		else if (key == 'L')
+		{
+			bModeLockControls = !bModeLockControls;
 		}
 
 		//--
@@ -1889,7 +2037,39 @@ void ofxSurfing_ImGui_Manager::keyPressed(int key)
 		//}
 	}
 
+	//--
+
+	////key enabler
+	//if (key == 'k')
+	//{
+	//	bKeys = !bKeys;
+	//	ofLogNotice(__FUNCTION__) << "KEYS: " << (bKeys ? "ON" : "OFF");
+	//	if (!bKeys)
+	//	{
+	//		ofLogNotice(__FUNCTION__) << "ALL KEYS DISABLED. PRESS 'k' TO ENABLE GAIN!";
+	//	}
+	//	else
+	//	{
+	//		ofLogNotice(__FUNCTION__) << "KEYS ENABLED BACK";
+	//	}
+	//}
 }
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs &eventArgs)
+{
+	const int &key = eventArgs.key;
+	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
+
+	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+}
+
+
+//--
+
 
 ////--------------------------------------------------------------
 //void ofxSurfing_ImGui_Manager::draw_ImGuiMenu()
