@@ -26,6 +26,8 @@ void ofApp::setup() {
 
 	//-
 
+	guiManager.setImGuiViewPort(true);
+
 	// -> To allow the full engine:
 	// Custom docking layout with presets. 
 	guiManager.setupDocking();
@@ -158,10 +160,6 @@ void ofApp::drawImGui()
 
 	if (guiManager.beginWindow(0)) // -> This is our helpers to render windows
 	{
-		//-
-
-		ImGui::Spacing();
-
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
@@ -261,7 +259,6 @@ void ofApp::drawImGui()
 void ofApp::dockingReset()
 {
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
@@ -305,7 +302,6 @@ void ofApp::dockingReset()
 void ofApp::dockingRandom()
 {
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 

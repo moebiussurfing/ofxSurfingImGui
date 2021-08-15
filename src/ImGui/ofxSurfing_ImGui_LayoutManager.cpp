@@ -570,8 +570,8 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 	if (dockNode)
 	{
 		ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
-		if (centralNode) 
-		//if (centralNode && centralNode->IsEmpty()) 
+		if (centralNode)
+			//if (centralNode && centralNode->IsEmpty()) 
 		{
 			ImRect availableSpace = centralNode->Rect();
 			//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
@@ -640,8 +640,8 @@ void ofxSurfing_ImGui_Manager::begin() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
 #ifdef FIXING_DRAW_VIEWPORT
-	if(bPreviewSceneViewport)
-	drawOFnative();
+	if (bPreviewSceneViewport)
+		drawOFnative();
 #endif
 
 	//--
@@ -870,10 +870,7 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-
 	ImGui::Begin("MyDockSpace", nullptr, window_flags);
-	//ImGui::Begin("DockSpace", nullptr, window_flags);
-
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar(2);
 
@@ -883,10 +880,7 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
-		//dockspace_flags |= ImGuiConfigFlags_DockingEnable
-
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 	}
@@ -922,11 +916,6 @@ void ofxSurfing_ImGui_Manager::endDocking()
 
 	 // End the parent window that contains the Dockspace:
 	ImGui::End(); // ?
-
-	//-
-
-	//ImGui::PopStyleVar();
-	//ImGui::PopStyleVar(2);
 }
 
 //----
@@ -1174,7 +1163,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		window_flags |= ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoSavedSettings;
 	}
-	
+
 	//if (bModeLock1)
 	////window_flags |= flagsWindowsModeFreeStore;
 	//window_flags |= flagsWindowsLocked1;
@@ -1805,7 +1794,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	//--
 
 	static bool bLandscape;
-
 #ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
 	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(3 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
 	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
@@ -1819,6 +1807,13 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		const int i = 1;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
+	}
+	//else
+	//startup default
+	{
+		ImGuiCond flagCond = ImGuiCond_FirstUseEver;
+		ImGui::SetNextWindowPos(ImVec2(100, 100), flagCond);
+		ImGui::SetNextWindowSize(ImVec2(600, 100), flagCond);
 	}
 
 	if (beginWindow(bGui_LayoutsPanels, window_flags))
@@ -1989,10 +1984,15 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 	{
 		switch (key)
 		{
-		case OF_KEY_F1: appLayoutIndex = 0; break;
-		case OF_KEY_F2: appLayoutIndex = 1; break;
-		case OF_KEY_F3: appLayoutIndex = 2; break;
-		case OF_KEY_F4: appLayoutIndex = 3; break;
+		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
+		case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1]; break;
+		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
+		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
+
+		//case OF_KEY_F1: appLayoutIndex = 0; break;
+		//case OF_KEY_F2: appLayoutIndex = 1; break;
+		//case OF_KEY_F3: appLayoutIndex = 2; break;
+		//case OF_KEY_F4: appLayoutIndex = 3; break;
 
 		case OF_KEY_F5: loadAppSettings(); break;
 

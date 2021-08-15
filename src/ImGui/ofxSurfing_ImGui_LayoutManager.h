@@ -641,7 +641,7 @@ private:
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels ", false };
 
 	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
-	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
+	ofParameter<bool> bModeFree{ "Free", false }; // -> A allows storing position for control windows too
 	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
 	ofParameter<bool> bModeLock1{ "Lock1", false }; // -> Cant be moved. To be used in presets panel
 	ofParameter<bool> bModeLockControls{ "Lock Controls", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
