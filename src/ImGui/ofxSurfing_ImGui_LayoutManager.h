@@ -86,6 +86,7 @@ public:
 		widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
 	}
 
+	//TODO: group styles are recursive! must fix!
 	//--------------------------------------------------------------
 	void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{

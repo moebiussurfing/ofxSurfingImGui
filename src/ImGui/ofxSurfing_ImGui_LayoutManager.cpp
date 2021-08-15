@@ -50,10 +50,13 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	//-
 
 	path_Global = "ImGuiLayout/";
-	ofxImGuiSurfing::CheckFolder(path_Global);
-
 	path_ImLayouts = path_Global + "Presets/";
-	ofxImGuiSurfing::CheckFolder(path_ImLayouts);
+
+	// create folders if required
+	if (bAutoSaveSettings) {
+		ofxImGuiSurfing::CheckFolder(path_Global);
+		ofxImGuiSurfing::CheckFolder(path_ImLayouts);
+	}
 
 	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
@@ -1989,10 +1992,10 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
 		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
 
-		//case OF_KEY_F1: appLayoutIndex = 0; break;
-		//case OF_KEY_F2: appLayoutIndex = 1; break;
-		//case OF_KEY_F3: appLayoutIndex = 2; break;
-		//case OF_KEY_F4: appLayoutIndex = 3; break;
+			//case OF_KEY_F1: appLayoutIndex = 0; break;
+			//case OF_KEY_F2: appLayoutIndex = 1; break;
+			//case OF_KEY_F3: appLayoutIndex = 2; break;
+			//case OF_KEY_F4: appLayoutIndex = 3; break;
 
 		case OF_KEY_F5: loadAppSettings(); break;
 

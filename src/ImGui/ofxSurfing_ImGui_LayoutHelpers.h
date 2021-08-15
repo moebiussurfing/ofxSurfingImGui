@@ -31,6 +31,8 @@
 #define WIDGET_SLIDER_HEIGHT 20
 #define WIDGET_COLOR_STRIP_COLOR_HEIGHT 15
 #define WIDGETS_HEIGHT 50 // will be applied to tbuttons/toggles heights
+
+//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 #define WIDGET_PARAM_PADDING 0 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 //#define WIDGET_PARAM_PADDING 120 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 
