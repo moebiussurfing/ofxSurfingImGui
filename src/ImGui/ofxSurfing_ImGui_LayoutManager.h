@@ -747,4 +747,17 @@ public:
 		bGui_LayoutsExtra = false;
 	}
 
+	//--------------------------------------------------------------
+	void doRemoveDataFiles() {
+
+		// remove all the settings folder
+		const filesystem::path path = path_Global;
+		ofDirectory::removeDirectory(path, true, true);
+
+		// remove ini file
+		const filesystem::path file = ofToDataPath("../imgui.ini");
+		ofFile::removeFile(file, true);
+	}
+
+
 };

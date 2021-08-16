@@ -312,7 +312,9 @@ void ofApp::drawMenu()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	guiManager.keyPressed(key); // -> we have some layout presets that we can load using keys
+	// -> we have some layout presets that we can load using keys:
+	// F1-F2-F3-F4 -> preset
+
 }
 
 //--------------------------------------------------------------

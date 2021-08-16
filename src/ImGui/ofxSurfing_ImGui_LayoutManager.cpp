@@ -1694,13 +1694,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 			if (ImGui::Button("Clear", ImVec2(_w100, _h)))
 			{
-				// remove all the settings folder
-				const filesystem::path path = path_Global;
-				ofDirectory::removeDirectory(path, true, true);
-
-				// remove ini file
-				const filesystem::path file = ofToDataPath("../imgui.ini");
-				ofFile::removeFile(file, true);
+				doRemoveDataFiles();
 			}
 		}
 
@@ -2025,6 +2019,10 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		else if (key == 'L')
 		{
 			bModeLockControls = !bModeLockControls;
+		}
+		else if (key == 'f')
+		{
+			bModeFree = !bModeFree;
 		}
 
 		//--
