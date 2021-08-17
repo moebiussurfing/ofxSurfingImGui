@@ -305,7 +305,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 	if (auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	window_flags |= flagsWindowsModeFreeStore;
-	window_flags |= flagsWindowsLocked2;
+
+	//window_flags |= flagsWindowsLocked2;
 
 	//--
 
@@ -314,6 +315,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
 		//flagCond = ImGuiCond_Always;
+
 		const int i = 2;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
@@ -404,6 +406,9 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 	}
 	if (bGui_LayoutsPanels) drawLayoutsPanels();
 	// draws all sections except drawLayoutsManager();
+
+	// log
+	if (bGui_Log) log.ImGui("ImLog");
 }
 
 //--------------------------------------------------------------
@@ -958,6 +963,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// 1.2 add other settings that we want to store into each presets
 	params_LayoutsExtra.add(bGui_Menu);
+	params_LayoutsExtra.add(bGui_Log);
 
 	// 1.3 applied to control windows
 	//params_LayoutsExtra.add(bModeFree);
@@ -1028,7 +1034,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bGui_LayoutsPresets);
 	params_AppSettingsLayout.add(bGui_LayoutsExtra);
 	params_AppSettingsLayout.add(bGui_LayoutsPanels);
-
 
 	params_AppSettingsLayout.add(bAutoSave_Layout);
 
@@ -1178,8 +1183,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		window_flags |= ImGuiWindowFlags_NoSavedSettings;
 	}
 
+	window_flags |= flagsWindowsModeFreeStore;
+
 	//if (bModeLock1)
-	////window_flags |= flagsWindowsModeFreeStore;
 	//window_flags |= flagsWindowsLocked1;
 
 	//--
@@ -1203,12 +1209,14 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 	ImGuiCond flagCond;
 
-	// bModeFree. Get window shape from settings. Unlinked from ImGui .ini
+	// bModeFree
+	// Gets window shape from settings. Unlinked from ImGui .ini
 	if (bModeFree.get())
 	{
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
 		//flagCond = ImGuiCond_Always;
+
 		const int i = 0;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
@@ -1372,13 +1380,13 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 	// free layout
 	else if (name == bModeFree.getName())
 	{
-		if (bModeFree)
+		if (bModeFree.get())
 		{
-			flagsWindowsModeFreeStore = ImGuiWindowFlags_None;
+			flagsWindowsModeFreeStore = ImGuiWindowFlags_NoSavedSettings;
 		}
 		else
 		{
-			flagsWindowsModeFreeStore = ImGuiWindowFlags_NoSavedSettings;
+			flagsWindowsModeFreeStore = ImGuiWindowFlags_None;
 		}
 	}
 
@@ -1560,6 +1568,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 	if (auto_resize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	//window_flags |= flagsWindowsModeFreeStore;
+
 	//window_flags |= flagsWindowsLocked2;
 
 	window_flags |= ImGuiWindowFlags_NoTitleBar;//hide header
@@ -1797,7 +1806,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	if (bAutoResizePanels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	window_flags |= flagsWindowsModeFreeStore;
-	window_flags |= flagsWindowsLocked2;
+
+	//window_flags |= flagsWindowsLocked2;
 
 	//--
 
@@ -1812,10 +1822,12 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 		ImGuiCond flagCond;
 		flagCond = ImGuiCond_Appearing;
 		//flagCond = ImGuiCond_Always;
+
 		const int i = 1;
 		ImGui::SetNextWindowPos(ofVec2f(rectPanels[i].get().getX(), rectPanels[i].get().getY()), flagCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectPanels[i].get().getWidth(), rectPanels[i].get().getHeight()), flagCond);
 	}
+
 	//else
 	//startup default
 	{
@@ -1980,6 +1992,14 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
 	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
+	// log
+	if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT) {
+		string ss = ofToString((char)key);
+		log.AddText(ss);
+	}
+
+	//-
+
 	bool debug = false;
 	if (debug)
 	{
@@ -2007,7 +2027,11 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		default: break;
 		}
 
-		if (key == OF_KEY_F9)//layouts
+		if (key == OF_KEY_F9)//presets
+		{
+			bGui_LayoutsPresets = !bGui_LayoutsPresets;
+		}
+		else if (key == 'p')
 		{
 			bGui_LayoutsPresets = !bGui_LayoutsPresets;
 		}
@@ -2017,7 +2041,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 			bGui_LayoutsPanels = !bGui_LayoutsPanels;
 		}
 
-		else if (key == OF_KEY_F11)//
+		else if (key == OF_KEY_F11)//extra
 		{
 			bGui_LayoutsExtra = !bGui_LayoutsExtra;
 		}
@@ -2034,11 +2058,6 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		else if (key == 's')
 		{
 			bSolo = !bSolo;
-		}
-
-		else if (key == 'p')
-		{
-			bGui_LayoutsPresets = !bGui_LayoutsPresets;
 		}
 
 		//--

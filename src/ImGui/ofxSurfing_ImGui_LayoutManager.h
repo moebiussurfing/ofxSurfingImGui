@@ -10,10 +10,13 @@ TODO:
 	+ fix multiple dock spaces that are colliding/one over another
 	+ fix viewport rectangle preview
 
-+ add global reset
++ aspect ratio /fit modes for game viewport
+
++ add global reset 
+	+ add data remover
 + add minimal toggle
 + auto size per window
-+ other window settings
+	+ other window settings
 
 */
 
@@ -67,6 +70,11 @@ using namespace ofxImGuiSurfing;
 class ofxSurfing_ImGui_Manager
 {
 	//-
+
+public:
+
+	// window log
+	ImGuiLogWindow log;
 
 public:
 
@@ -716,6 +724,7 @@ private:
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 	ofParameter<bool> bSolo{ "Solo", false };
+	ofParameter<bool> bGui_Log{ "Log", false};
 
 	//-
 
@@ -724,7 +733,7 @@ private:
 
 	ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
 	ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
-	ImGuiWindowFlags flagsWindowsModeFreeStore;
+	ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
 
 	string titleWindowLabel;
 

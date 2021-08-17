@@ -66,17 +66,22 @@ public:
 	bool bDockingReset1 = false;
 	bool bDockingReset2 = false;
 
+	//-
+
+//#define USE_FBOS_DEMO
+
+#ifdef USE_FBOS_DEMO
+	// window fbo
+	void setupFbos();
+	void updateFbos();
+	void drawFboTest();
+	ofFbo rgbaFbo; // with alpha
+	ofFbo rgbaFboFloat; // with alpha
+	int fadeAmnt;
+#endif
+
 	//--
 
 	ofxWindowApp windowApp;
 
-	//-
-
-	ofFbo rgbaFbo; // with alpha
-	ofFbo rgbaFboFloat; // with alpha
-	int fadeAmnt;
-
-	void setupFbos();
-	void updateFbo();
-	void drawFboTest();
 };

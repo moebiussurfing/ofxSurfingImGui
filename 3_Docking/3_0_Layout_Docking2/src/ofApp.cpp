@@ -5,7 +5,7 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 
 	// Parameters
-	params1.setName("paramsGroup1"); 
+	params1.setName("paramsGroup1");
 	params1.add(bPrevious.set("<", false));
 	params1.add(bNext.set(">", false));
 	params1.add(bEnable.set("Enable", false));
@@ -15,11 +15,11 @@ void ofApp::setup() {
 	params1.add(shapeType.set("shapeType", 0, -50, 50));
 	params1.add(size.set("size", 100, 0, 100));
 	params1.add(amount.set("amount", 10, 0, 25));
-	params2.setName("paramsGroup2"); 
+	params2.setName("paramsGroup2");
 	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
 	params2.add(amount2.set("amount2", 10, 0, 25));
-	params3.setName("paramsGroup3"); 
+	params3.setName("paramsGroup3");
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
@@ -46,6 +46,12 @@ void ofApp::setup() {
 	guiManager.addWindow("Window 3");
 	guiManager.addWindow("Window 4");
 
+	
+#ifdef USE_FBOS_DEMO
+	guiManager.addWindow("rgbaFbo");
+	//guiManager.addWindow("rgbaFboFloat");
+#endif
+
 	//-
 
 	// 2. Add parameters:
@@ -69,27 +75,29 @@ void ofApp::setup() {
 	guiManager.setReset(&bDockingReset1);
 	//guiManager.setReset((bool*)bDockingReset1);
 
+#ifdef USE_FBOS_DEMO
 	setupFbos();
+#endif
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	updateFbo();
-
 	guiManager.begin(); // global begin
 	{
 		drawImGui(); // populate all the widgets and panels
 
 		//-
-
+		
+#ifdef USE_FBOS_DEMO
 		// fbo windows
-
+		updateFbos();
 		GLuint sourceID1;
-		DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None);
-
 		GLuint sourceID2;
-		DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
+		if (guiManager.getVisible(5)) DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None, true);
+		//if (guiManager.getVisible(6)) DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
+#endif
+
 	}
 	guiManager.end(); // global end
 
@@ -104,6 +112,9 @@ void ofApp::draw()
 	ofDrawRectRounded(rectParam, 5);
 	ofPopStyle();
 	ofPopMatrix();
+
+	// log
+	if (ofGetFrameNum() % 60 == 0) guiManager.log.AddText("ONE SEC | frame " + ofToString(ofGetFrameNum()));
 }
 
 //--------------------------------------------------------------
@@ -407,6 +418,9 @@ void ofApp::Changed_Rect(ofRectangle & r)
 {
 }
 
+#ifdef USE_FBOS_DEMO
+
+// window fbo 
 //--------------------------------------------------------------
 void ofApp::setupFbos() {
 
@@ -448,9 +462,9 @@ void ofApp::setupFbos() {
 }
 
 //--------------------------------------------------------------
-void ofApp::updateFbo() {
+void ofApp::updateFbos() {
 
-	ofEnableAlphaBlending();
+	//ofEnableAlphaBlending();
 
 	//lets draw some graphics into our two fbos
 	rgbaFbo.begin();
@@ -460,8 +474,8 @@ void ofApp::updateFbo() {
 	rgbaFboFloat.begin();
 	drawFboTest();
 	rgbaFboFloat.end();
-
 }
+
 //--------------------------------------------------------------
 void ofApp::drawFboTest() {
 
@@ -495,3 +509,5 @@ void ofApp::drawFboTest() {
 
 	ofDrawRectangle(shiftX, rgbaFbo.getHeight() - 30, 3, 30);
 }
+
+#endif
