@@ -19,6 +19,13 @@ TODO:
 //#define FIXING_DOCKING // -> Need to fix yet
 #define FIXING_DRAW_VIEWPORT // -> To debug free space
 
+// -> we have some layout presets that we can load using keys:
+// F1-F2-F3-F4 -> preset
+// F9: Window Presets
+// F10: Window Panels
+// F11: Window Extra
+// f/l/L: locks
+
 //-
 
 // Docking help

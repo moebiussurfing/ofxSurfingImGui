@@ -389,8 +389,10 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 
 	//TODO:
 	// how to make all windows dockeable in the same space?
-	if (bGui_LayoutsExtra) drawLayoutsExtra();
-	if (bGui_LayoutsPresets) drawLayoutsPresets();
+	if (bGui_LayoutsPresets) {
+		drawLayoutsPresets();
+		if (bGui_LayoutsExtra) drawLayoutsExtra();
+	}
 	if (bGui_LayoutsPanels) drawLayoutsPanels();
 	// draws all sections except drawLayoutsManager();
 }
@@ -1991,7 +1993,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 			//case OF_KEY_F3: appLayoutIndex = 2; break;
 			//case OF_KEY_F4: appLayoutIndex = 3; break;
 
-		case OF_KEY_F5: loadAppSettings(); break;
+		//case OF_KEY_F5: loadAppSettings(); break;
 
 		default: break;
 		}
@@ -2020,9 +2022,14 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		{
 			bModeLockControls = !bModeLockControls;
 		}
-		else if (key == 'f')
+		else if (key == 's')
 		{
-			bModeFree = !bModeFree;
+			bSolo = !bSolo;
+		}
+
+		else if (key == 'p')
+		{
+			bGui_LayoutsPresets = !bGui_LayoutsPresets;
 		}
 
 		//--
