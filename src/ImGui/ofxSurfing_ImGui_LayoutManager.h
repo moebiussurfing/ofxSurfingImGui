@@ -2,7 +2,8 @@
 /*
 
 BUG:
-! debug mode crashes
+! debug mode crashes sometimes
+! typeFlags 0 fails flickering
 
 TODO:
 + fix make dockeable all windows on same space
@@ -65,6 +66,7 @@ using namespace ofxImGuiSurfing;
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
+	//-
 
 public:
 
@@ -274,15 +276,18 @@ private:
 
 public:
 
+	ofParameter<bool> bGui{ "Show Gui", true };
+
 	ofParameterGroup params_Advanced{ "Params Advanced" };
 
-	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
-	ofParameter<bool> bReset_Window{ "Reset Window", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
+
+	ofParameter<bool> bReset_Window{ "Reset Window", false };
 
 	ofParameterGroup params_RectPanels{ "Rect Panels" };
 	vector<ofParameter<ofRectangle>> rectPanels;
@@ -701,8 +706,6 @@ public:
 	ofParameter<bool> bGui_Menu{ "Menu", false };
 
 private:
-
-	ofParameter<bool> bKeys{ "Keys", true};
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true};

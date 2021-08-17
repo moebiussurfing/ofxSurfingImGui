@@ -4,11 +4,12 @@
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
-	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bMinimize);
+	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bKeys);
+	params_Advanced.add(bDebug);
 
 	bExtra.setSerializable(false);
 
@@ -55,7 +56,7 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	// create folders if required
 	if (bAutoSaveSettings) {
 		ofxImGuiSurfing::CheckFolder(path_Global);
-		ofxImGuiSurfing::CheckFolder(path_ImLayouts);
+		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
 	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
@@ -63,6 +64,14 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
 
 	//setupLayout(); //-> must call manually after adding windows and layout presets
+
+	// add the basic param settings
+	if (!bUseLayoutPresetsManager) {
+		params_AppSettings.add(params_Advanced);
+
+		// startup
+		loadAppSettings();
+	}
 }
 
 //--------------------------------------------------------------

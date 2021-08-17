@@ -6,6 +6,16 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
+
+/*
+
+TODO:
+
+ImGuiTreeNodeFlags_None on root groups fails
+
+*/
+
+
 // This class have widgets size constants and methods to get the window panel sizes.
 
 //----------
@@ -229,6 +239,20 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddSpacing()
 	{
+		ImGui::Spacing();
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacingBig()
+	{
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Spacing();
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacingSeparated()
+	{
+		ImGui::Spacing();
+		ImGui::Separator();
 		ImGui::Spacing();
 	}
 

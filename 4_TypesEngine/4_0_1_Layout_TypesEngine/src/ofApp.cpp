@@ -24,8 +24,6 @@ void ofApp::setup() {
 
 	// windows
 	bOpenMain = true;
-	bOpen1 = true;
-	bOpen2 = true;
 
 	//-
 
@@ -44,8 +42,8 @@ void ofApp::setup() {
 	params1.add(size1.set("size1", 100, 0, 100));
 	params1.add(amount1.set("amount1", 10, 0, 25));
 
-	params2.add(separation2min.set("separation2min", 25.f, 1, 100));
-	params2.add(separation2max.set("separation2max", 75.f, 1, 100));
+	params2.add(separation2min.set("sep2min", 25.f, 1, 100));
+	params2.add(separation2max.set("sep2max", 75.f, 1, 100));
 	params2.add(speed2.set("speed2", 0.5, 0, 1));
 	params2.add(lineWidth2.set("lineWidth2", 0.5, 0, 1));
 	params2.add(bEnable);
@@ -69,12 +67,13 @@ void ofApp::setup() {
 	params3.add(amount3.set("amount3", 10, 0, 25));
 	params3.add(bEnable);
 
+	params1.add(params3);
+
 	//--
 
-	//guiManager.setAutoSaveSettings(true); // -> enables stor/recall some settings from previous app session
-	guiManager.setImGuiAutodraw(true);
+	guiManager.setAutoSaveSettings(true); // -> enables store/recall some settings from previous app session
+	guiManager.setImGuiAutodraw(true); // -> required when only one ImGui instance
 	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
-	//guiManager.bAutoResize = false;
 
 	//-
 
@@ -86,6 +85,19 @@ void ofApp::setup() {
 	// We can overwrite this customization only draing the simple param "by hand".
 	// ie:
 	// guiManager.Add(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 3, 2);+
+
+	//-
+
+	// settings
+	params_AppSettings.add(bOpen1);
+	params_AppSettings.add(bOpen2);
+	params_AppSettings.add(typeGroups);
+	params_AppSettings.add(typeFlags);
+	params_AppSettings.add(bCustom1);
+	params_AppSettings.add(bCustom2);
+	params_AppSettings.add(bCustomGroups);
+
+	ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
 
 	//-
 
@@ -101,12 +113,18 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::SetupStyles() {
 
-	guiManager.clear(); // TODO: -> call from beginWindow/group
+	guiManager.clear(); // Clear queued styles if there where previously added, We can do this and changes styles on runtime!
 
-	// two widgets same line
+	//--
+
+	// This is the important sugar:
+	// We queue styles for the parameters that will be rendered after, on AddGroup methods on Draw()
+
+	// Two widgets same line
 	guiManager.AddStyle(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2);
-	// two widgets same line
+
+	// Two widgets same line
 	guiManager.AddStyle(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2, 10);
 
@@ -115,10 +133,11 @@ void ofApp::SetupStyles() {
 	guiManager.AddStyle(bModeC, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeD, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1, 10);
 
-	//// A. two widgets same line small
+	//// A. Two widgets same line small
 	//guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_SMALL, true, 2);
 	//guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_SMALL, false, 2, 10);
-	// B. two widgets same line big
+
+	// B. Two widgets same line big
 	guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, true, 2);
 	guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
 
@@ -126,13 +145,32 @@ void ofApp::SetupStyles() {
 	guiManager.AddStyle(size3, SurfingImGuiTypes::OFX_IM_STEPPER);
 	guiManager.AddStyle(amount3, SurfingImGuiTypes::OFX_IM_DRAG, false, 2, 10);
 
-	// more widgets
+	// More widgets
 	guiManager.AddStyle(lineWidth2, SurfingImGuiTypes::OFX_IM_STEPPER);
 	guiManager.AddStyle(speed2, SurfingImGuiTypes::OFX_IM_DRAG);
 
-	//enable this to disable mouse interaction for these widgets
+	// Uncoment this to disable the mouse interaction for these widgets
 	//guiManager.AddStyle(separation2min, SurfingImGuiTypes::OFX_IM_INACTIVE);
 	//guiManager.AddStyle(separation2max, SurfingImGuiTypes::OFX_IM_INACTIVE, false, 10);
+
+	//-
+
+	//TODO: some styles fails
+	// Custom group styles before draw
+
+	guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen); // ok
+	//guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen); // ok
+	//guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen); // ok
+	
+	//guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE, ImGuiTreeNodeFlags_DefaultOpen);
+	//guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER);
+	//guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED);
+	//guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX);
+	//guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT);
+	//guiManager.AddGroupStyle(params3, SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT);
+
+	//guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
+	//guiManager.AddGroupStyle(params3, SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 }
 
 //--------------------------------------------------------------
@@ -146,6 +184,7 @@ void ofApp::draw()
 	// The group of parameters will be customized tree/folder types
 	// Notice that will be applied to all the nested groups inside this parent/root ofParameterGroup
 	flags_typeFlags = ImGuiTreeNodeFlags_None;
+
 	if (typeFlags == 0) { flagInfo = "ImGuiTreeNodeFlags_None"; }
 	else if (typeFlags == 1) { flagInfo = "ImGuiTreeNodeFlags_DefaultOpen"; flags_typeFlags |= ImGuiTreeNodeFlags_DefaultOpen; } // to start closed
 	else if (typeFlags == 2) { flagInfo = "ImGuiTreeNodeFlags_Framed"; flags_typeFlags |= ImGuiTreeNodeFlags_Framed; } // to draw dark tittle bar
@@ -159,7 +198,7 @@ void ofApp::draw()
 	{
 		if (bOpenMain) drawWindowMain();
 		if (bOpen1) drawWindow1();
-		//if (bOpen2) drawWindow2();
+		if (bOpen2) drawWindow2();
 	}
 	guiManager.end();
 }
@@ -194,18 +233,18 @@ void ofApp::drawWindowMain() {
 
 		ImGui::Begin("Show Windows");
 		{
-			if (ImGui::Button("Reset Layout", ofxImGuiSurfing::getWidgetsShapeSmall()))
+			if (ImGui::Button("Reset Layout", ofxImGuiSurfing::getWidgetsShapeBig()))
 			{
 				bReset0 = true;
 			}
 
-			ImGui::Dummy(ImVec2(0, 5));
+			ofxImGuiSurfing::AddSpacing();
 
 			// round toggles
-			ToggleRoundedButton("Show Window 1", &bOpen1);
-			ToggleRoundedButton("Show Window 2", &bOpen2);
+			AddToggleRoundedButton(bOpen1);
+			AddToggleRoundedButton(bOpen2);
 
-			ImGui::Dummy(ImVec2(0, 5));
+			ofxImGuiSurfing::AddSpacing();
 
 			AddToggleRoundedButton(guiManager.bAutoResize, ImVec2(50, 30));
 
@@ -215,24 +254,20 @@ void ofApp::drawWindowMain() {
 
 			ImGui::Text("DEBUG STYLES TYPES");
 
-			ImGui::Dummy(ImVec2(0, 10)); // spacing
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(0, 10)); // spacing
+			ofxImGuiSurfing::AddSpacingSeparated();
 
 			//-
 
-			ToggleRoundedButton("bCustom1", &bCustom1);
+			AddToggleRoundedButton(bCustom1);
 			if (bCustom1) ImGui::TextWrapped("Customized style for some ofParams Widgets");
 			else ImGui::TextWrapped("Default Style for ofParams Widgets");
 
-			ImGui::Dummy(ImVec2(0, 5)); // spacing
-			ImGui::Separator();
-			ImGui::Dummy(ImVec2(0, 5)); // spacing
+			ofxImGuiSurfing::AddSpacingSeparated();
 
 			//-
 
 			// readed on setup only, cant be updated on runtime
-			if (ToggleRoundedButton("bCustom2", &bCustom2))
+			if (AddToggleRoundedButton(bCustom2))
 			{
 				if (bCustom2) {
 					SetupStyles();
@@ -241,20 +276,21 @@ void ofApp::drawWindowMain() {
 					ClearStyles();
 				}
 			}
-			if (bCustom2) ImGui::TextWrapped("Customized Style for Window 2 Group.");
-			else ImGui::TextWrapped("Default Style for Window 2 Group.");
+			if (bCustom2) ImGui::TextWrapped("Customized Style for Groups on Windows 1/2.");
+			else ImGui::TextWrapped("Default Style for some Groups on Window1/2.");
 
 			//-
 
-			//ImGui::Dummy(ImVec2(0, 5)); // spacing
-			ofxImGuiSurfing::AddSpaceY(5); // same than above line
-			ImGui::Separator();
-			ofxImGuiSurfing::AddSpaceY(5);
+			ofxImGuiSurfing::AddSpacingSeparated();
 
-			ImGui::TextWrapped("Customize Styles for Groups/Trees:");
-			ofxImGuiSurfing::AddSpaceY(5);
+			AddToggleRoundedButton(bCustomGroups);
+			if (bCustomGroups) ImGui::TextWrapped("Previously customized with Styles for Groups/Trees on Setup.");
+			else ImGui::TextWrapped("Direct customize Styles for Groups/Trees on Draw:");
+
+			ofxImGuiSurfing::Spacing();
 
 			// To debug ImGui flags when rendering groups
+			if (!bCustomGroups)
 			{
 				// test customize group/window folders and flags
 				ofxImGuiSurfing::AddParameter(typeFlags);
@@ -262,11 +298,8 @@ void ofApp::drawWindowMain() {
 
 				ofxImGuiSurfing::AddParameter(typeGroups);
 
-				string groupInfo;
-
-				groupInfo = ofxImGuiSurfing::getSurfingImGuiTypesGroupsName(typeGroups.get());
+				string groupInfo = ofxImGuiSurfing::getSurfingImGuiTypesGroupsName(typeGroups.get());
 				ImGui::Text(groupInfo.c_str());
-				//ImGui::TextWrapped("Custom Group/Tree Styles");
 			}
 
 			//-
@@ -286,10 +319,9 @@ void ofApp::drawWindowMain() {
 
 			// testing
 
-			ofxImGuiSurfing::AddSpaceY(10);
+			ofxImGuiSurfing::AddSpacingSeparated();
 
 			AddToggleRoundedButton(bEnable, ImVec2(50, 30));
-
 		}
 		ImGui::End();
 	}
@@ -318,7 +350,7 @@ void ofApp::drawWindow1() {
 			}
 		}
 
-		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+		guiManager.beginWindow(bOpen1, window_flags);
 		{
 			//--
 
@@ -326,8 +358,14 @@ void ofApp::drawWindow1() {
 
 			// 0. Default bool param
 			ofxImGuiSurfing::AddParameter(bEnable);
+			ofxImGuiSurfing::AddSpacingBig();
 
-			ImGui::Dummy(ImVec2(0, 10)); // spacing
+			//-
+
+			ofxImGuiSurfing::AddSpacingSeparated();
+			ofxImGuiSurfing::AddSpacingBig();
+			ImGui::TextWrapped("Here we render a container ofParameterGroup with two nested groups inside:");
+			ofxImGuiSurfing::AddSpacing();
 
 			//-
 
@@ -335,7 +373,16 @@ void ofApp::drawWindow1() {
 			// queue params configs to populate after when drawing they container group
 			{
 				// A.
-				guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+				if (!bCustomGroups) // Customized now on Draw
+				{
+					guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+					//ofxImGuiSurfing::AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroups.get()));
+				}
+				else // Previously customized on Setup
+				{
+					guiManager.AddGroup(params1);
+					//ofxImGuiSurfing::AddGroup(params1);
+				}
 
 				// B.
 				//ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
@@ -343,14 +390,27 @@ void ofApp::drawWindow1() {
 				//flags |= ImGuiTreeNodeFlags_DefaultOpen; // comment to start closed
 				//ofxImGuiSurfing::AddGroup(params1, flags);
 
-				//ImGui::Dummy(ImVec2(0, 10)); // spacing
+				ofxImGuiSurfing::AddSpacing();
 			}
 
 			//-
 
+			ofxImGuiSurfing::AddSpacingSeparated();
+			ofxImGuiSurfing::AddSpacingBig();
+			ImGui::TextWrapped("Below here, the widgets are outside of the nested ofParameterGroups");
+			ofxImGuiSurfing::AddSpacing();
 
 			// 1. Single parameters (out of a paramGroup)
 			// instant populate customized widgets
+
+			////TODO: add knobs + labels
+			//ofxImGuiSurfing::AddKnob(speed1);
+			//ImGui::SameLine();
+			//ofxImGuiSurfing::AddKnob(lineWidth1);
+			//ImGui::SameLine();
+			//ofxImGuiSurfing::AddKnob(separation1);
+			////ofxImGuiSurfing::AddKnob(size1); //TODO: add int
+			////guiManager.Add(speed1);
 
 			// A
 			if (bCustom1)
@@ -450,7 +510,7 @@ void ofApp::drawWindow2() {
 		//-
 
 		// A. without flags (default)
-		guiManager.beginWindow("Window 2", &bOpen2, window_flags);
+		guiManager.beginWindow(bOpen2, window_flags);
 		{
 			if (bCustom2) {
 				ImGui::Text("* bCustom2 = true");
@@ -488,13 +548,11 @@ void ofApp::drawWindow2() {
 			// Another widgets pack
 			{
 				static bool bMore = false;
-				ofxImGuiSurfing::AddSpaceY(); // simplified above Dummy
-				ImGui::Separator();
-				ofxImGuiSurfing::AddSpaceY();
+				ofxImGuiSurfing::AddSpacingSeparated (); 
 				ImGui::Text("MORE WIDGETS");
 				ofxImGuiSurfing::AddSpaceY(5);
 				ofxImGuiSurfing::ToggleRoundedButton("Draw", &bMore);
-				ofxImGuiSurfing::AddSpaceY(5);
+				ofxImGuiSurfing::AddSpacing();
 
 				if (bMore) drawMoreWidgets();
 			}
@@ -514,7 +572,7 @@ void ofApp::drawMoreWidgets() {
 
 	AddRangeParam("separation3", separation2min, separation2max, "%.2f  %.2f", 1.0f);
 
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ofxImGuiSurfing::AddSpacing();
 
 	//-
 
@@ -544,7 +602,7 @@ void ofApp::drawMoreWidgets() {
 	//-
 
 	// spacing
-	ofxImGuiSurfing::AddSpaceY(20);
+	ofxImGuiSurfing::AddSpacingBig();
 
 	//-
 
@@ -569,7 +627,7 @@ void ofApp::drawMoreWidgets() {
 	ImGui::DragFloatRange2("Range 3", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
 	ImGui::DragIntRange2("Range 4", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
 
-	ImGui::Dummy(ImVec2(0.0f, 2.0f));
+	ofxImGuiSurfing::AddSpacingSeparated();
 
 	//-
 
@@ -596,4 +654,10 @@ void ofApp::drawMoreWidgets() {
 		ofxImGuiSurfing::AddParameter(bModeC);
 		ofxImGuiSurfing::AddParameter(bModeD);
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::exit()
+{
+	ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
 }

@@ -185,6 +185,8 @@ namespace ImGui
 
 //-
 
+//TODO:
+//fix multiple instances
 namespace ofxImGuiSurfing
 {
 	bool AddKnob(ofParameter<float>& parameter, bool bTrail = false);

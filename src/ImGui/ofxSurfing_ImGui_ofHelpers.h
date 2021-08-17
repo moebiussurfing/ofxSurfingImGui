@@ -9,6 +9,18 @@
 //#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
+//TODO:
+// some macro sugar to help fix sliders widths rare behaviour...
+/*
+#define IMGUI_LABELS_WIDTH_DEFAULT 95
+#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
+#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+*/
+
+#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
+#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+
 //--
 
 namespace ofxImGuiSurfing
@@ -123,32 +135,30 @@ namespace ofxImGuiSurfing
 		// float
 		if (info == typeid(float))
 		{
-			ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
-
-				ImGui::PopItemWidth();
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return true;
 			}
-
-			ImGui::PopItemWidth();
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return false;
 		}
 
 		// int
 		if (info == typeid(int))
 		{
-			ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
-				ImGui::PopItemWidth();
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return true;
 			}
 
-			ImGui::PopItemWidth();
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return false;
 		}
 

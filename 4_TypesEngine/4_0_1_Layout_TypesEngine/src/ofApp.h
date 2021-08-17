@@ -14,6 +14,7 @@ class ofApp : public ofBaseApp{
 
 		void setup();
 		void draw();
+		void exit();
 
 		void drawWindowMain();
 		void drawWindow1();
@@ -54,14 +55,12 @@ class ofApp : public ofBaseApp{
 		//-
 
 		bool bOpenMain;
-		bool bOpen1;
-		bool bOpen2;
 
+		// to position layout
+#define MAX_WINDOW_HEIGHT 950
 		bool bReset0;
 		bool bReset1;
 		bool bReset2;
-#define MAX_WINDOW_HEIGHT 950
-
 		glm::vec2 pos0;
 		glm::vec2 pos1;
 		glm::vec2 pos2;
@@ -70,18 +69,26 @@ class ofApp : public ofBaseApp{
 
 		ofxSurfing_ImGui_Manager guiManager;
 
+		//-
+
+		ofParameter<bool> bOpen1{ "Window 1", true }; //  this bool will be used to name the window and to toggle if visible too
+		ofParameter<bool> bOpen2{ "Window 2", false };
+		ofParameter<bool> bCustom1{ "bCustom1", false };
+		ofParameter<bool> bCustom2{ "bCustom2", false };
+		ofParameter<bool> bCustomGroups{ "bCustomGroups", false };
+
 		// debug customize
-
-		bool bCustom1;
-		bool bCustom2;
-
 		ofParameter<int> typeGroups;
 		ofParameter<int> typeFlags;
 		ImGuiTreeNodeFlags flags_typeFlags = ImGuiTreeNodeFlags_None;
-		string flagInfo;
+		std::string flagInfo;
 
 		void SetupStyles();
 		void ClearStyles();
+
+		// settings
+		string path_AppSettings = "AppSettings.xml";
+		ofParameterGroup params_AppSettings{ "AppSettings" };
 
 		//-
 

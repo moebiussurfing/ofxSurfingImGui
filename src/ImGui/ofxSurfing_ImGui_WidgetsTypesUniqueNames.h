@@ -10,33 +10,63 @@ namespace ofxImGuiSurfing
 	{
 
 	private:
+
 		int index = 0;
 		int treeLevel = 0;
 
+		//TODO:
+		vector <ofParameter<bool>> bOpenGroups;
+
+		//--
+
 	public:
+
+		//--------------------------------------------------------------
+		void setOpen(bool b) {
+			bOpenGroups[treeLevel - 1].set(b);
+		}
+		//--------------------------------------------------------------
+		bool isOpen(int _treeLevel) {
+			return bOpenGroups[_treeLevel].get();
+		}
+
+	public:
+
+		//--------------------------------------------------------------
 		void pushGroup() {
+			ofParameter<bool> bOpenGroup{ "_open" + ofToString(treeLevel), false };
+			bOpenGroups.emplace_back(bOpenGroup);
 			treeLevel++;
 		}
+
+		//--------------------------------------------------------------
 		int getLevel() const {
 			return treeLevel;
 		}
 
+		//--------------------------------------------------------------
 		void reset() {
-			//ofLogNotice() << (__FUNCTION__) << "amount index:" << index;
 			index = 0;
 			treeLevel = 0;
+			bOpenGroups.clear();
 		}
+
 	private:
+
+		//--------------------------------------------------------------
 		void inc() {
 			index++;
 		}
 
 	public:
+
+		//--------------------------------------------------------------
 		void push() {
 			inc();
 			ImGui::PushID(ofToString(index).c_str());
 		}
 
+		//--------------------------------------------------------------
 		void pop() {
 			ImGui::PopID();
 		}

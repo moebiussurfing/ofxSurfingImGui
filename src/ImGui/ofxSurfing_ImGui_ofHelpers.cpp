@@ -99,6 +99,12 @@ namespace ofxImGuiSurfing
 				ofxImGuiSurfing::AddParameter(*parameterBool);
 				continue;
 			}
+			auto parameterRect = std::dynamic_pointer_cast<ofParameter<ofRectangle>>(parameter);
+			if (parameterRect)
+			{
+				ofxImGuiSurfing::AddParameter(*parameterRect);
+				continue;
+			}
 
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
 		}
@@ -621,16 +627,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 		{
 			parameter.set(tmpRef);
 
-			ImGui::PopItemWidth();
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
-		ImGui::PopItemWidth();
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 

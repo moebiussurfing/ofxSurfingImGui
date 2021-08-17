@@ -99,6 +99,7 @@ namespace ofxImGuiSurfing
 		// to queue all the rendered params to pushId's
 		ofParamUniqueName uniqueName;
 
+		//--------------------------------------------------------------
 		void resetUniqueNames() {
 			uniqueName.reset();
 		}
@@ -660,14 +661,15 @@ namespace ofxImGuiSurfing
 
 			// handle names/pushID's
 			// this is the root/first group
+			// level is about how many deep on nested groups we are
 
 			if (uniqueName.getLevel() == 0)
 			{
 				ImGui::PushID(("##_" + group.getName()).c_str());
-				////ImGui::PushID(group.getName().c_str());
 
 				bool bCloseTree = false;
 
+				// if a group style is queued. we overwrite the default style
 				auto c = getStyleGroup(group);
 				if (c.name != "-1")
 				{
@@ -724,6 +726,7 @@ namespace ofxImGuiSurfing
 				}
 
 				uniqueName.pushGroup(); //TODO: should be in another place
+				uniqueName.setOpen(bOpen); //TODO:
 
 				// 2. skip
 				if (!bOpen)
@@ -786,10 +789,12 @@ namespace ofxImGuiSurfing
 							//{
 							//	AddGroup(*parameterGroup, flags, typeGroup);
 							//}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
 								AddGroup(*parameterGroup, flags, typeGroup);
 							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
 							{
 							}
@@ -1022,7 +1027,6 @@ namespace ofxImGuiSurfing
 			if (uniqueName.getLevel() == 0)
 			{
 				if (bOpen)
-					//if (bOpen)
 				{
 					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
@@ -1031,13 +1035,11 @@ namespace ofxImGuiSurfing
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 					{
-						if (!bHide)
-							ImGui::TreePop();
+						if (!bHide) ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 					{
-						if (!bHide)
-							ImGui::TreePop();
+						if (!bHide) ImGui::TreePop();
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 					{
