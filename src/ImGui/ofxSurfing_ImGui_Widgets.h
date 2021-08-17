@@ -15,5 +15,6 @@
 #include "ImGui/ofxSurfing_ImGui_WidgetsBezier.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsKnob.h"
 #include "ImGui/ofxSurfing_ImGui_WidgetsSpinner.h"
+#include "ImGui/ofxSurfing_ImGui_WindowFbo.h"
 
 //#include "ImGui/ofxSurfing_ImGui_LayoutManager.h"

@@ -69,4 +69,14 @@ public:
 	//--
 
 	ofxWindowApp windowApp;
+
+	//-
+
+	ofFbo rgbaFbo; // with alpha
+	ofFbo rgbaFboFloat; // with alpha
+	int fadeAmnt;
+
+	void setupFbos();
+	void updateFbo();
+	void drawFboTest();
 };

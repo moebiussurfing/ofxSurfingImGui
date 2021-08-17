@@ -68,14 +68,28 @@ void ofApp::setup() {
 	// -> Subscribe external button that will be called to call / flab a bool to a method to reset the layout
 	guiManager.setReset(&bDockingReset1);
 	//guiManager.setReset((bool*)bDockingReset1);
+
+	setupFbos();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	updateFbo();
+
 	guiManager.begin(); // global begin
 	{
 		drawImGui(); // populate all the widgets and panels
+
+		//-
+
+		// fbo windows
+
+		GLuint sourceID1;
+		DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None);
+
+		GLuint sourceID2;
+		DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
 	}
 	guiManager.end(); // global end
 
@@ -326,7 +340,6 @@ void ofApp::dockingReset1()
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-	//ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
@@ -392,4 +405,93 @@ void ofApp::dockingReset2()
 //--------------------------------------------------------------
 void ofApp::Changed_Rect(ofRectangle & r)
 {
+}
+
+//--------------------------------------------------------------
+void ofApp::setupFbos() {
+
+	//allocate our fbos.
+	//providing the dimensions and the format for the,
+	rgbaFbo.allocate(400, 400, GL_RGBA); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+
+#ifdef TARGET_OPENGLES
+	rgbaFboFloat.allocate(400, 400, GL_RGBA); // with alpha, 8 bits red, 8 bits green, 8 bits blue, 8 bits alpha, from 0 to 255 in 256 steps
+	ofLogWarning("ofApp") << "GL_RGBA32F_ARB is not available for OPENGLES.  Using RGBA.";
+#else
+	rgbaFboFloat.allocate(400, 400, GL_RGBA32F_ARB); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
+#endif
+
+// we can also define the fbo with ofFboSettings.
+// this allows us so set more advanced options the width (400), the height (200) and the internal format like this
+/*
+ ofFboSettings s;
+ s.width			= 400;
+ s.height			= 200;
+ s.internalformat   = GL_RGBA;
+ s.useDepth			= true;
+ // and assigning this values to the fbo like this:
+ rgbaFbo.allocate(s);
+ */
+
+
+ // we have to clear all the fbos so that we don't see any artefacts
+ // the clearing color does not matter here, as the alpha value is 0, that means the fbo is cleared from all colors
+ // whenever we want to draw/update something inside the fbo, we have to write that inbetween fbo.begin() and fbo.end()
+
+	rgbaFbo.begin();
+	ofClear(255, 255, 255, 0);
+	rgbaFbo.end();
+
+	rgbaFboFloat.begin();
+	ofClear(255, 255, 255, 0);
+	rgbaFboFloat.end();
+}
+
+//--------------------------------------------------------------
+void ofApp::updateFbo() {
+
+	ofEnableAlphaBlending();
+
+	//lets draw some graphics into our two fbos
+	rgbaFbo.begin();
+	drawFboTest();
+	rgbaFbo.end();
+
+	rgbaFboFloat.begin();
+	drawFboTest();
+	rgbaFboFloat.end();
+
+}
+//--------------------------------------------------------------
+void ofApp::drawFboTest() {
+
+	fadeAmnt = 40;
+
+	//1 - Fade Fbo
+	//this is where we fade the fbo
+	//by drawing a rectangle the size of the fbo with a small alpha value, we can slowly fade the current contents of the fbo.
+	ofFill();
+	ofSetColor(255, 255, 255, fadeAmnt);
+	ofDrawRectangle(0, 0, 400, 400);
+
+	//2 - Draw graphics
+	ofNoFill();
+	ofSetColor(255, 255, 255);
+
+	//we draw a cube in the center of the fbo and rotate it based on time
+	ofPushMatrix();
+	ofTranslate(200, 200, 0);
+	ofRotateDeg(ofGetElapsedTimef() * 30, 1, 0, 0.5);
+	ofDrawBox(0, 0, 0, 100);
+	ofPopMatrix();
+
+	////also draw based on our mouse position
+	//ofFill();
+	//ofDrawCircle(ofGetMouseX() % 410, ofGetMouseY(), 8);
+
+	//we move a line across the screen based on the time
+	//the %400 makes the number stay in the 0-400 range.
+	int shiftX = (ofGetElapsedTimeMillis() / 8) % 400;
+
+	ofDrawRectangle(shiftX, rgbaFbo.getHeight() - 30, 3, 30);
 }
