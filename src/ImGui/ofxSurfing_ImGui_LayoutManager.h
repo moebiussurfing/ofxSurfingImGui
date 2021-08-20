@@ -10,6 +10,8 @@ TODO:
 	+ fix multiple dock spaces that are colliding/one over another
 	+ fix viewport rectangle preview
 
++ remake mode free and lockers simpler. a flag for each window
+
 + aspect ratio /fit modes for game viewport
 
 + add global reset 
@@ -101,6 +103,12 @@ public:
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
+	}
+
+	//--------------------------------------------------------------
+	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
+	{
+		widgetsManager.UpdateStyle(aparam, type);
 	}
 
 	//TODO: group styles are recursive! must fix!
@@ -460,6 +468,16 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	ofRectangle getRectangleWindow(int index) {
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+		}
+
+		return windowsAtributes[index].rectShapeWindow;
+	}
+
+	//--------------------------------------------------------------
 	void addWindow(std::string name) {
 		ofParameter<bool> _bGui{ name, true };
 
@@ -662,7 +680,7 @@ private:
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels ", false };
 
 	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
-	ofParameter<bool> bModeFree{ "Free", false }; // -> A allows storing position for control windows too
+	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
 	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
 	ofParameter<bool> bModeLock1{ "Lock1", false }; // -> Cant be moved. To be used in presets panel
 	ofParameter<bool> bModeLockControls{ "Lock Controls", false }; // -> Cant be moved. To be used to lock to free viewport scenarios

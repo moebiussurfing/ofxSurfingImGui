@@ -7,7 +7,7 @@ void ofApp::setup() {
 
 	//-
 
-	// prepare parameters
+	// Prepare parameters
 
 	params1.setName("paramsGroup1");
 	params2.setName("paramsGroup2");
@@ -49,15 +49,15 @@ void ofApp::setup() {
 
 	//--
 
-	guiManager.setAutoSaveSettings(true); // -> enables stor/recall some settings from previous app session
+	guiManager.setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
 	guiManager.setImGuiAutodraw(true);
-	guiManager.setup(); // this instantiates and configures ofxImGui inside the class object.
+	guiManager.setup(); // This instantiates and configures ofxImGui inside the class object.
 
 	//-
 
 	setupCustomizators();
 
-	resetStyles(); // -> workaround: loading settings not working..
+	resetStyles(); // -> Workaround: loading settings not working..
 
 	ofxImGuiSurfing::loadGroup(paramsSettings, "Settings.json");
 }
@@ -65,7 +65,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupCustomizators() {
 
-	// debug custom types and group flags
+	// Debug custom types and group flags
 	bCustom = true;
 
 	typeFlags1.set("typeFlags1", 1, 0, 4);
@@ -90,7 +90,7 @@ void ofApp::setupCustomizators() {
 
 	//--
 
-	// -> not checked on runtime! ONLY ON SETUP
+	// -> Not checked on runtime! ONLY ON SETUP
 	if (bCustom) {
 		setupStyles();
 	}
@@ -102,23 +102,23 @@ void ofApp::setupCustomizators() {
 //--------------------------------------------------------------
 void ofApp::setupStyles() {
 
-	guiManager.clear(); // TODO: -> call from beginWindow/group
+	guiManager.clear(); // TODO: -> Call from beginWindow/group
 
-	// two widgets same line
+	// Two widgets same line
 	guiManager.AddStyle(bMode1, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode2, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2);
 
-	// two widgets same line
+	// Two widgets same line
 	guiManager.AddStyle(bMode3, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 2);
 	guiManager.AddStyle(bMode4, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, false, 2, 10);
 
-	// one line per widget
+	// One line per widget
 	guiManager.AddStyle(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeB, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeC, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1);
 	guiManager.AddStyle(bModeD, SurfingImGuiTypes::OFX_IM_TOGGLE_SMALL, false, 1, 10);
 
-	// two widgets same line big
+	// Two widgets same line big
 	guiManager.AddStyle(bPrevious, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, true, 2);
 	guiManager.AddStyle(bNext, SurfingImGuiTypes::OFX_IM_BUTTON_BIG, false, 2, 10);
 
@@ -126,13 +126,13 @@ void ofApp::setupStyles() {
 	guiManager.AddStyle(size3, SurfingImGuiTypes::OFX_IM_STEPPER);
 	guiManager.AddStyle(amount3, SurfingImGuiTypes::OFX_IM_DRAG, false, 2, 10);
 
-	// more widgets
+	// More widgets
 	guiManager.AddStyle(line2, SurfingImGuiTypes::OFX_IM_STEPPER);
 	guiManager.AddStyle(speed2, SurfingImGuiTypes::OFX_IM_DRAG);
 
 	//--
 
-	// customize groups
+	// Customize groups
 	guiManager.AddGroupStyle(params1, SurfingImGuiTypesGroups(typeGroup1.get()), flags_typeFlags1);
 	guiManager.AddGroupStyle(params2, SurfingImGuiTypesGroups(typeGroup2.get()), flags_typeFlags2);
 	guiManager.AddGroupStyle(params3, SurfingImGuiTypesGroups(typeGroup3.get()), flags_typeFlags3);
@@ -140,7 +140,7 @@ void ofApp::setupStyles() {
 
 //--------------------------------------------------------------
 void ofApp::clearStyles() {
-	guiManager.clear(); // TODO: -> call from beginWindow/group
+	guiManager.clear(); // TODO: -> Call from beginWindow/group
 }
 
 //--------------------------------------------------------------
@@ -243,7 +243,7 @@ void ofApp::drawImGui()
 			//-
 
 			// To debug ImGui group flags when rendering groups
-			// test customize group/window folders and flags
+			// Test customize group/window folders and flags
 			{
 				ofxImGuiSurfing::AddSpaceY(10);
 
@@ -293,7 +293,7 @@ void ofApp::drawImGuiGroup()
 		ofxImGuiSurfing::AddSpaceY(10);
 		ImGui::TextWrapped("NOTE\nNotice that some combinations of flags/styles can't be combined.\nOr some flags also should be queued and here only one type at the same time is used..");
 		//TODO:
-		// some headers still not working
+		// Some headers still not working
 		ofxImGuiSurfing::AddSpaceY();
 		ImGui::TextWrapped("ofParameterGroup render ->");
 		ofxImGuiSurfing::AddSpaceY(10);
@@ -304,11 +304,11 @@ void ofApp::drawImGuiGroup()
 
 		// Render group
 
-		// A. direct styled
+		// A. Direct styled
 		//guiManager.AddGroup(params1, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup1.get()));
 		////guiManager.AddGroup(params3, flags_typeFlags, SurfingImGuiTypesGroups(typeGroup2.get()));
 
-		// B. styled previously on setup
+		// B. Styled previously on setup
 		guiManager.AddGroup(params1);
 		//guiManager.AddGroup(params2);
 		//guiManager.AddGroup(params3);
@@ -316,14 +316,14 @@ void ofApp::drawImGuiGroup()
 	guiManager.endWindow();
 }
 
-// callback for a parameter group  
+// Callback for a parameter group  
 //--------------------------------------------------------------
 void ofApp::Changed_Params(ofAbstractParameter &e)
 {
 	string name = e.getName();
 	ofLogNotice(__FUNCTION__) << name << " : " << e;
 
-	// group style type
+	// Group style type
 	if (name == typeGroup1.getName())
 	{
 		refreshFlag(typeFlags1, flags_typeFlags1, flagInfo1);
@@ -340,7 +340,7 @@ void ofApp::Changed_Params(ofAbstractParameter &e)
 		setupStyles();
 	}
 
-	// group flag type
+	// Group flag type
 	if (name == typeFlags1.getName())
 	{
 		refreshFlag(typeFlags1, flags_typeFlags1, flagInfo1);

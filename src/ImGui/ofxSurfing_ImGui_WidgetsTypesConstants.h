@@ -38,6 +38,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
 
+		// colors
+		OFX_IM_COLOR_INPUT,
+		OFX_IM_COLOR_BOX,
+
 		OFX_IM_NUM_TYPES
 	};
 

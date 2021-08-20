@@ -581,3 +581,8 @@ examples/1_Widgets/bin/imgui.ini
 3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P1.ini
 3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P0.ini
 3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Panels_AppSettings.json
+3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P0.json
+3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P1.json
+3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P2.json
+3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P3.json
+3_Docking/3_0_Layout_Docking2/bin/imgui.ini

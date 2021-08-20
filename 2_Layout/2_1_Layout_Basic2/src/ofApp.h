@@ -43,7 +43,7 @@ public:
 		bool bOpen1 = false;
 		bool bOpen2 = true;
 		bool bOpen3 = false;
-		bool show_app_style_editor = false;
+		bool bOpenStyleEditor = false;
 
 		//-
 

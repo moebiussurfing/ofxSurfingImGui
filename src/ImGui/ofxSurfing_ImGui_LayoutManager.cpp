@@ -408,7 +408,7 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 	// draws all sections except drawLayoutsManager();
 
 	// log
-	if (bGui_Log) log.ImGui("ImLog");
+	if (bGui_Log) log.ImGui("Log");
 }
 
 //--------------------------------------------------------------
@@ -709,6 +709,9 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	//TODO:
+	widgetsManager.resetUniqueNames();
+
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
 
@@ -1981,7 +1984,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 {
-	if (!bKeys) return;
+	if (!bKeys || !bUseLayoutPresetsManager) return;
 
 	const int &key = eventArgs.key;
 	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";

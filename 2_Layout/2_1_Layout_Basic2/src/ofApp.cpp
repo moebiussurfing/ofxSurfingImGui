@@ -77,9 +77,9 @@ void ofApp::draw()
 		//-----
 
 		// Theme editor
-		if (show_app_style_editor)
+		if (bOpenStyleEditor)
 		{
-			ImGui::Begin("Dear ImGui Style Editor", &show_app_style_editor);
+			ImGui::Begin("Dear ImGui Style Editor", &bOpenStyleEditor);
 			ofxImGuiSurfing::ShowStyleEditor2(NULL);
 			ImGui::End();
 		}
@@ -102,7 +102,7 @@ void ofApp::drawMainWindow() {
 		ofxImGuiSurfing::ToggleRoundedButton("Show Window 1", &bOpen1);
 		ofxImGuiSurfing::ToggleRoundedButton("Show Window 2", &bOpen2);
 		ofxImGuiSurfing::ToggleRoundedButton("Show Window 3", &bOpen3);
-		ofxImGuiSurfing::ToggleRoundedButton("Theme Editor", &show_app_style_editor);
+		ofxImGuiSurfing::ToggleRoundedButton("Theme Editor", &bOpenStyleEditor);
 
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 

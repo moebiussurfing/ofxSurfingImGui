@@ -7,6 +7,8 @@
 
 #include "ofxWindowApp.h" // -> not required
 
+//#define USE_FBOS_DEMO
+
 //--------------------------------------------------------------
 class ofApp : public ofBaseApp {
 
@@ -67,8 +69,6 @@ public:
 	bool bDockingReset2 = false;
 
 	//-
-
-//#define USE_FBOS_DEMO
 
 #ifdef USE_FBOS_DEMO
 	// window fbo

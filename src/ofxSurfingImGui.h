@@ -606,3 +606,12 @@ enum ImGuiDockNodeFlags_
 	ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
 };
 */
+
+//--
+
+/*
+
+// get window shape. call between begin/end
+ofRectangle rect = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+*/

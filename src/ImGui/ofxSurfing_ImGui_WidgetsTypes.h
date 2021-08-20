@@ -172,7 +172,22 @@ namespace ofxImGuiSurfing
 		//--
 
 		//TODO:
-		// add remover element?
+		// add remover / update style element o runtime?
+		//--------------------------------------------------------------
+		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
+		{
+			//widgetsStyles.getPosition(aparam)
+			//update style
+
+			//SurfingImGuiTypes_Style c;
+			//c.name = aparam.getName();
+			//c.type = type;
+			//c.bSameLine = bSameLine;
+			//c.amtPerRow = amtPerRow;
+			//c.spacing = spacing;
+
+			//widgetsStyles.push_back(c);
+		}
 
 		// queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
@@ -343,6 +358,8 @@ namespace ofxImGuiSurfing
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
 			bool isString = ptype == typeid(ofParameter<string>).name();
+			bool isColor = ptype == typeid(ofParameter<ofColor>).name();
+			bool isFloatColor = ptype == typeid(ofParameter<ofFloatColor>).name();
 
 			// is not called with groups here..
 			//bool isGroup = ptype == typeid(ofParameterGroup).name();
@@ -608,6 +625,52 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			// color
+
+			else if (isFloatColor)
+			{
+				ofParameter<ofFloatColor> p = aparam.cast<ofFloatColor>();
+				auto tmpRef = p.get();
+				uniqueName.push();
+
+				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+				flags |= ImGuiColorEditFlags_NoInputs;
+				flags |= ImGuiColorEditFlags_NoLabel;
+				flags |= ImGuiColorEditFlags_NoTooltip;
+
+				if (type == OFX_IM_COLOR_INPUT)
+					bReturn = ofxImGuiSurfing::AddParameter(p);
+
+				else if (type == OFX_IM_COLOR_BOX)
+					ImGui::ColorButton("", tmpRef, flags);
+
+				uniqueName.pop();
+				bDone = true;
+			}
+
+			else if (isColor)
+			{
+				ofParameter<ofColor> p = aparam.cast<ofColor>();
+				auto tmpRef = p.get();
+				uniqueName.push();
+				
+				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+				flags |= ImGuiColorEditFlags_NoInputs;
+				flags |= ImGuiColorEditFlags_NoLabel;
+				flags |= ImGuiColorEditFlags_NoTooltip;
+
+				if (type == OFX_IM_COLOR_INPUT)
+					bReturn = ofxImGuiSurfing::AddParameter(p);
+
+				else if (type == OFX_IM_COLOR_BOX)
+					ImGui::ColorButton("", tmpRef, flags);
+
+				uniqueName.pop();
+				bDone = true;
+			}
+
+			//-
+
 			if (bDone)
 			{
 				// extra options
@@ -678,8 +741,7 @@ namespace ofxImGuiSurfing
 				}
 
 				//bool bHide = false;
-				bHide = (
-					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
+				bHide = (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
 					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
 
 				if (bHide)
@@ -890,6 +952,8 @@ namespace ofxImGuiSurfing
 
 
 				// Parameter, try everything we know how to handle.
+				// but do not have styles types!
+
 				{
 					// Uses "ofxSurfing_ImGui_ofHelpers.h"
 					//TODO:
@@ -933,20 +997,20 @@ namespace ofxImGuiSurfing
 						AddParameter(*parameterOfVec4f);
 						continue;
 					}
-					auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-					if (parameterFloatColor)
-					{
-						AddParameter(*parameterFloatColor);
-						continue;
-					}
-					auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-					if (parameterColor)
-					{
-						AddParameter(*parameterColor);
-						continue;
-					}
+					//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+					//if (parameterOfFloatColor)
+					//{
+					//	AddParameter(*parameterOfFloatColor);
+					//	continue;
+					//}
+					//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+					//if (parameterOfColor)
+					//{
+					//	AddParameter(*parameterOfColor);
+					//	continue;
+					//}
 
-					//-
+					//----
 
 					// known styles for know types
 
@@ -1016,6 +1080,42 @@ namespace ofxImGuiSurfing
 						continue;
 					}
 
+					// float color
+					auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+					if (parameterFloatColor)
+					{
+						auto c = getStyle(*parameterFloatColor);
+						// if the parameter widget is not added explicitly, will populate it as the default appearance
+						if (c.name != "-1")
+						{
+							Add(*parameterFloatColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						// default style
+						else
+						{
+							AddParameter(*parameterFloatColor);
+						}
+						continue;
+					}
+
+					// color
+					auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+					if (parameterColor)
+					{
+						auto c = getStyle(*parameterColor);
+						// if the parameter widget is not added explicitly, will populate it as the default appearance
+						if (c.name != "-1")
+						{
+							Add(*parameterColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+						}
+						// default style
+						else
+						{
+							AddParameter(*parameterColor);
+						}
+						continue;
+					}
+
 					//--
 
 					ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
@@ -1054,7 +1154,6 @@ namespace ofxImGuiSurfing
 				//}
 			}
 		}
-
 	};
 
 	//--

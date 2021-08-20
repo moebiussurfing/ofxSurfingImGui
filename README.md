@@ -5,7 +5,7 @@ ofxSurfingImGui
 
 An **ImGui** toolkit for **openFrameworks** projects.  
 
-Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to **OF**, Docking Helpers with a Layout Presets Engine, and useful snippets.  
+Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to **oF**, Docking Helpers with a Layout Presets Engine, and useful snippets.  
 
 Some **WIP** stuff like Sequencer or Node Patching testing projects.   
 
@@ -23,7 +23,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
   <summary>RELEVANT CHANGES vs official ofxImGui ofParameter/ImHelpers</summary>
   <p>
 
-- Simplified and improved **OF Helpers** to use **ofParameters**. 
+- Simplified and improved **oF Helpers** to use **ofParameters**. 
   * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
   * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
   * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
@@ -255,7 +255,7 @@ Examples to improve the layout of docking spaces.
   <summary>3_1_Layout_ImTools1</summary>
   <p>
 
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my OF projects.  
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
 
 An alternative to my Docking Layout Engine but without presets and with more developement required.  
 Nice to learn about ImGui Docking.  
@@ -447,15 +447,17 @@ _All source snippets from other authors are linked into header files. Thanks!_
   <summary>Some reference links</summary>
   <p>
 
-https://github.com/HankiDesign/awesome-dear-imgui  
+https://github.com/HankiDesign/awesome-dear-imgui -> collected widgets  
 https://github.com/soufianekhiat/DearWidgets  
-https://github.com/yumataesu/ImGui_Widgets  
+https://github.com/yumataesu/ImGui_Widgets -> oF ready widgets  
 https://github.com/njazz/AutomationCurveEditor  
 https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
 https://github.com/Organic-Code/ImTerm  
-https://github.com/d3cod3/ofxVisualProgramming  
-https://github.com/d3cod3/Mosaic  
+https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system  
+https://github.com/d3cod3/Mosaic -> oF node patched system  
+https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros  
+
   </p>
 </details>
 
