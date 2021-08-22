@@ -7,13 +7,13 @@ An **ImGui** toolkit for **openFrameworks** projects.
 
 Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to **oF**, Docking Helpers with a Layout Presets Engine, and useful snippets.  
 
-Some **WIP** stuff like Sequencer or Node Patching testing projects.   
+Some **WIP** stuff like a Timeline/Sequencer or Node Patching TESTING projects.   
 
 ## WORK IN PROGRESS!
 
 ```
-NOT FINISHED. A BIT BUGGY YET...
-API WILL CHANGE A BIT.  
+NOT FINISHED. A BIT BUGGY YET.
+API WILL CHANGE.  
 SOME EXAMPLES CAN BE REDUNDANT  
 OR NOT FINISHED,  
 OR NEED TO BE UPDATED TO API CHANGES.
@@ -26,11 +26,11 @@ OR NEED TO BE UPDATED TO API CHANGES.
 - Simplified and improved **oF Helpers** to use **ofParameters**. 
   * _ImHelpers.h_ has been rewritten to _ofxSurfing_ImGui_ofHelpers.h_.
   * Now the _ofParameter_ widgets, _Windows_ and _Group/Trees_ are more customizable. 
-  * Removed all the old internal _windows/tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
+  * Removed all the old internal _Windows/Tree_, _WindowOpen/Settings_ and _GetUniqueName_ methods from **ofxImGui**. 
   * Currently using a _PushId()/PopID()_ approach on each widget.  
     
-- **NEW: _All the Layout/Styles Management_.**
-- **NEW: _Docking helpers with Layout Presets Engine_.**
+- **NEW: _Layout/Styles Management_.**
+- **NEW: _Docking helpers with an Engine for Layout Presets_.**
     </p>
     </details>
 
@@ -38,7 +38,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
   - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: Big toggles and buttons, Range sliders, Gradient Color Designer, Matrix selector, DearWidgets ...etc.
+* **ImGui Widgets**: Big toggles and buttons, Range Sliders, Gradient Color Designer, Matrix Selector, Files Browser, DearWidgets ...etc.
 * **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
 * **Layout Presets Engine with Docking**.
 * Included my **Dark Theme**.
@@ -61,13 +61,13 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 ## 1. WIDGETS
 
-Shows **ofParameter** helpers with full/half/third/quarter width buttons, toggles, DearWidgets, range sliders, Bezier Curve, Spinner/Progress Indicators, and ofxImGui standard params.  
+Shows **ofParameter** helpers with full/half/third/quarter width Buttons, Toggles, DearWidgets, Range Sliders, Bezier Curve, Spinner/Progress Indicators, and **ofxImGui** standard parameters.  
 
 <details>
   <summary>1_1_Widgets_DearWidgets</summary>
   <p>
 
-Includes range sliders with **ofParameters**, responsive button/toggles and the awesome [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
+Includes Range Sliders with **ofParameters**, responsive Button/Toggles and the AWESOME [DearWidgets](https://github.com/soufianekhiat/DearWidgets) from **@soufianekhiat**.  
 ![image](/docs/1_1_Widgets_DearWidgets.PNG?raw=true "image")  
   </p>
 </details>
@@ -76,7 +76,7 @@ Includes range sliders with **ofParameters**, responsive button/toggles and the 
   <summary>1_2_Widgets_Curve</summary>
   <p>
 
-Includes bezier curves and usable tween/easing functions.  
+Includes Bezier Curves and usable timed Tween/Easing functions.  
 ![image](/docs/1_2_Widgets_Curve.PNG?raw=true "image")  
   </p>
 </details>
@@ -85,7 +85,7 @@ Includes bezier curves and usable tween/easing functions.
   <summary>1_3_Widgets_Spinner</summary>
   <p>
 
-Includes waiting and progression spinners.  
+Includes waiting and progress spinners.  
 ![image](/docs/1_3_Widgets_Spinner.gif?raw=true "image")  
   </p>
 </details>
@@ -111,9 +111,8 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 
 ## 2. LAYOUT
 
-Uses **ofxSurfing_ImGui_LayoutManager.h**  
-Speed up **ofxImGui** instantiation, windows and layouts.  
-Includes **ofParameter** helpers, widget sizes and extra widgets.  
+Speed up **ofxImGui** instantiation (auto draw, viewport mode, fonts...), windows, and layouts.  
+Includes **ofParameter** helpers, widget sizes, and extra widgets.  
 _Notice that below at point **3. TYPES ENGINE**, there's a better NEW API!_ 
 
 <details>
@@ -221,7 +220,7 @@ Includes **ofParameter** and **ofParameterGroup** helpers and customize how grou
 
 This is a helper for tweaking your Themes: testings sizes, layout, and colors, and alternate fonts.  
 
-Notice that you need to export the new modified theme code trhought the clipboard and to paste to a new function/theme manually.  
+Notice that you need to export the newly modified theme code through the clipboard and paste it to a new function/theme manually.  
 There's not an automatic-fully-functional, save preset/load theme designer!  
 ![image](/docs/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
   </p>
@@ -231,21 +230,20 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 ## 3. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
 
-Examples to improve the layout of docking spaces. 
+Examples to improve the layout of Docking Spaces. 
 
 * Learn to split docking spaces by code, or using mouse control by the user.
-* Engine Manager to create layout presets.
-* Docking helpers
+* Docking helpers. **Engine Manager** to create layout presets.
 <details>
   <summary>3_0_Layout_Docking2</summary>
   <p>
 
 #### LAYOUT PRESETS ENGINE
 
-* Fast adding of windows to the Gui Manager.
-* Auto populates control panels to handle layout presets.
+* Fast adding of windows to the **Gui Manager**.
+* Auto populates **Control Panels** to handle layout presets.
 * Cute workflow for Management.
-* You can add parameters to the presets too. 
+* You can add extra parameters to the presets too. 
 
 ![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
@@ -255,9 +253,9 @@ Examples to improve the layout of docking spaces.
   <summary>3_1_Layout_ImTools1</summary>
   <p>
 
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_Its a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
 
-An alternative to my Docking Layout Engine but without presets and with more developement required.  
+An alternative to my Docking Layout Engine but without presets and with more development required.  
 Nice to learn about ImGui Docking.  
 
 ![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
@@ -268,19 +266,20 @@ Nice to learn about ImGui Docking.
 
 ## 4. TYPES ENGINE [WIP]
 
-One step forward for ofHelpers:  
+One step forward for **ofHelpers**:  
 
-* Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters.  
+* Fast **ofParameter**s widgets layout: responsive-auto_fit width, height, amount items per row, and different styles for the same types or even repeated parameters with different styles.  
 
 * Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
 #### FEATURES
 
+Instead of the **ofxImGui** behavior, where you can't change the param widget style, we will have:  
 1. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-2. Draw each **ofParameter** types with different styles. (Instead of the **ofxImGui** behavior, where you can't change the param widget style.)  
+2. Draw each **ofParameter** type with different styles. 
 3. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
 4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
-5. You can exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+5. You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
 6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
 
 <details>
@@ -334,10 +333,11 @@ ofApp.cpp
 
 #### AVAILABLE CUSTOMIZATIONS:
 
-    - Hide the parameter widget respecting the void space or not, or make it inactive sibaling mouse interation.  
-    - Set an ImGui::SameLine( after the widget, to draw more next params at the same line.  
+    - Hide the parameter widget respecting the void space or not, or make it inactive disabling mouse interaction.  
+    - Set an _ImGui::SameLine()_ after the widget, to draw the next params at the same line.  
     - Add a final vertical spacing after the widget.  
-    - Set the widget width to fit the panel width, passing the amount of widgets per row/line.  
+    - Set the widget width to fit the panel width, passing the number of widgets per row/line.  
+    - Queue styles for incoming parameters inside a group.  
 
 #### API
 
@@ -351,10 +351,10 @@ void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeF
 
 ## 5. TIMELINES AND SEQUENCERS [WIP]
 
-These are testing projects trying to build an operative but very basic timeline, to run very simple animations:  
+These are TESTING projects trying to build an operative but very basic timeline, to run very simple animations:  
 
 * A kind of note on/off or clip start/end behavior.
-* A curve editor for a float variable automation. 
+* A curve editor for float variable automation. 
 
 <details>
   <summary>4_1_ImSequencer</summary>
@@ -447,16 +447,16 @@ _All source snippets from other authors are linked into header files. Thanks!_
   <summary>Some reference links</summary>
   <p>
 
-https://github.com/HankiDesign/awesome-dear-imgui -> collected widgets  
-https://github.com/soufianekhiat/DearWidgets  
+https://github.com/HankiDesign/awesome-dear-imgui -> Collected widgets  
+https://github.com/soufianekhiat/DearWidgets -> Cute widgets already included  
 https://github.com/yumataesu/ImGui_Widgets -> oF ready widgets  
-https://github.com/njazz/AutomationCurveEditor  
-https://github.com/leiradel/ImGuiAl  
 https://github.com/aiekick/ImTools/tree/main/LayoutManager  
-https://github.com/Organic-Code/ImTerm  
+https://github.com/Organic-Code/ImTerm -> Interesting terminal to look into  
 https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system  
 https://github.com/d3cod3/Mosaic -> oF node patched system  
 https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros  
+https://github.com/njazz/AutomationCurveEditor  
+https://github.com/leiradel/ImGuiAl  
 
   </p>
 </details>
@@ -465,8 +465,9 @@ https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros
   <summary>TODO</summary>
   <p>
 
+* Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
 * Create some selected examples to simplify learning.
-* Add more ImGui raw widgets / add-ons with examples.
+* Add more ImGui raw widgets/add-ons with examples.
 * Convert some widgets to ofParameters.
   </p>
 </details>
