@@ -43,9 +43,46 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 
 //--
 
-//--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
+void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode) {
+	surfingImGuiMode = mode;
 
+	switch (surfingImGuiMode)
+	{
+
+	case ofxImGuiSurfing::IM_GUI_MODE_UNKNOWN:
+		break;
+
+	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
+		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
+		//setImGuiAutodraw(true);
+		setup(); // This instantiates and configures ofxImGui inside the class object.
+		break;
+
+	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
+		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
+		setImGuiAutodraw(true);
+		setup(); // This instantiates and configures ofxImGui inside the class object.
+		break;
+
+	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED:
+		break;
+
+	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED: // -> guiManager.begin(); it's bypassed internally then can be remain uncommented.
+		break;
+
+	default:
+		break;
+	}
+}
+
+//--
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//-
 	setupImGui();
 
 	//-
@@ -76,6 +113,11 @@ void ofxSurfing_ImGui_Manager::setup() { // using internal instantiated gui
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external instantiated gui
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//-
+
 	guiPtr = &_gui;
 
 	setupImGui();
@@ -225,6 +267,10 @@ void ofxSurfing_ImGui_Manager::openFileFont(int size)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setupImGui()
 {
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//-
+
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
 	bool bRestore = true;
@@ -267,7 +313,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::draw() {
-	if (customFont == nullptr) gui.draw();
+	//if (customFont == nullptr) gui.draw(); //?
+
+	if (!bAutoDraw)
+		if (customFont == nullptr) gui.draw();
 }
 
 //--------------------------------------------------------------
@@ -640,10 +689,14 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 // Global ImGui being/end like ofxImGui
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//-
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
 
-	resetIDs(); // reset names
+	resetIDs(); // reset unique names
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 
@@ -652,15 +705,18 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//--
 
-	if (bDocking)
-		drawLayoutEngine();
+	if (bDocking) drawLayoutEngine();
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::end() {
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//-
+
 #ifdef FIXING_DRAW_VIEWPORT
-	if (bPreviewSceneViewport)
-		drawOFnative();
+	if (bPreviewSceneViewport) drawOFnative();
 #endif
 
 	//--
@@ -711,6 +767,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 {
 	//TODO:
 	widgetsManager.resetUniqueNames();
+	//resetIDs(); // reset unique names
 
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
@@ -769,10 +826,13 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//}
 
 	// refresh layout
-	widgetsManager.refresh();
+	widgetsManager.refreshLayout(); // calculate sizes realted to window shape/size
 
-	// set default font
-	setDefaultFont();
+	if (surfingImGuiMode == !ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
+	{
+		// set default font
+		setDefaultFont();
+	}
 
 	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
@@ -892,7 +952,8 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("MyDockSpace", nullptr, window_flags);
+	ImGui::Begin("DockSpace", nullptr, window_flags);
+	//ImGui::Begin("MyDockSpace", nullptr, window_flags);
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar(2);
 

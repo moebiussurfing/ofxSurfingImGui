@@ -2,8 +2,8 @@
     "AppSettings": {
         "Window_1": "1",
         "Window_2": "1",
-        "bCustom1": "0",
-        "bCustom2": "0",
+        "bCustom1": "1",
+        "bCustom2": "1",
         "bCustomGroups": "0",
         "typeFlags": "0",
         "typeGroups": "0"

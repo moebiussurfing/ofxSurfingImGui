@@ -586,3 +586,9 @@ examples/1_Widgets/bin/imgui.ini
 3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P2.json
 3_Docking/3_0_Layout_Docking2/bin/data/ImGuiLayout/Presets/P3.json
 3_Docking/3_0_Layout_Docking2/bin/imgui.ini
+4_TypesEngine/4_0_0_Layout_TypesEngine/bin/data/Settings.json
+4_TypesEngine/4_0_0_Layout_TypesEngine/bin/imgui.ini
+4_TypesEngine/4_0_1_Layout_TypesEngine/bin/data/AppSettings.xml
+4_TypesEngine/4_0_1_Layout_TypesEngine/bin/imgui.ini
+7_Miscellaneous/example-TEST01/bin/imgui.ini
+7_Miscellaneous/example-TEST01/bin/data/Settings.json

@@ -68,10 +68,29 @@ TODO:
 
 using namespace ofxImGuiSurfing;
 
+namespace ofxImGuiSurfing
+{
+	enum SurfingImGuiInstantiationMode {
+		IM_GUI_MODE_UNKNOWN = 0,
+		IM_GUI_MODE_INSTANTIATED,
+		IM_GUI_MODE_REFERENCED,
+		IM_GUI_MODE_INSTANTIATED_SINGLE,
+		IM_GUI_MODE_NOT_INSTANTIATED // -> To render widgets only. Inside an external begin/end (newFrame)
+	};
+}
+
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
 	//-
+
+public:
+
+
+	SurfingImGuiInstantiationMode surfingImGuiMode;
+
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+
 
 public:
 
