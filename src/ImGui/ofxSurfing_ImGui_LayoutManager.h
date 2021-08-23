@@ -14,7 +14,7 @@ TODO:
 
 + aspect ratio /fit modes for game viewport
 
-+ add global reset 
++ add global reset
 	+ add data remover
 + add minimal toggle
 + auto size per window
@@ -118,6 +118,13 @@ public:
 		widgetsManager.AddGroupStyle(group, type, flags);
 	}
 
+	////--------------------------------------------------------------
+	//void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	//{
+	//	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+	//	widgetsManager.AddGroup(group, flags, typeGroup);
+	//}
+
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	{
@@ -197,7 +204,7 @@ public:
 	void end();
 
 	// window methods
-	
+
 	// begin a window
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
@@ -580,14 +587,14 @@ public:
 	void beginDocking();
 	void endDocking();
 
-//----
+	//----
 
-// Docking Layout Engine for Layout presets
+	// Docking Layout Engine for Layout presets
 
-// ImGui layouts engine
-// on each layout preset we store:
-// 1. some parameters states
-// 2. ImGui ini positions
+	// ImGui layouts engine
+	// on each layout preset we store:
+	// 1. some parameters states
+	// 2. ImGui ini positions
 
 private:
 
@@ -673,7 +680,7 @@ private:
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
 	void drawLayoutsPanels();
-	
+
 	void drawLayoutEngine();
 	void drawOFnative();
 
@@ -734,7 +741,7 @@ public:
 private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
-	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true};
+	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
 	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 
@@ -742,7 +749,7 @@ private:
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 	ofParameter<bool> bSolo{ "Solo", false };
-	ofParameter<bool> bGui_Log{ "Log", false};
+	ofParameter<bool> bGui_Log{ "Log", false };
 
 	//-
 

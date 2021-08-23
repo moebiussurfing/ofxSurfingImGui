@@ -174,6 +174,7 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
+					if (info.name() == "" || info.name() == " ")
 		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 
 		return false;
@@ -350,7 +351,8 @@ namespace ofxImGuiSurfing
 			}
 			else
 			{
-				ofLogWarning(/*__FUNCTIONS__*/) << "Could not create GUI element for type " << info.name();
+				if (info.name() == "" || info.name() == " ")
+					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 				return false;
 			}
 		}

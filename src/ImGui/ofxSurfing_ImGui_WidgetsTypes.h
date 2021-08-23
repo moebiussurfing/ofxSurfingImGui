@@ -653,7 +653,7 @@ namespace ofxImGuiSurfing
 				ofParameter<ofColor> p = aparam.cast<ofColor>();
 				auto tmpRef = p.get();
 				uniqueName.push();
-				
+
 				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
 				flags |= ImGuiColorEditFlags_NoInputs;
 				flags |= ImGuiColorEditFlags_NoLabel;
@@ -1118,7 +1118,8 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+					if (parameter->getName() == "" && parameter->getName() == " ")
+						ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 				}
 			}
 

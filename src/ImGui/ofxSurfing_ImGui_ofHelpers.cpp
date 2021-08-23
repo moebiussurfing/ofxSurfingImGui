@@ -106,7 +106,9 @@ namespace ofxImGuiSurfing
 				continue;
 			}
 
-			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
+			// don't debug if it's unnamed
+			if (parameter->getName() == "" && parameter->getName() == " ")
+				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName()<<"'";
 		}
 
 		{
@@ -443,8 +445,8 @@ namespace ofxImGuiSurfing
 		result |= ImGui::SliderFloat(((parameter.getName() + " y").c_str()), &y, parameter.getMin().y, parameter.getMax().y);
 		result |= ImGui::SliderFloat(((parameter.getName() + " w").c_str()), &w, parameter.getMin().width, parameter.getMax().width);
 		result |= ImGui::SliderFloat(((parameter.getName() + " h").c_str()), &h, parameter.getMin().height, parameter.getMax().height);
-		
-		if(result) parameter.set(ofRectangle(x, y, w, h));
+
+		if (result) parameter.set(ofRectangle(x, y, w, h));
 
 		return result;
 	}
@@ -632,7 +634,7 @@ namespace ofxImGuiSurfing
 		{
 			parameter.set(tmpRef);
 
-		IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
