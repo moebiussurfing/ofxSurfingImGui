@@ -1,0 +1,4 @@
+ofxImGui
+ofxInfiniteCanvas
+ofxSurfingImGui
+ofxXmlSettings

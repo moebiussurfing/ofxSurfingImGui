@@ -557,7 +557,7 @@ examples/3_Layout_TypesEngine/bin/imgui.ini
 examples/1_Widgets/bin/imgui.ini
 *.xcconfig
 *.plist
-*.make
+
 1_Widgets-examples/1_5_FileBrowser2/Makefile
 0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/ImGuiLayout/Panels_AppSettings.json
 0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/ImGuiLayout/Presets/P0.ini
