@@ -35,38 +35,34 @@ void ofApp::setup() {
 void ofApp::setupImGuiManager() {
 
 #ifdef TEST__LOCAL_IM_GUI
-	guiManager.setup(IM_GUI_MODE_NOT_INSTANTIATED);
+	guiManager.setup(IM_GUI_MODE_NOT_INSTANTIATED); // -> must be inside a gui.begin()/end()
 #endif
 
 	//-
 
 #ifdef TEST__MULTIINSTANCE_IM_GUI
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	//guiManager.setup(); // -> requires guiManager.begin()/end()
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED); // -> requires guiManager.begin()/end()
 #endif
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	// out of context/Begin/NewFrame
+	// We manipulate vector out of the drawing context Begin/NewFrame...
 	if (bFlagClear) {
 		bFlagClear = false;
 		clearImGuiWindows();
 	}
 
-	//-
+	//--
 
-	// Docking stuff
+	// Docking stuff: draws a rectangle to see the free space viewport on central dockspace
 	gui.begin();
 	setupDocking();
 	gui.end();
 
-	//-
-
-	// C.
-	guiInstance.draw();
-
-	//-
+	//--
 
 	// A.
 #ifdef TEST__LOCAL_IM_GUI
@@ -81,7 +77,7 @@ void ofApp::draw()
 		// other windows
 		drawImGui();
 		// using the raw ImGui widgets without instantiate ImGui begin/end
-		//guiManager.begin(); // if used begin/end it's bypassed internally when using IM_GUI_MODE_NOT_INSTANTIATED. can be uncommented
+		//guiManager.begin/end(); // if used begin/end it's bypassed internally when using .setup(IM_GUI_MODE_NOT_INSTANTIATED). can be uncommented
 	}
 	gui.end();
 #endif
@@ -111,8 +107,13 @@ void ofApp::draw()
 
 	//-
 
+	// C.
+	guiInstance.draw();
+
+	//-
+
 	// D.
-	// addon vector windows
+	// add-on vector of guiManager windows (ofxSurfing_ImGui_Manager)
 	for (auto &g : guiInstances) {
 		g->draw();
 	}
@@ -120,7 +121,7 @@ void ofApp::draw()
 	//-
 
 	// Some isolated windows
-	//gui.begin(); // -> Why it works without begin/end ??
+	gui.begin(); // -> Why it works without begin/end ??
 	{
 		// Draw a few windows
 		static int val0 = 0, val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0;
@@ -132,7 +133,7 @@ void ofApp::draw()
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID); // Attach a window to a viewport = prevent popping it out
 		drawWindow("Stuck in main window", val5, 550, 350, ImGuiWindowFlags_None);
 	}
-	//gui.end();
+	gui.end();
 }
 
 //--------------------------------------------------------------
@@ -167,9 +168,13 @@ void ofApp::drawImGuiGroup()
 
 	guiManager.beginWindow("guiManager-ofParameterGroup", NULL, flags);
 	{
-		ImGui::TextWrapped("guiManager-ofParameterGrouguiManager-ofParameterGrou.guiManager-ofParameterGrou.guiManager-ofParameterGrou");
+		AddToggleRoundedButton(guiManager.bAutoResize);
+
+		ImGui::TextWrapped("guiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroup");
 		ImGui::TextWrapped("ofParameterGroup render ->");
-		guiManager.AddGroup(params1);
+		
+		ofxImGuiSurfing::AddGroup(params1);
+		//guiManager.AddGroup(params1); // -> fials! must fix
 	}
 	guiManager.endWindow();
 }
@@ -214,20 +219,6 @@ void ofApp::setupParams() {
 
 	params2.add(params3);
 	params1.add(params2);
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key) {
-
-	if (key == ' ')
-	{
-		addImGuiWindow();
-	}
-
-	//if (key == OF_KEY_BACKSPACE)
-	//{
-	//	bFlagClear = true;
-	//}
 }
 
 //--------------------------------------------------------------
@@ -312,6 +303,20 @@ void ofApp::setupDocking()
 			ofPopStyle();
 		}
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key) {
+
+	if (key == ' ')
+	{
+		addImGuiWindow();
+	}
+
+	//if (key == OF_KEY_BACKSPACE)
+	//{
+	//	bFlagClear = true;
+	//}
 }
 
 //--------------------------------------------------------------

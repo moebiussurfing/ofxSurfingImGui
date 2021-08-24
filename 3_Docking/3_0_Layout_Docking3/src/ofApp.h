@@ -1,27 +1,30 @@
 
 #pragma once
 
+// Some code taken from: https://github.com/Daandelange/ofxImGui/tree/master/example-dockingandviewports
+
 //--------------------------------------------------------------
 
 /* 
 
-This example show how to populate many ImGui windows.
-Using different approaches: using Surfing layout as guiManager,
-To check viewport modes or autodraw modes.
+OVERVIEW:
+This example shows how to populate many ImGui windows from different scopes on the same viewport.  
+Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
+Also useful to check viewport modes, docking merging windows or autodraw modes.  
 
+HOW TO:
 Press SPACE to add a new ImGui window
 BAKSPACE to clear windows dynamically (fails. broken..)
+Drag with SHIFT to dock a window.
 
 */
 
 //--
 
-/*
-Enable only ONE of the modes to TESTING
-a local ImGui instance or internal to the classes
-*/
-#define TEST__LOCAL_IM_GUI // a.
-//#define TEST__MULTIINSTANCE_IM_GUI // b.
+// Enable only ONE of the modes to TESTING
+// a local ImGui instance or internal to the classes
+//#define TEST__LOCAL_IM_GUI // a.
+#define TEST__MULTIINSTANCE_IM_GUI // b.
 
 //--------------------------------------------------------------
 
@@ -81,9 +84,7 @@ public:
 	// different approaches:
 
 	// A. -> ofxImGui
-//#ifdef TEST__LOCAL_IM_GUI
 	ofxImGui::Gui gui;
-//#endif
 
 	// B. -> SurfingImGui
 	ofxSurfing_ImGui_Manager guiManager;
