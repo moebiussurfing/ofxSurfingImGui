@@ -310,18 +310,18 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 </details>
 
 <details>
-  <summary>3_0_Layout_TypesEngine</summary>
+  <summary>4_0_0_Layout_TypesEngine</summary>
   <p>
 
-![image](/docs/3_0_Layout_TypesEngine.PNG?raw=true "image")  
+![image](/docs/4_0_0_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
 
 <details>
-  <summary>3_1_Layout_TypesEngine</summary>
+  <summary>4_0_1_Layout_TypesEngine</summary>
   <p>
 
-![image](/docs/3_1_Layout_TypesEngine.PNG?raw=true "image")  
+![image](/docs/4_0_1_Layout_TypesEngine.PNG?raw=true "image")  
   </p>
 </details>
 
