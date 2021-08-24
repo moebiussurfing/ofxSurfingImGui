@@ -250,6 +250,17 @@ Examples to improve the layout of Docking Spaces.
 </details>
 
 <details>
+  <summary>3_0_Layout_Docking3</summary>
+  <p>
+
+This example shows how to populate many ImGui windows.  
+Using different approaches: using Surfing Layout tools as guiManager.  
+To check viewport modes, docking merging windows or autodraw modes.  
+![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
+  </p>
+</details>
+
+<details>
   <summary>3_1_Layout_ImTools1</summary>
   <p>
 

@@ -39,6 +39,12 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 	ofRemoveListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
 	if (bAutoSaveSettings) saveAppSettings();
+
+	//-
+
+	//TODO:
+	//destructor ??
+	//gui.exit();
 }
 
 //--
@@ -54,7 +60,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
 		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
-		//setImGuiAutodraw(true);
+		setImGuiAutodraw(true);
 		setup(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
@@ -83,6 +89,7 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//-
+
 	setupImGui();
 
 	//-
@@ -315,6 +322,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 void ofxSurfing_ImGui_Manager::draw() {
 	//if (customFont == nullptr) gui.draw(); //?
 
+	//if (bAutoDraw)
 	if (!bAutoDraw)
 		if (customFont == nullptr) gui.draw();
 }
@@ -746,7 +754,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open) {
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
+{
 	return beginWindow(name, p_open, ImGuiWindowFlags_None);
 }
 
@@ -766,7 +775,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	//TODO:
-	widgetsManager.resetUniqueNames();
+	//widgetsManager.resetUniqueNames();
 	//resetIDs(); // reset unique names
 
 	//static bool no_close = true;

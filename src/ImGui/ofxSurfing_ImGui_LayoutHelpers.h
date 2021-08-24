@@ -186,6 +186,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline float getWindowWidth()
+	{
+		return getWidgetsWidth();
+	}
+
+	//--------------------------------------------------------------
 	inline float getWidgetsHeightUnit()
 	{
 		return getWidgetsHeightRelative();

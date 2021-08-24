@@ -809,8 +809,9 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// this is not the root/first group
-
+			// Here, this is not the root/first group.
+			// We go populate the params widgets
+			
 			for (auto parameter : group)
 			{
 				// group

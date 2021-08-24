@@ -87,7 +87,7 @@ class ofxSurfing_ImGui_Manager
 public:
 
 
-	SurfingImGuiInstantiationMode surfingImGuiMode;
+	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
 
@@ -136,6 +136,12 @@ public:
 	{
 		widgetsManager.AddGroupStyle(group, type, flags);
 	}
+	//a better name
+	//--------------------------------------------------------------
+	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	{
+		widgetsManager.AddGroupStyle(group, type, flags);
+	}
 
 	////--------------------------------------------------------------
 	//void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
@@ -151,7 +157,7 @@ public:
 	}
 
 public:
-
+	//many repeated method to pick a good name...
 	//--------------------------------------------------------------
 	void refresh()
 	{
