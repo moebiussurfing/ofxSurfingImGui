@@ -5,19 +5,24 @@
 
 //--------------------------------------------------------------
 
-/* 
+
+/*
 
 OVERVIEW:
-This example shows how to populate many ImGui windows from different scopes on the same viewport.  
-Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
-Also useful to check viewport modes, docking merging windows or autodraw modes.  
+
+This example shows how to populate many ImGui windows from different scopes on the same viewport.
+Uses different approaches: 
+from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager and special windows too
+Also useful to check viewport modes, docking merging windows or autodraw modes.
 
 HOW TO:
+
 Press SPACE to add a new ImGui window
 BAKSPACE to clear windows dynamically (fails. broken..)
 Drag with SHIFT to dock a window.
 
 */
+
 
 //--
 
@@ -41,7 +46,7 @@ Drag with SHIFT to dock a window.
 class ofApp : public ofBaseApp {
 
 public:
-	
+
 	void setup();
 	void exit();
 	void draw();
@@ -91,7 +96,7 @@ public:
 
 	// C. -> ofxImGui class/add-on
 	myAddon guiInstance;
-	
+
 	// D. -> ofxImGui class vector
 	vector<myAddon*> guiInstances;
 
@@ -103,6 +108,9 @@ public:
 	void drawImGui();
 	void drawImGuiGroup();
 
+	void setupImGuiSpecialWindows();
+	void drawImGuiSpecialWindows();
+
 	void setupDocking();
 
 	//-
@@ -113,15 +121,20 @@ private:
 	void drawWindow(const char* _title, int& _value, int _x = 300, int _y = 300, ImGuiWindowFlags _flags = ImGuiWindowFlags_None)
 	{
 		ImGuiCond cond = ImGuiCond_FirstUseEver;
-		
+
 		ImGui::SetNextWindowSize(ImVec2(200, 200), cond);
 		ImGui::SetNextWindowPos(ImVec2(_x + ofGetWindowPositionX(), _y + ofGetWindowPositionY()), cond);
 
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(0, 255, 255, 128)); // This styles the special windows
+
 		ImGui::Begin(_title, NULL, _flags);
+		ImGui::Text("ofxImGui");
 		ImGui::InputInt("InputInt", &_value);
 		ImGui::SliderInt("SliderInt", &_value, 0, 10);
 		ImGui::DragInt("DragInt", &_value);
 		ImGui::End();
+
+		ImGui::PopStyleColor(1);
 	}
 
 	//-

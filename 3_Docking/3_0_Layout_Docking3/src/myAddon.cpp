@@ -6,7 +6,7 @@ void myAddon::setup(string _name, int _val, int _x, int _y) {
 	val = _val;
 	x = _x;
 	y = _y;
-	
+
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 	//guiManager.setup(IM_GUI_MODE_NOT_INSTANTIATED);
 
@@ -35,14 +35,19 @@ void myAddon::drawWindow(string _title, int& _value, int _x, int _y, ImGuiWindow
 
 	if (guiManager.bAutoResize) _flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(0, 255, 0, 128)); // This styles the special windows
+
 	guiManager.beginWindow(name.c_str(), NULL, _flags);
 	{
+		ImGui::Text("guiManager");
 		ImGui::SliderFloat("value1", &value1, 0, 1);
 		ImGui::SliderFloat("value2", &value2, 0, 1);
 
 		guiManager.drawAdvanced();
 	}
 	guiManager.endWindow();
+
+	ImGui::PopStyleColor(1);
 }
 
 //--------------------------------------------------------------

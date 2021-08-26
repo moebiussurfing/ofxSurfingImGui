@@ -39,7 +39,7 @@ namespace ofxImGuiSurfing
 		bool bPre = tmpRef;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
-		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
+		if (h == -1) h =2* ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -143,7 +143,8 @@ namespace ofxImGuiSurfing
 
 		// default
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
+		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+		//if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 		//if (h == -1) h = BUTTON_BIG_HEIGHT / 2;
 
 		// border when selected
@@ -290,7 +291,7 @@ namespace ofxImGuiSurfing
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
+		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		if (nameTrue == "-1") nameTrue = "##BIGTOGGLENAMED_on_" + name;
 		if (nameFalse == "-1") nameFalse = "##BIGTOGGLENAMED_off_" + name;

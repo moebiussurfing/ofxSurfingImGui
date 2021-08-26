@@ -33,7 +33,8 @@ void ofApp::setup() {
 	guiManager.setImGuiDocking(true);
 	// -> required false to allow custom docking layout. 
 	// instead of the default centralized.
-	guiManager.setImGuiDockingModeCentered(false);
+	guiManager.setImGuiDockingModeCentered(true);
+	//guiManager.setImGuiDockingModeCentered(false);
 
 	guiManager.setImGuiAutodraw(true); // -> required when only one ImGui instance (= n oother addons using ImGui)
 	guiManager.setup();

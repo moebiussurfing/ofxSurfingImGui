@@ -29,6 +29,11 @@ void ofApp::setup() {
 	for (int i = 0; i < AMOUNT_INSTANCES; i++) {
 		addImGuiWindow();
 	}
+
+	//--
+
+	// E.
+	setupImGuiSpecialWindows();
 }
 
 //--------------------------------------------------------------
@@ -49,6 +54,11 @@ void ofApp::setupImGuiManager() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	//// log
+	//if (ofGetFrameNum() % 120 == 0) {
+	//	guiManager.log_RectWindows();
+	//}
+
 	// We manipulate vector out of the drawing context Begin/NewFrame...
 	if (bFlagClear) {
 		bFlagClear = false;
@@ -68,6 +78,7 @@ void ofApp::draw()
 #ifdef TEST__LOCAL_IM_GUI
 	gui.begin();
 	{
+		ImGui::Text("ofApp-ofxImGui");
 		// one window
 		ImGui::Begin("ofApp-TEST");
 		static float value;
@@ -89,7 +100,8 @@ void ofApp::draw()
 	// A.
 	gui.begin();
 	{
-		ImGui::Begin("TEST");
+		ImGui::Begin("ofApp-ofxImGui");
+		ImGui::Text("ofApp-ofxImGui");
 		static float value;
 		ImGui::SliderFloat("value", &value, 0, 1);
 		ImGui::End();
@@ -125,13 +137,13 @@ void ofApp::draw()
 	{
 		// Draw a few windows
 		static int val0 = 0, val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0;
-		drawWindow("ofApp-DockableWindow", val0, 50, 100, ImGuiWindowFlags_None);
-		drawWindow("ofApp-Window1", val1, 300, 100, ImGuiWindowFlags_None);
-		drawWindow("ofApp-Window2", val2, 50, 350, ImGuiWindowFlags_None);
-		drawWindow("ofApp-Window3", val3, 300, 350, ImGuiWindowFlags_None);
-		drawWindow("ofApp-Window4", val4, 550, 100, ImGuiWindowFlags_None);
+		drawWindow("ofApp-ofxImGui-DockableWindow", val0, 50, 100, ImGuiWindowFlags_None);
+		drawWindow("ofApp-ofxImGui-Window1", val1, 300, 100, ImGuiWindowFlags_None);
+		drawWindow("ofApp-ofxImGui-Window2", val2, 50, 350, ImGuiWindowFlags_None);
+		drawWindow("ofApp-ofxImGui-Window3", val3, 300, 350, ImGuiWindowFlags_None);
+		drawWindow("ofApp-ofxImGui-Window4", val4, 550, 100, ImGuiWindowFlags_None);
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID); // Attach a window to a viewport = prevent popping it out
-		drawWindow("Stuck in main window", val5, 550, 350, ImGuiWindowFlags_None);
+		drawWindow("ofxImGui-Stuck in main window", val5, 550, 350, ImGuiWindowFlags_None);
 	}
 	gui.end();
 }
@@ -139,12 +151,15 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(255, 255, 0, 128));
+
 	// B.
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("guiManager-ofApp", NULL, flags);
+	guiManager.beginWindow("ofApp-guiManager", NULL, flags);
 	{
+		ImGui::Text("guiManager");
 		AddToggleRoundedButton(guiManager.bAutoResize);
 		static ofParameter<bool> bCustom{ "bCustom", false };
 		AddToggleRoundedButton(bCustom);
@@ -158,6 +173,74 @@ void ofApp::drawImGui()
 	//-
 
 	drawImGuiGroup();
+
+	ImGui::PopStyleColor(1);
+
+	//-
+
+	// E.
+	drawImGuiSpecialWindows();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupImGuiSpecialWindows()
+{
+	guiManager.addWindowSpecial("mySpecialWin0");//index 0
+	guiManager.addWindowSpecial("mySpecialWin1");//index 1
+	guiManager.addWindowSpecial("mySpecialWin2");//index 2
+	guiManager.addWindowSpecial("mySpecialWin3", true);//index 3 // -> powered toggle allows advanced controls
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindows()
+{
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(0, 0, 255, 128)); // This styles the special windows
+
+	if (guiManager.beginWindowSpecial())
+	{
+		static int _value = 0.5;
+		ImGui::Text("guiManager-SpecialWin");
+		ImGui::InputInt("InputInt", &_value);
+		ImGui::SliderInt("SliderInt", &_value, 0, 10);
+		ImGui::DragInt("DragInt", &_value);
+
+		guiManager.endWindowSpecial();
+	}
+
+	if (guiManager.beginWindowSpecial())
+	{
+		static int _value = 0.5;
+		ImGui::Text("guiManager-SpecialWin");
+		ImGui::InputInt("InputInt", &_value);
+		ImGui::SliderInt("SliderInt", &_value, 0, 10);
+		ImGui::DragInt("DragInt", &_value);
+
+		guiManager.endWindowSpecial();
+	}
+
+	if (guiManager.beginWindowSpecial())
+	{
+		static int _value = 0.5;
+		ImGui::Text("guiManager-SpecialWin");
+		ImGui::InputInt("InputInt", &_value);
+		ImGui::SliderInt("SliderInt", &_value, 0, 10);
+		ImGui::DragInt("DragInt", &_value);
+
+		guiManager.endWindowSpecial();
+	}
+
+	if (guiManager.beginWindowSpecial())
+	{
+		static int _value = 0.5;
+		ImGui::Text("guiManager-SpecialWin");
+		ImGui::InputInt("InputInt", &_value);
+		ImGui::SliderInt("SliderInt", &_value, 0, 10);
+		ImGui::DragInt("DragInt", &_value);
+
+		guiManager.endWindowSpecial();
+	}
+
+	ImGui::PopStyleColor(1);
 }
 
 //--------------------------------------------------------------
@@ -166,15 +249,15 @@ void ofApp::drawImGuiGroup()
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 	if (guiManager.bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	guiManager.beginWindow("guiManager-ofParameterGroup", NULL, flags);
+	guiManager.beginWindow("ofApp-guiManager-ofParameterGroup", NULL, flags);
 	{
+		ImGui::Text("guiManager");
 		AddToggleRoundedButton(guiManager.bAutoResize);
-
 		ImGui::TextWrapped("guiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroupguiManager-ofParameterGroup");
 		ImGui::TextWrapped("ofParameterGroup render ->");
-		
+
 		ofxImGuiSurfing::AddGroup(params1);
-		//guiManager.AddGroup(params1); // -> fials! must fix
+		//guiManager.AddGroup(params1); // -> fails! must fix
 	}
 	guiManager.endWindow();
 }
@@ -185,22 +268,18 @@ void ofApp::setupParams() {
 	params1.setName("paramsGroup1");
 	params2.setName("paramsGroup2");
 	params3.setName("paramsGroup3");
-
 	bEnable.set("Enable", false);
 	shapeType.set("shapeType", 0, -50, 50);
-
 	params1.add(line1.set("line1", 0.5, 0, 1));
 	params1.add(separation1.set("separation1", 50, 1, 100));
 	params1.add(speed1.set("speed1", 0.5, 0, 1));
 	params1.add(size1.set("size1", 100, 0, 100));
 	params1.add(amount1.set("amount1", 10, 0, 25));
-
 	params2.add(sep2min.set("sep2min", 25.f, 1, 100));
 	params2.add(sep2max.set("sep2max", 75.f, 1, 100));
 	params2.add(speed2.set("speed2", 0.5, 0, 1));
 	params2.add(line2.set("line2", 0.5, 0, 1));
 	params2.add(bEnable);
-
 	params3.add(bMode1.set("Mode1", false));
 	params3.add(bMode2.set("Mode2", false));
 	params3.add(bMode3.set("Mode3", false));
@@ -216,7 +295,6 @@ void ofApp::setupParams() {
 	params3.add(amount3.set("amount3", 10, 0, 25));
 	params3.add(bEnable);
 	params3.add(shapeType);
-
 	params2.add(params3);
 	params1.add(params2);
 }
@@ -228,7 +306,7 @@ void ofApp::addImGuiWindow() {
 
 	myAddon *_guiInstance = new myAddon();
 
-	string n = "myAddon-VECTOR-" + ofToString(i);
+	string n = "myAddon-guiManager-VECTOR-" + ofToString(i);
 	_guiInstance->setup(ofToString(n), i, i * 200, i * 100);
 	guiInstances.emplace_back(_guiInstance);
 }

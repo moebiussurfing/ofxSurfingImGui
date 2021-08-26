@@ -86,11 +86,9 @@ class ofxSurfing_ImGui_Manager
 
 public:
 
-
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
-
 
 public:
 
@@ -219,6 +217,7 @@ public:
 
 public:
 
+	void update(); // to manual update...
 	void draw(); // to manual draw...
 
 	//-
@@ -228,6 +227,8 @@ public:
 	void begin();
 	void end();
 
+	//-
+
 	// window methods
 
 	// begin a window
@@ -236,10 +237,70 @@ public:
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
 	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
-	bool beginWindow(int index); // -> If you added windows to the engine you can begin the window passing his index
 
 	// end a window
 	void endWindow();
+
+	//----
+
+	// Special windows
+
+	//// we can add some special windows that have more features, with a simplified api.
+	//// CODE:
+	//// Will be added on: 
+
+	//// setup():
+	//guiManager.addWindowSpecial("mySpecialWin0", true);//index 0
+	//guiManager.addWindowSpecial("mySpecialWin1", true);//index 1
+	//guiManager.addWindowSpecial("mySpecialWin2");//index 2
+	//guiManager.addWindowSpecial("mySpecialWin3");//index 3
+
+	//// draw():
+	// You must rememeber the index to manually call like:
+	//guiManager.beginWindowSpecial(1);{}
+	//guiManager.beginWindowSpecial();
+	// or remember and respect the original setup() sorting when draw():
+	//guiManager.beginWindowSpecial();{}
+	//guiManager.endWindow();
+	//guiManager.beginWindowSpecial();{}
+	//guiManager.endWindow();
+
+	//-
+
+	// To simplify a bit the api
+
+private:
+	int _currWindowsSpecial = 0;
+
+public:
+	bool beginWindowSpecial();
+	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
+	void endWindowSpecial();
+
+	bool beginWindow(int index) { //-> legacy api
+		return beginWindowSpecial(index);
+	}
+	
+	//----
+
+	/*
+	//TODO:
+	// a window management engine
+	//to cascade all window or to distribute into the the viewport in some ways...
+	//it seems that could be used only on the special windows not over all...
+private:
+	vector<ofRectangle> rectWindows;
+	int currWindow = -1;
+public:
+	//--------------------------------------------------------------
+	void log_RectWindows() {
+		ofLogNotice(__FUNCTION__) << "--------------------------------------------------------------";
+		int i = 0;
+		for (auto &r : rectWindows) {
+			ofLogNotice(__FUNCTION__) << "Window #" << i++ << " " << ofToString(r);
+		}
+	}
+	*/
 
 	//----
 
@@ -376,12 +437,17 @@ public:
 	// snippet to copy/paste into out orApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//guiManager.drawAdvancedSubPanel();
-
+	//--------------------------------------------------------------
+	void drawAdvancedControls() {
+		drawAdvanced();
+	}
 	//--------------------------------------------------------------
 	void drawAdvanced() { // -> simpler call
+		ImGui::Spacing();
 		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
 		drawAdvancedSubPanel();
 	}
+
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel(bool bHeader = true) {
 		if (!bAdvanced) return;
@@ -417,6 +483,11 @@ public:
 					//ofxImGuiSurfing::ToggleRoundedButton("Scene Viewport", &bPreviewSceneViewport);
 					AddToggleRoundedButton(bPreviewSceneViewport);
 					ImGui::Unindent();
+
+					//-
+
+					drawSpecialWindowsPanel();
+
 				}
 			}
 		}
@@ -472,14 +543,14 @@ public:
 public:
 
 	//--------------------------------------------------------------
-	void clearWindows() {
+	void clearWindowsSpecial() {
 		windowsAtributes.clear();
 	}
 
 	//--------------------------------------------------------------
-	void addWindow(ofParameter<bool>& _bGui, bool powered = false) {
+	void addWindowSpecial(ofParameter<bool>& _bGui, bool powered = false) {
 
-		ImWindowAtributes win;
+		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
 		win.setPowered(powered);
 
@@ -489,7 +560,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	string getWindowName(int index) {
+	string getWindowSpecialName(int index) {
 		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
@@ -500,7 +571,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ofRectangle getRectangleWindow(int index) {
+	ofRectangle getRectangleWindowSpecial(int index) {
 		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
@@ -510,12 +581,17 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void addWindow(std::string name) {
+	void addWindow(std::string name, bool bPowered = false) { // -> legacy api
+		addWindowSpecial(name, bPowered);
+	}
+
+	//--------------------------------------------------------------
+	void addWindowSpecial(std::string name, bool bPowered = false) {
 		ofParameter<bool> _bGui{ name, true };
 
-		ImWindowAtributes win;
+		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.setPowered(false);
+		win.setPowered(bPowered);
 
 		windowsAtributes.push_back(win);
 
@@ -563,7 +639,7 @@ public:
 
 private:
 
-	struct ImWindowAtributes
+	struct SurfingImGuiWindowAtributes
 	{
 		// we queue here the bool paramms that enables the show/hide for each queued window
 		ofParameter<bool> bGui{ "Show Gui", true };
@@ -584,7 +660,7 @@ private:
 		ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
 
 	};
-	vector<ImWindowAtributes> windowsAtributes;
+	vector<SurfingImGuiWindowAtributes> windowsAtributes;//handles only the manually pre added windows.
 
 	void loadAppSettings();
 	void saveAppSettings();
@@ -682,6 +758,8 @@ public:
 
 	//--------------------------------------------------------------
 	void setupDocking() {
+		surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
+
 		//setupLayout(4);
 		setAutoSaveSettings(true);
 		setImGuiDocking(true);
@@ -695,8 +773,10 @@ public:
 		bUseLayoutPresetsManager = b;
 	}
 
-private:
+public:
+	void drawSpecialWindowsPanel();
 
+private:
 #define LAYOUT_WINDOW_WIDTH 150
 
 	void updateLayout();
@@ -705,7 +785,6 @@ private:
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
 	void drawLayoutsPanels();
-
 	void drawLayoutEngine();
 	void drawOFnative();
 

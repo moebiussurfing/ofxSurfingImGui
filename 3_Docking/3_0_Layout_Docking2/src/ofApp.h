@@ -7,7 +7,14 @@
 
 #include "ofxWindowApp.h" // -> not required
 
-//#define USE_FBOS_DEMO
+//#define USE_FBOS_DEMO // -> fbo testing
+
+/*
+
+This example shows how to use the presets engine for panels layouts distribution,
+and for added parameters to presets system.
+
+*/
 
 //--------------------------------------------------------------
 class ofApp : public ofBaseApp {

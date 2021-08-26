@@ -159,6 +159,8 @@ void ofApp::drawImGui()
 
 	// -> Render our windows now
 
+	//if(0)
+	//if (guiManager.beginWindowSpecial())
 	if (guiManager.beginWindow(0))
 	{
 		// Calculate layout sizes
@@ -205,28 +207,35 @@ void ofApp::drawImGui()
 
 		// We expose the paremeters we added to the layout manager on setup
 		ImGui::TextWrapped("The added parameters");
-		ofxImGuiSurfing::AddParameter(rectParam);
-		ofxImGuiSurfing::AddGroup(params1);
+		//ofxImGuiSurfing::AddParameter(rectParam);
+		//ofxImGuiSurfing::AddGroup(params1);
 
 		//-
 
 		guiManager.endWindow(); // -> Notice that endWindow goes inside the beginWindow bracket!
+		//guiManager.endWindowSpecial();
 	}
 
 	//--------
-
+	
+	// -> crash ??
+	if(0) 
+	//if (guiManager.beginWindowSpecial())
 	if (guiManager.beginWindow(1))
 	{
 		ImGui::Text("Window1 Window1 Window1");
 
-		guiManager.AddGroup(params2, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_COLLAPSED);
-		guiManager.AddGroup(params3);
+		//guiManager.AddGroup(params2, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_COLLAPSED);
+		//guiManager.AddGroup(params3);
 
 		guiManager.endWindow();
+		//guiManager.endWindowSpecial();
 	}
 
 	//---------
 
+	//if(0)
+	//if (guiManager.beginWindowSpecial())
 	if (guiManager.beginWindow(2))
 	{
 		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
@@ -253,6 +262,7 @@ void ofApp::drawImGui()
 		ofxImGuiSurfing::AddParameter(shapeType);
 
 		guiManager.endWindow();
+		//guiManager.endWindowSpecial();
 	}
 
 	//--
@@ -260,6 +270,8 @@ void ofApp::drawImGui()
 	// more windows
 	// out of the docking space. cant be docked! ?
 
+	//if(0)
+	//if (guiManager.beginWindowSpecial())
 	if (guiManager.beginWindow(3))
 	{
 		ImGui::Text("Hello, left!");
@@ -267,10 +279,13 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, left!");
 
 		guiManager.endWindow();
+		//guiManager.endWindowSpecial();
 	}
 
 	//--
 
+	//if(0)
+	//if (guiManager.beginWindowSpecial())
 	if (guiManager.beginWindow(4))
 	{
 		ImGui::Text("Hello, down!");
@@ -280,6 +295,7 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, down!");
 
 		guiManager.endWindow();
+		//guiManager.endWindowSpecial();
 	}
 }
 

@@ -319,9 +319,17 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::draw() {
-	//if (customFont == nullptr) gui.draw(); //?
+void ofxSurfing_ImGui_Manager::update() { // -> not being used by default
 
+	//// log
+	//if (ofGetFrameNum() % 120 == 0) {
+	//	log_RectWindows();
+	//}
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::draw() { // -> not being used by default
+	//if (customFont == nullptr) gui.draw(); //?
 	//if (bAutoDraw)
 	if (!bAutoDraw)
 		if (customFont == nullptr) gui.draw();
@@ -698,9 +706,21 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 
+	////TODO: 
+	////not used
+	//rectWindows.clear();
+	//currWindow = -1;
+
+	//TODO:
+	//_currWindowsSpecial = -1;
+	_currWindowsSpecial = -1;
+
+	//-
+
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//-
+
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
 
@@ -745,6 +765,16 @@ void ofxSurfing_ImGui_Manager::end() {
 	//--
 
 	// Out of ImGui begin/end
+
+	////TODO:
+	//// log
+	//if (ofGetFrameNum() % 120 == 0) {
+	//	log_RectWindows();
+	//}
+
+	//TODO:
+	//_currWindowsSpecial = -1;
+	//_currWindowsSpecial = 0;
 }
 
 //--------------------------------------------------------------
@@ -827,6 +857,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 
 	// Main body of the Demo window starts here.
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
+
 	//if (!b)
 	//{
 	//	//// Early out if the window is collapsed, as an optimization.
@@ -846,18 +877,31 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
 	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
+	//currWindow++;
+
 	return b;
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(int index) {
+bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
+	_currWindowsSpecial++;
+	bool b = beginWindowSpecial(_currWindowsSpecial);
+	return b;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
+{
+	_currWindowsSpecial = index;
+
 	if (index > windowsAtributes.size() - 1 || index == -1)
 	{
 		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 		return false;
 	}
 
-	if (!windowsAtributes[index].bGui.get()) {
+	if (!windowsAtributes[index].bGui.get()) //skip window if hidden
+	{
 		return false;
 	}
 
@@ -866,21 +910,44 @@ bool ofxSurfing_ImGui_Manager::beginWindow(int index) {
 	float y = 10;
 	float w = 200;
 	float h = 600;
+
 	ImGuiCond cond = ImGuiCond_None;
 	cond |= ImGuiCond_FirstUseEver;
 	//cond |= ImGuiCond_Appearing;
+
 	ImGui::SetNextWindowPos(ImVec2(x, y), cond);
 	ImGui::SetNextWindowSize(ImVec2(w, h), cond);
 
 	ImGuiWindowFlags _flags = ImGuiWindowFlags_None;
-	//_flags |= ImGuiWindowFlags_None;
+
+	if (windowsAtributes[index].bPoweredWindow.get())
+	{
+		if (windowsAtributes[index].bAutoResize.get()) {
+			_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		}
+	}
 
 	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), _flags);
 
-	// get window position
-	windowsAtributes[index].rectShapeWindow.set(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
-
 	return b;
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::endWindowSpecial()
+{
+	// get window shape
+	if (windowsAtributes[_currWindowsSpecial].bPoweredWindow.get())
+	{
+		ofRectangle r = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		windowsAtributes[_currWindowsSpecial].rectShapeWindow.set(r);
+		//rectWindows.push_back(r);
+
+		drawAdvancedControls();
+	}
+
+	//_currWindowsSpecial++;
+
+	ImGui::End();
 }
 
 //--------------------------------------------------------------
@@ -2048,6 +2115,38 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 #ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
 	ImGui::PopStyleVar();
 #endif
+}
+
+//----
+
+//TODO:
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::drawSpecialWindowsPanel()
+{
+	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+	//if (bAutoResizePanels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//if (beginWindow("Specials", NULL, window_flags))
+	{
+		const int NUM_WIDGETS = windowsAtributes.size(); // expected num widgets
+
+		float _spcx = ImGui::GetStyle().ItemSpacing.x;
+		float _spcy = ImGui::GetStyle().ItemSpacing.y;
+		float _h100 = ImGui::GetContentRegionAvail().y;
+
+		// 1. populate all toggles
+
+		float _w = ofxImGuiSurfing::getWidgetsWidth(windowsAtributes.size());
+		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
+
+		for (int i = 0; i < NUM_WIDGETS; i++)
+		{
+			if (i > windowsAtributes.size() - 1) continue;
+
+			ofxImGuiSurfing::AddBigToggle(windowsAtributes[i].bGui, _w, _h);
+			ImGui::SameLine();
+		}
+		//endWindow();
+	}
 }
 
 //keys
