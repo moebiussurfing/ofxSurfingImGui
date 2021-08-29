@@ -615,3 +615,25 @@ enum ImGuiDockNodeFlags_
 ofRectangle rect = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 */
+
+
+//--
+
+/*
+
+Docking notes
+
+https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
+https://github.com/ocornut/imgui/issues/3521
+
+For now the slightly more legal way to do same hack as above is to set the 
+DockNodeFlagsOverrideSet / DockNodeFlagsOverrideClear members of ImGuiWindowClass + calling 
+SetNextWindowClass() to trigger this override but it's not solving the possibility of a conflict 
+between multiple windows with different requests, so it'll only fully work if there are also 
+constraints applied on how windows are docked with each others.
+
+SetNextWindowClass()
+
+
+https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
+*/

@@ -68,14 +68,17 @@ TODO:
 
 using namespace ofxImGuiSurfing;
 
+//TODO:
+// These argumnents are to pass to setup(..) method and simplify instantiation and settings.
 namespace ofxImGuiSurfing
 {
+	// Argument to be used on setup(mode);
 	enum SurfingImGuiInstantiationMode {
-		IM_GUI_MODE_UNKNOWN = 0,
-		IM_GUI_MODE_INSTANTIATED,
-		IM_GUI_MODE_REFERENCED,
-		IM_GUI_MODE_INSTANTIATED_SINGLE,
-		IM_GUI_MODE_NOT_INSTANTIATED // -> To render widgets only. Inside an external begin/end (newFrame)
+		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
+		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end
+		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGUi instance, no other addons.
+		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
+		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame)
 	};
 }
 
@@ -155,6 +158,7 @@ public:
 	}
 
 public:
+
 	//many repeated method to pick a good name...
 	//--------------------------------------------------------------
 	void refresh()
@@ -191,16 +195,16 @@ public:
 
 private:
 
-	// with have two mode for instantiate ImGui
-	ofxImGui::Gui * guiPtr = NULL; // To be used when ImGui is passed by reference
-	ofxImGui::Gui gui; // ImGui is inside the addon
+	// We have two mode for instantiate ImGui
+	ofxImGui::Gui gui; // ImGui is inside the add-on
+	ofxImGui::Gui * guiPtr = NULL; // To be used when ImGui is passed by reference in the parent scope (ofApp)
 
-	// initiate ofxImGui
+	// Initiates ofxImGui with the common settings
 	void setupImGui();
 
 public:
 
-	// To share Gui with other add-ons
+	// To share the same Gui between/with other add-ons
 	//--------------------------------------------------------------
 	ofxImGui::Gui* getGuiPtr() {
 		if (guiPtr == NULL) return &gui;
@@ -222,39 +226,41 @@ public:
 
 	//-
 
-	// global
-	// all the windows are feeded between
+	// To the Global context: all the windows are feeded in between!
 	void begin();
 	void end();
 
 	//-
 
-	// window methods
+	// Window methods
 
-	// begin a window
+	// Begins a window
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
 	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
 
-	// end a window
+	// Ends a window
 	void endWindow();
 
 	//----
 
+	//
 	// Special windows
-
-	//// we can add some special windows that have more features, with a simplified api.
-	//// CODE:
+	//
+	//// We can add some special windows that have more features, with a simplified api.
+	//// This type of windows can be included into the Layout Presets Engine!
+	////
+	//// EXAMPLE CODE:
 	//// Will be added on: 
-
+	////
 	//// setup():
 	//guiManager.addWindowSpecial("mySpecialWin0", true);//index 0
 	//guiManager.addWindowSpecial("mySpecialWin1", true);//index 1
 	//guiManager.addWindowSpecial("mySpecialWin2");//index 2
 	//guiManager.addWindowSpecial("mySpecialWin3");//index 3
-
+	////
 	//// draw():
 	// You must rememeber the index to manually call like:
 	//guiManager.beginWindowSpecial(1);{}
@@ -277,6 +283,7 @@ public:
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
 	void endWindowSpecial();
 
+	//--------------------------------------------------------------
 	bool beginWindow(int index) { //-> legacy api
 		return beginWindowSpecial(index);
 	}
@@ -306,12 +313,13 @@ public:
 
 private:
 
+	// The ImGui instance options
+
 	bool bAutoDraw; // must be false when multiple ImGui instances created!
 	bool bViewport = false;
 	bool bDockingModeCentered = false; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
 
-	ofParameter<bool> bPreviewSceneViewport{ "Viewport", false };
-	//bool bPreviewSceneViewport = false;
+	//-
 
 public:
 
@@ -332,7 +340,7 @@ public:
 
 	//----
 
-	// fonts runtime management 
+	// Fonts runtime management 
 
 private:
 
@@ -368,7 +376,12 @@ public:
 		return bMouseOverGui;
 	}
 
+	//----
+
 private:
+
+	ofParameter<bool> bPreviewSceneViewport{ "Viewport", false };
+	//bool bPreviewSceneViewport = false;
 
 	bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
@@ -499,7 +512,7 @@ public:
 		bUseAdvancedSubPanel = b;
 	}
 
-	//-
+	//----
 
 private:
 
@@ -508,6 +521,8 @@ private:
 	string path_ImLayouts;
 	string path_AppSettings;
 	string path_LayoutSettings;
+	
+	string path_SubPathLabel = "";
 
 	//bool bAutoSaveSettings = true;
 	bool bAutoSaveSettings = false;
@@ -515,11 +530,15 @@ private:
 	ofParameterGroup params_AppSettings{ "AppSettings" };
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" };
 
-	//-
+	//----
 
 public:
 
-	// some tweak modes
+	// Some tweaked settings modes
+	//--------------------------------------------------------------
+	void setSettingsPathLabel(string path) { // must call before setup. To allow multiple instances/windows settings
+		path_SubPathLabel = path + "_";
+	}
 
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup. IMPORTANT: if you are using multiple instances of this addon, must set only one to true or settings will not be handled correctly!
@@ -536,9 +555,9 @@ public:
 		bDocking = b;
 	}
 
-	//-
+	//----
 
-	// windows management
+	// Windows management
 
 public:
 
@@ -660,6 +679,7 @@ private:
 		ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
 
 	};
+
 	vector<SurfingImGuiWindowAtributes> windowsAtributes;//handles only the manually pre added windows.
 
 	void loadAppSettings();
@@ -668,7 +688,8 @@ private:
 	//----
 
 	//TODO:
-	//to be marked outside the scope to populate widgets inside this execution point... ?
+	// To be marked outside the scope to populate widgets inside this execution point... ?
+	// Should use lambda functions here!
 
 	void beginExtra();
 	void endExtra();
@@ -681,7 +702,7 @@ private:
 
 	//----
 
-	// docking helpers
+	// Docking helpers
 
 public:
 
@@ -690,7 +711,7 @@ public:
 
 	//----
 
-	// Docking Layout Engine for Layout presets
+	// Docking Layout Engine for Layout Presets Engine
 
 	// ImGui layouts engine
 	// on each layout preset we store:
@@ -765,6 +786,7 @@ public:
 		setImGuiDocking(true);
 		setImGuiDockingModeCentered(true);
 		setImGuiAutodraw(true);
+
 		setup();
 	}
 
@@ -774,9 +796,11 @@ public:
 	}
 
 public:
+
 	void drawSpecialWindowsPanel();
 
 private:
+
 #define LAYOUT_WINDOW_WIDTH 150
 
 	void updateLayout();

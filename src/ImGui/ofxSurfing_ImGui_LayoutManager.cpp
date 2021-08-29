@@ -100,10 +100,12 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	// create folders if required
 	if (bAutoSaveSettings) {
 		ofxImGuiSurfing::CheckFolder(path_Global);
+
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
-	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel  + "AppSettings.json";//this allow multiple addons instaces with settings
+	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
 
@@ -868,7 +870,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	// refresh layout
 	widgetsManager.refreshLayout(); // calculate sizes realted to window shape/size
 
-	if (surfingImGuiMode == !ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
+	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
 		// set default font
 		setDefaultFont();

@@ -4,6 +4,8 @@
 #include "ofMain.h"
 #include "ofxImGui.h" 
 
+#define DISABLE_ID_PUSH_POP
+
 namespace ofxImGuiSurfing
 {
 	struct ofParamUniqueName
@@ -63,12 +65,17 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void push() {
 			inc();
+
+#ifndef DISABLE_ID_PUSH_POP
 			ImGui::PushID(ofToString(index).c_str());
+#endif
 		}
 
 		//--------------------------------------------------------------
 		void pop() {
+#ifndef DISABLE_ID_PUSH_POP
 			ImGui::PopID();
+#endif
 		}
 
 	};
