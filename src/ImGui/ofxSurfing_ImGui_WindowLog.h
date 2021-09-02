@@ -102,10 +102,11 @@ namespace ofxImGuiSurfing {
 			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
 			ImGui::BeginChild("Logs");
 			auto logs = mLog;
-			for each (string l in logs)
-			{
-				ImGui::TextWrapped("%s", l.c_str());
-			}
+            //macOS bug
+//			for each (string l in logs)
+//			{
+//				ImGui::TextWrapped("%s", l.c_str());
+//			}
 			ImGui::EndChild();
 			ImGui::End();
 		}
