@@ -168,6 +168,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline float getPanelWidth()
+	{
+		return ImGui::GetContentRegionAvail().x;
+	}
+
+	//--------------------------------------------------------------
 	inline float getWidgetsWidth(int amntColumns = -1)
 	{
 		float w;
@@ -240,6 +246,12 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddSpaceY(int spacingy = 2)
 	{
+		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacingSmall()
+	{
+		int spacingy = 1;
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
 	//--------------------------------------------------------------

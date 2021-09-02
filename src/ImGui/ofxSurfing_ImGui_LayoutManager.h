@@ -166,7 +166,17 @@ public:
 		widgetsManager.refresh(); // update sizes to current window shape
 	}
 	//--------------------------------------------------------------
-	void clear()
+	void refreshLayout()
+	{
+		widgetsManager.refreshLayout(); // update sizes to current window shape
+	}
+	//--------------------------------------------------------------
+	void clearStyles()
+	{
+		widgetsManager.clear(); // update sizes to current window shape
+	}
+	//--------------------------------------------------------------
+	void clear()//->legacy api
 	{
 		widgetsManager.clear(); // update sizes to current window shape
 	}
@@ -403,9 +413,10 @@ public:
 	ofParameterGroup params_Advanced{ "Params Advanced" };
 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
+	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
-	ofParameter<bool> bMinimize{ "Minimize", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
+
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 

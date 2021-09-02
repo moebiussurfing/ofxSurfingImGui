@@ -1,7 +1,8 @@
 #include "ofxSurfing_ImGui_LayoutManager.h"
 
 //--------------------------------------------------------------
-ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager() {
+ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
+{
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
 	params_Advanced.add(bAutoResize);
@@ -49,6 +50,7 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 
 //--
 
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode) {
 	surfingImGuiMode = mode;
 
@@ -104,7 +106,7 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
-	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel  + "AppSettings.json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
@@ -113,6 +115,8 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 
 	// add the basic param settings
 	if (!bUseLayoutPresetsManager) {
+
+		params_AppSettings.clear();
 		params_AppSettings.add(params_Advanced);
 
 		// startup

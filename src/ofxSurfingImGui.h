@@ -105,7 +105,8 @@ using namespace ofxImGuiSurfing;
 
 	if (ImGui::TreeNode("_Tree"))
 	{
-		//..
+		//guiManager.refreshLayout();
+		//.. -> widgets
 		ImGui::TreePop();
 	}
 
@@ -117,7 +118,8 @@ using namespace ofxImGuiSurfing;
 	ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 	if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 	{
-		//..
+		//guiManager.refreshLayout();
+		//.. -> widgets
 	}
 
 	//--
@@ -129,7 +131,8 @@ using namespace ofxImGuiSurfing;
 	_flagt |= ImGuiTreeNodeFlags_Framed;
 	if (ImGui::TreeNodeEx("_TreeEx", _flagt))
 	{
-		//..
+		//guiManager.refreshLayout();
+		//.. -> widgets
 		ImGui::TreePop();
 	}
 

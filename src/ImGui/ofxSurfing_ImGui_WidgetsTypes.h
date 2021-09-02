@@ -354,6 +354,7 @@ namespace ofxImGuiSurfing
 			//----
 
 			auto ptype = aparam.type();
+
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
@@ -424,12 +425,24 @@ namespace ofxImGuiSurfing
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
+				case OFX_IM_TOGGLE_SMALL_BORDER:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
+					break;
+
 				case OFX_IM_TOGGLE_BIG:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
 					break;
 
+				case OFX_IM_TOGGLE_BIG_BORDER:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
+					break;
+
 				case OFX_IM_TOGGLE_BIG_XXL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
+					break;
+
+				case OFX_IM_TOGGLE_BIG_XXL_BORDER:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
@@ -691,11 +704,12 @@ namespace ofxImGuiSurfing
 			return bReturn;
 		}
 
-		//--
+		//-----
 
-		// groups
+		// Groups
 
 		//TODO:
+
 	public:
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group)

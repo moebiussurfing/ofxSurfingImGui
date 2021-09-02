@@ -14,6 +14,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
 
 		// bool
+
 		// button
 		OFX_IM_BUTTON_SMALL,
 		OFX_IM_BUTTON_BIG,
@@ -23,6 +24,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
+		// border
+		OFX_IM_TOGGLE_SMALL_BORDER,
+		OFX_IM_TOGGLE_BIG_BORDER,
+		OFX_IM_TOGGLE_BIG_XXL_BORDER,
 		// rounded
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
