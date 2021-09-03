@@ -580,7 +580,8 @@ namespace ofxImGuiSurfing
 		auto result = false;
 		auto tmpRef = parameter.get();
 
-		auto uniqueName = (parameter.getName().c_str());
+		auto uniqueName = (("##combo" + parameter.getName()).c_str());
+		//auto uniqueName = (parameter.getName().c_str());
 
 		ImGui::PushID(uniqueName);
 		if (ImGui::BeginCombo((parameter.getName().c_str()), labels.at(parameter.get()).c_str()))

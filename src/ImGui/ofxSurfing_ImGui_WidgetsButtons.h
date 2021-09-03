@@ -15,7 +15,9 @@
 #include "imgui_internal.h"
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
+
 #include "ofxSurfing_Timers.h"
+//#include "ofxSurfingHelpers.h"
 
 //------------------------------
 
@@ -39,7 +41,7 @@ namespace ofxImGuiSurfing
 		bool bPre = tmpRef;
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
-		if (h == -1) h =2* ofxImGuiSurfing::getWidgetsHeightRelative();
+		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -130,10 +132,24 @@ namespace ofxImGuiSurfing
 
 	// TODO: seems not working well linked to the param.. requires better unique name?
 	//--------------------------------------------------------------
-	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = true)
+	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
+		// border when selected
+		float a = 0.5f;
+		float borderLineWidth = 1.0;
+		ImGuiStyle *style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		// blink
+		if (bBlink) {
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, 0.25, 0.75);
+			borderLineColor= ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		//-
+
 		bool bDrawBorder = true;
-		//bool bDrawBorder = false;
 
 		std::string name = parameter.getName();
 		auto tmpRef = parameter.get();
@@ -146,12 +162,6 @@ namespace ofxImGuiSurfing
 		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		//if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 		//if (h == -1) h = BUTTON_BIG_HEIGHT / 2;
-
-		// border when selected
-		ImGuiStyle *style = &ImGui::GetStyle();
-		ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
-		float borderLineWidth = 1.0;
-
 
 		bool _boolToggle = tmpRef;  // default pre value, the button is disabled 
 
@@ -260,7 +270,7 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
-		
+
 		//-
 
 		bool bPre = tmpRef;
@@ -272,7 +282,7 @@ namespace ofxImGuiSurfing
 		bool b = tmpRef;
 
 		if (bBlink) {
-			const ImVec4 c_= style->Colors[ImGuiCol_TextDisabled];
+			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
 			if (blinkValue == -1) {
 				blinkValue = ofxSurfingHelpers::getFadeBlink();
@@ -625,7 +635,7 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 
 		//ImGui::Dummy(ImVec2(0, 2));
-		
+
 		//TODO: add return
 		// look into check box widget
 		return bchanged;

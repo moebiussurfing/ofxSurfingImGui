@@ -286,8 +286,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
+	// hardcoded settings
 	bool bRestore = true;
 	bool bMouse = false;
+	//bool bViewport = true;//TODO:
 
 	if (bDocking) flags += ImGuiConfigFlags_DockingEnable;
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;

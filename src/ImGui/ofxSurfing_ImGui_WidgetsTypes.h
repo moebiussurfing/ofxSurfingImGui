@@ -425,24 +425,36 @@ namespace ofxImGuiSurfing
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 					break;
 
-				case OFX_IM_TOGGLE_SMALL_BORDER:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
-					break;
-
 				case OFX_IM_TOGGLE_BIG:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_BORDER:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_XXL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
 					break;
 
+				case OFX_IM_TOGGLE_SMALL_BORDER:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
+					break;
+
+				case OFX_IM_TOGGLE_BIG_BORDER:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
+					break;
+
 				case OFX_IM_TOGGLE_BIG_XXL_BORDER:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
+					break;
+
+				case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
+					break;
+
+				case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true, true);
+					break;
+
+				case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
+					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
