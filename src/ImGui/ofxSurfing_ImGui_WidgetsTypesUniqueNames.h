@@ -4,7 +4,7 @@
 #include "ofMain.h"
 #include "ofxImGui.h" 
 
-#define DISABLE_ID_PUSH_POP
+//#define DISABLE_ID_PUSH_POP
 
 namespace ofxImGuiSurfing
 {

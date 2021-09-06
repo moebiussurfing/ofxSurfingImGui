@@ -114,26 +114,30 @@ using namespace ofxImGuiSurfing;
 
 	// 2.2 COLLAPSING PANEL
 
-	bool bOpen = false;
-	ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-	if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 	{
-		//guiManager.refreshLayout();
-		//.. -> widgets
+		bool bOpen = false;
+		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
+		{
+			//guiManager.refreshLayout();
+			//.. -> widgets
+		}
 	}
 
 	//--
 
 	// 2.3 treeEx - TREE WITH FLAGS
 
-	bool bOpen = true;
-	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-	_flagt |= ImGuiTreeNodeFlags_Framed;
-	if (ImGui::TreeNodeEx("_TreeEx", _flagt))
 	{
-		//guiManager.refreshLayout();
-		//.. -> widgets
-		ImGui::TreePop();
+		bool bOpen = true;
+		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+		_flagt |= ImGuiTreeNodeFlags_Framed;
+		if (ImGui::TreeNodeEx("_TreeEx", _flagt))
+		{
+			//guiManager.refreshLayout();
+			//.. -> widgets
+			ImGui::TreePop();
+		}
 	}
 
 	//--

@@ -66,6 +66,10 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 		setup(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
+	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
+		setupDocking();
+		break;
+
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
 		setImGuiAutodraw(true);
@@ -102,7 +106,6 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	// create folders if required
 	if (bAutoSaveSettings) {
 		ofxImGuiSurfing::CheckFolder(path_Global);
-
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
@@ -287,9 +290,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
 	// hardcoded settings
-	bool bRestore = true;
-	bool bMouse = false;
 	//bool bViewport = true;//TODO:
+	bool bRestore = true;
+	//bool bMouse = true;
+	bool bMouse = false;
 
 	if (bDocking) flags += ImGuiConfigFlags_DockingEnable;
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;

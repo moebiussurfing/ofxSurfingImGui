@@ -404,7 +404,7 @@ namespace ofxImGuiSurfing
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					uniqueName.pop();
+					//uniqueName.pop();
 					bReturn = false;
 				}
 				break;
@@ -528,14 +528,15 @@ namespace ofxImGuiSurfing
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//ImGui::PushItemWidth(ofxImGuiSurfing::getPanelWidth() - WIDGET_LABEL_WIDTH);
+					//ImGui::PushItemWidth(ofxImGuiSurfing::getPanelWidth() - WIDGET_LABEL_WIDTH);
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
 					bReturn = false;
-					ImGui::PopItemWidth();
+					//ImGui::PopItemWidth();
 				}
 				break;
 
@@ -596,14 +597,15 @@ namespace ofxImGuiSurfing
 				case OFX_IM_SLIDER:
 				case OFX_IM_INACTIVE:
 				{
-					ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
+					//ImGui::PushItemWidth(ofxImGuiSurfing::getPanelWidth() - WIDGET_LABEL_WIDTH);
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
 					bReturn = false;
-					ImGui::PopItemWidth();
+					//ImGui::PopItemWidth();
 				}
 				break;
 
@@ -837,7 +839,7 @@ namespace ofxImGuiSurfing
 
 			// Here, this is not the root/first group.
 			// We go populate the params widgets
-			
+
 			for (auto parameter : group)
 			{
 				// group

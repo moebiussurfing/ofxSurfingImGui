@@ -76,6 +76,7 @@ namespace ofxImGuiSurfing
 	enum SurfingImGuiInstantiationMode {
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end
+		IM_GUI_MODE_INSTANTIATED_DOCKING,
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGUi instance, no other addons.
 		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame)
@@ -297,7 +298,7 @@ public:
 	bool beginWindow(int index) { //-> legacy api
 		return beginWindowSpecial(index);
 	}
-	
+
 	//----
 
 	/*
@@ -532,7 +533,7 @@ private:
 	string path_ImLayouts;
 	string path_AppSettings;
 	string path_LayoutSettings;
-	
+
 	string path_SubPathLabel = "";
 
 	//bool bAutoSaveSettings = true;
@@ -784,13 +785,18 @@ public:
 
 	// some api simplificators
 	//--------------------------------------------------------------
-	void startup() {
-		setupLayout(4);
+	void startup()
+	{
+		if (bDocking)
+		{
+			setupLayout(4); // Default Layout with 4 presets.
+		}
 	}
 
 	//--------------------------------------------------------------
 	void setupDocking() {
-		surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
+		surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
+		//surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
 
 		//setupLayout(4);
 		setAutoSaveSettings(true);
