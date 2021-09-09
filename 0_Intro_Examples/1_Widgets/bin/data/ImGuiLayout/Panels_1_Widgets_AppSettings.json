@@ -1,0 +1,11 @@
+{
+    "AppSettings": {
+        "Params_Advanced": {
+            "Advanced": "0",
+            "Auto_Resize": "1",
+            "Debug": "0",
+            "Keys": "1",
+            "Minimize": "1"
+        }
+    }
+}

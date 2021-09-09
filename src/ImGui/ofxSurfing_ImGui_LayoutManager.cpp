@@ -67,6 +67,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
+		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
 		setupDocking();
 		break;
 
@@ -412,8 +413,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-		AddBigToggle(bGui_LayoutsPanels, _w, _h, true);
-		AddBigToggle(bGui_LayoutsPresets, _w, _h, true);
+		AddBigToggle(bGui_LayoutsPanels, _w, _h, false);
+		AddBigToggle(bGui_LayoutsPresets, _w, _h, false);
 		//AddToggleRoundedButton(bGui_LayoutsPanels);
 		//AddToggleRoundedButton(bGui_LayoutsPresets);
 		//AddToggleRoundedButton(bGui_LayoutsExtra);
@@ -1241,6 +1242,11 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_RectPanels.add(r2);
 	params_RectPanels.add(r3);
 	params_AppSettings.add(params_RectPanels);
+
+	//-
+
+	//// gui - > wich panels enabled but overwritten by Layout Presets Engine
+	//params_AppSettings.add(params_Panels);
 
 	//--
 
@@ -2111,8 +2117,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		// layout
 		float _hUnit = ofxImGuiSurfing::getWidgetsHeightRelative();
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresets, _w100, _hWid, true);
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, true);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresets, _w100, _hWid, false);
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, false);
 		//ofxImGuiSurfing::AddToggleRoundedButton(bAutoResizePanels);
 
 		if (bLandscape) {//landscape

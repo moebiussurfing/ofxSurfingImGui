@@ -341,48 +341,93 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec2>& parameter)
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit)
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
-		{
-			parameter.set(tmpRef);
+		if (!bsplit) {
+			if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+			{
+				parameter.set(tmpRef);
 
-			return true;
+				return true;
+			}
+			return false;
 		}
+		else
+		{
+			bool bchanged = false;
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+			if (bchanged)
+			{
+				parameter.set(tmpRef);
 
-		return false;
+				return true;
+			}
+			return false;
+		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec3>& parameter)
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit)
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat3((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
-		{
-			parameter.set(tmpRef);
+		if (!bsplit) {
+			if (ImGui::SliderFloat3((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+			{
+				parameter.set(tmpRef);
 
-			return true;
+				return true;
+			}
+			return false;
 		}
+		else
+		{
+			bool bchanged = false;
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
+			if (bchanged)
+			{
+				parameter.set(tmpRef);
 
-		return false;
+				return true;
+			}
+			return false;
+		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec4>& parameter)
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit)
 	{
 		auto tmpRef = parameter.get();
 
-		if (ImGui::SliderFloat4((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
-		{
-			parameter.set(tmpRef);
+		if (!bsplit) {
+			if (ImGui::SliderFloat4((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
+			{
+				parameter.set(tmpRef);
 
-			return true;
+				return true;
+			}
+			return false;
 		}
+		else
+		{
+			bool bchanged = false;
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
+			bchanged += ImGui::SliderFloat(((parameter.getName() + " W").c_str()), &tmpRef.w, parameter.getMin().w, parameter.getMax().w);
+			if (bchanged)
+			{
+				parameter.set(tmpRef);
 
-		return false;
+				return true;
+			}
+			return false;
+		}
 	}
 
 #endif

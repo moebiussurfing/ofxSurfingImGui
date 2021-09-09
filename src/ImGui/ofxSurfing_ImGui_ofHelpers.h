@@ -18,7 +18,8 @@
 #define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
 */
 
-#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
+//TODO:
+#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;//nothing
 #define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
 
 //--
@@ -41,9 +42,9 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<glm::ivec3>& parameter);
 	bool AddParameter(ofParameter<glm::ivec4>& parameter);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter);
-	bool AddParameter(ofParameter<glm::vec3>& parameter);
-	bool AddParameter(ofParameter<glm::vec4>& parameter);
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false);//split each arg to big sliders
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false);
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false);
 #endif
 
 	bool AddParameter(ofParameter<ofVec2f>& parameter);

@@ -548,6 +548,10 @@ public:
 
 	// Some tweaked settings modes
 	//--------------------------------------------------------------
+	void setSettingsFilename(string path) { // must call before setup. To allow multiple instances/windows settings
+		path_SubPathLabel = path + "_";
+	}
+	//--------------------------------------------------------------
 	void setSettingsPathLabel(string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
 	}

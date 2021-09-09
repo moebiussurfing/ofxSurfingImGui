@@ -144,7 +144,7 @@ namespace ofxImGuiSurfing
 		if (bBlink) {
 			float blinkValue = ofxSurfingHelpers::getFadeBlink();
 			a = ofClamp(blinkValue, 0.25, 0.75);
-			borderLineColor= ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
 		//-
@@ -508,16 +508,16 @@ namespace ofxImGuiSurfing
 		bool bchanged = false;
 		bool bref = v;
 
+		float width;
+		float radius;
+		float height;
+
 		string n = "##TOGGLEBUTTON" + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
 			ImVec4* colors = ImGui::GetStyle().Colors;
 			ImVec2 p = ImGui::GetCursorScreenPos();
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-			float width;
-			float radius;
-			float height;
 
 			if (vv.x == -1 && vv.y == -1)
 			{
@@ -623,18 +623,19 @@ namespace ofxImGuiSurfing
 			//draw_list->AddCircle(pt, 2, cc);
 			draw_list->AddText(pt, ct, str_id);
 
-			const float offset_xc = 0;
-			const float _yy = 4;
-			//const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
-			const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y + _yy;
-			const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
-			ImGui::SetCursorScreenPos(pc);
+			//const float offset_xc = 0;
+			//const float _yy = 4;
+			////const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y;
+			//const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y + _yy;
+			//const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
+			//ImGui::SetCursorScreenPos(pc);
+			////ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
+			const auto sizetx = ImGui::CalcTextSize(str_id);
+			//ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
+			ImGui::Dummy(ImVec2(/*width +*/ sizetx.x + ImGui::GetStyle().FramePadding.x * 1.0f, 0));
 
-			//ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetStyle().IndentSpacing * 0.5f);
 		}
 		ImGui::PopID();
-
-		//ImGui::Dummy(ImVec2(0, 2));
 
 		//TODO: add return
 		// look into check box widget
