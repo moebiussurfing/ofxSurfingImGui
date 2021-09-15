@@ -2,7 +2,8 @@
 
 #include "ofMain.h"
 
-#include "ofxImGui.h"
+#include "ofxSurfingImGui.h"
+//#include "ofxImGui.h"
 #include "imgui_stdlib.h"
 #include "imgui_node_canvas.h"
 
@@ -97,4 +98,7 @@ public:
         }
         return nullptr;
     };
+
+	ofParameter<bool> bEdit;
+
 };

@@ -5,12 +5,10 @@ void ofApp::setup() {
 
 	ofSetLogLevel(OF_LOG_NOTICE);
 	ofSetFrameRate(60);
-	//ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(1920, 25);
 	ofSetWindowTitle("Mosaic Engine Tester");
 
-	//guiManager.setImGuiAutodraw(true);
-	//guiManager.setup();
-	this->gui.setup();
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//-
 
@@ -72,7 +70,7 @@ void ofApp::draw()
 	ofSetLineWidth(1);
 
 
-	this->gui.begin();
+	this->guiManager.begin();
 	{
 		ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
@@ -90,19 +88,16 @@ void ofApp::draw()
 				//node->drawObjectNodeGui( _nodeCanvas );
 				//node->draw();
 				node->drawObjectNodeGui(nodeCanvas);
-
 			}
-
 		}
 
 		// Close canvas
 		if (isCanvasVisible) nodeCanvas.End();
+
+		//ImGui::ShowMetricsWindow();
 	}
-
-	//ImGui::ShowMetricsWindow();
-
 	// We're done drawing to IMGUI
-	this->gui.end();
+	this->guiManager.end();
 
 
 	canvas.end();

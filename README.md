@@ -430,6 +430,15 @@ Using [thedmd/imgui-node-editor](https://github.com/thedmd/imgui-node-editor)
   </p>
 </details>
 
+<details>
+  <summary>6_7_DaanMosaic3</summary>
+  <p>
+
+Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisualProgramming stuff](https://github.com/d3cod3/ofxVisualProgramming)  
+![image](/docs/6_7_DaanMosaic3.PNG?raw=true "image")  
+  </p>
+</details>
+
 5_5_ImNodes_thedmd-Blueprints [BROKEN]  
 5_6_ImNodes-Graph-ImGuizmo [BROKEN]  
 

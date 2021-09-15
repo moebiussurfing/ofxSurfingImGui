@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 
+#include "ofxSurfingImGui.h"
 #include "simpleNode.h"
 #include "ofxInfiniteCanvas.h"
 #include "imgui_node_canvas.h"
@@ -34,10 +35,9 @@ public:
 	std::map<int, std::shared_ptr<simpleNode>> nodesMap;
 
 	// GUI
-	ofxImGui::Gui gui;
+	ofxSurfing_ImGui_Manager guiManager;
+
 	ofxInfiniteCanvas               canvas;
-	//ofEasyCam                       easyCam;
 	ofRectangle                     canvasViewport;
-	//ofxImGui::Gui*                  ofxVPGui;
 	ImGuiEx::NodeCanvas             nodeCanvas;
 };
