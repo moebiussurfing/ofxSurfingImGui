@@ -20,6 +20,7 @@ void ofApp::setup() {
 
 	updateCanvasViewport();
 
+	//-
 
 	// TESTING SCENARIO, ADD 3 NODES
 
@@ -32,12 +33,13 @@ void ofApp::setup() {
 		it->second->setup();
 	}
 
+	//-
 
 	// TESTING CONNECT/DISCONNECT
 
-//	nodesMap[0]->connectFrom(nodesMap, 2, 0, 0, VP_LINK_NUMERIC);
-//	nodesMap[1]->connectFrom(nodesMap, 2, 1, 1, VP_LINK_STRING);
-//	nodesMap[1]->connectFrom(nodesMap, 2, 0, 1, VP_LINK_STRING);
+	//	nodesMap[0]->connectFrom(nodesMap, 2, 0, 0, VP_LINK_NUMERIC);
+	//	nodesMap[1]->connectFrom(nodesMap, 2, 1, 1, VP_LINK_STRING);
+	//	nodesMap[1]->connectFrom(nodesMap, 2, 0, 1, VP_LINK_STRING);
 	// new way ?
 	//nodesMap[0]->parameters.front()->connectWith( nodesMap[1]->parameters.front() );
 }
@@ -63,43 +65,43 @@ void ofApp::draw()
 	nodeCanvas.SetTransform(canvas.getTranslation(), canvas.getScale());//canvas.getScrollPosition(), canvas.getScale(true) );
 
 	canvas.begin(canvasViewport);
-
-	ofEnableAlphaBlending();
-	ofSetCurveResolution(50);
-	ofSetColor(255);
-	ofSetLineWidth(1);
-
-
-	this->guiManager.begin();
 	{
-		ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
+		ofEnableAlphaBlending();
+		ofSetCurveResolution(50);
+		ofSetColor(255);
+		ofSetLineWidth(1);
 
-		bool isCanvasVisible = nodeCanvas.Begin("ofxVPNodeCanvas");
+		//-
 
-		// END VP DRAW
+		this->guiManager.begin();
+		{
+			ImGui::SetNextWindowPos(canvasViewport.getTopLeft(), ImGuiCond_Always);
+			ImGui::SetNextWindowSize(ImVec2(canvasViewport.width, canvasViewport.height), ImGuiCond_Always);
 
-		if (isCanvasVisible) {
-			// draw nodes (will be in PatchObject)
-			for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++) {
-				shared_ptr<simpleNode> node = it->second;
+			bool isCanvasVisible = nodeCanvas.Begin("ofxVPNodeCanvas");
 
-				// Let objects draw their own Gui
-				//node->drawObjectNodeGui( _nodeCanvas );
-				//node->draw();
-				node->drawObjectNodeGui(nodeCanvas);
+			// END VP DRAW
+
+			if (isCanvasVisible) {
+				// draw nodes (will be in PatchObject)
+				for (map<int, shared_ptr<simpleNode>>::iterator it = nodesMap.begin(); it != nodesMap.end(); it++) {
+					shared_ptr<simpleNode> node = it->second;
+
+					// Let objects draw their own Gui
+					node->drawObjectNodeGui(nodeCanvas);
+				}
 			}
+
+			// Close canvas
+			if (isCanvasVisible) nodeCanvas.End();
+
+			// Debug
+			//ImGui::ShowMetricsWindow();
 		}
-
-		// Close canvas
-		if (isCanvasVisible) nodeCanvas.End();
-
-		//ImGui::ShowMetricsWindow();
+	
+		// We're done drawing to IMGUI
+		this->guiManager.end();
 	}
-	// We're done drawing to IMGUI
-	this->guiManager.end();
-
-
 	canvas.end();
 
 	ofDisableAlphaBlending();
@@ -153,6 +155,8 @@ void ofApp::mouseReleased(ofMouseEventArgs &e) {
 
 	canvas.mouseReleased(e);
 }
+
+//--------------------------------------------------------------
 void ofApp::mouseScrolled(ofMouseEventArgs &e) {
 
 	if (ImGui::IsAnyItemActive() || nodeCanvas.isAnyNodeHovered() || ImGui::IsAnyItemHovered())// | ImGui::IsAnyWindowHovered() )
@@ -161,6 +165,7 @@ void ofApp::mouseScrolled(ofMouseEventArgs &e) {
 	canvas.mouseScrolled(e);
 }
 
+//--------------------------------------------------------------
 void ofApp::updateCanvasViewport() {
 	// Map ofxInfiniteCanvas coords to node canvas. Any other canvas engine should be easy to port.
 	canvasViewport.set(0, 0, ofGetWindowWidth(), ofGetWindowHeight());

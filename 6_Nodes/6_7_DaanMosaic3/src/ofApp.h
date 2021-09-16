@@ -4,8 +4,8 @@
 
 #include "ofxSurfingImGui.h"
 #include "simpleNode.h"
-#include "ofxInfiniteCanvas.h"
 #include "imgui_node_canvas.h"
+#include "ofxInfiniteCanvas.h"
 
 class ofApp : public ofBaseApp {
 
@@ -24,12 +24,6 @@ public:
 	void mouseReleased(ofMouseEventArgs &e);
 	void mouseScrolled(ofMouseEventArgs &e);
 
-	void drawWidgets();
-	bool bOpen0 = true;
-	bool bOpen1 = true;
-	bool bOpen2 = false;
-	bool initialized = false;
-
 	void updateCanvasViewport();
 
 	std::map<int, std::shared_ptr<simpleNode>> nodesMap;
@@ -37,7 +31,7 @@ public:
 	// GUI
 	ofxSurfing_ImGui_Manager guiManager;
 
-	ofxInfiniteCanvas               canvas;
-	ofRectangle                     canvasViewport;
-	ImGuiEx::NodeCanvas             nodeCanvas;
+	ofxInfiniteCanvas canvas;
+	ofRectangle canvasViewport;
+	ImGuiEx::NodeCanvas nodeCanvas;
 };
