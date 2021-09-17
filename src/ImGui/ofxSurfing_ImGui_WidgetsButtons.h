@@ -281,7 +281,8 @@ namespace ofxImGuiSurfing
 
 		bool b = tmpRef;
 
-		if (bBlink) {
+		if (bBlink) 
+		{
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
 			if (blinkValue == -1) {
@@ -364,7 +365,8 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		if (bBlink && b) {
+		if (bBlink && b) 
+		{
 			ImGui::PopStyleColor();
 		}
 

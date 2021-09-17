@@ -12,16 +12,26 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags /*= ImGuiTreeNodeFlags_DefaultOpen*/)//fails..
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags /*= ImGuiTreeNodeFlags_DefaultOpen*/)//fails..
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
 		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!
 		// but these methods should work too.
 
-		if (!ImGui::CollapsingHeader(group.getName().c_str(), flags))
-			//if (!ImGui::TreeNodeEx(group.getName().c_str()))
-			//if (!ImGui::TreeNode(group.getName().c_str()))
+		//-
+
 		{
+			ImGui::PushID(group.getName().c_str());
+			//ImGui::PushID(("##" + group.getName()).c_str());
+		}
+
+		bool bOpened = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+		//bOpened = (!ImGui::TreeNodeEx(group.getName().c_str()));
+		//bOpened = (!ImGui::TreeNode(group.getName().c_str()));
+
+		if (!bOpened)
+		{
+			ImGui::PopID();
 			return;
 		}
 
@@ -34,7 +44,9 @@ namespace ofxImGuiSurfing
 			if (parameterGroup)
 			{
 				// Recurse through contents.
-				AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None);
+				AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None); // -> default: all with same style and non indent ?
+				//ImGui::Indent();
+
 				continue;
 			}
 
@@ -111,11 +123,21 @@ namespace ofxImGuiSurfing
 			// don't debug if it's unnamed
 			if (parameter->getName() == "" && parameter->getName() == " ")
 				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
+
+			//-
+
+			//if (parameterGroup) ImGui::Unindent();
 		}
+
+		//-
 
 		{
 			// End tree.
 			//ImGui::TreePop();
+		}
+
+		{
+			ImGui::PopID();
 		}
 	}
 
