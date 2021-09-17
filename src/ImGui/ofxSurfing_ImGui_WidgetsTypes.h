@@ -96,7 +96,7 @@ namespace ofxImGuiSurfing
 		// To queue the group styles
 		vector<SurfingImGuiTypesGroup_Style> groupsStyles;
 
-		// to queue all the rendered params to pushId's
+		// To queue all the rendered params to pushId's
 		ofParamUniqueName uniqueName;
 
 		//--------------------------------------------------------------
@@ -910,7 +910,7 @@ namespace ofxImGuiSurfing
 
 				if (parameterGroup) // detects nested groups
 				{
-					// ->  unique id for repeated params inside many groups
+					// -> unique id for repeated params inside many groups
 					ImGui::PushID(parameterGroup->getName().c_str());
 
 					{
@@ -1051,22 +1051,43 @@ namespace ofxImGuiSurfing
 					// no styles yet for unknow types!
 
 #if OF_VERSION_MINOR >= 10
+
 					auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
 					if (parameterVec2f)
 					{
-						AddParameter(*parameterVec2f);
+						//AddParameter(*parameterVec2f);
+						auto c = getStyle(*parameterVec2f);
+						if (c.name != "-1") AddParameter(*parameterVec2f);
+						else {
+							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec2f, true);
+							else AddParameter(*parameterVec2f);
+						}
 						continue;
 					}
+
 					auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
 					if (parameterVec3f)
 					{
-						AddParameter(*parameterVec3f);
+						//AddParameter(*parameterVec3f);
+						auto c = getStyle(*parameterVec3f);
+						if (c.name == "-1") AddParameter(*parameterVec3f);
+						else {
+							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec3f, true);
+							else AddParameter(*parameterVec3f);
+						}
 						continue;
 					}
+
 					auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
 					if (parameterVec4f)
 					{
-						AddParameter(*parameterVec4f);
+						//AddParameter(*parameterVec4f);
+						auto c = getStyle(*parameterVec4f);
+						if (c.name != "-1") AddParameter(*parameterVec4f);
+						else {
+							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec4f, true);
+							else AddParameter(*parameterVec4f);
+						}
 						continue;
 					}
 #endif

@@ -459,15 +459,20 @@ public:
 public:
 
 	// An advanced/extra common panel
-	// snippet to copy/paste into out orApp:
+	// Snippet to copy/paste into out ofApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//guiManager.drawAdvancedSubPanel();
 	//--------------------------------------------------------------
 	void drawAdvancedControls() {
 		drawAdvanced();
 	}
+
+	// Snippet to copy/paste into out ofApp:
+	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
+	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
-	void drawAdvanced() { // -> simpler call
+	void drawAdvanced() { // -> Simpler call. Use this.
 		ImGui::Spacing();
 		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
 		drawAdvancedSubPanel();

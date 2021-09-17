@@ -27,6 +27,7 @@ void ofApp::setup() {
 	separation.set("separation", 50, 1, 100);
 	params2.add(lineWidth);
 	params2.add(separation);
+
 	params.add(params2);
 
 	//params3.setName("paramsGroup3");// nested
@@ -39,6 +40,12 @@ void ofApp::setup() {
 	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	//params3.add(separation3.set("separation3", 50, 1, 100));
 	//params3.add(speed3.set("speed3", 0.5, 0, 1));
+
+	//--
+
+	// Customize Styles
+	guiManager.clearStyles();
+	guiManager.AddStyle(pos2, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 }
 
 //--------------------------------------------------------------
@@ -46,7 +53,10 @@ void ofApp::draw() {
 
 	guiManager.begin();
 	{
-		guiManager.beginWindow();
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		guiManager.beginWindow("ofApp", NULL, window_flags);
 		{
 			//if (ImGui::TreeNode("Tree"))
 			//{
@@ -59,16 +69,22 @@ void ofApp::draw() {
 			//guiManager.clear();
 			guiManager.AddGroup(params); // -> BUG: first level crashes!
 
-			ImGui::Spacing();
-			//ofxImGuiSurfing::AddParameter(pos1, true);
-			guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
-			ImGui::Spacing();
-			
-			ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
-			ImGui::SameLine();
-			ofxImGuiSurfing::AddToggleRoundedButton(bNext);
-			ImGui::SameLine();
-			ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
+			//ImGui::Spacing();
+			//
+			//// add a multidim parameter vec2/vec3/vec4
+			//// two api patterns can be used:
+			////ofxImGuiSurfing::AddParameter(pos1, true);
+			//guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+
+			//ImGui::Spacing();
+			//
+			//ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
+			//ImGui::SameLine();
+			//ofxImGuiSurfing::AddToggleRoundedButton(bNext);
+			//ImGui::SameLine();
+			//ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
+
+			guiManager.drawAdvancedControls();
 		}
 		guiManager.endWindow();
 	}

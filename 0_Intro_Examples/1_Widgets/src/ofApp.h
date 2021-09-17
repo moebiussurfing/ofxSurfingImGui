@@ -12,8 +12,6 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-//#define surfingImGui ofxSurfing_ImGui_Manager
-//namespace surfingImGui = ofxSurfing_ImGui_Manager;
 
 #define MAX_CAMERA_DISTANCE 500.0f
 
@@ -42,16 +40,17 @@ public:
 
     ofParameter<float> lineWidth;
     ofParameter<float> separation;
- //   ofParameter<float> speed;
- //   ofParameter<int> shapeType;
- //   ofParameter<int> size;
- //   ofParameter<int> shapeType2;
- //   ofParameter<int> amount2;
- //   ofParameter<int> size2;
- //   ofParameter<float> lineWidth3;
- //   ofParameter<float> separation3;
- //   ofParameter<float> speed3;
- //   ofParameter<int> shapeType3;
+
+	//ofParameter<float> speed;
+	//ofParameter<int> shapeType;
+	//ofParameter<int> size;
+	//ofParameter<int> shapeType2;
+	//ofParameter<int> amount2;
+	//ofParameter<int> size2;
+	//ofParameter<float> lineWidth3;
+	//ofParameter<float> separation3;
+	//ofParameter<float> speed3;
+	//ofParameter<int> shapeType3;
 	//ofParameter<float> valueKnob1{ "Value1", 0.5f, 0.f, 1.0f };
 	//ofParameter<float> valueKnob2{ "Value2", 5.f, -10.f, 10.0f };
 };
