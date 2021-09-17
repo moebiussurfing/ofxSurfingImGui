@@ -361,6 +361,9 @@ namespace ofxImGuiSurfing
 			bool isString = ptype == typeid(ofParameter<string>).name();
 			bool isColor = ptype == typeid(ofParameter<ofColor>).name();
 			bool isFloatColor = ptype == typeid(ofParameter<ofFloatColor>).name();
+			bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
+			bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
+			bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 
 			// is not called with groups here..
 			//bool isGroup = ptype == typeid(ofParameterGroup).name();
@@ -691,6 +694,65 @@ namespace ofxImGuiSurfing
 
 				else if (type == OFX_IM_COLOR_BOX)
 					ImGui::ColorButton("", tmpRef, flags);
+
+				uniqueName.pop();
+				bDone = true;
+			}
+
+			//-
+
+			// multidim vec2/vec3/vec4
+
+			else if (isMultiDimVec2)
+			{
+				uniqueName.push();
+
+				ofParameter<glm::vec2> p = aparam.cast<glm::vec2>();
+
+				switch (type)
+				{
+				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+				{
+					bReturn = ofxImGuiSurfing::AddParameter(p, true);
+				}
+				break;
+				}
+
+				uniqueName.pop();
+				bDone = true;
+			}
+			else if (isMultiDimVec3)
+			{
+				uniqueName.push();
+
+				ofParameter<glm::vec3> p = aparam.cast<glm::vec3>();
+
+				switch (type)
+				{
+				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+				{
+					bReturn = ofxImGuiSurfing::AddParameter(p, true);
+				}
+				break;
+				}
+
+				uniqueName.pop();
+				bDone = true;
+			}
+			else if (isMultiDimVec4)
+			{
+				uniqueName.push();
+
+				ofParameter<glm::vec4> p = aparam.cast<glm::vec4>();
+
+				switch (type)
+				{
+				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+				{
+					bReturn = ofxImGuiSurfing::AddParameter(p, true);
+				}
+				break;
+				}
 
 				uniqueName.pop();
 				bDone = true;

@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
+	ofSetWindowPosition(1920, 25);
 
 	guiManager.setSettingsFilename("1_Widgets"); // -> customize filename
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
@@ -59,7 +60,8 @@ void ofApp::draw() {
 			guiManager.AddGroup(params); // -> BUG: first level crashes!
 
 			ImGui::Spacing();
-			ofxImGuiSurfing::AddParameter(pos1, true);
+			//ofxImGuiSurfing::AddParameter(pos1, true);
+			guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 			ImGui::Spacing();
 			
 			ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
