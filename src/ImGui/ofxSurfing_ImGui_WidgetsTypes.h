@@ -809,6 +809,8 @@ namespace ofxImGuiSurfing
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bMustClose = false;
+			bool bMustHideGroup = false;
+			bool bMustHideHeader = false;
 
 			bool bOpen = false;
 			bool bHide = false;
