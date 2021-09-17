@@ -71,12 +71,12 @@ void ofApp::draw() {
 
 			//guiManager.clear();
 
-			// An ofParameterGroup
+			// an ofParameterGroup
 			guiManager.AddGroup(params); // -> BUG: first level crashes!
 
 			//ImGui::Spacing();
 
-			//// Add a multidim parameter vec2/vec3/vec4
+			//// add a multidim parameter vec2/vec3/vec4
 			//// two api patterns can be used:
 			////ofxImGuiSurfing::AddParameter(pos1, true);
 			//guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);

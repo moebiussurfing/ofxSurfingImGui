@@ -818,8 +818,12 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	//TODO:
+	// reset unique names
+	resetUniqueNames();
+	//resetIDs();
 	//widgetsManager.resetUniqueNames();
-	//resetIDs(); // reset unique names
+
+	//--
 
 	//static bool no_close = true;
 	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
@@ -860,7 +864,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
 
-	//-
+	//--
 
 	//// We specify a default position/size in case there's no data in the .ini file.
 	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.
@@ -878,12 +882,14 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//	//return;
 	//}
 
-	// refresh layout
+	// Refresh layout
 	widgetsManager.refreshLayout(); // calculate sizes realted to window shape/size
 
+	// When we are instantiating ImGui externally, not inside this addon,
+	// we don't handle the font and theme.
 	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
-		// set default font
+		// Set default font
 		setDefaultFont();
 	}
 

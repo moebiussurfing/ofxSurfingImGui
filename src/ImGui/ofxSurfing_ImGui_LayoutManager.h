@@ -191,6 +191,11 @@ public:
 	{
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
+	//--------------------------------------------------------------
+	void resetUniqueNames()
+	{
+		widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	}
 
 	//-
 
@@ -497,6 +502,11 @@ public:
 
 			if (!bHeader || (bHeader && b))
 			{
+				// autoresize
+				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+
+				//TODO:
+				// -> must be implemented
 				// reset window
 				if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
 					if (bReset_Window) {
@@ -505,12 +515,13 @@ public:
 					}
 				}
 
-				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+				//TODO:
+				// -> must be implemented
+				// debug
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 				if (bDebug) {
 					ImGui::Indent();
 					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-					//ofxImGuiSurfing::ToggleRoundedButton("Scene Viewport", &bPreviewSceneViewport);
 					AddToggleRoundedButton(bPreviewSceneViewport);
 					ImGui::Unindent();
 

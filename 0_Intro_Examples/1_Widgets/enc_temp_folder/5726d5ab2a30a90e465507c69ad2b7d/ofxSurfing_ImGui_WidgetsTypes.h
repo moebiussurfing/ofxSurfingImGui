@@ -784,8 +784,9 @@ namespace ofxImGuiSurfing
 
 		// Groups
 
-	public:
+		//TODO:
 
+	public:
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group)
 		{
@@ -805,11 +806,9 @@ namespace ofxImGuiSurfing
 	public:
 		//private:
 
-			//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
-			bool bMustClose = false;
-
 			bool bOpen = false;
 			bool bHide = false;
 
@@ -819,10 +818,9 @@ namespace ofxImGuiSurfing
 
 			if (uniqueName.getLevel() == 0)
 			{
-				std::string ss = "##" + group.getName();
-				ImGui::PushID(ss.c_str());
+				ImGui::PushID(("##_" + group.getName()).c_str());
 
-				//bool bCloseTree = false;
+				bool bCloseTree = false;
 
 				// If a group style is queued. we overwrite the default style
 				auto c = getStyleGroup(group);
@@ -833,8 +831,8 @@ namespace ofxImGuiSurfing
 				}
 
 				//bool bHide = false;
-				bHide = typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER;
-				bHide |= typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN;
+				bHide = (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER ||
+					typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
 
 				if (bHide)
 				{
@@ -842,7 +840,7 @@ namespace ofxImGuiSurfing
 					bOpen = true; // to avoid below skip. kind of open. just hidding header
 				}
 
-				// 1. Openings
+				// 1. openings
 				if (!bHide)
 				{
 					if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
@@ -860,14 +858,13 @@ namespace ofxImGuiSurfing
 					}
 					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 					{
-						// A. Height variable to amount widgets..
+						// A. height variable to amount widgets..
 						//auto& style = ImGui::GetStyle();
 						//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
 						//int h = 14;
 						//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
 						//int hhh = parameterGroup->size() * hratio * hh;
-
-						// B. Height hardcoded
+						// B. height hardcoded
 						int hhh = 200;
 
 						bOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
@@ -883,7 +880,7 @@ namespace ofxImGuiSurfing
 				uniqueName.pushGroup(); //TODO: should be in another place
 				uniqueName.setOpen(bOpen); //TODO:
 
-				// 2. Skip
+				// 2. skip
 				if (!bOpen)
 				{
 					//ImGui::PopID(); //TODO: BUG:
@@ -897,7 +894,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// To re calculate layout sizes
+			// measure layout sizes
 			refreshLayout();
 
 			//--
@@ -907,15 +904,14 @@ namespace ofxImGuiSurfing
 
 			for (auto parameter : group)
 			{
-				// Group
+				// group
 
-				// If the param is a group
 				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-				if (parameterGroup) // Will detect nested groups recursively
+
+				if (parameterGroup) // detects nested groups
 				{
-					// -> Unique id for possible name repeated params inside many groups.
-					std::string ss = parameterGroup->getName();
-					ImGui::PushID(ss.c_str());
+					// -> unique id for repeated params inside many groups
+					ImGui::PushID(parameterGroup->getName().c_str());
 
 					{
 						//if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
@@ -1008,11 +1004,8 @@ namespace ofxImGuiSurfing
 								//int h = 14;
 								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
 								//int hhh = parameterGroup->size() * hratio * hh;
-
 								// B. height hardcoded
 								int hhh = 200;
-
-								//-
 
 								//ImGui::Text((parameterGroup->getName() + ":").c_str());
 								bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
@@ -1048,23 +1041,21 @@ namespace ofxImGuiSurfing
 
 				//----
 
-				// Parameters, try everything we know how to handle.
-				// We will filter known styles for know types.
-				// Some params could not have styles types!
-				// Uses "ofxSurfing_ImGui_ofHelpers.h"
 
-				//TODO:
-				// Should add styles yet for unknow types!
+				// Parameter, try everything we know how to handle.
+				// but do not have styles types!
 
 				{
-					//-
-
-					// Multidim params vec2/vec3/vec4
+					// Uses "ofxSurfing_ImGui_ofHelpers.h"
+					//TODO:
+					// no styles yet for unknow types!
 
 #if OF_VERSION_MINOR >= 10
+
 					auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
 					if (parameterVec2f)
 					{
+						//AddParameter(*parameterVec2f);
 						auto c = getStyle(*parameterVec2f);
 						if (c.name != "-1") AddParameter(*parameterVec2f);
 						else {
@@ -1077,6 +1068,7 @@ namespace ofxImGuiSurfing
 					auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
 					if (parameterVec3f)
 					{
+						//AddParameter(*parameterVec3f);
 						auto c = getStyle(*parameterVec3f);
 						if (c.name == "-1") AddParameter(*parameterVec3f);
 						else {
@@ -1089,6 +1081,7 @@ namespace ofxImGuiSurfing
 					auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
 					if (parameterVec4f)
 					{
+						//AddParameter(*parameterVec4f);
 						auto c = getStyle(*parameterVec4f);
 						if (c.name != "-1") AddParameter(*parameterVec4f);
 						else {
@@ -1098,11 +1091,6 @@ namespace ofxImGuiSurfing
 						continue;
 					}
 #endif
-					//-
-
-					// Unknown types
-					//TODO:
-					// Should add styles for old ofVec...
 					auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
 					if (parameterOfVec2f)
 					{
@@ -1121,9 +1109,6 @@ namespace ofxImGuiSurfing
 						AddParameter(*parameterOfVec4f);
 						continue;
 					}
-
-					//-
-
 					//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 					//if (parameterOfFloatColor)
 					//{
@@ -1138,6 +1123,8 @@ namespace ofxImGuiSurfing
 					//}
 
 					//----
+
+					// known styles for know types
 
 					// float
 					auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
@@ -1243,7 +1230,6 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
 					if (parameter->getName() == "" && parameter->getName() == " ")
 						ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 				}
