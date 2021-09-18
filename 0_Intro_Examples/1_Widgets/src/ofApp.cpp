@@ -8,7 +8,7 @@ void ofApp::setup() {
 	//--
 
 	// Instantiate
-	// -> Optional to customize filename for the settings file for multiple instances.
+	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
 	//guiManager.setSettingsFilename("1_Widgets"); 
 
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
@@ -21,15 +21,15 @@ void ofApp::setup() {
 	bEnable3.set("bEnable3", false);
 	bPrevious.set("<", false);
 	bNext.set(">", false);
-	pos1_1.set("pos1_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
-	pos1_2.set("pos1_2", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
+	pos1.set("pos1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
+	rto1.set("rto1", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
 	lineWidth2.set("lineWidth2", 0.5, 0, 1);
 	separation2.set("separation2", 50, 1, 100);
 	shapeType2.set("shapeType2", 0, -50, 50);
 	amount2.set("amount2", 10, 0, 25);
 	speed3.set("speed3", 0.5, 0, 1);
-	valueKnob3_1.set("valueKnob3_1", 0.5f, 0.f, 1.0f);
-	valueKnob3_2.set("valueKnob3_2", 5.f, -10.f, 10.0f);
+	knob1.set("Knob1", 0.5f, 0.f, 1.0f);
+	knob2.set("Knob2", 5.f, -10.f, 10.0f);
 	shapeType3.set("shapeType3", 0, -50, 50);
 	size3.set("size3", 100, 0, 100);
 	shapeType4.set("shapeType4", 0, -50, 50);
@@ -44,16 +44,19 @@ void ofApp::setup() {
 	params3.setName("params3");
 	params4.setName("params4");
 
-	params1.add(pos1_1);
-	params1.add(pos1_2);
+	params1.add(pos1);
+	params1.add(rto1);
 
 	params2.add(lineWidth2);
 	params2.add(separation2);
+	params2.add(bEnable1);
+	params2.add(bEnable2);
+	params2.add(bEnable3);
 
 	params3.add(speed3);
 	params3.add(shapeType3);
-	params3.add(valueKnob3_1);
-	params3.add(valueKnob3_2);
+	params3.add(knob1);
+	params3.add(knob2);
 	params3.add(size3);
 
 	params4.add(size4);
@@ -69,23 +72,28 @@ void ofApp::setup() {
 
 	//----
 
+	setupStyles();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupStyles() {
+
 	// Customize Styles
 	// Will be applyed when rendering a group when draw.
-	{
-		guiManager.clearStyles();
+	guiManager.clearStyles();
 
-		// for params
-		guiManager.AddStyle(pos1_2, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+	// for params
+	guiManager.AddStyle(rto1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+	guiManager.AddStyle(bEnable1, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+	guiManager.AddStyle(bEnable2, OFX_IM_TOGGLE_BIG_BORDER);
+	guiManager.AddStyle(bEnable3, OFX_IM_TOGGLE_BIG);
+	guiManager.AddStyle(knob1, OFX_IM_KNOB, true);//same line
+	guiManager.AddStyle(knob2, OFX_IM_KNOB);
 
-		// for groups
-		//TODO:
-		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE);
-		//guiManager.AddStyleGroup(params2, OFX_IM_GROUP_HIDDEN_HEADER);
-		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_HIDDEN_HEADER); // -> fails affecting the lastone too
-		//guiManager.AddStyleGroup(params4, OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen); // -> flags not working
-		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX);
-		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_SCROLLABLE);
-	}
+	// for groups
+	// Notice that (some) flags are not supported for OFX_IM_GROUP_TREE
+	guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
+	//guiManager.AddStyleGroup(params4, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen);
 }
 
 //--------------------------------------------------------------
@@ -119,8 +127,8 @@ void ofApp::draw() {
 			// A multidim (xyz) vec2/vec3/vec4 parameter 
 			if (1) {
 				// Two api patterns can be used:
-				guiManager.Add(pos1_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
-				//ofxImGuiSurfing::AddParameter(pos1_1, true);
+				guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+				//ofxImGuiSurfing::AddParameter(pos1, true);
 			}
 
 			ImGui::Spacing();

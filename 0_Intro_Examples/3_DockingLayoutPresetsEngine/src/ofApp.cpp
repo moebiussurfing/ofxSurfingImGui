@@ -26,11 +26,17 @@ void ofApp::setup() {
 
 	//-
 
-	guiManager.setImGuiViewPort(true);
+	// Instantiate
 
-	// -> To allow the full engine:
-	// Custom docking layout with presets. 
-	guiManager.setupDocking();
+	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
+	//guiManager.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+
+	//// Original legacy api
+	//guiManager.setImGuiViewPort(true);
+	//// -> To allow the full engine:
+	//// Custom docking layout with presets. 
+	//guiManager.setupDocking();
 
 	//-
 
@@ -289,11 +295,11 @@ void ofApp::dockingReset()
 	//ImGui::DockBuilderDockWindow("Advanced", dock_id_right);
 
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(0).c_str(), dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(1).c_str(), dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(2).c_str(), dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(3).c_str(), dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(4).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(0).c_str(), dock_id_top);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(1).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(2).c_str(), dock_id_down);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(3).c_str(), dock_id_left);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(4).c_str(), dock_id_right);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }
@@ -319,11 +325,11 @@ void ofApp::dockingRandom()
 
 	// we now dock our windows into the docking node we made above
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
+	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }

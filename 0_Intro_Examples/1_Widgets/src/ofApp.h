@@ -20,6 +20,7 @@ class ofApp : public ofBaseApp{
 public:
 
     void setup();
+    void setupStyles();
     void draw();
 
 	ofxSurfing_ImGui_Manager guiManager;
@@ -31,15 +32,15 @@ public:
     ofParameterGroup params4;
 
     // parameters
-	ofParameter<glm::vec3> pos1_1;
-	ofParameter<glm::vec3> pos1_2;
+	ofParameter<glm::vec3> pos1;
+	ofParameter<glm::vec3> rto1;
     ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;
     ofParameter<bool> bEnable3;
     ofParameter<bool> bPrevious;
     ofParameter<bool> bNext;
-	ofParameter<float> valueKnob3_1;
-	ofParameter<float> valueKnob3_2;
+	ofParameter<float> knob1;
+	ofParameter<float> knob2;
 	ofParameter<int> amount2;
     ofParameter<float> lineWidth2;
     ofParameter<float> separation2;

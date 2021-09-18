@@ -41,6 +41,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
+		OFX_IM_KNOB,		
+		OFX_IM_KNOB_TRAIL,		
 
 		// multidim
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,

@@ -197,7 +197,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline const char * GetUniqueName2(ofAbstractParameter& parameter)
 	{
-		return parameter.getName().c_str();
+		return (parameter.getName().c_str());
 	}
 
 	//--------------------------------------------------------------
@@ -220,9 +220,10 @@ namespace ofxImGuiSurfing
 inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail)
 {
 	auto tmpRef = parameter.get();
+	string n = parameter.getName();
 	bool b;
-	if (bTrail) b = ImGui::KnobNeedleTrail2(GetUniqueName2(parameter), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
-	else b = ImGui::Knob(GetUniqueName2(parameter), &tmpRef, parameter.getMin(), parameter.getMax());
+	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
+	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax());
 	if (b)
 	{
 		parameter.set(tmpRef);
@@ -234,9 +235,11 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail)
 inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, float zeroRef, bool bTrail)
 {
 	auto tmpRef = parameter.get();
+	string n = parameter.getName();
 	bool b;
-	if (bTrail) b = ImGui::KnobNeedleTrail2(GetUniqueName2(parameter), &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef);
-	else b = ImGui::Knob(GetUniqueName2(parameter), &tmpRef, parameter.getMin(), parameter.getMax());
+	//if (bTrail) b = ImGui::KnobNeedleTrail2(GetUniqueName2(parameter), &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef);
+	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), zeroRef);
+	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax());
 	if (b)
 	{
 		parameter.set(tmpRef);

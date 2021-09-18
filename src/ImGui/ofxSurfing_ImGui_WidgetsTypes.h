@@ -567,6 +567,22 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
+				case OFX_IM_KNOB:
+				{
+					if (ofxImGuiSurfing::AddKnob(p))
+						bReturn = true;
+					else bReturn = false;
+				}
+				break;
+
+				case OFX_IM_KNOB_TRAIL:
+				{
+					if (ofxImGuiSurfing::AddKnob(p, true))
+						bReturn = true;
+					else bReturn = false;
+				}
+				break;
+
 				case OFX_IM_STEPPER:
 				{
 					const float step = 0.001f;
@@ -631,6 +647,24 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
+
+				//TODO:
+				// only implemented for floats
+				//case OFX_IM_KNOB:
+				//{
+				//	if (ofxImGuiSurfing::AddKnob(p))
+				//		bReturn = true;
+				//	else bReturn = false;
+				//}
+				//break;
+
+				//case OFX_IM_KNOB_TRAIL:
+				//{
+				//	if (ofxImGuiSurfing::AddKnob(p, true))
+				//		bReturn = true;
+				//	else bReturn = false;
+				//}
+				//break;
 
 				case OFX_IM_STEPPER:
 				{
@@ -811,9 +845,6 @@ namespace ofxImGuiSurfing
 		{
 			AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
 		}
-
-	public:
-
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
@@ -838,7 +869,7 @@ namespace ofxImGuiSurfing
 					typeGroup = SurfingImGuiTypesGroups(c.type);
 					flags = c.flags;
 				}
-				bMustHideGroup = typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN;
+				bMustHideGroup = (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
 
 				//-
 
@@ -892,13 +923,17 @@ namespace ofxImGuiSurfing
 					//-
 
 					// 2. Header already renderer
-					//uniqueName.pushGroup(); //TODO: should be in another place
-					uniqueName.setOpen(bIsOpen); //TODO:
+					uniqueName.setOpen(bIsOpen); //TODO: ?
 
 					//-
 
 					// 4. To re calculate layout sizes
 					refreshLayout(); // ?
+
+					//-
+
+					// 5. Skip all nested groups and their params
+					if (!bIsOpen) return;
 				}
 			}
 
@@ -1053,12 +1088,11 @@ namespace ofxImGuiSurfing
 
 				//--
 
-				// Skip params inside the group if is not opened or collapsed.
-				bool binclude = false;
-				//binclude = (uniqueName.isOpen(uniqueName.getLevel());
-				binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
-				
-				if (binclude)
+				//// Skip params inside the group if is not opened or collapsed.
+				//bool binclude = false;
+				////binclude = (uniqueName.isOpen(uniqueName.getLevel());
+				//binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
+				//if (binclude)
 				{
 					//-
 

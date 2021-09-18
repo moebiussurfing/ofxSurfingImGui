@@ -6,25 +6,21 @@
 
 #include "ofxWindowApp.h" // -> not required
 
-
 class ofApp : public ofBaseApp {
 
 public:
-
 	void setup();
 	void draw();
 
 	//-
 
 	ofxSurfing_ImGui_Manager guiManager;
-
 	void drawImGui();
 
 	//-
 
 	void dockingReset();
 	bool bDockingReset = false;
-
 	void dockingRandom();
 	bool bDockingRandom = false;
 
