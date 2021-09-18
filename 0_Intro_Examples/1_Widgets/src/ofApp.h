@@ -24,33 +24,32 @@ public:
 
 	ofxSurfing_ImGui_Manager guiManager;
 
-    // parameters
-    ofParameterGroup params;
+    // groups
+    ofParameterGroup params1;
     ofParameterGroup params2;
     ofParameterGroup params3;
+    ofParameterGroup params4;
 
-	ofParameter<glm::vec3> pos1;
-	ofParameter<glm::vec3> pos2;
-
+    // parameters
+	ofParameter<glm::vec3> pos1_1;
+	ofParameter<glm::vec3> pos1_2;
     ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;
     ofParameter<bool> bEnable3;
     ofParameter<bool> bPrevious;
     ofParameter<bool> bNext;
-
-    ofParameter<float> lineWidth;
-    ofParameter<float> separation;
-
-	//ofParameter<float> speed;
-	//ofParameter<int> shapeType;
-	//ofParameter<int> size;
-	//ofParameter<int> shapeType2;
-	//ofParameter<int> amount2;
-	//ofParameter<int> size2;
-	//ofParameter<float> lineWidth3;
-	//ofParameter<float> separation3;
-	//ofParameter<float> speed3;
-	//ofParameter<int> shapeType3;
-	//ofParameter<float> valueKnob1{ "Value1", 0.5f, 0.f, 1.0f };
-	//ofParameter<float> valueKnob2{ "Value2", 5.f, -10.f, 10.0f };
+	ofParameter<float> valueKnob3_1;
+	ofParameter<float> valueKnob3_2;
+	ofParameter<int> amount2;
+    ofParameter<float> lineWidth2;
+    ofParameter<float> separation2;
+	ofParameter<int> shapeType2;
+	ofParameter<float> speed3;
+	ofParameter<int> shapeType3;
+	ofParameter<int> size3;
+	ofParameter<int> shapeType4;
+	ofParameter<int> size4;
+	ofParameter<float> lineWidth4;
+	ofParameter<float> separation4;
+	ofParameter<float> speed4;
 };

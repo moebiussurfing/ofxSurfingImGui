@@ -7,6 +7,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
+	params_Advanced.add(bLockMove);
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bKeys);

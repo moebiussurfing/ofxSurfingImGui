@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "ofxImGui.h" 
 
+//TODO: enabled (commented) to enforce unique names engine...
 //#define DISABLE_ID_PUSH_POP
 
 namespace ofxImGuiSurfing
@@ -25,10 +26,16 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void setOpen(bool b) {
-			bOpenGroups[treeLevel - 1].set(b);
+			if (bOpenGroups.size() == 0) return;
+
+			bOpenGroups[treeLevel].set(b);
+			//bOpenGroups[treeLevel - 1].set(b);
 		}
 		//--------------------------------------------------------------
 		bool isOpen(int _treeLevel) {
+			if (bOpenGroups.size() == 0) return -1;
+			if (_treeLevel >= bOpenGroups.size()) return -1;
+
 			return bOpenGroups[_treeLevel].get();
 		}
 
@@ -36,7 +43,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void pushGroup() {
-			ofParameter<bool> bOpenGroup{ "_open" + ofToString(treeLevel), false };
+			ofParameter<bool> bOpenGroup{ "_open_" + ofToString(treeLevel), false };
 			bOpenGroups.emplace_back(bOpenGroup);
 			treeLevel++;
 		}
@@ -77,7 +84,6 @@ namespace ofxImGuiSurfing
 			ImGui::PopID();
 #endif
 		}
-
 	};
 
 	//-

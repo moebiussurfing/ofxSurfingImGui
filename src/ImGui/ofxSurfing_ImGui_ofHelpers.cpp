@@ -143,178 +143,6 @@ namespace ofxImGuiSurfing
 
 	//--
 
-//	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup)
-//	{
-//		//ofxImGuiSurfing::widgetsManager.refresh(); // is static -> not works
-//
-//		//-
-//
-//		for (auto parameter : group)
-//		{
-//			// group
-//
-//			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-//
-//			if (parameterGroup) // detects nested groups
-//			{
-//				ImGui::PushID(parameterGroup->getName().c_str()); // -> finally fix unique id for repeated params inside many groups
-//				{
-//					if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_ONLY_FIRST_HEADER)
-//					{
-//						ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//					}
-//					else
-//					{
-//						if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
-//						{
-//							ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//						}
-//
-//						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_COLLAPSED)
-//						{
-//							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
-//							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//						}
-//
-//						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT)
-//						{
-//							//ImGui::Indent();
-//
-//							bool b = ImGui::CollapsingHeader(parameterGroup->getName().data(), flags);
-//							if (b) ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//
-//							//ImGui::Unindent();
-//						}
-//
-//						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_TREE)
-//						{
-//							if (ImGui::TreeNode(parameterGroup->getName().data()))
-//							{
-//								//TODO:
-//								//ImGui::Indent();
-//
-//								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//
-//								//ImGui::Unindent();
-//
-//								ImGui::TreePop();
-//							}
-//						}
-//
-//						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_TREE_EX)
-//						{
-//							if (ImGui::TreeNodeEx(parameterGroup->getName().data(), flags))
-//							{
-//								ofxImGuiSurfing::AddGroup(*parameterGroup, flags, typeGroup);
-//
-//								ImGui::TreePop();
-//							}
-//						}
-//
-//						else if (typeGroup == ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_SCROLLABLE)
-//						{
-//							auto& style = ImGui::GetStyle();
-//							int hh = 40;
-//							int h = style.FramePadding.y + style.ItemSpacing.y + hh;
-//							ImGui::BeginChild(parameterGroup->getName().data(), ImVec2(0, parameterGroup->size() * h), false);
-//
-//
-//							AddGroup(*parameterGroup);
-//							ImGui::EndChild();
-//						}
-//					}
-//				}
-//				ImGui::PopID();
-//
-//				//-
-//
-//				continue;
-//			}
-//
-//			//----
-//
-//			// Parameter, try everything we know how to handle.
-//#if OF_VERSION_MINOR >= 10
-//			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-//			if (parameterVec2f)
-//			{
-//				AddParameter(*parameterVec2f);
-//				continue;
-//			}
-//			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-//			if (parameterVec3f)
-//			{
-//				AddParameter(*parameterVec3f);
-//				continue;
-//			}
-//			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-//			if (parameterVec4f)
-//			{
-//				AddParameter(*parameterVec4f);
-//				continue;
-//			}
-//#endif
-//			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-//			if (parameterOfVec2f)
-//			{
-//				AddParameter(*parameterOfVec2f);
-//				continue;
-//			}
-//			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-//			if (parameterOfVec3f)
-//			{
-//				AddParameter(*parameterOfVec3f);
-//				continue;
-//			}
-//			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-//			if (parameterOfVec4f)
-//			{
-//				AddParameter(*parameterOfVec4f);
-//				continue;
-//			}
-//			auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-//			if (parameterFloatColor)
-//			{
-//				AddParameter(*parameterFloatColor);
-//				continue;
-//			}
-//			auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-//			if (parameterColor)
-//			{
-//				AddParameter(*parameterColor);
-//				continue;
-//			}
-//			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-//			if (parameterFloat)
-//			{
-//				AddParameter(*parameterFloat);
-//				continue;
-//			}
-//			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-//			if (parameterInt)
-//			{
-//				AddParameter(*parameterInt);
-//				continue;
-//			}
-//			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-//			if (parameterBool)
-//			{
-//				AddParameter(*parameterBool);
-//				continue;
-//			}
-//			auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-//			if (parameterString)
-//			{
-//				AddParameter(*parameterString);
-//				continue;
-//			}
-//
-//			ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName();
-//		}
-//	}
-
-//--
-
 #if OF_VERSION_MINOR >= 10
 
 	//--------------------------------------------------------------
@@ -371,7 +199,6 @@ namespace ofxImGuiSurfing
 			if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 			{
 				parameter.set(tmpRef);
-
 				return true;
 			}
 			return false;
@@ -379,14 +206,17 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
+			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
 
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return true;
 			}
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return false;
 		}
 	}
@@ -408,6 +238,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
+			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
@@ -415,8 +246,10 @@ namespace ofxImGuiSurfing
 			{
 				parameter.set(tmpRef);
 
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return true;
 			}
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return false;
 		}
 	}
@@ -438,6 +271,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
+			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
@@ -446,26 +280,32 @@ namespace ofxImGuiSurfing
 			{
 				parameter.set(tmpRef);
 
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return true;
 			}
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return false;
 		}
 	}
-
 #endif
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofVec2f>& parameter)
 	{
 		auto tmpRef = parameter.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::SliderFloat2((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -473,14 +313,17 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<ofVec3f>& parameter)
 	{
 		auto tmpRef = parameter.get();
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 
 		if (ImGui::SliderFloat3((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -489,13 +332,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::SliderFloat4((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -510,6 +356,7 @@ namespace ofxImGuiSurfing
 		float w = tmpRef.getWidth();
 		float h = tmpRef.getHeight();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		result |= ImGui::SliderFloat(((parameter.getName() + " x").c_str()), &x, parameter.getMin().x, parameter.getMax().x);
 		result |= ImGui::SliderFloat(((parameter.getName() + " y").c_str()), &y, parameter.getMin().y, parameter.getMax().y);
 		result |= ImGui::SliderFloat(((parameter.getName() + " w").c_str()), &w, parameter.getMin().width, parameter.getMax().width);
@@ -517,6 +364,7 @@ namespace ofxImGuiSurfing
 
 		if (result) parameter.set(ofRectangle(x, y, w, h));
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return result;
 	}
 
@@ -684,13 +532,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::InputInt((parameter.getName().c_str()), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -719,15 +570,17 @@ namespace ofxImGuiSurfing
 		auto tmpRefMax = parameterMax.get();
 
 		auto uniqueName = name.c_str();
-
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::DragIntRange2(uniqueName, &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -737,14 +590,17 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -757,6 +613,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -771,8 +628,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -783,6 +642,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -802,8 +662,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 
@@ -814,6 +676,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -838,8 +701,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
+			IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 

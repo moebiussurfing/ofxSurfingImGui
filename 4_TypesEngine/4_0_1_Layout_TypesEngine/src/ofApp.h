@@ -4,14 +4,12 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h" 
-using namespace ofxImGuiSurfing;
 
 #include "ofxWindowApp.h" // not required
 
 class ofApp : public ofBaseApp{
 
 	public:
-
 		void setup();
 		void draw();
 		void exit();
@@ -23,8 +21,8 @@ class ofApp : public ofBaseApp{
 
 		// groups
 		ofParameterGroup params1;
-		ofParameterGroup params3;
 		ofParameterGroup params2;
+		ofParameterGroup params3;
 
 		// parameters
 		ofParameter<bool> bEnable;
@@ -82,7 +80,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<int> typeFlags;
 		ImGuiTreeNodeFlags flags_typeFlags = ImGuiTreeNodeFlags_None;
 		std::string flagInfo;
-
+		// styles
 		void SetupStyles();
 		void ClearStyles();
 

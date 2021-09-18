@@ -152,15 +152,20 @@ public:
 	//	widgetsManager.AddGroup(group, flags, typeGroup);
 	//}
 
+	//--
+
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	{
+		//refresh();//TODO:
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
+	//--
+
 public:
 
-	//many repeated method to pick a good name...
+	// many repeated methods. need to pick a good name...
 	//--------------------------------------------------------------
 	void refresh()
 	{
@@ -177,7 +182,7 @@ public:
 		widgetsManager.clear(); // update sizes to current window shape
 	}
 	//--------------------------------------------------------------
-	void clear()//->legacy api
+	void clear() //-> legacy api
 	{
 		widgetsManager.clear(); // update sizes to current window shape
 	}
@@ -422,6 +427,7 @@ public:
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bLockMove{ "Lock Move", false };
 
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
@@ -475,6 +481,7 @@ public:
 	// Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
 	void drawAdvanced() { // -> Simpler call. Use this.
@@ -504,6 +511,7 @@ public:
 			{
 				// autoresize
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+				ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
 
 				//TODO:
 				// -> must be implemented

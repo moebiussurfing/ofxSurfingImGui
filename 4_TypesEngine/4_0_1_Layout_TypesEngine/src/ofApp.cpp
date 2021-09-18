@@ -223,7 +223,7 @@ void ofApp::drawWindowMain() {
 				pos0.x = 10;
 				pos0.y = 10;
 				ImGui::SetNextWindowPos(ImVec2(pos0.x, pos0.y));
-				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
+				ImGui::SetNextWindowSize(ImVec2(PANEL_WIDGETS_WIDTH, (float)MAX_WINDOW_HEIGHT));
 
 				bReset1 = true;
 			}
@@ -344,7 +344,7 @@ void ofApp::drawWindow1() {
 				bReset1 = false;
 				ImGuiCond flag = ImGuiCond_Always;
 				ImGui::SetNextWindowPos(ImVec2(pos1.x, pos1.y), flag);
-				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
+				ImGui::SetNextWindowSize(ImVec2(PANEL_WIDGETS_WIDTH, (float)MAX_WINDOW_HEIGHT));
 
 				bReset2 = true;
 			}
@@ -417,8 +417,8 @@ void ofApp::drawWindow1() {
 			{
 				//guiManager.refresh();
 
-				ImGui::Text("* bCustom1 = true");
-				ImGui::Text("customized");
+				ImGui::TextWrapped("* bCustom1 = true");
+				ImGui::TextWrapped("customized");
 				ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 				// This is the defalut helpers ussage for the official ofxImGui Helpers:
@@ -503,7 +503,7 @@ void ofApp::drawWindow2() {
 				bReset2 = false;
 				ImGuiCond flag = ImGuiCond_Always;
 				ImGui::SetNextWindowPos(ImVec2(pos2.x, pos2.y), flag);
-				ImGui::SetNextWindowSize(ImVec2(200, (float)MAX_WINDOW_HEIGHT));
+				ImGui::SetNextWindowSize(ImVec2(PANEL_WIDGETS_WIDTH, (float)MAX_WINDOW_HEIGHT));
 			}
 		}
 
@@ -568,7 +568,7 @@ void ofApp::drawMoreWidgets() {
 
 	//-
 
-	ImGui::Text("Range Sliders | ofParameters");
+	ImGui::TextWrapped("Range Sliders | ofParameters");
 
 	AddRangeParam("separation3", separation2min, separation2max, "%.2f  %.2f", 1.0f);
 
@@ -578,7 +578,7 @@ void ofApp::drawMoreWidgets() {
 
 	// add an ofParameterGroup
 
-	ImGui::Text("An ofParameterGroup | params2");
+	ImGui::TextWrapped("An ofParameterGroup | params2");
 
 	//// Rememeber the "old" notation from original ofxGui:
 	//auto mainSettings = ofxImGui::Settings();
@@ -608,7 +608,7 @@ void ofApp::drawMoreWidgets() {
 
 	// some custom widgets
 
-	ImGui::Text("Range Sliders | int/float types");
+	ImGui::TextWrapped("Range Sliders | int/float types");
 
 	// range_slider.h
 	static float v1 = 0;
@@ -617,16 +617,19 @@ void ofApp::drawMoreWidgets() {
 	static float v_max = 1;
 	static float v3 = 0;
 	static float v4 = 1;
+	IMGUI_SUGAR_SLIDER_WIDTH_PUSH
 	ofxImGuiSurfing::RangeSliderFloat("Range 1", &v1, &v2, v_min, v_max, "%.1f  %.1f", 1.0f);
 	ofxImGuiSurfing::RangeSliderFloat("Range 2", &v3, &v4, v_min, v_max);
+	IMGUI_SUGAR_SLIDER_WIDTH_POP
 
 	// float/int types
 	// vanilla range slider
 	static float begin = 10, end = 90;
 	static int begin_i = 100, end_i = 1000;
+	IMGUI_SUGAR_SLIDER_WIDTH_PUSH
 	ImGui::DragFloatRange2("Range 3", &begin, &end, 0.25f, 0.0f, 100.0f, "Min: %.1f %%", "Max: %.1f %%");
 	ImGui::DragIntRange2("Range 4", &begin_i, &end_i, 5, 0, 0, "%.0fcm", "%.0fcm");
-
+	IMGUI_SUGAR_SLIDER_WIDTH_POP
 	ofxImGuiSurfing::AddSpacingSeparated();
 
 	//-
@@ -634,8 +637,8 @@ void ofApp::drawMoreWidgets() {
 	if (bCustom1)
 	{
 		// A row of four big toggles
-		ImGui::Text("* bCustom1 = true");
-		ImGui::Text("customized");
+		ImGui::TextWrapped("* bCustom1 = true");
+		ImGui::TextWrapped("customized");
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 		guiManager.Add(bModeA, SurfingImGuiTypes::OFX_IM_TOGGLE_BIG, true, 4);
@@ -645,8 +648,8 @@ void ofApp::drawMoreWidgets() {
 	}
 	else // default ofxImGui styles
 	{
-		ImGui::Text("* bCustom1 = false");
-		ImGui::Text("default style");
+		ImGui::TextWrapped("* bCustom1 = false");
+		ImGui::TextWrapped("default style");
 		ImGui::Dummy(ImVec2(0, 5)); // spacing
 
 		ofxImGuiSurfing::AddParameter(bModeA);

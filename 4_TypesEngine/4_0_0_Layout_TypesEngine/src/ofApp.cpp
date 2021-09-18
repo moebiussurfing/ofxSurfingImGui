@@ -48,10 +48,10 @@ void ofApp::setup() {
 	params1.add(params2);
 
 	//--
-
-	guiManager.setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
-	guiManager.setImGuiAutodraw(true);
-	guiManager.setup(); // This instantiates and configures ofxImGui inside the class object.
+	
+	// Instantiate
+	guiManager.setSettingsFilename("4_0_0_Layout_TypesEngine"); // -> Optional customize filename for the settings file for multiple instances.
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//-
 
@@ -209,8 +209,7 @@ void ofApp::drawImGui()
 		if (bCustom) ImGui::TextWrapped("Customized Style for the Group.");
 		else ImGui::TextWrapped("Default Style for the Group.");
 
-		//ImGui::Dummy(ImVec2(0, 5)); // spacing
-		ofxImGuiSurfing::AddSpaceY(5); // same than above line
+		ImGui::Spacing();
 
 		//-
 
@@ -255,7 +254,7 @@ void ofApp::drawImGui()
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup1).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags1);
 				ImGui::Text(flagInfo1.c_str());
-				ofxImGuiSurfing::AddSpaceY(10);
+				ImGui::Spacing();
 
 				ImGui::Separator();
 				ImGui::Text(params2.getName().c_str());
@@ -263,7 +262,7 @@ void ofApp::drawImGui()
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup2).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags2);
 				ImGui::Text(flagInfo2.c_str());
-				ofxImGuiSurfing::AddSpaceY(10);
+				ImGui::Spacing();
 
 				ImGui::Separator();
 				ImGui::Text(params3.getName().c_str());
@@ -271,7 +270,7 @@ void ofApp::drawImGui()
 				ImGui::Text(getSurfingImGuiTypesGroupsName(typeGroup3).c_str());
 				ofxImGuiSurfing::AddParameter(typeFlags3);
 				ImGui::Text(flagInfo3.c_str());
-				ofxImGuiSurfing::AddSpaceY(10);
+				ImGui::Spacing();
 			}
 		}
 	}
@@ -290,15 +289,15 @@ void ofApp::drawImGuiGroup()
 
 	guiManager.beginWindow("ofParameterGroup", NULL, flags);
 	{
-		ofxImGuiSurfing::AddSpaceY(10);
+		ImGui::Spacing();
 		ImGui::TextWrapped("NOTE\nNotice that some combinations of flags/styles can't be combined.\nOr some flags also should be queued and here only one type at the same time is used..");
 		//TODO:
 		// Some headers still not working
-		ofxImGuiSurfing::AddSpaceY();
+		ImGui::Spacing();
 		ImGui::TextWrapped("ofParameterGroup render ->");
-		ofxImGuiSurfing::AddSpaceY(10);
+		ImGui::Spacing();
 		ImGui::Separator();
-		ofxImGuiSurfing::AddSpaceY(10);
+		ImGui::Spacing();
 
 		//-
 

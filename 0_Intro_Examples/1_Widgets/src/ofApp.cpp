@@ -5,47 +5,87 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	ofSetWindowPosition(1920, 25);
 
-	guiManager.setSettingsFilename("1_Widgets"); // -> customize filename
+	//--
+
+	// Instantiate
+	// -> Optional to customize filename for the settings file for multiple instances.
+	//guiManager.setSettingsFilename("1_Widgets"); 
+
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
-
-	pos1.set("pos1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
-	pos2.set("pos2", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
-
-	bEnable1.set("bEnable1", false);
-	bEnable2.set("bEnable2", false);
-	bEnable3.set("bEnable3", false);
-
-	bPrevious.set("<", false);
-	bNext.set(">", false);
-
-	params.setName("params");
-	params.add(pos1);
-	params.add(pos2);
-
-	params2.setName("params2");
-	lineWidth.set("lineWidth", 0.5, 0, 1);
-	separation.set("separation", 50, 1, 100);
-	params2.add(lineWidth);
-	params2.add(separation);
-
-	params.add(params2);
-
-	//params3.setName("paramsGroup3");// nested
-	//params.add(speed.set("speed", 0.5, 0, 1));
-	//params.add(shapeType.set("shapeType", 0, -50, 50));
-	//params.add(size.set("size", 100, 0, 100));
-	//params2.add(shapeType2.set("shapeType2", 0, -50, 50));
-	//params2.add(size2.set("size2", 100, 0, 100));
-	//params2.add(amount2.set("amount2", 10, 0, 25));
-	//params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
-	//params3.add(separation3.set("separation3", 50, 1, 100));
-	//params3.add(speed3.set("speed3", 0.5, 0, 1));
 
 	//--
 
+	// Parameters
+	bEnable1.set("bEnable1", false);
+	bEnable2.set("bEnable2", false);
+	bEnable3.set("bEnable3", false);
+	bPrevious.set("<", false);
+	bNext.set(">", false);
+	pos1_1.set("pos1_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
+	pos1_2.set("pos1_2", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
+	lineWidth2.set("lineWidth2", 0.5, 0, 1);
+	separation2.set("separation2", 50, 1, 100);
+	shapeType2.set("shapeType2", 0, -50, 50);
+	amount2.set("amount2", 10, 0, 25);
+	speed3.set("speed3", 0.5, 0, 1);
+	valueKnob3_1.set("valueKnob3_1", 0.5f, 0.f, 1.0f);
+	valueKnob3_2.set("valueKnob3_2", 5.f, -10.f, 10.0f);
+	shapeType3.set("shapeType3", 0, -50, 50);
+	size3.set("size3", 100, 0, 100);
+	shapeType4.set("shapeType4", 0, -50, 50);
+	size4.set("size4", 100, 0, 100);
+	lineWidth4.set("lineWidth4", 0.5, 0, 1);
+	separation4.set("separation4", 50, 1, 100);
+	speed4.set("speed4", 0.5, 0, 1);
+
+	// Groups
+	params1.setName("params1");
+	params2.setName("params2");
+	params3.setName("params3");
+	params4.setName("params4");
+
+	params1.add(pos1_1);
+	params1.add(pos1_2);
+
+	params2.add(lineWidth2);
+	params2.add(separation2);
+
+	params3.add(speed3);
+	params3.add(shapeType3);
+	params3.add(valueKnob3_1);
+	params3.add(valueKnob3_2);
+	params3.add(size3);
+
+	params4.add(size4);
+	params4.add(speed4);
+	params4.add(shapeType4);
+	params4.add(lineWidth4);
+	params4.add(separation4);
+
+	// Nest groups
+	params2.add(params3);
+	params1.add(params2);
+	params1.add(params4);
+
+	//----
+
 	// Customize Styles
-	guiManager.clearStyles();
-	guiManager.AddStyle(pos2, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+	// Will be applyed when rendering a group when draw.
+	{
+		guiManager.clearStyles();
+
+		// for params
+		guiManager.AddStyle(pos1_2, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+
+		// for groups
+		//TODO:
+		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE);
+		//guiManager.AddStyleGroup(params2, OFX_IM_GROUP_HIDDEN_HEADER);
+		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_HIDDEN_HEADER); // -> fails affecting the lastone too
+		//guiManager.AddStyleGroup(params4, OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen); // -> flags not working
+		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX);
+		//guiManager.AddStyleGroup(params3, OFX_IM_GROUP_SCROLLABLE);
+	}
 }
 
 //--------------------------------------------------------------
@@ -55,12 +95,12 @@ void ofApp::draw() {
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+		if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
-		//if (guiManager.beginWindow("ofApp", NULL, window_flags))
 		guiManager.beginWindow("ofApp", NULL, window_flags);
 		{
 			// Basic folder
-			if (0)
+			if (1)
 				if (ImGui::TreeNode("Tree"))
 				{
 					guiManager.Add(bEnable1);
@@ -69,28 +109,36 @@ void ofApp::draw() {
 					ImGui::TreePop();
 				}
 
-			//guiManager.clear();
-
 			// An ofParameterGroup
-			guiManager.AddGroup(params); // -> BUG: first level crashes!
+			if (1) {
+				guiManager.AddGroup(params1); // -> BUG: first level crashes!
+			}
 
-			//ImGui::Spacing();
+			ImGui::Spacing();
 
-			//// Add a multidim parameter vec2/vec3/vec4
-			//// two api patterns can be used:
-			////ofxImGuiSurfing::AddParameter(pos1, true);
-			//guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+			// A multidim (xyz) vec2/vec3/vec4 parameter 
+			if (1) {
+				// Two api patterns can be used:
+				guiManager.Add(pos1_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+				//ofxImGuiSurfing::AddParameter(pos1_1, true);
+			}
 
-			//ImGui::Spacing();
+			ImGui::Spacing();
 
-			//ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
-			//ImGui::SameLine();
-			//ofxImGuiSurfing::AddToggleRoundedButton(bNext);
-			//ImGui::SameLine();
-			//ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
+			// Three rounded toggles
+			if (1) {
+				ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddToggleRoundedButton(bNext);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
+			}
 
-			// An extra sub panel with some common toggle that we must assign
-			if (0)
+			//-
+
+			// An extra advanced / sub-panel 
+			// with some common toggles that we must customize/assign destinations.
+			if (1)
 				guiManager.drawAdvancedControls();
 		}
 		guiManager.endWindow();

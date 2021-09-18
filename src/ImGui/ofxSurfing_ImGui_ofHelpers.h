@@ -4,25 +4,33 @@
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_Widgets.h"
-
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 //#include "ofxSurfing_ImGui_WidgetsTypes.h"
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
-//TODO:
-// some macro sugar to help fix sliders widths rare behaviour...
-/*
-#define IMGUI_LABELS_WIDTH_DEFAULT 95
-#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
-#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
-*/
-
-//TODO:
-#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;//nothing
-#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
 
 //--
+
+// workaround
+// Some macro sugar to help fix how sliders force autoresize the panel widths.
+// It's a 'rare behaviour' that I am trying to correct doing this.
+
+// A. Relative to panel width
+#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
+//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
+#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+//// B. Using absolute size
+//#define IMGUI_LABELS_WIDTH_DEFAULT 95
+//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+//// C. To bypass and do nothing.
+//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
+//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+
+//--
+
 
 namespace ofxImGuiSurfing
 {
@@ -132,7 +140,6 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
 
-
 		// float
 		if (info == typeid(float))
 		{
@@ -181,134 +188,6 @@ namespace ofxImGuiSurfing
 		return false;
 	}
 
-	/*
-	//--------------------------------------------------------------
-	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter, SurfingImGuiTypes type = OFX_IM_DEFAULT)
-	//bool AddParameter(ofParameter<ParameterType>& parameter)
-	{
-		auto tmpRef = parameter.get();
-		const auto& info = typeid(ParameterType);
-
-		//--
-
-		// customized styles
-		{
-			// B. if  there's a config already added for one or more parameters
-
-			//-
-
-			// float
-
-			if (info == typeid(float))
-			{
-				bool bReturn = false;
-				ofParameter<float> &p = parameter.template cast<float>();
-				auto c = widgetsManager.getStyle(p);
-
-				// if the parameter widget is not added explicitly, will populate it as the default appearance
-				if (c.name != "-1")
-				{
-					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-					return bReturn;
-				}
-
-				// default style
-				else
-				{
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-					if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
-					{
-						parameter.set(tmpRef);
-						bReturn = true;
-					}
-					else bReturn = false;
-					//ImGui::PopItemWidth();
-
-					return bReturn;
-				}
-			}
-
-			//-
-
-			// int
-
-			else if (info == typeid(int))
-			{
-				bool bReturn = false;
-				ofParameter<int> &p = parameter.template cast<int>();
-				auto c = widgetsManager.getStyle(p);
-
-				// if the parameter widget is not added explicitly, will populate it as the default appearance
-				if (c.name != "-1")
-				{
-					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-					return bReturn;
-				}
-
-				// default style
-				else
-				{
-					//ImGui::PushItemWidth(-WIDGET_PARAM_PADDING);
-					if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
-					{
-						parameter.set(tmpRef);
-						bReturn = true;
-					}
-					else bReturn = false;
-					//ImGui::PopItemWidth();
-
-					return bReturn;
-				}
-			}
-
-			//-
-
-			// bool
-
-			else if (info == typeid(bool))
-			{
-				bool bReturn = false;
-				ofParameter<bool> &p = parameter.template cast<bool>();
-				auto c = widgetsManager.getStyle(p);
-
-				// if the parameter widget is not added explicitly, will populate it as the default appearance
-				if (c.name != "-1")
-				{
-					bReturn = widgetsManager.Add(p, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-
-					return bReturn;
-				}
-
-				// default style
-				else
-				{
-					// Surfing customization
-					bReturn = (AddBigToggle(p));
-
-					// ofxImGui pattern
-					//if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
-					//{
-					//	parameter.set(tmpRef);
-					//	bReturn = true;
-					//}
-					//else bReturn = false;
-
-					return bReturn;
-				}
-			}
-		}
-
-		//--
-
-		ofLogWarning(__FUNCTION__) << "Could not create ImGui element for type " << info.name();
-
-		return false;
-	}
-	*/
-
 	//--
 
 	//--------------------------------------------------------------
@@ -333,6 +212,7 @@ namespace ofxImGuiSurfing
 	{
 		auto result = false;
 		const auto& info = typeid(DataType);
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 
 		for (int i = 0; i < values.size(); ++i)
 		{
@@ -354,10 +234,12 @@ namespace ofxImGuiSurfing
 			{
 				if (info.name() == "" || info.name() == " ")
 					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+				IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				return false;
 			}
 		}
 
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return result;
 	}
 
