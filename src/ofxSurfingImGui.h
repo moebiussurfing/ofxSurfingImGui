@@ -62,7 +62,8 @@ using namespace ofxImGuiSurfing;
 // WINDOWS, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
 
 /*
-	//--
+	//--------------------------------------------------------------
+
 
 	// 1. CREATE A WINDOW
 
@@ -97,11 +98,13 @@ using namespace ofxImGuiSurfing;
 	{ }
 	ofxImGui::EndWindow(mainSettings);
 
-	//--
+
+	//--------------------------------------------------------------
+
 
 	// 2. TREES
 
-	// 2.1 TREE
+	// 2.1 Simple TREE
 
 	if (ImGui::TreeNode("_Tree"))
 	{

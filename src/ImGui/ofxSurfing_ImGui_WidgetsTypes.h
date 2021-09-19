@@ -204,6 +204,19 @@ namespace ofxImGuiSurfing
 
 			widgetsStyles.push_back(c);
 		}
+		// This call by name is usefull when the param style is out of the current scope.
+		//--------------------------------------------------------------
+		void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		{
+			SurfingImGuiTypes_Style c;
+			c.name = name;
+			c.type = type;
+			c.bSameLine = bSameLine;
+			c.amtPerRow = amtPerRow;
+			c.spacing = spacing;
+
+			widgetsStyles.push_back(c);
+		}
 
 		// queue a customization config for future populate a group
 		//--------------------------------------------------------------
@@ -211,6 +224,16 @@ namespace ofxImGuiSurfing
 		{
 			SurfingImGuiTypesGroup_Style c;
 			c.name = group.getName();
+			c.type = type;
+			c.flags = flags;
+
+			groupsStyles.push_back(c);
+		}
+		//--------------------------------------------------------------
+		void AddGroupStyle(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		{
+			SurfingImGuiTypesGroup_Style c;
+			c.name = name;
 			c.type = type;
 			c.flags = flags;
 

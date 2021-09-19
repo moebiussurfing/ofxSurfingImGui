@@ -127,6 +127,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	{
+		widgetsManager.AddStyle(name, type, bSameLine, amtPerRow, spacing);
+	}
+
+	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
 	{
 		widgetsManager.UpdateStyle(aparam, type);
@@ -143,6 +149,11 @@ public:
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
 		widgetsManager.AddGroupStyle(group, type, flags);
+	}
+	//--------------------------------------------------------------
+	void AddStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	{
+		widgetsManager.AddGroupStyle(name, type, flags);
 	}
 
 	////--------------------------------------------------------------
