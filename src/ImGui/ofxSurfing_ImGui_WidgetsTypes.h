@@ -632,14 +632,16 @@ namespace ofxImGuiSurfing
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
 						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					ImGui::PopItemWidth();
+					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
 					bReturn = false;
 				}
 				break;
@@ -715,14 +717,16 @@ namespace ofxImGuiSurfing
 					const int step = 1;
 					const int stepFast = 5;
 					auto tmpRef = p.get();
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
 						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					ImGui::PopItemWidth();
 					bReturn = false;
 				}
 				break;
