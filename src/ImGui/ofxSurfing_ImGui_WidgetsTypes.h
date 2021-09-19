@@ -219,8 +219,28 @@ namespace ofxImGuiSurfing
 		}
 
 		// queue a customization config for future populate a group
+		////--------------------------------------------------------------
+		//void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		//{
+		//	SurfingImGuiTypesGroup_Style c;
+		//	c.name = group.getName();
+		//	c.type = type;
+		//	c.flags = flags;
+
+		//	groupsStyles.push_back(c);
+		//}
+		////--------------------------------------------------------------
+		//void AddGroupStyle(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		//{
+		//	SurfingImGuiTypesGroup_Style c;
+		//	c.name = name;
+		//	c.type = type;
+		//	c.flags = flags;
+
+		//	groupsStyles.push_back(c);
+		//}
 		//--------------------------------------------------------------
-		void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
 			SurfingImGuiTypesGroup_Style c;
 			c.name = group.getName();
@@ -230,7 +250,7 @@ namespace ofxImGuiSurfing
 			groupsStyles.push_back(c);
 		}
 		//--------------------------------------------------------------
-		void AddGroupStyle(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		void AddStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
 			SurfingImGuiTypesGroup_Style c;
 			c.name = name;
@@ -615,6 +635,7 @@ namespace ofxImGuiSurfing
 					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
+						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 						p.set(tmpRef);
 						bReturn = true;
 					}
@@ -697,6 +718,7 @@ namespace ofxImGuiSurfing
 					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
+						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 						p.set(tmpRef);
 						bReturn = true;
 					}

@@ -132,6 +132,7 @@ public:
 		widgetsManager.AddStyle(name, type, bSameLine, amtPerRow, spacing);
 	}
 
+	//TODO:
 	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
 	{
@@ -139,21 +140,16 @@ public:
 	}
 
 	//TODO: group styles are recursive! must fix!
-	//--------------------------------------------------------------
-	void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-	{
-		widgetsManager.AddGroupStyle(group, type, flags);
-	}
-	//a better name
+
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.AddGroupStyle(group, type, flags);
+		widgetsManager.AddStyleGroup(group, type, flags);
 	}
 	//--------------------------------------------------------------
 	void AddStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.AddGroupStyle(name, type, flags);
+		widgetsManager.AddStyleGroup(name, type, flags);
 	}
 
 	////--------------------------------------------------------------
@@ -177,36 +173,37 @@ public:
 public:
 
 	// many repeated methods. need to pick a good name...
-	//--------------------------------------------------------------
-	void refresh()
-	{
-		widgetsManager.refresh(); // update sizes to current window shape
-	}
+	////--------------------------------------------------------------
+	//void refresh()
+	//{
+	//	widgetsManager.refresh(); // update sizes to current window shape
+	//}
 	//--------------------------------------------------------------
 	void refreshLayout()
 	{
 		widgetsManager.refreshLayout(); // update sizes to current window shape
 	}
+
 	//--------------------------------------------------------------
 	void clearStyles()
 	{
 		widgetsManager.clear(); // update sizes to current window shape
 	}
-	//--------------------------------------------------------------
-	void clear() //-> legacy api
-	{
-		widgetsManager.clear(); // update sizes to current window shape
-	}
-	//--------------------------------------------------------------
-	void reset()
-	{
-		widgetsManager.resetUniqueNames(); // update sizes to current window shape
-	}
-	//--------------------------------------------------------------
-	void resetIDs()
-	{
-		widgetsManager.resetUniqueNames(); // update sizes to current window shape
-	}
+	////--------------------------------------------------------------
+	//void clear() //-> legacy api
+	//{
+	//	widgetsManager.clear(); // update sizes to current window shape
+	//}
+	////--------------------------------------------------------------
+	//void reset()
+	//{
+	//	widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	//}
+	////--------------------------------------------------------------
+	//void resetIDs()
+	//{
+	//	widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	//}
 	//--------------------------------------------------------------
 	void resetUniqueNames()
 	{

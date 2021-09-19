@@ -738,7 +738,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
 
-	resetIDs(); // reset unique names
+	resetUniqueNames(); // reset unique names
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 
