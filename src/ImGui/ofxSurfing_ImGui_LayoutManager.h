@@ -437,6 +437,7 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 
+	ofParameter<bool> bHelp{ "Help", true };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 
@@ -486,7 +487,7 @@ public:
 		drawAdvanced();
 	}
 
-	// Snippet to copy/paste into out ofApp:
+	// Example Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
@@ -530,6 +531,9 @@ public:
 						resetWindowImGui(false, true);
 					}
 				}
+
+				//help
+				ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
 
 				//TODO:
 				// -> must be implemented

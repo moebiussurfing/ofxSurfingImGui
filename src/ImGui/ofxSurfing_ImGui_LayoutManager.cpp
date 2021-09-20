@@ -11,6 +11,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bKeys);
+	params_Advanced.add(bHelp);
 	params_Advanced.add(bDebug);
 
 	bExtra.setSerializable(false);
@@ -1890,6 +1891,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 			ImGui::Indent();
 			AddToggleRoundedButton(bMinimize);
 			AddToggleRoundedButton(bKeys);
+			AddToggleRoundedButton(bHelp);
 			AddToggleRoundedButton(bAdvanced);
 			if (bAdvanced) {
 				ImGui::Indent();

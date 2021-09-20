@@ -39,6 +39,7 @@ namespace ofxImGuiSurfing
 		// float/int
 		OFX_IM_SLIDER,		
 		OFX_IM_PROGRESS_BAR,
+		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
 		OFX_IM_KNOB,		

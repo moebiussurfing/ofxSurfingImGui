@@ -174,6 +174,11 @@ namespace ofxImGuiSurfing
 	{
 		return ImGui::GetContentRegionAvail().x;
 	}
+	//--------------------------------------------------------------
+	inline float getPanelHeight()
+	{
+		return ImGui::GetContentRegionAvail().y;
+	}
 
 	//--------------------------------------------------------------
 	inline float getWidgetsWidth(int amntColumns = -1)

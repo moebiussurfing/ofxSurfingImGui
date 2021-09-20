@@ -596,6 +596,13 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
+				case OFX_IM_PROGRESS_BAR_NO_TEXT:
+				{
+					ofxImGuiSurfing::AddProgressBar(p);
+					bReturn = false;
+				}
+				break;
+
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.01f;
