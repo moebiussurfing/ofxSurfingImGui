@@ -419,10 +419,9 @@ namespace ofxImGuiSurfing
 	{
 		string n = name;
 		switch (dimTar) {
-		case 0: n += " X"; break;
-		case 1: n += " Y"; break;
-		case 2: n += " Z"; break;
-		case 3: n += " W"; break;
+		case 0: n += "X"; break;
+		case 1: n += "Y"; break;
+		case 2: n += "Z"; break;
 		}
 
 		switch (dimTar) { // modify the selected dim

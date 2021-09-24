@@ -9,29 +9,6 @@
 //#include "ofxSurfing_ImGui_LayoutHelpers.h"
 
 
-//--
-
-// workaround
-// Some macro sugar to help fix how sliders force autoresize the panel widths.
-// It's a 'rare behaviour' that I am trying to correct doing this.
-
-// A. Relative to panel width
-#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
-#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
-
-//// B. Using absolute size
-//#define IMGUI_LABELS_WIDTH_DEFAULT 95
-//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
-
-//// C. To bypass and do nothing.
-//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
-//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
-
-//--
-
-
 namespace ofxImGuiSurfing
 {
 	//--
@@ -42,8 +19,6 @@ namespace ofxImGuiSurfing
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen, ofxSurfing_ImGui_WidgetsTypes::SurfingImGuiTypesGroups typeGroup = ofxSurfing_ImGui_WidgetsTypes::OFX_IM_GROUP_DEFAULT);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);

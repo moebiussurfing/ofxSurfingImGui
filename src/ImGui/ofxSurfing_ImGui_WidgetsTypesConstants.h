@@ -4,6 +4,29 @@
 //public:
 namespace ofxImGuiSurfing
 {
+
+	//--
+
+	// Workaround
+	// Some macro sugar to help fix how sliders force autoresize the panel widths.
+	// It's a 'rare behaviour' that I am trying to correct doing this.
+
+	// A. Relative to panel width
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
+	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+	//// B. Using absolute size
+	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+	//// C. To bypass and do nothing.
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+
+//--
+
 	//TODO: 
 	// make simpler namespace. or move outside the class?
 	enum SurfingImGuiTypes
@@ -20,7 +43,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG,
 		OFX_IM_BUTTON_BIG_XXL,
 		// toggle
-		OFX_IM_CHECKBOX,	
+		OFX_IM_CHECKBOX,
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
@@ -37,13 +60,13 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
 
 		// float/int
-		OFX_IM_SLIDER,		
+		OFX_IM_SLIDER,
 		OFX_IM_PROGRESS_BAR,
 		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
-		OFX_IM_KNOB,		
-		OFX_IM_KNOB_TRAIL,		
+		OFX_IM_KNOB,
+		OFX_IM_KNOB_TRAIL,
 
 		// multidim
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
@@ -51,7 +74,7 @@ namespace ofxImGuiSurfing
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
 
 		// strings
-		OFX_IM_TEXT_DISPLAY, 
+		OFX_IM_TEXT_DISPLAY,
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
 

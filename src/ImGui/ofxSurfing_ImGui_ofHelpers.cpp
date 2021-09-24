@@ -926,7 +926,8 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// list
+	// lists
+	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
 		auto& vector = *static_cast<std::vector<std::string>*>(vec);
@@ -934,12 +935,19 @@ namespace ofxImGuiSurfing
 		*out_text = vector.at(idx).c_str();
 		return true;
 	};
+	//--------------------------------------------------------------
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
-		if (values.empty()) { return false; }
-		return ImGui::Combo(label, currIndex, vector_getter,
-			static_cast<void*>(&values), values.size());
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10); // fix oversizes
+		if (values.empty()) 
+		{ 
+			ImGui::PopItemWidth(); 
+			return false; 
+		}
+		ImGui::PopItemWidth();
+		return ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
 	}
+	//--------------------------------------------------------------
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
 		if (values.empty()) { return false; }

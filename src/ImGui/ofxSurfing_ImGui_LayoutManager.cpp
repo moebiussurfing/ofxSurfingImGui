@@ -819,6 +819,11 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+	//--
+
 	//TODO:
 	// reset unique names
 	resetUniqueNames();

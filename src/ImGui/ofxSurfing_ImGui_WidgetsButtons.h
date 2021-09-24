@@ -404,6 +404,9 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f))
 	{
+		//TODO:
+		//default is full panel shape
+
 		bool bChanged = false;
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
@@ -411,8 +414,13 @@ namespace ofxImGuiSurfing
 		float w = ImGui::GetContentRegionAvail().x;
 		float h = ImGui::GetContentRegionAvail().y;
 
-		if (sz.x == -1) sz.x = w;
-		if (sz.y == -1) sz.y = h;
+		float spcx = ImGui::GetStyle().ItemSpacing.x;
+		float spcy = ImGui::GetStyle().ItemSpacing.y;
+
+		//if (sz.x == -1) sz.x = w;
+		//if (sz.y == -1) sz.y = h;
+		if (sz.x == -1) sz.x = w- spcx;
+		if (sz.y == -1) sz.y = h- spcy;
 
 
 		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))

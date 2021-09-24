@@ -13,12 +13,9 @@
 
 #include "ofxSurfingImGui.h"
 
-#define MAX_CAMERA_DISTANCE 500.0f
-
 class ofApp : public ofBaseApp{
-    
 public:
-
+	
     void setup();
     void setupStyles();
     void draw();
@@ -33,6 +30,10 @@ public:
 
     // parameters
 	ofParameter<glm::vec3> pos1;
+	ofParameter<float> value;
+	ofParameter<float> valueMin;
+	ofParameter<float> valueMax;
+
 	ofParameter<glm::vec3> rto1;
     ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;

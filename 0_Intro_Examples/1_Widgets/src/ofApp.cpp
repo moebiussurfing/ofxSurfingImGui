@@ -21,7 +21,13 @@ void ofApp::setup() {
 	bEnable3.set("bEnable3", false);
 	bPrevious.set("<", false);
 	bNext.set(">", false);
+
+#define MAX_CAMERA_DISTANCE 500.0f
+	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
+	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
+	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	pos1.set("pos1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
+
 	rto1.set("rto1", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
 	lineWidth2.set("lineWidth2", 0.5, 0, 1);
 	separation2.set("separation2", 50, 1, 100);
@@ -107,8 +113,28 @@ void ofApp::draw() {
 
 		guiManager.beginWindow("ofApp", NULL, window_flags);
 		{
-			// Basic folder
+			// Ranges
 			if (1)
+			{ 
+				static ofParameter<int> coord{ "coord", 0, 0, 2 };
+				ofxImGuiSurfing::AddParameter(coord);
+
+				ofxImGuiSurfing::AddParameter(value);
+				ofxImGuiSurfing::AddParameter(valueMin);
+				ofxImGuiSurfing::AddParameter(valueMax);
+
+				//float w = 70;
+				//float h = 200;
+				//ofxImGuiSurfing::AddVSlider(yMin, ImVec2(w, h));
+				//ImGui::SameLine();
+				//ofxImGuiSurfing::AddVSlider(yMax, ImVec2(w, h));
+				//ofxImGuiSurfing::AddRangeParam("Range", yMin, yMax);
+
+				ofxImGuiSurfing::AddRangeOneVec3Param("Range", pos1, valueMin, valueMax, value, coord.get());
+			}
+
+			// Basic folder
+			if (0)
 				if (ImGui::TreeNode("Tree"))
 				{
 					guiManager.Add(bEnable1);
@@ -118,7 +144,7 @@ void ofApp::draw() {
 				}
 
 			// An ofParameterGroup
-			if (1) {
+			if (0) {
 				guiManager.AddGroup(params1); // -> BUG: first level crashes!
 			}
 
@@ -134,7 +160,7 @@ void ofApp::draw() {
 			ImGui::Spacing();
 
 			// Three rounded toggles
-			if (1) {
+			if (0) {
 				ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
 				ImGui::SameLine();
 				ofxImGuiSurfing::AddToggleRoundedButton(bNext);
@@ -146,8 +172,8 @@ void ofApp::draw() {
 
 			// An extra advanced / sub-panel 
 			// with some common toggles that we must customize/assign destinations.
-			if (1)
-				guiManager.drawAdvancedControls();
+			if (0)
+				guiManager.drawAdvanced();
 		}
 		guiManager.endWindow();
 	}

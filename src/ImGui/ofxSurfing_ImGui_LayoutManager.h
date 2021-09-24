@@ -476,8 +476,7 @@ public:
 
 	//--
 
-public:
-
+private:
 	// An advanced/extra common panel
 	// Snippet to copy/paste into out ofApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
@@ -487,6 +486,7 @@ public:
 		drawAdvanced();
 	}
 
+public:
 	// Example Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -499,14 +499,13 @@ public:
 		drawAdvancedSubPanel();
 	}
 
+private:
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel(bool bHeader = true) {
 		if (!bAdvanced) return;
 		if (!bUseAdvancedSubPanel) return;
 
 		//--
-
-		//ImGui::Dummy(ImVec2(0.0f, 2.0f));
 
 		ImGui::Indent();
 		{
@@ -520,8 +519,9 @@ public:
 			{
 				// autoresize
 				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+				// lock
 				ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
-
+				// reset
 				//TODO:
 				// -> must be implemented
 				// reset window
@@ -532,8 +532,11 @@ public:
 					}
 				}
 
-				//help
+				// help
 				ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
+
+				// keys
+				ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
 
 				//TODO:
 				// -> must be implemented
@@ -545,7 +548,7 @@ public:
 					AddToggleRoundedButton(bPreviewSceneViewport);
 					ImGui::Unindent();
 
-					//-
+					//--
 
 					drawSpecialWindowsPanel();
 
@@ -555,6 +558,7 @@ public:
 		ImGui::Unindent();
 	}
 
+public:
 	//--------------------------------------------------------------
 	void setUseAdvancedSubPanel(bool b) {
 		bUseAdvancedSubPanel = b;
@@ -707,6 +711,8 @@ public:
 
 		return windowsAtributes[index].bGui;
 	}
+
+	//----
 
 private:
 
