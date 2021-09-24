@@ -12,8 +12,8 @@ namespace ofxImGuiSurfing
 	// It's a 'rare behaviour' that I am trying to correct doing this.
 
 	// A. Relative to panel width
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-70);
 	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
 
 	//// B. Using absolute size

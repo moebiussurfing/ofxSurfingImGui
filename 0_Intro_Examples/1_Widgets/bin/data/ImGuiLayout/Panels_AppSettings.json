@@ -1,12 +1,12 @@
 {
     "AppSettings": {
         "Params_Advanced": {
-            "Advanced": "0",
-            "Auto_Resize": "1",
+            "Advanced": "1",
+            "Auto_Resize": "0",
             "Debug": "0",
             "Help": "1",
             "Keys": "1",
-            "Lock_Move": "1",
+            "Lock_Move": "0",
             "Minimize": "1"
         }
     }

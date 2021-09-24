@@ -281,7 +281,7 @@ namespace ofxImGuiSurfing
 
 		bool b = tmpRef;
 
-		if (bBlink) 
+		if (bBlink)
 		{
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
@@ -365,7 +365,7 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		if (bBlink && b) 
+		if (bBlink && b)
 		{
 			ImGui::PopStyleColor();
 		}
@@ -401,8 +401,56 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
+	//----
+
+	// vsliders
+	// TODO: move label on top/bottom
+	// float
 	//--------------------------------------------------------------
-	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f))
+	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
+	{
+		//TODO:
+		//default (-1,-1) is full panel shape
+
+		bool bChanged = false;
+		auto tmpRef = parameter.get();
+		string name = parameter.getName();
+
+		float w = ImGui::GetContentRegionAvail().x;
+		float h = ImGui::GetContentRegionAvail().y;
+
+		float spcx = ImGui::GetStyle().ItemSpacing.x;
+		float spcy = ImGui::GetStyle().ItemSpacing.y;
+
+		//if (sz.x == -1) sz.x = w;
+		//if (sz.y == -1) sz.y = h;
+		if (sz.x == -1) sz.x = w - spcx;
+		if (sz.y == -1) sz.y = h - spcy;
+
+		//ImGui::BeginGroup();
+		ImGui::PushID(name.c_str());
+		
+		if (bNoName) {
+			//ImGui::Text(name.c_str());
+			name = "";
+		}
+
+		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
+		{
+			parameter.set(tmpRef);
+
+			bChanged = true;
+		}
+
+		ImGui::PopID();
+		//ImGui::EndGroup();
+
+		return bChanged;
+	}
+
+	// int
+	//--------------------------------------------------------------
+	inline bool AddVSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
 	{
 		//TODO:
 		//default is full panel shape
@@ -419,17 +467,20 @@ namespace ofxImGuiSurfing
 
 		//if (sz.x == -1) sz.x = w;
 		//if (sz.y == -1) sz.y = h;
-		if (sz.x == -1) sz.x = w- spcx;
-		if (sz.y == -1) sz.y = h- spcy;
+		if (sz.x == -1) sz.x = w - spcx;
+		if (sz.y == -1) sz.y = h - spcy;
 
+		ImGui::PushID(name.c_str());
+		if (bNoName) name = "";
 
-		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
+		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
 		{
 			parameter.set(tmpRef);
 
 			bChanged = true;
 		}
 
+		ImGui::PopID();
 		return bChanged;
 	}
 

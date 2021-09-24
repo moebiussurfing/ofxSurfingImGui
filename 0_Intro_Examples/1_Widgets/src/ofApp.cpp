@@ -123,14 +123,9 @@ void ofApp::draw() {
 				ofxImGuiSurfing::AddParameter(valueMin);
 				ofxImGuiSurfing::AddParameter(valueMax);
 
-				//float w = 70;
-				//float h = 200;
-				//ofxImGuiSurfing::AddVSlider(yMin, ImVec2(w, h));
-				//ImGui::SameLine();
-				//ofxImGuiSurfing::AddVSlider(yMax, ImVec2(w, h));
-				//ofxImGuiSurfing::AddRangeParam("Range", yMin, yMax);
+				ofxImGuiSurfing::AddRangeParam("Range", valueMin, valueMax);
 
-				ofxImGuiSurfing::AddRangeOneVec3Param("Range", pos1, valueMin, valueMax, value, coord.get());
+				//ofxImGuiSurfing::AddRangeOneVec3Param("Range", pos1, valueMin, valueMax, value, coord.get());
 			}
 
 			// Basic folder
@@ -168,11 +163,25 @@ void ofApp::draw() {
 				ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
 			}
 
-			//-
+			// Vertical Sliders
+			if (1) {
+				ImGui::Spacing();
+				float w = 70;
+				float h = 200;
+				ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+			}
+				
+				//-
 
 			// An extra advanced / sub-panel 
 			// with some common toggles that we must customize/assign destinations.
-			if (0)
+			if (1)
 				guiManager.drawAdvanced();
 		}
 		guiManager.endWindow();
