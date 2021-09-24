@@ -54,4 +54,6 @@ public:
 	ofParameter<float> lineWidth4;
 	ofParameter<float> separation4;
 	ofParameter<float> speed4;
+
+	vector <ofParameter<bool>> bEnablers;
 };

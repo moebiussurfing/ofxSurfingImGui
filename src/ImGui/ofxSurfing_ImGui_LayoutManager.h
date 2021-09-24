@@ -466,12 +466,13 @@ public:
 		//float ww = PANEL_WIDGETS_WIDTH_MIN;
 		//float hh = PANEL_WIDGETS_HEIGHT;
 
-		ImGuiCond flagsCond = ImGuiCond_Appearing;
+		ImGuiCond flagsCond = ImGuiCond_Always;
+		//ImGuiCond flagsCond = ImGuiCond_Appearing;
 		//flagsCond |= ImGuiCond_Appearing;
 		//flagsCond |= ImGuiCond_Once;
 
 		if (size) ImGui::SetWindowSize(ImVec2(ww, hh), flagsCond);
-		if (pos)ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
+		if (pos) ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
 	}
 
 	//--
@@ -517,19 +518,23 @@ private:
 
 			if (!bHeader || (bHeader && b))
 			{
-				// autoresize
-				ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
-				// lock
-				ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
-				// reset
-				//TODO:
-				// -> must be implemented
-				// reset window
-				if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
-					if (bReset_Window) {
-						bReset_Window = false;
-						resetWindowImGui(false, true);
+				if (ImGui::TreeNode("Window"))
+				{
+					// autoresize
+					ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+					// lock
+					ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
+					// reset
+					//TODO:
+					// -> must be implemented
+					// reset window
+					if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
+						//if (bReset_Window) {
+						//	bReset_Window = false;
+						//	resetWindowImGui(false, true);
+						//}
 					}
+					ImGui::TreePop();
 				}
 
 				// help

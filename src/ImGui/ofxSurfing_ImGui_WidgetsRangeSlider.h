@@ -258,7 +258,7 @@ namespace ofxImGuiSurfing
 
 	// ~95% Common code with ImGui::SliderFloat
 	//--------------------------------------------------------------
-	inline /*IMGUI_API*/ bool RangeSliderFloat(const char* label, float* v1, float* v2, float v_min, float v_max, const char* display_format = "(%.3f, %.3f)", float power = 1.0f)
+	inline /*IMGUI_API*/ bool RangeSliderFloat(const char* label, float* v1, float* v2, float v_min, float v_max, const char* display_format = "(%.3f, %.3f)", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = true)
 	{
 		ImGuiWindow* window = GetCurrentWindow();
 		if (window->SkipItems) return false;
@@ -266,12 +266,28 @@ namespace ofxImGuiSurfing
 		ImGuiContext& g = *GImGui;
 		const ImGuiStyle& style = g.Style;
 		const ImGuiID id = window->GetID(label);
-		const float w = CalcItemWidth();
 
-		bool fixedWidth = true;
+		//ImVec2 pcursor = ImGui::GetCursorScreenPos();//TODO: fix size ?
+
+		bool fixedWidth = true;//to align multiple range sliders
 		ImVec2 label_size;
-		if (fixedWidth) label_size = ImVec2(120, 10);
-		else label_size = CalcTextSize(label, NULL, true);
+		if (fixedWidth) label_size = ImVec2(120, 10);//hardcoded size
+		else label_size = CalcTextSize(label, NULL, true);//sized by text long
+
+		//TODO:
+		float w;
+		//if (bfullsize) w = ImGui::GetContentRegionAvail().x - label_size.x;
+		if (bfullsize) w = CalcItemWidth();
+		else if (shape.x == -1 && shape.y == -1)
+		{
+			//if (bfullsize) w = ImGui::GetContentRegionAvail().x - label_size.x;
+			//else w = 200;//?
+			w = 200;//?
+		}
+		else
+		{
+			w = shape.x - label_size.x - 20;
+		}
 
 		const ImRect frame_bb(window->DC.CursorPos, window->DC.CursorPos + ImVec2(w, label_size.y + style.FramePadding.y*2.0f));
 		const ImRect total_bb(frame_bb.Min, frame_bb.Max + ImVec2(label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f, 0.0f));
@@ -288,6 +304,7 @@ namespace ofxImGuiSurfing
 
 		if (!display_format) display_format = "(%.3f, %.3f)";
 		//display_format = "%.3f - %.3f";
+
 		int decimal_precision = ImParseFormatPrecision(display_format, 3);
 
 		// Tabbing or CTRL-clicking on Slider turns it into an input box
@@ -305,7 +322,8 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		// crash
+		// Text input
+		// Crash
 		//if (start_text_input || (g.ActiveId == id && g.TempInputId == id))
 		//{
 		//    char fmt[64];
@@ -313,7 +331,20 @@ namespace ofxImGuiSurfing
 		//    return TempInputScalar(frame_bb, id, label, ImGuiDataType_Float, v1, fmt);
 		//}
 
-		ItemSize(total_bb, style.FramePadding.y);
+		//-
+
+		//TODO: this breaks the width whe auto resize...
+		//ItemSize(total_bb, style.FramePadding.y);
+
+		// workaround
+		//float h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+		//float h = label_size.y + 2 * style.FramePadding.y;
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit() + style.FramePadding.y;
+		const ImRect _bb(10, style.FramePadding.y, 400, h);
+		//const ImRect _bb(pcursor.x, pcursor.y, w + label_size.x, 1);
+		ItemSize(_bb, style.FramePadding.y);
+
+		//-
 
 		// Actual slider behavior + render grab
 		const bool value_changed = RangeSliderBehavior(frame_bb, id, v1, v2, v_min, v_max, power, decimal_precision, 0);
@@ -323,7 +354,13 @@ namespace ofxImGuiSurfing
 		const char* value_buf_end = value_buf + ImFormatString(value_buf, IM_ARRAYSIZE(value_buf), display_format, *v1, *v2);
 		RenderTextClipped(frame_bb.Min, frame_bb.Max, value_buf, value_buf_end, NULL, ImVec2(0.5f, 0.5f));
 
+		// Render Text
 		if (label_size.x > 0.0f) RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
+
+		//fixing auto resize infinite grow..
+		//ImGui::Dummy(ImVec2(100, 0));//?
+		//ImGui::Dummy(ImVec2(0, 0));//?
+		//ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
 
 		return value_changed;
 	}
@@ -334,29 +371,24 @@ namespace ofxImGuiSurfing
 
 	// ofParameters Helpers
 
-//	// A. Relative to panel width
-//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-////#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-200);
-//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
-
 	// float
 	//--------------------------------------------------------------
-	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f)
+	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = true)
 	{
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 
-		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
+		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power, shape, bfullsize))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
 			return true;
 		}
-		IMGUI_SUGAR_SLIDER_WIDTH_POP;
+		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
 		return false;
 	}
 

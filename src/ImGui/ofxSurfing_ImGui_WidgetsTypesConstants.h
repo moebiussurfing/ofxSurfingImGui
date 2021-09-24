@@ -13,7 +13,7 @@ namespace ofxImGuiSurfing
 
 	// A. Relative to panel width
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-70);
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-80);
 	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
 
 	//// B. Using absolute size

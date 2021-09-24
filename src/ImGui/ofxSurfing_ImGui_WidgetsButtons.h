@@ -385,7 +385,6 @@ namespace ofxImGuiSurfing
 
 		string name = parameter.getName();
 		string n = "##STEPPERint" + name + ofToString(1);
-
 		ImGui::PushID(n.c_str());
 
 		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
@@ -428,8 +427,8 @@ namespace ofxImGuiSurfing
 		if (sz.y == -1) sz.y = h - spcy;
 
 		//ImGui::BeginGroup();
-		ImGui::PushID(name.c_str());
-		
+		ImGui::PushID(("##VSLIDER" + name).c_str());
+
 		if (bNoName) {
 			//ImGui::Text(name.c_str());
 			name = "";
@@ -470,7 +469,7 @@ namespace ofxImGuiSurfing
 		if (sz.x == -1) sz.x = w - spcx;
 		if (sz.y == -1) sz.y = h - spcy;
 
-		ImGui::PushID(name.c_str());
+		ImGui::PushID(("##VSLIDER" + name).c_str());
 		if (bNoName) name = "";
 
 		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
@@ -483,6 +482,8 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 		return bChanged;
 	}
+
+	//--
 
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string format = "%.3f")// button but using a bool not void param

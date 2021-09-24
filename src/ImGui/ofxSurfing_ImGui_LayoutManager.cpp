@@ -821,6 +821,11 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 {
 	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+	
+	//if (bReset_Window) {
+	//	bReset_Window = false;
+	//	resetWindowImGui(false, true);
+	//}
 
 	//--
 
@@ -880,6 +885,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	//ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
 
 	// Main body of the Demo window starts here.
+
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
 
 	//if (!b)
