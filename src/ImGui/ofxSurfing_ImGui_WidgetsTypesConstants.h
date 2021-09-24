@@ -7,13 +7,16 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// Workaround
+	// workaround
+
+	//TODO: a nice ide should be to get the longer pamra label name width and use this max width...
+
 	// Some macro sugar to help fix how sliders force autoresize the panel widths.
 	// It's a 'rare behaviour' that I am trying to correct doing this.
 
 	// A. Relative to panel width
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-80);
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
 	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
 
 	//// B. Using absolute size

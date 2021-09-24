@@ -24,7 +24,7 @@ ImGuiTreeNodeFlags_None on root groups fails
 
 //#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme. not implemented
 
-// will be applied as minimal panel shape
+// Will be applied as minimal panel shape
 #define PANEL_WIDGETS_WIDTH 250
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 200

@@ -9,8 +9,9 @@
 
 #define M_PI 3.14159265358979323846264338327950288
 
-#include "colors/imgui_color_gradient.h"
-#include "ImGui/dear_widgets/dear_widgets.h"
+// Must include from OFX_ADDON/_LIBS if you want to use it in your project.
+//#include "colors/imgui_color_gradient.h"
+//#include "ImGui/dear_widgets/dear_widgets.h"
 
 // TODO:
 // WIP

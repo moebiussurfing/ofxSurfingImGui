@@ -57,7 +57,7 @@ TODO:
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 
 #include "ofxSurfing_Serializer.h"
-//#include "ofxSurfingHelpers.h"
+////#include "ofxSurfingHelpers.h"
 
 //#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
@@ -537,8 +537,19 @@ private:
 					ImGui::TreePop();
 				}
 
-				// help
-				ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
+				if (ImGui::TreeNode("Gui"))
+				{
+					// minimize
+					ofxImGuiSurfing::AddToggleRoundedButton(bMinimize);
+
+					// extra
+					ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
+
+					// help
+					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
+
+					ImGui::TreePop();
+				}
 
 				// keys
 				ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
@@ -556,7 +567,6 @@ private:
 					//--
 
 					drawSpecialWindowsPanel();
-
 				}
 			}
 		}

@@ -8,7 +8,10 @@
 
 //--------------------------------------------------------------
 
-// this header includes all the ImGui classes: layout, helpers and all my Surfing widgets.
+// This header includes the main classes: 
+// layout, helpers and all my Surfing widgets.
+// Some others are moved out of the /src folder bc they are less common.
+// You must include them manually from OFX_ADDON/_LIBS if you want to use it in your project.
 
 //---------
 // HEADERS
@@ -30,7 +33,8 @@
 //#include "ImGui/ofxSurfing_ImGui_Themes.h"
 //#include "ImGui/themes/ThemeSequentity.inl"
 
-#include "ofxSurfing_ImGui_WidgetsFileBrowser.h"
+// Must include from OFX_ADDON/_LIBS if you want to use it in your project.
+//#include "ofxSurfing_ImGui_WidgetsFileBrowser.h"
 
 
 using namespace ofxImGuiSurfing;
