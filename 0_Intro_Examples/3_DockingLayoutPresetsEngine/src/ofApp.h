@@ -4,7 +4,7 @@
 
 #include "ofxSurfingImGui.h"
 
-#include "ofxWindowApp.h" // -> not required
+#include "ofxWindowApp.h" // -> Not required
 
 class ofApp : public ofBaseApp {
 

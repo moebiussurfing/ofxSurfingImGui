@@ -15,15 +15,16 @@
 
 // TODO:
 // WIP
-// to add more uncoming new widgets here
+// To add more uncoming new widgets here
+// Some widget are already included!
 
-// cute widgets !
+// Cute widgets !
 // https://github.com/soufianekhiat/DearWidgets
 
-// spin arrows widget
+// Spin arrows widget
 // https://github.com/ocornut/imgui/issues/2649
 
-// spinners, loading bars 
+// Spinners, loading bars 
 // https://github.com/ocornut/imgui/issues/1901#issuecomment-552185000
 // https://github.com/ocornut/imgui/issues/1901
 

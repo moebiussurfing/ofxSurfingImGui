@@ -1,0 +1,18 @@
+{
+    "_LayoutsPresets": {
+        "Extra_Params": {
+            "Enable": "0",
+            "Log": "0",
+            "Menu": "0",
+            "bMode1": "0",
+            "bMode2": "1"
+        },
+        "_LayoutsVisible": {
+            "Audio": "1",
+            "Expert": "0",
+            "Main": "1",
+            "Video1": "1",
+            "Video2": "0"
+        }
+    }
+}

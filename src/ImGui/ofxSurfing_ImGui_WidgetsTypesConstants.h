@@ -100,7 +100,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_TREE_EX,
 		OFX_IM_GROUP_TREE,
 		OFX_IM_GROUP_SCROLLABLE,
-		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder
+		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
 		OFX_IM_GROUP_NUM_TYPES

@@ -282,7 +282,7 @@ namespace ofxImGuiSurfing
 		{
 			//if (bfullsize) w = ImGui::GetContentRegionAvail().x - label_size.x;
 			//else w = 200;//?
-			w = 200;//?
+			w = 200;//? default width when bfullsize = false and shape = -1,-1 
 		}
 		else
 		{
@@ -371,45 +371,52 @@ namespace ofxImGuiSurfing
 
 	// ofParameters Helpers
 
-	// float
+	// Float
 	//--------------------------------------------------------------
-	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = true)
+	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = false)
+		//inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = true)
 	{
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
 		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 
+		ImGui::PushID(name.c_str());
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power, shape, bfullsize))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
 			if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			ImGui::PopID();
 			return true;
 		}
 		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
+		ImGui::PopID();
 		return false;
 	}
 
-	// int
+	// Int
 	//--------------------------------------------------------------
-	inline static bool AddRangeParam(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, const char* display_format = "%d   %d", int power = 1)
+	inline static bool AddRangeParam(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, const char* display_format = "%d   %d", int power = 1, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = false)
 	{
 		float tmpRefMin = parameterMin.get();
 		float tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+		ImGui::PushID(name.c_str());
 
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			ImGui::PopID();
 			return true;
 		}
-		IMGUI_SUGAR_SLIDER_WIDTH_POP;
+		if (bfullsize) IMGUI_SUGAR_SLIDER_WIDTH_POP;
+		ImGui::PopID();
 		return false;
 	}
 
@@ -421,7 +428,6 @@ namespace ofxImGuiSurfing
 
 	//// Snippet
 	//ofxImGuiSurfing::AddRangeOneVec3Param("Range", pos1, valueMin, valueMax, value, coord.get());
-
 
 
 	//--------------------------------------------------------------
@@ -509,7 +515,7 @@ namespace ofxImGuiSurfing
 //#include "dear_widgets.h"
 //#include "dear_widgets.cpp"
 
-	//static inline bool  SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, float power) { return SliderScalar(label, ImGuiDataType_Float, v, &v_min, &v_max, format, power); }
+	//static inline bool SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, float power) { return SliderScalar(label, ImGuiDataType_Float, v, &v_min, &v_max, format, power); }
 	//bool SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
 	//{
 	//	return SliderScalar(label, ImGuiDataType_Float, v, &v_min, &v_max, format, flags);

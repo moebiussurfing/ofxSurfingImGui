@@ -83,6 +83,16 @@ namespace ofxImGuiSurfing {
 		//--------------------------------------------------------------
 		// ImGuiLogWindow
 		//--------------------------------------------------------------
+
+		//TODO: add colors
+		//enum IM_GUI_LOG_STYLE
+		//{
+		//	IM_GUI_LOG_STYLE_0 = 0,
+		//	IM_GUI_LOG_STYLE_1,
+		//	IM_GUI_LOG_STYLE_2
+		//};
+		//IM_GUI_LOG_STYLE style = IM_GUI_LOG_STYLE_0
+
 		void AddText(std::string str)
 		{
 			mLog.emplace_back(str);
@@ -99,14 +109,34 @@ namespace ofxImGuiSurfing {
 		//--------------------------------------------------------------
 		void ImGui(const std::string &name) {
 
-			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
+			ImGuiCond cond = ImGuiCond_FirstUseEver;
+			float w = ofGetWidth();
+			float h = ofGetHeight();
+			ImGui::SetNextWindowPos(ImVec2(w - 210, 20), cond);
+			ImGui::SetNextWindowSize(ImVec2(200, h - 100), cond);
+
+			if (!ImGui::Begin(name.c_str())) {ImGui::End(); return; }
+
+			float _w100 = ImGui::GetContentRegionAvail().x;
+			float _h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
+
+			if (ImGui::Button("Clear", ImVec2(_w100, _h)))
+			{
+				Clear();
+			}
+
+			ImGui::Separator();
+
 			ImGui::BeginChild("Logs");
 			auto logs = mLog;
-            //macOS bug
-//			for each (string l in logs)
-//			{
-//				ImGui::TextWrapped("%s", l.c_str());
-//			}
+
+			//macOS bug
+			//for each (string l in logs)
+			for (auto l : logs)
+			{
+				ImGui::TextWrapped("%s", l.c_str());
+			}
+
 			ImGui::EndChild();
 			ImGui::End();
 		}

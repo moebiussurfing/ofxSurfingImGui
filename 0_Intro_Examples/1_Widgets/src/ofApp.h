@@ -13,6 +13,9 @@
 
 #include "ofxSurfingImGui.h"
 
+//https://github.com/iamclint/ImGuiRangeSlider
+#include "ImGuiRangeSlider.h"
+
 class ofApp : public ofBaseApp{
 public:
 	

@@ -6,12 +6,16 @@ void ofApp::setup() {
 
 	// Parameters
 	params1.setName("paramsGroup1");
+	params1.add(speed.set("speed", 0.5, 0, 1));
 	params1.add(bPrevious.set("<", false));
 	params1.add(bNext.set(">", false));
 	params1.add(bEnable.set("Enable", false));
+	params1.add(bMode1.set("bMode1", false));
+	params1.add(bMode2.set("bMode2", true));
+	params1.add(bMode3.set("bMode3", false));
+	params1.add(bMode4.set("bMode4", false));
 	params1.add(lineWidth.set("lineWidth", 0.5, 0, 1));
 	params1.add(separation.set("separation", 50, 1, 100));
-	params1.add(speed.set("speed", 0.5, 0, 1));
 	params1.add(shapeType.set("shapeType", 0, -50, 50));
 	params1.add(size.set("size", 100, 0, 100));
 	params1.add(amount.set("amount", 10, 0, 25));
@@ -44,16 +48,18 @@ void ofApp::setup() {
 	// Add the windows just with a name:
 	// Pre add the window names that you will use and rememeber his index!
 	// Each added window will be added too to the layout presets engine
-	guiManager.addWindow("Main Window");
-	guiManager.addWindow("Audio Window");
-	guiManager.addWindow("Video 2");
-	guiManager.addWindow("Video 3");
-	guiManager.addWindow("Advanced");
+	guiManager.addWindowSpecial("Main");
+	guiManager.addWindowSpecial("Audio");
+	guiManager.addWindowSpecial("Video1");
+	guiManager.addWindowSpecial("Video2");
+	guiManager.addWindowSpecial("Expert");
+
+	//-
 
 	/*
 
 	NOTE:
-	Then we can reder the windows:
+	Then we can render the windows:
 	if (guiManager.beginWindow(index)) // -> This is our helpers to render each window passing the index
 	{
 		// widgets goes here!
@@ -67,16 +73,39 @@ void ofApp::setup() {
 
 	//-
 
+	// Optional: 
+	// Customize the name for the 4 default presets
+	vector<std::string> names;
+	names.push_back("Editor");
+	names.push_back("Player");
+	names.push_back("Live");
+	names.push_back("Mini");
+	guiManager.setPresetsNames(names);
+
 	// -> Initiates after adding windows and parameters.
 	guiManager.startup();
 
-	// -> subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+	//-
+
+	// Optional:
+	// We can add extra parameters to include into the layout presets
+	guiManager.addParameterToLayoutPresets(bEnable);
+	guiManager.addParameterToLayoutPresets(bMode1);
+	guiManager.addParameterToLayoutPresets(bMode2);
+
+	//-
+
+	// Optional: 
+	// -> Subscribe an optional reset flagging a bool to true to reset. 
+	// Uses the internal addon gui Reset button on the Presets Extra panel,
+	// but to call a local method on this scope (ofApp).
 	guiManager.setReset(&bDockingReset);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+
 	guiManager.begin(); // Global begin
 	{
 		/* Here (between begin/end) we can render ImGui windows and widgets. */
@@ -84,6 +113,7 @@ void ofApp::draw()
 		//if (0)//bypass
 		{
 			guiManager.beginDocking();
+			//if(0)
 			{
 				/* Here (between beginDocking/endDocking) we can access all the docking space. */
 
@@ -122,12 +152,30 @@ void ofApp::draw()
 		//guiManager.endDocking();
 	}
 	guiManager.end(); // Global end
+
+	//----
+
+	// Log
+	const int m = ofMap(speed, 1, 0, 2, 60);
+	if (ofGetFrameNum() % m == 0)
+	{
+		std::string ss = ofToString(ofGetFrameNum());
+		float _rnd = ofRandom(1);
+		if (_rnd < 0.2) guiManager.addLog(ss);
+		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
+		else if (_rnd < 0.6) guiManager.addLog(ofToString("---------------"));
+		else if (_rnd < 0.8) guiManager.addLog(ofToString("===//=====//==="));
+		else guiManager.addLog(ofGetTimestampString());
+	}
+
+	//-
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
 	// Hardcoded Layout
+	if (bEnable)
 	{
 		ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
 		flags |= ImGuiWindowFlags_NoSavedSettings; // -> exclude from layout presets
@@ -136,8 +184,9 @@ void ofApp::drawImGui()
 		cond |= ImGuiCond_Appearing;
 		ImGui::SetNextWindowPos(ImVec2(400, 400), cond);
 		ImGui::SetNextWindowSize(ImVec2(100, 200), cond);
-		
-		ImGui:Begin("Debug", NULL, flags);
+
+		//ImGui:Begin("Debug-ofApp", NULL, flags);
+		ImGui:Begin("Debug-ofApp", (bool*)bEnable.get(), flags);
 		{
 			ImGui::TextWrapped("Reset Docking hardcoded layouts");
 			float _w = ofxImGuiSurfing::getWidgetsWidth();
@@ -264,6 +313,8 @@ void ofApp::drawImGui()
 //--------------------------------------------------------------
 void ofApp::dockingReset()
 {
+	if (1) return;
+
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -307,6 +358,8 @@ void ofApp::dockingReset()
 //--------------------------------------------------------------
 void ofApp::dockingRandom()
 {
+	if (1) return;
+
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;

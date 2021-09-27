@@ -59,7 +59,7 @@ TODO:
 #include "ofxSurfing_Serializer.h"
 ////#include "ofxSurfingHelpers.h"
 
-//#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
+#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
 #define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
@@ -98,6 +98,12 @@ public:
 
 	// window log
 	ImGuiLogWindow log;
+
+	//--------------------------------------------------------------
+	void addLog(std::string text) {
+		// log
+		log.AddText(text);
+	}
 
 public:
 
@@ -405,6 +411,11 @@ public:
 		return bMouseOverGui;
 	}
 
+	//--------------------------------------------------------------
+	bool isOverInputText() {
+		return bInputText;
+	}
+
 	//----
 
 private:
@@ -449,6 +460,7 @@ public:
 private:
 
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
+	ofParameter<bool> bInputText{ "Input Text", false }; // user is over a text input
 	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
 
 	//-
@@ -518,16 +530,19 @@ private:
 
 			if (!bHeader || (bHeader && b))
 			{
-				if (ImGui::TreeNode("Window"))
+				if (ImGui::TreeNode("Windows"))
 				{
-					// autoresize
+					// Autoresize
 					ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
-					// lock
+
+					// Lock
 					ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
-					// reset
+
+					// Reset
 					//TODO:
 					// -> must be implemented
-					// reset window
+
+					// Reset window
 					if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
 						//if (bReset_Window) {
 						//	bReset_Window = false;
@@ -539,34 +554,71 @@ private:
 
 				if (ImGui::TreeNode("Gui"))
 				{
-					// minimize
+					// Minimize
 					ofxImGuiSurfing::AddToggleRoundedButton(bMinimize);
 
-					// extra
+					// Extra
 					ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
 
-					// help
+					// Menu
+					ofxImGuiSurfing::AddToggleRoundedButton(bMenu);
+
+					// Log
+					ofxImGuiSurfing::AddToggleRoundedButton(bLog);
+
+					// Help
 					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
 
 					ImGui::TreePop();
 				}
 
-				// keys
+				// Keys
 				ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
 
 				//TODO:
 				// -> must be implemented
-				// debug
+
+				// Debug
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-				if (bDebug) {
+				if (bDebug)
+				{
 					ImGui::Indent();
-					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-					AddToggleRoundedButton(bPreviewSceneViewport);
-					ImGui::Unindent();
 
 					//--
 
 					drawSpecialWindowsPanel();
+
+					ImGui::Separator();
+
+					//--
+
+					//ImGui::Text("Docking");
+					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+					{
+						AddToggleRoundedButton(bDebugDocking);
+						if (bDebugDocking)
+						{
+							ImGui::Indent();
+
+							AddToggleRoundedButton(bUseLayoutPresetsManager);
+							AddToggleRoundedButton(bDocking);
+							ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
+							AddToggleRoundedButton(bPreviewSceneViewport);
+							//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
+							AddToggleRoundedButton(bDebugRectCentral);
+
+							ImGui::Unindent();
+						}
+						ImGui::Separator();
+					}
+
+					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+					ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
+					//AddToggleRoundedButton(bPreviewSceneViewport);
+
+					ImGui::Separator();
+
+					ImGui::Unindent();
 				}
 			}
 		}
@@ -669,12 +721,12 @@ public:
 
 		return windowsAtributes[index].rectShapeWindow;
 	}
-
+private:
 	//--------------------------------------------------------------
 	void addWindow(std::string name, bool bPowered = false) { // -> legacy api
 		addWindowSpecial(name, bPowered);
 	}
-
+public:
 	//--------------------------------------------------------------
 	void addWindowSpecial(std::string name, bool bPowered = false) {
 		ofParameter<bool> _bGui{ name, true };
@@ -690,6 +742,7 @@ public:
 
 	//----
 
+	/*
 	// params to include packed into layout presets
 	//--------------------------------------------------------------
 	void addParameterToLayoutPresets(ofParameterGroup& group) {
@@ -710,6 +763,31 @@ public:
 	//--------------------------------------------------------------
 	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
 		params_Layouts.add(param);
+	}
+	*/
+
+	//----
+
+	// Extra params to include packed into layout presets
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameterGroup& group) {
+		params_LayoutsExtra.add(group);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<bool>& param) {
+		params_LayoutsExtra.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<int>& param) {
+		params_LayoutsExtra.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<float>& param) {
+		params_LayoutsExtra.add(param);
+	}
+	//--------------------------------------------------------------
+	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
+		params_LayoutsExtra.add(param);
 	}
 
 	//----
@@ -818,7 +896,7 @@ private:
 	ofParameterGroup params_LayoutsExtra{ "_LayoutsExtra" }; // all these params will be stored on each layout preset
 
 	int numPresetsDefault;
-	void createLayoutPreset();
+	void createLayoutPreset(std::string namePreset = "-1");
 
 	//-
 
@@ -841,6 +919,20 @@ private:
 	//----
 
 public:
+	//--------------------------------------------------------------
+	void setPresetsNames(vector <std::string > names) {
+		if (names.size() != 4) {
+			ofLogError(__FUNCTION__) << "Names sizes are not equals to 4";
+		}
+
+		namesPresets.clear();
+		namesPresets = names;
+	}
+
+private:
+	vector <std::string> namesPresets;
+
+public:
 
 	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
@@ -851,6 +943,7 @@ public:
 		if (bDocking)
 		{
 			setupLayout(4); // Default Layout with 4 presets.
+			//setupLayout(4); // Default Layout with 4 presets.
 		}
 	}
 
@@ -866,6 +959,11 @@ public:
 		setImGuiAutodraw(true);
 
 		setup();
+
+		////TODO:
+		//params_Layouts.clear();
+		//params_LayoutsExtra.clear();
+		//params_LayoutsVisible.clear();
 	}
 
 	//--------------------------------------------------------------
@@ -876,6 +974,7 @@ public:
 public:
 
 	void drawSpecialWindowsPanel();
+	void draw_ImGuiMenu();
 
 private:
 
@@ -895,8 +994,8 @@ private:
 	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
 	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
 	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
-	ofParameter<bool> bModeLock1{ "Lock1", false }; // -> Cant be moved. To be used in presets panel
-	ofParameter<bool> bModeLockControls{ "Lock Controls", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	ofParameter<bool> bModeLock1{ "Lock A", false }; // -> Cant be moved. To be used in presets panel
+	ofParameter<bool> bModeLockControls{ "Lock B", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
 	ofParameter<bool> bModeLockPreset{ "Lock Preset", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
 	//TODO: it's a problem if .ini files are already present... We must ingore loading.
 
@@ -942,7 +1041,7 @@ public:
 
 public:
 
-	ofParameter<bool> bGui_Menu{ "Menu", false };
+	ofParameter<bool> bMenu{ "Menu", false };
 
 private:
 
@@ -955,7 +1054,7 @@ private:
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 	ofParameter<bool> bSolo{ "Solo", false };
-	ofParameter<bool> bGui_Log{ "Log", false };
+	ofParameter<bool> bLog{ "Log", false };
 
 	//-
 
@@ -990,7 +1089,7 @@ public:
 		{
 			windowsAtributes[i].bGui.set(b);
 		}
-		bGui_Menu = b;
+		bMenu = b;
 		bModeLockControls = b;
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresets = b;

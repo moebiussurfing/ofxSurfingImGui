@@ -133,6 +133,24 @@ void ofApp::draw()
 
 		guiManager.beginWindow("ofApp", NULL, window_flags);
 		{
+			if(0)//TESTING
+			{
+				int max = 10000;
+				int min = 1;
+				static int ilow = 1, ihigh = 5000;
+				static int ilow1 = 1, ihigh1 = 5000;
+				static int ilow2 = 2, ihigh2 = 5000;
+				static float flow = 1, fhigh = 5000;
+				static float flow1 = 1, fhigh1 = 5000;
+				static float flow2 = 1, fhigh2 = 5000;
+				//ImGui::RangeSliderInt("CMDS", min, max, ilow, ihigh);
+				//ImGui::RangeSliderInt("CMDS1", min, max, ilow1, ihigh1);
+				//ImGui::RangeSliderInt("CMDS2", min, max, ilow2, ihigh2);
+				//ImGui::RangeSliderFloat("CMDS3f", min, max, flow2, fhigh2);
+				//ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
+				ImGui::RangeSliderFloat("CMDS5f", min, max, flow, fhigh);
+			}
+
 			// Toggle enablers
 			{
 				for (int i = 0; i < NUM_SECTIONS; i++) {
