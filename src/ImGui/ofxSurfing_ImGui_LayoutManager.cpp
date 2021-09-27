@@ -382,12 +382,10 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
-	//static bool auto_resize = true;
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	window_flags |= flagsWindowsModeFreeStore;
-
 	//window_flags |= flagsWindowsLocked2;
 
 	//--
@@ -427,10 +425,15 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 		//-
 
-		ImGui::Text("Panels");
-		for (int i = 0; i < windowsAtributes.size(); i++)
+		if (ImGui::TreeNode("Panels"))
 		{
-			AddToggleRoundedButton(windowsAtributes[i].bGui);
+			//ImGui::Text("Panels");
+			for (int i = 0; i < windowsAtributes.size(); i++)
+			{
+				AddToggleRoundedButton(windowsAtributes[i].bGui);
+			}
+
+			ImGui::TreePop();
 		}
 
 		//ImGui::Spacing();
@@ -452,21 +455,19 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 		//if (params_LayoutsExtra.getGroupHierarchyNames().size() > 0)
 			//if (params_LayoutsExtra.size() > 0)
-			{
-				//ImGui::Text("Extra Parameters");
-				//AddGroup(params_Layouts);
-				//AddGroup(params_LayoutsExtra);
-				AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_TREE);
-				//AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+		{
+			//ImGui::Text("Extra Parameters");
+			//AddGroup(params_Layouts);
+			//AddGroup(params_LayoutsExtra);
+			AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_TREE);
+			//AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 
-				ImGui::Separator();
-			}
+			ImGui::Separator();
+		}
 
 		//-
 
 		drawAdvanced();
-
-		//ImGui::Separator();
 
 		//-
 
@@ -1466,6 +1467,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			if (i % 2 == 0) ImGui::SameLine();
 		}
 
+		ImGui::Separator();
+
 		//-
 
 		if (bLayoutPresets.size() % 2 == 0) _w = ofxImGuiSurfing::getWidgetsWidth(1);
@@ -1473,41 +1476,37 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		// Save button
 		if (!bAutoSave_Layout.get())
 		{
-			ImGuiStyle *style = &ImGui::GetStyle();
-
-			ImVec4 butColor = style->Colors[ImGuiCol_FrameBg];
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(butColor.x, butColor.y, butColor.z, butColor.w * a));
-
-			// Border
-			ImVec4 borderLineColor = style->Colors[ImGuiCol_SliderGrab];
-			float borderLineWidth = 1.0;
-
-			ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+			//ImGuiStyle *style = &ImGui::GetStyle();
+			//ImVec4 butColor = style->Colors[ImGuiCol_FrameBg];
+			//ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(butColor.x, butColor.y, butColor.z, butColor.w * a));
+			//// Border
+			//ImVec4 borderLineColor = style->Colors[ImGuiCol_SliderGrab];
+			//float borderLineWidth = 1.0;
+			//ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 
 			ImGui::PushID("##SaveLayout");
-			if (ImGui::Button("Save", ImVec2(_w, _h)))
+			if (ImGui::Button("Save", ImVec2(_w, _h / 2)))
 			{
 				saveAppLayout(appLayoutIndex.get());
 			}
 			ImGui::PopID();
 
-			// Border
-			ImGui::PopStyleColor();
-			ImGui::PopStyleVar(1);
-
-			ImGui::PopStyleColor();
+			//// Border
+			//ImGui::PopStyleColor();
+			//ImGui::PopStyleVar(1);
+			//ImGui::PopStyleColor();
 		}
 
 		//-
 
 		_w = ofxImGuiSurfing::getWidgetsWidth(1);
-		//_h /= 2;
 
 		// One row
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, _h);
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w, _h);
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h / 2);
+		
+		ImGui::Separator();
 
 		/*
 		ofxImGuiSurfing::AddBigToggle(bModeForced, _w50, _h);
@@ -1515,10 +1514,13 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		ofxImGuiSurfing::AddBigToggle(bModeLockControls, _w50, _h);
 		*/
 
-		AddToggleRoundedButton(bModeLockPreset);
+		//AddToggleRoundedButton(bModeLockPreset);
+		ofxImGuiSurfing::AddBigToggle(bModeLockPreset, _w, _h / 2);
 
 		//AddToggleRoundedButton(bModeFree);
-		//ToggleRoundedButton("Auto Resize", &auto_resize);
+
+		AddToggleRoundedButton(bGui_LayoutsExtra);
+		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h / 2);
 
 		//-
 
@@ -1786,7 +1788,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 	//ImGui::SetNextWindowPos(ofVec2f(xw + ww + 2, yw), _flagc);
 	//ImGui::SetNextWindowSize(ofVec2f(ww, hw), _flagc);
-	
+
 	//right
 	//ImGui::SetNextWindowPos(ofVec2f(positionGuiLayout.get().x + shapeGuiLayout.get().x + _pad, positionGuiLayout.get().y), _flagc);
 
@@ -1904,6 +1906,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		}
 
 		//--
+
 		/*
 		AddToggleRoundedButton(bExtra);
 		if (bExtra) {

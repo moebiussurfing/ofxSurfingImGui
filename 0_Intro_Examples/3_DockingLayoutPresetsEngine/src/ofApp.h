@@ -6,15 +6,18 @@
 
 #include "ofxWindowApp.h" // -> Not required
 
-class ofApp : public ofBaseApp {
+// + fix resets
 
+class ofApp : public ofBaseApp {
 public:
+
 	void setup();
 	void draw();
 
 	//-
 
 	ofxSurfing_ImGui_Manager guiManager;
+
 	void drawImGui();
 
 	//-
@@ -26,7 +29,7 @@ public:
 
 	//-
 
-	// parameters
+	// Parameters
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
 	ofParameter<bool> bPrevious;

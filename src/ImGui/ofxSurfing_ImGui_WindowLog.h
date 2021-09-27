@@ -68,8 +68,11 @@ namespace ofxImGuiSurfing {
 
 		//void AddText(std::string str);
 		//void AddTextToFile(std::string str, std::string path, bool append = false, bool withTimeStamp = false);
+
 		void SetLogSize(unsigned long size) { mLogSize = size; }
+
 		//void ImGui(const std::string &name);
+
 		void Clear() { mLog.clear(); }
 
 	private:
@@ -115,10 +118,10 @@ namespace ofxImGuiSurfing {
 			ImGui::SetNextWindowPos(ImVec2(w - 210, 20), cond);
 			ImGui::SetNextWindowSize(ImVec2(200, h - 100), cond);
 
-			if (!ImGui::Begin(name.c_str())) {ImGui::End(); return; }
+			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
 
 			float _w100 = ImGui::GetContentRegionAvail().x;
-			float _h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
+			float _h = 1.5 * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
 
 			if (ImGui::Button("Clear", ImVec2(_w100, _h)))
 			{

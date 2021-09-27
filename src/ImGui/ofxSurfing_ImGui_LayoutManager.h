@@ -1,26 +1,24 @@
 
 /*
 
-BUG:
-! debug mode crashes sometimes
-! typeFlags 0 fails flickering
-
 TODO:
+
 + fix make dockeable all windows on same space
-	+ fix multiple dock spaces that are colliding/one over another
-	+ fix viewport rectangle preview
++ fix multiple dock spaces that are colliding/one over another
++ fix viewport rectangle preview
 
 + remake mode free and lockers simpler. a flag for each window
 
 + aspect ratio /fit modes for game viewport
++ add help box
 
 + add global reset
-	+ add data remover
 + add minimal toggle
 + auto size per window
-	+ other window settings
++ other window settings
 
 */
+
 
 //#define FIXING_DOCKING // -> Need to fix yet
 #define FIXING_DRAW_VIEWPORT // -> To debug free space
@@ -528,6 +526,9 @@ private:
 			}
 			else b = true;
 
+			// Keys
+			ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+
 			if (!bHeader || (bHeader && b))
 			{
 				if (ImGui::TreeNode("Windows"))
@@ -572,11 +573,7 @@ private:
 					ImGui::TreePop();
 				}
 
-				// Keys
-				ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
-
-				//TODO:
-				// -> must be implemented
+				//--
 
 				// Debug
 				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
@@ -620,6 +617,8 @@ private:
 
 					ImGui::Unindent();
 				}
+
+
 			}
 		}
 		ImGui::Unindent();
@@ -994,9 +993,9 @@ private:
 	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
 	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
 	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
-	ofParameter<bool> bModeLock1{ "Lock A", false }; // -> Cant be moved. To be used in presets panel
-	ofParameter<bool> bModeLockControls{ "Lock B", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
-	ofParameter<bool> bModeLockPreset{ "Lock Preset", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel
+	ofParameter<bool> bModeLockControls{ "Lock C", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	ofParameter<bool> bModeLockPreset{ "Lock A", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
 	//TODO: it's a problem if .ini files are already present... We must ingore loading.
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
@@ -1047,7 +1046,7 @@ private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
-	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
+	ofParameter<bool> bGui_LayoutsExtra{ "Extra Tools", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };

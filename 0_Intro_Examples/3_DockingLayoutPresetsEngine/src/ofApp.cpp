@@ -54,8 +54,6 @@ void ofApp::setup() {
 	guiManager.addWindowSpecial("Video2");
 	guiManager.addWindowSpecial("Expert");
 
-	//-
-
 	/*
 
 	NOTE:
@@ -105,7 +103,6 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
 	guiManager.begin(); // Global begin
 	{
 		/* Here (between begin/end) we can render ImGui windows and widgets. */

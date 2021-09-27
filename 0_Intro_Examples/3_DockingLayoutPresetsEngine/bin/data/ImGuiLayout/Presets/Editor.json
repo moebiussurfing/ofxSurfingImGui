@@ -3,7 +3,7 @@
         "Extra_Params": {
             "Enable": "0",
             "Log": "0",
-            "Menu": "0",
+            "Menu": "1",
             "bMode1": "0",
             "bMode2": "1"
         },
@@ -12,7 +12,7 @@
             "Expert": "0",
             "Main": "0",
             "Video1": "0",
-            "Video2": "1"
+            "Video2": "0"
         }
     }
 }
