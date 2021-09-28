@@ -528,13 +528,13 @@ private:
 
 			// Keys
 			ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+			// Autoresize
+			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 
 			if (!bHeader || (bHeader && b))
 			{
 				if (ImGui::TreeNode("Windows"))
 				{
-					// Autoresize
-					ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 
 					// Lock
 					ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
@@ -570,54 +570,54 @@ private:
 					// Help
 					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
 
-					ImGui::TreePop();
-				}
-
-				//--
-
-				// Debug
-				ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-				if (bDebug)
-				{
-					ImGui::Indent();
 
 					//--
 
-					drawSpecialWindowsPanel();
-
-					ImGui::Separator();
-
-					//--
-
-					//ImGui::Text("Docking");
-					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+					// Debug
+					ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+					if (bDebug)
 					{
-						AddToggleRoundedButton(bDebugDocking);
-						if (bDebugDocking)
-						{
-							ImGui::Indent();
+						ImGui::Indent();
 
-							AddToggleRoundedButton(bUseLayoutPresetsManager);
-							AddToggleRoundedButton(bDocking);
-							ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
-							AddToggleRoundedButton(bPreviewSceneViewport);
-							//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
-							AddToggleRoundedButton(bDebugRectCentral);
+						//--
 
-							ImGui::Unindent();
-						}
+						drawSpecialWindowsPanel();
+
 						ImGui::Separator();
+
+						//--
+
+						//ImGui::Text("Docking");
+						if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+						{
+							AddToggleRoundedButton(bDebugDocking);
+							if (bDebugDocking)
+							{
+								ImGui::Indent();
+
+								AddToggleRoundedButton(bUseLayoutPresetsManager);
+								AddToggleRoundedButton(bDocking);
+								ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
+								AddToggleRoundedButton(bPreviewSceneViewport);
+								//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
+								AddToggleRoundedButton(bDebugRectCentral);
+
+								ImGui::Unindent();
+							}
+							ImGui::Separator();
+						}
+
+						ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
+						ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
+						//AddToggleRoundedButton(bPreviewSceneViewport);
+
+						ImGui::Separator();
+
+						ImGui::Unindent();
 					}
 
-					ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-					ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
-					//AddToggleRoundedButton(bPreviewSceneViewport);
-
-					ImGui::Separator();
-
-					ImGui::Unindent();
+					ImGui::TreePop();
 				}
-
 
 			}
 		}
