@@ -431,6 +431,8 @@ namespace ofxImGuiSurfing
 		strcpy(cString, tmpRef.c_str());
 		auto result = false;
 
+		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+
 		if (multiline)
 		{
 			if (ImGui::InputTextMultiline((parameter.getName().c_str()), cString, maxChars))
@@ -445,6 +447,8 @@ namespace ofxImGuiSurfing
 			result = true;
 		}
 		delete[] cString;
+
+		IMGUI_SUGAR_SLIDER_WIDTH_POP;
 
 		return result;
 	}
@@ -926,7 +930,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// lists
+	// lists and drop down enum/lists
 	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
@@ -938,14 +942,15 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
 	{
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 10); // fix oversizes
-		if (values.empty()) 
-		{ 
-			ImGui::PopItemWidth(); 
-			return false; 
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20); // fix oversizes
+		if (values.empty())
+		{
+			ImGui::PopItemWidth();
+			return false;
 		}
+		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
 		ImGui::PopItemWidth();
-		return ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
+		return b;
 	}
 	//--------------------------------------------------------------
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)

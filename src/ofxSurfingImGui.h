@@ -91,7 +91,7 @@ using namespace ofxImGuiSurfing;
 
 	//--
 
-	// 1.2 WINDOW USING ofxImGui
+	// 1.2 WINDOW USING "old" ofxImGui
 
 	// (DEPRECATED. Better to not use like this)
 
@@ -108,7 +108,7 @@ using namespace ofxImGuiSurfing;
 
 	// 2. TREES
 
-	// 2.1 Simple TREE
+	// 2.1 Simple TREE (no framed)
 
 	if (ImGui::TreeNode("_Tree"))
 	{
@@ -119,10 +119,11 @@ using namespace ofxImGuiSurfing;
 
 	//--
 
-	// 2.2 COLLAPSING PANEL
+	// 2.2 COLLAPSING PANEL (framed and closed by default)
 
 	{
-		bool bOpen = false;
+		bool bOpen = true;
+		//bool bOpen = false;
 		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 		{
@@ -266,7 +267,7 @@ ImFont* customFont = nullptr;
 ofParameter<bool> bGui{ "Show Gui", true };
 ofParameter<bool> bAutoResize{ "Auto Resize", true };
 ofParameter<bool> bMouseOverGui{ "Mouse Locked", false };
-ofParameter<bool> auto_lockToBorder{ "Lock GUI", false };
+ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false };
 
 //-
 

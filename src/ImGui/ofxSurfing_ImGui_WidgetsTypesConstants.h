@@ -14,15 +14,24 @@ namespace ofxImGuiSurfing
 	// Some macro sugar to help fix how sliders force autoresize the panel widths.
 	// It's a 'rare behaviour' that I am trying to correct doing this.
 
+	//-
+
 	// A. Relative to panel width
+
+	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
+
 	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+	//-
 
 	//// B. Using absolute size
 	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+	//-
 
 	//// C. To bypass and do nothing.
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
@@ -60,6 +69,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK,
 		// rounded
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
+		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
 
 		// float/int

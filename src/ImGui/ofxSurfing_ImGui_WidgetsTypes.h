@@ -511,6 +511,10 @@ namespace ofxImGuiSurfing
 					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 					break;
 
+				case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
+					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.5 * _h, 1 * _h));
+					break;
+
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
 					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
 					break;
@@ -537,20 +541,26 @@ namespace ofxImGuiSurfing
 				case OFX_IM_DEFAULT:
 				case OFX_IM_TEXT_DISPLAY:
 				{
+					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					ImGui::Text(tmpRef.c_str());
+					IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				}
 				break;
 
 				case OFX_IM_TEXT_INPUT:
 				{
+					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					ImGui::Text(tmpRef.c_str());
 					//ofxImGuiSurfing::AddParameter(p);//cant be included?
+					IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				}
 				break;
 
 				case OFX_IM_TEXT_BIG:
 				{
+					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
 					ImGui::TextWrapped(tmpRef.c_str());
+					IMGUI_SUGAR_SLIDER_WIDTH_POP;
 				}
 				break;
 				}
@@ -910,6 +920,9 @@ namespace ofxImGuiSurfing
 			// Handle names/pushID's
 			// This is the root/first group
 			// Level is about how many deep on nested groups we are
+
+			//TODO:
+			ImGui::PushID(group.getName().c_str());
 
 			// A. 
 			// This is the root parent group/header:
@@ -1303,7 +1316,8 @@ namespace ofxImGuiSurfing
 						}
 						else
 						{
-							AddParameter(*parameterString);
+							Add(*parameterString, OFX_IM_DEFAULT);
+							//AddParameter(*parameterString);
 						}
 						continue;
 					}
@@ -1392,6 +1406,10 @@ namespace ofxImGuiSurfing
 				//ImGui::PopID(); // Group main
 				////}
 			}
+
+
+			//TODO:
+			ImGui::PopID();
 		}
 	};
 

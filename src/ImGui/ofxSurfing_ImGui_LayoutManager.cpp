@@ -7,6 +7,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
+	params_Advanced.add(bReset);
 	params_Advanced.add(bLockMove);
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bAdvanced);
@@ -14,7 +15,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bDebug);
 
-	bExtra.setSerializable(false);
+	//bExtra.setSerializable(false);
 
 	//-
 
@@ -819,8 +820,9 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+	//TODO: must be moved to special windows?
+	//if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
 	//if (bReset_Window) {
 	//	bReset_Window = false;

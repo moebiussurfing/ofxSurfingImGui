@@ -3,6 +3,9 @@
 
 TODO:
 
++ bug when chaining multiple groups on a window.
+//guiManager.resetUniqueNames();//-> requires a reset
+//guiManager.AddGroup(params_pointLight);
 + fix make dockeable all windows on same space
 + fix multiple dock spaces that are colliding/one over another
 + fix viewport rectangle preview
@@ -23,7 +26,7 @@ TODO:
 //#define FIXING_DOCKING // -> Need to fix yet
 #define FIXING_DRAW_VIEWPORT // -> To debug free space
 
-// -> we have some layout presets that we can load using keys:
+// -> We have some layout presets that we can load using keys:
 // F1-F2-F3-F4 -> preset
 // F9: Window Presets
 // F10: Window Panels
@@ -59,7 +62,7 @@ TODO:
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
-#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
+//#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
 
 
 //-
@@ -443,6 +446,7 @@ public:
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 
@@ -459,7 +463,7 @@ private:
 
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 	ofParameter<bool> bInputText{ "Input Text", false }; // user is over a text input
-	//ofParameter<bool> auto_lockToBorder{ "Lock GUI", false }; // force position
+	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
 
 	//-
 
@@ -563,6 +567,9 @@ private:
 
 					// Menu
 					ofxImGuiSurfing::AddToggleRoundedButton(bMenu);
+
+					// Reset
+					ofxImGuiSurfing::AddToggleRoundedButton(bReset);
 
 					// Log
 					ofxImGuiSurfing::AddToggleRoundedButton(bLog);
