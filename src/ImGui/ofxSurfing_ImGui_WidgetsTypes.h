@@ -431,7 +431,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// bool
+			// Bool
 
 			if (isBool)
 			{
@@ -512,7 +512,7 @@ namespace ofxImGuiSurfing
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
-					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.5 * _h, 1 * _h));
+					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
@@ -527,7 +527,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// string
+			// String
 
 			else if (isString)
 			{
@@ -572,7 +572,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// float
+			// Float
 
 			else if (isFloat)
 			{
@@ -585,6 +585,7 @@ namespace ofxImGuiSurfing
 				{
 				case OFX_IM_DEFAULT:
 				case OFX_IM_SLIDER:
+				case OFX_IM_HSLIDER:
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
@@ -595,6 +596,18 @@ namespace ofxImGuiSurfing
 						bReturn = true;
 					}
 					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					bReturn = false;
+				}
+				break;
+				
+				case OFX_IM_VSLIDER:
+				{
+					const float gap = 2;
+					string name = p.getName();
+					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true))
+					{
+						bReturn = true;
+					}
 					bReturn = false;
 				}
 				break;

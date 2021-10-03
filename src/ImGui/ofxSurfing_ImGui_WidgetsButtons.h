@@ -134,7 +134,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
-		// border when selected
+		// Border when selected
 		float a = 0.5f;
 		float borderLineWidth = 1.0;
 		ImGuiStyle *style = &ImGui::GetStyle();

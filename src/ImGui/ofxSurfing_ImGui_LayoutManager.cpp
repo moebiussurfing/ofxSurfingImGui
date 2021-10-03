@@ -15,7 +15,9 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bDebug);
 
+	// Exclude from settings
 	//bExtra.setSerializable(false);
+	bReset.setSerializable(false);
 
 	//-
 

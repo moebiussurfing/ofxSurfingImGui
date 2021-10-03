@@ -48,50 +48,53 @@ namespace ofxImGuiSurfing
 		OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
 		OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
 
-		// bool
+		// Bool
 
-		// button
+		// Button
 		OFX_IM_BUTTON_SMALL,
 		OFX_IM_BUTTON_BIG,
 		OFX_IM_BUTTON_BIG_XXL,
-		// toggle
+		// Toggle
 		OFX_IM_CHECKBOX,
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
-		// border
+		// Border
 		OFX_IM_TOGGLE_SMALL_BORDER,
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
-		// blink border
+		// Blink border
 		OFX_IM_TOGGLE_SMALL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK,
-		// rounded
+		// Rounded
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
 
-		// float/int
+		// Float/Int
 		OFX_IM_SLIDER,
+		OFX_IM_HSLIDER,
+		OFX_IM_VSLIDER,
 		OFX_IM_PROGRESS_BAR,
 		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
 		OFX_IM_STEPPER,
+		OFX_IM_COMBO,//TODO: multiple controls: slider+drag+stepper
 		OFX_IM_DRAG,
 		OFX_IM_KNOB,
 		OFX_IM_KNOB_TRAIL,
 
-		// multidim
+		// Multidim
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
 
-		// strings
+		// Strings
 		OFX_IM_TEXT_DISPLAY,
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
 
-		// colors
+		// Colors
 		OFX_IM_COLOR_INPUT,
 		OFX_IM_COLOR_BOX,
 
@@ -101,8 +104,8 @@ namespace ofxImGuiSurfing
 	//--
 
 	//TODO:
-	// centralize name types
-	// try to mix ImHelpers with ImTypes..
+	// Centralize name types
+	// Try to mix ImHelpers with ImTypes..
 	enum SurfingImGuiTypesGroups
 	{
 		OFX_IM_GROUP_DEFAULT = 0,
