@@ -603,7 +603,7 @@ namespace ofxImGuiSurfing
 				case OFX_IM_VSLIDER:
 				{
 					//const float gap = 0;//TODO:
-					const float gap = 2;
+					const float gap = 2;//fix oversize
 					string name = p.getName();
 					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true))
 					{
