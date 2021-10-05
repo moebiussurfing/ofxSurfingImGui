@@ -605,7 +605,44 @@ namespace ofxImGuiSurfing
 					//const float gap = 0;//TODO:
 					const float gap = 2;//fix oversize
 					string name = p.getName();
-					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true))
+					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false))
+					{
+						bReturn = true;
+					}
+					bReturn = false;
+				}
+				break;
+
+				case OFX_IM_VSLIDER_NO_NAME:
+				{
+					//const float gap = 0;//TODO:
+					const float gap = 2;//fix oversize
+					string name = p.getName();
+					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false))
+					{
+						bReturn = true;
+					}
+					bReturn = false;
+				}
+				break;
+
+				case OFX_IM_VSLIDER_NO_NUMBER:
+				{
+					const float gap = 2;//fix oversize
+					string name = p.getName();
+					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true))
+					{
+						bReturn = true;
+					}
+					bReturn = false;
+				}
+				break;
+
+				case OFX_IM_VSLIDER_NO_LABELS://no number and no name
+				{
+					const float gap = 2;//fix oversize
+					string name = p.getName();
+					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true))
 					{
 						bReturn = true;
 					}
@@ -685,7 +722,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// int
+			// Int
 
 			else if (isInt)
 			{
@@ -779,7 +816,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// color
+			// Color
 
 			else if (isFloatColor)
 			{
@@ -886,7 +923,7 @@ namespace ofxImGuiSurfing
 
 			if (bDone)
 			{
-				// extra options
+				// Extra options
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1 && spacing != 0)
 				{
@@ -904,7 +941,7 @@ namespace ofxImGuiSurfing
 			return bReturn;
 		}
 
-		//-----
+		//-------
 
 		// Groups
 

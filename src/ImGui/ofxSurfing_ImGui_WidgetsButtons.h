@@ -406,7 +406,7 @@ namespace ofxImGuiSurfing
 	// TODO: move label on top/bottom
 	// float
 	//--------------------------------------------------------------
-	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
+	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
 		//TODO:
 		//default (-1,-1) is full panel shape
@@ -421,6 +421,8 @@ namespace ofxImGuiSurfing
 		float spcx = ImGui::GetStyle().ItemSpacing.x;
 		float spcy = ImGui::GetStyle().ItemSpacing.y;
 
+		//ImGui::Dummy(ImVec2(0, spcy));//make top space
+
 		//if (sz.x == -1) sz.x = w;
 		//if (sz.y == -1) sz.y = h;
 		if (sz.x == -1) sz.x = w - spcx;
@@ -430,11 +432,18 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(("##VSLIDER" + name).c_str());
 
 		if (bNoName) {
-			//ImGui::Text(name.c_str());
 			name = "";
 		}
+		else {
+			ImGui::Text(name.c_str());
+		}
 
-		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
+		string format;
+		if (bNoNumber)format = "";
+		else format = "%.3f";
+
+		//bool ImGui::VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 		{
 			parameter.set(tmpRef);
 
