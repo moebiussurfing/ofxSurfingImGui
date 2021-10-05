@@ -9,13 +9,19 @@ namespace ofxImGuiSurfing
 
 	// workaround
 
-	//TODO: a nice ide should be to get the longer pamra label name width and use this max width...
+	//TODO: a nice idea could be to get the longer param label name width and use this max width to apply to our layouting engine...
 
 	// Some macro sugar to help fix how sliders force autoresize the panel widths.
 	// It's a 'rare behaviour' that I am trying to correct doing this.
 
 	//-
 
+	//TODO:
+//#define DEFAULT_LAYOUT_BEHAVIOUR // -> Uncomment to use a workaround to weird ImGui auto resize rare layout..
+
+	//-
+
+#ifndef DEFAULT_LAYOUT_BEHAVIOUR
 	// A. Relative to panel width
 
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
@@ -23,6 +29,7 @@ namespace ofxImGuiSurfing
 	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
 
 	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+#endif
 
 	//-
 
@@ -33,9 +40,11 @@ namespace ofxImGuiSurfing
 
 	//-
 
-	//// C. To bypass and do nothing.
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+#ifndef DEFAULT_LAYOUT_BEHAVIOUR
+	// C. To bypass and do nothing.
+	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
+	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+#endif
 
 //--
 
@@ -79,7 +88,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_VSLIDER_NO_NAME,
 		OFX_IM_VSLIDER_NO_NUMBER,
 		OFX_IM_VSLIDER_NO_LABELS,
-		OFX_IM_PROGRESS_BAR,
+		OFX_IM_PROGRESS_BAR,//TODO: must use normalized, from 0 to 1
 		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
 		OFX_IM_STEPPER,
 		OFX_IM_COMBO,//TODO: multiple controls: slider+drag+stepper
@@ -99,7 +108,10 @@ namespace ofxImGuiSurfing
 
 		// Colors
 		OFX_IM_COLOR_INPUT,
-		OFX_IM_COLOR_BOX,
+		OFX_IM_COLOR_NO_ALPHA,//without the alpha control
+		OFX_IM_COLOR_BOX,//small box color without controls
+		OFX_IM_COLOR_BOX_FULL_WIDTH,
+		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG,
 
 		OFX_IM_NUM_TYPES
 	};
@@ -116,7 +128,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_TREE_EX,
 		OFX_IM_GROUP_TREE,
 		OFX_IM_GROUP_SCROLLABLE,
-		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group
+		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group. not working
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
 		OFX_IM_GROUP_NUM_TYPES
