@@ -6,12 +6,8 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
-
 #include "ofxSurfing_ImGui_ofHelpers.h"
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
-//#include "ofxSurfing_ImGui_Widgets.h"
-
+#include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 #include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
 
@@ -31,8 +27,8 @@ namespace ofxImGuiSurfing
 	{
 		//--
 
-		// widgets sizes
-
+		// Widgets Sizes
+		// Common sizes to use when recalculating layout dimensions.
 	private:
 
 		float _spcx;
@@ -49,7 +45,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		// refresh current panel shape to update widgets sizes
+		// Refresh current panel shape to update widgets sizes.
 		//--------------------------------------------------------------
 		void refreshPanelShape()
 		{
@@ -522,7 +518,7 @@ namespace ofxImGuiSurfing
 
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//bools
 			}
 
 			//-
@@ -541,33 +537,33 @@ namespace ofxImGuiSurfing
 				case OFX_IM_DEFAULT:
 				case OFX_IM_TEXT_DISPLAY:
 				{
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::Text(tmpRef.c_str());
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				}
 				break;
 
 				case OFX_IM_TEXT_INPUT:
 				{
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::Text(tmpRef.c_str());
 					//ofxImGuiSurfing::AddParameter(p);//cant be included?
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				}
 				break;
 
 				case OFX_IM_TEXT_BIG:
 				{
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::TextWrapped(tmpRef.c_str());
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				}
 				break;
 				}
 
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//strings
 			}
 
 			//-
@@ -583,19 +579,33 @@ namespace ofxImGuiSurfing
 
 				switch (type)
 				{
-				case OFX_IM_DEFAULT:
-				case OFX_IM_SLIDER:
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					bReturn = false;
+				}
+				break;
+			
+				case OFX_IM_DEFAULT:
+				case OFX_IM_SLIDER:
+				{
+					string name = p.getName();
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+					{
+						p.set(tmpRef);
+						bReturn = true;
+					}
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -608,6 +618,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -615,6 +626,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -622,6 +634,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -629,6 +642,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -638,6 +652,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -645,6 +660,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -652,6 +668,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -659,6 +676,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -668,6 +686,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -675,6 +694,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -682,6 +702,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -689,6 +710,7 @@ namespace ofxImGuiSurfing
 				{
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -701,6 +723,7 @@ namespace ofxImGuiSurfing
 					const float gap = 2;//fix oversize
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -709,6 +732,7 @@ namespace ofxImGuiSurfing
 					const float gap = 2;//fix oversize
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -717,6 +741,7 @@ namespace ofxImGuiSurfing
 					const float gap = 2;//fix oversize
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -725,6 +750,7 @@ namespace ofxImGuiSurfing
 					const float gap = 2;//fix oversize
 					string name = p.getName();
 					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -753,14 +779,15 @@ namespace ofxImGuiSurfing
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.01f;
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -771,12 +798,14 @@ namespace ofxImGuiSurfing
 				case OFX_IM_KNOB:
 				{
 					bReturn = (ofxImGuiSurfing::AddKnob(p));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
 				case OFX_IM_KNOB_TRAIL:
 				{
 					bReturn = (ofxImGuiSurfing::AddKnob(p, true));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -790,7 +819,8 @@ namespace ofxImGuiSurfing
 					const float stepFast = 0.1f;
 					auto tmpRef = p.get();
 					string name = p.getName();
-					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+
+					//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 					{
@@ -799,15 +829,17 @@ namespace ofxImGuiSurfing
 						bReturn = true;
 					}
 					ImGui::PopItemWidth();
-					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+
 					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 				}
 
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//floats
 			}
 
 			//-
@@ -823,32 +855,46 @@ namespace ofxImGuiSurfing
 				switch (type)
 				{
 
-				case OFX_IM_DEFAULT:
-				case OFX_IM_SLIDER:
 				case OFX_IM_INACTIVE:
 				{
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					bReturn = false;
+				}
+				break;
+				
+				case OFX_IM_DEFAULT:
+				case OFX_IM_SLIDER:
+				{
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+					{
+						p.set(tmpRef);
+						bReturn = true;
+					}
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.1;
-					IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 					{
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -875,7 +921,7 @@ namespace ofxImGuiSurfing
 					const int step = 1;
 					const int stepFast = 5;
 					auto tmpRef = p.get();
-					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 					{
@@ -883,9 +929,10 @@ namespace ofxImGuiSurfing
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
+					//IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					ImGui::PopItemWidth();
 					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
@@ -901,7 +948,7 @@ namespace ofxImGuiSurfing
 
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//progress
 			}
 
 			//-
@@ -935,7 +982,7 @@ namespace ofxImGuiSurfing
 				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 				uniqueName.pop();
-				bDone = true;
+				bDone = true;//colors
 			}
 
 			else if (isColor)
@@ -956,7 +1003,7 @@ namespace ofxImGuiSurfing
 					ImGui::ColorButton("", tmpRef, flags);
 
 				uniqueName.pop();
-				bDone = true;
+				bDone = true;//colors
 			}
 
 			//-
@@ -1018,11 +1065,13 @@ namespace ofxImGuiSurfing
 				bDone = true;
 			}
 
-			//-
+			//----
 
 			if (bDone)
 			{
 				// Extra options
+				// - same line
+				// - amount widgets per row
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1 && spacing != 0)
 				{

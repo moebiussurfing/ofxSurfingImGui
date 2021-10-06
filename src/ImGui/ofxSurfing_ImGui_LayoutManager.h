@@ -545,10 +545,11 @@ private:
 
 					// Reset
 					//TODO:
-					// -> must be implemented
+					// -> must be implemented for each app.
 
 					// Reset window
 					if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window)) {
+						//TODO:
 						//if (bReset_Window) {
 						//	bReset_Window = false;
 						//	resetWindowImGui(false, true);
@@ -614,9 +615,37 @@ private:
 							ImGui::Separator();
 						}
 
-						ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 						ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
+						ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 						//AddToggleRoundedButton(bPreviewSceneViewport);
+
+						//--
+
+						//TODO:
+						// Check wheel
+						// Check active widget
+						//https://github.com/ocornut/imgui/issues/4207
+						//https://github.com/ocornut/imgui/issues/789
+						//https://github.com/ocornut/imgui/issues/4303
+						if (0)
+						{
+							auto &io = ImGui::GetIO();
+							if (io.MouseHoveredViewport)
+							{
+								float wheel = io.MouseWheel;
+								string ss1 = "Mouse Wheel ";
+								if (wheel != 0)
+								{
+									ss1 += ofToString(wheel);
+								}
+								ImGui::Text(ss1.c_str());
+							}
+							string ss2;
+							ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
+							ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
+							ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
+							ImGui::Text(ss2.c_str());
+						}
 
 						ImGui::Separator();
 

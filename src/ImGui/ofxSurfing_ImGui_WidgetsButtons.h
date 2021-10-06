@@ -6,8 +6,8 @@
 // https://github.com/nem0/LumixEngine/blob/timeline_gui/external/imgui/imgui_user.inl#L814
 
 // ImGui Widgets
-// - toogles and buttons
-// - bool and ofParameter<bool> types
+// - Toogles and buttons.
+// - For bool and ofParameter<bool> types.
 
 //------------------------------
 
@@ -15,6 +15,7 @@
 #include "imgui_internal.h"
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 
 #include "ofxSurfing_Timers.h"
 //#include "ofxSurfingHelpers.h"
@@ -23,10 +24,6 @@
 
 namespace ofxImGuiSurfing
 {
-	////TODO:
-	////test an unique_name_engine workaround..
-	//static int counterBigToggle = 0;
-
 	//-
 
 	//--------------------------------------------------------------
@@ -402,209 +399,6 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
-	//----
-
-	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")
-	{
-		if (w == -1) w = ImGui::GetContentRegionAvail().x;//full width
-		if (h == -1) h = getWidgetsHeightUnit();//one unit height
-		//if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
-		
-		ImGuiSliderFlags flag = ImGuiSliderFlags_Logarithmic;
-
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-
-		if (name == "-1") name = parameter.getName();
-
-		//TODO: name label is duplicated..
-		//TODO: make space for label..
-		//if (name != "") sz.x = sz.x - 100;
-
-		string n = "##BIGSLIDER" + name + ofToString(1);
-		ImGui::PushID(n.c_str());
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(w, h));//doesn't uses the width..
-			if (name == "") ImGui::PushItemWidth(w);//-> name != "" will enable standard aligned resizing with labels
-			{
-				if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
-				{
-					parameter.set(tmpRef);
-
-					bChanged = true;
-				}
-			}
-			if (name == "") ImGui::PopItemWidth();
-			ImGui::PopStyleVar(1);
-		}
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
-	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
-	{
-		return AddBigSlider(parameter, sz.x, sz.y, format);
-	}
-
-	//----
-
-	 // hSliders
-
-	// TODO: move label on top/bottom
-	//--------------------------------------------------------------
-	inline bool AddHSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
-	{
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-		string name;
-		if (bNoName) { name = ""; }
-		else name = parameter.getName();
-
-		//const float gap = 0;//fix oversize
-
-		float w = ImGui::GetContentRegionAvail().x;
-		float h = ImGui::GetContentRegionAvail().y;
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float spcy = ImGui::GetStyle().ItemSpacing.y;
-		if (sz.x == -1) sz.x = w - spcx;
-		if (sz.y == -1) sz.y = h - spcy;
-
-		ImGui::PushID(("##HSLIDER" + name).c_str());
-		{
-			if (!bNoName) { ImGui::Text(name.c_str()); }
-
-			string format;
-			if (bNoNumber) format = "";
-			else format = "%.3f";
-
-			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
-		}
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
-	//----
-
-	// vSliders
-
-	// TODO: move label on top/bottom
-	// float
-	//--------------------------------------------------------------
-	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
-	{
-		//TODO:
-		//default (-1,-1) is full panel shape
-
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-		string name = parameter.getName();
-
-		float w = ImGui::GetContentRegionAvail().x;
-		float h = ImGui::GetContentRegionAvail().y;
-
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float spcy = ImGui::GetStyle().ItemSpacing.y;
-
-		//ImGui::Dummy(ImVec2(0, spcy));//make top space
-
-		//if (sz.x == -1) sz.x = w;
-		//if (sz.y == -1) sz.y = h;
-		if (sz.x == -1) sz.x = w - spcx;
-		if (sz.y == -1) sz.y = h - spcy;
-
-		//ImGui::BeginGroup();
-		ImGui::PushID(("##VSLIDER" + name).c_str());
-
-		if (bNoName) {
-			name = "";
-		}
-		else {
-			ImGui::Text(name.c_str());
-		}
-
-		string format;
-		if (bNoNumber)format = "";
-		else format = "%.3f";
-
-		//bool ImGui::VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
-		{
-			parameter.set(tmpRef);
-
-			bChanged = true;
-		}
-
-		ImGui::PopID();
-		//ImGui::EndGroup();
-
-		return bChanged;
-	}
-
-	// Int
-	//--------------------------------------------------------------
-	inline bool AddVSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
-	{
-		//TODO:
-		//default is full panel shape
-
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-		string name = parameter.getName();
-
-		float w = ImGui::GetContentRegionAvail().x;
-		float h = ImGui::GetContentRegionAvail().y;
-
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float spcy = ImGui::GetStyle().ItemSpacing.y;
-
-		//if (sz.x == -1) sz.x = w;
-		//if (sz.y == -1) sz.y = h;
-		if (sz.x == -1) sz.x = w - spcx;
-		if (sz.y == -1) sz.y = h - spcy;
-
-		ImGui::PushID(("##VSLIDER" + name).c_str());
-		if (bNoName) name = "";
-
-		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
-		{
-			parameter.set(tmpRef);
-
-			bChanged = true;
-		}
-
-		ImGui::PopID();
-		return bChanged;
-	}
-
-	//----
-
-	//--------------------------------------------------------------
-	inline bool AddDragFloatSlider(ofParameter<float>& parameter/*, float w = 100*/)// button but using a bool not void param
-	{
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-		string name = parameter.getName();
-		float v_speed = 0.001f;//1ms
-
-		string n = "##DRAGSLIDERfloat" + name + ofToString(1);
-		ImGui::PushID(n.c_str());
-
-		//bool ImGui::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-		if (ImGui::DragFloat(name.c_str(), &tmpRef, v_speed, parameter.getMin(), parameter.getMax()))
-		{
-			parameter.set(tmpRef);
-			bChanged = true;
-		}
-
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
 	//--
 
 	//--------------------------------------------------------------
@@ -657,7 +451,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// 1. bg
+			// 1. Bg
 
 			// hover
 			if (ImGui::IsItemHovered())
@@ -675,7 +469,7 @@ namespace ofxImGuiSurfing
 				draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
 			}
 
-			// no hover
+			// No hover
 			else
 			{
 				//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
@@ -695,7 +489,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// 2. circle
+			// 2. Circle
 
 			ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
 			//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
@@ -782,210 +576,4 @@ namespace ofxImGuiSurfing
 		//return (tmpRef != parameter.get());
 		return bReturn;
 	}
-
-	//--
-
-	/*
-
-	// ofParameter bool toggle
-	//TODO:
-	// there's a bug that when using
-	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
-	// after the button it adds more spacing
-	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 v = ImVec2(-1, -1))
-	{
-		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
-
-		auto tmpRef = parameter.get();
-		std::string name = parameter.getName();
-
-		string n = "##TOGGLEROUNDEDBUTTON" + name + ofToString(1);
-		ImGui::PushID(n.c_str());
-
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		ImVec2 p = ImGui::GetCursorScreenPos();
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-
-		float width;
-		float radius;
-		float height;
-
-		if (v.x == -1 && v.y == -1)
-		{
-			height = ImGui::GetFrameHeight();
-			width = height * 1.55f;
-			radius = height * 0.50f;
-		}
-		else
-		{
-			width = v.x;
-			radius = v.y * 0.5f;
-			height = v.y;
-		}
-
-		ImGui::InvisibleButton(name.c_str(), ImVec2(width, height));
-		if (ImGui::IsItemClicked())
-		{
-			tmpRef = !tmpRef;
-
-			parameter.set(tmpRef);
-		}
-
-		ImGuiContext& gg = *GImGui;
-		float ANIM_SPEED = 0.085f;
-		if (gg.LastActiveId == gg.CurrentWindow->GetID(name.c_str()))// && g.LastActiveIdTimer < ANIM_SPEED)
-			float t_anim = ImSaturate(gg.LastActiveIdTimer / ANIM_SPEED);
-
-		//--
-
-		// 1. bg
-
-		// hover
-		if (ImGui::IsItemHovered())
-		{
-			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_FrameBgActive] : colors[ImGuiCol_FrameBg]), height * 0.5f);
-
-			ImU32 c1;
-			if (tmpRef) {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			else {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
-		}
-
-		// no hover
-		else {
-			//draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height),
-			//	ImGui::GetColorU32(*v ? colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_FrameBgActive]), height * 0.5f);
-
-			ImU32 c1;
-			if (tmpRef) {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			else {
-				c1 = IM_COL32(255 * colors[ImGuiCol_FrameBgActive].x, 255 * colors[ImGuiCol_FrameBgActive].y, 255 * colors[ImGuiCol_FrameBgActive].z, 255);
-			}
-			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), c1, height * 0.5f);
-		}
-
-		//colors[ImGuiCol_ButtonActive] : colors[ImGuiCol_ButtonHovered]), height * 0.5f);
-
-		//-
-
-		// 2. circle
-
-		ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
-		//ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_Button].x, 255 * colors[ImGuiCol_Button].y, 255 * colors[ImGuiCol_Button].z, 255);
-		draw_list->AddCircleFilled(ImVec2(p.x + radius + (tmpRef ? 1 : 0) * (width - radius * 2.0f),
-			p.y + radius), radius - 1.5f, c1);
-
-		//----
-
-		//ImGui::Text(name.c_str());
-
-		ImGui::SameLine();
-		float fontSize = ImGui::GetFontSize();
-		const ImVec2 p1 = ImGui::GetCursorScreenPos();
-		const float offset_xt = 0;
-		const float offset_yt = height / 2 - fontSize / 2;
-		//ImGui::Text(name.c_str(), ImVec2(p1.x + offset_x, p1.y));
-		//ImU32 ct = ImGui::GetColorU32(IM_COL32(255, 0, 0, 255));
-		const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-		const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
-		//draw_list->AddCircle(pt, 2, cc);
-		draw_list->AddText(pt, ct, name.c_str());
-
-		const float offset_xc = 0;
-		//int ypad = 2;
-		const float _yy = 4;
-		const float offset_yc = height + ImGui::GetStyle().ItemSpacing.y * 2 + _yy;
-		const ImVec2 pc = ImVec2(prevCursorPos.x + offset_xc, prevCursorPos.y + offset_yc);
-		ImGui::SetCursorScreenPos(pc);
-
-		ImGui::PopID();
-
-		return tmpRef;// used
-
-		//-
-
-		//// fix align
-
-		//ImVec2 alignment = ImVec2(100, 100);
-
-		////char name[32];
-		////sprintf(name, "(%.1f,%.1f)", alignment.x, alignment.y);
-		////if (x > 0) ImGui::SameLine();
-		////ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, alignment);
-		////ImGui::Selectable(name, &selected[3 * y + x], ImGuiSelectableFlags_None, ImVec2(80, 80));
-		////ImGui::PopStyleVar();
-
-		//ImGui::SameLine();
-		//ImGui::Text(name.c_str(), alignment.x, alignment.y);
-		//ImGui::PopID();
-
-		//return tmpRef;
-
-		//--
-
-		/*
-		//label
-
-		//// Render
-		//const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
-		//RenderNavHighlight(bb, id);
-		//RenderFrame(bb.Min, bb.Max, col, true, style.FrameRounding);
-
-		//ImVec2 pos = window->DC.CursorPos;
-		//if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrLineTextBaseOffset) // Try to vertically align buttons that are smaller/have no padding so that text baseline matches (bit hacky, since it shouldn't be a flag)
-		//	pos.y += window->DC.CurrLineTextBaseOffset - style.FramePadding.y;
-		//ImVec2 size = CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
-
-		//const ImRect bb(pos, pos + size);
-		//ImGui::RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
-		//ImGui::RenderTextClipped(.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
-
-		////ImGui::SameLine(0, 10);
-		////ImGui::SameLine(0, 0.5);
-		//ImGui::SameLine();
-		////ImGui::Dummy(ImVec2(-1.0f, 10.0f));
-		//ImGui::Text(name.c_str());
-
-
-		//TODO. aligning
-		//const char* fmt;
-		//va_list args;
-		//ImVec2 size_arg(100, 30);
-		//ImVec2 align(0, 0);
-
-		//ImGuiWindow* window = ImGui::GetCurrentWindow();
-
-		////ImGuiContext& g = *GetCurrentContext();
-		////
-		////auto g = ImGui::GetStyle();
-		////const ImGuiStyle& style = g.Style;
-		////const char* text_end = g.TempBuffer + ImFormatStringV(g.TempBuffer, IM_ARRAYSIZE(g.TempBuffer), fmt, args);
-		////const ImVec2 label_size = ImGui::CalcTextSize(g.TempBuffer, text_end, true, 0.0f);
-		////const ImGuiID id = window->GetID(g.TempBuffer, text_end);
-
-
-
-		//ImVec2 pos = window->DC.CursorPos;
-		////if ((flags & ImGuiButtonFlags_AlignTextBaseLine) && style.FramePadding.y < window->DC.CurrentLineTextBaseOffset)
-		//	//pos.y += window->DC.CurrentLineTextBaseOffset - style.FramePadding.y;
-		//ImVec2 size = ImGui::CalcItemSize(size_arg, label_size.x + style.FramePadding.x * 2.0f, label_size.y + style.FramePadding.y * 2.0f);
-
-
-		//const ImRect bb(pos, pos + size);
-		//ImGui::ItemSize(bb, style.FramePadding.y);
-		//ImGui::RenderTextClipped(bb.Min, bb.Max, g.TempBuffer, text_end, &label_size, align);
-
-
-		ImGui::PopID();
-
-		return tmpRef;// used
-		*/
 };

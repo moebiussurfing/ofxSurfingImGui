@@ -1,15 +1,27 @@
 
 #pragma once
 
-//public:
+//#include "ofxSurfing_ImGui_ofHelpers.h"
+
 namespace ofxImGuiSurfing
 {
+	//----
 
-	//--
+	// Sugar Snippets
+
+	//----
+
+	// 1.
+
+	// BUG:
+	// Annoying behaviour: sometimes the sliders are bigger bc the text long or something,
+	// Then all the window panels is being resized bigger if auto resize is enabled!
 
 	// workaround
 
-	//TODO: a nice idea could be to get the longer param label name width and use this max width to apply to our layouting engine...
+	//TODO: 
+	// A nice idea could be to get the longer param label name width 
+	// and use this max width to apply to our layouting engine...
 
 	// Some macro sugar to help fix how sliders force autoresize the panel widths.
 	// It's a 'rare behaviour' that I am trying to correct doing this.
@@ -22,34 +34,46 @@ namespace ofxImGuiSurfing
 	//-
 
 #ifndef DEFAULT_LAYOUT_BEHAVIOUR
+
 	// A. Relative to panel width
 
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
 
-	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
 #endif
 
 	//-
 
 	//// B. Using absolute size
+
 	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-	//#define IMGUI_SUGAR_SLIDER_WIDTH_POP ImGui::PopItemWidth();
+	//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+	//#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
 
 	//-
 
 #ifndef DEFAULT_LAYOUT_BEHAVIOUR
+
 	// C. To bypass and do nothing.
-	#define IMGUI_SUGAR_SLIDER_WIDTH_PUSH ;
-	#define IMGUI_SUGAR_SLIDER_WIDTH_POP ;
+
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
+#define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
 #endif
 
-//--
+	//----
 
-	//TODO: 
-	// make simpler namespace. or move outside the class?
+	// 2.
+
+	// Adds mouse wheel control to the last/previoues ofParam widget (float/int) rendered.
+
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
+
+	//----
+
+	//--------------------------------------------------------------
 	enum SurfingImGuiTypes
 	{
 		OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
@@ -85,12 +109,11 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		// Float / Int
+		// Float/Int
 		OFX_IM_SLIDER,//ImGui standard
 
-		//TODO:
-		// Big H/V Sliders
-
+		// Big Sliders
+		// horizontal
 		OFX_IM_HSLIDER_BIG,
 		OFX_IM_HSLIDER_BIG_NO_NAME,
 		OFX_IM_HSLIDER_BIG_NO_NUMBER,
@@ -103,7 +126,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
-
+		// vertical
 		OFX_IM_VSLIDER,
 		OFX_IM_VSLIDER_NO_NAME,
 		OFX_IM_VSLIDER_NO_NUMBER,
@@ -128,15 +151,15 @@ namespace ofxImGuiSurfing
 
 		// Colors
 		OFX_IM_COLOR_INPUT,
-		OFX_IM_COLOR_NO_ALPHA,//without the alpha control
-		OFX_IM_COLOR_BOX,//small box color without controls
+		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
+		OFX_IM_COLOR_BOX, // small box color without controls
 		OFX_IM_COLOR_BOX_FULL_WIDTH,
-		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG,
+		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // double height
 
 		//-
 
-		// Multidim
 		//TODO: for glm::vec
+		// Multidim
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
@@ -146,9 +169,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//TODO:
-	// Centralize name types
-	// Try to mix ImHelpers with ImTypes..
+	//--------------------------------------------------------------
 	enum SurfingImGuiTypesGroups
 	{
 		OFX_IM_GROUP_DEFAULT = 0,
@@ -162,6 +183,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_NUM_TYPES
 	};
 
+	//--------------------------------------------------------------
 	inline static std::string getSurfingImGuiTypesGroupsName(int i)
 	{
 		string _groupInfo;
@@ -171,6 +193,8 @@ namespace ofxImGuiSurfing
 		else if (i == 3) _groupInfo = "OFX_IM_GROUP_TREE";
 		else if (i == 4) _groupInfo = "OFX_IM_GROUP_SCROLLABLE";
 		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
+		else if (i == 6) _groupInfo = "OFX_IM_GROUP_HIDDEN";
+		else _groupInfo = "OFX_IM_GROUP UNKNOWN";
 
 		return _groupInfo;
 	}

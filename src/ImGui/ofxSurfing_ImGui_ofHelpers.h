@@ -5,13 +5,60 @@
 
 #include "ofxSurfing_ImGui_Widgets.h"
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
-//#include "ofxSurfing_ImGui_WidgetsTypes.h"
-//#include "ofxSurfing_ImGui_LayoutHelpers.h"
-
 
 namespace ofxImGuiSurfing
 {
-	//--
+	//----
+
+	// Adds mouse wheel control to the last orevioues param widget (templated float/int)
+
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	/*static*/ inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
+	{
+		bool bUnknown = false;
+		
+		const auto& info = typeid(ParameterType);
+		if (info == typeid(float)) // float
+		{}
+		else if (info == typeid(int)) // Int
+		{}
+		else { // unknown types
+			bUnknown = true;
+			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
+			return;
+		}
+
+		if (!bUnknown)
+		{
+			if (resolution == -1) {
+				resolution = (param.getMax() - param.getMin()) / 100.f;//100 steps for all the param range
+				//resolution = 0.1f;//hardcoded to 0.1
+			}
+
+			bool bCtrl = ImGui::GetIO().KeyCtrl;//ctrl to fine tunning
+
+			ImGui::SetItemUsingMouseWheel();
+			if (ImGui::IsItemHovered())
+			{
+				float wheel = ImGui::GetIO().MouseWheel;
+				if (wheel)
+				{
+					if (ImGui::IsItemActive())
+					{
+						ImGui::ClearActiveID();
+					}
+					else
+					{
+						param += wheel * (bCtrl ? resolution : resolution * 10);
+						param = ofClamp(param, param.getMin(), param.getMax());//clamp
+					}
+				}
+			}
+		}
+	}
+
+	//----
 
 	// ofParams Helpers
 
@@ -90,16 +137,18 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	// Image Textures
+	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{
 		return (ImTextureID)(uintptr_t)texture.texData.textureID;
 	}
-
+	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
 	{
 		return GetImTextureID2(hasTexture.getTexture());
 	}
-
+	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(GLuint glID)
 	{
 		return (ImTextureID)(uintptr_t)glID;
@@ -107,7 +156,8 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// clean of styles
+	// These are mainly the original ofxImGui methods:
+	// Clean of Styles with the default styles.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& parameter)
@@ -118,34 +168,34 @@ namespace ofxImGuiSurfing
 		// float
 		if (info == typeid(float))
 		{
-			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
-				IMGUI_SUGAR_SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				return true;
 			}
-			IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__SLIDER_WIDTH_POP;
 			return false;
 		}
 
-		// int
+		// Int
 		if (info == typeid(int))
 		{
-			IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
-				IMGUI_SUGAR_SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				return true;
 			}
 
-			IMGUI_SUGAR_SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__SLIDER_WIDTH_POP;
 			return false;
 		}
 
-		// bool
+		// Bool
 		if (info == typeid(bool))
 		{
 			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
@@ -157,8 +207,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-					if (info.name() == "" || info.name() == " ")
-		ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+		if (info.name() == "" || info.name() == " ")
+			ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 
 		return false;
 	}
@@ -187,7 +237,7 @@ namespace ofxImGuiSurfing
 	{
 		auto result = false;
 		const auto& info = typeid(DataType);
-		IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 
 		for (int i = 0; i < values.size(); ++i)
 		{
@@ -209,12 +259,12 @@ namespace ofxImGuiSurfing
 			{
 				if (info.name() == "" || info.name() == " ")
 					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
-				IMGUI_SUGAR_SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__SLIDER_WIDTH_POP;
 				return false;
 			}
 		}
 
-		IMGUI_SUGAR_SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__SLIDER_WIDTH_POP;
 		return result;
 	}
 
