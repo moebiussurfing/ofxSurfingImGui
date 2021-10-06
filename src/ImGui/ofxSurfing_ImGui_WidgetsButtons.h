@@ -375,6 +375,8 @@ namespace ofxImGuiSurfing
 		return (bPre != tmpRef);
 	}
 
+	//----
+
 	//--------------------------------------------------------------
 	inline bool AddIntStepped(ofParameter<int>& parameter)
 	{
@@ -402,7 +404,93 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// vsliders
+	//--------------------------------------------------------------
+	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")
+	{
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;//full width
+		if (h == -1) h = getWidgetsHeightUnit();//one unit height
+		//if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		
+		ImGuiSliderFlags flag = ImGuiSliderFlags_Logarithmic;
+
+		bool bChanged = false;
+		auto tmpRef = parameter.get();
+
+		if (name == "-1") name = parameter.getName();
+
+		//TODO: name label is duplicated..
+		//TODO: make space for label..
+		//if (name != "") sz.x = sz.x - 100;
+
+		string n = "##BIGSLIDER" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(w, h));//doesn't uses the width..
+			if (name == "") ImGui::PushItemWidth(w);//-> name != "" will enable standard aligned resizing with labels
+			{
+				if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+				{
+					parameter.set(tmpRef);
+
+					bChanged = true;
+				}
+			}
+			if (name == "") ImGui::PopItemWidth();
+			ImGui::PopStyleVar(1);
+		}
+		ImGui::PopID();
+
+		return bChanged;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	{
+		return AddBigSlider(parameter, sz.x, sz.y, format);
+	}
+
+	//----
+
+	 // hSliders
+
+	// TODO: move label on top/bottom
+	//--------------------------------------------------------------
+	inline bool AddHSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
+	{
+		bool bChanged = false;
+		auto tmpRef = parameter.get();
+		string name;
+		if (bNoName) { name = ""; }
+		else name = parameter.getName();
+
+		//const float gap = 0;//fix oversize
+
+		float w = ImGui::GetContentRegionAvail().x;
+		float h = ImGui::GetContentRegionAvail().y;
+		float spcx = ImGui::GetStyle().ItemSpacing.x;
+		float spcy = ImGui::GetStyle().ItemSpacing.y;
+		if (sz.x == -1) sz.x = w - spcx;
+		if (sz.y == -1) sz.y = h - spcy;
+
+		ImGui::PushID(("##HSLIDER" + name).c_str());
+		{
+			if (!bNoName) { ImGui::Text(name.c_str()); }
+
+			string format;
+			if (bNoNumber) format = "";
+			else format = "%.3f";
+
+			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
+		}
+		ImGui::PopID();
+
+		return bChanged;
+	}
+
+	//----
+
+	// vSliders
+
 	// TODO: move label on top/bottom
 	// float
 	//--------------------------------------------------------------
@@ -456,7 +544,7 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
-	// int
+	// Int
 	//--------------------------------------------------------------
 	inline bool AddVSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
 	{
@@ -492,54 +580,7 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
-	//--
-
-	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string format = "%.3f")// button but using a bool not void param
-	{
-		if (w == -1) w = ImGui::GetContentRegionAvail().x;
-		if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
-
-		bool bChanged = false;
-		auto tmpRef = parameter.get();
-		string name = parameter.getName();
-
-		string n = "##BIGSLIDER" + name + ofToString(1);
-		ImGui::PushID(n.c_str());
-
-		ImGuiStyle *style = &ImGui::GetStyle();
-
-		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
-		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
-		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
-
-		ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
-
-		//if (ImGui::SliderFloat(name.c_str(), &tmpRef,  parameter.getMin(), parameter.getMax(), ImVec2(w, h)))
-		if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
-		{
-			ofLogNotice(__FUNCTION__) << name << ": BANG";
-
-			//tmpRef = parameter.get();
-			parameter.set(tmpRef);
-
-			bChanged = true;
-		}
-
-		ImGui::PopStyleColor(3);
-
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
-	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
-	{
-		return AddBigSlider(parameter, sz.x, sz.y, format);
-	}
+	//----
 
 	//--------------------------------------------------------------
 	inline bool AddDragFloatSlider(ofParameter<float>& parameter/*, float w = 100*/)// button but using a bool not void param
@@ -567,7 +608,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	// rounded toggle buttons: 
+	// Rounded toggle buttons: 
 	// https://github.com/ocornut/imgui/issues/1537
 	// bool & ofParameter<bool>
 
@@ -717,9 +758,10 @@ namespace ofxImGuiSurfing
 
 	//-
 
-	// ofParameter bool toggle
+	// ofParameter bool Toggle
+
 	//TODO:
-	// there's a bug that when using
+	// There's a bug that when using
 	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
 	// after the button it adds more spacing
 	//--------------------------------------------------------------

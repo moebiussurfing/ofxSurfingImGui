@@ -585,7 +585,6 @@ namespace ofxImGuiSurfing
 				{
 				case OFX_IM_DEFAULT:
 				case OFX_IM_SLIDER:
-				case OFX_IM_HSLIDER:
 				case OFX_IM_INACTIVE:
 				{
 					string name = p.getName();
@@ -599,30 +598,117 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
-				
+
+				//--
+
+				// H Slider
+				//TODO:
+
+				case OFX_IM_HSLIDER:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_NO_LABELS:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_NO_NAME:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_NO_NUMBER:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+				}
+				break;
+
+				//-
+
+				case OFX_IM_HSLIDER_SMALL:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_SMALL_NO_LABELS:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_SMALL_NO_NAME:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+				}
+				break;
+
+				//-
+
+				case OFX_IM_HSLIDER_BIG:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_BIG_NO_LABELS:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_BIG_NO_NAME:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
+				}
+				break;
+
+				case OFX_IM_HSLIDER_BIG_NO_NUMBER:
+				{
+					string name = p.getName();
+					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
+				}
+				break;
+
+				//--
+
+				// V Slider
+
 				case OFX_IM_VSLIDER:
 				{
-					//const float gap = 0;//TODO:
 					const float gap = 2;//fix oversize
 					string name = p.getName();
-					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false))
-					{
-						bReturn = true;
-					}
-					bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
 				}
 				break;
 
 				case OFX_IM_VSLIDER_NO_NAME:
 				{
-					//const float gap = 0;//TODO:
 					const float gap = 2;//fix oversize
 					string name = p.getName();
-					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false))
-					{
-						bReturn = true;
-					}
-					bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
 				}
 				break;
 
@@ -630,11 +716,7 @@ namespace ofxImGuiSurfing
 				{
 					const float gap = 2;//fix oversize
 					string name = p.getName();
-					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true))
-					{
-						bReturn = true;
-					}
-					bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
 				}
 				break;
 
@@ -642,13 +724,13 @@ namespace ofxImGuiSurfing
 				{
 					const float gap = 2;//fix oversize
 					string name = p.getName();
-					if(ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true))
-					{
-						bReturn = true;
-					}
-					bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
 				}
 				break;
+
+				//--
+
+				// Progress Bar
 
 				case OFX_IM_PROGRESS_BAR:
 				{
@@ -664,6 +746,10 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
+				//--
+
+				// Drag
+
 				case OFX_IM_DRAG:
 				{
 					const float speed = 0.01f;
@@ -678,21 +764,25 @@ namespace ofxImGuiSurfing
 				}
 				break;
 
+				//--
+
+				// Knob
+
 				case OFX_IM_KNOB:
 				{
-					if (ofxImGuiSurfing::AddKnob(p))
-						bReturn = true;
-					else bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddKnob(p));
 				}
 				break;
 
 				case OFX_IM_KNOB_TRAIL:
 				{
-					if (ofxImGuiSurfing::AddKnob(p, true))
-						bReturn = true;
-					else bReturn = false;
+					bReturn = (ofxImGuiSurfing::AddKnob(p, true));
 				}
 				break;
+
+				//--
+
+				// Stepper
 
 				case OFX_IM_STEPPER:
 				{

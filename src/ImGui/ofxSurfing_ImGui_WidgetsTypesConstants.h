@@ -57,6 +57,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
 		OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
 
+		//-
+
 		// Bool
 
 		// Button
@@ -81,30 +83,48 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
 
-		// Float/Int
-		OFX_IM_SLIDER,
+		//-
+
+		// Float / Int
+		OFX_IM_SLIDER,//ImGui standard
+
+		//TODO:
+		// Big H/V Sliders
+
+		OFX_IM_HSLIDER_BIG,
+		OFX_IM_HSLIDER_BIG_NO_NAME,
+		OFX_IM_HSLIDER_BIG_NO_NUMBER,
+		OFX_IM_HSLIDER_BIG_NO_LABELS,
+		OFX_IM_HSLIDER_SMALL,
+		OFX_IM_HSLIDER_SMALL_NO_NAME,
+		OFX_IM_HSLIDER_SMALL_NO_NUMBER,
+		OFX_IM_HSLIDER_SMALL_NO_LABELS,
 		OFX_IM_HSLIDER,
+		OFX_IM_HSLIDER_NO_NAME,
+		OFX_IM_HSLIDER_NO_NUMBER,
+		OFX_IM_HSLIDER_NO_LABELS,
+
 		OFX_IM_VSLIDER,
 		OFX_IM_VSLIDER_NO_NAME,
 		OFX_IM_VSLIDER_NO_NUMBER,
 		OFX_IM_VSLIDER_NO_LABELS,
-		OFX_IM_PROGRESS_BAR,//TODO: must use normalized, from 0 to 1
+
+		OFX_IM_PROGRESS_BAR,
 		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
 		OFX_IM_STEPPER,
-		OFX_IM_COMBO,//TODO: multiple controls: slider+drag+stepper
 		OFX_IM_DRAG,
 		OFX_IM_KNOB,
 		OFX_IM_KNOB_TRAIL,
+		OFX_IM_COMBO,//TODO: multiple controls for fine tweak: slider + drag + stepper
 
-		// Multidim
-		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
-		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
-		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
+		//-
 
 		// Strings
 		OFX_IM_TEXT_DISPLAY,
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
+
+		//-
 
 		// Colors
 		OFX_IM_COLOR_INPUT,
@@ -112,6 +132,14 @@ namespace ofxImGuiSurfing
 		OFX_IM_COLOR_BOX,//small box color without controls
 		OFX_IM_COLOR_BOX_FULL_WIDTH,
 		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG,
+
+		//-
+
+		// Multidim
+		//TODO: for glm::vec
+		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
+		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
+		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
 
 		OFX_IM_NUM_TYPES
 	};

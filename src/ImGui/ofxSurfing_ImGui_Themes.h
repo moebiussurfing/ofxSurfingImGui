@@ -15,17 +15,17 @@ using namespace ImGui;
 namespace ofxImGuiSurfing
 {
 
-//#ifndef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
-//	static const float BUTTON_BIG_HEIGHT = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
-//#endif
+	//#ifndef OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme
+	//	static const float BUTTON_BIG_HEIGHT = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+	//#endif
 
-	//----
+		//----
 
-	//TODO:
-	// WIP
-	// fonts management
+		//TODO:
+		// WIP
+		// fonts management
 
-	//--------------------------------------------------------------
+		//--------------------------------------------------------------
 	inline void ImGui_FontCustom() {
 		ofLogNotice(__FUNCTION__);
 	}
@@ -88,9 +88,8 @@ namespace ofxImGuiSurfing
 		style->WindowRounding = 2;
 		style->GrabRounding = 2;
 		style->IndentSpacing = 5;
-
 		style->FrameBorderSize = 1;
-		style->WindowBorderSize= 1;
+		style->WindowBorderSize = 1;
 		style->TabBorderSize = 1;
 
 		//-
