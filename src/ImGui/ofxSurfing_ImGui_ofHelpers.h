@@ -17,12 +17,17 @@ namespace ofxImGuiSurfing
 	/*static*/ inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
 	{
 		bool bUnknown = false;
-		
+
 		const auto& info = typeid(ParameterType);
 		if (info == typeid(float)) // float
-		{}
+		{
+		}
 		else if (info == typeid(int)) // Int
-		{}
+		{
+		}
+		else if (info == typeid(bool)) // Bool
+		{
+		}
 		else { // unknown types
 			bUnknown = true;
 			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
@@ -50,8 +55,13 @@ namespace ofxImGuiSurfing
 					}
 					else
 					{
-						param += wheel * (bCtrl ? resolution : resolution * 10);
-						param = ofClamp(param, param.getMin(), param.getMax());//clamp
+						if (info == typeid(bool)) {//bool
+							param = !param.get();
+						}
+						else {//float, int
+							param += wheel * (bCtrl ? resolution : resolution * 10);
+							param = ofClamp(param, param.getMin(), param.getMax());//clamp
+						}
 					}
 				}
 			}

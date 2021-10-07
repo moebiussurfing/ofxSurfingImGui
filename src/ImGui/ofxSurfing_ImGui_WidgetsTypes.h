@@ -344,19 +344,20 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		// render now a parameter ImGui widget
-		// remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
+		// Render now a parameter with a related ImGui widget
+
+		// Remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
 		//--------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			bool bDone = false;
 
-			// if setted as hidden dont draw, but apply same line and spacing and return
+			// If setted as hidden dont draw, but apply same line and spacing and return
 			if (type == OFX_IM_HIDDEN)
 			{
 				uniqueName.push();
 
-				// extra options
+				// Extra options
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1)
 				{
@@ -367,12 +368,12 @@ namespace ofxImGuiSurfing
 				return false;
 			}
 
-			// if setted as hidden dont draw, but apply same line and spacing and return
+			// If setted as hidden dont draw, but apply same line and spacing and return
 			else if (type == OFX_IM_DISABLED)
 			{
 				uniqueName.push();
 
-				// extra options
+				// Extra options
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1)
 				{
@@ -386,7 +387,7 @@ namespace ofxImGuiSurfing
 				return false;
 			}
 
-			// disable mouse interaction
+			// Disable mouse interaction
 			else if (type == OFX_IM_INACTIVE)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -394,10 +395,10 @@ namespace ofxImGuiSurfing
 
 			//----
 
-			// detected type
+			// Detected type
 			auto ptype = aparam.type();
 
-			// filter param types
+			// Filter param types
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
@@ -418,14 +419,14 @@ namespace ofxImGuiSurfing
 
 			bool bReturn = false;
 
-			// set widget width/size reading from the function arguments
+			// Set widget width/size reading from the function arguments
 			float _ww;
 			if (amtPerRow == 2) _ww = _w50;
 			else if (amtPerRow == 3) _ww = _w33;
 			else if (amtPerRow == 4) _ww = _w25;
 			else _ww = _w100;
 
-			//-
+			//----
 
 			// Bool
 
@@ -439,8 +440,6 @@ namespace ofxImGuiSurfing
 				switch (type)
 				{
 
-				case OFX_IM_DEFAULT:
-				case OFX_IM_CHECKBOX:
 				case OFX_IM_INACTIVE:
 				{
 					// default:
@@ -450,69 +449,98 @@ namespace ofxImGuiSurfing
 						p.set(tmpRef);
 						bReturn = true;
 					}
-					//uniqueName.pop();
 					bReturn = false;
+				}
+				break;
+
+				case OFX_IM_DEFAULT:
+				case OFX_IM_CHECKBOX:
+				{
+					// default:
+					string name = p.getName();
+					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+					{
+						p.set(tmpRef);
+						bReturn = true;
+					}
+					bReturn = false;
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 				}
 				break;
 
 				case OFX_IM_BUTTON_SMALL:
 					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_BUTTON_BIG:
 					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_BUTTON_BIG_XXL:
 					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_SMALL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_XXL:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_SMALL_BORDER:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_BORDER:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_XXL_BORDER:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
 					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
 					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
 					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 
 				case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
 					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
+					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					break;
 				}
 
@@ -592,7 +620,7 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
-			
+
 				case OFX_IM_DEFAULT:
 				case OFX_IM_SLIDER:
 				{
@@ -612,7 +640,6 @@ namespace ofxImGuiSurfing
 				//--
 
 				// H Slider
-				//TODO:
 
 				case OFX_IM_HSLIDER:
 				{
@@ -850,6 +877,7 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<int> p = aparam.cast<int>();
 				auto tmpRef = p.get();
+
 				uniqueName.push();
 
 				switch (type)
@@ -867,7 +895,7 @@ namespace ofxImGuiSurfing
 					bReturn = false;
 				}
 				break;
-				
+
 				case OFX_IM_DEFAULT:
 				case OFX_IM_SLIDER:
 				{
@@ -921,6 +949,7 @@ namespace ofxImGuiSurfing
 					const int step = 1;
 					const int stepFast = 5;
 					auto tmpRef = p.get();
+
 					//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
@@ -930,6 +959,7 @@ namespace ofxImGuiSurfing
 						bReturn = true;
 					}
 					//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+
 					ImGui::PopItemWidth();
 					bReturn = false;
 					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
@@ -948,7 +978,7 @@ namespace ofxImGuiSurfing
 
 				uniqueName.pop();
 
-				bDone = true;//progress
+				bDone = true;//int
 			}
 
 			//-
@@ -959,6 +989,7 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<ofFloatColor> p = aparam.cast<ofFloatColor>();
 				auto tmpRef = p.get();
+
 				uniqueName.push();
 
 				float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -982,6 +1013,7 @@ namespace ofxImGuiSurfing
 				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 				uniqueName.pop();
+
 				bDone = true;//colors
 			}
 
@@ -989,6 +1021,7 @@ namespace ofxImGuiSurfing
 			{
 				ofParameter<ofColor> p = aparam.cast<ofColor>();
 				auto tmpRef = p.get();
+
 				uniqueName.push();
 
 				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
@@ -1003,6 +1036,7 @@ namespace ofxImGuiSurfing
 					ImGui::ColorButton("", tmpRef, flags);
 
 				uniqueName.pop();
+
 				bDone = true;//colors
 			}
 
@@ -1026,6 +1060,7 @@ namespace ofxImGuiSurfing
 				}
 
 				uniqueName.pop();
+
 				bDone = true;
 			}
 			else if (isMultiDimVec3)
@@ -1044,6 +1079,7 @@ namespace ofxImGuiSurfing
 				}
 
 				uniqueName.pop();
+
 				bDone = true;
 			}
 			else if (isMultiDimVec4)
@@ -1062,12 +1098,13 @@ namespace ofxImGuiSurfing
 				}
 
 				uniqueName.pop();
+
 				bDone = true;
 			}
 
 			//----
 
-			if (bDone)
+			if (bDone) //-> A widget has been populated, then we can apply the extra arguments..
 			{
 				// Extra options
 				// - same line
@@ -1221,6 +1258,7 @@ namespace ofxImGuiSurfing
 				//--------------------------------------------------------------
 
 				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+
 				if (parameterGroup) // Will detect nested groups recursively
 				{
 					refreshLayout(); // ?
@@ -1256,6 +1294,7 @@ namespace ofxImGuiSurfing
 						//	if (b) AddGroup(*parameterGroup, flags, typeGroup);
 						//	ImGui::Unindent();
 						//}
+
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
 						{
 							// must skip contained params
@@ -1409,8 +1448,8 @@ namespace ofxImGuiSurfing
 #endif
 					//--
 
-					// Unknown types
 					//TODO:
+					// Unknown types
 					// Should add styles for old ofVec...
 					auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
 					if (parameterOfVec2f)
@@ -1448,7 +1487,7 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// float
+					// Float
 					auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
 					if (parameterFloat)
 					{
@@ -1468,7 +1507,7 @@ namespace ofxImGuiSurfing
 
 					//-
 
-					// int
+					// Int
 					auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 					if (parameterInt)
 					{
@@ -1486,7 +1525,7 @@ namespace ofxImGuiSurfing
 
 					//-
 
-					// bool
+					// Bool
 					auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 					if (parameterBool)
 					{
@@ -1504,7 +1543,7 @@ namespace ofxImGuiSurfing
 
 					//-
 
-					// string
+					// String
 					auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
 					if (parameterString)
 					{
@@ -1523,7 +1562,7 @@ namespace ofxImGuiSurfing
 
 					//-
 
-					// float color
+					// Float color
 					auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 					if (parameterFloatColor)
 					{
@@ -1543,7 +1582,7 @@ namespace ofxImGuiSurfing
 
 					//-
 
-					// color
+					// Color
 					auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
 					if (parameterColor)
 					{

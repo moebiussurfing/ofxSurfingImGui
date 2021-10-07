@@ -20,6 +20,8 @@
 #include "ofxSurfing_Timers.h"
 //#include "ofxSurfingHelpers.h"
 
+//#include "ofxSurfing_ImGui_ofHelpers.h"//-> cant make work the above suggar..
+
 //------------------------------
 
 namespace ofxImGuiSurfing
@@ -60,6 +62,8 @@ namespace ofxImGuiSurfing
 		ImGui::PopStyleColor(3);
 
 		ImGui::PopID();
+		
+		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
 		if (bPre != parameter) return true;
 		else return false;
@@ -409,6 +413,9 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
 	{
+		//TODO:
+		// Should fix mouse over/inner bos checking to fix mouse wheel control..
+
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
 		bool bchanged = false;
