@@ -73,17 +73,46 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	// 3.
+
+	// Adds Constraint Window Shapes
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN + 40, ofGetHeight() - 100); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN, ofGetHeight() / 2); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+
+	//----
+
+
+	/*
+	
+	Arguments to the Styles Engine:
+	You can pass it as argument when adding each ofParameter to the guiManager.
+	
+	Examples:
+	guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+	guiManager.Add(floatValue, OFX_IM_VSLIDER);
+	guiManager.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
+	
+	*/
+
 	//--------------------------------------------------------------
 	enum SurfingImGuiTypes
 	{
-		OFX_IM_DEFAULT = 0,	// default style for each widget. (kind of like ofxImGui does)
-		OFX_IM_HIDDEN,		// omit widget. don't let spacing there
-		OFX_IM_DISABLED,	// make it invisble, preserve the void spacing
-		OFX_IM_INACTIVE,	// draws the widget. but makes it inactive. disables mouse control
+		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
+		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there
+		OFX_IM_DISABLED,	// Make it invisble, preserve the void spacing
+		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control
 
 		//-
 
-		// Bool
+		// Bool Styles
 
 		// Button
 		OFX_IM_BUTTON_SMALL,
@@ -109,11 +138,12 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		// Float/Int
-		OFX_IM_SLIDER,//ImGui standard
+		// Float/Int Styles
+
+		OFX_IM_SLIDER, // ofxImGui standard
 
 		// Big Sliders
-		// horizontal
+		// Horizontal
 		OFX_IM_HSLIDER_BIG,
 		OFX_IM_HSLIDER_BIG_NO_NAME,
 		OFX_IM_HSLIDER_BIG_NO_NUMBER,
@@ -126,7 +156,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
-		// vertical
+		// Vertical
 		OFX_IM_VSLIDER,
 		OFX_IM_VSLIDER_NO_NAME,
 		OFX_IM_VSLIDER_NO_NUMBER,
@@ -152,13 +182,15 @@ namespace ofxImGuiSurfing
 		// Colors
 		OFX_IM_COLOR_INPUT,
 		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
+		OFX_IM_COLOR_NO_NAME, //TODO: without name or controls
 		OFX_IM_COLOR_BOX, // small box color without controls
 		OFX_IM_COLOR_BOX_FULL_WIDTH,
 		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // double height
 
 		//-
 
-		//TODO: for glm::vec
+		//TODO: 
+		// for glm::vec
 		// Multidim
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
@@ -183,6 +215,9 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_NUM_TYPES
 	};
 
+	//-
+
+	// Helper to get the styles name for debugging purposes
 	//--------------------------------------------------------------
 	inline static std::string getSurfingImGuiTypesGroupsName(int i)
 	{

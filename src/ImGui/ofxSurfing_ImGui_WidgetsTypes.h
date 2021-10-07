@@ -977,13 +977,17 @@ namespace ofxImGuiSurfing
 				flags |= ImGuiColorEditFlags_NoLabel;
 				flags |= ImGuiColorEditFlags_NoTooltip;
 
-				if (type == OFX_IM_COLOR_INPUT)
-					bReturn = ofxImGuiSurfing::AddParameter(p);
-
+				if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+				
 				else if (type == OFX_IM_COLOR_NO_ALPHA) {
 					bReturn = ofxImGuiSurfing::AddParameter(p, false);
-					//ImGui::Text("TEST");
-					//ImGui::ColorButton("", tmpRef, flags);
+				}
+
+				//TODO:
+				else if (type == OFX_IM_COLOR_NO_NAME) {
+					//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
+					//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+					bReturn = ofxImGuiSurfing::AddParameter(p, false);
 				}
 
 				else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
@@ -1007,11 +1011,22 @@ namespace ofxImGuiSurfing
 				flags |= ImGuiColorEditFlags_NoLabel;
 				flags |= ImGuiColorEditFlags_NoTooltip;
 
-				if (type == OFX_IM_COLOR_INPUT)
-					bReturn = ofxImGuiSurfing::AddParameter(p);
+				if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
-				else if (type == OFX_IM_COLOR_BOX)
-					ImGui::ColorButton("", tmpRef, flags);
+				else if (type == OFX_IM_COLOR_NO_ALPHA) {
+					bReturn = ofxImGuiSurfing::AddParameter(p, false);
+				}
+
+				//TODO:
+				else if (type == OFX_IM_COLOR_NO_NAME) {
+					//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
+					//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+					bReturn = ofxImGuiSurfing::AddParameter(p, false);
+				}
+
+				else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
+				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 				uniqueName.pop();
 

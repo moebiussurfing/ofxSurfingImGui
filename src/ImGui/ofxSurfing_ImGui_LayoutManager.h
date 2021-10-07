@@ -71,6 +71,7 @@ using namespace ofxImGuiSurfing;
 
 //TODO:
 // These argumnents are to pass to setup(..) method and simplify instantiation and settings.
+//--------------------------------------------------------------
 namespace ofxImGuiSurfing
 {
 	// Argument to be used on setup(mode);

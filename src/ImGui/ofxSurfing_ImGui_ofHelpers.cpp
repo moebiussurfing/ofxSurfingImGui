@@ -368,21 +368,23 @@ namespace ofxImGuiSurfing
 		return result;
 	}
 
+	//TODO:
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha)
+	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha/*, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None*/)
 	{
 		auto tmpRef = parameter.get();
+		ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
 
 		if (alpha)
 		{
-			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r))
+			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r, flags))
 			{
 				parameter.set(tmpRef);
 
 				return true;
 			}
 		}
-		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r))
+		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r, flags))
 		{
 			parameter.set(tmpRef);
 
@@ -393,8 +395,10 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha)
+	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha/*, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None*/)
 	{
+		ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+
 		ofParameter<ofFloatColor> c;
 		c.set(parameter.getName(),
 			ofFloatColor(parameter.get().r / 255.f, parameter.get().g / 255.f, parameter.get().b / 255.f, parameter.get().a / 255.f),
@@ -406,14 +410,14 @@ namespace ofxImGuiSurfing
 
 		if (alpha)
 		{
-			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r))
+			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r, flags))
 			{
 				parameter.set(tmpRef);
 
 				return true;
 			}
 		}
-		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r))
+		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r, flags))
 		{
 			parameter.set(tmpRef);
 
