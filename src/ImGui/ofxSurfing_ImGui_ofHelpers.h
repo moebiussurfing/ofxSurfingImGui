@@ -102,6 +102,8 @@ namespace ofxImGuiSurfing
 	template<typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& parameter);
 
+	//--
+
 	template<typename ParameterType>
 	bool AddText(ofParameter<ParameterType>& parameter, bool label = true);
 
@@ -240,6 +242,8 @@ namespace ofxImGuiSurfing
 
 		return true;
 	}
+
+	//--
 
 	//--------------------------------------------------------------
 	template<typename DataType>

@@ -733,16 +733,16 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//_currWindowsSpecial = -1;
 	_currWindowsSpecial = -1;
 
-	//-
+	resetUniqueNames(); // reset unique names
+
+	//--
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
-	//-
+	//--
 
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
-
-	resetUniqueNames(); // reset unique names
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 

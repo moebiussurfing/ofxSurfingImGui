@@ -29,8 +29,8 @@ namespace ofxImGuiSurfing
 
 		// Widgets Sizes
 		// Common sizes to use when recalculating layout dimensions.
-	private:
 
+	private:
 		float _spcx;
 		float _spcy;
 		float _w100;
@@ -170,7 +170,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		//TODO:
-		// add remover / update style element o runtime?
+		// Add remover / update style element o runtime?
 		//--------------------------------------------------------------
 		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
 		{
@@ -187,7 +187,7 @@ namespace ofxImGuiSurfing
 			//widgetsStyles.push_back(c);
 		}
 
-		// queue a customization config for future populate a param widget
+		// Queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
 		void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
@@ -214,27 +214,7 @@ namespace ofxImGuiSurfing
 			widgetsStyles.push_back(c);
 		}
 
-		// queue a customization config for future populate a group
-		////--------------------------------------------------------------
-		//void AddGroupStyle(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-		//{
-		//	SurfingImGuiTypesGroup_Style c;
-		//	c.name = group.getName();
-		//	c.type = type;
-		//	c.flags = flags;
-
-		//	groupsStyles.push_back(c);
-		//}
-		////--------------------------------------------------------------
-		//void AddGroupStyle(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-		//{
-		//	SurfingImGuiTypesGroup_Style c;
-		//	c.name = name;
-		//	c.type = type;
-		//	c.flags = flags;
-
-		//	groupsStyles.push_back(c);
-		//}
+		// Queue a customization config for future populate a group
 		//--------------------------------------------------------------
 		void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
@@ -259,7 +239,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		//TODO:
-		// if we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
+		// If we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
 		// then we will populate each widget type as the default appearance!
 		//--------------------------------------------------------------
 		bool isOperative()
@@ -285,7 +265,6 @@ namespace ofxImGuiSurfing
 		//	char * cString = new char[maxChars];
 		//	strcpy(cString, tmpRef.c_str());
 		//	auto result = false;
-
 		//	if (multiline)
 		//	{
 		//		if (ImGui::InputTextMultiline(GetUniqueName(parameter), cString, maxChars))
@@ -300,7 +279,6 @@ namespace ofxImGuiSurfing
 		//		result = true;
 		//	}
 		//	delete[] cString;
-
 		//	return result;
 		//}
 
