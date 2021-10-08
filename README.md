@@ -47,7 +47,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 ### 1. [WIDGETS](#1-widgets-1)
 
-### 2. [LAYOUT](#2-layout-1)
+### 2. [BASIC LAYOUT](#2-layout-1)
 
 ### 3. [TYPES ENGINE](#3-types-engine-wip-1) [WIP]
 
@@ -464,16 +464,16 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021*  
 
-### Thanks
+#### Thanks
 _All source snippets from other authors are linked into header files. Thanks!_
 
-### License
+#### License
 **MIT License**
 
 <BR>
 
 <details>
-  <summary>Some reference links</summary>
+  <summary>Some Reference Links</summary>
   <p>
 
 https://github.com/HankiDesign/awesome-dear-imgui -> Collected widgets  
