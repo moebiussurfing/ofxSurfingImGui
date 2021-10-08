@@ -109,7 +109,7 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
 
 <BR>
 
-## 2. LAYOUT
+## 2. BASIC LAYOUT
 
 Speed up **ofxImGui** instantiation (auto draw, viewport mode, fonts...), windows, and layouts.  
 Includes **ofParameter** helpers, widget sizes, and extra widgets.  
