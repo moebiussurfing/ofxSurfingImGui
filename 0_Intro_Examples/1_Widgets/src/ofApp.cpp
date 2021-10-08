@@ -273,13 +273,13 @@ void ofApp::draw()
 					{
 						guiManager.refreshLayout();
 
-						ImGui::TextWrapped("Float and Int ofParamters \ncan be directly rendered as ImGui Windgets \n");
+						ImGui::TextWrapped("Float and Int ofParameters \ncan be directly rendered as ImGui Widgets \n");
 						ImGui::TextWrapped("Try to resize the window panel \nto see the responsive layouting.. \n");
 
 						ofxImGuiSurfing::AddSpacingSeparated();
 						ImGui::Spacing();
 
-						ImGui::TextWrapped("> Raw Mode without Styles Engine. \nNo Responsive! \n");
+						ImGui::TextWrapped("> Raw Mode without Styles Engine. \nNo Responsive! No Mouse Wheel!\n");
 						float w = 40;
 						float h = 80;
 						ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
