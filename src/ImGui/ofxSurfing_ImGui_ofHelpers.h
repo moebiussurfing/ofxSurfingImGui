@@ -100,7 +100,7 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<void>& parameter, float width = 0);
 
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter);
+	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format = "%.3f");
 
 	//--
 
@@ -172,16 +172,18 @@ namespace ofxImGuiSurfing
 	// Clean of Styles with the default styles.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter)
+	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format)//TODO: error if enabled..
 	{
+		//std::string format = "%.3f";//TODO:
+
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
 
-		// float
+		// Float
 		if (info == typeid(float))
 		{
 			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 			{
 				parameter.set(tmpRef);
 				IMGUI_SUGAR__SLIDER_WIDTH_POP;
@@ -192,7 +194,7 @@ namespace ofxImGuiSurfing
 		}
 
 		// Int
-		if (info == typeid(int))
+		else if (info == typeid(int))
 		{
 			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
@@ -208,7 +210,7 @@ namespace ofxImGuiSurfing
 		}
 
 		// Bool
-		if (info == typeid(bool))
+		else if (info == typeid(bool))
 		{
 			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
 			{
@@ -219,6 +221,7 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
+		// Unknown
 		if (info.name() == "" || info.name() == " ")
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 

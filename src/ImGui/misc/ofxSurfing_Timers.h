@@ -7,8 +7,8 @@
 
 using namespace std;
 
-namespace ofxSurfingHelpers
-//namespace ofxImGuiSurfing 
+//namespace ofxSurfingHelpers
+namespace ofxImGuiSurfing 
 {
 
 	//------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ namespace ofxSurfingHelpers
 
 	//-
 
-	// simple smooth
+	// Simple Smooth
 	//--------------------------------------------------------------
 	template <typename T>
 	void ofxKuValueSmooth(T &value, T target, float smooth) {

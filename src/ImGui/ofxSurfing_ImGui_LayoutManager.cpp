@@ -587,8 +587,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
 						//ofColor cl(0, 255, 255, 200);
 						ofColor cl = ofColor::orange;
 
-						//int g = 255 * ofxSurfingHelpers::Bounce(0.5);
-						int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+						//int g = 255 * ofxImGuiSurfing::Bounce(0.5);
+						int a = 255.f * ofMap(ofxImGuiSurfing::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 						ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 						//ofColor c = ofColor(g, a);
 						ofSetColor(c);
@@ -686,7 +686,7 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 
 			// create rectangle
 			rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, availableSpace.GetWidth(), availableSpace.GetHeight());
-			float v = ofxSurfingHelpers::Bounce(1);
+			float v = ofxImGuiSurfing::Bounce(1);
 			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
 		}
 	}
@@ -695,7 +695,7 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 		auto view = ofGetCurrentViewport();
 		auto viewCenter = view.getCenter();
 		rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
-		float v = ofxSurfingHelpers::Bounce(1);
+		float v = ofxImGuiSurfing::Bounce(1);
 		rectangle_Central.setSize(view.getWidth() * v, view.getHeight() * v);
 	}
 
@@ -704,7 +704,7 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 		ofSetRectMode(OF_RECTMODE_CENTER);
 		ofSetLineWidth(4);
 		ofColor cl = ofColor::yellow;
-		int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+		int a = 255.f * ofMap(ofxImGuiSurfing::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 		ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 		ofSetColor(c);
 		ofFill();
@@ -1385,7 +1385,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 	static float CURRENT_WINDOW_MIN_HEIGHT = 220;
 
 	// Blink save button to clarify workflow
-	float a = ofxSurfingHelpers::getFadeBlink(0.2, 0.8, 0.15);
+	float a = ofxImGuiSurfing::getFadeBlink(0.2, 0.8, 0.15);
 
 	//----
 

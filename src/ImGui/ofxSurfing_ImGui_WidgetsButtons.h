@@ -16,11 +16,9 @@
 
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "misc/ofxSurfing_Timers.h"
 
-#include "ofxSurfing_Timers.h"
-//#include "ofxSurfingHelpers.h"
-
-//#include "ofxSurfing_ImGui_ofHelpers.h"//-> cant make work the above suggar..
+//#include "ofxSurfing_ImGui_ofHelpers.h"//-> cant make work the above sugar..
 
 //------------------------------
 
@@ -125,7 +123,7 @@ namespace ofxImGuiSurfing
 	//if you want to overwrite the border color, like when blinking.. Yo need to set border to false
 	//float a;
 	//bool b = myToggleState.get();
-	//if (b) a = ofxSurfingHelpers::getFadeBlink();
+	//if (b) a = ofxImGuiSurfing::getFadeBlink();
 	//else a = 1.0f;
 	//if (b) ImGui::PushStyleColor(ImGuiCol_Border, (ImVec4)ImColor::HSV(0.5f, 0.0f, 1.0f, a));//white blink border
 	//ofxSurfing::AddBigToggle(myToggleState, _w100, _h, false);
@@ -143,7 +141,7 @@ namespace ofxImGuiSurfing
 		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		// blink
 		if (bBlink) {
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = ofxImGuiSurfing::getFadeBlink();
 			a = ofClamp(blinkValue, 0.25, 0.75);
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -287,7 +285,7 @@ namespace ofxImGuiSurfing
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
 			if (blinkValue == -1) {
-				blinkValue = ofxSurfingHelpers::getFadeBlink();
+				blinkValue = ofxImGuiSurfing::getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
