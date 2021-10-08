@@ -71,7 +71,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void push() {
-			inc();
+			inc();//count
 
 #ifndef DISABLE_ID_PUSH_POP
 			ImGui::PushID(ofToString(index).c_str());

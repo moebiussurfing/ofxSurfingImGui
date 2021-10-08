@@ -25,7 +25,7 @@
 
 namespace ofxImGuiSurfing
 {
-	//----
+	//--------
 
 	// Float
 	//--------------------------------------------------------------
@@ -117,7 +117,8 @@ namespace ofxImGuiSurfing
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 
-	//----
+
+	//--------
 
 	 // H Sliders
 
@@ -192,7 +193,8 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
-	//----
+
+	//------
 
 	// V Sliders
 
@@ -255,10 +257,10 @@ namespace ofxImGuiSurfing
 
 	// Int
 	//--------------------------------------------------------------
-	inline bool AddVSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false)
+	inline bool AddVSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
 		//TODO:
-		//default is full panel shape
+		//default (-1,-1) is full panel shape
 
 		bool bChanged = false;
 		auto tmpRef = parameter.get();
@@ -270,15 +272,28 @@ namespace ofxImGuiSurfing
 		float spcx = ImGui::GetStyle().ItemSpacing.x;
 		float spcy = ImGui::GetStyle().ItemSpacing.y;
 
+		//ImGui::Dummy(ImVec2(0, spcy));//make top space
+
 		//if (sz.x == -1) sz.x = w;
 		//if (sz.y == -1) sz.y = h;
 		if (sz.x == -1) sz.x = w - spcx;
 		if (sz.y == -1) sz.y = h - spcy;
 
+		//ImGui::BeginGroup();
 		ImGui::PushID(("##VSLIDER" + name).c_str());
-		if (bNoName) name = "";
 
-		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax()))
+		if (bNoName) {
+			name = "";
+		}
+		else {
+			ImGui::Text(name.c_str());
+		}
+
+		string format;
+		if (bNoNumber)format = "";
+		else format = "%.3f";
+
+		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 		{
 			parameter.set(tmpRef);
 
@@ -286,13 +301,17 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
+		//ImGui::EndGroup();
 
+		//TODO:
 		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
 		return bChanged;
 	}
 
-	//----
+	//--------
+
+	// Drag
 
 	//--------------------------------------------------------------
 	inline bool AddDragFloatSlider(ofParameter<float>& parameter/*, float w = 100*/)// button but using a bool not void param

@@ -12,6 +12,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+#include "ofxSurfingHelpers.h"
 
 //https://github.com/iamclint/ImGuiRangeSlider
 #include "ImGuiRangeSlider.h"
@@ -22,16 +23,17 @@ public:
     void setup();
     void setupStyles();
     void draw();
+    void exit();
 
 	ofxSurfing_ImGui_Manager guiManager;
 
-    // groups
+    // Groups
     ofParameterGroup params1;
     ofParameterGroup params2;
     ofParameterGroup params3;
     ofParameterGroup params4;
 
-    // parameters
+    // Parameters
 	ofParameter<glm::vec3> pos1;
 	ofParameter<float> value;
 	ofParameter<float> valueMin;
@@ -58,5 +60,8 @@ public:
 	ofParameter<float> separation4;
 	ofParameter<float> speed4;
 
+	// To be used to enable sections
+	// Could be used too to enable each window and allow close them using the top right [x]. 
 	vector <ofParameter<bool>> bEnablers;
+	ofParameterGroup paramsApp{ "ofApp" };
 };

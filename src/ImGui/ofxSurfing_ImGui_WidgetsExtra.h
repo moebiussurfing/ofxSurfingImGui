@@ -957,42 +957,49 @@ namespace ofxImGuiSurfing
 		//ImGui::Dummy(ImVec2(0, 2 * ImGui::GetStyle().ItemSpacing.y + 2 * ImGui::GetStyle().ItemInnerSpacing.y)); // hide widget
 	}
 
-//-----
+	//-----
 
 	//--------------------------------------------------------------
-	inline void ProgressBar2(float valuePrc, float max = 1.0f)
+	inline void ProgressBar2(float valuePrc, float max = 1.0f, bool noText = false)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
 		const float pad = 0;
 
-		// draw progress bar
+		//TODO:
+		//char* overlay = 0;
+		//if (noText) overlay = "";
+
+		// Draw progress bar
 		float _prc;
 		ImGuiStyle *style = &ImGui::GetStyle();
 		ImVec4 color;
 
-		//ImGui::PushID("prog");
-		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
+		// Fill bar color
+		color = style->Colors[ImGuiCol_ButtonHovered]; // We can force change this color on theme... only used here. Better to fit the theme style.
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		if (max == 1.0f) _prc = valuePrc;
 		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
 
-		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
+		if (noText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 0));//transparent
+		{
+			ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
+		}
+		if (noText) ImGui::PopStyleColor();
 
 		ImGui::PopStyleColor();
-		//ImGui::PopID();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<float> valuePrc, float max = -1.0f)
+	inline void AddProgressBar(ofParameter<float> valuePrc, float max = -1.0f, bool noText = false)
 	{
-		//allways starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1.0f) ofxImGuiSurfing::ProgressBar2(valuePrc.get(), valuePrc.getMax());
-		else ofxImGuiSurfing::ProgressBar2(valuePrc.get(), 1.0f);
+		// Always starts on 0.0f but max can be 1.0f, 100..
+		if (max == -1.0f) ofxImGuiSurfing::ProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
+		else ofxImGuiSurfing::ProgressBar2(valuePrc.get(), 1.0f, noText);
 	}
 
 	//--------------------------------------------------------------
-	inline void ProgressBar2(int valuePrc, int max = 100)
+	inline void ProgressBar2(int valuePrc, int max = 100, bool noText = false)
 	{
 		float _w100 = ImGui::GetContentRegionAvail().x;
 		float pad = 0;
@@ -1002,24 +1009,27 @@ namespace ofxImGuiSurfing
 		ImGuiStyle *style = &ImGui::GetStyle();
 		ImVec4 color;
 
-		//ImGui::PushID("prog");
 		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		if (max == 100) _prc = valuePrc / 100.f;
 		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
 
+		if (noText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0));
+
 		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
+
+		if (noText) ImGui::PopStyleColor();
+
 		ImGui::PopStyleColor();
-		//ImGui::PopID();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<int> valuePrc, int max = -1)
+	inline void AddProgressBar(ofParameter<int> valuePrc, int max = -1, bool noText = false)
 	{
-		//allways starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1) ProgressBar2(valuePrc.get(), valuePrc.getMax());
-		else ProgressBar2(valuePrc.get(), max);
+		// Always starts on 0.0f but max can be 1.0f, 100..
+		if (max == -1) ProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
+		else ProgressBar2(valuePrc.get(), max, noText);
 	}
 };
 

@@ -1,9 +1,11 @@
 #include "ofApp.h"
 
+#define MAX_CAMERA_DISTANCE 500.0f
+
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
-	ofSetWindowPosition(1920, 25);
+	//ofSetWindowPosition(1920, 25);
 
 	//--
 
@@ -22,7 +24,6 @@ void ofApp::setup() {
 	bPrevious.set("<", false);
 	bNext.set(">", false);
 
-#define MAX_CAMERA_DISTANCE 500.0f
 	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
@@ -87,12 +88,19 @@ void ofApp::setup() {
 	for (int i = 0; i < NUM_SECTIONS; i++) {
 		ofParameter<bool> b{ "Enable " + ofToString(i), false };
 		bEnablers.emplace_back(b);
+
+		paramsApp.add(b);
 	}
 
-	// Configure
-	bEnablers[0] = 1;
-	bEnablers[1] = 1;
-	bEnablers[6] = 1;
+	//--
+
+	// Startup
+	ofxSurfingHelpers::loadGroup(paramsApp);
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+	ofxSurfingHelpers::saveGroup(paramsApp);
 }
 
 //--------------------------------------------------------------
@@ -121,159 +129,189 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-		if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-		if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
-
-		//not working
-		if (guiManager.bReset_Window) {
-			guiManager.bReset_Window = false;
-			guiManager.resetWindowImGui(true, true);
-		}
-
-		guiManager.beginWindow("ofApp", NULL, window_flags);
+		// Toggle enablers
 		{
-			if(0)//TESTING
-			{
-				int max = 10000;
-				int min = 1;
-				static int ilow = 1, ihigh = 5000;
-				static int ilow1 = 1, ihigh1 = 5000;
-				static int ilow2 = 2, ihigh2 = 5000;
-				static float flow = 1, fhigh = 5000;
-				static float flow1 = 1, fhigh1 = 5000;
-				static float flow2 = 1, fhigh2 = 5000;
-				//ImGui::RangeSliderInt("CMDS", min, max, ilow, ihigh);
-				//ImGui::RangeSliderInt("CMDS1", min, max, ilow1, ihigh1);
-				//ImGui::RangeSliderInt("CMDS2", min, max, ilow2, ihigh2);
-				//ImGui::RangeSliderFloat("CMDS3f", min, max, flow2, fhigh2);
-				//ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
-				ImGui::RangeSliderFloat("CMDS5f", min, max, flow, fhigh);
-			}
-
-			// Toggle enablers
+			ImGui::Begin("Enablers");
 			{
 				for (int i = 0; i < NUM_SECTIONS; i++) {
 					ofxImGuiSurfing::AddToggleRoundedButton(bEnablers[i]);
 				}
 				ImGui::Spacing();
 			}
+			ImGui::End();
+		}
 
-			// Ranges for multidim glm::vec
-			if (bEnablers[0])
-			{
-				ImGui::Spacing();
-				guiManager.refreshLayout();
+		//----
 
-				static ofParameter<int> coord{ "coord", 0, 0, 2 };
-				ofxImGuiSurfing::AddParameter(coord);
+		// ofApp Window
+		{
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
-				ofxImGuiSurfing::AddParameter(value);
-				ofxImGuiSurfing::AddParameter(valueMin);
-				ofxImGuiSurfing::AddParameter(valueMax);
-
-				float _h= ofxImGuiSurfing::getWidgetsHeightUnit();
-				float _w100 = ofxImGuiSurfing::getWidgetsWidth(1);
-				float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);
-
-				//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
-				//ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f, ImVec2(_w100, _h), false);
-				ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f);
-				//IMGUI_SUGAR_SLIDER_WIDTH_POP;
-
-				//ImGui::SameLine();
-				//ImGui::Text("asdf");
-				//ImGui::SameLine();
-				//ImGui::Button("Button1");
-				//ImGui::SameLine();
-				//ImGui::Button("Button2");
-				//ImGui::Spacing();
-
-				ofxImGuiSurfing::AddRangeOneVec3Param("RangePos", pos1, valueMin, valueMax, value, coord.get());
-				//ImGui::SameLine();
-				//ImGui::Text("asdf");
+			// not working
+			if (guiManager.bReset_Window) {
+				guiManager.bReset_Window = false;
+				guiManager.resetWindowImGui(true, true);
 			}
 
-			// A Multidim (xyz) vec2/vec3/vec4 parameter 
-			if (bEnablers[1])
+			guiManager.beginWindow("ofApp", NULL, window_flags);
 			{
-				ImGui::Spacing();
+				if (0)//TESTING
+				{
+					int max = 10000;
+					int min = 1;
+					static int ilow = 1, ihigh = 5000;
+					static int ilow1 = 1, ihigh1 = 5000;
+					static int ilow2 = 2, ihigh2 = 5000;
+					static float flow = 1, fhigh = 5000;
+					static float flow1 = 1, fhigh1 = 5000;
+					static float flow2 = 1, fhigh2 = 5000;
+					//ImGui::RangeSliderInt("CMDS", min, max, ilow, ihigh);
+					//ImGui::RangeSliderInt("CMDS1", min, max, ilow1, ihigh1);
+					//ImGui::RangeSliderInt("CMDS2", min, max, ilow2, ihigh2);
+					//ImGui::RangeSliderFloat("CMDS3f", min, max, flow2, fhigh2);
+					//ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
+					ImGui::RangeSliderFloat("CMDS5f", min, max, flow, fhigh);
 
-				// Two api patterns can be used:
-				guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
-				//ofxImGuiSurfing::AddParameter(pos1, true);
-			}
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
 
-			// Basic folder
-			if (bEnablers[2])
-			{
-				if (ImGui::TreeNode("Tree"))
+				// Ranges for multidim glm::vec
+				if (bEnablers[0])
+				{
+					guiManager.refreshLayout();
+
+					static ofParameter<int> coord{ "coord", 0, 0, 2 };
+					ofxImGuiSurfing::AddParameter(coord);
+
+					ofxImGuiSurfing::AddParameter(value);
+					ofxImGuiSurfing::AddParameter(valueMin);
+					ofxImGuiSurfing::AddParameter(valueMax);
+
+					float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
+					float _w100 = ofxImGuiSurfing::getWidgetsWidth(1);
+					float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);
+
+					//IMGUI_SUGAR_SLIDER_WIDTH_PUSH;
+					//ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f, ImVec2(_w100, _h), false);
+					ofxImGuiSurfing::AddRangeParam("RgVal", valueMin, valueMax, "%.2f  %.2f", 1.0f);
+					//IMGUI_SUGAR_SLIDER_WIDTH_POP;
+
+					//ImGui::SameLine();
+					//ImGui::Text("asdf");
+					//ImGui::SameLine();
+					//ImGui::Button("Button1");
+					//ImGui::SameLine();
+					//ImGui::Button("Button2");
+					//ImGui::Spacing();
+
+					ofxImGuiSurfing::AddRangeOneVec3Param("RangePos", pos1, valueMin, valueMax, value, coord.get());
+					//ImGui::SameLine();
+					//ImGui::Text("asdf");
+
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
+
+				// A Multidim (xyz) vec2/vec3/vec4 parameter 
+				if (bEnablers[1])
 				{
 					ImGui::Spacing();
 
-					guiManager.Add(bEnable1);
-					guiManager.Add(bEnable2);
-					guiManager.Add(bEnable3);
-					ImGui::TreePop();
+					// Two api patterns can be used:
+					guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+					//ofxImGuiSurfing::AddParameter(pos1, true);
+
+					ofxImGuiSurfing::AddSpacingSeparated();
 				}
-			}
 
-			// An ofParameterGroup with nested params
-			//if (0)
-			if (bEnablers[3])
-			{
-				ImGui::Spacing();
-
-				static bool bOpen = false;
-				ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
-
-				guiManager.AddGroup(params1, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
-				//guiManager.AddGroup(params1);
-			}
-
-
-			// Three rounded toggles
-			if (bEnablers[4])
-			{
-				ImGui::Spacing();
-
-				ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddToggleRoundedButton(bNext);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
-			}
-
-			// Vertical Sliders
-			if (bEnablers[5])
-			{
-				ImGui::Spacing();
-
-				if (ImGui::TreeNode("Vertical Sliders"))
+				// Basic folder
+				if (bEnablers[2])
 				{
-					float w = 70;
-					float h = 200;
-					ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
+					if (ImGui::TreeNode("Tree"))
+					{
+						guiManager.Add(bEnable1);
+						guiManager.Add(bEnable2);
+						guiManager.Add(bEnable3);
+
+						ImGui::TreePop();
+					}
+
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
+
+				// An ofParameterGroup with nested params
+				//if (0)
+				if (bEnablers[3])
+				{
+					static bool bOpen = false;
+					ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+					guiManager.AddGroup(params1, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
+					//guiManager.AddGroup(params1);
+
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
+
+
+				// Three rounded toggles
+				if (bEnablers[4])
+				{
+					ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
 					ImGui::SameLine();
-					ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
+					ofxImGuiSurfing::AddToggleRoundedButton(bNext);
 					ImGui::SameLine();
-					ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
-					ImGui::SameLine();
-					ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
-					ImGui::TreePop();
+					ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
+
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
+
+				// Vertical Sliders
+				if (bEnablers[5])
+				{
+					if (ImGui::TreeNode("Vertical Sliders"))
+					{
+						//float w = 70;
+						//float h = 200;
+						//ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
+						//ImGui::SameLine();
+						//ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
+						//ImGui::SameLine();
+						//ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
+						//ImGui::SameLine();
+						//ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+
+						guiManager.Add(speed3, OFX_IM_VSLIDER, true, 4);
+						guiManager.Add(speed4, OFX_IM_VSLIDER_NO_LABELS, true, 4);
+						guiManager.Add(size3, OFX_IM_VSLIDER_NO_LABELS, true, 4);
+						guiManager.Add(size4, OFX_IM_VSLIDER_NO_LABELS, false, 4);
+
+						ImGui::Spacing();
+
+						guiManager.Add(speed3, OFX_IM_HSLIDER_BIG_NO_NAME);
+						guiManager.Add(speed3, OFX_IM_HSLIDER_BIG_NO_NUMBER);
+						guiManager.Add(size3, OFX_IM_HSLIDER, false, 1);
+						guiManager.Add(size4, OFX_IM_HSLIDER, false, 1);
+
+						ImGui::TreePop();
+					}
+
+					ofxImGuiSurfing::AddSpacingSeparated();
+				}
+
+				//-
+
+				// An extra advanced / sub-panel 
+				// with some common toggles that we must customize/assign destinations.
+				if (bEnablers[6])
+				{
+					guiManager.drawAdvanced();
+
+					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 			}
-
-			//-
-
-			// An extra advanced / sub-panel 
-			// with some common toggles that we must customize/assign destinations.
-			if (bEnablers[6])
-			{
-				guiManager.drawAdvanced();
-			}
+			guiManager.endWindow();
 		}
-		guiManager.endWindow();
 	}
 	guiManager.end();
 }

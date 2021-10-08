@@ -262,6 +262,12 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
 	//--------------------------------------------------------------
+	inline void AddSpacingDouble()
+	{
+		ImGui::Spacing();
+		ImGui::Spacing();
+	}
+	//--------------------------------------------------------------
 	inline void AddSpacing()
 	{
 		ImGui::Spacing();

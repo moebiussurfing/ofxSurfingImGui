@@ -31,6 +31,7 @@ namespace ofxImGuiSurfing
 		// Common sizes to use when recalculating layout dimensions.
 
 	private:
+
 		float _spcx;
 		float _spcy;
 		float _w100;
@@ -40,6 +41,9 @@ namespace ofxImGuiSurfing
 		float _w25;
 		float _h100;
 		float _h;
+
+		// -> This common sizes must be updated during draw to refresh when window panels resizing 
+		// or to addapt to tree/groups or indentation changes.
 
 		//--
 
@@ -320,63 +324,91 @@ namespace ofxImGuiSurfing
 			return rtype;
 		}
 
-		//-
+		//----
 
-		// Render now a parameter with a related ImGui widget
 
-		// Remember that must be called inside an ImGui::Begin/End() aka ImGui window/panel !
-		//--------------------------------------------------------------
+		// Render now a parameter with a related ImGui widget with a custom style.
+
+		// Remember that must be called inside an guiManager::Begin/End() !
+		//-----------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
+			// Will flag to true to do the final steps: sameline and spacing configs.
 			bool bDone = false;
+
+			// Will flag to notify if the ofParam widget changed.
+			bool bReturn = false;
+
+			// Set the next Widget shape size width/height reading from the function arguments:
+			float _ww;//widget width
+			if (amtPerRow == 2) _ww = _w50;//half size
+			else if (amtPerRow == 3) _ww = _w33;//third size
+			else if (amtPerRow == 4) _ww = _w25;//quater size
+			else _ww = _w100;//full width
+
+			//----
+
+			// 1. Handle hidden, disabled and inactive tags:
+
+			//-
 
 			// If setted as hidden dont draw, but apply same line and spacing and return
 			if (type == OFX_IM_HIDDEN)
 			{
 				uniqueName.push();
-
-				// Extra options
-				if (bSameLine) ImGui::SameLine();
-				if (spacing != -1)
 				{
-					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+					// Extra options
+					if (bSameLine) ImGui::SameLine();
+					if (spacing != -1)
+					{
+						ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+					}
 				}
-
 				uniqueName.pop();
+
 				return false;
 			}
+
+			//-
 
 			// If setted as hidden dont draw, but apply same line and spacing and return
 			else if (type == OFX_IM_DISABLED)
 			{
 				uniqueName.push();
-
-				// Extra options
-				if (bSameLine) ImGui::SameLine();
-				if (spacing != -1)
 				{
-					float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
-					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+					// Extra options
+					if (bSameLine) ImGui::SameLine();
+					if (spacing != -1)
+					{
+						float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+						ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
 
-					ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
+					}
 				}
-
 				uniqueName.pop();
+
 				return false;
 			}
+
+			//----
 
 			// Disable mouse interaction
 			else if (type == OFX_IM_INACTIVE)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+
+				bDone = true;
 			}
 
-			//----
+			//--------
 
-			// Detected type
+			// 2. Detect Type of the ofAbstractParameter:
+
 			auto ptype = aparam.type();
 
-			// Filter param types
+			// Filter expected ofParam Types
+
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
@@ -387,7 +419,8 @@ namespace ofxImGuiSurfing
 			bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
 			bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 
-			// is not called with groups here..
+			//TODO:
+			// is not called with groups here.. ?
 			//bool isGroup = ptype == typeid(ofParameterGroup).name();
 			//if (isGroup) 
 			//{
@@ -395,18 +428,9 @@ namespace ofxImGuiSurfing
 			//	return false;
 			//}
 
-			bool bReturn = false;
+			//--------
 
-			// Set widget width/size reading from the function arguments
-			float _ww;
-			if (amtPerRow == 2) _ww = _w50;
-			else if (amtPerRow == 3) _ww = _w33;
-			else if (amtPerRow == 4) _ww = _w25;
-			else _ww = _w100;
-
-			//----
-
-			// Bool
+			// 2.1. Bool
 
 			if (isBool)
 			{
@@ -414,114 +438,114 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
-
-				switch (type)
 				{
-
-				case OFX_IM_INACTIVE:
-				{
-					// default:
-					string name = p.getName();
-					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+					switch (type)
 					{
-						p.set(tmpRef);
-						bReturn = true;
-					}
-					bReturn = false;
-				}
-				break;
 
-				case OFX_IM_DEFAULT:
-				case OFX_IM_CHECKBOX:
-				{
-					// default:
-					string name = p.getName();
-					if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+					case OFX_IM_INACTIVE:
 					{
-						p.set(tmpRef);
-						bReturn = true;
+						// default:
+						string name = p.getName();
+						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						bReturn = false;
 					}
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					break;
+
+					case OFX_IM_DEFAULT:
+					case OFX_IM_CHECKBOX:
+					{
+						// default:
+						string name = p.getName();
+						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_BUTTON_SMALL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON_BIG:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_SMALL:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_XXL:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_SMALL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_XXL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+					}
 				}
-				break;
-
-				case OFX_IM_BUTTON_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_BUTTON_BIG:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_BUTTON_BIG_XXL:
-					bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_SMALL:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_XXL:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_SMALL_BORDER:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_BORDER:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_XXL_BORDER:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
-					bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
-					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
-					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-
-				case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
-					bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					break;
-				}
-
 				uniqueName.pop();
 
 				bDone = true;//bools
@@ -529,7 +553,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// String
+			// 2.2. String
 
 			else if (isString)
 			{
@@ -537,36 +561,36 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
-
-				switch (type)
 				{
-				case OFX_IM_DEFAULT:
-				case OFX_IM_TEXT_DISPLAY:
-				{
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					ImGui::Text(tmpRef.c_str());
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-				}
-				break;
+					switch (type)
+					{
+					case OFX_IM_DEFAULT:
+					case OFX_IM_TEXT_DISPLAY:
+					{
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						ImGui::Text(tmpRef.c_str());
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					}
+					break;
 
-				case OFX_IM_TEXT_INPUT:
-				{
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					ImGui::Text(tmpRef.c_str());
-					//ofxImGuiSurfing::AddParameter(p);//cant be included?
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-				}
-				break;
+					case OFX_IM_TEXT_INPUT:
+					{
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						ImGui::Text(tmpRef.c_str());
+						//ofxImGuiSurfing::AddParameter(p);//cant be included?
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					}
+					break;
 
-				case OFX_IM_TEXT_BIG:
-				{
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					ImGui::TextWrapped(tmpRef.c_str());
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					case OFX_IM_TEXT_BIG:
+					{
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						ImGui::TextWrapped(tmpRef.c_str());
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					}
+					break;
+					}
 				}
-				break;
-				}
-
 				uniqueName.pop();
 
 				bDone = true;//strings
@@ -574,7 +598,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// Float
+			// 2.3. Float
 
 			else if (isFloat)
 			{
@@ -582,266 +606,266 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
-
-				switch (type)
 				{
-				case OFX_IM_INACTIVE:
-				{
-					string name = p.getName();
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+					switch (type)
 					{
-						p.set(tmpRef);
-						bReturn = true;
-					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-				}
-				break;
-
-				case OFX_IM_DEFAULT:
-				case OFX_IM_SLIDER:
-				{
-					string name = p.getName();
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+					case OFX_IM_INACTIVE:
 					{
-						p.set(tmpRef);
-						bReturn = true;
+						string name = p.getName();
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
+					break;
 
-				//--
-
-				// H Slider
-
-				case OFX_IM_HSLIDER:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_NO_LABELS:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_NO_NAME:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_NO_NUMBER:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				//-
-
-				case OFX_IM_HSLIDER_SMALL:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_SMALL_NO_LABELS:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_SMALL_NO_NAME:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				//-
-
-				case OFX_IM_HSLIDER_BIG:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_BIG_NO_LABELS:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_BIG_NO_NAME:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_HSLIDER_BIG_NO_NUMBER:
-				{
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				//--
-
-				// V Slider
-
-				case OFX_IM_VSLIDER:
-				{
-					const float gap = 2;//fix oversize
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_VSLIDER_NO_NAME:
-				{
-					const float gap = 2;//fix oversize
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_VSLIDER_NO_NUMBER:
-				{
-					const float gap = 2;//fix oversize
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_VSLIDER_NO_LABELS://no number and no name
-				{
-					const float gap = 2;//fix oversize
-					string name = p.getName();
-					bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				//--
-
-				// Progress Bar
-
-				case OFX_IM_PROGRESS_BAR:
-				{
-					ofxImGuiSurfing::AddProgressBar(p);
-					bReturn = false;
-				}
-				break;
-
-				case OFX_IM_PROGRESS_BAR_NO_TEXT:
-				{
-					ofxImGuiSurfing::AddProgressBar(p);
-					bReturn = false;
-				}
-				break;
-
-				//--
-
-				// Drag
-
-				case OFX_IM_DRAG:
-				{
-					const float speed = 0.01f;
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
+					case OFX_IM_DEFAULT:
+					case OFX_IM_SLIDER:
 					{
-						p.set(tmpRef);
-						bReturn = true;
+						string name = p.getName();
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
+					break;
 
-				//--
+					//--
 
-				// Knob
+					// H Slider
 
-				case OFX_IM_KNOB:
-				{
-					bReturn = (ofxImGuiSurfing::AddKnob(p));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				case OFX_IM_KNOB_TRAIL:
-				{
-					bReturn = (ofxImGuiSurfing::AddKnob(p, true));
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-
-				//--
-
-				// Stepper
-
-				case OFX_IM_STEPPER:
-				{
-					const float step = 0.001f;
-					const float stepFast = 0.1f;
-					auto tmpRef = p.get();
-					string name = p.getName();
-
-					//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
-					if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
+					case OFX_IM_HSLIDER:
 					{
-						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-						p.set(tmpRef);
-						bReturn = true;
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
-					ImGui::PopItemWidth();
-					//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					break;
 
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
-				}
+					case OFX_IM_HSLIDER_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
 
+					case OFX_IM_HSLIDER_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//-
+
+					case OFX_IM_HSLIDER_SMALL:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//-
+
+					case OFX_IM_HSLIDER_BIG:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					// V Slider
+
+					case OFX_IM_VSLIDER:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_NAME:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_NUMBER:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_LABELS://no number and no name
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					// Progress Bar
+
+					case OFX_IM_PROGRESS_BAR:
+					{
+						ofxImGuiSurfing::AddProgressBar(p);
+						bReturn = false;
+					}
+					break;
+
+					case OFX_IM_PROGRESS_BAR_NO_TEXT:
+					{
+						ofxImGuiSurfing::AddProgressBar(p, -1, true);
+						bReturn = false;
+					}
+					break;
+
+					//--
+
+					// Drag
+
+					case OFX_IM_DRAG:
+					{
+						const float speed = 0.01f;
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					// Knob
+
+					case OFX_IM_KNOB:
+					{
+						bReturn = (ofxImGuiSurfing::AddKnob(p));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_KNOB_TRAIL:
+					{
+						bReturn = (ofxImGuiSurfing::AddKnob(p, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					// Stepper
+
+					case OFX_IM_STEPPER:
+					{
+						const float step = 0.001f;
+						const float stepFast = 0.1f;
+						auto tmpRef = p.get();
+						string name = p.getName();
+
+						bReturn = false;
+
+						//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
+						if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
+						{
+							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						ImGui::PopItemWidth();
+						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+					}
+				}
 				uniqueName.pop();
 
 				bDone = true;//floats
@@ -849,7 +873,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// Int
+			// 2.4. Int
 
 			else if (isInt)
 			{
@@ -857,103 +881,271 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
-
-				switch (type)
 				{
-
-				case OFX_IM_INACTIVE:
-				{
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+					switch (type)
 					{
-						p.set(tmpRef);
-						bReturn = true;
-					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-				}
-				break;
 
-				case OFX_IM_DEFAULT:
-				case OFX_IM_SLIDER:
-				{
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+					case OFX_IM_INACTIVE:
 					{
-						p.set(tmpRef);
-						bReturn = true;
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
 					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
+					break;
 
-				case OFX_IM_DRAG:
-				{
-					const float speed = 0.1;
-					IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
+					case OFX_IM_DEFAULT:
+					case OFX_IM_SLIDER:
 					{
-						p.set(tmpRef);
-						bReturn = true;
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
-					IMGUI_SUGAR__SLIDER_WIDTH_POP;
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-				}
-				break;
+					break;
 
-				//TODO:
-				// only implemented for floats
-				//case OFX_IM_KNOB:
-				//{
-				//	if (ofxImGuiSurfing::AddKnob(p))
-				//		bReturn = true;
-				//	else bReturn = false;
-				//}
-				//break;
+					//--
+					
+					// H Slider
 
-				//case OFX_IM_KNOB_TRAIL:
-				//{
-				//	if (ofxImGuiSurfing::AddKnob(p, true))
-				//		bReturn = true;
-				//	else bReturn = false;
-				//}
-				//break;
-
-				case OFX_IM_STEPPER:
-				{
-					const int step = 1;
-					const int stepFast = 5;
-					auto tmpRef = p.get();
-
-					//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
-					if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
+					case OFX_IM_HSLIDER:
 					{
-						tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-						p.set(tmpRef);
-						bReturn = true;
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
-					//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+					break;
 
-					ImGui::PopItemWidth();
-					bReturn = false;
-					IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					case OFX_IM_HSLIDER_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//-
+
+					case OFX_IM_HSLIDER_SMALL:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//-
+
+					case OFX_IM_HSLIDER_BIG:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_LABELS:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_NAME:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_BIG_NO_NUMBER:
+					{
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					// V Slider
+
+					case OFX_IM_VSLIDER:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_NAME:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_NUMBER:
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_VSLIDER_NO_LABELS://no number and no name
+					{
+						const float gap = 2;//fix oversize
+						string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+					
+					//-
+
+					// Progress Bar
+
+					case OFX_IM_PROGRESS_BAR:
+					{
+						string name = p.getName();
+						ofxImGuiSurfing::AddProgressBar(p);
+						bReturn = false;
+					}
+					break;
+
+					case OFX_IM_PROGRESS_BAR_NO_TEXT:
+					{
+						ofxImGuiSurfing::AddProgressBar(p, -1, true);
+						bReturn = false;
+					}
+					break;
+
+					//-
+
+					// Drag
+
+					case OFX_IM_DRAG:
+					{
+						const float speed = 0.1;
+						bReturn = false;
+						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
+						{
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//--
+
+					//TODO:
+					// only implemented for floats
+
+					// Knob
+
+					//case OFX_IM_KNOB:
+					//{
+					//	if (ofxImGuiSurfing::AddKnob(p))
+					//		bReturn = true;
+					//	else bReturn = false;
+					//}
+					//break;
+
+					//case OFX_IM_KNOB_TRAIL:
+					//{
+					//	if (ofxImGuiSurfing::AddKnob(p, true))
+					//		bReturn = true;
+					//	else bReturn = false;
+					//}
+					//break;
+
+					//--
+
+					// Stepper
+
+					case OFX_IM_STEPPER:
+					{
+						const int step = 1;
+						const int stepFast = 5;
+						auto tmpRef = p.get();
+
+						bReturn = false;
+
+						//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
+						if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
+						{
+							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+							p.set(tmpRef);
+							bReturn = true;
+						}
+						ImGui::PopItemWidth();
+						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					}
 				}
-				break;
-
-				case OFX_IM_PROGRESS_BAR:
-				{
-					string name = p.getName();
-					ofxImGuiSurfing::AddProgressBar(p);
-					bReturn = false;
-				}
-				break;
-
-				}
-
 				uniqueName.pop();
 
 				bDone = true;//int
@@ -961,7 +1153,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			// Color
+			// 2.5. Color
 
 			else if (isFloatColor)
 			{
@@ -969,31 +1161,31 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
+				{
+					float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
 
-				float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
+					ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+					flags |= ImGuiColorEditFlags_NoInputs;
+					flags |= ImGuiColorEditFlags_NoLabel;
+					flags |= ImGuiColorEditFlags_NoTooltip;
 
-				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
-				flags |= ImGuiColorEditFlags_NoInputs;
-				flags |= ImGuiColorEditFlags_NoLabel;
-				flags |= ImGuiColorEditFlags_NoTooltip;
+					if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
-				if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
-				
-				else if (type == OFX_IM_COLOR_NO_ALPHA) {
-					bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_ALPHA) {
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					}
+
+					//TODO:
+					else if (type == OFX_IM_COLOR_NO_NAME) {
+						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
+						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					}
+
+					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 				}
-
-				//TODO:
-				else if (type == OFX_IM_COLOR_NO_NAME) {
-					//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
-					//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-					bReturn = ofxImGuiSurfing::AddParameter(p, false);
-				}
-
-				else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
-
 				uniqueName.pop();
 
 				bDone = true;//colors
@@ -1005,109 +1197,117 @@ namespace ofxImGuiSurfing
 				auto tmpRef = p.get();
 
 				uniqueName.push();
+				{
+					ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+					flags |= ImGuiColorEditFlags_NoInputs;
+					flags |= ImGuiColorEditFlags_NoLabel;
+					flags |= ImGuiColorEditFlags_NoTooltip;
 
-				ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
-				flags |= ImGuiColorEditFlags_NoInputs;
-				flags |= ImGuiColorEditFlags_NoLabel;
-				flags |= ImGuiColorEditFlags_NoTooltip;
+					if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
-				if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_NO_ALPHA) {
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					}
 
-				else if (type == OFX_IM_COLOR_NO_ALPHA) {
-					bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					//TODO:
+					else if (type == OFX_IM_COLOR_NO_NAME) {
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
+						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+					}
+
+					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 				}
-
-				//TODO:
-				else if (type == OFX_IM_COLOR_NO_NAME) {
-					//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
-					//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-					bReturn = ofxImGuiSurfing::AddParameter(p, false);
-				}
-
-				else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-				else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
-
 				uniqueName.pop();
 
 				bDone = true;//colors
 			}
 
-			//-
+			//--------
 
-			// Multidim vec2/vec3/vec4
+			// 2.6. Multidim vec2/vec3/vec4
 
 			else if (isMultiDimVec2)
 			{
 				uniqueName.push();
-
-				ofParameter<glm::vec2> p = aparam.cast<glm::vec2>();
-
-				switch (type)
 				{
-				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
-				{
-					bReturn = ofxImGuiSurfing::AddParameter(p, true);
-				}
-				break;
-				}
+					ofParameter<glm::vec2> p = aparam.cast<glm::vec2>();
 
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+					}
+					break;
+					}
+				}
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//vec2
 			}
+
 			else if (isMultiDimVec3)
 			{
 				uniqueName.push();
-
-				ofParameter<glm::vec3> p = aparam.cast<glm::vec3>();
-
-				switch (type)
 				{
-				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
-				{
-					bReturn = ofxImGuiSurfing::AddParameter(p, true);
-				}
-				break;
-				}
+					ofParameter<glm::vec3> p = aparam.cast<glm::vec3>();
 
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+					}
+					break;
+					}
+				}
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//vec3
 			}
+
 			else if (isMultiDimVec4)
 			{
 				uniqueName.push();
-
-				ofParameter<glm::vec4> p = aparam.cast<glm::vec4>();
-
-				switch (type)
 				{
-				case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
-				{
-					bReturn = ofxImGuiSurfing::AddParameter(p, true);
-				}
-				break;
-				}
+					ofParameter<glm::vec4> p = aparam.cast<glm::vec4>();
 
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+					}
+					break;
+					}
+				}
 				uniqueName.pop();
 
-				bDone = true;
+				bDone = true;//vec4
 			}
 
-			//----
+
+			//--------
+
+			// 3. Closing, Ending last step.
 
 			if (bDone) //-> A widget has been populated, then we can apply the extra arguments..
 			{
 				// Extra options
-				// - same line
-				// - amount widgets per row
+				// - Same line flag.
+				// - Final y spacing.
+
 				if (bSameLine) ImGui::SameLine();
 				if (spacing != -1 && spacing != 0)
 				{
 					ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 				}
 			}
+
+			//--
 
 			if (type == OFX_IM_INACTIVE)
 			{
@@ -1118,6 +1318,7 @@ namespace ofxImGuiSurfing
 
 			return bReturn;
 		}
+
 
 		//-------
 
@@ -1157,7 +1358,7 @@ namespace ofxImGuiSurfing
 			// This is the root parent group/header:
 			//--------------------------------------------------------------
 
-			if (uniqueName.getLevel() == 0)
+			if (uniqueName.getLevel() == 0) //-> This should notify it's the root parent group..
 			{
 				// Group Style:
 				// If a group style is queued, we will overwrite the default style for each type.
