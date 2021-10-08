@@ -269,34 +269,80 @@ void ofApp::draw()
 				// Vertical Sliders
 				if (bEnablers[5])
 				{
-					if (ImGui::TreeNode("Vertical Sliders"))
+					if (ImGui::TreeNodeEx("Vert/Horiz Sliders", ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						//float w = 70;
-						//float h = 200;
-						//ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
-						//ImGui::SameLine();
-						//ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
-						//ImGui::SameLine();
-						//ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
-						//ImGui::SameLine();
-						//ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+						guiManager.refreshLayout();
 
-						guiManager.Add(speed3, OFX_IM_VSLIDER, true, 4);
-						guiManager.Add(speed4, OFX_IM_VSLIDER_NO_LABELS, true, 4);
-						guiManager.Add(size3, OFX_IM_VSLIDER_NO_LABELS, true, 4);
-						guiManager.Add(size4, OFX_IM_VSLIDER_NO_LABELS, false, 4);
+						ImGui::TextWrapped("Float and Int ofParamters \ncan be directly rendered as ImGui Windgets \n");
+						ImGui::TextWrapped("Try to resize the window panel \nto see the responsive layouting.. \n");
 
+						ofxImGuiSurfing::AddSpacingSeparated();
 						ImGui::Spacing();
 
-						guiManager.Add(speed3, OFX_IM_HSLIDER_BIG_NO_NAME);
-						guiManager.Add(speed3, OFX_IM_HSLIDER_BIG_NO_NUMBER);
-						guiManager.Add(size3, OFX_IM_HSLIDER, false, 1);
-						guiManager.Add(size4, OFX_IM_HSLIDER, false, 1);
+						ImGui::TextWrapped("> Raw Mode without Styles Engine. \nNo Responsive! \n");
+						float w = 40;
+						float h = 80;
+						ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
+						ImGui::SameLine();
+						ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
+						ImGui::SameLine();
+						ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
+						ImGui::SameLine();
+						ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						//TODO:
+						// Must improve the widgets.
+						// this is a workaround
+						// Using columns to mantain alignment
+						ImGui::TextWrapped("> Four Vertical Sliders \n");
+						ImGui::Spacing();
+						ImGui::Columns(4, "_bigSliders", false);
+						guiManager.Add(speed3, OFX_IM_VSLIDER, true, 4);
+						ImGui::NextColumn();
+						guiManager.Add(speed4, OFX_IM_VSLIDER, true, 4);
+						ImGui::NextColumn();
+						guiManager.Add(size3, OFX_IM_VSLIDER, true, 4);
+						ImGui::NextColumn();
+						guiManager.Add(size4, OFX_IM_VSLIDER, false, 4);
+						ImGui::Columns(1);
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						ImGui::TextWrapped("> Four Vertical Sliders \nNo Name \n");
+						ImGui::Spacing();
+						guiManager.Add(speed3, OFX_IM_VSLIDER_NO_NAME, true, 4);
+						guiManager.Add(speed4, OFX_IM_VSLIDER_NO_NAME, true, 4);
+						guiManager.Add(size3, OFX_IM_VSLIDER_NO_NAME, true, 4);
+						guiManager.Add(size4, OFX_IM_VSLIDER_NO_NAME, false, 4);
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						ImGui::TextWrapped("> Four Horizontal Sliders \n");
+						guiManager.Add(speed3, OFX_IM_HSLIDER_NO_NAME);
+						guiManager.Add(speed4, OFX_IM_HSLIDER_NO_LABELS);
+						guiManager.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
+						guiManager.Add(size4, OFX_IM_HSLIDER_SMALL);
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						ImGui::TextWrapped("> Two Horizontal Sliders \nWithout Labels in One Row \n");
+						guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, true, 2);
+						guiManager.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, false, 2);
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						ImGui::TextWrapped("> Four Knobs \n");
+						ImGui::Spacing();
+						guiManager.Add(speed3, OFX_IM_KNOB, true, 4);
+						guiManager.Add(speed4, OFX_IM_KNOB, true, 4);
+						guiManager.Add(size3, OFX_IM_KNOB, true, 4);
+						guiManager.Add(size4, OFX_IM_KNOB, false, 4);
 
 						ImGui::TreePop();
 					}
 
-					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//-
@@ -305,6 +351,8 @@ void ofApp::draw()
 				// with some common toggles that we must customize/assign destinations.
 				if (bEnablers[6])
 				{
+					ofxImGuiSurfing::AddSpacingSeparated();
+
 					guiManager.drawAdvanced();
 
 					ofxImGuiSurfing::AddSpacingSeparated();

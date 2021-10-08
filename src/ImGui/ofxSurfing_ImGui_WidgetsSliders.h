@@ -141,7 +141,10 @@ namespace ofxImGuiSurfing
 
 		ImGui::PushID(("##HSLIDER" + name).c_str());
 		{
-			if (!bNoName) { ImGui::Text(name.c_str()); }
+			if (!bNoName) {
+				ImGui::Text(name.c_str());
+				name = "";
+			}
 
 			string format;
 			if (bNoNumber) format = "";
@@ -151,13 +154,10 @@ namespace ofxImGuiSurfing
 		}
 		ImGui::PopID();
 
-		//IMGUI_SUGAR_ADD_MOUSE_WHEEL_CONTROL2(parameter);
-		//ofxImGuiSurfing::AddMouseWheel(parameter);
-		//AddMouseWheel(parameter);
-
 		return bChanged;
 	}
-	//int. cloned from float
+
+	// Int. cloned from Float
 	//--------------------------------------------------------------
 	inline bool AddHSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
@@ -178,7 +178,10 @@ namespace ofxImGuiSurfing
 
 		ImGui::PushID(("##HSLIDER" + name).c_str());
 		{
-			if (!bNoName) { ImGui::Text(name.c_str()); }
+			if (!bNoName) { 
+				ImGui::Text(name.c_str()); 
+				name = "";//-> to do not label name again. the right one to the fader
+			}
 
 			string format;
 			if (bNoNumber) format = "";
@@ -187,8 +190,6 @@ namespace ofxImGuiSurfing
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 		}
 		ImGui::PopID();
-
-		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
 		return bChanged;
 	}
@@ -199,57 +200,134 @@ namespace ofxImGuiSurfing
 	// V Sliders
 
 	// TODO: move name label on top/bottom or inside the slider..
-	
+
+	/*
+	//TODO: templating
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	inline bool AddVSlider(ofParameter<ParameterType>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
+	{
+		// default ImVec2 (-1,-1) is full panel shape.
+
+		auto tmpRef = parameter.get();
+		string name = parameter.getName();
+		bool bChanged = false;
+
+		const auto& info = typeid(ParameterType);
+		if (info == typeid(float)) // float
+		{
+		}
+		else if (info == typeid(int)) // Int
+		{
+		}
+		else { // unknown types
+			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << name;
+			return false;
+		}
+
+		if ((sz.x == -1) || (sz.y == -1))
+		{
+			float w = ImGui::GetContentRegionAvail().x;
+			float h = ImGui::GetContentRegionAvail().y;
+			float spcx = ImGui::GetStyle().ItemSpacing.x;
+			float spcy = ImGui::GetStyle().ItemSpacing.y;
+			if (sz.x == -1) sz.x = w - spcx;
+			if (sz.y == -1) sz.y = h - spcy;
+		}
+
+		ImGui::PushID(("##VSLIDER" + name).c_str());
+		{
+			if (bNoName) {
+				name = "";
+			}
+			else {
+				ImGui::Text(name.c_str());//doubles name to the top left
+			}
+
+			string format;
+
+			if (info == typeid(float)) // float
+			{
+				if (bNoNumber) format = "";
+				else format = "%.3f";
+
+				if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, (float)parameter.getMin(), (float)parameter.getMax(), format.c_str()))
+				{
+					parameter.set(tmpRef);
+					bChanged = true;
+				}
+			}
+			else if (info == typeid(int)) // Int
+			{
+				if (bNoNumber) format = "";
+				else format = "";
+				//else format = "%d";
+
+				if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, (int)parameter.getMin(), (int)parameter.getMax(), format.c_str()))
+				{
+					parameter.set(tmpRef);
+					bChanged = true;
+				}
+			}
+		}
+		ImGui::PopID();
+
+		//TODO: collides with namespaces.. ?
+		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
+
+		return bChanged;
+	}
+	*/
+
+
 	// Float
 	//--------------------------------------------------------------
 	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
-		//TODO:
-		//default (-1,-1) is full panel shape
+		// default ImVec2 (-1,-1) is full panel shape.
 
-		bool bChanged = false;
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
+		bool bChanged = false;
 
-		float w = ImGui::GetContentRegionAvail().x;
-		float h = ImGui::GetContentRegionAvail().y;
-
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float spcy = ImGui::GetStyle().ItemSpacing.y;
-
-		//ImGui::Dummy(ImVec2(0, spcy));//make top space
-
-		//if (sz.x == -1) sz.x = w;
-		//if (sz.y == -1) sz.y = h;
-		if (sz.x == -1) sz.x = w - spcx;
-		if (sz.y == -1) sz.y = h - spcy;
-
-		//ImGui::BeginGroup();
-		ImGui::PushID(("##VSLIDER" + name).c_str());
-
-		if (bNoName) {
-			name = "";
-		}
-		else {
-			ImGui::Text(name.c_str());
-		}
-
-		string format;
-		if (bNoNumber)format = "";
-		else format = "%.3f";
-
-		//bool ImGui::VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
-		if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+		if ((sz.x == -1) || (sz.y == -1))
 		{
-			parameter.set(tmpRef);
-
-			bChanged = true;
+			float w = ImGui::GetContentRegionAvail().x;
+			float h = ImGui::GetContentRegionAvail().y;
+			float spcx = ImGui::GetStyle().ItemSpacing.x;
+			float spcy = ImGui::GetStyle().ItemSpacing.y;
+			if (sz.x == -1) sz.x = w - spcx;
+			if (sz.y == -1) sz.y = h - spcy;
 		}
 
-		ImGui::PopID();
-		//ImGui::EndGroup();
+		ImGui::PushID(("##VSLIDER" + name).c_str());
+		{
+			ImGui::BeginGroup();
 
-		//TODO:
+			if (bNoName) {
+				name = "";
+			}
+			else {
+				ImGui::Text(name.c_str());//doubles name
+				//ImGui::SameLine();
+			}
+
+			string format;
+			if (bNoNumber) format = "";
+			else format = "%.3f";
+
+			name = "";//clear to not draw again right after the fader
+			if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+			{
+				parameter.set(tmpRef);
+				bChanged = true;
+			}
+
+			ImGui::EndGroup();
+		}
+		ImGui::PopID();
+
+		//TODO: collides with namespaces.. ?
 		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
 		return bChanged;
@@ -266,48 +344,49 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		string name = parameter.getName();
 
-		float w = ImGui::GetContentRegionAvail().x;
-		float h = ImGui::GetContentRegionAvail().y;
-
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float spcy = ImGui::GetStyle().ItemSpacing.y;
-
-		//ImGui::Dummy(ImVec2(0, spcy));//make top space
-
-		//if (sz.x == -1) sz.x = w;
-		//if (sz.y == -1) sz.y = h;
-		if (sz.x == -1) sz.x = w - spcx;
-		if (sz.y == -1) sz.y = h - spcy;
-
-		//ImGui::BeginGroup();
-		ImGui::PushID(("##VSLIDER" + name).c_str());
-
-		if (bNoName) {
-			name = "";
-		}
-		else {
-			ImGui::Text(name.c_str());
-		}
-
-		string format;
-		if (bNoNumber)format = "";
-		else format = "%.3f";
-
-		if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+		if ((sz.x == -1) || (sz.y == -1))
 		{
-			parameter.set(tmpRef);
-
-			bChanged = true;
+			float w = ImGui::GetContentRegionAvail().x;
+			float h = ImGui::GetContentRegionAvail().y;
+			float spcx = ImGui::GetStyle().ItemSpacing.x;
+			float spcy = ImGui::GetStyle().ItemSpacing.y;
+			if (sz.x == -1) sz.x = w - spcx;
+			if (sz.y == -1) sz.y = h - spcy;
 		}
 
+		ImGui::PushID(("##VSLIDER" + name).c_str());
+		{
+			ImGui::BeginGroup();
+
+			if (bNoName) {
+				name = "";
+			}
+			else {
+				ImGui::Text(name.c_str());
+				//ImGui::SameLine();
+			}
+
+			string format;
+			if (bNoNumber)format = "";
+			else format = "%d";
+
+			name = "";//clear to not draw again right after the fader
+			if (ImGui::VSliderInt(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+			{
+				parameter.set(tmpRef);
+				bChanged = true;
+			}
+
+			ImGui::EndGroup();
+		}
 		ImGui::PopID();
-		//ImGui::EndGroup();
 
 		//TODO:
 		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
 		return bChanged;
 	}
+
 
 	//--------
 

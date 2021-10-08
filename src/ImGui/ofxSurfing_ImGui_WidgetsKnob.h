@@ -17,7 +17,8 @@ using namespace ImGui;
 
 namespace ImGui
 {
-	inline bool Knob(const char* label, float* p_value, float v_min, float v_max, float radius = 25.0f, int valuePrecision = VALUEPRECISION)
+	//--------------------------------------------------------------
+	inline bool Knob(const char* label, float* p_value, float v_min, float v_max, float radius = 25.0f, string format = "%.2f", int valuePrecision = VALUEPRECISION)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -61,13 +62,13 @@ namespace ImGui
 
 		// draw outer knob
 		draw_list->AddCircleFilled(center, radius_outer, ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : ImGuiCol_FrameBg), 16);
-		
+
 		// line
-		draw_list->AddLine(ImVec2(center.x + angle_cos * radius_inner, center.y + angle_sin * radius_inner), 
+		draw_list->AddLine(ImVec2(center.x + angle_cos * radius_inner, center.y + angle_sin * radius_inner),
 			ImVec2(
-				center.x + angle_cos * (radius_outer - 2), 
-				center.y + angle_sin * (radius_outer - 2)), 
-			ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive:ImGuiCol_SliderGrab), 2.0f);
+				center.x + angle_cos * (radius_outer - 2),
+				center.y + angle_sin * (radius_outer - 2)),
+			ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), 2.0f);
 
 		// inner circle
 		draw_list->AddCircleFilled(center, radius_inner, ImGui::GetColorU32(is_active ? ImGuiCol_ButtonActive : is_hovered ? ImGuiCol_ButtonHovered : ImGuiCol_SliderGrab), 16);
@@ -75,7 +76,7 @@ namespace ImGui
 
 		// draw value
 		char temp_buf[64];
-		sprintf(temp_buf, "%.2f", *p_value);
+		sprintf(temp_buf, format.c_str(), *p_value);
 		labelLength = ImGui::CalcTextSize(temp_buf);
 		texPos = pos.x + ((widgetRec.z - labelLength.x) * 0.5f);
 
@@ -87,6 +88,7 @@ namespace ImGui
 
 namespace ImGui
 {
+	//--------------------------------------------------------------
 	inline bool KnobNeedleTrail2(const char* label, float* p_value, float v_min, float v_max, float trailZero, float radius = 25, float incPrecision = VALUEPRECISION)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -147,10 +149,10 @@ namespace ImGui
 			ImVec2(center.x + angle_cos * (radius-1.5f), center.y + angle_sin * (radius-1.5f)),
 			ImGui::GetColorU32(ImGuiCol_SliderGrabActive), 2.0f);*/
 
-		// line
+			// line
 		draw_list->AddLine(ImVec2(center.x + angle_cos * radius_inner, center.y + angle_sin * radius_inner),
 			ImVec2(
-				center.x + angle_cos * (radius - 1.5f), 
+				center.x + angle_cos * (radius - 1.5f),
 				center.y + angle_sin * (radius - 1.5f)),
 			ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), 2.0f);
 
@@ -185,11 +187,10 @@ namespace ImGui
 
 //-
 
-//TODO:
-//fix multiple instances
 namespace ofxImGuiSurfing
 {
-	bool AddKnob(ofParameter<float>& parameter, bool bTrail = false);
+	bool AddKnob(ofParameter<int>& parameter, bool bTrail = false, float width = -1);
+	bool AddKnob(ofParameter<float>& parameter, bool bTrail = false, float width = -1);
 	bool AddKnob(ofParameter<float>& parameter, float zeroRef, bool bTrail = false);
 	bool AddKnob(std::string label, ofParameter<float>& parameter, bool bTrail = false);
 	bool AddKnob(std::string label, ofParameter<float>& parameter, float zeroRef, bool bTrail = false);
@@ -217,13 +218,42 @@ namespace ofxImGuiSurfing
 
 //-
 
-inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail)
+// Int Knob
+
+//--------------------------------------------------------------
+inline bool ofxImGuiSurfing::AddKnob(ofParameter<int>& parameter, bool bTrail, float width)
 {
+	float w = (width * 0.9f) / 2;//TODO: fix tweak
+	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak
+
+	float tmpRef = parameter.get();
+	string n = parameter.getName();
+	bool b;
+	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
+	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), w, "%.f"/*"%d"*/);
+	if (b)
+	{
+		parameter.set((int)tmpRef);
+		return true;
+	}
+	return false;
+}
+
+//-
+
+// Float Knob
+
+//--------------------------------------------------------------
+inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail, float width)
+{
+	float w = (width * 0.9f) / 2;//TODO: fix tweak
+	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak
+
 	auto tmpRef = parameter.get();
 	string n = parameter.getName();
 	bool b;
 	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
-	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax());
+	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), w, "%.2f");
 	if (b)
 	{
 		parameter.set(tmpRef);
@@ -232,6 +262,7 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail)
 	return false;
 }
 
+//--------------------------------------------------------------
 inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, float zeroRef, bool bTrail)
 {
 	auto tmpRef = parameter.get();
@@ -248,6 +279,7 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, float zeroRe
 	return false;
 }
 
+//--------------------------------------------------------------
 inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& parameter, bool bTrail)
 {
 	auto tmpRef = parameter.get();
@@ -271,6 +303,7 @@ inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& para
 	}
 }
 
+//--------------------------------------------------------------
 inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& parameter, float zeroRef, bool bTrail)
 {
 	auto tmpRef = parameter.get();
@@ -285,7 +318,7 @@ inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& para
 	return false;
 }
 
-//--
+//----
 
 // v slider
 
@@ -298,7 +331,8 @@ namespace ofxImGuiSurfing
 	bool AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2 &size, bool bLabel = true);
 }
 
-inline bool ofxImGuiSurfing::AddVSlider2(ofParameter<float>& parameter, ImVec2& size, bool bLabel )
+//--------------------------------------------------------------
+inline bool ofxImGuiSurfing::AddVSlider2(ofParameter<float>& parameter, ImVec2& size, bool bLabel)
 {
 	auto tmpRef = parameter.get();
 
@@ -310,7 +344,8 @@ inline bool ofxImGuiSurfing::AddVSlider2(ofParameter<float>& parameter, ImVec2& 
 	return false;
 }
 
-inline bool ofxImGuiSurfing::AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2& size, bool bLabel )
+//--------------------------------------------------------------
+inline bool ofxImGuiSurfing::AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2& size, bool bLabel)
 {
 	auto tmpRef = parameter.get();
 	if (ImGui::VSliderFloat(GetUniqueName2(label), size, &tmpRef, parameter.getMin(), parameter.getMax(), "%.3f", ImGuiSliderFlags_None))
@@ -320,7 +355,6 @@ inline bool ofxImGuiSurfing::AddVSlider2(std::string label, ofParameter<float>& 
 	}
 	return false;
 }
-
 
 
 

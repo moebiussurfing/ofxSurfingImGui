@@ -49,9 +49,9 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 ### 2. [LAYOUT](#2-layout-1)
 
-### 3. [DOCKING AND LAYOUT PRESETS ENGINE](#3-docking-and-layout-presets-engine-wip-1) [WIP]
+### 3. [TYPES ENGINE](#3-types-engine-wip-1) [WIP]
 
-### 4. [TYPES ENGINE](#4-types-engine-wip-1) [WIP]
+### 4. [DOCKING AND LAYOUT PRESETS ENGINE](#4-docking-and-layout-presets-engine-wip-1) [WIP]
 
 ### 5. [TIMELINES AND SEQUENCERS](#5-timelines-and-sequencers-wip-1) [WIP]
 
@@ -228,55 +228,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
-## 3. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
-
-Examples to improve the layout of Docking Spaces. 
-
-* Learn to split docking spaces by code, or using mouse control by the user.
-* Docking helpers. **Engine Manager** to create layout presets.
-<details>
-  <summary>3_0_Layout_Docking2</summary>
-  <p>
-
-#### LAYOUT PRESETS ENGINE
-
-* Fast adding of windows to the **Gui Manager**.
-* Auto populates **Control Panels** to handle layout presets.
-* Cute workflow for Management.
-* You can add extra parameters to the presets too. 
-
-![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
-  </p>
-</details>
-
-<details>
-  <summary>3_0_Layout_Docking3</summary>
-  <p>
-
-This example shows how to populate many ImGui windows from different scopes on the same viewport.  
-Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
-Also useful to check viewport modes, docking merging windows or autodraw modes.  
-
-![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
-  </p>
-</details>
-
-<details>
-  <summary>3_1_Layout_ImTools1</summary>
-  <p>
-
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
-
-An alternative to my Docking Layout Engine but without presets and with more development required.  
-Nice to learn about ImGui Docking.  
-
-![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
-  </p>
-</details>
-
-<BR>
-
-## 4. TYPES ENGINE [WIP]
+## 3. TYPES ENGINE [WIP]
 
 One step forward for **ofHelpers**:  
 
@@ -306,6 +258,14 @@ _Draw an **ofParameter<bool>** as a check box (default), or as a big toggle butt
 
 **CASE 3**:  
 _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
+  </p>
+</details>
+
+<details>
+  <summary>0_Intro_Examples/1_Widgets_Sliders</summary>
+  <p>
+
+![image](/docs/1_Widgets_Sliders.PNG?raw=true "image")  
   </p>
 </details>
 
@@ -358,6 +318,54 @@ void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAU
 bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1);
 void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT);
 ```
+
+<BR>
+
+## 4. DOCKING AND LAYOUT PRESETS ENGINE [WIP]
+
+Examples to improve the layout of Docking Spaces. 
+
+* Learn to split docking spaces by code, or using mouse control by the user.
+* Docking helpers. **Engine Manager** to create layout presets.
+<details>
+  <summary>3_0_Layout_Docking2</summary>
+  <p>
+
+#### LAYOUT PRESETS ENGINE
+
+* Fast adding of windows to the **Gui Manager**.
+* Auto populates **Control Panels** to handle layout presets.
+* Cute workflow for Management.
+* You can add extra parameters to the presets too. 
+
+![image](/docs/3_0_Layout_Docking2.gif?raw=true "gif")  
+  </p>
+</details>
+
+<details>
+  <summary>3_0_Layout_Docking3</summary>
+  <p>
+
+This example shows how to populate many ImGui windows from different scopes on the same viewport.  
+Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
+Also useful to check viewport modes, docking merging windows or autodraw modes.  
+
+![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
+  </p>
+</details>
+
+<details>
+  <summary>3_1_Layout_ImTools1</summary>
+  <p>
+
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
+
+An alternative to my Docking Layout Engine but without presets and with more development required.  
+Nice to learn about ImGui Docking.  
+
+![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
+  </p>
+</details>
 
 <BR>
 

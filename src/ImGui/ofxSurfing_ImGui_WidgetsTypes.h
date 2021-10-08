@@ -294,7 +294,7 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//void AddStyle(string name, SurfingImGuiTypes type) {
+		//void AddStyle(std::string name, SurfingImGuiTypes type) {
 		//	SurfingImGuiTypes_Style e;
 		//	e.name = name;
 		//	e.type = type;
@@ -306,7 +306,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		SurfingImGuiTypes getType(ofAbstractParameter& aparam)
 		{
-			string name = aparam.getName();
+			std::string name = aparam.getName();
 			SurfingImGuiTypes rtype = SurfingImGuiTypes(OFX_IM_DEFAULT);
 
 			auto type = aparam.type();
@@ -412,7 +412,7 @@ namespace ofxImGuiSurfing
 			bool isBool = ptype == typeid(ofParameter<bool>).name();
 			bool isFloat = ptype == typeid(ofParameter<float>).name();
 			bool isInt = ptype == typeid(ofParameter<int>).name();
-			bool isString = ptype == typeid(ofParameter<string>).name();
+			bool isString = ptype == typeid(ofParameter<std::string>).name();
 			bool isColor = ptype == typeid(ofParameter<ofColor>).name();
 			bool isFloatColor = ptype == typeid(ofParameter<ofFloatColor>).name();
 			bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
@@ -445,7 +445,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_INACTIVE:
 					{
 						// default:
-						string name = p.getName();
+						std::string name = p.getName();
 						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 						{
 							p.set(tmpRef);
@@ -459,7 +459,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_CHECKBOX:
 					{
 						// default:
-						string name = p.getName();
+						std::string name = p.getName();
 						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
 						{
 							p.set(tmpRef);
@@ -557,7 +557,7 @@ namespace ofxImGuiSurfing
 
 			else if (isString)
 			{
-				ofParameter<string> p = aparam.cast<string>();
+				ofParameter<std::string> p = aparam.cast<std::string>();
 				auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -611,7 +611,7 @@ namespace ofxImGuiSurfing
 					{
 					case OFX_IM_INACTIVE:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = false;
 						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
@@ -626,7 +626,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_DEFAULT:
 					case OFX_IM_SLIDER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = false;
 						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
 						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
@@ -645,7 +645,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -653,7 +653,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -661,7 +661,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -669,7 +669,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_NUMBER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -679,7 +679,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -687,7 +687,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -695,7 +695,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -703,7 +703,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -713,7 +713,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -721,7 +721,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -729,7 +729,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -737,7 +737,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_NUMBER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -750,7 +750,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -759,7 +759,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_NAME:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -768,7 +768,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_NUMBER:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -777,7 +777,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_LABELS://no number and no name
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -826,14 +826,14 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB:
 					{
-						bReturn = (ofxImGuiSurfing::AddKnob(p));
+						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
 					case OFX_IM_KNOB_TRAIL:
 					{
-						bReturn = (ofxImGuiSurfing::AddKnob(p, true));
+						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -847,7 +847,7 @@ namespace ofxImGuiSurfing
 						const float step = 0.001f;
 						const float stepFast = 0.1f;
 						auto tmpRef = p.get();
-						string name = p.getName();
+						std::string name = p.getName();
 
 						bReturn = false;
 
@@ -919,7 +919,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -927,7 +927,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -935,7 +935,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -943,8 +943,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_NO_NUMBER:
 					{
-						string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						std::string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -953,7 +953,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -961,7 +961,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -969,7 +969,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -977,7 +977,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -987,7 +987,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -995,7 +995,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_LABELS:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1003,7 +1003,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_NAME:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1011,7 +1011,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_HSLIDER_BIG_NO_NUMBER:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1024,7 +1024,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1033,7 +1033,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_NAME:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1042,7 +1042,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_NUMBER:
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1051,7 +1051,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_VSLIDER_NO_LABELS://no number and no name
 					{
 						const float gap = 2;//fix oversize
-						string name = p.getName();
+						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
 						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
@@ -1063,7 +1063,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_PROGRESS_BAR:
 					{
-						string name = p.getName();
+						std::string name = p.getName();
 						ofxImGuiSurfing::AddProgressBar(p);
 						bReturn = false;
 					}
@@ -1102,21 +1102,19 @@ namespace ofxImGuiSurfing
 
 					// Knob
 
-					//case OFX_IM_KNOB:
-					//{
-					//	if (ofxImGuiSurfing::AddKnob(p))
-					//		bReturn = true;
-					//	else bReturn = false;
-					//}
-					//break;
+					case OFX_IM_KNOB:
+					{
+						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
 
-					//case OFX_IM_KNOB_TRAIL:
-					//{
-					//	if (ofxImGuiSurfing::AddKnob(p, true))
-					//		bReturn = true;
-					//	else bReturn = false;
-					//}
-					//break;
+					case OFX_IM_KNOB_TRAIL:
+					{
+						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
+						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
 
 					//--
 
