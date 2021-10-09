@@ -154,7 +154,8 @@ void ofApp::setupImGuiStyles() {
 	// Will be applied when rendering a group when drawing his widgets.
 	guiManager.AddStyle(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 
-	guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER_BIG, false, 1, 20);
+	guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER_BIG, false, 1, 20); 
+	// not sameline for the next. 1 per row. 20 pix y spacing at end.
 
 	guiManager.AddStyle(bEnable1, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 	guiManager.AddStyle(bEnable2, OFX_IM_TOGGLE_BIG_BORDER);
@@ -167,9 +168,12 @@ void ofApp::setupImGuiStyles() {
 		guiManager.AddStyle(lineWidth2, OFX_IM_STEPPER);
 		guiManager.AddStyle(separation2, OFX_IM_STEPPER);
 
-		guiManager.AddStyle(knob1, OFX_IM_KNOB, true, 3); // sameline for the next. 3 per row
-		guiManager.AddStyle(knob2, OFX_IM_KNOB, true, 3); // sameline for the next. 3 per row
-		guiManager.AddStyle(size3, OFX_IM_KNOB, false, 3); // not sameline for the next. 3 per row
+		guiManager.AddStyle(knob1, OFX_IM_KNOB, true, 3); 
+		// sameline for the next. 3 per row
+		guiManager.AddStyle(knob2, OFX_IM_KNOB, true, 3); 
+		// sameline for the next. 3 per row
+		guiManager.AddStyle(size3, OFX_IM_KNOB, false, 3); 
+		// not sameline for the next. 3 per row
 	}
 	else {
 		guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen);

@@ -51,7 +51,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 ### 2. [BASIC LAYOUT](#2-layout-1)
 
-### 3. [TYPES ENGINE](#3-types-engine-wip-1) [WIP]
+### 3. [TYPES ENGINE](#3-types-engine-wip-1)
 
 ### 4. [DOCKING AND LAYOUT PRESETS ENGINE](#4-docking-and-layout-presets-engine-wip-1) [WIP]
 
