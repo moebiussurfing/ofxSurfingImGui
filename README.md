@@ -51,7 +51,7 @@ OR NEED TO BE UPDATED TO API CHANGES.
 
 ### 2. [BASIC LAYOUT](#2-layout-1)
 
-### 3. [TYPES ENGINE](#3-types-engine-wip-1)
+### 3. [TYPES ENGINE](#3-types-engine-1)
 
 ### 4. [DOCKING AND LAYOUT PRESETS ENGINE](#4-docking-and-layout-presets-engine-wip-1) [WIP]
 
@@ -230,7 +230,7 @@ There's not an automatic-fully-functional, save preset/load theme designer!
 
 <BR>
 
-## 3. TYPES ENGINE [WIP]
+## 3. TYPES ENGINE
 
 One step forward for **ofHelpers**:  
 
