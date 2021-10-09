@@ -63,7 +63,7 @@ namespace ofxImGuiSurfing
 	private:
 
 		//--------------------------------------------------------------
-		void inc() {
+		void incIndex() {
 			index++;
 		}
 
@@ -71,7 +71,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void push() {
-			inc();//count
+			incIndex();//count
 
 #ifndef DISABLE_ID_PUSH_POP
 			ImGui::PushID(ofToString(index).c_str());

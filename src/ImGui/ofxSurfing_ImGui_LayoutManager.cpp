@@ -9,9 +9,11 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
 	params_Advanced.add(bLockMove);
+	params_Advanced.add(bNoScroll);
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bKeys);
+	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bDebug);
 
@@ -104,6 +106,11 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 
 	//-
 
+	// bMouseWheel
+	widgetsManager.bMouseWheel.makeReferenceTo(bMouseWheel);
+
+	//-
+
 	setupImGui();
 
 	//-
@@ -111,7 +118,7 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	path_Global = "ImGuiLayout/";
 	path_ImLayouts = path_Global + "Presets/";
 
-	// create folders if required
+	// Create folders if required
 	if (bAutoSaveSettings) {
 		ofxImGuiSurfing::CheckFolder(path_Global);
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
@@ -124,13 +131,13 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 
 	//setupLayout(); //-> must call manually after adding windows and layout presets
 
-	// add the basic param settings
+	// Add the basic param settings
 	if (!bUseLayoutPresetsManager) {
 
 		params_AppSettings.clear();
 		params_AppSettings.add(params_Advanced);
 
-		// startup
+		// Startup
 		loadAppSettings();
 	}
 }

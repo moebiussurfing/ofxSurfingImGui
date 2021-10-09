@@ -415,3 +415,47 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 };
+
+
+
+
+//----
+
+
+// used ?
+
+//// v slider
+//
+//namespace ofxImGuiSurfing
+//{
+//	//TODO:
+//	//bLabel 
+//
+//	bool AddVSlider2(ofParameter<float>& parameter, ImVec2 &size, bool bLabel = true);
+//	bool AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2 &size, bool bLabel = true);
+//}
+//
+////--------------------------------------------------------------
+//inline bool ofxImGuiSurfing::AddVSlider2(ofParameter<float>& parameter, ImVec2& size, bool bLabel)
+//{
+//	auto tmpRef = parameter.get();
+//
+//	if (ImGui::VSliderFloat(GetUniqueName2(parameter), size, &tmpRef, parameter.getMin(), parameter.getMax(), "%.3f", ImGuiSliderFlags_None))
+//	{
+//		parameter.set(tmpRef);
+//		return true;
+//	}
+//	return false;
+//}
+//
+////--------------------------------------------------------------
+//inline bool ofxImGuiSurfing::AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2& size, bool bLabel)
+//{
+//	auto tmpRef = parameter.get();
+//	if (ImGui::VSliderFloat(GetUniqueName2(label), size, &tmpRef, parameter.getMin(), parameter.getMax(), "%.3f", ImGuiSliderFlags_None))
+//	{
+//		parameter.set(tmpRef);
+//		return true;
+//	}
+//	return false;
+//}

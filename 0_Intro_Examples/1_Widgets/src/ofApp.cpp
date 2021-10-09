@@ -10,6 +10,7 @@ void ofApp::setup() {
 	//--
 
 	// Instantiate
+
 	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
 	//guiManager.setSettingsFilename("1_Widgets"); 
 
@@ -18,6 +19,7 @@ void ofApp::setup() {
 	//--
 
 	// Parameters
+
 	bEnable1.set("bEnable1", false);
 	bEnable2.set("bEnable2", false);
 	bEnable3.set("bEnable3", false);
@@ -27,9 +29,9 @@ void ofApp::setup() {
 	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	pos1.set("pos1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
+	pos_1.set("pos_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
 
-	rto1.set("rto1", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
+	rot_1.set("rot_1", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
 	lineWidth2.set("lineWidth2", 0.5, 0, 1);
 	separation2.set("separation2", 50, 1, 100);
 	shapeType2.set("shapeType2", 0, -50, 50);
@@ -45,14 +47,40 @@ void ofApp::setup() {
 	separation4.set("separation4", 50, 1, 100);
 	speed4.set("speed4", 0.5, 0, 1);
 
+	//-
+
+	// Callbacks
+
+	//--------------------------------------------------------------
+	listener_bEnable1 = bEnable1.newListener([this](bool &b) {
+		ofLogNotice("bEnable1: ") << (b ? "TRUE" : "FALSE");
+
+		setupImGuiStyles(); // -> refresh styles on runtime!
+	});
+
+	//--------------------------------------------------------------
+	listener_bEnable2 = bEnable2.newListener([this](bool &b) {
+		ofLogNotice("bEnable2: ") << (b ? "TRUE" : "FALSE");
+		setupImGuiStyles(); // -> refresh styles on runtime!
+	});
+
+	//--------------------------------------------------------------
+	listener_bEnable3 = bEnable3.newListener([this](bool &b) {
+		ofLogNotice("bEnable3: ") << (b ? "TRUE" : "FALSE");
+		setupImGuiStyles(); // -> refresh styles on runtime!
+	});
+
+	//--
+
 	// Groups
+
 	params1.setName("params1");
 	params2.setName("params2");
 	params3.setName("params3");
 	params4.setName("params4");
 
-	params1.add(pos1);
-	params1.add(rto1);
+	params1.add(pos_1);
+	params1.add(rot_1);
 
 	params2.add(lineWidth2);
 	params2.add(separation2);
@@ -72,21 +100,21 @@ void ofApp::setup() {
 	params4.add(lineWidth4);
 	params4.add(separation4);
 
-	// Nest groups
+	// -> Nesting Groups
 	params2.add(params3);
 	params1.add(params2);
 	params1.add(params4);
 
 	//----
 
-	setupStyles();
+	setupImGuiStyles();
 
 	//----
 
-	// Sections
+	// Sections toggles
 #define NUM_SECTIONS 7
 	for (int i = 0; i < NUM_SECTIONS; i++) {
-		ofParameter<bool> b{ "Enable " + ofToString(i), false };
+		ofParameter<bool> b{ "Section " + ofToString(i), false };
 		bEnablers.emplace_back(b);
 
 		paramsApp.add(b);
@@ -104,24 +132,95 @@ void ofApp::exit() {
 }
 
 //--------------------------------------------------------------
-void ofApp::setupStyles() {
+void ofApp::setupImGuiStyles() {
 
 	// Customize Styles
-	// Will be applyed when rendering a group when draw.
+
 	guiManager.clearStyles();
 
-	// for params
-	guiManager.AddStyle(rto1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+	// Notice that:
+	// Clear is required before adding styles. 
+	// We can't update (without clear) previously added ofParams yet.
+	// We can update and change the settings on runtime, ie for some ofApp states,
+	// but we need to Clear all first and add the styles again with the new style changes.
+
+	// Look on the bEnable1/bEnable2 behaviour: 
+	// We recall setupImGuiStyles() when bEnable1 changes to update the new styles.
+
+	//-
+
+	// 1. For params
+
+	// Will be applied when rendering a group when drawing his widgets.
+	guiManager.AddStyle(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+
+	guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER_BIG, false, 1, 20);
+
 	guiManager.AddStyle(bEnable1, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 	guiManager.AddStyle(bEnable2, OFX_IM_TOGGLE_BIG_BORDER);
 	guiManager.AddStyle(bEnable3, OFX_IM_TOGGLE_BIG);
-	guiManager.AddStyle(knob1, OFX_IM_KNOB, true);//+same line
-	guiManager.AddStyle(knob2, OFX_IM_KNOB);
 
-	// for groups
-	// Notice that (some) flags are not supported for OFX_IM_GROUP_TREE
-	guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
-	//guiManager.AddStyleGroup(params4, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen);
+
+	if (bEnable1) {
+		guiManager.AddStyleGroup(params1, OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags_DefaultOpen);
+
+		guiManager.AddStyle(lineWidth2, OFX_IM_STEPPER);
+		guiManager.AddStyle(separation2, OFX_IM_STEPPER);
+
+		guiManager.AddStyle(knob1, OFX_IM_KNOB, true, 3); // sameline for the next. 3 per row
+		guiManager.AddStyle(knob2, OFX_IM_KNOB, true, 3); // sameline for the next. 3 per row
+		guiManager.AddStyle(size3, OFX_IM_KNOB, false, 3); // not sameline for the next. 3 per row
+	}
+	else {
+		guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen);
+
+		guiManager.AddStyle(lineWidth2, OFX_IM_DEFAULT);
+		guiManager.AddStyle(separation2, OFX_IM_DEFAULT);
+
+		guiManager.AddStyle(knob1, OFX_IM_VSLIDER_NO_LABELS, true, 3);
+		guiManager.AddStyle(knob2, OFX_IM_VSLIDER_NO_LABELS, true, 3);
+		guiManager.AddStyle(size3, OFX_IM_VSLIDER_NO_LABELS, false, 3);
+	}
+
+	if (bEnable2) {
+		guiManager.AddStyle(lineWidth4, OFX_IM_HSLIDER_NO_NAME, true, 2);
+		guiManager.AddStyle(separation4, OFX_IM_HSLIDER_NO_NAME, false, 2);
+	}
+	else {
+		guiManager.AddStyle(lineWidth4, OFX_IM_KNOB, true, 2);
+		guiManager.AddStyle(separation4, OFX_IM_KNOB, false, 2);
+	}
+
+	if (bEnable3) {
+		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
+		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
+	}
+	else {
+		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_HIDDEN, ImGuiTreeNodeFlags_DefaultOpen);
+		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen);
+	}
+
+	//-
+
+	// 2. For Groups / headers / trees
+
+	// WARNING:
+
+	// Notice that:
+	// Some flags may be not be supported/combined for some tree types.
+	// ie: OFX_IM_GROUP_TREE maybe can not be with ImGuiTreeNodeFlags_DefaultOpen. 
+	// and the tree will be closed by default. 
+	// That's bc ImGui::TreeNode has no flags, but (when passing ImGuiTreeNodeFlags_DefaultOpen)
+	// we are using an internal workaround doing:
+	// bool bOpen = true;
+	// ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+	// Notice that:
+	// Nested groups can heritate flags/types from parent ones.
+	// Then, in most cases, it's recommended to define all the flags for each group style!
+
+	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_None);
+	guiManager.AddStyleGroup(params2, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 }
 
 //--------------------------------------------------------------
@@ -129,7 +228,7 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
-		// Toggle enablers
+		// Toggle enablers Window
 		{
 			ImGui::Begin("Enablers");
 			{
@@ -137,6 +236,8 @@ void ofApp::draw()
 					ofxImGuiSurfing::AddToggleRoundedButton(bEnablers[i]);
 				}
 				ImGui::Spacing();
+
+				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 			}
 			ImGui::End();
 		}
@@ -145,19 +246,25 @@ void ofApp::draw()
 
 		// ofApp Window
 		{
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-			if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
-
 			// not working
 			if (guiManager.bReset_Window) {
 				guiManager.bReset_Window = false;
 				guiManager.resetWindowImGui(true, true);
 			}
 
+			//-
+
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+			if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+			if (guiManager.bNoScroll) window_flags |= ImGuiWindowFlags_NoScrollbar;
+
 			guiManager.beginWindow("ofApp", NULL, window_flags);
 			{
-				if (0)//TESTING
+				//--------------------------------------------------------------
+
+				// TESTING New Range Sliders
+				if (bEnablers[0])
 				{
 					int max = 10000;
 					int min = 1;
@@ -167,18 +274,21 @@ void ofApp::draw()
 					static float flow = 1, fhigh = 5000;
 					static float flow1 = 1, fhigh1 = 5000;
 					static float flow2 = 1, fhigh2 = 5000;
-					//ImGui::RangeSliderInt("CMDS", min, max, ilow, ihigh);
-					//ImGui::RangeSliderInt("CMDS1", min, max, ilow1, ihigh1);
-					//ImGui::RangeSliderInt("CMDS2", min, max, ilow2, ihigh2);
-					//ImGui::RangeSliderFloat("CMDS3f", min, max, flow2, fhigh2);
-					//ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
+					ImGui::RangeSliderInt("CMDS", min, max, ilow, ihigh);
+					ImGui::RangeSliderInt("CMDS1", min, max, ilow1, ihigh1);
+					ImGui::RangeSliderInt("CMDS2", min, max, ilow2, ihigh2);
+					ImGui::RangeSliderFloat("CMDS3f", min, max, flow2, fhigh2);
+					ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
 					ImGui::RangeSliderFloat("CMDS5f", min, max, flow, fhigh);
 
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
+				//--------------------------------------------------------------
+
 				// Ranges for multidim glm::vec
-				if (bEnablers[0])
+
+				if (bEnablers[1])
 				{
 					guiManager.refreshLayout();
 
@@ -206,27 +316,33 @@ void ofApp::draw()
 					//ImGui::Button("Button2");
 					//ImGui::Spacing();
 
-					ofxImGuiSurfing::AddRangeOneVec3Param("RangePos", pos1, valueMin, valueMax, value, coord.get());
+					ofxImGuiSurfing::AddRangeOneVec3Param("RangePos", pos_1, valueMin, valueMax, value, coord.get());
 					//ImGui::SameLine();
 					//ImGui::Text("asdf");
 
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
+				//--------------------------------------------------------------
+
 				// A Multidim (xyz) vec2/vec3/vec4 parameter 
-				if (bEnablers[1])
+
+				if (bEnablers[2])
 				{
 					ImGui::Spacing();
 
 					// Two api patterns can be used:
-					guiManager.Add(pos1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
-					//ofxImGuiSurfing::AddParameter(pos1, true);
+					guiManager.Add(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+					//ofxImGuiSurfing::AddParameter(pos_1, true);
 
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
+				//--------------------------------------------------------------
+
 				// Basic folder
-				if (bEnablers[2])
+
+				if (bEnablers[3])
 				{
 					if (ImGui::TreeNode("Tree"))
 					{
@@ -240,22 +356,27 @@ void ofApp::draw()
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
-				// An ofParameterGroup with nested params
+				//--------------------------------------------------------------
+
+				// An ofParameterGroup with monested Groups with params
+
 				//if (0)
-				if (bEnablers[3])
+				if (bEnablers[4])
 				{
 					static bool bOpen = false;
 					ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
-					guiManager.AddGroup(params1, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
-					//guiManager.AddGroup(params1);
+					guiManager.AddGroup(params1);
+					//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
 
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
+				//--------------------------------------------------------------
 
 				// Three rounded toggles
-				if (bEnablers[4])
+
+				if (bEnablers[5])
 				{
 					ofxImGuiSurfing::AddToggleRoundedButton(bPrevious);
 					ImGui::SameLine();
@@ -266,8 +387,11 @@ void ofApp::draw()
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
-				// Vertical Sliders
-				if (bEnablers[5])
+				//--------------------------------------------------------------
+
+				// Vertica/Horizontal Big Sliders
+
+				if (bEnablers[6])
 				{
 					if (ImGui::TreeNodeEx("Vert/Horiz Sliders", ImGuiTreeNodeFlags_DefaultOpen))
 					{
@@ -279,17 +403,22 @@ void ofApp::draw()
 						ofxImGuiSurfing::AddSpacingSeparated();
 						ImGui::Spacing();
 
-						ImGui::TextWrapped("> Raw Mode without Styles Engine. \nNo Responsive! No Mouse Wheel!\n");
-						float w = 40;
-						float h = 80;
-						ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
-						ImGui::SameLine();
-						ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
-						ImGui::SameLine();
-						ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
-						ImGui::SameLine();
-						ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+						if (ImGui::TreeNodeEx("Raw Mode without Styles Engine"))
+						{
+							ImGui::TextWrapped("> No Responsive! No Mouse Wheel!\n");
 
+							float w = 40;
+							float h = 80;
+							ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
+							ImGui::SameLine();
+							ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
+							ImGui::SameLine();
+							ofxImGuiSurfing::AddVSlider(size3, ImVec2(w, h), true);
+							ImGui::SameLine();
+							ofxImGuiSurfing::AddVSlider(size4, ImVec2(w, h), true);
+
+							ImGui::TreePop();
+						}
 						ofxImGuiSurfing::AddSpacingSeparated();
 
 						//TODO:
@@ -342,21 +471,20 @@ void ofApp::draw()
 
 						ImGui::TreePop();
 					}
-
 				}
 
-				//-
+				//--------------------------------------------------------------
 
 				// An extra advanced / sub-panel 
+
 				// with some common toggles that we must customize/assign destinations.
-				if (bEnablers[6])
 				{
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 
 					guiManager.drawAdvanced();
-
-					ofxImGuiSurfing::AddSpacingSeparated();
 				}
+
+				//--------------------------------------------------------------
 			}
 			guiManager.endWindow();
 		}

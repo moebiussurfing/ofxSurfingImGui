@@ -45,6 +45,9 @@ namespace ofxImGuiSurfing
 		// -> This common sizes must be updated during draw to refresh when window panels resizing 
 		// or to addapt to tree/groups or indentation changes.
 
+	public:
+		ofParameter<bool> bMouseWheel{ "MouseWheel", false };
+
 		//--
 
 	public:
@@ -466,83 +469,83 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
 					case OFX_IM_BUTTON_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_BUTTON_BIG:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_BUTTON_BIG_XXL:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_SMALL_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 					}
 				}
@@ -635,7 +638,7 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -647,7 +650,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -655,7 +658,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -663,7 +666,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -671,7 +674,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -681,7 +684,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -689,7 +692,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -697,7 +700,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -705,7 +708,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -715,7 +718,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -723,7 +726,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -731,7 +734,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -739,7 +742,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -752,7 +755,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -761,7 +764,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -770,7 +773,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -779,7 +782,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -816,7 +819,7 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -827,14 +830,14 @@ namespace ofxImGuiSurfing
 					case OFX_IM_KNOB:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
 					case OFX_IM_KNOB_TRAIL:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -861,7 +864,7 @@ namespace ofxImGuiSurfing
 						}
 						ImGui::PopItemWidth();
 						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 					}
@@ -909,19 +912,19 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
 					//--
-					
+
 					// H Slider
 
 					case OFX_IM_HSLIDER:
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -929,7 +932,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -937,7 +940,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -945,7 +948,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -955,7 +958,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -963,7 +966,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -971,7 +974,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -979,7 +982,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -989,7 +992,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -997,7 +1000,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1005,7 +1008,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1013,7 +1016,7 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, 2 * _h), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1026,7 +1029,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1035,7 +1038,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1044,7 +1047,7 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1053,10 +1056,10 @@ namespace ofxImGuiSurfing
 						const float gap = 2;//fix oversize
 						std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
-					
+
 					//-
 
 					// Progress Bar
@@ -1091,7 +1094,7 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1105,14 +1108,14 @@ namespace ofxImGuiSurfing
 					case OFX_IM_KNOB:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
 					case OFX_IM_KNOB_TRAIL:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1138,7 +1141,7 @@ namespace ofxImGuiSurfing
 						}
 						ImGui::PopItemWidth();
 						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
-						IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1171,6 +1174,7 @@ namespace ofxImGuiSurfing
 
 					else if (type == OFX_IM_COLOR_NO_ALPHA) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 
 					//TODO:
@@ -1178,6 +1182,7 @@ namespace ofxImGuiSurfing
 						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
 						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 
 					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
@@ -1205,11 +1210,13 @@ namespace ofxImGuiSurfing
 
 					else if (type == OFX_IM_COLOR_NO_ALPHA) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 
 					//TODO:
 					else if (type == OFX_IM_COLOR_NO_NAME) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
 						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
 					}
@@ -1237,7 +1244,7 @@ namespace ofxImGuiSurfing
 					{
 					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
 					{
-						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+						bReturn = ofxImGuiSurfing::AddParameter(p, true); //-> Should include sugar inside
 					}
 					break;
 					}
@@ -1344,501 +1351,527 @@ namespace ofxImGuiSurfing
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
+			bool bMusCloseTree = false; //TODO: -> add new
 
 			// Handle names/pushID's
 			// This is the root/first group
 			// Level is about how many deep on nested groups we are
 
-			//TODO:
-			ImGui::PushID(group.getName().c_str());
-
-			// A. 
-			// This is the root parent group/header:
-			//--------------------------------------------------------------
-
-			if (uniqueName.getLevel() == 0) //-> This should notify it's the root parent group..
+			////TODO:
+			// -> Must remove all return calls inside below to not break pushIDs if we want to use ID's!
+			ImGui::PushID(("##GROUP_" + group.getName()).c_str());
 			{
-				// Group Style:
-				// If a group style is queued, we will overwrite the default style for each type.
-				auto c = getStyleGroup(group);
-				if (c.name != "-1")
-				{
-					typeGroup = SurfingImGuiTypesGroups(c.type);
-					flags = c.flags;
-				}
-				bMustHideGroup = (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
-
-				//-
-
-				// 1. Openings
-				if (!bMustHideGroup)
-				{
-					{
-						if (0) {}
-
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
-						{
-							bIsOpen = false;
-						}
-						else if (
-							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
-							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-						{
-							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-						}
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
-						{
-							bIsOpen = ImGui::TreeNode(group.getName().c_str());
-						}
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
-						{
-							bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
-						}
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
-						{
-							// A. Height variable to amount widgets..
-							//auto& style = ImGui::GetStyle();
-							//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
-							//int h = 14;
-							//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-							//int hhh = parameterGroup->size() * hratio * hh;
-
-							// B. Height hardcoded
-							int hhh = HEIGHT_SCROLL_GROUP;
-
-							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-							if (bIsOpen)
-							{
-								ImGui::Indent();
-								ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
-								refreshLayout(); // ?
-								// -> AddGroup(*parameterGroup, flags, typeGroup);
-							}
-						}
-					}
-
-					//-
-
-					// 2. Header already renderer
-					uniqueName.setOpen(bIsOpen); //TODO: ?
-
-					//-
-
-					// 4. To re calculate layout sizes
-					refreshLayout(); // ?
-
-					//-
-
-					// 5. Skip all nested groups and their params
-					if (!bIsOpen) return;
-				}
-			}
-
-			//----
-
-			// 5. Parameters
-			// Here, this is not the root/first group.
-			// We go populate the params widgets
-
-			for (auto parameter : group)
-			{
-				// 5.1 Group parameter
-
-				// B. 
-				// The param is a Group
-				// This will not be the Group from the 0'th/root/parent level.
+				// A. 
+				// This is the root parent group/header:
 				//--------------------------------------------------------------
 
-				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-
-				if (parameterGroup) // Will detect nested groups recursively
+				if (uniqueName.getLevel() == 0) //-> This should notify it's the root parent group..
 				{
-					refreshLayout(); // ?
-
-					uniqueName.pushGroup(); //TODO: should be in another place ?
-
-					// -> Unique id for possible name repeated params inside many groups.
-					std::string ss = "##" + ofToString(uniqueName.getLevel()) + parameterGroup->getName();
-					ImGui::PushID(ss.c_str());
+					// Group Style:
+					// If a group style is queued, we will overwrite the default style for each type.
+					auto c = getStyleGroup(group);
+					if (c.name != "-1")
 					{
-						auto c = getStyleGroup(*parameterGroup);
-						if (c.name != "-1")//the overwrite
+						typeGroup = SurfingImGuiTypesGroups(c.type);
+						flags = c.flags;
+					}
+					bMustHideGroup = (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN);
+
+					//-
+
+					// 1. Openings
+					if (!bMustHideGroup)
+					{
 						{
-							typeGroup = SurfingImGuiTypesGroups(c.type); // overwrite main type
-							flags = c.flags;
-						}
+							if (0) {}
 
-						std::string sshead = parameterGroup->getName();
-
-						//----
-
-						if (0) {}
-
-						// Hidden
-						//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
-						//{
-						//	AddGroup(*parameterGroup, flags, typeGroup);
-						//}
-						//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
-						//{
-						//	ImGui::Indent();
-						//	bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
-						//	if (b) AddGroup(*parameterGroup, flags, typeGroup);
-						//	ImGui::Unindent();
-						//}
-
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
-						{
-							// must skip contained params
-						}
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
-						{
-							ImGui::Indent();
-							refreshLayout(); // ?
-							AddGroup(*parameterGroup, flags, typeGroup);
-							ImGui::Unindent();
-						}
-
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
-						{
-							ImGui::Indent();
-							refreshLayout(); // ?
-							bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
-							if (b) AddGroup(*parameterGroup, flags, typeGroup);
-							ImGui::Unindent();
-						}
-
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-						{
-							ImGui::Indent();
-							refreshLayout(); // ?
-							bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
-							if (b) AddGroup(*parameterGroup, flags, typeGroup);
-							ImGui::Unindent();
-						}
-
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
-						{
-							if (ImGui::TreeNode(sshead.c_str()))
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
-								ImGui::Indent();
-								refreshLayout(); // ?
-								AddGroup(*parameterGroup, flags, typeGroup);
-								ImGui::Unindent();
+								bIsOpen = true;//not really closed but not rendered!
+								bMusCloseTree = false;// ? should depends of the tree type.. ? //TODO: important!
+							}
+							else if (
+								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT || typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							{
+								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+								bMusCloseTree = false;//we dont need to close tree!
+							}
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+							{
+								//TODO:
+								// workaround bc tree has no flags..
+								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
+								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
-								ImGui::TreePop();
+								bIsOpen = ImGui::TreeNode(group.getName().c_str());
+								bMusCloseTree = bIsOpen;
+							}
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+							{
+								bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
+								bMusCloseTree = bIsOpen;
+							}
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+							{
+								// A. Height variable to amount widgets..
+								//auto& style = ImGui::GetStyle();
+								//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+								//int h = 14;
+								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+								//int hhh = parameterGroup->size() * hratio * hh;
+
+								// B. Height hardcoded
+								int hhh = HEIGHT_SCROLL_GROUP;
+
+								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+								bMusCloseTree = false;
+
+								if (bIsOpen)
+								{
+									ImGui::Indent();
+									ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
+									refreshLayout();
+
+									// -> .. AddGroup(*parameterGroup, flags, typeGroup);
+								}
 							}
 						}
 
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
-						{
-							if (ImGui::TreeNodeEx(sshead.c_str(), flags))
-							{
-								ImGui::Indent();
-								refreshLayout(); // ?
-								AddGroup(*parameterGroup, flags, typeGroup);
-								ImGui::Unindent();
+						//-
 
-								ImGui::TreePop();
-							}
-						}
+						// 2. Header already rendered
+						uniqueName.setOpen(bIsOpen); //TODO: ?
 
-						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
-						{
-							// A. height variable to amount widgets..
-							//auto& style = ImGui::GetStyle();
-							//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
-							//int h = 14;
-							//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-							//int hhh = parameterGroup->size() * hratio * hh;
+						//-
 
-							// B. height hardcoded
-							int hhh = HEIGHT_SCROLL_GROUP;
+						// 4. To re calculate layout sizes after headers and indenting.
+						refreshLayout();
 
-							//-
+						//-
 
-							bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
-							if (b)
-							{
-								ImGui::Indent();
-								refreshLayout(); // ?
-								ImGui::BeginChild(sshead.c_str(), ImVec2(0, hhh), false);
-								AddGroup(*parameterGroup, flags, typeGroup);
-								ImGui::EndChild();
-								ImGui::Unindent();
-							}
+						// 5. Skip all nested groups and their params
+						if (!bIsOpen) {
+							ImGui::PopID();
+							return;
 						}
 					}
-					ImGui::PopID();
-					// group iteration done!
-					continue;
 				}
 
 				//----
 
-				// 5.2 Not group parameters 
-				// Try everything we know how to handle.
-				// We will filter known styles for know types.
-				// Some params could not have styles types!
-				// Uses "ofxSurfing_ImGui_ofHelpers.h"
+				// 5. Parameters
+				// Here, this is not the root/first group.
+				// We go populate the params widgets
 
-				//TODO:
-				// Should add styles yet for unknow types!
-
-				//--
-
-				//// Skip params inside the group if is not opened or collapsed.
-				//bool binclude = false;
-				////binclude = (uniqueName.isOpen(uniqueName.getLevel());
-				//binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
-				//if (binclude)
+				for (auto parameter : group)
 				{
-					//-
+					// 5.1 Group Parameter
 
-					// Multidim params vec2/vec3/vec4
+					// B. 
+					// The param is a Group
+					// This will not be the Group from the 0'th/root/parent level.
+					//--------------------------------------------------------------
 
-#if OF_VERSION_MINOR >= 10
-					auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-					if (parameterVec2f)
+					auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+
+					if (parameterGroup) // Will detect nested groups recursively
 					{
-						auto c = getStyle(*parameterVec2f);
-						if (c.name != "-1") AddParameter(*parameterVec2f);//if not added style for this param
-						else {
-							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec2f, true);
-							else AddParameter(*parameterVec2f);
+						refreshLayout(); // ?
+						uniqueName.pushGroup(); //TODO: should be in another place ?
+
+						// -> Unique id for possible name repeated params inside many groups.
+						std::string ss = "##" + ofToString(uniqueName.getLevel()) + parameterGroup->getName();
+						ImGui::PushID(ss.c_str());
+						{
+							auto c = getStyleGroup(*parameterGroup);
+							if (c.name != "-1")//the overwrite
+							{
+								typeGroup = SurfingImGuiTypesGroups(c.type); // overwrite main type
+								flags = c.flags;
+							}
+
+							std::string sshead = parameterGroup->getName();
+
+							//----
+
+							if (0) {}
+
+							// Hidden
+							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
+							//{
+							//	AddGroup(*parameterGroup, flags, typeGroup);
+							//}
+							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
+							//{
+							//	ImGui::Indent();
+							//	bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
+							//	if (b) AddGroup(*parameterGroup, flags, typeGroup);
+							//	ImGui::Unindent();
+							//}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN)
+							{
+								// Must skip contained params
+							}
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
+							{
+								ImGui::Indent();
+								refreshLayout(); // ?
+								AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::Unindent();
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
+							{
+								ImGui::Indent();
+								refreshLayout(); // ?
+								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::Unindent();
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							{
+								ImGui::Indent();
+								refreshLayout(); // ?
+								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+								ImGui::Unindent();
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+							{
+								//TODO:
+								// workaround bc tree has no flags..
+								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
+								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+								if (ImGui::TreeNode(sshead.c_str()))
+								{
+									ImGui::Indent();
+									refreshLayout(); // ?
+									AddGroup(*parameterGroup, flags, typeGroup);
+									ImGui::Unindent();
+
+									ImGui::TreePop();
+								}
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+							{
+								if (ImGui::TreeNodeEx(sshead.c_str(), flags))
+								{
+									ImGui::Indent();
+									refreshLayout(); // ?
+									AddGroup(*parameterGroup, flags, typeGroup);
+									ImGui::Unindent();
+
+									ImGui::TreePop();
+								}
+							}
+
+							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+							{
+								// Scrollable zone
+
+								// A. Height variable to amount of widgets..
+								//auto& style = ImGui::GetStyle();
+								//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+								//int h = 14;
+								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+								//int hhh = parameterGroup->size() * hratio * hh;
+
+								// B. Height hardcoded
+								int hhh = HEIGHT_SCROLL_GROUP;
+
+								//-
+
+								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								if (b)
+								{
+									ImGui::Indent();
+									refreshLayout(); // ?
+									ImGui::BeginChild(sshead.c_str(), ImVec2(0, hhh), false);
+									AddGroup(*parameterGroup, flags, typeGroup);
+									ImGui::EndChild();
+									ImGui::Unindent();
+								}
+							}
 						}
+						ImGui::PopID();
+
+						//--
+
+						// Group content iteration done!
 						continue;
 					}
 
-					//-
+					//----
 
-					auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-					if (parameterVec3f)
-					{
-						auto c = getStyle(*parameterVec3f);
-						if (c.name == "-1") AddParameter(*parameterVec3f);
-						else {
-							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec3f, true);
-							else AddParameter(*parameterVec3f);
-						}
-						continue;
-					}
-
-					//-
-
-					auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-					if (parameterVec4f)
-					{
-						auto c = getStyle(*parameterVec4f);
-						if (c.name != "-1") AddParameter(*parameterVec4f);
-						else {
-							if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec4f, true);
-							else AddParameter(*parameterVec4f);
-						}
-						continue;
-					}
-#endif
-					//--
+					// 5.2 Not group parameters 
+					// Try everything we know how to handle.
+					// We will filter known styles for know types.
+					// Some params could not have styles types!
+					// Uses "ofxSurfing_ImGui_ofHelpers.h"
 
 					//TODO:
-					// Unknown types
-					// Should add styles for old ofVec...
-					auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-					if (parameterOfVec2f)
-					{
-						AddParameter(*parameterOfVec2f);
-						continue;
-					}
-					auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-					if (parameterOfVec3f)
-					{
-						AddParameter(*parameterOfVec3f);
-						continue;
-					}
-					auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-					if (parameterOfVec4f)
-					{
-						AddParameter(*parameterOfVec4f);
-						continue;
-					}
+					// Should add styles yet for unknow types!
 
 					//--
 
-					//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-					//if (parameterOfFloatColor)
-					//{
-					//	AddParameter(*parameterOfFloatColor);
-					//	continue;
-					//}
-					//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-					//if (parameterOfColor)
-					//{
-					//	AddParameter(*parameterOfColor);
-					//	continue;
-					//}
-
-					//--
-
-					// Float
-					auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-					if (parameterFloat)
+					//// Skip params inside the group if is not opened or collapsed.
+					//bool binclude = false;
+					////binclude = (uniqueName.isOpen(uniqueName.getLevel());
+					//binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
+					//if (binclude)
 					{
-						auto c = getStyle(*parameterFloat);
-						// if the parameter widget is not added explicitly, will populate it as the default appearance
-						if (c.name != "-1")
+						//-
+
+						// Multidim params vec2/vec3/vec4
+
+#if OF_VERSION_MINOR >= 10
+						auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+						if (parameterVec2f)
 						{
-							Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							auto c = getStyle(*parameterVec2f);
+							if (c.name != "-1") AddParameter(*parameterVec2f);//if not added style for this param
+							else {
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec2f, true);
+								else AddParameter(*parameterVec2f);
+							}
+							continue;
 						}
-						// default style
-						else
+
+						//-
+
+						auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+						if (parameterVec3f)
 						{
-							AddParameter(*parameterFloat);
+							auto c = getStyle(*parameterVec3f);
+							if (c.name == "-1") AddParameter(*parameterVec3f);
+							else {
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec3f, true);
+								else AddParameter(*parameterVec3f);
+							}
+							continue;
 						}
-						continue;
+
+						//-
+
+						auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+						if (parameterVec4f)
+						{
+							auto c = getStyle(*parameterVec4f);
+							if (c.name != "-1") AddParameter(*parameterVec4f);
+							else {
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec4f, true);
+								else AddParameter(*parameterVec4f);
+							}
+							continue;
+						}
+#endif
+						//--
+
+						//TODO:
+						// Unknown types
+						// Should add styles for old ofVec...
+
+						auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+						if (parameterOfVec2f)
+						{
+							AddParameter(*parameterOfVec2f);
+							continue;
+						}
+						auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+						if (parameterOfVec3f)
+						{
+							AddParameter(*parameterOfVec3f);
+							continue;
+						}
+						auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+						if (parameterOfVec4f)
+						{
+							AddParameter(*parameterOfVec4f);
+							continue;
+						}
+
+						//--
+
+						//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						//if (parameterOfFloatColor)
+						//{
+						//	AddParameter(*parameterOfFloatColor);
+						//	continue;
+						//}
+						//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						//if (parameterOfColor)
+						//{
+						//	AddParameter(*parameterOfColor);
+						//	continue;
+						//}
+
+						//--
+
+						// Float
+						auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+						if (parameterFloat)
+						{
+							auto c = getStyle(*parameterFloat);
+							// if the parameter widget is not added explicitly, will populate it as the default appearance
+							if (c.name != "-1")
+							{
+								Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							// default style
+							else
+							{
+								AddParameter(*parameterFloat);
+							}
+							continue;
+						}
+
+						//-
+
+						// Int
+						auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+						if (parameterInt)
+						{
+							auto c = getStyle(*parameterInt);
+							if (c.name != "-1")
+							{
+								Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							else
+							{
+								AddParameter(*parameterInt);
+							}
+							continue;
+						}
+
+						//-
+
+						// Bool
+						auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+						if (parameterBool)
+						{
+							auto c = getStyle(*parameterBool);
+							if (c.name != "-1")
+							{
+								Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							else
+							{
+								AddParameter(*parameterBool);
+							}
+							continue;
+						}
+
+						//-
+
+						// String
+						auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+						if (parameterString)
+						{
+							auto c = getStyle(*parameterString);
+							if (c.name != "-1")
+							{
+								Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							else
+							{
+								Add(*parameterString, OFX_IM_DEFAULT);
+								//AddParameter(*parameterString);
+							}
+							continue;
+						}
+
+						//-
+
+						// Float color
+						auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						if (parameterFloatColor)
+						{
+							auto c = getStyle(*parameterFloatColor);
+							// if the parameter widget is not added explicitly, will populate it as the default appearance
+							if (c.name != "-1")
+							{
+								Add(*parameterFloatColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							// default style
+							else
+							{
+								AddParameter(*parameterFloatColor);
+							}
+							continue;
+						}
+
+						//-
+
+						// Color
+						auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						if (parameterColor)
+						{
+							auto c = getStyle(*parameterColor);
+							// if the parameter widget is not added explicitly, will populate it as the default appearance
+							if (c.name != "-1")
+							{
+								Add(*parameterColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+							}
+							// default style
+							else
+							{
+								AddParameter(*parameterColor);
+							}
+							continue;
+						}
+
+						//--
+
+						// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
+						if (parameter->getName() == "" && parameter->getName() == " ")
+							ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 					}
-
-					//-
-
-					// Int
-					auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-					if (parameterInt)
-					{
-						auto c = getStyle(*parameterInt);
-						if (c.name != "-1")
-						{
-							Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-						}
-						else
-						{
-							AddParameter(*parameterInt);
-						}
-						continue;
-					}
-
-					//-
-
-					// Bool
-					auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-					if (parameterBool)
-					{
-						auto c = getStyle(*parameterBool);
-						if (c.name != "-1")
-						{
-							Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-						}
-						else
-						{
-							AddParameter(*parameterBool);
-						}
-						continue;
-					}
-
-					//-
-
-					// String
-					auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-					if (parameterString)
-					{
-						auto c = getStyle(*parameterString);
-						if (c.name != "-1")
-						{
-							Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-						}
-						else
-						{
-							Add(*parameterString, OFX_IM_DEFAULT);
-							//AddParameter(*parameterString);
-						}
-						continue;
-					}
-
-					//-
-
-					// Float color
-					auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-					if (parameterFloatColor)
-					{
-						auto c = getStyle(*parameterFloatColor);
-						// if the parameter widget is not added explicitly, will populate it as the default appearance
-						if (c.name != "-1")
-						{
-							Add(*parameterFloatColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-						}
-						// default style
-						else
-						{
-							AddParameter(*parameterFloatColor);
-						}
-						continue;
-					}
-
-					//-
-
-					// Color
-					auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-					if (parameterColor)
-					{
-						auto c = getStyle(*parameterColor);
-						// if the parameter widget is not added explicitly, will populate it as the default appearance
-						if (c.name != "-1")
-						{
-							Add(*parameterColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
-						}
-						// default style
-						else
-						{
-							AddParameter(*parameterColor);
-						}
-						continue;
-					}
-
-					//--
-
-					// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
-					if (parameter->getName() == "" && parameter->getName() == " ")
-						ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 				}
-			}
 
-			//------
+				//------
 
-			// 3. Closings
-			// Handle names/pushID's
-			if (uniqueName.getLevel() == 0)
-			{
-				if (bIsOpen)
+				// 3. Closings
+				// Handle names/pushID's
+				if (uniqueName.getLevel() == 0)
 				{
-					if (0) {}
+					if (bIsOpen)
+					{
+						if (0) {}
 
-					else if (
-						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
-						typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-					{
-						// Do not requires closing/pop
+						else if (
+							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+						{
+							// Do not requires closing/pop
+						}
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+						{
+							if(bMusCloseTree) ImGui::TreePop();
+						}
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+						{
+							if (bMusCloseTree) ImGui::TreePop();
+						}
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+						{
+							ImGui::EndChild();
+							ImGui::Unindent();
+							//dont needs close tree bc uses a collapsingHeader tree on begin
+						}
 					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
-					{
-						ImGui::TreePop();
-					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
-					{
-						ImGui::TreePop();
-					}
-					else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
-					{
-						ImGui::EndChild();
-						ImGui::Unindent();
-					}
+
+					//-
+
+					//ImGui::PopID(); // Group main
+					////}
 				}
-
-				//-
-
-				//ImGui::PopID(); // Group main
-				////}
 			}
-
-
-			//TODO:
+			////TODO:
 			ImGui::PopID();
 		}
 	};

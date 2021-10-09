@@ -270,6 +270,14 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 </details>
 
 <details>
+  <summary>0_Intro_Examples/1_Widgets_Sliders2</summary>
+  <p>
+
+![image](/docs/1_Widgets_Sliders2.PNG?raw=true "image")  
+  </p>
+</details>
+
+<details>
   <summary>4_0_0_Layout_TypesEngine</summary>
   <p>
 

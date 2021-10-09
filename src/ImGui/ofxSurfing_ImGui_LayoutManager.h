@@ -172,7 +172,6 @@ public:
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	{
-		//refresh();//TODO:
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
@@ -450,10 +449,12 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
+	ofParameter<bool> bNoScroll{ "No Scroll", false };
 
 	ofParameter<bool> bHelp{ "Help", true };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
+	ofParameter<bool> bMouseWheel{ "MouseWheel", false };
 
 	ofParameter<bool> bReset_Window{ "Reset Window", false };
 
@@ -511,6 +512,7 @@ public:
 	//--------------------------------------------------------------
 	void drawAdvanced() { // -> Simpler call. Use this.
 		ImGui::Spacing();
+		ImGui::Spacing();
 		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
 		drawAdvancedSubPanel();
 	}
@@ -533,6 +535,10 @@ private:
 
 			// Keys
 			ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+
+			// MouseWheel
+			ofxImGuiSurfing::AddToggleRoundedButton(bMouseWheel);
+
 			// Autoresize
 			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
 
@@ -540,9 +546,11 @@ private:
 			{
 				if (ImGui::TreeNode("Windows"))
 				{
-
 					// Lock
 					ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
+
+					// No Scroll
+					ofxImGuiSurfing::AddToggleRoundedButton(bNoScroll);
 
 					// Reset
 					//TODO:

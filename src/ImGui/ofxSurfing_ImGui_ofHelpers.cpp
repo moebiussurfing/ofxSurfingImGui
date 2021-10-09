@@ -199,6 +199,7 @@ namespace ofxImGuiSurfing
 			if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 			{
 				parameter.set(tmpRef);
+				//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);//TODO: should include sguar here
 				return true;
 			}
 			return false;

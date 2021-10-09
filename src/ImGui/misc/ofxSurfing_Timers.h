@@ -68,9 +68,41 @@ namespace ofxImGuiSurfing
 		return a;
 	}
 
-	//-
+	//----
 
 	// Simple Smooth
+
+	//// Example Snippet:
+
+	//// Smooth
+	//ofParameter<bool> bSmooth{ "Smooth", false };
+	//ofParameter<float> smoothSpeed{ "Speed", 0.f, 0.f, 1.f };
+	//ofParameterGroup params_SmoothControl{ "_Smoother", bSmooth, smoothSpeed };
+
+	// Setup
+	//// Extra Controls for this app
+	//presets.addParamsAppExtra(params_SmoothControl);
+
+	// Draw
+	//// No smooth. Raw values.
+	//if (!bSmooth.get())
+	//{
+	//	_size1 = size1;
+	//	_size2 = size2;
+	//	_rotation1 = rotation1;
+	//	_rotation2 = rotation2;
+	//}
+	//// Smoothed
+	//else
+	//{
+	//	static const float MAX_CLAMP_SMOOTH = 0.85f;
+	//	float sp = ofMap(smoothSpeed, 1, 0, 0.45f, MAX_CLAMP_SMOOTH);
+	//	ofxSurfingHelpers::ofxKuValueSmooth(_size1, size1.get(), sp);
+	//	ofxSurfingHelpers::ofxKuValueSmooth(_size2, size2.get(), sp);
+	//	ofxSurfingHelpers::ofxKuValueSmooth(_rotation1, rotation1.get(), sp);
+	//	ofxSurfingHelpers::ofxKuValueSmooth(_rotation2, rotation2.get(), sp);
+	//}
+
 	//--------------------------------------------------------------
 	template <typename T>
 	void ofxKuValueSmooth(T &value, T target, float smooth) {
