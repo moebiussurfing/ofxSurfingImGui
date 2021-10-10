@@ -47,7 +47,7 @@ namespace ofxImGuiSurfing
 
 	public:
 		ofParameter<bool> bMouseWheel{ "MouseWheel", false };
-
+		
 		//--
 
 	public:

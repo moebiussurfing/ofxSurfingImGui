@@ -106,6 +106,7 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 	enum SurfingImGuiTypes
 	{
 		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
+		//TODO: could be an extra arg to allow different appearance for inactive types..
 		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there
 		OFX_IM_DISABLED,	// Make it invisble, preserve the void spacing
 		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control

@@ -124,6 +124,40 @@ private:
 
 	//-
 
+	// Ddisable Widget
+	// Reduces transparency of most common colors.
+
+public:
+	//--------------------------------------------------------------
+	inline void pushInactive() {
+
+		const float a = 0.7f;
+
+		ImGuiStyle *style = &ImGui::GetStyle();
+
+		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
+		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
+		const ImVec4 cActive = style->Colors[ImGuiCol_ButtonActive];
+		const ImVec4 cSliderGrab = style->Colors[ImGuiCol_SliderGrab];
+		const ImVec4 cBorder = style->Colors[ImGuiCol_Border];
+		const ImVec4 cText = style->Colors[ImGuiCol_Text];
+
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
+
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+	}
+	//--------------------------------------------------------------
+	inline void popInactive() {
+		ImGui::PopItemFlag();
+
+		ImGui::PopStyleColor(6);
+	}
+
 public:
 
 	// Modified api
@@ -148,7 +182,6 @@ public:
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
-		//widgetsManager.UpdateStyle(aparam, type, bSameLine, amtPerRow, spacing);
 	}
 
 	//-
