@@ -51,9 +51,12 @@ public:
 	ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;
     ofParameter<bool> bEnable3;
+    ofParameter<bool> bEnable4;
+
 	ofEventListener listener_bEnable1;
 	ofEventListener listener_bEnable2;
 	ofEventListener listener_bEnable3;
+	ofEventListener listener_bEnable4;
 
     ofParameter<bool> bPrevious;
     ofParameter<bool> bNext;

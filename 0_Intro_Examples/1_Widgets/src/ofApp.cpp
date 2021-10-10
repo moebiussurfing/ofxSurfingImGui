@@ -23,6 +23,8 @@ void ofApp::setup() {
 	bEnable1.set("bEnable1", false);
 	bEnable2.set("bEnable2", false);
 	bEnable3.set("bEnable3", false);
+	bEnable4.set("bEnable4", false);
+
 	bPrevious.set("<", false);
 	bNext.set(">", false);
 
@@ -55,7 +57,16 @@ void ofApp::setup() {
 	listener_bEnable1 = bEnable1.newListener([this](bool &b) {
 		ofLogNotice("bEnable1: ") << (b ? "TRUE" : "FALSE");
 
-		setupImGuiStyles(); // -> refresh styles on runtime!
+		if (bEnable1) {
+			guiManager.UpdateStyle(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+			guiManager.UpdateStyle(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+		}
+		else {
+			guiManager.UpdateStyle(rot_1, OFX_IM_DEFAULT);
+			guiManager.UpdateStyle(pos_1, OFX_IM_DEFAULT);
+		}
+
+		//setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//--------------------------------------------------------------
@@ -70,6 +81,12 @@ void ofApp::setup() {
 		setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
+	//--------------------------------------------------------------
+	listener_bEnable4 = bEnable4.newListener([this](bool &b) {
+		ofLogNotice("bEnable4: ") << (b ? "TRUE" : "FALSE");
+		setupImGuiStyles(); // -> refresh styles on runtime!
+	});
+
 	//--
 
 	// Groups
@@ -79,14 +96,16 @@ void ofApp::setup() {
 	params3.setName("params3");
 	params4.setName("params4");
 
+	params1.add(bEnable1);
+	params1.add(bEnable2);
+	params1.add(bEnable3);
+	params1.add(bEnable4);
+
 	params1.add(pos_1);
 	params1.add(rot_1);
 
 	params2.add(lineWidth2);
 	params2.add(separation2);
-	params2.add(bEnable1);
-	params2.add(bEnable2);
-	params2.add(bEnable3);
 
 	params3.add(speed3);
 	params3.add(shapeType3);
@@ -124,11 +143,13 @@ void ofApp::setup() {
 
 	// Startup
 	ofxSurfingHelpers::loadGroup(paramsApp);
+	ofxSurfingHelpers::loadGroup(params1);
 }
 
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofxSurfingHelpers::saveGroup(paramsApp);
+	ofxSurfingHelpers::saveGroup(params1);
 }
 
 //--------------------------------------------------------------
@@ -152,56 +173,78 @@ void ofApp::setupImGuiStyles() {
 	// 1. For params
 
 	// Will be applied when rendering a group when drawing his widgets.
-	guiManager.AddStyle(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 
-	guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER_BIG, false, 1, 20); 
-	// not sameline for the next. 1 per row. 20 pix y spacing at end.
+	// 1 widget per row. not sameline for the next. 20 pix y spacing at end.
 
 	guiManager.AddStyle(bEnable1, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 	guiManager.AddStyle(bEnable2, OFX_IM_TOGGLE_BIG_BORDER);
 	guiManager.AddStyle(bEnable3, OFX_IM_TOGGLE_BIG);
+	guiManager.AddStyle(bEnable4, OFX_IM_TOGGLE_BIG);
 
+	//-
 
 	if (bEnable1) {
-		guiManager.AddStyleGroup(params1, OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags_DefaultOpen);
-
-		guiManager.AddStyle(lineWidth2, OFX_IM_STEPPER);
-		guiManager.AddStyle(separation2, OFX_IM_STEPPER);
-
-		guiManager.AddStyle(knob1, OFX_IM_KNOB, true, 3); 
-		// sameline for the next. 3 per row
-		guiManager.AddStyle(knob2, OFX_IM_KNOB, true, 3); 
-		// sameline for the next. 3 per row
-		guiManager.AddStyle(size3, OFX_IM_KNOB, false, 3); 
-		// not sameline for the next. 3 per row
+		guiManager.AddStyle(knob1, OFX_IM_KNOB, 3, true);
+		guiManager.AddStyle(knob2, OFX_IM_KNOB, 3, true);
+		guiManager.AddStyle(size3, OFX_IM_KNOB, 3, false);
+		// 3 widgets per row. sameline for the next
+		// 3 widgets per row. sameline for the next
+		// 3 widgets per row. not sameline for the next
 	}
 	else {
-		guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_DefaultOpen);
-
-		guiManager.AddStyle(lineWidth2, OFX_IM_DEFAULT);
-		guiManager.AddStyle(separation2, OFX_IM_DEFAULT);
-
-		guiManager.AddStyle(knob1, OFX_IM_VSLIDER_NO_LABELS, true, 3);
-		guiManager.AddStyle(knob2, OFX_IM_VSLIDER_NO_LABELS, true, 3);
-		guiManager.AddStyle(size3, OFX_IM_VSLIDER_NO_LABELS, false, 3);
+		guiManager.AddStyle(knob1, OFX_IM_VSLIDER_NO_LABELS, 3, true);
+		guiManager.AddStyle(knob2, OFX_IM_VSLIDER_NO_LABELS, 3, true);
+		guiManager.AddStyle(size3, OFX_IM_VSLIDER_NO_LABELS, 3, false);
+		// 3 widgets per row. sameline for the next
+		// 3 widgets per row. sameline for the next
+		// 3 widgets per row. not sameline for the next
 	}
 
 	if (bEnable2) {
-		guiManager.AddStyle(lineWidth4, OFX_IM_HSLIDER_NO_NAME, true, 2);
-		guiManager.AddStyle(separation4, OFX_IM_HSLIDER_NO_NAME, false, 2);
+		guiManager.AddStyle(lineWidth2, OFX_IM_STEPPER);
+		guiManager.AddStyle(separation2, OFX_IM_STEPPER);
+
+		//guiManager.AddStyle(lineWidth2, OFX_IM_VSLIDER, 2, true);
+		//guiManager.AddStyle(separation2, OFX_IM_VSLIDER, 2, false);
+		// 2 widgets per row. sameline for the next
+		// 2 widgets per row. not sameline for the next
 	}
 	else {
-		guiManager.AddStyle(lineWidth4, OFX_IM_KNOB, true, 2);
-		guiManager.AddStyle(separation4, OFX_IM_KNOB, false, 2);
+		guiManager.AddStyle(lineWidth2, OFX_IM_DEFAULT);
+		guiManager.AddStyle(separation2, OFX_IM_DEFAULT);
+
+		//guiManager.AddStyle(lineWidth2, OFX_IM_HSLIDER, 2, true);
+		//guiManager.AddStyle(separation2, OFX_IM_HSLIDER, 2, false);
+		// 2 widgets per row. sameline for the next
+		// 2 widgets per row. not sameline for the next
 	}
 
 	if (bEnable3) {
 		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
-		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 	}
 	else {
 		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_HIDDEN, ImGuiTreeNodeFlags_DefaultOpen);
+	}
+
+	if (bEnable4) {
+		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
+
+		guiManager.AddStyle(lineWidth4, OFX_IM_HSLIDER_NO_NAME, 2, true);
+		guiManager.AddStyle(separation4, OFX_IM_HSLIDER_NO_NAME, 2, false);
+		// 2 widgets per row. sameline for the next
+		// 2 widgets per row. not sameline for the next
+		
+		guiManager.AddStyle(shapeType4, OFX_IM_VSLIDER, 1, false, 20);
+	}
+	else {
 		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen);
+
+		guiManager.AddStyle(lineWidth4, OFX_IM_KNOB, 2, true);
+		guiManager.AddStyle(separation4, OFX_IM_KNOB, 2, false);
+		// 2 widgets per row. sameline for the next
+		// 2 widgets per row. not sameline for the next
+		
+		guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER, 1, false, 20);
 	}
 
 	//-
@@ -223,8 +266,9 @@ void ofApp::setupImGuiStyles() {
 	// Nested groups can heritate flags/types from parent ones.
 	// Then, in most cases, it's recommended to define all the flags for each group style!
 
+	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
 	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_None);
-	guiManager.AddStyleGroup(params2, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
+	//guiManager.AddStyleGroup(params2, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 }
 
 //--------------------------------------------------------------
@@ -432,23 +476,23 @@ void ofApp::draw()
 						ImGui::TextWrapped("> Four Vertical Sliders \n");
 						ImGui::Spacing();
 						ImGui::Columns(4, "_bigSliders", false);
-						guiManager.Add(speed3, OFX_IM_VSLIDER, true, 4);
+						guiManager.Add(speed3, OFX_IM_VSLIDER, 4, true);
 						ImGui::NextColumn();
-						guiManager.Add(speed4, OFX_IM_VSLIDER, true, 4);
+						guiManager.Add(speed4, OFX_IM_VSLIDER, 4, true);
 						ImGui::NextColumn();
-						guiManager.Add(size3, OFX_IM_VSLIDER, true, 4);
+						guiManager.Add(size3, OFX_IM_VSLIDER, 4, true);
 						ImGui::NextColumn();
-						guiManager.Add(size4, OFX_IM_VSLIDER, false, 4);
+						guiManager.Add(size4, OFX_IM_VSLIDER, 4, false);
 						ImGui::Columns(1);
 
 						ofxImGuiSurfing::AddSpacingSeparated();
 
 						ImGui::TextWrapped("> Four Vertical Sliders \nNo Name \n");
 						ImGui::Spacing();
-						guiManager.Add(speed3, OFX_IM_VSLIDER_NO_NAME, true, 4);
-						guiManager.Add(speed4, OFX_IM_VSLIDER_NO_NAME, true, 4);
-						guiManager.Add(size3, OFX_IM_VSLIDER_NO_NAME, true, 4);
-						guiManager.Add(size4, OFX_IM_VSLIDER_NO_NAME, false, 4);
+						guiManager.Add(speed3, OFX_IM_VSLIDER_NO_NAME, 4, true);
+						guiManager.Add(speed4, OFX_IM_VSLIDER_NO_NAME, 4, true);
+						guiManager.Add(size3, OFX_IM_VSLIDER_NO_NAME, 4, true);
+						guiManager.Add(size4, OFX_IM_VSLIDER_NO_NAME, 4, false);
 
 						ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -461,17 +505,17 @@ void ofApp::draw()
 						ofxImGuiSurfing::AddSpacingSeparated();
 
 						ImGui::TextWrapped("> Two Horizontal Sliders \nWithout Labels in One Row \n");
-						guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, true, 2);
-						guiManager.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, false, 2);
+						guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, true);
+						guiManager.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, false);
 
 						ofxImGuiSurfing::AddSpacingSeparated();
 
 						ImGui::TextWrapped("> Four Knobs \n");
 						ImGui::Spacing();
-						guiManager.Add(speed3, OFX_IM_KNOB, true, 4);
-						guiManager.Add(speed4, OFX_IM_KNOB, true, 4);
-						guiManager.Add(size3, OFX_IM_KNOB, true, 4);
-						guiManager.Add(size4, OFX_IM_KNOB, false, 4);
+						guiManager.Add(speed3, OFX_IM_KNOB, 4, true);
+						guiManager.Add(speed4, OFX_IM_KNOB, 4, true);
+						guiManager.Add(size3, OFX_IM_KNOB, 4, true);
+						guiManager.Add(size4, OFX_IM_KNOB, 4, false);
 
 						ImGui::TreePop();
 					}

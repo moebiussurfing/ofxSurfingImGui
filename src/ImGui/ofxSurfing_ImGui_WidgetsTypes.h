@@ -312,7 +312,6 @@ namespace ofxImGuiSurfing
 
 	public:
 		// Update styles on runtime
-		// new api
 		//--------------------------------------------------------------
 		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
@@ -327,7 +326,8 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
+			ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list. Added!";
+			AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 			return;
 		}
 		//--------------------------------------------------------------
@@ -344,7 +344,8 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list!";
+			ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list. Added!";
+			AddStyle(name, type, amtPerRow, bSameLine, spacing);
 			return;
 		}
 
@@ -1454,18 +1455,18 @@ namespace ofxImGuiSurfing
 		{
 			AddGroup(group, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
 		}
+		////--------------------------------------------------------------
+		//void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+		//{
+		//	AddGroup(group, ImGuiTreeNodeFlags_None, typeGroup);
+		//}
+		////--------------------------------------------------------------
+		//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen)
+		//{
+		//	AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
+		//}
 		//--------------------------------------------------------------
-		void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
-		{
-			AddGroup(group, ImGuiTreeNodeFlags_None, typeGroup);
-		}
-		//--------------------------------------------------------------
-		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-		{
-			AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
-		}
-		//--------------------------------------------------------------
-		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
