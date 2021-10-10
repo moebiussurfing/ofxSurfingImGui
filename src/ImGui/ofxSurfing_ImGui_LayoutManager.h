@@ -96,16 +96,20 @@ public:
 
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
 
+	//-
+
 public:
 
-	// window log
+	// Window log
 	ImGuiLogWindow log;
 
 	//--------------------------------------------------------------
 	void addLog(std::string text) {
-		// log
+		// Log
 		log.AddText(text);
 	}
+
+	//-
 
 public:
 
@@ -122,33 +126,64 @@ private:
 
 public:
 
+	// Modified api
+
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		return widgetsManager.Add(aparam, type, bSameLine, amtPerRow, spacing);
+		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
+	}
+	//--------------------------------------------------------------
+	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
+	}
+	//--------------------------------------------------------------
+	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//--------------------------------------------------------------
-	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
+		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
+		//widgetsManager.UpdateStyle(aparam, type, bSameLine, amtPerRow, spacing);
 	}
 
-	//--------------------------------------------------------------
-	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-	{
-		widgetsManager.AddStyle(name, type, bSameLine, amtPerRow, spacing);
-	}
+	//-
 
-	//TODO:
-	//--------------------------------------------------------------
-	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
-	{
-		widgetsManager.UpdateStyle(aparam, type);
-	}
+private:
 
-	//TODO: group styles are recursive! must fix!
+	//// Legacy api
 
+	////--------------------------------------------------------------
+	//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	//{
+	//	return widgetsManager.Add(aparam, type, bSameLine, amtPerRow, spacing);
+	//}
+	////--------------------------------------------------------------
+	//void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	//{
+	//	widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
+	//}
+	////--------------------------------------------------------------
+	//void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	//{
+	//	widgetsManager.AddStyle(name, type, bSameLine, amtPerRow, spacing);
+	//}
+
+	////--------------------------------------------------------------
+	//void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+	//{
+	//	widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
+	//}
+
+	//--
+
+public:
+
+	//TODO: Group styles are (?) recursive! must fix!
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
@@ -179,7 +214,7 @@ public:
 
 public:
 
-	// many repeated methods. need to pick a good name...
+	// Many repeated methods. need to pick a good name...
 	////--------------------------------------------------------------
 	//void refresh()
 	//{
@@ -217,7 +252,7 @@ public:
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
 
-	//-
+	//--
 
 public:
 

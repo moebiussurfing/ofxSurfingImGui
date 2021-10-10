@@ -145,7 +145,7 @@ namespace ofxImGuiSurfing
 			// we return a kind of error type to be detected
 			// and to be drawn with the default style.
 			SurfingImGuiTypes_Style cError;
-			cError.name = "-1";
+			//cError.name = "-1";
 			return cError;
 
 			//SurfingImGuiTypes_Style confDefault;
@@ -170,33 +170,18 @@ namespace ofxImGuiSurfing
 			}
 
 			SurfingImGuiTypesGroup_Style cError;
-			cError.name = "-1";
+			//cError.name = "-1";
 			return cError;
 		}
 
-		//--
+		//-
 
-		//TODO:
-		// Add remover / update style element o runtime?
-		//--------------------------------------------------------------
-		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT)
-		{
-			//widgetsStyles.getPosition(aparam)
-			//update style
-
-			//SurfingImGuiTypes_Style c;
-			//c.name = aparam.getName();
-			//c.type = type;
-			//c.bSameLine = bSameLine;
-			//c.amtPerRow = amtPerRow;
-			//c.spacing = spacing;
-
-			//widgetsStyles.push_back(c);
-		}
+//private:
+	public:
 
 		// Queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
-		void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
 			SurfingImGuiTypes_Style c;
 			c.name = aparam.getName();
@@ -207,9 +192,9 @@ namespace ofxImGuiSurfing
 
 			widgetsStyles.push_back(c);
 		}
-		// This call by name is usefull when the param style is out of the current scope.
+		// This call by name is usefull when the param style is out of the current scope
 		//--------------------------------------------------------------
-		void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
 			SurfingImGuiTypes_Style c;
 			c.name = name;
@@ -220,6 +205,10 @@ namespace ofxImGuiSurfing
 
 			widgetsStyles.push_back(c);
 		}
+
+		//-
+
+	public:
 
 		// Queue a customization config for future populate a group
 		//--------------------------------------------------------------
@@ -245,6 +234,123 @@ namespace ofxImGuiSurfing
 
 		//--
 
+		// Update styles on runtime
+	//private:
+		//// Legacy api
+		////--------------------------------------------------------------
+		//void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		//{
+		//	for (auto &c : widgetsStyles)
+		//	{
+		//		if (c.name == aparam.getName()) // param was in the queue list
+		//		{
+		//			c.type = type;
+		//			c.bSameLine = bSameLine;
+		//			c.amtPerRow = amtPerRow;
+		//			c.spacing = spacing;
+		//			return;
+		//		}
+		//	}
+		//	ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
+		//	return;
+		//}
+		////--------------------------------------------------------------
+		//void UpdateStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		//{
+		//	for (auto &c : widgetsStyles)
+		//	{
+		//		if (c.name == name) // param was in the queue list
+		//		{
+		//			c.type = type;
+		//			c.bSameLine = bSameLine;
+		//			c.amtPerRow = amtPerRow;
+		//			c.spacing = spacing;
+		//			return;
+		//		}
+		//	}
+		//	ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list!";
+		//	return;
+		//}
+
+	public:
+
+		//--------------------------------------------------------------
+		void UpdateStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		{
+			for (auto &c : groupsStyles)
+			{
+				if (c.name == name)
+				{
+					c.type = type;
+					c.flags = flags;
+					return;
+				}
+			}
+			ofLogWarning(__FUNCTION__) << "Group " << name << " not found on styles list!";
+			return;
+		}
+		//--------------------------------------------------------------
+		void UpdateStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+		{
+			for (auto &c : groupsStyles)
+			{
+				if (c.name == group.getName())
+				{
+					c.type = type;
+					c.flags = flags;
+					return;
+				}
+			}
+			ofLogWarning(__FUNCTION__) << "Group " << group.getName() << " not found on styles list!";
+			return;
+		}
+
+		//TODO:
+		// Add style remover
+
+		//----
+
+	public:
+		// Update styles on runtime
+		// new api
+		//--------------------------------------------------------------
+		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		{
+			for (auto &c : widgetsStyles)
+			{
+				if (c.name == aparam.getName()) // param was in the queue list
+				{
+					c.type = type;
+					c.bSameLine = bSameLine;
+					c.amtPerRow = amtPerRow;
+					c.spacing = spacing;
+					return;
+				}
+			}
+			ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
+			return;
+		}
+		//--------------------------------------------------------------
+		void UpdateStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		{
+			for (auto &c : widgetsStyles)
+			{
+				if (c.name == name) // param was in the queue list
+				{
+					c.type = type;
+					c.bSameLine = bSameLine;
+					c.amtPerRow = amtPerRow;
+					c.spacing = spacing;
+					return;
+				}
+			}
+			ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list!";
+			return;
+		}
+
+		//----
+
+	public:
 		//TODO:
 		// If we are not using the Types Engine, we will bypass the creation of widgets on ofxSurfing_ImGui_Helpers
 		// then we will populate each widget type as the default appearance!
@@ -329,12 +435,24 @@ namespace ofxImGuiSurfing
 
 		//----
 
-
 		// Render now a parameter with a related ImGui widget with a custom style.
-
 		// Remember that must be called inside an guiManager::Begin/End() !
+
+		//TODO:
+		// new api
+
+	//public:
+		////-----------------------------------------------------------------
+		//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		//{
+		//	return Add(aparam, type, bSameLine, amtPerRow, spacing);
+		//}
+
+	//private:
+	public:
 		//-----------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+			//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			// Will flag to true to do the final steps: sameline and spacing configs.
 			bool bDone = false;
@@ -1720,7 +1838,7 @@ namespace ofxImGuiSurfing
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterFloat, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
 							else
@@ -1739,7 +1857,7 @@ namespace ofxImGuiSurfing
 							auto c = getStyle(*parameterInt);
 							if (c.name != "-1")
 							{
-								Add(*parameterInt, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
@@ -1757,7 +1875,7 @@ namespace ofxImGuiSurfing
 							auto c = getStyle(*parameterBool);
 							if (c.name != "-1")
 							{
-								Add(*parameterBool, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
@@ -1775,7 +1893,7 @@ namespace ofxImGuiSurfing
 							auto c = getStyle(*parameterString);
 							if (c.name != "-1")
 							{
-								Add(*parameterString, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterString, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
@@ -1795,7 +1913,7 @@ namespace ofxImGuiSurfing
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterFloatColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
 							else
@@ -1815,7 +1933,7 @@ namespace ofxImGuiSurfing
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterColor, c.type, c.bSameLine, c.amtPerRow, c.spacing);
+								Add(*parameterColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
 							else
@@ -1851,7 +1969,7 @@ namespace ofxImGuiSurfing
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 						{
-							if(bMusCloseTree) ImGui::TreePop();
+							if (bMusCloseTree) ImGui::TreePop();
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 						{
