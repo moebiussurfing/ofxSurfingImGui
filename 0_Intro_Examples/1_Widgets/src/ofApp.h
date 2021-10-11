@@ -41,13 +41,13 @@ public:
 
     // Parameters
 	
+	ofParameter<glm::vec3> rot_1;
 	ofParameter<glm::vec3> pos_1;
+    
 	ofParameter<float> value;
 	ofParameter<float> valueMin;
 	ofParameter<float> valueMax;
 
-	ofParameter<glm::vec3> rot_1;
-    
 	ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;
     ofParameter<bool> bEnable3;

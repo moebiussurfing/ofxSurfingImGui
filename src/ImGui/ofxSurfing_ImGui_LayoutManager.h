@@ -131,7 +131,7 @@ public:
 	//--------------------------------------------------------------
 	inline void pushInactive() {
 
-		const float a = 0.7f;
+		const float a = 0.5f;
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 

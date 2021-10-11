@@ -1,28 +1,28 @@
 {
     "params1": {
         "bEnable1": "1",
-        "bEnable2": "0",
-        "bEnable3": "0",
-        "bEnable4": "0",
+        "bEnable2": "1",
+        "bEnable3": "1",
+        "bEnable4": "1",
         "params2": {
-            "lineWidth2": "0.5",
+            "lineWidth2": "0.584",
             "params3": {
-                "Knob1": "0.5",
-                "Knob2": "5",
-                "shapeType3": "0",
-                "size3": "100",
-                "speed3": "0.5"
+                "Knob1": "0.5825",
+                "Knob2": "1.65",
+                "shapeType3": "-1",
+                "size3": "80",
+                "speed3": "0.7"
             },
-            "separation2": "50"
+            "separation2": "52.429"
         },
         "params4": {
-            "lineWidth4": "0.684",
-            "separation4": "86.462",
-            "shapeType4": "5",
-            "size4": "100",
-            "speed4": "0.5"
+            "lineWidth4": "1",
+            "separation4": "50.5",
+            "shapeType4": "32",
+            "size4": "70",
+            "speed4": "0.8"
         },
-        "pos_1": "0, 0, 323.529",
-        "rot_1": "0, 0, 1000"
+        "pos_1": "0, -77.922, 155.844",
+        "rot_1": "648.649, 0, 1000"
     }
 }

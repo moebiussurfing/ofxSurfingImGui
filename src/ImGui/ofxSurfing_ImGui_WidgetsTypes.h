@@ -462,11 +462,11 @@ namespace ofxImGuiSurfing
 			bool bReturn = false;
 
 			// Set the next Widget shape size width/height reading from the function arguments:
-			float _ww;//widget width
-			if (amtPerRow == 2) _ww = _w50;//half size
-			else if (amtPerRow == 3) _ww = _w33;//third size
-			else if (amtPerRow == 4) _ww = _w25;//quater size
-			else _ww = _w100;//full width
+			float _ww; // widget width
+			if (amtPerRow == 2) _ww = _w50; // half size
+			else if (amtPerRow == 3) _ww = _w33; // third size
+			else if (amtPerRow == 4) _ww = _w25; // quater size
+			else _ww = _w100; // full width
 
 			//----
 
@@ -483,7 +483,7 @@ namespace ofxImGuiSurfing
 					if (bSameLine) ImGui::SameLine();
 					if (spacing != -1)
 					{
-						ImGui::Dummy(ImVec2(0.0f, (float)spacing));// spacing
+						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 					}
 				}
 				uniqueName.pop();
@@ -1488,6 +1488,7 @@ namespace ofxImGuiSurfing
 				{
 					// Group Style:
 					// If a group style is queued, we will overwrite the default style for each type.
+
 					auto c = getStyleGroup(group);
 					if (c.name != "-1")
 					{
@@ -1499,6 +1500,7 @@ namespace ofxImGuiSurfing
 					//-
 
 					// 1. Openings
+
 					if (!bMustHideGroup)
 					{
 						{
@@ -1506,14 +1508,20 @@ namespace ofxImGuiSurfing
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
-								bIsOpen = true;//not really closed but not rendered!
-								bMusCloseTree = false;// ? should depends of the tree type.. ? //TODO: important!
+								bIsOpen = true; // not really closed but not rendered!
+								bMusCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
 							}
 							else if (
-								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT || typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
 							{
+								//TODO:
+								// workaround
+								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
+								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
 								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-								bMusCloseTree = false;//we dont need to close tree!
+								bMusCloseTree = false; // we dont need to close tree!
 							}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 							{
@@ -1559,16 +1567,19 @@ namespace ofxImGuiSurfing
 						//-
 
 						// 2. Header already rendered
+
 						uniqueName.setOpen(bIsOpen); //TODO: ?
 
 						//-
 
 						// 4. To re calculate layout sizes after headers and indenting.
+
 						refreshLayout();
 
 						//-
 
 						// 5. Skip all nested groups and their params
+
 						if (!bIsOpen) {
 							ImGui::PopID();
 							return;
@@ -1579,6 +1590,7 @@ namespace ofxImGuiSurfing
 				//----
 
 				// 5. Parameters
+
 				// Here, this is not the root/first group.
 				// We go populate the params widgets
 
@@ -1603,7 +1615,7 @@ namespace ofxImGuiSurfing
 						ImGui::PushID(ss.c_str());
 						{
 							auto c = getStyleGroup(*parameterGroup);
-							if (c.name != "-1")//the overwrite
+							if (c.name != "-1") // the overwrite
 							{
 								typeGroup = SurfingImGuiTypesGroups(c.type); // overwrite main type
 								flags = c.flags;
@@ -1728,6 +1740,7 @@ namespace ofxImGuiSurfing
 					//----
 
 					// 5.2 Not group parameters 
+
 					// Try everything we know how to handle.
 					// We will filter known styles for know types.
 					// Some params could not have styles types!
@@ -1832,6 +1845,7 @@ namespace ofxImGuiSurfing
 						//--
 
 						// Float
+
 						auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
 						if (parameterFloat)
 						{
@@ -1852,6 +1866,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// Int
+
 						auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 						if (parameterInt)
 						{
@@ -1870,6 +1885,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// Bool
+
 						auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 						if (parameterBool)
 						{
@@ -1888,6 +1904,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// String
+
 						auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
 						if (parameterString)
 						{
@@ -1907,6 +1924,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// Float color
+
 						auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 						if (parameterFloatColor)
 						{
@@ -1927,6 +1945,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// Color
+
 						auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
 						if (parameterColor)
 						{
@@ -1955,6 +1974,7 @@ namespace ofxImGuiSurfing
 				//------
 
 				// 3. Closings
+
 				// Handle names/pushID's
 				if (uniqueName.getLevel() == 0)
 				{

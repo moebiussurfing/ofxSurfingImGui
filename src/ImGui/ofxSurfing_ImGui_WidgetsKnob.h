@@ -8,6 +8,7 @@
 #include "imconfig.h"
 
 #define IM_GUI_KNOB_CIRCLE_SEGMENTS 48 // Circle resolution "quality". Could be size dependant to improve performance.
+#define USE_BORDER_ROUNDE_TOGGLES // -> to draw circle borders on the rounded toggle..
 
 #define M_PI 3.14159265358979323846264338327950288
 #define VALUEPRECISION 400 // 400
@@ -42,8 +43,10 @@ namespace ImGui
 
 		ImGui::InvisibleButton(label, ImVec2(widgetRec.z, widgetRec.w));
 		bool value_changed = false;
+		
 		bool is_active = ImGui::IsItemActive();
-		bool is_hovered = ImGui::IsItemActive();
+		bool is_hovered = ImGui::IsItemHovered();
+
 		if (is_active && io.MouseDelta.x != 0.0f)
 		{
 			//ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -59,26 +62,49 @@ namespace ImGui
 		float angle = ANGLE_MIN + (ANGLE_MAX - ANGLE_MIN) * t;
 		float angle_cos = cosf(angle), angle_sin = sinf(angle);
 		float radius_inner = radius_outer * 0.40f;
+		
+		//-
 
-		// draw label
+		// 1. Draw label
 		float texPos = pos.x + ((widgetRec.z - labelLength.x) * 0.5f);
 		draw_list->AddText(ImVec2(texPos, pos.y + space_height), ImGui::GetColorU32(ImGuiCol_Text), label);
+		
+		//-
 
-		// draw outer knob
-		draw_list->AddCircleFilled(center, radius_outer, ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : ImGuiCol_FrameBg), IM_GUI_KNOB_CIRCLE_SEGMENTS);
+		// 2. Draw big outer circle 
+		const ImU32 frame_col = GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+		draw_list->AddCircleFilled(center, radius_outer, frame_col, IM_GUI_KNOB_CIRCLE_SEGMENTS);
 
-		// line
+		// 2.1 Border
+		// reduce alpha
+#ifdef USE_BORDER_ROUNDE_TOGGLES
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		const float a = (is_active ? 0.8 : 0.5);
+
+		const ImVec4 c = ImVec4(colors[ImGuiCol_Border].x, colors[ImGuiCol_Border].y, colors[ImGuiCol_Border].z, colors[ImGuiCol_Border].w * a);
+		ImU32 cb = ImGui::GetColorU32(c);
+
+		draw_list->AddCircle(center, radius_outer, cb, IM_GUI_KNOB_CIRCLE_SEGMENTS);
+#endif
+		//-
+
+		// 3. Line
 		draw_list->AddLine(ImVec2(center.x + angle_cos * radius_inner, center.y + angle_sin * radius_inner),
 			ImVec2(
 				center.x + angle_cos * (radius_outer - 2),
 				center.y + angle_sin * (radius_outer - 2)),
 			ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive : ImGuiCol_SliderGrab), 2.0f);
 
-		// inner circle
-		draw_list->AddCircleFilled(center, radius_inner, ImGui::GetColorU32(is_active ? ImGuiCol_ButtonActive : is_hovered ? ImGuiCol_ButtonHovered : ImGuiCol_SliderGrab), IM_GUI_KNOB_CIRCLE_SEGMENTS);
-		//draw_list->AddCircleFilled(center, radius_inner, ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg), 16);
+		//-
 
-		// draw value
+		// 4. Inner small circle
+
+		draw_list->AddCircleFilled(center, radius_inner, ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive : is_hovered ? ImGuiCol_ButtonHovered : ImGuiCol_ButtonActive), IM_GUI_KNOB_CIRCLE_SEGMENTS);
+		
+		//-
+
+		// 5. Draw value label
+
 		char temp_buf[64];
 		sprintf(temp_buf, format.c_str(), *p_value);
 		labelLength = ImGui::CalcTextSize(temp_buf);
@@ -155,7 +181,7 @@ namespace ImGui
 			ImVec2(center.x + angle_cos * (radius-1.5f), center.y + angle_sin * (radius-1.5f)),
 			ImGui::GetColorU32(ImGuiCol_SliderGrabActive), 2.0f);*/
 
-		// line
+			// line
 		draw_list->AddLine(ImVec2(center.x + angle_cos * radius_inner, center.y + angle_sin * radius_inner),
 			ImVec2(
 				center.x + angle_cos * (radius - 1.5f),

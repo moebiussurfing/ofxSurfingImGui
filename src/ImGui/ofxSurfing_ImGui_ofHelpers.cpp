@@ -208,8 +208,11 @@ namespace ofxImGuiSurfing
 		{
 			bool bchanged = false;
 			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			ImGui::Dummy(ImVec2(0, 1));
+			//ImGui::Spacing();
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+			ImGui::Dummy(ImVec2(0, 1));
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
@@ -240,9 +243,12 @@ namespace ofxImGuiSurfing
 		{
 			bool bchanged = false;
 			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			ImGui::Dummy(ImVec2(0, 1));
+			//ImGui::Spacing();
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
+			ImGui::Dummy(ImVec2(0, 1));
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
@@ -273,10 +279,13 @@ namespace ofxImGuiSurfing
 		{
 			bool bchanged = false;
 			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			//ImGui::Spacing();
+			ImGui::Dummy(ImVec2(0, 1));
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " W").c_str()), &tmpRef.w, parameter.getMin().w, parameter.getMax().w);
+			ImGui::Dummy(ImVec2(0, 1));
 			if (bchanged)
 			{
 				parameter.set(tmpRef);

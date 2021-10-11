@@ -31,9 +31,10 @@ void ofApp::setup() {
 	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	pos_1.set("pos_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
 
+	pos_1.set("pos_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
 	rot_1.set("rot_1", glm::vec3(0.f), glm::vec3(-2.f*MAX_CAMERA_DISTANCE), glm::vec3(2.f*MAX_CAMERA_DISTANCE));
+
 	lineWidth2.set("lineWidth2", 0.5, 0, 1);
 	separation2.set("separation2", 50, 1, 100);
 	shapeType2.set("shapeType2", 0, -50, 50);
@@ -59,31 +60,37 @@ void ofApp::setup() {
 
 		if (bEnable1) {
 			guiManager.UpdateStyle(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
-			guiManager.UpdateStyle(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+			guiManager.UpdateStyle(pos_1, OFX_IM_DEFAULT);
 		}
 		else {
 			guiManager.UpdateStyle(rot_1, OFX_IM_DEFAULT);
-			guiManager.UpdateStyle(pos_1, OFX_IM_DEFAULT);
+			guiManager.UpdateStyle(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 		}
 
-		//setupImGuiStyles(); // -> refresh styles on runtime!
+		// Notice that:
+		// For this bool toggle, we do not will call setupImGuiStyles()
+		// We can update these two above params on runtime
+		// (without having to clear) previously added ofParams yet.
 	});
 
 	//--------------------------------------------------------------
 	listener_bEnable2 = bEnable2.newListener([this](bool &b) {
 		ofLogNotice("bEnable2: ") << (b ? "TRUE" : "FALSE");
+
 		setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//--------------------------------------------------------------
 	listener_bEnable3 = bEnable3.newListener([this](bool &b) {
 		ofLogNotice("bEnable3: ") << (b ? "TRUE" : "FALSE");
+
 		setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//--------------------------------------------------------------
 	listener_bEnable4 = bEnable4.newListener([this](bool &b) {
 		ofLogNotice("bEnable4: ") << (b ? "TRUE" : "FALSE");
+
 		setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
@@ -160,13 +167,10 @@ void ofApp::setupImGuiStyles() {
 	guiManager.clearStyles();
 
 	// Notice that:
-	// Clear is required before adding styles. 
-	// We can't update (without clear) previously added ofParams yet.
-	// We can update and change the settings on runtime, ie for some ofApp states,
-	// but we need to Clear all first and add the styles again with the new style changes.
+	// We can update on runtime (without having to clear) previously added ofParams yet.
 
-	// Look on the bEnable1/bEnable2 behaviour: 
-	// We recall setupImGuiStyles() when bEnable1 changes to update the new styles.
+	// Look on the bEnable1 / bEnable2 / bEnable3 / bEnable4 behaviour: 
+	// We recall setupImGuiStyles() when above bool changes to update the styles.
 
 	//-
 
@@ -220,7 +224,7 @@ void ofApp::setupImGuiStyles() {
 	}
 
 	if (bEnable3) {
-		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
+		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 	}
 	else {
 		guiManager.AddStyleGroup(params3, OFX_IM_GROUP_HIDDEN, ImGuiTreeNodeFlags_DefaultOpen);
@@ -235,6 +239,7 @@ void ofApp::setupImGuiStyles() {
 		// 2 widgets per row. not sameline for the next
 		
 		guiManager.AddStyle(shapeType4, OFX_IM_VSLIDER, 1, false, 20);
+		// 1 widget per row. not sameline for the next and 20 y pixels spacing at end
 	}
 	else {
 		guiManager.AddStyleGroup(params4, OFX_IM_GROUP_TREE, ImGuiTreeNodeFlags_DefaultOpen);
@@ -245,6 +250,11 @@ void ofApp::setupImGuiStyles() {
 		// 2 widgets per row. not sameline for the next
 		
 		guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER, 1, false, 20);
+		// 1 widget per row. not sameline for the next and 20 y pixels spaning at end
+
+		guiManager.AddStyle(speed3, OFX_IM_HSLIDER_NO_NAME);
+		guiManager.AddStyle(shapeType3, OFX_IM_HSLIDER_NO_NAME);
+
 	}
 
 	//-
@@ -267,8 +277,8 @@ void ofApp::setupImGuiStyles() {
 	// Then, in most cases, it's recommended to define all the flags for each group style!
 
 	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_TREE_EX, ImGuiTreeNodeFlags_DefaultOpen);
+	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 	//guiManager.AddStyleGroup(params1, OFX_IM_GROUP_HIDDEN_HEADER, ImGuiTreeNodeFlags_None);
-	//guiManager.AddStyleGroup(params2, OFX_IM_GROUP_COLLAPSED, ImGuiTreeNodeFlags_DefaultOpen);
 }
 
 //--------------------------------------------------------------
@@ -276,25 +286,41 @@ void ofApp::draw()
 {
 	guiManager.begin();
 	{
-		// Toggle enablers Window
+		// 1. Toggle Section Enablers Window
 		{
-			ImGui::Begin("Enablers");
+			// Notice that if you use ImGui Raw begin/end methods to create window panels,
+			// some widget helpers can be used, but not all. 
+			// In this case will made crash the app if you use guiManager.Add(..
+			// But it will work if you use ofxImGuiSurfing::AddToggleRoundedButton(..
+			// --> *
+			//ImGui::Begin("Enablers"); 
+
+			guiManager.beginWindow(ofToString("Enablers"));
 			{
-				for (int i = 0; i < NUM_SECTIONS; i++) {
-					ofxImGuiSurfing::AddToggleRoundedButton(bEnablers[i]);
+				for (int i = 0; i < NUM_SECTIONS; i++) 
+				{
+					guiManager.Add(bEnablers[i], OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+					
+					// -> *
+					//ofxImGuiSurfing::AddToggleRoundedButton(bEnablers[i]);
 				}
+
 				ImGui::Spacing();
 
 				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 			}
-			ImGui::End();
+			guiManager.endWindow();
+			
+			// -> *
+			//ImGui::End();
 		}
 
-		//----
+		//--------
 
-		// ofApp Window
+		// 2. ofApp Window
 		{
-			// not working
+			//TODO:
+			// not working..
 			if (guiManager.bReset_Window) {
 				guiManager.bReset_Window = false;
 				guiManager.resetWindowImGui(true, true);
@@ -311,7 +337,9 @@ void ofApp::draw()
 			{
 				//--------------------------------------------------------------
 
-				// TESTING New Range Sliders
+				//TODO:
+				// TESTING
+				// New Range Sliders
 				if (bEnablers[0])
 				{
 					int max = 10000;
@@ -415,7 +443,6 @@ void ofApp::draw()
 					ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 					guiManager.AddGroup(params1);
-					//guiManager.AddGroup(params1, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
 
 					ofxImGuiSurfing::AddSpacingSeparated();
 				}

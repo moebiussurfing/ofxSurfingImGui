@@ -109,7 +109,8 @@ namespace ofxImGuiSurfing
 
 	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns = 1);
 	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels);
-	bool AddStepper(ofParameter<int>& parameter, int step = 1, int stepFast = 100);
+	
+	//-
 
 	bool AddSlider(ofParameter<float>& parameter, const char* format = "%.3f", float power = 1.0f);
 
@@ -146,6 +147,34 @@ namespace ofxImGuiSurfing
 	void AddImage(const ofBaseHasTexture& hasTexture, const glm::vec2& size);
 	void AddImage(const ofTexture& texture, const glm::vec2& size);
 #endif
+
+	//----
+
+	bool AddStepper(ofParameter<int>& parameter, int step = 1, int stepFast = 100);
+	//--------------------------------------------------------------
+	inline bool AddIntStepped(ofParameter<int>& parameter)
+	{
+		bool bChanged = false;
+		auto tmpRefi = parameter.get();
+		const ImU32 u32_one = 1;
+		static bool inputs_step = true;
+
+		string name = parameter.getName();
+		string n = "##STEPPERint" + name;// +ofToString(1);
+		ImGui::PushID(n.c_str());
+
+		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
+		{
+			tmpRefi = ofClamp(tmpRefi, parameter.getMin(), parameter.getMax());
+			parameter.set(tmpRefi);
+
+			bChanged = true;
+		}
+
+		ImGui::PopID();
+
+		return bChanged;
+	}
 
 	//----
 
