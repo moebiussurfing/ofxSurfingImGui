@@ -17,7 +17,8 @@
 #include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
 
-#define HEIGHT_SCROLL_GROUP 200
+//#define HEIGHT_SCROLL_GROUP 200
+#define HEIGHT_SCROLL_GROUP 400
 
 //-
 
@@ -35,10 +36,10 @@ namespace ofxImGuiSurfing
 		float _spcx;
 		float _spcy;
 		float _w100;
-		float _w99;
 		float _w50;
 		float _w33;
 		float _w25;
+		float _w99;
 		float _h100;
 		float _h;
 
@@ -46,27 +47,31 @@ namespace ofxImGuiSurfing
 		// or to addapt to tree/groups or indentation changes.
 
 	public:
+
 		ofParameter<bool> bMouseWheel{ "MouseWheel", false };
-		
+
 		//--
 
-	public:
+	private:
 
 		// Refresh current panel shape to update widgets sizes.
 		//--------------------------------------------------------------
-		void refreshPanelShape()
+		void refreshPanelShape(bool bWithScroll = false)
 		{
-			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h);
+			ofxImGuiSurfing::refreshImGui_WidgetsSizes(_spcx, _spcy, _w100, _h100, _w99, _w50, _w33, _w25, _h, bWithScroll);
 		}
 		//--------------------------------------------------------------
-		void refresh() // short name
+		void refresh(bool bWithScroll = false) // short name
 		{
-			refreshPanelShape();
+			refreshPanelShape(bWithScroll);
 		}
+
+	public:
+
 		//--------------------------------------------------------------
-		void refreshLayout() // short name
+		void refreshLayout(bool bWithScroll = false) // short name
 		{
-			refreshPanelShape();
+			refreshPanelShape(bWithScroll);
 		}
 
 		//-
@@ -145,7 +150,6 @@ namespace ofxImGuiSurfing
 			// we return a kind of error type to be detected
 			// and to be drawn with the default style.
 			SurfingImGuiTypes_Style cError;
-			//cError.name = "-1";
 			return cError;
 
 			//SurfingImGuiTypes_Style confDefault;
@@ -158,7 +162,6 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//TODO:
 		//--------------------------------------------------------------
 		SurfingImGuiTypesGroup_Style getStyleGroup(ofParameterGroup& group) {
 			for (auto &c : groupsStyles)
@@ -170,13 +173,11 @@ namespace ofxImGuiSurfing
 			}
 
 			SurfingImGuiTypesGroup_Style cError;
-			//cError.name = "-1";
 			return cError;
 		}
 
 		//-
 
-//private:
 	public:
 
 		// Queue a customization config for future populate a param widget
@@ -1446,7 +1447,7 @@ namespace ofxImGuiSurfing
 
 		//-------
 
-		// Groups
+		// Groups (ofParameterGroup)
 
 	public:
 
@@ -1455,16 +1456,7 @@ namespace ofxImGuiSurfing
 		{
 			AddGroup(group, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_DEFAULT);
 		}
-		////--------------------------------------------------------------
-		//void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
-		//{
-		//	AddGroup(group, ImGuiTreeNodeFlags_None, typeGroup);
-		//}
-		////--------------------------------------------------------------
-		//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen)
-		//{
-		//	AddGroup(group, flags, OFX_IM_GROUP_DEFAULT);
-		//}
+
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
@@ -1515,7 +1507,6 @@ namespace ofxImGuiSurfing
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
 							{
-								//TODO:
 								// workaround
 								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
 								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
@@ -1525,7 +1516,6 @@ namespace ofxImGuiSurfing
 							}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 							{
-								//TODO:
 								// workaround bc tree has no flags..
 								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
 								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
@@ -1549,7 +1539,6 @@ namespace ofxImGuiSurfing
 
 								// B. Height hardcoded
 								int hhh = HEIGHT_SCROLL_GROUP;
-
 								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
 								bMusCloseTree = false;
 
@@ -1557,9 +1546,6 @@ namespace ofxImGuiSurfing
 								{
 									ImGui::Indent();
 									ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
-									refreshLayout();
-
-									// -> .. AddGroup(*parameterGroup, flags, typeGroup);
 								}
 							}
 						}
@@ -1580,7 +1566,8 @@ namespace ofxImGuiSurfing
 
 						// 5. Skip all nested groups and their params
 
-						if (!bIsOpen) {
+						if (!bIsOpen)
+						{
 							ImGui::PopID();
 							return;
 						}
@@ -1621,7 +1608,7 @@ namespace ofxImGuiSurfing
 								flags = c.flags;
 							}
 
-							std::string sshead = parameterGroup->getName();
+							std::string name = parameterGroup->getName();
 
 							//----
 
@@ -1656,7 +1643,7 @@ namespace ofxImGuiSurfing
 							{
 								ImGui::Indent();
 								refreshLayout(); // ?
-								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								bool b = ImGui::CollapsingHeader(name.c_str(), flags);
 								if (b) AddGroup(*parameterGroup, flags, typeGroup);
 								ImGui::Unindent();
 							}
@@ -1665,7 +1652,7 @@ namespace ofxImGuiSurfing
 							{
 								ImGui::Indent();
 								refreshLayout(); // ?
-								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								bool b = ImGui::CollapsingHeader(name.c_str(), flags);
 								if (b) AddGroup(*parameterGroup, flags, typeGroup);
 								ImGui::Unindent();
 							}
@@ -1677,7 +1664,7 @@ namespace ofxImGuiSurfing
 								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
 								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
-								if (ImGui::TreeNode(sshead.c_str()))
+								if (ImGui::TreeNode(name.c_str()))
 								{
 									ImGui::Indent();
 									refreshLayout(); // ?
@@ -1690,7 +1677,7 @@ namespace ofxImGuiSurfing
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 							{
-								if (ImGui::TreeNodeEx(sshead.c_str(), flags))
+								if (ImGui::TreeNodeEx(name.c_str(), flags))
 								{
 									ImGui::Indent();
 									refreshLayout(); // ?
@@ -1717,12 +1704,12 @@ namespace ofxImGuiSurfing
 
 								//-
 
-								bool b = ImGui::CollapsingHeader(sshead.c_str(), flags);
+								bool b = ImGui::CollapsingHeader(name.c_str(), flags);
 								if (b)
 								{
 									ImGui::Indent();
-									refreshLayout(); // ?
-									ImGui::BeginChild(sshead.c_str(), ImVec2(0, hhh), false);
+									ImGui::BeginChild(name.c_str(), ImVec2(0, hhh), false);
+									refreshLayout(true); // ?
 									AddGroup(*parameterGroup, flags, typeGroup);
 									ImGui::EndChild();
 									ImGui::Unindent();

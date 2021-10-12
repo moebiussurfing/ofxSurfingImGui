@@ -103,22 +103,35 @@ namespace ofxImGuiSurfing
 
 	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h)
+	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h, bool bWithScroll = false)
 	{
-		__spcx = ImGui::GetStyle().ItemSpacing.x;
-		__spcy = ImGui::GetStyle().ItemSpacing.y;
-		__w100 = ImGui::GetContentRegionAvail().x;
-		__h100 = ImGui::GetContentRegionAvail().y;
-		__w99 = __w100 - __spcx;
+		__spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+		__spcy = ImGui::GetStyle().ItemSpacing.y; // y spacing between widgets
+
+		__w100 = ImGui::GetContentRegionAvail().x; // full window panel width
+		
+		//TODO:
+		// Not good when multiple levels..
+		// All widths a bit smaller to avoid lateral scroll bar
+		if (bWithScroll) 
+		{
+			ImGuiStyle *style = &ImGui::GetStyle();
+			__w100 -= style->ScrollbarSize + __spcx;
+			//__w100 -= 0.8f * style->ScrollbarSize;
+			//__w100 -= __spcx;
+		}
+
 		__w50 = (__w100 - __spcx * 1) / 2;
 		__w33 = (__w100 - __spcx * 2) / 3;
 		__w25 = (__w100 - __spcx * 3) / 4;
-		//__h = BUTTON_BIG_HEIGHT;
-		__h = getWidgetsHeightRelative();
+		__w99 = __w100 - __spcx;
+		__h100 = ImGui::GetContentRegionAvail().y; // full window panel height
+		__h = getWidgetsHeightRelative(); // relative to theme
+		//__h = BUTTON_BIG_HEIGHT; // hardcoded
 	}
 
+	// Just the more relevant sizes
 	//--------------------------------------------------------------
-	// just the more relevant sizes
 	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
 	{
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
@@ -233,7 +246,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeDefault()
 	{
-		ImVec2 vv (getWidgetsWidth(), getWidgetsHeight());
+		ImVec2 vv(getWidgetsWidth(), getWidgetsHeight());
 
 		return vv;
 	}
@@ -245,7 +258,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeSmall()
 	{
-		ImVec2 vv (getWidgetsWidth(), getWidgetsHeight()/2);
+		ImVec2 vv(getWidgetsWidth(), getWidgetsHeight() / 2);
 
 		return vv;
 	}
@@ -285,6 +298,15 @@ namespace ofxImGuiSurfing
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacingHuge()
+	{
+		AddSpacingBig();
+		AddSpacingBig();
+		AddSpacingSeparated();
+		AddSpacingBig();
+		AddSpacingBig();
 	}
 
 } // namespace ofxImGuiSurfing

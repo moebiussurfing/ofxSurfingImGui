@@ -51,19 +51,15 @@ TODO:
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 #include "ofxSurfing_ImGui_Themes.h"
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
-
 #include "ofxSurfing_Serializer.h"
-////#include "ofxSurfingHelpers.h"
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
 //#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
-
 
 //-
 
@@ -92,75 +88,34 @@ class ofxSurfing_ImGui_Manager
 
 public:
 
-	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
-
-	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
-
-	//-
-
-public:
-
-	// Window log
-	ImGuiLogWindow log;
-
-	//--------------------------------------------------------------
-	void addLog(std::string text) {
-		// Log
-		log.AddText(text);
-	}
-
-	//-
-
-public:
-
 	ofxSurfing_ImGui_Manager();
 	~ofxSurfing_ImGui_Manager();
+
+	//--
+
+public:
+	
+	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
+	void update(); // to manual update...
+	void draw(); // to manual draw...
+
+private:
+
+	void keyPressed(ofKeyEventArgs &eventArgs);
+	void keyReleased(ofKeyEventArgs &eventArgs);
 
 	//-
 
 private:
 
-	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> fails bc it seems it's instantiated many times..
+	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> The Widget Styles Manager
 
-	//-
-
-	// Ddisable Widget
-	// Reduces transparency of most common colors.
-
-public:
-	//--------------------------------------------------------------
-	inline void pushInactive() {
-
-		const float a = 0.5f;
-
-		ImGuiStyle *style = &ImGui::GetStyle();
-
-		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
-		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
-		const ImVec4 cActive = style->Colors[ImGuiCol_ButtonActive];
-		const ImVec4 cSliderGrab = style->Colors[ImGuiCol_SliderGrab];
-		const ImVec4 cBorder = style->Colors[ImGuiCol_Border];
-		const ImVec4 cText = style->Colors[ImGuiCol_Text];
-
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
-
-		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-	}
-	//--------------------------------------------------------------
-	inline void popInactive() {
-		ImGui::PopItemFlag();
-
-		ImGui::PopStyleColor(6);
-	}
+	//--
 
 public:
 
-	// Modified api
+	// Api
 
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -184,39 +139,12 @@ public:
 		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
-	//-
-
-private:
-
-	//// Legacy api
-
-	////--------------------------------------------------------------
-	//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-	//{
-	//	return widgetsManager.Add(aparam, type, bSameLine, amtPerRow, spacing);
-	//}
-	////--------------------------------------------------------------
-	//void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-	//{
-	//	widgetsManager.AddStyle(aparam, type, bSameLine, amtPerRow, spacing);
-	//}
-	////--------------------------------------------------------------
-	//void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-	//{
-	//	widgetsManager.AddStyle(name, type, bSameLine, amtPerRow, spacing);
-	//}
-
-	////--------------------------------------------------------------
-	//void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
-	//{
-	//	widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
-	//}
-
 	//--
 
 public:
 
 	//TODO: Group styles are (?) recursive! must fix!
+
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
@@ -227,13 +155,6 @@ public:
 	{
 		widgetsManager.AddStyleGroup(name, type, flags);
 	}
-
-	////--------------------------------------------------------------
-	//void AddGroup(ofParameterGroup& group, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
-	//{
-	//	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
-	//	widgetsManager.AddGroup(group, flags, typeGroup);
-	//}
 
 	//--
 
@@ -248,6 +169,7 @@ public:
 public:
 
 	// Many repeated methods. need to pick a good name...
+
 	////--------------------------------------------------------------
 	//void refresh()
 	//{
@@ -285,15 +207,26 @@ public:
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
 
-	//--
+	//-
 
 public:
 
-	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
+	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 
-	void keyPressed(ofKeyEventArgs &eventArgs);
-	void keyReleased(ofKeyEventArgs &eventArgs);
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+
+	//-
+
+public:
+
+	// Window Log
+	ImGuiLogWindow log;
+
+	//--------------------------------------------------------------
+	void addLog(std::string text) {
+		// Log
+		log.AddText(text);
+	}
 
 	//-
 
@@ -321,20 +254,16 @@ public:
 		else return *guiPtr;
 	}
 
-	//-
+	//----
 
 public:
 
-	void update(); // to manual update...
-	void draw(); // to manual draw...
+	// To the Global context: 
+	// All the windows are feeded in between!
+	void begin(); // -> main begin feed widgets
+	void end(); // -> main end feed widgets
 
-	//-
-
-	// To the Global context: all the windows are feeded in between!
-	void begin();
-	void end();
-
-	//-
+	//----
 
 	// Window methods
 
@@ -350,7 +279,6 @@ public:
 
 	//----
 
-	//
 	// Special windows
 	//
 	//// We can add some special windows that have more features, with a simplified api.
@@ -375,9 +303,9 @@ public:
 	//guiManager.beginWindowSpecial();{}
 	//guiManager.endWindow();
 
-	//-
+	//----
 
-	// To simplify a bit the api
+	// To simplify a bit the Api
 
 private:
 	int _currWindowsSpecial = 0;
@@ -427,9 +355,9 @@ private:
 
 public:
 
-	// some api configs
+	// Some Api configs
 
-	// force autodraw
+	// Force autodraw
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
@@ -438,7 +366,7 @@ public:
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
-	// force shared context
+	// Force shared context
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
@@ -490,20 +418,12 @@ public:
 private:
 
 	ofParameter<bool> bPreviewSceneViewport{ "Viewport", false };
-	//bool bPreviewSceneViewport = false;
 
 	bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
-	// panels minimal sizes
-	float xx = 10;
-	float yy = 10;
-	float ww = PANEL_WIDGETS_WIDTH_MIN;
-	float hh = PANEL_WIDGETS_HEIGHT_MIN;
-	//float hh = 50;
-
 	//-
 
-	// exposed useful public params
+	// Exposed useful public params
 
 public:
 
@@ -562,6 +482,7 @@ public:
 	//--
 
 private:
+
 	// An advanced/extra common panel
 	// Snippet to copy/paste into out ofApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
@@ -572,6 +493,7 @@ private:
 	}
 
 public:
+
 	// Example Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -580,12 +502,17 @@ public:
 	//--------------------------------------------------------------
 	void drawAdvanced() { // -> Simpler call. Use this.
 		ImGui::Spacing();
+		ImGui::Separator();
 		ImGui::Spacing();
-		ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
+
+		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+		//ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
+		
 		drawAdvancedSubPanel();
 	}
 
 private:
+
 	//--------------------------------------------------------------
 	void drawAdvancedSubPanel(bool bHeader = true) {
 		if (!bAdvanced) return;
@@ -654,7 +581,6 @@ private:
 
 					// Help
 					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
-
 
 					//--
 
@@ -747,7 +673,7 @@ public:
 
 private:
 
-	// settings
+	// File Settings
 	string path_Global;
 	string path_ImLayouts;
 	string path_AppSettings;
@@ -755,11 +681,10 @@ private:
 
 	string path_SubPathLabel = "";
 
-	//bool bAutoSaveSettings = true;
 	bool bAutoSaveSettings = false;
 
-	ofParameterGroup params_AppSettings{ "AppSettings" };
-	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" };
+	ofParameterGroup params_AppSettings{ "AppSettings" }; // -> Features states
+	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // -> Layout states
 
 	//----
 
@@ -792,7 +717,7 @@ public:
 
 	//----
 
-	// Windows management
+	// Windows Management
 
 public:
 
@@ -833,11 +758,13 @@ public:
 
 		return windowsAtributes[index].rectShapeWindow;
 	}
+
 private:
 	//--------------------------------------------------------------
 	void addWindow(std::string name, bool bPowered = false) { // -> legacy api
 		addWindowSpecial(name, bPowered);
 	}
+
 public:
 	//--------------------------------------------------------------
 	void addWindowSpecial(std::string name, bool bPowered = false) {
@@ -921,6 +848,7 @@ public:
 
 private:
 
+	//--------------------------------------------------------------
 	struct SurfingImGuiWindowAtributes
 	{
 		// we queue here the bool paramms that enables the show/hide for each queued window
@@ -935,6 +863,8 @@ private:
 		ofParameter<bool> bDebug{ "Debug", false };
 
 		ofParameter<bool> bReset_Window{ "Reset Window", false };
+
+		//--------------------------------------------------------------
 		void setPowered(bool b) {
 			bPoweredWindow = b;
 		}
@@ -1031,6 +961,7 @@ private:
 	//----
 
 public:
+
 	//--------------------------------------------------------------
 	void setPresetsNames(vector <std::string > names) {
 		if (names.size() != 4) {
@@ -1042,13 +973,14 @@ public:
 	}
 
 private:
+
 	vector <std::string> namesPresets;
 
 public:
 
 	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
-	// some api simplificators
+	// Some Api simplificators
 	//--------------------------------------------------------------
 	void startup()
 	{
@@ -1220,5 +1152,41 @@ public:
 		ofFile::removeFile(file, true);
 	}
 
+	//-
+
+	//TODO:
+	// Should move to styles..
+	// Disables a Widget and reduces transparency of most common colors.
+
+public:
+	//--------------------------------------------------------------
+	inline void pushInactive() {
+
+		const float a = 0.5f;
+
+		ImGuiStyle *style = &ImGui::GetStyle();
+
+		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
+		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
+		const ImVec4 cActive = style->Colors[ImGuiCol_ButtonActive];
+		const ImVec4 cSliderGrab = style->Colors[ImGuiCol_SliderGrab];
+		const ImVec4 cBorder = style->Colors[ImGuiCol_Border];
+		const ImVec4 cText = style->Colors[ImGuiCol_Text];
+
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
+
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+	}
+	//--------------------------------------------------------------
+	inline void popInactive() {
+		ImGui::PopItemFlag();
+
+		ImGui::PopStyleColor(6);
+	}
 
 };

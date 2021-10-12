@@ -346,16 +346,16 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::update() { // -> not being used by default
+void ofxSurfing_ImGui_Manager::update() { // -> Not being used by default
 
-	//// log
+	//// Log
 	//if (ofGetFrameNum() % 120 == 0) {
 	//	log_RectWindows();
 	//}
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::draw() { // -> not being used by default
+void ofxSurfing_ImGui_Manager::draw() { // -> Not being used by default
 	//if (customFont == nullptr) gui.draw(); //?
 	//if (bAutoDraw)
 	if (!bAutoDraw)

@@ -14,7 +14,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	/*static*/ inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
+	inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
 	{
 		bool bUnknown = false;
 
@@ -28,7 +28,7 @@ namespace ofxImGuiSurfing
 		else if (info == typeid(bool)) // Bool
 		{
 		}
-		else { // unknown types
+		else { // Unknown types
 			bUnknown = true;
 			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
 			return;
@@ -37,11 +37,11 @@ namespace ofxImGuiSurfing
 		if (!bUnknown)
 		{
 			if (resolution == -1) {
-				resolution = (param.getMax() - param.getMin()) / 100.f;//100 steps for all the param range
-				//resolution = 0.1f;//hardcoded to 0.1
+				resolution = (param.getMax() - param.getMin()) / 100.f; // 100 steps for all the param range
+				//resolution = 0.1f; // hardcoded to 0.1
 			}
 
-			bool bCtrl = ImGui::GetIO().KeyCtrl;//ctrl to fine tunning
+			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
 
 			ImGui::SetItemUsingMouseWheel();
 			if (ImGui::IsItemHovered())
@@ -55,12 +55,12 @@ namespace ofxImGuiSurfing
 					}
 					else
 					{
-						if (info == typeid(bool)) {//bool
+						if (info == typeid(bool)) { // bool
 							param = !param.get();
 						}
-						else {//float, int
+						else { // float, int
 							param += wheel * (bCtrl ? resolution : resolution * 10);
-							param = ofClamp(param, param.getMin(), param.getMax());//clamp
+							param = ofClamp(param, param.getMin(), param.getMax()); // clamp
 						}
 					}
 				}
@@ -68,9 +68,9 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-	//----
+	//----------------------
 
-	// ofParams Helpers
+	// ofParameter's Helpers
 
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
@@ -82,7 +82,7 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<glm::ivec3>& parameter);
 	bool AddParameter(ofParameter<glm::ivec4>& parameter);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false);//split each arg to big sliders
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false); // split each arg to big sliders
 	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false);
 	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false);
 #endif
@@ -201,7 +201,7 @@ namespace ofxImGuiSurfing
 	// Clean of Styles with the default styles.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format)//TODO: error if enabled..
+	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format)
 	{
 		//std::string format = "%.3f";//TODO:
 

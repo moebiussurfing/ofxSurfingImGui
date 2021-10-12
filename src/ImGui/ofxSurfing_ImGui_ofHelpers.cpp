@@ -20,125 +20,124 @@ namespace ofxImGuiSurfing
 
 		//-
 
+		//ImGui::PushID(group.getName().c_str());
+		ImGui::PushID(("##" + group.getName()).c_str());
 		{
-			ImGui::PushID(group.getName().c_str());
-			//ImGui::PushID(("##" + group.getName()).c_str());
-		}
+			bool bOpened;
 
-		bool bOpened = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-		//bOpened = (!ImGui::TreeNodeEx(group.getName().c_str()));
-		//bOpened = (!ImGui::TreeNode(group.getName().c_str()));
+			bOpened = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+			//bOpened = (!ImGui::TreeNodeEx(group.getName().c_str()));
+			//bOpened = (!ImGui::TreeNode(group.getName().c_str()));
 
-		if (!bOpened)
-		{
-			ImGui::PopID();
-			return;
-		}
-
-		//-
-
-		for (auto parameter : group)
-		{
-			// Group.
-			auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-			if (parameterGroup)
+			if (!bOpened)
 			{
-				// Recurse through contents.
-				AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None); // -> default: all with same style and non indent ?
-				//ImGui::Indent();
-
-				continue;
+				ImGui::PopID();
+				return;
 			}
-
-			// Parameter, try everything we know how to handle.
-#if OF_VERSION_MINOR >= 10
-			auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-			if (parameterVec2f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterVec2f);
-				continue;
-			}
-			auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-			if (parameterVec3f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterVec3f);
-				continue;
-			}
-			auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-			if (parameterVec4f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterVec4f);
-				continue;
-			}
-#endif
-			auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-			if (parameterOfVec2f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
-				continue;
-			}
-			auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-			if (parameterOfVec3f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
-				continue;
-			}
-			auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-			if (parameterOfVec4f)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
-				continue;
-			}
-			auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-			if (parameterFloatColor)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterFloatColor);
-				continue;
-			}
-			auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-			if (parameterFloat)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterFloat);
-				continue;
-			}
-			auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-			if (parameterInt)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterInt);
-				continue;
-			}
-			auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-			if (parameterBool)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterBool);
-				continue;
-			}
-			auto parameterRect = std::dynamic_pointer_cast<ofParameter<ofRectangle>>(parameter);
-			if (parameterRect)
-			{
-				ofxImGuiSurfing::AddParameter(*parameterRect);
-				continue;
-			}
-
-			// don't debug if it's unnamed
-			if (parameter->getName() == "" && parameter->getName() == " ")
-				ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 
 			//-
 
-			//if (parameterGroup) ImGui::Unindent();
-		}
+			for (auto parameter : group)
+			{
+				// Group.
+				auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+				if (parameterGroup)
+				{
+					// Recurse through contents.
+					AddGroup(*parameterGroup, ImGuiTreeNodeFlags_None); // -> default: all with same style and non indent ?
+					//ImGui::Indent();
 
-		//-
+					continue;
+				}
 
-		{
-			// End tree.
-			//ImGui::TreePop();
-		}
+				// Parameter, try everything we know how to handle.
+#if OF_VERSION_MINOR >= 10
+				auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
+				if (parameterVec2f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterVec2f);
+					continue;
+				}
+				auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
+				if (parameterVec3f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterVec3f);
+					continue;
+				}
+				auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
+				if (parameterVec4f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterVec4f);
+					continue;
+				}
+#endif
+				auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
+				if (parameterOfVec2f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterOfVec2f);
+					continue;
+				}
+				auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
+				if (parameterOfVec3f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterOfVec3f);
+					continue;
+				}
+				auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
+				if (parameterOfVec4f)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterOfVec4f);
+					continue;
+				}
+				auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+				if (parameterFloatColor)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterFloatColor);
+					continue;
+				}
+				auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+				if (parameterFloat)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterFloat);
+					continue;
+				}
+				auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+				if (parameterInt)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterInt);
+					continue;
+				}
+				auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+				if (parameterBool)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterBool);
+					continue;
+				}
+				auto parameterRect = std::dynamic_pointer_cast<ofParameter<ofRectangle>>(parameter);
+				if (parameterRect)
+				{
+					ofxImGuiSurfing::AddParameter(*parameterRect);
+					continue;
+				}
 
-		{
-			ImGui::PopID();
+				// don't debug if it's unnamed
+				if (parameter->getName() == "" && parameter->getName() == " ")
+					ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
+
+				//-
+
+				//if (parameterGroup) ImGui::Unindent();
+			}
+
+			//-
+
+			{
+				// End tree.
+				//ImGui::TreePop();
+			}
+
 		}
+		ImGui::PopID();
 	}
 
 	//--
