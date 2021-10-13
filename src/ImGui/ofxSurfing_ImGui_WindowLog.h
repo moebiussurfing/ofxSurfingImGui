@@ -63,16 +63,16 @@ namespace ofxImGuiSurfing {
 
 	public:
 
-		ImGuiLogWindow() : mLogSize(50), mLog(std::deque<std::string>()) {}
+		//--------------------------------------------------------------
+		ImGuiLogWindow() : mLogSize(20), mLog(std::deque<std::string>()) {}
+
+		//--------------------------------------------------------------
 		~ImGuiLogWindow() {}
 
-		//void AddText(std::string str);
-		//void AddTextToFile(std::string str, std::string path, bool append = false, bool withTimeStamp = false);
-
+		//--------------------------------------------------------------
 		void SetLogSize(unsigned long size) { mLogSize = size; }
 
-		//void ImGui(const std::string &name);
-
+		//--------------------------------------------------------------
 		void Clear() { mLog.clear(); }
 
 	private:
@@ -96,6 +96,10 @@ namespace ofxImGuiSurfing {
 		//};
 		//IM_GUI_LOG_STYLE style = IM_GUI_LOG_STYLE_0
 
+		//--------------------------------------------------------------
+		//void AddTextToFile(std::string str, std::string path, bool append = false, bool withTimeStamp = false);
+
+		//--------------------------------------------------------------
 		void AddText(std::string str)
 		{
 			mLog.emplace_back(str);
@@ -110,37 +114,43 @@ namespace ofxImGuiSurfing {
 		//}
 
 		//--------------------------------------------------------------
-		void ImGui(const std::string &name) {
+		void ImGui(std::string name = "Log") {
 
 			ImGuiCond cond = ImGuiCond_FirstUseEver;
+			const int LOG_WINDOW_SIZE = 250;
 			float w = ofGetWidth();
 			float h = ofGetHeight();
-			ImGui::SetNextWindowPos(ImVec2(w - 210, 20), cond);
-			ImGui::SetNextWindowSize(ImVec2(200, h - 100), cond);
+			ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
+			ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
 
 			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
-
-			float _w100 = ImGui::GetContentRegionAvail().x;
-			float _h = 1.5 * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
-
-			if (ImGui::Button("Clear", ImVec2(_w100, _h)))
 			{
-				Clear();
+				float _w100 = ofxImGuiSurfing::getWidgetsWidth(1);
+				float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+				//float _w100 = ImGui::GetContentRegionAvail().x;
+				//float _h = 1.5f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
+
+				if (ImGui::Button("Clear", ImVec2(_w100, _h)))
+				{
+					Clear();
+				}
+
+				ImGui::Separator();
+
+				ImGui::BeginChild("Logs");
+				{
+					auto logs = mLog;
+
+					// macOS bug
+					//for each (string l in logs)
+					for (auto &l : logs)
+					{
+						ImGui::TextWrapped("%s", l.c_str());
+					}
+				}
+				ImGui::EndChild();
 			}
-
-			ImGui::Separator();
-
-			ImGui::BeginChild("Logs");
-			auto logs = mLog;
-
-			//macOS bug
-			//for each (string l in logs)
-			for (auto l : logs)
-			{
-				ImGui::TextWrapped("%s", l.c_str());
-			}
-
-			ImGui::EndChild();
 			ImGui::End();
 		}
 	};

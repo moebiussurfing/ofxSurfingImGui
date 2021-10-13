@@ -262,9 +262,9 @@ namespace ofxImGuiSurfing
 			ImGuiTreeNodeFlags flagst;
 			flagst = ImGuiTreeNodeFlags_None;
 			//flagst |= ImGuiTreeNodeFlags_DefaultOpen;
-			flagst |= ImGuiTreeNodeFlags_Framed;
+			//flagst |= ImGuiTreeNodeFlags_Framed;
 
-			string _labelf = "FILES";
+			string _labelf = "Files";
 			//string _labelf = ofFilePath::getBaseName(path).c_str();
 
 			//if (TreeNode(ofFilePath::getBaseName(path).c_str()))

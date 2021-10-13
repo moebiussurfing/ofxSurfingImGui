@@ -94,7 +94,7 @@ public:
 	//--
 
 public:
-	
+
 	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
@@ -455,7 +455,7 @@ private:
 	ofParameter<bool> bInputText{ "Input Text", false }; // user is over a text input
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
 
-	//-
+	//--
 
 public:
 
@@ -481,6 +481,28 @@ public:
 
 	//--
 
+	// Log Window
+
+public:
+
+	// Snippets:
+	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bLog); // -> enabler
+	//guiManager.log.AddText(mMidiMessageHistoryStr); // -> feed
+	//--------------------------------------------------------------
+	void drawLogPanel() {
+		if (bLog) {
+			log.ImGui();
+		}
+	}
+	//--------------------------------------------------------------
+	void logAdd(std::string text) {
+		if (bLog) log.AddText(text);
+	}
+
+	//--
+
+	// Advanced Window
+
 private:
 
 	// An advanced/extra common panel
@@ -494,7 +516,8 @@ private:
 
 public:
 
-	// Example Snippet to copy/paste into out ofApp:
+	// Snippet:
+	// Example to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
@@ -506,10 +529,11 @@ public:
 		ImGui::Spacing();
 
 		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-		//ofxImGuiSurfing::AddToggleRoundedButton(bAdvanced);
-		
+
 		drawAdvancedSubPanel();
 	}
+
+	//--
 
 private:
 
@@ -636,7 +660,7 @@ private:
 							if (io.MouseHoveredViewport)
 							{
 								float wheel = io.MouseWheel;
-								string ss1 = "Mouse Wheel ";
+								std::string ss1 = "Mouse Wheel ";
 								if (wheel != 0)
 								{
 									ss1 += ofToString(wheel);
@@ -674,12 +698,12 @@ public:
 private:
 
 	// File Settings
-	string path_Global;
-	string path_ImLayouts;
-	string path_AppSettings;
-	string path_LayoutSettings;
+	std::string path_Global;
+	std::string path_ImLayouts;
+	std::string path_AppSettings;
+	std::string path_LayoutSettings;
 
-	string path_SubPathLabel = "";
+	std::string path_SubPathLabel = "";
 
 	bool bAutoSaveSettings = false;
 
@@ -692,11 +716,11 @@ public:
 
 	// Some tweaked settings modes
 	//--------------------------------------------------------------
-	void setSettingsFilename(string path) { // must call before setup. To allow multiple instances/windows settings
+	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
 	}
 	//--------------------------------------------------------------
-	void setSettingsPathLabel(string path) { // must call before setup. To allow multiple instances/windows settings
+	void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
 	}
 
@@ -739,7 +763,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	string getWindowSpecialName(int index) {
+	std::string getWindowSpecialName(int index) {
 		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
@@ -923,12 +947,12 @@ private:
 	void loadAppLayout(int mode);
 	void saveAppLayout(int mode);
 
-	void saveLayoutPreset(string path); //-> both group params and ImGui ini files
-	void loadLayoutPreset(string path);
-	void saveLayoutImGuiIni(string path);
-	void loadLayoutImGuiIni(string path);
-	void saveLayoutPresetGroup(string path);
-	void loadLayoutPresetGroup(string path);
+	void saveLayoutPreset(std::string path); //-> both group params and ImGui ini files
+	void loadLayoutPreset(std::string path);
+	void saveLayoutImGuiIni(std::string path);
+	void loadLayoutImGuiIni(std::string path);
+	void saveLayoutPresetGroup(std::string path);
+	void loadLayoutPresetGroup(std::string path);
 
 	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; // index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
@@ -954,7 +978,7 @@ private:
 
 		s = bLayoutPresets[mode].getName();
 		//s += ".ini";
-		string _path = s;
+		std::string _path = s;
 		return _path;
 	}
 
@@ -1073,11 +1097,11 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setLabelLayoutPanels(string label) { // -> customize the app name for panels window label tittle
+	void setLabelLayoutPanels(std::string label) { // -> customize the app name for panels window label tittle
 		bGui_LayoutsPanels.setName(label);
 	}
 	//--------------------------------------------------------------
-	void setLabelLayoutMainWindow(string label) {
+	void setLabelLayoutMainWindow(std::string label) {
 		bGui_LayoutsManager.setName(label);
 	}
 
@@ -1098,9 +1122,14 @@ private:
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 	ofParameter<bool> bSolo{ "Solo", false };
+
+public:
+
 	ofParameter<bool> bLog{ "Log", false };
 
 	//-
+
+private:
 
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 	ofParameterGroup params_Panels{ "Params Panels" };
@@ -1109,7 +1138,7 @@ private:
 	ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
 	ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
 
-	string titleWindowLabel;
+	std::string titleWindowLabel;
 
 	//-
 

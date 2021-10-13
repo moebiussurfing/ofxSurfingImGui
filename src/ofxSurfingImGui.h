@@ -122,7 +122,7 @@ using namespace ofxImGuiSurfing;
 	// 2.2 COLLAPSING PANEL (framed and closed by default)
 
 	{
-		bool bOpen = true;
+		static bool bOpen = true;
 		//bool bOpen = false;
 		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
@@ -137,7 +137,7 @@ using namespace ofxImGuiSurfing;
 	// 2.3 treeEx - TREE WITH FLAGS
 
 	{
-		bool bOpen = true;
+		static bool bOpen = true;
 		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 		_flagt |= ImGuiTreeNodeFlags_Framed;
 		if (ImGui::TreeNodeEx("_TreeEx", _flagt))

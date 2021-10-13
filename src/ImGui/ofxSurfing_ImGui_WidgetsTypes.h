@@ -970,20 +970,17 @@ namespace ofxImGuiSurfing
 						const float step = 0.001f;
 						const float stepFast = 0.1f;
 						auto tmpRef = p.get();
-						std::string name = p.getName();
 
 						bReturn = false;
 
-						//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
+						IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 						if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
 						{
 							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						ImGui::PopItemWidth();
-						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__STEPPER_WIDTH_POP;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -1251,16 +1248,14 @@ namespace ofxImGuiSurfing
 
 						bReturn = false;
 
-						//IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
-						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
+						IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 						if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
 						{
 							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						ImGui::PopItemWidth();
-						//IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__STEPPER_WIDTH_POP;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;

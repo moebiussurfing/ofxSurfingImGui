@@ -5,101 +5,16 @@
 
 namespace ofxImGuiSurfing
 {
-	//----
-
-	// Sugar Snippets
-
-	//----
-
-	// 1.
-
-	// BUG:
-	// Annoying behaviour: sometimes the sliders are bigger bc the text long or something,
-	// Then all the window panels is being resized bigger if auto resize is enabled!
-
-	// workaround
-
-	//TODO: 
-	// A nice idea could be to get the longer param label name width 
-	// and use this max width to apply to our layouting engine...
-
-	// Some macro sugar to help fix how sliders force autoresize the panel widths.
-	// It's a 'rare behaviour' that I am trying to correct doing this.
-
-	//-
-
-	//TODO:
-//#define DEFAULT_LAYOUT_BEHAVIOUR // -> Uncomment to use a workaround to weird ImGui auto resize rare layout..
-
-	//-
-
-#ifndef DEFAULT_LAYOUT_BEHAVIOUR
-
-	// A. Relative to panel width
-
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-
-#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
-#endif
-
-	//-
-
-	//// B. Using absolute size
-
-	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
-	//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-	//#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
-
-	//-
-
-#ifndef DEFAULT_LAYOUT_BEHAVIOUR
-
-	// C. To bypass and do nothing.
-
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
-#define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
-#endif
-
-	//----
-
-	// 2.
-
-	// Adds mouse wheel control to the last/previoues ofParam widget (float/int) rendered.
-
-#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
-#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
-
-	//----
-
-	// 3.
-
-	// Adds Constraint Window Shapes
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN + 40, ofGetHeight() - 100); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN, ofGetHeight() / 2); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-
-	//----
-
-
 	/*
-	
+
 	Arguments to the Styles Engine:
 	You can pass it as argument when adding each ofParameter to the guiManager.
-	
+
 	Examples:
 	guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 	guiManager.Add(floatValue, OFX_IM_VSLIDER);
 	guiManager.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
-	
+
 	*/
 
 	//--------------------------------------------------------------
@@ -234,4 +149,100 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 		return _groupInfo;
 	}
+
+
+	//--------
+
+
+	// Sugar Snippets
+
+	//----
+
+	// 1.
+
+	// BUG:
+	// Annoying behaviour: sometimes the sliders are bigger bc the text long or something,
+	// Then all the window panels is being resized bigger if auto resize is enabled!
+
+	// workaround
+
+	//TODO: 
+	// A nice idea could be to get the longer param label name width 
+	// and use this max width to apply to our layouting engine...
+
+	// Some macro sugar to help fix how sliders force autoresize the panel widths.
+	// It's a 'rare behaviour' that I am trying to correct doing this.
+
+	//-
+
+	//TODO:
+#define DEFAULT_LAYOUT_BEHAVIOUR // -> Comment to use a workaround to weird ImGui auto resize rare layout..
+
+	//-
+
+#ifndef DEFAULT_LAYOUT_BEHAVIOUR
+
+	// A. Relative to panel width
+
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
+#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+#endif
+
+	//-
+
+	//// B. Using absolute size
+
+	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
+	//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+	//#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
+
+	//-
+
+#ifdef DEFAULT_LAYOUT_BEHAVIOUR
+
+	// C. To bypass and do nothing.
+
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
+#define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
+#endif
+	
+	//--
+
+	// 2.
+
+	// For OFX_IM_STEPPER
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+
+
+	//----
+
+	// 3.
+
+	// Adds mouse wheel control to the last/previoues ofParam widget (float/int) rendered.
+
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
+
+	//----
+
+	// 3.
+
+	// Adds Constraint Window Shapes
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN + 40, ofGetHeight() - 100); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN, ofGetHeight() / 2); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+
+	//----
 }
