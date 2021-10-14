@@ -509,11 +509,15 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
 	{
+		if (parameter.get() < 0) return false;
+		if (labels.size() == 0) return false;
+
+		//-
+
 		auto result = false;
 		auto tmpRef = parameter.get();
 
-		auto uniqueName = (("##combo" + parameter.getName()).c_str());
-		//auto uniqueName = (parameter.getName().c_str());
+		auto uniqueName = (("##COMBO" + parameter.getName()).c_str());
 
 		ImGui::PushID(uniqueName);
 		if (ImGui::BeginCombo((parameter.getName().c_str()), labels.at(parameter.get()).c_str()))
