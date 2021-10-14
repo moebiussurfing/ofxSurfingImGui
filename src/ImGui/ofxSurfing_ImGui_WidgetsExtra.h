@@ -196,6 +196,8 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopID();
 
+		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+
 		return cChanged;
 	}
 
