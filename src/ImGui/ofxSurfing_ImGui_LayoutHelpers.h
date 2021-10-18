@@ -6,16 +6,6 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-
-/*
-
-TODO:
-
-ImGuiTreeNodeFlags_None on root groups fails
-
-*/
-
-
 // This class have widgets size constants and methods to get the window panel sizes.
 
 //----------
@@ -44,8 +34,9 @@ ImGuiTreeNodeFlags_None on root groups fails
 
 #define WIDGET_LABEL_WIDTH 120
 
-//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//TODO:
 #define WIDGET_PARAM_PADDING 0 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 //#define WIDGET_PARAM_PADDING 120 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 
 #define PADDING_PANELS 2 // space between some widgets or panels
@@ -53,9 +44,9 @@ ImGuiTreeNodeFlags_None on root groups fails
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
 
-//-
+//----
 
-// default font
+// Default Font
 
 #define FONT_DEFAULT_SIZE 11
 #define FONT_DEFAULT_FILE "telegrama_render.otf"
@@ -72,10 +63,11 @@ ImGuiTreeNodeFlags_None on root groups fails
 
 //------------------
 
-/* Layout Helpers */
+// Layout Helpers
 
-// useful layout helpers 
-// to update / recalculate the sizes/width to fit the panel window shape
+// Useful layout helpers 
+// Reads the ImGui panel window dimensions.
+// To update / recalculate the sizes / width to fit the panel window shape.
 
 namespace ofxImGuiSurfing
 {
@@ -101,7 +93,8 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
-	// we will update the sizes on any gui drawing point, like inside a new foldered sub-window that could be indendeted and full size is being 
+	// We will update the sizes on any gui drawing point, 
+	// like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h, bool bWithScroll = false)
 	{
@@ -141,16 +134,17 @@ namespace ofxImGuiSurfing
 		__w50 = (__w100 - __spcx * 1) / 2;
 		__w33 = (__w100 - __spcx * 2) / 3;
 		__w25 = (__w100 - __spcx * 3) / 4;
-		//__h = BUTTON_BIG_HEIGHT;
 		__h = getWidgetsHeightRelative();
+		//__h = BUTTON_BIG_HEIGHT;
 	}
 
 	//--
 
-	// example: 
-	// allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
-	//float w = getWidgetsWidth(2); // half width button
-	//if (ImGui::Button("_Button", ImVec2(w, h))) {}
+	// Example: 
+	// Allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
+	// float h = getWidgetsHeightRelative(); // One unit height
+	// float w = getWidgetsWidth(2); // A button with the half window panel width. 
+	// if (ImGui::Button("_Button", ImVec2(w, h))) { }
 
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetWidth(float &w, int amntColumns = -1)
@@ -172,7 +166,9 @@ namespace ofxImGuiSurfing
 	{
 		if (amntRows == -1 || amntRows == 1)
 		{
-			h = BUTTON_BIG_HEIGHT;
+			//h = ofxImGuiSurfing::getWidgetsHeightUnit();
+			//h = BUTTON_BIG_HEIGHT;
+			h = getWidgetsHeightRelative();
 		}
 		else
 		{
@@ -187,6 +183,7 @@ namespace ofxImGuiSurfing
 	{
 		return ImGui::GetContentRegionAvail().x;
 	}
+
 	//--------------------------------------------------------------
 	inline float getPanelHeight()
 	{
@@ -229,7 +226,8 @@ namespace ofxImGuiSurfing
 		float h;
 		if (amntRows == -1)
 		{
-			h = BUTTON_BIG_HEIGHT;
+			h = getWidgetsHeightUnit();
+			//h = BUTTON_BIG_HEIGHT;
 		}
 		else
 		{
@@ -250,11 +248,13 @@ namespace ofxImGuiSurfing
 
 		return vv;
 	}
+
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeBig()
 	{
 		return getWidgetsShapeDefault();
 	}
+
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeSmall()
 	{
@@ -268,23 +268,27 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacingSmall()
 	{
 		int spacingy = 1;
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacingDouble()
 	{
 		ImGui::Spacing();
 		ImGui::Spacing();
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacing()
 	{
 		ImGui::Spacing();
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacingBig()
 	{
@@ -292,6 +296,7 @@ namespace ofxImGuiSurfing
 		ImGui::Spacing();
 		ImGui::Spacing();
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacingSeparated()
 	{
@@ -299,6 +304,7 @@ namespace ofxImGuiSurfing
 		ImGui::Separator();
 		ImGui::Spacing();
 	}
+
 	//--------------------------------------------------------------
 	inline void AddSpacingHuge()
 	{

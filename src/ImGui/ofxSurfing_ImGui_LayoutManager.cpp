@@ -68,7 +68,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
-		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
+		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
 		setup(); // This instantiates and configures ofxImGui inside the class object.
 		break;
@@ -76,12 +76,12 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = 4;
 
-		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
+		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setupDocking();
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
-		setAutoSaveSettings(true); // -> Enables stor/recall some settings from previous app session
+		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
 		setup(); // This instantiates and configures ofxImGui inside the class object.
 		break;
@@ -156,7 +156,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external i
 
 //----
 
-// fonts
+// Fonts
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
@@ -262,7 +262,7 @@ void ofxSurfing_ImGui_Manager::processOpenFileSelection(ofFileDialogResult openF
 		ofLogNotice(__FUNCTION__) << ("The file exists - now checking the type via file extension");
 		string fileExtension = ofToUpper(file.getExtension());
 
-		//We only want images
+		// We only want ttf/otf
 		if (fileExtension == "TTF" || fileExtension == "OTF") {
 
 			ofLogNotice(__FUNCTION__) << ("TTF or OTF found!");
@@ -284,9 +284,8 @@ void ofxSurfing_ImGui_Manager::openFileFont(int size)
 
 		ofLogNotice(__FUNCTION__) << ("User selected a file");
 
-		//We have a file, check it and process it
+		// We have a file, check it and process it
 		processOpenFileSelection(openFileResult, size);
-
 	}
 	else {
 		ofLogNotice(__FUNCTION__) << ("User hit cancel");
@@ -304,8 +303,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
-	// hardcoded settings
-	//bool bViewport = true;//TODO:
+	// Hardcoded settings
+
+	//TODO:
+	//bool bViewport = true;
 	bool bRestore = true;
 	//bool bMouse = true;
 	bool bMouse = false;
@@ -326,12 +327,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	//-
 
-	//TODO: crashes if font not present!
-
-	// font
+	// Font
 	std::string _fontName;
 	float _fontSizeParam;
-	_fontName = FONT_DEFAULT_FILE; // WARNING: will crash if font not present!
+	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
 	_fontSizeParam = FONT_DEFAULT_SIZE;
 	std::string _path = "assets/fonts/"; // assets folder
 
@@ -341,7 +340,8 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	//-
 
-	// Theme: colors and sizes
+	// Theme: 
+	// colors and sizes
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }
 
@@ -365,7 +365,7 @@ void ofxSurfing_ImGui_Manager::draw() { // -> Not being used by default
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::updateLayout() {
 
-	// layouts
+	// Layouts
 
 	if (ini_to_load)
 	{
@@ -438,6 +438,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		if (ImGui::TreeNode("Panels"))
 		{
 			//ImGui::Text("Panels");
+
 			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
 				AddToggleRoundedButton(windowsAtributes[i].bGui);

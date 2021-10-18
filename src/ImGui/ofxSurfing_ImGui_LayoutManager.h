@@ -59,8 +59,6 @@ TODO:
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
-//#define APP_RELEASE_NAME "ofxSurfing_ImGui_Manager"
-
 //-
 
 using namespace ofxImGuiSurfing;
@@ -78,6 +76,169 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGUi instance, no other addons.
 		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame)
+	};
+}
+
+//----
+
+namespace ofxImGuiSurfing
+{
+
+	//TODO: 
+	// Cascade windows engine..
+	//--------------------------------------------------------------
+	class WindowPanel {
+	public:
+
+		ofParameter<bool> bEnable{ "bEnable", true };
+		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
+		ofParameter<int> indexPos{ "IndexPos", -1, -1, 0 };
+
+		WindowPanel::WindowPanel() {
+		}
+
+		WindowPanel::~WindowPanel() {
+		}
+
+		void getState() {
+			rShape = ofRectangle(
+				ImGui::GetWindowPos().x,
+				ImGui::GetWindowPos().y,
+				ImGui::GetWindowWidth(),
+				ImGui::GetWindowHeight());
+		}
+
+		void runState() {
+			ImGuiCond flagCond;
+			//flagCond = ImGuiCond_Always;
+			flagCond = ImGuiCond_Appearing;
+
+			ImGui::SetNextWindowPos(ImVec2(rShape.get().getX(), rShape.get().getY()), flagCond);
+			ImGui::SetNextWindowSize(ImVec2(rShape.get().getWidth(), rShape.get().getHeight()), flagCond);
+		}
+
+		glm::vec2 getPosition()
+		{
+			return glm::vec2(rShape->x, rShape->y);
+		}
+		float getWidth() {
+			return rShape->getWidth();
+		}
+
+		void setPosition(glm::vec2 pos)
+		{
+			rShape->x = pos.x;
+			rShape->y = pos.y;
+		}
+
+		void setRectangle(ofRectangle r)
+		{
+			rShape = r;
+		}
+	};
+
+	//--------------------------------------------------------------
+	class WindowPanels {
+	public:
+
+		std::vector<WindowPanel> panels;
+
+		int counter = 0;
+		std::queue<int> myqueue;
+
+		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+
+		ofParameterGroup params{ "Enablers" };
+
+		void Changed_Params(ofAbstractParameter &e)
+		{
+			std::string name = e.getName();
+			//ofLogNotice() << __FUNCTION__ << " " << name << " : " << e;
+
+			int i = 0;
+			for (auto &p : panels)
+			{
+				if (name == p.bEnable.getName())
+				{
+					ofLogNotice() << __FUNCTION__ << " Enabler #" << i << " " << (p.bEnable.get() ? "TRUE" : "FALSE");
+
+					if (p.bEnable)
+					{
+						if (p.indexPos == -1) // it was hidden
+						{
+							counter = myqueue.size();
+							p.indexPos = counter;
+							myqueue.push(i);
+							counter = myqueue.size();
+
+							if (counter == 0)
+							{
+							}
+							else if (counter == 1)
+							{
+							}
+							else if (counter > 1)
+							{
+								glm::vec2 pos = glm::vec2(
+									panels[counter - 2].getPosition().x + panels[counter - 2].getWidth(),
+									panels[counter - 2].getPosition().y);
+
+								panels[counter - 1].setPosition(pos);
+							}
+						}
+					}
+					else
+					{
+
+					}
+				}
+
+				i++;
+			}
+		}
+
+		void doOrganize() {
+
+		}
+
+		WindowPanels::WindowPanels() {
+			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
+		}
+
+		WindowPanels::~WindowPanels() {
+			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
+			ofxImGuiSurfing::saveGroup(params);
+		}
+
+		void add(ofParameter<bool> &e) {
+			WindowPanel p;
+			p.bEnable.makeReferenceTo(e);
+			params.add(e);
+			panels.push_back(p);
+		}
+
+		void initiate() {
+			//params_enablers
+			ofxImGuiSurfing::loadGroup(params);
+		}
+
+		void getStates() {
+		}
+
+		void runStates() {
+		}
+
+		void beginWindow(string name, bool *bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None) {
+			ImGui::Begin(name.c_str(), bOpen, flags);
+		}
+		void drawWidgets() {
+			for (auto &p : panels) {
+				ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
+			}
+		}
+		void endWindow() {
+			ImGui::End();
+		}
 	};
 }
 
@@ -111,11 +272,13 @@ private:
 
 	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> The Widget Styles Manager
 
-	//--
+	//----
+
+	// Styles Api
 
 public:
 
-	// Api
+	// ofParam's
 
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -143,7 +306,7 @@ public:
 
 public:
 
-	//TODO: Group styles are (?) recursive! must fix!
+	// ofParametersGroup's
 
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
@@ -156,7 +319,17 @@ public:
 		widgetsManager.AddStyleGroup(name, type, flags);
 	}
 
-	//--
+	//--------------------------------------------------------------
+	void clearStyles()
+	{
+		widgetsManager.clear(); // update sizes to current window shape
+	}
+
+	//----
+
+public:
+
+	// widgetsManager
 
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
@@ -164,28 +337,27 @@ public:
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
-	//--
+	//----
 
 public:
 
 	// Many repeated methods. need to pick a good name...
 
-	////--------------------------------------------------------------
-	//void refresh()
-	//{
-	//	widgetsManager.refresh(); // update sizes to current window shape
-	//}
 	//--------------------------------------------------------------
 	void refreshLayout()
 	{
 		widgetsManager.refreshLayout(); // update sizes to current window shape
 	}
-
 	//--------------------------------------------------------------
-	void clearStyles()
+	void resetUniqueNames()
 	{
-		widgetsManager.clear(); // update sizes to current window shape
+		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
+	////--------------------------------------------------------------
+	//void refresh()
+	//{
+	//	widgetsManager.refresh(); // update sizes to current window shape
+	//}
 	////--------------------------------------------------------------
 	//void clear() //-> legacy api
 	//{
@@ -201,36 +373,22 @@ public:
 	//{
 	//	widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	//}
-	//--------------------------------------------------------------
-	void resetUniqueNames()
-	{
-		widgetsManager.resetUniqueNames(); // update sizes to current window shape
-	}
 
 	//-
 
 public:
+
+	// Instantiator
 
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
 
-	//-
-
-public:
-
-	// Window Log
-	ImGuiLogWindow log;
-
-	//--------------------------------------------------------------
-	void addLog(std::string text) {
-		// Log
-		log.AddText(text);
-	}
-
-	//-
+	//----
 
 private:
+
+	// ImGui instance/context
 
 	// We have two mode for instantiate ImGui
 	ofxImGui::Gui gui; // ImGui is inside the add-on
@@ -257,6 +415,8 @@ public:
 	//----
 
 public:
+
+	// Api
 
 	// To the Global context: 
 	// All the windows are feeded in between!
@@ -347,15 +507,16 @@ private:
 
 	// The ImGui instance options
 
-	bool bAutoDraw; // must be false when multiple ImGui instances created!
+	bool bAutoDraw; //TODO: must be false when multiple ImGui instances created ?
 	bool bViewport = false;
-	bool bDockingModeCentered = false; // enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
+	bool bDockingModeCentered = false; //TODO: enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
 
 	//-
 
 public:
 
-	// Some Api configs
+	// Api 
+	// Some configs
 
 	// Force autodraw
 	//--------------------------------------------------------------
@@ -438,12 +599,10 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 	ofParameter<bool> bNoScroll{ "No Scroll", false };
-
 	ofParameter<bool> bHelp{ "Help", true };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
-	ofParameter<bool> bMouseWheel{ "MouseWheel", false };
-
+	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 	ofParameter<bool> bReset_Window{ "Reset Window", false };
 
 	ofParameterGroup params_RectPanels{ "Rect Panels" };
@@ -464,6 +623,7 @@ public:
 	{
 		float xx = 10;
 		float yy = 10;
+
 		float ww = 200;
 		float hh = 600;
 
@@ -479,27 +639,39 @@ public:
 		if (pos) ImGui::SetWindowPos(ImVec2(xx, yy), flagsCond);
 	}
 
-	//--
+	//----
 
 	// Log Window
 
 public:
 
+	// Window Log
+	ImGuiLogWindow log;
+
+	//--------------------------------------------------------------
+	void addLog(std::string text) {
+		// Log
+		log.AddText(text);
+	}
+
+public:
+
 	// Snippets:
-	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bLog); // -> enabler
-	//guiManager.log.AddText(mMidiMessageHistoryStr); // -> feed
+	// ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bLog); // -> enabler
+	// guiManager.log.AddText(mMidiMessageHistoryStr); // -> feed
 	//--------------------------------------------------------------
 	void drawLogPanel() {
 		if (bLog) {
 			log.ImGui();
 		}
 	}
+
 	//--------------------------------------------------------------
 	void logAdd(std::string text) {
 		if (bLog) log.AddText(text);
 	}
 
-	//--
+	//----
 
 	// Advanced Window
 
@@ -675,19 +847,17 @@ private:
 						}
 
 						ImGui::Separator();
-
 						ImGui::Unindent();
 					}
-
 					ImGui::TreePop();
 				}
-
 			}
 		}
 		ImGui::Unindent();
 	}
 
 public:
+
 	//--------------------------------------------------------------
 	void setUseAdvancedSubPanel(bool b) {
 		bUseAdvancedSubPanel = b;
@@ -719,6 +889,7 @@ public:
 	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
 	}
+
 	//--------------------------------------------------------------
 	void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
@@ -784,12 +955,14 @@ public:
 	}
 
 private:
+
 	//--------------------------------------------------------------
 	void addWindow(std::string name, bool bPowered = false) { // -> legacy api
 		addWindowSpecial(name, bPowered);
 	}
 
 public:
+
 	//--------------------------------------------------------------
 	void addWindowSpecial(std::string name, bool bPowered = false) {
 		ofParameter<bool> _bGui{ name, true };
@@ -875,7 +1048,7 @@ private:
 	//--------------------------------------------------------------
 	struct SurfingImGuiWindowAtributes
 	{
-		// we queue here the bool paramms that enables the show/hide for each queued window
+		// We queue here the bool paramms that enables the show/hide for each queued window
 		ofParameter<bool> bGui{ "Show Gui", true };
 
 		ofParameter<bool> bPoweredWindow{ "_bPoweredWindow", false }; // to include below extra toggles when rendering
@@ -894,10 +1067,9 @@ private:
 		}
 
 		ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
-
 	};
 
-	vector<SurfingImGuiWindowAtributes> windowsAtributes;//handles only the manually pre added windows.
+	vector<SurfingImGuiWindowAtributes> windowsAtributes; // Handles only the manually pre added windows.
 
 	void loadAppSettings();
 	void saveAppSettings();
@@ -1188,6 +1360,7 @@ public:
 	// Disables a Widget and reduces transparency of most common colors.
 
 public:
+
 	//--------------------------------------------------------------
 	inline void pushInactive() {
 
@@ -1211,6 +1384,7 @@ public:
 
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 	}
+
 	//--------------------------------------------------------------
 	inline void popInactive() {
 		ImGui::PopItemFlag();

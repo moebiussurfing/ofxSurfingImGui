@@ -46,6 +46,28 @@ namespace ofxImGuiSurfing
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
 	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
 	{
+		/*
+		//TODO:
+		// Dragging colors
+		enum Mode
+		{
+			Mode_Copy = 0,
+			Mode_Swap
+		};
+		static int mode = 1;
+
+		if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			ImGui::SetDragDropPayload("DND_DEMO_CELL", &c, sizeof(int));
+			if (mode == Mode_Copy) { ImGui::Text("Copy %s", ofToString(c).c_str()); }
+			if (mode == Mode_Swap) { ImGui::Text("Swap %s", ofToString(c).c_str()); }
+
+			ImGui::EndDragDropSource();
+		}
+		*/
+
+		//--
+
 		bool cChanged = false;
 
 		if (sizey == -1)

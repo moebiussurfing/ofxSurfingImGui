@@ -114,6 +114,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	//--------------------------------------------------------------
+	//inline bool AddBigToggle(ofParameter<bool>& parameter, float w, float h , bool border , bool bBlink )
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
 		// Border when selected
@@ -229,7 +230,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
-		AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
+		return AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
 	}
 
 	//--
