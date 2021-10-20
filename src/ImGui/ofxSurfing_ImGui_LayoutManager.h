@@ -3,22 +3,21 @@
 
 TODO:
 
-+ bug when chaining multiple groups on a window.
-//guiManager.resetUniqueNames();//-> requires a reset
-//guiManager.AddGroup(params_pointLight);
++ merge window special with ofxSurfing_ImGui_WindowsOrganizer.h
+	+ get from 2_Widnows example
+
 + fix make dockeable all windows on same space
 + fix multiple dock spaces that are colliding/one over another
 + fix viewport rectangle preview
 
 + remake mode free and lockers simpler. a flag for each window
 
-+ aspect ratio /fit modes for game viewport
++ aspect ratio/fit modes for game viewport
 + add help box
 
-+ add global reset
-+ add minimal toggle
 + auto size per window
 + other window settings
+
 
 */
 
@@ -56,6 +55,7 @@ TODO:
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 #include "ofxSurfing_Serializer.h"
+#include "ofxSurfing_ImGui_WindowsOrganizer.h"
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
@@ -79,168 +79,8 @@ namespace ofxImGuiSurfing
 	};
 }
 
-//----
+//--------
 
-namespace ofxImGuiSurfing
-{
-
-	//TODO: 
-	// Cascade windows engine..
-	//--------------------------------------------------------------
-	class WindowPanel {
-	public:
-
-		ofParameter<bool> bEnable{ "bEnable", true };
-		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
-		ofParameter<int> indexPos{ "IndexPos", -1, -1, 0 };
-
-		WindowPanel::WindowPanel() {
-		}
-
-		WindowPanel::~WindowPanel() {
-		}
-
-		void getState() {
-			rShape = ofRectangle(
-				ImGui::GetWindowPos().x,
-				ImGui::GetWindowPos().y,
-				ImGui::GetWindowWidth(),
-				ImGui::GetWindowHeight());
-		}
-
-		void runState() {
-			ImGuiCond flagCond;
-			//flagCond = ImGuiCond_Always;
-			flagCond = ImGuiCond_Appearing;
-
-			ImGui::SetNextWindowPos(ImVec2(rShape.get().getX(), rShape.get().getY()), flagCond);
-			ImGui::SetNextWindowSize(ImVec2(rShape.get().getWidth(), rShape.get().getHeight()), flagCond);
-		}
-
-		glm::vec2 getPosition()
-		{
-			return glm::vec2(rShape->x, rShape->y);
-		}
-		float getWidth() {
-			return rShape->getWidth();
-		}
-
-		void setPosition(glm::vec2 pos)
-		{
-			rShape->x = pos.x;
-			rShape->y = pos.y;
-		}
-
-		void setRectangle(ofRectangle r)
-		{
-			rShape = r;
-		}
-	};
-
-	//--------------------------------------------------------------
-	class WindowPanels {
-	public:
-
-		std::vector<WindowPanel> panels;
-
-		int counter = 0;
-		std::queue<int> myqueue;
-
-		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
-
-		ofParameterGroup params{ "Enablers" };
-
-		void Changed_Params(ofAbstractParameter &e)
-		{
-			std::string name = e.getName();
-			//ofLogNotice() << __FUNCTION__ << " " << name << " : " << e;
-
-			int i = 0;
-			for (auto &p : panels)
-			{
-				if (name == p.bEnable.getName())
-				{
-					ofLogNotice() << __FUNCTION__ << " Enabler #" << i << " " << (p.bEnable.get() ? "TRUE" : "FALSE");
-
-					if (p.bEnable)
-					{
-						if (p.indexPos == -1) // it was hidden
-						{
-							counter = myqueue.size();
-							p.indexPos = counter;
-							myqueue.push(i);
-							counter = myqueue.size();
-
-							if (counter == 0)
-							{
-							}
-							else if (counter == 1)
-							{
-							}
-							else if (counter > 1)
-							{
-								glm::vec2 pos = glm::vec2(
-									panels[counter - 2].getPosition().x + panels[counter - 2].getWidth(),
-									panels[counter - 2].getPosition().y);
-
-								panels[counter - 1].setPosition(pos);
-							}
-						}
-					}
-					else
-					{
-
-					}
-				}
-
-				i++;
-			}
-		}
-
-		void doOrganize() {
-
-		}
-
-		WindowPanels::WindowPanels() {
-			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-		}
-
-		WindowPanels::~WindowPanels() {
-			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-			ofxImGuiSurfing::saveGroup(params);
-		}
-
-		void add(ofParameter<bool> &e) {
-			WindowPanel p;
-			p.bEnable.makeReferenceTo(e);
-			params.add(e);
-			panels.push_back(p);
-		}
-
-		void initiate() {
-			//params_enablers
-			ofxImGuiSurfing::loadGroup(params);
-		}
-
-		void getStates() {
-		}
-
-		void runStates() {
-		}
-
-		void beginWindow(string name, bool *bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None) {
-			ImGui::Begin(name.c_str(), bOpen, flags);
-		}
-		void drawWidgets() {
-			for (auto &p : panels) {
-				ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
-			}
-		}
-		void endWindow() {
-			ImGui::End();
-		}
-	};
-}
 
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
@@ -1079,7 +919,7 @@ private:
 	//TODO:
 	// To be marked outside the scope to populate widgets inside this execution point... ?
 	// Should use lambda functions here!
-
+	//TODO: learn lambda functions..
 	void beginExtra();
 	void endExtra();
 
@@ -1091,7 +931,7 @@ private:
 
 	//----
 
-	// Docking helpers
+	// Docking Helpers
 
 public:
 
@@ -1121,6 +961,7 @@ private:
 
 	void saveLayoutPreset(std::string path); //-> both group params and ImGui ini files
 	void loadLayoutPreset(std::string path);
+
 	void saveLayoutImGuiIni(std::string path);
 	void loadLayoutImGuiIni(std::string path);
 	void saveLayoutPresetGroup(std::string path);
@@ -1188,7 +1029,8 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setupDocking() {
+	void setupDocking()
+	{
 		surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 		//surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
 
@@ -1211,10 +1053,14 @@ public:
 		bUseLayoutPresetsManager = b;
 	}
 
+	//--
+
 public:
 
 	void drawSpecialWindowsPanel();
 	void draw_ImGuiMenu();
+
+	//--
 
 private:
 
@@ -1237,7 +1083,8 @@ private:
 	ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel
 	ofParameter<bool> bModeLockControls{ "Lock C", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
 	ofParameter<bool> bModeLockPreset{ "Lock A", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
-	//TODO: it's a problem if .ini files are already present... We must ingore loading.
+	//TODO: 
+	// It's a problem if .ini files are already present... We must ingore loading.
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
@@ -1246,7 +1093,7 @@ private:
 	ofRectangle rectangle_Central; // current free space viewport updated when changes
 	ofRectangle rectangle_Central_Transposed;
 
-	// standalone window not handled by .ini layout
+	// Standalone window not handled by .ini layout
 	// but for the app settings
 	//float widthGuiLayout;
 
@@ -1269,7 +1116,7 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setLabelLayoutPanels(std::string label) { // -> customize the app name for panels window label tittle
+	void setLabelLayoutPanels(std::string label) { // -> Customize the app name for panels window label tittle
 		bGui_LayoutsPanels.setName(label);
 	}
 	//--------------------------------------------------------------
@@ -1291,7 +1138,7 @@ private:
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false };//cant be changed on runtime. cant include into settings
+	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false }; // Can't be changed on runtime. cant include into settings
 	ofParameter<bool> bDocking{ "bDocking", true };
 	ofParameter<bool> bSolo{ "Solo", false };
 
@@ -1314,9 +1161,11 @@ private:
 
 	//-
 
-	//TODO: learn to use lambda functions
-	// to callback reset
-	// -> subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+	//TODO: 
+	// Learn to use lambda functions
+	// To callback reset
+	// -> Subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+
 private:
 
 	bool *bResetPtr = nullptr;
@@ -1344,11 +1193,11 @@ public:
 	//--------------------------------------------------------------
 	void doRemoveDataFiles() {
 
-		// remove all the settings folder
+		// Remove all the settings folder
 		const filesystem::path path = path_Global;
 		ofDirectory::removeDirectory(path, true, true);
 
-		// remove ini file
+		// Remove ini file
 		const filesystem::path file = ofToDataPath("../imgui.ini");
 		ofFile::removeFile(file, true);
 	}
@@ -1391,5 +1240,4 @@ public:
 
 		ImGui::PopStyleColor(6);
 	}
-
 };

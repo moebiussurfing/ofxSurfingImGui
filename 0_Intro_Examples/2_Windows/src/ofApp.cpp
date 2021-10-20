@@ -55,78 +55,114 @@ void ofApp::setup_ImGui()
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofBackground(255);
+	ofBackground(32);
+	//ofBackground(255);
 
 	guiManager.begin();
 	{
-		if (bGui_0) draw_SurfingWidgets0();
-		if (bGui_1) draw_SurfingWidgets1();
-		if (bGui_2) draw_SurfingWidgets2();
-		if (bGui_3) draw_SurfingWidgets3();
+		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+		if (guiManager.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
-		// Panels toggles
-		windowPanels.beginWindow("Panels", NULL, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None);
+		// Panels Toggles
+		windowPanels.beginWindow("Panels", NULL, flags);
 		{
 			guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+			guiManager.Add(guiManager.bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+
 			windowPanels.drawWidgets();
-			guiManager.Add(guiManager.bAutoResize);
-			if (!guiManager.bMinimize) {
+
+			if (!guiManager.bMinimize)
+			{
 				guiManager.drawAdvanced();
 			}
 		}
 		windowPanels.endWindow();
+
+		//--
+
+		if (windowPanels.bEnable)
+		{
+			if (bGui_0) draw_SurfingWidgets0();
+			if (bGui_1) draw_SurfingWidgets1();
+			if (bGui_2) draw_SurfingWidgets2();
+			if (bGui_3) draw_SurfingWidgets3();
+		}
 	}
 	guiManager.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets0() {
-	windowPanels.panels[0].runState();
+	windowPanels.runState(0);
 
-	if (guiManager.beginWindow(bGui_0, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None));
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	if (guiManager.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+	
+	windowPanels.checkWidthMax();
+
+	if (guiManager.beginWindow(bGui_0, flags));
 	{
 		guiManager.AddGroup(params0);
 
-		windowPanels.panels[0].getState();
+		windowPanels.getState(0);
 	}
 	guiManager.endWindow();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets1() {
-	windowPanels.panels[1].runState();
+	windowPanels.runState(1);
 
-	if (guiManager.beginWindow(bGui_1, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None));
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	if (guiManager.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+	windowPanels.checkWidthMax();
+
+	if (guiManager.beginWindow(bGui_1, flags));
 	{
 		guiManager.AddGroup(params1);
 
-		windowPanels.panels[1].getState();
+		windowPanels.getState(1);
 	}
 	guiManager.endWindow();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets2() {
-	windowPanels.panels[2].runState();
+	windowPanels.runState(2);
 
-	if (guiManager.beginWindow(bGui_2, guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None));
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	if (guiManager.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+	windowPanels.checkWidthMax();
+
+	if (guiManager.beginWindow(bGui_2, flags));
 	{
 		guiManager.AddGroup(params2);
 
-		windowPanels.panels[2].getState();
+		windowPanels.getState(2);
 	}
 	guiManager.endWindow();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets3() {
-	windowPanels.panels[3].runState();
+	windowPanels.runState(3);
 
-	if (guiManager.beginWindow(bGui_3));
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	if (guiManager.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+	windowPanels.checkWidthMax();
+
+	if (guiManager.beginWindow(bGui_3, flags));
 	{
 		guiManager.AddGroup(params3);
 
-		windowPanels.panels[3].getState();
+		windowPanels.getState(3);
 	}
 	guiManager.endWindow();
 }

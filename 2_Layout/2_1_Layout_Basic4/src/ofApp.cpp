@@ -5,9 +5,11 @@ void ofApp::setup() {
 	ofSetFrameRate(60);
 	//ofSetWindowPosition(1920, 20);
 
-	guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
-	guiManager.setImGuiDockingModeCentered(false);
-	guiManager.setup();
+	//guiManager.setImGuiAutodraw(true); // -> required when only one single ImGui instance is instantiated on all the oF project.
+	//guiManager.setImGuiDockingModeCentered(false);
+	//guiManager.setup();
+
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 
 	//-
 
@@ -29,8 +31,8 @@ void ofApp::setup() {
 
 	//--
 
-	guiManager.addWindow((string)"myWindow0");
-	guiManager.addWindow((string)"myWindow1");
+	guiManager.addWindowSpecial((string)"myWindow0");
+	guiManager.addWindowSpecial((string)"myWindow1");
 }
 
 //--------------------------------------------------------------
@@ -135,36 +137,36 @@ void ofApp::draw()
 
 		// using some helpers
 
-		//if (guiManager.getVisible(0)) {
-		//	if (guiManager.beginWindow(0))
-		//	{
-		//		ImGui::Text("Test guiManager.beginWindow(0)");
-		//		ImGui::SliderFloat(lineWidth.getName().c_str(),
-		//			(float*)&lineWidth.get(), lineWidth.getMin(), lineWidth.getMax());
-		//	}
-		//	guiManager.endWindow();
-		//}
+		if (guiManager.getVisible(0)) {
+			if (guiManager.beginWindow(0))
+			{
+				ImGui::Text("Test guiManager.beginWindow(0)");
+				ImGui::SliderFloat(lineWidth.getName().c_str(),
+					(float*)&lineWidth.get(), lineWidth.getMin(), lineWidth.getMax());
+			}
+			guiManager.endWindow();
+		}
 
-		//if (guiManager.getVisible(1)) {
-		//	if (guiManager.beginWindow(1))
-		//	{
-		//		ImGui::Text("Test guiManager.beginWindow(1)");
-		//		static int _value = 0;
-		//		ImGui::InputInt("InputInt", &_value);
-		//		ImGui::SliderInt("SliderInt", &_value, 0, 10);
-		//		ImGui::DragInt("DragInt", &_value);
-		//	}
-		//	guiManager.endWindow();
-		//}
+		if (guiManager.getVisible(1)) {
+			if (guiManager.beginWindow(1))
+			{
+				ImGui::Text("Test guiManager.beginWindow(1)");
+				static int _value = 0;
+				ImGui::InputInt("InputInt", &_value);
+				ImGui::SliderInt("SliderInt", &_value, 0, 10);
+				ImGui::DragInt("DragInt", &_value);
+			}
+			guiManager.endWindow();
+		}
 
 		//-
 
-		//	guiManager.beginWindow("Window 1", &bOpen1, window_flags);
-		//	{
-		//		drawWidgets();
-		//	}
-		//	guiManager.endWindow();
-		//}
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		guiManager.beginWindow("Window 1", &bOpen1, window_flags);
+		{
+			drawWidgets();
+		}
+		guiManager.endWindow();
 	}
 	guiManager.end();
 }
@@ -183,9 +185,8 @@ void ofApp::drawMainWindow()
 			//ofxImGuiSurfing::ToggleRoundedButton(6&guiManager.getVisible(0).get());
 			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(0));
 			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(1));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-			guiManager.drawAdvancedSubPanel();
+
+			guiManager.drawAdvanced();
 		}
 		ImGui::End();
 	}
@@ -194,5 +195,5 @@ void ofApp::drawMainWindow()
 //--------------------------------------------------------------
 void ofApp::drawWidgets()
 {
-	//guiManager.AddGroup(params1);
+	guiManager.AddGroup(params1);
 }
