@@ -177,6 +177,15 @@ namespace ofxImGuiSurfing
 			std::string name = e.getName();
 			//ofLogNotice() << __FUNCTION__ << " " << name << " : " << e;
 
+			if (name == iOrientation.getName())
+			{
+				static int pre = -1;
+				if (iOrientation != pre) pre = iOrientation;
+				else return;//not changed then skip
+
+				doSetWindowsPositions();
+			}
+
 			//-
 
 			// Check toggle enablers
@@ -348,6 +357,7 @@ namespace ofxImGuiSurfing
 		void runState(int i)
 		{
 			panels[i].runState();
+			checkWidthMax();
 		}
 
 	public:
@@ -357,97 +367,116 @@ namespace ofxImGuiSurfing
 			ImGui::Begin(name.c_str(), bOpen, flags);
 		}
 
-		void drawWidgets()
+		void drawWidgets(bool bMinimized = false)
 		{
-			ofxImGuiSurfing::AddToggleRoundedButtonNamed(bEnable, ImVec2(-1, -1));
+			float _h = getWidgetsHeight();
+			float _w1 = getWidgetsWidth(1);
+			float _w2 = getWidgetsWidth(2);
+
+			ofxImGuiSurfing::AddToggleRoundedButton(bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+			//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bEnable, ImVec2(-1, -1));
+
 			if (bEnable)
 			{
 				for (auto &p : panels)
 				{
-					ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
+					ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+					//ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(-1, -1));
+					//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
 				}
 
 				ImGui::Spacing();
 
+				if (ImGui::Button("All", ImVec2(_w2, _h)))
 				{
-					float _h = getWidgetsHeight();
-					float _w1 = getWidgetsWidth(1);
-					float _w2 = getWidgetsWidth(2);
-					if (ImGui::Button("All", ImVec2(_w2, _h)))
-					{
-						for (auto &p : panels) {
-							p.bEnable = true;
-						}
-					}
-					ImGui::SameLine();
-					if (ImGui::Button("None", ImVec2(_w2, _h)))
-					{
-						for (auto &p : panels) {
-							p.bEnable = false;
-						}
+					for (auto &p : panels) {
+						p.bEnable = true;
 					}
 				}
-			}
-
-			ImGui::Spacing();
-
-			// Controls
-			{
-				static bool bOpen = false;
-				ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-				if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+				ImGui::SameLine();
+				if (ImGui::Button("None", ImVec2(_w2, _h)))
 				{
-					ImGui::PushItemWidth(getPanelWidth() * 0.5f);
-					ofxImGuiSurfing::AddIntStepped(pad);
-					ofxImGuiSurfing::AddParameter(bHeaders);
-					ofxImGuiSurfing::AddParameter(bLockedWidth);
-					ofxImGuiSurfing::AddCombo(iOrientation, sOrientation);
-					ofxImGuiSurfing::AddParameter(iOrientation);
-					ImGui::PopItemWidth();
+					for (auto &p : panels) {
+						p.bEnable = false;
+					}
 				}
 
 				ImGui::Spacing();
-			}
 
-			//-
-
-			static ofParameter<bool> bDebug{ "Debug", false };
-			ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-			ImGui::Spacing();
-			if (bDebug)
-			{
-				ImGui::Indent();
-				std::string ss1 = "";
-				int i = 0;
-				for (auto &p : panels)
+				if (!bMinimized)
 				{
-					ss1 += "[" + ofToString(i) + "] ";
-					ss1 += ofToString(p.pos);
-					ss1 += "\n";
-					ss1 += ofToString(p.getRectangle());
-					ss1 += "\n";
-					ss1 += "\n";
+					// Controls
+					{
+						static bool bOpen = false;
+						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+						{
+							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
 
-					i++;
+							ofxImGuiSurfing::AddIntStepped(pad);
+							ofxImGuiSurfing::AddParameter(bHeaders);
+							ofxImGuiSurfing::AddParameter(bLockedWidth);
+							//ofxImGuiSurfing::AddCombo(iOrientation, sOrientation);//crash
+							//ofxImGuiSurfing::AddParameter(iOrientation);
+
+							static ofParameter<bool> bOrient{ "Orientation", false };
+							if (iOrientation == 0) bOrient.set(false);
+							else bOrient.set(true);
+							if (AddToggleRoundedButtonNamed(bOrient, ImVec2(-1, -1), string("Horizontal"), string("Vertical")))
+							{
+								if (!bOrient) iOrientation = 0;
+								else iOrientation = 1;
+							}
+
+							ImGui::PopItemWidth();
+
+							//-
+
+							// Debug
+
+							static ofParameter<bool> bDebug{ "Debug", false };
+							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+							ImGui::Spacing();
+							if (bDebug)
+							{
+								ImGui::Indent();
+								std::string ss1 = "";
+								int i = 0;
+								for (auto &p : panels)
+								{
+									ss1 += "[" + ofToString(i) + "] ";
+									ss1 += ofToString(p.pos);
+									ss1 += "\n";
+									ss1 += ofToString(p.getRectangle());
+									ss1 += "\n";
+									ss1 += "\n";
+
+									i++;
+								}
+								ImGui::TextWrapped(ss1.c_str());
+								ImGui::Spacing();
+
+								std::string ss2 = "queue\n";
+								for (int i = 0; i < panelsQueue.size(); i++)
+								{
+									if (i != 0) ss2 += ", ";
+									ss2 += ofToString(panelsQueue[i]);
+								}
+								ImGui::TextWrapped(ss2.c_str());
+								ImGui::Spacing();
+
+								std::string ss3 = "";
+								ss3 += "amnt ";
+								ss3 += ofToString(panelsQueue.size());
+								ImGui::TextWrapped(ss3.c_str());
+								ImGui::Spacing();
+								ImGui::Unindent();
+							}
+						}
+
+						//ImGui::Spacing();
+					}
 				}
-				ImGui::TextWrapped(ss1.c_str());
-				ImGui::Spacing();
-
-				std::string ss2 = "queue\n";
-				for (int i = 0; i < panelsQueue.size(); i++)
-				{
-					if (i != 0) ss2 += ", ";
-					ss2 += ofToString(panelsQueue[i]);
-				}
-				ImGui::TextWrapped(ss2.c_str());
-				ImGui::Spacing();
-
-				std::string ss3 = "";
-				ss3 += "amnt ";
-				ss3 += ofToString(panelsQueue.size());
-				ImGui::TextWrapped(ss3.c_str());
-				ImGui::Spacing();
-				ImGui::Unindent();
 			}
 		}
 

@@ -92,6 +92,7 @@ public:
 	ofxSurfing_ImGui_Manager();
 	~ofxSurfing_ImGui_Manager();
 
+
 	//--
 
 public:
@@ -276,49 +277,6 @@ public:
 
 	// Ends a window
 	void endWindow();
-
-	//----
-
-	// Special windows
-	//
-	//// We can add some special windows that have more features, with a simplified api.
-	//// This type of windows can be included into the Layout Presets Engine!
-	////
-	//// EXAMPLE CODE:
-	//// Will be added on: 
-	////
-	//// setup():
-	//guiManager.addWindowSpecial("mySpecialWin0", true);//index 0
-	//guiManager.addWindowSpecial("mySpecialWin1", true);//index 1
-	//guiManager.addWindowSpecial("mySpecialWin2");//index 2
-	//guiManager.addWindowSpecial("mySpecialWin3");//index 3
-	////
-	//// draw():
-	// You must rememeber the index to manually call like:
-	//guiManager.beginWindowSpecial(1);{}
-	//guiManager.beginWindowSpecial();
-	// or remember and respect the original setup() sorting when draw():
-	//guiManager.beginWindowSpecial();{}
-	//guiManager.endWindow();
-	//guiManager.beginWindowSpecial();{}
-	//guiManager.endWindow();
-
-	//----
-
-	// To simplify a bit the Api
-
-private:
-	int _currWindowsSpecial = 0;
-
-public:
-	bool beginWindowSpecial();
-	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
-	void endWindowSpecial();
-
-	//--------------------------------------------------------------
-	bool beginWindow(int index) { //-> legacy api
-		return beginWindowSpecial(index);
-	}
 
 	//----
 
@@ -750,9 +708,62 @@ public:
 		bDocking = b;
 	}
 
+
+	//--------
+
+	// Special Windows Management
+
 	//----
 
-	// Windows Management
+	// To simplify a bit the Api
+
+private:
+	int _currWindowsSpecial = 0;
+
+public:
+	bool beginWindowSpecial();
+	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
+	void endWindowSpecial(int index = -1);
+
+	//--------------------------------------------------------------
+	void drawSpecialWindowsPanels() {
+		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+		// Panels Toggles
+		windowPanels.beginWindow("Panels", NULL, flags);
+		{
+			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+			//Add(bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+
+			windowPanels.drawWidgets(bMinimize);
+
+			if (windowPanels.bEnable)
+			{
+				if (!bMinimize)
+				{
+					drawSpecialWindowsPanel();
+
+					//drawAdvanced();//crashes
+				}
+			}
+		}
+		windowPanels.endWindow();
+	}
+	//--------------------------------------------------------------
+	bool getSpecialWindowsEnableGlobal() {
+		return windowPanels.bEnable.get();
+	}
+
+	////--------------------------------------------------------------
+	//bool beginWindow(int index) { //-> legacy api
+	//	return beginWindowSpecial(index);
+	//}
+
+	//--
+
+private:
+	WindowPanels windowPanels;
 
 public:
 
@@ -771,6 +782,8 @@ public:
 		windowsAtributes.push_back(win);
 
 		params_Panels.add(_bGui);
+
+		windowPanels.add(_bGui);
 	}
 
 	//--------------------------------------------------------------
@@ -816,33 +829,13 @@ public:
 		params_Panels.add(_bGui);
 	}
 
-	//----
-
-	/*
-	// params to include packed into layout presets
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameterGroup& group) {
-		params_Layouts.add(group);
+	void initiatieSpecialWindows() {
+		windowPanels.initiate();
 	}
-	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<bool>& param) {
-		params_Layouts.add(param);
-	}
-	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<int>& param) {
-		params_Layouts.add(param);
-	}
-	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<float>& param) {
-		params_Layouts.add(param);
-	}
-	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
-		params_Layouts.add(param);
-	}
-	*/
 
 	//----
+
 
 	// Extra params to include packed into layout presets
 	//--------------------------------------------------------------

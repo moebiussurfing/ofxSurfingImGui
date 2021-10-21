@@ -31,8 +31,10 @@ void ofApp::setup() {
 
 	//--
 
-	guiManager.addWindowSpecial((string)"myWindow0");
-	guiManager.addWindowSpecial((string)"myWindow1");
+	guiManager.addWindowSpecial(bMode1);
+	guiManager.addWindowSpecial(bMode2);
+
+	guiManager.initiatieSpecialWindows();
 }
 
 //--------------------------------------------------------------
@@ -41,7 +43,6 @@ void ofApp::draw()
 	guiManager.begin();
 	{
 		//-
-
 
 		const auto viewport = ImGui::GetMainViewport();
 
@@ -135,28 +136,30 @@ void ofApp::draw()
 
 		//--
 
-		// using some helpers
+		// Using some helpers
+		guiManager.drawSpecialWindowsPanels(); // -> Main Panels Controller
 
-		if (guiManager.getVisible(0)) {
-			if (guiManager.beginWindow(0))
+		if (guiManager.getSpecialWindowsEnableGlobal())
+		{
+			if (guiManager.beginWindowSpecial(0))
 			{
 				ImGui::Text("Test guiManager.beginWindow(0)");
 				ImGui::SliderFloat(lineWidth.getName().c_str(),
 					(float*)&lineWidth.get(), lineWidth.getMin(), lineWidth.getMax());
 			}
 			guiManager.endWindow();
-		}
 
-		if (guiManager.getVisible(1)) {
-			if (guiManager.beginWindow(1))
-			{
-				ImGui::Text("Test guiManager.beginWindow(1)");
-				static int _value = 0;
-				ImGui::InputInt("InputInt", &_value);
-				ImGui::SliderInt("SliderInt", &_value, 0, 10);
-				ImGui::DragInt("DragInt", &_value);
+			if (guiManager.getVisible(1)) {
+				if (guiManager.beginWindowSpecial(1))
+				{
+					ImGui::Text("Test guiManager.beginWindow(1)");
+					static int _value = 0;
+					ImGui::InputInt("InputInt", &_value);
+					ImGui::SliderInt("SliderInt", &_value, 0, 10);
+					ImGui::DragInt("DragInt", &_value);
+				}
+				guiManager.endWindow();
 			}
-			guiManager.endWindow();
 		}
 
 		//-

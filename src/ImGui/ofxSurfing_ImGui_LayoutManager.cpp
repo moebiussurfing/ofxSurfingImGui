@@ -698,7 +698,7 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
 		}
 	}
-	else //get the OF viewport
+	else // get the OF viewport
 	{
 		auto view = ofGetCurrentViewport();
 		auto viewCenter = view.getCenter();
@@ -944,50 +944,60 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 		return false;
 	}
 
-	if (!windowsAtributes[index].bGui.get()) //skip window if hidden
+	if (!windowsAtributes[index].bGui.get()) // skip window if hidden
 	{
 		return false;
 	}
 
-	// default shape window
-	float x = 10;
-	float y = 10;
-	float w = 200;
-	float h = 600;
+	//--
 
-	ImGuiCond cond = ImGuiCond_None;
-	cond |= ImGuiCond_FirstUseEver;
-	//cond |= ImGuiCond_Appearing;
+	windowPanels.runState(index);
 
-	ImGui::SetNextWindowPos(ImVec2(x, y), cond);
-	ImGui::SetNextWindowSize(ImVec2(w, h), cond);
+	//// default shape window
+	//float x = 10;
+	//float y = 10;
+	//float w = 200;
+	//float h = 600;
 
-	ImGuiWindowFlags _flags = ImGuiWindowFlags_None;
+	//ImGuiCond cond = ImGuiCond_None;
+	//cond |= ImGuiCond_FirstUseEver;
+	////cond |= ImGuiCond_Appearing;
 
-	if (windowsAtributes[index].bPoweredWindow.get())
-	{
-		if (windowsAtributes[index].bAutoResize.get()) {
-			_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-		}
-	}
+	//ImGui::SetNextWindowPos(ImVec2(x, y), cond);
+	//ImGui::SetNextWindowSize(ImVec2(w, h), cond);
 
-	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), _flags);
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+	//if (windowsAtributes[index].bPoweredWindow.get())
+	//{
+	//	if (windowsAtributes[index].bAutoResize.get()) {
+	//		flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//	}
+	//}
+
+	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
 
 	return b;
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::endWindowSpecial()
+void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
-	// get window shape
-	if (windowsAtributes[_currWindowsSpecial].bPoweredWindow.get())
-	{
-		ofRectangle r = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-		windowsAtributes[_currWindowsSpecial].rectShapeWindow.set(r);
-		//rectWindows.push_back(r);
+	//// get window shape
+	//if (windowsAtributes[_currWindowsSpecial].bPoweredWindow.get())
+	//{
+	//	ofRectangle r = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+	//	windowsAtributes[_currWindowsSpecial].rectShapeWindow.set(r);
+	//	//rectWindows.push_back(r);
+	//	drawAdvancedControls();
+	//}
 
-		drawAdvancedControls();
-	}
+	//drawAdvancedControls();
+
+	if (index == -1) windowPanels.getState(_currWindowsSpecial);
+	else windowPanels.getState(index);
 
 	//_currWindowsSpecial++;
 
@@ -1517,7 +1527,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		// One row
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, _h);
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w, _h);
-		
+
 		ImGui::Separator();
 
 		/*
