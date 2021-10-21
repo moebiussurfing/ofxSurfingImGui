@@ -81,7 +81,6 @@ namespace ofxImGuiSurfing
 
 //--------
 
-
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
@@ -91,7 +90,6 @@ public:
 
 	ofxSurfing_ImGui_Manager();
 	~ofxSurfing_ImGui_Manager();
-
 
 	//--
 
@@ -170,6 +168,7 @@ public:
 
 public:
 
+	// Styles Engine
 	// widgetsManager
 
 	//--------------------------------------------------------------
@@ -182,8 +181,6 @@ public:
 
 public:
 
-	// Many repeated methods. need to pick a good name...
-
 	//--------------------------------------------------------------
 	void refreshLayout()
 	{
@@ -194,26 +191,6 @@ public:
 	{
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
-	////--------------------------------------------------------------
-	//void refresh()
-	//{
-	//	widgetsManager.refresh(); // update sizes to current window shape
-	//}
-	////--------------------------------------------------------------
-	//void clear() //-> legacy api
-	//{
-	//	widgetsManager.clear(); // update sizes to current window shape
-	//}
-	////--------------------------------------------------------------
-	//void reset()
-	//{
-	//	widgetsManager.resetUniqueNames(); // update sizes to current window shape
-	//}
-	////--------------------------------------------------------------
-	//void resetIDs()
-	//{
-	//	widgetsManager.resetUniqueNames(); // update sizes to current window shape
-	//}
 
 	//-
 
@@ -280,27 +257,6 @@ public:
 
 	//----
 
-	/*
-	//TODO:
-	// a window management engine
-	//to cascade all window or to distribute into the the viewport in some ways...
-	//it seems that could be used only on the special windows not over all...
-private:
-	vector<ofRectangle> rectWindows;
-	int currWindow = -1;
-public:
-	//--------------------------------------------------------------
-	void log_RectWindows() {
-		ofLogNotice(__FUNCTION__) << "--------------------------------------------------------------";
-		int i = 0;
-		for (auto &r : rectWindows) {
-			ofLogNotice(__FUNCTION__) << "Window #" << i++ << " " << ofToString(r);
-		}
-	}
-	*/
-
-	//----
-
 private:
 
 	// The ImGui instance options
@@ -314,7 +270,7 @@ private:
 public:
 
 	// Api 
-	// Some configs
+	// Some options
 
 	// Force autodraw
 	//--------------------------------------------------------------
@@ -387,6 +343,7 @@ private:
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
+	ofParameter<bool> bGui_WindowsSpecials{ "Gui Cascade", true }; // uses Windows Specials
 
 	ofParameterGroup params_Advanced{ "Params Advanced" };
 
@@ -416,6 +373,8 @@ private:
 
 public:
 
+	//TODO:
+	// Some methods to reset windows layouts..
 	//--------------------------------------------------------------
 	void resetWindowImGui(bool pos = true, bool size = true)
 	{
@@ -493,9 +452,9 @@ public:
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
-	void drawAdvanced() { // -> Simpler call. Use this.
+	void drawAdvanced(bool bNoSperator = false) { // -> Simpler call. Use this.
 		ImGui::Spacing();
-		ImGui::Separator();
+		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
 
 		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
@@ -586,9 +545,8 @@ private:
 
 						//--
 
-						drawSpecialWindowsPanel();
-
-						ImGui::Separator();
+						//drawSpecialWindowsPanel();
+						//ImGui::Separator();
 
 						//--
 
@@ -618,31 +576,31 @@ private:
 
 						//--
 
-						//TODO:
-						// Check wheel
-						// Check active widget
-						//https://github.com/ocornut/imgui/issues/4207
-						//https://github.com/ocornut/imgui/issues/789
-						//https://github.com/ocornut/imgui/issues/4303
-						if (0)
-						{
-							auto &io = ImGui::GetIO();
-							if (io.MouseHoveredViewport)
-							{
-								float wheel = io.MouseWheel;
-								std::string ss1 = "Mouse Wheel ";
-								if (wheel != 0)
-								{
-									ss1 += ofToString(wheel);
-								}
-								ImGui::Text(ss1.c_str());
-							}
-							string ss2;
-							ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
-							ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
-							ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
-							ImGui::Text(ss2.c_str());
-						}
+						////TODO:
+						//// Check wheel
+						//// Check active widget
+						////https://github.com/ocornut/imgui/issues/4207
+						////https://github.com/ocornut/imgui/issues/789
+						////https://github.com/ocornut/imgui/issues/4303
+						//if (0)
+						//{
+						//	auto &io = ImGui::GetIO();
+						//	if (io.MouseHoveredViewport)
+						//	{
+						//		float wheel = io.MouseWheel;
+						//		std::string ss1 = "Mouse Wheel ";
+						//		if (wheel != 0)
+						//		{
+						//			ss1 += ofToString(wheel);
+						//		}
+						//		ImGui::Text(ss1.c_str());
+						//	}
+						//	string ss2;
+						//	ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
+						//	ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
+						//	ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
+						//	ImGui::Text(ss2.c_str());
+						//}
 
 						ImGui::Separator();
 						ImGui::Unindent();
@@ -709,50 +667,60 @@ public:
 	}
 
 
-	//--------
+	//---------------------------
 
 	// Special Windows Management
-
-	//----
 
 	// To simplify a bit the Api
 
 private:
+
 	int _currWindowsSpecial = 0;
 
+	std::string namePanel = "";
+
 public:
+
 	bool beginWindowSpecial();
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
 	void endWindowSpecial(int index = -1);
 
 	//--------------------------------------------------------------
-	void drawSpecialWindowsPanels() {
+	void setNamePanelWindowsSpecial(std::string name) {
+		namePanel = name;
+	}
+
+	//--------------------------------------------------------------
+	void drawWindowsSpecialPanel() {
 		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
+		string ss;
+		if (namePanel == "") ss = "Panels";
+		else ss = namePanel;
+
 		// Panels Toggles
-		windowPanels.beginWindow("Panels", NULL, flags);
+		windowPanels.beginWindow(ss.c_str(), NULL, flags);
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 			//Add(bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
 			windowPanels.drawWidgets(bMinimize);
 
-			if (windowPanels.bEnable)
-			{
-				if (!bMinimize)
-				{
-					drawSpecialWindowsPanel();
-
-					//drawAdvanced();//crashes
-				}
-			}
+			//if (windowPanels.bEnable)
+			//{
+			//	if (!bMinimize)
+			//	{
+			//		drawSpecialWindowsPanel();
+			//		//drawAdvanced();//crashes?
+			//	}
+			//}
 		}
 		windowPanels.endWindow();
 	}
 	//--------------------------------------------------------------
-	bool getSpecialWindowsEnableGlobal() {
-		return windowPanels.bEnable.get();
+	bool getWindowsSpecialEnableGlobal() {
+		return windowPanels.bGui_Global.get();
 	}
 
 	////--------------------------------------------------------------
@@ -762,8 +730,45 @@ public:
 
 	//--
 
+	//TODO:
+	//--------------------------------------------------------------
+	struct SurfingImGuiWindowAtributes
+	{
+		// We queue here the bool paramms that enables the show/hide for each queued window
+		ofParameter<bool> bGui{ "Show Gui", true };
+
+		ofParameter<bool> bPoweredWindow{ "_bPoweredWindow", false }; // to include below extra toggles when rendering
+
+		ofParameter<bool> bAutoResize{ "Auto Resize", true };
+		ofParameter<bool> bExtra{ "Extra", false };
+		ofParameter<bool> bMinimize{ "Minimize", false };
+		ofParameter<bool> bAdvanced{ "Advanced", false };
+		ofParameter<bool> bDebug{ "Debug", false };
+
+		ofParameter<bool> bReset_Window{ "Reset Window", false };
+
+		//--------------------------------------------------------------
+		void setPowered(bool b) {
+			bPoweredWindow = b;
+		}
+
+		//ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
+	};
+
+	vector<SurfingImGuiWindowAtributes> windowsAtributes; // Handles only the manually pre added windows.
+
+	//--
+
 private:
+
 	WindowPanels windowPanels;
+
+public:
+
+	//--------------------------------------------------------------
+	void setNameGlobalPanelWindowsSpecial(std::string name) {
+		windowPanels.setNameGlobalPanelWindowsSpecial(name);
+	}
 
 public:
 
@@ -787,36 +792,6 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	std::string getWindowSpecialName(int index) {
-		if (index > windowsAtributes.size() - 1 || index == -1)
-		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-			return "-1";
-		}
-
-		return windowsAtributes[index].bGui.getName();
-	}
-
-	//--------------------------------------------------------------
-	ofRectangle getRectangleWindowSpecial(int index) {
-		if (index > windowsAtributes.size() - 1 || index == -1)
-		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-		}
-
-		return windowsAtributes[index].rectShapeWindow;
-	}
-
-private:
-
-	//--------------------------------------------------------------
-	void addWindow(std::string name, bool bPowered = false) { // -> legacy api
-		addWindowSpecial(name, bPowered);
-	}
-
-public:
-
-	//--------------------------------------------------------------
 	void addWindowSpecial(std::string name, bool bPowered = false) {
 		ofParameter<bool> _bGui{ name, true };
 
@@ -827,15 +802,60 @@ public:
 		windowsAtributes.push_back(win);
 
 		params_Panels.add(_bGui);
+
+		windowPanels.add(_bGui);
 	}
 
 	//--------------------------------------------------------------
-	void initiatieSpecialWindows() {
-		windowPanels.initiate();
+	std::string getWindowSpecialName(int index) {
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return "-1";
+		}
+
+		return windowsAtributes[index].bGui.getName();
 	}
+
+	////--------------------------------------------------------------
+	//ofRectangle getRectangleWindowSpecial(int index) {
+	//	if (index > windowsAtributes.size() - 1 || index == -1)
+	//	{
+	//		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+	//	}
+	//	return windowsAtributes[index].rectShapeWindow;
+	//}
+
+	////--------------------------------------------------------------
+	//void addWindow(std::string name, bool bPowered = false) { // -> legacy api
+	//	addWindowSpecial(name, bPowered);
+	//}
+
+	//--------------------------------------------------------------
+	void initiatieWindowsSpecial() {
+		windowPanels.setPath(path_Global);
+		windowPanels.initiate();
+
+		windowPanels.bModeLinkedWindowsSpecial.set(true);
+	}
+
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowsSpecialEnabler() {
+		return windowPanels.bModeLinkedWindowsSpecial;
+	}
+
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowsSpecialGui() {
+		return bGui_WindowsSpecials;
+	}
+
+	//void drawSpecialWindowsPanel();
+
+public:
 
 	//----
 
+	// Layouts Engine
 
 	// Extra params to include packed into layout presets
 	//--------------------------------------------------------------
@@ -862,7 +882,7 @@ public:
 	//----
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getVisible(int index)
+	ofParameter<bool>& getWindowSpecialVisible(int index)
 	{
 		if (index > windowsAtributes.size() - 1 || index == -1)
 		{
@@ -878,49 +898,23 @@ public:
 
 private:
 
-	//--------------------------------------------------------------
-	struct SurfingImGuiWindowAtributes
-	{
-		// We queue here the bool paramms that enables the show/hide for each queued window
-		ofParameter<bool> bGui{ "Show Gui", true };
-
-		ofParameter<bool> bPoweredWindow{ "_bPoweredWindow", false }; // to include below extra toggles when rendering
-
-		ofParameter<bool> bAutoResize{ "Auto Resize", true };
-		ofParameter<bool> bExtra{ "Extra", false };
-		ofParameter<bool> bMinimize{ "Minimize", false };
-		ofParameter<bool> bAdvanced{ "Advanced", false };
-		ofParameter<bool> bDebug{ "Debug", false };
-
-		ofParameter<bool> bReset_Window{ "Reset Window", false };
-
-		//--------------------------------------------------------------
-		void setPowered(bool b) {
-			bPoweredWindow = b;
-		}
-
-		ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
-	};
-
-	vector<SurfingImGuiWindowAtributes> windowsAtributes; // Handles only the manually pre added windows.
-
 	void loadAppSettings();
 	void saveAppSettings();
 
 	//----
 
-	//TODO:
-	// To be marked outside the scope to populate widgets inside this execution point... ?
-	// Should use lambda functions here!
-	//TODO: learn lambda functions..
-	void beginExtra();
-	void endExtra();
+	////TODO:
+	//// To be marked outside the scope to populate widgets inside this execution point... ?
+	//// Should use lambda functions here!
+	////TODO: learn lambda functions..
+	//void beginExtra();
+	//void endExtra();
 
-	void beginAdvanced();
-	void endAdvanced();
+	//void beginAdvanced();
+	//void endAdvanced();
 
-	void beginMenu();
-	void endMenu();
+	//void beginMenu();
+	//void endMenu();
 
 	//----
 
@@ -974,6 +968,7 @@ private:
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter &e);
+	void Changed_Params_Enablers(ofAbstractParameter &e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
 	//--------------------------------------------------------------
@@ -1050,7 +1045,6 @@ public:
 
 public:
 
-	void drawSpecialWindowsPanel();
 	void draw_ImGuiMenu();
 
 	//--

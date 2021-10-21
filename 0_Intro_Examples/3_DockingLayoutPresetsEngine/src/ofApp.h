@@ -6,6 +6,7 @@
 
 #include "ofxWindowApp.h" // -> Not required
 
+//TODO:
 // + fix resets
 
 class ofApp : public ofBaseApp {

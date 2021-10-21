@@ -115,7 +115,8 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 
 	//-
 
-	path_Global = "ImGuiLayout/";
+	path_Global = "ImGui_Layout/";
+	//path_Global = "ImGuiLayout/";
 	path_ImLayouts = path_Global + "Presets/";
 
 	// Create folders if required
@@ -124,7 +125,8 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
-	path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel + "AppSettings.json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + "GuiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
+	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
 	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
@@ -732,13 +734,12 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 
-	////TODO: 
-	////not used
-	//rectWindows.clear();
-	//currWindow = -1;
+	//TODO:
+	if (ofGetFrameNum() == 1) {
+
+	}
 
 	//TODO:
-	//_currWindowsSpecial = -1;
 	_currWindowsSpecial = -1;
 
 	resetUniqueNames(); // reset unique names
@@ -760,6 +761,14 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//--
 
 	if (bDocking) drawLayoutEngine();
+
+	//--
+
+	// Main Panels Controller
+	{
+		if (bGui_WindowsSpecials) drawWindowsSpecialPanel();
+		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
+	}
 }
 
 //--------------------------------------------------------------
@@ -775,8 +784,6 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	//--
 
-	//ImGui::PopStyleVar(); // minimal size
-
 	if (customFont != nullptr) ImGui::PopFont();
 
 	// mouse lockers
@@ -787,20 +794,6 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
-
-	//--
-
-	// Out of ImGui begin/end
-
-	////TODO:
-	//// log
-	//if (ofGetFrameNum() % 120 == 0) {
-	//	log_RectWindows();
-	//}
-
-	//TODO:
-	//_currWindowsSpecial = -1;
-	//_currWindowsSpecial = 0;
 }
 
 //--------------------------------------------------------------
@@ -926,6 +919,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(string name = "Window", bool* p_open 
 	return b;
 }
 
+//TODO: a faster mode to avoid use indexes..
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 	_currWindowsSpecial++;
@@ -936,35 +930,22 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 {
-	_currWindowsSpecial = index;
+	_currWindowsSpecial = index;//workflow
 
-	if (index > windowsAtributes.size() - 1 || index == -1)
 	{
-		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-		return false;
-	}
-
-	if (!windowsAtributes[index].bGui.get()) // skip window if hidden
-	{
-		return false;
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return false;
+		}
+		// skip window if hidden
+		if (!windowPanels.bGui_Global.get()) return false;
+		if (!windowsAtributes[index].bGui.get()) return false;
 	}
 
 	//--
 
-	windowPanels.runState(index);
-
-	//// default shape window
-	//float x = 10;
-	//float y = 10;
-	//float w = 200;
-	//float h = 600;
-
-	//ImGuiCond cond = ImGuiCond_None;
-	//cond |= ImGuiCond_FirstUseEver;
-	////cond |= ImGuiCond_Appearing;
-
-	//ImGui::SetNextWindowPos(ImVec2(x, y), cond);
-	//ImGui::SetNextWindowSize(ImVec2(w, h), cond);
+	if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.runState(index);
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
@@ -985,21 +966,34 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
-	//// get window shape
+	if (index == -1) index = _currWindowsSpecial;//workaround
+
+	{
+		if (index > windowsAtributes.size() - 1 /*|| index == -1*/)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return;
+		}
+
+		// skip window if hidden
+		if (!windowPanels.bGui_Global.get()) return;
+		if (!windowsAtributes[index].bGui.get()) return;
+	}
+
+	//-
+
 	//if (windowsAtributes[_currWindowsSpecial].bPoweredWindow.get())
 	//{
-	//	ofRectangle r = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-	//	windowsAtributes[_currWindowsSpecial].rectShapeWindow.set(r);
-	//	//rectWindows.push_back(r);
 	//	drawAdvancedControls();
 	//}
 
-	//drawAdvancedControls();
+	if (windowPanels.bModeLinkedWindowsSpecial)
+	{
+		if (index == -1) windowPanels.getState(_currWindowsSpecial);
+		else windowPanels.getState(index);
+	}
 
-	if (index == -1) windowPanels.getState(_currWindowsSpecial);
-	else windowPanels.getState(index);
-
-	//_currWindowsSpecial++;
+	//_currWindowsSpecial++;//workflow: to avoid use the index. but requires sequencial calling
 
 	ImGui::End();
 }
@@ -1257,6 +1251,8 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(params_Advanced);
 	params_AppSettings.add(bSolo);
+
+	params_AppSettings.add(bGui_WindowsSpecials);
 
 	//-
 
@@ -2197,7 +2193,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 }
 
 //----
-
+/*
 //TODO:
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawSpecialWindowsPanel()
@@ -2236,7 +2232,7 @@ void ofxSurfing_ImGui_Manager::drawSpecialWindowsPanel()
 
 		ImGui::TreePop();
 	}
-}
+}*/
 
 //keys
 //--------------------------------------------------------------

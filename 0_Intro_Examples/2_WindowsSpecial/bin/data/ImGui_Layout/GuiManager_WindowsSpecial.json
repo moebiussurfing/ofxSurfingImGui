@@ -1,0 +1,18 @@
+{
+    "WindowsSpecial": {
+        "Enablers": {
+            "myWindow_0": "1",
+            "myWindow_1": "1",
+            "myWindow_2": "1",
+            "myWindow_3": "1"
+        },
+        "Hide_Headers": "1",
+        "Lock_Height": "0",
+        "Lock_Width": "1",
+        "Mode_Cascade": "1",
+        "Orientation": "1",
+        "Padding": "0",
+        "Show_Global": "1",
+        "position": "385, 113"
+    }
+}

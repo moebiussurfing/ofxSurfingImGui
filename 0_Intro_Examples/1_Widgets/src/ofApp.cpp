@@ -9,15 +9,6 @@ void ofApp::setup() {
 
 	//--
 
-	// Instantiate
-
-	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
-	//guiManager.setSettingsFilename("1_Widgets"); 
-
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
-
-	//--
-
 	// Parameters
 
 	bEnable1.set("bEnable1", false);
@@ -50,9 +41,64 @@ void ofApp::setup() {
 	separation4.set("separation4", 50, 1, 100);
 	speed4.set("speed4", 0.5, 0, 1);
 
+	//--
+
+	// Groups
+
+	params1.setName("params1");
+	params2.setName("params2");
+	params3.setName("params3");
+	params4.setName("params4");
+
+	params1.add(bEnable1);
+	params1.add(bEnable2);
+	params1.add(bEnable3);
+	params1.add(bEnable4);
+
+	params1.add(pos_1);
+	params1.add(rot_1);
+
+	params2.add(lineWidth2);
+	params2.add(separation2);
+
+	params3.add(speed3);
+	params3.add(shapeType3);
+	params3.add(knob1);
+	params3.add(knob2);
+	params3.add(size3);
+
+	params4.add(size4);
+	params4.add(speed4);
+	params4.add(shapeType4);
+	params4.add(lineWidth4);
+	params4.add(separation4);
+
+	// -> Nesting Groups
+	params2.add(params3);
+	params1.add(params2);
+	params1.add(params4);
+
+	//----
+
+
+	// ImGui
+
+	// Instantiate
+
+	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
+	//guiManager.setSettingsFilename("1_Widgets"); 
+
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+
+	//----
+
+	// Customize Styles
+
+	setupImGuiStyles();
+
 	//-
 
-	// Callbacks
+	// Callbacks to update Custom Styles on runtime
 
 	//--------------------------------------------------------------
 	listener_bEnable1 = bEnable1.newListener([this](bool &b) {
@@ -94,67 +140,69 @@ void ofApp::setup() {
 		setupImGuiStyles(); // -> refresh styles on runtime!
 	});
 
-	//--
-
-	// Groups
-
-	params1.setName("params1");
-	params2.setName("params2");
-	params3.setName("params3");
-	params4.setName("params4");
-
-	params1.add(bEnable1);
-	params1.add(bEnable2);
-	params1.add(bEnable3);
-	params1.add(bEnable4);
-
-	params1.add(pos_1);
-	params1.add(rot_1);
-
-	params2.add(lineWidth2);
-	params2.add(separation2);
-
-	params3.add(speed3);
-	params3.add(shapeType3);
-	params3.add(knob1);
-	params3.add(knob2);
-	params3.add(size3);
-
-	params4.add(size4);
-	params4.add(speed4);
-	params4.add(shapeType4);
-	params4.add(lineWidth4);
-	params4.add(separation4);
-
-	// -> Nesting Groups
-	params2.add(params3);
-	params1.add(params2);
-	params1.add(params4);
-
-	//----
-
-	setupImGuiStyles();
-
 	//----
 
 	// Sections toggles
+	// To hide or show sections
+
 #define NUM_SECTIONS 7
 	for (int i = 0; i < NUM_SECTIONS; i++) {
 		ofParameter<bool> b{ "Section " + ofToString(i), false };
 		bEnablers.emplace_back(b);
 
 		paramsApp.add(b);
+
+		listenerGroup2.push(b.newListener(this, &ofApp::checkPressed));
 	}
 
 	//--
 
 	// Startup
+	// Load last session state settings
+
 	ofxSurfingHelpers::loadGroup(paramsApp);
 	ofxSurfingHelpers::loadGroup(params1);
 }
 
 //--------------------------------------------------------------
+void ofApp::checkPressed(const void * sender, bool & value) {
+	if (attendingEvent) {
+		return;
+	}
+
+	attendingEvent = true;
+	auto param = (ofParameter<bool>*)sender;
+
+	ofLogNotice() << __FUNCTION__ << " : "
+		<< (param->getName()) << " "
+		<< (param->get() ? "TRUE" : "FALSE");
+
+	if (value == false)
+	{
+		// Don't let this parameter be deactivated so there's always
+		// one active
+		param->set(true);
+	}
+	else
+	{
+		for (int i = 0; i < NUM_SECTIONS; i++)
+		{
+			if (param->isReferenceTo(bEnablers[i])) {
+				for (int j = 0; j < NUM_SECTIONS; j++)
+				{
+					if (i == j) continue;
+					bEnablers[j].set(false);
+				}
+			}
+		}
+	}
+	attendingEvent = false;
+}
+
+//--------------------------------------------------------------
 void ofApp::exit() {
+
+	// Save session state settings
 	ofxSurfingHelpers::saveGroup(paramsApp);
 	ofxSurfingHelpers::saveGroup(params1);
 }
@@ -237,7 +285,7 @@ void ofApp::setupImGuiStyles() {
 		guiManager.AddStyle(separation4, OFX_IM_HSLIDER_NO_NAME, 2, false);
 		// 2 widgets per row. sameline for the next
 		// 2 widgets per row. not sameline for the next
-		
+
 		guiManager.AddStyle(shapeType4, OFX_IM_VSLIDER, 1, false, 20);
 		// 1 widget per row. not sameline for the next and 20 y pixels spacing at end
 	}
@@ -248,7 +296,7 @@ void ofApp::setupImGuiStyles() {
 		guiManager.AddStyle(separation4, OFX_IM_KNOB, 2, false);
 		// 2 widgets per row. sameline for the next
 		// 2 widgets per row. not sameline for the next
-		
+
 		guiManager.AddStyle(shapeType4, OFX_IM_HSLIDER, 1, false, 20);
 		// 1 widget per row. not sameline for the next and 20 y pixels spaning at end
 
@@ -294,23 +342,33 @@ void ofApp::draw()
 			// But it will work if you use ofxImGuiSurfing::AddToggleRoundedButton(..
 			// --> *
 			//ImGui::Begin("Enablers"); 
+			
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			guiManager.beginWindow(ofToString("Enablers"));
+			guiManager.beginWindow(ofToString("Enablers"), NULL, window_flags);
 			{
-				for (int i = 0; i < NUM_SECTIONS; i++) 
+				for (int i = 0; i < NUM_SECTIONS; i++)
 				{
 					guiManager.Add(bEnablers[i], OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-					
+
 					// -> *
 					//ofxImGuiSurfing::AddToggleRoundedButton(bEnablers[i]);
 				}
 
 				ImGui::Spacing();
 
-				ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
+				//--------------------------------------------------------------
+
+				// An extra advanced / sub-panel 
+
+				// with some common toggles that we must customize/assign destinations.
+				{
+					guiManager.drawAdvanced(true);
+				}
 			}
 			guiManager.endWindow();
-			
+
 			// -> *
 			//ImGui::End();
 		}
@@ -357,7 +415,7 @@ void ofApp::draw()
 					ImGui::RangeSliderFloat("CMDS4f", min, max, flow1, fhigh1);
 					ImGui::RangeSliderFloat("CMDS5f", min, max, flow, fhigh);
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -396,7 +454,7 @@ void ofApp::draw()
 					//ImGui::SameLine();
 					//ImGui::Text("asdf");
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -411,7 +469,7 @@ void ofApp::draw()
 					guiManager.Add(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
 					//ofxImGuiSurfing::AddParameter(pos_1, true);
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -429,7 +487,7 @@ void ofApp::draw()
 						ImGui::TreePop();
 					}
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -444,7 +502,7 @@ void ofApp::draw()
 
 					guiManager.AddGroup(params1);
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -459,7 +517,7 @@ void ofApp::draw()
 					ImGui::SameLine();
 					ofxImGuiSurfing::AddToggleRoundedButton(bEnable1);
 
-					ofxImGuiSurfing::AddSpacingSeparated();
+					//ofxImGuiSurfing::AddSpacingSeparated();
 				}
 
 				//--------------------------------------------------------------
@@ -476,6 +534,7 @@ void ofApp::draw()
 						ImGui::TextWrapped("Try to resize the window panel \nto see the responsive layouting.. \n");
 
 						ofxImGuiSurfing::AddSpacingSeparated();
+
 						ImGui::Spacing();
 
 						if (ImGui::TreeNodeEx("Raw Mode without Styles Engine"))
@@ -546,17 +605,6 @@ void ofApp::draw()
 
 						ImGui::TreePop();
 					}
-				}
-
-				//--------------------------------------------------------------
-
-				// An extra advanced / sub-panel 
-
-				// with some common toggles that we must customize/assign destinations.
-				{
-					//ofxImGuiSurfing::AddSpacingSeparated();
-
-					guiManager.drawAdvanced();
 				}
 
 				//--------------------------------------------------------------

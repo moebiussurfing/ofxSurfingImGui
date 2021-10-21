@@ -54,6 +54,8 @@ void ofApp::setup() {
 	guiManager.addWindowSpecial("Video2");
 	guiManager.addWindowSpecial("Expert");
 
+	//guiManager.initiatieSpecialWindows();
+
 	/*
 
 	NOTE:
@@ -210,7 +212,7 @@ void ofApp::drawImGui()
 
 	//---------
 
-	if (guiManager.beginWindow(0)) // -> This is our helpers to render windows
+	if (guiManager.beginWindowSpecial(0)) // -> This is our helpers to render windows
 	{
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
@@ -218,12 +220,12 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
 
-		guiManager.endWindow(); // -> Must be called inside the if / beginWindow brackets!
+		guiManager.endWindowSpecial(); // -> Must be called inside the if / beginWindow brackets!
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(1))
+	if (guiManager.beginWindowSpecial(1))
 	{
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
@@ -231,12 +233,12 @@ void ofApp::drawImGui()
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
 
-		guiManager.endWindow();
+		guiManager.endWindowSpecial();
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(2))
+	if (guiManager.beginWindowSpecial(2))
 	{
 		if (ImGui::BeginTabBar("myTabs"))
 		{
@@ -263,23 +265,23 @@ void ofApp::drawImGui()
 			ImGui::EndTabBar();
 		}
 
-		guiManager.endWindow();
+		guiManager.endWindowSpecial();
 	}
 
 	//--------
 
-	if (guiManager.beginWindow(3))
+	if (guiManager.beginWindowSpecial(3))
 	{
 		ImGui::Text("myWindow3");
 		guiManager.AddGroup(params1);
 		guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
-		guiManager.endWindow();
+		guiManager.endWindowSpecial();
 	}
 
 	//---------
 
-	if (guiManager.beginWindow(4))
+	if (guiManager.beginWindowSpecial(4))
 	{
 		ImGui::Text("myWindow4");
 
@@ -302,7 +304,7 @@ void ofApp::drawImGui()
 		ofxImGuiSurfing::AddParameter(separation);
 		ofxImGuiSurfing::AddParameter(shapeType);
 
-		guiManager.endWindow();
+		guiManager.endWindowSpecial();
 	}
 }
 

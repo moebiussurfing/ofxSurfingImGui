@@ -1,28 +1,28 @@
 {
     "params1": {
-        "bEnable1": "1",
-        "bEnable2": "1",
+        "bEnable1": "0",
+        "bEnable2": "0",
         "bEnable3": "1",
-        "bEnable4": "1",
+        "bEnable4": "0",
         "params2": {
-            "lineWidth2": "0.584",
+            "lineWidth2": "0.266",
             "params3": {
-                "Knob1": "0.5825",
-                "Knob2": "1.65",
-                "shapeType3": "-1",
-                "size3": "80",
-                "speed3": "0.7"
+                "Knob1": "0.475651",
+                "Knob2": "-3.3",
+                "shapeType3": "-22",
+                "size3": "50",
+                "speed3": "0.596"
             },
-            "separation2": "52.429"
+            "separation2": "24.786"
         },
         "params4": {
-            "lineWidth4": "1",
-            "separation4": "50.5",
-            "shapeType4": "32",
-            "size4": "70",
-            "speed4": "0.8"
+            "lineWidth4": "0.6405",
+            "separation4": "58.1015",
+            "shapeType4": "-27",
+            "size4": "25",
+            "speed4": "0.253"
         },
-        "pos_1": "0, -77.922, 155.844",
-        "rot_1": "648.649, 0, 1000"
+        "pos_1": "-116.883, 162.338, -64.935",
+        "rot_1": "648.649, -90.909, -647.059"
     }
 }

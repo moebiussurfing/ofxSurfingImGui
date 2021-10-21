@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
-	ofSetWindowPosition(1920, 25);
+	//ofSetWindowPosition(1920, 25);
 
 	// Parameters
 	params0.setName("paramsGroup0");
@@ -32,6 +32,8 @@ void ofApp::setup() {
 	params3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params3.add(separation3.set("separation3", 50, 1, 100));
 
+	//-
+
 	setup_ImGui();
 }
 
@@ -40,17 +42,18 @@ void ofApp::setup_ImGui()
 {
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 
-	bGui_0.set("Window 0", true);
-	bGui_1.set("Window 1", true);
-	bGui_2.set("Window 2", true);
-	bGui_3.set("Window 3", true);
+	// Add special windows
+	guiManager.addWindowSpecial("myWindow 0"); // -> Custom enablers names
+	guiManager.addWindowSpecial("myWindow 1");
+	guiManager.addWindowSpecial("myWindow 2");
+	guiManager.addWindowSpecial("myWindow 3");
 
-	guiManager.addWindowSpecial(bGui_0);
-	guiManager.addWindowSpecial(bGui_1);
-	guiManager.addWindowSpecial(bGui_2);
-	guiManager.addWindowSpecial(bGui_3);
+	//// Customize names
+	//guiManager.setNamePanelWindowsSpecial("Example Windows");
+	//guiManager.setNameGlobalPanelWindowsSpecial("Enable Global");
 
-	guiManager.initiatieSpecialWindows();
+	// Startup
+	guiManager.initiatieWindowsSpecial();
 }
 
 //--------------------------------------------------------------
@@ -59,15 +62,16 @@ void ofApp::draw() {
 
 	guiManager.begin();
 	{
-		guiManager.drawSpecialWindowsPanels(); // -> Main Panels Controller
-		
-		if (guiManager.getSpecialWindowsEnableGlobal())
-		{
-			draw_SurfingWidgets0();
-			draw_SurfingWidgets1();
-			draw_SurfingWidgets2();
-			draw_SurfingWidgets3();
-		}
+		draw_SurfingWidgets0();
+		draw_SurfingWidgets1();
+		draw_SurfingWidgets2();
+		draw_SurfingWidgets3();
+
+		//-
+
+		//ImGui::Begin("TEST");
+		//ofxImGuiSurfing::AddParameter(guiManager.getWindowsSpecialGui());
+		//ImGui::End();
 	}
 	guiManager.end();
 }
@@ -75,55 +79,39 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets0() {
 
-	const int i = 0;
-	if (guiManager.getVisible(i))
+	if (guiManager.beginWindowSpecial(0))
 	{
-		if (guiManager.beginWindowSpecial(i))
-		{
-			guiManager.AddGroup(params0);
-		}
-		guiManager.endWindowSpecial(i);
+		guiManager.AddGroup(params0);
 	}
+	guiManager.endWindowSpecial();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets1() {
 
-	const int i = 1;
-	if (guiManager.getVisible(i))
+	if (guiManager.beginWindowSpecial(1))
 	{
-		if (guiManager.beginWindowSpecial(i))
-		{
-			guiManager.AddGroup(params1);
-		}
-		guiManager.endWindowSpecial(i);
+		guiManager.AddGroup(params1);
 	}
+	guiManager.endWindowSpecial();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets2() {
 
-	const int i = 2;
-	if (guiManager.getVisible(i))
+	if (guiManager.beginWindowSpecial(2))
 	{
-		if (guiManager.beginWindowSpecial(i))
-		{
-			guiManager.AddGroup(params2);
-		}
-		guiManager.endWindowSpecial(i);
+		guiManager.AddGroup(params2);
 	}
+	guiManager.endWindowSpecial();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets3() {
 
-	const int i = 3;
-	if (guiManager.getVisible(i))
+	if (guiManager.beginWindowSpecial(3))
 	{
-		if (guiManager.beginWindowSpecial(i))
-		{
-			guiManager.AddGroup(params3);
-		}
-		guiManager.endWindowSpecial(i);
+		guiManager.AddGroup(params3);
 	}
+	guiManager.endWindowSpecial();
 }

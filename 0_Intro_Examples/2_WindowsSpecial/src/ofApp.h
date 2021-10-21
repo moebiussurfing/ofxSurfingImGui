@@ -5,27 +5,11 @@
 #include "ofxSurfingImGui.h"
 
 class ofApp : public ofBaseApp{
-    
 public:
+    
     void setup();
     void draw();
-    
-	void setup_ImGui();
-
-    void draw_SurfingWidgets0();
-    void draw_SurfingWidgets1();
-    void draw_SurfingWidgets2();
-    void draw_SurfingWidgets3();
 	
-	ofxSurfing_ImGui_Manager guiManager;
-
-	// Window Enablers
-
-	ofParameter<bool> bGui_0;
-	ofParameter<bool> bGui_1;
-	ofParameter<bool> bGui_2;
-	ofParameter<bool> bGui_3;
-
     // Parameters
     
     ofParameterGroup params0;
@@ -53,4 +37,17 @@ public:
     ofParameter<float> separation3;
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
+
+	//-
+
+	// Gui
+
+	ofxSurfing_ImGui_Manager guiManager;
+
+	void setup_ImGui();
+
+	void draw_SurfingWidgets0();
+	void draw_SurfingWidgets1();
+	void draw_SurfingWidgets2();
+	void draw_SurfingWidgets3();
 };

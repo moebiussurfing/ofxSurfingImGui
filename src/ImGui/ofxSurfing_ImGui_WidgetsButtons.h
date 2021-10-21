@@ -229,7 +229,8 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
+	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border, bool bBlink ) {
+	//inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
 		return AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
 	}
 
@@ -363,7 +364,7 @@ namespace ofxImGuiSurfing
 #define USE_BORDER_ROUNDE_TOGGLES // -> Enable to draw circle borders on the rounded toggle..
 
 	//--------------------------------------------------------------
-	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 vv = ImVec2(-1, -1))
+	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 bb = ImVec2(-1, -1))
 	{
 		//TODO:
 		// Should fix mouse over/inner pos checking to fix mouse wheel control..
@@ -381,15 +382,15 @@ namespace ofxImGuiSurfing
 		string n = "##TOGGLEROUNDBUTTON" + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
-			if ((vv.x == -1) && (vv.y == -1)) // default size
+			if ((bb.x == -1) && (bb.y == -1)) // default size
 			{
 				height = ImGui::GetFrameHeight();
 				width = height * 1.55f;
 			}
 			else // received by args
 			{
-				width = vv.x;
-				height = vv.y;
+				width = bb.x;
+				height = bb.y;
 			}
 			radius = height / 2.0f;
 
@@ -515,12 +516,12 @@ namespace ofxImGuiSurfing
 	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
 	// after the button it adds more spacing
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 vv = ImVec2(-1, -1))
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1))
 	{
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 
-		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, vv))
+		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, bb))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;
@@ -529,21 +530,39 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, std::string name, ImVec2 bb)
+	{
+
+		bool bReturn = false;
+		auto tmpRef = parameter.get();
+
+		if (ToggleRoundedButton(name.c_str(), (bool *)&tmpRef, bb))
+		{
+			parameter.set(tmpRef);
+			bReturn = true;
+		}
+
+		return bReturn;
+	}
+
+	//TODO: not working..
 	// Two names depending of the bool state
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& parameter, ImVec2 vv = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1")
+	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1")
 	{
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 		std::string name;
 
 		if (nameTrue == "-1" || nameFalse == "-1") name = parameter.getName();
-		else {
+		else 
+		{
 			if ((bool *)&tmpRef) name = nameTrue;
 			else name = nameFalse;
 		}
 
-		if (ToggleRoundedButton(name.c_str(), (bool *)&tmpRef, vv))
+		if (ToggleRoundedButton(name.c_str(), (bool *)&tmpRef, bb))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;

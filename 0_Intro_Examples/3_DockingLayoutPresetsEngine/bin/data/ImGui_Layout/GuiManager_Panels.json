@@ -1,0 +1,35 @@
+{
+    "AppSettings": {
+        "LayoutSettings": {
+            "Auto_Save": "1",
+            "Extra_Tools": "0",
+            "Forced": "0",
+            "Free": "1",
+            "Layout_Preset": "0",
+            "Lock_A": "0",
+            "Lock_B": "0",
+            "Lock_C": "0",
+            "Panels": "1",
+            "Presets": "1",
+            "Viewport": "0"
+        },
+        "Manager": "1",
+        "Params_Advanced": {
+            "Advanced": "0",
+            "Auto_Resize": "1",
+            "Debug": "0",
+            "Extra": "0",
+            "Help": "1",
+            "Keys": "1",
+            "Lock_Move": "0",
+            "Minimize": "1",
+            "MouseWheel": "1",
+            "No_Scroll": "0"
+        },
+        "Rect_Panels": {
+            "rect_Manager": "1172, 316, 0, 186, 221",
+            "rect_Panels": "1102, 233, 0, 600, 300",
+            "rect_Presets": "768, 316, 0, 186, 253"
+        }
+    }
+}
