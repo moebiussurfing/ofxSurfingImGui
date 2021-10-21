@@ -9,10 +9,10 @@
         },
         "_LayoutsVisible": {
             "Audio": "1",
-            "Expert": "0",
+            "Expert": "1",
             "Main": "1",
             "Video1": "1",
-            "Video2": "0"
+            "Video2": "1"
         }
     }
 }

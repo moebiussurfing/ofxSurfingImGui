@@ -1,0 +1,19 @@
+{
+    "WindowsSpecial": {
+        "Enablers": {
+            "Audio": "1",
+            "Expert": "1",
+            "Main": "1",
+            "Video1": "1",
+            "Video2": "1"
+        },
+        "Hide_Headers": "1",
+        "Lock_Height": "1",
+        "Lock_Width": "0",
+        "Mode_Cascade": "1",
+        "Orientation": "0",
+        "Padding": "0",
+        "Windows_Special": "1",
+        "position": "2590, 32"
+    }
+}

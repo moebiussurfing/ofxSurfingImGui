@@ -11,9 +11,9 @@
 
 
 TODO:
-
-	+ store sorting
-
+	+ fix recolotate when closed first window
+	+ store sorting queue ?
+	+ fix close window using [x]
 */
 
 
@@ -108,6 +108,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bGui_Global{ "Show Global", true };
 		ofParameter<bool> bHeaders{ "Hide Headers", true };
 		ofParameter<bool> bModeLinkedWindowsSpecial{ "Mode Cascade",  false };
+		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 
 	private:
 
@@ -230,13 +231,16 @@ namespace ofxImGuiSurfing
 				if (iOrientation == 0) bOrientation.set(false);
 				else bOrientation.set(true);
 
-				if (iOrientation == 0) {
-					bLockedWidth = false;
-					bLockedHeight = true;
-				}
-				else {
-					bLockedWidth = true;
-					bLockedHeight = false;
+				//if (bFitSizes)
+				{
+					if (iOrientation == 0) {
+						bLockedWidth = false;
+						bLockedHeight = true;
+					}
+					else {
+						bLockedWidth = true;
+						bLockedHeight = false;
+					}
 				}
 
 				doSetWindowsPositions();
@@ -366,6 +370,8 @@ namespace ofxImGuiSurfing
 		{
 			if (ofGetFrameNum() < 2) return;
 
+			if (!bFitSizes) return;//skip
+
 			if (bLockedWidth && bLockedHeight) {
 				ImGui::SetNextWindowSize(ImVec2(width_max, height_max));
 			}
@@ -386,12 +392,14 @@ namespace ofxImGuiSurfing
 			params.add(bOrientation);
 			params.add(iOrientation);
 			params.add(bHeaders);
+			params.add(bFitSizes);
 
 			params_Settings.add(bGui_Global);
 			params_Settings.add(bModeLinkedWindowsSpecial);
 			params_Settings.add(bOrientation);
 			params_Settings.add(position);
 			params_Settings.add(pad);
+			params_Settings.add(bFitSizes);
 			params_Settings.add(bLockedWidth);
 			params_Settings.add(bLockedHeight);
 			params_Settings.add(bHeaders);
@@ -484,41 +492,55 @@ namespace ofxImGuiSurfing
 			//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bModeLinkedWindowsSpecial);//small
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 
-			// Global Enable 
-			//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
-			ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
+			ImGui::Spacing();
 
-			if (bGui_Global)
-			{
-				for (auto &p : panels)
-				{
-					ImGui::Indent();
-					ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-					//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
-					ImGui::Unindent();
-				}
-
-				ImGui::Spacing();
-
-				if (ImGui::Button("All", ImVec2(_w2, _h)))
-				{
-					for (auto &p : panels) {
-						p.bEnable = true;
-					}
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("None", ImVec2(_w2, _h)))
-				{
-					for (auto &p : panels) {
-						p.bEnable = false;
-					}
-				}
-
-				ImGui::Spacing();
-
+			if (bModeLinkedWindowsSpecial) {
 				// Orientation
 				string ss = bOrientation ? "Vertical" : "Horizontal";
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(-1, -1));
+				ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
+
+				ImGui::Spacing();
+			}
+
+			//-
+
+			{
+				static bool bOpen = false;
+				ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+				if (ImGui::CollapsingHeader("Windows", _flagw))
+				{
+					// Global Enable 
+					//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
+					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
+
+					if (bGui_Global)
+					{
+						for (auto &p : panels)
+						{
+							ImGui::Indent();
+							ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+							//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
+							ImGui::Unindent();
+						}
+
+						ImGui::Spacing();
+
+						if (ImGui::Button("All", ImVec2(_w2, _h)))
+						{
+							for (auto &p : panels) {
+								p.bEnable = true;
+							}
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("None", ImVec2(_w2, _h)))
+						{
+							for (auto &p : panels) {
+								p.bEnable = false;
+							}
+						}
+					}
+				}
 
 				ImGui::Spacing();
 

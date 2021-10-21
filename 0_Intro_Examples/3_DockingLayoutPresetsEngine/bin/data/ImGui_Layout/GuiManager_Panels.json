@@ -1,14 +1,15 @@
 {
     "AppSettings": {
+        "Gui_Cascade": "1",
         "LayoutSettings": {
             "Auto_Save": "1",
             "Extra_Tools": "0",
             "Forced": "0",
             "Free": "1",
             "Layout_Preset": "0",
-            "Lock_A": "0",
+            "Lock_A": "1",
             "Lock_B": "0",
-            "Lock_C": "0",
+            "Lock_C": "1",
             "Panels": "1",
             "Presets": "1",
             "Viewport": "0"
@@ -22,13 +23,13 @@
             "Help": "1",
             "Keys": "1",
             "Lock_Move": "0",
-            "Minimize": "1",
+            "Minimize": "0",
             "MouseWheel": "1",
             "No_Scroll": "0"
         },
         "Rect_Panels": {
-            "rect_Manager": "1172, 316, 0, 186, 221",
-            "rect_Panels": "1102, 233, 0, 600, 300",
+            "rect_Manager": "1126, 178, 0, 186, 336",
+            "rect_Panels": "1124, 632, 0, 600, 300",
             "rect_Presets": "768, 316, 0, 186, 253"
         }
     }

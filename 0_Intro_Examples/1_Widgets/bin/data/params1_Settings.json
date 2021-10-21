@@ -7,22 +7,22 @@
         "params2": {
             "lineWidth2": "0.266",
             "params3": {
-                "Knob1": "0.475651",
-                "Knob2": "-3.3",
-                "shapeType3": "-22",
-                "size3": "50",
-                "speed3": "0.596"
+                "Knob1": "0.561644",
+                "Knob2": "-2.60274",
+                "shapeType3": "1",
+                "size3": "30",
+                "speed3": "0.379"
             },
             "separation2": "24.786"
         },
         "params4": {
-            "lineWidth4": "0.6405",
-            "separation4": "58.1015",
-            "shapeType4": "-27",
-            "size4": "25",
-            "speed4": "0.253"
+            "lineWidth4": "0.203",
+            "separation4": "33.67",
+            "shapeType4": "36",
+            "size4": "59",
+            "speed4": "0.845"
         },
-        "pos_1": "-116.883, 162.338, -64.935",
+        "pos_1": "0, 162.338, -64.935",
         "rot_1": "648.649, -90.909, -647.059"
     }
 }

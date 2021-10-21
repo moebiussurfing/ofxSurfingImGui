@@ -83,7 +83,7 @@ void ofApp::draw_SurfingWidgets0() {
 	{
 		guiManager.AddGroup(params0);
 	}
-	guiManager.endWindowSpecial();
+	guiManager.endWindowSpecial(0);
 }
 
 //--------------------------------------------------------------
@@ -93,7 +93,7 @@ void ofApp::draw_SurfingWidgets1() {
 	{
 		guiManager.AddGroup(params1);
 	}
-	guiManager.endWindowSpecial();
+	guiManager.endWindowSpecial(1);
 }
 
 //--------------------------------------------------------------
@@ -103,7 +103,7 @@ void ofApp::draw_SurfingWidgets2() {
 	{
 		guiManager.AddGroup(params2);
 	}
-	guiManager.endWindowSpecial();
+	guiManager.endWindowSpecial(2);
 }
 
 //--------------------------------------------------------------
@@ -113,5 +113,5 @@ void ofApp::draw_SurfingWidgets3() {
 	{
 		guiManager.AddGroup(params3);
 	}
-	guiManager.endWindowSpecial();
+	guiManager.endWindowSpecial(3);
 }

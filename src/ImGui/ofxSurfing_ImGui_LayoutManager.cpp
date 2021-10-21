@@ -1001,9 +1001,6 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endWindow()
 {
-	//ImGui::PopItemWidth();
-	//ImGui::PopStyleVar();
-
 	ImGui::End();
 }
 

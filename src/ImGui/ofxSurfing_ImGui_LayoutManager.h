@@ -744,7 +744,6 @@ public:
 		ofParameter<bool> bMinimize{ "Minimize", false };
 		ofParameter<bool> bAdvanced{ "Advanced", false };
 		ofParameter<bool> bDebug{ "Debug", false };
-
 		ofParameter<bool> bReset_Window{ "Reset Window", false };
 
 		//--------------------------------------------------------------

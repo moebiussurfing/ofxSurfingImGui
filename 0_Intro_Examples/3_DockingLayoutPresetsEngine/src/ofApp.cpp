@@ -54,7 +54,10 @@ void ofApp::setup() {
 	guiManager.addWindowSpecial("Video2");
 	guiManager.addWindowSpecial("Expert");
 
-	//guiManager.initiatieSpecialWindows();
+	// Cascade Mode
+	guiManager.initiatieWindowsSpecial();
+	guiManager.setNamePanelWindowsSpecial("ofApp");
+	guiManager.setNameGlobalPanelWindowsSpecial("Windows Special");
 
 	/*
 
