@@ -110,6 +110,10 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bModeLinkedWindowsSpecial{ "Mode Cascade",  false };
 		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 
+		bool isIntitiated() {
+			return panels.size() > 0;
+		}
+
 	private:
 
 		ofParameter<bool> bLockedWidth{ "Lock Width", false };

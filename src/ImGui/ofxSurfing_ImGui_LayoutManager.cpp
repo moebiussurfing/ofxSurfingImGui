@@ -765,6 +765,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//--
 
 	// Main Panels Controller
+	if (windowPanels.isIntitiated())
 	{
 		if (bGui_WindowsSpecials) drawWindowsSpecialPanel();
 		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
@@ -1641,7 +1642,8 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 	//--
 
-	// layout preset index
+	// Layout preset index
+
 	else if (name == appLayoutIndex.getName())
 	{
 		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
@@ -1652,7 +1654,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 			//-
 
-			// 1. autosave
+			// 1. Autosave
 			if (bAutoSave_Layout)
 			{
 				// workaround:
@@ -1679,7 +1681,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 		//-
 
-		// hide all modules/gui toggles
+		// Hide all modules/gui toggles
 		if (appLayoutIndex == -1) {
 			for (int i = 0; i < windowsAtributes.size(); i++)
 			{
@@ -1690,13 +1692,13 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 		//-
 
-		// 2. load layout
+		// 2. Load layout
 		loadAppLayout(appLayoutIndex.get());
 	}
 
 	//-
 
-	// presets selector exclusive toggles
+	// Presets selector exclusive toggles
 	{
 		bool bSomeTrue = false;
 		for (int i = 0; i < bLayoutPresets.size(); i++)
@@ -1744,7 +1746,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 
 	//-
 
-	// solo panels selectors
+	// Solo panels selectors
 	{
 		bool bSomeTrue = false;
 		for (int i = 0; i < windowsAtributes.size(); i++)
