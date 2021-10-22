@@ -26,7 +26,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// must be here to allow to be changed before setup!
 	//// EXAMPLE
 	//guiManager.setImGuiAutodraw(true);
-	//guiManager.setup(); // this instantiates and configurates ofxImGui inside the class object.
+	//guiManager.initiate(); // this instantiates and configurates ofxImGui inside the class object.
 
 	// -> TODO: BUG?: 
 	// it seems than requires to be false when using multi-context/instances
@@ -70,7 +70,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
 		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
-		setup(); // This instantiates and configures ofxImGui inside the class object.
+		initiate(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
@@ -83,7 +83,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
-		setup(); // This instantiates and configures ofxImGui inside the class object.
+		initiate(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED:
@@ -100,7 +100,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
+void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated gui
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -116,7 +116,6 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	//-
 
 	path_Global = "ImGui_Layout/";
-	//path_Global = "ImGuiLayout/";
 	path_ImLayouts = path_Global + "Presets/";
 
 	// Create folders if required
@@ -126,9 +125,6 @@ void ofxSurfing_ImGui_Manager::setup() { // For using internal instantiated gui
 	}
 
 	path_AppSettings = path_Global + "GuiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
-	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + path_SubPathLabel + "AppSettings.json";//this allow multiple addons instaces with settings
-	//path_AppSettings = path_Global + bGui_LayoutsPanels.getName() + "_" + "AppSettings.json";//this allow multiple addons instaces with settings
-	//path_AppSettings = path_Global + "AppSettings.json";//file will be shared between all addon instances! take care or set to not autosave (setAutoSaveSettings(false))
 	//path_LayoutSettings = path_Global + "imgui_LayoutPresets.json";
 
 	//setupLayout(); //-> must call manually after adding windows and layout presets
@@ -170,7 +166,7 @@ void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setDefaultFont()
+void ofxSurfing_ImGui_Manager::setDefaultFont()//will apply the first added font file
 {
 	setDefaultFontIndex(0);
 }
@@ -181,7 +177,7 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 	//TODO:
 	// should be a vector with several customFont to allow hot reloading..
 	// if not, last added font will be used
-	ofLogNotice(__FUNCTION__) << path << ":" << size;
+	ofLogNotice(__FUNCTION__) << path << " : " << size;
 
 	auto &io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
@@ -241,11 +237,21 @@ void ofxSurfing_ImGui_Manager::pushStyleFont(int index)
 		if (customFonts[index] != nullptr)
 			ImGui::PushFont(customFonts[index]);
 	}
+	else {
+		bIgnoreNextPopFont = true;//workaround to avoid crashes
+	}
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::popStyleFont()
 {
+	//TODO: will crash if not pushed..
+	//workaround to avoid crashes
+	if (bIgnoreNextPopFont) {
+		bIgnoreNextPopFont = false;
+		return;
+	}
+
 	ImGui::PopFont();
 }
 
@@ -2398,7 +2404,7 @@ void ofxSurfing_ImGui_Manager::draw_ImGuiMenu()
 				*p_open = false;
 			ImGui::EndMenu();
 		}
-		ofxImGuiSurfing::HelpMarker(
+		ofxImGuiSurfing::AddTooltipHelp(
 			"This is not operative here. Just for testing menus!" "\n\n"
 			"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 			"- Drag from window title bar or their tab to dock/undock." "\n"

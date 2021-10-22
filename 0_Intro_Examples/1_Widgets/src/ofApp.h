@@ -16,7 +16,7 @@
 #include "ofxSurfingHelpers.h"
 
 // To learn how to add an extra ImGui add-on. 
-//https://github.com/iamclint/ImGuiRangeSlider // into src/
+//https://github.com/iamclint/ImGuiRangeSlider // into /example/src/
 #include "ImGuiRangeSlider.h"
 
 class ofApp : public ofBaseApp{
@@ -79,11 +79,13 @@ public:
 	//-
 
 	// To be used to enable Gui sections
-	// Could be used too to enable each window and allow close them using the top right [x]. 
+	// Could be used too to enable each window and 
+	// allow close them using the top right [x]. 
+#define NUM_SECTIONS 7
 	vector <ofParameter<bool>> bEnablers;
-	ofParameterGroup paramsApp{ "ofApp" };
+	ofParameterGroup params_Enablers{ "params_Enablers" };
 	// Exclusive toggles
-	ofEventListeners listenerGroup2;
-	void checkPressed(const void * sender, bool & value);
-	bool attendingEvent;// callback blocker
+	ofEventListeners listeners_Enablers;
+	void Changed_Enablers(const void * sender, bool & value);
+	bool bAttendingCallback; // Callback blocker
 };

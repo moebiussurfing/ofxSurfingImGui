@@ -12,7 +12,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags /*= ImGuiTreeNodeFlags_DefaultOpen*/)//fails..
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen)//fails..
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
 		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!

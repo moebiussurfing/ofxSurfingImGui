@@ -11,9 +11,9 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
-#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
-#include "misc/ofxSurfing_Timers.h"
+#include "ImGui/ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "ImGui/utils/ofxSurfing_Timers.h"
 
 //#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
 
@@ -401,7 +401,7 @@ namespace ofxImGuiSurfing
 
 			if (ImGui::IsItemClicked())
 			{
-				*v = !*v;//flip bool
+				*v = !*v; // flip bool
 
 				bchanged = true;
 			}
@@ -409,11 +409,12 @@ namespace ofxImGuiSurfing
 			//-
 
 			//TODO:
+
 			// Animated
+
 			float t = *v ? 1.0f : 0.0f;
 			ImGuiContext& g = *GImGui;
 			float ANIM_SPEED = 0.08f;
-			//if (g.LastActiveId == g.CurrentWindow->GetID(str_id) && g.LastActiveIdTimer < ANIM_SPEED)
 			if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
 			{
 				float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
@@ -430,12 +431,15 @@ namespace ofxImGuiSurfing
 			//cf = IM_COL32(255, 0, 255, 255);
 
 			// State true
+
 			if (*v) 
 			{
 				frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
 				cf = frame_col;
 			}
+
 			// State false
+
 			else
 			{
 				frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);

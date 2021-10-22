@@ -107,12 +107,14 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
+	//inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
+	//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
@@ -178,8 +180,8 @@ namespace ofxImGuiSurfing
 
 		ImGui::PushID(("##HSLIDER" + name).c_str());
 		{
-			if (!bNoName) { 
-				ImGui::Text(name.c_str()); 
+			if (!bNoName) {
+				ImGui::Text(name.c_str());
 				name = "";//-> to do not label name again. the right one to the fader
 			}
 

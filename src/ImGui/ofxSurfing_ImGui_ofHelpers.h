@@ -1,6 +1,12 @@
 
 #pragma once
 
+/*
+
+ofParameter Helpers
+
+*/
+
 #include "ofxImGui.h"
 
 #include "ofxSurfing_ImGui_Widgets.h"
@@ -68,6 +74,23 @@ namespace ofxImGuiSurfing
 		}
 	}
 
+	//--------------------------------------------------------------
+	inline void AddTooltip(std::string text, bool bEnabled = false)
+	{
+		if (!bEnabled) return;
+
+		// A tooltip over previous widget
+		if (ImGui::IsItemHovered()) 
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			//ImGui::TextUnformatted(text.c_str());
+			ImGui::TextWrapped(text.c_str());
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+	}
+
 	//----------------------
 
 	// ofParameter's Helpers
@@ -75,7 +98,8 @@ namespace ofxImGuiSurfing
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& parameter);
@@ -109,7 +133,7 @@ namespace ofxImGuiSurfing
 
 	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns = 1);
 	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels);
-	
+
 	//-
 
 	bool AddSlider(ofParameter<float>& parameter, const char* format = "%.3f", float power = 1.0f);

@@ -88,7 +88,7 @@ void ofApp::setup() {
 	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
 	//guiManager.setSettingsFilename("1_Widgets"); 
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	guiManager.setup(); // IM_GUI_MODE_INSTANTIATED
 
 	//----
 
@@ -145,14 +145,13 @@ void ofApp::setup() {
 	// Sections toggles
 	// To hide or show sections
 
-#define NUM_SECTIONS 7
 	for (int i = 0; i < NUM_SECTIONS; i++) {
 		ofParameter<bool> b{ "Section " + ofToString(i), false };
 		bEnablers.emplace_back(b);
 
-		paramsApp.add(b);
+		params_Enablers.add(b);
 
-		listenerGroup2.push(b.newListener(this, &ofApp::checkPressed));
+		listeners_Enablers.push(b.newListener(this, &ofApp::Changed_Enablers));
 	}
 
 	//--
@@ -160,17 +159,19 @@ void ofApp::setup() {
 	// Startup
 	// Load last session state settings
 
-	ofxSurfingHelpers::loadGroup(paramsApp);
+	//ofxSurfingHelpers::loadGroup(params_Enablers);//not works
+	bEnablers[4] = true;
+
 	ofxSurfingHelpers::loadGroup(params1);
 }
 
 //--------------------------------------------------------------
-void ofApp::checkPressed(const void * sender, bool & value) {
-	if (attendingEvent) {
+void ofApp::Changed_Enablers(const void * sender, bool & value) {
+	if (bAttendingCallback) {
 		return;
 	}
 
-	attendingEvent = true;
+	bAttendingCallback = true;
 	auto param = (ofParameter<bool>*)sender;
 
 	ofLogNotice() << __FUNCTION__ << " : "
@@ -196,14 +197,14 @@ void ofApp::checkPressed(const void * sender, bool & value) {
 			}
 		}
 	}
-	attendingEvent = false;
+	bAttendingCallback = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::exit() {
 
 	// Save session state settings
-	ofxSurfingHelpers::saveGroup(paramsApp);
+	//ofxSurfingHelpers::saveGroup(params_Enablers);
 	ofxSurfingHelpers::saveGroup(params1);
 }
 
@@ -302,7 +303,6 @@ void ofApp::setupImGuiStyles() {
 
 		guiManager.AddStyle(speed3, OFX_IM_HSLIDER_NO_NAME);
 		guiManager.AddStyle(shapeType3, OFX_IM_HSLIDER_NO_NAME);
-
 	}
 
 	//-
@@ -346,7 +346,7 @@ void ofApp::draw()
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			guiManager.beginWindow(ofToString("Enablers"), NULL, window_flags);
+			guiManager.beginWindow(ofToString("Sections Enablers"), NULL, window_flags);
 			{
 				for (int i = 0; i < NUM_SECTIONS; i++)
 				{
@@ -507,7 +507,7 @@ void ofApp::draw()
 
 				//--------------------------------------------------------------
 
-				// Three rounded toggles
+				// Three Rounded Toggles
 
 				if (bEnablers[5])
 				{

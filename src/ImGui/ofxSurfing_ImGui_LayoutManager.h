@@ -95,7 +95,7 @@ public:
 
 public:
 
-	void setup(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
 	void draw(); // to manual draw...
@@ -200,7 +200,7 @@ public:
 
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 
-	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
 
 	//----
 
@@ -293,6 +293,7 @@ private:
 
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
+	bool bIgnoreNextPopFont = false;
 
 public:
 
@@ -1027,7 +1028,7 @@ public:
 		setImGuiDockingModeCentered(true);
 		setImGuiAutodraw(true);
 
-		setup();
+		initiate();
 
 		////TODO:
 		//params_Layouts.clear();

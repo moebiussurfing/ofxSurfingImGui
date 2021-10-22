@@ -41,9 +41,10 @@ namespace ofxImGuiSurfing
 {
 	using namespace ImGui;
 
-	// preset clicker matrix buttons
-	// index will change when a box is clicked
+	// Preset Clicker Matrix Buttons
+	// Index will change when a box is clicked
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
+	//--------------------------------------------------------------
 	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
 	{
 		/*
@@ -68,30 +69,38 @@ namespace ofxImGuiSurfing
 
 		//--
 
+		////TODO:
+		//// Tooltip
+		//string text = "sdofhosdhfosihf";
+		//float w = getWidgetsWidth(1);
+		//float h = 50;
+		//ImGui::InvisibleButton("empty", ImVec2(w, h), ImGuiButtonFlags_None); // fix widget width
+		//if (ImGui::IsItemHovered())
+		//{
+		//	ImGui::BeginTooltip();
+		//	ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		//	ImGui::TextWrapped(text.c_str());
+		//	ImGui::PopTextWrapPos();
+		//	ImGui::EndTooltip();
+		//}
+
+		//--
+
 		bool cChanged = false;
 
 		if (sizey == -1)
 		{
-			sizey = ofxImGuiSurfing::getWidgetsHeightRelative();
+			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
-		//if (bDrawBorder) 
-		//{
 		ImGuiStyle *style = &ImGui::GetStyle();
 		float a = 0.3;
 		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
-		//ImVec4 borderLineColor = style->Colors[ImGuiCol_Border];
-		//ImVec4 borderLineColor = style->Colors[ImGuiCol_Separator];
 		float borderLineWidth = 1.0;
-		//}
-
-		//ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-		//_flagt |= ImGuiTreeNodeFlags_Framed;
 
 		string sid = "##MatrixClicker_" + _index.getName();
 		ImGui::PushID(sid.c_str());
 
-		//if (ImGui::TreeNodeEx(label.c_str(), _flagt))
 		{
 			int gap = 1;
 			float __spcx = ImGui::GetStyle().ItemSpacing.x;
@@ -103,12 +112,10 @@ namespace ofxImGuiSurfing
 			else
 			{
 				_sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
-				//_sizex = __w100 / amountBtRow - __spcx / amountBtRow - __spcx;
 			}
 
 			int _amt = _index.getMax() + 1;
 			float sizex;
-			//float  sizey;
 
 			if (_amt > amountBtRow)
 			{
@@ -123,18 +130,17 @@ namespace ofxImGuiSurfing
 				else
 				{
 					sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
-					//sizex = __w100 / _amt - __spcx / _amt - __spcx;
 				}
 			}
 
-			//sizey = 40;
 			sizex = MAX(5, sizex);
 
 			//-
 
-			//ImGui::Text("PRESET SELECTOR:");
-			// toggle button matrix
+			// Toggle button matrix
+
 			ImVec2 sizebt(sizex, sizey);
+
 			// Manually wrapping
 			// (we should eventually provide this as an automatic layout feature, but for now you can do it manually)
 
@@ -158,14 +164,9 @@ namespace ofxImGuiSurfing
 
 							// changes the colors
 							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
-							//const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonHovered];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
 							// border with alpha
-							//const ImVec4 c = style2.Colors[ImGuiCol_BorderShadow]; // TODO: get black from theme
-							//const ImVec4 colorBorder = ImVec4(c.x, c.y, c.z, c.w * 1);
 							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
-							//const ImVec4 c = style2.Colors[ImGuiCol_TextDisabled]; 
-							//const ImVec4 colorBorder = ImVec4(c.x, c.y, c.z, c.w * 0.15f);
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 						else
@@ -180,8 +181,6 @@ namespace ofxImGuiSurfing
 						// border
 						if (bBorder)
 						{
-							//uint32_t _time = ofGetElapsedTimeMillis();
-							//float a = ofMap(_time % randomizeDuration, 0, randomizeDuration, 0.8, 0.4);
 							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
 							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 						}
@@ -190,8 +189,11 @@ namespace ofxImGuiSurfing
 						if (ImGui::Button(name.c_str(), sizebt))
 						{
 							_index = n;
-							//load(n); // trig load preset
 							cChanged = true;
+
+							// Example Use 
+							// trig load preset
+							//load(n); 
 						}
 
 						// border
@@ -212,8 +214,6 @@ namespace ofxImGuiSurfing
 				}
 				ImGui::PopID();
 			}
-
-			//ImGui::TreePop();
 		}
 
 		ImGui::PopID();
@@ -508,7 +508,7 @@ namespace ofxImGuiSurfing
 	//}
 
 	//--------------------------------------------------------------
-	static void HelpMarker(const char* desc) {
+	static void AddTooltipHelp(const char* desc) {
 		ImGui::TextDisabled("(?)");
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
@@ -520,17 +520,60 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	static void ObjectInfo(const char* desc, const char* url, float retinaScale = 1.0f) {
-		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
+	static void AddLinkURL(const char* desc, const char* url, float retinaScale = 1.0f, bool bBlink = true)
+	{
 		ImGui::InvisibleButton("empty", ImVec2(224 * retinaScale, 1));  // fix widget width
-		if (ImGui::CollapsingHeader("INFO", ImGuiTreeNodeFlags_None)) {
-			ImGui::TextWrapped("%s", desc);
-			ImGui::Spacing();
-			if (ImGui::Button("Open Browser")) {
+
+		static bool isHover = false;
+
+		float w = getWidgetsWidth(1);
+		float h = 1.5 * getWidgetsHeightRelative();
+
+		// Border when selected
+		float a = 0.5f;
+		ImGuiStyle *style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+		ImVec4 colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		// Blink
+		static bool _bBlink;
+		_bBlink = bBlink && isHover;
+		if (_bBlink) 
+		{
+			float blinkValue = ofxImGuiSurfing::getFadeBlink();
+			a = ofClamp(blinkValue, 0.25, 0.75);
+			colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		//ImGui::TextWrapped("Open Internet Browser");
+
+		ImGui::Spacing();
+
+		if (_bBlink)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, colText);
+		}
+		
+		{
+			if (ImGui::Button(desc, ImVec2(w, h)))
+			{
 				ofLaunchBrowser(url);
 			}
+		}
+		
+		if (_bBlink)
+		{
+			ImGui::PopStyleColor();
+		}
+
+		isHover = ImGui::IsItemHovered();
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextWrapped("Open Internet Browser");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
 		}
 	}
 
@@ -576,6 +619,11 @@ namespace ofxImGuiSurfing
 		int _hours = static_cast<int>(ceil(seconds) / 3600);
 		int _minutes = static_cast<int>(ceil(seconds) / 60);
 		int _seconds = static_cast<int>(round(seconds)) % 60;
+
+		//if (drawList == NULL)
+		//{
+		//	drawList = &ImGui::GetWindowDrawList();
+		//}
 
 		string _sh, _sm, _ss;
 
@@ -1122,7 +1170,8 @@ namespace ofxImGuiSurfing
 
 			// start diffs
 			float frame_height = GetFrameHeight();
-			float arrow_size = std::floor(frame_height * .45f);
+			float arrow_size = std::floor(frame_height * .5f);
+			//float arrow_size = std::floor(frame_height * .45f);
 			float arrow_spacing = frame_height - 2.0f * arrow_size;
 
 			BeginGroup();

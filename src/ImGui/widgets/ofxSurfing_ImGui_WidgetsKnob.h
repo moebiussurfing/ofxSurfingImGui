@@ -43,7 +43,7 @@ namespace ImGui
 
 		ImGui::InvisibleButton(label, ImVec2(widgetRec.z, widgetRec.w));
 		bool value_changed = false;
-		
+
 		bool is_active = ImGui::IsItemActive();
 		bool is_hovered = ImGui::IsItemHovered();
 
@@ -62,13 +62,13 @@ namespace ImGui
 		float angle = ANGLE_MIN + (ANGLE_MAX - ANGLE_MIN) * t;
 		float angle_cos = cosf(angle), angle_sin = sinf(angle);
 		float radius_inner = radius_outer * 0.40f;
-		
+
 		//-
 
 		// 1. Draw label
 		float texPos = pos.x + ((widgetRec.z - labelLength.x) * 0.5f);
 		draw_list->AddText(ImVec2(texPos, pos.y + space_height), ImGui::GetColorU32(ImGuiCol_Text), label);
-		
+
 		//-
 
 		// 2. Draw big outer circle 
@@ -100,7 +100,7 @@ namespace ImGui
 		// 4. Inner small circle
 
 		draw_list->AddCircleFilled(center, radius_inner, ImGui::GetColorU32(is_active ? ImGuiCol_SliderGrabActive : is_hovered ? ImGuiCol_ButtonHovered : ImGuiCol_ButtonActive), IM_GUI_KNOB_CIRCLE_SEGMENTS);
-		
+
 		//-
 
 		// 5. Draw value label
@@ -257,6 +257,8 @@ namespace ofxImGuiSurfing
 //--------------------------------------------------------------
 inline bool ofxImGuiSurfing::AddKnob(ofParameter<int>& parameter, bool bTrail, float width)
 {
+	if (width == -1) width = 80;
+
 	float w = (width * RATIO_DIM) / 2;//TODO: fix tweak
 	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak
 
@@ -280,6 +282,7 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<int>& parameter, bool bTrail, f
 //--------------------------------------------------------------
 inline bool ofxImGuiSurfing::AddKnob(ofParameter<float>& parameter, bool bTrail, float width)
 {
+	if (width == -1) width = 80;
 
 	float w = (width * RATIO_DIM) / 2;//TODO: fix tweak
 	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak

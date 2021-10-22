@@ -1,55 +1,19 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup_ImGui()
-{
-	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
-	bool bRestore = true;
-	bool bMouse = false;
-	bool bAutoDraw = true;
-	// NOTE: it seems that must be false when multiple ImGui instances created!
-
-	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
-
-	//-
-
-	// font
-	auto &io = ImGui::GetIO();
-	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
-
-	std::string fontName;
-	float fontSize;
-	fontSize = 16;
-	fontName = "overpass-mono-bold.otf";
-
-	std::string _path = "assets/fonts/"; // assets folder
-	ofFile fileToRead(_path + fontName); // a file that exists
-	bool b = fileToRead.exists();
-	if (b) {
-		customFont = gui.addFont(_path + fontName, fontSize, nullptr, normalCharRanges);
-	}
-	if (customFont != nullptr) io.FontDefault = customFont;
-
-	//-
-
-	// theme
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
-}
-
-//--------------------------------------------------------------
 void ofApp::setup() {
 	ofSetFrameRate(60);
 
 	setup_ImGui();
 
-	// parameters
+	// Parameters
 	params.setName("paramsGroup1");// main container
 	params2.setName("paramsGroup2");// nested
 	params3.setName("paramsGroup3");// nested
 	params.add(indexPreset.set("Preset", 0, 0, 8));
 	params.add(bPrevious.set("<", false));
 	params.add(bNext.set(">", false));
-	params.add(bEnable1.set("Enable1", false));
+	params.add(bEnable1.set("bEnable1", false));
 	params.add(bEnable2.set("Enable2", false));
 	params.add(bEnable3.set("Enable3", false));
 	params.add(lineWidth.set("lineWidth", 0.5, 0, 1));
@@ -66,76 +30,81 @@ void ofApp::setup() {
 	params2.add(params3);
 	params.add(params2);
 
-	listener = indexPreset.newListener([this](int &i) {
-		ofLogNotice("loadGradient: ") << i;
-		loadGradient(indexPreset);
-	});
+	indexPreset.makeReferenceTo(surfingGradient.indexPreset);
+}
 
-	//--
-
-	// gradient
-	gradient.getMarks().clear();
-	gradient.addMark(0.0f, ImColor(ofColor(0)));
-	gradient.addMark(1.0f, ImColor(ofColor(255)));
+//--------------------------------------------------------------
+void ofApp::setup_ImGui()
+{
+	guiManager.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofBackground(color);
+
+	ofBackground(surfingGradient.color);
 
 	//-
 
-	gui.begin();
+	guiManager.begin();
 	{
-		ImGuiColorEditFlags _flagw;
-		string name;
 		{
-			// surfing widgets 1
-			_flagw = ImGuiWindowFlags_None;
+			// Surfing Widgets 1
+
+			ImGuiColorEditFlags _flagw;
+			string name;
+
+			_flagw = guiManager.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+
 			name = "SurfingWidgets 1";
-			ImGui::Begin(name.c_str(), NULL, _flagw);
+			guiManager.beginWindow(name.c_str(), NULL, _flagw);
 			{
-				//static float f1 = -0.5f, f2 = 0.75f;
-				//ofxImGuiSurfing::RangeSliderFloat2("range slider float", &f1, &f2, -1.0f, 1.0f, "(%.3f, %.3f)");
+				// Customize font
+				ofxImGuiSurfing::AddParameter(bEnable1);
+				ofxImGuiSurfing::AddTooltip("Enable to customize Font.", guiManager.bHelp);
 
-				// v sliders
-				ofxImGuiSurfing::AddVSlider2(valueKnob1, ImVec2(20, 100), false);
+				// Range
+				static float f1 = -0.5f;
+				static float f2 = 0.75f;
+				ofxImGuiSurfing::RangeSliderFloat("Range", &f1, &f2, -1.0f, 1.0f, "(%.3f, %.3f)");
+
+				// Sliders
+				ofxImGuiSurfing::AddBigSlider(valueKnob1);
+				guiManager.Add(valueKnob2, OFX_IM_HSLIDER);
+
+				// Knobs
+				guiManager.Add(valueKnob1, OFX_IM_KNOB, 4); // width size of a quarter of panel width
 				ImGui::SameLine();
-				ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
-				//ImGui::SameLine();
-				//ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
-				//ImGui::SameLine();
-				//ofxImGuiSurfing::AddVSlider2(valueKnob2, ImVec2(20, 100));
-				//ImGui::SameLine();
-				//ofxImGuiSurfing::AddVSlider2(valueKnob1, ImVec2(20, 100));
+				ofxImGuiSurfing::AddKnob(valueKnob2);
 
-				// knobs
-				ofxImGuiSurfing::AddKnob(valueKnob1);
-				//ImGui::SameLine();
-				//ofxImGuiSurfing::AddKnob(valueKnob2, true);
-
-				// more
-				draw_SurfingWidgets1();
+				// More Wdigets
+				draw_SurfingWidgets_1();
 			}
-			ImGui::End();
+			guiManager.endWindow();
 
-			//-
+			//--
 
-			// surfing widgets 2
-			_flagw = ImGuiWindowFlags_None;
+			// Surfing Widgets 2
+
 			name = "SurfingWidgets 2";
-			ImGui::Begin(name.c_str(), NULL, _flagw);
+			guiManager.beginWindow(name.c_str(), NULL, _flagw);
 			{
-				draw_SurfingWidgets2();
+				draw_SurfingWidgets_2();
 			}
-			ImGui::End();
+			guiManager.endWindow();
+
+			//--
+
+			// Colors Gradient
+
+			surfingGradient.drawImGui();
 		}
 	}
-	gui.end();
+	guiManager.end();
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets1() {
+void ofApp::draw_SurfingWidgets_1() {
 
 	// Common width sizes from 1 (_w1) to 4 (_w4) widgets per row
 	// Precalculate common widgets % sizes to fit current window "to be responsive"
@@ -146,11 +115,6 @@ void ofApp::draw_SurfingWidgets1() {
 	float _w3;
 	float _w4;
 	float _h;
-	_w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
-	_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
-	_w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
-	_w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
-	_h = WIDGETS_HEIGHT;
 
 	//--
 
@@ -159,27 +123,53 @@ void ofApp::draw_SurfingWidgets1() {
 		bool bOpen = true;
 		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 		_flagt |= ImGuiTreeNodeFlags_Framed;
+
 		if (ImGui::TreeNodeEx("An Index Selector", _flagt))
 		{
+			// Calculate sizes related to window shape/size
+
+			// Required when creating a raw ImGui tree manually.
+			// Not required when using the Api helpers/tools.
+			// Btw, some standard widgets do not requires to do it.
+			{
+				guiManager.refreshLayout();
+				_w1 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
+				_w2 = ofxImGuiSurfing::getWidgetsWidth(2); // 2 widgets half width
+				_w3 = ofxImGuiSurfing::getWidgetsWidth(3); // 3 widgets third width
+				_w4 = ofxImGuiSurfing::getWidgetsWidth(4); // 4 widgets quarter width
+				_h = 2 * ofxImGuiSurfing::getWidgetsHeight(); // Double height
+			}
+
+			// 1.01 Time counter in seconds 
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			ofxImGuiSurfing::drawTimecode(draw_list, ofGetElapsedTimef());
+			ImGui::Spacing();
+
+			ofxImGuiSurfing::AddTooltipHelp("Move the index slider, Click browse buttons or click the matrix numbers");
+			ImGui::Spacing();
+
 			// 1.1 Two buttons on same line
-			if (ImGui::Button("<", ImVec2(_w2, _h / 2)))
+			if (ImGui::Button("<", ImVec2(_w2, _h)))
 			{
 				indexPreset--;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
 			}
+			ofxImGuiSurfing::AddTooltip("Click to Previous", guiManager.bHelp);
 			ImGui::SameLine();
-			if (ImGui::Button(">", ImVec2(_w2, _h / 2)))
+
+			if (ImGui::Button(">", ImVec2(_w2, _h)))
 			{
 				indexPreset++;
 				indexPreset = ofClamp(indexPreset, indexPreset.getMin(), indexPreset.getMax()); // clamp parameter
 			}
+			ofxImGuiSurfing::AddTooltip("Click to Next", guiManager.bHelp);
 
 			// 1.2 Slider: the master int ofParam!
 			ofxImGuiSurfing::AddParameter(indexPreset);
-			ofxImGuiSurfing::HelpMarker("The master int ofParam!");
+			ofxImGuiSurfing::AddTooltip("Move the slider index to pick a preset.", guiManager.bHelp);
 
 			// 1.3 Matrix button clicker
-			AddMatrixClicker(indexPreset, true, 3); // responsive with 3 widgets per row
+			AddMatrixClicker(indexPreset, true, 3); // Responsive layout with 3 widgets per row
 
 			// 1.4 Spin arrows
 			int intSpin = indexPreset;
@@ -189,184 +179,71 @@ void ofApp::draw_SurfingWidgets1() {
 				indexPreset = intSpin;
 			}
 
-			// 1.5 A tooltip over prev widget
-			if (ImGui::IsItemHovered()) {
-				ImGui::BeginTooltip();
-				ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-				ImGui::TextUnformatted("This is not an ofParam. Just an int!");
-				ImGui::PopTextWrapPos();
-				ImGui::EndTooltip();
-			}
+			// 1.5 A tooltip over previous widget
+			ofxImGuiSurfing::AddTooltip(
+				"This is not an ofParameter. "
+				"It's Just an int type, so here we are using RAW ImGui widgets! "
+				"But remember that we can use ofParameter Helpers instead."
+				, guiManager.bHelp);
 
 			// 1.6 An external url link
-			ofxImGuiSurfing::ObjectInfo("ofxSurfingImGui @ github.com", "https://github.com/moebiussurfing/ofxSurfingImGui");
+			ofxImGuiSurfing::AddLinkURL("ofxSurfingImGui@github.com", "https://github.com/moebiussurfing/ofxSurfingImGui");
+
 			ImGui::TreePop();
 		}
 	}
 
-	ImGui::Dummy(ImVec2(0, 10)); // spacing
+	ImGui::Spacing();
 
 	//--
 
-	// 2. an ofParameterGroup
+	// 2. An ofParameterGroup
+	ofxImGuiSurfing::AddGroup(params3);
 
-	ImGuiTreeNodeFlags flagst;
-	flagst = ImGuiTreeNodeFlags_None;
-	flagst |= ImGuiTreeNodeFlags_DefaultOpen;
-	flagst |= ImGuiTreeNodeFlags_Framed;
-	ofxImGuiSurfing::AddGroup(params3, flagst); // -> force to be expanded
-	//ofxImGuiSurfing::AddGroup(params3); // -> by default appears collapsed
+	ofxImGuiSurfing::AddSpacingSeparated();
+
+	//--
+
+	// 3. Extra Stuff that we can use in our windows.
+
+	// There's common toggles on guiManager to use in our apps: 
+	// advanced, extra, help, keys, debug, lock move, etc...
+
+	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bHelp); // -> Here is used to enable tooltips
+	ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
+	if (guiManager.bExtra)
+	{
+		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAutoResize);
+		guiManager.drawAdvanced();
+	}
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets2()
+void ofApp::draw_SurfingWidgets_2()
 {
+	ImGui::SetNextItemOpen(true, ImGuiCond_FirstUseEver);
+
+	// Simple Tree 
+	// made using raw ImGui, not with all the power of the add-on Api.
+
 	if (ImGui::TreeNode("ofParams Widgets"))
 	{
-		ofxImGuiSurfing::AddParameter(size2);
-		ofxImGuiSurfing::AddParameter(amount2);
-		ofxImGuiSurfing::AddParameter(separation3);
+		ImGui::Indent();
+		{
+			//// Required when creating a raw ImGui tree and/or indenting manually.
+			//// Not required when using the Api helpers/tools.
+			//// Btw, some standard widgets do not requires to do it.
+			//guiManager.refreshLayout(); // Calculates sizes related to window shape/size now.
 
+			ofxImGuiSurfing::AddParameter(size2);
+			ofxImGuiSurfing::AddParameter(amount2);
+			ofxImGuiSurfing::AddParameter(separation3);
+
+			ofxImGuiSurfing::AddSpacingSeparated();
+
+			ofxImGuiSurfing::AddGroup(params);
+		}
+		ImGui::Unindent();
 		ImGui::TreePop();
 	}
-
-	ImGui::Dummy(ImVec2(0, 10)); // spacing
-
-	//--
-
-	// A gradient color tool
-	bool bOpen = true;
-	ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
-	_flagt |= ImGuiTreeNodeFlags_Framed;
-
-	if (ImGui::TreeNodeEx("A Gradient Widget", _flagt))
-	{
-		float _h = WIDGETS_HEIGHT;
-		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // 1 widget full width
-		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2);  // 2 widgets half width
-		float _w33 = ofxImGuiSurfing::getWidgetsWidth(3);  // 3 widgets per row
-
-		//-
-
-		static bool bEditGrad = false;
-		if (ImGui::GradientButton(&gradient))
-		{
-			//set show editor flag to true/false
-			bEditGrad = !bEditGrad;
-		}
-
-		//::EDITOR::
-		if (bEditGrad)
-		{
-			static ImGradientMark* draggingMark = nullptr;
-			static ImGradientMark* selectedMark = nullptr;
-
-			bool updated = ImGui::GradientEditor(&gradient, draggingMark, selectedMark);
-		}
-
-		//-
-
-		ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-		// selector
-		ImGui::PushItemWidth(_w50); // make smaller bc too long label
-		if (ImGui::SliderFloat("SELECT COLOR PERCENT", &prcGrad, 0, 1))
-		{
-			//::GET A COLOR::
-			float _color[3];
-			gradient.getColorAt(prcGrad, _color); // position from 0 to 1
-			color.set(_color[0], _color[1], _color[2], 1.0f);
-		}
-		ImGui::PopItemWidth();
-
-		ImGui::Dummy(ImVec2(0, 5)); // spacing
-
-		//// presets
-		//if (ImGui::Button("Gradient1", ImVec2(_w3, _h / 2)))
-		//{
-		//	indexPreset = 0;
-		//}
-		//ImGui::SameLine();
-		//if (ImGui::Button("Gradient2", ImVec2(_w3, _h / 2)))
-		//{
-		//	indexPreset = 2;
-		//}
-		//ImGui::SameLine();
-		//if (ImGui::Button("Gradient3", ImVec2(_w3, _h / 2)))
-		//{
-		//	indexPreset = 3;
-		//}
-
-		ImGui::TreePop();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::loadGradient(int index) {
-
-	int i = index; 
-
-	if (i == 0) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::blue));
-		gradient.addMark(0.3f, ImColor(ofColor::blueViolet));
-		gradient.addMark(0.6f, ImColor(ofColor::yellow));
-		gradient.addMark(1.0f, ImColor(ofColor::orangeRed));
-	}
-	else if (i == 1) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(0xA0, 0x79, 0x3D));
-		//gradient.addMark(0.2f, ImColor(0xAA, 0x83, 0x47));
-		gradient.addMark(0.3f, ImColor(0xB4, 0x8D, 0x51));
-		//gradient.addMark(0.4f, ImColor(0xBE, 0x97, 0x5B));
-		//gradient.addMark(0.6f, ImColor(0xC8, 0xA1, 0x65));
-		gradient.addMark(0.7f, ImColor(0xD2, 0xAB, 0x6F));
-		gradient.addMark(0.8f, ImColor(0xDC, 0xB5, 0x79));
-		gradient.addMark(1.0f, ImColor(0xE6, 0xBF, 0x83));
-	}
-	else if (i == 2) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::red));
-		gradient.addMark(0.3f, ImColor(ofColor::yellowGreen));
-		gradient.addMark(1.0f, ImColor(ofColor::green));
-	}
-	else if (i == 3) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::blueSteel));
-		gradient.addMark(0.3f, ImColor(ofColor::blueViolet));
-		gradient.addMark(0.7f, ImColor(ofColor::cornflowerBlue));
-		gradient.addMark(1.0f, ImColor(ofColor::cadetBlue));
-	}
-	else if (i == 4) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::yellow));
-		gradient.addMark(0.5f, ImColor(ofColor::lightYellow));
-		gradient.addMark(1.0f, ImColor(ofColor::lightGoldenRodYellow));
-	}
-	else if (i == 5) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::red));
-		gradient.addMark(0.5f, ImColor(ofColor::orangeRed));
-		gradient.addMark(1.0f, ImColor(ofColor::blueViolet));
-	}
-	else if (i == 6) {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::lightYellow));
-		gradient.addMark(0.5f, ImColor(ofColor::floralWhite));
-		gradient.addMark(1.0f, ImColor(ofColor::whiteSmoke));
-	}
-
-	// repeat some if index is too big. just for testing..
-	else {
-		gradient.getMarks().clear();
-		gradient.addMark(0.0f, ImColor(ofColor::paleVioletRed));
-		gradient.addMark(0.3f, ImColor(ofColor::red));
-		gradient.addMark(0.7f, ImColor(ofColor::darkRed));
-		gradient.addMark(1.0f, ImColor(ofColor::black));
-	}
-
-	//refresh
-	float _color[3];
-	gradient.getColorAt(prcGrad, _color); // position from 0 to 1
-	color.set(_color[0], _color[1], _color[2], 1.0f);
 }
