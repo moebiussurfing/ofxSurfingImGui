@@ -47,6 +47,9 @@
 
 #pragma once
 
+//#include "ofMain.h"
+#include "ofParameter.h"
+
 #include "imgui.h"
 
 #include <list>
@@ -55,6 +58,7 @@ struct ImGradientMark
 {
     float color[4];
     float position; //0 to 1
+	int index;
 };
 
 class ImGradient
@@ -63,6 +67,10 @@ public:
     ImGradient();
     ~ImGradient();
     
+	ofParameter<bool> bLockNew{ "bLock", true }; 
+	ofParameter<int> indexColor{ "indexColor", 0, 0, 0 };
+	ofParameter<ofFloatColor> color_Picked;
+
     void getColorAt(float position, float* color) const;
     void addMark(float position, ImColor const color);
     void removeMark(ImGradientMark* mark);
@@ -72,6 +80,7 @@ private:
     void computeColorAt(float position, float* color) const;
     std::list<ImGradientMark*> m_marks;
     float m_cachedValues[256 * 3];
+
 };
 
 namespace ImGui
@@ -80,7 +89,7 @@ namespace ImGui
     
     bool GradientEditor(ImGradient* gradient,
                         ImGradientMark* & draggingMark,
-                        ImGradientMark* & selectedMark);
+                        ImGradientMark* & selectedMark, bool bEdit = true);
     
 
 }

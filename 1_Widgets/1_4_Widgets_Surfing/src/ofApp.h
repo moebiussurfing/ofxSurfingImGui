@@ -4,7 +4,8 @@
 
 #include "ofxSurfingImGui.h" // -> This header includes ALL the add-on classes. 
 
-#include "SurfingGradient.h" 
+#include "exampleSurfingGradient.h" // -> This is an example about how to build a complex "widget",
+// using small raw ImGui widgets from other users community.
 
 
 class ofApp : public ofBaseApp{
@@ -48,5 +49,5 @@ public:
 	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();
 
-	SurfingGradient surfingGradient;
+	exampleSurfingGradient surfingGradient;
 };
