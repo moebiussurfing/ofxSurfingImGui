@@ -40,6 +40,9 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
+	// Enable Special Windows Organizer
+	guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
 
 	// Add special windows
@@ -53,7 +56,7 @@ void ofApp::setup_ImGui()
 	//guiManager.setNameGlobalPanelWindowsSpecial("Enable Global");
 
 	// Startup
-	guiManager.initiatieWindowsSpecial();
+	guiManager.startup();
 }
 
 //--------------------------------------------------------------

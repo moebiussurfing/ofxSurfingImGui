@@ -9,9 +9,10 @@
 
 /*
 
-
 TODO:
-	+ fix recolotate when closed first window
+
+	+ fix recolotate when closed first queued window
+	+ fix/replace position apply to first queued window
 	+ store sorting queue ?
 	+ fix close window using [x]
 */
@@ -207,7 +208,7 @@ namespace ofxImGuiSurfing
 			//-
 
 			params_User.clear();
-			params_User.add(bGui_WindowsSpecials);
+			//params_User.add(bGui_WindowsSpecials);
 			//params_User.add(bGui_Global);
 			params_User.add(bModeLinkedWindowsSpecial);
 			params_User.add(bOrientation);
@@ -286,7 +287,7 @@ namespace ofxImGuiSurfing
 			{
 				static int pre = -1;
 				if (iOrientation != pre) pre = iOrientation;
-				else return;//not changed then skip
+				else return; // not changed then skip
 
 				if (iOrientation == 0) bOrientation.set(false);
 				else bOrientation.set(true);
@@ -324,6 +325,8 @@ namespace ofxImGuiSurfing
 				if (panelsQueue.size() == 0 || panels.size() == 0) return;
 				int id = panelsQueue[0];
 				panels[id].setPosition(position.get());
+
+				doSetWindowsPositions();
 			}
 		}
 
@@ -578,7 +581,8 @@ namespace ofxImGuiSurfing
 
 			ImGui::Spacing();
 
-			if (bModeLinkedWindowsSpecial) {
+			if (bModeLinkedWindowsSpecial) 
+			{
 				// Orientation
 				string ss = bOrientation ? "Vertical" : "Horizontal";
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(-1, -1));
@@ -713,13 +717,13 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doRepositione()
 		{
-			//TODO:
-			return;
+			////TODO:
+			//return;
 
-			ofLogNotice() << __FUNCTION__ << " " << position.get();
-			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-			int id = panelsQueue[0];
-			panels[id].setPosition(position.get());
+			//ofLogNotice() << __FUNCTION__ << " " << position.get();
+			//if (panelsQueue.size() == 0 || panels.size() == 0) return;
+			//int id = panelsQueue[0];
+			//panels[id].setPosition(position.get());
 		}
 
 	public:
@@ -730,8 +734,8 @@ namespace ofxImGuiSurfing
 			doSetWindowsPositions();
 
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-
-			position.set(panels[0].getPosition());
+			int id = panelsQueue[0];
+			position.set(panels[id].getPosition());
 		}
 
 	private:

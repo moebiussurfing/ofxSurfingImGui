@@ -3,8 +3,7 @@
 
 TODO:
 
-+ merge window special with ofxSurfing_ImGui_WindowsOrganizer.h
-	+ get from 2_Widnows example
++ position applyes to 2nd window ?
 
 + fix make dockeable all windows on same space
 + fix multiple dock spaces that are colliding/one over another
@@ -76,6 +75,12 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGUi instance, no other addons.
 		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame)
+	};
+
+	enum SurfingImGuiWindowsMode {
+		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
+		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
+		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
 	};
 }
 
@@ -196,10 +201,14 @@ public:
 
 public:
 
+	// Special Windows Mode
+	SurfingImGuiWindowsMode surfingImGuiSpecialWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
+	void setWindowsMode(SurfingImGuiWindowsMode mode) {
+		surfingImGuiSpecialWindowsMode = mode;
+	}
+
 	// Instantiator
-
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
-
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
 
 	//----
@@ -691,7 +700,6 @@ public:
 		namePanel = name;
 	}
 
-	/*
 	//--------------------------------------------------------------
 	void drawWindowsSpecialPanel() {
 
@@ -721,7 +729,7 @@ public:
 		}
 		windowPanels.endWindow();
 	}
-	*/
+
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
@@ -792,7 +800,10 @@ public:
 
 		params_Panels.add(_bGui);
 
-		windowPanels.add(_bGui);
+		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		{
+			windowPanels.add(_bGui);
+		}
 	}
 
 	//--------------------------------------------------------------
@@ -807,7 +818,10 @@ public:
 
 		params_Panels.add(_bGui);
 
-		windowPanels.add(_bGui);
+		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		{
+			windowPanels.add(_bGui);
+		}
 	}
 
 	//--------------------------------------------------------------
@@ -1022,26 +1036,37 @@ public:
 
 		//-
 
-		// Cascade Mode
-		// Special windows manager
+		// Special Windows Organizer
 
-		initiatieWindowsSpecial();
-		//guiManager.setNamePanelWindowsSpecial("ofApp");
-		//guiManager.setNameGlobalPanelWindowsSpecial("Windows Special");
+		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		{
+			// Cascade / Organizer Mode
+			// Special windows manager
 
-		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING) {
-			windowPanels.setHideWindows(true);
+			initiatieWindowsSpecial();
 
 			// Customize names
-			windowPanels.setNameGlobalPanelWindowsSpecial("Organizer");
+			windowPanels.setNameGlobalPanelWindowsSpecial("Show Global");
 			setNamePanelWindowsSpecial("Organizer");
 
-			windowPanels.bGui_WindowsSpecials = false;
-			windowPanels.bGui_WindowsSpecials.setSerializable(false);
+			if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+			{
+				windowPanels.setHideWindows(true);
 
-			//// link show gui
-			//bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
-			////windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
+				// Docking mode has the gui toggles in other panels..
+				if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+				{
+					windowPanels.bGui_WindowsSpecials = false;
+					windowPanels.bGui_WindowsSpecials.setSerializable(false);
+				}
+			}
+
+			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+			{
+				// Link show gui
+				bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
+				//windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
+			}
 		}
 	}
 

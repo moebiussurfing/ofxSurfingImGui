@@ -32,7 +32,16 @@ void ofApp::setup() {
 	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 
+
 	//----
+
+	// guiManager
+
+	// Optional:
+	// A windows organizer engine..
+	//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	
+	//-
 
 	// Instantiate
 
@@ -93,7 +102,7 @@ void ofApp::setup() {
 
 	// Optional:
 
-	// We can add extra parameters to include into the Layout Presets
+	// We can add extra parameters to append include into the Layout Presets
 
 	//guiManager.addParameterToLayoutPresets(bEnable);
 	//guiManager.addParameterToLayoutPresets(bMode1);

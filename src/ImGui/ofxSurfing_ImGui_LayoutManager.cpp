@@ -783,11 +783,19 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//--
 
-	// Main Panels Controller
-	if (windowPanels.isIntitiated())
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
-		//if (bGui_WindowsSpecials) drawWindowsSpecialPanel();
+		// Main Panels Controller
+		if (windowPanels.isIntitiated())
+		{
+			if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
+
+			// Docking mode has the gui toggles in other panels..
+			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+			{
+				if (bGui_WindowsSpecials) drawWindowsSpecialPanel();
+			}
+		}
 	}
 }
 
@@ -950,26 +958,32 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 {
-	//TODO:
+	////TODO:
 	_currWindowsSpecial = index;//workflow
 
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+
+	// Skip window if hidden
+
+	if (index > windowsAtributes.size() - 1 || index == -1)
 	{
-		if (index > windowsAtributes.size() - 1 || index == -1)
-		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-			return false;
-		}
-		// skip window if hidden
-		if (!windowPanels.bGui_Global.get()) return false;
-		if (!windowsAtributes[index].bGui.get()) return false;
+		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+		return false;
 	}
 
-	//--
+	if (!windowsAtributes[index].bGui.get()) return false;
 
-	if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.runState(index);
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
+		if (!windowPanels.bGui_Global.get()) return false;
 
-	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-	if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+		//--
+
+		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.runState(index);
+
+		if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+	}
+
 	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
 	//if (windowsAtributes[index].bPoweredWindow.get())
@@ -982,8 +996,9 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
 
 	//TODO:
-	//if (!windowPanels.bGui_Global.get()) return false;//workaround
-	if (!windowsAtributes[index].bGui.get()) return false;
+	//workaround
+	////if (!windowPanels.bGui_Global.get()) return false;
+	//if (!windowsAtributes[index].bGui.get()) return false;
 
 	return b;
 }
@@ -993,16 +1008,19 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
 	if (index == -1) index = _currWindowsSpecial;//workaround
 
+	if (index > windowsAtributes.size() - 1)
 	{
-		if (index > windowsAtributes.size() - 1 /*|| index == -1*/)
-		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
-			return;
-		}
+		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+		return;
+	}
 
-		// skip window if hidden
+	// skip window if hidden
+
+	if (!windowsAtributes[index].bGui.get()) return;
+
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
 		if (!windowPanels.bGui_Global.get()) return;
-		if (!windowsAtributes[index].bGui.get()) return;
 	}
 
 	//-
@@ -1012,13 +1030,18 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 	//	drawAdvancedControls();
 	//}
 
-	if (windowPanels.bModeLinkedWindowsSpecial)
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (index == -1) windowPanels.getState(_currWindowsSpecial);
-		else windowPanels.getState(index);
+		if (windowPanels.bModeLinkedWindowsSpecial)
+		{
+			windowPanels.getState(index);
+		}
 	}
 
-	//_currWindowsSpecial++;//workflow: to avoid use the index. but requires sequencial calling
+	//--
+
+	//workflow: to avoid use the index. but requires sequencial calling
+	//_currWindowsSpecial++;
 
 	ImGui::End();
 }
@@ -1186,10 +1209,10 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
 
 	// 1.2.2 Special Windows Helpers
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		params_LayoutsExtra.add(windowPanels.getParamsUser());
 
-		////params_LayoutsExtra.add(windowPanels.b);
 		//params_LayoutsExtra.add(windowPanels.bGui_WindowsSpecials);
 		//params_LayoutsExtra.add(windowPanels.bModeLinkedWindowsSpecial);
 		//params_LayoutsExtra.add(windowPanels.bOrientation);
@@ -1199,15 +1222,13 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 		//params_LayoutsExtra.add(windowPanels.position);
 	}
 
-	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
-
 	// 1.3 Applied to control windows
 	//params_LayoutsExtra.add(bModeFree);
 	//params_LayoutsExtra.add(bModeForced);
 	//params_LayoutsExtra.add(bModeLock1);
 	//params_LayoutsExtra.add(bModeLockControls);
 
-	// Pack both groups
+	// 1.4 Pack both groups
 	params_Layouts.add(params_LayoutsVisible);
 	params_Layouts.add(params_LayoutsExtra);
 
@@ -1274,23 +1295,20 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// 4. App states for the next session
 
 	// The main control windows
+	
 	params_AppSettingsLayout.add(bGui_LayoutsPresets);
 	params_AppSettingsLayout.add(bGui_LayoutsExtra);
 	params_AppSettingsLayout.add(bGui_LayoutsPanels);
 
 	params_AppSettingsLayout.add(bAutoSave_Layout);
-
 	params_AppSettingsLayout.add(bModeFree);
 	params_AppSettingsLayout.add(bModeForced);
 	params_AppSettingsLayout.add(bModeLock1);
 	params_AppSettingsLayout.add(bModeLockControls);
 	params_AppSettingsLayout.add(bModeLockPreset);
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
-
 	params_AppSettingsLayout.add(appLayoutIndex);
-	//params_AppSettingsLayout.add(bMenu);
-	//params_AppSettingsLayout.add(bDebugRectCentral);
-
+	
 	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(params_Advanced);
@@ -1568,7 +1586,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		// One row
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w, _h);
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w, _h);
-		
+
 		if (!bMinimize)
 		{
 			ImGui::Separator();
@@ -1586,10 +1604,21 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 		{
 			ofxImGuiSurfing::AddBigToggle(bModeLockPreset, _w, _h / 2);
 
-		//AddToggleRoundedButton(bModeFree);
+			//AddToggleRoundedButton(bModeFree);
 
-		AddToggleRoundedButton(bGui_LayoutsExtra);
-		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h / 2);
+			AddToggleRoundedButton(bGui_LayoutsExtra);
+			//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsExtra, _w, _h / 2);
+		}
+
+		//-
+
+		//TODO:
+		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		{
+			if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
+			{
+
+			}
 		}
 
 		//-
@@ -1991,6 +2020,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//-
 
 		//if (!bMinimize)
+		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
 			if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) {
 				windowPanels.drawWidgets(bMinimize);
