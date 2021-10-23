@@ -603,3 +603,6 @@ examples/1_Widgets/bin/imgui.ini
 0_Intro_Examples/1_Widgets/bin/data/ofApp_Settings.json
 0_Intro_Examples/1_Widgets/bin/imgui.ini
 0_Intro_Examples/1_Widgets/bin/imgui.ini
+0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/ImGui_Layout/GuiManager_Panels.json
+0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/ImGui_Layout/GuiManager_Panels.json
+0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/ImGui_Layout/GuiManager_WindowsSpecial.json
