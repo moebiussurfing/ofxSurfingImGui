@@ -6,15 +6,19 @@
 
 #include "ofxWindowApp.h" // -> Not required
 
-//TODO:
-// + fix resets
-
-class ofApp : public ofBaseApp {
+class ofApp : public ofBaseApp 
+{
 public:
 
 	//-
 
+	void setup();
+	void draw();
+
+	//-
+
 	// Parameters
+
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
 	ofParameter<bool> bPrevious;
@@ -41,25 +45,19 @@ public:
 
 	//-
 
-	void setup();
-	void draw();
+	ofxSurfing_ImGui_Manager guiManager;
+
+	void drawImGui();
 
 	void logPopulate();
 
 	//-
 
-	ofxSurfing_ImGui_Manager guiManager;
-
-	void drawImGui();
-
-	//-
-
 	void dockingHelper();
 	void dockingHelperDraw();
-
 	void dockingReset();
-	bool bDockingReset = false;
 	void dockingRandom();
+	bool bDockingReset = false;
 	bool bDockingRandom = false;
 
 	//-

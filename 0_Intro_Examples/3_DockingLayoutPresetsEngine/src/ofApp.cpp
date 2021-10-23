@@ -33,7 +33,7 @@ void ofApp::setup() {
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 
 
-	//----
+	//-----------
 
 	// guiManager
 
@@ -287,7 +287,7 @@ void ofApp::drawImGui()
 void ofApp::dockingHelper()
 {
 	// Reset layout once.
-	if (0) // bypass
+	//if (0) // bypass
 	{
 		static bool binitiated = false;
 		if (!binitiated) {
@@ -320,9 +320,9 @@ void ofApp::dockingHelperDraw()
 	ImGui::SetNextWindowPos(ImVec2(400, 400), cond);
 	ImGui::SetNextWindowSize(ImVec2(100, 200), cond);
 
-	ImGui:Begin("Debug-ofApp", (bool*)bEnable.get(), flags);
+	ImGui:Begin("ofApp-Resets", (bool*)bEnable.get(), flags);
 	{
-		ImGui::TextWrapped("Reset Docking hardcoded layouts");
+		ImGui::TextWrapped("Reset Docking Hardcoded Layouts");
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
@@ -350,7 +350,7 @@ void ofApp::dockingHelperDraw()
 //--------------------------------------------------------------
 void ofApp::dockingReset()
 {
-	if (1) return;
+	//if (1) return;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -395,7 +395,7 @@ void ofApp::dockingReset()
 //--------------------------------------------------------------
 void ofApp::dockingRandom()
 {
-	if (1) return;
+	//if (1) return;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
