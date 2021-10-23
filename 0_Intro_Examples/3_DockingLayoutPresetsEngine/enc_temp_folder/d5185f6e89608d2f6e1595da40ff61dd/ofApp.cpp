@@ -2,7 +2,6 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
 	ofSetFrameRate(60);
 
 	//----
@@ -49,9 +48,9 @@ void ofApp::setup() {
 
 	guiManager.addWindowSpecial("Main"); // index 0
 	guiManager.addWindowSpecial("Audio"); // index 1
-	guiManager.addWindowSpecial("Video1"); // index 2
-	guiManager.addWindowSpecial("Video2"); // index 3
-	guiManager.addWindowSpecial("Expert"); // index 4
+	guiManager.addWindowSpecial("Video1"); //..
+	guiManager.addWindowSpecial("Video2");
+	guiManager.addWindowSpecial("Expert");
 
 	/*
 
@@ -74,7 +73,6 @@ void ofApp::setup() {
 	// Optional: 
 
 	// Customize the names for the 4 default Layout Presets
-	// Default names are P0-P1-P2-P3
 
 	//vector<std::string> names;
 	//names.push_back("Editor");
@@ -103,11 +101,11 @@ void ofApp::setup() {
 
 	// Optional: 
 
-	//// Subscribe an optional Reset button
-	//// flagging a bool to true to reset. 
-	//// Uses the internal addon gui Reset button on the Presets Extra panel,
-	//// But notice that it will call a local method on this scope (ofApp).
-	//guiManager.setReset(&bDockingReset);
+	// Subscribe an optional Reset button
+	// flagging a bool to true to reset. 
+	// Uses the internal addon gui Reset button on the Presets Extra panel,
+	// But notice that it will call a local method on this scope (ofApp).
+	guiManager.setReset(&bDockingReset);
 }
 
 //--------------------------------------------------------------
@@ -120,7 +118,6 @@ void ofApp::draw()
 		//----
 
 		// Here (between beginDocking/endDocking) we can access all the docking space.
-
 		guiManager.beginDocking();
 		{
 			dockingHelper();
@@ -132,6 +129,10 @@ void ofApp::draw()
 		// Render windows and widgets now!
 
 		drawImGui();
+
+		//----
+
+		//guiManager.endDocking();
 	}
 	guiManager.end();
 
@@ -139,6 +140,25 @@ void ofApp::draw()
 
 	// Log
 	logPopulate();
+}
+
+//--------------------------------------------------------------
+void ofApp::logPopulate()
+{
+	// Auto populate random log messages.
+	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
+	if (ofGetFrameNum() % m == 0)
+	{
+		if (ofNoise(ofGetElapsedTimef()) < 0.4f) return; // skip one third
+
+		std::string ss = ofToString(ofGetFrameNum());
+		float _rnd = ofRandom(1);
+		if (_rnd < 0.2) guiManager.addLog(ss);
+		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
+		else if (_rnd < 0.6) guiManager.addLog(ofToString("---------------"));
+		else if (_rnd < 0.8) guiManager.addLog(ofToString("===//...--//-----.."));
+		else guiManager.addLog(ofGetTimestampString());
+	}
 }
 
 //--------------------------------------------------------------
@@ -156,31 +176,31 @@ void ofApp::drawImGui()
 		ImGui::SetNextWindowPos(ImVec2(400, 400), cond);
 		ImGui::SetNextWindowSize(ImVec2(100, 200), cond);
 
-	ImGui:Begin("Debug-ofApp", (bool*)bEnable.get(), flags);
-	{
-		ImGui::TextWrapped("Reset Docking hardcoded layouts");
-		float _w = ofxImGuiSurfing::getWidgetsWidth();
-		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
-
-		// Reset docking layout
-		if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
+		ImGui:Begin("Debug-ofApp", (bool*)bEnable.get(), flags);
 		{
-			bDockingReset = true; // flag to call on a preciste draw point
-		}
+			ImGui::TextWrapped("Reset Docking hardcoded layouts");
+			float _w = ofxImGuiSurfing::getWidgetsWidth();
+			float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
-		// Randomize docking layout
-		if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
-		{
-			bDockingRandom = true; // flag to call on a preciste draw point
-		}
+			// Reset docking layout
+			if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
+			{
+				bDockingReset = true; // flag to call on a preciste draw point
+			}
 
-		// Show all Panels
-		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
-		{
-			guiManager.setShowAllPanels(true);
+			// Randomize docking layout
+			if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
+			{
+				bDockingRandom = true; // flag to call on a preciste draw point
+			}
+
+			// Show all Panels
+			if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
+			{
+				guiManager.setShowAllPanels(true);
+			}
 		}
-	}
-	ImGui::End();
+		ImGui::End();
 	}
 
 	//----
@@ -203,7 +223,7 @@ void ofApp::drawImGui()
 
 	//----
 
-	if (guiManager.getWindowSpecialVisible(1))
+	if (guiManager.getWindowSpecialVisible(1)) 
 	{
 		if (guiManager.beginWindowSpecial(1))
 		{
@@ -400,23 +420,4 @@ void ofApp::dockingRandom()
 	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
 
 	ImGui::DockBuilderFinish(dockspace_id);
-}
-
-//--------------------------------------------------------------
-void ofApp::logPopulate()
-{
-	// Auto populate random log messages.
-	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
-	if (ofGetFrameNum() % m == 0)
-	{
-		if (ofNoise(ofGetElapsedTimef()) < 0.4f) return; // skip one third
-
-		std::string ss = ofToString(ofGetFrameNum());
-		float _rnd = ofRandom(1);
-		if (_rnd < 0.2) guiManager.addLog(ss);
-		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
-		else if (_rnd < 0.6) guiManager.addLog(ofToString("---------------"));
-		else if (_rnd < 0.8) guiManager.addLog(ofToString("===//...--//-----.."));
-		else guiManager.addLog(ofGetTimestampString());
-	}
 }

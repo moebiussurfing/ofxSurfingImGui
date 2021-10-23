@@ -12,22 +12,6 @@
 class ofApp : public ofBaseApp {
 public:
 
-	void setup();
-	void draw();
-
-	//-
-
-	ofxSurfing_ImGui_Manager guiManager;
-
-	void drawImGui();
-
-	//-
-
-	void dockingReset();
-	bool bDockingReset = false;
-	void dockingRandom();
-	bool bDockingRandom = false;
-
 	//-
 
 	// Parameters
@@ -54,6 +38,27 @@ public:
 	ofParameter<float> separation3;
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
+
+	//-
+
+	void setup();
+	void draw();
+
+	void logPopulate();
+
+	//-
+
+	ofxSurfing_ImGui_Manager guiManager;
+
+	void drawImGui();
+
+	//-
+
+	void dockingHelper();
+	void dockingReset();
+	bool bDockingReset = false;
+	void dockingRandom();
+	bool bDockingRandom = false;
 
 	//-
 

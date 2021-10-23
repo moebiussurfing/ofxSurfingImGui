@@ -7,13 +7,14 @@
             "Video1": "1",
             "Video2": "1"
         },
-        "Hide_Headers": "1",
-        "Lock_Height": "1",
-        "Lock_Width": "0",
-        "Mode_Cascade": "1",
-        "Orientation": "0",
-        "Padding": "0",
-        "Windows_Special": "1",
-        "position": "2590, 32"
+        "Fit_Sizes": "1",
+        "Hide_Headers": "0",
+        "Link_windows": "1",
+        "Lock_Height": "0",
+        "Lock_Width": "1",
+        "Organizer": "1",
+        "Orientation": "1",
+        "Padding": "2",
+        "position": "335, 28"
     }
 }

@@ -480,8 +480,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 			//AddGroup(params_LayoutsExtra);
 			AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_None, OFX_IM_GROUP_TREE);
 			//AddGroup(params_LayoutsExtra, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-
-			ImGui::Separator();
 		}
 
 		//-
@@ -937,6 +935,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 {
+	//TODO:
 	_currWindowsSpecial = index;//workflow
 
 	{
@@ -966,6 +965,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//}
 
 	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
+	
+	if (!windowPanels.bGui_Global.get()) return false;//workaround
 
 	return b;
 }
@@ -1157,9 +1158,22 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 		params_LayoutsVisible.add(windowsAtributes[i].bGui);
 	}
 
-	// 1.2 Add other settings that we want to store into each presets
 	params_LayoutsExtra.add(bMenu);
 	params_LayoutsExtra.add(bLog);
+
+	//// 1.2 Add other settings that we want to store into each presets
+	//params_LayoutsExtraInternal.clear();
+	//params_LayoutsExtraInternal.add(bMenu);
+	//params_LayoutsExtraInternal.add(bLog);
+	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
+
+	// 1.2.2 Special Windows Helpers
+	//params_LayoutsExtraInternal.add(windowPanels.getParamsUser());
+
+	windowPanels.setNameGlobalPanelWindowsSpecial("Organizer");
+	setNamePanelWindowsSpecial("Organizer");
+	
+	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
 
 	// 1.3 Applied to control windows
 	//params_LayoutsExtra.add(bModeFree);
@@ -2033,8 +2047,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	static bool bLandscape;
 
 #ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
-	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(3 * PANEL_WIDTH_MIN, PANEL_HEIGHT_MIN));
-	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
+	if (bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(3.5 * PANEL_WIDTH_MIN, 0.9 * PANEL_HEIGHT_MIN));
+	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(0.55f * PANEL_WIDTH_MIN, 3 * PANEL_HEIGHT_MIN));
 #endif
 
 	if (bModeFree)

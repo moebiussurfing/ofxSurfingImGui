@@ -107,7 +107,8 @@ namespace ofxImGuiSurfing
 
 		ofParameter<bool> bGui_Global{ "Show Global", true };
 		ofParameter<bool> bHeaders{ "Hide Headers", true };
-		ofParameter<bool> bModeLinkedWindowsSpecial{ "Mode Cascade",  false };
+		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link windows",  false };
+		//ofParameter<bool> bModeLinkedWindowsSpecial{ "Mode Cascade",  false };
 		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 
 		bool isIntitiated() {
@@ -151,12 +152,32 @@ namespace ofxImGuiSurfing
 		wOrientation orientation;
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<int> iOrientation{ "Orient", 0, 0, W_COUNT - 1 };
-		std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
+		//std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
 		ofParameter<int> pad{ "Padding", 0, 0, 25 };
 
 		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+		
+		bool bHideWindows = false; //-> To disable when using the full layout engine. 
 
-		//--
+	public:
+		//--------------------------------------------------------------
+		void setHideWindows(bool b) {
+
+		bHideWindows = b;
+		}
+		//-
+
+		ofParameterGroup params_User{ "Params" }; // To use on external gui 
+
+	public:
+		//--------------------------------------------------------------
+		ofParameterGroup& getParamsUser() {
+			return params_User;
+		}
+
+
+		//----
+
 
 	public:
 
@@ -167,6 +188,17 @@ namespace ofxImGuiSurfing
 			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
 
 			counterQueue.addListener(this, &WindowPanels::Changed_counterQueue);
+
+			//-
+
+			params_User.clear();
+			params_User.add(bGui_Global);
+			params_User.add(bModeLinkedWindowsSpecial);
+			params_User.add(bOrientation);
+			params_User.add(bFitSizes);
+			params_User.add(bHeaders);
+			params_User.add(pad);
+			params_User.add(position);
 		}
 
 		//--------------------------------------------------------------
@@ -510,43 +542,50 @@ namespace ofxImGuiSurfing
 			//-
 
 			{
-				static bool bOpen = false;
-				ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-				if (ImGui::CollapsingHeader("Windows", _flagw))
+				// Windows
+
+				if (!bHideWindows) 
 				{
-					// Global Enable 
-					//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
-					ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
-
-					if (bGui_Global)
+					static bool bOpen = false;
+					ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+					if (ImGui::CollapsingHeader("Windows", _flagw))
 					{
-						for (auto &p : panels)
-						{
-							ImGui::Indent();
-							ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-							//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
-							ImGui::Unindent();
-						}
+						// Global Enable 
+						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
+						ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
 
-						ImGui::Spacing();
-
-						if (ImGui::Button("All", ImVec2(_w2, _h)))
+						if (bGui_Global)
 						{
-							for (auto &p : panels) {
-								p.bEnable = true;
+							for (auto &p : panels)
+							{
+								ImGui::Indent();
+								ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+								//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
+								ImGui::Unindent();
 							}
-						}
-						ImGui::SameLine();
-						if (ImGui::Button("None", ImVec2(_w2, _h)))
-						{
-							for (auto &p : panels) {
-								p.bEnable = false;
+
+							ImGui::Spacing();
+
+							if (ImGui::Button("All", ImVec2(_w2, _h)))
+							{
+								for (auto &p : panels) {
+									p.bEnable = true;
+								}
+							}
+							ImGui::SameLine();
+							if (ImGui::Button("None", ImVec2(_w2, _h)))
+							{
+								for (auto &p : panels) {
+									p.bEnable = false;
+								}
 							}
 						}
 					}
 				}
 
-				ImGui::Spacing();
+				//ImGui::Spacing();
+
+				// Settings
 
 				if (!bMinimized)
 				{

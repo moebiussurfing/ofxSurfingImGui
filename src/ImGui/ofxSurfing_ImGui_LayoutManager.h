@@ -960,6 +960,7 @@ private:
 	ofParameterGroup params_Layouts{ "_LayoutsPresets" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsVisible{ "_LayoutsVisible" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsExtra{ "_LayoutsExtra" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
 
 	int numPresetsDefault;
 	void createLayoutPreset(std::string namePreset = "-1");
@@ -1014,6 +1015,14 @@ public:
 			setupLayout(4); // Default Layout with 4 presets.
 			//setupLayout(4); // Default Layout with 4 presets.
 		}
+
+		// Cascade Mode
+		initiatieWindowsSpecial();
+		//guiManager.setNamePanelWindowsSpecial("ofApp");
+		//guiManager.setNameGlobalPanelWindowsSpecial("Windows Special");
+
+		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+			windowPanels.setHideWindows(true);
 	}
 
 	//--------------------------------------------------------------
@@ -1228,3 +1237,11 @@ public:
 		ImGui::PopStyleColor(6);
 	}
 };
+
+
+
+// NOTES
+
+// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
+//guiManager.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+

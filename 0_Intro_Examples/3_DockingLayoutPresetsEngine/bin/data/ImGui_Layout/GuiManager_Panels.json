@@ -7,9 +7,9 @@
             "Forced": "0",
             "Free": "1",
             "Layout_Preset": "0",
-            "Lock_A": "1",
+            "Lock_A": "0",
             "Lock_B": "0",
-            "Lock_C": "1",
+            "Lock_C": "0",
             "Panels": "1",
             "Presets": "1",
             "Viewport": "0"
@@ -28,9 +28,9 @@
             "No_Scroll": "0"
         },
         "Rect_Panels": {
-            "rect_Manager": "1126, 178, 0, 186, 336",
-            "rect_Panels": "1124, 632, 0, 600, 300",
-            "rect_Presets": "768, 316, 0, 186, 253"
+            "rect_Manager": "1160, 450, 0, 186, 263",
+            "rect_Panels": "697, 77, 0, 700, 300",
+            "rect_Presets": "782, 466, 0, 186, 253"
         }
     }
 }
