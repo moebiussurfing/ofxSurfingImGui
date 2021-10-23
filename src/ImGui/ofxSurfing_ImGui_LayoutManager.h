@@ -344,7 +344,7 @@ private:
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bGui_WindowsSpecials{ "Gui Cascade", true }; // uses Windows Specials
+	ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // uses Windows Specials
 
 	ofParameterGroup params_Advanced{ "Params Advanced" };
 
@@ -691,8 +691,10 @@ public:
 		namePanel = name;
 	}
 
+	/*
 	//--------------------------------------------------------------
 	void drawWindowsSpecialPanel() {
+
 		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -701,7 +703,7 @@ public:
 		else ss = namePanel;
 
 		// Panels Toggles
-		windowPanels.beginWindow(ss.c_str(), NULL, flags);
+		windowPanels.beginWindow(ss.c_str(), (bool*)&bGui_WindowsSpecials.get(), flags);
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 			//Add(bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
@@ -719,6 +721,8 @@ public:
 		}
 		windowPanels.endWindow();
 	}
+	*/
+
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
 		return windowPanels.bGui_Global.get();
@@ -1016,13 +1020,29 @@ public:
 			//setupLayout(4); // Default Layout with 4 presets.
 		}
 
+		//-
+
 		// Cascade Mode
+		// Special windows manager
+
 		initiatieWindowsSpecial();
 		//guiManager.setNamePanelWindowsSpecial("ofApp");
 		//guiManager.setNameGlobalPanelWindowsSpecial("Windows Special");
 
-		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING) {
 			windowPanels.setHideWindows(true);
+
+			// Customize names
+			windowPanels.setNameGlobalPanelWindowsSpecial("Organizer");
+			setNamePanelWindowsSpecial("Organizer");
+
+			windowPanels.bGui_WindowsSpecials = false;
+			windowPanels.bGui_WindowsSpecials.setSerializable(false);
+
+			//// link show gui
+			//bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
+			////windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
+		}
 	}
 
 	//--------------------------------------------------------------
@@ -1130,7 +1150,7 @@ private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
-	ofParameter<bool> bGui_LayoutsExtra{ "Extra Tools", false };
+	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };

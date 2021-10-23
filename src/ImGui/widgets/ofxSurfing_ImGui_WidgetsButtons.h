@@ -519,6 +519,7 @@ namespace ofxImGuiSurfing
 	// There's a bug that when using
 	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
 	// after the button it adds more spacing
+
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1))
 	{
@@ -548,6 +549,13 @@ namespace ofxImGuiSurfing
 		}
 
 		return bReturn;
+	}
+
+	// Api short name
+	//--------------------------------------------------------------
+	inline bool AddToggleRounded(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1))
+	{
+		return AddToggleRoundedButton(parameter, bb);
 	}
 
 	//TODO: not working..

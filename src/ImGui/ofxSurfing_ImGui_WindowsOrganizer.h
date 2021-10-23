@@ -103,14 +103,28 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	class WindowPanels {
 
+		//private:
 	public:
 
-		ofParameter<bool> bGui_Global{ "Show Global", true };
-		ofParameter<bool> bHeaders{ "Hide Headers", true };
-		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link windows",  false };
-		//ofParameter<bool> bModeLinkedWindowsSpecial{ "Mode Cascade",  false };
-		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
+		ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // toggle gui to draw window
+		ofParameter<bool> bGui_Global{ "Show Global", true }; // extra toggle to hide / show all
 
+	public:
+
+		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link windows",  false };
+		ofParameter<bool> bOrientation{ "Orientation", false };
+		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
+		ofParameter<bool> bHeaders{ "Hide Headers", true };
+		ofParameter<int> pad{ "Padding", 0, 0, 25 };
+		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+
+	private:
+
+		bool bTrigGroup = false;
+
+	public:
+
+		//--------------------------------------------------------------
 		bool isIntitiated() {
 			return panels.size() > 0;
 		}
@@ -128,6 +142,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
+		//--------------------------------------------------------------
 		void setPath(std::string path) {
 			path_Global = path;
 			path_Settings = path_Global + "GuiManager_" + params_Settings.getName() + ".json";
@@ -150,24 +165,26 @@ namespace ofxImGuiSurfing
 			W_COUNT
 		};
 		wOrientation orientation;
-		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<int> iOrientation{ "Orient", 0, 0, W_COUNT - 1 };
 		//std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
-		ofParameter<int> pad{ "Padding", 0, 0, 25 };
 
-		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
-		
 		bool bHideWindows = false; //-> To disable when using the full layout engine. 
 
 	public:
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
 
-		bHideWindows = b;
+			bHideWindows = b;
+
+			if (bHideWindows) {
+				bGui_Global = true;
+				bGui_Global.setSerializable(false);
+			}
 		}
+
 		//-
 
-		ofParameterGroup params_User{ "Params" }; // To use on external gui 
+		ofParameterGroup params_User{ "Organizer" }; // To use on external gui 
 
 	public:
 		//--------------------------------------------------------------
@@ -175,9 +192,7 @@ namespace ofxImGuiSurfing
 			return params_User;
 		}
 
-
 		//----
-
 
 	public:
 
@@ -192,7 +207,8 @@ namespace ofxImGuiSurfing
 			//-
 
 			params_User.clear();
-			params_User.add(bGui_Global);
+			params_User.add(bGui_WindowsSpecials);
+			//params_User.add(bGui_Global);
 			params_User.add(bModeLinkedWindowsSpecial);
 			params_User.add(bOrientation);
 			params_User.add(bFitSizes);
@@ -244,7 +260,11 @@ namespace ofxImGuiSurfing
 
 			ofLogVerbose() << __FUNCTION__ << " " << name << " : " << e;
 
+			//-
+
 			if (0) {}
+
+			//-
 
 			//TODO: should recalculate..
 			else if (name == bHeaders.getName())
@@ -252,11 +272,15 @@ namespace ofxImGuiSurfing
 				doSetWindowsPositions();
 			}
 
+			//-
+
 			else if (name == bGui_Global.getName())
 			{
 				//workaround to avoid bad dimension on startup
 				bOrientation = bOrientation;
 			}
+
+			//-
 
 			else if (name == iOrientation.getName())
 			{
@@ -282,12 +306,24 @@ namespace ofxImGuiSurfing
 				doSetWindowsPositions();
 			}
 
+			//-
+
 			else if (name == bOrientation.getName())
 			{
 				if (!bOrientation) iOrientation = 0;
 				else iOrientation = 1;
 
 				doSetWindowsPositions();
+			}
+
+			//-
+
+			else if (name == position.getName())
+			{
+				// Position linked to first queued window
+				if (panelsQueue.size() == 0 || panels.size() == 0) return;
+				int id = panelsQueue[0];
+				panels[id].setPosition(position.get());
 			}
 		}
 
@@ -363,7 +399,7 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice() << __FUNCTION__;
 
-			// reorganize sorting indexes
+			// Reorganize sorting indexes
 
 			// Disable all
 			for (int i = 0; i < panels.size(); i++)
@@ -424,12 +460,15 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice() << __FUNCTION__;
 
+			// To get notified by the callbacks
 			params.add(bGui_Global);
 			params.add(bOrientation);
 			params.add(iOrientation);
 			params.add(bHeaders);
 			params.add(bFitSizes);
+			params.add(position);
 
+			// To store session settings
 			params_Settings.add(bGui_Global);
 			params_Settings.add(bModeLinkedWindowsSpecial);
 			params_Settings.add(bOrientation);
@@ -440,6 +479,7 @@ namespace ofxImGuiSurfing
 			params_Settings.add(bLockedHeight);
 			params_Settings.add(bHeaders);
 
+			// Each window enabler
 			params_Settings.add(params_Enablers);
 
 			//--
@@ -463,6 +503,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			// Position linked to first queued window
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
 			int id = panelsQueue[0];
 			panels[id].setPosition(position.get());
@@ -528,6 +569,13 @@ namespace ofxImGuiSurfing
 			//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bModeLinkedWindowsSpecial);//small
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 
+			////TODO: trig
+			//if (ImGui::Button("Group", ImVec2(_w1, _h)))
+			//{
+			//	bTrigGroup = true;
+			//	bModeLinkedWindowsSpecial = true;
+			//}
+
 			ImGui::Spacing();
 
 			if (bModeLinkedWindowsSpecial) {
@@ -544,7 +592,7 @@ namespace ofxImGuiSurfing
 			{
 				// Windows
 
-				if (!bHideWindows) 
+				if (!bHideWindows)
 				{
 					static bool bOpen = false;
 					ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
@@ -658,8 +706,6 @@ namespace ofxImGuiSurfing
 		void endWindow()
 		{
 			ImGui::End();
-
-			//doSetWindowsPositions();
 		}
 
 	private:
@@ -680,7 +726,12 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void update() {
+
 			doSetWindowsPositions();
+
+			if (panelsQueue.size() == 0 || panels.size() == 0) return;
+
+			position.set(panels[0].getPosition());
 		}
 
 	private:
