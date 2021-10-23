@@ -373,6 +373,13 @@ public:
 	ofParameterGroup params_RectPanels{ "Rect Panels" };
 	vector<ofParameter<ofRectangle>> rectPanels;
 
+	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+
+	ImGuiWindowFlags flags_wPr;
+	ImGuiWindowFlags flags_wPanels;
+
 private:
 
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
@@ -1057,12 +1064,13 @@ private:
 
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels ", false };
 
-	// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
-	ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
-	ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
-	ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel
-	ofParameter<bool> bModeLockControls{ "Lock C", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
-	ofParameter<bool> bModeLockPreset{ "Lock A", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	//// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
+	//ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
+	//ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
+	//ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel
+	//ofParameter<bool> bModeLockControls{ "Lock C", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	//ofParameter<bool> bModeLockPreset{ "Lock A", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
+	
 	//TODO: 
 	// It's a problem if .ini files are already present... We must ingore loading.
 
@@ -1072,22 +1080,6 @@ private:
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central; // current free space viewport updated when changes
 	ofRectangle rectangle_Central_Transposed;
-
-	// Standalone window not handled by .ini layout
-	// but for the app settings
-	//float widthGuiLayout;
-
-	//ofParameter<glm::vec2> positionGuiLayout{ "Gui Layout Position",
-	//glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
-	//	glm::vec2(0,0),
-	//	glm::vec2(ofGetWidth(), ofGetHeight())
-	//};
-
-	//ofParameter<glm::vec2> shapeGuiLayout{ "Gui Layout Shape",
-	//	glm::vec2(ofGetWidth() / 2,ofGetHeight() / 2),//center
-	//	glm::vec2(0,0),
-	//	glm::vec2(ofGetWidth(), ofGetHeight())
-	//};
 
 	//-
 
@@ -1133,9 +1125,9 @@ private:
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 	ofParameterGroup params_Panels{ "Params Panels" };
 
-	ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
-	ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
-	ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
+	//ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
+	//ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
+	//ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
 
 	std::string titleWindowLabel;
 
@@ -1164,7 +1156,9 @@ public:
 			windowsAtributes[i].bGui.set(b);
 		}
 		bMenu = b;
-		bModeLockControls = b;
+		
+		//bModeLockControls = b;
+
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresets = b;
 		bGui_LayoutsExtra = false;

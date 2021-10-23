@@ -82,8 +82,7 @@ void ofApp::setup() {
 
 	// Optional: 
 
-	// Customize the names for the 4 default Layout Presets
-	// Default names are P0-P1-P2-P3
+	// Customize the names for the 4 default Layout Presets. Default names are P0-P1-P2-P3
 
 	//vector<std::string> names;
 	//names.push_back("Editor");
@@ -94,12 +93,6 @@ void ofApp::setup() {
 
 	//-
 
-	// Initiates after adding windows is done.
-
-	guiManager.startup();
-
-	//-
-
 	// Optional:
 
 	// We can add extra parameters to append include into the Layout Presets
@@ -107,6 +100,12 @@ void ofApp::setup() {
 	//guiManager.addParameterToLayoutPresets(bEnable);
 	//guiManager.addParameterToLayoutPresets(bMode1);
 	//guiManager.addParameterToLayoutPresets(bMode2);
+
+	//-
+
+	// Startup
+
+	guiManager.startup();
 
 	//-
 
