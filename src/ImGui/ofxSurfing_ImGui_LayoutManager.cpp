@@ -98,6 +98,71 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	}
 }
 
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::startup()
+{
+	if (bDocking)
+	{
+		setupLayout(4); // Default Layout with 4 presets.
+		//setupLayout(4); // Default Layout with 4 presets.
+	}
+
+	//-
+
+	// Special Windows Organizer
+
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
+		// Cascade / Organizer Mode
+		// Special windows manager
+
+		initiatieWindowsSpecial();
+
+		// Customize names
+		windowPanels.setNameGlobalPanelWindowsSpecial("Show Global");
+		setNamePanelWindowsSpecial("Organizer");
+
+		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+		{
+			windowPanels.setHideWindows(true);
+
+			// Docking mode has the gui toggles in other panels..
+			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+			{
+				windowPanels.bGui_WindowsSpecials = false;
+				windowPanels.bGui_WindowsSpecials.setSerializable(false);
+			}
+		}
+
+		if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+		{
+			// Link show gui
+			bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
+			//windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
+		}
+	}
+}
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::setupDocking()
+{
+	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
+	//surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
+
+	//setupLayout(4);
+	setAutoSaveSettings(true);
+	setImGuiDocking(true);
+	setImGuiDockingModeCentered(true);
+	setImGuiAutodraw(true);
+
+	initiate();
+
+	////TODO:
+	//params_Layouts.clear();
+	//params_LayoutsExtra.clear();
+	//params_LayoutsVisible.clear();
+}
+
 //--
 
 //--------------------------------------------------------------
@@ -239,7 +304,7 @@ void ofxSurfing_ImGui_Manager::pushStyleFont(int index)
 			ImGui::PushFont(customFonts[index]);
 	}
 	else {
-		bIgnoreNextPopFont = true;//workaround to avoid crashes
+		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
 }
 
@@ -752,6 +817,8 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 // Global ImGui being/end like ofxImGui
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
+	//TODO:
+	//windowPanels.update();
 
 	//TODO:
 	if (ofGetFrameNum() == 1) {
@@ -788,7 +855,9 @@ void ofxSurfing_ImGui_Manager::begin() {
 		// Main Panels Controller
 		if (windowPanels.isIntitiated())
 		{
-			if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
+			//if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
+
+			windowPanels.update();
 
 			// Docking mode has the gui toggles in other panels..
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
@@ -958,8 +1027,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 {
-	////TODO:
-	_currWindowsSpecial = index;//workflow
+	//TODO:
+	_currWindowsSpecial = index; // workflow
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 
@@ -996,7 +1065,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
 
 	//TODO:
-	//workaround
+	// workaround
 	////if (!windowPanels.bGui_Global.get()) return false;
 	//if (!windowsAtributes[index].bGui.get()) return false;
 
@@ -1006,7 +1075,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
-	if (index == -1) index = _currWindowsSpecial;//workaround
+	if (index == -1) index = _currWindowsSpecial; // workaround
 
 	if (index > windowsAtributes.size() - 1)
 	{
@@ -1295,7 +1364,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// 4. App states for the next session
 
 	// The main control windows
-	
+
 	params_AppSettingsLayout.add(bGui_LayoutsPresets);
 	params_AppSettingsLayout.add(bGui_LayoutsExtra);
 	params_AppSettingsLayout.add(bGui_LayoutsPanels);
@@ -1308,13 +1377,21 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bModeLockPreset);
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
-	
+
 	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(params_Advanced);
 	params_AppSettings.add(bSolo);
 
-	//params_AppSettings.add(bGui_WindowsSpecials);
+
+	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
+		if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+		{
+			//params_AppSettings.add(bGui_WindowsSpecials);
+			//params_AppSettings.add(windowPanels.getParamsUser());
+		}
+	}
 
 	//-
 
@@ -1369,13 +1446,13 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::loadAppSettings()
 {
-	if (bAutoSaveSettings) ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
+	/*if (bAutoSaveSettings) */ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::saveAppSettings()
 {
-	if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
+	/*if (bAutoSaveSettings) */ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
 }
 
 //--------------------------------------------------------------
@@ -1632,7 +1709,9 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 {
 	std::string name = e.getName();
 
-	ofLogNotice(__FUNCTION__) << name << " : " << e;
+	if (name != "position") {
+		ofLogNotice(__FUNCTION__) << name << " : " << e;
+	}
 
 	//----
 

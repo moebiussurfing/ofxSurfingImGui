@@ -55,11 +55,15 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void runState()
+		void runState(bool bForced = false)
 		{
-			bool bMaster = (pos == 0);
+			bool b1st;
+			
+			if (!bForced) b1st = (pos == 0);
+			else b1st = false;
+
 			ImGuiCond flagCond;
-			if (bMaster) flagCond = ImGuiCond_Appearing; // only first window can be moved
+			if (b1st) flagCond = ImGuiCond_Appearing; // only first window can be moved
 			else flagCond = ImGuiCond_Always; // Others are locked
 
 			ImGui::SetNextWindowPos(ImVec2(rShape.get().getX(), rShape.get().getY()), flagCond);
@@ -208,14 +212,14 @@ namespace ofxImGuiSurfing
 			//-
 
 			params_User.clear();
-			//params_User.add(bGui_WindowsSpecials);
-			//params_User.add(bGui_Global);
 			params_User.add(bModeLinkedWindowsSpecial);
 			params_User.add(bOrientation);
 			params_User.add(bFitSizes);
 			params_User.add(bHeaders);
 			params_User.add(pad);
 			params_User.add(position);
+			//params_User.add(bGui_WindowsSpecials);
+			//params_User.add(bGui_Global);
 		}
 
 		//--------------------------------------------------------------
@@ -381,11 +385,11 @@ namespace ofxImGuiSurfing
 								panelsQueue.erase(panelsQueue.begin() + i);
 								counterQueue = panelsQueue.size();
 
-								//TODO:
-								if (bSort)
-								{
-									doRepositione();
-								}
+								////TODO:
+								//if (bSort)
+								//{
+								//	doRepositione();
+								//}
 
 								return;
 							}
@@ -419,6 +423,46 @@ namespace ofxImGuiSurfing
 				panels[id].pos = pos;
 				panels[id].bEnable.setWithoutEventNotifications(true);
 			}
+		}
+
+		//--------------------------------------------------------------
+		void doResetLayout()
+		{
+			//TODO:
+
+			ofLogNotice() << __FUNCTION__;
+
+			if (panelsQueue.size() < 2) {
+				ofLogWarning() << __FUNCTION__ << " Skip!";
+				return;
+			}
+
+			// 1st
+			{
+				glm::vec2 posPre{ 10, 10 };
+				int id = panelsQueue[0];
+				panels[id].setPosition(posPre);
+			}
+
+			for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
+			{
+				glm::vec2 posPre;
+
+				int idPre = panelsQueue[i - 1];
+				posPre = panels[idPre].getPosition();
+
+				int id = panelsQueue[i];
+				panels[id].setPosition(posPre);
+			}
+
+			//for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
+			//{
+			//	int id = panelsQueue[i];
+			//	runState(id, true);
+			//}
+
+			//doSetWindowsPositions(); 
+			//doOrganize(); 
 		}
 
 	public:
@@ -463,6 +507,18 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice() << __FUNCTION__;
 
+			//--
+
+			// Disable all
+			for (auto &p : params_Enablers)
+			{
+				if (p->type() == typeid(ofParameter<bool>).name())
+				{
+					ofParameter<bool> pm = p->cast<bool>();
+					pm = false;
+				}
+			}
+
 			// To get notified by the callbacks
 			params.add(bGui_Global);
 			params.add(bOrientation);
@@ -487,18 +543,6 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// Disable all
-			for (auto &p : params_Enablers)
-			{
-				if (p->type() == typeid(ofParameter<bool>).name())
-				{
-					ofParameter<bool> pm = p->cast<bool>();
-					pm = false;
-				}
-			}
-
-			//--
-
 			// Startup
 
 			// Load Settings
@@ -511,12 +555,12 @@ namespace ofxImGuiSurfing
 			int id = panelsQueue[0];
 			panels[id].setPosition(position.get());
 
-			//bLockedWidth = bLockedWidth;
-			//bLockedHeight = bLockedHeight;
-
 			bOrientation = bOrientation;
 			//bOrientation = !bOrientation;
 			//bOrientation = !bOrientation;
+
+			//bLockedWidth = bLockedWidth;
+			//bLockedHeight = bLockedHeight;
 		}
 
 	private:
@@ -542,9 +586,9 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void runState(int i)
+		void runState(int i, bool bForced = false)
 		{
-			panels[i].runState();
+			panels[i].runState(bForced);
 			doApplyMaxDimensions();
 		}
 
@@ -569,23 +613,23 @@ namespace ofxImGuiSurfing
 			float _w2 = getWidgetsWidth(2);
 
 			// Enable mode
-			//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bModeLinkedWindowsSpecial);//small
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 
-			////TODO: trig
-			//if (ImGui::Button("Group", ImVec2(_w1, _h)))
-			//{
-			//	bTrigGroup = true;
-			//	bModeLinkedWindowsSpecial = true;
-			//}
+			//TODO: trig
+			if (ImGui::Button("Reset", ImVec2(_w1, _h)))
+			{
+				bTrigGroup = true;
+			}
 
 			ImGui::Spacing();
 
-			if (bModeLinkedWindowsSpecial) 
+			if (bModeLinkedWindowsSpecial)
 			{
 				// Orientation
 				string ss = bOrientation ? "Vertical" : "Horizontal";
-				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(-1, -1));
+				float h = 1.25 * ImGui::GetFrameHeight();
+				float w = h * 1.55f;
+				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
 				ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
 
 				ImGui::Spacing();
@@ -712,30 +756,42 @@ namespace ofxImGuiSurfing
 			ImGui::End();
 		}
 
-	private:
+	//private:
 
-		//--------------------------------------------------------------
-		void doRepositione()
-		{
-			////TODO:
-			//return;
+	//	//--------------------------------------------------------------
+	//	void doRepositione()
+	//	{
+	//		////TODO:
+	//		//return;
 
-			//ofLogNotice() << __FUNCTION__ << " " << position.get();
-			//if (panelsQueue.size() == 0 || panels.size() == 0) return;
-			//int id = panelsQueue[0];
-			//panels[id].setPosition(position.get());
-		}
+	//		//ofLogNotice() << __FUNCTION__ << " " << position.get();
+	//		//if (panelsQueue.size() == 0 || panels.size() == 0) return;
+	//		//int id = panelsQueue[0];
+	//		//panels[id].setPosition(position.get());
+	//	}
 
 	public:
 
 		//--------------------------------------------------------------
 		void update() {
 
-			doSetWindowsPositions();
+			//TODO:
+			// Reset layout
+			if (bTrigGroup)
+			{
+				bTrigGroup = false;
 
+				doResetLayout();
+
+				return;
+			}
+
+			// Read 1st queued position
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
 			int id = panelsQueue[0];
 			position.set(panels[id].getPosition());
+
+			if (bModeLinkedWindowsSpecial) doSetWindowsPositions();
 		}
 
 	private:

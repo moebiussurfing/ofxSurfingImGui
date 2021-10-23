@@ -1026,69 +1026,8 @@ public:
 
 	// Some Api simplificators
 	//--------------------------------------------------------------
-	void startup()
-	{
-		if (bDocking)
-		{
-			setupLayout(4); // Default Layout with 4 presets.
-			//setupLayout(4); // Default Layout with 4 presets.
-		}
-
-		//-
-
-		// Special Windows Organizer
-
-		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-		{
-			// Cascade / Organizer Mode
-			// Special windows manager
-
-			initiatieWindowsSpecial();
-
-			// Customize names
-			windowPanels.setNameGlobalPanelWindowsSpecial("Show Global");
-			setNamePanelWindowsSpecial("Organizer");
-
-			if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
-			{
-				windowPanels.setHideWindows(true);
-
-				// Docking mode has the gui toggles in other panels..
-				if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
-				{
-					windowPanels.bGui_WindowsSpecials = false;
-					windowPanels.bGui_WindowsSpecials.setSerializable(false);
-				}
-			}
-
-			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
-			{
-				// Link show gui
-				bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
-				//windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
-			}
-		}
-	}
-
-	//--------------------------------------------------------------
-	void setupDocking()
-	{
-		surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
-		//surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED;
-
-		//setupLayout(4);
-		setAutoSaveSettings(true);
-		setImGuiDocking(true);
-		setImGuiDockingModeCentered(true);
-		setImGuiAutodraw(true);
-
-		initiate();
-
-		////TODO:
-		//params_Layouts.clear();
-		//params_LayoutsExtra.clear();
-		//params_LayoutsVisible.clear();
-	}
+	void startup();
+	void setupDocking();
 
 	//--------------------------------------------------------------
 	void setImGuiLayoutPresets(bool b) {
