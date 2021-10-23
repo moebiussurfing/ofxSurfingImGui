@@ -55,6 +55,8 @@ public:
 	//-
 
 	void dockingHelper();
+	void dockingHelperDraw();
+
 	void dockingReset();
 	bool bDockingReset = false;
 	void dockingRandom();
