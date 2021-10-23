@@ -58,7 +58,7 @@ namespace ofxImGuiSurfing
 		void runState(bool bForced = false)
 		{
 			bool b1st;
-			
+
 			if (!bForced) b1st = (pos == 0);
 			else b1st = false;
 
@@ -615,11 +615,12 @@ namespace ofxImGuiSurfing
 			// Enable mode
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 
-			//TODO: trig
-			if (ImGui::Button("Reset", ImVec2(_w1, _h)))
-			{
-				bTrigGroup = true;
-			}
+			//TODO: Trig
+			if (0)
+				if (ImGui::Button("Reset", ImVec2(_w1, _h)))
+				{
+					bTrigGroup = true;
+				}
 
 			ImGui::Spacing();
 
@@ -756,19 +757,19 @@ namespace ofxImGuiSurfing
 			ImGui::End();
 		}
 
-	//private:
+		//private:
 
-	//	//--------------------------------------------------------------
-	//	void doRepositione()
-	//	{
-	//		////TODO:
-	//		//return;
+		//	//--------------------------------------------------------------
+		//	void doRepositione()
+		//	{
+		//		////TODO:
+		//		//return;
 
-	//		//ofLogNotice() << __FUNCTION__ << " " << position.get();
-	//		//if (panelsQueue.size() == 0 || panels.size() == 0) return;
-	//		//int id = panelsQueue[0];
-	//		//panels[id].setPosition(position.get());
-	//	}
+		//		//ofLogNotice() << __FUNCTION__ << " " << position.get();
+		//		//if (panelsQueue.size() == 0 || panels.size() == 0) return;
+		//		//int id = panelsQueue[0];
+		//		//panels[id].setPosition(position.get());
+		//	}
 
 	public:
 
