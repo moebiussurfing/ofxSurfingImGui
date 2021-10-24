@@ -125,18 +125,21 @@ namespace ofxImGuiSurfing {
 
 			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
 			{
-				float _w100 = ofxImGuiSurfing::getWidgetsWidth(1);
+				float _w1= ofxImGuiSurfing::getWidgetsWidth(1);
 				float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
 
 				//float _w100 = ImGui::GetContentRegionAvail().x;
 				//float _h = 1.5f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
+				
+				ImGui::Spacing();
 
-				if (ImGui::Button("Clear", ImVec2(_w100, _h)))
+				if (ImGui::Button("Clear", ImVec2(_w1, _h)))
 				{
 					Clear();
 				}
 
-				ImGui::Separator();
+				ofxImGuiSurfing::AddSpacingSeparated();
+				ImGui::Spacing();
 
 				ImGui::BeginChild("Logs");
 				{

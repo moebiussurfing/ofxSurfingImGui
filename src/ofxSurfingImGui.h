@@ -1,4 +1,13 @@
 
+/*
+
+TODO:
+
++ add tooltip types for styles
+
+*/
+
+
 #pragma once
 
 #include "ofMain.h"

@@ -355,8 +355,7 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // uses Windows Specials
 
-	ofParameterGroup params_Advanced{ "Params Advanced" };
-
+	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved on settings when exit the app 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
@@ -370,15 +369,30 @@ public:
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 	ofParameter<bool> bReset_Window{ "Reset Window", false };
 
-	ofParameterGroup params_RectPanels{ "Rect Panels" };
-	vector<ofParameter<ofRectangle>> rectPanels;
+private:
 
-	ofParameter<ofRectangle> r1{ "rect_Presets", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
-	ofParameter<ofRectangle> r2{ "rect_Panels", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
-	ofParameter<ofRectangle> r3{ "rect_Manager", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+	ofParameterGroup params_RectPanels{ "Rectangles Windows" };
+	vector<ofParameter<ofRectangle>> rectangles_Windows;
+
+	ofParameter<ofRectangle> rect0_Presets{ "rect_Presets", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+	ofParameter<ofRectangle> rect1_Panels{ "rect_Panels", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
+	ofParameter<ofRectangle> rect2_Manager{ "rect_Manager", ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080) };
 
 	ImGuiWindowFlags flags_wPr;
 	ImGuiWindowFlags flags_wPanels;
+
+	// Presets and Panels windows
+	ofParameter<bool> bResetWindowPresets{ "Reset", false };
+	ofParameter<bool> bAutoResizePresets{ "AutoResize", true };
+	ofParameter<bool> bMinimizePresets{ "Minimize", true};
+	ofParameterGroup params_WindowPresets{ "Window Presets" };
+
+	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
+	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels", true };
+	ofParameter<bool> bMinimizePanels{ "Minimize", true};
+	ofParameterGroup params_WindowPanels{ "Window Panels" };
+
+	ofParameterGroup params_WindowsEngine{ "Engine Windows" };
 
 private:
 
@@ -1062,7 +1076,6 @@ private:
 	void drawLayoutEngine();
 	void drawOFnative();
 
-	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels ", false };
 
 	//// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
 	//ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
@@ -1083,7 +1096,7 @@ private:
 
 	//-
 
-	// customize titles
+	// Customize Titles
 
 public:
 
@@ -1105,7 +1118,8 @@ public:
 private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
-	ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
+	ofParameter<bool> bGui_LayoutsPresets{ "Layouts", true };
+	//ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
 	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 

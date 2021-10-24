@@ -23,41 +23,84 @@ namespace ofxImGuiSurfing
 {
 	//-
 
+	// Mini Button and toggles for bool ofParams
+
+	//--------------------------------------------------------------
+	inline bool AddButtonMini(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
+	{
+		auto tmpRef = parameter.get();
+		std::string name = parameter.getName();
+		bool bPre = tmpRef;
+
+
+		std::string n = "##BUTTONMINI" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+		{
+			const auto sztx = ImGui::CalcTextSize(name.c_str());
+			if (w == -1) w = sztx.x + 2 * ImGui::GetStyle().ItemInnerSpacing.x;
+			if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightUnit();
+
+			ImGuiStyle *style = &ImGui::GetStyle();
+			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			{
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+
+					tmpRef = true;
+					parameter.set(tmpRef);
+				}
+			}
+			ImGui::PopStyleColor(3);
+		}
+		ImGui::PopID();
+
+		if (bPre != parameter) return true;
+		else return false;
+	}
+
+	//-
+
 	// Big Buttons and toggles for bool ofParams
 
 	//--------------------------------------------------------------
 	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
-		string name = parameter.getName();
-
-		string n = "##BIGBUTTON" + name + ofToString(1);
-		ImGui::PushID(n.c_str());
-
+		std::string name = parameter.getName();
 		bool bPre = tmpRef;
 
-		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
-		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
-
-		ImGuiStyle *style = &ImGui::GetStyle();
-		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
-		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
-		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
-
-		ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
-
-		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+		std::string n = "##BIGBUTTON" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
 		{
-			ofLogVerbose(__FUNCTION__) << name << ": BANG";
+			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
+			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+			//if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-			tmpRef = true;
-			parameter.set(tmpRef);
+			ImGuiStyle *style = &ImGui::GetStyle();
+			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
+			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			{
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+
+					tmpRef = true;
+					parameter.set(tmpRef);
+				}
+			}
+			ImGui::PopStyleColor(3);
 		}
-
-		ImGui::PopStyleColor(3);
-
 		ImGui::PopID();
 
 		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
@@ -67,7 +110,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1)) {
+	inline bool AddBigButton(ofParameter<bool>& parameter, ImVec2 bb /*= ImVec2(-1, -1)*/) {
 		return AddBigButton(parameter, bb.x, bb.y);
 	}
 
@@ -77,9 +120,9 @@ namespace ofxImGuiSurfing
 	inline bool AddSmallButton(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
-		string name = parameter.getName();
+		std::string name = parameter.getName();
 
-		string n = "##SMALLBUTTON" + name + ofToString(1);
+		std::string n = "##SMALLBUTTON" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
@@ -152,9 +195,9 @@ namespace ofxImGuiSurfing
 			// Warning: notice that each state has a different button, so we need to push different ID's!
 			// Warning: in this case we need to use the name to became the toggle functional
 			// that means that we can maybe collide not unique names! 
-			//string n = "#BT" + name + ofToString(counterBigToggle++);
+			//std::string n = "#BT" + name + ofToString(counterBigToggle++);
 			//ofLogNotice(__FUNCITON__) << n;
-			string n = "##BIGTOGGLE_on_" + name + ofToString(1);
+			std::string n = "##BIGTOGGLE_on_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 			{
 				// Border to selected
@@ -169,7 +212,6 @@ namespace ofxImGuiSurfing
 				const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
 				const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
 				ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 1.0);
-
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorHover2);
 				ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover2);
@@ -195,7 +237,7 @@ namespace ofxImGuiSurfing
 		}
 		else // was disabled
 		{
-			string n = "##BIGTOGGLE_off_" + name + ofToString(1);
+			std::string n = "##BIGTOGGLE_off_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 			{
 				const ImVec4 colorOn = style->Colors[ImGuiCol_FrameBg];
@@ -222,6 +264,13 @@ namespace ofxImGuiSurfing
 			ImGui::PopID();
 		}
 
+		// Debug point
+		if (0) {
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			const ImVec2 pdebug = ImGui::GetCursorScreenPos();
+			draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//a bit of offset
+		}
+
 		//-
 
 		if (parameter.get() != bPre) return true; // changed
@@ -229,8 +278,8 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border, bool bBlink ) {
-	//inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
+	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border, bool bBlink) {
+		//inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
 		return AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
 	}
 
@@ -241,7 +290,7 @@ namespace ofxImGuiSurfing
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
 	{
 		auto tmpRef = parameter.get();
-		string name = parameter.getName();
+		std::string name = parameter.getName();
 
 		//-
 
@@ -357,156 +406,172 @@ namespace ofxImGuiSurfing
 
 	// Rounded Toggle Buttons
 
-	// Take from:
+	// Taken from:
 	// https://github.com/ocornut/imgui/issues/1537
-	// bool & ofParameter<bool>
+	// Usable with bool & ofParameter<bool>
 
-#define USE_BORDER_ROUNDE_TOGGLES // -> Enable to draw circle borders on the rounded toggle..
+#define USE_BORDER_ROUNDE_TOGGLES // -> Enable to draw circle borders on the rounded toggle.. 
+	// Btw can be disabled like on mini toggle style.
 
 	//--------------------------------------------------------------
-	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 bb = ImVec2(-1, -1))
+	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false)
 	{
-		//TODO:
-		// Should fix mouse over/inner pos checking to fix mouse wheel control..
-
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-		ImVec2 pos = ImGui::GetCursorScreenPos();
-		ImVec4* colors = ImGui::GetStyle().Colors;
-
 		bool bchanged = false;
 
-		float width;
-		float radius;
-		float height;
-
-		string n = "##TOGGLEROUNDBUTTON" + ofToString(1);
-		ImGui::PushID(n.c_str());
+		ImGui::BeginGroup(); // -> to detect complete isHover
 		{
-			if ((bb.x == -1) && (bb.y == -1)) // default size
-			{
-				height = ImGui::GetFrameHeight();
-				width = height * 1.55f;
-			}
-			else // received by args
-			{
-				width = bb.x;
-				height = bb.y;
-			}
-			radius = height / 2.0f;
-
-			ImGui::InvisibleButton(str_id, ImVec2(width, height));
-
-			bool is_active = ImGui::IsItemActive();
-			bool is_hovered = ImGui::IsItemHovered();
-
-			if (ImGui::IsItemClicked())
-			{
-				*v = !*v; // flip bool
-
-				bchanged = true;
-			}
-
-			//-
-
 			//TODO:
+			// Should fix mouse over/inner pos checking to fix mouse wheel control..
 
-			// Animated
+			//cf = IM_COL32(255, 0, 255, 255); // test color
 
-			float t = *v ? 1.0f : 0.0f;
-			ImGuiContext& g = *GImGui;
-			float ANIM_SPEED = 0.08f;
-			if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			ImVec2 pos = ImGui::GetCursorScreenPos();
+			ImVec4* colors = ImGui::GetStyle().Colors;
+
+			float width;
+			float radius;
+			float height;
+
+			std::string n = "##TOGGLEROUNDBUTTON" + ofToString(1);
+			ImGui::PushID(n.c_str());
 			{
-				float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
-				t = *v ? (t_anim) : (1.0f - t_anim);
-			}
-			//const ImU32 frame_col = ImGui::GetColorU32(ImLerp(ImVec4(0.85f, 0.85f, 0.85f, 1.0f), ImVec4(0.56f, 0.83f, 0.26f, 1.0f), t));
+				if ((bb.x == -1) && (bb.y == -1)) // default size
+				{
+					height = ImGui::GetFrameHeight();
+					width = height * 1.55f;
+				}
+				else // received by args
+				{
+					width = bb.x;
+					height = bb.y;
+				}
+				radius = height / 2.0f;
 
-			//--
+				ImGui::InvisibleButton(str_id, ImVec2(width, height));
 
-			// 1. Background Zone
+				bool is_active = ImGui::IsItemActive();
+				bool is_hovered = ImGui::IsItemHovered();
 
-			ImU32 frame_col;
-			ImU32 cf;
-			//cf = IM_COL32(255, 0, 255, 255);
+				if (ImGui::IsItemClicked())
+				{
+					*v = !*v; // flip bool
 
-			// State true
+					bchanged = true;
+				}
 
-			if (*v) 
-			{
-				frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
-				cf = frame_col;
-			}
+				//-
 
-			// State false
+				//TODO:
+				//how to animate power off too ?
 
-			else
-			{
-				frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
-				cf = frame_col;
-			}
+				// Animated
 
-			draw_list->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), cf, height * 0.5f);
+				float t = *v ? 1.0f : 0.0f;
+				ImGuiContext& g = *GImGui;
+				float ANIM_SPEED = 0.08f;
+				if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
+				{
+					float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
+					t = *v ? (t_anim) : (1.0f - t_anim);
+				}
 
-			//-
+				//const ImU32 frame_col = ImGui::GetColorU32(ImLerp(ImVec4(0.85f, 0.85f, 0.85f, 1.0f), ImVec4(0.56f, 0.83f, 0.26f, 1.0f), t));
 
-			// 1.2 Border Background Zone
+				//--
 
-			// A. Reduced alpha
+				// 1. Background Zone
+
+				ImU32 frame_col;
+				ImU32 cf;
+
+				// State true
+				if (*v)
+				{
+					frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
+					cf = frame_col;
+				}
+
+				// State false
+				else
+				{
+					frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+					cf = frame_col;
+				}
+
+				draw_list->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), cf, height * 0.5f);
+
+				//-
+
+				// 1.2 Border Background Zone
+
+				// A. Reduced alpha
+
+				const ImU32 cb = ImGui::GetColorU32(colors[ImGuiCol_Border]);
+
 #ifdef USE_BORDER_ROUNDE_TOGGLES
-			//const float a = (is_active ? 0.8 : 0.5);
-			//const ImVec4 c = ImVec4(colors[ImGuiCol_Border].x, colors[ImGuiCol_Border].y, colors[ImGuiCol_Border].z, colors[ImGuiCol_Border].w * a);
-			//const ImU32 cb = ImGui::GetColorU32(c);
-
-			// B. No alpha changes
-			const ImU32 cb = ImGui::GetColorU32(colors[ImGuiCol_Border]);
-
-			draw_list->AddRect(pos, ImVec2(pos.x + width, pos.y + height), cb, height * 0.5f);
+				//if (!bNoBorder)
+				{
+					// B. No alpha changes
+					draw_list->AddRect(pos, ImVec2(pos.x + width, pos.y + height), cb, height * 0.5f);
+				}
 #endif
-			//-
 
-			// 2.1 Small Circle
+				//-
 
-			ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
+				// 2.1 Small Circle
+
+				ImU32 c1 = IM_COL32(255 * colors[ImGuiCol_SliderGrab].x, 255 * colors[ImGuiCol_SliderGrab].y, 255 * colors[ImGuiCol_SliderGrab].z, 255);
+
 #ifndef USE_BORDER_ROUNDE_TOGGLES
-			draw_list->AddCircleFilled(ImVec2(pos.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, c1);
+				draw_list->AddCircleFilled(ImVec2(pos.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, c1);
 #endif
-			//-
 
-			// 2.2 Border Small Circle
+				//-
+
+				// 2.2 Border Small Circle
 
 #ifdef USE_BORDER_ROUNDE_TOGGLES
-			//draw_list->AddCircleFilled(ImVec2(pos.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
-			//draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
-
-			draw_list->AddCircleFilled(ImVec2(pos.x + radius + t * (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
-			draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * t * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
+				//if (!bNoBorder)
+				{
+					draw_list->AddCircleFilled(ImVec2(pos.x + radius + t * (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
+					draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * t * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
+				}
 #endif
-			//TODO:
-			//ofxImGuiSurfing::AddMouseWheel();
+				//TODO:
+				//// Align text to right border
+				//auto io = ImGui::GetIO();
+				//const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+				//const auto size = ImGui::CalcTextSize(label.c_str());
+				//ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
+				//ImGui::Text("%s", label.c_str());
 
-			//-
+				ImGui::SameLine();
 
-			// 3. Text Label
+				//-
 
-			ImGui::SameLine();
-			float fontSize = ImGui::GetFontSize();
-			const ImVec2 p1 = ImGui::GetCursorScreenPos();
-			const float offset_xt = 0;
-			const float offset_yt = height / 2 - fontSize / 2;
-			const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-			const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
+				// 3. Text Label
 
-			draw_list->AddText(pt, ct, str_id);
+				float fontSize = ImGui::GetFontSize();
+				const float offset_xt = 0;
+				const float offset_yt = height / 2 - fontSize / 2;
+				const ImVec2 p1 = ImGui::GetCursorScreenPos();
+				const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+				const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
 
-			//-
+				draw_list->AddText(pt, ct, str_id);
 
-			// 4. Frame ?
+				//-
 
-			const auto sizetx = ImGui::CalcTextSize(str_id);
-			ImGui::Dummy(ImVec2(sizetx.x + ImGui::GetStyle().FramePadding.x * 1.0f, 0)); // ?
+				// 4. Adjust frame end ?
+
+				const auto sztx = ImGui::CalcTextSize(str_id);
+				float xx = sztx.x + ImGui::GetStyle().FramePadding.x;
+				ImGui::Dummy(ImVec2(xx, 0));
+			}
+			ImGui::PopID();
 		}
-		ImGui::PopID();
+		ImGui::EndGroup();
 
 		return bchanged;
 	}
@@ -521,12 +586,12 @@ namespace ofxImGuiSurfing
 	// after the button it adds more spacing
 
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1))
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false)
 	{
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 
-		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, bb))
+		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, bb, bNoBorder))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;
@@ -568,7 +633,7 @@ namespace ofxImGuiSurfing
 		std::string name;
 
 		if (nameTrue == "-1" || nameFalse == "-1") name = parameter.getName();
-		else 
+		else
 		{
 			if ((bool *)&tmpRef) name = nameTrue;
 			else name = nameFalse;

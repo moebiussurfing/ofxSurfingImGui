@@ -653,6 +653,11 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.1625f * _h, 0.75f * _h), true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);

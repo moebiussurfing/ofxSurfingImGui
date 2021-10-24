@@ -31,9 +31,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")
 	{
-		if (w == -1) w = ImGui::GetContentRegionAvail().x;//full width
-		if (h == -1) h = getWidgetsHeightUnit();//one unit height
-		//if (h == -1) h = BUTTON_BIG_HEIGHT;//TODO: get widget height
+		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
+		if (h == -1) h = getWidgetsHeightUnit(); // one unit height
 
 		ImGuiSliderFlags flag = ImGuiSliderFlags_Logarithmic;
 
@@ -49,8 +48,8 @@ namespace ofxImGuiSurfing
 		string n = "##BIGSLIDER" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(w, h));//doesn't uses the width..
-			if (name == "") ImGui::PushItemWidth(w);//-> name != "" will enable standard aligned resizing with labels
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(w, h)); //TODO: doesn't uses the width..
+			if (name == "") ImGui::PushItemWidth(w); // -> name != "" will enable standard aligned resizing with labels
 			{
 				if (ImGui::SliderFloat(name.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 				{
@@ -66,6 +65,7 @@ namespace ofxImGuiSurfing
 
 		return bChanged;
 	}
+
 	// Int. cloned from float.
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")

@@ -152,45 +152,54 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
-	// Call resets of hardcoded Layout.
-
-	if (bEnable)
-	{
-		dockingHelperDraw();
-	}
-
-	//----
-
 	// -> These are our helpers to render windows using the power of the Layout Engine.
 
 	int index;
 
 	index = 0;
-	if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			ImGui::Text("myWindow0");
+			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
+			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
+			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
 
-			float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-			float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			float _h = ofxImGuiSurfing::getWidgetsHeightRelative(); // standard height
+			//-
 
-			if (ofxImGuiSurfing::AddBigToggle(bEnable)) {}
-			if (ofxImGuiSurfing::AddBigButton(bPrevious, _w50, _h * 2)) {
-				lineWidth -= 0.1;
+			ImGui::Text("myWindow_0");
+
+			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+			ofxImGuiSurfing::AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));
+
+			ofxImGuiSurfing::AddToggleRounded(guiManager.bHelp);
+			ofxImGuiSurfing::AddTooltip("Help enables some ToolTips");
+
+			ofxImGuiSurfing::AddBigToggle(guiManager.bLog);
+			ofxImGuiSurfing::AddHSlider(speed, ImVec2(_w1, 2 * _h), false, false);
+			ofxImGuiSurfing::AddTooltip("Speed controls the autopopulated Log window speed", guiManager.bHelp);
+
+			ofxImGuiSurfing::AddHSlider(amount, ImVec2(_w1, _h));
+			ofxImGuiSurfing::AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
+
+			if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2)) {
 				bPrevious = false;
+				lineWidth -= 0.1;
 			}
+			ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
+
 			ImGui::SameLine();
-			if (ofxImGuiSurfing::AddBigButton(bNext, _w50, _h * 2)) {
-				lineWidth += 0.1;
+			if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2)) {
 				bNext = false;
+				lineWidth += 0.1;
 			}
+			ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
 
-			ofxImGuiSurfing::AddParameter(bEnable);
+			//ofxImGuiSurfing::AddParameter(lineWidth);
+			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+
 			ofxImGuiSurfing::AddParameter(separation);
-			ofxImGuiSurfing::AddParameter(shapeType);
-
+			ofxImGuiSurfing::AddStepper(shapeType);
 		}
 		guiManager.endWindowSpecial(index);
 	}
@@ -198,21 +207,21 @@ void ofApp::drawImGui()
 	//----
 
 	index = 1;
-	if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			ImGui::Text("myWindow1");
+			ImGui::Text("myWindow_1");
 			guiManager.AddGroup(params1);
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 		}
 	}
-	guiManager.endWindowSpecial(index);
+	guiManager.endWindowSpecial();
 
 	//----
 
 	index = 2;
-	if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -242,12 +251,12 @@ void ofApp::drawImGui()
 			}
 		}
 	}
-	guiManager.endWindowSpecial(index);
+	guiManager.endWindowSpecial();
 
 	//----
 
 	index = 3;
-	if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -258,12 +267,12 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, down!");
 		}
 	}
-	guiManager.endWindowSpecial(index);
+	guiManager.endWindowSpecial();
 
 	//----
 
 	index = 4;
-	if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -274,7 +283,7 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, left!");
 		}
 	}
-	guiManager.endWindowSpecial(index);
+	guiManager.endWindowSpecial();
 }
 
 //----
@@ -436,8 +445,8 @@ void ofApp::logPopulate()
 		float _rnd = ofRandom(1);
 		if (_rnd < 0.2) guiManager.addLog(ss);
 		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
-		else if (_rnd < 0.6) guiManager.addLog(ofToString("---------------"));
-		else if (_rnd < 0.8) guiManager.addLog(ofToString("===//...--//-----.."));
+		else if (_rnd < 0.6) guiManager.addLog(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
+		else if (_rnd < 0.8) guiManager.addLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
 		else guiManager.addLog(ofGetTimestampString());
 	}
 }

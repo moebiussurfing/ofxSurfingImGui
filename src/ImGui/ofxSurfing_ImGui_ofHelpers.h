@@ -3,7 +3,7 @@
 
 /*
 
-ofParameter Helpers
+ofParameter Helpers to easely render different widgets styles for each ofParma types.
 
 */
 
@@ -75,16 +75,16 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddTooltip(std::string text, bool bEnabled = false)
+	inline void AddTooltip(std::string text, bool bEnabled = true)
 	{
 		if (!bEnabled) return;
 
-		// A tooltip over previous widget
-		if (ImGui::IsItemHovered()) 
+		if (ImGui::IsItemHovered())
+		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
+		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			//ImGui::TextUnformatted(text.c_str());
 			ImGui::TextWrapped(text.c_str());
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
@@ -95,10 +95,6 @@ namespace ofxImGuiSurfing
 
 	// ofParameter's Helpers
 
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
-	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
-
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None);
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
@@ -175,6 +171,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	bool AddStepper(ofParameter<int>& parameter, int step = 1, int stepFast = 100);
+
 	//--------------------------------------------------------------
 	inline bool AddIntStepped(ofParameter<int>& parameter)
 	{
@@ -198,25 +195,6 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 
 		return bChanged;
-	}
-
-	//----
-
-	// Image Textures
-	//--------------------------------------------------------------
-	static ImTextureID GetImTextureID2(const ofTexture& texture)
-	{
-		return (ImTextureID)(uintptr_t)texture.texData.textureID;
-	}
-	//--------------------------------------------------------------
-	static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
-	{
-		return GetImTextureID2(hasTexture.getTexture());
-	}
-	//--------------------------------------------------------------
-	static ImTextureID GetImTextureID2(GLuint glID)
-	{
-		return (ImTextureID)(uintptr_t)glID;
 	}
 
 	//----
@@ -337,5 +315,27 @@ namespace ofxImGuiSurfing
 		IMGUI_SUGAR__SLIDER_WIDTH_POP;
 		return result;
 	}
+
+	//----
+
+	// Image Textures
+	//--------------------------------------------------------------
+	static ImTextureID GetImTextureID2(const ofTexture& texture)
+	{
+		return (ImTextureID)(uintptr_t)texture.texData.textureID;
+	}
+	//--------------------------------------------------------------
+	static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
+	{
+		return GetImTextureID2(hasTexture.getTexture());
+	}
+	//--------------------------------------------------------------
+	static ImTextureID GetImTextureID2(GLuint glID)
+	{
+		return (ImTextureID)(uintptr_t)glID;
+	}
+
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
+	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
 } // namespace ofxImGuiSurfing

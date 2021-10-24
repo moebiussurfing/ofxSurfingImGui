@@ -1,6 +1,9 @@
 
 #pragma once
 
+//TODO:
+// Can't add libs bc area also defined/included too on classes that includes this class.
+//#include "ofxSurfingImGui.h"
 //#include "ofxSurfing_ImGui_ofHelpers.h"
 
 namespace ofxImGuiSurfing
@@ -11,20 +14,27 @@ namespace ofxImGuiSurfing
 	You can pass it as argument when adding each ofParameter to the guiManager.
 
 	Examples:
+
 	guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 	guiManager.Add(floatValue, OFX_IM_VSLIDER);
 	guiManager.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
 
+	// Two toggles in one row
+	guiManager.Add(bEnable1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
+	guiManager.Add(bEnable2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
+
+
 	*/
+
 
 	//--------------------------------------------------------------
 	enum SurfingImGuiTypes
 	{
 		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
-		//TODO: could be an extra arg to allow different appearance for inactive types..
 		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there
 		OFX_IM_DISABLED,	// Make it invisble, preserve the void spacing
 		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control
+		//TODO: could be an extra arg to allow different appearance for inactive types..
 
 		//-
 
@@ -34,20 +44,25 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_SMALL,
 		OFX_IM_BUTTON_BIG,
 		OFX_IM_BUTTON_BIG_XXL,
+
 		// Toggle
 		OFX_IM_CHECKBOX,
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
+
 		// Border
 		OFX_IM_TOGGLE_SMALL_BORDER,
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
+
 		// Blink border
 		OFX_IM_TOGGLE_SMALL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK,
+
 		// Rounded
+		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
@@ -59,6 +74,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_SLIDER, // ofxImGui standard
 
 		// Big Sliders
+
 		// Horizontal
 		OFX_IM_HSLIDER_BIG,
 		OFX_IM_HSLIDER_BIG_NO_NAME,
@@ -72,6 +88,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
+
 		// Vertical
 		OFX_IM_VSLIDER,
 		OFX_IM_VSLIDER_NO_NAME,
@@ -79,7 +96,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_VSLIDER_NO_LABELS,
 
 		OFX_IM_PROGRESS_BAR,
-		OFX_IM_PROGRESS_BAR_NO_TEXT,//TODO:
+		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
 		OFX_IM_KNOB,
@@ -151,10 +168,9 @@ namespace ofxImGuiSurfing
 	}
 
 
-	//--------
-
-
-	// Sugar Snippets
+	//---------------
+	
+	// SUGAR SNIPPETS
 
 	//----
 
@@ -208,7 +224,7 @@ namespace ofxImGuiSurfing
 #define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
 #define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
 #endif
-	
+
 	//--
 
 	// 2.
@@ -245,4 +261,32 @@ ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN, ofGetHeight() / 2); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 	//----
+
+	// 4.
+
+	// Draws a point on the ImGui cursor positon for debugging when designing widgets
+	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//	{ \
+	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+	//	} \
+
+	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+
+	//----
+
+	//// NOTES
+	//
+	////ImGui::SetCursorPosX(ImGui::GetCursorPosX() + sztx.x);
+	////ImGui::SetCursorPosY(ImGui::GetCursorPosY() + sztx.y);
+	//
+	////IMGUI_SUGAR__TEST_POINT;
+	//
+	//const ImVec2 pdebug = ImGui::GetCursorScreenPos();
+	//draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//can't use macros..
+
 }
