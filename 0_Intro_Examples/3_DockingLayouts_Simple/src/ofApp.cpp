@@ -180,8 +180,8 @@ void ofApp::drawImGui()
 			guiManager.AddGroup(params1);
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -215,8 +215,8 @@ void ofApp::drawImGui()
 				ImGui::EndTabBar();
 			}
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -231,8 +231,8 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -247,8 +247,8 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, left!");
 			ImGui::Text("Hello, left!");
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 }
 
 //--------------------------------------------------------------

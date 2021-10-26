@@ -53,10 +53,10 @@ public:
 
 	//-
 
-	void dockingHelper();
+	void dockingHelperUpdate();
 	void dockingHelperDraw();
-	void dockingReset();
-	void dockingRandom();
+	void doDockingReset();
+	void doDockingRandom();
 	bool bDockingReset = false;
 	bool bDockingRandom = false;
 

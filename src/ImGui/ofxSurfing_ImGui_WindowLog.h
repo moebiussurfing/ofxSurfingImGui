@@ -125,12 +125,26 @@ namespace ofxImGuiSurfing {
 
 			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
 			{
-				float _w1= ofxImGuiSurfing::getWidgetsWidth(1);
+				float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 				float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
+				float _sp = ofxImGuiSurfing::GetFrameHeightWithSpacing();
+
+				static int _pre = -1;
+				//float hl = ImGui::GetFrameHeight();
+				//float hl = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+				//float hl = (ImGui::GetIO().FontDefault->FontSize);
+				float hl = ofxImGuiSurfing::getWidgetsHeightUnit();
+
+				// auto fit
+				int _count = (ImGui::GetWindowHeight() - _h - _sp) / (float)hl;
+				if (_count != _pre) {
+					_pre = _count;
+					SetLogSize(_count + 1);
+				}
 
 				//float _w100 = ImGui::GetContentRegionAvail().x;
 				//float _h = 1.5f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
-				
+
 				ImGui::Spacing();
 
 				if (ImGui::Button("Clear", ImVec2(_w1, _h)))
@@ -139,6 +153,7 @@ namespace ofxImGuiSurfing {
 				}
 
 				ofxImGuiSurfing::AddSpacingSeparated();
+
 				ImGui::Spacing();
 
 				ImGui::BeginChild("Logs");

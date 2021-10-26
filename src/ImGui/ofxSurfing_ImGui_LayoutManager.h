@@ -20,17 +20,6 @@ TODO:
 
 */
 
-
-//#define FIXING_DOCKING // -> Need to fix yet
-#define FIXING_DRAW_VIEWPORT // -> To debug free space
-
-// -> We have some layout presets that we can load using keys:
-// F1-F2-F3-F4 -> preset
-// F9: Window Presets
-// F10: Window Panels
-// F11: Window Extra
-// f/l/L: locks
-
 //-
 
 // Docking help
@@ -41,6 +30,21 @@ TODO:
 
 // Toolbar example
 // https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
+
+//-
+
+// -> We have some layout presets that we can load using keys:
+// F1-F2-F3-F4 -> preset
+// F5: Window Presets
+// F6: Window Panels
+// F7: Window Extra
+
+//-
+
+//TODO:
+// Testing central viewport
+//#define FIXING_DOCKING // -> Need to fix yet
+#define FIXING_DRAW_VIEWPORT // -> To debug free space
 
 //-
 
@@ -118,7 +122,7 @@ private:
 
 	//----
 
-	// Styles Api
+	// Styles API
 
 public:
 
@@ -243,7 +247,7 @@ public:
 
 public:
 
-	// Api
+	// API
 
 	// To the Global context: 
 	// All the windows are feeded in between!
@@ -278,7 +282,7 @@ private:
 
 public:
 
-	// Api 
+	// API 
 	// Some options
 
 	// Force autodraw
@@ -702,7 +706,7 @@ public:
 
 	// Special Windows Management
 
-	// To simplify a bit the Api
+	// To simplify a bit the API
 
 private:
 
@@ -1045,9 +1049,10 @@ public:
 
 	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
-	// Some Api simplificators
+	// Some API simplificators
 	//--------------------------------------------------------------
 	void startup();
+	void startupFirstFrame();
 	void setupDocking();
 
 	//--------------------------------------------------------------
@@ -1089,7 +1094,10 @@ private:
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
-	ofParameter<bool> bDebugRectCentral{ "Rectangle Central", false };
+	//TODO:
+	//ofParameter<bool> bDebugRectCentral{ "Rect Central", false };
+	ofParameter<bool> bDebugRectCentral{ "Rect Central", true };
+
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central; // current free space viewport updated when changes
 	ofRectangle rectangle_Central_Transposed;

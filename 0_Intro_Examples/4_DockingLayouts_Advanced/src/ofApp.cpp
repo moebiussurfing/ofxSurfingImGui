@@ -5,6 +5,8 @@ void ofApp::setup() {
 
 	ofSetFrameRate(60);
 
+	//ofSetEscapeQuitsApp(false);
+
 	//----
 
 	// Parameters
@@ -40,7 +42,7 @@ void ofApp::setup() {
 	// Optional:
 	// A windows organizer engine..
 	//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-	
+
 	//-
 
 	// Instantiate
@@ -63,7 +65,6 @@ void ofApp::setup() {
 	guiManager.addWindowSpecial("Expert"); // index 4
 
 	/*
-
 		NOTE:
 		Then we can render the windows:
 		if (guiManager.beginWindow(0)) // -> This is our helpers to render each window passing the index
@@ -75,7 +76,6 @@ void ofApp::setup() {
 		NOTICE:
 		We can use also raw ImGui methods and widgets,
 		combined with the add-on helpers to create windows and widgets too!
-
 	*/
 
 	//-
@@ -97,13 +97,14 @@ void ofApp::setup() {
 
 	// We can add extra parameters to append include into the Layout Presets
 
-	//guiManager.addParameterToLayoutPresets(bEnable);
+	guiManager.addParameterToLayoutPresets(guiManager.bReset);
+	guiManager.addParameterToLayoutPresets(bEnable);
 	//guiManager.addParameterToLayoutPresets(bMode1);
 	//guiManager.addParameterToLayoutPresets(bMode2);
 
 	//-
 
-	// Startup
+	// Startup:
 
 	guiManager.startup();
 
@@ -111,16 +112,29 @@ void ofApp::setup() {
 
 	// Optional: 
 
-	//// Subscribe an optional Reset button
-	//// flagging a bool to true to reset. 
-	//// Uses the internal addon gui Reset button on the Presets Extra panel,
-	//// But notice that it will call a local method on this scope (ofApp).
-	//guiManager.setReset(&bDockingReset);
+	// Subscribe an optional Reset button
+	// flagging a bool to true to reset. 
+	// Uses the internal addon gui Reset button on the Presets Extra panel,
+	// But notice that it will call a local method on this scope (ofApp).
+	guiManager.setReset(&bDockingReset);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	if (bEnable)
+	{
+		float t = ofGetElapsedTimef();
+		float s = ofMap(amount, amount.getMax(), amount.getMin(), 1, 10);
+		t = ofWrap(t, 0, s);
+		separation = ofMap(t, 0, s, separation.getMin(), separation.getMax());
+
+		// Log 8 times per second at 60 fps
+		if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
+	}
+
+	//--
+
 	guiManager.begin();
 	{
 		// In between here (begin/end) we can render ImGui windows and widgets.
@@ -131,9 +145,12 @@ void ofApp::draw()
 
 		guiManager.beginDocking();
 		{
-			dockingHelper();
+			dockingHelperUpdate();
 		}
 		guiManager.endDocking();
+
+		// An extra window with some hardcoded layout triggers
+		if (bEnable) dockingHelperDraw();
 
 		//--
 
@@ -182,24 +199,32 @@ void ofApp::drawImGui()
 			ofxImGuiSurfing::AddHSlider(amount, ImVec2(_w1, _h));
 			ofxImGuiSurfing::AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
 
-			if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2)) {
-				bPrevious = false;
-				lineWidth -= 0.1;
-			}
-			ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
-
-			ImGui::SameLine();
-			if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2)) {
-				bNext = false;
-				lineWidth += 0.1;
-			}
-			ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
-
-			//ofxImGuiSurfing::AddParameter(lineWidth);
 			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+			//ofxImGuiSurfing::AddParameter(lineWidth);
 
-			ofxImGuiSurfing::AddParameter(separation);
-			ofxImGuiSurfing::AddStepper(shapeType);
+			ImGui::PushButtonRepeat(true);
+			{
+				if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 1.5)) {
+					bPrevious = false;
+					lineWidth -= 0.02;
+					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+				}
+				ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
+				ImGui::SameLine();
+				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 1.5)) {
+					bNext = false;
+					lineWidth += 0.02;
+					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+				}
+				ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
+			}
+			ImGui::PopButtonRepeat();
+
+			guiManager.Add(separation, OFX_IM_HSLIDER_MINI);
+			//ofxImGuiSurfing::AddDragFloatSlider(separation);
+
+			guiManager.Add(shapeType, OFX_IM_STEPPER);
+			//ofxImGuiSurfing::AddStepper(shapeType);
 		}
 		guiManager.endWindowSpecial(index);
 	}
@@ -215,8 +240,8 @@ void ofApp::drawImGui()
 			guiManager.AddGroup(params1);
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -227,6 +252,11 @@ void ofApp::drawImGui()
 		{
 			if (ImGui::BeginTabBar("myTabs"))
 			{
+				if (ImGui::BeginTabItem("Controls"))
+				{
+					guiManager.drawAdvanced();
+					ImGui::EndTabItem();
+				}
 				if (ImGui::BeginTabItem("Video"))
 				{
 					string str = "weqweqr qc wcrqw crqwecrqwec rqwec rqwe crqwecrqwecr qervev qervew ecrqwecr qwecrqwe cr qervev qerve";
@@ -241,17 +271,12 @@ void ofApp::drawImGui()
 					ImGui::TextWrapped(str.c_str());
 					ImGui::EndTabItem();
 				}
-				if (ImGui::BeginTabItem("Controls"))
-				{
-					guiManager.drawAdvanced();
-					ImGui::EndTabItem();
-				}
 
 				ImGui::EndTabBar();
 			}
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -266,8 +291,8 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 
 	//----
 
@@ -282,8 +307,8 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, left!");
 			ImGui::Text("Hello, left!");
 		}
+		guiManager.endWindowSpecial();
 	}
-	guiManager.endWindowSpecial();
 }
 
 //----
@@ -292,28 +317,27 @@ void ofApp::drawImGui()
 // added to the user session mouse-layouting work.
 
 //--------------------------------------------------------------
-void ofApp::dockingHelper()
+void ofApp::dockingHelperUpdate()
 {
-	// Reset layout once.
-	//if (0) // bypass
+	// Reset layout once o startup/first frame call
 	{
 		static bool binitiated = false;
 		if (!binitiated) {
-			binitiated = true;
-			dockingReset();
+			binitiated = true; // Called only once!
+			doDockingReset();
 		}
 	}
 
 	// Reset layout by button gui
 	if (bDockingReset) {
 		bDockingReset = false;
-		dockingReset();
+		doDockingReset();
 	}
 
 	// Random layout by button gui
 	if (bDockingRandom) {
 		bDockingRandom = false;
-		dockingRandom();
+		doDockingRandom();
 	}
 }
 
@@ -328,38 +352,38 @@ void ofApp::dockingHelperDraw()
 	ImGui::SetNextWindowPos(ImVec2(400, 400), cond);
 	ImGui::SetNextWindowSize(ImVec2(100, 200), cond);
 
-	ImGui:Begin("ofApp-Resets", (bool*)bEnable.get(), flags);
+	//-
+
+ImGui:Begin("ofApp-Resets", (bool*)bEnable.get(), flags);
+{
+	ImGui::TextWrapped("Reset Docking Hardcoded Layouts");
+	float _w = ofxImGuiSurfing::getWidgetsWidth();
+	float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+	// Reset docking layout
+	if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
 	{
-		ImGui::TextWrapped("Reset Docking Hardcoded Layouts");
-		float _w = ofxImGuiSurfing::getWidgetsWidth();
-		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
-
-		// Reset docking layout
-		if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
-		{
-			bDockingReset = true; // flag to call on a preciste draw point
-		}
-
-		// Randomize docking layout
-		if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
-		{
-			bDockingRandom = true; // flag to call on a preciste draw point
-		}
-
-		// Show all Panels
-		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
-		{
-			guiManager.setShowAllPanels(true);
-		}
+		bDockingReset = true; // flag to call on a preciste draw point
 	}
-	ImGui::End();
+
+	// Randomize docking layout
+	if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
+	{
+		bDockingRandom = true; // flag to call on a preciste draw point
+	}
+
+	// Show all Panels
+	if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
+	{
+		guiManager.setShowAllPanels(true);
+	}
+}
+ImGui::End();
 }
 
 //--------------------------------------------------------------
-void ofApp::dockingReset()
+void ofApp::doDockingReset()
 {
-	//if (1) return;
-
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -368,7 +392,7 @@ void ofApp::dockingReset()
 	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
 	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
 
-	// split the dockspace into 2 nodes --
+	// Split the dockspace into 2 nodes --
 	// DockBuilderSplitNode takes in the following args in the following order
 	//   window ID to split, direction, fraction (between 0 and 1),
 	// the final two setting let's us choose which id we want (which ever one we DON'T set as NULL,
@@ -376,13 +400,13 @@ void ofApp::dockingReset()
 	// out_id_at_dir is the id of the node in the direction we specified earlier,
 	// out_id_at_opposite_dir is in the opposite direction
 
-	// fixed sizes
+	// Fixed sizes
 	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2f, nullptr, &dockspace_id);
 	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.25f, nullptr, &dockspace_id);
 	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
 	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.15f, nullptr, &dockspace_id);
 
-	// we now dock our windows into the docking node we made above
+	// We now dock our windows into the docking node we made above
 
 	//ImGui::DockBuilderDockWindow("Main Window", dock_id_top);
 	//ImGui::DockBuilderDockWindow("Audio Window", dock_id_right);
@@ -401,10 +425,8 @@ void ofApp::dockingReset()
 }
 
 //--------------------------------------------------------------
-void ofApp::dockingRandom()
+void ofApp::doDockingRandom()
 {
-	//if (1) return;
-
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -446,7 +468,7 @@ void ofApp::logPopulate()
 		if (_rnd < 0.2) guiManager.addLog(ss);
 		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
 		else if (_rnd < 0.6) guiManager.addLog(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
-		else if (_rnd < 0.8) guiManager.addLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
+		else if (_rnd < 0.8) guiManager.addLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--------.--") + ofToString("===//...--//-----..")));
 		else guiManager.addLog(ofGetTimestampString());
 	}
 }

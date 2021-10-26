@@ -88,6 +88,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
+		OFX_IM_HSLIDER_MINI, //TODO:
 
 		// Vertical
 		OFX_IM_VSLIDER,
@@ -169,7 +170,7 @@ namespace ofxImGuiSurfing
 
 
 	//---------------
-	
+
 	// SUGAR SNIPPETS
 
 	//----
@@ -231,9 +232,13 @@ namespace ofxImGuiSurfing
 
 	// For OFX_IM_STEPPER
 
-#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
-#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
+//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
+#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
+	const auto sztx = ImGui::CalcTextSize("----------"); \
+	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x);
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----
 
