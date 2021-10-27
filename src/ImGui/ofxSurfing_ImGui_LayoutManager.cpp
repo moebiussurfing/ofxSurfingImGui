@@ -818,6 +818,13 @@ void ofxSurfing_ImGui_Manager::startupFirstFrame() {
 // Global ImGui being/end like ofxImGui
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
+
+	//--
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+
+	//--
+
 	//TODO:
 	//windowPanels.update();
 	//update();
@@ -832,10 +839,6 @@ void ofxSurfing_ImGui_Manager::begin() {
 	_currWindowsSpecial = -1;
 
 	resetUniqueNames(); // reset unique names
-
-	//--
-
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//--
 
@@ -878,6 +881,10 @@ void ofxSurfing_ImGui_Manager::begin() {
 void ofxSurfing_ImGui_Manager::end() {
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+	
+	//--
+		
+	drawLogPanel();
 
 	//--
 

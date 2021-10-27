@@ -612,14 +612,14 @@ private:
 						//-
 						if (ImGui::TreeNode("Window Info"))
 						{
-							std::string _hwidget = "Widgets Unit Height: ";
+							std::string _hwidget = "Widget Height: ";
 							_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-							std::string _wwidget = "Widgets Unit Width: ";
+							std::string _wwidget = "Widget Width: ";
 							_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
 							std::string _wpanel = "Panel Width: ";
 							_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
 
-							std::string _wShape = "";
+							std::string _wShape = "Window Shape: ";
 							_wShape += ofToString(ImGui::GetWindowPos().x);
 							_wShape += ", ";
 							_wShape += ofToString(ImGui::GetWindowPos().y);
