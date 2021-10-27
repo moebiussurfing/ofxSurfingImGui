@@ -805,10 +805,11 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startupFirstFrame() {
-	if (ofGetFrameNum() == 1)
+	//if (ofGetFrameNum() == 1)
+	if (ofGetFrameNum() == 2)
 	{
 		appLayoutIndex = appLayoutIndex;
-		rectangles_Windows[1] = rectangles_Windows[1];
+		if (rectangles_Windows.size() > 0) rectangles_Windows[1] = rectangles_Windows[1];
 	}
 }
 

@@ -388,12 +388,12 @@ private:
 	// Presets and Panels windows
 	ofParameter<bool> bResetWindowPresets{ "Reset", false };
 	ofParameter<bool> bAutoResizePresets{ "AutoResize", true };
-	ofParameter<bool> bMinimizePresets{ "Minimize", true};
+	ofParameter<bool> bMinimizePresets{ "Minimize", true };
 	ofParameterGroup params_WindowPresets{ "Window Presets" };
 
 	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels", true };
-	ofParameter<bool> bMinimizePanels{ "Minimize", true};
+	ofParameter<bool> bMinimizePanels{ "Minimize", true };
 	ofParameterGroup params_WindowPanels{ "Window Panels" };
 
 	ofParameterGroup params_WindowsEngine{ "Engine Windows" };
@@ -608,6 +608,35 @@ private:
 						ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
 						ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
 						//AddToggleRoundedButton(bPreviewSceneViewport);
+
+						//-
+						if (ImGui::TreeNode("Window Info"))
+						{
+							std::string _hwidget = "Widgets Unit Height: ";
+							_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
+							std::string _wwidget = "Widgets Unit Width: ";
+							_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
+							std::string _wpanel = "Panel Width: ";
+							_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
+
+							std::string _wShape = "";
+							_wShape += ofToString(ImGui::GetWindowPos().x);
+							_wShape += ", ";
+							_wShape += ofToString(ImGui::GetWindowPos().y);
+							_wShape += ", ";
+							_wShape += ofToString(ImGui::GetWindowWidth());
+							_wShape += ", ";
+							_wShape += ofToString(ImGui::GetWindowHeight());
+
+							std::string ss = "";
+							ss += _hwidget + "\n";
+							ss += _wwidget + "\n";
+							ss += _wpanel + "\n";
+							ss += _wShape + "\n";
+							ImGui::TextWrapped(ss.c_str());
+						
+							ImGui::TreePop();
+						}
 
 						//--
 
@@ -1088,7 +1117,7 @@ private:
 	//ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel
 	//ofParameter<bool> bModeLockControls{ "Lock C", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
 	//ofParameter<bool> bModeLockPreset{ "Lock A", false }; // -> Cant be moved. To be used to lock to free viewport scenarios
-	
+
 	//TODO: 
 	// It's a problem if .ini files are already present... We must ingore loading.
 
@@ -1178,7 +1207,7 @@ public:
 			windowsAtributes[i].bGui.set(b);
 		}
 		bMenu = b;
-		
+
 		//bModeLockControls = b;
 
 		bGui_LayoutsPanels = b;
