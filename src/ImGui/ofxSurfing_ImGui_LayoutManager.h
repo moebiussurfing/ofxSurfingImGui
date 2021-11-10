@@ -1094,6 +1094,16 @@ public:
 public:
 
 	void draw_ImGuiMenu();
+	
+public:
+	
+	// Get the central space to position other panels or gui elements
+	// like video viewports or scenes previews
+	//--------------------------------------------------------------
+	ofRectangle getRectangleCentralDocking() {
+		return rectangle_Central_MAX;
+		//return rectangle_Central;
+	}
 
 	//--
 
@@ -1123,9 +1133,7 @@ private:
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
-	//TODO:
-	//ofParameter<bool> bDebugRectCentral{ "Rect Central", false };
-	ofParameter<bool> bDebugRectCentral{ "Rect Central", true };
+	ofParameter<bool> bDebugRectCentral{ "Rect Central", false };
 
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central; // current free space viewport updated when changes

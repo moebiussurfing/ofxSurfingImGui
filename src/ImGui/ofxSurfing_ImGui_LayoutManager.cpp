@@ -670,7 +670,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
 						ofSetRectMode(OF_RECTMODE_CENTER);
 
 						int g = 0;
-						ofColor cl = ofColor::orange;
+						ofColor cl = ofColor::white;
+						//ofColor cl = ofColor::orange;
 
 						//int g = 255 * ofxImGuiSurfing::Bounce(0.5);
 						int a = 255.f * ofMap(ofxImGuiSurfing::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
@@ -698,7 +699,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
 					//-
 
 					static ofRectangle rectangle_Central_MAX_PRE;
-					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX) { // updates when layout canges..
+					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX) { // updates when layout changes..
 						rectangle_Central_MAX_PRE = rectangle_Central_MAX;
 
 						// fit exact rectangle to borders and scaled to fit
@@ -2101,9 +2102,9 @@ void ofxSurfing_ImGui_Manager::createLayoutPreset(std::string namePreset)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 {
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	//if (bAutoResizePanels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	flags_wPanels = ImGuiWindowFlags_None;
+	flags_wPanels += ImGuiWindowFlags_NoSavedSettings;
+	if (bAutoResizePanels) flags_wPanels += ImGuiWindowFlags_AlwaysAutoResize;
 
 	//--
 
@@ -2139,7 +2140,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 	ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), pnCond);
 	ImGui::SetNextWindowSize(ofVec2f(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), pnCond);
 
-	if (beginWindow(bGui_LayoutsPanels, window_flags))
+	if (beginWindow(bGui_LayoutsPanels, flags_wPanels))
 	{
 		const int i = 1;
 		rectangles_Windows[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight()));
@@ -2238,7 +2239,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		if (ImGui::Button("All", ImVec2(_w50, _hWid)))
 		{
-			// wokflow
+			// workflow
 			if (bSolo) bSolo.set(false);
 
 			bool b = true;

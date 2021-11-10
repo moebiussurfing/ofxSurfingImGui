@@ -2,14 +2,16 @@
 
 #include "ofMain.h"
 
+// - Class to handle a video preview window with some extra features
+// - Fbo ImGui Window
+// Some stuff cames from ofxMyUtil from https://github.com/Iwanaka
+
 #include "ofxImGui.h"
-#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofxSurfingHelpers.h"
 #include "ofxInteractiveRect.h"
 
-// Class to handle a video preview window with some extra features
-
-// Fbo ImGui Window
-// Some stuff from ofxMyUtil from https://github.com/Iwanaka
+//#include "ofxSurfingImGui.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
 
 namespace ofxImGuiSurfing
 {
@@ -32,7 +34,7 @@ namespace ofxImGuiSurfing
 	inline void BasicInfosWindow()
 	{
 		string str1 = "Size: " + ofToString(ImGui::GetWindowSize().x, 0) + "," + ofToString(ImGui::GetWindowSize().y, 0);
-		string str2 = "Pos:  " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
+		string str2 = "Pos: " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
 		ImGui::Text(str1.c_str());
 		ImGui::Text(str2.c_str());
 	}
@@ -81,14 +83,13 @@ namespace ofxImGuiSurfing
 
 		szOut = ImVec2(ww, hh);
 		ImGui::Image(textureID, szOut);
-
 	}
 
+	/*
 	//--------------------------------------------------------------
 	inline void DrawFbo(const ofFbo &fbo, GLuint &sourceID, string name, ImGuiWindowFlags flag = ImGuiWindowFlags_None, bool bResizeable = false)
 	{
 		if (!fbo.isAllocated()) return;
-
 
 		//TODO:
 		//static bool bDebug = true;
@@ -110,7 +111,6 @@ namespace ofxImGuiSurfing
 		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
 		auto size = ImGui::GetContentRegionAvail(); // for example
 		ImGui::Image(textureID, size);
-
 
 
 		//// set source
@@ -176,6 +176,7 @@ namespace ofxImGuiSurfing
 		//	ImGui::EndChild();
 		//}
 	}
+	*/
 
 	/*
 	//--------------------------------------------------------------
@@ -241,6 +242,8 @@ namespace ofxImGuiSurfing
 
 //--
 
+// More complex class
+
 class SurfingPreview
 {
 public:
@@ -252,6 +255,7 @@ public:
 
 	SurfingPreview::~SurfingPreview()
 	{
+		ofxSurfingHelpers::saveGroup(params);
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // exit()
 	}
 
@@ -263,13 +267,18 @@ private:
 	ofParameter<bool> bGui_Preview;
 	GLuint sourceID;
 
+	string path;
+
 public:
 
 	ofParameter<bool> bGui{ "Preview", true };
 	ofParameter<bool> bFullScreen{ "Full Screen", false };
 	ofParameter<bool> bBigScreen{ "Big Screen", true };
+	ofParameter<bool> bInDocked{ "In Docked", true };
+	ofParameter<ofColor> colorBg{ "Bg", ofColor(0),ofColor(0),ofColor(255) };
+
 	ofScaleMode scaleMode;
-	ofxInteractiveRect myRect = { "myRect" };
+	ofxInteractiveRect rectDraggable = { "rectDraggable" };
 
 	ofParameterGroup & getParameters() {
 		return params;
@@ -278,10 +287,10 @@ public:
 private:
 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
-	ofParameter<bool> bDebug{ "Debug", true };
+	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 
-	std::vector<std::string> scaleModenames={ "FILL", "FIT", "CENTER", "STRETCH_TO_FILL" };
+	std::vector<std::string> scaleModenames = { "FILL", "FIT", "CENTER", "STRETCH_TO_FILL" };
 	ofParameter<int> scaleModeIndex{ "Scale Mode", 0, 0, 3 };
 
 	ofParameterGroup params;
@@ -290,6 +299,7 @@ public:
 
 	void setup()
 	{
+		// Params
 		params.setName("SurfingPreview");
 		params.add(bGui);
 		params.add(bExtra);
@@ -297,11 +307,15 @@ public:
 		params.add(bFullScreen);
 		params.add(scaleModeIndex);
 		params.add(bBigScreen);
-		params.add(myRect.getParameter());
+		params.add(bInDocked);
+		params.add(colorBg);
+		params.add(rectDraggable.getParameter());
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // setup()
 
-		// fbo settings
+		//-
+
+		// Fbo settings
 		fboSettings.width = 1920;
 		fboSettings.height = 1080;
 
@@ -313,7 +327,7 @@ public:
 		//fboSettings.useStencil = true;
 		//fboSettings.depthStencilAsTexture = true;
 
-		// fbo 
+		// Fbo 
 		//ofEnableArbTex();
 		//ofDisableeArbTex();
 		fboPreview.allocate(fboSettings);
@@ -325,25 +339,30 @@ public:
 
 		//-
 
-		myRect.bEditMode.setName("Edit Viewport");
-		//myRect.enableEdit();
-		//myRect.setRect(200, 200, 200, 400);
-		myRect.setTransparent();
-		myRect.setAutoSave(true);
-		//myRect.loadSettings();
+		// Draggable viewport rectangle
+		rectDraggable.bEditMode.setName("Edit Viewport");
+		//rectDraggable.enableEdit();
+		//rectDraggable.setRect(200, 200, 200, 400);
+		rectDraggable.setTransparent();
+		rectDraggable.setAutoSave(true);
+		//rectDraggable.loadSettings();
+
+		//-
+
+		ofxSurfingHelpers::loadGroup(params);
 	};
 
-	void updateRect(ofRectangle r)
+	void updateRectDraggable(ofRectangle r)
 	{
-		myRect.setX(r.getX());
-		myRect.setY(r.getY());
-		myRect.setWidth(r.getWidth());
-		myRect.setHeight(r.getHeight());
+		rectDraggable.setX(r.getX());
+		rectDraggable.setY(r.getY());
+		rectDraggable.setWidth(r.getWidth());
+		rectDraggable.setHeight(r.getHeight());
 	};
 
 	void draw()
 	{
-		myRect.draw();
+		rectDraggable.draw();
 	};
 
 	void begin()
@@ -374,22 +393,34 @@ public:
 			ofxImGuiSurfing::AddToggleRounded(bExtra);
 			if (bExtra)
 			{
-				ofxImGuiSurfing::AddToggleRounded(bBigScreen);
-				if (bBigScreen) {
-					ImGui::Indent();
-					ofxImGuiSurfing::AddToggleRounded(myRect.bEditMode);
-					//ofxImGuiSurfing::AddCombo(scaleModeIndex, scaleModenames);
-					ofxImGuiSurfing::AddToggleRounded(bFullScreen);
-					ImGui::Unindent();
-				}
-				ofxImGuiSurfing::AddToggleRounded(bDebug);
-				if (bDebug)
+				ImGui::Indent();
 				{
-					ImGui::Indent();
-					ofxImGuiSurfing::BasicInfosWindow();
-					ImGui::Unindent();
+					ofxImGuiSurfing::AddToggleRounded(bBigScreen);
+					if (bBigScreen)
+					{
+						ImGui::Indent();
+						{
+							ofxImGuiSurfing::AddToggleRounded(bFullScreen);
+							if (!bFullScreen)
+							{
+								ofxImGuiSurfing::AddToggleRounded(bInDocked);
+								if(!bInDocked) ofxImGuiSurfing::AddToggleRounded(rectDraggable.bEditMode);
+							}
+							//ofxImGuiSurfing::AddCombo(scaleModeIndex, scaleModenames);//TODO: fix
+							//ofxImGuiSurfing::AddParameter(colorBg);//TODO: fix
+						}
+						ImGui::Unindent();
+					}
+					ofxImGuiSurfing::AddToggleRounded(bDebug);
+					if (bDebug)
+					{
+						ImGui::Indent();
+						ofxImGuiSurfing::BasicInfosWindow();
+						ImGui::Unindent();
+					}
+					ofxImGuiSurfing::AddToggleRounded(bAutoResize);
 				}
-				ofxImGuiSurfing::AddToggleRounded(bAutoResize);
+				ImGui::Unindent();
 			}
 		}
 		ImGui::End();
