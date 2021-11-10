@@ -29,6 +29,7 @@ public:
 	//-
 
 	// parameters
+
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
 	ofParameter<bool> bPrevious;
@@ -77,8 +78,9 @@ public:
 
 	//-
 
-#ifdef USE_FBOS_DEMO
 	// window fbo
+
+#ifdef USE_FBOS_DEMO
 	void setupFbos();
 	void updateFbos();
 	void drawFboTest();

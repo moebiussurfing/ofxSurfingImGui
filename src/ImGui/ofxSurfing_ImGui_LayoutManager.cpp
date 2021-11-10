@@ -881,9 +881,9 @@ void ofxSurfing_ImGui_Manager::begin() {
 void ofxSurfing_ImGui_Manager::end() {
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
-	
+
 	//--
-		
+
 	drawLogPanel();
 
 	//--
@@ -1360,6 +1360,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bAutoSave_Layout);
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
+	params_AppSettingsLayout.add(bSolo);
 
 	params_AppSettings.add(params_AppSettingsLayout);
 
@@ -1378,7 +1379,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//-
 
 	// Exclude from settings but to use the grouped callback
-	bSolo.setSerializable(false);
+	//bSolo.setSerializable(false);
 
 	//---------------
 
@@ -1427,6 +1428,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_WindowsEngine.add(params_WindowPanels);
 
 	params_AppSettings.add(params_WindowsEngine);
+
 
 	//----
 
@@ -1885,6 +1887,8 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
 	{
 		// workflow
 		appLayoutIndex = -1;
+
+		// disable preset
 		for (int i = 0; i < bLayoutPresets.size(); i++)
 		{
 			bLayoutPresets[i].setWithoutEventNotifications(false);

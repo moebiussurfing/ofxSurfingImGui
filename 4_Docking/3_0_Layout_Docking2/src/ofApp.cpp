@@ -40,16 +40,16 @@ void ofApp::setup() {
 	// 1. Add the windows:
 	// Pre add the window names that you will use and rememeber his index!
 	// Each added window will be added too to the layout presets engine
-	guiManager.addWindow("Window 0");
-	guiManager.addWindow("Window 1");
-	guiManager.addWindow("Window 2");
-	guiManager.addWindow("Window 3");
-	guiManager.addWindow("Window 4");
+	guiManager.addWindowSpecial("Window 0");
+	guiManager.addWindowSpecial("Window 1");
+	guiManager.addWindowSpecial("Window 2");
+	guiManager.addWindowSpecial("Window 3");
+	guiManager.addWindowSpecial("Window 4");
 
 	
 #ifdef USE_FBOS_DEMO
-	guiManager.addWindow("rgbaFbo");
-	//guiManager.addWindow("rgbaFboFloat");
+	guiManager.addWindowSpecial("rgbaFbo");
+	//guiManager.addWindowSpecial("rgbaFboFloat");
 #endif
 
 	//-
@@ -94,8 +94,8 @@ void ofApp::draw()
 		updateFbos();
 		GLuint sourceID1;
 		GLuint sourceID2;
-		if (guiManager.getVisible(5)) DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None, true);
-		//if (guiManager.getVisible(6)) DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
+		if (guiManager.getWindowSpecialVisible(5)) DrawFbo(rgbaFbo, sourceID1, "rgbaFbo", ImGuiWindowFlags_None, true);
+		//if (guiManager.getWindowSpecialVisible(6)) DrawFbo(rgbaFboFloat, sourceID2, "rgbaFboFloat", ImGuiWindowFlags_NoResize);
 #endif
 
 	}
@@ -151,7 +151,7 @@ void ofApp::drawImGui()
 
 		//--
 
-		if (guiManager.bGui_Menu) drawMenu();
+		if (guiManager.bMenu) drawMenu();
 	}
 	guiManager.endDocking();
 
@@ -161,7 +161,7 @@ void ofApp::drawImGui()
 
 	//if(0)
 	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindow(0))
+	if (guiManager.beginWindowSpecial(0))
 	{
 		// Calculate layout sizes
 		float _w100 = ofxImGuiSurfing::getWidgetsWidth();
@@ -192,11 +192,11 @@ void ofApp::drawImGui()
 		if (ImGui::CollapsingHeader("Added windows"))
 		{
 			ImGui::TextWrapped("Auto created toggles to set each added window visible");
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(0));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(1));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(2));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(3));
-			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getVisible(4));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(0));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(1));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(2));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(3));
+			ofxImGuiSurfing::AddToggleRoundedButton(guiManager.getWindowSpecialVisible(4));
 		}
 
 		ImGui::Spacing();
@@ -221,7 +221,7 @@ void ofApp::drawImGui()
 	// -> crash ??
 	if(0) 
 	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindow(1))
+	if (guiManager.beginWindowSpecial(1))
 	{
 		ImGui::Text("Window1 Window1 Window1");
 
@@ -236,7 +236,7 @@ void ofApp::drawImGui()
 
 	//if(0)
 	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindow(2))
+	if (guiManager.beginWindowSpecial(2))
 	{
 		float _w100 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 		float _w50 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
@@ -272,7 +272,7 @@ void ofApp::drawImGui()
 
 	//if(0)
 	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindow(3))
+	if (guiManager.beginWindowSpecial(3))
 	{
 		ImGui::Text("Hello, left!");
 		ImGui::Text("Hello, left!");
@@ -286,7 +286,7 @@ void ofApp::drawImGui()
 
 	//if(0)
 	//if (guiManager.beginWindowSpecial())
-	if (guiManager.beginWindow(4))
+	if (guiManager.beginWindowSpecial(4))
 	{
 		ImGui::Text("Hello, down!");
 		ImGui::Text("Hello, down!");
@@ -334,7 +334,7 @@ void ofApp::drawMenu()
 				*p_open = false;
 			ImGui::EndMenu();
 		}
-		ofxImGuiSurfing::HelpMarker(
+		ofxImGuiSurfing::AddTooltipHelp(
 			"This is not operative here. Just for testing menus!" "\n\n"
 			"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 			"- Drag from window title bar or their tab to dock/undock." "\n"

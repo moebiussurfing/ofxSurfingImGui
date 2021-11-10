@@ -3,12 +3,16 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofxInteractiveRect.h"
+
+// Class to handle a video preview window with some extra features
 
 // Fbo ImGui Window
-// from ofxMyUtil from https://github.com/Iwanaka
+// Some stuff from ofxMyUtil from https://github.com/Iwanaka
 
-namespace ofxImGuiSurfing {
-
+namespace ofxImGuiSurfing
+{
 	/*
 	void DrawFbo(const ofFbo &fbo, GLuint &sourceID,
 		std::string name = "fbo", ImGuiWindowFlags flag = 0);
@@ -27,8 +31,10 @@ namespace ofxImGuiSurfing {
 	//--------------------------------------------------------------
 	inline void BasicInfosWindow()
 	{
-		ImGui::Text("Window size : x %f, y %f", ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
-		ImGui::Text("Window position : x %f, y %f", ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+		string str1 = "Size: " + ofToString(ImGui::GetWindowSize().x, 0) + "," + ofToString(ImGui::GetWindowSize().y, 0);
+		string str2 = "Pos:  " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
+		ImGui::Text(str1.c_str());
+		ImGui::Text(str2.c_str());
 	}
 
 	//--------------------------------------------------------------
@@ -55,23 +61,57 @@ namespace ofxImGuiSurfing {
 	}
 
 	//--------------------------------------------------------------
+	inline void DrawFboPreview(const ofFbo &fbo)
+	{
+		if (!fbo.isAllocated()) return;
+
+		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
+
+		ImVec2 szWin = ImGui::GetContentRegionAvail(); // for example
+		ImVec2 szOut;
+
+		float w = fbo.getWidth();
+		float h = fbo.getHeight();
+		float ratio = h / w;
+		float pad = 0;
+		float ww;
+		float hh;
+		ww = szWin.x - pad;
+		hh = ww * ratio;
+
+		szOut = ImVec2(ww, hh);
+		ImGui::Image(textureID, szOut);
+
+	}
+
+	//--------------------------------------------------------------
 	inline void DrawFbo(const ofFbo &fbo, GLuint &sourceID, string name, ImGuiWindowFlags flag = ImGuiWindowFlags_None, bool bResizeable = false)
 	{
 		if (!fbo.isAllocated()) return;
 
-		static bool bDebug = true;
 
-		//TODO: try to scale..
-		ImVec2 sz = ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		//TODO:
+		//static bool bDebug = true;
 
-		ofPixels pix;
-		pix.clear();
+		////TODO: try to scale..
+		//ImVec2 sz = ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 
-		fbo.readToPixels(pix);
-		pix.setImageType(OF_IMAGE_COLOR_ALPHA);
+		//ofPixels pix;
+		//pix.clear();
 
-		// clear source
-		glDeleteTextures(1, &sourceID);
+		//fbo.readToPixels(pix);
+		//pix.setImageType(OF_IMAGE_COLOR_ALPHA);
+
+		//// clear source
+		//glDeleteTextures(1, &sourceID);
+
+		//-
+
+		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
+		auto size = ImGui::GetContentRegionAvail(); // for example
+		ImGui::Image(textureID, size);
+
+
 
 		//// set source
 		//if (bResizeable) {
@@ -116,22 +156,25 @@ namespace ofxImGuiSurfing {
 		//	ImGui::End();
 		//}
 
-		sourceID = loadTextureImage2D(pix.getData(), sz.x, sz.y);
-		//https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
-		//ImGui::Begin("GameWindow");
-		ImGui::Begin(name.c_str());
-		{
-			// Using a Child allow to fill all the space of the window.
-			// It also alows customization
-			ImGui::BeginChild("GameRender");
-			// Get the size of the child (i.e. the whole draw size of the windows).
-			ImVec2 wsize = ImGui::GetWindowSize();
-			// Because I use the texture from OpenGL, I need to invert the V from the UV.
-			ImGui::Image((ImTextureID)(uintptr_t)sourceID, wsize);
-			//ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
-			//ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
-			ImGui::EndChild();
-		}
+		//-
+
+		////TODO:
+		//sourceID = loadTextureImage2D(pix.getData(), sz.x, sz.y);
+		////https://gamedev.stackexchange.com/questions/140693/how-can-i-render-an-opengl-scene-into-an-imgui-window
+		////ImGui::Begin("GameWindow");
+		//ImGui::Begin(name.c_str());
+		//{
+		//	// Using a Child allow to fill all the space of the window.
+		//	// It also alows customization
+		//	ImGui::BeginChild("GameRender");
+		//	// Get the size of the child (i.e. the whole draw size of the windows).
+		//	ImVec2 wsize = ImGui::GetWindowSize();
+		//	// Because I use the texture from OpenGL, I need to invert the V from the UV.
+		//	ImGui::Image((ImTextureID)(uintptr_t)sourceID, wsize);
+		//	//ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		//	//ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		//	ImGui::EndChild();
+		//}
 	}
 
 	/*
@@ -195,3 +238,173 @@ namespace ofxImGuiSurfing {
 
 	}*/
 }
+
+//--
+
+class SurfingPreview
+{
+public:
+
+	SurfingPreview::SurfingPreview()
+	{
+		setup();
+	}
+
+	SurfingPreview::~SurfingPreview()
+	{
+		ofRemoveListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // exit()
+	}
+
+private:
+
+	// fbo
+	ofFbo fboPreview;
+	ofFboSettings fboSettings;
+	ofParameter<bool> bGui_Preview;
+	GLuint sourceID;
+
+public:
+
+	ofParameter<bool> bGui{ "Preview", true };
+	ofParameter<bool> bFullScreen{ "Full Screen", false };
+	ofParameter<bool> bBigScreen{ "Big Screen", true };
+	ofScaleMode scaleMode;
+	ofxInteractiveRect myRect = { "myRect" };
+
+	ofParameterGroup & getParameters() {
+		return params;
+	}
+
+private:
+
+	ofParameter<bool> bAutoResize{ "Auto Resize", true };
+	ofParameter<bool> bDebug{ "Debug", true };
+	ofParameter<bool> bExtra{ "Extra", false };
+
+	std::vector<std::string> scaleModenames={ "FILL", "FIT", "CENTER", "STRETCH_TO_FILL" };
+	ofParameter<int> scaleModeIndex{ "Scale Mode", 0, 0, 3 };
+
+	ofParameterGroup params;
+
+public:
+
+	void setup()
+	{
+		params.setName("SurfingPreview");
+		params.add(bGui);
+		params.add(bExtra);
+		params.add(bAutoResize);
+		params.add(bFullScreen);
+		params.add(scaleModeIndex);
+		params.add(bBigScreen);
+		params.add(myRect.getParameter());
+
+		ofAddListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // setup()
+
+		// fbo settings
+		fboSettings.width = 1920;
+		fboSettings.height = 1080;
+
+		fboSettings.internalformat = GL_RGBA;
+		fboSettings.textureTarget = GL_TEXTURE_2D;
+		//fboSettings.internalformat = GL_RGBA32F_ARB;
+
+		//fboSettings.useDepth = true;
+		//fboSettings.useStencil = true;
+		//fboSettings.depthStencilAsTexture = true;
+
+		// fbo 
+		//ofEnableArbTex();
+		//ofDisableeArbTex();
+		fboPreview.allocate(fboSettings);
+		fboPreview.begin();
+		{
+			ofClear(0, 255);
+		}
+		fboPreview.end();
+
+		//-
+
+		myRect.bEditMode.setName("Edit Viewport");
+		//myRect.enableEdit();
+		//myRect.setRect(200, 200, 200, 400);
+		myRect.setTransparent();
+		myRect.setAutoSave(true);
+		//myRect.loadSettings();
+	};
+
+	void updateRect(ofRectangle r)
+	{
+		myRect.setX(r.getX());
+		myRect.setY(r.getY());
+		myRect.setWidth(r.getWidth());
+		myRect.setHeight(r.getHeight());
+	};
+
+	void draw()
+	{
+		myRect.draw();
+	};
+
+	void begin()
+	{
+		fboPreview.begin();
+		ofClear(0, 255);
+	};
+
+	void end()
+	{
+		fboPreview.end();
+	};
+
+	void draw_ImGuiPreview()
+	{
+		if (!bGui) return;
+
+		ImGuiCond flagsCond = ImGuiCond_None;
+		flagsCond |= ImGuiCond_Appearing;
+
+		ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
+		if (bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui.get(), flagsw);
+		{
+			ofxImGuiSurfing::DrawFboPreview(fboPreview);
+
+			ofxImGuiSurfing::AddToggleRounded(bExtra);
+			if (bExtra)
+			{
+				ofxImGuiSurfing::AddToggleRounded(bBigScreen);
+				if (bBigScreen) {
+					ImGui::Indent();
+					ofxImGuiSurfing::AddToggleRounded(myRect.bEditMode);
+					//ofxImGuiSurfing::AddCombo(scaleModeIndex, scaleModenames);
+					ofxImGuiSurfing::AddToggleRounded(bFullScreen);
+					ImGui::Unindent();
+				}
+				ofxImGuiSurfing::AddToggleRounded(bDebug);
+				if (bDebug)
+				{
+					ImGui::Indent();
+					ofxImGuiSurfing::BasicInfosWindow();
+					ImGui::Unindent();
+				}
+				ofxImGuiSurfing::AddToggleRounded(bAutoResize);
+			}
+		}
+		ImGui::End();
+	};
+
+	void Changed_Params(ofAbstractParameter &e)
+	{
+		string name = e.getName();
+		ofLogNotice() << __FUNCTION__ << name << " : " << e;
+
+		if (0) {}
+
+		else if (name == scaleModeIndex.getName())
+		{
+			scaleMode = ofScaleMode(scaleModeIndex.get());
+		}
+	};
+};

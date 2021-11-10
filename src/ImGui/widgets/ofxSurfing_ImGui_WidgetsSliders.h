@@ -299,7 +299,7 @@ namespace ofxImGuiSurfing
 			float spcx = ImGui::GetStyle().ItemSpacing.x;
 			float spcy = ImGui::GetStyle().ItemSpacing.y;
 			if (sz.x == -1) sz.x = w - spcx;
-			if (sz.y == -1) sz.y = h - spcy;
+			if (sz.y == -1) sz.y = h - 2 * spcy;
 		}
 
 		ImGui::PushID(("##VSLIDER" + name).c_str());

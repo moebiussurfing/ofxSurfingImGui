@@ -367,7 +367,7 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 	ofParameter<bool> bNoScroll{ "No Scroll", false };
-	ofParameter<bool> bHelp{ "Help", true };
+	ofParameter<bool> bHelp{ "Help", false };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };

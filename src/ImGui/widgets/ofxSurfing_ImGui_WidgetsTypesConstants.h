@@ -155,7 +155,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline static std::string getSurfingImGuiTypesGroupsName(int i)
 	{
-		string _groupInfo;
+		std::string _groupInfo;
 		if (i == 0) _groupInfo = "OFX_IM_GROUP_DEFAULT";
 		else if (i == 1) _groupInfo = "OFX_IM_GROUP_COLLAPSED";
 		else if (i == 2) _groupInfo = "OFX_IM_GROUP_TREE_EX";
@@ -193,15 +193,23 @@ namespace ofxImGuiSurfing
 	//-
 
 	//TODO:
-#define DEFAULT_LAYOUT_BEHAVIOUR // -> Comment to use a workaround to weird ImGui auto resize rare layout..
+
+#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR // -> Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
+
+#define TEXT_LABEL_TO_RESIZE "----------" // -> This is a 10 chars string that we will use as default label width, to name wdigets.
 
 	//-
 
-#ifndef DEFAULT_LAYOUT_BEHAVIOUR
+#ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR
 
 	// A. Relative to panel width
+//TODO:
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH \
+//const ImVec2 sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x);
 
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
+//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-65);
 //#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
 //#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
 #define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
@@ -218,12 +226,13 @@ namespace ofxImGuiSurfing
 
 	//-
 
-#ifdef DEFAULT_LAYOUT_BEHAVIOUR
+#ifdef DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR
 
 	// C. To bypass and do nothing.
 
 #define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
 #define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
+
 #endif
 
 	//--
@@ -236,7 +245,7 @@ namespace ofxImGuiSurfing
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	const auto sztx = ImGui::CalcTextSize("----------"); \
+	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
 	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x);
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
