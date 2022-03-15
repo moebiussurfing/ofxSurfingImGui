@@ -1,3 +1,4 @@
 ofxImGui
+ofxScaleDragRect
 ofxSurfingHelpers
 ofxSurfingImGui
