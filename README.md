@@ -463,10 +463,10 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 <BR>
 
 ## Dependencies
-[ofxImGui](https://github.com/Daandelange/ofxImGui/)  [ FORK from @**Daandelange** ]  
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)  [ For some examples only ]  
-[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  [ For some examples only ]  
-[ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect)  [ FORK from @**roymacdonald** ]  
+[ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) : For some examples only  
+[ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) : FORK from @**roymacdonald**  
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
