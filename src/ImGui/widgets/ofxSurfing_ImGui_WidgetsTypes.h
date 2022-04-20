@@ -607,6 +607,11 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
+						
+					case OFX_IM_BUTTON_BIG_XXXL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 4);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
 
 					case OFX_IM_TOGGLE_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
@@ -620,6 +625,11 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_BIG_XXL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_XXXL:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 4);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -638,6 +648,11 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_BIG_XXXL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 4, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
 					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
@@ -650,6 +665,11 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 3, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 4, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -966,6 +986,13 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
+
+					//case OFX_IM_KNOB_SMALL:
+					//{
+					//	bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
+					//	if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					//}
+					//break;
 
 					case OFX_IM_KNOB_TRAIL:
 					{

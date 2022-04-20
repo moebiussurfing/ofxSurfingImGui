@@ -159,6 +159,86 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
+	//-
+
+	// TODO: marked as range limits..
+
+	//--------------------------------------------------------------
+	inline bool AddHSliderRanged(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), float rmin = 0.1f, float rmax = 0.9f, bool bNoName = false, bool bNoNumber = false)
+	{
+		bool bChanged = false;
+		auto tmpRef = parameter.get();
+		string name;
+		if (bNoName) { name = ""; }
+		else name = parameter.getName();
+
+		float w = ImGui::GetContentRegionAvail().x;
+		float h = ImGui::GetContentRegionAvail().y;
+		float spcx = ImGui::GetStyle().ItemSpacing.x;
+		float spcy = ImGui::GetStyle().ItemSpacing.y;
+		if (sz.x == -1) sz.x = w - spcx;
+		if (sz.y == -1) sz.y = h - spcy;
+
+		//-
+
+		// markers zones
+		float x1, x2, y1, y2;
+		float gap, yy, ww, hh;
+
+		//ww = ofxImGuiSurfing::getPanelWidth();
+		ww = sz.x;
+		hh = sz.y;
+		//hh = ofxImGuiSurfing::getWidgetsHeightRelative();
+		//hh = ofxImGuiSurfing::getPanelHeight();
+
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		float linew = 3.f;
+		float linea = 0.25f;
+		ImVec4 cm = ImVec4(0.0f, 0.0f, 0.0f, linea);
+		auto _cm = ImGui::GetColorU32(cm);
+
+		//gap = 0;
+		//ww -= 2 * gap;
+		//x1 = p.x + gap;
+		//x2 = x1 + ww;
+
+		//gap = 10;
+		//ww -= 2 * gap;
+
+		x1 = p.x + ww * rmin;
+		x2 = p.x + ww * rmax;
+		y1 = p.y;
+		y2 = y1 + hh; //* 2;//?
+
+		//yy = p.y + 0.33 * hh;
+		//yy = p.y + 0.66 * hh;
+
+		//-
+
+		ImGui::PushID(("##HSLIDERRNG" + name).c_str());
+		{
+			if (!bNoName) {
+				ImGui::Text(name.c_str());
+				name = "";
+			}
+
+			string format;
+			if (bNoNumber) format = "";
+			else format = "%.3f";
+
+			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
+
+			draw_list->AddLine(ImVec2(x1, y1), ImVec2(x1, y2), _cm, linew);
+			draw_list->AddLine(ImVec2(x2, y1), ImVec2(x2, y2), _cm, linew);
+		}
+		ImGui::PopID();
+
+		return bChanged;
+	}
+
+	//-
+
 	// Int. cloned from Float
 	//--------------------------------------------------------------
 	inline bool AddHSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)

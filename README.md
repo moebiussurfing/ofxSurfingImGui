@@ -174,11 +174,13 @@ void ofApp::draw()
 
                 // Two widgets same line/row with the 50% of window panel width 
                 if (ofxImGuiSurfing::AddBigButton(b2, _w2, _h)) {
-                  /* This acts as callback. No parameter listener required. */
+                  // This acts as callback. 
+                  // No parameter listener required.
                 }
                 ImGui::SameLine();
                 if (ofxImGuiSurfing::AddBigButton(b3, _w2, _h)) {
-
+                  // This acts as callback. 
+                  // No parameter listener required.
                 }
 
                 // Or using raw ImGui
@@ -316,7 +318,7 @@ ofApp.cpp
 #### AVAILABLE CUSTOMIZATIONS:
 
     - Hide the parameter widget respecting the void space or not, or make it inactive disabling mouse interaction.  
-    - Set an _ImGui::SameLine()_ after the widget, to draw the next params at the same line.  
+    - Set an ImGui::SameLine() after the widget, to draw the next params at the same line.  
     - Add a final vertical spacing after the widget.  
     - Set the widget width to fit the panel width, passing the number of widgets per row/line.  
     - Queue styles for incoming parameters inside a group.  
@@ -465,7 +467,8 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
-[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) : For some examples only  
+#### Already copied into _/libs_. No need to add manually on PROJECT GENERATOR!    
+[ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) : FORK from @**roymacdonald**  
 
 ## Tested Systems
@@ -505,9 +508,10 @@ https://github.com/leiradel/ImGuiAl
   <summary>TODO</summary>
   <p>
 
+* macOS testing and fixing.
 * Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
 * Create some selected examples to simplify learning.
 * Add more ImGui raw widgets/add-ons with examples.
-* Convert some widgets to ofParameters.
+* Convert some more widgets to ofParameters.
   </p>
 </details>

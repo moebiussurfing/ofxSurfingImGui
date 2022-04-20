@@ -74,11 +74,11 @@ namespace ofxImGuiSurfing
 	// Argument to be used on setup(mode);
 	enum SurfingImGuiInstantiationMode {
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
-		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end
-		IM_GUI_MODE_INSTANTIATED_DOCKING,
-		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGUi instance, no other addons.
+		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end.
+		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
+		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other addons.
 		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
-		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame)
+		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
 
 	enum SurfingImGuiWindowsMode {
@@ -487,8 +487,8 @@ public:
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
-	void drawAdvanced(bool bNoSperator = false) { // -> Simpler call. Use this.
-		ImGui::Spacing();
+	void drawAdvanced(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
+		if (!bNoSpacing) ImGui::Spacing();
 		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
 
