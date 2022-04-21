@@ -791,6 +791,8 @@ namespace ofxImGuiSurfing
 
 					// H Slider
 
+					// mini
+
 					case OFX_IM_HSLIDER_MINI:
 					{
 						std::string name = p.getName();
@@ -798,6 +800,32 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
+
+					case OFX_IM_HSLIDER_MINI_NO_LABELS:
+					{
+						std::string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 4), true, true));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_MINI_NO_NAME:
+					{
+						std::string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 4), true, false));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					case OFX_IM_HSLIDER_MINI_NO_NUMBER:
+					{
+						std::string name = p.getName();
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 8), false, true));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
+					//-
 
 					case OFX_IM_HSLIDER:
 					{

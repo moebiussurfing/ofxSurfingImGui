@@ -185,34 +185,29 @@ namespace ofxImGuiSurfing
 		float x1, x2, y1, y2;
 		float gap, yy, ww, hh;
 
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		ImVec2 p = ImGui::GetCursorScreenPos();
+
+		// lines
+		float linew = 2.f;
+		float linea = 0.4f;
+		ImVec4 cm = ImVec4(0.0f, 0.0f, 0.0f, linea);
+		auto _cm = ImGui::GetColorU32(cm);
+
+		// kind of workaround bc I dont know where is the bellow slider height...
+
 		//ww = ofxImGuiSurfing::getPanelWidth();
 		ww = sz.x;
 		hh = sz.y;
 		//hh = ofxImGuiSurfing::getWidgetsHeightRelative();
 		//hh = ofxImGuiSurfing::getPanelHeight();
-
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-		ImVec2 p = ImGui::GetCursorScreenPos();
-		float linew = 3.f;
-		float linea = 0.25f;
-		ImVec4 cm = ImVec4(0.0f, 0.0f, 0.0f, linea);
-		auto _cm = ImGui::GetColorU32(cm);
-
-		//gap = 0;
-		//ww -= 2 * gap;
-		//x1 = p.x + gap;
-		//x2 = x1 + ww;
-
-		//gap = 10;
-		//ww -= 2 * gap;
+		
+		gap = 4;
 
 		x1 = p.x + ww * rmin;
 		x2 = p.x + ww * rmax;
-		y1 = p.y;
-		y2 = y1 + hh; //* 2;//?
-
-		//yy = p.y + 0.33 * hh;
-		//yy = p.y + 0.66 * hh;
+		y1 = p.y - gap;
+		y2 = y1 + hh * 3 - 2;
 
 		//-
 
