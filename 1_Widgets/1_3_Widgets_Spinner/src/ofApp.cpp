@@ -46,6 +46,17 @@ void ofApp::draw() {
 		ImVec4 col3 = colors[ImGuiCol_Text];
 		ImVec4 col4 = colors[ImGuiCol_TextDisabled];
 		ImGui::LoadingIndicatorCircle("loading", 40, col3, col4, 10, 5);
+				ImGui::Spacing();
+
+		//-
+
+		// Progress bar
+		static ofParameter<float>p{ "time", 0, 0, 1 };
+		p = ofMap(ofGetFrameNum() % 60, 0, 60, 0, 1);
+		ofxImGuiSurfing::AddProgressBar(p);
+		//OFX_IM_PROGRESS_BAR_NO_TEXT:
+		ofxImGuiSurfing::AddProgressBar(p, -1, true);
+		//guiManager.Add(timer_Progress, OFX_IM_PROGRESS_BAR_NO_TEXT);//-> To use when using a guiManager
 
 		ImGui::End();
 	}

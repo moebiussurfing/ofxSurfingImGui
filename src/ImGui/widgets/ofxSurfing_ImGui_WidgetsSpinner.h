@@ -148,6 +148,10 @@ namespace ImGui {
 				circle_radius + growth * circle_radius,
 				GetColorU32(color));
 		}
+
+		//TODO: not working...
+		//window->spacing
+		ImGui::Spacing();
 	}
 
 	//--
