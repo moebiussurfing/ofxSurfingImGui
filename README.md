@@ -467,7 +467,6 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
-#### Already copied into _/libs_. No need to add manually on PROJECT GENERATOR!    
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 [ofxScaleDragRect](https://github.com/moebiussurfing/ofxScaleDragRect) : FORK from @**roymacdonald**  
 
@@ -476,7 +475,7 @@ Example code by [@Daandelange](https://github.com/Daandelange). Using [ofxVisual
 
 ## Author
 An addon by **@moebiusSurfing**  
-*( ManuMolina ) 2021*  
+*( ManuMolina ) 2021-2022*  
 
 #### Thanks
 _All source snippets from other authors are linked into header files. Thanks!_
@@ -509,6 +508,7 @@ https://github.com/leiradel/ImGuiAl
   <p>
 
 * macOS testing and fixing.
+* Split repo to simplify current examples. Move extra examples to new repo.
 * Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
 * Create some selected examples to simplify learning.
 * Add more ImGui raw widgets/add-ons with examples.

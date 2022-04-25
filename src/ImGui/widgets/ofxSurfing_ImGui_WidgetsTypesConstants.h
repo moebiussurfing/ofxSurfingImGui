@@ -22,6 +22,8 @@ namespace ofxImGuiSurfing
 	// Two toggles in one row
 	guiManager.Add(bEnable1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
 	guiManager.Add(bEnable2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
+	
+	guiManager.Add(bEnable3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
 
 
 	*/

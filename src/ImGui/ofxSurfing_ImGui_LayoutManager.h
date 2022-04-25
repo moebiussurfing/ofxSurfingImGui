@@ -685,6 +685,9 @@ public:
 
 	//----
 
+	ofParameter<bool> bAutoSaveSettings{ "Autosave", false };
+	//bool bAutoSaveSettings = false;
+
 private:
 
 	// File Settings
@@ -694,8 +697,6 @@ private:
 	std::string path_LayoutSettings;
 
 	std::string path_SubPathLabel = "";
-
-	bool bAutoSaveSettings = false;
 
 	ofParameterGroup params_AppSettings{ "AppSettings" }; // -> Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // -> Layout states
