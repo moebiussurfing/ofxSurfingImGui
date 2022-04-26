@@ -39,15 +39,19 @@ OR NEEDING TO BE UPDATED TO API CHANGES.
 
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
   - Why? 
-    - Easy to update to future **new ImGui** versions.  
+    - Easy to update to future **NEW ImGui** versions.  
     - Multi context/instances: you can use several windows from different add-ons without colliding.  
 * **ImGui Widgets**: 
   - Big Toggles and Buttons
+  - Vertical and horizontal sliders, with or without labels or numbers
   - Range Sliders
   - Gradient Color Designer
   - Matrix Selector
   - Files Browser
   - DearWidgets
+  - Progress bars and waiting spinners
+  - Curve Editors
+
 * **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
 * **Layout Presets Engine with Docking** and app sections handling.
 * Included my **Dark Theme**.
