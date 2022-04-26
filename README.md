@@ -121,6 +121,14 @@ Includes a **matrix button clicker selector** linked to an **ofParameter<int>** 
   </p>
 </details>
 
+<details>
+  <summary>1_8_Knobs</summary>
+  <p>
+
+![image](/docs/1_8_Knobs.PNG?raw=true "image")  
+  </p>
+</details>
+
 <BR>
 
 ## 2. BASIC LAYOUT
