@@ -26,7 +26,7 @@ namespace ofxImGuiSurfing
 	bool AddKnobStyled(ofParameter<float>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string resolution = "%.1f");
 
 	//TODO: fix decimal format wrong drag
-	bool AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string resolution = "%d");
+	bool AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string resolution = "%.1f");
 
 	////--------------------------------------------------------------
 	//inline const char * GetUniqueName2(ofAbstractParameter& parameter)

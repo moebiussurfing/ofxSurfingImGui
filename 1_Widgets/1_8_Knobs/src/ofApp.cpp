@@ -65,13 +65,13 @@ void ofApp::draw(){
 
 				ofxImGuiSurfing::AddSpacingHuge();
 
-				ofxImGuiSurfing::AddKnobStyled(valueKnob5, OFX_IMGUI_KNOB_TICKKNOB, 40);
+				ofxImGuiSurfing::AddKnobStyled(valueKnob5, OFX_IMGUI_KNOB_TICKKNOB, 120);
 				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob6, OFX_IMGUI_KNOB_DOTKNOB, 40);
+				ofxImGuiSurfing::AddKnobStyled(valueKnob6, OFX_IMGUI_KNOB_DOTKNOB, 120);
+
+				ofxImGuiSurfing::AddKnobStyled(valueKnob7, OFX_IMGUI_KNOB_WIPERKNOB, 120);
 				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob7, OFX_IMGUI_KNOB_WIPERKNOB, 40);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddKnobStyled(valueKnob8, OFX_IMGUI_KNOB_WIPERONLYKNOB, 40);
+				ofxImGuiSurfing::AddKnobStyled(valueKnob8, OFX_IMGUI_KNOB_WIPERONLYKNOB, 120);
 
 				//-
 
@@ -160,6 +160,14 @@ void ofApp::draw(){
 				flag = ImGuiKnobFlags_NoInput | ImGuiKnobFlags_NoTitle | ImGuiKnobFlags_ValueTooltip;
 				if (ImGuiKnobs::WiperOnlyKnob("Value-4", &value4, -6.0f, 6.0f, "%.1f", 0, flag))
 				{
+				}
+
+				//TODO
+				static int myInt = 0;
+				float _myInt = myInt;
+				if (ImGuiKnobs::TickKnob("myInt", &_myInt, -6, 6, "%d", size))
+				{
+					myInt = _myInt;
 				}
 			}
 			guiManager.endWindow();
