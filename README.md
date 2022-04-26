@@ -396,6 +396,8 @@ Nice to learn about ImGui Docking.
 
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
 
+**/data/** folder contains some font files that we use in the examples.  
+
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
 
@@ -429,6 +431,7 @@ https://github.com/leiradel/ImGuiAl -> Some widgets
 
   </p>
 </details>
+
 
 <details>
   <summary>TODO</summary>
