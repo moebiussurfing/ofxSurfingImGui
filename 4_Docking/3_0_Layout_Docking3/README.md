@@ -1,1 +1,0 @@
-![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
