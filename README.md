@@ -43,14 +43,18 @@ OR NEEDING TO BE UPDATED TO API CHANGES.
     - Multi context/instances: you can use several windows from different add-ons without colliding.  
 * **ImGui Widgets**: 
   - Big Toggles and Buttons
-  - Vertical and horizontal sliders, with or without labels or numbers
+  - Vertical and Horizontal Sliders
   - Range Sliders
+  - Styled Knobs
+  - Inactive, hidden, locked widgets
+  - Show or hide labels and values
+  - DearWidgets
   - Gradient Color Designer
   - Matrix Selector
-  - Files Browser
-  - DearWidgets
   - Progress bars and waiting spinners
+  - Files Browser
   - Curve Editors
+  - Mouse Wheel control
 
 * **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
 * **Layout Presets Engine with Docking** and app sections handling.
