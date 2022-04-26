@@ -388,19 +388,6 @@ Also useful to check viewport modes, docking merging windows or auto draw modes.
   </p>
 </details>
 
-<details>
-  <summary>3_1_Layout_ImTools1</summary>
-  <p>
-
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use in my oF projects.  
-
-An alternative to my Docking Layout Engine but without presets and with more development required.  
-Nice to learn about ImGui Docking.  
-
-![image](/docs/3_1_Layout_ImTools1.PNG?raw=true "image")  
-  </p>
-</details>
-
 <BR>
 
 ## Dependencies
