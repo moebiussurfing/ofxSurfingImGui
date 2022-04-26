@@ -313,7 +313,8 @@ ofApp.cpp
 
 #### AVAILABLE CUSTOMIZATIONS:
 
-    - Hide the parameter widget respecting the void space or not, or make it inactive disabling mouse interaction.  
+    - Hide the parameter widget respecting the void space or not.
+    - Make a parameter inactive disabling mouse interaction.  
     - Set an ImGui::SameLine() after the widget, to draw the next params at the same line.  
     - Add a final vertical spacing after the widget.  
     - Set the widget width to fit the panel width, passing the number of widgets per row/line.  
@@ -356,7 +357,7 @@ Examples to improve the layout of Docking Spaces.
 
 This example shows how to populate many ImGui windows from different scopes on the same viewport.  
 Uses different approaches: from ofApp, from an add-on/class, or with Surfing Layout tools as guiManager.  
-Also useful to check viewport modes, docking merging windows or autodraw modes.  
+Also useful to check viewport modes, docking merging windows or auto draw modes.  
 
 ![image](/docs/3_0_Layout_Docking3.PNG?raw=true "png")  
   </p>
@@ -366,7 +367,7 @@ Also useful to check viewport modes, docking merging windows or autodraw modes.
   <summary>3_1_Layout_ImTools1</summary>
   <p>
 
-Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use into my oF projects.  
+Uses [ImTools](https://github.com/aiekick/ImTools) from **@aiekick**: "_ It's a class for manage docking panes in an easy way, display (panes, menu, pane dialog), load/save, auto layout, etc..._". **WIP** porting to use in my oF projects.  
 
 An alternative to my Docking Layout Engine but without presets and with more development required.  
 Nice to learn about ImGui Docking.  
