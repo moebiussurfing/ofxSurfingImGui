@@ -310,6 +310,15 @@ namespace ofxImGuiSurfing
 	{
 		AddSpacingBig();
 		AddSpacingBig();
+		AddSpacingBig();
+		AddSpacingBig();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddSpacingHugeSeparated()
+	{
+		AddSpacingBig();
+		AddSpacingBig();
 		AddSpacingSeparated();
 		AddSpacingBig();
 		AddSpacingBig();

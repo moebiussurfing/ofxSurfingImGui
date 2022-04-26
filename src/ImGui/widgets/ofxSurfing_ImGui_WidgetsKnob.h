@@ -9,9 +9,9 @@
 
 #define IM_GUI_KNOB_CIRCLE_SEGMENTS 48 // Circle resolution "quality". Could be size dependant to improve performance.
 #define USE_BORDER_ROUNDE_TOGGLES // -> to draw circle borders on the rounded toggle..
-
-#define M_PI 3.14159265358979323846264338327950288
 #define VALUEPRECISION 400 // 400
+#define M_PI IM_PI
+//#define M_PI 3.14159265358979323846264338327950288
 
 using namespace ImGui;
 
@@ -358,6 +358,16 @@ inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& para
 
 
 //-
+
+
+
+
+
+
+
+
+
+
 
 ////------------------------------------------------
 //
