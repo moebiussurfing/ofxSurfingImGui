@@ -263,15 +263,15 @@ One step forward for **ofHelpers**:
 #### FEATURES
 
 Instead of the **ofxImGui** behavior, where you can't change the param widget style, we will have:  
-1. A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-2. Draw each **ofParameter** type with different styles. 
-3. Especially useful when **ofParameters** are into an **ofParameterGroup**.  
-4. Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
-5. You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
-6. You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+- A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+- Draw each **ofParameter** type with different styles. 
+- Especially useful when **ofParameters** are into an **ofParameterGroup**.  
+- Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
+- You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+- You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
 
 <details>
-  <summary>USAGE CASES</summary>
+  <summary>SOME EXAMPLE CASES</summary>
   <p>
 
 **CASE 1**:  
@@ -285,8 +285,9 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
   </p>
 </details>
 
+
 <details>
-  <summary>0_Intro_Examples/1_Widgets_Sliders</summary>
+  <summary>Vertical and Horizontal Sliders</summary>
   <p>
 
 ![image](/docs/1_Widgets_Sliders.PNG?raw=true "image")  
@@ -294,7 +295,7 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 </details>
 
 <details>
-  <summary>0_Intro_Examples/1_Widgets_Sliders2</summary>
+  <summary>Grouped Vertical and Horizontal Sliders</summary>
   <p>
 
 ![image](/docs/1_Widgets_Sliders2.PNG?raw=true "image")  
@@ -302,7 +303,7 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 </details>
 
 <details>
-  <summary>4_0_0_Layout_TypesEngine</summary>
+  <summary>Nested Styled Groups</summary>
   <p>
 
 ![image](/docs/4_0_0_Layout_TypesEngine.PNG?raw=true "image")  
@@ -310,7 +311,7 @@ _You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style 
 </details>
 
 <details>
-  <summary>4_0_1_Layout_TypesEngine</summary>
+  <summary>Layout Engine</summary>
   <p>
 
 ![image](/docs/4_0_1_Layout_TypesEngine.PNG?raw=true "image")  
