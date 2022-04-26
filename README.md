@@ -415,7 +415,7 @@ _All source snippets from other authors are linked into header files. Thanks!_
   <summary>Some Reference Links</summary>
   <p>
 
-https://github.com/altschuler/imgui-knobs -> Knobs
+https://github.com/altschuler/imgui-knobs -> Cute Knobs  
 https://github.com/HankiDesign/awesome-dear-imgui -> Collected widgets  
 https://github.com/soufianekhiat/DearWidgets -> Cute widgets already included  
 https://github.com/yumataesu/ImGui_Widgets -> oF ready widgets  
@@ -423,7 +423,7 @@ https://github.com/aiekick/ImTools/tree/main/LayoutManager -> Layout helpers
 https://github.com/Organic-Code/ImTerm -> Interesting terminal to look into  
 https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system for inspiration  
 https://github.com/d3cod3/Mosaic -> oF node patched system for inspiration  
-https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros  
+https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> Useful ImGui style macros  
 https://github.com/njazz/AutomationCurveEditor -> Curve editor for param automations  
 https://github.com/leiradel/ImGuiAl -> Some widgets    
 
