@@ -380,6 +380,7 @@ Nice to learn about ImGui Docking.
 ## Dependencies
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only  
 
 ## Tested Systems
