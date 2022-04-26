@@ -38,10 +38,18 @@ OR NEEDING TO BE UPDATED TO API CHANGES.
 ## FEATURES
 
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
-  - Why? Easy to update to future **new ImGui** versions and multi context/instances.
-* **ImGui Widgets**: Big toggles and buttons, Range Sliders, Gradient Color Designer, Matrix Selector, Files Browser, DearWidgets ...etc.
-* **Layout Manager** to speed up **windows creation** and fit-widgets-width-to-window sizes.
-* **Layout Presets Engine with Docking**.
+  - Why? 
+    - Easy to update to future **new ImGui** versions.  
+    - Multi context/instances: you can use several windows from different add-ons without colliding.  
+* **ImGui Widgets**: 
+  - Big Toggles and Buttons
+  - Range Sliders
+  - Gradient Color Designer
+  - Matrix Selector
+  - Files Browser
+  - DearWidgets
+* **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
+* **Layout Presets Engine with Docking** and app sections handling.
 * Included my **Dark Theme**.
 
 ## INDEX
@@ -391,10 +399,10 @@ Nice to learn about ImGui Docking.
 An addon by **@moebiusSurfing**  
 *( ManuMolina ) 2021-2022*  
 
-#### Thanks
+### Thanks
 _All source snippets from other authors are linked into header files. Thanks!_
 
-#### License
+### License
 **MIT License**
 
 <BR>
@@ -403,16 +411,17 @@ _All source snippets from other authors are linked into header files. Thanks!_
   <summary>Some Reference Links</summary>
   <p>
 
+https://github.com/altschuler/imgui-knobs -> Knobs
 https://github.com/HankiDesign/awesome-dear-imgui -> Collected widgets  
 https://github.com/soufianekhiat/DearWidgets -> Cute widgets already included  
 https://github.com/yumataesu/ImGui_Widgets -> oF ready widgets  
-https://github.com/aiekick/ImTools/tree/main/LayoutManager  
+https://github.com/aiekick/ImTools/tree/main/LayoutManager -> Layout helpers  
 https://github.com/Organic-Code/ImTerm -> Interesting terminal to look into  
-https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system  
-https://github.com/d3cod3/Mosaic -> oF node patched system  
+https://github.com/d3cod3/ofxVisualProgramming -> oF node patched system for inspiration  
+https://github.com/d3cod3/Mosaic -> oF node patched system for inspiration  
 https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> macros  
-https://github.com/njazz/AutomationCurveEditor  
-https://github.com/leiradel/ImGuiAl  
+https://github.com/njazz/AutomationCurveEditor -> Curve editor for param automations  
+https://github.com/leiradel/ImGuiAl -> Some widgets    
 
   </p>
 </details>
@@ -421,7 +430,7 @@ https://github.com/leiradel/ImGuiAl
   <summary>TODO</summary>
   <p>
 
-* macOS testing and fixing. Any help on this is appreciated.  
+* macOS testing and fixing. Any help on this is appreciated!  
 * Split repo to simplify current examples. Move extra examples to new repo.
 * Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
 * Create some selected examples to simplify learning.
