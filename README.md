@@ -7,7 +7,7 @@ An **ImGui** toolkit for **openFrameworks** projects.
 
 Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** ported to **oF**, Docking Helpers with a Layout Presets Engine, and useful snippets.  
 
-Some examples and testing projects are now moved to: [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)  
+Some examples and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
 ![image](/docs/1_Widgets_Sliders2.PNG?raw=true "image")  
 
