@@ -23,10 +23,10 @@ enum ImGuiKnobType {
 
 namespace ofxImGuiSurfing
 {
-	bool AddKnobStyled(ofParameter<float>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string resolution = "%.1f");
+	bool AddKnobStyled(ofParameter<float>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string format = "%.1f", ImGuiKnobFlags flags = 0, float speed = 1.f);
+	bool AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string format = "%i", ImGuiKnobFlags flags = 0, float speed = 1.f);
 
-	//TODO: fix decimal format wrong drag
-	bool AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string resolution = "%.1f");
+	//-
 
 	////--------------------------------------------------------------
 	//inline const char * GetUniqueName2(ofAbstractParameter& parameter)
@@ -53,19 +53,23 @@ namespace ofxImGuiSurfing
 // Float Knob
 
 //--------------------------------------------------------------
-inline bool ofxImGuiSurfing::AddKnobStyled(ofParameter<float>& parameter, ImGuiKnobType type, float size, string resolution)
+inline bool ofxImGuiSurfing::AddKnobStyled(ofParameter<float>& parameter, ImGuiKnobType type, float size, string format, ImGuiKnobFlags flags, float speed)
 {
 	auto tmpRef = parameter.get();
 	string n = parameter.getName();
 	bool b = false;
 
-	if (type == OFX_IMGUI_KNOB_TICKKNOB) b = ImGuiKnobs::TickKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_DOTKNOB) b = ImGuiKnobs::DotKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERKNOB) b = ImGuiKnobs::WiperKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERONLYKNOB) b = ImGuiKnobs::WiperOnlyKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERDOTKNOB) b = ImGuiKnobs::WiperDotKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_STEPPEDKNOB) b = ImGuiKnobs::SteppedKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_SPACEKNOB) b = ImGuiKnobs::SpaceKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
+	// API
+	// if (ImGuiKnobs::Knob("Volume", &value, -6.0f, 6.0f, 0.1f, "%.1fdB", ImGuiKnobVariant_Tick)) {
+	// bool Knob(const char *label, float *p_value, float v_min, float v_max, float speed = 1.f, const char *format = NULL, ImGuiKnobVariant variant = ImGuiKnobVariant_Tick, float size = 0, ImGuiKnobFlags flags = 0, int steps = 10);
+	
+	if (type == OFX_IMGUI_KNOB_TICKKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, flags);
+	else if (type == OFX_IMGUI_KNOB_DOTKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERONLYKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERDOTKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, flags);
+	else if (type == OFX_IMGUI_KNOB_STEPPEDKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, flags);
+	else if (type == OFX_IMGUI_KNOB_SPACEKNOB) b = ImGuiKnobs::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, flags);
 
 	if (b)
 	{
@@ -81,19 +85,24 @@ inline bool ofxImGuiSurfing::AddKnobStyled(ofParameter<float>& parameter, ImGuiK
 // Int Knob
 
 //--------------------------------------------------------------
-inline bool ofxImGuiSurfing::AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type, float size, string resolution)
+inline bool ofxImGuiSurfing::AddKnobStyled(ofParameter<int>& parameter, ImGuiKnobType type, float size, string format, ImGuiKnobFlags flags, float speed)
 {
-	float tmpRef = parameter.get();
+	auto tmpRef = parameter.get();
 	string n = parameter.getName();
 	bool b = false;
 
-	if (type == OFX_IMGUI_KNOB_TICKKNOB) b = ImGuiKnobs::TickKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_DOTKNOB) b = ImGuiKnobs::DotKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERKNOB) b = ImGuiKnobs::WiperKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERONLYKNOB) b = ImGuiKnobs::WiperOnlyKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_WIPERDOTKNOB) b = ImGuiKnobs::WiperDotKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_STEPPEDKNOB) b = ImGuiKnobs::SteppedKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
-	else if (type == OFX_IMGUI_KNOB_SPACEKNOB) b = ImGuiKnobs::SpaceKnob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), resolution.c_str(), size);
+	// API
+	// if (ImGuiKnobs::Knob("Volume", &value, -6.0f, 6.0f, 0.1f, "%.1fdB", ImGuiKnobVariant_Tick)) {
+	// bool Knob(const char *label, float *p_value, float v_min, float v_max, float speed = 1.f, const char *format = NULL, ImGuiKnobVariant variant = ImGuiKnobVariant_Tick, float size = 0, ImGuiKnobFlags flags = 0, int steps = 10);
+
+	if (type == OFX_IMGUI_KNOB_TICKKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, flags);
+	else if (type == OFX_IMGUI_KNOB_DOTKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERONLYKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, flags);
+	else if (type == OFX_IMGUI_KNOB_WIPERDOTKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, flags);
+	else if (type == OFX_IMGUI_KNOB_STEPPEDKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, flags);
+	else if (type == OFX_IMGUI_KNOB_SPACEKNOB) b = ImGuiKnobs::KnobInt(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, flags);
+
 
 	if (b)
 	{
