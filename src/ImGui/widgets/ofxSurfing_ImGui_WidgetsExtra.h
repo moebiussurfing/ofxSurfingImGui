@@ -223,9 +223,160 @@ namespace ofxImGuiSurfing
 		return cChanged;
 	}
 
-	//-
+	//--
 
-	// file selector
+	//TODO: pass labels as a pointer or reference
+	//--------------------------------------------------------------
+	//inline bool AddMatrixClickerLabels(ofParameter<int>& _index, vector<char *> &labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
+	{
+		bool cChanged = false;
+
+		if (sizey == -1)
+		{
+			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+		}
+
+		ImGuiStyle *style = &ImGui::GetStyle();
+		float a = 0.3;
+		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
+		float borderLineWidth = 1.0;
+
+		string sid = "##MatrixClicker_" + _index.getName();
+		ImGui::PushID(sid.c_str());
+
+		{
+			int gap = 1;
+			float __spcx = ImGui::GetStyle().ItemSpacing.x;
+			float __w100 = ImGui::GetContentRegionAvail().x - gap;
+
+			float _sizex = 5;
+
+			if (!bResponsive) _sizex = 40;
+			else
+			{
+				_sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+			}
+
+			int _amt = _index.getMax() + 1;
+			float sizex;
+
+			if (_amt > amountBtRow)
+			{
+				sizex = _sizex;
+			}
+			else
+			{
+				if (_amt == 1)
+				{
+					sizex = __w100;
+				}
+				else
+				{
+					sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+				}
+			}
+
+			sizex = MAX(5, sizex);
+
+			//-
+
+			// Toggle button matrix
+
+			ImVec2 sizebt(sizex, sizey);
+
+			// Manually wrapping
+			// (we should eventually provide this as an automatic layout feature, but for now you can do it manually)
+
+			ImGuiStyle& style2 = ImGui::GetStyle();
+			float _windowVisible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+
+			for (int n = 0; n < _amt; n++)
+			{
+				bool bBorder = false;
+
+				ImGui::PushID(n);
+				{
+					string name;
+
+					if(labels.size()==0) name = ofToString(ofToString(n));
+					else 
+					{
+						if (n < labels.size()) name = (labels[n]);
+						else name = ofToString(ofToString(n));
+					}
+
+					// customize colors
+					{
+						// when selected / active
+						if (_index.get() == n)
+						{
+							if (bDrawBorder) bBorder = true;
+
+							// changes the colors
+							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
+							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
+							// border with alpha
+							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
+							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
+						}
+						else
+						{
+							// do not changes the colors
+							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
+							ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+							const ImVec4 colorBorder = style2.Colors[ImGuiCol_Border];
+							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
+						}
+
+						// border
+						if (bBorder)
+						{
+							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
+							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+						}
+
+						// draw button
+						if (ImGui::Button(name.c_str(), sizebt))
+						{
+							_index = n;
+							cChanged = true;
+
+							// Example Use 
+							// trig load preset
+							//load(n); 
+						}
+
+						// border
+						if (bBorder)
+						{
+							ImGui::PopStyleVar(1);
+							ImGui::PopStyleColor();
+						}
+
+						// customize colors
+						ImGui::PopStyleColor(2);
+					}
+
+					float last_button_x2 = ImGui::GetItemRectMax().x;
+					float next_button_x2 = last_button_x2 + style2.ItemSpacing.x + sizebt.x; // Expected position if next button was on same line
+
+					if (n + 1 < _amt && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
+				}
+				ImGui::PopID();
+			}
+		}
+
+		ImGui::PopID();
+
+		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+
+		return cChanged;
+	}
+
+	//----
+
+	// File Selector
 
 	// from https://gist.github.com/nariakiiwatani/dabf4cd2d04ad015bb6fabdedef7b2aa
 	// buttons selector for files on a folder:
