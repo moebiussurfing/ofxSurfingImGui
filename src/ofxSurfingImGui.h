@@ -2,8 +2,12 @@
 /*
 
 TODO:
+	+ add tooltip types for styles
 
-+ add tooltip types for styles
+
+BUGS:
+	+ autoResize fails with some widgets (OFX_IM_STEPPER) scenarios 
+
 
 */
 

@@ -128,22 +128,26 @@ public:
 
 	// ofParam's
 
+	///draw parameter into ImGui manager
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
+	///queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
+	///queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
+	///update style for the parameter
 	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{

@@ -145,6 +145,7 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			// Style not found for this param:
 			// if return has not been called yet here,
 			// then there's no conf added (AddStyle) for the parameter
 			// we return a kind of error type to be detected
@@ -1429,6 +1430,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
 					{
 						bReturn = ofxImGuiSurfing::AddParameter(p, true); //-> Should include sugar inside
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 					}
@@ -1907,9 +1909,11 @@ namespace ofxImGuiSurfing
 								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
-							else
+							else 
 							{
-								AddParameter(*parameterFloat);
+								//AddParameter(*parameterFloat);
+								// fixing to allow mouse wheel..
+								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -1928,7 +1932,9 @@ namespace ofxImGuiSurfing
 							}
 							else
 							{
-								AddParameter(*parameterInt);
+								//AddParameter(*parameterInt);
+								// fixing to allow mouse wheel..
+								Add(*parameterInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -1947,7 +1953,9 @@ namespace ofxImGuiSurfing
 							}
 							else
 							{
-								AddParameter(*parameterBool);
+								//AddParameter(*parameterBool);
+								// fixing to allow mouse wheel..
+								Add(*parameterBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -1988,7 +1996,10 @@ namespace ofxImGuiSurfing
 							// default style
 							else
 							{
-								AddParameter(*parameterFloatColor);
+								//AddParameter(*parameterFloatColor);
+								// fixing to allow mouse wheel..
+								Add(*parameterFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+
 							}
 							continue;
 						}
@@ -2009,7 +2020,9 @@ namespace ofxImGuiSurfing
 							// default style
 							else
 							{
-								AddParameter(*parameterColor);
+								//AddParameter(*parameterColor);
+								// fixing to allow mouse wheel..
+								Add(*parameterColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}

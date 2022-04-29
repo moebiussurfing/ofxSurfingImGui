@@ -236,7 +236,7 @@ namespace ofxImGuiSurfing
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 
 			// red rectangle
-			ImDrawFlags flags;
+			ImDrawFlags flags = ImDrawFlags_None;
 			draw_list->AddRectFilled(ImVec2(x1, y1+gap2), ImVec2(x2, y2 - 4), _cr, 0, flags);
 
 			// limit lines

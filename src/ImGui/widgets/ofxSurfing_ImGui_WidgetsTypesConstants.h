@@ -22,7 +22,7 @@ namespace ofxImGuiSurfing
 	// Two toggles in one row
 	guiManager.Add(bEnable1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
 	guiManager.Add(bEnable2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
-	
+
 	guiManager.Add(bEnable3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
 
 
@@ -254,9 +254,11 @@ namespace ofxImGuiSurfing
 //#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
+//fix autoresize grow... 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
 	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x);
+	const float gap = 40; \
+	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----

@@ -5,6 +5,9 @@
 
 ofParameter Helpers to easely render different widgets styles for each ofParma types.
 
+TODO:
++ mouse wheel for multi dim params
+
 */
 
 #include "ofxImGui.h"
@@ -23,6 +26,7 @@ namespace ofxImGuiSurfing
 	inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
 	{
 		bool bUnknown = false;
+		bool bIsMultiDim = false;
 
 		const auto& info = typeid(ParameterType);
 		if (info == typeid(float)) // float
@@ -34,6 +38,19 @@ namespace ofxImGuiSurfing
 		else if (info == typeid(bool)) // Bool
 		{
 		}
+		//TODO:
+		else if (info == typeid(ofDefaultVec2))
+		{
+			bIsMultiDim = true;
+		}
+		else if (info == typeid(ofDefaultVec3))
+		{
+			bIsMultiDim = true;
+		}
+		else if (info == typeid(ofDefaultVec4))
+		{
+			bIsMultiDim = true;
+		}
 		else { // Unknown types
 			bUnknown = true;
 			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
@@ -42,9 +59,17 @@ namespace ofxImGuiSurfing
 
 		if (!bUnknown)
 		{
-			if (resolution == -1) {
-				resolution = (param.getMax() - param.getMin()) / 100.f; // 100 steps for all the param range
-				//resolution = 0.1f; // hardcoded to 0.1
+			if (!bIsMultiDim) {
+				if (resolution == -1) {
+					resolution = (param.getMax() - param.getMin()) / 100.f; // 100 steps for all the param range
+					//resolution = 0.1f; // hardcoded to 0.1
+				}
+			}
+			else {
+				//if (resolution == -1) {
+				//	//resolution = (param.getMax().x - param.getMin().x) / 100.f; // 100 steps for all the param range
+				//	resolution = 0.1f; // hardcoded to 0.1
+				//}
 			}
 
 			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
@@ -80,8 +105,8 @@ namespace ofxImGuiSurfing
 		if (!bEnabled) return;
 
 		if (ImGui::IsItemHovered())
-		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
-		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
+			//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
+			//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
