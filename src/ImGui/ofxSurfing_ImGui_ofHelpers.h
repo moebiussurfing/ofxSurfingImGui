@@ -16,7 +16,7 @@ namespace ofxImGuiSurfing
 {
 	//----
 
-	// Adds mouse wheel control to the last orevioues param widget (templated float/int)
+	// Adds mouse wheel control to the last previous param widget (templated float/int)
 
 	//--------------------------------------------------------------
 	template<typename ParameterType>

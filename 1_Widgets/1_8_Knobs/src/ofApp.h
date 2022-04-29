@@ -13,8 +13,8 @@ public:
 
 	ofxSurfing_ImGui_Manager guiManager;
 
-	ofParameter<float> valueKnob1{ "Value1", 0.25f, 0.f, 1.0f };
-	ofParameter<float> valueKnob2{ "Value2", 0.75f, 0.f, 1.0f };
+	ofParameter<float> valueKnob1{ "Value1", 0.f, -10.f, 10.0f };
+	ofParameter<float> valueKnob2{ "Value2", 5.f, 0.f, 10.0f };
 	ofParameter<float> valueKnob3{ "Value3", -5.f, -10.f, 10.0f };
 	ofParameter<float> valueKnob4{ "Value4", 5.f, -10.f, 10.0f };
 
