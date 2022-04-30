@@ -4,7 +4,6 @@
 void ofApp::setup() {
 
 	ofSetFrameRate(60);
-	ofSetWindowPosition(1920, 25);
 
 	//----
 
@@ -47,7 +46,7 @@ void ofApp::setupImGui()
 {
 	// Instantiate
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+	guiManager.setup();
 
 	//-
 
@@ -76,13 +75,14 @@ void ofApp::draw()
 {
 	if (bEnable)
 	{
+		// animate
 		float t = ofGetElapsedTimef();
 		float s = ofMap(amount, amount.getMax(), amount.getMin(), 1, 10);
 		t = ofWrap(t, 0, s);
 		separation = ofMap(t, 0, s, separation.getMin(), separation.getMax());
 
 		// Log 8 times per second at 60 fps
-		if (ofGetFrameNum() % (60/8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
+		if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
 	}
 
 	//----
@@ -122,49 +122,64 @@ void ofApp::drawImGui()
 	int index;
 
 	index = 0;
-	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
+			// Some useful sizes to help layouting in some scenarios:
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
 			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
 
-			//-
-
 			ImGui::Text("myWindow_0");
 
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ofxImGuiSurfing::AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));
+			ofxImGuiSurfing::AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
 
-			ofxImGuiSurfing::AddToggleRounded(guiManager.bHelp);
+			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 			ofxImGuiSurfing::AddTooltip("Help enables some ToolTips");
 
-			ofxImGuiSurfing::AddBigToggle(guiManager.bLog);
-			ofxImGuiSurfing::AddHSlider(speed, ImVec2(_w1, 2 * _h), false, false);
+			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG);
+			
+			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
 			ofxImGuiSurfing::AddTooltip("Speed controls the autopopulated Log window speed", guiManager.bHelp);
 
-			ofxImGuiSurfing::AddHSlider(amount, ImVec2(_w1, _h));
+			guiManager.Add(amount, OFX_IM_HSLIDER);
 			ofxImGuiSurfing::AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
 
-			if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2)) {
-				bPrevious = false;
-				lineWidth -= 0.1;
-			}
-			ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
+			ImGui::PushButtonRepeat(true);//-> pushing repeats trigs
+			{
+				guiManager.refreshLayout();
 
-			ImGui::SameLine();
-			if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2)) {
-				bNext = false;
-				lineWidth += 0.1;
+				if (guiManager.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
+				//if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2))
+				{
+					bPrevious = false;
+					lineWidth -= 0.1;
+					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+				}
+				ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
+
+				ImGui::SameLine();
+
+				//if (guiManager.Add(bNext, OFX_IM_BUTTON_BIG, 2))
+				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2)) 
+				{
+					bNext = false;
+					lineWidth += 0.1;
+					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+				}
+				ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
 			}
-			ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
+			ImGui::PopButtonRepeat();
 
 			//ofxImGuiSurfing::AddParameter(lineWidth);
-			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+			// -> Using this below style (guiManager.add(..) vs the above line legacy style, 
+			// we will gain new features like:
+			// some resposive layouting or mouse wheel control...
+			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL); 
 
-			ofxImGuiSurfing::AddParameter(separation);
-			ofxImGuiSurfing::AddStepper(shapeType);
+			guiManager.Add(separation);
+			guiManager.Add(lineWidth);
 		}
 		guiManager.endWindowSpecial(index);
 	}
@@ -172,7 +187,6 @@ void ofApp::drawImGui()
 	//----
 
 	index = 1;
-	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -186,7 +200,6 @@ void ofApp::drawImGui()
 	//----
 
 	index = 2;
-	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -221,7 +234,6 @@ void ofApp::drawImGui()
 	//----
 
 	index = 3;
-	//if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -237,7 +249,7 @@ void ofApp::drawImGui()
 	//----
 
 	index = 4;
-	//if (guiManager.getWindowSpecialVisible(index))
+	//if (guiManager.getWindowSpecialVisible(index))//->This method can get the state (if it's open) of the special window.
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{

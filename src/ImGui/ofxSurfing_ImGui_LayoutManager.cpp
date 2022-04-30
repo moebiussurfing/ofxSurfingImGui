@@ -28,6 +28,13 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// it seems than requires to be false when using multi-context/instances
 	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
 	bAutoDraw = false;
+
+	//-
+
+	// Enable "Windows Special Organizer"
+	// Customize names
+	windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
+	setNameWindowsSpecialsPanel("Organizer");
 }
 
 //--------------------------------------------------------------
@@ -72,7 +79,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 		initiate(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
-	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED:
+	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED://TODO:
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED: // -> guiManager.begin(); it's bypassed internally then can be remain uncommented.
@@ -195,12 +202,13 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startup()
 {
+	//-
+
 	// Last setup step
 
 	if (bDocking)
 	{
-		setupLayout(4); // Default Layout with 4 presets.
-		//setupLayout(4); // Default Layout with 4 presets.
+		setupLayout(4); // Init Default Layout with 4 presets.
 	}
 
 	//-
@@ -212,11 +220,12 @@ void ofxSurfing_ImGui_Manager::startup()
 		// Cascade / Organizer Mode
 		// Special windows manager
 
-		initiatieWindowsSpecial();
+		initiatieSpecialWindowsOrganizer();
 
-		// Customize names
-		windowPanels.setNameGlobalPanelWindowsSpecial("Show Global");
-		setNamePanelWindowsSpecial("Organizer");
+		//// Customize names
+		//windowPanels.setNameWindowsSpecialsEnableGlobal("Show Global");
+		//setNameWindowsSpecialsPanel("Organizer");
+		////setNameWindowsSpecialsPanel("Organizer");
 
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
@@ -246,7 +255,34 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	//--
 
+	//TODO:
+	//BUG: toggle states are not recalled well...
+	//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
+		windowPanels.startup();
+	}
+
+	//for (size_t i = 0; i < windowsAtributes.size(); i++)
+	//{
+	//	//windowsAtributes[i].bGui = params_Panels[i];
+	//	//windowsAtributes[i].bGui = windowPanels[i];
+	//	bool b = windowsAtributes[i].bGui;
+	//	ofLogNotice(__FUNCTION__) << b;
+
+	//	////params_Panels[i] = b;
+	//	bPanels[i].set(b);
+	//}
+	//
+	////if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	////{
+	////	windowPanels.add(_bGui);
+	////}
+
+	//--
+
 	appLayoutIndex = appLayoutIndex;
+
+	//--
 }
 
 //----
@@ -910,6 +946,12 @@ void ofxSurfing_ImGui_Manager::end() {
 }
 
 //--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindow(char* name)
+{
+	return beginWindow((string)name, NULL, ImGuiWindowFlags_None);
+}
+
+//--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name)
 {
 	return beginWindow(name, NULL, ImGuiWindowFlags_None);
@@ -1084,6 +1126,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	// workaround
 	////if (!windowPanels.bGui_Global.get()) return false;
 	//if (!windowsAtributes[index].bGui.get()) return false;
+
+	//refreshLayout();
 
 	return b;
 }
@@ -1348,23 +1392,21 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// The main control windows
 
-	params_AppSettingsLayout.add(bGui_LayoutsPresets);
-	params_AppSettingsLayout.add(bGui_LayoutsExtra);
-	params_AppSettingsLayout.add(bGui_LayoutsPanels);
-
 	//params_AppSettingsLayout.add(bModeFree);
 	//params_AppSettingsLayout.add(bModeForced);
 	//params_AppSettingsLayout.add(bModeLock1);
 	//params_AppSettingsLayout.add(bModeLockControls);
 	//params_AppSettingsLayout.add(bModeLockPreset);
 
+	params_AppSettingsLayout.add(bGui_LayoutsPresets);
+	params_AppSettingsLayout.add(bGui_LayoutsExtra);
+	params_AppSettingsLayout.add(bGui_LayoutsPanels);
 	params_AppSettingsLayout.add(bAutoSave_Layout);
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
 
 	params_AppSettings.add(params_AppSettingsLayout);
-
 	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_Advanced);
 
@@ -1452,6 +1494,8 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 void ofxSurfing_ImGui_Manager::loadAppSettings()
 {
 	/*if (bAutoSaveSettings) */ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
+
+
 }
 
 //--------------------------------------------------------------
@@ -1614,23 +1658,24 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			if (i % 2 == 0) ImGui::SameLine();
 		}
 
-		// Autosave/Save when minimized
-		if (bMinimizePresets)
-		{
-			// Autosave
-			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h);
+		//// Autosave/Save when minimized
+		//if (bMinimizePresets)
+		//{
+		//	// Autosave
+		//	ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h, true);
+		//	//ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h);
 
-			// Save Button
-			if (!bAutoSave_Layout.get())
-			{
-				ImGui::PushID("##SaveLayout0");
-				if (ImGui::Button("Save", ImVec2(_w1, 0.5 * _h)))
-				{
-					saveAppLayout(appLayoutIndex.get());
-				}
-				ImGui::PopID();
-			}
-		}
+		//	// Save Button
+		//	if (!bAutoSave_Layout.get())
+		//	{
+		//		ImGui::PushID("##SaveLayout0");
+		//		if (ImGui::Button("Save", ImVec2(_w1, 0.5 * _h)))
+		//		{
+		//			saveAppLayout(appLayoutIndex.get());
+		//		}
+		//		ImGui::PopID();
+		//	}
+		//}
 
 		ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1642,7 +1687,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 		// Panels & Manager
 
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimizePresets ? _h / 2 : _h));
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimizePresets ? _h * 0.75f : _h));
+		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimizePresets ? _h / 2 : _h));
 		if (!bMinimizePresets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimizePresets ? _h / 2 : _h));
 
 		//--
@@ -1652,7 +1698,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			ofxImGuiSurfing::AddSpacingSeparated();
 
 			// Autosave
-			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h);
+			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h, true);
 
 			// Save Button
 			if (!bAutoSave_Layout.get())
@@ -1670,23 +1716,26 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 
 		//-
 
-		// Reset Window
-
 		if (!bMinimizePresets)
 		{
+			// Reset Window
+
 			//if (ofxImGuiSurfing::AddButtonMini(bResetWindowPresets))
 			if (this->Add(bResetWindowPresets, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL))
 			{
 				bResetWindowPresets = true;
 			}
-		}
 
-		//--
+			//--
 
-		// Autoresize & Extra
+			// Help
 
-		if (!bMinimizePresets)
-		{
+			this->Add(bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+
+			//--
+
+			// Autoresize & Extra
+
 			this->Add(bAutoResizePresets, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 			this->Add(bGui_LayoutsExtra, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
@@ -1806,7 +1855,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//if (!bMinimizePresets)
 		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
-			if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) {
+			if (ImGui::CollapsingHeader(nameWindowSpecialsPanel.c_str(), ImGuiWindowFlags_None))
+				//if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) 
+			{
 				windowPanels.drawWidgets(bMinimizePresets);
 			}
 		}

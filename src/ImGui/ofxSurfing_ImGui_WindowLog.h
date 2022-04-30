@@ -123,7 +123,12 @@ namespace ofxImGuiSurfing {
 			ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
 			ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
 
-			if (!ImGui::Begin(name.c_str())) { ImGui::End(); return; }
+			ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollbar;
+
+			if (!ImGui::Begin(name.c_str(), NULL, flags))
+			{
+				ImGui::End(); return;
+			}
 			{
 				float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 				float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();

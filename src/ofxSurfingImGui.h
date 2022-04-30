@@ -6,7 +6,7 @@ TODO:
 
 
 BUGS:
-	+ autoResize fails with some widgets (OFX_IM_STEPPER) scenarios 
+	+ docking overlaps sometimes on layout management
 
 
 */

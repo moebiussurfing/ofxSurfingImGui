@@ -77,7 +77,7 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end.
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other addons.
-		IM_GUI_MODE_REFERENCED, // -> To receive the parent (ofApp scope) ImGui object as reference.
+		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
 
@@ -103,11 +103,18 @@ public:
 	//--
 
 public:
-
+	
+	
 	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
 	void draw(); // to manual draw...
+
+	//--------------------------------------------------------------
+	void setup()//->We will use the most common use to avoid use any argument.
+	{
+		setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+	}
 
 private:
 
@@ -134,12 +141,14 @@ public:
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
+
 	///queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
+
 	///queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -211,13 +220,15 @@ public:
 
 	// Special Windows Mode
 	SurfingImGuiWindowsMode surfingImGuiSpecialWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
+	//--------------------------------------------------------------
 	void setWindowsMode(SurfingImGuiWindowsMode mode) {
 		surfingImGuiSpecialWindowsMode = mode;
 	}
 
 	// Instantiator
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
-	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+	//void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
 
 	//----
 
@@ -267,7 +278,8 @@ public:
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
-	bool beginWindow(std::string name = "Window"); // -> simpler. not working?
+	bool beginWindow(std::string name /*= "Window"*/); // -> simpler. not working?
+	bool beginWindow(char* name = "Window"); // -> simpler. not working?
 
 	// Ends a window
 	void endWindow();
@@ -638,7 +650,7 @@ private:
 							ss += _wpanel + "\n";
 							ss += _wShape + "\n";
 							ImGui::TextWrapped(ss.c_str());
-						
+
 							ImGui::TreePop();
 						}
 
@@ -746,7 +758,7 @@ private:
 
 	int _currWindowsSpecial = 0;
 
-	std::string namePanel = "";
+	std::string nameWindowSpecialsPanel = "";
 
 public:
 
@@ -755,8 +767,10 @@ public:
 	void endWindowSpecial(int index = -1);
 
 	//--------------------------------------------------------------
-	void setNamePanelWindowsSpecial(std::string name) {
-		namePanel = name;
+	void setNameWindowsSpecialsPanel(std::string name) {
+		nameWindowSpecialsPanel = name;
+		bGui_WindowsSpecials.setName(name);
+		windowPanels.bGui_WindowsSpecials.setName(name);
 	}
 
 	//--------------------------------------------------------------
@@ -766,8 +780,8 @@ public:
 		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
 		string ss;
-		if (namePanel == "") ss = "Panels";
-		else ss = namePanel;
+		if (nameWindowSpecialsPanel == "") ss = "Organizer";
+		else ss = nameWindowSpecialsPanel;
 
 		// Panels Toggles
 		windowPanels.beginWindow(ss.c_str(), (bool*)&bGui_WindowsSpecials.get(), flags);
@@ -837,8 +851,8 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setNameGlobalPanelWindowsSpecial(std::string name) {
-		windowPanels.setNameGlobalPanelWindowsSpecial(name);
+	void setNameWindowsSpecialsEnableGlobal(std::string name) {
+		windowPanels.setNameWindowsSpecialsEnableGlobal(name);
 	}
 
 public:
@@ -876,6 +890,7 @@ public:
 		windowsAtributes.push_back(win);
 
 		params_Panels.add(_bGui);
+		bPanels.push_back(_bGui);
 
 		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
@@ -909,7 +924,7 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void initiatieWindowsSpecial() {
+	void initiatieSpecialWindowsOrganizer() {
 		windowPanels.setPath(path_Global);
 		windowPanels.initiate();
 
@@ -922,7 +937,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialGui() {
+	ofParameter<bool>& getWindowsSpecialGui() {//legacy
+		return bGui_WindowsSpecials;
+	}
+
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowsSpecialGuiToggle() {
 		return bGui_WindowsSpecials;
 	}
 
@@ -1034,9 +1054,9 @@ private:
 	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; // index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "_LayoutsPresets" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsVisible{ "_LayoutsVisible" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsExtra{ "_LayoutsExtra" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_Layouts{ "LayoutsPresets" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsExtra{ "LayoutsExtra" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
 
 	int numPresetsDefault;
@@ -1099,9 +1119,9 @@ public:
 public:
 
 	void draw_ImGuiMenu();
-	
+
 public:
-	
+
 	// Get the central space to position other panels or gui elements
 	// like video viewports or scenes previews
 	//--------------------------------------------------------------
@@ -1187,7 +1207,9 @@ public:
 private:
 
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
-	ofParameterGroup params_Panels{ "Params Panels" };
+	ofParameterGroup params_Panels{ "Params Panels" };//to store the gui show toggles for each window
+	//TODO:
+	vector<ofParameter<bool>> bPanels;
 
 	//ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
 	//ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels

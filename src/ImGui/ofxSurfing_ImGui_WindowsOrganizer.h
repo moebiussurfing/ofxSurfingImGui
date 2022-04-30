@@ -112,16 +112,16 @@ namespace ofxImGuiSurfing
 	public:
 
 		ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // toggle gui to draw window
-		ofParameter<bool> bGui_Global{ "Show Global", true }; // extra toggle to hide / show all
+		ofParameter<bool> bGui_Global{ "Show All", true }; // extra toggle to hide / show all
 
 	public:
 
-		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link windows",  false };
+		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link Windows",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 		ofParameter<bool> bHeaders{ "Hide Headers", true };
 		ofParameter<int> pad{ "Padding", 0, 0, 25 };
-		ofParameter<glm::vec2> position{ "position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+		ofParameter<glm::vec2> position{ "Position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
 	private:
 
@@ -538,7 +538,20 @@ namespace ofxImGuiSurfing
 			params_Settings.add(bLockedHeight);
 			params_Settings.add(bHeaders);
 
+			//// Each window enabler
+			//params_Settings.add(params_Enablers);
+
+			startup();
+		}
+
+		//--------------------------------------------------------------
+		void startup()
+		{
+			ofLogNotice() << __FUNCTION__;
+			
+			//TODO:
 			// Each window enabler
+			params_Settings.clear();
 			params_Settings.add(params_Enablers);
 
 			//--
@@ -562,6 +575,8 @@ namespace ofxImGuiSurfing
 			//bLockedWidth = bLockedWidth;
 			//bLockedHeight = bLockedHeight;
 		}
+
+		//--
 
 	private:
 
@@ -595,7 +610,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void setNameGlobalPanelWindowsSpecial(std::string name) {
+		void setNameWindowsSpecialsEnableGlobal(std::string name) {
 			bGui_Global.setName(name);
 		}
 
