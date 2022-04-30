@@ -68,7 +68,7 @@ OR NEEDING TO BE UPDATED TO API CHANGES.
 
 ### 3. [STYLES](#3-styles-1)
 
-### 4. [LAYOUTS & DOCKING](#4-layout-&-docking-wip-1) [WIP]
+### 4. [LAYOUTS & DOCKING](4-layouts--docking-wip-1) [WIP]
 
 
 <BR>

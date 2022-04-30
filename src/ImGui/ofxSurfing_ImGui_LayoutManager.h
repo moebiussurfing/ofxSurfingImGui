@@ -729,7 +729,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
-		path_SubPathLabel = path + "_";
+		path_SubPathLabel = "_"+ path ;
 	}
 
 	//--------------------------------------------------------------
@@ -1056,7 +1056,7 @@ private:
 
 	ofParameterGroup params_Layouts{ "LayoutsPresets" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsExtra{ "LayoutsExtra" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsExtra{ "ExtraParams" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
 
 	int numPresetsDefault;

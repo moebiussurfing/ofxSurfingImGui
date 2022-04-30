@@ -5,8 +5,6 @@ void ofApp::setup() {
 
 	ofSetFrameRate(60);
 
-	//ofSetEscapeQuitsApp(false);
-
 	//----
 
 	// Parameters
@@ -125,6 +123,7 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	// Animate a bit
 	if (bEnable)
 	{
 		float t = ofGetElapsedTimef();
@@ -136,13 +135,15 @@ void ofApp::draw()
 		if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
 	}
 
-	//--
+	//----
+
+	// Gui Manager with Docking features:
 
 	guiManager.begin();
 	{
 		// In between here (begin/end) we can render ImGui windows and widgets.
 
-		//----
+		//--
 
 		// Here (between beginDocking/endDocking) we can access all the docking space.
 
@@ -151,6 +152,8 @@ void ofApp::draw()
 			dockingHelperUpdate();
 		}
 		guiManager.endDocking();
+
+		//--
 
 		// An extra window with some hardcoded layout triggers
 		if (bEnable) dockingHelperDraw();
@@ -165,7 +168,7 @@ void ofApp::draw()
 
 	//----
 
-	// Log
+	// Animate a Log
 	logPopulate();
 }
 
@@ -180,7 +183,7 @@ void ofApp::drawImGui()
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			// Some useful sizes to help layouting in some scenarios:
+			// Some useful pre calculated sizes to speed up and help layouting in some scenarios:
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
 			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
@@ -205,8 +208,8 @@ void ofApp::drawImGui()
 			{
 				guiManager.refreshLayout();
 
-				if (guiManager.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
-					//if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2))
+				if (guiManager.Add(bPrevious, OFX_IM_BUTTON_BIG, 2)) //-> Using the Manager API
+					//if (ofxImGuiSurfing::AddBigButton(bPrevious, _w2, _h * 2)) //-> Using the Layout API
 				{
 					bPrevious = false;
 					lineWidth -= 0.1;
@@ -216,8 +219,8 @@ void ofApp::drawImGui()
 
 				ImGui::SameLine();
 
-				//if (guiManager.Add(bNext, OFX_IM_BUTTON_BIG, 2))
-				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2))
+				//if (guiManager.Add(bNext, OFX_IM_BUTTON_BIG, 2)) //-> Using the Manager API
+				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h * 2)) //-> Using the Layout API
 				{
 					bNext = false;
 					lineWidth += 0.1;
@@ -227,11 +230,11 @@ void ofApp::drawImGui()
 			}
 			ImGui::PopButtonRepeat();
 
-			//ofxImGuiSurfing::AddParameter(lineWidth);
+			//ofxImGuiSurfing::AddParameter(lineWidth); //-> Using the Legacy API
 			// -> Using this below style (guiManager.add(..) vs the above line legacy style, 
 			// we will gain new features like:
 			// some resposive layouting or mouse wheel control...
-			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL); //-> Using the Manager API
 
 			guiManager.Add(separation);
 			guiManager.Add(lineWidth);

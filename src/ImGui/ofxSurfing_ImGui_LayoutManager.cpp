@@ -1316,7 +1316,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	//-
 
-	params_LayoutsExtra.setName("Extra Params");
+	//params_LayoutsExtra.setName("Extra Params");
 
 	//-
 
@@ -1406,8 +1406,8 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
 
-	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(bGui_LayoutsManager);
+	params_AppSettings.add(params_AppSettingsLayout);
 	params_AppSettings.add(params_Advanced);
 
 	//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
