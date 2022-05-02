@@ -75,7 +75,7 @@ namespace ImGuiKnobs {
                 ImGui::InvisibleButton(_label, {radius * 2.0f, radius * 2.0f});
                 auto gid = ImGui::GetID(_label);
                 ImGuiSliderFlags drag_flags = 0;
-                if (flags ^ ImGuiKnobFlags_DragHorizontal) {
+                if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
                     drag_flags |= ImGuiSliderFlags_Vertical;
                 }
                 value_changed = ImGui::DragBehavior(gid, data_type, p_value, speed, &v_min, &v_max, format, drag_flags);
@@ -140,7 +140,8 @@ namespace ImGuiKnobs {
         };
 
         template<typename DataType>
-        knob<DataType> knob_with_drag(const char *label, ImGuiDataType data_type, DataType *p_value, DataType v_min, DataType v_max, float speed, const char *format, float size, ImGuiKnobFlags flags) {
+        knob<DataType> knob_with_drag(const char *label, ImGuiDataType data_type, DataType *p_value, DataType v_min, DataType v_max, float _speed, const char *format, float size, ImGuiKnobFlags flags) {
+            auto speed = _speed == 0 ? (v_max - v_min) / 250.f : _speed;
             ImGui::PushID(label);
             auto width = size == 0 ? ImGui::GetTextLineHeight() * 4.0f : size * ImGui::GetIO().FontGlobalScale;
             ImGui::PushItemWidth(width);
@@ -152,7 +153,7 @@ namespace ImGuiKnobs {
             ImGui::GetCurrentWindow()->DC.CurrLineTextBaseOffset = 0;
 
             // Draw title
-            if (flags ^ ImGuiKnobFlags_NoTitle) {
+            if (!(flags & ImGuiKnobFlags_NoTitle)) {
                 auto title_size = ImGui::CalcTextSize(label, NULL, false, width);
 
                 // Center title
@@ -172,9 +173,9 @@ namespace ImGuiKnobs {
             }
 
             // Draw input
-            if (flags ^ ImGuiKnobFlags_NoInput) {
+            if (!(flags & ImGuiKnobFlags_NoInput)) {
                 ImGuiSliderFlags drag_flags = 0;
-                if (flags ^ ImGuiKnobFlags_DragHorizontal) {
+                if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
                     drag_flags |= ImGuiSliderFlags_Vertical;
                 }
                 ImGui::DragScalar("###knob_drag", data_type, p_value, speed, &v_min, &v_max, format, drag_flags);

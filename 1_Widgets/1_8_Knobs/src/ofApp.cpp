@@ -37,14 +37,13 @@ void ofApp::draw() {
 				float size1 = 60;
 				float size2 = 90;
 
-				ImGuiKnobFlags flags = ImGuiKnobFlags_ValueTooltip | ImGuiKnobFlags_NoTitle | ImGuiKnobFlags_NoInput;
-				//ImGuiKnobFlags flags;
-				//flags |= ImGuiKnobFlags_ValueTooltip;
-				//flags |= ImGuiKnobFlags_NoTitle;
-				//flags |= ImGuiKnobFlags_NoInput;
-				//flags |= ImGuiKnobFlags_DragHorizontal;
+				ImGuiKnobFlags flags;
+				flags |= ImGuiKnobFlags_ValueTooltip;
+				flags |= ImGuiKnobFlags_NoTitle;
+				flags |= ImGuiKnobFlags_NoInput;
+				flags |= ImGuiKnobFlags_DragHorizontal;
 
-				/*
+				
 				guiManager.Add(guiManager.bAutoResize);
 
 				//-
@@ -94,7 +93,6 @@ void ofApp::draw() {
 				ofxImGuiSurfing::AddKnobStyled(valueKnob7, OFX_IMGUI_KNOB_STEPPEDKNOB, size2);
 				ImGui::SameLine();
 				ofxImGuiSurfing::AddKnobStyled(valueKnob8, OFX_IMGUI_KNOB_SPACEKNOB, size2);
-				*/
 
 				//--
 
@@ -110,12 +108,12 @@ void ofApp::draw() {
 
 				float size = 80;
 
-				if (ImGuiKnobs::Knob("Value 1", &value1, -6.0f, 6.0f, 12 / 250.f, "%.1fdB", ImGuiKnobVariant_Tick, size, ImGuiKnobFlags_DragHorizontal))
+				if (ImGuiKnobs::Knob("Value 1", &value1, -6.0f, 6.0f, 0, "%.1f", ImGuiKnobVariant_Tick, size, ImGuiKnobFlags_DragHorizontal))
 				{
 				}
 				ImGui::SameLine();
 
-				if (ImGuiKnobs::Knob("Value 2", &value2, -6.0f, 6.0f, 12 / 250.f, "%.1fdB", ImGuiKnobVariant_WiperDot, size, flags))
+				if (ImGuiKnobs::Knob("Value 2", &value2, -6.0f, 6.0f, 0, "%.1fdB", ImGuiKnobVariant_WiperDot, size, flags))
 				{
 				}
 				ImGui::SameLine();

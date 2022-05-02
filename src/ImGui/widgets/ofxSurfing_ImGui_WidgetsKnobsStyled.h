@@ -29,7 +29,7 @@ enum ImGuiKnobType {
 	OFX_IMGUI_KNOB_SPACEKNOB
 };
 
-#define SPEED_RATIO 250
+//#define SPEED_RATIO 250
 
 //-
 
@@ -37,7 +37,7 @@ namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	/*inline*/ bool AddKnobStyled(ofParameter<ParameterType>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string format = "-1", ImGuiKnobFlags flags = 0, float speed = -1)
+	/*inline*/ bool AddKnobStyled(ofParameter<ParameterType>& parameter, ImGuiKnobType type = OFX_IMGUI_KNOB_TICKKNOB, float size = 0, string format = "-1", ImGuiKnobFlags flags = 0, float speed = 0)
 	{
 		auto tmpRef = parameter.get();
 		string n = parameter.getName();
@@ -62,11 +62,11 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// Fix speed bug
-		if (speed == -1)
-		{
-			speed = (abs)(parameter.getMax() - parameter.getMin()) / (float)SPEED_RATIO;
-		}
+		//// Fix speed bug
+		//if (speed == -1)
+		//{
+		//	speed = (abs)(parameter.getMax() - parameter.getMin()) / (float)SPEED_RATIO;
+		//}
 
 		// Drag horizontal
 		if (flags == 0)
