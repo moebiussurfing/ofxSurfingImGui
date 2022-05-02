@@ -26,7 +26,7 @@ namespace ofxImGuiSurfing
 	inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
 	{
 		bool bUnknown = false;
-		//bool bIsMultiDim = false;
+		bool bIsMultiDim = false;
 
 		const auto& info = typeid(ParameterType);
 		if (info == typeid(float)) // float
@@ -39,19 +39,19 @@ namespace ofxImGuiSurfing
 		{
 		}
 
-		////TODO:
-		//else if (info == typeid(ofDefaultVec2))
-		//{
-		//	bIsMultiDim = true;
-		//}
-		//else if (info == typeid(ofDefaultVec3))
-		//{
-		//	bIsMultiDim = true;
-		//}
-		//else if (info == typeid(ofDefaultVec4))
-		//{
-		//	bIsMultiDim = true;
-		//}
+		//TODO:
+		else if (info == typeid(ofDefaultVec2))
+		{
+			bIsMultiDim = true;
+		}
+		else if (info == typeid(ofDefaultVec3))
+		{
+			bIsMultiDim = true;
+		}
+		else if (info == typeid(ofDefaultVec4))
+		{
+			bIsMultiDim = true;
+		}
 
 		// Unknown types
 		else { 
@@ -62,20 +62,20 @@ namespace ofxImGuiSurfing
 
 		if (!bUnknown)
 		{
-			//if (!bIsMultiDim)
+			if (!bIsMultiDim)
 			{
 				if (resolution == -1) {
 					resolution = (param.getMax() - param.getMin()) / 100.f; // 100 steps for all the param range
 					//resolution = 0.1f; // hardcoded to 0.1
 				}
 			}
-			//else
-			//{
-			//	//if (resolution == -1) {
-			//	//	//resolution = (param.getMax().x - param.getMin().x) / 100.f; // 100 steps for all the param range
-			//	//	resolution = 0.1f; // hardcoded to 0.1
-			//	//}
-			//}
+			else
+			{
+				if (resolution == -1) {
+					//resolution = (param.getMax().x - param.getMin().x) / 100.f; // 100 steps for all the param range
+					resolution = 0.1f; // hardcoded to 0.1
+				}
+			}
 
 			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
 

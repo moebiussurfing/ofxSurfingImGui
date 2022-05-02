@@ -40,7 +40,6 @@ void ofApp::setup() {
 	lineWidth4.set("lineWidth4", 0.5, 0, 1);
 	separation4.set("separation4", 50, 1, 100);
 	speed4.set("speed4", 0.5, 0, 1);
-
 	color1.set("color1", ofColor(0, 0, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255));
 	color2.set("color2", ofFloatColor(0, 1, 0, 1), ofColor(0, 0, 0, 0), ofColor(1, 1, 1, 1));
 
@@ -539,11 +538,6 @@ void ofApp::draw()
 						ImGui::TextWrapped("Try to resize the window panel \nto see the responsive layouting.. \n");
 
 						ofxImGuiSurfing::AddSpacingSeparated();
-
-						ofxImGuiSurfing::AddParameter(color1);
-						//ofxImGuiSurfing::AddParameter(color2);
-						//guiManager.Add(color1);
-						guiManager.Add(color2);
 
 						ImGui::Spacing();
 

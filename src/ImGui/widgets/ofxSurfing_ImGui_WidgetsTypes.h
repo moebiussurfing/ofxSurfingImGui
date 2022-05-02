@@ -451,11 +451,10 @@ namespace ofxImGuiSurfing
 		//	return Add(aparam, type, bSameLine, amtPerRow, spacing);
 		//}
 
-	//private:
 	public:
+
 		//-----------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
-			//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		{
 			// Will flag to true to do the final steps: sameline and spacing configs.
 			bool bDone = false;
@@ -1354,8 +1353,10 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoInputs;
 					flags |= ImGuiColorEditFlags_NoLabel;
 					flags |= ImGuiColorEditFlags_NoTooltip;
+					
+					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
-					if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
 					else if (type == OFX_IM_COLOR_NO_ALPHA) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
@@ -1391,7 +1392,9 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoLabel;
 					flags |= ImGuiColorEditFlags_NoTooltip;
 
-					if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
+
+					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
 					else if (type == OFX_IM_COLOR_NO_ALPHA) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
