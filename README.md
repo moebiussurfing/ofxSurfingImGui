@@ -143,6 +143,7 @@ ofApp.cpp
 void ofApp::setup() 
 { 
     guiManager.setup(); 
+
     // Instantiates and configures all the required ofxImGui stuff inside:
     // Font, theme, autodraw, layout store/recall, multi context/instances, ofParams Helpers and other customizations.
 }
@@ -239,16 +240,6 @@ One step forward for **ofHelpers**:
 
 * Also **ofParameterGroup** and their inside **ofParameters**, can be customized too with different **ImGui::Tree** settings, collapsed and nested.  
 
-#### FEATURES
-
-Instead of the **ofxImGui** behavior, where you can't change the param widget style, we will have:  
-- A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
-- Draw each **ofParameter** type with different styles. 
-- Especially useful when **ofParameters** are into an **ofParameterGroup**.  
-- Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
-- You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
-- You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
-
 <details>
   <summary>Vertical and Horizontal Sliders</summary>
   <p>
@@ -322,7 +313,7 @@ Also useful to check viewport modes, docking merging windows or auto draw modes.
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 
-[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : [ _Optional_ ] For some examples only.  
+[ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only. [ _Optional_ ]  
 
 **/data/** folder contains some font files that we use in the examples.  
 

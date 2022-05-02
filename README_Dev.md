@@ -45,6 +45,16 @@ void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeF
 ```
 
 
+#### FEATURES
+
+Instead of the **ofxImGui** behavior, where you can't change the param widget style, we will have:  
+- A more powerful **Layout Engine** to improve: "responsive" layouts and customized widgets.  
+- Draw each **ofParameter** type with different styles. 
+- Especially useful when **ofParameters** are into an **ofParameterGroup**.  
+- Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
+- You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
+- You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+
 
 <BR>
 
