@@ -41,6 +41,9 @@ void ofApp::setup() {
 	separation4.set("separation4", 50, 1, 100);
 	speed4.set("speed4", 0.5, 0, 1);
 
+	color1.set("color1", ofColor(0, 0, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255));
+	color2.set("color2", ofFloatColor(0, 1, 0, 1), ofColor(0, 0, 0, 0), ofColor(1, 1, 1, 1));
+
 	//--
 
 	// Groups
@@ -72,6 +75,8 @@ void ofApp::setup() {
 	params4.add(shapeType4);
 	params4.add(lineWidth4);
 	params4.add(separation4);
+	params4.add(color1);
+	params4.add(color2);
 
 	// -> Nesting Groups
 	params2.add(params3);
@@ -342,7 +347,7 @@ void ofApp::draw()
 			// But it will work if you use ofxImGuiSurfing::AddToggleRoundedButton(..
 			// --> *
 			//ImGui::Begin("Enablers"); 
-			
+
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 			if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -534,6 +539,11 @@ void ofApp::draw()
 						ImGui::TextWrapped("Try to resize the window panel \nto see the responsive layouting.. \n");
 
 						ofxImGuiSurfing::AddSpacingSeparated();
+
+						ofxImGuiSurfing::AddParameter(color1);
+						//ofxImGuiSurfing::AddParameter(color2);
+						//guiManager.Add(color1);
+						guiManager.Add(color2);
 
 						ImGui::Spacing();
 

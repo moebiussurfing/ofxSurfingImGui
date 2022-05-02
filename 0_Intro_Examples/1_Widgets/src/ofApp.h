@@ -54,6 +54,7 @@ public:
     ofParameter<bool> bEnable3;
     ofParameter<bool> bEnable4;
 
+
 	ofEventListener listener_bEnable1;
 	ofEventListener listener_bEnable2;
 	ofEventListener listener_bEnable3;
@@ -75,6 +76,8 @@ public:
 	ofParameter<float> lineWidth4;
 	ofParameter<float> separation4;
 	ofParameter<float> speed4;
+    ofParameter<ofColor> color1;
+    ofParameter<ofFloatColor> color2;
 
 	//-
 

@@ -9,7 +9,7 @@ Setup and Layout Management, **ofParameter Helpers** and **ImGui Widgets** porte
 
 Some examples and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
-More Info [README_DEV](/README_DEV.md)  
+More Info [README_DEV](/README_DEV.md?raw=true).  
 
 ![image](/docs/1_Widgets/1_Widgets_Sliders2.PNG?raw=true "image")  
 
