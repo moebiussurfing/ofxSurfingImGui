@@ -309,16 +309,28 @@ Also useful to check viewport modes, docking merging windows or auto draw modes.
 
 <BR>
 
-## Dependencies
+<details>
+  <summary>Dependencies</summary>
+  <p>
+
 [ofxImGui](https://github.com/Daandelange/ofxImGui/) : AWESOME FORK from @**Daandelange**  
 [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 
 [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) : For some examples only. [ _Optional_ ]  
 
 **/data/** folder contains some font files that we use in the examples.  
+  </p>
+</details>
 
-## Tested Systems
+
+<details>
+  <summary>Tested Systems</summary>
+  <p>
+
 - **Windows10** / **VS2017** / **OF ~0.11**
+  </p>
+</details>
+
 
 ## Author
 An addon by **@moebiusSurfing**  

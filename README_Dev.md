@@ -78,6 +78,16 @@ https://github.com/njazz/AutomationCurveEditor -> Curve editor for param automat
 https://github.com/leiradel/ImGuiAl -> Some widgets    
 
 
+<details>
+  <summary>Title</summary>
+  <p>
+
+There's not an automatic-fully-functional, save preset/load theme designer!  
+![image](/docs/2_Layout/2_4_Layout_ThemeEditor.PNG?raw=true "image")  
+  </p>
+</details>
+
+
 
 <details>
   <summary>Code</summary>
