@@ -1,6 +1,5 @@
  
-
-## WORK IN PROGRESS!
+ ## WORK IN PROGRESS!
 
 ```
 NOT FINISHED. A BIT BUGGY YET.
@@ -8,6 +7,8 @@ API WILL CHANGE.
 SOME EXAMPLES CAN BE REDUNDANT OR INCOMPLETE  
 OR NEEDING TO BE UPDATED TO API CHANGES.
 ```
+
+
 
 <details>
   <summary>RELEVANT CHANGES vs official ofxImGui ofParameter/ImHelpers</summary>
@@ -45,6 +46,7 @@ void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeF
 ```
 
 
+
 #### FEATURES
 
 Instead of the **ofxImGui** behavior, where you can't change the param widget style, we will have:  
@@ -54,6 +56,7 @@ Instead of the **ofxImGui** behavior, where you can't change the param widget st
 - Queue settings for an **ofParameter** to define configurations to be applied when the widget is drawn when drawing a group. 
 - You can hide or exclude some params to be drawn, to disable the mouse interaction, or to draw his void spacing. 
 - You can customize how **ofParameterGroup** / **ImGui::Tree** are presented.
+
 
 
 <BR>
@@ -73,3 +76,55 @@ https://github.com/d3cod3/Mosaic -> oF node patched system for inspiration
 https://github.com/mnesarco/imgui_sugar/blob/main/imgui_sugar.hpp -> Useful ImGui style macros  
 https://github.com/njazz/AutomationCurveEditor -> Curve editor for param automations  
 https://github.com/leiradel/ImGuiAl -> Some widgets    
+
+
+
+<details>
+  <summary>Code</summary>
+  <p>
+
+ofApp.h
+
+```.cpp
+
+```
+
+ofApp.cpp
+
+```.cpp
+
+```
+</p>
+</details>
+
+
+
+<details>
+  <summary>SOME EXAMPLE CASES</summary>
+  <p>
+
+**CASE 1**:  
+_Draw an **ofParameter<float>** as slider (default), drag number or/and +/- stepper box._  
+
+**CASE 2**:  
+_Draw an **ofParameter<bool>** as a check box (default), or as a big toggle button with custom dimensions._  
+
+**CASE 3**:  
+_You added an **ofParameter<bool>** inside an **ofParameterGroup**. Add a style for the type of widget. You want to customize how it will be drawn (instead of using the default style), but when the group is rendered._  
+  </p>
+</details>
+
+
+
+<details>
+  <summary>TODO</summary>
+  <p>
+
+* macOS testing and fixing. Any help on this is appreciated!  
+* Split repo to simplify current examples. Move extra examples to new repo.
+* Fix Bugs on all the ofParameter Helpers/Styles/Docking sections.
+* Create some selected examples to simplify learning.
+* Add more ImGui raw widgets/add-ons with examples.
+* Convert some more widgets to ofParameters.
+  </p>
+</details>
