@@ -956,23 +956,23 @@ public:
 
 	// Extra params to include packed into layout presets
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameterGroup& group) {
+	void addExtraParamToLayoutPresets(ofParameterGroup& group) {
 		params_LayoutsExtra.add(group);
 	}
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<bool>& param) {
+	void addExtraParamToLayoutPresets(ofParameter<bool>& param) {
 		params_LayoutsExtra.add(param);
 	}
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<int>& param) {
+	void addExtraParamToLayoutPresets(ofParameter<int>& param) {
 		params_LayoutsExtra.add(param);
 	}
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<float>& param) {
+	void addExtraParamToLayoutPresets(ofParameter<float>& param) {
 		params_LayoutsExtra.add(param);
 	}
 	//--------------------------------------------------------------
-	void addParameterToLayoutPresets(ofParameter<ofRectangle>& param) {
+	void addExtraParamToLayoutPresets(ofParameter<ofRectangle>& param) {
 		params_LayoutsExtra.add(param);
 	}
 

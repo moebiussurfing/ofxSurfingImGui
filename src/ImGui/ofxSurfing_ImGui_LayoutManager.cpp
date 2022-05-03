@@ -88,6 +88,14 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	default:
 		break;
 	}
+
+	//--
+
+	// Clear
+
+	params_Layouts.clear();
+	params_LayoutsExtra.clear();
+	params_LayoutsVisible.clear();
 }
 
 //--------------------------------------------------------------
@@ -1308,15 +1316,15 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	//-
 
-	// Clear
-
-	params_Layouts.clear();
-	params_LayoutsExtra.clear();
-	params_LayoutsVisible.clear();
+	//// Clear
+	//params_Layouts.clear();
+	//params_LayoutsExtra.clear();
+	//params_LayoutsVisible.clear();
 
 	//-
 
-	//params_LayoutsExtra.setName("Extra Params");
+	params_LayoutsExtra.add(bMenu);
+	params_LayoutsExtra.add(bLog);
 
 	//-
 
@@ -1327,9 +1335,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	{
 		params_LayoutsVisible.add(windowsAtributes[i].bGui);
 	}
-
-	params_LayoutsExtra.add(bMenu);
-	params_LayoutsExtra.add(bLog);
 
 	//// 1.2 Add other settings that we want to store into each presets
 
