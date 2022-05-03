@@ -313,6 +313,7 @@ namespace ofxImGuiSurfing
 		//----
 
 	public:
+
 		// Update styles on runtime
 		//--------------------------------------------------------------
 		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -444,7 +445,7 @@ namespace ofxImGuiSurfing
 		//TODO:
 		// new api
 
-	//public:
+		//public:
 		////-----------------------------------------------------------------
 		//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		//{
@@ -607,7 +608,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
-						
+
 					case OFX_IM_BUTTON_BIG_XXXL:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 4);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
@@ -1353,7 +1354,7 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoInputs;
 					flags |= ImGuiColorEditFlags_NoLabel;
 					flags |= ImGuiColorEditFlags_NoTooltip;
-					
+
 					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
 					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
@@ -1531,7 +1532,7 @@ namespace ofxImGuiSurfing
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
-			bool bMusCloseTree = false; //TODO: -> add new
+			bool bMustCloseTree = false; //TODO: -> add new
 
 			// Handle names/pushID's
 			// This is the root/first group
@@ -1570,7 +1571,7 @@ namespace ofxImGuiSurfing
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
 								bIsOpen = true; // not really closed but not rendered!
-								bMusCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
+								bMustCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
 							}
 							else if (
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
@@ -1581,7 +1582,7 @@ namespace ofxImGuiSurfing
 								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-								bMusCloseTree = false; // we dont need to close tree!
+								bMustCloseTree = false; // we dont need to close tree!
 							}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 							{
@@ -1590,12 +1591,12 @@ namespace ofxImGuiSurfing
 								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 								bIsOpen = ImGui::TreeNode(group.getName().c_str());
-								bMusCloseTree = bIsOpen;
+								bMustCloseTree = bIsOpen;
 							}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 							{
 								bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
-								bMusCloseTree = bIsOpen;
+								bMustCloseTree = bIsOpen;
 							}
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 							{
@@ -1609,7 +1610,7 @@ namespace ofxImGuiSurfing
 								// B. Height hardcoded
 								int hhh = HEIGHT_SCROLL_GROUP;
 								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-								bMusCloseTree = false;
+								bMustCloseTree = false;
 
 								if (bIsOpen)
 								{
@@ -1813,11 +1814,12 @@ namespace ofxImGuiSurfing
 					//binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
 					//if (binclude)
 					{
-						//-
-
+						//--
+						 
 						// Multidim params vec2/vec3/vec4
 
 #if OF_VERSION_MINOR >= 10
+
 						auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
 						if (parameterVec2f)
 						{
@@ -1912,7 +1914,7 @@ namespace ofxImGuiSurfing
 								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
-							else 
+							else
 							{
 								//AddParameter(*parameterFloat);
 								// fixing to allow mouse wheel..
@@ -1921,7 +1923,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						// Int
 
@@ -1942,7 +1944,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						// Bool
 
@@ -1963,7 +1965,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						// String
 
@@ -2049,25 +2051,26 @@ namespace ofxImGuiSurfing
 					{
 						if (0) {}
 
-						else if (
-							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
-							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-						{
+						else if
+							(
+								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
+							{
 							// Do not requires closing/pop
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 						{
-							if (bMusCloseTree) ImGui::TreePop();
+							if (bMustCloseTree) ImGui::TreePop();
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 						{
-							if (bMusCloseTree) ImGui::TreePop();
+							if (bMustCloseTree) ImGui::TreePop();
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 						{
 							ImGui::EndChild();
 							ImGui::Unindent();
-							//dont needs close tree bc uses a collapsingHeader tree on begin
+							// Don't needs close tree bc uses a collapsingHeader tree on begin
 						}
 					}
 
