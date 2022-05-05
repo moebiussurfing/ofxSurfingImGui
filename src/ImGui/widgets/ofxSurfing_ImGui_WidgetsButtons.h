@@ -21,6 +21,46 @@
 
 namespace ofxImGuiSurfing
 {
+	//TODO:
+	//move to other widgets header
+	//--------------------------------------------------------------
+	inline void AddTextBlink(std::string text, bool bBlink = true)
+	{
+		//bool border = false;
+
+		float a = 0.5f;
+		float borderLineWidth = 1.0;
+		ImGuiStyle *style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		// Blink
+		if (bBlink)
+		{
+			float blinkValue = ofxImGuiSurfing::getFadeBlink();
+			a = ofClamp(blinkValue, 0.25, 0.75);
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		//-
+
+		// Border to selected
+		//if (border)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, borderLineColor);
+			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+		}
+
+		ImGui::TextWrapped(text.c_str());
+
+		//if (border)
+		{
+			ImGui::PopStyleColor();
+			//ImGui::PopStyleVar(1);
+		}
+	}
+
+	//----
 	//-
 
 	// Mini Button and toggles for bool ofParams

@@ -223,6 +223,9 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline float getWidgetsHeight(int amntRows = -1)
 	{
+		// notice that passing 1 will be full window height!
+		// that can be trouble when autosize window is allowed.
+
 		float h;
 		if (amntRows == -1)
 		{

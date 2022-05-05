@@ -1183,7 +1183,7 @@ namespace ofxImGuiSurfing
 	//-----
 
 	//--------------------------------------------------------------
-	inline void ProgressBar2(float valuePrc, float max = 1.0f, bool noText = false)
+	inline void ProgressBar2(float valuePrc, float max = 1.0f, bool noText = true)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
 		const float pad = 0;

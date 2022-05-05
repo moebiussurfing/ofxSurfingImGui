@@ -183,7 +183,8 @@ void ofApp::drawImGui()
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			// Some useful pre calculated sizes to speed up and help layouting in some scenarios:
+			// Some useful pre calculated sizes to speed up and help layouting in some scenarios.
+			// Notice that these are sizes at this point of indenting/foldering!
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
 			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
