@@ -959,7 +959,7 @@ namespace ofxImGuiSurfing
 		return true;
 	};
 	//--------------------------------------------------------------
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values)
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values /*,bool bUpperCase = true*/)
 	{
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20); // fix oversizes
 		if (values.empty())
