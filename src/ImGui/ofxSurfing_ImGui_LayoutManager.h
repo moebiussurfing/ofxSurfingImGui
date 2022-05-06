@@ -67,7 +67,7 @@ TODO:
 using namespace ofxImGuiSurfing;
 
 //TODO:
-// These argumnents are to pass to setup(..) method and simplify instantiation and settings.
+// These arguments are to pass to setup(..) method and simplify instantiation and settings.
 //--------------------------------------------------------------
 namespace ofxImGuiSurfing
 {
@@ -135,28 +135,28 @@ public:
 
 	// ofParam's
 
-	///draw parameter into ImGui manager
+	// draw parameter into ImGui manager
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
-	///queue style for the parameter
+	// queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
-	///queue style for the parameter
+	// queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
-	///update style for the parameter
+	// update style for the parameter
 	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
@@ -752,7 +752,7 @@ public:
 
 	// Special Windows Management
 
-	// To simplify a bit the API
+	// To simplify a bit more the API
 
 private:
 
@@ -948,6 +948,22 @@ public:
 
 	//void drawSpecialWindowsPanel();
 
+	// Orientation cascade windows
+	//--------------------------------------------------------------
+	void setSpecialWindowsOrganizerOrientationHorizontal() {
+		windowPanels.bOrientation.set(false);
+	}
+
+	//--------------------------------------------------------------
+	void setSpecialWindowsOrganizerOrientationVertical() {
+		windowPanels.bOrientation.set(true);
+	}
+
+	//--------------------------------------------------------------
+	void setToggleSpecialWindowsOrganizerOrientation() {
+		windowPanels.bOrientation.set(!windowPanels.bOrientation.get());
+	}
+
 public:
 
 	//----
@@ -989,6 +1005,18 @@ public:
 		}
 
 		return windowsAtributes[index].bGui;
+	}
+
+	//--------------------------------------------------------------
+	void setWindowSpecialToggleVisible(int index)
+	{
+		if (index > windowsAtributes.size() - 1 || index == -1)
+		{
+			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			return;
+		}
+
+		windowsAtributes[index].bGui = !windowsAtributes[index].bGui;
 	}
 
 	//----
@@ -1103,7 +1131,7 @@ public:
 
 	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
 
-	// Some API simplificators
+	// Some API simplifications 
 	//--------------------------------------------------------------
 	void startup();
 	void startupFirstFrame();
@@ -1146,7 +1174,7 @@ private:
 	void drawOFnative();
 
 
-	//// For different behaviour. We can disable to save some windows positions to allow them locked when changing presets.
+	//// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.
 	//ofParameter<bool> bModeFree{ "Free", true }; // -> A allows storing position for control windows too
 	//ofParameter<bool> bModeForced{ "Forced", false }; // -> Locked to free space on viewport
 	//ofParameter<bool> bModeLock1{ "Lock B", false }; // -> Cant be moved. To be used in presets panel

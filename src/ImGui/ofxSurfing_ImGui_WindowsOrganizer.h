@@ -108,7 +108,6 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	class WindowPanels {
 
-		//private:
 	public:
 
 		ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // toggle gui to draw window
