@@ -301,6 +301,16 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline void AddSpacingBigSeparated()
+	{
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+	}
+
+	//--------------------------------------------------------------
 	inline void AddSpacingSeparated()
 	{
 		ImGui::Spacing();

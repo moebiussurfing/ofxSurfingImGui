@@ -467,7 +467,7 @@ namespace ofxImGuiSurfing
 			float _ww; // widget width
 			if (amtPerRow == 2) _ww = _w50; // half size
 			else if (amtPerRow == 3) _ww = _w33; // third size
-			else if (amtPerRow == 4) _ww = _w25; // quater size
+			else if (amtPerRow == 4) _ww = _w25; // quarter size
 			else _ww = _w100; // full width
 
 			//----

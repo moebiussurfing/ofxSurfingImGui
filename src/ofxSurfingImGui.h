@@ -2,12 +2,17 @@
 /*
 
 TODO:
+
+	+ add cascade align engine:
+	https://github.com/ocornut/imgui/issues/5287
+	
 	+ add tooltip types for styles
 
-
 BUGS:
-	+ docking overlaps sometimes on layout management
 
+	+ fix windowsSpecial not drawing windows, when multiple instances?
+		+ it's mybe working on docking mode only?
+	+ docking overlaps sometimes on layout management
 
 */
 
@@ -88,7 +93,7 @@ using namespace ofxImGuiSurfing;
 
 	// 1.0 SIMPLE
 
-	ImGui::Begin("myWindow);
+	ImGui::Begin("myWindow");
 	{ }
 	ImGui::End();
 
