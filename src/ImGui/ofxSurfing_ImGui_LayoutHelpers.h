@@ -8,6 +8,9 @@
 
 // This class have widgets size constants and methods to get the window panel sizes.
 
+//TODO:
+#define WINDOW_WIDTH_THRESHOLD 300
+
 //----------
 
 // CONSTANTS

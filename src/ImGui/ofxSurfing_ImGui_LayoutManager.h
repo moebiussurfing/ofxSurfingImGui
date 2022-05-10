@@ -3,7 +3,7 @@
 
 TODO:
 
-+ position applyes to 2nd window ?
++ position applies to 2nd window ?
 
 + fix make dockeable all windows on same space
 + fix multiple dock spaces that are colliding/one over another
@@ -212,6 +212,22 @@ public:
 	void resetUniqueNames()
 	{
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
+	}
+
+	//-
+
+	//--------------------------------------------------------------
+	void Indent()
+	{
+		ImGui::Indent();
+		refreshLayout();
+	}
+
+	//--------------------------------------------------------------
+	void Unindent()
+	{
+		ImGui::Unindent();
+		refreshLayout();
 	}
 
 	//-

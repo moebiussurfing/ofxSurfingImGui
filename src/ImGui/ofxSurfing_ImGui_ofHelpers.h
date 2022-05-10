@@ -205,6 +205,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddIntStepped(ofParameter<int>& parameter)
 	{
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+
 		bool bChanged = false;
 		auto tmpRefi = parameter.get();
 		const ImU32 u32_one = 1;
@@ -223,6 +225,8 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
+
+		IMGUI_SUGAR__STEPPER_WIDTH_POP;
 
 		return bChanged;
 	}

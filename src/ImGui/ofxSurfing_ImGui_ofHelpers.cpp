@@ -514,7 +514,7 @@ namespace ofxImGuiSurfing
 		if (parameter.get() < 0) return false;
 		if (labels.size() == 0) return false;
 
-		//-
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
 
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -546,6 +546,8 @@ namespace ofxImGuiSurfing
 		{
 			parameter.set(tmpRef);
 		}
+		
+		ImGui::PopItemWidth();
 
 		return result;
 	}
@@ -555,16 +557,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 		if (ImGui::InputInt((parameter.getName().c_str()), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__STEPPER_WIDTH_POP;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__STEPPER_WIDTH_POP;
 		return false;
 	}
 

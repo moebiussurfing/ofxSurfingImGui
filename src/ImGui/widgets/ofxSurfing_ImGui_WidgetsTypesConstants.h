@@ -188,7 +188,7 @@ namespace ofxImGuiSurfing
 	// 1.
 
 	// BUG:
-	// Annoying behaviour: sometimes the sliders are bigger bc the text long or something,
+	// Annoying behavior: sometimes the sliders are bigger bc the text long or something,
 	// Then all the window panels is being resized bigger if auto resize is enabled!
 
 	// workaround
@@ -198,45 +198,44 @@ namespace ofxImGuiSurfing
 	// and use this max width to apply to our layouting engine...
 
 	// Some macro sugar to help fix how sliders force autoresize the panel widths.
-	// It's a 'rare behaviour' that I am trying to correct doing this.
+	// It's a 'rare behavior' that I am trying to correct doing this.
 
 	//-
 
-	//TODO:
-
-#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR // -> Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
+//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR // -> Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
 
 #define TEXT_LABEL_TO_RESIZE "----------" // -> This is a 10 chars string that we will use as default label width, to name wdigets.
 
-	//-
+	//--
 
-#ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR
+#ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
 
 	// A. Relative to panel width
-//TODO:
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH \
-//const ImVec2 sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x);
+	// less than threshold will make half window width
 
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200?ImGui::GetContentRegionAvail().x-110:ImGui::GetContentRegionAvail().x-90);//sometimes looks weird..
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-65);
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x-90);
-//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2);
-#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
+#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
+
+#define IMGUI_SUGAR__SLIDER_WIDTH_POP \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 #endif
 
-	//-
+	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
+	// that could be weird because each slider will have a different width.
+	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+	
+	//--
 
-	//// B. Using absolute size
+	//// B. Using an absolute size
 
 	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
 	//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
 	//#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
 
-	//-
+	//--
 
-#ifdef DEFAULT_LAYOUT_SLIDERS_BEHAVIOUR
+#ifdef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
 
 	// C. To bypass and do nothing.
 
@@ -254,11 +253,15 @@ namespace ofxImGuiSurfing
 //#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
-//fix autoresize grow... 
+// fix autoresize grow... 
+//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
+//	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+//	const float gap = 40; \
+//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
+//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	const float gap = 40; \
-	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----

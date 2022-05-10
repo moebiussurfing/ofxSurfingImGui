@@ -217,6 +217,7 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
+		ImGui::Spacing();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
@@ -368,6 +369,7 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
+		ImGui::Spacing();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
