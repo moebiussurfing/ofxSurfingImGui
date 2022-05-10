@@ -8,8 +8,12 @@
 
 // This class have widgets size constants and methods to get the window panel sizes.
 
-//TODO:
-#define WINDOW_WIDTH_THRESHOLD 300
+//---
+
+// Fix weird behaviors when too big or small resized windows
+
+#define WINDOW_WIDTH_THRESHOLD 300 // when window width is less than that, we will use another pattern for some widgets.
+#define PADDING_COMBO 13
 
 //----------
 
@@ -33,7 +37,7 @@
 
 #define WIDGET_SLIDER_HEIGHT 20
 #define WIDGET_COLOR_STRIP_COLOR_HEIGHT 15
-#define WIDGETS_HEIGHT 50 // will be applied to tbuttons/toggles heights
+#define WIDGETS_HEIGHT 50 // will be applied to buttons/toggles heights
 
 #define WIDGET_LABEL_WIDTH 120
 

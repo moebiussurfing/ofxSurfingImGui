@@ -250,6 +250,10 @@ namespace ofxImGuiSurfing
 
 	// For OFX_IM_STEPPER
 
+#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+
 //#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
@@ -259,10 +263,6 @@ namespace ofxImGuiSurfing
 //	const float gap = 40; \
 //	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
-
-#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
-#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----
 

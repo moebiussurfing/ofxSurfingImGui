@@ -514,7 +514,8 @@ namespace ofxImGuiSurfing
 		if (parameter.get() < 0) return false;
 		if (labels.size() == 0) return false;
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7);
+		const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sz.x - 0.5f * PADDING_COMBO);
 
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -546,7 +547,7 @@ namespace ofxImGuiSurfing
 		{
 			parameter.set(tmpRef);
 		}
-		
+
 		ImGui::PopItemWidth();
 
 		return result;
@@ -963,7 +964,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values /*,bool bUpperCase = true*/)
 	{
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 20); // fix oversizes
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO); // fix oversizes
 		if (values.empty())
 		{
 			ImGui::PopItemWidth();
@@ -971,6 +972,7 @@ namespace ofxImGuiSurfing
 		}
 		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
 		ImGui::PopItemWidth();
+
 		return b;
 	}
 	//--------------------------------------------------------------
