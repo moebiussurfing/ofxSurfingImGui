@@ -490,9 +490,9 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 
 	ImGuiWindowFlags flagsMng = ImGuiWindowFlags_None;
-	flagsMng += ImGuiWindowFlags_NoSavedSettings;
+	flagsMng |= ImGuiWindowFlags_NoSavedSettings;
 
-	if (bAutoResize) flagsMng += ImGuiWindowFlags_AlwaysAutoResize;
+	if (bAutoResize) flagsMng |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	//--
 
@@ -956,25 +956,37 @@ void ofxSurfing_ImGui_Manager::end() {
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(char* name)
 {
+	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
+	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	return beginWindow((string)name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name)
 {
+	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
+	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 {
+	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
+	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	return beginWindow(name, p_open, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 {
-	return beginWindow(p.getName().c_str(), (bool*)&p.get(), ImGuiWindowFlags_None);
+	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
+	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
+
+	return beginWindow(p.getName().c_str(), (bool*)&p.get(), fg);
 }
 
 //--------------------------------------------------------------
