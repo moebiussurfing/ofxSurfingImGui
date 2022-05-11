@@ -62,7 +62,7 @@ TODO:
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
-//-
+//--
 
 using namespace ofxImGuiSurfing;
 
@@ -74,7 +74,7 @@ namespace ofxImGuiSurfing
 	// Argument to be used on setup(mode);
 	enum SurfingImGuiInstantiationMode {
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
-		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring begin/end.
+		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring main begin/end.
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other addons.
 		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
@@ -103,8 +103,8 @@ public:
 	//--
 
 public:
-	
-	
+
+
 	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
@@ -197,6 +197,98 @@ public:
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	{
 		widgetsManager.AddGroup(group, flags, typeGroup);
+	}
+
+	//--
+
+	// Combo list. 
+	// Selector index directly with an int ofParam
+	// without name label
+	//--------------------------------------------------------------
+	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	{
+		if (fileNames.empty()) return false;
+
+		int i = pIndex.get();
+		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
+		if (b) {
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice(__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+
+		return b;
+	}
+
+	// Text with spacing
+	//--------------------------------------------------------------
+	void AddLabel(std::string label, bool bUppercase = false)
+	{
+		std::string t = bUppercase ? ofToUpper(label) : label;
+		ofxImGuiSurfing::AddSpacingBig();
+		ImGui::TextWrapped(t.c_str());
+		ofxImGuiSurfing::AddSpacing();
+		//ofxImGuiSurfing::AddSpacingBig();
+	}
+	//--------------------------------------------------------------
+	void AddLabelBig(std::string label, bool bUppercase = false)
+	{
+		std::string t = bUppercase ? ofToUpper(label) : label;
+		ofxImGuiSurfing::AddSpacingBig();
+		pushStyleFont(1);
+		ImGui::TextWrapped(t.c_str());
+		popStyleFont();
+		ofxImGuiSurfing::AddSpacing();
+		//ofxImGuiSurfing::AddSpacingBig();
+	}
+
+	//--
+
+	// To help API coherence
+	//--------------------------------------------------------------
+	void AddSpacingSmall()
+	{
+		ofxImGuiSurfing::AddSpacingSmall();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingDouble()
+	{
+		ofxImGuiSurfing::AddSpacingDouble();
+	}
+	//--------------------------------------------------------------
+	void AddSpacing()
+	{
+		ofxImGuiSurfing::AddSpacing();
+	}
+	//--------------------------------------------------------------
+	void AddSeparator()
+	{
+		ofxImGuiSurfing::AddSeparator();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingBig()
+	{
+		ofxImGuiSurfing::AddSpacingBig();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingBigSeparated()
+	{
+		ofxImGuiSurfing::AddSpacingBigSeparated();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingSeparated()
+	{
+		ofxImGuiSurfing::AddSpacingSeparated();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingHuge()
+	{
+		ofxImGuiSurfing::AddSpacingHuge();
+	}
+	//--------------------------------------------------------------
+	void AddSpacingHugeSeparated()
+	{
+		ofxImGuiSurfing::AddSpacingHugeSeparated();
 	}
 
 	//----
@@ -745,7 +837,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
-		path_SubPathLabel = "_"+ path ;
+		path_SubPathLabel = "_" + path;
 	}
 
 	//--------------------------------------------------------------
@@ -1150,6 +1242,13 @@ public:
 	// Some API simplifications 
 	//--------------------------------------------------------------
 	void startup();
+
+private:
+
+	bool bStartupCalled = false;
+
+public:
+
 	void startupFirstFrame();
 	void setupDocking();
 

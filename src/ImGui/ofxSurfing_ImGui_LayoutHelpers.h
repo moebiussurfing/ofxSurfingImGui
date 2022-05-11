@@ -66,6 +66,18 @@
 //#define FONT_DEFAULT_SIZE 14
 //#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
 
+//--
+
+//// to help API memo
+//#define guiManager.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
+//#define guiManager.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
+//#define guiManager.AddSpacing() ofxImGuiSurfing::AddSpacing() 
+//#define guiManager.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
+//#define guiManager.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
+//#define guiManager.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
+//#define guiManager.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
+//#define guiManager.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
+
 
 //------------------
 
@@ -272,11 +284,7 @@ namespace ofxImGuiSurfing
 		return vv;
 	}
 
-	//--------------------------------------------------------------
-	inline void AddSpaceY(int spacingy = 2)
-	{
-		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
-	}
+	//--
 
 	//--------------------------------------------------------------
 	inline void AddSpacingSmall()
@@ -296,6 +304,13 @@ namespace ofxImGuiSurfing
 	inline void AddSpacing()
 	{
 		ImGui::Spacing();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddSeparator()
+	{
+		ImGui::Spacing();
+		ImGui::Separator();
 	}
 
 	//--------------------------------------------------------------
@@ -341,6 +356,12 @@ namespace ofxImGuiSurfing
 		AddSpacingSeparated();
 		AddSpacingBig();
 		AddSpacingBig();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddSpaceY(int spacingy = 2)
+	{
+		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
 	}
 
 } // namespace ofxImGuiSurfing

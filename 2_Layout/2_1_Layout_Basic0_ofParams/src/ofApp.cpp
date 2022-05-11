@@ -122,7 +122,7 @@ void ofApp::drawMainWindow()
 
 					//..more widgets
 					ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-					if (guiManager.bExtra) guiManager.drawAdvancedSubPanel();
+					if (guiManager.bExtra) guiManager.drawAdvanced();
 
 					ImGui::Unindent();
 				}

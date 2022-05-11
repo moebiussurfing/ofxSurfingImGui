@@ -188,9 +188,10 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	// Uncomment below to "force" all imgui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
 
-	//-
+	//--
 
 	// Font
+
 	std::string _fontName;
 	float _fontSizeParam;
 	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
@@ -199,9 +200,18 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
 
+	//TODO:
+	// font big
+
+	pushFont(_path + _fontName, _fontSizeParam + 3.0f); // queue big font too
+
+	//--
+
+	// default
+
 	addFont(_path + _fontName, _fontSizeParam);
 
-	//-
+	//--
 
 	// Theme: colors and sizes
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
@@ -210,6 +220,8 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startup()
 {
+bStartupCalled = true;
+
 	//-
 
 	// Last setup step
@@ -850,12 +862,20 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startupFirstFrame() {
+	//TODO: ?
+
+	//TODO
 	//if (ofGetFrameNum() == 1)
-	if (ofGetFrameNum() == 2)
+	//if (ofGetFrameNum() == 2)
 	{
 		appLayoutIndex = appLayoutIndex;
 		if (rectangles_Windows.size() > 0) rectangles_Windows[1] = rectangles_Windows[1];
 	}
+
+	// Force call startup(). 
+	// Maybe user forgets to do it or to speed up the API setup in some scenarios.
+	// i.e. when not using special windows or layout engine
+	if (!bStartupCalled) startup();
 }
 
 //----
@@ -953,6 +973,8 @@ void ofxSurfing_ImGui_Manager::end() {
 	else gui.end();
 }
 
+//--
+
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(char* name)
 {
@@ -974,6 +996,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name)
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 {
+	if (!&p_open) return false;
+
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -983,6 +1007,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 {
+	if (!p.get()) return false;
+
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -992,6 +1018,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
 {
+	if (!p.get()) return false;
+
 	return beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
 }
 
@@ -1010,8 +1038,11 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 	//--
 
 	//TODO:
+	
 	// reset unique names
+
 	resetUniqueNames();
+
 	//resetIDs();
 	//widgetsManager.resetUniqueNames();
 
@@ -1030,31 +1061,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 	//float ww = PANEL_WIDGETS_WIDTH_MIN;
 	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
 	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
-
-	//// Demonstrate the various window flags. Typically you would just use the default!
-	//static bool no_titlebar = false;
-	//static bool no_scrollbar = false;
-	//static bool no_menu = false;
-	//static bool no_move = false;
-	//static bool no_resize = false;
-	//static bool no_collapse = false;
-	//static bool no_nav = false;
-	//static bool no_background = false;
-	//static bool no_bring_to_front = false;
-	//static bool no_docking = false;
-
-	////ImGuiWindowFlags window_flags = false;
-	//if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
-	//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-	//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-	//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-	//if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-	//if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-	//if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-	//if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-	//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
 
 	//--
 
