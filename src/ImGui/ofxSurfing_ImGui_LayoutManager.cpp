@@ -84,9 +84,6 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED: // -> guiManager.begin(); it's bypassed internally then can be remain uncommented.
 		break;
-
-	default:
-		break;
 	}
 
 	//--
@@ -1016,6 +1013,17 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 }
 
 //--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p)
+{
+	if (!p.get()) return false;
+
+	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
+	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
+
+	return beginWindow(name.c_str(), (bool*)&p.get(), fg);
+}
+
+//--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
 {
 	if (!p.get()) return false;
@@ -1026,8 +1034,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	//TODO: must be moved to special windows?
-	//if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//TODO: 
+	
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
 	//if (bReset_Window) {
@@ -1037,43 +1045,24 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 
 	//--
 
-	//TODO:
-	
-	// reset unique names
+	// Reset unique names
+	// This is to handle the widgets ID to avoid repeat an used name, avoiding collides between them.
 
 	resetUniqueNames();
 
+	//TODO:
 	//resetIDs();
 	//widgetsManager.resetUniqueNames();
 
 	//--
 
-	//static bool no_close = true;
-	//if (no_close) p_open = NULL; // Don't pass our bool* to Begin
-
-	// force
-	//window_flags |= ImGuiWindowFlags_NoDecoration;
-
-	// bAutoResize mode
-	//static bool bAutoResize = true;
-
-	// minimal sizes
-	//float ww = PANEL_WIDGETS_WIDTH_MIN;
-	//float hh = PANEL_WIDGETS_HEIGHT_MIN;
-	//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh));
+	IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 
 	//--
 
-	//// We specify a default position/size in case there's no data in the .ini file.
-	//// We only do it to make the demo applications a little more welcoming, but typically this isn't required.
-	//const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
-	//ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x + 650, main_viewport->WorkPos.y + 20), ImGuiCond_FirstUseEver);
-	//ImGui::SetNextWindowSize(ImVec2(550, 680), ImGuiCond_FirstUseEver);
-
-	// Main body of the Demo window starts here.
-
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
 
+	//TODO:
 	//if (!b)
 	//{
 	//	//// Early out if the window is collapsed, as an optimization.
@@ -1091,9 +1080,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 		// Set default font
 		setDefaultFont();
 	}
-
-	// Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
-	//ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
 	//currWindow++;
 
@@ -1139,7 +1125,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
-	//if (windowsAtributes[index].bPoweredWindow.get())
+	//if (windowsAtributes[index].bSpecialWindow.get())
 	//{
 	//	if (windowsAtributes[index].bAutoResize.get()) {
 	//		flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -1180,7 +1166,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	//-
 
-	//if (windowsAtributes[_currWindowsSpecial].bPoweredWindow.get())
+	//if (windowsAtributes[_currWindowsSpecial].bSpecialWindow.get())
 	//{
 	//	drawAdvancedControls();
 	//}
