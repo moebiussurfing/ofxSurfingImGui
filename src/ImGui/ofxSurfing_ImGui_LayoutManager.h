@@ -223,6 +223,8 @@ public:
 			ofLogNotice(__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
+		ImGui::Spacing();
+
 		return b;
 	}
 
@@ -384,7 +386,7 @@ public:
 	////TODO:
 	////https://github.com/ocornut/imgui/issues/5287
 	////--------------------------------------------------------------
-	//void doAlignWindows()
+	//void doAlignWindowsOnce()
 	//{
 	//	ofLogNotice(__FUNCTION__);
 
@@ -448,6 +450,7 @@ public:
 
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, ofParameter<bool> p); //  to change the name, and not use the param name.
+	bool beginWindow(std::string name, ofParameter<bool> p, ImGuiWindowFlags window_flags);
 	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
@@ -1405,6 +1408,7 @@ public:
 public:
 
 	ofParameter<bool> bMenu{ "Menu", false };
+	ofParameter <bool> bLinkWindows{ "Link Windows", true };//align windows engine
 
 private:
 
@@ -1417,6 +1421,7 @@ private:
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false }; // Can't be changed on runtime. cant include into settings
 	ofParameter<bool> bSolo{ "Solo", false };
+
 
 	ofParameter<bool> bDocking{ "bDocking", false};
 	//ofParameter<bool> bDocking{ "bDocking", true };

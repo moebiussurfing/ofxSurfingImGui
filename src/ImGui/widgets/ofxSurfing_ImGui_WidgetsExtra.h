@@ -231,6 +231,8 @@ namespace ofxImGuiSurfing
 	//inline bool AddMatrixClickerLabels(ofParameter<int>& _index, vector<char *> &labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
 	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
 	{
+		ImGui::Spacing();
+
 		bool cChanged = false;
 
 		if (sizey == -1)
@@ -372,6 +374,8 @@ namespace ofxImGuiSurfing
 		ImGui::Spacing();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+
+		ImGui::Spacing();
 
 		return cChanged;
 	}

@@ -22,8 +22,9 @@ BUGS:
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-#include "imgui_internal.h"
 
+#include "imgui_internal.h"
+#define IMGUI_DEFINE_MATH_OPERATORS
 //--------------------------------------------------------------
 
 // This header includes the main classes: 

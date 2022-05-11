@@ -7,6 +7,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
 	params_Advanced.add(bAutoResize);
+	params_Advanced.add(bLinkWindows);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
 	params_Advanced.add(bLockMove);
@@ -1024,6 +1025,14 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p
 }
 
 //--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p, ImGuiWindowFlags window_flags)
+{
+	if (!p.get()) return false;
+
+	return beginWindow(name.c_str(), (bool*)&p.get(), window_flags);
+}
+
+//--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
 {
 	if (!p.get()) return false;
@@ -1056,7 +1065,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 
 	//--
 
-	IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+	//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+	//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL;
 
 	//--
 
