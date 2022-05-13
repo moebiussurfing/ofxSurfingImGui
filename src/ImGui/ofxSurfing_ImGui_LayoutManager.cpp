@@ -1040,13 +1040,14 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 	return beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
 }
 
+//this is the main beginWindow. all above methods call this one!
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	//TODO: 
-	
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
+	//TODO: 
 	//if (bReset_Window) {
 	//	bReset_Window = false;
 	//	resetWindowImGui(false, true);
@@ -1059,10 +1060,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 
 	resetUniqueNames();
 
-	//TODO:
-	//resetIDs();
-	//widgetsManager.resetUniqueNames();
-
 	//--
 
 	//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
@@ -1072,16 +1069,15 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
 
-	//TODO:
-	//if (!b)
-	//{
-	//	//// Early out if the window is collapsed, as an optimization.
-	//	//ImGui::End();
-	//	//return;
-	//}
+	// Early out if the window is collapsed, as an optimization.
+	if (!b)
+	{
+		ImGui::End();
+		return false;
+	}
 
 	// Refresh layout
-	widgetsManager.refreshLayout(); // calculate sizes realted to window shape/size
+	widgetsManager.refreshLayout(); // calculate sizes related to window shape/size
 
 	// When we are instantiating ImGui externally, not inside this addon,
 	// we don't handle the font and theme.
@@ -1091,6 +1087,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 		setDefaultFont();
 	}
 
+	//TODO: workflow for API / special windows engine too
 	//currWindow++;
 
 	return b;

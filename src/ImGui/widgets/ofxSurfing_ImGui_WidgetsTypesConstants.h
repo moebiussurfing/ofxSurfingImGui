@@ -213,10 +213,10 @@ namespace ofxImGuiSurfing
 	// A. Relative to panel width
 	// less than threshold will make half window width
 
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH \
+#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
 
-#define IMGUI_SUGAR__SLIDER_WIDTH_POP \
+#define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 #endif
@@ -230,8 +230,8 @@ namespace ofxImGuiSurfing
 	//// B. Using an absolute size
 
 	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
-	//#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-	//#define IMGUI_SUGAR__SLIDER_WIDTH_POP ImGui::PopItemWidth();
+	//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
+	//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH ImGui::PopItemWidth();
 
 	//--
 
@@ -239,8 +239,8 @@ namespace ofxImGuiSurfing
 
 	// C. To bypass and do nothing.
 
-#define IMGUI_SUGAR__SLIDER_WIDTH_PUSH ;
-#define IMGUI_SUGAR__SLIDER_WIDTH_POP ;
+#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ;
+#define IMGUI_SUGAR__WIDGETS_POP_WIDTH ;
 
 #endif
 

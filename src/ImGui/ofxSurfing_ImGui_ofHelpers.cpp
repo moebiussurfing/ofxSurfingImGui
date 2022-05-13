@@ -208,7 +208,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
-			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 			ImGui::Dummy(ImVec2(0, 1));
 			//ImGui::Spacing();
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
@@ -218,10 +218,10 @@ namespace ofxImGuiSurfing
 			{
 				parameter.set(tmpRef);
 
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
 	}
@@ -243,7 +243,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
-			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 			ImGui::Dummy(ImVec2(0, 1));
 			//ImGui::Spacing();
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
@@ -254,10 +254,10 @@ namespace ofxImGuiSurfing
 			{
 				parameter.set(tmpRef);
 
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
 	}
@@ -279,7 +279,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bchanged = false;
-			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 			//ImGui::Spacing();
 			ImGui::Dummy(ImVec2(0, 1));
 			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
@@ -291,10 +291,10 @@ namespace ofxImGuiSurfing
 			{
 				parameter.set(tmpRef);
 
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
 	}
@@ -307,16 +307,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::SliderFloat2((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -324,17 +324,17 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<ofVec3f>& parameter)
 	{
 		auto tmpRef = parameter.get();
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		if (ImGui::SliderFloat3((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -343,16 +343,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::SliderFloat4((parameter.getName().c_str()), tmpRef.getPtr(), parameter.getMin().x, parameter.getMax().x))
 		{
 			parameter.set(tmpRef);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -367,7 +367,7 @@ namespace ofxImGuiSurfing
 		float w = tmpRef.getWidth();
 		float h = tmpRef.getHeight();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		result |= ImGui::SliderFloat(((parameter.getName() + " x").c_str()), &x, parameter.getMin().x, parameter.getMax().x);
 		result |= ImGui::SliderFloat(((parameter.getName() + " y").c_str()), &y, parameter.getMin().y, parameter.getMax().y);
 		result |= ImGui::SliderFloat(((parameter.getName() + " w").c_str()), &w, parameter.getMin().width, parameter.getMax().width);
@@ -375,7 +375,7 @@ namespace ofxImGuiSurfing
 
 		if (result) parameter.set(ofRectangle(x, y, w, h));
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return result;
 	}
 
@@ -446,7 +446,7 @@ namespace ofxImGuiSurfing
 		strcpy(cString, tmpRef.c_str());
 		auto result = false;
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		if (multiline)
 		{
@@ -463,7 +463,7 @@ namespace ofxImGuiSurfing
 		}
 		delete[] cString;
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
 		return result;
 	}
@@ -576,16 +576,16 @@ namespace ofxImGuiSurfing
 	{
 		auto tmpRef = parameter.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, power))
 		{
 			parameter.set(tmpRef);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -596,17 +596,17 @@ namespace ofxImGuiSurfing
 		auto tmpRefMax = parameterMax.get();
 
 		auto uniqueName = name.c_str();
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::DragIntRange2(uniqueName, &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -616,17 +616,17 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::DragFloatRange2(name.c_str(), &tmpRefMin, &tmpRefMax, speed, parameterMin.getMin(), parameterMax.getMax()))
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -639,7 +639,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -654,10 +654,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -668,7 +668,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -688,10 +688,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 
@@ -702,7 +702,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpRefMin.x, &tmpRefMax.x, speed, parameterMin.getMin().x, parameterMax.getMax().x))
 		{
 			result |= true;
@@ -727,10 +727,10 @@ namespace ofxImGuiSurfing
 		{
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return true;
 		}
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return false;
 	}
 

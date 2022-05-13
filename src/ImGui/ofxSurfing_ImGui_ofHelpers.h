@@ -247,30 +247,30 @@ namespace ofxImGuiSurfing
 		// Float
 		if (info == typeid(float))
 		{
-			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 			{
 				parameter.set(tmpRef);
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
 
 		// Int
 		else if (info == typeid(int))
 		{
-			IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
 
-			IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
 
@@ -319,7 +319,7 @@ namespace ofxImGuiSurfing
 	{
 		auto result = false;
 		const auto& info = typeid(DataType);
-		IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		for (int i = 0; i < values.size(); ++i)
 		{
@@ -341,12 +341,12 @@ namespace ofxImGuiSurfing
 			{
 				if (info.name() == "" || info.name() == " ")
 					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
-				IMGUI_SUGAR__SLIDER_WIDTH_POP;
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return false;
 			}
 		}
 
-		IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		return result;
 	}
 

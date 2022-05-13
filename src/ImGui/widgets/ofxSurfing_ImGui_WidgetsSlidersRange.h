@@ -379,7 +379,7 @@ namespace ofxImGuiSurfing
 		auto tmpRefMin = parameterMin.get();
 		auto tmpRefMax = parameterMax.get();
 
-		if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		if (bfullsize) IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		ImGui::PushID(name.c_str());
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power, shape, bfullsize))
@@ -387,11 +387,11 @@ namespace ofxImGuiSurfing
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			if (bfullsize) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			ImGui::PopID();
 			return true;
 		}
-		if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		if (bfullsize) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		ImGui::PopID();
 		return false;
 	}
@@ -403,7 +403,7 @@ namespace ofxImGuiSurfing
 		float tmpRefMin = parameterMin.get();
 		float tmpRefMax = parameterMax.get();
 
-		if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+		if (bfullsize) IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 		ImGui::PushID(name.c_str());
 
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power))
@@ -411,11 +411,11 @@ namespace ofxImGuiSurfing
 			parameterMin.set(tmpRefMin);
 			parameterMax.set(tmpRefMax);
 
-			if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_POP;
+			if (bfullsize) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			ImGui::PopID();
 			return true;
 		}
-		if (bfullsize) IMGUI_SUGAR__SLIDER_WIDTH_POP;
+		if (bfullsize) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 		ImGui::PopID();
 		return false;
 	}

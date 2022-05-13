@@ -716,26 +716,26 @@ namespace ofxImGuiSurfing
 					case OFX_IM_DEFAULT:
 					case OFX_IM_TEXT_DISPLAY:
 					{
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::Text(tmpRef.c_str());
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
 					case OFX_IM_TEXT_INPUT:
 					{
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::Text(tmpRef.c_str());
 						//ofxImGuiSurfing::AddParameter(p);//cant be included?
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
 					case OFX_IM_TEXT_BIG:
 					{
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::TextWrapped(tmpRef.c_str());
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 					}
@@ -762,13 +762,13 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
@@ -777,13 +777,13 @@ namespace ofxImGuiSurfing
 					{
 						std::string name = p.getName();
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -995,13 +995,13 @@ namespace ofxImGuiSurfing
 					{
 						const float speed = 0.01f;
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -1078,13 +1078,13 @@ namespace ofxImGuiSurfing
 					case OFX_IM_INACTIVE:
 					{
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
@@ -1092,13 +1092,13 @@ namespace ofxImGuiSurfing
 					case OFX_IM_SLIDER:
 					{
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -1274,13 +1274,13 @@ namespace ofxImGuiSurfing
 					{
 						const float speed = 0.1;
 						bReturn = false;
-						IMGUI_SUGAR__SLIDER_WIDTH_PUSH;
+						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						IMGUI_SUGAR__SLIDER_WIDTH_POP;
+						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;

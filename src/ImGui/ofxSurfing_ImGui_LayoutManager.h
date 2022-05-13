@@ -381,7 +381,13 @@ public:
 
 public:
 
-	ImGuiContext* getContext() { return gui.getContext(); }
+	//ImGuiContext* getContext() { return gui.getContext(); }
+
+	ImGuiContext* getContext() { 
+		//ImGuiContext* context;
+		//ImGui::GetCurrentContext()
+		return ImGui::GetCurrentContext();
+	}
 
 	////TODO:
 	////https://github.com/ocornut/imgui/issues/5287
