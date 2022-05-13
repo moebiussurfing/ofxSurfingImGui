@@ -7,6 +7,8 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
+<BR>
+
 ## WORK IN PROGRESS!
 
 <details>
@@ -24,6 +26,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 ![gif](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif?raw=true "gif")  
   </p>
 </details>
+
+<BR>
 
 ## FEATURES 
 
@@ -56,18 +60,21 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 - A **Layout Presets Engine**.
 - Included my **Dark Theme**.
 
+<BR>
+
 ## DEPENDENCIES
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
-* **data.zip** assets like font files used in examples.
-
-* Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
 
   - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
     - Easy to update to future **NEW ImGui** versions.  
     - Multi context/instances: 
       you can use several windows from different add-ons without colliding. 
+
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
+* **data.zip** assets like font files used in examples.
+
+<BR>
 
 ## TESTED SYSTEMS
 - **Windows10** / **VS2017** / **OF ~0.11**
