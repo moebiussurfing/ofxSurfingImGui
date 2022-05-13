@@ -7,7 +7,21 @@ ofxSurfingImGui
 
 An **ImGui** Toolkit for **openFrameworks** projects.  
 
-![image](/docs/1_Widgets/1_Widgets_Sliders2.PNG?raw=true "image")  
+<details>
+  <summary>Screenshots</summary>
+  <p>
+
+#### Widgets & Layout Engine
+
+![image](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders2.PNG?raw=true "image")  
+
+![image](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders.PNG?raw=true "image")  
+
+#### Layout Presets Engine
+
+![gif](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif?raw=true "gif")  
+  </p>
+</details>
 
 Setup and **Layout Manager*, **ofParameter Helpers** and **ImGui Widgets** ported to **oF**, **Docking Helpers** with a **Layout Presets Engine**, and useful snippets.  
 
