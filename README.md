@@ -5,7 +5,7 @@ ofxSurfingImGui
 
 ## WORK IN PROGRESS!
 
-An [ImGui](https://github.com/ocornut/imgui) **Toolkit* for **openFrameworks** projects.  
+An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** projects.  
 
 #### NOTE
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
