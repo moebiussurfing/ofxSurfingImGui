@@ -25,15 +25,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
-## WHY?
-
-* Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
-
-  - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
-    - Easy to update to future **NEW ImGui** versions.  
-    - Multi context/instances: 
-      you can use several windows from different add-ons without colliding. 
-
 ## FEATURES 
 
 <details>
@@ -70,6 +61,13 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
 * **data.zip** assets like font files used in examples.
+
+* Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
+
+  - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
+    - Easy to update to future **NEW ImGui** versions.  
+    - Multi context/instances: 
+      you can use several windows from different add-ons without colliding. 
 
 ## TESTED SYSTEMS
 - **Windows10** / **VS2017** / **OF ~0.11**
