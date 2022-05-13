@@ -3,20 +3,14 @@
 
 TODO:
 
-+ position applies to 2nd window ?
+	+ fix make dockeable all windows on same space
+	+ fix multiple dock spaces that are colliding/one over another
+	+ fix viewport rectangle preview
 
-+ fix make dockeable all windows on same space
-+ fix multiple dock spaces that are colliding/one over another
-+ fix viewport rectangle preview
+	+ remake mode free and lockers simpler. a flag for each window
 
-+ remake mode free and lockers simpler. a flag for each window
-
-+ aspect ratio/fit modes for game viewport
-+ add help box
-
-+ auto size per window
-+ other window settings
-
+	+ aspect ratio/fit modes for game viewport
+	+ add help box
 
 */
 
@@ -59,6 +53,7 @@ TODO:
 #include "ofxSurfing_ImGui_WidgetsTypes.h"
 #include "ofxSurfing_Serializer.h"
 #include "ofxSurfing_ImGui_WindowsOrganizer.h"
+#include "TextBoxWidget.h"
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
@@ -107,7 +102,8 @@ public:
 	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
-	void draw(); // to manual draw...
+	//void draw(); // to manual draw...
+	void draw(ofEventArgs & args);
 
 	//--------------------------------------------------------------
 	void setup()//->We will use the most common use to avoid use any argument.
@@ -207,6 +203,8 @@ public:
 
 	//----
 
+	// More Widgets
+
 	// Combo list. 
 	// Selector index directly with an int ofParam
 	// without name label
@@ -230,24 +228,28 @@ public:
 
 	// Text with spacing
 	//--------------------------------------------------------------
-	void AddLabel(std::string label, bool bUppercase = true)
+	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		ImGui::TextWrapped(t.c_str());
-		ofxImGuiSurfing::AddSpacing();
-		//ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
-	void AddLabelBig(std::string label, bool bUppercase = true)
+	void AddLabelBig(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		ofxImGuiSurfing::AddSpacing();
-		//ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+	}
+
+	//--------------------------------------------------------------
+	void AddTooltip(std::string text, bool bEnabled = true)
+	{
+		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
 	//--
@@ -383,7 +385,7 @@ public:
 
 	//ImGuiContext* getContext() { return gui.getContext(); }
 
-	ImGuiContext* getContext() { 
+	ImGuiContext* getContext() {
 		//ImGuiContext* context;
 		//ImGui::GetCurrentContext()
 		return ImGui::GetCurrentContext();
@@ -1429,7 +1431,7 @@ private:
 	ofParameter<bool> bSolo{ "Solo", false };
 
 
-	ofParameter<bool> bDocking{ "bDocking", false};
+	ofParameter<bool> bDocking{ "bDocking", false };
 	//ofParameter<bool> bDocking{ "bDocking", true };
 
 public:
@@ -1535,6 +1537,14 @@ public:
 
 		ImGui::PopStyleColor(6);
 	}
+
+//--
+
+private:
+
+std::string helpInfo = "";
+TextBoxWidget textBoxWidget;
+
 };
 
 //--

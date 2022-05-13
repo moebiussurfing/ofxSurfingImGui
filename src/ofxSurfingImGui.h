@@ -11,7 +11,7 @@ TODO:
 BUGS:
 
 	+ fix windowsSpecial not drawing windows, when multiple instances?
-		+ it's mybe working on docking mode only?
+		+ it's maybe working on docking mode only?
 	+ docking overlaps sometimes on layout management
 
 */

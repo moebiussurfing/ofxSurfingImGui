@@ -5,6 +5,7 @@
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 {
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
+	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bLinkWindows);
@@ -42,6 +43,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 
 	ofRemoveListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
+	ofRemoveListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -218,7 +220,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startup()
 {
-bStartupCalled = true;
+	bStartupCalled = true;
 
 	//-
 
@@ -299,6 +301,40 @@ bStartupCalled = true;
 	//--
 
 	appLayoutIndex = appLayoutIndex;
+
+	//--
+
+	// Help Text Box
+
+	helpInfo += "ofxSurfingImGui \n"; helpInfo += "\n";
+	helpInfo += "Double click this help box to allow move it! \n";
+	helpInfo += "\n";
+	helpInfo += "H > HELP \n";
+	helpInfo += "\n";
+	helpInfo += "F1-F2-F3-F4 > LAYOUT PRESETS P1-P2-P3-P4 \n";
+	helpInfo += "\n";
+	helpInfo += "F5 > LAYOUTS WINDOW \n";
+	helpInfo += "F6 > PANELS WINDOW \n";
+	helpInfo += "\n";
+	helpInfo += "F9 > MINIMIZE \n";
+	helpInfo += "F7 > PANELS MANAGER \n";
+	helpInfo += "F8 > EXTRA \n";
+	helpInfo += "\n\n";
+	helpInfo += "HOW TO \n"; helpInfo += "\n";
+	helpInfo += "1. CLICK ON P1-P2-P3-P4 TO SET A LAYOUT PRESET. \n"; helpInfo += "\n";
+	helpInfo += "2. ENABLE OR HIDE THE PANELS YOU WANT VISIBLE FOR CURRENT PRESET. \n"; helpInfo += "\n";
+	helpInfo += "3. MOVE AND RESIZE THE PANELS. \n"; helpInfo += "\n";
+	helpInfo += "4. SET ANOTHER LAYOUT PRESET. \n"; helpInfo += "\n";
+	helpInfo += "- DISABLE MINIMIZE TOGGLES TO LOOK HIDDEN CONTROLS. "; helpInfo += "\n";
+	helpInfo += "- EXPLORE MORE DEEP INTO 'LAYOUT', 'PANELS' AND 'MANAGER' WINDOWS. "; helpInfo += "\n";
+	helpInfo += "- EACH LAYOUT PRESET CAN BE THINKED AS AN APP MODE OR ACTIVED SECTION. "; helpInfo += "\n";
+	helpInfo += "- WHEN NO PRESET IS ENABLED ALL PANELS WILL BE HIDDEN. "; helpInfo += "\n";
+	helpInfo += "- WHEN NO MINIMIZED, ON EXTRA ZONE, YOU CAN ENABLE MENU, LOG ON EACH PRESET. "; helpInfo += "\n";
+
+	textBoxWidget.setPath(path_Global + "HelpBox/");
+	textBoxWidget.setFontSize(7);
+	textBoxWidget.setup();
+	textBoxWidget.setText(helpInfo);
 
 	//--
 }
@@ -463,8 +499,18 @@ void ofxSurfing_ImGui_Manager::update() { // -> Not being used by default
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::draw() { // -> Not being used by default
+//void ofxSurfing_ImGui_Manager::draw() // -> Not being used by default
+void ofxSurfing_ImGui_Manager::draw(ofEventArgs & args)
+{
 	if (!bAutoDraw) if (customFont == nullptr) gui.draw();
+
+	//--
+
+	// Draw Help box
+	if (bHelp)
+	{
+		textBoxWidget.draw();
+	}
 }
 
 //--------------------------------------------------------------
@@ -603,9 +649,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 		{
 			drawAdvanced();
 		}
-	}
 
-	this->endWindow();
+		this->endWindow();
+	}
 }
 
 //--------------------------------------------------------------
@@ -1758,9 +1804,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			//ofxImGuiSurfing::AddToggleRoundedButton(bAutoResizePresets);
 			//ofxImGuiSurfing::AddToggleRoundedButton(bGui_LayoutsExtra);
 		}
-	}
 
-	this->endWindow();
+		this->endWindow();
+	}
 }
 
 //--------------------------------------------------------------
@@ -2153,7 +2199,8 @@ void ofxSurfing_ImGui_Manager::loadLayoutPresetGroup(std::string path)
 void ofxSurfing_ImGui_Manager::createLayoutPreset(std::string namePreset)
 {
 	std::string n;
-	int i = bLayoutPresets.size();
+	//int i = bLayoutPresets.size();
+	int i = bLayoutPresets.size() + 1;
 
 	if (namePreset == "-1") n = "P" + ofToString(i);
 	else n = namePreset;
@@ -2161,7 +2208,8 @@ void ofxSurfing_ImGui_Manager::createLayoutPreset(std::string namePreset)
 	ofParameter<bool> _b = ofParameter<bool>{ n, false };
 	bLayoutPresets.push_back(_b);
 	appLayoutIndex.setMax(bLayoutPresets.size() - 1);
-	params_LayoutPresetsStates.add(bLayoutPresets[i]);
+	params_LayoutPresetsStates.add(bLayoutPresets[i - 1]);
+	//params_LayoutPresetsStates.add(bLayoutPresets[i]);
 }
 
 //----
@@ -2407,7 +2455,6 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 	{
 		switch (key)
 		{
-
 			// Layout Presets
 
 		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
@@ -2422,14 +2469,30 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 			bGui_LayoutsPresets = !bGui_LayoutsPresets;
 		}
 
-		if (key == OF_KEY_F6) // Panels
+		else if (key == OF_KEY_F6) // Panels
 		{
 			bGui_LayoutsPanels = !bGui_LayoutsPanels;
 		}
 
-		else if (key == OF_KEY_F7) // Extra
+		else if (key == OF_KEY_F7) // Manager
+		{
+			bGui_LayoutsManager = !bGui_LayoutsManager;
+		}
+
+		else if (key == OF_KEY_F8) // Extra
 		{
 			bGui_LayoutsExtra = !bGui_LayoutsExtra;
+		}
+
+		else if (key == OF_KEY_F9) // Minimize
+		{
+			bMinimizePresets = !bMinimizePresets;
+		}
+
+		// Help 
+		else if (key == 'h')
+		{
+			bHelp = !bHelp;
 		}
 
 		//// Solo
@@ -2443,6 +2506,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		//{
 		//	bModeLock1 = !bModeLock1;
 		//}
+
 		//else if (key == 'L')
 		//{
 		//	bModeLockControls = !bModeLockControls;
