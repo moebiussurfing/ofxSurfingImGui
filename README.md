@@ -5,10 +5,9 @@ ofxSurfingImGui
 
 ## WORK IN PROGRESS!
 
-An **ImGui** Toolkit for **openFrameworks** projects.  
+An [ImGui](https://github.com/ocornut/imgui) **Toolkit* for **openFrameworks** projects.  
 
 #### NOTE
-
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
 <details>
@@ -37,9 +36,9 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 ## FEATURES
 
-* Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
+* Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
 
-  - Why a fork? 
+  - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
     - Easy to update to future **NEW ImGui** versions.  
     - Multi context/instances: 
       you can use several windows from different add-ons without colliding.  
@@ -74,32 +73,21 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 <BR>
 
-<details>
-  <summary>Dependencies</summary>
-  <p>
-
+## Dependencies
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). AWESOME fork from @**Daandelange**  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). For examples only. 
+**data.zip** folder with some assets like font files that we use in the examples.  
 
-**data.zip** folder contains some assets like font files that we use in the examples.  
-  </p>
-</details>
-
-<details>
-  <summary>Tested Systems</summary>
-  <p>
-
+## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
-  </p>
-</details>
 
 ## Author
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
 ### Thanks
-_All source snippets from other authors are linked into header files. Thanks!_
+_All source snippets and widgets from other authors are linked into header files. Thanks!_
 
 ### License
 **MIT License**
