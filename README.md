@@ -56,6 +56,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
+<BR>
+
 - Setup and **Layout Manager**.
 - Useful snippets to speed up the layout process.  
 - **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
