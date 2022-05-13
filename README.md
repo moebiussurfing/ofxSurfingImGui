@@ -11,7 +11,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
 <details>
-  <summary>Screenshots</summary>
+  <summary>SCREENSHOTS</summary>
   <p>
 
 #### Widgets & Layout Engine
