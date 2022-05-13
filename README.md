@@ -7,8 +7,6 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
-<BR>
-
 ## WORK IN PROGRESS!
 
 <details>
@@ -27,9 +25,14 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
-<BR>
-
 ## FEATURES 
+
+- Setup and **Layout Manager**.
+- Useful snippets to speed up the layout process.  
+- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
+- **Docking Helpers**.
+- A **Layout Presets Engine**.
+- Included my **Dark Theme**.
 
 <details>
   <summary>More ImGui Widgets</summary>
@@ -51,16 +54,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
-<BR>
-
-- Setup and **Layout Manager**.
-- Useful snippets to speed up the layout process.  
-- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
-- **Docking Helpers**.
-- A **Layout Presets Engine**.
-- Included my **Dark Theme**.
-
-<BR>
 
 ## DEPENDENCIES
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
@@ -72,9 +65,7 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
-* **data.zip** assets like font files used in examples.
-
-<BR>
+* `data.zip` assets like font files used in examples.
 
 ## TESTED SYSTEMS
 - **Windows10** / **VS2017** / **OF ~0.11**
@@ -83,8 +74,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
-### THANKS
+## THANKS
 _All source snippets and widgets from other authors are linked into header files. Thanks!_
 
-### LICENSE
+## LICENSE
 **MIT License**
