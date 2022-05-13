@@ -3,12 +3,12 @@ ofxSurfingImGui
 
 ## Overview
 
-## WORK IN PROGRESS!
-
 An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** projects.  
 
 #### NOTE
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
+
+## WORK IN PROGRESS!
 
 <details>
   <summary>SCREENSHOTS</summary>
@@ -27,22 +27,20 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 </details>
 
 ## WHY?
-
 - Setup and **Layout Manager**.
+- Useful snippets to speed up the layout process.  
 - **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
 - **Docking Helpers**.
 - A **Layout Presets Engine**.
-- Useful snippets to speed up the layout process.  
-
-## FEATURES
 
 * Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
 
   - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
     - Easy to update to future **NEW ImGui** versions.  
     - Multi context/instances: 
-      you can use several windows from different add-ons without colliding.  
+      you can use several windows from different add-ons without colliding. 
 
+## FEATURES 
 <details>
   <summary>More ImGui Widgets</summary>
   <p>
@@ -63,21 +61,19 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
-<BR>
+- **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
 
-* **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
+- **Layout Presets Engine with Docking**. Easy GUI App sections manager.
 
-* **Layout Presets Engine with Docking**. Easy GUI App sections manager.
-
-* Included my **Dark Theme**.
+- Included my **Dark Theme**.
 
 <BR>
 
 ## Dependencies
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/). AWESOME fork from @**Daandelange**  
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). For examples only. 
-**data.zip** folder with some assets like font files that we use in the examples.  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
+* **data.zip** assets like font files used in examples.
 
 ## Tested Systems
 - **Windows10** / **VS2017** / **OF ~0.11**
