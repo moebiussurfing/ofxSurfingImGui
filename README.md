@@ -1,11 +1,10 @@
 ofxSurfingImGui
 =============================
 
-## Overview
+## OVERVIEW
 
 An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** projects.  
 
-#### NOTE
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
 ## WORK IN PROGRESS!
@@ -27,11 +26,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 </details>
 
 ## WHY?
-- Setup and **Layout Manager**.
-- Useful snippets to speed up the layout process.  
-- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
-- **Docking Helpers**.
-- A **Layout Presets Engine**.
 
 * Requires the _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
 
@@ -41,6 +35,7 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
       you can use several windows from different add-ons without colliding. 
 
 ## FEATURES 
+
 <details>
   <summary>More ImGui Widgets</summary>
   <p>
@@ -61,29 +56,28 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
-- **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
-
-- **Layout Presets Engine with Docking**. Easy GUI App sections manager.
-
+- Setup and **Layout Manager**.
+- Useful snippets to speed up the layout process.  
+- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
+- **Docking Helpers**.
+- A **Layout Presets Engine**.
 - Included my **Dark Theme**.
 
-<BR>
-
-## Dependencies
+## DEPENDENCIES
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
 * **data.zip** assets like font files used in examples.
 
-## Tested Systems
+## TESTED SYSTEMS
 - **Windows10** / **VS2017** / **OF ~0.11**
 
-## Author
+## AUTHOR
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
-### Thanks
+### THANKS
 _All source snippets and widgets from other authors are linked into header files. Thanks!_
 
-### License
+### LICENSE
 **MIT License**
