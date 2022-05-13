@@ -7,7 +7,7 @@ ofxSurfingImGui
 
 An **ImGui** Toolkit for **openFrameworks** projects.  
 
-### NOTE:
+#### NOTE
 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
@@ -64,6 +64,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
+<BR>
+
 * **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
 
 * **Layout Presets Engine with Docking**. Easy GUI App sections manager.
@@ -76,9 +78,9 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   <summary>Dependencies</summary>
   <p>
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/) / AWESOME FORK from @**Daandelange**  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). AWESOME fork from @**Daandelange**  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / For examples only. 
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). For examples only. 
 
 **data.zip** folder contains some assets like font files that we use in the examples.  
   </p>
