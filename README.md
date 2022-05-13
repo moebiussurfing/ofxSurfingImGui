@@ -7,6 +7,10 @@ ofxSurfingImGui
 
 An **ImGui** Toolkit for **openFrameworks** projects.  
 
+### NOTE:
+
+Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
+
 <details>
   <summary>Screenshots</summary>
   <p>
@@ -30,10 +34,6 @@ An **ImGui** Toolkit for **openFrameworks** projects.
 - **Docking Helpers**.
 - A **Layout Presets Engine**.
 - Useful snippets to speed up the layout process.  
-
-### NOTE:
-
-Some examples and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
 ## FEATURES
 
