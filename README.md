@@ -23,7 +23,13 @@ An **ImGui** Toolkit for **openFrameworks** projects.
   </p>
 </details>
 
-Setup and **Layout Manager*, **ofParameter Helpers** and **ImGui Widgets** ported to **oF**, **Docking Helpers** with a **Layout Presets Engine**, and useful snippets.  
+## WHY?
+
+- Setup and **Layout Manager**.
+- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
+- **Docking Helpers**.
+- A **Layout Presets Engine**.
+- Useful snippets to speed up the layout process.  
 
 ### NOTE:
 
@@ -33,12 +39,15 @@ Some examples and testing projects are now moved to [ofxSurfingImGuiExtra](https
 
 * Requires the _AWESOME_ @**Daandelange**'s [ofxImGui](https://github.com/Daandelange/ofxImGui/) fork: 
 
-  - Why? 
+  - Why a fork? 
     - Easy to update to future **NEW ImGui** versions.  
     - Multi context/instances: 
       you can use several windows from different add-ons without colliding.  
 
-* **Some ImGui Widgets**: 
+<details>
+  <summary>More ImGui Widgets</summary>
+  <p>
+
   - Big Toggles and Buttons
   - Vertical and Horizontal Sliders
   - Range Sliders
@@ -52,6 +61,8 @@ Some examples and testing projects are now moved to [ofxSurfingImGuiExtra](https
   - Files Browser
   - Curve Editors
   - Mouse Wheel control
+  </p>
+</details>
 
 * **Layout Manager** to speed up **windows creation** and responsive _auto-fit-widgets-width-to-window_ sizes.
 
