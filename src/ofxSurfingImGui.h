@@ -49,6 +49,12 @@ guiManager.
 
 #include "imgui_internal.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
+
+//--
+
+//TODO:
+//namespace ofxSurfingImGui = ofxImGuiSurfing;
+
 //--------------------------------------------------------------
 
 // This header includes the main classes: 
