@@ -599,6 +599,11 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_BUTTON:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 1.25f);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
 					case OFX_IM_BUTTON_BIG:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
@@ -614,8 +619,15 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+						//--
+
 					case OFX_IM_TOGGLE_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -633,6 +645,8 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 4);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
+
+						//-
 
 					case OFX_IM_TOGGLE_SMALL_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
@@ -654,8 +668,15 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+						//-
+
 					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h* 1.25f, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -673,6 +694,8 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 4, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
+
+						//--
 
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.1625f * _h, 0.75f * _h), true);
@@ -716,28 +739,45 @@ namespace ofxImGuiSurfing
 					case OFX_IM_DEFAULT:
 					case OFX_IM_TEXT_DISPLAY:
 					{
-						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::Text(tmpRef.c_str());
-						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
 					case OFX_IM_TEXT_INPUT:
 					{
-						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::Text(tmpRef.c_str());
 						//ofxImGuiSurfing::AddParameter(p);//cant be included?
-						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 
 					case OFX_IM_TEXT_BIG:
 					{
-						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::TextWrapped(tmpRef.c_str());
-						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
+
+					//TODO: guiManager fonts are not available on this scope!
+					//case OFX_IM_LABEL:
+					//{
+					//	//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+					//	AddLabel(p);
+					//	//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+					//}
+					//break;
+					//case OFX_IM_LABEL_BIG:
+					//{
+					//	//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+					//	AddLabelBig(p);
+					//	//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+					//}
+					//break;
+
 					}
 				}
 				uniqueName.pop();
@@ -792,13 +832,12 @@ namespace ofxImGuiSurfing
 
 					// H Slider
 
-					//?? fails
 					// mini
 
 					case OFX_IM_HSLIDER_MINI:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -806,7 +845,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_MINI_NO_LABELS:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -814,7 +853,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_MINI_NO_NAME:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -822,7 +861,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_MINI_NO_NUMBER:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -866,7 +905,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -874,7 +913,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -882,7 +921,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_NAME:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -890,7 +929,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
 					{
 						std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, true));
 						if (bMouseWheel) if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
@@ -1031,27 +1070,49 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
+					//-- 
+
+					//TODO:
+					case OFX_IM_COMBO_MULTI:
+					{
+						float pad = ImGui::GetStyle().FramePadding.x;
+
+						bReturn |= (ofxImGuiSurfing::AddDragFloatSlider(p));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+
+						bReturn |= ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww * 0.25f - pad, _ww * 0.75f), true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						ImGui::SameLine();
+						bReturn |= (ofxImGuiSurfing::AddKnob(p, false, _ww * 0.75f));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+
+						bReturn |= ofxImGuiSurfing::AddStepperFloat(p);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+
 					//--
 
 					// Stepper
 
 					case OFX_IM_STEPPER:
 					{
-						const float step = 0.001f;
-						const float stepFast = 0.1f;
-						auto tmpRef = p.get();
-
-						bReturn = false;
-
-						IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-						if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
-						{
-							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-							p.set(tmpRef);
-							bReturn = true;
-						}
-						IMGUI_SUGAR__STEPPER_WIDTH_POP;
+						bReturn = AddStepperFloat(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+
+						//const float step = 0.001f;
+						//const float stepFast = 0.1f;
+						//auto tmpRef = p.get();
+						//bReturn = false;
+						//IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+						//if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
+						//{
+						//	tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+						//	p.set(tmpRef);
+						//	bReturn = true;
+						//}
+						//IMGUI_SUGAR__STEPPER_WIDTH_POP;
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 					}
@@ -1312,21 +1373,22 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_STEPPER:
 					{
-						const int step = 1;
-						const int stepFast = 5;
-						auto tmpRef = p.get();
-
-						bReturn = false;
-
-						IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-						if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
-						{
-							tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-							p.set(tmpRef);
-							bReturn = true;
-						}
-						IMGUI_SUGAR__STEPPER_WIDTH_POP;
+						bReturn = AddStepperInt(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+
+						//const int step = 1;
+						//const int stepFast = 5;
+						//auto tmpRef = p.get();
+						//bReturn = false;
+						//IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+						//if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
+						//{
+						//	tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+						//	p.set(tmpRef);
+						//	bReturn = true;
+						//}
+						//IMGUI_SUGAR__STEPPER_WIDTH_POP;
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
 
@@ -1618,6 +1680,9 @@ namespace ofxImGuiSurfing
 									ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
 								}
 							}
+							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_WINDOWED)
+							//{
+							//}
 						}
 
 						//-
@@ -1815,7 +1880,7 @@ namespace ofxImGuiSurfing
 					//if (binclude)
 					{
 						//--
-						 
+
 						// Multidim params vec2/vec3/vec4
 
 #if OF_VERSION_MINOR >= 10
@@ -2055,7 +2120,7 @@ namespace ofxImGuiSurfing
 							(
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-							{
+						{
 							// Do not requires closing/pop
 						}
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)

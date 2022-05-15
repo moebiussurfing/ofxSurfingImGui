@@ -54,7 +54,7 @@ namespace ofxImGuiSurfing
 		}
 
 		// Unknown types
-		else { 
+		else {
 			bUnknown = true;
 			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
 			return;
@@ -200,13 +200,12 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	bool AddStepper(ofParameter<int>& parameter, int step = 1, int stepFast = 100);
+	bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
+	bool AddStepper(ofParameter<float> & parameter, float step = -1, float stepFast = -1);
 
 	//--------------------------------------------------------------
-	inline bool AddIntStepped(ofParameter<int>& parameter)
+	inline bool AddStepperInt(ofParameter<int>& parameter)
 	{
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-
 		bool bChanged = false;
 		auto tmpRefi = parameter.get();
 		const ImU32 u32_one = 1;
@@ -215,6 +214,8 @@ namespace ofxImGuiSurfing
 		string name = parameter.getName();
 		string n = "##STEPPERint" + name;// +ofToString(1);
 		ImGui::PushID(n.c_str());
+
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
 		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 		{
@@ -229,6 +230,33 @@ namespace ofxImGuiSurfing
 		IMGUI_SUGAR__STEPPER_WIDTH_POP;
 
 		return bChanged;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddStepperFloat(ofParameter<float>& p)
+	{
+		float step = (p.getMax() - p.getMin()) / 100.f;
+		float stepFast = 100.f * step;
+
+		auto tmpRef = p.get();
+		bool bReturn = false;
+
+		string name = p.getName();
+		string n = "##STEPPERfloat" + name;// +ofToString(1);
+		ImGui::PushID(n.c_str());
+
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
+		{
+			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+			p.set(tmpRef);
+			bReturn = true;
+		}
+		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+
+		ImGui::PopID();
+
+		return bReturn;
 	}
 
 	//----

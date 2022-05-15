@@ -2490,9 +2490,15 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		}
 
 		// Help 
-		else if (key == 'h')
+		else if (key == 'H')
 		{
 			bHelp = !bHelp;
+		}
+
+		// Help 
+		else if (key == 'D')
+		{
+			bDebug= !bDebug;
 		}
 
 		//// Solo

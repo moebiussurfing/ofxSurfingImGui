@@ -521,8 +521,8 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 
 		auto uniqueName = (("##COMBO" + parameter.getName()).c_str());
-
 		ImGui::PushID(uniqueName);
+
 		if (ImGui::BeginCombo((parameter.getName().c_str()), labels.at(parameter.get()).c_str()))
 		{
 			for (size_t i = 0; i < labels.size(); ++i)
@@ -541,6 +541,7 @@ namespace ofxImGuiSurfing
 
 			ImGui::EndCombo();
 		}
+
 		ImGui::PopID();
 
 		if (result)
@@ -556,20 +557,81 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool AddStepper(ofParameter<int>& parameter, int step, int stepFast)
 	{
+		if (step == -1 || stepFast == -1) {
+			step = (parameter.getMax() - parameter.getMin()) / 100.f;
+			stepFast = (int)100.f * step;
+		}
+
 		auto tmpRef = parameter.get();
 
+		auto uniqueName = (("##StepperInt" + parameter.getName()).c_str());
+		ImGui::PushID(uniqueName);
+
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+
+		bool bChanged = false;
 		if (ImGui::InputInt((parameter.getName().c_str()), &tmpRef, step, stepFast))
 		{
 			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
 
-			IMGUI_SUGAR__STEPPER_WIDTH_POP;
-			return true;
+			bChanged = true;
 		}
 
 		IMGUI_SUGAR__STEPPER_WIDTH_POP;
-		return false;
+		
+		ImGui::PopID();
+
+		return bChanged;
 	}
+
+	//--------------------------------------------------------------
+	bool AddStepper(ofParameter<float>& parameter, float step, float stepFast)
+	{
+		if (step == -1 || stepFast == -1) {
+			step = (parameter.getMax() - parameter.getMin()) / 100.f;
+			stepFast = 100.f * step;
+		}
+
+		auto tmpRef = parameter.get();
+
+		auto uniqueName = (("##StepperFloat" + parameter.getName()).c_str());
+		ImGui::PushID(uniqueName);
+
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+
+		bool bChanged = false;
+		if (ImGui::InputFloat((parameter.getName().c_str()), &tmpRef, step, stepFast))
+		{
+			parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
+
+			bChanged = true;
+		}
+
+		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+
+		ImGui::PopID();
+
+		return bChanged;
+	}
+
+	////TODO:
+	////--------------------------------------------------------------
+	//bool AddStepper(ofParameter<float>& parameter, float step = 0, float stepFast = 0)
+	//{
+	//	auto tmpRef = parameter.get();
+
+	//	IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+	//	if (ImGui::InputFloat((parameter.getName().c_str()), &tmpRef, step, stepFast))
+	//	{
+	//		parameter.set(ofClamp(tmpRef, parameter.getMin(), parameter.getMax()));
+
+	//		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+	//		return true;
+	//	}
+
+	//	IMGUI_SUGAR__STEPPER_WIDTH_POP;
+	//	return false;
+	//}
 
 	//--------------------------------------------------------------
 	bool AddSlider(ofParameter<float>& parameter, const char* format, float power)

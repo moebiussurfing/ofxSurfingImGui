@@ -116,7 +116,7 @@ private:
 	void keyPressed(ofKeyEventArgs &eventArgs);
 	void keyReleased(ofKeyEventArgs &eventArgs);
 
-	//-
+	//----
 
 private:
 
@@ -175,6 +175,96 @@ public:
 		widgetsManager.AddStyleGroup(name, type, flags);
 	}
 
+	//TODO:
+	//--------------------------------------------------------------
+	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiGroupStyle flags)
+	{
+		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
+		
+		//if (flags & ImGuiKnobFlags_ValueTooltip &&
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_Hidden)
+		{
+			//type = OFX_IM_GROUP_HIDDEN;
+			//widgetsManager.AddStyleGroup(group, type, flagst);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_NoHeader)
+		{
+			type = OFX_IM_GROUP_HIDDEN_HEADER;
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.AddStyleGroup(group, type, flagst);
+			return;
+		}
+
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+		}
+		
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE;
+			widgetsManager.AddStyleGroup(group, type, flagst);
+			return;
+		}
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE_EX;
+			widgetsManager.AddStyleGroup(group, type, flagst);
+			return;
+		}
+
+		widgetsManager.AddStyleGroup(group, type, flagst);
+	}
+
+	//--
+
+	//TODO:
+	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a group.
+	//--------------------------------------------------------------
+	void AddStyleGroupForBools(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_TOGGLE)
+	{
+		for (int i = 0; i < group.size(); i++)
+		{
+			ofAbstractParameter& ap = group[i];
+			if (ap.type() == typeid(ofParameter<bool>).name()) {
+				widgetsManager.AddStyle(ap, type);
+			}
+
+			//TODO: make it recursive
+			//else if (ap.type() == typeid(ofParameterGroup).name()) {
+			//	AddStyleGroupForBools(ap, type);
+			//}
+		}
+	}
+	//--------------------------------------------------------------
+	void AddStyleGroupForFloats(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_HSLIDER)
+	{
+		for (int i = 0; i < group.size(); i++)
+		{
+			ofAbstractParameter& ap = group[i];
+			if (ap.type() == typeid(ofParameter<float>).name()) {
+				widgetsManager.AddStyle(ap, type);
+			}
+		}
+	}
+	//--------------------------------------------------------------
+	void AddStyleGroupForInts(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_HSLIDER)
+	{
+		for (int i = 0; i < group.size(); i++)
+		{
+			ofAbstractParameter& ap = group[i];
+			if (ap.type() == typeid(ofParameter<int>).name()) {
+				widgetsManager.AddStyle(ap, type);
+			}
+		}
+	}
+
+	//--
+
 	//legacy
 	//--------------------------------------------------------------
 	void clearStyles()
@@ -201,7 +291,39 @@ public:
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
+	//--
+
+	//TODO: Autocreates a window for the group
+	//--------------------------------------------------------------
+	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	{
+		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		//if (this->beginWindow(group.getName()))
+		if (this->beginWindow((string)group.getName(), NULL, flags))
+		{
+			widgetsManager.AddGroup(group, flags, typeGroup);
+
+			this->endWindow();
+		}
+	}
+	//--------------------------------------------------------------
+	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	{
+		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		//if (this->beginWindow((string)group.getName(), _bGui, flags))
+		if (this->beginWindow((string)_bGui.getName(), _bGui, flags))
+		{
+			widgetsManager.AddGroup(group, flags, typeGroup);
+
+			this->endWindow();
+		}
+	}
+
+
 	//----
+
 
 	// More Widgets
 
@@ -233,7 +355,8 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		ImGui::TextWrapped(t.c_str());
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelBig(std::string label, bool bUppercase = true, bool bNoSpacing = false)
@@ -243,7 +366,8 @@ public:
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 
 	//--------------------------------------------------------------
@@ -252,7 +376,9 @@ public:
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
-	//--
+
+	//----
+
 
 	// To help API coherence
 	//--------------------------------------------------------------
@@ -316,7 +442,7 @@ public:
 		widgetsManager.resetUniqueNames(); // update sizes to current window shape
 	}
 
-	//-
+	//--
 
 	//--------------------------------------------------------------
 	void Indent()
@@ -332,7 +458,7 @@ public:
 		refreshLayout();
 	}
 
-	//-
+	//----
 
 public:
 
@@ -1538,12 +1664,12 @@ public:
 		ImGui::PopStyleColor(6);
 	}
 
-//--
+	//--
 
 private:
 
-std::string helpInfo = "";
-TextBoxWidget textBoxWidget;
+	std::string helpInfo = "";
+	TextBoxWidget textBoxWidget;
 
 };
 

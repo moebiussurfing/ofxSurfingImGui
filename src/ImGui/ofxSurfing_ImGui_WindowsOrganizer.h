@@ -708,7 +708,7 @@ namespace ofxImGuiSurfing
 						{
 							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
 							{
-								ofxImGuiSurfing::AddIntStepped(pad);
+								ofxImGuiSurfing::AddStepperInt(pad);
 								ofxImGuiSurfing::AddParameter(bHeaders);
 							}
 							ImGui::PopItemWidth();

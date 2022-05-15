@@ -6,6 +6,9 @@
 //#include "ofxSurfingImGui.h"
 //#include "ofxSurfing_ImGui_ofHelpers.h"
 
+#define OFX_IM_WIDGETS_RATIO_MINI 0.16f
+#define OFX_IM_WIDGETS_RATIO_SMALL 0.4f
+
 namespace ofxImGuiSurfing
 {
 	/*
@@ -34,7 +37,7 @@ namespace ofxImGuiSurfing
 	{
 		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
 		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there
-		OFX_IM_DISABLED,	// Make it invisble, preserve the void spacing
+		OFX_IM_DISABLED,	// Make it invisible, preserve the void spacing
 		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control
 		//TODO: could be an extra arg to allow different appearance for inactive types..
 
@@ -44,12 +47,14 @@ namespace ofxImGuiSurfing
 
 		// Button
 		OFX_IM_BUTTON_SMALL,
+		OFX_IM_BUTTON,
 		OFX_IM_BUTTON_BIG,
 		OFX_IM_BUTTON_BIG_XXL,
 		OFX_IM_BUTTON_BIG_XXXL,
 
 		// Toggle
-		OFX_IM_CHECKBOX,
+		OFX_IM_CHECKBOX, // ofxImGui standard
+		OFX_IM_TOGGLE,
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
@@ -57,12 +62,14 @@ namespace ofxImGuiSurfing
 
 		// Border
 		OFX_IM_TOGGLE_SMALL_BORDER,
+		OFX_IM_TOGGLE_BORDER,
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER,
 
 		// Blink border
 		OFX_IM_TOGGLE_SMALL_BORDER_BLINK,
+		OFX_IM_TOGGLE_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK,
@@ -94,10 +101,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
-		OFX_IM_HSLIDER_MINI, //TODO:
-		OFX_IM_HSLIDER_MINI_NO_NAME, //TODO:
-		OFX_IM_HSLIDER_MINI_NO_LABELS, //TODO:
-		OFX_IM_HSLIDER_MINI_NO_NUMBER, //TODO:
+		OFX_IM_HSLIDER_MINI, 
+		OFX_IM_HSLIDER_MINI_NO_NAME, 
+		OFX_IM_HSLIDER_MINI_NO_LABELS, 
+		OFX_IM_HSLIDER_MINI_NO_NUMBER, 
 
 		// Vertical
 		OFX_IM_VSLIDER,
@@ -109,10 +116,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
-		OFX_IM_KNOB,
-		OFX_IM_KNOB_TRAIL,
-		OFX_IM_KNOB_SMALL,//TODO:
-		OFX_IM_COMBO,//TODO: multiple controls for fine tweak: slider + drag + stepper
+		OFX_IM_KNOB,//fullwidth by default
+		OFX_IM_KNOB_TRAIL,//decorated
+		//OFX_IM_KNOB_SMALL,//TODO:
+		OFX_IM_COMBO_MULTI,//TODO: multiple controls for fine tweak: slider + drag + stepper
 
 		//-
 
@@ -120,6 +127,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TEXT_DISPLAY,
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_BIG,
+		//OFX_IM_LABEL,//big font not accessible here..
+		//OFX_IM_LABEL_BIG,
 
 		//-
 
@@ -145,16 +154,31 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO: to simplify the api
+	typedef int SurfingImGuiGroupStyle;
+	enum SurfingImGuiGroupStyle_ {
+		SurfingImGuiGroupStyle_None = 1 << 0,
+		SurfingImGuiGroupStyle_Collapsed = 1 << 1,
+		SurfingImGuiGroupStyle_NoHeader = 1 << 2,
+		SurfingImGuiGroupStyle_Hidden = 1 << 3,
+		SurfingImGuiGroupStyle_HeaderSmall = 1 << 4//uses ImGui tree without big header. just arrow
+		//SurfingImGuiGroupStyle_NoArrow = 1 << 5,
+	};
+
+
 	//--------------------------------------------------------------
 	enum SurfingImGuiTypesGroups
 	{
-		OFX_IM_GROUP_DEFAULT = 0,
+		OFX_IM_GROUP_DEFAULT = 0,// TODO: BUG: it's forced collapsed
 		OFX_IM_GROUP_COLLAPSED,
-		OFX_IM_GROUP_TREE_EX,
-		OFX_IM_GROUP_TREE,
+		OFX_IM_GROUP_TREE_EX, // TODO: can be collapsed or opened
+		OFX_IM_GROUP_TREE, // TODO: BUG: it's forced collapsed
 		OFX_IM_GROUP_SCROLLABLE,
 		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group. not working
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
+		
+		//OFX_IM_GROUP_WINDOWED, // creates a windows to populate into. Notice that must be a root group. can't be a nested! 
+		//guiMnager is not in scope here!
 
 		OFX_IM_GROUP_NUM_TYPES
 	};
@@ -173,6 +197,7 @@ namespace ofxImGuiSurfing
 		else if (i == 4) _groupInfo = "OFX_IM_GROUP_SCROLLABLE";
 		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
 		else if (i == 6) _groupInfo = "OFX_IM_GROUP_HIDDEN";
+		//else if (i == 7) _groupInfo = "OFX_IM_GROUP_WINDOWED";
 		else _groupInfo = "OFX_IM_GROUP UNKNOWN";
 
 		return _groupInfo;
@@ -252,7 +277,9 @@ namespace ofxImGuiSurfing
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
-#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 //#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
 //#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();

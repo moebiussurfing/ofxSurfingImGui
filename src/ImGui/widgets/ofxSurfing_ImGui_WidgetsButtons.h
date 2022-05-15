@@ -61,7 +61,6 @@ namespace ofxImGuiSurfing
 	}
 
 	//----
-	//-
 
 	// Mini Button and toggles for bool ofParams
 

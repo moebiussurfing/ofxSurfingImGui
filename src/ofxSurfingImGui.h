@@ -17,6 +17,30 @@ BUGS:
 */
 
 
+//--------------------------------------------------------------
+
+
+/*
+
+// 1. LAYOUT MANGER
+
+// .h
+#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
+ofxSurfing_ImGui_Manager guiManager;
+
+// .cpp
+// setup()
+guiManager.setup(); // ofxImGui is instantiated inside the class, then we can forgot declare ofxImGui here (ofApp scope).
+
+
+guiManager.
+
+*/
+
+
+//--------------------------------------------------------------
+
+
 #pragma once
 
 #include "ofMain.h"
@@ -168,24 +192,6 @@ using namespace ofxImGuiSurfing;
 	}
 
 	//--
-
-*/
-
-
-//--------------------------------------------------------------
-
-
-/*
-
-// 1. LAYOUT MANGER
-
-// .h
-#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
-ofxSurfing_ImGui_Manager guiManager;
-
-// .cpp
-// setup()
-guiManager.setup(); // ofxImGui is instantiated inside the class, then we can forgot declare ofxImGui here (ofApp scope).
 
 */
 
