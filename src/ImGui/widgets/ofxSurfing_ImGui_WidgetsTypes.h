@@ -483,6 +483,7 @@ namespace ofxImGuiSurfing
 				{
 					// Extra options
 					if (bSameLine) ImGui::SameLine();
+
 					if (spacing != -1)
 					{
 						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
@@ -493,20 +494,45 @@ namespace ofxImGuiSurfing
 				return false;
 			}
 
-			//-
+			//--
 
-			// If setted as hidden dont draw, but apply same line and spacing and return
+			//TODO:
+			// If setted as hidden don't draw, but apply same line and spacing and return!
+
 			else if (type == OFX_IM_DISABLED)
 			{
 				uniqueName.push();
 				{
 					// Extra options
 					if (bSameLine) ImGui::SameLine();
+
 					if (spacing != -1)
 					{
-						float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+						float h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
 						ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
 
+						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
+					}
+				}
+				uniqueName.pop();
+
+				return false;
+			}
+
+			//--
+
+			else if (type == OFX_IM_SPACING)
+			{
+				uniqueName.push();
+				{
+					// Extra options
+					if (bSameLine) ImGui::SameLine();
+
+					float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+
+					if (spacing != -1)
+					{
 						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 					}
 				}
@@ -533,15 +559,15 @@ namespace ofxImGuiSurfing
 
 			// Filter expected ofParam Types
 
-			bool isBool = ptype == typeid(ofParameter<bool>).name();
-			bool isFloat = ptype == typeid(ofParameter<float>).name();
-			bool isInt = ptype == typeid(ofParameter<int>).name();
-			bool isString = ptype == typeid(ofParameter<std::string>).name();
-			bool isColor = ptype == typeid(ofParameter<ofColor>).name();
-			bool isFloatColor = ptype == typeid(ofParameter<ofFloatColor>).name();
-			bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
-			bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
-			bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
+			const bool isBool = ptype == typeid(ofParameter<bool>).name();
+			const bool isFloat = ptype == typeid(ofParameter<float>).name();
+			const bool isInt = ptype == typeid(ofParameter<int>).name();
+			const bool isString = ptype == typeid(ofParameter<std::string>).name();
+			const bool isColor = ptype == typeid(ofParameter<ofColor>).name();
+			const bool isFloatColor = ptype == typeid(ofParameter<ofFloatColor>).name();
+			const bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
+			const bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
+			const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 
 			//TODO:
 			// is not called with groups here.. ?
@@ -621,13 +647,13 @@ namespace ofxImGuiSurfing
 
 						//--
 
-					case OFX_IM_TOGGLE_SMALL:
-						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
+					case OFX_IM_TOGGLE:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
-					case OFX_IM_TOGGLE:
-						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f);
+					case OFX_IM_TOGGLE_SMALL:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -648,13 +674,20 @@ namespace ofxImGuiSurfing
 
 						//-
 
-					case OFX_IM_TOGGLE_SMALL_BORDER:
-						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
+						// border
+
+					case OFX_IM_TOGGLE_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_BIG_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 2, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_SMALL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -670,13 +703,15 @@ namespace ofxImGuiSurfing
 
 						//-
 
-					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
-						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
+						// border blink
+
+					case OFX_IM_TOGGLE_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
-					case OFX_IM_TOGGLE_BORDER_BLINK:
-						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h* 1.25f, true, true);
+					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
@@ -696,6 +731,13 @@ namespace ofxImGuiSurfing
 						break;
 
 						//--
+
+						// rounded
+
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.5f * _h, 1.5f * (2 / 3.f) * _h));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
 
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.1625f * _h, 0.75f * _h), true);

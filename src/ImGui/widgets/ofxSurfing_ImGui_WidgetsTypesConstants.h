@@ -31,14 +31,15 @@ namespace ofxImGuiSurfing
 
 	*/
 
-
+	//These sizes are usually related to height! Because widgets widths are handled by the API args!
 	//--------------------------------------------------------------
 	enum SurfingImGuiTypes
 	{
 		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
-		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there
-		OFX_IM_DISABLED,	// Make it invisible, preserve the void spacing
-		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control
+		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there.
+		OFX_IM_DISABLED,	// Make it invisible, preserve the void spacing. it's a common height but could differs..
+		OFX_IM_SPACING,	// Make it invisible, preserve a custom (one standard line) spacing.
+		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control.
 		//TODO: could be an extra arg to allow different appearance for inactive types..
 
 		//-
@@ -75,6 +76,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK,
 
 		// Rounded
+		OFX_IM_TOGGLE_BUTTON_ROUNDED,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
@@ -116,9 +118,11 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
-		OFX_IM_KNOB,//fullwidth by default
+		
+		OFX_IM_KNOB,//notice that full width by default. too big!
 		OFX_IM_KNOB_TRAIL,//decorated
 		//OFX_IM_KNOB_SMALL,//TODO:
+
 		OFX_IM_COMBO_MULTI,//TODO: multiple controls for fine tweak: slider + drag + stepper
 
 		//-
@@ -155,8 +159,10 @@ namespace ofxImGuiSurfing
 	//--
 
 	//TODO: to simplify the api
+	// We can use one only flag argument and multiple possibilities at the same time are allowed.
 	typedef int SurfingImGuiGroupStyle;
-	enum SurfingImGuiGroupStyle_ {
+	enum SurfingImGuiGroupStyle_ 
+	{
 		SurfingImGuiGroupStyle_None = 1 << 0,
 		SurfingImGuiGroupStyle_Collapsed = 1 << 1,
 		SurfingImGuiGroupStyle_NoHeader = 1 << 2,
