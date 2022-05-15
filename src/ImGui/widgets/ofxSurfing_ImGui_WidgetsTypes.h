@@ -1637,6 +1637,7 @@ namespace ofxImGuiSurfing
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
 			bool bMustCloseTree = false; //TODO: -> add new
+			bool bMustDisableIndenting = false;
 
 			// Handle names/pushID's
 			// This is the root/first group
@@ -1676,7 +1677,9 @@ namespace ofxImGuiSurfing
 							{
 								bIsOpen = true; // not really closed but not rendered!
 								bMustCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
+								bMustDisableIndenting = true;
 							}
+
 							else if (
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
@@ -1688,6 +1691,7 @@ namespace ofxImGuiSurfing
 								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
 								bMustCloseTree = false; // we dont need to close tree!
 							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 							{
 								// workaround bc tree has no flags..
@@ -1697,11 +1701,13 @@ namespace ofxImGuiSurfing
 								bIsOpen = ImGui::TreeNode(group.getName().c_str());
 								bMustCloseTree = bIsOpen;
 							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 							{
 								bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
 								bMustCloseTree = bIsOpen;
 							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 							{
 								// A. Height variable to amount widgets..
@@ -1808,12 +1814,16 @@ namespace ofxImGuiSurfing
 							{
 								// Must skip contained params
 							}
+
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 							{
-								ImGui::Indent();
-								refreshLayout(); // ?
-								AddGroup(*parameterGroup, flags, typeGroup);
-								ImGui::Unindent();
+								if (!bMustDisableIndenting) ImGui::Indent();
+								{
+									refreshLayout(); // ?
+
+									AddGroup(*parameterGroup, flags, typeGroup);
+								}
+								if (!bMustDisableIndenting) ImGui::Unindent();
 							}
 
 							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT)
