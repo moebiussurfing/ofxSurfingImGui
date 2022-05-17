@@ -181,7 +181,7 @@ public:
 	{
 		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
-		
+
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_Hidden)
@@ -203,7 +203,7 @@ public:
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
-		
+
 		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
@@ -286,20 +286,74 @@ public:
 	// widgetsManager
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	//TODO:
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
-	//--
-
-	//TODO: Autocreates a window for the group
+	//TODO:
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	void AddGroup(ofParameterGroup& group, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	{
+		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
+
+		//if (flags & ImGuiKnobFlags_ValueTooltip &&
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_None)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.AddGroup(group, flagst, type);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_Hidden)
+		{
+			type = OFX_IM_GROUP_HIDDEN;
+			widgetsManager.AddGroup(group, flagst, type);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_NoHeader)
+		{
+			type = OFX_IM_GROUP_HIDDEN_HEADER;
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.AddGroup(group, flagst, type);
+			return;
+		}
+
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE;
+			widgetsManager.AddGroup(group, flagst, type);
+			return;
+		}
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE_EX;
+			widgetsManager.AddGroup(group, flagst, type);
+			return;
+		}
+
+		widgetsManager.AddGroup(group, flagst, type);
+	}
+
+	//----
+
+	//TODO: Auto creates a window for the group
+	//--------------------------------------------------------------
+	//void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		//if (this->beginWindow(group.getName()))
 		if (this->beginWindow((string)group.getName(), NULL, flags))
 		{
 			widgetsManager.AddGroup(group, flags, typeGroup);
@@ -308,7 +362,8 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	//void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -321,6 +376,35 @@ public:
 		}
 	}
 
+	//TODO: API update
+	//--------------------------------------------------------------
+	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	{
+		ImGuiWindowFlags f = ImGuiWindowFlags_None;
+		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		if (this->beginWindow((string)_bGui.getName(), _bGui, flags))
+		{
+			this->AddGroup(group, flags);
+			//widgetsManager.AddGroup(group, flags);
+
+			this->endWindow();
+		}
+	}
+	//--------------------------------------------------------------
+	void AddGroupWindowed(ofParameterGroup& group, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	{
+		ImGuiWindowFlags f = ImGuiWindowFlags_None;
+		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		if (this->beginWindow((string)group.getName(), NULL, f))
+		{
+			this->AddGroup(group, flags);
+			//widgetsManager.AddGroup(group, flags);
+
+			this->endWindow();
+		}
+	}
 
 	//----
 

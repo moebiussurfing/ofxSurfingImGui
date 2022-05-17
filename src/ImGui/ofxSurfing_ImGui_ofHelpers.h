@@ -128,20 +128,26 @@ namespace ofxImGuiSurfing
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddParameter(ofParameter<glm::ivec2>& parameter);
-	bool AddParameter(ofParameter<glm::ivec3>& parameter);
-	bool AddParameter(ofParameter<glm::ivec4>& parameter);
+	bool AddParameter(ofParameter<glm::ivec2>& parameter, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec3>& parameter, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec4>& parameter, bool bfoldered = false);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false); // split each arg to big sliders
-	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false);
-	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false);
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false);
 #endif
 
+	//TODO:
 	bool AddParameter(ofParameter<ofVec2f>& parameter);
 	bool AddParameter(ofParameter<ofVec3f>& parameter);
 	bool AddParameter(ofParameter<ofVec4f>& parameter);
+	
 	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha = true);
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha = true);
+
+	//TODO:
+	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha, ImGuiColorEditFlags flags);
+	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha, ImGuiColorEditFlags flags);
 
 	bool AddParameter(ofParameter<ofRectangle>& parameter);
 

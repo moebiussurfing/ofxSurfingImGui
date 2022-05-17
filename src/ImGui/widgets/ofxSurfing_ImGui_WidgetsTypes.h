@@ -568,6 +568,7 @@ namespace ofxImGuiSurfing
 			const bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
 			const bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
 			const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
+			const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
 
 			//TODO:
 			// is not called with groups here.. ?
@@ -734,26 +735,31 @@ namespace ofxImGuiSurfing
 
 						// rounded
 
+					case OFX_IM_TOGGLE_ROUNDED:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.5f * _h, 1.5f * (2 / 3.f) * _h));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_ROUNDED_MINI:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.1625f * _h, 0.75f * _h), true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_ROUNDED_SMALL:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
+					case OFX_IM_TOGGLE_ROUNDED_BIG:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
@@ -1468,6 +1474,19 @@ namespace ofxImGuiSurfing
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 
+					//TODO: must merge..
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
+						flags = ImGuiColorEditFlags_None;
+						flags |= ImGuiColorEditFlags_NoInputs;
+						flags |= ImGuiColorEditFlags_NoLabel;
+						flags |= ImGuiColorEditFlags_NoTooltip;
+						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+						ImGui::PopItemWidth();
+						ImGui::SameLine();
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					}
+
 					//TODO:
 					else if (type == OFX_IM_COLOR_NO_NAME) {
 						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
@@ -1506,6 +1525,19 @@ namespace ofxImGuiSurfing
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 
+					//TODO: must merge..
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
+						flags = ImGuiColorEditFlags_None;
+						flags |= ImGuiColorEditFlags_NoInputs;
+						flags |= ImGuiColorEditFlags_NoLabel;
+						flags |= ImGuiColorEditFlags_NoTooltip;
+						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
+						ImGui::PopItemWidth();
+						ImGui::SameLine();
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					}
+
 					//TODO:
 					else if (type == OFX_IM_COLOR_NO_NAME) {
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
@@ -1517,6 +1549,7 @@ namespace ofxImGuiSurfing
 					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+
 				}
 				uniqueName.pop();
 
@@ -1541,6 +1574,15 @@ namespace ofxImGuiSurfing
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 					}
 					break;
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
 					}
 				}
 				uniqueName.pop();
@@ -1561,6 +1603,15 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, true);
 					}
 					break;
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
 					}
 				}
 				uniqueName.pop();
@@ -1581,11 +1632,35 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, true);
 					}
 					break;
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+					}
+					break;
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
 					}
 				}
 				uniqueName.pop();
 
 				bDone = true;//vec4
+			}
+
+			//--
+
+			else if (isRectangle)
+			{
+				uniqueName.push();
+				{
+					ofParameter<ofRectangle> p = aparam.cast<ofRectangle>();
+
+					bReturn = ofxImGuiSurfing::AddParameter(p);
+				}
+				uniqueName.pop();
+
+				bDone = true;//rect
 			}
 
 
@@ -1670,90 +1745,88 @@ namespace ofxImGuiSurfing
 
 					if (!bMustHideGroup)
 					{
+						if (0) {}
+
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
 						{
-							if (0) {}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_HIDDEN_HEADER)
-							{
-								bIsOpen = true; // not really closed but not rendered!
-								bMustCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
-								bMustDisableIndenting = true;
-							}
-
-							else if (
-								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
-								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
-							{
-								// workaround
-								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
-
-								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-								bMustCloseTree = false; // we dont need to close tree!
-							}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
-							{
-								// workaround bc tree has no flags..
-								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
-
-								bIsOpen = ImGui::TreeNode(group.getName().c_str());
-								bMustCloseTree = bIsOpen;
-							}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
-							{
-								bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
-								bMustCloseTree = bIsOpen;
-							}
-
-							else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
-							{
-								// A. Height variable to amount widgets..
-								//auto& style = ImGui::GetStyle();
-								//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
-								//int h = 14;
-								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-								//int hhh = parameterGroup->size() * hratio * hh;
-
-								// B. Height hardcoded
-								int hhh = HEIGHT_SCROLL_GROUP;
-								bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-								bMustCloseTree = false;
-
-								if (bIsOpen)
-								{
-									ImGui::Indent();
-									ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
-								}
-							}
-							//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_WINDOWED)
-							//{
-							//}
+							bIsOpen = true; // not really closed but not rendered!
+							bMustCloseTree = false; // ? should depends of the tree type.. ? //TODO: important!
+							bMustDisableIndenting = true;
 						}
 
-						//-
-
-						// 2. Header already rendered
-
-						uniqueName.setOpen(bIsOpen); //TODO: ?
-
-						//-
-
-						// 4. To re calculate layout sizes after headers and indenting.
-
-						refreshLayout();
-
-						//-
-
-						// 5. Skip all nested groups and their params
-
-						if (!bIsOpen)
+						else if (
+							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+							typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
 						{
-							ImGui::PopID();
-							return;
+							// workaround
+							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
+							ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+							bMustCloseTree = false; // we dont need to close tree!
 						}
+
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
+						{
+							// workaround bc tree has no flags..
+							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
+							ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+
+							bIsOpen = ImGui::TreeNode(group.getName().c_str());
+							bMustCloseTree = bIsOpen;
+						}
+
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
+						{
+							bIsOpen = ImGui::TreeNodeEx(group.getName().c_str(), flags);
+							bMustCloseTree = bIsOpen;
+						}
+
+						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
+						{
+							// A. Height variable to amount widgets..
+							//auto& style = ImGui::GetStyle();
+							//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
+							//int h = 14;
+							//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
+							//int hhh = parameterGroup->size() * hratio * hh;
+
+							// B. Height hardcoded
+							int hhh = HEIGHT_SCROLL_GROUP;
+							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
+							bMustCloseTree = false;
+
+							if (bIsOpen)
+							{
+								ImGui::Indent();
+								ImGui::BeginChild(group.getName().c_str(), ImVec2(0, hhh), false);
+							}
+						}
+						//else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_WINDOWED)
+						//{
+						//}
+					}
+
+					//-
+
+					// 2. Header already rendered
+
+					uniqueName.setOpen(bIsOpen); //TODO: ?
+
+					//-
+
+					// 4. To re calculate layout sizes after headers and indenting.
+
+					refreshLayout();
+
+					//-
+
+					// 5. Skip all nested groups and their params
+
+					if (!bIsOpen)
+					{
+						ImGui::PopID();
+						return;
 					}
 				}
 
@@ -2102,7 +2175,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						// Float color
 
@@ -2126,7 +2199,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						// Color
 
@@ -2169,25 +2242,28 @@ namespace ofxImGuiSurfing
 						if (0) {}
 
 						else if
-							(
-								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+							(typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 								typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
 						{
 							// Do not requires closing/pop
 						}
+
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE)
 						{
 							if (bMustCloseTree) ImGui::TreePop();
 						}
+
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_TREE_EX)
 						{
 							if (bMustCloseTree) ImGui::TreePop();
 						}
+
 						else if (typeGroup == SurfingImGuiTypesGroups::OFX_IM_GROUP_SCROLLABLE)
 						{
 							ImGui::EndChild();
 							ImGui::Unindent();
-							// Don't needs close tree bc uses a collapsingHeader tree on begin
+
+							// Don't needs to close tree bc uses a collapsingHeader tree when begins!
 						}
 					}
 
@@ -2197,6 +2273,7 @@ namespace ofxImGuiSurfing
 					////}
 				}
 			}
+
 			////TODO:
 			ImGui::PopID();
 		}

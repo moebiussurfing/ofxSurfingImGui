@@ -143,9 +143,9 @@ namespace ofxImGuiSurfing
 	//--
 
 #if OF_VERSION_MINOR >= 10
-
+	//TODO: 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec2<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec2<int>>& parameter, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -160,7 +160,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec3<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec3<int>>& parameter, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -175,7 +175,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec4<int>>& parameter)
+	bool AddParameter(ofParameter<glm::tvec4<int>>& parameter, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -188,9 +188,11 @@ namespace ofxImGuiSurfing
 
 		return false;
 	}
+	
+	//--
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit)
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -198,6 +200,7 @@ namespace ofxImGuiSurfing
 			if (ImGui::SliderFloat2((parameter.getName().c_str()), glm::value_ptr(tmpRef), parameter.getMin().x, parameter.getMax().x))
 			{
 				parameter.set(tmpRef);
+
 				//wheel for multi dim params
 				//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);//TODO: should include sguar here
 				//ofxImGuiSurfing::AddMouseWheel(arg1);
@@ -207,27 +210,45 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
+			bool bExpanded;
+			if (bfoldered)
+			{
+				static bool bOpen = false;
+				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagt |= ImGuiTreeNodeFlags_Framed;
+				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
+			}
+			else bExpanded = true;
+
+			//if (bfoldered && bExpanded) ImGui::TreePop();
+
 			bool bchanged = false;
-			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			ImGui::Dummy(ImVec2(0, 1));
-			//ImGui::Spacing();
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
-			ImGui::Dummy(ImVec2(0, 1));
+			if (bExpanded)
+			{
+				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+				ImGui::Dummy(ImVec2(0, 1));
+				//ImGui::Spacing();
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+				ImGui::Dummy(ImVec2(0, 1));
+			}
+			
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+				if (bfoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bfoldered && bExpanded) ImGui::TreePop();
 			return false;
 		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit)
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -242,28 +263,44 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
+			bool bExpanded;
+			if (bfoldered)
+			{
+				static bool bOpen = false;
+				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagt |= ImGuiTreeNodeFlags_Framed;
+				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
+			}
+			else bExpanded = true;
+
 			bool bchanged = false;
-			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			ImGui::Dummy(ImVec2(0, 1));
-			//ImGui::Spacing();
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
-			ImGui::Dummy(ImVec2(0, 1));
+			if (bExpanded)
+			{
+				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+				ImGui::Dummy(ImVec2(0, 1));
+				//ImGui::Spacing();
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
+				ImGui::Dummy(ImVec2(0, 1));
+			}
+			
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+				if (bfoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			//if (bfoldered && bExpanded) ImGui::TreePop();
 			return false;
 		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit)
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit, bool bfoldered)
 	{
 		auto tmpRef = parameter.get();
 
@@ -278,23 +315,39 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
+			bool bExpanded;
+			if (bfoldered)
+			{
+				static bool bOpen = false;
+				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagt |= ImGuiTreeNodeFlags_Framed;
+				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
+			}
+			else bExpanded = true;
+
 			bool bchanged = false;
-			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			//ImGui::Spacing();
-			ImGui::Dummy(ImVec2(0, 1));
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
-			bchanged += ImGui::SliderFloat(((parameter.getName() + " W").c_str()), &tmpRef.w, parameter.getMin().w, parameter.getMax().w);
-			ImGui::Dummy(ImVec2(0, 1));
+			if (bExpanded)
+			{
+				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+				//ImGui::Spacing();
+				ImGui::Dummy(ImVec2(0, 1));
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " X").c_str()), &tmpRef.x, parameter.getMin().x, parameter.getMax().x);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
+				bchanged += ImGui::SliderFloat(((parameter.getName() + " W").c_str()), &tmpRef.w, parameter.getMin().w, parameter.getMax().w);
+				ImGui::Dummy(ImVec2(0, 1));
+			}
+
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+				if (bfoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bfoldered && bExpanded) ImGui::TreePop();
 			return false;
 		}
 	}
@@ -302,6 +355,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO: kind of deprecated. not all features implemented
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofVec2f>& parameter)
 	{
@@ -379,7 +433,6 @@ namespace ofxImGuiSurfing
 		return result;
 	}
 
-	//TODO:
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha/*, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None*/)
 	{
@@ -437,6 +490,67 @@ namespace ofxImGuiSurfing
 
 		return false;
 	}
+
+	//TODO:
+	//full customizable flags
+	//--------------------------------------------------------------
+	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha, ImGuiColorEditFlags flags)
+	{
+		//ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+
+		ofParameter<ofFloatColor> c;
+		c.set(parameter.getName(),
+			ofFloatColor(parameter.get().r / 255.f, parameter.get().g / 255.f, parameter.get().b / 255.f, parameter.get().a / 255.f),
+			ofFloatColor(0, 0, 0, 0),
+			ofFloatColor(1.f, 1.f, 1.f, 1.f)
+		);
+
+		auto tmpRef = c.get();
+
+		if (alpha)
+		{
+			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r, flags))
+			{
+				parameter.set(tmpRef);
+
+				return true;
+			}
+		}
+		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r, flags))
+		{
+			parameter.set(tmpRef);
+
+			return true;
+		}
+
+		return false;
+	}
+	//--------------------------------------------------------------
+	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None)
+	{
+		auto tmpRef = parameter.get();
+		//ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
+
+		if (alpha)
+		{
+			if (ImGui::ColorEdit4((parameter.getName().c_str()), &tmpRef.r, flags))
+			{
+				parameter.set(tmpRef);
+
+				return true;
+			}
+		}
+		else if (ImGui::ColorEdit3((parameter.getName().c_str()), &tmpRef.r, flags))
+		{
+			parameter.set(tmpRef);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	//----
 
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
@@ -578,7 +692,7 @@ namespace ofxImGuiSurfing
 		}
 
 		IMGUI_SUGAR__STEPPER_WIDTH_POP;
-		
+
 		ImGui::PopID();
 
 		return bChanged;

@@ -1092,7 +1092,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags
 	return beginWindow(p.getName().c_str(), (bool*)&p.get(), window_flags);
 }
 
-//this is the main beginWindow. all above methods call this one!
+// This is the main beginWindow. all above methods call this one!
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
