@@ -318,17 +318,28 @@ namespace ofxImGuiSurfing
 
 	// 3.
 
-	// Adds Constraint Window Shapes
+	// Adds Constraints Window Shapes
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN + 40, ofGetHeight() - 100); \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, ofGetHeight() - 100); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN / 2, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN, ofGetHeight() / 2); \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.5f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, ofGetHeight() / 2); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MINI \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, ofGetHeight() / 2); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
 
 	//----
 

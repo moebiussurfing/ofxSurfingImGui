@@ -44,9 +44,9 @@ namespace ofxImGuiSurfing
 	// Preset Clicker Matrix Buttons
 	// Index will change when a box is clicked
 	// Notice that index must start in 0 like we use on vectors!
-	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 4)
+	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 3)
 	//--------------------------------------------------------------
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
 	{
 		const int _amt = _index.getMax() - _index.getMin()+1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -237,8 +237,8 @@ namespace ofxImGuiSurfing
 	// group all methods to a template or something
 
 	//--------------------------------------------------------------
-	//inline bool AddMatrixClickerLabels(ofParameter<int>& _index, vector<char *> &labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
-	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
+	//inline bool AddMatrixClickerLabels(ofParameter<int>& _index, vector<char *> &labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -392,7 +392,7 @@ namespace ofxImGuiSurfing
 		return cChanged;
 	}
 
-	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 4, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;

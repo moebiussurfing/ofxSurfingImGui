@@ -188,7 +188,7 @@ namespace ofxImGuiSurfing
 
 		return false;
 	}
-	
+
 	//--
 
 	//--------------------------------------------------------------
@@ -210,7 +210,7 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
-			bool bExpanded;
+			bool bExpanded = false;
 			if (bfoldered)
 			{
 				static bool bOpen = false;
@@ -218,12 +218,13 @@ namespace ofxImGuiSurfing
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
 			}
-			else bExpanded = true;
+			//else bExpanded = true;
 
 			//if (bfoldered && bExpanded) ImGui::TreePop();
 
 			bool bchanged = false;
-			if (bExpanded)
+			//if (bExpanded)
+			if (bExpanded || !bfoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 				ImGui::Dummy(ImVec2(0, 1));
@@ -232,7 +233,7 @@ namespace ofxImGuiSurfing
 				bchanged += ImGui::SliderFloat(((parameter.getName() + " Y").c_str()), &tmpRef.y, parameter.getMin().y, parameter.getMax().y);
 				ImGui::Dummy(ImVec2(0, 1));
 			}
-			
+
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
@@ -263,7 +264,7 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
-			bool bExpanded;
+			bool bExpanded = false;
 			if (bfoldered)
 			{
 				static bool bOpen = false;
@@ -271,10 +272,11 @@ namespace ofxImGuiSurfing
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
 			}
-			else bExpanded = true;
+			//else bExpanded = true;
 
 			bool bchanged = false;
-			if (bExpanded)
+			//if (bExpanded)
+			if (bExpanded || !bfoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 				ImGui::Dummy(ImVec2(0, 1));
@@ -284,7 +286,7 @@ namespace ofxImGuiSurfing
 				bchanged += ImGui::SliderFloat(((parameter.getName() + " Z").c_str()), &tmpRef.z, parameter.getMin().z, parameter.getMax().z);
 				ImGui::Dummy(ImVec2(0, 1));
 			}
-			
+
 			if (bchanged)
 			{
 				parameter.set(tmpRef);
@@ -315,7 +317,7 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
-			bool bExpanded;
+			bool bExpanded = false;
 			if (bfoldered)
 			{
 				static bool bOpen = false;
@@ -323,10 +325,12 @@ namespace ofxImGuiSurfing
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(parameter.getName().c_str(), _flagt));
 			}
-			else bExpanded = true;
+			//else bExpanded = true;
 
+			//TODO: BUG:
 			bool bchanged = false;
-			if (bExpanded)
+			//if (bExpanded)
+			if (bExpanded || !bfoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 				//ImGui::Spacing();
