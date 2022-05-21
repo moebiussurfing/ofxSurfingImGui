@@ -100,10 +100,10 @@ public:
 public:
 
 	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setup(ofxImGui::Gui & gui); // MODE B: can be instantiated out of the class, locally
+	void setup(ofxImGui::Gui& gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
 	//void draw(); // to manual draw...
-	void draw(ofEventArgs & args);
+	void draw(ofEventArgs& args);
 
 	//--------------------------------------------------------------
 	void setup()//->We will use the most common use to avoid use any argument.
@@ -113,8 +113,8 @@ public:
 
 private:
 
-	void keyPressed(ofKeyEventArgs &eventArgs);
-	void keyReleased(ofKeyEventArgs &eventArgs);
+	void keyPressed(ofKeyEventArgs& eventArgs);
+	void keyReleased(ofKeyEventArgs& eventArgs);
 
 	//----
 
@@ -365,6 +365,8 @@ public:
 	//void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
+		if (!_bGui) return;
+
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		//if (this->beginWindow((string)group.getName(), _bGui, flags))
@@ -380,6 +382,8 @@ public:
 	//--------------------------------------------------------------
 	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
 	{
+		if (!_bGui) return;
+
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -432,6 +436,8 @@ public:
 		return b;
 	}
 
+	//--
+	// 
 	// Text with spacing
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
@@ -451,9 +457,20 @@ public:
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+	}
+	//--------------------------------------------------------------
+	void AddLabelHuge(std::string label, bool bUppercase = true, bool bNoSpacing = false)
+	{
+		std::string t = bUppercase ? ofToUpper(label) : label;
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		pushStyleFont(2);
+		ImGui::TextWrapped(t.c_str());
+		popStyleFont();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 	}
 
+	//--
+	 
 	//--------------------------------------------------------------
 	void AddTooltip(std::string text, bool bEnabled = true)
 	{
@@ -568,7 +585,7 @@ private:
 
 	// We have two mode for instantiate ImGui
 	ofxImGui::Gui gui; // ImGui is inside the add-on
-	ofxImGui::Gui * guiPtr = NULL; // To be used when ImGui is passed by reference in the parent scope (ofApp)
+	ofxImGui::Gui* guiPtr = NULL; // To be used when ImGui is passed by reference in the parent scope (ofApp)
 
 	// Initiates ofxImGui with the common settings
 	void setupImGui();
@@ -779,6 +796,7 @@ public:
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 	ofParameter<bool> bNoScroll{ "No Scroll", false };
 	ofParameter<bool> bHelp{ "Help", false };
+	ofParameter<bool> bHelp2{ "Help Internal", false };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
@@ -992,6 +1010,7 @@ private:
 
 					// Help
 					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
+					ofxImGuiSurfing::AddToggleRoundedButton(bHelp2);
 
 					//--
 
@@ -1500,8 +1519,8 @@ private:
 	//-
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
-	void Changed_Params(ofAbstractParameter &e);
-	void Changed_Params_Enablers(ofAbstractParameter &e);
+	void Changed_Params(ofAbstractParameter& e);
+	void Changed_Params_Enablers(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
 	//--------------------------------------------------------------
@@ -1673,12 +1692,12 @@ private:
 
 private:
 
-	bool *bResetPtr = nullptr;
+	bool* bResetPtr = nullptr;
 
 public:
 
 	//--------------------------------------------------------------
-	void setReset(bool *b) {
+	void setReset(bool* b) {
 		bResetPtr = b;
 	}
 
@@ -1722,7 +1741,7 @@ public:
 
 		const float a = 0.5f;
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 
 		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
 		const ImVec4 cButton = style->Colors[ImGuiCol_Button];

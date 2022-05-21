@@ -105,7 +105,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddTooltip(std::string text, bool bEnabled = true)
+	inline void AddTooltip(std::string text, bool bEnabled = true)//call after the popup trigger widget
 	{
 		if (!bEnabled) return;
 
@@ -132,9 +132,9 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<glm::ivec3>& parameter, bool bfoldered = false);
 	bool AddParameter(ofParameter<glm::ivec4>& parameter, bool bfoldered = false);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders
-	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
 #endif
 
 	//TODO:

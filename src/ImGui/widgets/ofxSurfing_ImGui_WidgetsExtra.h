@@ -392,15 +392,16 @@ namespace ofxImGuiSurfing
 		return cChanged;
 	}
 
-	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = true, float sizey = -1, bool bSpaced = true)
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
 
-		ImGui::Spacing();
+		if(bSpaced) ImGui::Spacing();
 
 		bool cChanged = false;
 
+		// default height size for the toggle buttons
 		if (sizey == -1)
 		{
 			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -537,11 +538,11 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
-		ImGui::Spacing();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
-		ImGui::Spacing();
+		if (bSpaced) ImGui::Spacing();
+		if (bSpaced) ImGui::Spacing();
 
 		return cChanged;
 	}

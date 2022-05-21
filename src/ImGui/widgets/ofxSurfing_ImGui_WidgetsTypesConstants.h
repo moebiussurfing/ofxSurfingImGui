@@ -320,6 +320,13 @@ namespace ofxImGuiSurfing
 
 	// Adds Constraints Window Shapes
 
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.5f, 150); \
+ImVec2 size_max = ImVec2(1000, ofGetHeight() - 10); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
 { \
 ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, 2 * PANEL_WIDGETS_HEIGHT_MIN); \

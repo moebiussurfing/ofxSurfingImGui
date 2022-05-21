@@ -5,13 +5,13 @@ TODO:
 
 	+ add cascade align engine:
 	https://github.com/ocornut/imgui/issues/5287
-	
+
 	+ add tooltip types for styles
 
 BUGS:
 
 	+ fix windowsSpecial not drawing windows, when multiple instances?
-		+ it's maybe working on docking mode only?
+	+ it's maybe working on docking mode only?
 	+ docking overlaps sometimes on layout management
 
 */
@@ -22,19 +22,35 @@ BUGS:
 
 /*
 
-// 1. LAYOUT MANGER
+// RECOMMENDED USAGE
 
-// .h
-#include "ofxSurfingImGui.h"	// -> Add all classes. You can also simplify picking what you want to use.
-ofxSurfing_ImGui_Manager guiManager;
+// TOP SNIPPETS HERE!
 
-// .cpp
-// setup()
-guiManager.setup(); // ofxImGui is instantiated inside the class, then we can forgot declare ofxImGui here (ofApp scope).
+{
+	// .h
+	{
+		#include "ofxSurfingImGui.h"
+		ofxSurfing_ImGui_Manager guiManager;
+		ofParameter<bool> bGui{ "Show",true };
+	}
 
+	// .cpp
+	{
+		// setup()
+		guiManager.setup(); 
 
-guiManager.
-
+		// draw()
+		guiManager.begin();
+		{
+			if (guiManager.beginWindow(bGui))
+			{
+				//..
+				guiManager.endWindow();
+			}
+		}
+		guiManager.end();
+	}
+}
 */
 
 
@@ -46,7 +62,6 @@ guiManager.
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-
 #include "imgui_internal.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 
@@ -67,24 +82,9 @@ guiManager.
 //---------
 
 #include "ImGui/ofxSurfing_ImGui_ofHelpers.h"
-
 #include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
-
 #include "ImGui/widgets/ofxSurfing_ImGui_Widgets.h"
-//#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsButtons.h"
-//#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsExtra.h"
-//#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsKnob.h"
-//#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsRangeSlider.h"
-//#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsBezier.h"
-//#include "ImGui/widgets/dear_widgets/dear_widgets.h"
-
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
-//#include "ImGui/themes/ofxSurfing_ImGui_Themes.h"
-//#include "ImGui/themes/ThemeSequentity.inl"
-
-// Must include from OFX_ADDON/_LIBS if you want to use it in your project.
-//#include "ofxSurfing_ImGui_WidgetsFileBrowser.h"
-
 
 using namespace ofxImGuiSurfing;
 
@@ -93,23 +93,7 @@ using namespace ofxImGuiSurfing;
 /*
 	EXAMPLE SNIPPETS
 	----------------
-
-	Typical basic usage
-
-	Copy paste all this to your ofApp
-	or you can use ofxSurfing_ImGui_Manager that bundles all this code
-
-	Content:
-	1. LAYOUT MANGER: SIMPLIFY THE WINDOW/PANELS/LAYOUT PROCESS.
-	2. ofxImGui BASIC BOILERPLATE.
-	3. RAW IMGUI: WINDOW, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES.
-	4. WINDOW PANEL SHAPE: GET WINDOW POSITION FOR ADVANCED LAYOUT LINKED TO OTHER WINDOWS/GUI'S.
-	5. MORE RAW IMGUI SNIPPETS
 */
-
-
-//--------------------------------------------------------------
-
 
 // LEARN HOW TO CREATE
 // WINDOWS, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
@@ -117,8 +101,13 @@ using namespace ofxImGuiSurfing;
 /*
 	//--------------------------------------------------------------
 
+	// OTHER EXAMPLES.
+	// LOOK RECOMMENDED USAGE ABOVE!
+	// THESE ARE NOT RECOMMENDED OR DEPRECATED MODES!
 
-	// 1. CREATE A WINDOW
+	// 1. HOW TO CREATE A WINDOW?
+
+	//--
 
 	// WINDOWS USING RAW ImGui
 
@@ -143,7 +132,6 @@ using namespace ofxImGuiSurfing;
 	// 1.2 WINDOW USING "old" ofxImGui
 
 	// (DEPRECATED. Better to not use like this)
-
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
@@ -172,7 +160,6 @@ using namespace ofxImGuiSurfing;
 
 	{
 		static bool bOpen = true;
-		//bool bOpen = false;
 		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 		{
@@ -201,18 +188,14 @@ using namespace ofxImGuiSurfing;
 
 */
 
-
-//--------------------------------------------------------------
-
-
-
 //--------------------------------------------------------------
 
 // MORE RAW IMGUI
 
 /*
 
-// 5.1 How to set colors
+// HOW TO SET COLORS?
+
 static float b = 1.0f;
 static float c = 0.5f;
 static int i = 3;// hue colors are from 0 to 7
@@ -221,7 +204,9 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 
 */
 
-//-
+
+//--
+
 
 /*
 
@@ -259,12 +244,14 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 */
 
 
-
 //--
 
+
 /*
-// An extra begin/end pair
-// with snapping
+
+// AN EXTRA BEGIN/END PAIR
+// WITH SNAPPING
+
 //--------------------------------------------------------------
 void Begin(const std::string& name) {
 	const int snapSz = 20;
@@ -297,7 +284,9 @@ void End() {
 	ImGui::End();
 }
 
+
 //--
+
 
 // Another extra begin/end pair
 //--------------------------------------------------------------
@@ -311,35 +300,49 @@ void EndWindow()
 {
 	ImGui::End();
 }
+
 */
+
 
 //--
 
+
 /*
-// An extra begin/end pair
-// with snapping
+
+// ANOTHER WINDOW WITH SNAPPING
+
 bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 void EndWindow();
 
 void Begin(const std::string& name);
 void End();
+
 */
+
 
 //--
 
-/*		
-// ImGui Infos
+
+/*
+
+// IMGUI INFOS
+
 auto io = ImGui::GetIO();
 const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
 const auto size = ImGui::CalcTextSize(label.c_str());
 ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
 ImGui::Text("%s", label.c_str());
+
 */
+
 
 //--
 
+
 /*
-// Tabs
+
+// TABS
+
 if (ImGui::BeginTabBar("Tabs Blah"))
 {
 	if (ImGui::BeginTabItem("Video"))
@@ -363,11 +366,43 @@ if (ImGui::BeginTabBar("Tabs Blah"))
 }
 ImGui::EndTabBar();
 }
+
 */
+
 
 //--
 
+
 /*
+
+// Example 2:
+// prev/next dual buttons
+
+{
+	static ofParameter<bool> bPrev{ "<", false };
+	static ofParameter<bool> bNext{ ">", false };
+	guiManager.Add(bPrev, OFX_IM_BUTTON, 2, true);
+	guiManager.Add(bNext, OFX_IM_BUTTON, 2);
+	if (bPrev) {
+		bPrev = false;
+		index_FX = ofClamp(index_FX - 1, index_FX.getMin(), index_FX.getMax());
+	}
+	if (bNext) {
+		bNext = false;
+		index_FX = ofClamp(index_FX + 1, index_FX.getMin(), index_FX.getMax());
+	}
+}
+
+*/
+
+
+//--
+
+
+// DOCKSPACE
+
+/*
+
 // Flags for ImGui::DockSpace()
 enum ImGuiDockNodeFlags_
 {
@@ -380,6 +415,7 @@ enum ImGuiDockNodeFlags_
 	ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
 	ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
 };
+
 */
 
 //--
@@ -421,63 +457,65 @@ ofRectangle rect = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
 
 //--
 
+
 /*
 
-Docking notes
+DOCKING NOTES
 
 https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
 https://github.com/ocornut/imgui/issues/3521
 
-For now the slightly more legal way to do same hack as above is to set the 
-DockNodeFlagsOverrideSet / DockNodeFlagsOverrideClear members of ImGuiWindowClass + calling 
-SetNextWindowClass() to trigger this override but it's not solving the possibility of a conflict 
-between multiple windows with different requests, so it'll only fully work if there are also 
+For now the slightly more legal way to do same hack as above is to set the
+DockNodeFlagsOverrideSet / DockNodeFlagsOverrideClear members of ImGuiWindowClass + calling
+SetNextWindowClass() to trigger this override but it's not solving the possibility of a conflict
+between multiple windows with different requests, so it'll only fully work if there are also
 constraints applied on how windows are docked with each others.
 
 SetNextWindowClass()
 
-
 https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
+
 */
 
 
+//--
 
 
+// HOW TO CUSTOMIZE FONT
+// AND USE DIFFERENT FONT STYLES?
 
-//-
+/*
 
-//TODO:
+{
+	std::string _fontName;
+	std::string _path;
+	float _fontSize;
 
-//// Customize font
+	_fontSize = 16;
+	_fontName = "overpass-mono-bold.otf";
+	_path = "assets/fonts/" + _fontName;
+	guiManager.pushFont(_path, _fontSize);//index 0
 
-//std::string _fontName;
-//std::string _path;
-//float _fontSize;
+	_fontSize = 14;
+	_fontName = "RecMonoLinear-Bold-1.082.ttf";
+	_path = "assets/fonts/" + _fontName;
+	guiManager.pushFont(_path, _fontSize);//index 1
 
-//_fontSize = 16;
-//_fontName = "overpass-mono-bold.otf";
-//_path = "assets/fonts/" + _fontName;
-//guiManager.pushFont(_path, _fontSize);
+	_fontSize = 17;
+	_fontName = "RecMonoLinear-Regular-1.082.ttf";
+	_path = "assets/fonts/" + _fontName;
+	guiManager.pushFont(_path, _fontSize);//index 2
 
-////_fontSize = 14;
-////_fontName = "RecMonoLinear-Bold-1.082.ttf";
-////_path = "assets/fonts/" + _fontName;
-////guiManager.pushFont(_path, _fontSize);
+	guiManager.addFont(_path, _fontSize);
+	guiManager.setDefaultFontIndex(2);
 
-////_fontSize = 17;
-////_fontName = "RecMonoLinear-Regular-1.082.ttf";
-////_path = "assets/fonts/" + _fontName;
-////guiManager.pushFont(_path, _fontSize);
+	// Customize Font
+	static bool bCustomFont = true;
+	if (bCustomFont) guiManager.pushStyleFont(1);
+	{
+		//.. draw with this font
+	}
+	if (bCustomFont) guiManager.popStyleFont();
+}
 
-////guiManager.addFont(_path, _fontSize);
-////guiManager.setDefaultFontIndex(2);
-
-//TODO:
-//// Customize Font
-//static bool bCustomFont = false;
-//bCustomFont = bEnable1;
-//if (bCustomFont) guiManager.pushStyleFont(1);
-
-//..
-
-//if (bCustomFont) guiManager.popStyleFont();
+*/

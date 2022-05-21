@@ -24,6 +24,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bHelp);
+	params_Advanced.add(bHelp2);
 	params_Advanced.add(bDebug);
 
 	// Exclude from settings
@@ -196,30 +197,33 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	//--
 
-	// Font
+	// Fonts
 
 	std::string _fontName;
 	float _fontSizeParam;
 	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
 	_fontSizeParam = FONT_DEFAULT_SIZE;
+
 	std::string _path = "assets/fonts/"; // assets folder
 
+	// font default
 	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
 
-	//TODO:
 	// font big
-
-	pushFont(_path + _fontName, _fontSizeParam + 3.0f); // queue big font too
+	pushFont(_path + _fontName, _fontSizeParam * 1.25f); // queue big font too
+	
+	// font huge
+	pushFont(_path + _fontName, _fontSizeParam * 2.f); // queue huge font too
 
 	//--
 
 	// default
-
 	addFont(_path + _fontName, _fontSizeParam);
 
 	//--
 
-	// Theme: colors and sizes
+	// Theme:
+	// colors and sizes
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }
 
@@ -513,7 +517,7 @@ void ofxSurfing_ImGui_Manager::draw(ofEventArgs & args)
 	//--
 
 	// Draw Help box
-	if (bHelp)
+	if (bHelp2)
 	{
 		textBoxWidget.draw();
 	}
@@ -1799,6 +1803,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			// Help
 
 			this->Add(bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+			this->Add(bHelp2, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
 			//--
 
@@ -2495,23 +2500,35 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 			bMinimizePresets = !bMinimizePresets;
 		}
 
+		//----
+
 		// Help 
-		else if (key == 'H')
+		else if (key == 'H' && !mod_CONTROL)
 		{
 			bHelp = !bHelp;
 		}
+		else if (key == 'h' && !mod_CONTROL)
+		{
+			bHelp2 = !bHelp2;
+		}
 
-		// Help 
-		else if (key == 'D')
+		// Debug 
+		else if (key == 'D' && !mod_CONTROL)
 		{
 			bDebug= !bDebug;
 		}
 
-		//// Solo
-		//else if (key == 's')
-		//{
-		//	bSolo = !bSolo;
-		//}
+		// Minimize
+		else if (key == 'm' && mod_CONTROL)
+		{
+			bMinimize = !bMinimize;
+		}
+
+		// Solo
+		else if (key == 's' && mod_CONTROL)
+		{
+			bSolo = !bSolo;
+		}
 
 		//// Unlock Dock 
 		//else if (key == 'l')
