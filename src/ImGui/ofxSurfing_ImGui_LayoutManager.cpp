@@ -156,7 +156,7 @@ void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated g
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui & _gui) { // using external instantiated gui
+void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui& _gui) { // using external instantiated gui
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -211,7 +211,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	// font big
 	pushFont(_path + _fontName, _fontSizeParam * 1.25f); // queue big font too
-	
+
 	// font huge
 	pushFont(_path + _fontName, _fontSizeParam * 2.f); // queue huge font too
 
@@ -376,7 +376,7 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 	// if not, last added font will be used
 	ofLogNotice(__FUNCTION__) << path << " : " << size;
 
-	auto &io = ImGui::GetIO();
+	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
 
 	ofFile fileToRead(path); // a file that exists
@@ -410,7 +410,7 @@ bool ofxSurfing_ImGui_Manager::addFont(std::string path, int size)
 	// should be a vector with several customFont to allow hot reloading..
 	// if not, last added font will be used
 
-	auto &io = ImGui::GetIO();
+	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
 
 	ofFile fileToRead(path); // a file that exists
@@ -510,7 +510,7 @@ void ofxSurfing_ImGui_Manager::update() { // -> Not being used by default
 
 //--------------------------------------------------------------
 //void ofxSurfing_ImGui_Manager::draw() // -> Not being used by default
-void ofxSurfing_ImGui_Manager::draw(ofEventArgs & args)
+void ofxSurfing_ImGui_Manager::draw(ofEventArgs& args)
 {
 	if (!bAutoDraw) if (customFont == nullptr) gui.draw();
 
@@ -1964,7 +1964,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter &e)
+void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 {
 	std::string name = e.getName();
 
@@ -2433,11 +2433,11 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 // Keys
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
+void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 {
 	if (!bKeys || !bUseLayoutPresetsManager) return;
 
-	const int &key = eventArgs.key;
+	const int& key = eventArgs.key;
 	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
 
 	// Modifiers
@@ -2454,56 +2454,90 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 
 	//-
 
-	bool debug = false;
-	if (debug)
+	if (0)
 	{
-		ofLogNotice(__FUNCTION__) << "mod_COMMAND: " << (mod_COMMAND ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_CONTROL: " << (mod_CONTROL ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_ALT: " << (mod_ALT ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_SHIFT: " << (mod_SHIFT ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
+		ofLogNotice(__FUNCTION__) << "mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
 	}	if (!bKeys) return;
 
 	{
-		switch (key)
-		{
-			// Layout Presets
+		// Layout Presets
 
-		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
-		case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1]; break;
-		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
-		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
-		default: break;
-		}
-
-		if (key == OF_KEY_F5 /*|| key == 'p'*/) // Presets
+		if (bDocking)
 		{
-			bGui_LayoutsPresets = !bGui_LayoutsPresets;
-		}
+			switch (key)
+			{
+			case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
+			case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1]; break;
+			case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
+			case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
+			
+			default: break;
+			}
 
-		else if (key == OF_KEY_F6) // Panels
-		{
-			bGui_LayoutsPanels = !bGui_LayoutsPanels;
-		}
+			if (key == OF_KEY_F5 /*|| key == 'p'*/) // Presets
+			{
+				bGui_LayoutsPresets = !bGui_LayoutsPresets;
+			}
 
-		else if (key == OF_KEY_F7) // Manager
-		{
-			bGui_LayoutsManager = !bGui_LayoutsManager;
-		}
+			else if (key == OF_KEY_F6) // Panels
+			{
+				bGui_LayoutsPanels = !bGui_LayoutsPanels;
+			}
 
-		else if (key == OF_KEY_F8) // Extra
-		{
-			bGui_LayoutsExtra = !bGui_LayoutsExtra;
-		}
+			else if (key == OF_KEY_F7) // Manager
+			{
+				bGui_LayoutsManager = !bGui_LayoutsManager;
+			}
 
-		else if (key == OF_KEY_F9) // Minimize
-		{
-			bMinimizePresets = !bMinimizePresets;
+			else if (key == OF_KEY_F8) // Extra
+			{
+				bGui_LayoutsExtra = !bGui_LayoutsExtra;
+			}
+
+			else if (key == OF_KEY_F9) // Minimize
+			{
+				bMinimizePresets = !bMinimizePresets;
+			}
+
+			//--
+
+			// Solo
+			else if (key == 's' && mod_CONTROL)
+			{
+				bSolo = !bSolo;
+			}
+
+			//// Unlock Dock 
+			//else if (key == 'l')
+			//{
+			//	bModeLock1 = !bModeLock1;
+			//}
+
+			//else if (key == 'L')
+			//{
+			//	bModeLockControls = !bModeLockControls;
+			//}
+
+			//--
+
+			//// Layout Modes
+
+			//else if (key == OF_KEY_TAB && !mod_CONTROL)
+			//{
+			//	if (appLayoutIndex > appLayoutIndex.getMin()) appLayoutIndex++;
+			//	else if (appLayoutIndex == appLayoutIndex.getMin()) appLayoutIndex = appLayoutIndex.getMax();
+			//	//if (appLayoutIndex < 3) loadAppLayout(AppLayouts(appLayoutIndex + 1));
+			//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
+			//}
 		}
 
 		//----
 
 		// Help 
-		else if (key == 'H' && !mod_CONTROL)
+		if (key == 'H' && !mod_CONTROL)
 		{
 			bHelp = !bHelp;
 		}
@@ -2512,10 +2546,16 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 			bHelp2 = !bHelp2;
 		}
 
+		// Minimize
+		else if (key == '`')
+		{
+			bMinimize = !bMinimize;
+		}
+
 		// Debug 
 		else if (key == 'D' && !mod_CONTROL)
 		{
-			bDebug= !bDebug;
+			bDebug = !bDebug;
 		}
 
 		// Minimize
@@ -2523,35 +2563,6 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 		{
 			bMinimize = !bMinimize;
 		}
-
-		// Solo
-		else if (key == 's' && mod_CONTROL)
-		{
-			bSolo = !bSolo;
-		}
-
-		//// Unlock Dock 
-		//else if (key == 'l')
-		//{
-		//	bModeLock1 = !bModeLock1;
-		//}
-
-		//else if (key == 'L')
-		//{
-		//	bModeLockControls = !bModeLockControls;
-		//}
-
-		//--
-
-		//// Layout Modes
-
-		//else if (key == OF_KEY_TAB && !mod_CONTROL)
-		//{
-		//	if (appLayoutIndex > appLayoutIndex.getMin()) appLayoutIndex++;
-		//	else if (appLayoutIndex == appLayoutIndex.getMin()) appLayoutIndex = appLayoutIndex.getMax();
-		//	//if (appLayoutIndex < 3) loadAppLayout(AppLayouts(appLayoutIndex + 1));
-		//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
-		//}
 	}
 
 	//--
@@ -2573,9 +2584,9 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs &eventArgs)
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs &eventArgs)
+void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs& eventArgs)
 {
-	const int &key = eventArgs.key;
+	const int& key = eventArgs.key;
 	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
 
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
