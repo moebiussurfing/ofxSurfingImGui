@@ -2435,7 +2435,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 {
-	if (!bKeys || !bUseLayoutPresetsManager) return;
+	if (!bKeys) return;
 
 	const int& key = eventArgs.key;
 	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
@@ -2464,8 +2464,8 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	{
 		// Layout Presets
-
 		if (bDocking)
+		if (bUseLayoutPresetsManager)
 		{
 			switch (key)
 			{
@@ -2521,7 +2521,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 			//	bModeLockControls = !bModeLockControls;
 			//}
 
-			//--
+			//----
 
 			//// Layout Modes
 
