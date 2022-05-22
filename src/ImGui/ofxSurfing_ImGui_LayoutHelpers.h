@@ -262,6 +262,7 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
+	// More helpers
 	// Get ImVec2 size for fast populate buttons
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeDefault()

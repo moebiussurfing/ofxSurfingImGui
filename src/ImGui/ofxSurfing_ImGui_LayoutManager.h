@@ -102,13 +102,16 @@ public:
 	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui& gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
-	//void draw(); // to manual draw...
 	void draw(ofEventArgs& args);
+	//void draw(); // to manual draw...
 
 	//--------------------------------------------------------------
-	void setup()//->We will use the most common use to avoid use any argument.
+	void setup()//->We will use the most common use to avoid to have to use any argument.
 	{
-		setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+		setup(IM_GUI_MODE_INSTANTIATED);
+
+		//setup(IM_GUI_MODE_INSTANTIATED_DOCKING);//this crashes when multiple instances share dock stuff...
+		//we will need to activate only one Docking / "Layout Presets Engine" / guiManager instace!
 	}
 
 private:
@@ -470,7 +473,7 @@ public:
 	}
 
 	//--
-	 
+
 	//--------------------------------------------------------------
 	void AddTooltip(std::string text, bool bEnabled = true)
 	{
@@ -1388,6 +1391,23 @@ public:
 	//--------------------------------------------------------------
 	void setToggleSpecialWindowsOrganizerOrientation() {
 		windowPanels.bOrientation.set(!windowPanels.bOrientation.get());
+	}
+
+	//--
+
+	//--------------------------------------------------------------
+	float getWidgetsWidth(int amnt) {
+		return ofxImGuiSurfing::getWidgetsWidth(amnt);
+	}
+
+	//--------------------------------------------------------------
+	float getWidgetsHeight() {
+		return ofxImGuiSurfing::getWidgetsHeight();
+	}
+
+	//--------------------------------------------------------------
+	void refreshWidgetsSizes(float& _w100, float&  _w50, float& _w33, float& _w25, float& _h) {
+		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 	}
 
 public:

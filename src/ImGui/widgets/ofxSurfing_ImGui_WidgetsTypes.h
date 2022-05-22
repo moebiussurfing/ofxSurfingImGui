@@ -1714,6 +1714,8 @@ namespace ofxImGuiSurfing
 			bool bMustCloseTree = false; //TODO: -> add new
 			bool bMustDisableIndenting = false;
 
+			bool bSkipNoSerializable = false; //TODO: add to the guiManager object! to allow more customization.
+
 			// Handle names/pushID's
 			// This is the root/first group
 			// Level is about how many deep on nested groups we are
@@ -2141,6 +2143,12 @@ namespace ofxImGuiSurfing
 						auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 						if (parameterBool)
 						{
+							//TODO:
+							if (bSkipNoSerializable) 
+							{
+								if (!parameterBool->isSerializable()) continue;
+							}
+
 							auto c = getStyle(*parameterBool);
 							if (c.name != "-1")
 							{
