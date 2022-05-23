@@ -656,4 +656,209 @@ namespace ofxImGuiSurfing
 		style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 	}
 
+
+	//----
+	 
+	// Taken from xemu from mborgerson 
+	// https://github.com/mborgerson/xemu
+
+	//--------------------------------------------------------------
+	static void ImGui_Xemu()
+	{
+		//g_font_mgr.Rebuild();
+
+		ImGui::StyleColorsDark();
+		ImVec4* c = ImGui::GetStyle().Colors;
+		c[ImGuiCol_Text] = ImVec4(0.94f, 0.94f, 0.94f, 1.00f);
+		c[ImGuiCol_TextDisabled] = ImVec4(0.86f, 0.93f, 0.89f, 0.28f);
+		c[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+		c[ImGuiCol_ChildBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.98f);
+		c[ImGuiCol_PopupBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
+		c[ImGuiCol_Border] = ImVec4(0.11f, 0.11f, 0.11f, 0.60f);
+		c[ImGuiCol_BorderShadow] = ImVec4(0.16f, 0.16f, 0.16f, 0.00f);
+		c[ImGuiCol_FrameBg] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
+		c[ImGuiCol_FrameBgHovered] = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
+		c[ImGuiCol_FrameBgActive] = ImVec4(0.28f, 0.71f, 0.25f, 1.00f);
+		c[ImGuiCol_TitleBg] = ImVec4(0.20f, 0.51f, 0.18f, 1.00f);
+		c[ImGuiCol_TitleBgActive] = ImVec4(0.26f, 0.66f, 0.23f, 1.00f);
+		c[ImGuiCol_TitleBgCollapsed] = ImVec4(0.16f, 0.16f, 0.16f, 0.75f);
+		c[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.00f);
+		c[ImGuiCol_ScrollbarBg] = ImVec4(0.16f, 0.16f, 0.16f, 0.00f);
+		c[ImGuiCol_ScrollbarGrab] = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
+		c[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_CheckMark] = ImVec4(0.26f, 0.66f, 0.23f, 1.00f);
+		c[ImGuiCol_SliderGrab] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+		c[ImGuiCol_SliderGrabActive] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+		c[ImGuiCol_Button] = ImVec4(0.17f, 0.17f, 0.17f, 1.00f);
+		c[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_ButtonActive] = ImVec4(0.26f, 0.66f, 0.23f, 1.00f);
+		c[ImGuiCol_Header] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_HeaderHovered] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_HeaderActive] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_Separator] = ImVec4(1.00f, 1.00f, 1.00f, 0.25f);
+		c[ImGuiCol_SeparatorHovered] = ImVec4(0.13f, 0.87f, 0.16f, 0.78f);
+		c[ImGuiCol_SeparatorActive] = ImVec4(0.25f, 0.75f, 0.10f, 1.00f);
+		c[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.83f, 0.49f, 0.04f);
+		c[ImGuiCol_ResizeGripHovered] = ImVec4(0.28f, 0.71f, 0.25f, 0.78f);
+		c[ImGuiCol_ResizeGripActive] = ImVec4(0.28f, 0.71f, 0.25f, 1.00f);
+		c[ImGuiCol_Tab] = ImVec4(0.26f, 0.67f, 0.23f, 0.95f);
+		c[ImGuiCol_TabHovered] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_TabActive] = ImVec4(0.24f, 0.60f, 0.00f, 1.00f);
+		c[ImGuiCol_TabUnfocused] = ImVec4(0.21f, 0.54f, 0.19f, 0.99f);
+		c[ImGuiCol_TabUnfocusedActive] = ImVec4(0.24f, 0.60f, 0.21f, 1.00f);
+		c[ImGuiCol_PlotLines] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
+		c[ImGuiCol_PlotLinesHovered] = ImVec4(0.28f, 0.71f, 0.25f, 1.00f);
+		c[ImGuiCol_PlotHistogram] = ImVec4(0.86f, 0.93f, 0.89f, 0.63f);
+		c[ImGuiCol_PlotHistogramHovered] = ImVec4(0.28f, 0.71f, 0.25f, 1.00f);
+		c[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.66f, 0.23f, 1.00f);
+		c[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+		c[ImGuiCol_NavHighlight] = ImVec4(0.28f, 0.71f, 0.25f, 1.00f);
+		c[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+		c[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+		c[ImGuiCol_ModalWindowDimBg] = ImVec4(0.16f, 0.16f, 0.16f, 0.73f);
+
+		ImGuiStyle& s = ImGui::GetStyle();
+		s.WindowRounding = 6.0;
+		s.FrameRounding = 6.0;
+		s.PopupRounding = 6.0;
+		//g_base_style = s;
+	}
+
+
+	//----
+
+	// Taken from Yave by gan74
+	// Author: https://github.com/gan74/Yave
+
+#define none ofFloatColor(0,0,0)
+
+	static ofFloatColor grey(int g, float a = 1.f) {
+		ofColor c = ofColor(g, g, g, a * 255);
+		return ofFloatColor(c);
+	};
+
+	static ofFloatColor rgb(int r, int g, int b) {
+		ofColor c = ofColor(r, g, b);
+		return ofFloatColor(c);
+	};
+
+	//--------------------------------------------------------------
+	static void ImGui_ThemeYave()
+	{
+		auto& style = ImGui::GetStyle();
+		ImVec4* colors = style.Colors;
+
+		//const math::Vec4 none = {};
+
+		//const float lightness = 1.0f;
+		//auto rgb = [=](u8 r, u8 g, u8 b, float alpha = 1.0f) {
+		//    return math::Vec4(math::Vec3(r, g, b) / 255.0f * lightness, alpha).min(math::Vec4(1.0f));
+		//};
+		//auto grey = [=](u8 g, float alpha = 1.0f) {
+		//    return rgb(g, g, g, alpha);
+		//};
+
+		//for (usize i = 0; i != ImGuiCol_COUNT; ++i) {
+		//    colors[i] = rgb(255, 0, 0);
+		//}
+
+		colors[ImGuiCol_ChildBg] = none;
+		colors[ImGuiCol_BorderShadow] = none;
+		colors[ImGuiCol_FrameBgActive] = none;
+		colors[ImGuiCol_Tab] = none;
+		colors[ImGuiCol_TabUnfocused] = none;
+		colors[ImGuiCol_DockingEmptyBg] = none;
+
+		colors[ImGuiCol_Text] = grey(180);
+		colors[ImGuiCol_TextDisabled] = grey(90);
+
+		colors[ImGuiCol_CheckMark] = rgb(0, 112, 224);
+		colors[ImGuiCol_DragDropTarget] = rgb(0, 112, 224);
+		colors[ImGuiCol_NavWindowingHighlight] = rgb(0, 112, 224);
+
+		colors[ImGuiCol_PlotHistogram] = rgb(0, 112, 224);
+		colors[ImGuiCol_PlotHistogramHovered] = rgb(0, 112, 224);
+		colors[ImGuiCol_PlotLines] = rgb(0, 112, 224);
+		colors[ImGuiCol_PlotLinesHovered] = rgb(0, 112, 224);
+
+		colors[ImGuiCol_NavWindowingHighlight] = rgb(128, 168, 224);
+
+		colors[ImGuiCol_Border] = grey(21, 0.75f);
+		colors[ImGuiCol_PopupBg] = grey(21, 0.9f);
+		colors[ImGuiCol_FrameBg] = grey(15, 0.5f);
+		colors[ImGuiCol_TableRowBgAlt] = grey(20, 0.25f);
+
+		colors[ImGuiCol_NavWindowingDimBg] = grey(128, 0.75f);
+		colors[ImGuiCol_ModalWindowDimBg] = grey(128, 0.75f);
+		colors[ImGuiCol_DockingPreview] = grey(128, 0.25f);
+		colors[ImGuiCol_FrameBgHovered] = grey(128, 0.25f);
+		colors[ImGuiCol_TextSelectedBg] = grey(128, 0.25f);
+
+		colors[ImGuiCol_SliderGrabActive] = grey(128);
+		colors[ImGuiCol_ScrollbarGrabActive] = grey(128);
+		colors[ImGuiCol_ScrollbarGrabHovered] = grey(128);
+		colors[ImGuiCol_ResizeGripActive] = grey(128);
+		colors[ImGuiCol_ResizeGripHovered] = grey(128);
+
+		colors[ImGuiCol_SliderGrab] = grey(87);
+		colors[ImGuiCol_ScrollbarGrab] = grey(87);
+		colors[ImGuiCol_ResizeGrip] = grey(87);
+
+		colors[ImGuiCol_Button] = grey(60);
+
+		colors[ImGuiCol_ButtonHovered] = grey(47);
+		colors[ImGuiCol_ButtonActive] = grey(47);
+		colors[ImGuiCol_Header] = grey(47);
+		colors[ImGuiCol_HeaderHovered] = grey(47);
+		colors[ImGuiCol_HeaderActive] = grey(47);
+		colors[ImGuiCol_SeparatorActive] = grey(47);
+		colors[ImGuiCol_SeparatorHovered] = grey(47);
+		colors[ImGuiCol_TabHovered] = grey(47);
+
+		colors[ImGuiCol_WindowBg] = grey(36);
+		colors[ImGuiCol_TabActive] = grey(36);
+		colors[ImGuiCol_TabUnfocusedActive] = grey(36);
+		colors[ImGuiCol_TableRowBg] = grey(36);
+
+		colors[ImGuiCol_Separator] = grey(26);
+		colors[ImGuiCol_TableBorderLight] = grey(26);
+		colors[ImGuiCol_TableBorderStrong] = grey(26);
+		colors[ImGuiCol_ScrollbarBg] = grey(26);
+
+		colors[ImGuiCol_TitleBg] = grey(21);
+		colors[ImGuiCol_TitleBgActive] = grey(21);
+		colors[ImGuiCol_TitleBgCollapsed] = grey(21);
+		colors[ImGuiCol_MenuBarBg] = grey(21);
+
+
+		style.WindowPadding = ImVec2(4, 4);
+		style.FramePadding = ImVec2(6, 6);
+		style.ItemSpacing = ImVec2(4, 2);
+
+		style.ScrollbarSize = 12;
+		style.ScrollbarRounding = 12;
+
+		style.IndentSpacing = 12;
+
+		style.WindowBorderSize = 0;
+		style.ChildBorderSize = 0;
+		style.PopupBorderSize = 0;
+		style.FrameBorderSize = 0;
+		style.PopupRounding = 0;
+
+		style.FrameRounding = 3;
+		style.GrabRounding = 3;
+
+		style.WindowRounding = 0;
+		style.ChildRounding = 0;
+		style.TabBorderSize = 0;
+		style.TabRounding = 0;
+
+
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
+	}
 };//namespace
