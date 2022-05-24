@@ -36,7 +36,7 @@ void ofApp::setup() {
 	//-----------
 
 	// Gui Manager
-	
+
 	//-
 
 	// Optional:
@@ -71,8 +71,9 @@ void ofApp::setup() {
 		if (guiManager.beginWindow(0)) // -> This is our helpers to render each window passing the index
 		{
 			// ..  window widgets goes here!
-		}
+
 		guiManager.endWindow();
+		}
 
 		NOTICE:
 		We can use also raw ImGui methods and widgets,
@@ -83,8 +84,8 @@ void ofApp::setup() {
 
 	// Optional: 
 
-	// Customize the names for the 4 default Layout Presets. Default names are P0-P1-P2-P3
-
+	//// Uncommnet to test it
+	//// Customize the names for the 4 default Layout Presets. Default names are P0-P1-P2-P3
 	//vector<std::string> names;
 	//names.push_back("Editor");
 	//names.push_back("Player");
@@ -98,10 +99,10 @@ void ofApp::setup() {
 
 	// We can add extra parameters to append include into the Layout Presets
 
-	guiManager.addParameterToLayoutPresets(guiManager.bReset);
-	guiManager.addParameterToLayoutPresets(bEnable);
-	//guiManager.addParameterToLayoutPresets(bMode1);
-	//guiManager.addParameterToLayoutPresets(bMode2);
+	guiManager.addExtraParamToLayoutPresets(guiManager.bReset);
+	guiManager.addExtraParamToLayoutPresets(bEnable);
+	//guiManager.addExtraParamToLayoutPresets(bMode1);
+	//guiManager.addExtraParamToLayoutPresets(bMode2);
 
 	//-
 
@@ -135,6 +136,17 @@ void ofApp::draw()
 		if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
 	}
 
+	// Animate a Log
+	logPopulate();
+
+	//----
+
+	drawGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGui()
+{
 	//----
 
 	// Gui Manager with Docking features:
@@ -160,18 +172,13 @@ void ofApp::draw()
 
 		//--
 
-		// Render windows and widgets now!
-
-		drawImGui();
+		// Render ImGui windows and widgets now!
+		{
+			drawImGui();
+		}
 	}
 	guiManager.end();
-
-	//----
-
-	// Animate a Log
-	logPopulate();
 }
-
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
@@ -192,18 +199,18 @@ void ofApp::drawImGui()
 			ImGui::Text("myWindow_0");
 
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ofxImGuiSurfing::AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
+			guiManager.AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
 
 			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ofxImGuiSurfing::AddTooltip("Help enables some ToolTips");
+			guiManager.AddTooltip("Help enables some ToolTips");
 
 			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG);
 
 			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
-			ofxImGuiSurfing::AddTooltip("Speed controls the autopopulated Log window speed", guiManager.bHelp);
+			guiManager.AddTooltip("Speed controls the autopopulated Log window speed", guiManager.bHelp);
 
 			guiManager.Add(amount, OFX_IM_HSLIDER);
-			ofxImGuiSurfing::AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
+			guiManager.AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
 
 			ImGui::PushButtonRepeat(true);//-> pushing repeats trigs
 			{
@@ -216,7 +223,7 @@ void ofApp::drawImGui()
 					lineWidth -= 0.1;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				ofxImGuiSurfing::AddTooltip("Decrease lineWidth", guiManager.bHelp);
+				guiManager.AddTooltip("Decrease lineWidth", guiManager.bHelp);
 
 				ImGui::SameLine();
 
@@ -227,7 +234,7 @@ void ofApp::drawImGui()
 					lineWidth += 0.1;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				ofxImGuiSurfing::AddTooltip("Increase lineWidth", guiManager.bHelp);
+				guiManager.AddTooltip("Increase lineWidth", guiManager.bHelp);
 			}
 			ImGui::PopButtonRepeat();
 
@@ -239,8 +246,11 @@ void ofApp::drawImGui()
 
 			guiManager.Add(separation);
 			guiManager.Add(lineWidth);
+
+			//--
+
+			guiManager.endWindowSpecial(index);
 		}
-		guiManager.endWindowSpecial(index);
 	}
 
 	//----
@@ -252,8 +262,11 @@ void ofApp::drawImGui()
 			ImGui::Text("myWindow_1");
 			guiManager.AddGroup(params1);
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
+
+			//--
+
+			guiManager.endWindowSpecial();
 		}
-		guiManager.endWindowSpecial();
 	}
 
 	//----
@@ -286,8 +299,11 @@ void ofApp::drawImGui()
 
 				ImGui::EndTabBar();
 			}
+
+			//--
+
+			guiManager.endWindowSpecial();
 		}
-		guiManager.endWindowSpecial();
 	}
 
 	//----
@@ -301,8 +317,11 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
 			ImGui::Text("Hello, down!");
+
+			//--
+
+			guiManager.endWindowSpecial();
 		}
-		guiManager.endWindowSpecial();
 	}
 
 	//----
@@ -317,8 +336,11 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, left!");
 			ImGui::Text("Hello, left!");
 			ImGui::Text("Hello, left!");
+
+			//--
+
+			guiManager.endWindowSpecial();
 		}
-		guiManager.endWindowSpecial();
 	}
 }
 
@@ -390,6 +412,7 @@ ImGui:Begin("ofApp-Resets", (bool*)bEnable.get(), flags);
 	}
 }
 ImGui::End();
+
 }
 
 //--------------------------------------------------------------

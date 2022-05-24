@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <interactiveRect>
-	<path>ImGui_Layout/HelpBox//appSettings/</path>
-	<x>33</x>
-	<y>593</y>
+	<path>ImGui_Layout/HelpBox//</path>
+	<x>960</x>
+	<y>530</y>
 	<width>533</width>
 	<height>360</height>
 	<name>_HelpBox</name>

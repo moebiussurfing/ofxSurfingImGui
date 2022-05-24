@@ -50,7 +50,10 @@ void ofApp::setupImGui()
 {
 	// Instantiate
 
-	guiManager.setup();
+	// -> IM_GUI_MODE_INSTANTIATED_DOCKING is mandatory!
+	// NOTICE that, as we will use here the Layouts Engine, 
+	// we need to enable this mode!
+	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
 
 	//-
 

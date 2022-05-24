@@ -47,6 +47,7 @@ public:
 
 	ofxSurfing_ImGui_Manager guiManager; // The Gui Manager !
 
+	void drawGui();
 	void drawImGui();
 
 	void logPopulate();
