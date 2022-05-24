@@ -69,7 +69,12 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 * `data.zip` assets like font files used in examples.
 
 ## TESTED SYSTEMS
-- **Windows10** / **VS2017 VS2022** / **OF ~0.11**
+
+Currently Using:  
+- **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
+
+Also tested legacy and working:  
+- **Windows 10** / **VS 2017 / **oF ~0.10** - [oF ~0.11.2](https://github.com/openframeworks/openFrameworks/releases/download/0.11.2/of_v0.11.2_vs2017_release.zip)
 
 ## AUTHOR
 An add-on by **moebiusSurfing**.  

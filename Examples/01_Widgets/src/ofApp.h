@@ -23,7 +23,7 @@ class ofApp : public ofBaseApp{
 public:
 	
     void setup();
-    void setupImGuiStyles();
+    void refreshImGuiStyles();
     void draw();
     void exit();
 
@@ -53,7 +53,6 @@ public:
     ofParameter<bool> bEnable2;
     ofParameter<bool> bEnable3;
     ofParameter<bool> bEnable4;
-
 
 	ofEventListener listener_bEnable1;
 	ofEventListener listener_bEnable2;

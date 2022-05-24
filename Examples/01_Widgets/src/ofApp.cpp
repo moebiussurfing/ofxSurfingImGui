@@ -97,7 +97,8 @@ void ofApp::setup() {
 
 	// Customize Styles
 
-	setupImGuiStyles();
+	// ->  Styles can be modified on runtime to reflect different modes of your app.
+	refreshImGuiStyles();
 
 	//-
 
@@ -117,7 +118,7 @@ void ofApp::setup() {
 		}
 
 		// Notice that:
-		// For this bool toggle, we do not will call setupImGuiStyles()
+		// For this bool toggle, we do not will call refreshImGuiStyles()
 		// We can update these two above params on runtime
 		// (without having to clear) previously added ofParams yet.
 	});
@@ -126,21 +127,21 @@ void ofApp::setup() {
 	listener_bEnable2 = bEnable2.newListener([this](bool &b) {
 		ofLogNotice("bEnable2: ") << (b ? "TRUE" : "FALSE");
 
-		setupImGuiStyles(); // -> refresh styles on runtime!
+		refreshImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//--------------------------------------------------------------
 	listener_bEnable3 = bEnable3.newListener([this](bool &b) {
 		ofLogNotice("bEnable3: ") << (b ? "TRUE" : "FALSE");
 
-		setupImGuiStyles(); // -> refresh styles on runtime!
+		refreshImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//--------------------------------------------------------------
 	listener_bEnable4 = bEnable4.newListener([this](bool &b) {
 		ofLogNotice("bEnable4: ") << (b ? "TRUE" : "FALSE");
 
-		setupImGuiStyles(); // -> refresh styles on runtime!
+		refreshImGuiStyles(); // -> refresh styles on runtime!
 	});
 
 	//----
@@ -212,7 +213,7 @@ void ofApp::exit() {
 }
 
 //--------------------------------------------------------------
-void ofApp::setupImGuiStyles() {
+void ofApp::refreshImGuiStyles() {
 
 	// Customize Styles
 
@@ -222,7 +223,7 @@ void ofApp::setupImGuiStyles() {
 	// We can update on runtime (without having to clear) previously added ofParams yet.
 
 	// Look on the bEnable1 / bEnable2 / bEnable3 / bEnable4 behaviour: 
-	// We recall setupImGuiStyles() when above bool changes to update the styles.
+	// We recall refreshImGuiStyles() when above bool changes to update the styles.
 
 	//-
 
