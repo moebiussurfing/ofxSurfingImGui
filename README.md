@@ -56,12 +56,14 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 
 ## DEPENDENCIES
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
+  - You MUST use this above fork.  
 
-  - Why a fork of the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
+  - Why a fork and NOT the original [ofxImGui](https://github.com/jvcleave/ofxImGui)? 
+    - Multi context/instances:  
+      You can use several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
-    - Multi context/instances: 
-      you can use several windows from different add-ons without colliding. 
+
 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
