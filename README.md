@@ -69,7 +69,7 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 * `data.zip` assets like font files used in examples.
 
 ## TESTED SYSTEMS
-- **Windows10** / **VS2017** / **OF ~0.11**
+- **Windows10** / **VS2017 VS2022** / **OF ~0.11**
 
 ## AUTHOR
 An add-on by **moebiusSurfing**.  
