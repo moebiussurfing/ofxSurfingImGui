@@ -56,7 +56,7 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 
 ## DEPENDENCIES
-* Get the [ofxImGui](https://github.com/Daandelange/ofxImGui/). _THE AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
+* Get from [ofxImGui](https://github.com/Daandelange/ofxImGui/): _THE AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
   - You MUST use this above fork.  
 
   - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui**? 
