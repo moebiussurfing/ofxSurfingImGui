@@ -59,9 +59,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/). _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
   - You MUST use this above fork.  
 
-  - Why a fork and NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui**? 
-    - Multi context/instances:  
-      You can use several windows from different add-ons without colliding.  
+  - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui**? 
+    - Multi context/instances: You can use several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
 
 
