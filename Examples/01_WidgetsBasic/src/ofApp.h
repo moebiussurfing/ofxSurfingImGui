@@ -12,7 +12,6 @@ public:
 	
     void setup();
     void draw();
-    void exit();
     void keyPressed(int key);
 
 	//-
@@ -32,8 +31,6 @@ public:
     void drawImWindow2();
     void drawImWindow3();
     void drawImWindow4();
-
-	ofParameter<bool> bConstraint{ "Constraints", true };
 
 	//-
 
