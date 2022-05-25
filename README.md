@@ -56,24 +56,25 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 
 ## DEPENDENCIES
-* Get from [ofxImGui](https://github.com/Daandelange/ofxImGui/): _THE AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/):  
+  _THE AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.  
   - You MUST use this above fork.  
-
   - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui**? 
     - Multi context/instances: You can use several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
 
 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (For examples only.)
-* `data.zip` assets like font files used in examples.
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (_For some examples only_)
+
+`data.zip` assets like font files used in examples.  
 
 ## TESTED SYSTEMS
 
 Currently Using:  
 - **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
 
-Also tested legacy and working:  
+Legacy Tested:  
 - **Windows 10** / **VS 2017** / **oF ~0.10** / [oF ~0.11.2](https://github.com/openframeworks/openFrameworks/releases/download/0.11.2/of_v0.11.2_vs2017_release.zip)
 
 ## AUTHOR
