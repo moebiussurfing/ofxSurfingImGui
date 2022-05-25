@@ -27,7 +27,7 @@ void ofApp::setup()
 	params2.add(params3);
 	params.add(params2);
 
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED);
+	guiManager.setup();
 }
 
 //--------------------------------------------------------------
