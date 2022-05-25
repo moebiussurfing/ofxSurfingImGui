@@ -7,6 +7,8 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
+---
+
 ## WORK IN PROGRESS!
 
 <details>
@@ -24,6 +26,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
   </p>
 </details>
+
+---
 
 ## FEATURES 
 
@@ -54,20 +58,23 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
+---
 
 ## DEPENDENCIES
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/):  
-  THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s fork.
-  - You MUST use this above fork.  
-  - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui**? 
-    - Multi context/instances: You can use several windows from different add-ons without colliding.  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
+  - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s FORK.
+  - You MUST use this one!  
+  - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+    - Multi context/instances: Several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
 
 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). (_For some examples only_)
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). ( _For some examples only_ )
 
 `data.zip` assets like font files used in examples.  
+
+---
 
 ## TESTED SYSTEMS
 
@@ -77,12 +84,18 @@ Currently Using:
 Legacy Tested:  
 - **Windows 10** / **VS 2017** / **oF ~0.10** / [oF ~0.11.2](https://github.com/openframeworks/openFrameworks/releases/download/0.11.2/of_v0.11.2_vs2017_release.zip)
 
+---
+
 ## AUTHOR
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
+---
+
 ## THANKS
 _All source snippets and widgets from other authors are linked into header files. Thanks!_
+
+---
 
 ## LICENSE
 **MIT License**
