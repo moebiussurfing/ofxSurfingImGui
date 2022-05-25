@@ -168,6 +168,31 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGui::Gui& _gui) { // using external in
 }
 
 //--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::setupImGuiFonts()
+{
+	std::string _fontName;
+	float _fontSizeParam;
+	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
+	_fontSizeParam = FONT_DEFAULT_SIZE;
+
+	std::string _path = "assets/fonts/"; // assets folder
+
+	// font default
+	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
+
+	// font big
+	pushFont(_path + _fontName, _fontSizeParam * 1.5f); // queue big font too
+
+	// font huge
+	pushFont(_path + _fontName, _fontSizeParam * 2.f); // queue huge font too
+
+	//--
+
+	// default
+	addFont(_path + _fontName, _fontSizeParam);
+}
+
+//--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setupImGui()
 {
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
@@ -198,27 +223,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	//--
 
 	// Fonts
-
-	std::string _fontName;
-	float _fontSizeParam;
-	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
-	_fontSizeParam = FONT_DEFAULT_SIZE;
-
-	std::string _path = "assets/fonts/"; // assets folder
-
-	// font default
-	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
-
-	// font big
-	pushFont(_path + _fontName, _fontSizeParam * 1.3f); // queue big font too
-
-	// font huge
-	pushFont(_path + _fontName, _fontSizeParam * 1.8f); // queue huge font too
-
-	//--
-
-	// default
-	addFont(_path + _fontName, _fontSizeParam);
+	setupImGuiFonts();
 
 	//--
 

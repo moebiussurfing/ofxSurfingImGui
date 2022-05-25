@@ -594,6 +594,7 @@ private:
 
 	// Initiates ofxImGui with the common settings
 	void setupImGui();
+	void setupImGuiFonts();
 
 public:
 
