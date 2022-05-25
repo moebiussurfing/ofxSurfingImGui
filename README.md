@@ -15,13 +15,11 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 #### Widgets & Layout Engine
 
-![image](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders2.PNG?raw=true "image")  
-
-![image](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders.PNG?raw=true "image")  
+![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders2.PNG)  
 
 #### Layout Presets Engine
 
-![gif](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif?raw=true "gif")  
+![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
   </p>
 </details>
 
