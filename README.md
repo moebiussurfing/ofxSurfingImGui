@@ -13,6 +13,8 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   <summary>SCREENSHOTS</summary>
   <p>
 
+[Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/tree/master/Examples)  
+
 #### Widgets & Layout Engine
 
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders2.PNG)  
