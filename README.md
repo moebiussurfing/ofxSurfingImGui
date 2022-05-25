@@ -7,7 +7,6 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra).  
 
----
 
 ## WORK IN PROGRESS!
 
@@ -27,7 +26,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
----
 
 ## FEATURES 
 
@@ -58,7 +56,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   </p>
 </details>
 
----
 
 ## DEPENDENCIES
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
@@ -74,7 +71,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 `data.zip` assets like font files used in examples.  
 
----
 
 ## TESTED SYSTEMS
 
@@ -84,18 +80,15 @@ Currently Using:
 Legacy Tested:  
 - **Windows 10** / **VS 2017** / **oF ~0.10** / [oF ~0.11.2](https://github.com/openframeworks/openFrameworks/releases/download/0.11.2/of_v0.11.2_vs2017_release.zip)
 
----
 
 ## AUTHOR
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
----
 
 ## THANKS
 _All source snippets and widgets from other authors are linked into header files. Thanks!_
 
----
 
 ## LICENSE
 **MIT License**
