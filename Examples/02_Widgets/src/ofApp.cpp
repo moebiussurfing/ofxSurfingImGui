@@ -12,7 +12,7 @@ void ofApp::setup()
 
 	bGui.set("bGui", true);
 
-	// These toggles are very usefull to handle the windows show/hide states.
+	// These toggles are very useful to handle the windows show/hide states.
 	// Improves and speed-up also the API and some Layout Presets Engine aspects.
 	bGui_1.set("Window 1", true);
 	bGui_2.set("Window 2", true);
@@ -110,19 +110,6 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() {
-
-	// Save session settings
-	ofxSurfingHelpers::saveGroup(params1);
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
-	if (key == 'g') bGui = !bGui;
-}
-
-//--------------------------------------------------------------
 void ofApp::draw()
 {
 	//ofClear(color1);
@@ -152,7 +139,7 @@ void ofApp::drawImWindowMain()
 
 		guiManager.AddLabelBig("> Helpers");
 
-		// The manager has some usefull params for common funcions.
+		// The manager has some useful params for common funcions.
 
 		// The minimize toggle will help us to hide stuff on our winwows
 		// to simplify a bit the GUI when some windgets are not required to be visible.
@@ -302,7 +289,7 @@ void ofApp::drawImWindow2()
 		_flagt |= ImGuiTreeNodeFlags_Framed;
 		if (ImGui::TreeNodeEx("EXPAND", _flagt))
 		{
-			// statics vars are usefull sometimes for fast prototyping on ImGui
+			// statics vars are useful sometimes for fast prototyping on ImGui
 			static ofParameter<bool> bBig{ "Big", false };
 
 			if (!guiManager.bMinimize)
@@ -413,4 +400,37 @@ void ofApp::drawImWindow4()
 
 		guiManager.endWindow();
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key)
+{
+	if (key == 'g') bGui = !bGui;
+
+	// Test some Themes
+	if (key == '1') {
+		ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+	}
+	if (key == '2') {
+		ofxImGuiSurfing::ImGui_Xemu();
+	}
+	if (key == '3') {
+		ofxImGuiSurfing::ImGui_ThemeYave();
+	}
+	if (key == '4') {
+		ofxImGuiSurfing::ImGui_ThemeSequentity();
+	}
+	if (key == '5') {
+		ofxImGuiSurfing::ImGui_ThemeModernDark();
+	}
+	if (key == '6') {
+		ofxImGuiSurfing::ImGui_ThemeOlekristensen();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+
+	// Save session settings
+	ofxSurfingHelpers::saveGroup(params1);
 }

@@ -729,7 +729,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	// Taken from Yave by gan74
-	// Author: https://github.com/gan74/Yave
+	// Source: https://github.com/gan74/Yave
 
 #define none ofFloatColor(0,0,0)
 
