@@ -29,12 +29,14 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
 
 ## FEATURES 
 
-- Setup and **Layout Manager**.
-- Useful snippets to speed up the layout process.  
-- **ofParameter Helpers** and **ImGui Widgets** ported to **oF**.
-- **Docking Helpers**.
+- Easy **Setup** and **Layout**.
+- **ofParameter Helpers**.
+- **ImGui Widgets** ported to **oF ofParameters**.
+- Useful methods and snippets to speed-up layout and workflow.
 - A **Layout Presets Engine**.
-- Included my **Dark Theme**.
+- **Docking Helpers**.
+- Cool **Themes**.
+- Mouse Wheel control.
 
 <details>
   <summary>More ImGui Widgets</summary>
@@ -44,15 +46,15 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   - Vertical and Horizontal Sliders
   - Range Sliders
   - Styled Knobs
-  - Inactive, hidden, locked widgets
-  - Show or hide labels and values
+  - Inactive, hidden or locked styles
+  - Hide labels and values
   - DearWidgets
   - Gradient Color Designer
-  - Matrix Selector
+  - Matrix Selectors
   - Progress bars and waiting spinners
   - Files Browser
   - Curve Editors
-  - Mouse Wheel control
+  - Bubbles Notifier System
   </p>
 </details>
 
@@ -64,7 +66,6 @@ Some examples, complementary docs and testing projects are now moved to [ofxSurf
   - Why NOT the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
     - Multi context/instances: Several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
-
 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). ( _For some examples only_ )
