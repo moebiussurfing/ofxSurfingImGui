@@ -6,8 +6,17 @@
 
 #include "ofxWindowApp.h" // -> Not required
 
+/*
+
+Docking features is a bit WIP yet!
+Some zones are not allowed or not memorized..
+
+*/
+
+
 class ofApp : public ofBaseApp 
 {
+
 public:
 
 	//-
@@ -54,6 +63,7 @@ public:
 
 	//-
 
+	// Docking Stuff
 	void dockingHelperUpdate();
 	void dockingHelperDraw();
 	void doDockingReset();

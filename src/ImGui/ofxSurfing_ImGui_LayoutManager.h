@@ -103,7 +103,6 @@ public:
 	void setup(ofxImGui::Gui& gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
 	void draw(ofEventArgs& args);
-	//void draw(); // to manual draw...
 
 	//--------------------------------------------------------------
 	void setup()//->We will use the most common use to avoid to have to use any argument.
@@ -439,13 +438,14 @@ public:
 		return b;
 	}
 
-	//--
-	// 
+	//----
+	 
 	// Text with spacing
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		ImGui::TextWrapped(t.c_str());
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
@@ -456,6 +456,7 @@ public:
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
@@ -465,6 +466,7 @@ public:
 	void AddLabelHuge(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		pushStyleFont(2);
 		ImGui::TextWrapped(t.c_str());
@@ -799,13 +801,15 @@ public:
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 	ofParameter<bool> bNoScroll{ "No Scroll", false };
 	ofParameter<bool> bHelp{ "Help", false };
-	ofParameter<bool> bHelp2{ "Help Internal", false };
+	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 	ofParameter<bool> bReset_Window{ "Reset Window", false };
 
 private:
+
+	void helpInfoBuild();
 
 	ofParameterGroup params_RectPanels{ "Rectangles Windows" };
 	vector<ofParameter<ofRectangle>> rectangles_Windows;
@@ -917,7 +921,7 @@ private:
 	//guiManager.drawAdvancedSubPanel();
 	//--------------------------------------------------------------
 	void drawAdvancedControls() {
-		drawAdvanced();
+		drawAdvancedBundle();
 	}
 
 public:
@@ -929,7 +933,7 @@ public:
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
-	void drawAdvanced(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
+	void drawAdvancedBundle(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
 		if (!bNoSpacing) ImGui::Spacing();
 		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
@@ -1013,7 +1017,7 @@ private:
 
 					// Help
 					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
-					ofxImGuiSurfing::AddToggleRoundedButton(bHelp2);
+					ofxImGuiSurfing::AddToggleRoundedButton(bHelpInternal);
 
 					//--
 
@@ -1224,7 +1228,7 @@ public:
 			//	if (!bMinimize)
 			//	{
 			//		drawSpecialWindowsPanel();
-			//		//drawAdvanced();//crashes?
+			//		//drawAdvancedBundle();//crashes?
 			//	}
 			//}
 		}
@@ -1599,7 +1603,7 @@ public:
 
 public:
 
-	void draw_ImGuiMenu();
+	void drawImGuiMenu();
 
 public:
 

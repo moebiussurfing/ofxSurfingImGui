@@ -364,7 +364,7 @@ if (ImGui::BeginTabBar("Tabs Blah"))
 	}
 	if (ImGui::BeginTabItem("Controls"))
 	{
-		guiManager.drawAdvanced();
+		guiManager.drawAdvancedBundle();
 		ImGui::EndTabItem();
 }
 ImGui::EndTabBar();

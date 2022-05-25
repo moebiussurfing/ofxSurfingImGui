@@ -36,7 +36,7 @@ void ofApp::setup() {
 
 	//-----------
 
-	// guiManager
+	// Gui Manager
 
 	setupImGui();
 
@@ -50,9 +50,9 @@ void ofApp::setupImGui()
 {
 	// Instantiate
 
-	// -> IM_GUI_MODE_INSTANTIATED_DOCKING is mandatory!
-	// NOTICE that, as we will use here the Layouts Engine, 
-	// we need to enable this mode!
+	// NOTICE that
+	// To enable the "Layout Presets Engine":
+	// To pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument is mandatory!
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
 
 	//-
@@ -63,6 +63,9 @@ void ofApp::setupImGui()
 	// You will use these added windows easily, 
 	// but you must remember his index order!
 	// Each window will be added to the "Layout Presets Engine" and auto handled too.
+	// The engine will auto create bool toggles 
+	// (like the bGui we used before)
+	// to handle the show/hide window states
 
 	guiManager.addWindowSpecial("Main"); // index 0
 	guiManager.addWindowSpecial("Audio"); // index 1
@@ -105,12 +108,10 @@ void ofApp::setupImGuiStyles()
 	guiManager.AddStyle(size2, OFX_IM_HSLIDER_BIG_NO_LABELS);
 	guiManager.AddStyle(amount2, OFX_IM_DRAG);
 
-
 	// params3
 	guiManager.AddStyle(lineWidth3, OFX_IM_KNOB, 2, true);
 	guiManager.AddStyle(separation3, OFX_IM_KNOB, 2, false);
 	guiManager.AddStyle(speed3, OFX_IM_KNOB);
-
 }
 
 //--------------------------------------------------------------
@@ -122,24 +123,14 @@ void ofApp::draw()
 
 	guiManager.begin();
 	{
-		//--
-
-		//TODO: this can be removed for the moment...
-		// Should allow to disable!
-
-		// Here (between beginDocking/endDocking) 
-		// we can access all the docking space.
-		guiManager.beginDocking();
-		{
-		}
-		guiManager.endDocking();
+		drawImGuiDocking();
 
 		//--
 
 		// Render windows and widgets now!
 
 		// NOTICE than common and Raw ImGui windows and widgets can be drawn here too,
-		// but if you want to use the "Layout Presets Engine" you need to use the API and follow the rules!
+		// But if you want to use the "Layout Presets Engine" you need to use the API and follow the rules!
 
 		drawImGui();
 	}
@@ -147,11 +138,27 @@ void ofApp::draw()
 
 	//----
 
-	// Log
-	logPopulate();
-
+	// Scene
+	 
 	// Animate some vars
 	doAnimate();
+
+	// Log
+	logPopulate();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiDocking()
+{
+	//TODO: this can be removed for the moment...
+	// Should allow to disable!
+
+	// Here (between beginDocking/endDocking) 
+	// we can access all the docking space.
+	guiManager.beginDocking();
+	{
+	}
+	guiManager.endDocking();
 }
 
 //--------------------------------------------------------------
@@ -175,12 +182,12 @@ void ofApp::drawImGui()
 
 			guiManager.AddLabelBig("myWindow_0", true);
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			guiManager.AddTooltip("This is a Help Tooltip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
+			guiManager.AddTooltip("This is a Help Tool tip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
 			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 			guiManager.AddTooltip("Help enables some ToolTips and the Help Box!");
 			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG_BORDER);
 			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
-			guiManager.AddTooltip("Speed controls the autopopulated Log window speed", guiManager.bHelp);
+			guiManager.AddTooltip("Speed controls the auto populated Log window speed", guiManager.bHelp);
 			guiManager.Add(amount, OFX_IM_HSLIDER);
 			guiManager.AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
 
@@ -237,18 +244,23 @@ void ofApp::drawImGui()
 		{
 			guiManager.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
+			guiManager.AddSpacingBigSeparated();
+
 			if (ImGui::BeginTabBar("myTabs"))
 			{
 				if (ImGui::BeginTabItem("Video"))
 				{
+					guiManager.AddSpacingBig();
 					string str = "weqweqr qc wcrqw crqwecrqwec rqwec rqwe crqwecrqwecr qervev qervew ecrqwecr qwecrqwe cr qervev qerve";
 					ImGui::Text("Blah blah");
 					ImGui::TextWrapped(str.c_str());
+					guiManager.AddSpacingBigSeparated();
 					guiManager.AddGroup(params1);
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Audio"))
 				{
+					guiManager.AddSpacingBig();
 					string str = "weq12341 234w eqrqcwcrqwcr 112 1233a dqervewecr qwecrqwe crqw ecr qervev qerve";
 					ImGui::Text("Blah blah");
 					ImGui::TextWrapped(str.c_str());
@@ -256,8 +268,9 @@ void ofApp::drawImGui()
 				}
 				if (ImGui::BeginTabItem("Controls"))
 				{
+					guiManager.AddSpacingBig();
 					guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-					guiManager.drawAdvanced();
+					guiManager.drawAdvancedBundle();
 					ImGui::EndTabItem();
 				}
 

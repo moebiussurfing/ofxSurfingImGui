@@ -65,7 +65,9 @@ public:
 
 	void setupImGui();
 	void setupImGuiStyles();
+	
 	void drawImGui();
+	void drawImGuiDocking();
 
 	void logPopulate(); // -> Generates random messages to test logging.
 	void doAnimate(); // -> Generates random variations to animate variables.

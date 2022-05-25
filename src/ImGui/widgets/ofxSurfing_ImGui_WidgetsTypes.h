@@ -457,7 +457,7 @@ namespace ofxImGuiSurfing
 		//-----------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
-			// Will flag to true to do the final steps: sameline and spacing configs.
+			// Will flag to true to do the final steps: sameline and spacing configs by args.
 			bool bDone = false;
 
 			// Will flag to notify if the ofParam widget changed.
@@ -735,20 +735,20 @@ namespace ofxImGuiSurfing
 
 						// rounded
 
-					case OFX_IM_TOGGLE_ROUNDED:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED:
-						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.5f * _h, 1.5f * (2 / 3.f) * _h));
-						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-						break;
-
 					case OFX_IM_TOGGLE_ROUNDED_MINI:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI:
-						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.1625f * _h, 0.75f * _h), true);
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h), true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 
 					case OFX_IM_TOGGLE_ROUNDED_SMALL:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL:
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_TOGGLE_ROUNDED:
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED:
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
@@ -1466,15 +1466,14 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoTooltip;
 
 					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
-
 					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_NO_ALPHA)bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
-					else if (type == OFX_IM_COLOR_NO_ALPHA) {
-						bReturn = ofxImGuiSurfing::AddParameter(p, false);
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					}
-
-					//TODO: must merge..
+					//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
 						flags = ImGuiColorEditFlags_None;
 						flags |= ImGuiColorEditFlags_NoInputs;
@@ -1486,18 +1485,6 @@ namespace ofxImGuiSurfing
 						ImGui::SameLine();
 						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
 					}
-
-					//TODO:
-					else if (type == OFX_IM_COLOR_NO_NAME) {
-						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
-						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-						bReturn = ofxImGuiSurfing::AddParameter(p, false);
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					}
-
-					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 				}
 				uniqueName.pop();
 
@@ -1519,13 +1506,13 @@ namespace ofxImGuiSurfing
 					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
 
 					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_NO_ALPHA) bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
-					else if (type == OFX_IM_COLOR_NO_ALPHA) {
-						bReturn = ofxImGuiSurfing::AddParameter(p, false);
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-					}
-
-					//TODO: must merge..
+					//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
 						flags = ImGuiColorEditFlags_None;
 						flags |= ImGuiColorEditFlags_NoInputs;
@@ -1537,18 +1524,6 @@ namespace ofxImGuiSurfing
 						ImGui::SameLine();
 						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
 					}
-
-					//TODO:
-					else if (type == OFX_IM_COLOR_NO_NAME) {
-						bReturn = ofxImGuiSurfing::AddParameter(p, false);
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
-						//ImGuiColorEditFlags flags = ImGuiColorEditFlags_NoLabel;
-						//bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-					}
-
-					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 				}
 				uniqueName.pop();

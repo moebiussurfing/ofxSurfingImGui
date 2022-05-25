@@ -463,6 +463,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	//bool AddParameter(ofParameter<ofColor>& parameter, bool alpha, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None)
 	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha/*, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None*/)
 	{
 		ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
@@ -503,8 +504,13 @@ namespace ofxImGuiSurfing
 		//ImGuiColorEditFlags flags = ImGuiColorEditFlags_None;
 
 		ofParameter<ofFloatColor> c;
+
 		c.set(parameter.getName(),
-			ofFloatColor(parameter.get().r / 255.f, parameter.get().g / 255.f, parameter.get().b / 255.f, parameter.get().a / 255.f),
+			ofFloatColor(
+				parameter.get().r / 255.f, 
+				parameter.get().g / 255.f, 
+				parameter.get().b / 255.f, 
+				parameter.get().a / 255.f),
 			ofFloatColor(0, 0, 0, 0),
 			ofFloatColor(1.f, 1.f, 1.f, 1.f)
 		);

@@ -279,7 +279,7 @@ void ofApp::drawImGui()
 			{
 				if (ImGui::BeginTabItem("Controls"))
 				{
-					guiManager.drawAdvanced();
+					guiManager.drawAdvancedBundle();
 					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Video"))
