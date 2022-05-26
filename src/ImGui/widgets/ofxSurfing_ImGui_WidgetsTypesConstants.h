@@ -145,6 +145,7 @@ namespace ofxImGuiSurfing
 		// Colors
 		OFX_IM_COLOR_INPUT, // standard
 		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
+		OFX_IM_COLOR_NO_INPUTS, // without inputs
 		OFX_IM_COLOR_NO_NAME, //TODO: without name or controls
 		OFX_IM_COLOR_BOX, // small box color without controls
 		OFX_IM_COLOR_BOX_FULL_WIDTH,

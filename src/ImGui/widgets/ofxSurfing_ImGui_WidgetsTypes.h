@@ -1468,6 +1468,7 @@ namespace ofxImGuiSurfing
 					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
 					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 					else if (type == OFX_IM_COLOR_NO_ALPHA)bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_INPUTS) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
 					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
@@ -1508,6 +1509,7 @@ namespace ofxImGuiSurfing
 					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
 					else if (type == OFX_IM_COLOR_NO_ALPHA) bReturn = ofxImGuiSurfing::AddParameter(p, false);
 					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+					else if (type == OFX_IM_COLOR_NO_INPUTS) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
