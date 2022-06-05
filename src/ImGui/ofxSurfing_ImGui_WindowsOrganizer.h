@@ -289,6 +289,16 @@ namespace ofxImGuiSurfing
 
 			//-
 
+			else if (name == bFitSizes.getName())
+			{
+				//fix
+				if (bFitSizes) {
+					bOrientation = bOrientation;
+				}
+			}
+
+			//-
+
 			else if (name == iOrientation.getName())
 			{
 				static int pre = -1;
@@ -643,7 +653,7 @@ namespace ofxImGuiSurfing
 				float w = h * 1.55f;
 
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-				if (!bMinimized) ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
+				ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
 
 				ImGui::Spacing();
 			}
