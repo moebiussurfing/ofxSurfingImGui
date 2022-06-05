@@ -4,6 +4,8 @@
 
 ![](02_Widgets/Capture.PNG)  
 
+![](10_WindowsSpecials/Capture.PNG)  
+
 ![](20_LayoutsEngine/Capture.PNG)  
 
 ![](30_LayoutsEngineDocking/Capture.PNG)  
