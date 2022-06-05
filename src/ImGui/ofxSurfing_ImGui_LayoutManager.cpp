@@ -45,7 +45,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// Enable "Windows Special Organizer"
 	// Customize names
 	windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
-	setNameWindowsSpecialsPanel("Organizer");
+	setNameWindowsSpecialsPanel("ORGANIZER");
 }
 
 //--------------------------------------------------------------
@@ -209,7 +209,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	bool bRestore = true;
 	bool bMouse = false;
 
-	if (bDocking) flags += ImGuiConfigFlags_DockingEnable;
+	if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
 	// Setup imgui with the appropriate config flags
@@ -218,7 +218,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
-	if (bDocking) ImGui::GetIO().ConfigDockingWithShift = true;
+	if (bDockingLayoutPresetsEngine) ImGui::GetIO().ConfigDockingWithShift = true;
 
 	// Uncomment below to "force" all imgui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
@@ -244,7 +244,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	// Last setup step
 
-	if (bDocking)
+	if (bDockingLayoutPresetsEngine)
 	{
 		setupLayout(4); // Init Default Layout with 4 presets.
 	}
@@ -363,7 +363,7 @@ void ofxSurfing_ImGui_Manager::helpInfoBuild()
 	helpInfo += "\n\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
-		if (bDocking)
+		if (bDockingLayoutPresetsEngine)
 		{
 			helpInfo += "LAYOUTS PRESETS ENGINE \n";
 			helpInfo += "\n";
@@ -724,7 +724,7 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
+void ofxSurfing_ImGui_Manager::drawLayoutPresetsEngine() {
 
 	if (bUseLayoutPresetsManager && bGui_LayoutsManager && !bMinimizePresets)
 		drawLayoutsManager();
@@ -737,7 +737,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutEngine() {
 
 		//----
 
-		if (bDocking)
+		if (bDockingLayoutPresetsEngine)
 		{
 
 			ImGuiID dockNodeID;
@@ -977,6 +977,10 @@ void ofxSurfing_ImGui_Manager::startupFirstFrame() {
 //----
 
 // Global ImGui being/end like ofxImGui
+// 
+// All the ImGui Stuff goes in between here,
+// The RAW ImGui widgets and the API / Engine handled stuff too!
+// 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 
@@ -999,12 +1003,23 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//TODO:
 	_currWindowsSpecial = -1;
 
-	resetUniqueNames(); // reset unique names
+	//--
+
+	resetUniqueNames(); // Reset unique names
+
+	// This handles the name to Push/Pop widgets IDs
+	// Then we can use several times the same ofParameter with many styles,
+	// into the same window without colliding!
+	// That collide happens when using the original legacy ofxImGui ofParam Helpers!
 
 	//--
 
+	//TODO:
+	// Sometimes we could use an ofxImGui external or from a parent scope..
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
+
+	//--
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 
@@ -1013,11 +1028,14 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//--
 
-	if (bDocking) drawLayoutEngine();
+	// Layout Presets Engine
 
-	//--
+	if (bDockingLayoutPresetsEngine) drawLayoutPresetsEngine();
+
+	//----
 
 	// Special Windows Engine
+	// 
 	// Organizer
 
 	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
@@ -1029,10 +1047,12 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 			windowPanels.update();
 
+			//TODO:
 			// Docking mode has the gui toggles in other panels..
+
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
-				if (bGui_WindowsSpecials) drawWindowsSpecialPanel();
+				if (bGui_WindowsSpecials) drawWindowsSpecialsPanel();
 			}
 		}
 	}
@@ -1077,7 +1097,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(char* name)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return beginWindow((string)name, NULL, ImGuiWindowFlags_None);
+	return beginWindow((string)name, NULL, fg);
+	//return beginWindow((string)name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
@@ -1086,7 +1107,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return beginWindow(name, NULL, ImGuiWindowFlags_None);
+	return beginWindow(name, NULL, fg);
+	//return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
@@ -1097,7 +1119,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return beginWindow(name, p_open, ImGuiWindowFlags_None);
+	return beginWindow(name, p_open, fg);
+	//return beginWindow(name, p_open, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
@@ -2033,7 +2056,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 	// skip callbakcs when not using the Layout Presets Engine!
 	if (!surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
-		if (!bDocking)
+		if (!bDockingLayoutPresetsEngine)
 			return;
 
 	//----
@@ -2571,7 +2594,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	// Layout Presets Engine
 	{
-		if (!bDocking && !bUseLayoutPresetsManager) return;//skip is not enabled!
+		if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return;//skip is not enabled!
 
 		//--
 

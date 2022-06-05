@@ -11,7 +11,7 @@ TODO:
 BUGS:
 
 	+ next groups headers are weird hidden!
-	+ nested groups are (heriting) expanded when parent is expanded.
+	+ nested groups are (heritating) expanded when parent is expanded.
 	+ fix windowsSpecial not drawing windows, when multiple instances?
 	+ it's maybe working on docking mode only?
 	+ docking overlaps sometimes on layout management

@@ -800,7 +800,7 @@ private:
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // uses Windows Specials
+	ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // uses Windows Specials
 
 	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved on settings when exit the app 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
@@ -1079,7 +1079,7 @@ private:
 									ImGui::Indent();
 
 									AddToggleRoundedButton(bUseLayoutPresetsManager);
-									AddToggleRoundedButton(bDocking);
+									AddToggleRoundedButton(bDockingLayoutPresetsEngine);
 									ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
 									AddToggleRoundedButton(bPreviewSceneViewport);
 									//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
@@ -1228,7 +1228,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setDocking(bool b) { // must call before setup
-		bDocking = b;
+		bDockingLayoutPresetsEngine = b;
 	}
 
 
@@ -1251,15 +1251,16 @@ public:
 	void endWindowSpecial(int index = -1);
 
 	//--------------------------------------------------------------
-	void setNameWindowsSpecialsPanel(std::string name) {
+	void setNameWindowsSpecialsPanel(std::string name)
+	{
 		nameWindowSpecialsPanel = name;
 		bGui_WindowsSpecials.setName(name);
 		windowPanels.bGui_WindowsSpecials.setName(name);
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowsSpecialPanel() {
-
+	void drawWindowsSpecialsPanel()
+	{
 		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -1427,7 +1428,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialGuiToggle() {
+	ofParameter<bool>& getWindowsSpecialsGuiToggle() {
 		return bGui_WindowsSpecials;
 	}
 
@@ -1679,7 +1680,7 @@ private:
 	void drawLayoutsExtra();
 	void drawLayoutsPresets();
 	void drawLayoutsPanels();
-	void drawLayoutEngine();
+	void drawLayoutPresetsEngine();
 	void drawOFnative();
 
 
@@ -1736,8 +1737,8 @@ private:
 	ofParameter<bool> bSolo{ "Solo", false };
 
 
-	ofParameter<bool> bDocking{ "bDocking", false };
-	//ofParameter<bool> bDocking{ "bDocking", true };
+	ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", false };
+	//ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", true };
 
 public:
 

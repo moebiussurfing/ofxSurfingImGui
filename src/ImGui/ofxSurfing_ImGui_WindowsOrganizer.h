@@ -9,12 +9,11 @@
 
 /*
 
-TODO:
+	TODO:
 
-	+ fix recolotate when closed first queued window
-	+ fix/replace position apply to first queued window
-	+ store sorting queue ?
-	+ fix close window using [x]
+		+ fix re position when closed first queued window
+		+ fix/replace position apply to first queued window
+		+ store sorting queue ?
 */
 
 
@@ -110,7 +109,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		ofParameter<bool> bGui_WindowsSpecials{ "Organizer", true }; // toggle gui to draw window
+		ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // toggle gui to draw window
 		ofParameter<bool> bGui_Global{ "Show All", true }; // extra toggle to hide / show all
 
 	public:
@@ -137,6 +136,7 @@ namespace ofxImGuiSurfing
 
 		ofParameter<bool> bLockedWidth{ "Lock Width", false };
 		ofParameter<bool> bLockedHeight{ "Lock Height", false };
+
 		float width_max = 0;
 		float height_max = 0;
 
@@ -191,6 +191,7 @@ namespace ofxImGuiSurfing
 		ofParameterGroup params_User{ "Organizer" }; // To use on external gui 
 
 	public:
+
 		//--------------------------------------------------------------
 		ofParameterGroup& getParamsUser() {
 			return params_User;
@@ -657,9 +658,12 @@ namespace ofxImGuiSurfing
 
 				if (!bHideWindows)
 				{
+					ofxImGuiSurfing::AddSpacingSeparated();
+
 					static bool bOpen = false;
 					ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-					if (ImGui::CollapsingHeader("Windows", _flagw))
+
+					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
 						// Global Enable 
 						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
@@ -690,6 +694,8 @@ namespace ofxImGuiSurfing
 									p.bEnable = false;
 								}
 							}
+
+							ImGui::Spacing();
 						}
 					}
 				}
@@ -702,9 +708,12 @@ namespace ofxImGuiSurfing
 				{
 					// Controls
 					{
+						ofxImGuiSurfing::AddSpacingSeparated();
+
 						static bool bOpen = false;
 						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-						if (ImGui::CollapsingHeader("Settings", _flagw))
+
+						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 						{
 							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
 							{
@@ -714,6 +723,8 @@ namespace ofxImGuiSurfing
 							ImGui::PopItemWidth();
 
 							//-
+
+							ofxImGuiSurfing::AddSpacingSeparated();
 
 							// Debug
 
@@ -726,13 +737,15 @@ namespace ofxImGuiSurfing
 
 								ofxImGuiSurfing::AddParameter(bLockedWidth);
 								ofxImGuiSurfing::AddParameter(bLockedHeight);
+								ImGui::Spacing();
 
 								std::string ss1 = "";
 								int i = 0;
 								for (auto &p : panels)
 								{
-									ss1 += "[" + ofToString(i) + "] ";
-									ss1 += ofToString(p.pos);
+									ss1 += "/t [" + ofToString(p.pos) + "] ";
+									//ss1 += "[" + ofToString(i) + "] ";
+									//ss1 += ofToString(p.pos);
 									ss1 += "\n";
 									ss1 += ofToString(p.getRectangle());
 									ss1 += "\n";
