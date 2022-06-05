@@ -5,6 +5,9 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetWindowPosition(-1920, 25);
+	ofSetWindowShape(1920, 1080 - 25);
+
 	bGui.set("bGui", true);
 
 	// These toggles are very useful to handle the windows show/hide states.
@@ -23,8 +26,8 @@ void ofApp::setup()
 	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
 	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	pos_1.set("Position", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
-	rot_1.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_CAMERA_DISTANCE), glm::vec3(2.f * MAX_CAMERA_DISTANCE));
+	position.set("Position", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
+	rotation.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_CAMERA_DISTANCE), glm::vec3(2.f * MAX_CAMERA_DISTANCE));
 	lineWidth2.set("linew2", 0.5, 0, 1);
 	separation2.set("sep2", 50, 1, 100);
 	shapeType2.set("shape2", 0, -50, 50);
@@ -55,8 +58,8 @@ void ofApp::setup()
 	params1.add(bGui_2);
 	params1.add(bGui_3);
 	params1.add(bGui_4);
-	params1.add(pos_1);
-	params1.add(rot_1);
+	params1.add(position);
+	params1.add(rotation);
 
 	params2.add(lineWidth2);
 	params2.add(separation2);
@@ -113,7 +116,7 @@ void ofApp::drawImWindowMain()
 	if (guiManager.beginWindow(bGui))
 	{
 		guiManager.AddLabelHuge("Examples/\n01_Widgets\nBasic");
-		guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+		guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 		guiManager.AddLabelHuge("> Show Windows");
 
@@ -129,6 +132,8 @@ void ofApp::drawImWindowMain()
 		guiManager.Add(bGui_4, OFX_IM_TOGGLE_ROUNDED_BIG);
 		guiManager.AddTooltip("Sliders & Knobs");
 
+		guiManager.drawAdvanced();
+
 		guiManager.endWindow();
 	}
 }
@@ -141,8 +146,8 @@ void ofApp::drawImWindow1()
 		if (!guiManager.bMinimize)
 		{
 			guiManager.AddLabelBig("> Two Multidims \nSplitted and foldered");
-			guiManager.Add(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);//split components
-			guiManager.Add(rot_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED);//split components
+			guiManager.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS);//split components
+			guiManager.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED);//split components
 			guiManager.AddSpacingBigSeparated();
 
 			guiManager.Add(lineWidth2);//no arg. default style

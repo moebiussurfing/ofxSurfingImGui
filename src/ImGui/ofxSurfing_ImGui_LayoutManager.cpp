@@ -17,6 +17,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bLinkWindows);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
+	params_Advanced.add(bReset_Window);
 	params_Advanced.add(bLockMove);
 	params_Advanced.add(bNoScroll);
 	params_Advanced.add(bMinimize);
@@ -30,6 +31,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// Exclude from settings
 	//bExtra.setSerializable(false);
 	bReset.setSerializable(false);
+	bReset_Window.setSerializable(false);
 
 	//-
 
@@ -149,7 +151,8 @@ void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated g
 	path_AppSettings = path_Global + "GuiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
 
 	// Add the basic param settings
-	if (!bUseLayoutPresetsManager)
+	//TODO:
+	//if (!bUseLayoutPresetsManager)
 	{
 		params_AppSettings.add(params_Advanced);
 	}
@@ -1519,7 +1522,8 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_AppSettingsLayout);
-	params_AppSettings.add(params_Advanced);
+
+	//params_AppSettings.add(params_Advanced);
 
 	//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	//{
@@ -1566,9 +1570,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_WindowsEngine.clear();
 	params_WindowsEngine.add(params_RectPanels);
 
-	//-
+	//--
 
-	// Presets and Panles Widnows
+	// Presets and Panels Windows
 
 	params_WindowPresets.add(bResetWindowPresets);
 	params_WindowPresets.add(bAutoResizePresets);
@@ -1576,13 +1580,13 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	params_WindowPanels.add(bResetWindowPanels);
 	params_WindowPanels.add(bAutoResizePanels);
+
 	params_WindowPresets.add(bMinimizePanels);
 
 	params_WindowsEngine.add(params_WindowPresets);
 	params_WindowsEngine.add(params_WindowPanels);
 
 	params_AppSettings.add(params_WindowsEngine);
-
 
 	//----
 
@@ -1591,9 +1595,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
-	//-
+	//--
 
-	//// Gui - > wich panels enabled but overwritten by Layout Presets Engine
+	//// Gui - > which panels enabled but overwritten by Layout Presets Engine
 	//params_AppSettings.add(params_Panels);
 
 	//--
@@ -2060,6 +2064,11 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		if (bResetPtr != nullptr) {
 			*bResetPtr = true;
 		}
+	}
+
+	else if (name == bReset_Window.getName() && bReset_Window.get())
+	{
+		bReset_Window = false;
 	}
 
 	//-

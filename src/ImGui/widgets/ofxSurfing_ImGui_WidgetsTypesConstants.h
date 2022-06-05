@@ -109,10 +109,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_NO_NAME,
 		OFX_IM_HSLIDER_NO_NUMBER,
 		OFX_IM_HSLIDER_NO_LABELS,
-		OFX_IM_HSLIDER_MINI, 
-		OFX_IM_HSLIDER_MINI_NO_NAME, 
-		OFX_IM_HSLIDER_MINI_NO_LABELS, 
-		OFX_IM_HSLIDER_MINI_NO_NUMBER, 
+		OFX_IM_HSLIDER_MINI,
+		OFX_IM_HSLIDER_MINI_NO_NAME,
+		OFX_IM_HSLIDER_MINI_NO_LABELS,
+		OFX_IM_HSLIDER_MINI_NO_NUMBER,
 
 		// Vertical
 		OFX_IM_VSLIDER,
@@ -124,7 +124,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
-		
+
 		OFX_IM_KNOB,//notice that full width by default. too big!
 		OFX_IM_KNOB_TRAIL,//decorated
 		//OFX_IM_KNOB_SMALL,//TODO:
@@ -170,7 +170,7 @@ namespace ofxImGuiSurfing
 	//TODO: to simplify the api
 	// We can use one only flag argument and multiple possibilities at the same time are allowed.
 	typedef int SurfingImGuiGroupStyle;
-	enum SurfingImGuiGroupStyle_ 
+	enum SurfingImGuiGroupStyle_
 	{
 		SurfingImGuiGroupStyle_None = 1 << 0,
 		SurfingImGuiGroupStyle_Collapsed = 1 << 1,
@@ -191,7 +191,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_SCROLLABLE,
 		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group. not working
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
-		
+
 		//OFX_IM_GROUP_WINDOWED, // creates a windows to populate into. Notice that must be a root group. can't be a nested! 
 		//guiMnager is not in scope here!
 
@@ -323,29 +323,29 @@ namespace ofxImGuiSurfing
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.5f, 150); \
-ImVec2 size_max = ImVec2(1000, ofGetHeight() - 10); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4, PANEL_WIDGETS_HEIGHT_MIN * 8); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, 2 * PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, ofGetHeight() - 100); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, PANEL_WIDGETS_HEIGHT_MIN * 2); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, PANEL_WIDGETS_HEIGHT_MIN * 5); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
 { \
 ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.5f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, ofGetHeight() / 2); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MINI \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, ofGetHeight() / 2); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MIN * 0.75f ); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MIN); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

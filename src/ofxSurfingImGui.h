@@ -24,7 +24,7 @@ BUGS:
 
 /*
 
-// RECOMMENDED USAGE
+// RECOMMENDED OR COMMON USAGE
 
 // TOP SNIPPETS HERE!
 
@@ -42,10 +42,14 @@ BUGS:
 		guiManager.setup(); 
 
 		// draw()
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS
 		guiManager.begin();
 		{
 			if (guiManager.beginWindow(bGui))
 			{
+				guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+				if (!guiManager.bMinimize)
+
 				//..
 
 				guiManager.endWindow();

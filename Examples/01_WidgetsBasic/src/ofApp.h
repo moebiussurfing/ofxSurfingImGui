@@ -21,12 +21,13 @@ public:
 	ofxSurfing_ImGui_Manager guiManager;
 
 	ofParameter<bool> bGui;
+    void drawImWindowMain();
+
 	ofParameter<bool> bGui_1;
 	ofParameter<bool> bGui_2;
 	ofParameter<bool> bGui_3;
 	ofParameter<bool> bGui_4;
 
-    void drawImWindowMain();
     void drawImWindow1();
     void drawImWindow2();
     void drawImWindow3();
@@ -45,8 +46,8 @@ public:
 
     // Parameters
 	
-	ofParameter<glm::vec3> rot_1;
-	ofParameter<glm::vec3> pos_1;
+	ofParameter<glm::vec3> rotation;
+	ofParameter<glm::vec3> position;
 	ofParameter<float> value;
 	ofParameter<float> valueMin;
 	ofParameter<float> valueMax;

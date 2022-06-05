@@ -139,6 +139,15 @@ public:
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
+	////TODO: a button without param
+	////--------------------------------------------------------------
+	//bool Add(SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	//{
+	//	return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
+	//}
+
+	//----
+
 	// queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -439,7 +448,7 @@ public:
 	}
 
 	//----
-	 
+
 	// Text with spacing
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
@@ -801,8 +810,8 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bLockMove{ "Lock Move", false };
 	ofParameter<bool> bNoScroll{ "No Scroll", false };
-	ofParameter<bool> bHelp{ "Help", false };
-	ofParameter<bool> bHelpInternal{ "Help Internal", false };
+	ofParameter<bool> bHelp{ "Help App", false };
+	ofParameter<bool> bHelpInternal{ "Help", false };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
@@ -935,6 +944,9 @@ public:
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
 	//--------------------------------------------------------------
 	void drawAdvancedBundle(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
+
+		if (bMinimize) return;
+
 		if (!bNoSpacing) ImGui::Spacing();
 		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
@@ -942,6 +954,12 @@ public:
 		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
 		drawAdvancedSubPanel();
+	}
+
+	// legacy API
+	//--------------------------------------------------------------
+	void drawAdvanced(bool bNoSperator = false, bool bNoSpacing = false) {
+		drawAdvancedBundle(bNoSperator, bNoSpacing);
 	}
 
 	//--
@@ -965,30 +983,41 @@ private:
 			else b = true;
 
 			// Keys
-			ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+			Add(bKeys, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+			// Help
+			Add(bHelp, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 			// MouseWheel
-			ofxImGuiSurfing::AddToggleRoundedButton(bMouseWheel);
+			Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED);
+			ofxImGuiSurfing::AddTooltip("Ctrl+ fine tunning");
 
-			// Autoresize
-			ofxImGuiSurfing::AddToggleRoundedButton(bAutoResize);
+			// Auto resize
+			Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED);
+
+			ofxImGuiSurfing::AddSpacing();
 
 			if (!bHeader || (bHeader && b))
 			{
-				if (ImGui::TreeNode("Windows"))
+				ofxImGuiSurfing::AddSpacing();
+
+				if (ImGui::TreeNode("WINDOWS"))
 				{
+					ofxImGuiSurfing::AddSpacing();
+
 					// Lock
-					ofxImGuiSurfing::AddToggleRoundedButton(bLockMove);
+					Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 					// No Scroll
-					ofxImGuiSurfing::AddToggleRoundedButton(bNoScroll);
+					Add(bNoScroll, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 					// Reset
 					//TODO:
 					// -> must be implemented for each app.
 
 					// Reset window
-					if (ofxImGuiSurfing::AddToggleRoundedButton(bReset_Window))
+					if (Add(bReset_Window, OFX_IM_TOGGLE_ROUNDED_MINI))
 					{
 						//TODO:
 						//if (bReset_Window) {
@@ -996,97 +1025,118 @@ private:
 						//	resetWindowImGui(false, true);
 						//}
 					}
+
 					ImGui::TreePop();
 				}
 
-				if (ImGui::TreeNode("Gui"))
+				ofxImGuiSurfing::AddSpacing();
+
+				if (ImGui::TreeNode("GUI"))
 				{
-					// Minimize
-					ofxImGuiSurfing::AddToggleRoundedButton(bMinimize);
+					ofxImGuiSurfing::AddSpacing();
 
-					// Extra
-					ofxImGuiSurfing::AddToggleRoundedButton(bExtra);
-
-					// Menu
-					ofxImGuiSurfing::AddToggleRoundedButton(bMenu);
-
-					// Reset
-					ofxImGuiSurfing::AddToggleRoundedButton(bReset);
+					//// Minimize
+					//Add(bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 					// Log
-					ofxImGuiSurfing::AddToggleRoundedButton(bLog);
+					Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
-					// Help
-					ofxImGuiSurfing::AddToggleRoundedButton(bHelp);
-					ofxImGuiSurfing::AddToggleRoundedButton(bHelpInternal);
+					// Extra
+					Add(bExtra, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
-					//--
-
-					// Debug
-					ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-					if (bDebug)
+					if (bExtra)
 					{
 						ImGui::Indent();
 
-						//--
-
-						//drawSpecialWindowsPanel();
-						//ImGui::Separator();
+						// Menu
+						ofxImGuiSurfing::AddToggleRoundedButton(bMenu);
 
 						//--
 
-						//ImGui::Text("Docking");
-						if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+						AddSpacingSeparated();
+
+						// Debug
+						ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+						if (bDebug)
 						{
-							AddToggleRoundedButton(bDebugDocking);
-							if (bDebugDocking)
+							ImGui::Indent();
+
+							//--
+
+							//drawSpecialWindowsPanel();
+							//ImGui::Separator();
+
+							//--
+
+							//ImGui::Text("Docking");
+
+							if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 							{
-								ImGui::Indent();
+								AddToggleRoundedButton(bDebugDocking);
 
-								AddToggleRoundedButton(bUseLayoutPresetsManager);
-								AddToggleRoundedButton(bDocking);
-								ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
-								AddToggleRoundedButton(bPreviewSceneViewport);
-								//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
-								AddToggleRoundedButton(bDebugRectCentral);
+								if (bDebugDocking)
+								{
+									ImGui::Indent();
 
-								ImGui::Unindent();
+									AddToggleRoundedButton(bUseLayoutPresetsManager);
+									AddToggleRoundedButton(bDocking);
+									ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
+									AddToggleRoundedButton(bPreviewSceneViewport);
+									//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
+									AddToggleRoundedButton(bDebugRectCentral);
+
+									ImGui::Unindent();
+								}
+								ImGui::Separator();
 							}
-							ImGui::Separator();
+
+							Add(bInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
+							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+							//AddToggleRoundedButton(bPreviewSceneViewport);
+
+							//-
+
+							ofxImGuiSurfing::AddSpacing();
+
+							if (ImGui::TreeNode("WINDOW INFO"))
+							{
+								std::string _hwidget = "Widget Height: ";
+								_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
+								std::string _wwidget = "Widget Width: ";
+								_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
+								std::string _wpanel = "Panel Width: ";
+								_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
+
+								std::string _wShape = "Window Shape: ";
+								_wShape += ofToString(ImGui::GetWindowPos().x);
+								_wShape += ", ";
+								_wShape += ofToString(ImGui::GetWindowPos().y);
+								_wShape += ", ";
+								_wShape += ofToString(ImGui::GetWindowWidth());
+								_wShape += ", ";
+								_wShape += ofToString(ImGui::GetWindowHeight());
+
+								std::string ss = "";
+								ss += _hwidget + "\n";
+								ss += _wwidget + "\n";
+								ss += _wpanel + "\n";
+								ss += _wShape + "\n";
+								ImGui::TextWrapped(ss.c_str());
+
+								ImGui::TreePop();
+							}
+
+							ImGui::Unindent();
 						}
 
-						ofxImGuiSurfing::AddToggleRoundedButton(bInputText);
-						ofxImGuiSurfing::AddToggleRoundedButton(bMouseOverGui);
-						//AddToggleRoundedButton(bPreviewSceneViewport);
+						//ofxImGuiSurfing::AddSpacing();
 
-						//-
-						if (ImGui::TreeNode("Window Info"))
-						{
-							std::string _hwidget = "Widget Height: ";
-							_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-							std::string _wwidget = "Widget Width: ";
-							_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
-							std::string _wpanel = "Panel Width: ";
-							_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
+						AddSpacingSeparated();
 
-							std::string _wShape = "Window Shape: ";
-							_wShape += ofToString(ImGui::GetWindowPos().x);
-							_wShape += ", ";
-							_wShape += ofToString(ImGui::GetWindowPos().y);
-							_wShape += ", ";
-							_wShape += ofToString(ImGui::GetWindowWidth());
-							_wShape += ", ";
-							_wShape += ofToString(ImGui::GetWindowHeight());
-
-							std::string ss = "";
-							ss += _hwidget + "\n";
-							ss += _wwidget + "\n";
-							ss += _wpanel + "\n";
-							ss += _wShape + "\n";
-							ImGui::TextWrapped(ss.c_str());
-
-							ImGui::TreePop();
-						}
+						// Reset
+						//ofxImGuiSurfing::AddToggleRoundedButton(bReset);
+						Add(bReset, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 						//--
 
@@ -1116,7 +1166,8 @@ private:
 						//	ImGui::Text(ss2.c_str());
 						//}
 
-						ImGui::Separator();
+						//ImGui::Separator();
+
 						ImGui::Unindent();
 					}
 					ImGui::TreePop();
@@ -1411,7 +1462,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void refreshWidgetsSizes(float& _w100, float&  _w50, float& _w33, float& _w25, float& _h) {
+	void refreshWidgetsSizes(float& _w100, float& _w50, float& _w33, float& _w25, float& _h) {
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 	}
 

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <interactiveRect>
 	<path>ImGui_Layout/HelpBox//</path>
-	<x>1427</x>
-	<y>201</y>
-	<width>239</width>
-	<height>218.667</height>
+	<x>1455</x>
+	<y>30</y>
+	<width>455</width>
+	<height>261.667</height>
 	<name>_HelpBox</name>
-	<isEditing>1</isEditing>
+	<isEditing>0</isEditing>
 </interactiveRect>
