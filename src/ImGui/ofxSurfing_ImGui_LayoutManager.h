@@ -579,10 +579,10 @@ public:
 
 	// Special Windows Mode
 
-	SurfingImGuiWindowsMode surfingImGuiSpecialWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
+	SurfingImGuiWindowsMode specialsWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
 	//--------------------------------------------------------------
 	void setWindowsMode(SurfingImGuiWindowsMode mode) {
-		surfingImGuiSpecialWindowsMode = mode;
+		specialsWindowsMode = mode;
 	}
 
 	// Instantiator
@@ -906,7 +906,7 @@ public:
 		}
 	}
 
-	//legacy api
+	// legacy API
 	//--------------------------------------------------------------
 	void logAdd(std::string text) {
 		if (bLog) log.AddText(text);
@@ -1198,7 +1198,8 @@ private:
 
 	std::string path_SubPathLabel = "";
 
-	ofParameterGroup params_AppSettings{ "AppSettings" }; // -> Features states
+	ofParameterGroup params_AppSettings{ "guiManager" }; // -> Features states
+	//ofParameterGroup params_AppSettings{ "AppSettings" }; // -> Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // -> Layout states
 
 	//----
@@ -1269,10 +1270,11 @@ public:
 		else ss = nameWindowSpecialsPanel;
 
 		// Panels Toggles
+
 		windowPanels.beginWindow(ss.c_str(), (bool*)&bGui_WindowsSpecials.get(), flags);
 		{
-			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-			//Add(bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			AddSpacing();
 
 			windowPanels.drawWidgets(bMinimize);
 
@@ -1291,7 +1293,7 @@ public:
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
-		return windowPanels.bGui_Global.get();
+		return windowPanels.bGui_ShowAll.get();
 	}
 
 	//TODO:
@@ -1331,6 +1333,7 @@ public:
 	//--
 
 private:
+//public:
 
 	WindowPanels windowPanels;
 
@@ -1359,7 +1362,7 @@ public:
 
 		params_Panels.add(_bGui);
 
-		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
 			windowPanels.add(_bGui);
 		}
@@ -1378,7 +1381,7 @@ public:
 		params_Panels.add(_bGui);
 		bPanels.push_back(_bGui);
 
-		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
 			windowPanels.add(_bGui);
 		}
@@ -1410,8 +1413,10 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void initiatieSpecialWindowsOrganizer() {
+	void initiatieSpecialWindowsOrganizer() 
+	{
 		windowPanels.setPath(path_Global);
+
 		windowPanels.initiate();
 
 		windowPanels.bModeLinkedWindowsSpecial.set(true);
@@ -1656,7 +1661,7 @@ public:
 
 public:
 
-	void drawImGuiMenu();
+	void drawMenu();
 
 public:
 

@@ -23,15 +23,16 @@ BUGS:
 
 
 /*
-
-// RECOMMENDED OR COMMON USAGE
-
-// TOP SNIPPETS HERE!
+ 
+	// HOW TO
+	// RECOMMENDED OR COMMON USAGE
+	// TOP SNIPPETS HERE !
 
 {
 	// .h
 	{
 		#include "ofxSurfingImGui.h"
+
 		ofxSurfing_ImGui_Manager guiManager;
 		ofParameter<bool> bGui{ "Show",true };
 	}
@@ -39,10 +40,15 @@ BUGS:
 	// .cpp
 	{
 		// setup()
+
 		guiManager.setup(); 
 
+		//-------------------------------
+
 		// draw()
+
 		IMGUI_SUGAR__WINDOWS_CONSTRAINTS
+
 		guiManager.begin();
 		{
 			if (guiManager.beginWindow(bGui))
@@ -98,52 +104,62 @@ using namespace ofxImGuiSurfing;
 //--------------------------------------------------------------
 
 /*
-	EXAMPLE SNIPPETS
-	----------------
+		-----------------------
+		 MORE EXAMPLE SNIPPETS
+		-----------------------
+
+		LOOK RECOMMENDED USAGE ABOVE!
+		THESE ARE NOT RECOMMENDED / LEGACY AND DEPRECATED MODES!
+
+		LEARN HOW TO CREATE
+		WINDOWS, PANELS, 
+		AND SUB PANELS 
+		AND DIFFERENT TREES MODES
+		...etc
+
 */
 
-// LEARN HOW TO CREATE
-// WINDOWS, PANELS, AND SUB PANELS AND DIFFERENT TREES MODES
+
+//--
+
 
 /*
 	//--------------------------------------------------------------
 
-	// OTHER EXAMPLES.
-	// LOOK RECOMMENDED USAGE ABOVE!
-	// THESE ARE NOT RECOMMENDED OR DEPRECATED MODES!
+	// 1. HOW TO CREATE A WINDOW ?
 
-	// 1. HOW TO CREATE A WINDOW?
+	THESE ARE DEPRECATED/LEGACY MODES THAT DO NOT USES THE ADDON POWERED API !
 
 	//--
 
-	// WINDOWS USING RAW ImGui
+	// WINDOWS USING RAW ImGui (LEGACY)
 
 	// 1.0 SIMPLE
 
 	ImGui::Begin("myWindow");
-	{ }
+		{ }
 	ImGui::End();
 
 	//--
 
-	// 1.1 WINDOW WITH NAME WITH FLAGS
+	// 1.1 WINDOW WITH NAME WITH FLAGS (LEGACY)
 
 	string _name = "myWindow";
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
-	{ }
+		{ }
 	ImGui::End();
 
 	//--
 
-	// 1.2 WINDOW USING "old" ofxImGui
+	// 1.2 WINDOW USING "OLD/LEGACY" ofxImGui
 
 	// (DEPRECATED. Better to not use like this)
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
-	{ }
+		{ }
 	ofxImGui::EndWindow(mainSettings);
 
 
@@ -177,7 +193,7 @@ using namespace ofxImGuiSurfing;
 
 	//--
 
-	// 2.3 treeEx - TREE WITH FLAGS
+	// 2.3 TREE EX - TREE WITH FLAGS
 
 	{
 		static bool bOpen = true;
@@ -218,6 +234,22 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 /*
 
 // WINDOW TESTER
+
+
+// FORCE WINDOW POSITION & SHAPE
+{
+	float x = 10;
+	float y = 10;
+	float w = 200;
+	float h = 200;
+	ImGuiCond flag = ImGuiCond_Appearing;
+	ImGui::SetNextWindowPos(ImVec2(x, y), flag);
+	ImGui::SetNextWindowSize(ImVec2(w, h), flag);
+}
+
+//--
+
+// WINDOW CONSTRAINTS FOR SHAPE SIZE
 {
 	ImGuiCond flagsc = ImGuiCond_Appearing;
 	static int type = 0;
@@ -257,7 +289,7 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 /*
 
 // AN EXTRA BEGIN/END PAIR
-// WITH SNAPPING
+// WITH A SNAPPING GRID
 
 //--------------------------------------------------------------
 void Begin(const std::string& name) {
@@ -295,7 +327,8 @@ void End() {
 //--
 
 
-// Another extra begin/end pair
+// ANOTHER EXTRA BEGIN/END PAIR
+
 //--------------------------------------------------------------
 bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
 {
@@ -382,19 +415,23 @@ ImGui::EndTabBar();
 
 /*
 
-// Example 2:
-// prev/next dual buttons
+// EXAMPLE 2:
+// PREV / NEXT DUAL BUTTONS
 
 {
 	static ofParameter<bool> bPrev{ "<", false };
 	static ofParameter<bool> bNext{ ">", false };
+
 	guiManager.Add(bPrev, OFX_IM_BUTTON, 2, true);
 	guiManager.Add(bNext, OFX_IM_BUTTON, 2);
-	if (bPrev) {
+
+	if (bPrev) 
+	{
 		bPrev = false;
 		index_FX = ofClamp(index_FX - 1, index_FX.getMin(), index_FX.getMax());
 	}
-	if (bNext) {
+	if (bNext) 
+	{
 		bNext = false;
 		index_FX = ofClamp(index_FX + 1, index_FX.getMin(), index_FX.getMax());
 	}
@@ -425,9 +462,12 @@ enum ImGuiDockNodeFlags_
 
 */
 
+
 //--
 
-//// Demonstrate the various window flags. Typically you would just use the default!
+
+//// DEMONSTRATE THE VARIOUS WINDOW FLAGS. TYPICALLY YOU WOULD JUST USE THE DEFAULT!
+
 //static bool no_titlebar = false;
 //static bool no_scrollbar = false;
 //static bool no_menu = false;
@@ -456,7 +496,8 @@ enum ImGuiDockNodeFlags_
 
 /*
 
-// get window shape. call between begin/end
+// GET WINDOW SHAPE. CALL BETWEEN BEGIN/END
+
 ofRectangle rect = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 */
@@ -498,7 +539,7 @@ https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
 	std::string _path;
 	float _fontSize;
 
-	_fontSize = 16;
+	_fontSize = 11;
 	_fontName = "overpass-mono-bold.otf";
 	_path = "assets/fonts/" + _fontName;
 	guiManager.pushFont(_path, _fontSize);//index 0
@@ -520,7 +561,7 @@ https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
 	static bool bCustomFont = true;
 	if (bCustomFont) guiManager.pushStyleFont(1);
 	{
-		//.. draw with this font
+		//.. Will draw widgets using this font
 	}
 	if (bCustomFont) guiManager.popStyleFont();
 }

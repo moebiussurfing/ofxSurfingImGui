@@ -8,12 +8,12 @@
 #include "ofxSurfing_ImGui_ofHelpers.h"
 
 /*
-
 	TODO:
 
-		+ fix re position when closed first queued window
-		+ fix/replace position apply to first queued window
-		+ store sorting queue ?
+	+ fix re position when closed first queued window
+	+ add reset layout
+	+ store sorting queue ?
+	+ cascade windows engine
 */
 
 
@@ -23,24 +23,18 @@ using namespace ofxImGuiSurfing;
 
 namespace ofxImGuiSurfing
 {
-	//TODO: 
-	// Cascade windows engine..
+	// One Window
 	//--------------------------------------------------------------
 	class WindowPanel {
 
 	public:
 
-		ofParameter<bool> bEnable{ "bEnable", true };
-		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
-		ofParameter<int> pos{ "IndexPos", -1, -1, 0 };
-		int id = -1;
-
 		//--------------------------------------------------------------
-		WindowPanel::WindowPanel() {
+		WindowPanel() {
 		}
 
 		//--------------------------------------------------------------
-		WindowPanel::~WindowPanel() {
+		~WindowPanel() {
 		}
 
 		//--------------------------------------------------------------
@@ -52,6 +46,15 @@ namespace ofxImGuiSurfing
 				ImGui::GetWindowWidth(),
 				ImGui::GetWindowHeight());
 		}
+
+	public:
+
+		ofParameter<bool> bEnable{ "bEnable", true };
+		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
+		ofParameter<int> pos{ "IndexPos", -1, -1, 0 };
+		int id = -1;
+
+	public:
 
 		//--------------------------------------------------------------
 		void runState(bool bForced = false)
@@ -67,9 +70,6 @@ namespace ofxImGuiSurfing
 
 			ImGui::SetNextWindowPos(ImVec2(rShape.get().getX(), rShape.get().getY()), flagCond);
 			//ImGui::SetNextWindowSize(ImVec2(rShape.get().getWidth(), rShape.get().getHeight()), flagCond);
-
-			//bool bSize = false;//TODO:
-			//if (bSize) ImGui::SetNextWindowSize(ImVec2(rShape.get().getWidth(), rShape.get().getHeight()), flagCond);
 		}
 
 		//--------------------------------------------------------------
@@ -104,26 +104,67 @@ namespace ofxImGuiSurfing
 		}
 	};
 
+
+	//----
+
+
 	//--------------------------------------------------------------
-	class WindowPanels {
+
+	// Container Manager for all the manager special windows to handle.
+
+	class WindowPanels
+	{
+	public:
+
+		//--------------------------------------------------------------
+		WindowPanels()
+		{
+			ofAddListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
+			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
+
+			amountQueue.addListener(this, &WindowPanels::Changed_counterQueue);
+
+			//-
+
+			params_User.clear();
+
+			params_User.add(bModeLinkedWindowsSpecial);
+			params_User.add(bOrientation);
+			params_User.add(bFitSizes);
+			params_User.add(bHeaders);
+			params_User.add(pad);
+			params_User.add(position_Anchor);
+
+			params_User.add(bGui_WindowsSpecials);
+			params_User.add(bGui_ShowAll);
+		}
+
+		//--------------------------------------------------------------
+		~WindowPanels()
+		{
+			ofRemoveListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
+			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
+
+			// Save
+			ofxImGuiSurfing::saveGroup(params_WindowsSpecials, path_Settings);
+		}
+
+		//--
 
 	public:
 
-		ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // toggle gui to draw window
-		ofParameter<bool> bGui_Global{ "Show All", true }; // extra toggle to hide / show all
-
-	public:
-
+		ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // toggle gui to draw main window.
+		ofParameter<bool> bGui_ShowAll{ "Show All", true }; // extra toggle to hide / show all the queued windows.
 		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link Windows",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 		ofParameter<bool> bHeaders{ "Hide Headers", true };
 		ofParameter<int> pad{ "Padding", 0, 0, 25 };
-		ofParameter<glm::vec2> position{ "Position", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
 	private:
 
-		bool bTrigGroup = false;
+		bool bResetLayout = false;
 
 	public:
 
@@ -142,23 +183,25 @@ namespace ofxImGuiSurfing
 
 		std::vector<WindowPanel> panels; // all the added panels
 		std::string path_Global = "";
-		std::string path_Settings = "WindowsSpecial.json";
+		std::string path_Settings = "_WindowsSpecial.json";
 
 	public:
 
 		//--------------------------------------------------------------
-		void setPath(std::string path) {
+		void setPath(std::string path)
+		{
 			path_Global = path;
-			path_Settings = path_Global + "GuiManager_" + params_Settings.getName() + ".json";
+			ofxSurfingHelpers::CheckFolder(path_Global);
+			path_Settings = path_Global + "guiManager_" + params_WindowsSpecials.getName() + ".json";
 		}
 
 	private:
 
 		std::vector<int> panelsQueue; // just the enabled (visible) panels
-		ofParameter<int> counterQueue{ "counterQueue", 0, 0, 0 }; // count how many visible/queued
+		ofParameter<int> amountQueue{ "amountQueue", 0, 0, 0 }; // count how many visible/queued
 
 		ofParameterGroup params_Enablers{ "Enablers" };
-		ofParameterGroup params_Settings{ "WindowsSpecial" };
+		ofParameterGroup params_WindowsSpecials{ "WindowsSpecials" };
 		ofParameterGroup params{ "Params" };
 
 		// Cascade orientation
@@ -175,20 +218,21 @@ namespace ofxImGuiSurfing
 		bool bHideWindows = false; //-> To disable when using the full layout engine. 
 
 	public:
+
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
 
 			bHideWindows = b;
 
 			if (bHideWindows) {
-				bGui_Global = true;
-				bGui_Global.setSerializable(false);
+				bGui_ShowAll = true;
+				bGui_ShowAll.setSerializable(false);
 			}
 		}
 
 		//-
 
-		ofParameterGroup params_User{ "Organizer" }; // To use on external gui 
+		ofParameterGroup params_User{ "Organizer" }; // To use on a external GUI 
 
 	public:
 
@@ -197,69 +241,25 @@ namespace ofxImGuiSurfing
 			return params_User;
 		}
 
-		//----
-
-	public:
-
-		//--------------------------------------------------------------
-		WindowPanels::WindowPanels()
-		{
-			ofAddListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
-			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-
-			counterQueue.addListener(this, &WindowPanels::Changed_counterQueue);
-
-			//-
-
-			params_User.clear();
-			params_User.add(bModeLinkedWindowsSpecial);
-			params_User.add(bOrientation);
-			params_User.add(bFitSizes);
-			params_User.add(bHeaders);
-			params_User.add(pad);
-			params_User.add(position);
-			//params_User.add(bGui_WindowsSpecials);
-			//params_User.add(bGui_Global);
-		}
-
-		//--------------------------------------------------------------
-		WindowPanels::~WindowPanels()
-		{
-			ofRemoveListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
-			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-
-			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-			int id = panelsQueue[0];
-			position.set(panels[id].getPosition());
-
-			ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
-		}
-
 	private:
 
 		//--------------------------------------------------------------
-		void Changed_counterQueue(int &i)
+		void Changed_counterQueue(int& i)
 		{
+			ofLogNotice() << __FUNCTION__;
+
 			// Return if not changed
 			static int pre = -1;
 			if (pre == i) return;
 			else pre = i;
 
-			ofLogNotice() << __FUNCTION__ << " Counter #" << counterQueue;
-
-			////TODO:
-			//bool b = !(panelsQueue.size() == 0 || panels.size() == 0);
-			//if (b) {
-			//	int id = panelsQueue[0];
-			//	//refresh
-			//	position = panels[id].getPosition();
-			//}
+			ofLogNotice() << __FUNCTION__ << " Counter #" << amountQueue;
 
 			doOrganize();
 		}
 
 		//--------------------------------------------------------------
-		void Changed_Params(ofAbstractParameter &e)
+		void Changed_Params(ofAbstractParameter& e)
 		{
 			std::string name = e.getName();
 
@@ -272,6 +272,7 @@ namespace ofxImGuiSurfing
 			//-
 
 			//TODO: should recalculate..
+
 			else if (name == bHeaders.getName())
 			{
 				doSetWindowsPositions();
@@ -279,9 +280,10 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			else if (name == bGui_Global.getName())
+			else if (name == bGui_ShowAll.getName())
 			{
-				//workaround to avoid bad dimension on startup
+				// workaround 
+				// to avoid bad dimension on startup
 				bOrientation = bOrientation;
 			}
 
@@ -323,19 +325,19 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			else if (name == position.getName())
+			else if (name == position_Anchor.getName())
 			{
 				// Position linked to first queued window
 				if (panelsQueue.size() == 0 || panels.size() == 0) return;
 				int id = panelsQueue[0];
-				panels[id].setPosition(position.get());
+				panels[id].setPosition(position_Anchor.get());
 
 				doSetWindowsPositions();
 			}
 		}
 
 		//--------------------------------------------------------------
-		void Changed_Params_Enablers(ofAbstractParameter &e)
+		void Changed_Params_Enablers(ofAbstractParameter& e)
 		{
 			std::string name = e.getName();
 
@@ -346,7 +348,7 @@ namespace ofxImGuiSurfing
 			// Check toggle enablers
 
 			int i = 0;
-			for (auto &p : panels)
+			for (auto& p : panels)
 			{
 				if (name == p.bEnable.getName()) // Check wich one is clicked
 				{
@@ -358,7 +360,7 @@ namespace ofxImGuiSurfing
 						{
 							p.pos = panelsQueue.size();
 							panelsQueue.push_back(p.id);
-							counterQueue = panelsQueue.size();
+							amountQueue = panelsQueue.size();
 
 							return;
 						}
@@ -371,7 +373,7 @@ namespace ofxImGuiSurfing
 							{
 								bool bSort = false;
 
-								position = p.getPosition();//refresh
+								position_Anchor = p.getPosition();//refresh
 
 								if (p.pos == 0)//warn if it's the first window
 								{
@@ -383,7 +385,7 @@ namespace ofxImGuiSurfing
 
 								// remove
 								panelsQueue.erase(panelsQueue.begin() + i);
-								counterQueue = panelsQueue.size();
+								amountQueue = panelsQueue.size();
 
 								////TODO:
 								//if (bSort)
@@ -425,14 +427,15 @@ namespace ofxImGuiSurfing
 			}
 		}
 
+			//TODO:
 		//--------------------------------------------------------------
 		void doResetLayout()
 		{
-			//TODO:
 
 			ofLogNotice() << __FUNCTION__;
 
-			if (panelsQueue.size() < 2) {
+			if (panelsQueue.size() < 2 || panelsQueue.size() == 0)
+			{
 				ofLogWarning() << __FUNCTION__ << " Skip!";
 				return;
 			}
@@ -468,7 +471,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void add(ofParameter<bool> &e) // add panels on setup
+		void add(ofParameter<bool>& e) // add panels on setup
 		{
 			ofLogNotice() << __FUNCTION__ << e.getName();
 
@@ -479,7 +482,7 @@ namespace ofxImGuiSurfing
 			params_Enablers.add(e);
 			panels.push_back(p);
 
-			counterQueue.setMax(panels.size() - 1);
+			amountQueue.setMax(panels.size() - 1);
 		}
 
 	public:
@@ -510,7 +513,7 @@ namespace ofxImGuiSurfing
 			//--
 
 			// Disable all
-			for (auto &p : params_Enablers)
+			for (auto& p : params_Enablers)
 			{
 				if (p->type() == typeid(ofParameter<bool>).name())
 				{
@@ -520,26 +523,28 @@ namespace ofxImGuiSurfing
 			}
 
 			// To get notified by the callbacks
-			params.add(bGui_Global);
+			params.add(bGui_ShowAll);
 			params.add(bOrientation);
 			params.add(iOrientation);
 			params.add(bHeaders);
 			params.add(bFitSizes);
-			params.add(position);
+			params.add(position_Anchor);
 
 			// To store session settings
-			params_Settings.add(bGui_Global);
-			params_Settings.add(bModeLinkedWindowsSpecial);
-			params_Settings.add(bOrientation);
-			params_Settings.add(position);
-			params_Settings.add(pad);
-			params_Settings.add(bFitSizes);
-			params_Settings.add(bLockedWidth);
-			params_Settings.add(bLockedHeight);
-			params_Settings.add(bHeaders);
+			params_WindowsSpecials.add(bGui_WindowsSpecials);
+			params_WindowsSpecials.add(bGui_ShowAll);
+			params_WindowsSpecials.add(bModeLinkedWindowsSpecial);
+			params_WindowsSpecials.add(bOrientation);
+			params_WindowsSpecials.add(position_Anchor);
+			params_WindowsSpecials.add(pad);
+			params_WindowsSpecials.add(bFitSizes);
+			params_WindowsSpecials.add(bLockedWidth);
+			params_WindowsSpecials.add(bLockedHeight);
+			params_WindowsSpecials.add(bHeaders);
 
-			//// Each window enabler
-			//params_Settings.add(params_Enablers);
+			// Each window enabler will be added here..
+			// all of theme has been added during setup
+			params_WindowsSpecials.add(params_Enablers);
 
 			startup();
 		}
@@ -548,49 +553,39 @@ namespace ofxImGuiSurfing
 		void startup()
 		{
 			ofLogNotice() << __FUNCTION__;
-			
-			//TODO:
-			// Each window enabler
-			params_Settings.clear();
-			params_Settings.add(params_Enablers);
 
 			//--
 
-			// Startup
-
 			// Load Settings
-			ofxImGuiSurfing::loadGroup(params_Settings, path_Settings);
+			ofxImGuiSurfing::loadGroup(params_WindowsSpecials, path_Settings);
 
 			//-
 
 			// Position linked to first queued window
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
 			int id = panelsQueue[0];
-			panels[id].setPosition(position.get());
+			panels[id].setPosition(position_Anchor.get());
 
 			bOrientation = bOrientation;
-			//bOrientation = !bOrientation;
-			//bOrientation = !bOrientation;
-
 			//bLockedWidth = bLockedWidth;
 			//bLockedHeight = bLockedHeight;
 		}
 
 		//--
 
-	private:
+	//private:
 
-		void refreshQueues()
-		{
-		}
+	//	void refreshQueues()
+	//	{
+	//	}
 
-		void getStates()
-		{
-		}
+	//	void getStates()
+	//	{
+	//	}
 
-		void runStates()
-		{
-		}
+	//	void runStates()
+	//	{
+	//	}
 
 	public:
 
@@ -611,11 +606,11 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void setNameWindowsSpecialsEnableGlobal(std::string name) {
-			bGui_Global.setName(name);
+			bGui_ShowAll.setName(name);
 		}
 
 		//--------------------------------------------------------------
-		void beginWindow(string name, bool *bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None)
+		void beginWindow(string name, bool* bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None)
 		{
 			ImGui::Begin(name.c_str(), bOpen, flags);
 		}
@@ -627,15 +622,16 @@ namespace ofxImGuiSurfing
 			float _w1 = getWidgetsWidth(1);
 			float _w2 = getWidgetsWidth(2);
 
-			// Enable mode
+			// Enable
+
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 
 			//TODO: Trig
-			if (0)
-				if (ImGui::Button("Reset", ImVec2(_w1, _h)))
-				{
-					bTrigGroup = true;
-				}
+			//if (0)
+			if (ImGui::Button("Reset", ImVec2(_w1, _h)))
+			{
+				bResetLayout = true;
+			}
 
 			ImGui::Spacing();
 
@@ -645,8 +641,9 @@ namespace ofxImGuiSurfing
 				string ss = bOrientation ? "Vertical" : "Horizontal";
 				float h = 1.25 * ImGui::GetFrameHeight();
 				float w = h * 1.55f;
+
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
+				if (!bMinimized) ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
 
 				ImGui::Spacing();
 			}
@@ -665,34 +662,39 @@ namespace ofxImGuiSurfing
 
 					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
-						// Global Enable 
-						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_Global, ImVec2(-1, -1));//small
-						ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
+						ImGui::Spacing();
 
-						if (bGui_Global)
+						if (ImGui::Button("All", ImVec2(_w2, _h)))
 						{
-							for (auto &p : panels)
+							for (auto& p : panels) {
+								p.bEnable = true;
+							}
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("None", ImVec2(_w2, _h)))
+						{
+							for (auto& p : panels) {
+								p.bEnable = false;
+							}
+						}
+
+						ImGui::Spacing();
+
+						//--
+
+						// Global Enable 
+
+						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
+						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_ShowAll, ImVec2(-1, -1));//small
+
+						if (bGui_ShowAll)
+						{
+							for (auto& p : panels)
 							{
 								ImGui::Indent();
 								ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
 								//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
 								ImGui::Unindent();
-							}
-
-							ImGui::Spacing();
-
-							if (ImGui::Button("All", ImVec2(_w2, _h)))
-							{
-								for (auto &p : panels) {
-									p.bEnable = true;
-								}
-							}
-							ImGui::SameLine();
-							if (ImGui::Button("None", ImVec2(_w2, _h)))
-							{
-								for (auto &p : panels) {
-									p.bEnable = false;
-								}
 							}
 
 							ImGui::Spacing();
@@ -703,78 +705,87 @@ namespace ofxImGuiSurfing
 				//ImGui::Spacing();
 
 				// Settings
-
-				if (!bMinimized)
-				{
-					// Controls
+				if (bModeLinkedWindowsSpecial)
+					if (!bMinimized)
 					{
-						ofxImGuiSurfing::AddSpacingSeparated();
-
-						static bool bOpen = false;
-						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-
-						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+						// Controls
 						{
-							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
-							{
-								ofxImGuiSurfing::AddStepperInt(pad);
-								ofxImGuiSurfing::AddParameter(bHeaders);
-							}
-							ImGui::PopItemWidth();
-
-							//-
-
 							ofxImGuiSurfing::AddSpacingSeparated();
 
-							// Debug
+							static bool bOpen = false;
+							ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
-							static ofParameter<bool> bDebug{ "Debug", false };
-							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-							ImGui::Spacing();
-							if (bDebug)
+							if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 							{
-								ImGui::Indent();
-
-								ofxImGuiSurfing::AddParameter(bLockedWidth);
-								ofxImGuiSurfing::AddParameter(bLockedHeight);
-								ImGui::Spacing();
-
-								std::string ss1 = "";
-								int i = 0;
-								for (auto &p : panels)
+								ImGui::PushItemWidth(getPanelWidth() * 0.5f);
 								{
-									ss1 += "/t [" + ofToString(p.pos) + "] ";
-									//ss1 += "[" + ofToString(i) + "] ";
-									//ss1 += ofToString(p.pos);
-									ss1 += "\n";
-									ss1 += ofToString(p.getRectangle());
-									ss1 += "\n";
-									ss1 += "\n";
-
-									i++;
+									ofxImGuiSurfing::AddStepperInt(pad);
+									ofxImGuiSurfing::AddParameter(bHeaders);
 								}
-								ImGui::TextWrapped(ss1.c_str());
-								ImGui::Spacing();
+								ImGui::PopItemWidth();
 
-								std::string ss2 = "queue\n";
-								for (int i = 0; i < panelsQueue.size(); i++)
+								//-
+
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								// Debug
+
+								static ofParameter<bool> bDebug{ "Debug", false };
+								ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+								ImGui::Spacing();
+								if (bDebug)
 								{
-									if (i != 0) ss2 += ", ";
-									ss2 += ofToString(panelsQueue[i]);
-								}
-								ImGui::TextWrapped(ss2.c_str());
-								ImGui::Spacing();
+									ImGui::Indent();
 
-								std::string ss3 = "";
-								ss3 += "amnt\n";
-								ss3 += ofToString(panelsQueue.size());
-								ImGui::TextWrapped(ss3.c_str());
-								ImGui::Spacing();
-								ImGui::Unindent();
+									ofxImGuiSurfing::AddParameter(bLockedWidth);
+									ofxImGuiSurfing::AddParameter(bLockedHeight);
+									ImGui::Spacing();
+									
+									ofxImGuiSurfing::AddSpacingSeparated();
+
+									ImGui::Spacing();
+									ImGui::TextWrapped("Special Windows:\n");
+									ImGui::Spacing();
+
+									std::string ss1 = "";
+									int i = 0;
+									for (auto& p : panels)
+									{
+										//ss1 += "[" + ofToString(i) + "] ";
+										ss1 += " #" + ofToString(p.pos);
+										ss1 += "\n";
+										ss1 += ofToString(p.getRectangle());
+										ss1 += "\n";
+										ss1 += "\n";
+
+										i++;
+									}
+									ImGui::TextWrapped(ss1.c_str());
+									
+									ofxImGuiSurfing::AddSpacingSeparated();
+
+									std::string ss2 = "Queue:\n\n";
+									for (int i = 0; i < panelsQueue.size(); i++)
+									{
+										if (i != 0) ss2 += ", ";
+										ss2 += ofToString(panelsQueue[i]);
+									}
+									ImGui::TextWrapped(ss2.c_str());
+									
+									ofxImGuiSurfing::AddSpacingSeparated();
+
+									std::string ss3 = "";
+									ss3 += "Amount:\n\n";
+									ss3 += ofToString(panelsQueue.size());
+									ImGui::TextWrapped(ss3.c_str());
+									
+									ofxImGuiSurfing::AddSpacingSeparated();
+
+									ImGui::Unindent();
+								}
 							}
 						}
 					}
-				}
 			}
 		}
 
@@ -785,17 +796,15 @@ namespace ofxImGuiSurfing
 		}
 
 		//private:
-
 		//	//--------------------------------------------------------------
 		//	void doRepositione()
 		//	{
 		//		////TODO:
 		//		//return;
-
-		//		//ofLogNotice() << __FUNCTION__ << " " << position.get();
+		//		//ofLogNotice() << __FUNCTION__ << " " << position_Anchor.get();
 		//		//if (panelsQueue.size() == 0 || panels.size() == 0) return;
 		//		//int id = panelsQueue[0];
-		//		//panels[id].setPosition(position.get());
+		//		//panels[id].setPosition(position_Anchor.get());
 		//	}
 
 	public:
@@ -805,20 +814,25 @@ namespace ofxImGuiSurfing
 
 			//TODO:
 			// Reset layout
-			if (bTrigGroup)
+			if (bResetLayout)
 			{
-				bTrigGroup = false;
+				bResetLayout = false;
 
 				doResetLayout();
 
 				return;
 			}
 
-			// Read 1st queued position
+			//--
+			 
+			// Read 1st queued position to the anchor
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
 			int id = panelsQueue[0];
-			position.set(panels[id].getPosition());
+			position_Anchor.set(panels[id].getPosition());
 
+			//--
+
+			// Apply all links to windows
 			if (bModeLinkedWindowsSpecial) doSetWindowsPositions();
 		}
 

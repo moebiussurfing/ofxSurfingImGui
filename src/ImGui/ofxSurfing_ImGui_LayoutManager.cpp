@@ -44,6 +44,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	// Enable "Windows Special Organizer"
 	// Customize names
+	//windowPanels.setPath(path_Global);
 	windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
 	setNameWindowsSpecialsPanel("ORGANIZER");
 }
@@ -58,7 +59,7 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
-	/*if (bAutoSaveSettings) */saveAppSettings();
+	saveAppSettings();
 }
 
 //--
@@ -142,13 +143,13 @@ void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated g
 	path_ImLayouts = path_Global + "Presets/";
 
 	// Create folders if required
-	if (bAutoSaveSettings)
+	//if (bAutoSaveSettings)
 	{
 		ofxImGuiSurfing::CheckFolder(path_Global);
 		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
 	}
 
-	path_AppSettings = path_Global + "GuiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + "guiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
 
 	// Add the basic param settings
 	//TODO:
@@ -253,7 +254,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	// Special Windows Organizer
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		// Cascade / Organizer Mode
 		// Special windows manager
@@ -269,9 +270,10 @@ void ofxSurfing_ImGui_Manager::startup()
 		{
 			windowPanels.setHideWindows(true);
 
-			// Docking mode has the gui toggles in other panels..
+			// Docking mode has the GUI toggles in other panels..
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
+				// force disable to avoid collide settings layout!
 				windowPanels.bGui_WindowsSpecials = false;
 				windowPanels.bGui_WindowsSpecials.setSerializable(false);
 			}
@@ -293,12 +295,12 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	//--
 
-	//TODO:
-	//BUG: toggle states are not recalled well...
-	//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	{
-		windowPanels.startup();
-	}
+	////TODO:
+	////BUG: toggle states are not recalled well...
+	////if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	//{
+	//	windowPanels.startup();
+	//}
 
 	//for (size_t i = 0; i < windowsAtributes.size(); i++)
 	//{
@@ -311,7 +313,7 @@ void ofxSurfing_ImGui_Manager::startup()
 	//	bPanels[i].set(b);
 	//}
 	//
-	////if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	////if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	////{
 	////	windowPanels.add(_bGui);
 	////}
@@ -988,6 +990,9 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
+	//if (!bDockingLayoutPresetsEngine)
+		if (bMenu) drawMenu();
+
 	//--
 
 	//TODO:
@@ -1035,10 +1040,10 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//----
 
 	// Special Windows Engine
-	// 
+	 
 	// Organizer
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		// Main Panels Controller
 		if (windowPanels.isIntitiated())
@@ -1048,7 +1053,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 			windowPanels.update();
 
 			//TODO:
-			// Docking mode has the gui toggles in other panels..
+			// Docking mode has the GUI toggles in other panels..
 
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
@@ -1240,9 +1245,9 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	if (!windowsAtributes[index].bGui.get()) return false;
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (!windowPanels.bGui_Global.get()) return false;
+		if (!windowPanels.bGui_ShowAll.get()) return false;
 
 		//--
 
@@ -1264,7 +1269,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	//TODO:
 	// workaround
-	////if (!windowPanels.bGui_Global.get()) return false;
+	////if (!windowPanels.bGui_ShowAll.get()) return false;
 	//if (!windowsAtributes[index].bGui.get()) return false;
 
 	//refreshLayout();
@@ -1287,9 +1292,9 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	if (!windowsAtributes[index].bGui.get()) return;
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (!windowPanels.bGui_Global.get()) return;
+		if (!windowPanels.bGui_ShowAll.get()) return;
 	}
 
 	//-
@@ -1299,7 +1304,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 	//	drawAdvancedControls();
 	//}
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		if (windowPanels.bModeLinkedWindowsSpecial)
 		{
@@ -1425,7 +1430,7 @@ void ofxSurfing_ImGui_Manager::endDocking()
 	return;
 #endif
 
-	if (bMenu) drawImGuiMenu();
+	//if (bMenu) drawMenu();
 
 	//-
 
@@ -1477,18 +1482,17 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// 1.2.2 Special Windows Helpers
 
-	if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	{
-		params_LayoutsExtra.add(windowPanels.getParamsUser());
-
-		//params_LayoutsExtra.add(windowPanels.bGui_WindowsSpecials);
-		//params_LayoutsExtra.add(windowPanels.bModeLinkedWindowsSpecial);
-		//params_LayoutsExtra.add(windowPanels.bOrientation);
-		//params_LayoutsExtra.add(windowPanels.bFitSizes);			
-		//params_LayoutsExtra.add(windowPanels.bHeaders);
-		//params_LayoutsExtra.add(windowPanels.pad);
-		//params_LayoutsExtra.add(windowPanels.position);
-	}
+	//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	//{
+	//	//params_LayoutsExtra.add(windowPanels.getParamsUser());
+	//	//params_LayoutsExtra.add(windowPanels.bGui_WindowsSpecials);
+	//	//params_LayoutsExtra.add(windowPanels.bModeLinkedWindowsSpecial);
+	//	//params_LayoutsExtra.add(windowPanels.bOrientation);
+	//	//params_LayoutsExtra.add(windowPanels.bFitSizes);			
+	//	//params_LayoutsExtra.add(windowPanels.bHeaders);
+	//	//params_LayoutsExtra.add(windowPanels.pad);
+	//	//params_LayoutsExtra.add(windowPanels.position);
+	//}
 
 	// 1.3 Applied to control windows
 
@@ -1548,7 +1552,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	//params_AppSettings.add(params_Advanced);
 
-	//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	//{
 	//	if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 	//	{
@@ -1612,7 +1616,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettings.add(params_WindowsEngine);
 
 	//----
-
+	
+	//TODO: simplify calls..
+	// 
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -1994,7 +2000,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//-
 
 		//if (!bMinimizePresets)
-		if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
 			if (ImGui::CollapsingHeader(nameWindowSpecialsPanel.c_str(), ImGuiWindowFlags_None))
 				//if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) 
@@ -2018,7 +2024,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		//--
 
 		////TODO:
-		//if (surfingImGuiSpecialWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+		//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		//{
 		//	if (ImGui::Button("Reset Layout", ImVec2(_w1, _h)))
 		//	{
@@ -2698,7 +2704,7 @@ void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs& eventArgs)
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawImGuiMenu()
+void ofxSurfing_ImGui_Manager::drawMenu()
 {
 	static bool opt_fullscreen = true;
 	static bool* p_open = NULL;
