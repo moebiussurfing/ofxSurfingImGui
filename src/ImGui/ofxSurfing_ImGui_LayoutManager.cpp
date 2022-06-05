@@ -988,10 +988,14 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//--
 
+	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
+	//--
+
+	//TODO. fix
 	//if (!bDockingLayoutPresetsEngine)
-		if (bMenu) drawMenu();
+	//	if (bMenu) drawMenu();
 
 	//--
 
@@ -1040,7 +1044,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//----
 
 	// Special Windows Engine
-	 
+
 	// Organizer
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
@@ -1430,7 +1434,7 @@ void ofxSurfing_ImGui_Manager::endDocking()
 	return;
 #endif
 
-	//if (bMenu) drawMenu();
+	if (bMenu) drawMenuDocked();
 
 	//-
 
@@ -1458,41 +1462,44 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//params_LayoutsExtra.clear();
 	//params_LayoutsVisible.clear();
 
-	//-
-
-	params_LayoutsExtra.add(bMenu);
-	params_LayoutsExtra.add(bLog);
-
-	//-
+	//--
 
 	// 1.1 Store all the window panels show toggles
+	// we will remember, on each layout preset, if a window is visible or not!
 
-	//params_Layouts.clear();
 	for (int i = 0; i < windowsAtributes.size(); i++)
 	{
 		params_LayoutsVisible.add(windowsAtributes[i].bGui);
 	}
 
+	//--
+
 	//// 1.2 Add other settings that we want to store into each presets
+
+	//-
+
+	// Extra params that will be included into each preset.
+	// Then can be different and memorized in different states too,
+	// like the common panels. 
+
+	params_LayoutsExtra.add(bMenu);
+	params_LayoutsExtra.add(bLog);
 
 	//params_LayoutsExtraInternal.clear();
 	//params_LayoutsExtraInternal.add(bMenu);
 	//params_LayoutsExtraInternal.add(bLog);
 	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
 
+	//--
+
 	// 1.2.2 Special Windows Helpers
 
-	//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	//{
-	//	//params_LayoutsExtra.add(windowPanels.getParamsUser());
-	//	//params_LayoutsExtra.add(windowPanels.bGui_WindowsSpecials);
-	//	//params_LayoutsExtra.add(windowPanels.bModeLinkedWindowsSpecial);
-	//	//params_LayoutsExtra.add(windowPanels.bOrientation);
-	//	//params_LayoutsExtra.add(windowPanels.bFitSizes);			
-	//	//params_LayoutsExtra.add(windowPanels.bHeaders);
-	//	//params_LayoutsExtra.add(windowPanels.pad);
-	//	//params_LayoutsExtra.add(windowPanels.position);
-	//}
+	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
+	{
+		params_LayoutsExtra.add(windowPanels.getParamsUser());
+	}
+
+	//--
 
 	// 1.3 Applied to control windows
 
@@ -1501,20 +1508,24 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//params_LayoutsExtra.add(bModeLock1);
 	//params_LayoutsExtra.add(bModeLockControls);
 
+	//--
+
 	// 1.4 Pack both groups
 
 	params_Layouts.add(params_LayoutsVisible);
 	params_Layouts.add(params_LayoutsExtra);
 
-	//-
+	//--
 
-	// Initiate
+	// 2. Initiate
 
 	bLayoutPresets.clear();
 	params_LayoutPresetsStates.clear();
 	appLayoutIndex.setMax(0);
 
-	// Populate some presets
+	//--
+
+	// 3. Populate some presets
 
 	for (int i = 0; i < numPresetsDefault; i++)
 	{
@@ -1533,6 +1544,8 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// The main control windows
 
+	params_AppSettings.add(bGui_LayoutsManager);
+
 	//params_AppSettingsLayout.add(bModeFree);
 	//params_AppSettingsLayout.add(bModeForced);
 	//params_AppSettingsLayout.add(bModeLock1);
@@ -1546,11 +1559,11 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
-
-	params_AppSettings.add(bGui_LayoutsManager);
 	params_AppSettings.add(params_AppSettingsLayout);
 
 	//params_AppSettings.add(params_Advanced);
+
+	//--
 
 	//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	//{
@@ -1561,7 +1574,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//	}
 	//}
 
-	//-
+	//--
 
 	// Exclude from settings but to use the grouped callback
 	//bSolo.setSerializable(false);
@@ -1616,9 +1629,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettings.add(params_WindowsEngine);
 
 	//----
-	
-	//TODO: simplify calls..
-	// 
+
+	//TODO: simplify calls merging to one group only...
+	 
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -1638,8 +1651,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 void ofxSurfing_ImGui_Manager::loadAppSettings()
 {
 	/*if (bAutoSaveSettings) */ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
-
-
 }
 
 //--------------------------------------------------------------
@@ -1878,7 +1889,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets()
 			this->Add(bHelpInternal, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
 			this->Add(bKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-			
+
 			//--
 
 			// Autoresize & Extra
@@ -2704,7 +2715,7 @@ void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs& eventArgs)
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawMenu()
+void ofxSurfing_ImGui_Manager::drawMenuDocked()
 {
 	static bool opt_fullscreen = true;
 	static bool* p_open = NULL;
@@ -2780,6 +2791,75 @@ void ofxSurfing_ImGui_Manager::drawMenu()
 			ImGui::GetIO().ConfigFlags = dockspace_flags;
 			//ImGui::GetIO().ConfigDockingWithShift = true;
 
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("About"))
+		{
+			ofxImGuiSurfing::AddTooltipHelp(
+				"This is not operative here. Just for testing menus!" "\n\n"
+				"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
+				"- Drag from window title bar or their tab to dock/undock." "\n"
+				"- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"
+				"- Hold SHIFT to enable dragging docking." "\n"
+				"This demo app has nothing to do with it!" "\n\n"
+				"This demo app only demonstrate the use of ImGui::DockSpace() which allows you to manually create a docking node _within_ another window. This is useful so you can decorate your main application window (e.g. with a menu bar)." "\n\n"
+				"ImGui::DockSpace() comes with one hard constraint: it needs to be submitted _before_ any window which may be docked into it. Therefore, if you use a dock spot as the central point of your application, you'll probably want it to be part of the very first window you are submitting to imgui every frame." "\n\n"
+				"(NB: because of this constraint, the implicit \"Debug\" window can not be docked into an explicit DockSpace() node, because that window is submitted as part of the NewFrame() call. An easy workaround is that you can create your own implicit \"Debug##2\" window after calling DockSpace() and leave it in the window stack for anyone to use.)"
+			);
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+}
+
+//--
+
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::drawMenu()
+{
+	static bool opt_fullscreen = true;
+	static bool* p_open = NULL;
+	static bool opt_exit = false;
+
+	//-
+
+	// Menu bar
+
+	// This is not operative. just for testing menus!
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			// Disabling fullscreen would allow the window to be moved to the front of other windows,
+			// which we can't undo at the moment without finer window depth/z control.
+			ofWindowMode windowMode = ofGetCurrentWindow()->getWindowMode();
+			if (windowMode == OF_WINDOW) opt_fullscreen = false;
+			else if (windowMode == OF_FULLSCREEN) opt_fullscreen = true;
+			else if (windowMode == OF_GAME_MODE) opt_fullscreen = false;
+
+			if (ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen))
+			{
+				ofSetFullscreen(opt_fullscreen);
+			}
+
+			ofxImGuiSurfing::AddSpacingSeparated();
+
+			if (ImGui::MenuItem("Exit", NULL, &opt_exit))
+			{
+				ofExit();
+				//*opt_exit = false;
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Copy", NULL)) {}
+			if (ImGui::MenuItem("Paste", NULL)) {}
 			ImGui::EndMenu();
 		}
 

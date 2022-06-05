@@ -1098,17 +1098,18 @@ private:
 							//-
 
 							ofxImGuiSurfing::AddSpacing();
+							ofxImGuiSurfing::AddSpacing();
 
 							if (ImGui::TreeNode("WINDOW INFO"))
 							{
-								std::string _hwidget = "Widget Height: ";
+								std::string _hwidget = "\nWidget Height:\n";
 								_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-								std::string _wwidget = "Widget Width: ";
+								std::string _wwidget = "\nWidget Width:\n";
 								_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
-								std::string _wpanel = "Panel Width: ";
+								std::string _wpanel = "\nPanel Width:\n";
 								_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
 
-								std::string _wShape = "Window Shape: ";
+								std::string _wShape = "\nWindow Shape:\n";
 								_wShape += ofToString(ImGui::GetWindowPos().x);
 								_wShape += ", ";
 								_wShape += ofToString(ImGui::GetWindowPos().y);
@@ -1662,6 +1663,7 @@ public:
 public:
 
 	void drawMenu();
+	void drawMenuDocked();
 
 public:
 

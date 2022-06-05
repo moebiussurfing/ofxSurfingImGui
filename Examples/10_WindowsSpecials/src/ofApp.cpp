@@ -3,34 +3,33 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 25);
-	ofSetWindowShape(1920, 1080 - 25);
+	//ofSetWindowPosition(-1920, 25);
+	//ofSetWindowShape(1920, 1080 - 25);
 
 	//--
-	 
+
 	// Parameters
 
 	params_0.setName("paramsGroup0");
-	params_1.setName("paramsGroup1");
-	params_2.setName("paramsGroup2");
-	params_3.setName("paramsGroup3");
-
 	params_0.add(bEnable0.set("Enable0", false));
 	params_0.add(speed0.set("speed0", 0.5, 0, 1));
 	params_0.add(bPrevious0.set("<", false));
 	params_0.add(bNext0.set(">", false));
 
+	params_1.setName("paramsGroup1");
 	params_1.add(bEnable1.set("Enable1", false));
 	params_1.add(shapeType1.set("shapeType1", 0, -50, 50));
 	params_1.add(size1.set("size1", 100, 0, 100));
 	params_1.add(lineWidth1.set("lineWidth1", 0.5, 0, 1));
 	params_1.add(separation1.set("separation1", 50, 1, 100));
 
+	params_2.setName("paramsGroup2");
 	params_2.add(bEnable2.set("Enable2", false));
 	params_2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params_2.add(size2.set("size2", 100, 0, 100));
 	params_2.add(amount2.set("amount2", 10, 0, 25));
 
+	params_3.setName("paramsGroup3");
 	params_3.add(bEnable3.set("Enable3", false));
 	params_3.add(speed3.set("speed3", 0.5, 0, 1));
 	params_3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
@@ -56,7 +55,8 @@ void ofApp::setup_ImGui()
 	// 3. Add and queue "Special Windows" to the Organizer
 	// Custom enablers names. 
 	// These names will be used to name the windows too.
-	// Internal bool toggles will be auto created too.
+	// Internal bool toggles ofParams will be auto created too:
+	// You just pass a name!
 
 	guiManager.addWindowSpecial("myWindow 0");
 	guiManager.addWindowSpecial("myWindow 1");
@@ -69,7 +69,7 @@ void ofApp::setup_ImGui()
 
 	// 5. Startup
 	// Called after windows has been added.
-	guiManager.startup(); 
+	guiManager.startup();
 }
 
 //--------------------------------------------------------------
@@ -88,6 +88,8 @@ void ofApp::draw()
 			NOTE:
 
 			The "Special Windows Organizer" window.
+			Speeds Up the creation of windows.
+			An Internal bool toggle will be auto created for each added Special Window.
 			Another window called "Organizer" (by default) will be auto drawn!
 			This happens internally, and we don't need to handle that.
 			It's a panel who controls all the special windows.
@@ -121,6 +123,9 @@ void ofApp::draw_MainWindow() {
 		// Organizer Panel toggle
 		// To hide or show the "Special Windows Organizer" window:
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+		// For internal debug purposes
+		guiManager.drawAdvanced();
 
 		guiManager.endWindow();
 	}
