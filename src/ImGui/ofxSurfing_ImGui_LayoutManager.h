@@ -1,7 +1,7 @@
 
 /*
 
-TODO:
+	TODO:
 
 	+ fix make dockeable all windows on same space
 	+ fix multiple dock spaces that are colliding/one over another
@@ -99,7 +99,7 @@ public:
 
 public:
 
-	void initiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setupInitiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
 	void setup(ofxImGui::Gui& gui); // MODE B: can be instantiated out of the class, locally
 	void update(); // to manual update...
 	void draw(ofEventArgs& args);
@@ -623,61 +623,18 @@ public:
 		else return *guiPtr;
 	}
 
-	//--
+	//----
+
+	// Context getter shortcut
+	 
+	////TODO:
+	////https://github.com/ocornut/imgui/issues/5287
 
 public:
 
-	//ImGuiContext* getContext() { return gui.getContext(); }
-
 	ImGuiContext* getContext() {
-		//ImGuiContext* context;
-		//ImGui::GetCurrentContext()
 		return ImGui::GetCurrentContext();
 	}
-
-	////TODO:
-	////https://github.com/ocornut/imgui/issues/5287
-	////--------------------------------------------------------------
-	//void doAlignWindowsOnce()
-	//{
-	//	ofLogNotice(__FUNCTION__);
-
-	//	ImGuiContext* GImGui = gui.getContext();
-	//	ImGuiContext& g = *GImGui;
-
-	//	ImVector<ImGuiWindow*> windows;
-	//	for (ImGuiWindow* window : g.WindowsFocusOrder)
-	//	{
-	//		if (window->WasActive) {
-	//			windows.push_back(window);
-	//		}
-	//	}
-
-	//	if (windows.Size > 0)
-	//	{
-	//		//ImVec2 base_pos = ImGui::GetMainViewport()->Pos;
-	//		//ImVec2 v1 = ImVec2(0.7f, 0.7f);
-	//		//ImVec2 step = ImFloor((ImGui::GetMainViewport()->Size * v1) / (float)windows.Size);
-	//		//step.x = step.y = ImFloor(ImMin(step.x, step.y));
-	//		//for (int n = 0; n < windows.Size; n++)
-	//		//{
-	//		//	ImVec2 v2 = ImVec2(((float)n + 0.5f), ((float)n + 0.5f));
-	//		//	ImGui::SetWindowPos(windows[n], base_pos + step * v2);
-	//		//}
-
-	//		//--
-
-	//		ImVec2 pos = windows[0]->Pos;
-	//		ImVec2 sz = windows[0]->Size;
-	//		ImVec2 gap = ImVec2(5.f, 0.f);
-	//		for (int n = 1; n < windows.Size; n++)
-	//		{
-	//			cout << windows[n]->Name << endl;
-	//			pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
-	//			ImGui::SetWindowPos(windows[n], pos);
-	//		}
-	//	}
-	//}
 
 	//----
 
@@ -688,17 +645,17 @@ public:
 	// To the global context: 
 	// All the windows will be populated in between!
 
-	// -> main begin feed widgets
+	// -> 1. Main BEGIN feed widgets!
 	void begin();
 
-	// -> main end feed widgets
+	// -> 2. Main END feed widgets!
 	void end();
 
 	//----
 
 	// Window methods
 
-	// Begins a window
+	// -> 1. BEGINs a Window
 
 	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, ofParameter<bool> p); //  to change the name, and not use the param name.
@@ -709,8 +666,10 @@ public:
 	bool beginWindow(std::string name /*= "Window"*/); // -> simpler. not working?
 	bool beginWindow(char* name = "Window"); // -> simpler. not working?
 
-	// Ends a window
-
+	//--
+	 
+	// -> 2. ENDs a Window
+	
 	void endWindow();
 
 	//----
@@ -797,14 +756,15 @@ private:
 
 	//-
 
-	// Exposed useful public params
+	// Exposed useful public params:
 
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // uses Windows Specials
 
-	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved on settings when exit the app 
+	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
+
+	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved too on settings when exit the app. 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bExtra{ "Extra", false };
@@ -997,6 +957,11 @@ private:
 
 			// Auto resize
 			Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED);
+
+			// Align Helpers
+			Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
+
+			//--
 
 			ofxImGuiSurfing::AddSpacing();
 
@@ -1240,10 +1205,11 @@ public:
 
 	// Special Windows Management
 
-	// To simplify a bit more the API
-
 private:
 
+	//TODO:
+	// To simplify a bit more the API workflow.
+	// Allows to omit the index argument on begin a window...
 	int _currWindowsSpecial = 0;
 
 	std::string nameWindowSpecialsPanel = "";
@@ -1252,58 +1218,55 @@ public:
 
 	bool beginWindowSpecial();
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
+	
 	void endWindowSpecial(int index = -1);
 
 	//--------------------------------------------------------------
-	void setNameWindowsSpecialsPanel(std::string name)
+	void setNameWindowsSpecialsPanel(std::string name) // Just optional to customize name.
 	{
 		nameWindowSpecialsPanel = name;
-		bGui_WindowsSpecials.setName(name);
 		windowPanels.bGui_WindowsSpecials.setName(name);
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowsSpecialsPanel()
+	void drawWindowsSpecialsPanel() // Draws the main panel controller.
 	{
-		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
-
-		string ss;
-		if (nameWindowSpecialsPanel == "") ss = "Organizer";
-		else ss = nameWindowSpecialsPanel;
-
-		// Panels Toggles
-
-		windowPanels.beginWindow(ss.c_str(), (bool*)&bGui_WindowsSpecials.get(), flags);
+		if (beginWindow(windowPanels.bGui_WindowsSpecials))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
 			windowPanels.drawWidgets(bMinimize);
 
-			//if (windowPanels.bEnable)
-			//{
-			//	if (!bMinimize)
-			//	{
-			//		drawSpecialWindowsPanel();
-			//		//drawAdvancedBundle();//crashes?
-			//	}
-			//}
+			endWindow();
 		}
-		windowPanels.endWindow();
 	}
 
+	//--------------------------------------------------------------
+	void drawWindowsAlignHelpers()
+	{
+		if (beginWindow(bGui_WindowsAlignHelpers))
+		{
+			//windowPanels.drawWidgetsAlignHelpers();
+
+			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			AddSpacing();
+
+			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsY);
+			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsX);
+			ofxImGuiSurfing::AddSmallButton(windowPanels.bResetLayout);
+
+			AddSpacing();
+			ofxImGuiSurfing::AddStepperInt(windowPanels.pad);
+
+			endWindow();
+		}
+	}
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
 		return windowPanels.bGui_ShowAll.get();
 	}
-
-	//TODO:
-	////--------------------------------------------------------------
-	//bool beginWindow(int index) { //-> legacy api
-	//	return beginWindowSpecial(index);
-	//}
 
 	//--
 
@@ -1338,7 +1301,7 @@ public:
 	// Windows Special Engine
 
 private:
-//public:
+	//public:
 
 	WindowPanels windowPanels;
 
@@ -1418,31 +1381,24 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void initiatieSpecialWindowsOrganizer() 
+	void initiatieSpecialWindowsOrganizer()
 	{
 		windowPanels.setPath(path_Global);
 
-		windowPanels.initiate();
+		windowPanels.setupInitiate();
 
 		//windowPanels.bModeLinkedWindowsSpecial.set(true);//force
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialEnabler() {
+	ofParameter<bool>& getWindowsSpecialEnabler() { // toggle to enable or disable
 		return windowPanels.bModeLinkedWindowsSpecial;
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialGui() {//legacy
-		return bGui_WindowsSpecials;
+	ofParameter<bool>& getWindowsSpecialsGuiToggle() { // main toggle to show the panel
+		return windowPanels.bGui_WindowsSpecials;
 	}
-
-	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialsGuiToggle() {
-		return bGui_WindowsSpecials;
-	}
-
-	//void drawSpecialWindowsPanel();
 
 	// Orientation cascade windows
 	//--------------------------------------------------------------

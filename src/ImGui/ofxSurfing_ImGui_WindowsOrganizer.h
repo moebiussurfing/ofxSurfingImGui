@@ -133,14 +133,19 @@ namespace ofxImGuiSurfing
 
 			params_User.add(bModeLinkedWindowsSpecial);
 			params_User.add(bOrientation);
-			params_User.add(iOrientation);
-			params_User.add(bFitSizes);
+			params_User.add(orientation_Index);//?
+			params_User.add(bAlignShapes);
 			params_User.add(bHeaders);
 			params_User.add(pad);
 			params_User.add(position_Anchor);
 			params_User.add(bAlignWindowsY);
 			params_User.add(bAlignWindowsX);
 			params_User.add(bResetLayout);
+
+			// exclude
+			bAlignWindowsY.setSerializable(false);
+			bAlignWindowsX.setSerializable(false);
+			bResetLayout.setSerializable(false);
 		}
 
 		//--------------------------------------------------------------
@@ -152,6 +157,11 @@ namespace ofxImGuiSurfing
 			// Save
 			ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
 		}
+
+		//--
+
+		//TODO:
+		//this is taken from ofxSurfingPresets
 
 		enum surfingAlignMode
 		{
@@ -284,16 +294,16 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // toggle gui to draw main window.
-		ofParameter<bool> bGui_ShowAll{ "Show All", true }; // extra toggle to hide / show all the queued windows.
+		ofParameter<bool> bGui_WindowsSpecials{ "ORGANIZER", true }; // toggle gui to draw main window.
+		ofParameter<bool> bGui_ShowAll{ "ALL", true }; // extra toggle to hide / show all the queued windows.
 
 		ofParameter <bool> bAlignWindowsX{ "AlignX", false };
 		ofParameter <bool> bAlignWindowsY{ "AlignY", false };
 
 		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link Windows",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
-		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
-		ofParameter<bool> bHeaders{ "Hide Headers", true };
+		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
+		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
@@ -347,7 +357,7 @@ namespace ofxImGuiSurfing
 			W_COUNT
 		};
 		wOrientation orientation;
-		ofParameter<int> iOrientation{ "Orient", 0, 0, W_COUNT - 1 };
+		ofParameter<int> orientation_Index{ "Orient", 0, 0, W_COUNT - 1 };
 		//std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
 
 		bool bHideWindows = false; //-> To disable when using the full layout engine. 
@@ -407,7 +417,6 @@ namespace ofxImGuiSurfing
 			//-
 
 			//TODO: should recalculate..
-
 			else if (name == bHeaders.getName())
 			{
 				doSetWindowsPositions();
@@ -424,15 +433,17 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			else if (name == bFitSizes.getName())
+			else if (name == bAlignShapes.getName())
 			{
 				//fix
-				if (bFitSizes) {
+				if (bAlignShapes) {
 					bOrientation = bOrientation;
 				}
 			}
 
-			//-
+			//--
+
+			// ALign Windows Helpers
 
 			else if (name == bResetLayout.getName() && bResetLayout)
 			{
@@ -459,18 +470,18 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			else if (name == iOrientation.getName())
+			else if (name == orientation_Index.getName())
 			{
 				static int pre = -1;
-				if (iOrientation != pre) pre = iOrientation;
+				if (orientation_Index != pre) pre = orientation_Index;
 				else return; // not changed then skip
 
-				if (iOrientation == 0) bOrientation.set(false);
+				if (orientation_Index == 0) bOrientation.set(false);
 				else bOrientation.set(true);
 
-				//if (bFitSizes)
+				//if (bAlignShapes)
 				{
-					if (iOrientation == 0) {
+					if (orientation_Index == 0) {
 						bLockedWidth = false;
 						bLockedHeight = true;
 					}
@@ -487,8 +498,8 @@ namespace ofxImGuiSurfing
 
 			else if (name == bOrientation.getName())
 			{
-				if (!bOrientation) iOrientation = 0;
-				else iOrientation = 1;
+				if (!bOrientation) orientation_Index = 0;
+				else orientation_Index = 1;
 
 				doSetWindowsPositions();
 			}
@@ -641,10 +652,10 @@ namespace ofxImGuiSurfing
 
 			std::sort(myWins.begin(), myWins.end(), myobject);
 
-			float w= myWins[0].sz.x + pad;
-			float h= myWins[0].sz.y;
-			float x= myWins[0].pos.x + w + pad;
-			float y= myWins[0].pos.y;//anchor
+			float w = myWins[0].sz.x + pad;
+			float h = myWins[0].sz.y;
+			float x = myWins[0].pos.x + w + pad;
+			float y = myWins[0].pos.y;//anchor
 
 			for (int i = 1; i < myWins.size(); i++)
 			{
@@ -726,7 +737,7 @@ namespace ofxImGuiSurfing
 		{
 			if (ofGetFrameNum() < 2) return;
 
-			if (!bFitSizes) return;//skip
+			if (!bAlignShapes) return;//skip
 
 			if (bLockedWidth && bLockedHeight) {
 				ImGui::SetNextWindowSize(ImVec2(width_max, height_max));
@@ -740,7 +751,7 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void initiate()
+		void setupInitiate()
 		{
 			ofLogNotice() << __FUNCTION__;
 
@@ -836,11 +847,17 @@ namespace ofxImGuiSurfing
 			bGui_ShowAll.setName(name);
 		}
 
-		//--------------------------------------------------------------
-		void beginWindow(string name, bool* bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None)
-		{
-			ImGui::Begin(name.c_str(), bOpen, flags);
-		}
+		////--------------------------------------------------------------
+		//void beginWindow(string name, bool* bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None)
+		//{
+		//	ImGui::Begin(name.c_str(), bOpen, flags);
+		//}
+
+
+		////--------------------------------------------------------------
+		//void drawWidgetsAlignHelpers()
+		//{
+		//}
 
 		//--------------------------------------------------------------
 		void drawWidgets(bool bMinimized = false)
@@ -853,9 +870,9 @@ namespace ofxImGuiSurfing
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
 			ofxImGuiSurfing::AddSpacing();
 
-			ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
-			ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
-			ofxImGuiSurfing::AddSmallButton(bResetLayout);
+			//ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
+			//ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
+			//ofxImGuiSurfing::AddSmallButton(bResetLayout);
 
 			ImGui::Spacing();
 
@@ -867,7 +884,7 @@ namespace ofxImGuiSurfing
 				float w = h * 1.55f;
 
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggleRoundedButton(bFitSizes);
+				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
 
 				ImGui::Spacing();
 			}
@@ -886,29 +903,34 @@ namespace ofxImGuiSurfing
 
 					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
-						ImGui::Spacing();
+						if (!bMinimized)
+						{
+							ImGui::Spacing();
 
-						if (ImGui::Button("All", ImVec2(_w2, _h)))
-						{
-							for (auto& p : panels) {
-								p.bEnable = true;
+							if (ImGui::Button("All", ImVec2(_w2, _h)))
+							{
+								for (auto& p : panels) {
+									p.bEnable = true;
+								}
 							}
-						}
-						ImGui::SameLine();
-						if (ImGui::Button("None", ImVec2(_w2, _h)))
-						{
-							for (auto& p : panels) {
-								p.bEnable = false;
+							ImGui::SameLine();
+							if (ImGui::Button("None", ImVec2(_w2, _h)))
+							{
+								for (auto& p : panels) {
+									p.bEnable = false;
+								}
 							}
+
 						}
 
 						ImGui::Spacing();
 
 						//--
 
-						// Global Enable 
+					// Global Enable 
 
-						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
+						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll);//medium
+						//ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
 						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_ShowAll, ImVec2(-1, -1));//small
 
 						if (bGui_ShowAll)
@@ -916,7 +938,8 @@ namespace ofxImGuiSurfing
 							for (auto& p : panels)
 							{
 								ImGui::Indent();
-								ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+								ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable);
+								//ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
 								//ofxImGuiSurfing::AddBigToggle(p.bEnable, ImVec2(-1, -1));
 								ImGui::Unindent();
 							}
@@ -1016,11 +1039,11 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		//--------------------------------------------------------------
-		void endWindow()
-		{
-			ImGui::End();
-		}
+		////--------------------------------------------------------------
+		//void endWindow()
+		//{
+		//	ImGui::End();
+		//}
 
 		//private:
 		//	//--------------------------------------------------------------
@@ -1038,15 +1061,6 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void update() {
-
-			////TODO:
-			//// Reset layout
-			//if (bResetLayout)
-			//{
-			//	bResetLayout = false;
-			//	doResetLayout();
-			//	return;
-			//}
 
 			//--
 
@@ -1097,13 +1111,13 @@ namespace ofxImGuiSurfing
 				rCurr = panels[id].getRectangle();
 				rNext = panels[idNext].getRectangle();
 
-				if (iOrientation == W_HORIZ)
+				if (orientation_Index == W_HORIZ)
 				{
 					glm::vec2 p = rCurr.getTopRight();
 					rNext.setPosition(p.x + pad, p.y);
 					panels[idNext].setRectangle(rNext);
 				}
-				else if (iOrientation == W_VERT)
+				else if (orientation_Index == W_VERT)
 				{
 					glm::vec2 p = rCurr.getBottomLeft();
 					rNext.setPosition(p.x, p.y + pad);

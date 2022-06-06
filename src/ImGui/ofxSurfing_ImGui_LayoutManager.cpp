@@ -14,6 +14,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	params_Advanced.add(bLinkWindows);
+	//params_Advanced.add(bGui_WindowsAlignHelpers);
 	params_Advanced.add(bAutoResize);
 
 	params_Advanced.add(bExtra);
@@ -77,7 +78,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
 		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
-		initiate(); // This instantiates and configures ofxImGui inside the class object.
+		setupInitiate(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
@@ -85,12 +86,13 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 
 		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setupDocking();
+		setupInitiate();
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 		setAutoSaveSettings(true); // -> Enables store/recall some settings from previous app session
 		setImGuiAutodraw(true);
-		initiate(); // This instantiates and configures ofxImGui inside the class object.
+		setupInitiate(); // This instantiates and configures ofxImGui inside the class object.
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED://TODO:
@@ -118,14 +120,12 @@ void ofxSurfing_ImGui_Manager::setupDocking()
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
 	setImGuiAutodraw(true);
-
-	initiate();
 }
 
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated gui
+void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantiated gui
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -138,17 +138,19 @@ void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated g
 
 	setupImGui();
 
-	//-
+	//--
 
-	path_Global = "ImGui_Layout/";
+	path_Global = "Gui/";
+	//path_Global = "ImGui_Layout/";
+
 	path_ImLayouts = path_Global + "Presets/";
 
 	// Create folders if required
-	//if (bAutoSaveSettings)
-	{
-		ofxImGuiSurfing::CheckFolder(path_Global);
-		if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
-	}
+	ofxImGuiSurfing::CheckFolder(path_Global);
+
+	if (bUseLayoutPresetsManager) ofxImGuiSurfing::CheckFolder(path_ImLayouts);
+
+	//--
 
 	path_AppSettings = path_Global + "guiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
 
@@ -158,6 +160,10 @@ void ofxSurfing_ImGui_Manager::initiate() { // For using internal instantiated g
 	{
 		params_AppSettings.add(params_Advanced);
 	}
+
+	//--
+
+	params_AppSettings.add(bGui_WindowsAlignHelpers);
 }
 
 //--------------------------------------------------------------
@@ -274,17 +280,17 @@ void ofxSurfing_ImGui_Manager::startup()
 			// Docking mode has the GUI toggles in other panels..
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
-				// force disable to avoid collide settings layout!
-				windowPanels.bGui_WindowsSpecials = false;
-				windowPanels.bGui_WindowsSpecials.setSerializable(false);
+				//// workflow
+				//// force disable to avoid collide settings layout!
+				//windowPanels.bGui_WindowsSpecials = false;
+				////windowPanels.bGui_WindowsSpecials.setSerializable(false);
 			}
 		}
 
 		if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
 			// Link show gui
-			bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
-			//windowPanels.bGui_WindowsSpecials.makeReferenceTo(bGui_WindowsSpecials);
+			//bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
 		}
 	}
 
@@ -961,11 +967,7 @@ void ofxSurfing_ImGui_Manager::drawOFnative() {
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::startupFirstFrame() {
-	//TODO: ?
-
-	//TODO
-	//if (ofGetFrameNum() == 1)
-	//if (ofGetFrameNum() == 2)
+	//TODO:
 	{
 		appLayoutIndex = appLayoutIndex;
 		if (rectangles_Windows.size() > 0) rectangles_Windows[1] = rectangles_Windows[1];
@@ -987,22 +989,10 @@ void ofxSurfing_ImGui_Manager::startupFirstFrame() {
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::begin() {
 
-	//--
-
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//--
-
-	//TODO. fix
-	//if (!bDockingLayoutPresetsEngine)
-	//	if (bMenu) drawMenu();
-
-	//--
-
-	//TODO:
-	//windowPanels.update();
-	//update();
 
 	//TODO:
 	if (ofGetFrameNum() == 1)
@@ -1010,7 +1000,10 @@ void ofxSurfing_ImGui_Manager::begin() {
 		startupFirstFrame();
 	}
 
+	//--
+
 	//TODO:
+	// This is used to auto handle indexes and speed up API.. 
 	_currWindowsSpecial = -1;
 
 	//--
@@ -1033,18 +1026,27 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 
-	//TODO:
+	// Reset font to default.
+	// this clear all the push/pop queue.
 	setDefaultFont();
 
 	//--
 
-	// Layout Presets Engine
+	//TODO. fix
+	//if (!bDockingLayoutPresetsEngine)
+	//	if (bMenu) drawMenu();
+
+	//----
+
+	// Extra Tools / Engines
+
+	// 1. Layout Presets Engine
 
 	if (bDockingLayoutPresetsEngine) drawLayoutPresetsEngine();
 
 	//----
 
-	// Special Windows Engine
+	// 2. Special Windows Engine Window Panel
 
 	// Organizer
 
@@ -1062,15 +1064,23 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
-				if (bGui_WindowsSpecials) drawWindowsSpecialsPanel();
+				if (windowPanels.bGui_WindowsSpecials) drawWindowsSpecialsPanel();
+				//if (bGui_WindowsSpecials) drawWindowsSpecialsPanel();
 			}
 		}
 	}
+
+	//----
+
+	// 3. Align Helpers Window Panel
+
+	if (bGui_WindowsAlignHelpers) drawWindowsAlignHelpers();
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::end() {
-
+void ofxSurfing_ImGui_Manager::end()
+{
+	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//--
@@ -1087,7 +1097,10 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	if (customFont != nullptr) ImGui::PopFont();
 
-	// mouse lockers
+	// Mouse lockers helpers
+	// Here we check if mouse is over gui to disable other external stuff
+	// e.g. easyCam draggable moving, text input boxes, key commands...
+
 	bMouseOverGui = false;
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
@@ -1095,6 +1108,8 @@ void ofxSurfing_ImGui_Manager::end() {
 
 	//--
 
+	//TODO:
+	// Sometimes we could use an ofxImGui external or from a parent scope..
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
 }
@@ -1258,7 +1273,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.runState(index);
 
-		if (windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+		if (!windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
 	}
 
 	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
@@ -1556,6 +1571,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bGui_LayoutsPresets);
 	params_AppSettingsLayout.add(bGui_LayoutsExtra);
 	params_AppSettingsLayout.add(bGui_LayoutsPanels);
+
 	params_AppSettingsLayout.add(bAutoSave_Layout);
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
@@ -1632,7 +1648,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//----
 
 	//TODO: simplify calls merging to one group only...
-	 
+
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);

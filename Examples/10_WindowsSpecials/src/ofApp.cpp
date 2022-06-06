@@ -126,6 +126,8 @@ void ofApp::draw_MainWindow() {
 		// To hide or show the "Special Windows Organizer" window:
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
+		guiManager.Add(guiManager.bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		
 		// For internal debug purposes
 		guiManager.drawAdvanced();
 
