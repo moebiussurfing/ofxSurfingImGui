@@ -454,7 +454,7 @@ public:
 	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		ImGui::TextWrapped(t.c_str());
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
@@ -464,23 +464,25 @@ public:
 	void AddLabelBig(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelHuge(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		pushStyleFont(2);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 
 	//--
@@ -1331,7 +1333,9 @@ public:
 
 	vector<SurfingImGuiWindowAtributes> windowsAtributes; // Handles only the manually pre added windows.
 
-	//--
+	//----
+
+	// Windows Special Engine
 
 private:
 //public:
@@ -1420,7 +1424,7 @@ public:
 
 		windowPanels.initiate();
 
-		windowPanels.bModeLinkedWindowsSpecial.set(true);
+		//windowPanels.bModeLinkedWindowsSpecial.set(true);//force
 	}
 
 	//--------------------------------------------------------------
@@ -1729,6 +1733,8 @@ public:
 public:
 
 	ofParameter<bool> bMenu{ "Menu", false };
+
+	//TODO:
 	ofParameter <bool> bLinkWindows{ "Link Windows", true };//align windows engine
 
 private:

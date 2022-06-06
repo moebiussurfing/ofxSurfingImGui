@@ -128,15 +128,19 @@ namespace ofxImGuiSurfing
 
 			params_User.clear();
 
+			params_User.add(bGui_WindowsSpecials);
+			params_User.add(bGui_ShowAll);
+
 			params_User.add(bModeLinkedWindowsSpecial);
 			params_User.add(bOrientation);
+			params_User.add(iOrientation);
 			params_User.add(bFitSizes);
 			params_User.add(bHeaders);
 			params_User.add(pad);
 			params_User.add(position_Anchor);
-
-			params_User.add(bGui_WindowsSpecials);
-			params_User.add(bGui_ShowAll);
+			params_User.add(bAlignWindowsY);
+			params_User.add(bAlignWindowsX);
+			params_User.add(bResetLayout);
 		}
 
 		//--------------------------------------------------------------
@@ -146,7 +150,134 @@ namespace ofxImGuiSurfing
 			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
 
 			// Save
-			ofxImGuiSurfing::saveGroup(params_WindowsSpecials, path_Settings);
+			ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
+		}
+
+		enum surfingAlignMode
+		{
+			SURFING_ALIGN_HORIZONTAL = 0,
+			SURFING_ALIGN_VERTICAL
+		};
+		surfingAlignMode modeAlignWindows = SURFING_ALIGN_HORIZONTAL;
+
+		//--------------------------------------------------------------
+		void doAlignWindowsOnce()
+		{
+			ofLogNotice(__FUNCTION__);
+			//ofLogNotice(__FUNCTION__) << " #" << countTimes;
+			//cout << __FUNCTION__ << " #" << countTimes << endl;
+
+			ImGuiContext* GImGui = ImGui::GetCurrentContext();
+			ImGuiContext& g = *GImGui;
+
+			float _yMin = 1920;
+
+			ImVector<ImGuiWindow*> windows;
+			for (ImGuiWindow* window : g.WindowsFocusOrder)
+			{
+				if (window->WasActive)
+				{
+					windows.push_back(window);
+					//cout << window->Name << endl;
+
+					// get the more top window height y coord
+					if (window->Pos.y < _yMin) _yMin = window->Pos.y;
+				}
+			}
+			//cout << endl;
+
+			//--
+
+			if (windows.Size > 0)
+			{
+				//const int gapx = 0;
+				//const int gapy = 0;
+
+				ImVec2 pos;
+				//ImVec2 sz;
+				//ImVec2 gap;
+
+				//if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) gap = ImVec2(gapx, 0.f);
+				//else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) gap = ImVec2(0.f, gapy);
+
+				for (int n = 0; n < windows.Size; n++)
+				{
+					if (!windows[n]->WasActive) continue;
+					else
+					{
+						pos = windows[n]->Pos;
+						pos.y = _yMin;
+						windows[n]->Pos = pos;
+					}
+				}
+
+
+
+				//string namew;
+
+				//// 0. window clicker (main and anchor window!)
+				//bool b = false;
+				//for (int n = 0; n < windows.Size; n++)
+				//{
+				//	namew = windows[n]->Name;
+				//	if ((namew == name_Window_ClickerFloating) && bGui_ClickerFloating.get())
+				//	{
+				//		b = true;
+				//		pos = windows[n]->Pos;
+				//		sz = windows[n]->Size;
+				//		//cout << name_Window_ClickerFloating << endl;
+				//		break;
+				//	}
+				//}
+				//if (!b) return;//main window must be visible or we will skip all below and return.
+
+//				// 1. window edit
+//				for (int n = 0; n < windows.Size; n++)
+//				{
+//					namew = windows[n]->Name;
+//					if ((namew == name_Window_Editor) /*&& bGui_Editor*/)
+//					{
+//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
+//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
+//
+//						sz = windows[n]->Size;
+//						ImGui::SetWindowPos(windows[n], pos);
+//						break;
+//					}
+//				}
+//
+//				// 2. window parameters 
+//				for (int n = 0; n < windows.Size; n++)
+//				{
+//					namew = windows[n]->Name;
+//					if ((namew == name_Window_Parameters) /*&& bGui_Parameters*/)
+//					{
+//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
+//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
+//
+//						sz = windows[n]->Size;
+//						ImGui::SetWindowPos(windows[n], pos);
+//						break;
+//					}
+//				}
+//
+//				// 3. window player 
+//#ifdef USE__OFX_SURFING_PRESETS__OFX_SURFING_PLAYER
+//				for (int n = 0; n < windows.Size; n++)
+//				{
+//					namew = windows[n]->Name;
+//					if ((namew == name_Window_Player) /*&& playerSurfer.bGui*/)
+//					{
+//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
+//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
+//
+//						sz = windows[n]->Size;
+//						ImGui::SetWindowPos(windows[n], pos);
+//						break;
+//					}
+//				}
+//#endif
+			}
 		}
 
 		//--
@@ -155,16 +286,20 @@ namespace ofxImGuiSurfing
 
 		ofParameter<bool> bGui_WindowsSpecials{ "_Organizer", true }; // toggle gui to draw main window.
 		ofParameter<bool> bGui_ShowAll{ "Show All", true }; // extra toggle to hide / show all the queued windows.
+
+		ofParameter <bool> bAlignWindowsX{ "AlignX", false };
+		ofParameter <bool> bAlignWindowsY{ "AlignY", false };
+
 		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link Windows",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bFitSizes{ "Fit Sizes",  false };
 		ofParameter<bool> bHeaders{ "Hide Headers", true };
-		ofParameter<int> pad{ "Padding", 0, 0, 25 };
+		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
-	private:
+		ofParameter<bool> bResetLayout{ "Reset Layout",false };
 
-		bool bResetLayout = false;
+		//--
 
 	public:
 
@@ -192,7 +327,7 @@ namespace ofxImGuiSurfing
 		{
 			path_Global = path;
 			ofxSurfingHelpers::CheckFolder(path_Global);
-			path_Settings = path_Global + "guiManager_" + params_WindowsSpecials.getName() + ".json";
+			path_Settings = path_Global + "guiManager_" + params_Settings.getName() + ".json";
 		}
 
 	private:
@@ -201,8 +336,8 @@ namespace ofxImGuiSurfing
 		ofParameter<int> amountQueue{ "amountQueue", 0, 0, 0 }; // count how many visible/queued
 
 		ofParameterGroup params_Enablers{ "Enablers" };
-		ofParameterGroup params_WindowsSpecials{ "WindowsSpecials" };
-		ofParameterGroup params{ "Params" };
+		ofParameterGroup params_Settings{ "WindowsSpecials" };
+		ofParameterGroup params{ "Params" }; // for callbacks only
 
 		// Cascade orientation
 		enum wOrientation
@@ -295,6 +430,31 @@ namespace ofxImGuiSurfing
 				if (bFitSizes) {
 					bOrientation = bOrientation;
 				}
+			}
+
+			//-
+
+			else if (name == bResetLayout.getName() && bResetLayout)
+			{
+				bResetLayout = false;
+
+				doResetLayout();
+			}
+
+			//-
+
+			else if (name == bAlignWindowsY.getName() && bAlignWindowsY)
+			{
+				bAlignWindowsY = false;
+
+				doAlignWindowsOnce();
+			}
+
+			else if (name == bAlignWindowsX.getName() && bAlignWindowsX)
+			{
+				bAlignWindowsX = false;
+
+				doAlignWindowsOnce();
 			}
 
 			//-
@@ -437,45 +597,109 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-			//TODO:
+		//--
+
+		//TODO:
+
 		//--------------------------------------------------------------
 		void doResetLayout()
 		{
-
 			ofLogNotice() << __FUNCTION__;
+			ImGuiContext* GImGui = ImGui::GetCurrentContext();
+			ImGuiContext& g = *GImGui;
+			ImVector<ImGuiWindow*> windows;
 
-			if (panelsQueue.size() < 2 || panelsQueue.size() == 0)
+			struct myWin {
+				ImVec2 pos;
+				ImVec2 sz;
+				int id;
+				string name;
+				ImGuiWindow* ImWin;
+			};
+
+			struct myclass {
+				bool operator() (myWin w1, myWin w2) { return (w1.pos.x < w2.pos.x); }
+			} myobject;
+
+			vector<myWin> myWins;
+
+			int _id = 0;
+			for (ImGuiWindow* window : g.WindowsFocusOrder)
 			{
-				ofLogWarning() << __FUNCTION__ << " Skip!";
-				return;
+				if (window->WasActive)
+				{
+					myWin w;
+					w.ImWin = window;
+					w.pos = window->Pos;
+					w.sz = window->Size;
+					w.name = window->Name;
+					w.id = _id++;
+					myWins.push_back(w);
+				}
+			}
+			if (myWins.size() == 0) return; // skip
+
+			std::sort(myWins.begin(), myWins.end(), myobject);
+
+			float w= myWins[0].sz.x + pad;
+			float h= myWins[0].sz.y;
+			float x= myWins[0].pos.x + w + pad;
+			float y= myWins[0].pos.y;//anchor
+
+			for (int i = 1; i < myWins.size(); i++)
+			{
+				myWins[i].ImWin->Pos.x = x;
+				myWins[i].ImWin->Pos.y = y;
+
+				w = myWins[i].sz.x;
+				x = x + w + pad;
+				//h = myWins[i].sz.y;
+				//y = myWins[i].pos.y;
 			}
 
-			// 1st
-			{
-				glm::vec2 posPre{ 10, 10 };
-				int id = panelsQueue[0];
-				panels[id].setPosition(posPre);
-			}
+			//for (int n = 0; n < windows.Size; n++)
+			//{
+			//	if (!windows[n]->WasActive) continue;
+			//	else
+			//	{
+			//		pos = windows[n]->Pos;
+			//		pos.y = _yMin;
+			//		windows[n]->Pos = pos;
+			//	}
+			//}
 
-			for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
-			{
-				glm::vec2 posPre;
+			//if (panelsQueue.size() < 2 || panelsQueue.size() == 0)
+			//{
+			//	ofLogWarning() << __FUNCTION__ << " Skip!";
+			//	return;
+			//}
 
-				int idPre = panelsQueue[i - 1];
-				posPre = panels[idPre].getPosition();
-
-				int id = panelsQueue[i];
-				panels[id].setPosition(posPre);
-			}
+			//// 1st
+			//{
+			//	glm::vec2 posPre{ 10, 10 };
+			//	int id = panelsQueue[0];
+			//	panels[id].setPosition(posPre);
+			//}
 
 			//for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
 			//{
+			//	glm::vec2 posPre;
+
+			//	int idPre = panelsQueue[i - 1];
+			//	posPre = panels[idPre].getPosition();
+
 			//	int id = panelsQueue[i];
-			//	runState(id, true);
+			//	panels[id].setPosition(posPre);
 			//}
 
-			//doSetWindowsPositions(); 
-			//doOrganize(); 
+			////for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
+			////{
+			////	int id = panelsQueue[i];
+			////	runState(id, true);
+			////}
+
+			////doSetWindowsPositions(); 
+			////doOrganize(); 
 		}
 
 	public:
@@ -532,29 +756,22 @@ namespace ofxImGuiSurfing
 				}
 			}
 
+			//--
+
 			// To get notified by the callbacks
-			params.add(bGui_ShowAll);
-			params.add(bOrientation);
-			params.add(iOrientation);
-			params.add(bHeaders);
-			params.add(bFitSizes);
-			params.add(position_Anchor);
+			params.add(params_User);
+
+			//--
 
 			// To store session settings
-			params_WindowsSpecials.add(bGui_WindowsSpecials);
-			params_WindowsSpecials.add(bGui_ShowAll);
-			params_WindowsSpecials.add(bModeLinkedWindowsSpecial);
-			params_WindowsSpecials.add(bOrientation);
-			params_WindowsSpecials.add(position_Anchor);
-			params_WindowsSpecials.add(pad);
-			params_WindowsSpecials.add(bFitSizes);
-			params_WindowsSpecials.add(bLockedWidth);
-			params_WindowsSpecials.add(bLockedHeight);
-			params_WindowsSpecials.add(bHeaders);
+
+			params_Settings.add(params_User);
 
 			// Each window enabler will be added here..
 			// all of theme has been added during setup
-			params_WindowsSpecials.add(params_Enablers);
+			params_Settings.add(params_Enablers);
+
+			//--
 
 			startup();
 		}
@@ -567,7 +784,7 @@ namespace ofxImGuiSurfing
 			//--
 
 			// Load Settings
-			ofxImGuiSurfing::loadGroup(params_WindowsSpecials, path_Settings);
+			ofxImGuiSurfing::loadGroup(params_Settings, path_Settings);
 
 			//-
 
@@ -633,15 +850,12 @@ namespace ofxImGuiSurfing
 			float _w2 = getWidgetsWidth(2);
 
 			// Enable
-
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
+			ofxImGuiSurfing::AddSpacing();
 
-			//TODO: Trig
-			//if (0)
-			if (ImGui::Button("Reset", ImVec2(_w1, _h)))
-			{
-				bResetLayout = true;
-			}
+			ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
+			ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
+			ofxImGuiSurfing::AddSmallButton(bResetLayout);
 
 			ImGui::Spacing();
 
@@ -715,87 +929,90 @@ namespace ofxImGuiSurfing
 				//ImGui::Spacing();
 
 				// Settings
-				if (bModeLinkedWindowsSpecial)
-					if (!bMinimized)
+
+				//if (!bModeLinkedWindowsSpecial) ofxImGuiSurfing::AddParameter(bHeaders);
+				//if (bModeLinkedWindowsSpecial)
+
+				if (!bMinimized)
+				{
+					// Controls
 					{
-						// Controls
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						static bool bOpen = false;
+						ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+
+						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 						{
+							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
+							{
+								ofxImGuiSurfing::AddParameter(bHeaders);
+								ofxImGuiSurfing::AddStepperInt(pad);
+							}
+							ImGui::PopItemWidth();
+
+							//-
+
 							ofxImGuiSurfing::AddSpacingSeparated();
 
-							static bool bOpen = false;
-							ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+							// Debug
 
-							if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+							static ofParameter<bool> bDebug{ "Debug", false };
+							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+							ImGui::Spacing();
+							if (bDebug)
 							{
-								ImGui::PushItemWidth(getPanelWidth() * 0.5f);
-								{
-									ofxImGuiSurfing::AddStepperInt(pad);
-									ofxImGuiSurfing::AddParameter(bHeaders);
-								}
-								ImGui::PopItemWidth();
+								ImGui::Indent();
 
-								//-
+								ofxImGuiSurfing::AddParameter(bLockedWidth);
+								ofxImGuiSurfing::AddParameter(bLockedHeight);
+								ImGui::Spacing();
 
 								ofxImGuiSurfing::AddSpacingSeparated();
 
-								// Debug
-
-								static ofParameter<bool> bDebug{ "Debug", false };
-								ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 								ImGui::Spacing();
-								if (bDebug)
+								ImGui::TextWrapped("Special Windows\n");
+								ImGui::Spacing();
+
+								std::string ss1 = "";
+								int i = 0;
+								for (auto& p : panels)
 								{
-									ImGui::Indent();
+									//ss1 += "[" + ofToString(i) + "] ";
+									ss1 += " #" + ofToString(p.pos);
+									ss1 += "\n";
+									ss1 += ofToString(p.getRectangle());
+									ss1 += "\n";
+									ss1 += "\n";
 
-									ofxImGuiSurfing::AddParameter(bLockedWidth);
-									ofxImGuiSurfing::AddParameter(bLockedHeight);
-									ImGui::Spacing();
-									
-									ofxImGuiSurfing::AddSpacingSeparated();
-
-									ImGui::Spacing();
-									ImGui::TextWrapped("Special Windows:\n");
-									ImGui::Spacing();
-
-									std::string ss1 = "";
-									int i = 0;
-									for (auto& p : panels)
-									{
-										//ss1 += "[" + ofToString(i) + "] ";
-										ss1 += " #" + ofToString(p.pos);
-										ss1 += "\n";
-										ss1 += ofToString(p.getRectangle());
-										ss1 += "\n";
-										ss1 += "\n";
-
-										i++;
-									}
-									ImGui::TextWrapped(ss1.c_str());
-									
-									ofxImGuiSurfing::AddSpacingSeparated();
-
-									std::string ss2 = "Queue:\n\n";
-									for (int i = 0; i < panelsQueue.size(); i++)
-									{
-										if (i != 0) ss2 += ", ";
-										ss2 += ofToString(panelsQueue[i]);
-									}
-									ImGui::TextWrapped(ss2.c_str());
-									
-									ofxImGuiSurfing::AddSpacingSeparated();
-
-									std::string ss3 = "";
-									ss3 += "Amount:\n\n";
-									ss3 += ofToString(panelsQueue.size());
-									ImGui::TextWrapped(ss3.c_str());
-									
-									ofxImGuiSurfing::AddSpacingSeparated();
-
-									ImGui::Unindent();
+									i++;
 								}
+								ImGui::TextWrapped(ss1.c_str());
+
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								std::string ss2 = "Queue\n\n";
+								for (int i = 0; i < panelsQueue.size(); i++)
+								{
+									if (i != 0) ss2 += ", ";
+									ss2 += ofToString(panelsQueue[i]);
+								}
+								ImGui::TextWrapped(ss2.c_str());
+
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								std::string ss3 = "";
+								ss3 += "Amount\n\n";
+								ss3 += ofToString(panelsQueue.size());
+								ImGui::TextWrapped(ss3.c_str());
+
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								ImGui::Unindent();
 							}
 						}
 					}
+				}
 			}
 		}
 
@@ -822,19 +1039,17 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void update() {
 
-			//TODO:
-			// Reset layout
-			if (bResetLayout)
-			{
-				bResetLayout = false;
-
-				doResetLayout();
-
-				return;
-			}
+			////TODO:
+			//// Reset layout
+			//if (bResetLayout)
+			//{
+			//	bResetLayout = false;
+			//	doResetLayout();
+			//	return;
+			//}
 
 			//--
-			 
+
 			// Read 1st queued position to the anchor
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;
 			int id = panelsQueue[0];

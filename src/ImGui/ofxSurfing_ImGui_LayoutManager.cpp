@@ -13,8 +13,9 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
-	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bLinkWindows);
+	params_Advanced.add(bAutoResize);
+
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
 	params_Advanced.add(bReset_Window);

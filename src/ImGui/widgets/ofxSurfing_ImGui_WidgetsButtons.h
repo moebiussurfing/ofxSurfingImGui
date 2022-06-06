@@ -30,7 +30,7 @@ namespace ofxImGuiSurfing
 
 		float a = 0.5f;
 		float borderLineWidth = 1.0;
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
@@ -79,7 +79,7 @@ namespace ofxImGuiSurfing
 			if (w == -1) w = sztx.x + 2 * ImGui::GetStyle().ItemInnerSpacing.x;
 			if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightUnit();
 
-			ImGuiStyle *style = &ImGui::GetStyle();
+			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
@@ -121,7 +121,7 @@ namespace ofxImGuiSurfing
 			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 			//if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-			ImGuiStyle *style = &ImGui::GetStyle();
+			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
@@ -156,7 +156,7 @@ namespace ofxImGuiSurfing
 	//-
 
 	//--------------------------------------------------------------
-	inline bool AddSmallButton(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
+	inline bool AddSmallButton(ofParameter<bool>& parameter, float w/* = -1*/, float h/* = -1*/) // button but using a bool not void param
 	{
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
@@ -167,7 +167,7 @@ namespace ofxImGuiSurfing
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
 		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
 		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
@@ -189,8 +189,14 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddSmallButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1)) {
+	inline bool AddSmallButton(ofParameter<bool>& parameter, ImVec2 bb /*= ImVec2(-1, -1)*/) {
 		AddSmallButton(parameter, bb.x, bb.y);
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddSmallButton(ofParameter<bool>& parameter) // button but using a bool not void param
+	{
+		return AddSmallButton(parameter, -1, -1);
 	}
 
 	//----
@@ -202,7 +208,7 @@ namespace ofxImGuiSurfing
 		// Border when selected
 		float a = 0.5f;
 		float borderLineWidth = 1.0;
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
@@ -335,7 +341,7 @@ namespace ofxImGuiSurfing
 
 		bool bPre = tmpRef;
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 
 		//-
 
@@ -630,7 +636,7 @@ namespace ofxImGuiSurfing
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 
-		if (ToggleRoundedButton(parameter.getName().c_str(), (bool *)&tmpRef, bb, bNoBorder))
+		if (ToggleRoundedButton(parameter.getName().c_str(), (bool*)&tmpRef, bb, bNoBorder))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;
@@ -646,7 +652,7 @@ namespace ofxImGuiSurfing
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 
-		if (ToggleRoundedButton(name.c_str(), (bool *)&tmpRef, bb))
+		if (ToggleRoundedButton(name.c_str(), (bool*)&tmpRef, bb))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;
@@ -674,11 +680,11 @@ namespace ofxImGuiSurfing
 		if (nameTrue == "-1" || nameFalse == "-1") name = parameter.getName();
 		else
 		{
-			if ((bool *)&tmpRef) name = nameTrue;
+			if ((bool*)&tmpRef) name = nameTrue;
 			else name = nameFalse;
 		}
 
-		if (ToggleRoundedButton(name.c_str(), (bool *)&tmpRef, bb))
+		if (ToggleRoundedButton(name.c_str(), (bool*)&tmpRef, bb))
 		{
 			parameter.set(tmpRef);
 			bReturn = true;

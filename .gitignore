@@ -627,3 +627,4 @@ examples/1_Widgets/bin/imgui.ini
 0_Intro_Examples/3_DockingLayoutPresetsEngine/bin/data/WindowsSpecial.json
 *.ini
 *.json
+Examples/10_WindowsSpecials/bin/data/ImGui_Layout/HelpBox/_HelpBox.xml
