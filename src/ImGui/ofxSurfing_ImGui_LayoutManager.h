@@ -626,7 +626,7 @@ public:
 	//----
 
 	// Context getter shortcut
-	 
+
 	////TODO:
 	////https://github.com/ocornut/imgui/issues/5287
 
@@ -667,9 +667,9 @@ public:
 	bool beginWindow(char* name = "Window"); // -> simpler. not working?
 
 	//--
-	 
+
 	// -> 2. ENDs a Window
-	
+
 	void endWindow();
 
 	//----
@@ -765,19 +765,19 @@ public:
 	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
 
 	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved too on settings when exit the app. 
-	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bMinimize{ "Minimize", true };
-	ofParameter<bool> bExtra{ "Extra", false };
-	ofParameter<bool> bReset{ "Reset", false };
-	ofParameter<bool> bAdvanced{ "Advanced", false };
-	ofParameter<bool> bLockMove{ "Lock Move", false };
-	ofParameter<bool> bNoScroll{ "No Scroll", false };
+	ofParameter<bool> bAutoResize{ "Auto Resize", true };
+	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bHelp{ "Help App", false };
 	ofParameter<bool> bHelpInternal{ "Help", false };
-	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bDebug{ "Debug", false };
+	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
+	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
 	ofParameter<bool> bReset_Window{ "Reset Window", false };
+	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
 
 private:
 
@@ -955,13 +955,9 @@ private:
 			Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED);
 			ofxImGuiSurfing::AddTooltip("Ctrl+ fine tunning");
 
-			// Auto resize
-			Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED);
-
-			// Align Helpers
-			Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
-
 			//--
+
+			// Windows
 
 			ofxImGuiSurfing::AddSpacing();
 
@@ -973,6 +969,18 @@ private:
 				{
 					ofxImGuiSurfing::AddSpacing();
 
+					// Align Helpers
+					Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
+
+					// Organizer Special Windows
+					if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
+						Add(windowPanels.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
+					}
+
+					// Auto resize
+					Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+					//TODO:
 					// Lock
 					Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
 
@@ -997,6 +1005,10 @@ private:
 				}
 
 				ofxImGuiSurfing::AddSpacing();
+
+				//--
+				
+				// Gui
 
 				if (ImGui::TreeNode("GUI"))
 				{
@@ -1218,7 +1230,7 @@ public:
 
 	bool beginWindowSpecial();
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
-	
+
 	void endWindowSpecial(int index = -1);
 
 	//--------------------------------------------------------------
@@ -1252,12 +1264,14 @@ public:
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
+			ofxImGuiSurfing::AddBigButton(windowPanels.bResetLayout);
 			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsY);
 			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsX);
-			ofxImGuiSurfing::AddSmallButton(windowPanels.bResetLayout);
 
+			if (!bMinimize) {
 			AddSpacing();
 			ofxImGuiSurfing::AddStepperInt(windowPanels.pad);
+			}
 
 			endWindow();
 		}
@@ -1391,13 +1405,18 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowsSpecialEnabler() { // toggle to enable or disable
+	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
 		return windowPanels.bModeLinkedWindowsSpecial;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialsGuiToggle() { // main toggle to show the panel
 		return windowPanels.bGui_WindowsSpecials;
+	}
+
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowsAlignHelpersGuiToggle() { // align windows toggle to show the panel
+		return bGui_WindowsAlignHelpers;
 	}
 
 	// Orientation cascade windows
@@ -1463,6 +1482,13 @@ public:
 
 	//----
 
+	// Getter for the internal show GUI toggles for each queued special Windows!
+	// Both does the same! Just to beauty method name...
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowSpecialGuiToggle(int index)
+	{
+		return getWindowSpecialVisible(index);
+	}
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowSpecialVisible(int index)
 	{
@@ -1474,6 +1500,14 @@ public:
 		}
 
 		return windowsAtributes[index].bGui;
+	}
+	// Easy populate all the toggles .
+	//--------------------------------------------------------------
+	void drawWindowSpecialsGuiToggles() {
+		for (size_t i = 0; i < windowsAtributes.size(); i++)
+		{
+			Add(getWindowSpecialGuiToggle(i), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		}
 	}
 
 	//--------------------------------------------------------------

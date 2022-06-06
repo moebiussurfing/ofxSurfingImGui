@@ -46,9 +46,9 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	// Enable "Windows Special Organizer"
 	// Customize names
+	//setNameWindowsSpecialsPanel("ORGANIZER");
+	//windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
 	//windowPanels.setPath(path_Global);
-	windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
-	setNameWindowsSpecialsPanel("ORGANIZER");
 }
 
 //--------------------------------------------------------------
@@ -271,7 +271,6 @@ void ofxSurfing_ImGui_Manager::startup()
 		//// Customize names
 		//windowPanels.setNameWindowsSpecialsEnableGlobal("Show Global");
 		//setNameWindowsSpecialsPanel("Organizer");
-		////setNameWindowsSpecialsPanel("Organizer");
 
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
@@ -283,14 +282,11 @@ void ofxSurfing_ImGui_Manager::startup()
 				//// workflow
 				//// force disable to avoid collide settings layout!
 				//windowPanels.bGui_WindowsSpecials = false;
-				////windowPanels.bGui_WindowsSpecials.setSerializable(false);
 			}
 		}
 
 		if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
-			// Link show gui
-			//bGui_WindowsSpecials.makeReferenceTo(windowPanels.bGui_WindowsSpecials);
 		}
 	}
 
@@ -299,31 +295,6 @@ void ofxSurfing_ImGui_Manager::startup()
 	// Startup
 
 	loadAppSettings();
-
-	//--
-
-	////TODO:
-	////BUG: toggle states are not recalled well...
-	////if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	//{
-	//	windowPanels.startup();
-	//}
-
-	//for (size_t i = 0; i < windowsAtributes.size(); i++)
-	//{
-	//	//windowsAtributes[i].bGui = params_Panels[i];
-	//	//windowsAtributes[i].bGui = windowPanels[i];
-	//	bool b = windowsAtributes[i].bGui;
-	//	ofLogNotice(__FUNCTION__) << b;
-
-	//	////params_Panels[i] = b;
-	//	bPanels[i].set(b);
-	//}
-	//
-	////if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	////{
-	////	windowPanels.add(_bGui);
-	////}
 
 	//--
 
@@ -1055,8 +1026,6 @@ void ofxSurfing_ImGui_Manager::begin() {
 		// Main Panels Controller
 		if (windowPanels.isIntitiated())
 		{
-			//if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.update();
-
 			windowPanels.update();
 
 			//TODO:
@@ -1065,7 +1034,6 @@ void ofxSurfing_ImGui_Manager::begin() {
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
 				if (windowPanels.bGui_WindowsSpecials) drawWindowsSpecialsPanel();
-				//if (bGui_WindowsSpecials) drawWindowsSpecialsPanel();
 			}
 		}
 	}
@@ -1073,6 +1041,8 @@ void ofxSurfing_ImGui_Manager::begin() {
 	//----
 
 	// 3. Align Helpers Window Panel
+
+	// Aligners
 
 	if (bGui_WindowsAlignHelpers) drawWindowsAlignHelpers();
 }
@@ -1577,19 +1547,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
 	params_AppSettings.add(params_AppSettingsLayout);
-
-	//params_AppSettings.add(params_Advanced);
-
-	//--
-
-	//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-	//{
-	//	if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
-	//	{
-	//		//params_AppSettings.add(bGui_WindowsSpecials);
-	//		//params_AppSettings.add(windowPanels.getParamsUser());
-	//	}
-	//}
 
 	//--
 

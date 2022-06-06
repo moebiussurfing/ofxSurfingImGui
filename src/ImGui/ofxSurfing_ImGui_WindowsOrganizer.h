@@ -8,12 +8,17 @@
 #include "ofxSurfing_ImGui_ofHelpers.h"
 
 /*
+
 	TODO:
 
-	+ fix re position when closed first queued window
-	+ add reset layout
+	+ remake to avoid weird flickering on hidding some.
+	+ fix re position when closed first queued window.
+	+ add addon mode: queue windows (bGui) sorted.
+		linked mode will handle the sort priority.
 	+ store sorting queue ?
-	+ cascade windows engine
+	+ improve align windows engine.
+	+ make align x
+
 */
 
 
@@ -307,7 +312,7 @@ namespace ofxImGuiSurfing
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
-		ofParameter<bool> bResetLayout{ "Reset Layout",false };
+		ofParameter<bool> bResetLayout{ "RESET LAYOUT",false };
 
 		//--
 
@@ -652,7 +657,7 @@ namespace ofxImGuiSurfing
 
 			std::sort(myWins.begin(), myWins.end(), myobject);
 
-			float w = myWins[0].sz.x + pad;
+			float w = myWins[0].sz.x /*+ pad*/;
 			float h = myWins[0].sz.y;
 			float x = myWins[0].pos.x + w + pad;
 			float y = myWins[0].pos.y;//anchor
@@ -847,18 +852,6 @@ namespace ofxImGuiSurfing
 			bGui_ShowAll.setName(name);
 		}
 
-		////--------------------------------------------------------------
-		//void beginWindow(string name, bool* bOpen = NULL, ImGuiWindowFlags flags = ImGuiWindowFlags_None)
-		//{
-		//	ImGui::Begin(name.c_str(), bOpen, flags);
-		//}
-
-
-		////--------------------------------------------------------------
-		//void drawWidgetsAlignHelpers()
-		//{
-		//}
-
 		//--------------------------------------------------------------
 		void drawWidgets(bool bMinimized = false)
 		{
@@ -868,13 +861,8 @@ namespace ofxImGuiSurfing
 
 			// Enable
 			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
+
 			ofxImGuiSurfing::AddSpacing();
-
-			//ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
-			//ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
-			//ofxImGuiSurfing::AddSmallButton(bResetLayout);
-
-			ImGui::Spacing();
 
 			if (bModeLinkedWindowsSpecial)
 			{
@@ -887,6 +875,16 @@ namespace ofxImGuiSurfing
 				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
 
 				ImGui::Spacing();
+			}
+			
+			ofxImGuiSurfing::AddSpacingSeparated();
+
+			if (ImGui::CollapsingHeader("ALIGNERS"))
+			{
+				ofxImGuiSurfing::AddSpacing();
+				ofxImGuiSurfing::AddBigButton(bResetLayout);
+				ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
+				ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
 			}
 
 			//-
@@ -1039,30 +1037,10 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		////--------------------------------------------------------------
-		//void endWindow()
-		//{
-		//	ImGui::End();
-		//}
-
-		//private:
-		//	//--------------------------------------------------------------
-		//	void doRepositione()
-		//	{
-		//		////TODO:
-		//		//return;
-		//		//ofLogNotice() << __FUNCTION__ << " " << position_Anchor.get();
-		//		//if (panelsQueue.size() == 0 || panels.size() == 0) return;
-		//		//int id = panelsQueue[0];
-		//		//panels[id].setPosition(position_Anchor.get());
-		//	}
-
 	public:
 
 		//--------------------------------------------------------------
 		void update() {
-
-			//--
 
 			// Read 1st queued position to the anchor
 			if (panelsQueue.size() == 0 || panels.size() == 0) return;

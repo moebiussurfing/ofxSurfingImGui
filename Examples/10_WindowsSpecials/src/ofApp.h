@@ -7,6 +7,7 @@
 	This example shows one of the extra engines of the ofxSurfingImGui Toolkit,
 	It's called "Windows Special Organizer".
 	Many grouped windows can be arranged linked together and distributed horizontally or vertically.
+    Also, there's an "Align Windows Engine" to align/cascade windows layout.
 
 */
 
