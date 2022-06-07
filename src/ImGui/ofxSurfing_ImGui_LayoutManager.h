@@ -1319,7 +1319,6 @@ public:
 	// Windows Special Engine
 
 private:
-	//public:
 
 	WindowPanels windowPanels;
 
@@ -1346,7 +1345,7 @@ public:
 
 		windowsAtributes.push_back(win);
 
-		params_Panels.add(_bGui);
+		params_WindowSpecials.add(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
@@ -1364,8 +1363,8 @@ public:
 
 		windowsAtributes.push_back(win);
 
-		params_Panels.add(_bGui);
-		bPanels.push_back(_bGui);
+		params_WindowSpecials.add(_bGui);
+		bWindowSpecials.push_back(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
@@ -1405,12 +1404,12 @@ public:
 
 		windowPanels.setupInitiate();
 
-		//windowPanels.bModeLinkedWindowsSpecial.set(true);//force
+		//windowPanels.bLinkedWindowsSpecial.set(true);//force
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
-		return windowPanels.bModeLinkedWindowsSpecial;
+		return windowPanels.bLinkedWindowsSpecial;
 	}
 
 	//--------------------------------------------------------------
@@ -1767,10 +1766,11 @@ public:
 private:
 
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
-	ofParameterGroup params_Panels{ "Params Panels" };//to store the gui show toggles for each window
+
+	ofParameterGroup params_WindowSpecials{ "_WindowSpecials" };//to store the gui show toggles for each window
 
 	//TODO:
-	vector<ofParameter<bool>> bPanels;
+	vector<ofParameter<bool>> bWindowSpecials;
 
 	//ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
 	//ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels

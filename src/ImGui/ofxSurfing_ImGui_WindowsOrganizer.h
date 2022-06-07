@@ -16,8 +16,6 @@
 	+ add addon mode: queue windows (bGui) sorted.
 		linked mode will handle the sort priority.
 	+ store sorting queue ?
-	+ improve align windows engine.
-	+ make align x
 
 */
 
@@ -57,13 +55,15 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bEnable{ "bEnable", true };
 		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
 		ofParameter<int> pos{ "IndexPos", -1, -1, 0 };
-		int id = -1;
+		int id = -1; // -1 is for not visible ?. or its position on the queue / window from left to right
 
 	public:
 
 		//--------------------------------------------------------------
 		void runState(bool bForced = false)
 		{
+			//--
+
 			bool b1st;
 
 			if (!bForced) b1st = (pos == 0);
@@ -93,6 +93,12 @@ namespace ofxImGuiSurfing
 		float getWidth() const
 		{
 			return rShape->getWidth();
+		}
+
+		//--------------------------------------------------------------
+		float getHeight() const
+		{
+			return rShape->getHeight();
 		}
 
 		//--------------------------------------------------------------
@@ -127,7 +133,7 @@ namespace ofxImGuiSurfing
 			ofAddListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
 			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
 
-			amountQueue.addListener(this, &WindowPanels::Changed_counterQueue);
+			amount_QueueWindowsVisible.addListener(this, &WindowPanels::Changed_counterQueue);
 
 			//-
 
@@ -136,7 +142,7 @@ namespace ofxImGuiSurfing
 			params_User.add(bGui_WindowsSpecials);
 			params_User.add(bGui_ShowAll);
 
-			params_User.add(bModeLinkedWindowsSpecial);
+			params_User.add(bLinkedWindowsSpecial);
 			params_User.add(bOrientation);
 			params_User.add(orientation_Index);//?
 			params_User.add(bAlignShapes);
@@ -146,13 +152,13 @@ namespace ofxImGuiSurfing
 			params_User.add(bAlignWindowsY);
 			params_User.add(bAlignWindowsX);
 			params_User.add(bAlignWindowsCascade);
-			params_User.add(bAlignWindowsResetLayout);
+			params_User.add(bAlignWindowsReset);
 
 			// exclude
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
 			bAlignWindowsCascade.setSerializable(false);
-			bAlignWindowsResetLayout.setSerializable(false);
+			bAlignWindowsReset.setSerializable(false);
 		}
 
 		//--------------------------------------------------------------
@@ -258,9 +264,9 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
 		ofParameter<bool> bAlignWindowsY{ "AlignY", false };
 		ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
-		ofParameter<bool> bAlignWindowsResetLayout{ "Reset",false };
+		ofParameter<bool> bAlignWindowsReset{ "Reset",false };
 
-		ofParameter<bool> bModeLinkedWindowsSpecial{ "LINK",  false };
+		ofParameter<bool> bLinkedWindowsSpecial{ "LINK",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
 		ofParameter<bool> bHeaders{ "Headers", true };
@@ -273,7 +279,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		bool isIntitiated() {
-			return panels.size() > 0;
+			return windowPanels.size() > 0;
 		}
 
 	private:
@@ -284,7 +290,7 @@ namespace ofxImGuiSurfing
 		float width_max = 0;
 		float height_max = 0;
 
-		std::vector<WindowPanel> panels; // all the added panels
+		std::vector<WindowPanel> windowPanels; // all the added panels. hidden windows are not removed from here!
 		std::string path_Global = "";
 		std::string path_Settings = "_WindowsSpecial.json";
 
@@ -300,8 +306,8 @@ namespace ofxImGuiSurfing
 
 	private:
 
-		std::vector<int> panelsQueue; // just the enabled (visible) panels
-		ofParameter<int> amountQueue{ "amountQueue", 0, 0, 0 }; // count how many visible/queued
+		std::vector<int> queueWindowsVisible; // just the enabled (visible) panels (not all the added panels). hidden windows are removed from here!
+		ofParameter<int> amount_QueueWindowsVisible{ "amount_QueueWindowsVisible", 0, 0, 0 }; // count how many visible/queued
 
 		ofParameterGroup params_Enablers{ "Enablers" };
 		ofParameterGroup params_Settings{ "WindowsSpecials" };
@@ -351,12 +357,14 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice() << __FUNCTION__;
 
+			// A new window has been queued or removed/hidded
+
 			// Return if not changed
 			static int pre = -1;
 			if (pre == i) return;
 			else pre = i;
 
-			ofLogNotice() << __FUNCTION__ << " Counter #" << amountQueue;
+			ofLogNotice() << __FUNCTION__ << " Counter #" << amount_QueueWindowsVisible;
 
 			doOrganize();
 		}
@@ -372,29 +380,43 @@ namespace ofxImGuiSurfing
 
 			if (0) {}
 
-			//-
+			//--
 
-			//TODO: should recalculate..
-			else if (name == bHeaders.getName())
+			else if (name == position_Anchor.getName())
 			{
-				doSetWindowsPositions();
+				// Position linked to first queued window
+				if (queueWindowsVisible.size() == 0 || windowPanels.size() == 0) return;
+
+				int id = queueWindowsVisible[0];//get the index of firs window
+				windowPanels[id].setPosition(position_Anchor.get());
+
+				doApplyLinkWindows();
 			}
 
 			//-
 
-			else if (name == bGui_ShowAll.getName())
-			{
-				// workaround 
-				// to avoid bad dimension on startup
-				bOrientation = bOrientation;
-			}
+			////TODO: should recalculate..
+			//else if (name == bHeaders.getName())
+			//{
+			//	doApplyLinkWindows();
+			//}
+
+			//-
+
+			//else if (name == bGui_ShowAll.getName()) // global show
+			//{
+			//	// workaround 
+			//	// to avoid bad dimension on startup
+			//	bOrientation = bOrientation;
+			//}
 
 			//-
 
 			else if (name == bAlignShapes.getName())
 			{
 				//fix
-				if (bAlignShapes) {
+				if (bAlignShapes)
+				{
 					bOrientation = bOrientation;
 				}
 			}
@@ -403,11 +425,11 @@ namespace ofxImGuiSurfing
 
 			// Align Windows Helpers
 
-			else if (name == bAlignWindowsResetLayout.getName() && bAlignWindowsResetLayout)
+			else if (name == bAlignWindowsReset.getName() && bAlignWindowsReset)
 			{
-				bAlignWindowsResetLayout = false;
+				bAlignWindowsReset = false;
 
-				doAlignWindowsResetLayout();
+				doAlignWindowsReset();
 			}
 
 			else if (name == bAlignWindowsCascade.getName() && bAlignWindowsCascade)
@@ -446,44 +468,36 @@ namespace ofxImGuiSurfing
 
 				//if (bAlignShapes)
 				{
-					if (orientation_Index == 0) {
+					if (orientation_Index == 0)
+					{
 						bLockedWidth = false;
 						bLockedHeight = true;
 					}
-					else {
+					else
+					{
 						bLockedWidth = true;
 						bLockedHeight = false;
 					}
 				}
 
-				doSetWindowsPositions();
+				doApplyLinkWindows();
 			}
 
-			//-
+			//--
 
 			else if (name == bOrientation.getName())
 			{
 				if (!bOrientation) orientation_Index = 0;
 				else orientation_Index = 1;
 
-				doSetWindowsPositions();
-			}
-
-			//-
-
-			else if (name == position_Anchor.getName())
-			{
-				// Position linked to first queued window
-				if (panelsQueue.size() == 0 || panels.size() == 0) return;
-				int id = panelsQueue[0];
-				panels[id].setPosition(position_Anchor.get());
-
-				doSetWindowsPositions();
+				doApplyLinkWindows();
 			}
 		}
 
+		//--
+
 		//--------------------------------------------------------------
-		void Changed_Params_Enablers(ofAbstractParameter& e)
+		void Changed_Params_Enablers(ofAbstractParameter& e) // each window show toggle changed
 		{
 			std::string name = e.getName();
 
@@ -493,59 +507,95 @@ namespace ofxImGuiSurfing
 
 			// Check toggle enablers
 
-			int i = 0;
-			for (auto& p : panels)
+			for (auto& p : windowPanels)
 			{
-				if (name == p.bEnable.getName()) // Check wich one is clicked
+				if (name == p.bEnable.getName()) // Check which one is clicked
 				{
-					ofLogNotice() << __FUNCTION__ << " Enabler #" << i << " " << (p.bEnable.get() ? "TRUE" : "FALSE");
+					ofLogNotice() << (__FUNCTION__) 
+						<< " Window ID#" << p.id 
+						<< " Pos " << p.pos 
+						<< " " << (p.bEnable.get() ? "TRUE" : "FALSE");
 
-					if (p.bEnable) // Add 
+					//--
+
+					// Just enabled / Add 
+
+					if (p.bEnable)
 					{
-						if (p.pos == -1) // It was hidden
+						// It was hidden
+
+						if (p.pos == -1)
 						{
-							p.pos = panelsQueue.size();
-							panelsQueue.push_back(p.id);
-							amountQueue = panelsQueue.size();
+							// put new window at end of the queue
+							p.pos = queueWindowsVisible.size();
+
+							queueWindowsVisible.push_back(p.id);
+							amount_QueueWindowsVisible = queueWindowsVisible.size();
 
 							return;
 						}
 					}
-					else // Remove
+
+					//--
+
+					// Just disabled / Remove
+
+					else
 					{
-						for (int i = 0; i < panelsQueue.size(); i++)
+						for (int i = 0; i < queueWindowsVisible.size(); i++)
 						{
-							if (p.id == panelsQueue[i]) // If it's on queue, remove it from there
+							//TODO:
+							if (p.id == queueWindowsVisible[i]) // If it's on queue, remove it from there
 							{
-								bool bSort = false;
+								bool bForceFirst = false;
+								glm::vec2 _pos;
 
-								position_Anchor = p.getPosition();//refresh
-
-								if (p.pos == 0)//warn if it's the first window
+								// p.pos = which special window is.
+								// 0 = first!
+								if (p.pos == 0) // warn if it's the first window to force sort / re arrange!
 								{
-									ofLogWarning() << __FUNCTION__ << " Closing window ID #" << p.id << ", the first one!";
-									bSort = true;
+									ofLogWarning() << __FUNCTION__ << "\n Closing First!";
+									ofLogWarning() << __FUNCTION__ << "\n Window ID #" << p.id;
+
+									bForceFirst = true;
+
+									//TODO:
+									_pos = windowPanels[p.id].getPosition();
 								}
 
-								p.pos = -1;
+								// remove the window from queue
+								queueWindowsVisible.erase(queueWindowsVisible.begin() + p.pos);
 
-								// remove
-								panelsQueue.erase(panelsQueue.begin() + i);
-								amountQueue = panelsQueue.size();
+								// update amount counter
+								amount_QueueWindowsVisible = queueWindowsVisible.size();
 
-								////TODO:
-								//if (bSort)
-								//{
-								//	doRepositione();
-								//}
+								p.pos = -1; // mark as not visible/hidden
 
-								return;
+								//--
+
+								if (bForceFirst)
+								{
+									// Position linked to first queued window
+									if (queueWindowsVisible.size() == 0 || windowPanels.size() == 0) return;
+
+									//get the index of firs window
+									int id = queueWindowsVisible[0] ;
+
+									//do not changed!
+									//position_Anchor.setWithoutEventNotifications(windowPanels[id].getPosition());
+									position_Anchor.setWithoutEventNotifications(_pos);
+									windowPanels[id].setPosition(position_Anchor.get());
+								}
+
+								//continue;
+								return; // dont need iterate all when found which one changed!
 							}
 						}
 					}
 					return;
 				}
-				i++;
+				
+				//k++;
 			}
 		}
 
@@ -557,19 +607,19 @@ namespace ofxImGuiSurfing
 			// Reorganize sorting indexes
 
 			// Disable all
-			for (int i = 0; i < panels.size(); i++)
+			for (int i = 0; i < windowPanels.size(); i++)
 			{
-				panels[i].pos = -1;
-				panels[i].bEnable.setWithoutEventNotifications(false);
+				windowPanels[i].pos = -1;
+				windowPanels[i].bEnable.setWithoutEventNotifications(false);
 			}
 
-			for (int i = 0; i < panelsQueue.size(); i++) // search each item into queue
+			for (int i = 0; i < queueWindowsVisible.size(); i++) // search each item into queue
 			{
-				int id = panelsQueue[i];
+				int id = queueWindowsVisible[i];
 				int pos = i;
 
-				panels[id].pos = pos;
-				panels[id].bEnable.setWithoutEventNotifications(true);
+				windowPanels[id].pos = pos;
+				windowPanels[id].bEnable.setWithoutEventNotifications(true);
 			}
 		}
 
@@ -578,7 +628,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void doAlignWindowsResetLayout()
+		void doAlignWindowsReset()
 		{
 			ofLogNotice() << __FUNCTION__;
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
@@ -709,28 +759,37 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void add(ofParameter<bool>& e) // add panels on setup
+		void add(ofParameter<bool>& e) // add Special Windows / panels on setup!
 		{
 			ofLogNotice() << __FUNCTION__ << e.getName();
 
-			WindowPanel p;
-			p.id = panels.size();
-			p.pos = -1;
-			p.bEnable.makeReferenceTo(e);
 			params_Enablers.add(e);
-			panels.push_back(p);
 
-			amountQueue.setMax(panels.size() - 1);
+			WindowPanel p;
+			
+			////TODO:
+			////better pointers
+			//windowPanels.push_back(p);
+			//windowPanels.back().id = windowPanels.size();
+			//windowPanels.back().pos = -1;
+			//windowPanels.back().bEnable.makeReferenceTo(e);
+
+			p.id = windowPanels.size(); // which special window is
+			p.pos = -1; // what position on visible windows queue. -1 = hidden
+			p.bEnable.makeReferenceTo(e); // is visible
+			windowPanels.push_back(p);
+
+			amount_QueueWindowsVisible = windowPanels.size();
+			amount_QueueWindowsVisible.setMax(windowPanels.size() - 1);
 		}
 
 	public:
 
 		//--------------------------------------------------------------
-		void doApplyMaxDimensions()
+		void doAlignShapes()//must be called using runState, called on begin() phase!
 		{
-			if (ofGetFrameNum() < 2) return;
-
-			if (!bAlignShapes) return;//skip
+			if (ofGetFrameNum() == 1) return;//skip first frame to ensure prepared.
+			if (!bAlignShapes) return;//skip.
 
 			if (bLockedWidth && bLockedHeight) {
 				ImGui::SetNextWindowSize(ImVec2(width_max, height_max));
@@ -793,13 +852,19 @@ namespace ofxImGuiSurfing
 			//-
 
 			// Position linked to first queued window
-			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-			int id = panelsQueue[0];
-			panels[id].setPosition(position_Anchor.get());
+			if (queueWindowsVisible.size() == 0 || windowPanels.size() == 0)
+			{
+			}
+			else 
+			{
+				int id = queueWindowsVisible[0];
+				windowPanels[id].setPosition(position_Anchor.get());
+			}
 
+			// fixes
 			bOrientation = bOrientation;
-			//bLockedWidth = bLockedWidth;
-			//bLockedHeight = bLockedHeight;
+			bLockedWidth = bLockedWidth;
+			bLockedHeight = bLockedHeight;
 		}
 
 		//--
@@ -823,14 +888,14 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void getState(int i)
 		{
-			panels[i].getState();
+			windowPanels[i].getState();
 		}
 
 		//--------------------------------------------------------------
-		void runState(int i, bool bForced = false)
+		void runState(int i, bool bForced = false) // To be effective, must be called just before begin()!
 		{
-			panels[i].runState(bForced);
-			doApplyMaxDimensions();
+			windowPanels[i].runState(bForced);
+			doAlignShapes();
 		}
 
 	public:
@@ -844,7 +909,7 @@ namespace ofxImGuiSurfing
 		void drawWidgetsAlignHelpers(bool bMinimized = false)
 		{
 			ofxImGuiSurfing::AddSpacing();
-			ofxImGuiSurfing::AddBigButton(bAlignWindowsResetLayout);
+			ofxImGuiSurfing::AddBigButton(bAlignWindowsReset);
 			ofxImGuiSurfing::AddSmallButton(bAlignWindowsCascade);
 
 			if (!bMinimized) {
@@ -864,11 +929,11 @@ namespace ofxImGuiSurfing
 			float _w2 = getWidgetsWidth(2);
 
 			// Enable
-			ofxImGuiSurfing::AddBigToggle(bModeLinkedWindowsSpecial);
+			ofxImGuiSurfing::AddBigToggle(bLinkedWindowsSpecial);
 
 			ofxImGuiSurfing::AddSpacing();
 
-			if (bModeLinkedWindowsSpecial)
+			if (bLinkedWindowsSpecial)
 			{
 				// Orientation
 				string ss = bOrientation ? "Vertical" : "Horizontal";
@@ -908,14 +973,14 @@ namespace ofxImGuiSurfing
 
 							if (ImGui::Button("All", ImVec2(_w2, _h)))
 							{
-								for (auto& p : panels) {
+								for (auto& p : windowPanels) {
 									p.bEnable = true;
 								}
 							}
 							ImGui::SameLine();
 							if (ImGui::Button("None", ImVec2(_w2, _h)))
 							{
-								for (auto& p : panels) {
+								for (auto& p : windowPanels) {
 									p.bEnable = false;
 								}
 							}
@@ -934,7 +999,7 @@ namespace ofxImGuiSurfing
 
 						if (bGui_ShowAll)
 						{
-							for (auto& p : panels)
+							for (auto& p : windowPanels)
 							{
 								ImGui::Indent();
 								ofxImGuiSurfing::AddToggleRoundedButton(p.bEnable);
@@ -951,9 +1016,6 @@ namespace ofxImGuiSurfing
 				//ImGui::Spacing();
 
 				// Settings
-
-				//if (!bModeLinkedWindowsSpecial) ofxImGuiSurfing::AddParameter(bHeaders);
-				//if (bModeLinkedWindowsSpecial)
 
 				if (!bMinimized)
 				{
@@ -998,7 +1060,7 @@ namespace ofxImGuiSurfing
 
 								std::string ss1 = "";
 								int i = 0;
-								for (auto& p : panels)
+								for (auto& p : windowPanels)
 								{
 									//ss1 += "[" + ofToString(i) + "] ";
 									ss1 += " #" + ofToString(p.pos);
@@ -1014,10 +1076,10 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								std::string ss2 = "Queue\n\n";
-								for (int i = 0; i < panelsQueue.size(); i++)
+								for (int i = 0; i < queueWindowsVisible.size(); i++)
 								{
 									if (i != 0) ss2 += ", ";
-									ss2 += ofToString(panelsQueue[i]);
+									ss2 += ofToString(queueWindowsVisible[i]);
 								}
 								ImGui::TextWrapped(ss2.c_str());
 
@@ -1025,7 +1087,7 @@ namespace ofxImGuiSurfing
 
 								std::string ss3 = "";
 								ss3 += "Amount\n\n";
-								ss3 += ofToString(panelsQueue.size());
+								ss3 += ofToString(queueWindowsVisible.size());
 								ImGui::TextWrapped(ss3.c_str());
 
 								ofxImGuiSurfing::AddSpacingSeparated();
@@ -1038,69 +1100,86 @@ namespace ofxImGuiSurfing
 			}
 		}
 
+		//--
+
 	public:
 
 		//--------------------------------------------------------------
 		void update() {
 
+			//--
+
+			if (queueWindowsVisible.size() == 0 || windowPanels.size() == 0) return;
+
 			// Read 1st queued position to the anchor
-			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-			int id = panelsQueue[0];
-			position_Anchor.set(panels[id].getPosition());
+			int id = queueWindowsVisible[0];
+			position_Anchor.setWithoutEventNotifications(windowPanels[id].getPosition());
+			//position_Anchor.set(windowPanels[id].getPosition());
 
 			//--
 
-			// Apply all links to windows
-			if (bModeLinkedWindowsSpecial) doSetWindowsPositions();
+			// Update / Apply all links to windows
+			if (bLinkedWindowsSpecial) doApplyLinkWindows();
 		}
 
 	private:
 
 		//--------------------------------------------------------------
-		void doSetWindowsPositions()
+		void doApplyLinkWindows()
 		{
-			if (panelsQueue.size() == 0 || panels.size() == 0) return;
-
-			ofRectangle rCurr;
-			ofRectangle rNext;
+			if (queueWindowsVisible.size() == 0 || windowPanels.size() == 0) return;
 
 			//-
 
+			// Take measures to apply on next doAlignShapes() call!
 			// All windows with the same max width
 			if (bLockedWidth || bLockedHeight)
 			{
-				for (int i = 0; i < panelsQueue.size(); i++)
+				for (int i = 0; i < queueWindowsVisible.size(); i++)
 				{
-					int id = panelsQueue[i];
-					rCurr = panels[id].getRectangle();
-					if (bLockedWidth) if (width_max < rCurr.getWidth()) width_max = rCurr.getWidth();
-					if (bLockedHeight) if (height_max < rCurr.getHeight()) height_max = rCurr.getHeight();
+					int id = queueWindowsVisible[i];
+					ofRectangle r = windowPanels[id].getRectangle();
+
+					// measure max w/h from all the windows to align shapes!
+					if (bLockedWidth) if (width_max < r.getWidth()) width_max = r.getWidth();
+					if (bLockedHeight) if (height_max < r.getHeight()) height_max = r.getHeight();
 				}
 			}
 
 			//-
 
-			for (int i = 0; i < panelsQueue.size() - 1; i++) // Exclude the lastone
+			//TODO: remake by copying from align!
+			// direct on same frame 
+
+			int id = queueWindowsVisible[0];
+			
+			//float x = windowPanels[id].getPosition().x;
+			//float y = windowPanels[id].getPosition().y;
+			float x = position_Anchor.get().x;
+			float y = position_Anchor.get().y;
+			
+			float w;
+			float h;
+
+			for (int i = 0; i < queueWindowsVisible.size(); i++)
 			{
-				int id, idNext;
+				id = queueWindowsVisible[i];
 
-				id = panelsQueue[i];
-				idNext = panelsQueue[i + 1];
-
-				rCurr = panels[id].getRectangle();
-				rNext = panels[idNext].getRectangle();
+				glm::vec2 p(x, y);
+				windowPanels[id].setPosition(p);
+				//windowPanels[id].setRectangle(r);
 
 				if (orientation_Index == W_HORIZ)
 				{
-					glm::vec2 p = rCurr.getTopRight();
-					rNext.setPosition(p.x + pad, p.y);
-					panels[idNext].setRectangle(rNext);
+					w = windowPanels[id].getWidth();
+					x = x + w + pad;
+					y = y;
 				}
 				else if (orientation_Index == W_VERT)
 				{
-					glm::vec2 p = rCurr.getBottomLeft();
-					rNext.setPosition(p.x, p.y + pad);
-					panels[idNext].setRectangle(rNext);
+					h = windowPanels[id].getHeight();
+					x = x;
+					y = y + h + pad;
 				}
 			}
 		}

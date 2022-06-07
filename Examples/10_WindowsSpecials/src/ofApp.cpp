@@ -84,10 +84,10 @@ void ofApp::setup_ImGui()
 	// Internal bool toggles ofParams will be auto created too:
 	// You just pass a name!
 
-	guiManager.addWindowSpecial("myWindow 0"); // we customize the panel names. e.g: audio, video, advanced..etc
-	guiManager.addWindowSpecial("myWindow 1");
+	guiManager.addWindowSpecial("myWindow 1"); // we customize the panel names. e.g: audio, video, advanced..etc
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
+	guiManager.addWindowSpecial("myWindow 4");
 
 	//// 4. Optional: Customize names to help integrate into your App GUI's.
 	//// Rename "Organizer" to a custom name.
@@ -109,10 +109,10 @@ void ofApp::draw()
 
 		//--
 
-		draw_SurfingWidgets_0();
 		draw_SurfingWidgets_1();
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
+		draw_SurfingWidgets_4();
 	}
 	guiManager.end();
 }
@@ -157,7 +157,7 @@ void ofApp::draw_MainWindow() {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_0()
+void ofApp::draw_SurfingWidgets_1()
 {
 	// We begin the window like that,
 	// passing which special window index is as argument.
@@ -167,7 +167,7 @@ void ofApp::draw_SurfingWidgets_0()
 	{
 		/* Your widgets goes here... */
 
-		guiManager.AddLabelBig("> Window\nSpecial 0", false);
+		guiManager.AddLabelBig("> Window\nSpecial 1", false);
 		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		//if (!guiManager.bMinimize)
@@ -181,11 +181,11 @@ void ofApp::draw_SurfingWidgets_0()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_1() 
+void ofApp::draw_SurfingWidgets_2() 
 {
 	if (guiManager.beginWindowSpecial(1))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 1", false);
+		guiManager.AddLabelBig("> Window\nSpecial 2", false);
 		//if (!guiManager.bMinimize)
 		{
 			guiManager.AddGroup(params_1);
@@ -200,11 +200,11 @@ void ofApp::draw_SurfingWidgets_1()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_2() 
+void ofApp::draw_SurfingWidgets_3() 
 {
 	if (guiManager.beginWindowSpecial(2))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 2", false);
+		guiManager.AddLabelBig("> Window\nSpecial 3", false);
 		//if (!guiManager.bMinimize)
 		{
 			guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
@@ -219,11 +219,11 @@ void ofApp::draw_SurfingWidgets_2()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_3()
+void ofApp::draw_SurfingWidgets_4()
 {
 	if (guiManager.beginWindowSpecial(3))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 3", false);
+		guiManager.AddLabelBig("> Window\nSpecial 4", false);
 		guiManager.AddGroup(params_3);
 		guiManager.AddSpacingSeparated();
 		//if (!guiManager.bMinimize)

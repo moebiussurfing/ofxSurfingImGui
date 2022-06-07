@@ -59,7 +59,7 @@ ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
-	ofRemoveListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
+	ofRemoveListener(params_WindowSpecials.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
 	saveAppSettings();
 }
@@ -1026,8 +1026,6 @@ void ofxSurfing_ImGui_Manager::begin() {
 		// Main Panels Controller
 		if (windowPanels.isIntitiated())
 		{
-			windowPanels.update();
-
 			//TODO:
 			// Docking mode has the GUI toggles in other panels..
 
@@ -1222,6 +1220,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 
+	//--
+
 	// Skip window if hidden
 
 	if (index > windowsAtributes.size() - 1 || index == -1)
@@ -1230,7 +1230,11 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 		return false;
 	}
 
+	//--
+
 	if (!windowsAtributes[index].bGui.get()) return false;
+
+	//--
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
@@ -1238,10 +1242,18 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 		//--
 
-		if (windowPanels.bModeLinkedWindowsSpecial) windowPanels.runState(index);
+		if (windowPanels.bLinkedWindowsSpecial) {
+
+			//TODO: make refresh faster
+			windowPanels.update();
+
+			windowPanels.runState(index);
+		}
 
 		if (!windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
 	}
+
+	//--
 
 	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -1252,7 +1264,11 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//	}
 	//}
 
+	//--
+
 	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
+
+	//--
 
 	//TODO:
 	// workaround
@@ -1260,6 +1276,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//if (!windowsAtributes[index].bGui.get()) return false;
 
 	//refreshLayout();
+
+	//--
 
 	return b;
 }
@@ -1299,7 +1317,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (windowPanels.bModeLinkedWindowsSpecial)
+		if (windowPanels.bLinkedWindowsSpecial)
 		{
 			windowPanels.getState(index);
 		}
@@ -1612,12 +1630,12 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
-	ofAddListener(params_Panels.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
+	ofAddListener(params_WindowSpecials.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
 	//--
 
 	//// Gui - > which panels enabled but overwritten by Layout Presets Engine
-	//params_AppSettings.add(params_Panels);
+	//params_AppSettings.add(params_WindowSpecials);
 
 	//--
 
@@ -1991,7 +2009,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
 			if (ImGui::CollapsingHeader(nameWindowSpecialsPanel.c_str(), ImGuiWindowFlags_None))
-				//if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) 
 			{
 				windowPanels.drawWidgetsOrganizer(bMinimizePresets);
 			}
@@ -2008,16 +2025,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 			createLayoutPreset();
 		}
 		*/
-
-		//--
-
-		////TODO:
-		//if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-		//{
-		//	if (ImGui::Button("Reset Layout", ImVec2(_w1, _h)))
-		//	{
-		//	}
-		//}
 
 		//--
 
