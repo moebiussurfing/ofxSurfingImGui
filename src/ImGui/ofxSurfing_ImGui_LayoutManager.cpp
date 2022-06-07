@@ -1093,7 +1093,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(char* name)
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	return beginWindow((string)name, NULL, fg);
-	//return beginWindow((string)name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
@@ -1103,7 +1102,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name)
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	return beginWindow(name, NULL, fg);
-	//return beginWindow(name, NULL, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------
@@ -1115,7 +1113,6 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
 	return beginWindow(name, p_open, fg);
-	//return beginWindow(name, p_open, ImGuiWindowFlags_None);
 }
 
 //--------------------------------------------------------------

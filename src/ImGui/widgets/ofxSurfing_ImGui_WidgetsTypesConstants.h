@@ -6,6 +6,7 @@
 //#include "ofxSurfingImGui.h"
 //#include "ofxSurfing_ImGui_ofHelpers.h"
 
+#define OFX_IM_WIDGETS_RATIO_BIG 1.5f
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
 #define OFX_IM_WIDGETS_RATIO_SMALL 0.4f
 
