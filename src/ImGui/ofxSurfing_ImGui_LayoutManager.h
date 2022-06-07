@@ -1007,7 +1007,7 @@ private:
 				ofxImGuiSurfing::AddSpacing();
 
 				//--
-				
+
 				// Gui
 
 				if (ImGui::TreeNode("GUI"))
@@ -1226,6 +1226,8 @@ private:
 
 	std::string nameWindowSpecialsPanel = "";
 
+	//--
+
 public:
 
 	bool beginWindowSpecial();
@@ -1233,22 +1235,26 @@ public:
 
 	void endWindowSpecial(int index = -1);
 
+	//--
+
 	//--------------------------------------------------------------
-	void setNameWindowsSpecialsPanel(std::string name) // Just optional to customize name.
+	void setNameWindowsSpecialsOrganizer(std::string name) // Just optional to customize name.
 	{
 		nameWindowSpecialsPanel = name;
 		windowPanels.bGui_WindowsSpecials.setName(name);
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowsSpecialsPanel() // Draws the main panel controller.
+	void drawWindowsSpecialsOrganizer() // Draws the main panel controller.
 	{
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+
 		if (beginWindow(windowPanels.bGui_WindowsSpecials))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			windowPanels.drawWidgets(bMinimize);
+			windowPanels.drawWidgetsOrganizer(bMinimize);
 
 			endWindow();
 		}
@@ -1257,20 +1263,18 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowsAlignHelpers()
 	{
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+
 		if (beginWindow(bGui_WindowsAlignHelpers))
 		{
-			//windowPanels.drawWidgetsAlignHelpers();
-
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			ofxImGuiSurfing::AddBigButton(windowPanels.bResetLayout);
-			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsY);
-			ofxImGuiSurfing::AddSmallButton(windowPanels.bAlignWindowsX);
+			windowPanels.drawWidgetsAlignHelpers(bMinimize);
 
 			if (!bMinimize) {
-			AddSpacing();
-			ofxImGuiSurfing::AddStepperInt(windowPanels.pad);
+				AddSpacing();
+				ofxImGuiSurfing::AddStepperInt(windowPanels.pad);
 			}
 
 			endWindow();
@@ -1415,6 +1419,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowsSpecialsGuiToggleAllGlobal() { // global toggle to show/hide the all panels
+		return windowPanels.bGui_ShowAll;
+	}
+
+	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsAlignHelpersGuiToggle() { // align windows toggle to show the panel
 		return bGui_WindowsAlignHelpers;
 	}
@@ -1508,6 +1517,12 @@ public:
 		{
 			Add(getWindowSpecialGuiToggle(i), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		}
+	}
+
+	//--------------------------------------------------------------
+	void setWindowSpecialToggleVisibleAllGlobal()
+	{
+		windowPanels.bGui_ShowAll = !windowPanels.bGui_ShowAll;
 	}
 
 	//--------------------------------------------------------------

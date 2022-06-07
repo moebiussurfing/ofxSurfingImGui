@@ -46,7 +46,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	// Enable "Windows Special Organizer"
 	// Customize names
-	//setNameWindowsSpecialsPanel("ORGANIZER");
+	//setNameWindowsSpecialsOrganizer("ORGANIZER");
 	//windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
 	//windowPanels.setPath(path_Global);
 }
@@ -270,7 +270,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 		//// Customize names
 		//windowPanels.setNameWindowsSpecialsEnableGlobal("Show Global");
-		//setNameWindowsSpecialsPanel("Organizer");
+		//setNameWindowsSpecialsOrganizer("Organizer");
 
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
@@ -1033,7 +1033,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
-				if (windowPanels.bGui_WindowsSpecials) drawWindowsSpecialsPanel();
+				if (windowPanels.bGui_WindowsSpecials) drawWindowsSpecialsOrganizer();
 			}
 		}
 	}
@@ -1272,12 +1272,16 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
 	if (index == -1) index = _currWindowsSpecial; // workaround
 
+	//--
+
 	if (index > windowsAtributes.size() - 1)
 	{
 		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 		return;
 	}
 
+	//--
+	 
 	// skip window if hidden
 
 	if (!windowsAtributes[index].bGui.get()) return;
@@ -1287,12 +1291,14 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 		if (!windowPanels.bGui_ShowAll.get()) return;
 	}
 
-	//-
+	//--
 
 	//if (windowsAtributes[_currWindowsSpecial].bSpecialWindow.get())
 	//{
 	//	drawAdvancedControls();
 	//}
+
+	//--
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
@@ -1990,7 +1996,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 			if (ImGui::CollapsingHeader(nameWindowSpecialsPanel.c_str(), ImGuiWindowFlags_None))
 				//if (ImGui::CollapsingHeader("Organizer", ImGuiWindowFlags_None)) 
 			{
-				windowPanels.drawWidgets(bMinimizePresets);
+				windowPanels.drawWidgetsOrganizer(bMinimizePresets);
 			}
 		}
 

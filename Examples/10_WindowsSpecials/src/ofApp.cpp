@@ -84,14 +84,14 @@ void ofApp::setup_ImGui()
 	// Internal bool toggles ofParams will be auto created too:
 	// You just pass a name!
 
-	guiManager.addWindowSpecial("myWindow 0");
+	guiManager.addWindowSpecial("myWindow 0"); // we customize the panel names. e.g: audio, video, advanced..etc
 	guiManager.addWindowSpecial("myWindow 1");
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
 
 	//// 4. Optional: Customize names to help integrate into your App GUI's.
 	//// Rename "Organizer" to a custom name.
-	//guiManager.setNameWindowsSpecialsPanel("My Add-on");
+	//guiManager.setNameWindowsSpecialsOrganizer("My Add-on");
 
 	// 5. Startup
 	// Called after windows has been added.
@@ -123,20 +123,32 @@ void ofApp::draw_MainWindow() {
 	if (guiManager.beginWindow(bGui))
 	{
 		// Extra Panels
-		 
-		// To hide or show the "Special Windows Organizer" window (ORGANIZER):
-		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-		// To hide or show the "Align Windows Helpers" window (ALIGNERS):
-		guiManager.Add(guiManager.getWindowsAlignHelpersGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		
+		//--
+		 
+		// 1. To hide or show the "Special Windows Organizer" window (ORGANIZER):
+		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		// 2. To hide or show the "Align Windows Helpers" window (ALIGNERS):
+		guiManager.Add(guiManager.getWindowsAlignHelpersGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		guiManager.AddSpacingSeparated();
 
+		//--
+
 		guiManager.AddLabelBig("Special Windows");
+
+		// Global toggle
+		guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+		guiManager.AddSpacing();
+
+		// Each Window toggle
 		guiManager.drawWindowSpecialsGuiToggles();
-		// We can also get each toggle too:
+		// We can also get each toggle instead too:
 		//guiManager.Add(guiManager.getWindowSpecialGuiToggle(0));
 		//guiManager.Add(guiManager.getWindowSpecialGuiToggle(1));
+		//..
 
+		//--
+		 
 		// For internal debug purposes
 		guiManager.drawAdvanced();
 
@@ -236,25 +248,19 @@ void ofApp::keyPressed(int key) {
 	}
 
 	else if (key == '0') {
-		guiManager.setWindowSpecialToggleVisible(0);
-	}
-	else if (key == '1') {
-		guiManager.setWindowSpecialToggleVisible(1);
-	}
-	else if (key == '2') {
-		guiManager.setWindowSpecialToggleVisible(2);
-	}
-	else if (key == '3') {
-		guiManager.setWindowSpecialToggleVisible(3);
+		guiManager.setWindowSpecialToggleVisibleAllGlobal();
 	}
 
-	//else if (key == 'h') {
-	//	guiManager.setSpecialWindowsOrganizerOrientationHorizontal();
-	//}
-	//else if (key == 'v') {
-	//	guiManager.setSpecialWindowsOrganizerOrientationVertical();
-	//}
-	//else if (key == 'o') {
-	//	guiManager.setToggleSpecialWindowsOrganizerOrientation();
-	//}
+	else if (key == '1') {
+		guiManager.setWindowSpecialToggleVisible(0);
+	}
+	else if (key == '2') {
+		guiManager.setWindowSpecialToggleVisible(1);
+	}
+	else if (key == '3') {
+		guiManager.setWindowSpecialToggleVisible(2);
+	}
+	else if (key == '4') {
+		guiManager.setWindowSpecialToggleVisible(3);
+	}
 }

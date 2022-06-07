@@ -190,7 +190,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	inline bool AddSmallButton(ofParameter<bool>& parameter, ImVec2 bb /*= ImVec2(-1, -1)*/) {
-		AddSmallButton(parameter, bb.x, bb.y);
+		return AddSmallButton(parameter, bb.x, bb.y);
 	}
 
 	//--------------------------------------------------------------

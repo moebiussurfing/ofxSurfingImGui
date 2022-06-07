@@ -16,6 +16,57 @@
 namespace ofxImGuiSurfing
 {
 	/*
+	
+	//TODO:
+	//https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_profiler.h
+
+	//TODO:
+	// Taken from here: 
+	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
+	
+	//--------------------------------------------------------------
+	inline void drawOFTexture(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH ){
+	  if(tex->isAllocated()){
+		if(tex->getWidth()/tex->getHeight() >= _tw/_th){
+		  if(tex->getWidth() > tex->getHeight()){   // horizontal texture
+			drawW           = _tw;
+			drawH           = (_tw/tex->getWidth())*tex->getHeight();
+			posX            = 0;
+			posY            = (_th-drawH)/2.0f;
+		  }else{ // vertical texture
+			drawW           = (tex->getWidth()*_th)/tex->getHeight();
+			drawH           = _th;
+			posX            = (_tw-drawW)/2.0f;
+			posY            = 0;
+		  }
+		}else{ // always considered vertical texture
+		  drawW           = (tex->getWidth()*_th)/tex->getHeight();
+		  drawH           = _th;
+		  posX            = (_tw-drawW)/2.0f;
+		  posY            = 0;
+		}
+
+		ImVec2 cursor_pos = ImGui::GetCursorPos();
+		ImGui::SetCursorPos(ImVec2(posX,posY+IMGUI_EX_NODE_HEADER_HEIGHT));
+
+		ofxImGui::AddImage(*tex, ofVec2f(drawW, drawH));
+
+		ImGui::SetCursorPos(cursor_pos);
+
+	  }
+	}
+
+	//--------------------------------------------------------------
+	inline void drawOFTextureFromImGui(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH , void (*drawTexture)(ofTexture*,float&,float&,float&,float&,float&,float&)){
+		drawTexture(tex,_tw,_th,posX,posY,drawW,drawH);
+	}
+
+	*/
+
+
+
+
+	/*
 	void DrawFbo(const ofFbo &fbo, GLuint &sourceID,
 		std::string name = "fbo", ImGuiWindowFlags flag = 0);
 

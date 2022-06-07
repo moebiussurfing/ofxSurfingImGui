@@ -145,12 +145,14 @@ namespace ofxImGuiSurfing
 			params_User.add(position_Anchor);
 			params_User.add(bAlignWindowsY);
 			params_User.add(bAlignWindowsX);
-			params_User.add(bResetLayout);
+			params_User.add(bAlignWindowsCascade);
+			params_User.add(bAlignWindowsResetLayout);
 
 			// exclude
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
-			bResetLayout.setSerializable(false);
+			bAlignWindowsCascade.setSerializable(false);
+			bAlignWindowsResetLayout.setSerializable(false);
 		}
 
 		//--------------------------------------------------------------
@@ -167,7 +169,6 @@ namespace ofxImGuiSurfing
 
 		//TODO:
 		//this is taken from ofxSurfingPresets
-
 		enum surfingAlignMode
 		{
 			SURFING_ALIGN_HORIZONTAL = 0,
@@ -176,16 +177,14 @@ namespace ofxImGuiSurfing
 		surfingAlignMode modeAlignWindows = SURFING_ALIGN_HORIZONTAL;
 
 		//--------------------------------------------------------------
-		void doAlignWindowsOnce()
+		void doAlignWindowsY()
 		{
 			ofLogNotice(__FUNCTION__);
-			//ofLogNotice(__FUNCTION__) << " #" << countTimes;
-			//cout << __FUNCTION__ << " #" << countTimes << endl;
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
 
-			float _yMin = 1920;
+			float _yMin = 1080;//store the more hight/upper, lower y window coordinate
 
 			ImVector<ImGuiWindow*> windows;
 			for (ImGuiWindow* window : g.WindowsFocusOrder)
@@ -193,105 +192,59 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					windows.push_back(window);
-					//cout << window->Name << endl;
 
-					// get the more top window height y coord
+					// get the more top window y coord
 					if (window->Pos.y < _yMin) _yMin = window->Pos.y;
 				}
 			}
-			//cout << endl;
 
 			//--
 
 			if (windows.Size > 0)
 			{
-				//const int gapx = 0;
-				//const int gapy = 0;
-
-				ImVec2 pos;
-				//ImVec2 sz;
-				//ImVec2 gap;
-
-				//if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) gap = ImVec2(gapx, 0.f);
-				//else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) gap = ImVec2(0.f, gapy);
-
 				for (int n = 0; n < windows.Size; n++)
 				{
-					if (!windows[n]->WasActive) continue;
-					else
-					{
-						pos = windows[n]->Pos;
-						pos.y = _yMin;
-						windows[n]->Pos = pos;
-					}
+					ImVec2 pos;
+					pos = windows[n]->Pos;
+					pos.y = _yMin;
+					windows[n]->Pos = pos;
 				}
+			}
+		}
 
+		//--------------------------------------------------------------
+		void doAlignWindowsX()
+		{
+			ofLogNotice(__FUNCTION__);
 
+			ImGuiContext* GImGui = ImGui::GetCurrentContext();
+			ImGuiContext& g = *GImGui;
 
-				//string namew;
+			float _xMin = 1920;//store the more hight/upper, lower y window coordinate
 
-				//// 0. window clicker (main and anchor window!)
-				//bool b = false;
-				//for (int n = 0; n < windows.Size; n++)
-				//{
-				//	namew = windows[n]->Name;
-				//	if ((namew == name_Window_ClickerFloating) && bGui_ClickerFloating.get())
-				//	{
-				//		b = true;
-				//		pos = windows[n]->Pos;
-				//		sz = windows[n]->Size;
-				//		//cout << name_Window_ClickerFloating << endl;
-				//		break;
-				//	}
-				//}
-				//if (!b) return;//main window must be visible or we will skip all below and return.
+			ImVector<ImGuiWindow*> windows;
+			for (ImGuiWindow* window : g.WindowsFocusOrder)
+			{
+				if (window->WasActive)
+				{
+					windows.push_back(window);
 
-//				// 1. window edit
-//				for (int n = 0; n < windows.Size; n++)
-//				{
-//					namew = windows[n]->Name;
-//					if ((namew == name_Window_Editor) /*&& bGui_Editor*/)
-//					{
-//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
-//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
-//
-//						sz = windows[n]->Size;
-//						ImGui::SetWindowPos(windows[n], pos);
-//						break;
-//					}
-//				}
-//
-//				// 2. window parameters 
-//				for (int n = 0; n < windows.Size; n++)
-//				{
-//					namew = windows[n]->Name;
-//					if ((namew == name_Window_Parameters) /*&& bGui_Parameters*/)
-//					{
-//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
-//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
-//
-//						sz = windows[n]->Size;
-//						ImGui::SetWindowPos(windows[n], pos);
-//						break;
-//					}
-//				}
-//
-//				// 3. window player 
-//#ifdef USE__OFX_SURFING_PRESETS__OFX_SURFING_PLAYER
-//				for (int n = 0; n < windows.Size; n++)
-//				{
-//					namew = windows[n]->Name;
-//					if ((namew == name_Window_Player) /*&& playerSurfer.bGui*/)
-//					{
-//						if (modeAlignWindows == SURFING_ALIGN_HORIZONTAL) pos = ImVec2(pos + ImVec2(sz.x, 0) + gap);
-//						else if (modeAlignWindows == SURFING_ALIGN_VERTICAL) pos = ImVec2(pos + ImVec2(0, sz.y) + gap);
-//
-//						sz = windows[n]->Size;
-//						ImGui::SetWindowPos(windows[n], pos);
-//						break;
-//					}
-//				}
-//#endif
+					// get the more top window x coord
+					if (window->Pos.x < _xMin) _xMin = window->Pos.x;
+				}
+			}
+
+			//--
+
+			if (windows.Size > 0)
+			{
+				for (int n = 0; n < windows.Size; n++)
+				{
+					ImVec2 pos;
+					pos = windows[n]->Pos;
+					pos.x = _xMin;
+					windows[n]->Pos = pos;
+				}
 			}
 		}
 
@@ -300,19 +253,19 @@ namespace ofxImGuiSurfing
 	public:
 
 		ofParameter<bool> bGui_WindowsSpecials{ "ORGANIZER", true }; // toggle gui to draw main window.
-		ofParameter<bool> bGui_ShowAll{ "ALL", true }; // extra toggle to hide / show all the queued windows.
+		ofParameter<bool> bGui_ShowAll{ "ALL", true }; // extra global toggle to hide / show all the queued windows.
 
-		ofParameter <bool> bAlignWindowsX{ "AlignX", false };
-		ofParameter <bool> bAlignWindowsY{ "AlignY", false };
+		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
+		ofParameter<bool> bAlignWindowsY{ "AlignY", false };
+		ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
+		ofParameter<bool> bAlignWindowsResetLayout{ "Reset",false };
 
-		ofParameter<bool> bModeLinkedWindowsSpecial{ "Link Windows",  false };
+		ofParameter<bool> bModeLinkedWindowsSpecial{ "LINK",  false };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
 		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
-
-		ofParameter<bool> bResetLayout{ "RESET LAYOUT",false };
 
 		//--
 
@@ -448,13 +401,20 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// ALign Windows Helpers
+			// Align Windows Helpers
 
-			else if (name == bResetLayout.getName() && bResetLayout)
+			else if (name == bAlignWindowsResetLayout.getName() && bAlignWindowsResetLayout)
 			{
-				bResetLayout = false;
+				bAlignWindowsResetLayout = false;
 
-				doResetLayout();
+				doAlignWindowsResetLayout();
+			}
+
+			else if (name == bAlignWindowsCascade.getName() && bAlignWindowsCascade)
+			{
+				bAlignWindowsCascade = false;
+
+				doAlignWindowsCascade();
 			}
 
 			//-
@@ -463,17 +423,17 @@ namespace ofxImGuiSurfing
 			{
 				bAlignWindowsY = false;
 
-				doAlignWindowsOnce();
+				doAlignWindowsY();
 			}
 
 			else if (name == bAlignWindowsX.getName() && bAlignWindowsX)
 			{
 				bAlignWindowsX = false;
 
-				doAlignWindowsOnce();
+				doAlignWindowsX();
 			}
 
-			//-
+			//--
 
 			else if (name == orientation_Index.getName())
 			{
@@ -615,10 +575,8 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		//TODO:
-
 		//--------------------------------------------------------------
-		void doResetLayout()
+		void doAlignWindowsResetLayout()
 		{
 			ofLogNotice() << __FUNCTION__;
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
@@ -655,12 +613,15 @@ namespace ofxImGuiSurfing
 			}
 			if (myWins.size() == 0) return; // skip
 
+			// Sort, the more lefted window will be used as anchor!
 			std::sort(myWins.begin(), myWins.end(), myobject);
 
 			float w = myWins[0].sz.x /*+ pad*/;
 			float h = myWins[0].sz.y;
+
+			//anchor
 			float x = myWins[0].pos.x + w + pad;
-			float y = myWins[0].pos.y;//anchor
+			float y = myWins[0].pos.y;
 
 			for (int i = 1; i < myWins.size(); i++)
 			{
@@ -669,54 +630,75 @@ namespace ofxImGuiSurfing
 
 				w = myWins[i].sz.x;
 				x = x + w + pad;
-				//h = myWins[i].sz.y;
-				//y = myWins[i].pos.y;
 			}
-
-			//for (int n = 0; n < windows.Size; n++)
-			//{
-			//	if (!windows[n]->WasActive) continue;
-			//	else
-			//	{
-			//		pos = windows[n]->Pos;
-			//		pos.y = _yMin;
-			//		windows[n]->Pos = pos;
-			//	}
-			//}
-
-			//if (panelsQueue.size() < 2 || panelsQueue.size() == 0)
-			//{
-			//	ofLogWarning() << __FUNCTION__ << " Skip!";
-			//	return;
-			//}
-
-			//// 1st
-			//{
-			//	glm::vec2 posPre{ 10, 10 };
-			//	int id = panelsQueue[0];
-			//	panels[id].setPosition(posPre);
-			//}
-
-			//for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
-			//{
-			//	glm::vec2 posPre;
-
-			//	int idPre = panelsQueue[i - 1];
-			//	posPre = panels[idPre].getPosition();
-
-			//	int id = panelsQueue[i];
-			//	panels[id].setPosition(posPre);
-			//}
-
-			////for (int i = 1; i < panelsQueue.size(); i++) // search each item into queue
-			////{
-			////	int id = panelsQueue[i];
-			////	runState(id, true);
-			////}
-
-			////doSetWindowsPositions(); 
-			////doOrganize(); 
 		}
+
+		//--------------------------------------------------------------
+		void doAlignWindowsCascade()
+		{
+			float _padx = 120;
+			float _pady = 25;
+
+			//--
+
+			ofLogNotice() << __FUNCTION__;
+			ImGuiContext* GImGui = ImGui::GetCurrentContext();
+			ImGuiContext& g = *GImGui;
+			ImVector<ImGuiWindow*> windows;
+
+			struct myWin {
+				ImVec2 pos;
+				ImVec2 sz;
+				int id;
+				string name;
+				ImGuiWindow* ImWin;
+			};
+
+			struct myclass {
+				bool operator() (myWin w1, myWin w2) { return (w1.pos.x < w2.pos.x); }
+			} myobject;
+
+			vector<myWin> myWins;
+
+			int _id = 0;
+			for (ImGuiWindow* window : g.WindowsFocusOrder)
+			{
+				if (window->WasActive)
+				{
+					myWin w;
+					w.ImWin = window;
+					w.pos = window->Pos;
+					w.sz = window->Size;
+					w.name = window->Name;
+					w.id = _id++;
+					myWins.push_back(w);
+				}
+			}
+			if (myWins.size() == 0) return; // skip
+
+			// Sort, the more lefted window will be used as anchor!
+			std::sort(myWins.begin(), myWins.end(), myobject);
+
+			float diffx = pad + _padx;
+			float diffy = pad + _pady;
+
+			// anchor
+			float x = myWins[0].pos.x + diffx;
+			float y = myWins[0].pos.y + diffy;
+
+			for (int i = 1; i < myWins.size(); i++)
+			{
+				myWins[i].ImWin->Pos.x = x;
+				myWins[i].ImWin->Pos.y = y;
+
+				x = x + diffx;
+				y = y + diffy;
+
+				myWins[i].ImWin->BeginOrderWithinParent;
+			}
+		}
+
+		//--
 
 	public:
 
@@ -853,7 +835,23 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void drawWidgets(bool bMinimized = false)
+		void drawWidgetsAlignHelpers(bool bMinimized = false)
+		{
+			ofxImGuiSurfing::AddSpacing();
+			ofxImGuiSurfing::AddBigButton(bAlignWindowsResetLayout);
+			ofxImGuiSurfing::AddSmallButton(bAlignWindowsCascade);
+
+			if (!bMinimized) {
+				float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+				float w2 = ofxImGuiSurfing::getWidgetsWidth(2);
+				ofxImGuiSurfing::AddSmallButton(bAlignWindowsY, ImVec2(w2, h));
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddSmallButton(bAlignWindowsX, ImVec2(w2, h));
+			}
+		}
+
+		//--------------------------------------------------------------
+		void drawWidgetsOrganizer(bool bMinimized = false)
 		{
 			float _h = getWidgetsHeight();
 			float _w1 = getWidgetsWidth(1);
@@ -876,15 +874,12 @@ namespace ofxImGuiSurfing
 
 				ImGui::Spacing();
 			}
-			
+
 			ofxImGuiSurfing::AddSpacingSeparated();
 
 			if (ImGui::CollapsingHeader("ALIGNERS"))
 			{
-				ofxImGuiSurfing::AddSpacing();
-				ofxImGuiSurfing::AddBigButton(bResetLayout);
-				ofxImGuiSurfing::AddSmallButton(bAlignWindowsY);
-				ofxImGuiSurfing::AddSmallButton(bAlignWindowsX);
+				drawWidgetsAlignHelpers();
 			}
 
 			//-
