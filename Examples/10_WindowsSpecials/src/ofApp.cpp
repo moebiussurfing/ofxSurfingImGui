@@ -53,7 +53,7 @@ void ofApp::setup_ImGui()
 
 		The "Special Windows Organizer".
 		Speeds Up the creation of ImGui windows.
-		An Internal bool toggle (commonly named as bGui in other examples) 
+		An Internal bool toggle (commonly named as bGui in other examples)
 		will be auto created for each added Special Window.
 		Another window called "Organizer" (by default) will be auto drawn!
 		This happens internally, and we don't need to handle that.
@@ -84,7 +84,9 @@ void ofApp::setup_ImGui()
 	// Internal bool toggles ofParams will be auto created too:
 	// You just pass a name!
 
-	guiManager.addWindowSpecial("myWindow 1"); // we customize the panel names. e.g: audio, video, advanced..etc
+	// We customize the panel names. 
+	// e.g: audio, video, advanced...etc
+	guiManager.addWindowSpecial("myWindow 1"); 
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
 	guiManager.addWindowSpecial("myWindow 4");
@@ -123,9 +125,9 @@ void ofApp::draw_MainWindow() {
 	if (guiManager.beginWindow(bGui))
 	{
 		// Extra Panels
-		
+
 		//--
-		 
+
 		// 1. To hide or show the "Special Windows Organizer" window (ORGANIZER):
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		// 2. To hide or show the "Align Windows Helpers" window (ALIGNERS):
@@ -148,7 +150,7 @@ void ofApp::draw_MainWindow() {
 		//..
 
 		//--
-		 
+
 		// For internal debug purposes
 		guiManager.drawAdvanced();
 
@@ -170,26 +172,20 @@ void ofApp::draw_SurfingWidgets_1()
 		guiManager.AddLabelBig("> Window\nSpecial 1", false);
 		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
-		//if (!guiManager.bMinimize)
-		{
-			guiManager.AddGroup(params_0);
-			guiManager.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
-		}
+		guiManager.AddGroup(params_0);
+		guiManager.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
 
 		guiManager.endWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_2() 
+void ofApp::draw_SurfingWidgets_2()
 {
 	if (guiManager.beginWindowSpecial(1))
 	{
 		guiManager.AddLabelBig("> Window\nSpecial 2", false);
-		//if (!guiManager.bMinimize)
-		{
-			guiManager.AddGroup(params_1);
-		}
+		guiManager.AddGroup(params_1);
 		guiManager.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
@@ -200,16 +196,13 @@ void ofApp::draw_SurfingWidgets_2()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_3() 
+void ofApp::draw_SurfingWidgets_3()
 {
 	if (guiManager.beginWindowSpecial(2))
 	{
 		guiManager.AddLabelBig("> Window\nSpecial 3", false);
-		//if (!guiManager.bMinimize)
-		{
-			guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
-			guiManager.Add(amount2, OFX_IM_KNOB, 2);
-		}
+		guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
+		guiManager.Add(amount2, OFX_IM_KNOB, 2);
 		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
 		guiManager.AddSpacingBigSeparated();
 		guiManager.AddGroup(params_2);
@@ -226,13 +219,10 @@ void ofApp::draw_SurfingWidgets_4()
 		guiManager.AddLabelBig("> Window\nSpecial 4", false);
 		guiManager.AddGroup(params_3);
 		guiManager.AddSpacingSeparated();
-		//if (!guiManager.bMinimize)
-		{
-			guiManager.Add(size2, OFX_IM_HSLIDER_BIG);
-			guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
-			guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
-			guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
-		}
+		guiManager.Add(size2, OFX_IM_HSLIDER_BIG);
+		guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
+		guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
+		guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
 
 		guiManager.endWindowSpecial();
 	}

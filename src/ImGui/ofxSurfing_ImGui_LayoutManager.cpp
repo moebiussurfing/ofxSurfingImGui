@@ -47,8 +47,8 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// Enable "Windows Special Organizer"
 	// Customize names
 	//setNameWindowsSpecialsOrganizer("ORGANIZER");
-	//windowPanels.setNameWindowsSpecialsEnableGlobal("Show All");
-	//windowPanels.setPath(path_Global);
+	//windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal("Show All");
+	//windowsSpecialsOrganizer.setPath(path_Global);
 }
 
 //--------------------------------------------------------------
@@ -255,6 +255,10 @@ void ofxSurfing_ImGui_Manager::startup()
 	if (bDockingLayoutPresetsEngine)
 	{
 		setupLayout(4); // Init Default Layout with 4 presets.
+
+		//--
+
+		appLayoutIndex = appLayoutIndex;
 	}
 
 	//-
@@ -269,36 +273,35 @@ void ofxSurfing_ImGui_Manager::startup()
 		initiatieSpecialWindowsOrganizer();
 
 		//// Customize names
-		//windowPanels.setNameWindowsSpecialsEnableGlobal("Show Global");
+		//windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal("Show Global");
 		//setNameWindowsSpecialsOrganizer("Organizer");
 
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
-			windowPanels.setHideWindows(true);
-
-			// Docking mode has the GUI toggles in other panels..
-			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
-			{
-				//// workflow
-				//// force disable to avoid collide settings layout!
-				//windowPanels.bGui_WindowsSpecials = false;
-			}
+			// workflow
+			windowsSpecialsOrganizer.setHideWindows(true);
 		}
 
-		if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+		// Docking mode has the GUI toggles in other panels..
+		else
 		{
+			//// workflow
+			//// force disable to avoid collide settings layout!
+			//windowsSpecialsOrganizer.bGui_WindowsSpecials = false;
 		}
 	}
+
+	//--
+
+	//if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
+	//{
+	//}
 
 	//--
 
 	// Startup
 
 	loadAppSettings();
-
-	//--
-
-	appLayoutIndex = appLayoutIndex;
 
 	//--
 
@@ -649,9 +652,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager() {
 			{
 				ImGui::Spacing();
 
-				for (int i = 0; i < windowsAtributes.size(); i++)
+				for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 				{
-					AddToggleRoundedButton(windowsAtributes[i].bGui);
+					AddToggleRoundedButton(windowsSpecialsLayouts[i].bGui);
 				}
 
 				ImGui::Spacing();
@@ -1024,14 +1027,14 @@ void ofxSurfing_ImGui_Manager::begin() {
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		// Main Panels Controller
-		if (windowPanels.isIntitiated())
+		if (windowsSpecialsOrganizer.isIntitiated())
 		{
 			//TODO:
 			// Docking mode has the GUI toggles in other panels..
 
 			if (surfingImGuiMode != IM_GUI_MODE_INSTANTIATED_DOCKING)
 			{
-				if (windowPanels.bGui_WindowsSpecials) drawWindowsSpecialsOrganizer();
+				if (windowsSpecialsOrganizer.bGui_WindowsSpecials) drawWindowsSpecialsOrganizer();
 			}
 		}
 	}
@@ -1209,6 +1212,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 	_currWindowsSpecial++;
 	bool b = beginWindowSpecial(_currWindowsSpecial);
+
 	return b;
 }
 
@@ -1224,7 +1228,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	// Skip window if hidden
 
-	if (index > windowsAtributes.size() - 1 || index == -1)
+	if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 	{
 		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 		return false;
@@ -1232,48 +1236,49 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	//--
 
-	if (!windowsAtributes[index].bGui.get()) return false;
+	if (!windowsSpecialsLayouts[index].bGui.get()) return false;
 
 	//--
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (!windowPanels.bGui_ShowAll.get()) return false;
+		if (!windowsSpecialsOrganizer.bGui_ShowAll.get()) return false;
 
 		//--
 
-		if (windowPanels.bLinkedWindowsSpecial) {
-
+		if (windowsSpecialsOrganizer.bLinkedWindowsSpecial)
+		{
 			//TODO: make refresh faster
-			windowPanels.update();
+			windowsSpecialsOrganizer.update();
 
-			windowPanels.runState(index);
+			windowsSpecialsOrganizer.runShapeState(index);
 		}
 
-		if (!windowPanels.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
+		if (!windowsSpecialsOrganizer.bHeaders) flags += ImGuiWindowFlags_NoDecoration;
 	}
 
 	//--
 
-	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
-	//if (windowsAtributes[index].bSpecialWindow.get())
+	//if (windowsSpecialsLayouts[index].bSpecialWindow.get())
 	//{
-	//	if (windowsAtributes[index].bAutoResize.get()) {
+	//	if (windowsSpecialsLayouts[index].bAutoResize.get()) {
 	//		flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//	}
 	//}
+	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui.getName().c_str(), (bool*)&windowsSpecialsLayouts[index].bGui.get(), flags);
 
 	//--
 
-	bool b = beginWindow(windowsAtributes[index].bGui.getName().c_str(), (bool*)&windowsAtributes[index].bGui.get(), flags);
+	bool b = beginWindow(windowsSpecialsLayouts[index].bGui);
 
 	//--
 
 	//TODO:
 	// workaround
-	////if (!windowPanels.bGui_ShowAll.get()) return false;
-	//if (!windowsAtributes[index].bGui.get()) return false;
+	////if (!windowsSpecialsOrganizer.bGui_ShowAll.get()) return false;
+	//if (!windowsSpecialsLayouts[index].bGui.get()) return false;
 
 	//refreshLayout();
 
@@ -1289,26 +1294,26 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	//--
 
-	if (index > windowsAtributes.size() - 1)
+	if (index > windowsSpecialsLayouts.size() - 1)
 	{
 		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 		return;
 	}
 
 	//--
-	 
+
 	// skip window if hidden
 
-	if (!windowsAtributes[index].bGui.get()) return;
+	if (!windowsSpecialsLayouts[index].bGui.get()) return;
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (!windowPanels.bGui_ShowAll.get()) return;
+		if (!windowsSpecialsOrganizer.bGui_ShowAll.get()) return;
 	}
 
 	//--
 
-	//if (windowsAtributes[_currWindowsSpecial].bSpecialWindow.get())
+	//if (windowsSpecialsLayouts[_currWindowsSpecial].bSpecialWindow.get())
 	//{
 	//	drawAdvancedControls();
 	//}
@@ -1317,9 +1322,12 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (windowPanels.bLinkedWindowsSpecial)
+		if (windowsSpecialsOrganizer.bLinkedWindowsSpecial)
 		{
-			windowPanels.getState(index);
+			windowsSpecialsOrganizer.getShapeState(index);
+
+			//TODO: make refresh faster
+			//windowsSpecialsOrganizer.update();
 		}
 	}
 
@@ -1474,9 +1482,9 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	// 1.1 Store all the window panels show toggles
 	// we will remember, on each layout preset, if a window is visible or not!
 
-	for (int i = 0; i < windowsAtributes.size(); i++)
+	for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 	{
-		params_LayoutsVisible.add(windowsAtributes[i].bGui);
+		params_LayoutsVisible.add(windowsSpecialsLayouts[i].bGui);
 	}
 
 	//--
@@ -1503,7 +1511,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		params_LayoutsExtra.add(windowPanels.getParamsUser());
+		params_LayoutsExtra.add(windowsSpecialsOrganizer.getParamsUser());
 	}
 
 	//--
@@ -1989,8 +1997,8 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 					}
 
 					// Toggle panels to true
-					for (int i = 0; i < windowsAtributes.size(); i++) {
-						windowsAtributes[i].bGui.set(true);
+					for (int i = 0; i < windowsSpecialsLayouts.size(); i++) {
+						windowsSpecialsLayouts[i].bGui.set(true);
 					}
 
 					saveAppLayout((appLayoutIndex.get()));
@@ -2010,7 +2018,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 		{
 			if (ImGui::CollapsingHeader(nameWindowSpecialsPanel.c_str(), ImGuiWindowFlags_None))
 			{
-				windowPanels.drawWidgetsOrganizer(bMinimizePresets);
+				windowsSpecialsOrganizer.drawWidgetsOrganizer(bMinimizePresets);
 			}
 		}
 
@@ -2155,9 +2163,9 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		// Hide all modules / gui toggles
 		if (appLayoutIndex == -1)
 		{
-			for (int i = 0; i < windowsAtributes.size(); i++)
+			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 			{
-				windowsAtributes[i].bGui.set(false);
+				windowsSpecialsLayouts[i].bGui.set(false);
 			}
 			return; // not required bc loadAppLayout will be skipped when -1
 		}
@@ -2223,16 +2231,16 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 	// Solo Panels Selectors
 	{
 		bool bSomeTrue = false;
-		for (int i = 0; i < windowsAtributes.size(); i++)
+		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
 			int iTrue = -1;
-			if (name == windowsAtributes[i].bGui.getName() && windowsAtributes[i].bGui.get()) {
+			if (name == windowsSpecialsLayouts[i].bGui.getName() && windowsSpecialsLayouts[i].bGui.get()) {
 				iTrue = i;
 				if (bSolo.get())
 				{
-					for (int i = 0; i < windowsAtributes.size(); i++)
+					for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 					{
-						if (iTrue != i && iTrue != -1) windowsAtributes[i].bGui.set(false);
+						if (iTrue != i && iTrue != -1) windowsSpecialsLayouts[i].bGui.set(false);
 					}
 					return;
 				}
@@ -2369,7 +2377,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		//-
 
-		const int NUM_WIDGETS = windowsAtributes.size(); // expected num widgets
+		const int NUM_WIDGETS = windowsSpecialsLayouts.size(); // expected num widgets
 		const int NUM_WIDGETS_EXTRA_LANDSCAPE = 5;
 		//const int NUM_WIDGETS_EXTRA_LANDSCAPE = 6; // with autoresize
 
@@ -2416,9 +2424,9 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 
 		// 1. Populate all toggles
 
-		for (int i = 0; i < windowsAtributes.size(); i++)
+		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
-			ofxImGuiSurfing::AddBigToggle(windowsAtributes[i].bGui, _w, _h);
+			ofxImGuiSurfing::AddBigToggle(windowsSpecialsLayouts[i].bGui, _w, _h);
 			if (bLandscape) ImGui::SameLine();
 		}
 
@@ -2460,18 +2468,18 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPanels()
 			if (bSolo) bSolo.set(false);
 
 			bool b = true;
-			for (int i = 0; i < windowsAtributes.size(); i++)
+			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 			{
-				windowsAtributes[i].bGui.set(b);
+				windowsSpecialsLayouts[i].bGui.set(b);
 			}
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("None", ImVec2(_w50, _hWid)))
 		{
 			bool b = false;
-			for (int i = 0; i < windowsAtributes.size(); i++)
+			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 			{
-				windowsAtributes[i].bGui.set(b);
+				windowsSpecialsLayouts[i].bGui.set(b);
 			}
 		}
 
@@ -2884,7 +2892,7 @@ void ofxSurfing_ImGui_Manager::drawSpecialWindowsPanel()
 		//if (bAutoResizePanels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 		//if (beginWindow("Specials", NULL, window_flags))
 		{
-			const int NUM_WIDGETS = windowsAtributes.size(); // expected num widgets
+			const int NUM_WIDGETS = windowsSpecialsLayouts.size(); // expected num widgets
 
 			float _spcx = ImGui::GetStyle().ItemSpacing.x;
 			float _spcy = ImGui::GetStyle().ItemSpacing.y;
@@ -2896,13 +2904,13 @@ void ofxSurfing_ImGui_Manager::drawSpecialWindowsPanel()
 
 			float _w = ofxImGuiSurfing::getWidgetsWidth(_amnt);
 			float _h = 1 * ofxImGuiSurfing::getWidgetsHeightRelative();
-			//float _w = ofxImGuiSurfing::getWidgetsWidth(windowsAtributes.size());
+			//float _w = ofxImGuiSurfing::getWidgetsWidth(windowsSpecialsLayouts.size());
 
 			for (int i = 0; i < NUM_WIDGETS; i++)
 			{
-				if (i > windowsAtributes.size() - 1) continue;
+				if (i > windowsSpecialsLayouts.size() - 1) continue;
 
-				ofxImGuiSurfing::AddBigToggle(windowsAtributes[i].bGui, _w, _h);
+				ofxImGuiSurfing::AddBigToggle(windowsSpecialsLayouts[i].bGui, _w, _h);
 
 				//if ((i + 1) % _amnt != 0 && i < NUM_WIDGETS - 1) ImGui::SameLine();
 			}

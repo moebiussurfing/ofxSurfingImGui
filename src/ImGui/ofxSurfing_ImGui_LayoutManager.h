@@ -974,7 +974,7 @@ private:
 
 					// Organizer Special Windows
 					if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
-						Add(windowPanels.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
+						Add(windowsSpecialsOrganizer.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
 					}
 
 					// Auto resize
@@ -1241,7 +1241,7 @@ public:
 	void setNameWindowsSpecialsOrganizer(std::string name) // Just optional to customize name.
 	{
 		nameWindowSpecialsPanel = name;
-		windowPanels.bGui_WindowsSpecials.setName(name);
+		windowsSpecialsOrganizer.bGui_WindowsSpecials.setName(name);
 	}
 
 	//--------------------------------------------------------------
@@ -1249,12 +1249,12 @@ public:
 	{
 		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 
-		if (beginWindow(windowPanels.bGui_WindowsSpecials))
+		if (beginWindow(windowsSpecialsOrganizer.bGui_WindowsSpecials))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			windowPanels.drawWidgetsOrganizer(bMinimize);
+			windowsSpecialsOrganizer.drawWidgetsOrganizer(bMinimize);
 
 			endWindow();
 		}
@@ -1270,11 +1270,11 @@ public:
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			windowPanels.drawWidgetsAlignHelpers(bMinimize);
+			windowsSpecialsOrganizer.drawWidgetsAlignHelpers(bMinimize);
 
 			if (!bMinimize) {
 				AddSpacing();
-				ofxImGuiSurfing::AddStepperInt(windowPanels.pad);
+				ofxImGuiSurfing::AddStepperInt(windowsSpecialsOrganizer.pad);
 			}
 
 			endWindow();
@@ -1283,7 +1283,7 @@ public:
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
-		return windowPanels.bGui_ShowAll.get();
+		return windowsSpecialsOrganizer.bGui_ShowAll.get();
 	}
 
 	//--
@@ -1312,7 +1312,7 @@ public:
 		//ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
 	};
 
-	vector<SurfingImGuiWindowAtributes> windowsAtributes; // Handles only the manually pre added windows.
+	vector<SurfingImGuiWindowAtributes> windowsSpecialsLayouts; // Handles only the manually pre added special windows.
 
 	//----
 
@@ -1320,20 +1320,20 @@ public:
 
 private:
 
-	WindowPanels windowPanels;
+	WindowPanels windowsSpecialsOrganizer;
 
 public:
 
 	//--------------------------------------------------------------
 	void setNameWindowsSpecialsEnableGlobal(std::string name) {
-		windowPanels.setNameWindowsSpecialsEnableGlobal(name);
+		windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
 	}
 
 public:
 
 	//--------------------------------------------------------------
 	void clearWindowsSpecial() {
-		windowsAtributes.clear();
+		windowsSpecialsLayouts.clear();
 	}
 
 	//--------------------------------------------------------------
@@ -1343,13 +1343,13 @@ public:
 		win.bGui.makeReferenceTo(_bGui);
 		win.setSpecialWindow(powered);
 
-		windowsAtributes.push_back(win);
+		windowsSpecialsLayouts.push_back(win);
 
 		params_WindowSpecials.add(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
-			windowPanels.add(_bGui);
+			windowsSpecialsOrganizer.add(_bGui);
 		}
 	}
 
@@ -1361,35 +1361,35 @@ public:
 		win.bGui.makeReferenceTo(_bGui);
 		win.setSpecialWindow(bPowered);
 
-		windowsAtributes.push_back(win);
+		windowsSpecialsLayouts.push_back(win);
 
 		params_WindowSpecials.add(_bGui);
 		bWindowSpecials.push_back(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
-			windowPanels.add(_bGui);
+			windowsSpecialsOrganizer.add(_bGui);
 		}
 	}
 
 	//--------------------------------------------------------------
 	std::string getWindowSpecialName(int index) {
-		if (index > windowsAtributes.size() - 1 || index == -1)
+		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 			return "-1";
 		}
 
-		return windowsAtributes[index].bGui.getName();
+		return windowsSpecialsLayouts[index].bGui.getName();
 	}
 
 	////--------------------------------------------------------------
 	//ofRectangle getRectangleWindowSpecial(int index) {
-	//	if (index > windowsAtributes.size() - 1 || index == -1)
+	//	if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 	//	{
 	//		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 	//	}
-	//	return windowsAtributes[index].rectShapeWindow;
+	//	return windowsSpecialsLayouts[index].rectShapeWindow;
 	//}
 
 	////--------------------------------------------------------------
@@ -1400,26 +1400,26 @@ public:
 	//--------------------------------------------------------------
 	void initiatieSpecialWindowsOrganizer()
 	{
-		windowPanels.setPath(path_Global);
+		windowsSpecialsOrganizer.setPath(path_Global);
 
-		windowPanels.setupInitiate();
+		windowsSpecialsOrganizer.setupInitiate();
 
-		//windowPanels.bLinkedWindowsSpecial.set(true);//force
+		//windowsSpecialsOrganizer.bLinkedWindowsSpecial.set(true);//force
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
-		return windowPanels.bLinkedWindowsSpecial;
+		return windowsSpecialsOrganizer.bLinkedWindowsSpecial;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialsGuiToggle() { // main toggle to show the panel
-		return windowPanels.bGui_WindowsSpecials;
+		return windowsSpecialsOrganizer.bGui_WindowsSpecials;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialsGuiToggleAllGlobal() { // global toggle to show/hide the all panels
-		return windowPanels.bGui_ShowAll;
+		return windowsSpecialsOrganizer.bGui_ShowAll;
 	}
 
 	//--------------------------------------------------------------
@@ -1427,21 +1427,21 @@ public:
 		return bGui_WindowsAlignHelpers;
 	}
 
-	// Orientation cascade windows
-	//--------------------------------------------------------------
-	void setSpecialWindowsOrganizerOrientationHorizontal() {
-		windowPanels.bOrientation.set(false);
-	}
+	//// Orientation cascade windows
+	////--------------------------------------------------------------
+	//void setSpecialWindowsOrganizerOrientationHorizontal() {
+	//	windowsSpecialsOrganizer.bOrientation.set(false);
+	//}
 
-	//--------------------------------------------------------------
-	void setSpecialWindowsOrganizerOrientationVertical() {
-		windowPanels.bOrientation.set(true);
-	}
+	////--------------------------------------------------------------
+	//void setSpecialWindowsOrganizerOrientationVertical() {
+	//	windowsSpecialsOrganizer.bOrientation.set(true);
+	//}
 
-	//--------------------------------------------------------------
-	void setToggleSpecialWindowsOrganizerOrientation() {
-		windowPanels.bOrientation.set(!windowPanels.bOrientation.get());
-	}
+	////--------------------------------------------------------------
+	//void setToggleSpecialWindowsOrganizerOrientation() {
+	//	windowsSpecialsOrganizer.bOrientation.set(!windowsSpecialsOrganizer.bOrientation.get());
+	//}
 
 	//--
 
@@ -1500,19 +1500,19 @@ public:
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowSpecialVisible(int index)
 	{
-		if (index > windowsAtributes.size() - 1 || index == -1)
+		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
 			return b;
 		}
 
-		return windowsAtributes[index].bGui;
+		return windowsSpecialsLayouts[index].bGui;
 	}
 	// Easy populate all the toggles .
 	//--------------------------------------------------------------
 	void drawWindowSpecialsGuiToggles() {
-		for (size_t i = 0; i < windowsAtributes.size(); i++)
+		for (size_t i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
 			Add(getWindowSpecialGuiToggle(i), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		}
@@ -1521,19 +1521,19 @@ public:
 	//--------------------------------------------------------------
 	void setWindowSpecialToggleVisibleAllGlobal()
 	{
-		windowPanels.bGui_ShowAll = !windowPanels.bGui_ShowAll;
+		windowsSpecialsOrganizer.bGui_ShowAll = !windowsSpecialsOrganizer.bGui_ShowAll;
 	}
 
 	//--------------------------------------------------------------
 	void setWindowSpecialToggleVisible(int index)
 	{
-		if (index > windowsAtributes.size() - 1 || index == -1)
+		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
 			return;
 		}
 
-		windowsAtributes[index].bGui = !windowsAtributes[index].bGui;
+		windowsSpecialsLayouts[index].bGui = !windowsSpecialsLayouts[index].bGui;
 	}
 
 	//----
@@ -1798,9 +1798,9 @@ public:
 
 	//--------------------------------------------------------------
 	void setShowAllPanels(bool b) {
-		for (int i = 0; i < windowsAtributes.size(); i++)
+		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
-			windowsAtributes[i].bGui.set(b);
+			windowsSpecialsLayouts[i].bGui.set(b);
 		}
 		bMenu = b;
 
