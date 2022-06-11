@@ -35,6 +35,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);
 
+
 	//-
 
 	// -> TODO: BUG?: 
@@ -125,7 +126,7 @@ void ofxSurfing_ImGui_Manager::setupDocking()
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantiated gui
+void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantiated GUI. Called by all modes.
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -133,6 +134,9 @@ void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantia
 
 	// MouseWheel link
 	widgetsManager.bMouseWheel.makeReferenceTo(bMouseWheel);
+
+	// MouseWheel link
+	windowsSpecialsOrganizer.bDebug.makeReferenceTo(bDebug);
 
 	//-
 

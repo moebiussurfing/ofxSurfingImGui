@@ -156,6 +156,7 @@ namespace ofxImGuiSurfing
 			params_User.add(bAlignWindowsX);
 			params_User.add(bAlignWindowsCascade);
 			params_User.add(bAlignWindowsReset);
+			//params_User.add(bDebug);
 
 			// exclude
 			bAlignWindowsY.setSerializable(false);
@@ -173,6 +174,8 @@ namespace ofxImGuiSurfing
 			// Save
 			ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
 		}
+		
+		ofParameter<bool> bDebug{ "Debug", false };
 
 		//--
 
@@ -276,7 +279,7 @@ namespace ofxImGuiSurfing
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
-		bool bAlignShapes_PRE;
+		//bool bAlignShapes_PRE;
 
 		//--
 
@@ -617,6 +620,8 @@ namespace ofxImGuiSurfing
 								//	windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
 								//}
 							}
+							
+							doReOrganize();
 
 							//--
 
@@ -632,33 +637,33 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		////--------------------------------------------------------------
-		//void doReOrganize()
-		//{
-		//	ofLogNotice(__FUNCTION__);
+		//--------------------------------------------------------------
+		void doReOrganize()
+		{
+			ofLogNotice(__FUNCTION__);
 
-		//	//bDISABLE_CALLBACKS = true;
+			//bDISABLE_CALLBACKS = true;
 
-		//	// Reorganize sorting indexes
+			// Reorganize sorting indexes
 
-		//	// 1. Disable all
-		//	for (int i = 0; i < windowsSpecialsOrganizer.size(); i++)
-		//	{
-		//		windowsSpecialsOrganizer[i].pos = -1;
-		//		windowsSpecialsOrganizer[i].bEnable.setWithoutEventNotifications(false);
-		//	}
+			// 1. Disable all
+			for (int i = 0; i < windowsSpecialsOrganizer.size(); i++)
+			{
+				windowsSpecialsOrganizer[i].pos = -1;
+				windowsSpecialsOrganizer[i].bEnable.setWithoutEventNotifications(false);
+			}
 
-		//	// 2. Iterate each item of the queue and set the current position index
-		//	for (int i = 0; i < queueWindowsVisible.size(); i++)
-		//	{
-		//		int id = queueWindowsVisible[i];
+			// 2. Iterate each item of the queue and set the current position index
+			for (int i = 0; i < queueWindowsVisible.size(); i++)
+			{
+				int id = queueWindowsVisible[i];
 
-		//		windowsSpecialsOrganizer[id].pos = i;
-		//		windowsSpecialsOrganizer[id].bEnable.setWithoutEventNotifications(true);
-		//	}
+				windowsSpecialsOrganizer[id].pos = i;
+				windowsSpecialsOrganizer[id].bEnable.setWithoutEventNotifications(true);
+			}
 
-		//	//bDISABLE_CALLBACKS = false;
-		//}
+			//bDISABLE_CALLBACKS = false;
+		}
 
 		//--
 
@@ -904,8 +909,11 @@ namespace ofxImGuiSurfing
 			//bLockedWidth = bLockedWidth;
 			//bLockedHeight = bLockedHeight;
 			//bAlignShapes = bAlignShapes;
-			bAlignShapes_PRE = bAlignShapes;
-			bAlignShapes = !bAlignShapes;
+			//bAlignShapes_PRE = bAlignShapes;
+			//bAlignShapes = !bAlignShapes;
+
+			//TODO:
+			doReOrganize();
 		}
 
 		//--
@@ -1067,7 +1075,8 @@ namespace ofxImGuiSurfing
 
 						//static bool bOpen = false;
 						//ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-						ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+						//ImGuiColorEditFlags _flagw = ImGuiWindowFlags_NoCollapse;
+						ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
 						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 						{
@@ -1084,7 +1093,6 @@ namespace ofxImGuiSurfing
 
 							// Debug
 
-							static ofParameter<bool> bDebug{ "Debug", false };
 							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 							ImGui::Spacing();
 							if (bDebug)
