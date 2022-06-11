@@ -1222,7 +1222,7 @@ private:
 	//TODO:
 	// To simplify a bit more the API workflow.
 	// Allows to omit the index argument on begin a window...
-	int _currWindowsSpecial = 0;
+	int _indexWindowsSpecials = 0;
 
 	std::string nameWindowSpecialsPanel = "";
 

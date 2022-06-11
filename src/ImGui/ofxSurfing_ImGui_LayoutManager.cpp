@@ -982,7 +982,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 
 	//TODO:
 	// This is used to auto handle indexes and speed up API.. 
-	_currWindowsSpecial = -1;
+	_indexWindowsSpecials = -1;
 
 	//--
 
@@ -1214,8 +1214,8 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 //TODO: a faster mode to avoid use indexes..
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
-	_currWindowsSpecial++;
-	bool b = beginWindowSpecial(_currWindowsSpecial);
+	_indexWindowsSpecials++;
+	bool b = beginWindowSpecial(_indexWindowsSpecials);
 
 	return b;
 }
@@ -1224,7 +1224,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 {
 	//TODO:
-	_currWindowsSpecial = index; // workflow
+	_indexWindowsSpecials = index; // workflow
 
 	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 
@@ -1253,6 +1253,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 		if (windowsSpecialsOrganizer.bLinkedWindowsSpecial)
 		{
 			//TODO: make refresh faster
+			// can be moved to global begin() to reduce calls?
 			windowsSpecialsOrganizer.update();
 
 			windowsSpecialsOrganizer.runShapeState(index);
@@ -1264,7 +1265,6 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//--
 
 	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
-
 	//if (windowsSpecialsLayouts[index].bSpecialWindow.get())
 	//{
 	//	if (windowsSpecialsLayouts[index].bAutoResize.get()) {
@@ -1283,7 +1283,6 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	// workaround
 	////if (!windowsSpecialsOrganizer.bGui_ShowAll.get()) return false;
 	//if (!windowsSpecialsLayouts[index].bGui.get()) return false;
-
 	//refreshLayout();
 
 	//--
@@ -1294,7 +1293,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 {
-	if (index == -1) index = _currWindowsSpecial; // workaround
+	if (index == -1) index = _indexWindowsSpecials; // workaround
 
 	//--
 
@@ -1317,7 +1316,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	//--
 
-	//if (windowsSpecialsLayouts[_currWindowsSpecial].bSpecialWindow.get())
+	//if (windowsSpecialsLayouts[_indexWindowsSpecials].bSpecialWindow.get())
 	//{
 	//	drawAdvancedControls();
 	//}
@@ -1338,7 +1337,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 	//--
 
 	//workflow: to avoid use the index. but requires sequencial calling
-	//_currWindowsSpecial++;
+	//_indexWindowsSpecials++;
 
 	ImGui::End();
 }
