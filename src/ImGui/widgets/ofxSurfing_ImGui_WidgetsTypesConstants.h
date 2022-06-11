@@ -311,7 +311,7 @@ namespace ofxImGuiSurfing
 
 	// 3.
 
-	// Adds mouse wheel control to the last/previoues ofParam widget (float/int) rendered.
+	// Adds mouse wheel control to the last/previous ofParam widget (float/int) rendered.
 
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
@@ -324,22 +324,22 @@ namespace ofxImGuiSurfing
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4, PANEL_WIDGETS_HEIGHT_MIN * 8); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, PANEL_WIDGETS_HEIGHT_MIN * 8.f); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, PANEL_WIDGETS_HEIGHT_MIN * 2); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, PANEL_WIDGETS_HEIGHT_MIN * 5); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, PANEL_WIDGETS_HEIGHT_MIN * 5.f); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
 { \
 ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.5f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

@@ -1377,6 +1377,7 @@ public:
 		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+
 			return "-1";
 		}
 

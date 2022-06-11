@@ -132,6 +132,7 @@ void ofApp::draw_MainWindow() {
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		// 2. To hide or show the "Align Windows Helpers" window (ALIGNERS):
 		guiManager.Add(guiManager.getWindowsAlignHelpersGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		guiManager.Add(guiManager.bDebug, OFX_IM_TOGGLE_ROUNDED);
 		guiManager.AddSpacingSeparated();
 
 		//--

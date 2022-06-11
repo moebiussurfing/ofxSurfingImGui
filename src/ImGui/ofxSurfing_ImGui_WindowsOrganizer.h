@@ -174,7 +174,7 @@ namespace ofxImGuiSurfing
 			// Save
 			ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
 		}
-		
+
 		ofParameter<bool> bDebug{ "Debug", false };
 
 		//--
@@ -377,37 +377,6 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			//else if (name == position_Anchor.getName())
-			//{
-			//	//// Position linked to first queued window
-			//	//if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
-
-			//	//// get the index of the first window
-			//	//int id = queueWindowsVisible[0];
-			//	//windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
-
-			//	//doApplyLinkWindows();
-			//}
-
-			//-
-
-			////TODO: should recalculate..
-			//else if (name == bHeaders.getName())
-			//{
-			//	doApplyLinkWindows();
-			//}
-
-			//-
-
-			//else if (name == bGui_ShowAll.getName()) // global show
-			//{
-			//	// workaround 
-			//	// to avoid bad dimension on startup
-			//	bOrientation = bOrientation;
-			//}
-
-			//--
-
 			// Align Shapes
 
 			else if (name == bAlignShapes.getName())
@@ -477,8 +446,6 @@ namespace ofxImGuiSurfing
 						bLockedHeight = false;
 					}
 				}
-
-				//doApplyLinkWindows();
 			}
 
 			//--
@@ -487,16 +454,44 @@ namespace ofxImGuiSurfing
 			{
 				if (!bOrientation) orientation_Index = 0;
 				else orientation_Index = 1;
-
-				//doApplyLinkWindows();
 			}
 
 			//--
 
 			else if (name == pad.getName())
 			{
-				//doApplyLinkWindows();
 			}
+
+			//--
+
+			//else if (name == position_Anchor.getName())
+			//{
+			//	//// Position linked to first queued window
+			//	//if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
+
+			//	//// get the index of the first window
+			//	//int id = queueWindowsVisible[0];
+			//	//windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
+
+			//	//doApplyLinkWindows();
+			//}
+
+			//-
+
+			////TODO: should recalculate..
+			//else if (name == bHeaders.getName())
+			//{
+			//	doApplyLinkWindows();
+			//}
+
+			//-
+
+			//else if (name == bGui_ShowAll.getName()) // global show
+			//{
+			//	// workaround 
+			//	// to avoid bad dimension on startup
+			//	bOrientation = bOrientation;
+			//}
 		}
 
 		//--
@@ -504,6 +499,8 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void Changed_Params_Enablers(ofAbstractParameter& e) // each window show toggle changed
 		{
+			if (windowsSpecialsOrganizer.size() == 0) return;
+
 			if (bDISABLE_CALLBACKS) return;
 
 			bDISABLE_CALLBACKS = true;
@@ -533,33 +530,21 @@ namespace ofxImGuiSurfing
 
 					// Just ENABLED / Add 
 
-					//if (p.bGui)
-					if (p.bGui && p.indexPos == -1 )
+					if (p.bGui && p.indexPos == -1)
 					{
 						// It was hidden. Now will be queued and visible at end of the queue!
+						// put new window at end of the queue
+						queueWindowsVisible.push_back(p.id); // which one (from the full queue with all visible or not) is it
+						p.indexPos = queueWindowsVisible.size() - 1; // get last index/size
 
-						////if (p.indexPos == -1 || !p.bGui)
-						//if (p.indexPos == -1)
-						{
-							// put new window at end of the queue
-							queueWindowsVisible.push_back(p.id); // which one (from the full queue with all visible or not) is it
-							p.indexPos = queueWindowsVisible.size() - 1; // get last index/size
+						doReOrganize();//not required?
 
-							doReOrganize();//not required?
+						// workflow
+						//doApplyLinkWindows();
 
-							// workflow
-							//doApplyLinkWindows();
+						bDISABLE_CALLBACKS = false;
 
-							bDISABLE_CALLBACKS = false;
-
-							return;
-						}
-						//else
-						//{
-						//	ofLogError(__FUNCTION__) << "indexPos-" << p.indexPos << " should was -1 (disabled)... if " << p.id << " it was disabled";
-						//	bDISABLE_CALLBACKS = false;
-						//	return;
-						//}
+						return;
 					}
 
 					//--
@@ -568,11 +553,12 @@ namespace ofxImGuiSurfing
 
 					else if (!p.bGui)
 					{
-						////if (p.indexPos == -1 || !p.bGui)
 						if (p.indexPos == -1)
 						{
 							ofLogError(__FUNCTION__) << "Should not be disabled... if " << p.id << " it's queued here";
+
 							bDISABLE_CALLBACKS = false;
+
 							return;
 						}
 
@@ -581,36 +567,27 @@ namespace ofxImGuiSurfing
 						else
 						{
 							// Warn if it's the first window to force sort / re arrange!
-							
+
 							// The hidded window is not the first!
 
-							if (p.indexPos != 0) 
+							if (p.indexPos != 0)
 							{
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin() + p.indexPos);
 
 								p.indexPos = -1; // mark as not visible/hidden
 								p.bGui.setWithoutEventNotifications(false); // mark as not visible/hidden
-								//p.bGui = false; // mark as not visible/hidden
-							
+
 								doReOrganize();
 							}
 
 							//--
-							
+
 							// The hidded window is the first!
-	
+
 							else
 							{
-								ofLogWarning() << (__FUNCTION__) << "\n Closing First! Window ID " << p.id;
-
-								////int lastZero = -1;
-								//bool bWasFirst = false;
-								//glm::vec2 _pos(0, 0);
-								//	_pos = windowsSpecialsOrganizer[p.id].getPosition();
-								//	bWasFirst = true;
-								//	//lastZero = p.indexPos;
-								//}
+								ofLogWarning() << (__FUNCTION__) << "Closing First! Window ID " << p.id;
 
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin());
@@ -618,24 +595,16 @@ namespace ofxImGuiSurfing
 								p.indexPos = -1; // mark as not visible/hidden
 								//not required? its false already..
 								p.bGui.setWithoutEventNotifications(false); // mark as not visible/hidden
-								//p.bGui = false; // mark as not visible/hidden
 
 								// We must update all the positions indexes bc we removed one element!
 								doReOrganize();
 
-								//// Kick translate left the first window
-								//if (bWasFirst)
-								//{
-								//	position_Anchor.setWithoutEventNotifications(_pos);
-								//	int id = queueWindowsVisible[0]; // get the index of first window
-								//	windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
-								//}
+								//TODO:
+								int id = queueWindowsVisible[0]; // get the index of first window
+								windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
 							}
 
 							//--
-
-							// workflow
-							//doApplyLinkWindows();
 
 							bDISABLE_CALLBACKS = false;
 
@@ -644,6 +613,8 @@ namespace ofxImGuiSurfing
 					}
 				}
 			}
+
+			bDISABLE_CALLBACKS = false;
 		}
 
 		//--------------------------------------------------------------
@@ -676,12 +647,9 @@ namespace ofxImGuiSurfing
 			//--
 
 			//TODO:
-			float x = position_Anchor.get().x;
-			float y = position_Anchor.get().y;
-			glm::vec2 p(x, y);
 			int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
-			windowsSpecialsOrganizer[id].setPosition(p);
-			
+			windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
+
 			//bDISABLE_CALLBACKS = false;
 		}
 
@@ -830,14 +798,15 @@ namespace ofxImGuiSurfing
 
 			params_Enablers.add(e);
 
-			WindowPanel p;
-
 			////TODO:
 			////better pointers
+			//WindowPanel p;
 			//windowsSpecialsOrganizer.push_back(p);
 			//windowsSpecialsOrganizer.back().id = windowsSpecialsOrganizer.size();
 			//windowsSpecialsOrganizer.back().pos = -1;
 			//windowsSpecialsOrganizer.back().bGui.makeReferenceTo(e);
+
+			WindowPanel p;
 
 			p.id = windowsSpecialsOrganizer.size(); // which special window is
 			p.indexPos = -1; // what position on visible windows queue. -1 = hidden
@@ -1035,9 +1004,7 @@ namespace ofxImGuiSurfing
 				{
 					ofxImGuiSurfing::AddSpacingSeparated();
 
-					//static bool bOpen = false;
-					//ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-					ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+					ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
 					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
@@ -1065,30 +1032,26 @@ namespace ofxImGuiSurfing
 
 						//--
 
-					// Global Enable 
+						// Global Enable 
 
 						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll);//medium
-						//ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));//medium
-						//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bGui_ShowAll, ImVec2(-1, -1));//small
 
 						if (bGui_ShowAll)
 						{
+							ImGui::Indent();
 							for (auto& p : windowsSpecialsOrganizer)
 							{
-								ImGui::Indent();
 								ofxImGuiSurfing::AddToggleRoundedButton(p.bGui);
-								//ofxImGuiSurfing::AddToggleRoundedButton(p.bGui, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-								//ofxImGuiSurfing::AddBigToggle(p.bGui, ImVec2(-1, -1));
-								ImGui::Unindent();
 							}
+							ImGui::Unindent();
 
 							ImGui::Spacing();
 						}
 					}
 				}
 
-				//ImGui::Spacing();
-
+				//--
+				 
 				// Settings
 
 				if (!bMinimized)
@@ -1097,9 +1060,6 @@ namespace ofxImGuiSurfing
 					{
 						ofxImGuiSurfing::AddSpacingSeparated();
 
-						//static bool bOpen = false;
-						//ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-						//ImGuiColorEditFlags _flagw = ImGuiWindowFlags_NoCollapse;
 						ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
 						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
@@ -1111,7 +1071,7 @@ namespace ofxImGuiSurfing
 							}
 							ImGui::PopItemWidth();
 
-							//-
+							//--
 
 							ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1137,6 +1097,12 @@ namespace ofxImGuiSurfing
 								std::string ss4 = "";
 								ss4 += "Anchor \n\n";
 								ss4 += ofToString(position_Anchor.get());
+								if (queueWindowsVisible.size() > 0) {
+									int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
+									ss4 += "\n";
+									ss4 += "" + ofToString(id);
+								}
+
 								ImGui::TextWrapped(ss4.c_str());
 								ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1179,6 +1145,9 @@ namespace ofxImGuiSurfing
 								}
 								ImGui::TextWrapped(ss5.c_str());
 								ofxImGuiSurfing::AddSpacingSeparated();
+
+								ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
+								ImGui::TextWrapped(ss1.c_str());
 
 								ImGui::Unindent();
 							}
