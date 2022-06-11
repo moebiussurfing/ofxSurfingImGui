@@ -377,17 +377,17 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			else if (name == position_Anchor.getName())
-			{
-				//// Position linked to first queued window
-				//if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
+			//else if (name == position_Anchor.getName())
+			//{
+			//	//// Position linked to first queued window
+			//	//if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
 
-				//// get the index of the first window
-				//int id = queueWindowsVisible[0];
-				//windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
+			//	//// get the index of the first window
+			//	//int id = queueWindowsVisible[0];
+			//	//windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
 
-				//doApplyLinkWindows();
-			}
+			//	//doApplyLinkWindows();
+			//}
 
 			//-
 
@@ -525,23 +525,27 @@ namespace ofxImGuiSurfing
 				if (p.bGui.getName() == name)
 				{
 					ofLogNotice(__FUNCTION__)
-						<< " Window Id-" << p.id
-						<< " Pos-" << p.indexPos
-						<< " Enabled-" << (p.bGui.get() ? "TRUE" : "FALSE");
+						<< " Window id-" << p.id
+						<< " indexPos-" << p.indexPos
+						<< " bGui-" << (p.bGui.get() ? "TRUE" : "FALSE");
 
 					//--
 
-					// Just enabled / Add 
+					// Just ENABLED / Add 
 
-					if (p.bGui)
+					//if (p.bGui)
+					if (p.bGui && p.indexPos == -1 )
 					{
 						// It was hidden. Now will be queued and visible at end of the queue!
 
-						if (p.indexPos == -1)
+						////if (p.indexPos == -1 || !p.bGui)
+						//if (p.indexPos == -1)
 						{
 							// put new window at end of the queue
 							queueWindowsVisible.push_back(p.id); // which one (from the full queue with all visible or not) is it
 							p.indexPos = queueWindowsVisible.size() - 1; // get last index/size
+
+							doReOrganize();//not required?
 
 							// workflow
 							//doApplyLinkWindows();
@@ -550,37 +554,37 @@ namespace ofxImGuiSurfing
 
 							return;
 						}
-						else
-						{
-							ofLogError(__FUNCTION__) << "Pos-" << p.indexPos << " should was -1 (disabled)... if " << p.id << " it was disabled";
-
-							bDISABLE_CALLBACKS = false;
-
-							return;
-						}
+						//else
+						//{
+						//	ofLogError(__FUNCTION__) << "indexPos-" << p.indexPos << " should was -1 (disabled)... if " << p.id << " it was disabled";
+						//	bDISABLE_CALLBACKS = false;
+						//	return;
+						//}
 					}
 
 					//--
 
-					// Just disabled / Remove
+					// Just DISABLED / Remove
 
-					else
+					else if (!p.bGui)
 					{
+						////if (p.indexPos == -1 || !p.bGui)
 						if (p.indexPos == -1)
 						{
 							ofLogError(__FUNCTION__) << "Should not be disabled... if " << p.id << " it's queued here";
-
 							bDISABLE_CALLBACKS = false;
-
 							return;
 						}
+
+						//--
+
 						else
 						{
 							// Warn if it's the first window to force sort / re arrange!
 							
 							// The hidded window is not the first!
 
-							if (!p.indexPos == 0) 
+							if (p.indexPos != 0) 
 							{
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin() + p.indexPos);
@@ -588,6 +592,8 @@ namespace ofxImGuiSurfing
 								p.indexPos = -1; // mark as not visible/hidden
 								p.bGui.setWithoutEventNotifications(false); // mark as not visible/hidden
 								//p.bGui = false; // mark as not visible/hidden
+							
+								doReOrganize();
 							}
 
 							//--
@@ -609,11 +615,13 @@ namespace ofxImGuiSurfing
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin());
 
-								p.bGui = false; // mark as not visible/hidden
 								p.indexPos = -1; // mark as not visible/hidden
+								//not required? its false already..
+								p.bGui.setWithoutEventNotifications(false); // mark as not visible/hidden
+								//p.bGui = false; // mark as not visible/hidden
 
 								// We must update all the positions indexes bc we removed one element!
-								//doReOrganize();
+								doReOrganize();
 
 								//// Kick translate left the first window
 								//if (bWasFirst)
@@ -623,13 +631,11 @@ namespace ofxImGuiSurfing
 								//	windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
 								//}
 							}
-							
-							doReOrganize();
 
 							//--
 
 							// workflow
-							doApplyLinkWindows();
+							//doApplyLinkWindows();
 
 							bDISABLE_CALLBACKS = false;
 
@@ -644,6 +650,8 @@ namespace ofxImGuiSurfing
 		void doReOrganize()
 		{
 			ofLogNotice(__FUNCTION__);
+
+			if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
 
 			//bDISABLE_CALLBACKS = true;
 
@@ -665,6 +673,15 @@ namespace ofxImGuiSurfing
 				windowsSpecialsOrganizer[id].bGui.setWithoutEventNotifications(true);
 			}
 
+			//--
+
+			//TODO:
+			float x = position_Anchor.get().x;
+			float y = position_Anchor.get().y;
+			glm::vec2 p(x, y);
+			int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
+			windowsSpecialsOrganizer[id].setPosition(p);
+			
 			//bDISABLE_CALLBACKS = false;
 		}
 
@@ -676,6 +693,7 @@ namespace ofxImGuiSurfing
 		void doAlignWindowsReset()
 		{
 			ofLogNotice(__FUNCTION__);
+
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
 			ImVector<ImGuiWindow*> windows;
@@ -733,6 +751,8 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsCascade()
 		{
+			ofLogNotice(__FUNCTION__);
+
 			float _padx = 117;
 			float _pady = 25;
 
@@ -822,6 +842,7 @@ namespace ofxImGuiSurfing
 			p.id = windowsSpecialsOrganizer.size(); // which special window is
 			p.indexPos = -1; // what position on visible windows queue. -1 = hidden
 			p.bGui.makeReferenceTo(e); // is visible
+
 			windowsSpecialsOrganizer.push_back(p);
 		}
 
@@ -1188,6 +1209,7 @@ namespace ofxImGuiSurfing
 			// Skip
 			if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
 
+			//TODO:
 			// Read 1st queued position to the anchor
 			int id = queueWindowsVisible[0];
 			glm::vec2 p = windowsSpecialsOrganizer[id].getPosition();
@@ -1204,7 +1226,7 @@ namespace ofxImGuiSurfing
 	private:
 
 		//--------------------------------------------------------------
-		void doApplyLinkWindows()//set the position for all visible windows
+		void doApplyLinkWindows() // set the position for all visible windows
 		{
 			if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
 
@@ -1230,9 +1252,9 @@ namespace ofxImGuiSurfing
 
 			// 2. Position all the visible windows
 
-			int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
-			float x = position_Anchor.get().x;
-			float y = position_Anchor.get().y;
+			int id = 0;
+			float x = 0;
+			float y = 0;
 			float w = 0;
 			float h = 0;
 
@@ -1240,9 +1262,15 @@ namespace ofxImGuiSurfing
 			{
 				id = queueWindowsVisible[i]; // the original id of each window
 
+				// first visible windows acts as anchor!
+				if (i == 0) {
+					x = position_Anchor.get().x;
+					y = position_Anchor.get().y;
+				}
 				glm::vec2 p(x, y);
-
 				windowsSpecialsOrganizer[id].setPosition(p);
+
+				//--
 
 				if (orientation_Index == W_HORIZ)
 				{
