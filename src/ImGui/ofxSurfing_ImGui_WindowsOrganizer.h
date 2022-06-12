@@ -139,7 +139,8 @@ namespace ofxImGuiSurfing
 			params_User.add(bAlignWindowsReset);
 
 			// exclude
-			orientation_Index.setSerializable(false);
+			bOrientation.setSerializable(false);
+			//orientation_Index.setSerializable(false);
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
 			bAlignWindowsCascade.setSerializable(false);
@@ -253,7 +254,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
 		ofParameter<bool> bAlignWindowsReset{ "Reset",false };
 
-		ofParameter<bool> bLinkedWindowsSpecial{ "LINK",  false };
+		ofParameter<bool> bLinkedWindowsSpecial{ "LINK",  true };
 		ofParameter<bool> bOrientation{ "Orientation", false };
 		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
 		ofParameter<bool> bHeaders{ "Headers", true };
@@ -899,21 +900,22 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// fixes
-			//bOrientation = bOrientation;
-			//bLockedWidth = bLockedWidth;
-			//bLockedHeight = bLockedHeight;
-			//bAlignShapes = bAlignShapes;
-			//bAlignShapes_PRE = bAlignShapes;
-			//bAlignShapes = !bAlignShapes;
-
-			//--
-
 			////TODO:
 			//doReOrganize();
 
 			//TODO:
 			if (bLinkedWindowsSpecial) doApplyLinkWindows();
+
+			//--
+
+			// fixes
+			//bOrientation = bOrientation;
+			//bLockedWidth = bLockedWidth;
+			//bLockedHeight = bLockedHeight;
+
+			//bAlignShapes = bAlignShapes;
+			//bAlignShapes_PRE = bAlignShapes;
+			//bAlignShapes = !bAlignShapes;
 		}
 
 		//--

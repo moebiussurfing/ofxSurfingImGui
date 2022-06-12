@@ -125,26 +125,35 @@ void ofApp::draw_MainWindow() {
 	if (guiManager.beginWindow(bGui))
 	{
 		// Extra Panels
+		// Useful for your own GUI's:
 
 		//--
+
+		// A. Toggles to show/hide Main panels.
 
 		// 1. To hide or show the "Special Windows Organizer" window (ORGANIZER):
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 		// 2. To hide or show the "Align Windows Helpers" window (ALIGNERS):
 		guiManager.Add(guiManager.getWindowsAlignHelpersGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-		guiManager.Add(guiManager.bDebug, OFX_IM_TOGGLE_ROUNDED);
+
+		//--
+
+		//guiManager.Add(guiManager.bDebug, OFX_IM_TOGGLE_ROUNDED);
+
 		guiManager.AddSpacingSeparated();
 
 		//--
 
+		// B. Toggles to show/hide Special Windows / panels.
+		
 		guiManager.AddLabelBig("Special Windows");
 
-		// Global toggle
+		// 1. Global toggle
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
 		guiManager.AddSpacing();
 
-		// Each Window toggle
+		// 2. Each Window toggle
 		guiManager.drawWindowSpecialsGuiToggles();
 		// We can also get each toggle instead too:
 		//guiManager.Add(guiManager.getWindowSpecialGuiToggle(0));
@@ -154,7 +163,7 @@ void ofApp::draw_MainWindow() {
 		//--
 
 		// For internal debug purposes
-		guiManager.drawAdvanced();
+		//guiManager.drawAdvanced();
 
 		guiManager.endWindow();
 	}
