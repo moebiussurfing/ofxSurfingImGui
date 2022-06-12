@@ -168,14 +168,11 @@ void ofApp::draw_SurfingWidgets_1()
 
 	if (guiManager.beginWindowSpecial(0))
 	{
-		/* Your widgets goes here... */
-
 		guiManager.AddLabelBig("> Window\nSpecial 1", false);
 		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		guiManager.AddGroup(params_0);
 		guiManager.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
-
 		guiManager.endWindowSpecial();
 	}
 }
@@ -191,7 +188,6 @@ void ofApp::draw_SurfingWidgets_2()
 		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
-
 		guiManager.endWindowSpecial();
 	}
 }
@@ -207,7 +203,6 @@ void ofApp::draw_SurfingWidgets_3()
 		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
 		guiManager.AddSpacingBigSeparated();
 		guiManager.AddGroup(params_2);
-
 		guiManager.endWindowSpecial();
 	}
 }
@@ -224,7 +219,6 @@ void ofApp::draw_SurfingWidgets_4()
 		guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
 		guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
-
 		guiManager.endWindowSpecial();
 	}
 }
@@ -238,10 +232,6 @@ void ofApp::keyPressed(int key) {
 		bGui = !bGui;
 	}
 
-	else if (key == '0') {
-		guiManager.setWindowSpecialToggleVisibleAllGlobal();
-	}
-
 	else if (key == '1') {
 		guiManager.setWindowSpecialToggleVisible(0);
 	}
@@ -253,5 +243,9 @@ void ofApp::keyPressed(int key) {
 	}
 	else if (key == '4') {
 		guiManager.setWindowSpecialToggleVisible(3);
+	}
+
+	else if (key == '0') {
+		guiManager.setWindowSpecialToggleVisibleAllGlobal();
 	}
 }
