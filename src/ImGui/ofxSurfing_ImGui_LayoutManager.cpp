@@ -1264,8 +1264,8 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	//--
 
-	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
-	//if (windowsSpecialsLayouts[index].bSpecialWindow.get())
+
+	//if (windowsSpecialsLayouts[index].bSpecialWindow.get()) // window
 	//{
 	//	if (windowsSpecialsLayouts[index].bAutoResize.get()) {
 	//		flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -1274,6 +1274,9 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui.getName().c_str(), (bool*)&windowsSpecialsLayouts[index].bGui.get(), flags);
 
 	//--
+
+	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize; // global
+	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui, flags);
 
 	bool b = beginWindow(windowsSpecialsLayouts[index].bGui);
 
@@ -1288,6 +1291,43 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//--
 
 	return b;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindowSpecial(ofParameter<bool>& _bGui)
+{
+	int i = getWindowSpecialIndexForToggle(_bGui);
+
+	if (i != -1)
+	{
+		return beginWindowSpecial(i);
+	}
+	else {
+		ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
+		return false;
+	}
+}
+
+//--------------------------------------------------------------
+int ofxSurfing_ImGui_Manager::getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui)
+{
+	string name = _bGui.getName();
+
+	for (size_t i = 0; i < windowsSpecialsLayouts.size(); i++)
+	{
+		string _name = windowsSpecialsLayouts[i].bGui.getName();
+
+		if (name == _name)
+		{
+			return  i;
+		}
+	}
+
+	{
+		ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
+
+		return -1;
+	}
 }
 
 //--------------------------------------------------------------

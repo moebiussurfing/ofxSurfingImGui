@@ -1235,6 +1235,9 @@ public:
 
 	void endWindowSpecial(int index = -1);
 
+	bool beginWindowSpecial(ofParameter<bool>& _bGui);
+	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
+
 	//--
 
 	//--------------------------------------------------------------
@@ -1295,6 +1298,7 @@ public:
 		// We queue here the bool params that enables the show/hide for each queued window
 		ofParameter<bool> bGui{ "Show Gui", true };
 
+		//TODO: could be removed...not used..
 		ofParameter<bool> bAutoResize{ "Auto Resize", true };
 		ofParameter<bool> bExtra{ "Extra", false };
 		ofParameter<bool> bMinimize{ "Minimize", false };

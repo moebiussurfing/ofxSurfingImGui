@@ -11,11 +11,10 @@
 
 	TODO:
 
-	+ remake to avoid weird flickering on hidding some.
-	+ fix re position when closed first queued window.
-	+ add addon mode: queue windows (bGui) sorted.
-		linked mode will handle the sort priority.
+	+ fix vert/horizontal modes
+	+ allow headers refesh stacks foldering.
 	+ store sorting queue ?
+	+ check autoresize workflow
 
 */
 
@@ -129,7 +128,10 @@ namespace ofxImGuiSurfing
 			params_User.add(bLinkedWindowsSpecial);
 			params_User.add(bOrientation);
 			params_User.add(orientation_Index);//?
-			params_User.add(bAlignShapes);
+			params_User.add(bAlignShapesX);
+			params_User.add(bAlignShapesY);
+			params_User.add(bLockedWidth);
+			params_User.add(bLockedHeight);
 			params_User.add(bHeaders);
 			params_User.add(pad);
 			params_User.add(position_Anchor);
@@ -256,7 +258,8 @@ namespace ofxImGuiSurfing
 
 		ofParameter<bool> bLinkedWindowsSpecial{ "LINK",  true };
 		ofParameter<bool> bOrientation{ "Orientation", false };
-		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
+		ofParameter<bool> bAlignShapesX{ "Align ShapesX",  true };
+		ofParameter<bool> bAlignShapesY{ "Align ShapesY",  true };
 		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
@@ -275,7 +278,7 @@ namespace ofxImGuiSurfing
 		bool bDISABLE_CALLBACKS = true;
 
 		ofParameter<bool> bLockedWidth{ "Lock Width", false };
-		ofParameter<bool> bLockedHeight{ "Lock Height", false };
+		ofParameter<bool> bLockedHeight{ "Lock Height", true };
 
 		float width_max = 0;
 		float height_max = 0;
@@ -371,10 +374,19 @@ namespace ofxImGuiSurfing
 
 			// Align Shapes
 
-			else if (name == bAlignShapes.getName())
+			else if (name == bAlignShapesX.getName())
 			{
 				//fix
-				if (bAlignShapes)
+				if (bAlignShapesX)
+				{
+					bOrientation = bOrientation;
+				}
+			}
+
+			else if (name == bAlignShapesY.getName())
+			{
+				//fix
+				if (bAlignShapesY)
 				{
 					bOrientation = bOrientation;
 				}
@@ -425,19 +437,19 @@ namespace ofxImGuiSurfing
 				if (orientation_Index == 0) bOrientation.set(false);
 				else bOrientation.set(true);
 
-				//if (bAlignShapes)
-				{
-					if (orientation_Index == 0)
-					{
-						bLockedWidth = false;
-						bLockedHeight = true;
-					}
-					else
-					{
-						bLockedWidth = true;
-						bLockedHeight = false;
-					}
-				}
+				//if (bAlignShapesX)
+				//{
+				//	if (orientation_Index == 0)
+				//	{
+				//		bLockedWidth = false;
+				//		bLockedHeight = true;
+				//	}
+				//	else
+				//	{
+				//		bLockedWidth = true;
+				//		bLockedHeight = false;
+				//	}
+				//}
 			}
 
 			//--
@@ -823,15 +835,18 @@ namespace ofxImGuiSurfing
 			//ofLogNotice(__FUNCTION__);
 
 			if (ofGetFrameNum() == 1) return;//skip first frame to be sure that it's prepared.
-			if (!bAlignShapes) return;//skip.
+			if (!bAlignShapesX && !bAlignShapesY) return;//skip.
 
 			if (bLockedWidth && bLockedHeight) {
+				//if(bAlignShapesX && bAlignShapesY)
 				ImGui::SetNextWindowSize(ImVec2(width_max, height_max));
 			}
 			else if (bLockedWidth) {
+				//if (bAlignShapesX)
 				ImGui::SetNextWindowSize(ImVec2(width_max, 0));
 			}
 			else if (bLockedHeight) {
+				//if (bAlignShapesY)
 				ImGui::SetNextWindowSize(ImVec2(0, height_max));
 			}
 		}
@@ -874,6 +889,24 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
+		void startupDelayed()
+		{
+			ofLogNotice(__FUNCTION__);
+
+			//--
+
+			// fixes
+			bOrientation = bOrientation;
+			//bLockedWidth = bLockedWidth;
+			//bLockedHeight = bLockedHeight;
+
+			bAlignShapesX = bAlignShapesX;
+			bAlignShapesY = bAlignShapesY;
+			//bAlignShapes_PRE = bAlignShapesX;
+			//bAlignShapesX = !bAlignShapesX;
+		}
+
+		//--------------------------------------------------------------
 		void startup()
 		{
 			ofLogNotice(__FUNCTION__);
@@ -905,17 +938,6 @@ namespace ofxImGuiSurfing
 
 			//TODO:
 			if (bLinkedWindowsSpecial) doApplyLinkWindows();
-
-			//--
-
-			// fixes
-			//bOrientation = bOrientation;
-			//bLockedWidth = bLockedWidth;
-			//bLockedHeight = bLockedHeight;
-
-			//bAlignShapes = bAlignShapes;
-			//bAlignShapes_PRE = bAlignShapes;
-			//bAlignShapes = !bAlignShapes;
 		}
 
 		//--
@@ -1021,7 +1043,8 @@ namespace ofxImGuiSurfing
 				float w = h * 1.55f;
 
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
+				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
+				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
 
 				ImGui::Spacing();
 			}
@@ -1107,6 +1130,10 @@ namespace ofxImGuiSurfing
 							{
 								ofxImGuiSurfing::AddParameter(bHeaders);
 								ofxImGuiSurfing::AddStepperInt(pad);
+								if (!bMinimized) {
+								ofxImGuiSurfing::AddParameter(bLockedWidth);
+								ofxImGuiSurfing::AddParameter(bLockedHeight);
+								}
 							}
 							ImGui::PopItemWidth();
 
@@ -1121,11 +1148,6 @@ namespace ofxImGuiSurfing
 							if (bDebug)
 							{
 								ImGui::Indent();
-
-								ofxImGuiSurfing::AddParameter(bLockedWidth);
-								ofxImGuiSurfing::AddParameter(bLockedHeight);
-								ImGui::Spacing();
-								ofxImGuiSurfing::AddSpacingSeparated();
 
 								ImGui::Spacing();
 								ImGui::TextWrapped("SPECIAL WINDOWS \n");
@@ -1203,6 +1225,13 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void update()
 		{
+			//--
+
+			// Startup Delayed
+			if (ofGetFrameNum() == 2) {
+				startupDelayed();
+			}
+
 			//--
 
 			// Skip
