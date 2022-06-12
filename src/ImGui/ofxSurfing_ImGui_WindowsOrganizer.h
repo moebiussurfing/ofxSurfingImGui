@@ -60,28 +60,11 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void runShapeState(bool bForced = false)
-		{
-			//--
-
-			bool b1st;
-
-			if (!bForced) b1st = (indexPos == 0);
-			else b1st = false;
-
-			ImGuiCond flagCond;
-			if (b1st) flagCond = ImGuiCond_Appearing; // only first window can be moved
-			else flagCond = ImGuiCond_Always; // Others are locked
-
-			ImGui::SetNextWindowPos(ImVec2(rShape.get().getX(), rShape.get().getY()), flagCond);
-			//ImGui::SetNextWindowSize(ImVec2(rShape.get().getWidth(), rShape.get().getHeight()), flagCond);
-		}
-
-		//--------------------------------------------------------------
 		ofRectangle getShape() const
 		{
 			return rShape.get();
 		}
+
 		//--------------------------------------------------------------
 		ofRectangle getRectangle() const
 		{
@@ -507,18 +490,18 @@ namespace ofxImGuiSurfing
 
 			// Check toggle enablers
 
-			// iterate (all) unsorted and some may hidden windows!
+			// Iterate (all) unsorted and some may hidden windows!
 
 			for (auto& p : windowsSpecialsOrganizer)
 			{
 				// A bGui toggle is pressed...
+				// The toggles that are showers for each special window.
 				// Check which one is changed (enabled or disabled)
+
 				if (p.bGui.getName() == name)
 				{
-					ofLogNotice(__FUNCTION__)
-						<< " id:" << p.id
-						<< " indexPos:" << p.indexPos
-						<< " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
+					ofLogNotice(__FUNCTION__) << " id:" << p.id
+						<< " indexPos:" << p.indexPos << " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
 
 					//--
 
@@ -535,15 +518,22 @@ namespace ofxImGuiSurfing
 
 							doReOrganize();//not required?
 
+							//TODO:
+							doApplyLinkWindows();
+
 							bDISABLE_CALLBACKS = false;
 
 							return;
 						}
-						else 
+						else
 						{
 							ofLogError(__FUNCTION__) << "Should not be indexPos -1 for the window " << p.id << " that was hidden until now";
 
 							bDISABLE_CALLBACKS = false;
+
+							//TODO:
+							doReOrganize();
+							doApplyLinkWindows();
 
 							return;
 						}
@@ -553,13 +543,18 @@ namespace ofxImGuiSurfing
 
 					// Just DISABLED / Remove
 
-					else //if (!p.bGui)
+					//if (!p.bGui)
+					else
 					{
 						if (p.indexPos == -1)
 						{
 							ofLogError(__FUNCTION__) << "Should not be -1 ... if " << p.id << " was enabled until now";
 
 							bDISABLE_CALLBACKS = false;
+
+							//TODO:
+							doReOrganize();
+							doApplyLinkWindows();
 
 							return;
 						}
@@ -578,14 +573,14 @@ namespace ofxImGuiSurfing
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin());
 
+								if (queueWindowsVisible.size() != 0)
+								{
+									//TODO:
+									int id = queueWindowsVisible[0]; // get the index of first window
+									windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
+								}
+
 								p.indexPos = -1; // mark as not visible/hidden
-
-								// We must update all the positions indexes bc we removed one element!
-								doReOrganize();
-
-								////TODO:
-								//int id = queueWindowsVisible[0]; // get the index of first window
-								//windowsSpecialsOrganizer[id].setPosition(position_Anchor.get());
 							}
 
 							//--
@@ -600,10 +595,17 @@ namespace ofxImGuiSurfing
 								queueWindowsVisible.erase(queueWindowsVisible.begin() + p.indexPos);
 
 								p.indexPos = -1; // mark as not visible/hidden
-
-								// We must update all the positions indexes bc we removed one element!
-								doReOrganize();
 							}
+
+							//--
+
+							// We must update all the positions indexes bc we removed one element!
+							doReOrganize();
+
+							//TODO:
+							doApplyLinkWindows();
+
+							bForceNext = true;
 
 							//--
 
@@ -915,6 +917,8 @@ namespace ofxImGuiSurfing
 		}
 
 		//--
+	private:
+		bool bForceNext = false; // workaround required / to be used when hidding first window!
 
 	public:
 
@@ -925,9 +929,50 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void runShapeState(int i, bool bForced = false) // To be effective, must be called just before begin()!
+		void runShapeState(int i) // To be effective, must be called just before begin()!
 		{
-			windowsSpecialsOrganizer[i].runShapeState(bForced);
+			ofRectangle r = windowsSpecialsOrganizer[i].getShape();
+
+			ImGuiCond flagCond;
+
+			int id = queueWindowsVisible[0]; // get the index of first window
+
+			// force engine
+			bool bforce = false;
+			if (bForceNext)
+			{
+				bForceNext = false;
+				bforce = true;
+			}
+
+			if (bforce)
+			{
+				////TODO:
+				//// workaround
+				//float x = position_Anchor.get().x;
+				//float y = position_Anchor.get().y;
+				//glm::vec2 p = glm::vec2(x, y);
+				//windowsSpecialsOrganizer[id].setPosition(p);
+
+				flagCond = ImGuiCond_Always;
+			}
+			else
+			{
+				if (i == id) // first window is free
+				{
+					flagCond = ImGuiCond_Appearing;
+				}
+				else // other windows are locked
+				{
+					flagCond = ImGuiCond_Always;
+					//flagCond = ImGuiCond_None;
+				}
+			}
+
+			// Position
+			ImGui::SetNextWindowPos(ImVec2(r.getX(), r.getY()), flagCond);
+
+			// Shape
 			doAlignShapesNextWindow();
 		}
 
@@ -995,7 +1040,8 @@ namespace ofxImGuiSurfing
 				{
 					ofxImGuiSurfing::AddSpacingSeparated();
 
-					ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+					ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
+					//ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
 					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
@@ -1155,23 +1201,28 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void update()
 		{
-			//// fixes
-			//if (ofGetFrameNum() == 10) 
-			//{
-			//	//bOrientation = bOrientation;
-			//	//bLockedWidth = bLockedWidth;
-			//	//bLockedHeight = bLockedHeight;
-			//	bAlignShapes = bAlignShapes_PRE;
-			//}
-
 			//--
 
 			// Skip
-			if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0) return;
+			if (queueWindowsVisible.size() == 0 || windowsSpecialsOrganizer.size() == 0)
+			{
+				//TODO:
+				// workaround 
+				// to solve that sometimes hidding/showing windows are translated to the right..
+				// force to improve when showing back 
+				for (size_t i = 0; i < windowsSpecialsOrganizer.size(); i++)
+				{
+					windowsSpecialsOrganizer[i].setPosition(position_Anchor.get());
+				}
+
+				return;
+			}
 
 			//--
 
 			// Read 1st queued position to the anchor
+			// Required to allow move first window by the user!
+			//TODO: we could allow to move all windows with another engine..
 			int id = queueWindowsVisible[0];
 			glm::vec2 p = windowsSpecialsOrganizer[id].getPosition();
 			position_Anchor.setWithoutEventNotifications(p);
@@ -1214,12 +1265,14 @@ namespace ofxImGuiSurfing
 
 			// 2. Position all the visible windows
 
-			int id = 0;
 			float x = 0;
 			float y = 0;
 			float w = 0;
 			float h = 0;
+
 			glm::vec2 p(x, y);
+
+			int id = 0;
 
 			for (int i = 0; i < queueWindowsVisible.size(); i++)
 			{

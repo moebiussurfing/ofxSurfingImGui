@@ -1498,6 +1498,7 @@ public:
 	{
 		return getWindowSpecialVisible(index);
 	}
+
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowSpecialVisible(int index)
 	{
@@ -1510,6 +1511,7 @@ public:
 
 		return windowsSpecialsLayouts[index].bGui;
 	}
+
 	// Easy populate all the toggles .
 	//--------------------------------------------------------------
 	void drawWindowSpecialsGuiToggles() {
@@ -1531,6 +1533,7 @@ public:
 		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
 			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+
 			return;
 		}
 
