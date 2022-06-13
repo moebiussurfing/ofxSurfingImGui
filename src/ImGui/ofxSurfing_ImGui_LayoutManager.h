@@ -657,10 +657,10 @@ public:
 
 	// -> 1. BEGINs a Window
 
-	bool beginWindow(ofParameter<bool> p); // will use the bool param for show/hide and the param name for the window name
-	bool beginWindow(std::string name, ofParameter<bool> p); //  to change the name, and not use the param name.
-	bool beginWindow(std::string name, ofParameter<bool> p, ImGuiWindowFlags window_flags);
-	bool beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
+	bool beginWindow(ofParameter<bool>& p); // will use the bool param for show/hide and the param name for the window name
+	bool beginWindow(std::string name, ofParameter<bool>& p); //  to change the name, and not use the param name.
+	bool beginWindow(std::string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags);
+	bool beginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
 	bool beginWindow(std::string name /*= "Window"*/); // -> simpler. not working?
@@ -1328,6 +1328,10 @@ private:
 
 public:
 
+	int getPad() { return windowsSpecialsOrganizer.pad; }
+
+public:
+
 	//--------------------------------------------------------------
 	void setNameWindowsSpecialsEnableGlobal(std::string name) {
 		windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
@@ -1431,6 +1435,42 @@ public:
 	ofParameter<bool>& getWindowsAlignHelpersGuiToggle() { // align windows toggle to show the panel
 		return bGui_WindowsAlignHelpers;
 	}
+
+	//--
+	
+	//TODO:
+	// Call to autoplace to queue. to the right of the last window populated on the viewport!
+	// Could be weird bc some window can could be populated from other scopes...
+	// This is imporved using ther Special Windows Engine.
+	//--------------------------------------------------------------
+	ImVec2 getTopRightWindowLast()
+	{
+		ImVec2 posTopRight{ 0, 0 };
+
+		ImGuiContext* g = ImGui::GetCurrentContext();
+		ImVector<ImGuiWindow*> windows;
+
+		for (ImGuiWindow* window : g->WindowsFocusOrder)
+		{
+			if (window->WasActive)
+			{
+				ImVec2 base_pos = ImGui::GetMainViewport()->Pos;
+				ImVec2 wTopRight = base_pos + window->Pos + ImVec2(window->Size.x, 0);
+
+				if (posTopRight.x < wTopRight.x)
+				{
+					posTopRight = ImVec2(wTopRight.x, wTopRight.y);
+				}
+			}
+		}
+
+		return posTopRight;
+	}
+	//--------------------------------------------------------------
+	void setNextWindowOnViewport() {
+		ImGui::SetNextWindowPos(getTopRightWindowLast(), ImGuiCond_Appearing);
+	}
+
 
 	//// Orientation cascade windows
 	////--------------------------------------------------------------

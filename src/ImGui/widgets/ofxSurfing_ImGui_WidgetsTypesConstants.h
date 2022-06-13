@@ -338,7 +338,7 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.5f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, PANEL_WIDGETS_HEIGHT_MIN); \
 ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
@@ -350,11 +350,18 @@ ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MI
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, -1); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
 	//----
 
 	// 4.
 
-	// Draws a point on the ImGui cursor positon for debugging when designing widgets
+	// Draws a point on the ImGui cursor position for debugging when designing widgets
 	//#define IMGUI_SUGAR__TEST_POINT \ 
 	//	{ \
 	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \

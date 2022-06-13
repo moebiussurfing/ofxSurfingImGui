@@ -14,7 +14,6 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	params_Advanced.add(bLinkWindows);
-	//params_Advanced.add(bGui_WindowsAlignHelpers);
 	params_Advanced.add(bAutoResize);
 
 	params_Advanced.add(bExtra);
@@ -164,10 +163,6 @@ void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantia
 	{
 		params_AppSettings.add(params_Advanced);
 	}
-
-	//--
-
-	params_AppSettings.add(bGui_WindowsAlignHelpers);
 }
 
 //--------------------------------------------------------------
@@ -1121,7 +1116,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, bool* p_open)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
+bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool>& p)
 {
 	if (!p.get()) return false;
 
@@ -1132,7 +1127,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p)
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p)
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool>& p)
 {
 	if (!p.get()) return false;
 
@@ -1143,7 +1138,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p, ImGuiWindowFlags window_flags)
+bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags)
 {
 	if (!p.get()) return false;
 
@@ -1151,7 +1146,7 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name, ofParameter<bool> p
 }
 
 //--------------------------------------------------------------
-bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool> p, ImGuiWindowFlags window_flags)
+bool ofxSurfing_ImGui_Manager::beginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags)
 {
 	if (!p.get()) return false;
 
@@ -1187,10 +1182,12 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 
 	bool b = ImGui::Begin(name.c_str(), p_open, window_flags);
 
+	//TODO:
 	// Early out if the window is collapsed, as an optimization.
 	if (!b)
 	{
 		ImGui::End();
+
 		return false;
 	}
 
@@ -1226,8 +1223,6 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//TODO:
 	_indexWindowsSpecials = index; // workflow
 
-	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-
 	//--
 
 	// Skip window if hidden
@@ -1238,9 +1233,11 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 		return false;
 	}
 
+	if (!windowsSpecialsLayouts[index].bGui.get()) return false;
+
 	//--
 
-	if (!windowsSpecialsLayouts[index].bGui.get()) return false;
+	ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 
 	//--
 
@@ -1264,7 +1261,13 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 
 	//--
 
+	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize; // global
 
+	bool b = beginWindow(windowsSpecialsLayouts[index].bGui, flags);
+
+	//--
+
+	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui);
 	//if (windowsSpecialsLayouts[index].bSpecialWindow.get()) // window
 	//{
 	//	if (windowsSpecialsLayouts[index].bAutoResize.get()) {
@@ -1272,21 +1275,6 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//	}
 	//}
 	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui.getName().c_str(), (bool*)&windowsSpecialsLayouts[index].bGui.get(), flags);
-
-	//--
-
-	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize; // global
-	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui, flags);
-
-	bool b = beginWindow(windowsSpecialsLayouts[index].bGui);
-
-	//--
-
-	//TODO:
-	// workaround
-	////if (!windowsSpecialsOrganizer.bGui_ShowAll.get()) return false;
-	//if (!windowsSpecialsLayouts[index].bGui.get()) return false;
-	//refreshLayout();
 
 	//--
 
@@ -2079,7 +2067,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsExtra()
 
 		//--
 
-		this->endWindow();
+		endWindow();
 	}
 }
 

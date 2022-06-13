@@ -11,10 +11,9 @@
 
 	TODO:
 
-	+ fix vert/horizontal modes
-	+ allow headers refesh stacks foldering.
+	+ fix bug crash when closing windows using the x
 	+ store sorting queue ?
-	+ check autoresize workflow
+	+ enable moving from all panels
 
 */
 
@@ -102,9 +101,7 @@ namespace ofxImGuiSurfing
 		}
 	};
 
-
 	//----
-
 
 	//--------------------------------------------------------------
 
@@ -127,11 +124,9 @@ namespace ofxImGuiSurfing
 			params_User.add(bGui_ShowAll);
 			params_User.add(bLinkedWindowsSpecial);
 			params_User.add(bOrientation);
-			params_User.add(orientation_Index);//?
+			params_User.add(bAlignShapes);
 			params_User.add(bAlignShapesX);
 			params_User.add(bAlignShapesY);
-			params_User.add(bLockedWidth);
-			params_User.add(bLockedHeight);
 			params_User.add(bHeaders);
 			params_User.add(pad);
 			params_User.add(position_Anchor);
@@ -141,8 +136,6 @@ namespace ofxImGuiSurfing
 			params_User.add(bAlignWindowsReset);
 
 			// exclude
-			bOrientation.setSerializable(false);
-			//orientation_Index.setSerializable(false);
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
 			bAlignWindowsCascade.setSerializable(false);
@@ -257,9 +250,10 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAlignWindowsReset{ "Reset",false };
 
 		ofParameter<bool> bLinkedWindowsSpecial{ "LINK",  true };
-		ofParameter<bool> bOrientation{ "Orientation", false };
-		ofParameter<bool> bAlignShapesX{ "Align ShapesX",  true };
-		ofParameter<bool> bAlignShapesY{ "Align ShapesY",  true };
+		ofParameter<bool> bOrientation{ "Orientation", false };//false=horizontal. true=vertical
+		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
+		ofParameter<bool> bAlignShapesX{ "ShapesX",  true };
+		ofParameter<bool> bAlignShapesY{ "ShapesY",  false };
 		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
@@ -277,8 +271,8 @@ namespace ofxImGuiSurfing
 
 		bool bDISABLE_CALLBACKS = true;
 
-		ofParameter<bool> bLockedWidth{ "Lock Width", false };
-		ofParameter<bool> bLockedHeight{ "Lock Height", true };
+		//ofParameter<bool> bLockedWidth{ "Lock Width", false };
+		//ofParameter<bool> bLockedHeight{ "Lock Height", true };
 
 		float width_max = 0;
 		float height_max = 0;
@@ -306,27 +300,27 @@ namespace ofxImGuiSurfing
 		ofParameterGroup params_Settings{ "WindowsSpecials" };
 		ofParameterGroup params{ "Params" }; // for callbacks only
 
-		// Cascade orientation
-		enum wOrientation
-		{
-			W_HORIZ = 0,
-			W_VERT,
-			W_COUNT
-		};
-		wOrientation orientation;
-		ofParameter<int> orientation_Index{ "Orient", 0, 0, W_COUNT - 1 };
+		//// Cascade orientation
+		//enum wOrientation
+		//{
+		//	W_HORIZ = 0,
+		//	W_VERT,
+		//	W_COUNT
+		//};
+		//wOrientation orientation;
+		//ofParameter<int> orientation_Index{ "Orient", 0, 0, W_COUNT - 1 };
 		//std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
 
-		bool bHideWindows = false; //-> To disable when using the full layout engine. 
+		bool bHideWindowsToggles = false; //-> To disable when using the full layout engine. 
 
 	public:
 
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
 
-			bHideWindows = b;
+			bHideWindowsToggles = b;
 
-			if (bHideWindows) {
+			if (bHideWindowsToggles) {
 				bGui_ShowAll = true;
 				bGui_ShowAll.setSerializable(false);
 			}
@@ -374,23 +368,54 @@ namespace ofxImGuiSurfing
 
 			// Align Shapes
 
-			else if (name == bAlignShapesX.getName())
-			{
-				//fix
-				if (bAlignShapesX)
-				{
-					bOrientation = bOrientation;
-				}
-			}
+			//else if (name == bAlignShapesX.getName())
+			//{
+			//	////fix
+			//	//if (bAlignShapesX)
+			//	//{
+			//	//	bOrientation = bOrientation;
+			//	//}
+			//}
 
-			else if (name == bAlignShapesY.getName())
-			{
-				//fix
-				if (bAlignShapesY)
-				{
-					bOrientation = bOrientation;
-				}
-			}
+			//else if (name == bAlignShapesY.getName())
+			//{
+			//	////fix
+			//	//if (bAlignShapesY)
+			//	//{
+			//	//	bOrientation = bOrientation;
+			//	//}
+			//}
+
+			//--
+
+			//else if (name == bOrientation.getName())
+			//{
+			//	//if (!bOrientation) orientation_Index = 0;
+			//	//else orientation_Index = 1;
+			//}
+
+			////--
+
+			//else if (name == pad.getName())
+			//{
+			//}
+
+			//--
+
+			////TODO: should recalculate..
+			//else if (name == bHeaders.getName())
+			//{
+			//	doApplyLinkWindows();
+			//}
+
+			//-
+
+			//else if (name == bGui_ShowAll.getName()) // global show
+			//{
+			//	// workaround 
+			//	// to avoid bad dimension on startup
+			//	bOrientation = bOrientation;
+			//}
 
 			//--
 
@@ -425,63 +450,6 @@ namespace ofxImGuiSurfing
 
 				doAlignWindowsX();
 			}
-
-			//--
-
-			else if (name == orientation_Index.getName())
-			{
-				static int pre = -1;
-				if (orientation_Index != pre) pre = orientation_Index;
-				else return; // not changed then skip
-
-				if (orientation_Index == 0) bOrientation.set(false);
-				else bOrientation.set(true);
-
-				//if (bAlignShapesX)
-				//{
-				//	if (orientation_Index == 0)
-				//	{
-				//		bLockedWidth = false;
-				//		bLockedHeight = true;
-				//	}
-				//	else
-				//	{
-				//		bLockedWidth = true;
-				//		bLockedHeight = false;
-				//	}
-				//}
-			}
-
-			//--
-
-			else if (name == bOrientation.getName())
-			{
-				if (!bOrientation) orientation_Index = 0;
-				else orientation_Index = 1;
-			}
-
-			//--
-
-			else if (name == pad.getName())
-			{
-			}
-
-			//-
-
-			////TODO: should recalculate..
-			//else if (name == bHeaders.getName())
-			//{
-			//	doApplyLinkWindows();
-			//}
-
-			//-
-
-			//else if (name == bGui_ShowAll.getName()) // global show
-			//{
-			//	// workaround 
-			//	// to avoid bad dimension on startup
-			//	bOrientation = bOrientation;
-			//}
 		}
 
 		//--
@@ -720,6 +688,24 @@ namespace ofxImGuiSurfing
 
 			for (int i = 1; i < myWins.size(); i++)
 			{
+				//skip
+				//vertical goes different
+				if (bOrientation)
+				{
+					bool bskip = false;
+					for (size_t k = 0; k < queueWindowsVisible.size(); k++)
+					{
+						string name = windowsSpecialsOrganizer[k].bGui.getName();
+						if (myWins[i].ImWin->Name == name)
+						{
+							if (name != windowsSpecialsOrganizer[0].bGui.getName())
+								bskip = true;
+							break;
+						}
+					}
+					if (bskip) continue;
+				}
+
 				myWins[i].ImWin->Pos.x = x;
 				myWins[i].ImWin->Pos.y = y;
 
@@ -785,13 +771,31 @@ namespace ofxImGuiSurfing
 
 			for (int i = 1; i < myWins.size(); i++)
 			{
+				//skip
+				//vertical goes different
+				if (bOrientation)
+				{
+					bool bskip = false;
+					for (size_t k = 0; k < queueWindowsVisible.size(); k++)
+					{
+						string name = windowsSpecialsOrganizer[k].bGui.getName();
+						if (myWins[i].ImWin->Name == name)
+						{
+							if (name != windowsSpecialsOrganizer[0].bGui.getName())
+								bskip = true;
+							break;
+						}
+					}
+					if (bskip) continue;
+				}
+
 				myWins[i].ImWin->Pos.x = x;
 				myWins[i].ImWin->Pos.y = y;
 
 				x = x + diffx;
 				y = y + diffy;
 
-				//// Focus sorted..
+				// Focus sorted..
 				//string n = myWins[i].name;
 				//ImGui::Begin(n.c_str());
 				FocusWindow(myWins[i].ImWin);
@@ -835,19 +839,18 @@ namespace ofxImGuiSurfing
 			//ofLogNotice(__FUNCTION__);
 
 			if (ofGetFrameNum() == 1) return;//skip first frame to be sure that it's prepared.
-			if (!bAlignShapesX && !bAlignShapesY) return;//skip.
 
-			if (bLockedWidth && bLockedHeight) {
-				//if(bAlignShapesX && bAlignShapesY)
-				ImGui::SetNextWindowSize(ImVec2(width_max, height_max));
+			//--
+
+			if (bOrientation)//vertical
+			{
+				if (bAlignShapesX)
+					ImGui::SetNextWindowSize(ImVec2(width_max, 0));
 			}
-			else if (bLockedWidth) {
-				//if (bAlignShapesX)
-				ImGui::SetNextWindowSize(ImVec2(width_max, 0));
-			}
-			else if (bLockedHeight) {
-				//if (bAlignShapesY)
-				ImGui::SetNextWindowSize(ImVec2(0, height_max));
+			else//horizontal
+			{
+				if (bAlignShapesY)
+					ImGui::SetNextWindowSize(ImVec2(0, height_max));
 			}
 		}
 
@@ -895,15 +898,16 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// fixes
-			bOrientation = bOrientation;
-			//bLockedWidth = bLockedWidth;
-			//bLockedHeight = bLockedHeight;
+			//// fixes
+			//bOrientation = bOrientation;
+			////bLockedWidth = bLockedWidth;
+			////bLockedHeight = bLockedHeight;
 
-			bAlignShapesX = bAlignShapesX;
-			bAlignShapesY = bAlignShapesY;
-			//bAlignShapes_PRE = bAlignShapesX;
-			//bAlignShapesX = !bAlignShapesX;
+			//bAlignShapes = bAlignShapes;
+			//bAlignShapesX = bAlignShapesX;
+			//bAlignShapesY = bAlignShapesY;
+			////bAlignShapes_PRE = bAlignShapesX;
+			////bAlignShapesX = !bAlignShapesX;
 		}
 
 		//--------------------------------------------------------------
@@ -997,7 +1001,7 @@ namespace ofxImGuiSurfing
 			ImGui::SetNextWindowPos(ImVec2(r.getX(), r.getY()), flagCond);
 
 			// Shape
-			doAlignShapesNextWindow();
+			if (bAlignShapes) doAlignShapesNextWindow();
 		}
 
 	public:
@@ -1038,13 +1042,10 @@ namespace ofxImGuiSurfing
 			if (bLinkedWindowsSpecial)
 			{
 				// Orientation
-				string ss = bOrientation ? "Vertical" : "Horizontal";
+				string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
 				float h = 1.25 * ImGui::GetFrameHeight();
 				float w = h * 1.55f;
-
 				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
-				ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
 
 				ImGui::Spacing();
 			}
@@ -1056,12 +1057,122 @@ namespace ofxImGuiSurfing
 				drawWidgetsAlignHelpers();
 			}
 
+			//--
+
+			// Settings
+
+			if (!bMinimized)
+			{
+				// Controls
+				{
+					ofxImGuiSurfing::AddSpacingSeparated();
+
+					ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+
+					if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+					{
+						ImGui::PushItemWidth(getPanelWidth() * 0.5f);
+						{
+							ofxImGuiSurfing::AddParameter(bHeaders);
+							ofxImGuiSurfing::AddStepperInt(pad);
+
+							ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
+							if (bAlignShapes) {
+								ImGui::Indent();
+								if (bOrientation)//vertical
+									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
+
+								if (!bOrientation)//horizontal
+									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
+								ImGui::Unindent();
+							}
+						}
+						ImGui::PopItemWidth();
+
+						//--
+
+						ofxImGuiSurfing::AddSpacingSeparated();
+
+						// Debug
+
+						ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+						ImGui::Spacing();
+						if (bDebug)
+						{
+							ImGui::Indent();
+
+							ImGui::Spacing();
+							ImGui::TextWrapped("SPECIAL WINDOWS \n");
+							ofxImGuiSurfing::AddSpacingSeparated();
+							ImGui::Spacing();
+
+							// Anchor
+							std::string ss4 = "";
+							ss4 += "Anchor \n\n";
+							ss4 += ofToString(position_Anchor.get());
+							if (queueWindowsVisible.size() > 0) {
+								int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
+								ss4 += "\n";
+								ss4 += "" + ofToString(id);
+							}
+
+							ImGui::TextWrapped(ss4.c_str());
+							ofxImGuiSurfing::AddSpacingSeparated();
+
+							// Queue visible
+							std::string ss2 = "Queue Visible \n\n";
+							for (int i = 0; i < queueWindowsVisible.size(); i++)
+							{
+								if (i != 0) ss2 += ", ";
+								ss2 += ofToString(queueWindowsVisible[i]);
+							}
+							ImGui::TextWrapped(ss2.c_str());
+							ofxImGuiSurfing::AddSpacingSeparated();
+
+							// All the panels
+							std::string ss1 = "";
+							int i = 0;
+							for (auto& p : windowsSpecialsOrganizer)
+							{
+								ss1 += "" + ofToString(i) + "";
+								ss1 += "\n";
+								ss1 += "" + ofToString(p.bGui ? "ON" : "OFF");
+								ss1 += "\n";
+								//ss1 += "id_" + ofToString(p.id) + " ";
+								//ss1 += "pos_" + ofToString(p.indexPos);
+								//ss1 += "\n";
+								ss1 += ofToString(p.getRectangle());
+								ss1 += "\n\n";
+
+								i++;
+							}
+							ImGui::TextWrapped(ss1.c_str());
+							ofxImGuiSurfing::AddSpacingSeparated();
+
+							// Windows
+							std::string ss5 = "All Windows \n\n";
+							for (int i = 0; i < windowsSpecialsOrganizer.size(); i++)
+							{
+								if (i != 0) ss5 += ", ";
+								ss5 += ofToString(windowsSpecialsOrganizer[i].id);
+							}
+							ImGui::TextWrapped(ss5.c_str());
+							ofxImGuiSurfing::AddSpacingSeparated();
+
+							ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
+							ImGui::TextWrapped(ss1.c_str());
+
+							ImGui::Unindent();
+						}
+					}
+				}
+			}
+
 			//-
 
-			{
-				// Windows
-
-				if (!bHideWindows)
+			// Windows
+			if (!bMinimized)
+				if (!bHideWindowsToggles)
 				{
 					ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1087,7 +1198,6 @@ namespace ofxImGuiSurfing
 									p.bGui = false;
 								}
 							}
-
 						}
 
 						ImGui::Spacing();
@@ -1111,111 +1221,6 @@ namespace ofxImGuiSurfing
 						}
 					}
 				}
-
-				//--
-
-				// Settings
-
-				if (!bMinimized)
-				{
-					// Controls
-					{
-						ofxImGuiSurfing::AddSpacingSeparated();
-
-						ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-
-						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
-						{
-							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
-							{
-								ofxImGuiSurfing::AddParameter(bHeaders);
-								ofxImGuiSurfing::AddStepperInt(pad);
-								if (!bMinimized) {
-								ofxImGuiSurfing::AddParameter(bLockedWidth);
-								ofxImGuiSurfing::AddParameter(bLockedHeight);
-								}
-							}
-							ImGui::PopItemWidth();
-
-							//--
-
-							ofxImGuiSurfing::AddSpacingSeparated();
-
-							// Debug
-
-							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-							ImGui::Spacing();
-							if (bDebug)
-							{
-								ImGui::Indent();
-
-								ImGui::Spacing();
-								ImGui::TextWrapped("SPECIAL WINDOWS \n");
-								ofxImGuiSurfing::AddSpacingSeparated();
-								ImGui::Spacing();
-
-								// Anchor
-								std::string ss4 = "";
-								ss4 += "Anchor \n\n";
-								ss4 += ofToString(position_Anchor.get());
-								if (queueWindowsVisible.size() > 0) {
-									int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
-									ss4 += "\n";
-									ss4 += "" + ofToString(id);
-								}
-
-								ImGui::TextWrapped(ss4.c_str());
-								ofxImGuiSurfing::AddSpacingSeparated();
-
-								// Queue visible
-								std::string ss2 = "Queue Visible \n\n";
-								for (int i = 0; i < queueWindowsVisible.size(); i++)
-								{
-									if (i != 0) ss2 += ", ";
-									ss2 += ofToString(queueWindowsVisible[i]);
-								}
-								ImGui::TextWrapped(ss2.c_str());
-								ofxImGuiSurfing::AddSpacingSeparated();
-
-								// All the panels
-								std::string ss1 = "";
-								int i = 0;
-								for (auto& p : windowsSpecialsOrganizer)
-								{
-									ss1 += "" + ofToString(i) + "";
-									ss1 += "\n";
-									ss1 += "" + ofToString(p.bGui ? "ON" : "OFF");
-									ss1 += "\n";
-									//ss1 += "id_" + ofToString(p.id) + " ";
-									//ss1 += "pos_" + ofToString(p.indexPos);
-									//ss1 += "\n";
-									ss1 += ofToString(p.getRectangle());
-									ss1 += "\n\n";
-
-									i++;
-								}
-								ImGui::TextWrapped(ss1.c_str());
-								ofxImGuiSurfing::AddSpacingSeparated();
-
-								// Windows
-								std::string ss5 = "All Windows \n\n";
-								for (int i = 0; i < windowsSpecialsOrganizer.size(); i++)
-								{
-									if (i != 0) ss5 += ", ";
-									ss5 += ofToString(windowsSpecialsOrganizer[i].id);
-								}
-								ImGui::TextWrapped(ss5.c_str());
-								ofxImGuiSurfing::AddSpacingSeparated();
-
-								ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
-								ImGui::TextWrapped(ss1.c_str());
-
-								ImGui::Unindent();
-							}
-						}
-					}
-				}
-			}
 		}
 
 		//--
@@ -1279,7 +1284,7 @@ namespace ofxImGuiSurfing
 
 			// Take measures to apply on next doAlignShapesNextWindow() call!
 
-			if (bLockedWidth || bLockedHeight)
+			if (bAlignShapes)
 			{
 				for (int i = 0; i < queueWindowsVisible.size(); i++)
 				{
@@ -1287,8 +1292,8 @@ namespace ofxImGuiSurfing
 					ofRectangle r = windowsSpecialsOrganizer[id].getRectangle();
 
 					// measure maxims w/h from all the windows to align shapes!
-					if (bLockedWidth) if (width_max < r.getWidth()) width_max = r.getWidth();
-					if (bLockedHeight) if (height_max < r.getHeight()) height_max = r.getHeight();
+					if (width_max < r.getWidth()) width_max = r.getWidth();
+					if (height_max < r.getHeight()) height_max = r.getHeight();
 				}
 			}
 
@@ -1320,15 +1325,15 @@ namespace ofxImGuiSurfing
 
 				//--
 
-				if (orientation_Index == W_HORIZ)
-				{
-					w = windowsSpecialsOrganizer[id].getWidth();
-					x = x + w + pad;
-				}
-				else if (orientation_Index == W_VERT)
+				if (bOrientation)//vertical
 				{
 					h = windowsSpecialsOrganizer[id].getHeight();
 					y = y + h + pad;
+				}
+				else//horizontal
+				{
+					w = windowsSpecialsOrganizer[id].getWidth();
+					x = x + w + pad;
 				}
 			}
 		}

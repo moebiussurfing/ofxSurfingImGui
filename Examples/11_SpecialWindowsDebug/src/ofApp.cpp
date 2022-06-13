@@ -3,8 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 25);
-	ofSetWindowShape(1920, 1080 - 25);
+	//ofSetWindowPosition(-1920, 25);
+	//ofSetWindowShape(1920, 1080 - 25);
 
 	//--
 
@@ -120,8 +120,12 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_MainWindow() {
-
+void ofApp::draw_MainWindow() 
+{
+	float x = ofGetWidth() - 200;
+	float y = 10;
+	ImGuiCond flag = ImGuiCond_FirstUseEver;
+	ImGui::SetNextWindowPos(ImVec2(x, y), flag);
 	if (guiManager.beginWindow(bGui))
 	{
 		// Extra Panels
