@@ -357,6 +357,13 @@ ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, -1); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
 	//----
 
 	// 4.

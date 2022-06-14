@@ -1439,9 +1439,9 @@ public:
 	//--
 	
 	//TODO:
-	// Call to autoplace to queue. to the right of the last window populated on the viewport!
+	// Call to auto place to queue. to the right of the last window populated on the viewport!
 	// Could be weird bc some window can could be populated from other scopes...
-	// This is imporved using ther Special Windows Engine.
+	// This is improved using the Special Windows Engine.
 	//--------------------------------------------------------------
 	ImVec2 getTopRightWindowLast()
 	{
