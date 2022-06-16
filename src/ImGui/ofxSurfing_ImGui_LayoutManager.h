@@ -299,9 +299,12 @@ public:
 	//--------------------------------------------------------------
 	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	//TODO:
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Appearing)
+	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
-		widgetsManager.AddGroup(group, flags, typeGroup);
+		widgetsManager.AddGroup(group, flags, typeGroup, cond);
+		//widgetsManager.AddGroup(group, flags, typeGroup);
 	}
 
 	//TODO:
@@ -335,7 +338,7 @@ public:
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		if (flags &! ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
@@ -346,7 +349,7 @@ public:
 			widgetsManager.AddGroup(group, flagst, type);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags &! ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
 			widgetsManager.AddGroup(group, flagst, type);
@@ -1437,11 +1440,13 @@ public:
 	}
 
 	//--
-	
-	//TODO:
+
+	// Helpers to position ImGui windows 
+	// on the main ImGui viewport / canvas:
+
 	// Call to auto place to queue. to the right of the last window populated on the viewport!
 	// Could be weird bc some window can could be populated from other scopes...
-	// This is improved using the Special Windows Engine.
+	// This is improved using the Special Windows Engine!
 	//--------------------------------------------------------------
 	ImVec2 getTopRightWindowLast()
 	{
@@ -1466,11 +1471,50 @@ public:
 
 		return posTopRight;
 	}
+
+	// Set next window position after last window. 
+	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
 	//--------------------------------------------------------------
 	void setNextWindowOnViewport() {
 		ImGui::SetNextWindowPos(getTopRightWindowLast(), ImGuiCond_Appearing);
 	}
 
+	// Set next window position after the window named as the passed named and with the layout type distribution.
+	// layoutType=0 : top right 
+	// layoutType=1 : bottom left
+	//--------------------------------------------------------------
+	void setNextWindowAfterWindowNamed(string nameAnchorWindow = "-1", int layoutType = -1, ImGuiCond cond = ImGuiCond_Always)
+	{
+		if (nameAnchorWindow == "-1") {
+			setNextWindowOnViewport();
+			return;
+		}
+
+		ImVec2 p;
+		ImGuiContext* GImGui = ImGui::GetCurrentContext();
+		ImGuiContext& g = *GImGui;
+		bool bready = false;
+
+		for (ImGuiWindow* window : g.WindowsFocusOrder)
+		{
+			if (window->WasActive && window->Name == nameAnchorWindow)
+			{
+				if (layoutType == 0) {
+					// to the top right
+					p = window->Pos + ImVec2(window->Size.x, 0);
+					bready = true;
+				}
+				else if (layoutType == 1) {
+					// to the bottom left
+					p = window->Pos + ImVec2(0, window->Size.y);
+					bready = true;
+				}
+				break;
+			}
+		}
+		if (bready) ImGui::SetNextWindowPos(ImVec2(p.x, p.y), cond);
+		return;
+	}
 
 	//// Orientation cascade windows
 	////--------------------------------------------------------------

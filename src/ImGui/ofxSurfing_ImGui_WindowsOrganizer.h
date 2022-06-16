@@ -771,8 +771,8 @@ namespace ofxImGuiSurfing
 
 			for (int i = 1; i < myWins.size(); i++)
 			{
-				//skip
-				//vertical goes different
+				// skip
+				// vertical goes different
 				if (bOrientation)
 				{
 					bool bskip = false;

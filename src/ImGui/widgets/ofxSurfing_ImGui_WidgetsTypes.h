@@ -1684,7 +1684,8 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT, ImGuiCond cond = ImGuiCond_Once)
+		//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
@@ -1739,7 +1740,8 @@ namespace ofxImGuiSurfing
 						{
 							// workaround
 							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-							ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+							ImGui::SetNextTreeNodeOpen(bOpen, cond);
+							//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
 							bMustCloseTree = false; // we dont need to close tree!
@@ -1749,7 +1751,8 @@ namespace ofxImGuiSurfing
 						{
 							// workaround bc tree has no flags..
 							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-							ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+							ImGui::SetNextTreeNodeOpen(bOpen, cond);
+							//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 							bIsOpen = ImGui::TreeNode(group.getName().c_str());
 							bMustCloseTree = bIsOpen;
@@ -1901,7 +1904,8 @@ namespace ofxImGuiSurfing
 								//TODO:
 								// workaround bc tree has no flags..
 								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-								ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+								ImGui::SetNextTreeNodeOpen(bOpen, cond);
+								//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
 
 								if (ImGui::TreeNode(name.c_str()))
 								{
