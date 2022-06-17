@@ -7,8 +7,11 @@
 ## 02_Widgets
 ![](02_Widgets/Capture.PNG)  
 
-## 10_WindowsSpecials
-![](10_WindowsSpecials/Capture.PNG)  
+## 10_SpecialWindows
+![](10_SpecialWindows/Capture.PNG)  
+
+## 11_SpecialWindowsDebug
+![](11_SpecialWindowsDebug/Capture.PNG)  
 
 ## 20_LayoutsEngine
 ![](20_LayoutsEngine/Capture.PNG)  
