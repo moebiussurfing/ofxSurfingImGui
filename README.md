@@ -72,8 +72,9 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
   <summary>Why an ofxImGui FORK?</summary>
   <p>
 
-  - What's new to the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
-    - Multi context / instances: Several windows from different add-ons without colliding.  
+  - What's new vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+    - Multi context / instances: 
+        - Several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
     </p>
 </details>
