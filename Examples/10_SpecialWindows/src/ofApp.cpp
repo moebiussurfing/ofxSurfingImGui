@@ -83,6 +83,10 @@ void ofApp::draw_MainWindow() {
 
 		// Show global
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+
+		// Draw each Special Window toggle
+		guiManager.drawWindowSpecialsGuiToggles();
+
 		guiManager.endWindow();
 	}
 }

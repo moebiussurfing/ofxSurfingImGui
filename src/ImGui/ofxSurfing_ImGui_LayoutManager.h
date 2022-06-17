@@ -591,7 +591,7 @@ public:
 
 	SurfingImGuiWindowsMode specialsWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
 	//--------------------------------------------------------------
-	void setWindowsMode(SurfingImGuiWindowsMode mode) {
+	void setWindowsMode(SurfingImGuiWindowsMode mode) { // Call before setup.
 		specialsWindowsMode = mode;
 	}
 
@@ -1423,6 +1423,10 @@ public:
 		//windowsSpecialsOrganizer.bLinkedWindowsSpecial.set(true);//force
 	}
 
+	//--
+	// 
+	// Exposed helpers to external GUIs / scope.
+	//  
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
 		return windowsSpecialsOrganizer.bLinkedWindowsSpecial;
@@ -1604,7 +1608,7 @@ public:
 		return windowsSpecialsLayouts[index].bGui;
 	}
 
-	// Easy populate all the toggles .
+	// Easy populate all the Special Windows toggles. Call inside a window.
 	//--------------------------------------------------------------
 	void drawWindowSpecialsGuiToggles() {
 		for (size_t i = 0; i < windowsSpecialsLayouts.size(); i++)
@@ -1707,8 +1711,9 @@ private:
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter& e);
-	//void Changed_Params_Enablers(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
+	
+	//void Changed_Params_Enablers(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
 	std::string getLayoutName(int mode) {
