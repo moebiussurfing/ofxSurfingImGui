@@ -62,26 +62,23 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ## DEPENDENCIES
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
   - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s FORK.
-  - You MUST use this one!  
-<details>
-  <summary>Why?</summary>
-  <p>
-
-  - Whats new to the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
-    - Multi context/instances: Several windows from different add-ons without colliding.  
-    - Easy to update to future **NEW ImGui** versions.  
-    </p>
-</details>
-
+  - You MUST use this one! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
 `data.zip` assets like font files.  
+ 
+<details>
+  <summary>Why an ofxImGui FORK?</summary>
+  <p>
 
+  - What's new to the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+    - Multi context / instances: Several windows from different add-ons without colliding.  
+    - Easy to update to future **NEW ImGui** versions.  
+    </p>
+</details>
 
-## TESTED SYSTEMS
-
-Currently Using:  
+## CURRENT SYSTEMS
 - **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
 
 ## AUTHOR
