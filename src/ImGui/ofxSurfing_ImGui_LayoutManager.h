@@ -297,14 +297,19 @@ public:
 	// widgetsManager
 
 	//--------------------------------------------------------------
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
-	//TODO:
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Appearing)
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		widgetsManager.AddGroup(group, flags, typeGroup, cond);
-		//widgetsManager.AddGroup(group, flags, typeGroup);
+	}
+
+	//--------------------------------------------------------------
+	void AddGroup(ofParameterGroup& group, bool bOpen, ImGuiCond cond = ImGuiCond_None)
+	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
+		SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
+		
+		widgetsManager.AddGroup(group, flags, typeGroup, cond);
 	}
 
 	//TODO:
@@ -338,7 +343,7 @@ public:
 			return;
 		}
 
-		if (flags &! ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
@@ -349,7 +354,7 @@ public:
 			widgetsManager.AddGroup(group, flagst, type);
 			return;
 		}
-		if (flags &! ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
 			widgetsManager.AddGroup(group, flagst, type);
@@ -784,7 +789,7 @@ public:
 
 private:
 
-	void helpInfoBuild();
+	void buildHelpInfo();
 
 	ofParameterGroup params_RectPanels{ "Rectangles Windows" };
 	vector<ofParameter<ofRectangle>> rectangles_Windows;
@@ -866,17 +871,14 @@ public:
 	// guiManager.log.AddText(mMidiMessageHistoryStr); // -> feed
 	//--------------------------------------------------------------
 	void drawLogPanel() {
-		if (bLog) {
-			log.ImGui();
-		}
+		if (bLog) log.ImGui(bLog);
 	}
 
-	// legacy API
+	// Legacy API
 	//--------------------------------------------------------------
 	void logAdd(std::string text) {
 		if (bLog) log.AddText(text);
 	}
-
 	//--------------------------------------------------------------
 	void AddLog(std::string text) {
 		if (bLog) log.AddText(text);
@@ -1169,7 +1171,9 @@ public:
 
 	//----
 
-	ofParameter<bool> bAutoSaveSettings{ "Autosave", false };
+private:
+
+	ofParameter<bool> bAutoSaveSettings{ "Autosave", true };
 
 private:
 
@@ -1703,7 +1707,7 @@ private:
 
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter& e);
-	void Changed_Params_Enablers(ofAbstractParameter& e);
+	//void Changed_Params_Enablers(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
 	//--------------------------------------------------------------

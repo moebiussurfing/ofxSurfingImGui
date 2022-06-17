@@ -83,6 +83,8 @@ namespace ofxImGuiSurfing {
 
 	public:
 
+		//ofParameter<bool> bGui{"Show", true};
+
 		//--------------------------------------------------------------
 		// ImGuiLogWindow
 		//--------------------------------------------------------------
@@ -114,7 +116,16 @@ namespace ofxImGuiSurfing {
 		//}
 
 		//--------------------------------------------------------------
-		void ImGui(std::string name = "Log") {
+		//void ImGui(std::string name = "Log", ofParameter<bool>& bGui)
+		void ImGui(ofParameter<bool>& bGui)
+		{
+			if (!bGui) return;
+
+			std::string name = bGui.getName();
+
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			flags |= ImGuiWindowFlags_NoScrollbar;
+			//flags |= ImGuiWindowFlags_;
 
 			ImGuiCond cond = ImGuiCond_FirstUseEver;
 			const int LOG_WINDOW_SIZE = 250;
@@ -123,9 +134,8 @@ namespace ofxImGuiSurfing {
 			ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
 			ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
 
-			ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollbar;
-
-			if (!ImGui::Begin(name.c_str(), NULL, flags))
+			//if (!ImGui::Begin(name.c_str(), NULL, flags))
+			if (!ImGui::Begin(name.c_str(), (bool*)&bGui.get(), flags))
 			{
 				ImGui::End(); return;
 			}
@@ -135,9 +145,6 @@ namespace ofxImGuiSurfing {
 				float _sp = ofxImGuiSurfing::GetFrameHeightWithSpacing();
 
 				static int _pre = -1;
-				//float hl = ImGui::GetFrameHeight();
-				//float hl = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
-				//float hl = (ImGui::GetIO().FontDefault->FontSize);
 				float hl = ofxImGuiSurfing::getWidgetsHeightUnit();
 
 				// auto fit
@@ -146,9 +153,6 @@ namespace ofxImGuiSurfing {
 					_pre = _count;
 					SetLogSize(_count + 1);
 				}
-
-				//float _w100 = ImGui::GetContentRegionAvail().x;
-				//float _h = 1.5f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y); // multiply the them widget height
 
 				ImGui::Spacing();
 
@@ -165,9 +169,11 @@ namespace ofxImGuiSurfing {
 				{
 					auto logs = mLog;
 
+					//TODO:
 					// macOS bug
 					//for each (string l in logs)
-					for (auto &l : logs)
+
+					for (auto& l : logs)
 					{
 						ImGui::TextWrapped("%s", l.c_str());
 					}

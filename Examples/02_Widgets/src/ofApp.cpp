@@ -6,7 +6,7 @@
 void ofApp::setup()
 {
 	ofSetFrameRate(60);
-	// ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 
 	//--
 
@@ -46,6 +46,7 @@ void ofApp::setup()
 	speed4.set("speed4", 0.5, 0, 1);
 	color1.set("color1", ofColor(0, 0, 255, 255), ofColor(0, 0, 0, 0), ofColor(255, 255, 255, 255));
 	color2.set("color2", ofFloatColor(0, 1, 0, 1), ofColor(0, 0, 0, 0), ofColor(1, 1, 1, 1));
+	indexExpanded.set("SELECT EXPANDED", 0, 0, 4);
 
 	//--
 
@@ -62,6 +63,7 @@ void ofApp::setup()
 	params1.add(bGui_4);
 	params1.add(pos_1);
 	params1.add(rot_1);
+	params1.add(indexExpanded);
 
 	params2.add(lineWidth2);
 	params2.add(separation2);
@@ -106,7 +108,10 @@ void ofApp::setup()
 	//--
 
 	// Load session settings
-	ofxSurfingHelpers::loadGroup(params1);
+	ofxSurfingHelpers::load(params1);
+	ofxSurfingHelpers::load(params2);
+	ofxSurfingHelpers::load(params3);
+	ofxSurfingHelpers::load(params4);
 }
 
 //--------------------------------------------------------------
@@ -139,11 +144,17 @@ void ofApp::drawImWindowMain()
 
 		guiManager.AddLabelBig("> Helpers");
 
-		// The manager has some useful params for common funcions.
+		// The manager has some useful params for common functions.
 
-		// The minimize toggle will help us to hide stuff on our winwows
+		// The minimize toggle will help us to hide stuff on our windows
 		// to simplify a bit the GUI when some windgets are not required to be visible.
 		guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		guiManager.AddSpacingSeparated();
+
+		// Align Helpers Window
+		guiManager.Add(guiManager.bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+		//--
 
 		if (!guiManager.bMinimize) // -> We will use an 'if' when we want to hide some widgets zone.
 		{
@@ -215,7 +226,7 @@ void ofApp::drawImWindow1()
 {
 	//if (bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 	//-> Constrait next window dimensions to be smaller.
-	// Will limit the size and autoexpanding size on this situation.
+	// Will limit the size and auto expanding size on this situation.
 
 	if (guiManager.beginWindow(bGui_1))
 	{
@@ -239,32 +250,39 @@ void ofApp::drawImWindow1()
 		if (ImGui::CollapsingHeader("EDIT", _flagw))
 		{
 			// When using raw trees,
-			// It's required to refresh indenting/responsive layout width!
+			// It's required to refresh indenting / responsive layout width!
 			// That's to not break the responsive layouting engine.
 			guiManager.refreshLayout();
 
 			guiManager.AddSpacing();
 
-			if (guiManager.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true))//next on same line
+			ImGui::PushButtonRepeat(true); // -> Re trig when maintained click!
 			{
-				bPrevious = false;
-				speed3 = speed3 - ((speed3.getMax() - speed3.getMin()) * 0.100f);
-				speed3 = ofClamp(speed3--, speed3.getMin(), speed3.getMax());
+				if (guiManager.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true)) // Two widgets/row. Next widget on same line.
+				{
+					// clicked
+					bPrevious = false;
+					speed3 = speed3 - ((speed3.getMax() - speed3.getMin()) * 0.100f);
+					speed3 = ofClamp(speed3--, speed3.getMin(), speed3.getMax());
+				}
+				if (guiManager.Add(bNext, OFX_IM_TOGGLE_BIG, 2))
+				{
+					// clicked
+					bNext = false;
+					speed3 = speed3 + ((speed3.getMax() - speed3.getMin()) * 0.100f);
+					speed3 = ofClamp(speed3, speed3.getMin(), speed3.getMax());
+				}
 			}
-			if (guiManager.Add(bNext, OFX_IM_TOGGLE_BIG, 2))
-			{
-				bNext = false;
-				speed3 = speed3 + ((speed3.getMax() - speed3.getMin()) * 0.100f);
-				speed3 = ofClamp(speed3, speed3.getMin(), speed3.getMax());
-			}
+			ImGui::PopButtonRepeat();
+
 			guiManager.AddSpacingSeparated();
 
-			guiManager.Add(speed3, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+			guiManager.Add(speed3, OFX_IM_VSLIDER_NO_LABELS); // hide labels
 			guiManager.Add(speed4, OFX_IM_VSLIDER_NO_LABELS);
-			guiManager.AddSpacingSeparated();
 
 			if (!guiManager.bMinimize)
 			{
+				guiManager.AddSpacingSeparated();
 				guiManager.AddGroup(params2);
 				guiManager.AddGroup(params4);
 				guiManager.AddSpacingBig();
@@ -307,7 +325,7 @@ void ofApp::drawImWindow2()
 			float w = guiManager.getWidgetsWidth(4);//manually responsive
 			float h = bBig ? 500 : 100;
 
-			//custom sizes
+			// custom sizes
 			ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
 			ImGui::SameLine();
 			ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
@@ -337,7 +355,7 @@ void ofApp::drawImWindow3()
 		guiManager.AddSpacing(); // space
 
 		//TODO:
-		// this is a worwaround toi align sliders counting labels..
+		// this is a workaround to align sliders counting labels..
 		ImGui::Columns(4, "_", false);
 		{
 			guiManager.Add(speed3, OFX_IM_VSLIDER, 4, true);
@@ -380,7 +398,7 @@ void ofApp::drawImWindow4()
 {
 	if (bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
 	//-> Constrait next window dimensions to be bigger.
-	// Will helpo to read the labels in this situation.
+	// Will help to read the labels in this situation.
 
 	if (guiManager.beginWindow(bGui_4))
 	{
@@ -397,8 +415,39 @@ void ofApp::drawImWindow4()
 		guiManager.Add(speed4, OFX_IM_KNOB, 4, true);
 		guiManager.Add(size3, OFX_IM_KNOB, 4, true);
 		guiManager.Add(size4, OFX_IM_KNOB, 4);
+		guiManager.AddSpacingBigSeparated();
 
-		guiManager.endWindow();
+		//--
+
+		// https://github.com/ocornut/imgui/issues/1131
+		guiManager.AddLabelBig("> Three Expandable Groups / Trees ");
+		{
+			static ImGuiCond cond = ImGuiCond_None;
+			static string label = "";
+
+			bool open1 = false;
+			bool open2 = false;
+			bool open3 = false;
+
+			if (guiManager.Add(indexExpanded)) cond = ImGuiCond_Always;
+			guiManager.AddLabel(label, true, true);
+
+			switch (indexExpanded)
+			{
+			case 0: label = "expand none"; break;
+			case 1: open1 = true; label = "expand group one"; break;
+			case 2: open2 = true; label = "expand group two"; break;
+			case 3: open3 = true; label = "expand group three"; break;
+			case 4: open1 = open2 = open3 = true; label = "expand all"; break;
+			}
+
+			guiManager.AddGroup(params2, open1, cond);
+			guiManager.AddGroup(params3, open2, cond);
+			guiManager.AddGroup(params4, open3, cond);
+			guiManager.endWindow();
+
+			if (cond == ImGuiCond_Always) { cond = ImGuiCond_Once; }
+		}
 	}
 }
 
@@ -432,5 +481,8 @@ void ofApp::keyPressed(int key)
 void ofApp::exit() {
 
 	// Save session settings
-	ofxSurfingHelpers::saveGroup(params1);
+	ofxSurfingHelpers::save(params1);
+	ofxSurfingHelpers::save(params2);
+	ofxSurfingHelpers::save(params3);
+	ofxSurfingHelpers::save(params4);
 }

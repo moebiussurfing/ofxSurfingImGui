@@ -12,6 +12,12 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
+	
+	// Callbacks
+	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
+	ofAddListener(params_WindowSpecials.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
+
+	//--
 
 	params_Advanced.add(bLinkWindows);
 	params_Advanced.add(bAutoResize);
@@ -28,12 +34,14 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
+	params_Advanced.add(bLog);
+
+	params_Advanced.add(windowsSpecialsOrganizer.pad);
 
 	// Exclude from settings
 	//bExtra.setSerializable(false);
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);
-
 
 	//-
 
@@ -297,6 +305,12 @@ void ofxSurfing_ImGui_Manager::startup()
 	//}
 
 	//--
+	
+	// Aligners
+
+	windowsSpecialsOrganizer.bGui_WindowsAlignHelpers.makeReferenceTo(bGui_WindowsAlignHelpers);
+
+	//--
 
 	// Startup
 
@@ -307,10 +321,9 @@ void ofxSurfing_ImGui_Manager::startup()
 	// Help Text Box
 
 	textBoxWidget.setPath(path_Global + "HelpBox/");
-	textBoxWidget.setFontSize(10);
 	textBoxWidget.setup();
 
-	helpInfoBuild();
+	buildHelpInfo();
 
 	//--
 }
@@ -320,28 +333,31 @@ void ofxSurfing_ImGui_Manager::startup()
 // Fonts
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::helpInfoBuild()
+void ofxSurfing_ImGui_Manager::buildHelpInfo()
 {
 	helpInfo = "";
-	helpInfo += "ofxSurfingImGui \n";
-	helpInfo += "\n";
+	helpInfo += "GUI MANAGER \n";
+	helpInfo += "HELP INTERNAL \n\n";
+	helpInfo += "KEY COMMANDS \n\n";
+	
+	if (bHelpInternal) helpInfo += "I      HELP INTERNAL ON \n";
+	else helpInfo += "I      HELP INTERNAL OFF \n";
 
-	if (bHelp)
-	{
-		helpInfo += "Double click this help box to allow move it! \n";
-		helpInfo += "\n\n";
-	}
+	if (bHelp) helpInfo += "H      HELP APP ON \n";
+	else helpInfo += "H      HELP APP OFF \n";
+	
+	if (bMinimize) helpInfo += "`      MINIMIZE ON \n";
+	else helpInfo += "`      MINIMIZE OFF \n";
+	
+	if (bExtra) helpInfo += "E      EXTRA ON \n";
+	else helpInfo += "E      EXTRA OFF \n";
+	
+	if (bLog) helpInfo += "L      LOG ON \n";
+	else helpInfo += "L      LOG OFF \n";
 
-	helpInfo += "KEY COMMANDS \n";
-	helpInfo += "\n";
-	helpInfo += "INTERNAL \n";
-	helpInfo += "\n";
-	helpInfo += "H      HELP GLOBAL \n";
-	helpInfo += "I      HELP INTERNAL \n";
-	helpInfo += "`      MINIMIZE \n";
-	helpInfo += "E      EXTRA \n";
-	helpInfo += "L      LOG \n";
-	helpInfo += "D      DEBUG \n";
+	if(bDebug) helpInfo += "D      DEBUG ON \n";
+	else helpInfo += "D      DEBUG OFF \n";
+
 	helpInfo += "\n\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
@@ -373,6 +389,12 @@ void ofxSurfing_ImGui_Manager::helpInfoBuild()
 			helpInfo += "- WHEN NO PRESET IS ENABLED ALL PANELS WILL BE HIDDEN. "; helpInfo += "\n";
 			helpInfo += "- WHEN NO MINIMIZED, ON EXTRA ZONE, YOU CAN ENABLE MENU, LOG ON EACH PRESET. "; helpInfo += "\n";
 		}
+
+	if (bHelp)
+	{
+		//helpInfo += "\n\n";
+		helpInfo += "Double click this to Edit/Lock \n";
+	}
 
 	textBoxWidget.setText(helpInfo);
 }
@@ -701,8 +723,8 @@ void ofxSurfing_ImGui_Manager::drawLayouts() {
 	// Draws all sections except drawLayoutsManager();
 
 	// Log
-	if (appLayoutIndex != -1)
-		if (bLog) log.ImGui("Log");
+	if (appLayoutIndex != -1) if (bLog) log.ImGui(bLog);
+	//if (bLog) log.ImGui("Log");
 }
 
 //--------------------------------------------------------------
@@ -1530,6 +1552,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	params_LayoutsExtra.add(bMenu);
 	params_LayoutsExtra.add(bLog);
+	//TODO: should be removed if handled by preset engine..
 
 	//params_LayoutsExtraInternal.clear();
 	//params_LayoutsExtraInternal.add(bMenu);
@@ -1668,8 +1691,6 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
-	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
-	ofAddListener(params_WindowSpecials.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 
 	//--
 
@@ -1684,13 +1705,13 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::loadAppSettings()
 {
-	/*if (bAutoSaveSettings) */ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
+	if (bAutoSaveSettings) ofxImGuiSurfing::loadGroup(params_AppSettings, path_AppSettings, true);
 }
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::saveAppSettings()
 {
-	/*if (bAutoSaveSettings) */ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
+	if (bAutoSaveSettings) ofxImGuiSurfing::saveGroup(params_AppSettings, path_AppSettings, true);
 }
 
 //--------------------------------------------------------------
@@ -2082,28 +2103,56 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		ofLogNotice(__FUNCTION__) << name << " : " << e;
 	}
 
-	// help internal
-	if (name == bHelpInternal.getName() && bHelpInternal)
+	if (0) {}
+
+	//--
+	// 
+	// Update Help Info
+	// 
+	// Help internal
+	else if (name == bHelpInternal.getName() && bHelpInternal)
 	{
-		helpInfoBuild();
+		buildHelpInfo();
 	}
 
-	// help global
-	if (name == bHelp.getName())
+	// Help app / global. to be handled externally
+	else if (name == bHelp.getName())
 	{
-		helpInfoBuild();
+		buildHelpInfo();
 	}
 
-	// skip callbakcs when not using the Layout Presets Engine!
+	// Debug
+	else if (name == bDebug.getName())
+	{
+		buildHelpInfo();
+	}
+
+	// Extra
+	else if (name == bExtra.getName())
+	{
+		buildHelpInfo();
+	}
+
+	// Log
+	else if (name == bLog.getName())
+	{
+		buildHelpInfo();
+	}
+
+	// Minimize
+	else if (name == bMinimize.getName())
+	{
+		buildHelpInfo();
+	}
+
+	//----
+	// 
+	// skip callbacks when not using the Layout Presets Engine!
 	if (!surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 		if (!bDockingLayoutPresetsEngine)
 			return;
 
-	//----
-
-	if (0) {}
-
-	//-
+	//--
 
 	// gui layout
 	else if (name == bGui_LayoutsPresets.getName())
@@ -2115,7 +2164,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		}
 	}
 
-	//-
+	//--
 
 	// Reset 
 	// This toggle/flag is "sended" to the parent scope (ofApp), to resets something in our apps.
@@ -2134,7 +2183,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		bReset_Window = false;
 	}
 
-	//-
+	//--
 
 	// Solo Panel
 
@@ -2164,7 +2213,8 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 			//-
 
-			// 1. Autosave
+			// 1. Auto save
+
 			if (bAutoSave_Layout)
 			{
 				// workaround:
@@ -2191,7 +2241,8 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 		//-
 
-		// Hide all modules / gui toggles
+		// Hide all modules / GUI toggles
+
 		if (appLayoutIndex == -1)
 		{
 			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)

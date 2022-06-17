@@ -9,11 +9,11 @@ class ofApp : public ofBaseApp
 {
 
 public:
-	
-    void setup();
-    void draw();
-    void exit();
-    void keyPressed(int key);
+
+	void setup();
+	void draw();
+	void exit();
+	void keyPressed(int key);
 
 	//-
 
@@ -27,39 +27,39 @@ public:
 	ofParameter<bool> bGui_3;
 	ofParameter<bool> bGui_4;
 
-    void drawImWindowMain();
-    void drawImWindow1();
-    void drawImWindow2();
-    void drawImWindow3();
-    void drawImWindow4();
+	void drawImWindowMain();
+	void drawImWindow1();
+	void drawImWindow2();
+	void drawImWindow3();
+	void drawImWindow4();
 
 	ofParameter<bool> bConstraint{ "Constraints", true };
 
 	//-
 
-    // Groups
-    
+	// Groups
+
 	ofParameterGroup params1;
-    ofParameterGroup params2;
-    ofParameterGroup params3;
-    ofParameterGroup params4;
+	ofParameterGroup params2;
+	ofParameterGroup params3;
+	ofParameterGroup params4;
 
 	//-
 
-    // Parameters
-	
+	// Parameters
+
 	ofParameter<glm::vec3> rot_1;
 	ofParameter<glm::vec3> pos_1;
 	ofParameter<float> value;
 	ofParameter<float> valueMin;
 	ofParameter<float> valueMax;
-    ofParameter<bool> bPrevious;
-    ofParameter<bool> bNext;
+	ofParameter<bool> bPrevious;
+	ofParameter<bool> bNext;
 	ofParameter<float> knob1;
 	ofParameter<float> knob2;
 	ofParameter<int> amount2;
-    ofParameter<float> lineWidth2;
-    ofParameter<float> separation2;
+	ofParameter<float> lineWidth2;
+	ofParameter<float> separation2;
 	ofParameter<int> shapeType2;
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
@@ -69,6 +69,7 @@ public:
 	ofParameter<float> lineWidth4;
 	ofParameter<float> separation4;
 	ofParameter<float> speed4;
-    ofParameter<ofColor> color1;
-    ofParameter<ofFloatColor> color2;
+	ofParameter<ofColor> color1;
+	ofParameter<ofFloatColor> color2;
+	ofParameter<int> indexExpanded;
 };
