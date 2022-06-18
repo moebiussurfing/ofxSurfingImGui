@@ -2,16 +2,16 @@
 /*
 
 TODO:
-	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
-	+ add cascade align engine:
-	https://github.com/ocornut/imgui/issues/5287
+	+ add clickable label toggle
+
+	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
 	+ add tooltip types for styles
 
 BUGS:
 
-	+ next groups headers are weird hidden!
+	+ next / nested groups headers are weird hidden!
 	+ nested groups are (heritating) expanded when parent is expanded.
 	+ fix windowsSpecial not drawing windows, when multiple instances?
 	+ it's maybe working on docking mode only?
@@ -25,9 +25,9 @@ BUGS:
 
 /*
  
-	// HOW TO
-	// RECOMMENDED OR COMMON USAGE
-	// TOP SNIPPETS HERE !
+// HOW TO
+// RECOMMENDED OR COMMON USAGE
+// TOP SNIPPETS HERE !
 
 {
 	// .h

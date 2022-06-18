@@ -308,7 +308,7 @@ public:
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
 		SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
-		
+
 		widgetsManager.AddGroup(group, flags, typeGroup, cond);
 	}
 
@@ -1490,8 +1490,10 @@ public:
 	// Set next window position after the window named as the passed named and with the layout type distribution.
 	// layoutType=0 : top right 
 	// layoutType=1 : bottom left
+	// layoutType=2 : top left//TODO:BUG
+	// layoutType=3 : top up//TODO:
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(string nameAnchorWindow = "-1", int layoutType = -1, ImGuiCond cond = ImGuiCond_Always)
+	void setNextWindowAfterWindowNamed(string nameAnchorWindow = "-1", int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
 	{
 		if (nameAnchorWindow == "-1") {
 			setNextWindowOnViewport();
@@ -1502,14 +1504,16 @@ public:
 		ImGuiContext* GImGui = ImGui::GetCurrentContext();
 		ImGuiContext& g = *GImGui;
 		bool bready = false;
-
+		//int _pad = 0;
+		int _pad = windowsSpecialsOrganizer.pad;
+		
 		for (ImGuiWindow* window : g.WindowsFocusOrder)
 		{
 			if (window->WasActive && window->Name == nameAnchorWindow)
 			{
 				if (layoutType == 0) {
 					// to the top right
-					p = window->Pos + ImVec2(window->Size.x, 0);
+					p = window->Pos + ImVec2(window->Size.x + _pad, 0);
 					bready = true;
 				}
 				else if (layoutType == 1) {
@@ -1517,6 +1521,16 @@ public:
 					p = window->Pos + ImVec2(0, window->Size.y);
 					bready = true;
 				}
+				if (layoutType == 2) {
+					// to the top left //TODO: BUG: we don't know the width of next window...
+					p = window->Pos + ImVec2(window->Size.x - _pad - window->Size.x, 0);
+					bready = true;
+				}
+				//else if (layoutType == 3) {
+				//	// top up
+				//	p = window->Pos + ImVec2(0, 0 - _pad - window->Size.y);
+				//	bready = true;
+				//}
 				break;
 			}
 		}
@@ -1712,7 +1726,7 @@ private:
 	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
-	
+
 	//void Changed_Params_Enablers(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
