@@ -320,10 +320,15 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	// Help Text Box
 
-	textBoxWidget.setPath(path_Global + "HelpBox/");
+	textBoxWidget.setPath(path_Global + "HelpBoxInternal/");
 	textBoxWidget.setup();
 
 	buildHelpInfo();
+
+	//-
+
+	textBoxWidgetApp.setPath(path_Global + "HelpBoxApp/");
+	textBoxWidgetApp.setup();
 
 	//--
 }
@@ -392,8 +397,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 
 	if (bHelp)
 	{
-		//helpInfo += "\n\n";
-		helpInfo += "Double click this to Edit/Lock \n";
+		helpInfo += "Double click to Edit/Lock \n";
 	}
 
 	textBoxWidget.setText(helpInfo);
@@ -563,9 +567,17 @@ void ofxSurfing_ImGui_Manager::draw(ofEventArgs& args)
 	//--
 
 	// Draw Help box
+
+	// Internal
 	if (bHelpInternal)
 	{
 		textBoxWidget.draw();
+	}
+
+	// App
+	if (bHelp)
+	{
+		textBoxWidgetApp.draw();
 	}
 }
 
@@ -1231,12 +1243,30 @@ bool ofxSurfing_ImGui_Manager::beginWindow(std::string name = "Window", bool* p_
 }
 
 //TODO: a faster mode to avoid use indexes..
+// that workflow mode could be problematic, bc you must draw the special windows sorted... 
+// in the same order than when adding special windows on setup.
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial() {
 	_indexWindowsSpecials++;
 	bool b = beginWindowSpecial(_indexWindowsSpecials);
 
 	return b;
+}
+
+//--------------------------------------------------------------
+bool ofxSurfing_ImGui_Manager::beginWindowSpecial(string name)
+{
+	int _index = getWindowSpecialIndexForName(name);
+
+	if (_index != -1) {
+		return beginWindowSpecial(_index);
+	}
+	else
+	{
+		ofLogError(__FUNCTION__) << "Special Window with name '" << name << "' not found!";
+
+		return false;
+	}
 }
 
 //--------------------------------------------------------------
@@ -1315,6 +1345,26 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(ofParameter<bool>& _bGui)
 	else {
 		ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
 		return false;
+	}
+}
+
+//--------------------------------------------------------------
+int ofxSurfing_ImGui_Manager::getWindowSpecialIndexForName(string name)
+{
+	for (size_t i = 0; i < windowsSpecialsLayouts.size(); i++)
+	{
+		string _name = windowsSpecialsLayouts[i].bGui.getName();
+
+		if (name == _name)
+		{
+			return  i;
+		}
+	}
+
+	{
+		ofLogError(__FUNCTION__) << "Special Window with name '" << name << "' not found!";
+
+		return -1;
 	}
 }
 

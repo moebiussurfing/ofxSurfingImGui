@@ -3,8 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	bGui.set("ofApp", true);
-
 	//--
 
 	// Parameters
@@ -36,6 +34,15 @@ void ofApp::setup()
 
 	//--
 
+	bGui.set("ofApp", true);
+
+	bGui_5.set("Window 5", true);
+	bGui_6.set("Window 6", true);
+
+	buildHelpInfo();
+
+	//--
+
 	setup_ImGui();
 }
 
@@ -45,10 +52,19 @@ void ofApp::setup_ImGui()
 	guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 	guiManager.setup();
 
+	// when adding by name you need to use indexes when drawing the window!
 	guiManager.addWindowSpecial("myWindow 1");
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
 	guiManager.addWindowSpecial("myWindow 4");
+
+	// when can add special windows passing the visible toggle by argument.
+	// ofParameter name will be used to name the windows headers too.
+
+	guiManager.addWindowSpecial(bGui_5);
+	guiManager.addWindowSpecial(bGui_6);
+
+	// all the window visible toggle states are auto handled between sessions.
 
 	guiManager.startup();
 }
@@ -56,7 +72,9 @@ void ofApp::setup_ImGui()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	if (!bGui)return;
+	buildHelpInfo();
+
+	if (!bGui) return;
 
 	guiManager.begin();
 	{
@@ -66,6 +84,9 @@ void ofApp::draw()
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
 		draw_SurfingWidgets_4();
+
+		draw_SurfingWidgets_5();
+		draw_SurfingWidgets_6();
 	}
 	guiManager.end();
 }
@@ -76,13 +97,15 @@ void ofApp::draw_MainWindow() {
 	if (guiManager.beginWindow(bGui))
 	{
 		// Useful common toggles exposed:
-		 
+
 		// "Special Windows Organizer" 
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_ROUNDED);
 		guiManager.AddSpacingSeparated();
 
 		// Show global
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+		guiManager.AddSpacingSeparated();
 
 		// Draw each Special Window toggle
 		guiManager.drawWindowSpecialsGuiToggles();
@@ -96,7 +119,7 @@ void ofApp::draw_SurfingWidgets_1()
 {
 	if (guiManager.beginWindowSpecial(0))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 1", false);
+		guiManager.AddLabelBig("> Window \n Special 1", false);
 		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		guiManager.AddGroup(params_0);
@@ -108,9 +131,14 @@ void ofApp::draw_SurfingWidgets_1()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_2()
 {
-	if (guiManager.beginWindowSpecial(1))
+	//// A. we can begin the window passing the index, that we want to remember!
+	//if (guiManager.beginWindowSpecial(1)) 
+
+	// B. but we can remember the name used on setup too.
+	// it's the same that use the index 1. (as first starts with zero)
+	if (guiManager.beginWindowSpecial("myWindow 2"))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 2", false);
+		guiManager.AddLabelBig("> Window \n Special 2", false);
 		guiManager.AddGroup(params_1);
 		guiManager.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
@@ -125,7 +153,7 @@ void ofApp::draw_SurfingWidgets_3()
 {
 	if (guiManager.beginWindowSpecial(2))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 3", false);
+		guiManager.AddLabelBig("> Window \n Special 3", false);
 		guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
 		guiManager.Add(amount2, OFX_IM_KNOB, 2);
 		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
@@ -140,13 +168,35 @@ void ofApp::draw_SurfingWidgets_4()
 {
 	if (guiManager.beginWindowSpecial(3))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 4", false);
+		guiManager.AddLabelBig("> Window \n Special 4", false);
 		guiManager.AddGroup(params_3);
 		guiManager.AddSpacingSeparated();
 		guiManager.Add(size2, OFX_IM_HSLIDER_BIG);
 		guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
 		guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
+		guiManager.endWindowSpecial();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw_SurfingWidgets_5()
+{
+	if (guiManager.beginWindowSpecial(bGui_5))
+	{
+		guiManager.AddLabelBig("> Window \nSpecial 5", false);
+		guiManager.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
+		guiManager.endWindowSpecial();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw_SurfingWidgets_6()
+{
+	if (guiManager.beginWindowSpecial(bGui_6))
+	{
+		guiManager.AddLabelBig("> Window \n Special 6", false);
+		guiManager.Add(amount2, OFX_IM_KNOB);
 		guiManager.endWindowSpecial();
 	}
 }
@@ -159,4 +209,58 @@ void ofApp::keyPressed(int key) {
 	else if (key == 'g') {
 		bGui = !bGui;
 	}
+	else if (key == '1') {
+		guiManager.setWindowSpecialToggleVisible(0);
+	}
+	else if (key == '2') {
+		guiManager.setWindowSpecialToggleVisible(1);
+	}
+	else if (key == '3') {
+		guiManager.setWindowSpecialToggleVisible(2);
+	}
+	else if (key == '4') {
+		guiManager.setWindowSpecialToggleVisible(3);
+	}
+
+	else if (key == '5') {
+		guiManager.setWindowSpecialToggleVisible(4);
+	}
+	else if (key == '6') {
+		guiManager.setWindowSpecialToggleVisible(5);
+	}
+
+	else if (key == '0') {
+		guiManager.setWindowSpecialToggleVisibleAllGlobal();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::buildHelpInfo()
+{
+	helpInfo = "";
+	helpInfo += "HELP \n\n";
+	helpInfo += "12_SpecialWindows2 \n";
+	helpInfo += "\n";
+	helpInfo += "KEY COMMANDS \n";
+	helpInfo += "\n";
+	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
+	if (bGui)
+	{
+		helpInfo += "\n\n";
+		helpInfo += "0      GLOBAL VISIBLE " + ofToString(guiManager.getWindowSpecialVisibleGlobalState() ? "ON" : "OFF") + "\n";
+		if (guiManager.getWindowSpecialVisibleGlobalState())
+		{
+			helpInfo += "\n";
+			helpInfo += "1      WINDOW 1 " + ofToString(guiManager.getWindowSpecialVisibleState(0) ? "ON" : "OFF") + "\n";
+			helpInfo += "2      WINDOW 2 " + ofToString(guiManager.getWindowSpecialVisibleState(1) ? "ON" : "OFF") + "\n";
+			helpInfo += "3      WINDOW 3 " + ofToString(guiManager.getWindowSpecialVisibleState(2) ? "ON" : "OFF") + "\n";
+			helpInfo += "4      WINDOW 4 " + ofToString(guiManager.getWindowSpecialVisibleState(3) ? "ON" : "OFF") + "\n";
+			helpInfo += "5      WINDOW 5 " + ofToString(guiManager.getWindowSpecialVisibleState(4) ? "ON" : "OFF") + "\n";
+			helpInfo += "6      WINDOW 6 " + ofToString(guiManager.getWindowSpecialVisibleState(5) ? "ON" : "OFF") + "\n";
+		}
+	}
+	helpInfo += "\n\n";
+	helpInfo += "Double click to Edit/Lock \n";
+
+	guiManager.setHelpInfoApp(helpInfo);
 }

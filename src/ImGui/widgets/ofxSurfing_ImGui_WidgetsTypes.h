@@ -509,7 +509,9 @@ namespace ofxImGuiSurfing
 					if (spacing != -1)
 					{
 						float h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
-						ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+
+						ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
+						//ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
 
 						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 					}
@@ -529,7 +531,9 @@ namespace ofxImGuiSurfing
 					if (bSameLine) ImGui::SameLine();
 
 					float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
-					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+
+					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
+					//ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
 
 					if (spacing != -1)
 					{
@@ -1740,8 +1744,8 @@ namespace ofxImGuiSurfing
 						{
 							// workaround
 							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-							ImGui::SetNextTreeNodeOpen(bOpen, cond);
-							//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+							ImGui::SetNextItemOpen(bOpen, cond);
+							//ImGui::SetNextItemOpen(bOpen, ImGuiCond_Appearing);
 
 							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
 							bMustCloseTree = false; // we dont need to close tree!
@@ -1751,8 +1755,8 @@ namespace ofxImGuiSurfing
 						{
 							// workaround bc tree has no flags..
 							bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-							ImGui::SetNextTreeNodeOpen(bOpen, cond);
-							//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+							ImGui::SetNextItemOpen(bOpen, cond);
+							//ImGui::SetNextItemOpen(bOpen, ImGuiCond_Appearing);
 
 							bIsOpen = ImGui::TreeNode(group.getName().c_str());
 							bMustCloseTree = bIsOpen;
@@ -1904,8 +1908,8 @@ namespace ofxImGuiSurfing
 								//TODO:
 								// workaround bc tree has no flags..
 								bool bOpen = (flags == ImGuiTreeNodeFlags_DefaultOpen);
-								ImGui::SetNextTreeNodeOpen(bOpen, cond);
-								//ImGui::SetNextTreeNodeOpen(bOpen, ImGuiCond_Appearing);
+								ImGui::SetNextItemOpen(bOpen, cond);
+								//ImGui::SetNextItemOpen(bOpen, ImGuiCond_Appearing);
 
 								if (ImGui::TreeNode(name.c_str()))
 								{

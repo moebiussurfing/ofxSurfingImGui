@@ -181,15 +181,16 @@ namespace ofxImGuiSurfing
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
 
-			float _yMin = 1080; // store the more hight/upper, lower y window coordinate
+			float _yMin = 1000; // set an y max to bottom. store the more hight/upper, lower y window coordinate
 
 			ImVector<ImGuiWindow*> windows;
 			for (ImGuiWindow* window : g.WindowsFocusOrder)
 			{
 				if (window->WasActive)
 				{					
-					// skip aligner window
-					if (bGui_WindowsAlignHelpers.getName() == window->Name) continue;
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
 
 					windows.push_back(window);
 
@@ -204,6 +205,10 @@ namespace ofxImGuiSurfing
 			{
 				for (int n = 0; n < windows.Size; n++)
 				{
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(windows[n]->Name)) continue;
+
 					ImVec2 pos;
 					pos = windows[n]->Pos;
 					pos.y = _yMin;
@@ -227,8 +232,9 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
-					// skip aligner window
-					if (bGui_WindowsAlignHelpers.getName() == window->Name) continue;
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
 
 					windows.push_back(window);
 
@@ -242,7 +248,11 @@ namespace ofxImGuiSurfing
 			if (windows.Size > 0)
 			{
 				for (int n = 0; n < windows.Size; n++)
-				{
+				{	
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(windows[n]->Name)) continue;
+
 					ImVec2 pos;
 					pos = windows[n]->Pos;
 					pos.x = _xMin;
@@ -255,8 +265,9 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		ofParameter<bool> bGui_WindowsSpecials{ "ORGANIZER", true }; // toggle gui to draw main window.
-		ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", true }; 
+		ofParameter<bool> bGui_WindowsSpecials{ "ORGANIZER", false }; // organizer window.
+		ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false}; // subpanel aligner window.
+		
 		ofParameter<bool> bGui_ShowAll{ "SHOW GLOBAL", true }; // extra global toggle to hide / show all the queued windows.
 
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
@@ -688,8 +699,9 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
-					// skip aligner window
-					if (bGui_WindowsAlignHelpers.getName() == window->Name) continue;
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
 
 					myWin w;
 					w.ImWin = window;
@@ -724,8 +736,7 @@ namespace ofxImGuiSurfing
 						string name = windowsSpecialsOrganizer[k].bGui.getName();
 						if (myWins[i].ImWin->Name == name)
 						{
-							if (name != windowsSpecialsOrganizer[0].bGui.getName())
-								bskip = true;
+							if (name != windowsSpecialsOrganizer[0].bGui.getName()) bskip = true;
 							break;
 						}
 					}
@@ -774,8 +785,9 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{					
-					// skip aligner window
-					if (bGui_WindowsAlignHelpers.getName() == window->Name) continue;
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
 
 					myWin w;
 					w.ImWin = window;
@@ -810,8 +822,7 @@ namespace ofxImGuiSurfing
 						string name = windowsSpecialsOrganizer[k].bGui.getName();
 						if (myWins[i].ImWin->Name == name)
 						{
-							if (name != windowsSpecialsOrganizer[0].bGui.getName())
-								bskip = true;
+							if (name != windowsSpecialsOrganizer[0].bGui.getName()) bskip = true;
 							break;
 						}
 					}
@@ -832,7 +843,7 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		//--
+		//----
 
 	public:
 

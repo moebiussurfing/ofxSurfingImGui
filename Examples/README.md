@@ -13,6 +13,9 @@
 ## 11_SpecialWindowsDebug
 ![](11_SpecialWindowsDebug/Capture.PNG)  
 
+## 12_SpecialWindows2
+![](12_SpecialWindows2/Capture.PNG)  
+
 ## 20_LayoutsEngine
 ![](20_LayoutsEngine/Capture.PNG)  
 

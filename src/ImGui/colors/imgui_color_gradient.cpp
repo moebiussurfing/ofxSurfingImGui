@@ -353,7 +353,7 @@ namespace ImGui
 
 		float ratio = 1.f;
 		//bar_pos.x += ImGui::GetContentRegionAvailWidth() * (1.0f - ratio);
-		float maxWidth = ImGui::GetContentRegionAvailWidth() * ratio - 7;
+		float maxWidth = ImGui::GetContentRegionAvail().x * ratio - 7;
 
 		float barBottom = bar_pos.y + GRADIENT_BAR_EDITOR_HEIGHT;
 		float _h = ImGui::GetFrameHeight();//GRADIENT_BAR_WIDGET_HEIGHT

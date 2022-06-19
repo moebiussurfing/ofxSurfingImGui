@@ -1,15 +1,17 @@
 
 /*
 
-TODO:
+	TODO:
 
+	+ fix log ofxImGuiSurfing::WindowPanels::isIntitiated: 
+	
 	+ add clickable label toggle
 
 	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
 	+ add tooltip types for styles
 
-BUGS:
+	BUGS:
 
 	+ next / nested groups headers are weird hidden!
 	+ nested groups are (heritating) expanded when parent is expanded.

@@ -1239,11 +1239,14 @@ public:
 
 	bool beginWindowSpecial();
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
+	bool beginWindowSpecial(string name); // -> If you added windows to the engine you can begin the window passing his SAME name.
 
 	void endWindowSpecial(int index = -1);
 
 	bool beginWindowSpecial(ofParameter<bool>& _bGui);
+
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
+	int getWindowSpecialIndexForName(string name);
 
 	//--
 
@@ -1293,6 +1296,10 @@ public:
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
+		return windowsSpecialsOrganizer.bGui_ShowAll.get();
+	}
+	//--------------------------------------------------------------
+	bool getWindowSpecialVisibleGlobalState() const {
 		return windowsSpecialsOrganizer.bGui_ShowAll.get();
 	}
 
@@ -1610,7 +1617,15 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowSpecialVisible(int index)
+	bool getWindowSpecialVisibleState(int index) const // return visible toggle state
+	{
+		if (windowsSpecialsLayouts.size() == 0) return false;
+		else if (index > windowsSpecialsLayouts.size() - 1 || index == -1) return false;
+		else return windowsSpecialsLayouts[index].bGui.get();
+	}
+
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowSpecialVisible(int index) // return bool parameter visible toggle
 	{
 		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
 		{
@@ -1984,6 +1999,17 @@ private:
 	std::string helpInfo = "";
 	TextBoxWidget textBoxWidget;
 
+	std::string helpInfoApp = "";
+	TextBoxWidget textBoxWidgetApp;
+
+public:
+
+	//--------------------------------------------------------------
+	void setHelpInfoApp(string text) {
+		helpInfoApp = text;
+		textBoxWidgetApp.setText(helpInfoApp);
+
+	}
 };
 
 //--

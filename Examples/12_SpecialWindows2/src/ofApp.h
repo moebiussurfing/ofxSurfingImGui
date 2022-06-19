@@ -13,6 +13,15 @@
     2. "Align Windows Engine": 
     Helpers to align/cascade/layout all visible windows.
 
+    3. We will learn how to create Special Windows using different workflows / API methods:
+    passing names and handling with indexes 
+    or by passing visible toggles (ofParameter<bool> bGui), 
+    that will be used to name the windows headers too.
+
+    4. We will learn how to add an Help Info box to the GUI manager.
+    As help boxes could be commonly used in our apps, 
+    an internal help box is bundled inside.
+
 */
 
 
@@ -26,7 +35,7 @@ public:
     void draw();
 	void keyPressed(int key);
 
-	//-
+	//--
 
     // Parameters
     
@@ -56,7 +65,7 @@ public:
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
 
-	//-
+	//--
 
 	// Gui
 
@@ -64,11 +73,22 @@ public:
 
 	void setup_ImGui();
 
-    ofParameter<bool> bGui;
+    ofParameter<bool> bGui; // this is the only visible toggle that will not be added as special window.
     void draw_MainWindow();
 
 	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
 	void draw_SurfingWidgets_4();
+
+    // two more windows with local visible toggles,
+    // to be passed when adding as special windows.
+    ofParameter<bool> bGui_5;
+    ofParameter<bool> bGui_6;
+	void draw_SurfingWidgets_5();
+	void draw_SurfingWidgets_6();
+
+    // help info
+    void buildHelpInfo();
+    string helpInfo;
 };
