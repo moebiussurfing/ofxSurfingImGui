@@ -335,7 +335,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 //----
 
-// Fonts
+// Help
 
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::buildHelpInfo()
@@ -403,6 +403,10 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 	textBoxWidget.setText(helpInfo);
 }
 
+//----
+ 
+// Fonts
+
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
 {
@@ -416,6 +420,16 @@ void ofxSurfing_ImGui_Manager::setDefaultFontIndex(int index)
 void ofxSurfing_ImGui_Manager::setDefaultFont()//will apply the first added font file
 {
 	setDefaultFontIndex(0);
+}
+
+//TODO:
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::clearFonts()
+{
+	customFonts.clear();
+
+	auto& io = ImGui::GetIO();
+	io.Fonts->Clear();
 }
 
 //--------------------------------------------------------------
@@ -437,7 +451,8 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 		if (guiPtr != nullptr) {
 			_customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
 		}
-		else {
+		else 
+		{
 			_customFont = gui.addFont(path, size, nullptr, normalCharRanges);
 		}
 
@@ -479,12 +494,13 @@ bool ofxSurfing_ImGui_Manager::addFont(std::string path, int size)
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::pushStyleFont(int index)
 {
-	if (index <= customFonts.size() - 1)
+	if (index < customFonts.size())
 	{
 		if (customFonts[index] != nullptr)
 			ImGui::PushFont(customFonts[index]);
 	}
-	else {
+	else 
+	{
 		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
 }
@@ -497,6 +513,7 @@ void ofxSurfing_ImGui_Manager::popStyleFont()
 	if (bIgnoreNextPopFont)
 	{
 		bIgnoreNextPopFont = false;
+
 		return;
 	}
 
@@ -530,12 +547,12 @@ void ofxSurfing_ImGui_Manager::processOpenFileSelection(ofFileDialogResult openF
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::openFileFont(int size)
+void ofxSurfing_ImGui_Manager::openFontFileDialog(int size)
 {
 	// Open the Open File Dialog
-	ofFileDialogResult openFileResult = ofSystemLoadDialog("Select a font file, ttf or otf to add to ImGui", false, ofToDataPath(""));
+	ofFileDialogResult openFileResult = ofSystemLoadDialog("Select a font file, TTF or OTF to add to ImGui", false, ofToDataPath(""));
 
-	// Check if the user opened a file
+	// Check if the user picked a file
 	if (openFileResult.bSuccess) {
 
 		ofLogNotice(__FUNCTION__) << ("User selected a file");

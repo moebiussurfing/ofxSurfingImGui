@@ -76,6 +76,8 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
     - Multi context / instances: 
         - Several windows from different add-ons without colliding.  
     - Easy to update to future **NEW ImGui** versions.  
+    Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original ofxImGui from **@jvcleave**.  
+    And will be probably merged into the master branch.  
     </p>
 </details>
 

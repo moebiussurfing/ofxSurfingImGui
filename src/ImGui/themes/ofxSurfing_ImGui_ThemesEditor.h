@@ -6,13 +6,15 @@
 #include "imgui_internal.h"
 
 #include "ofxSurfing_ImGui_Themes.h"
-#include "ImGui/themes/ThemeSequentity.inl"
-#include "ImGui/themes/FlatDryWineGreenTheme.h"
+
+#include "ImGui/themes/ThemeSequentity.h"
+#include "ImGui/themes/ThemeFlatDryWineGreen.h"
+#include "ImGui/themes/ThemeT3.h"
 
 // Helpers macros
 // We normally try to not use many helpers in imgui_demo.cpp in order to make code easier to copy and paste,
 // but making an exception here as those are largely simplifying code...
-// In other imgui sources we can use nicer internal functions from imgui_internal.h (ImMin/ImMax) but not in the demo.
+// In other ImGui sources we can use nicer internal functions from imgui_internal.h (ImMin/ImMax) but not in the demo.
 #define IM_MIN(A, B)            (((A) < (B)) ? (A) : (B))
 #define IM_MAX(A, B)            (((A) >= (B)) ? (A) : (B))
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
@@ -22,6 +24,7 @@ using namespace ImGui;
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
+//--------------------------------------------------------------
 static void HelpMarker(const char* desc)
 {
 	ImGui::TextDisabled("(?)");
@@ -44,6 +47,7 @@ namespace ofxImGuiSurfing
 	// TODO
 	// adding theme editor
 	// [Internal] Display details for a single font, called by ShowStyleEditor().
+	//--------------------------------------------------------------
 	inline static void NodeFont2(ImFont* font)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -131,15 +135,36 @@ namespace ofxImGuiSurfing
 		}
 		ImGui::TreePop();
 	}
-
+	
 	// Demo helper function to select among default colors. See ShowStyleEditor() for more advanced options.
 	// Here we use the simplified Combo() api that packs items into a single literal string.
 	// Useful for quick combo boxes where the choices are known locally.
+	//--------------------------------------------------------------
 	inline bool ShowStyleSelector2(const char* label)
 	{
 		static int style_idx = -1;
-		if (ImGui::Combo(label, &style_idx, "Dark\0Light\0Classic\0MoebiusSurfingV2\0MoebiusSurfing\0ModernDark\0Grey\0Sequentity\0Olekristensen\0FlatDryWineGreenTheme\0"))
-		{
+
+		std::vector<std::string> values;
+		values.clear();
+		values.push_back("Dark");
+		values.push_back("Light");
+		values.push_back("Classic");
+		values.push_back("moebiusSurfingV2");
+		values.push_back("moebiusSurfing");
+		values.push_back("ModernDark");
+		values.push_back("Grey");
+		values.push_back("Sequentity");
+		values.push_back("Olekristensen");
+		values.push_back("FlatDryWineGreen");
+		values.push_back("T3");
+
+		int i = style_idx;
+		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, values));
+		if (b) {
+			i = ofClamp(i, 0, values.size() - 1);//avoid crashes
+			style_idx = i;
+			ofLogNotice(__FUNCTION__) << "Combo: " << i;
+
 			switch (style_idx)
 			{
 			case 0: ImGui::StyleColorsDark(); break;
@@ -151,13 +176,15 @@ namespace ofxImGuiSurfing
 			case 6: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
 			case 7: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;
 			case 8: ofxImGuiSurfing::ImGui_ThemeOlekristensen(); break;
-			case 9: ofxImGuiSurfing::FlatDryWineGreenTheme(); break;
+			case 9: ofxImGuiSurfing::ImGui_ThemeFlatDryWineGreen(); break;
+			case 10: ofxImGuiSurfing::ImGui_ThemeT3(); break;
 			}
 			return true;
 		}
 		return false;
 	}
 
+	//--------------------------------------------------------------
 	inline void ShowStyleEditor2(ImGuiStyle* ref)
 	{
 		// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
@@ -177,7 +204,7 @@ namespace ofxImGuiSurfing
 
 		if (ofxImGuiSurfing::ShowStyleSelector2("Colors##Selector"))
 			ref_saved_style = style;
-		
+
 		ImGui::ShowFontSelector("Fonts##Selector");
 
 		// Simplified Settings (expose floating-pointer border sizes as boolean representing 0.0f or 1.0f)

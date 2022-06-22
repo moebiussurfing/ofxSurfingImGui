@@ -14,7 +14,8 @@
 
 #define WINDOW_WIDTH_THRESHOLD 250 // when window width is less than that, we will use another pattern for some widgets.
 //#define WINDOW_WIDTH_THRESHOLD 300 // when window width is less than that, we will use another pattern for some widgets.
-#define PADDING_COMBO 13
+#define PADDING_COMBO 20
+//#define PADDING_COMBO 13
 
 //----------
 

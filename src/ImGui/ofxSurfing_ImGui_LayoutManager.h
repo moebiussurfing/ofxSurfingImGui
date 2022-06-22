@@ -722,6 +722,8 @@ private:
 
 public:
 
+	void clearFonts();
+
 	bool addFont(std::string path, int size);//TODO: required? bc pushFont workflow..
 	bool pushFont(std::string path, int size);
 
@@ -729,16 +731,35 @@ private:
 
 	int currFont = 0;
 	void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
-	void openFileFont(int size = 10);
+
+public:
+
+	void openFontFileDialog(int size = 10);//opens file dialog window to pick a font file, passing the desired size.
 
 public:
 
 	void setDefaultFontIndex(int index);
 	void setDefaultFont();
+
+	// Enable some previously added font
+	void pushStyleFont(int index);//Take care not pushing a non existing index or it will crash!
+	void popStyleFont();
+
 	int getNumFonts() { return customFonts.size(); }
 
-	void pushStyleFont(int index);
-	void popStyleFont();
+	//--------------------------------------------------------------
+	string getFontName(int index) {
+		string s = "UNKNOWN";
+
+		if (index < customFonts.size())
+		{
+			if (customFonts[index] != nullptr)
+				s = (customFonts[index]->ConfigData->Name);
+			return s;
+		}
+
+		return s;
+	}
 
 	//----
 
@@ -1513,7 +1534,7 @@ public:
 		bool bready = false;
 		//int _pad = 0;
 		int _pad = windowsSpecialsOrganizer.pad;
-		
+
 		for (ImGuiWindow* window : g.WindowsFocusOrder)
 		{
 			if (window->WasActive && window->Name == nameAnchorWindow)
