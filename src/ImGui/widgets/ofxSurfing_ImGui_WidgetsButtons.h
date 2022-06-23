@@ -22,7 +22,7 @@
 namespace ofxImGuiSurfing
 {
 	//TODO:
-	//move to other widgets header
+	// Move to other widgets header
 	//--------------------------------------------------------------
 	inline void AddTextBlink(std::string text, bool bBlink = true)
 	{
@@ -42,7 +42,7 @@ namespace ofxImGuiSurfing
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
-		//-
+		//--
 
 		// Border to selected
 		//if (border)
@@ -62,7 +62,7 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// Mini Button and toggles for bool ofParams
+	// Mini Button and toggles for BOOL ofParams
 
 	//--------------------------------------------------------------
 	inline bool AddButtonMini(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
@@ -103,9 +103,9 @@ namespace ofxImGuiSurfing
 		else return false;
 	}
 
-	//-
+	//--
 
-	// Big Buttons and toggles for bool ofParams
+	// Big Buttons and toggles for BOOL ofParams
 
 	//--------------------------------------------------------------
 	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
@@ -119,7 +119,6 @@ namespace ofxImGuiSurfing
 		{
 			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
 			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
-			//if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -149,14 +148,15 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<bool>& parameter, ImVec2 bb /*= ImVec2(-1, -1)*/) {
+	inline bool AddBigButton(ofParameter<bool>& parameter, ImVec2 bb) {
 		return AddBigButton(parameter, bb.x, bb.y);
 	}
 
-	//-
+	//--
 
+	// Button but using a BOOL not void param
 	//--------------------------------------------------------------
-	inline bool AddSmallButton(ofParameter<bool>& parameter, float w/* = -1*/, float h/* = -1*/) // button but using a bool not void param
+	inline bool AddSmallButton(ofParameter<bool>& parameter, float w, float h) 
 	{
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
@@ -177,6 +177,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 		{
+			ofLogVerbose(__FUNCTION__) << name << ": BANG";
 			tmpRef = true;
 			parameter.set(tmpRef);
 		}
@@ -201,8 +202,96 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	// TODO: 
+
+	// Big Buttons and toggles for VOID ofParams
+
 	//--------------------------------------------------------------
-	//inline bool AddBigToggle(ofParameter<bool>& parameter, float w, float h , bool border , bool bBlink )
+	inline bool AddBigButton(ofParameter<void>& parameter, float w = -1, float h = -1) 
+	{
+		bool bReturn = false;
+		std::string name = parameter.getName();
+
+		std::string n = "##BIGBUTTON" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+		{
+			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
+			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
+			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			{
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					bReturn = true;
+					parameter.trigger();
+				}
+			}
+			ImGui::PopStyleColor(3);
+		}
+		ImGui::PopID();
+
+		return bReturn;
+	}
+	//--------------------------------------------------------------
+	inline bool AddBigButton(ofParameter<void>& parameter, ImVec2 bb /*= ImVec2(-1, -1)*/) {
+		return AddBigButton(parameter, bb.x, bb.y);
+	}
+	//--------------------------------------------------------------
+	inline bool AddSmallButton(ofParameter<void>& parameter, float w/* = -1*/, float h/* = -1*/) // button but using a bool not void param
+	{
+		bool bReturn = false;
+		std::string name = parameter.getName();
+
+		std::string n = "##SMALLBUTTON" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightRelative();
+
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
+		ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+		{
+			ofLogVerbose(__FUNCTION__) << name << ": BANG";
+			bReturn = true;
+			parameter.trigger();
+		}
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::PopID();
+
+		return bReturn;
+	}
+	//--------------------------------------------------------------
+	inline bool AddSmallButton(ofParameter<void>& parameter, ImVec2 bb) {
+		return AddSmallButton(parameter, bb.x, bb.y);
+	}
+	//--------------------------------------------------------------
+	inline bool AddSmallButton(ofParameter<void>& parameter)
+	{
+		return AddSmallButton(parameter, -1, -1);
+	}
+
+	//----
+
+	// Big Buttons and toggles for BOOLS ofParams
+
+	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
 		// Border when selected
@@ -324,7 +413,6 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border, bool bBlink) {
-		//inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool border = false, bool bBlink = false) {
 		return AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
 	}
 
@@ -445,8 +533,6 @@ namespace ofxImGuiSurfing
 		AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
 	}
 
-	//----
-
 	//--------------------------------------------------------------
 
 	// Rounded Toggle Buttons
@@ -546,7 +632,7 @@ namespace ofxImGuiSurfing
 
 				draw_list->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), cf, height * 0.5f);
 
-				//-
+				//--
 
 				// 1.2 Border Background Zone
 
@@ -561,8 +647,7 @@ namespace ofxImGuiSurfing
 					draw_list->AddRect(pos, ImVec2(pos.x + width, pos.y + height), cb, height * 0.5f);
 				}
 #endif
-
-				//-
+				//--
 
 				// 2.1 Small Circle
 
@@ -571,8 +656,7 @@ namespace ofxImGuiSurfing
 #ifndef USE_BORDER_ROUNDE_TOGGLES
 				draw_list->AddCircleFilled(ImVec2(pos.x + radius + (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, c1);
 #endif
-
-				//-
+				//--
 
 				// 2.2 Border Small Circle
 
@@ -593,7 +677,7 @@ namespace ofxImGuiSurfing
 
 				ImGui::SameLine();
 
-				//-
+				//--
 
 				// 3. Text Label
 
@@ -606,7 +690,7 @@ namespace ofxImGuiSurfing
 
 				draw_list->AddText(pt, ct, str_id);
 
-				//-
+				//--
 
 				// 4. Adjust frame end ?
 
@@ -621,9 +705,9 @@ namespace ofxImGuiSurfing
 		return bchanged;
 	}
 
-	//-
+	//--
 
-	// ofParameter bool rounded toggle
+	// ofParameter BOOL rounded toggle
 
 	//TODO:
 	// There's a bug that when using
@@ -648,7 +732,6 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, std::string name, ImVec2 bb)
 	{
-
 		bool bReturn = false;
 		auto tmpRef = parameter.get();
 
@@ -661,15 +744,16 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
-	// Api short name
+	// API short name
 	//--------------------------------------------------------------
 	inline bool AddToggleRounded(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1))
 	{
 		return AddToggleRoundedButton(parameter, bb);
 	}
 
-	//TODO: not working..
-	// Two names depending of the bool state
+	//TODO: 
+	// not working..
+	// Two names depending of the BOOL state
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1")
 	{

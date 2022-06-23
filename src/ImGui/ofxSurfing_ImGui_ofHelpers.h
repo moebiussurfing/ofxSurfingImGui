@@ -27,16 +27,24 @@ namespace ofxImGuiSurfing
 	{
 		bool bUnknown = false;
 		bool bIsMultiDim = false;
+		bool bIsVoid = false;
 
 		const auto& info = typeid(ParameterType);
-		if (info == typeid(float)) // float
+
+		if (info == typeid(float)) // FLOAT
 		{
 		}
-		else if (info == typeid(int)) // Int
+		else if (info == typeid(int)) // INT
 		{
 		}
-		else if (info == typeid(bool)) // Bool
+		else if (info == typeid(bool)) // BOOL
 		{
+		}
+		//TODO:
+		else if (info == typeid(void)) // VOID
+		{
+			bIsVoid = true;
+			return;
 		}
 
 		//TODO:
@@ -53,36 +61,49 @@ namespace ofxImGuiSurfing
 			bIsMultiDim = true;
 		}
 
-		// Unknown types
-		else {
+		// Unknown Types
+		else
+		{
 			bUnknown = true;
-			ofLogWarning(__FUNCTION__) << "Could not add wheel control to element " << param.getName();
+
+			ofLogWarning(__FUNCTION__) << "Could not add wheel to " << param.getName();
+
 			return;
 		}
+
+		//// TODO
+		//if (info == typeid(void)) return; // VOID
+
+		//--
 
 		if (!bUnknown)
 		{
 			if (!bIsMultiDim)
 			{
-				if (resolution == -1) {
-					resolution = (param.getMax() - param.getMin()) / 100.f; // 100 steps for all the param range
-					//resolution = 0.1f; // hardcoded to 0.1
+				if (resolution == -1)
+				{
+					resolution = (param.getMax() - param.getMin()) / 100.f;
+					// 100 steps for all the param range
 				}
 			}
 			else
 			{
-				if (resolution == -1) {
-					//resolution = (param.getMax().x - param.getMin().x) / 100.f; // 100 steps for all the param range
-					resolution = 0.1f; // hardcoded to 0.1
+				if (resolution == -1)
+				{
+					//resolution = (param.getMax().x - param.getMin().x) / 100.f; 
+					// 100 steps for all the param range
+					resolution = 0.1f; // hardcoded to 0.1 bc each dim could be different scale..
 				}
 			}
 
 			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
 
 			ImGui::SetItemUsingMouseWheel();
+
 			if (ImGui::IsItemHovered())
 			{
 				float wheel = ImGui::GetIO().MouseWheel;
+
 				if (wheel)
 				{
 					if (ImGui::IsItemActive())
@@ -91,10 +112,15 @@ namespace ofxImGuiSurfing
 					}
 					else
 					{
-						if (info == typeid(bool)) { // bool
+						if (info == typeid(bool)) { // BOOL
 							param = !param.get();
 						}
-						else { // float, int
+						else if (info == typeid(void)) { // VOID
+						}
+
+						// FLOAT, INT
+						else
+						{
 							param += wheel * (bCtrl ? resolution : resolution * 10);
 							param = ofClamp(param, param.getMin(), param.getMax()); // clamp
 						}
@@ -105,13 +131,13 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddTooltip(std::string text, bool bEnabled = true)//call after the popup trigger widget
+	inline void AddTooltip(std::string text, bool bEnabled = true)//call after the pop up trigger widget
 	{
 		if (!bEnabled) return;
 
+		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
+		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
 		if (ImGui::IsItemHovered())
-			//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
-			//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
@@ -141,7 +167,7 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<ofVec2f>& parameter);
 	bool AddParameter(ofParameter<ofVec3f>& parameter);
 	bool AddParameter(ofParameter<ofVec4f>& parameter);
-	
+
 	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha = true);
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha = true);
 
@@ -207,7 +233,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
-	bool AddStepper(ofParameter<float> & parameter, float step = -1, float stepFast = -1);
+	bool AddStepper(ofParameter<float>& parameter, float step = -1, float stepFast = -1);
 
 	//--------------------------------------------------------------
 	inline bool AddStepperInt(ofParameter<int>& parameter)
@@ -223,7 +249,7 @@ namespace ofxImGuiSurfing
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
-		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int *)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
+		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 		{
 			tmpRefi = ofClamp(tmpRefi, parameter.getMin(), parameter.getMax());
 			parameter.set(tmpRefi);
@@ -252,7 +278,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-		if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
+		if (ImGui::InputFloat(p.getName().c_str(), (float*)&tmpRef, step, stepFast))
 		{
 			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 			p.set(tmpRef);
@@ -282,7 +308,7 @@ namespace ofxImGuiSurfing
 		if (info == typeid(float))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			if (ImGui::SliderFloat((parameter.getName().c_str()), (float *)&tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+			if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
 			{
 				parameter.set(tmpRef);
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
@@ -296,7 +322,7 @@ namespace ofxImGuiSurfing
 		else if (info == typeid(int))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			if (ImGui::SliderInt((parameter.getName().c_str()), (int *)&tmpRef, parameter.getMin(), parameter.getMax()))
+			if (ImGui::SliderInt((parameter.getName().c_str()), (int*)&tmpRef, parameter.getMin(), parameter.getMax()))
 			{
 				parameter.set(tmpRef);
 
@@ -311,7 +337,7 @@ namespace ofxImGuiSurfing
 		// Bool
 		else if (info == typeid(bool))
 		{
-			if (ImGui::Checkbox((parameter.getName().c_str()), (bool *)&tmpRef))
+			if (ImGui::Checkbox((parameter.getName().c_str()), (bool*)&tmpRef))
 			{
 				parameter.set(tmpRef);
 				return true;

@@ -135,7 +135,7 @@ namespace ofxImGuiSurfing
 			//	std::cout << i << '\n';
 			//for (auto c : boost::adaptors::reverse(widgetsStyles)) // reverse?
 
-			for (auto &c : widgetsStyles)
+			for (auto& c : widgetsStyles)
 			{
 				if (c.name == aparam.getName()) // param was added to the queue
 				{
@@ -165,7 +165,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		SurfingImGuiTypesGroup_Style getStyleGroup(ofParameterGroup& group) {
-			for (auto &c : groupsStyles)
+			for (auto& c : groupsStyles)
 			{
 				if (c.name == group.getName()) // param was added to the queue
 				{
@@ -279,7 +279,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void UpdateStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
-			for (auto &c : groupsStyles)
+			for (auto& c : groupsStyles)
 			{
 				if (c.name == name)
 				{
@@ -294,7 +294,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void UpdateStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 		{
-			for (auto &c : groupsStyles)
+			for (auto& c : groupsStyles)
 			{
 				if (c.name == group.getName())
 				{
@@ -318,7 +318,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
-			for (auto &c : widgetsStyles)
+			for (auto& c : widgetsStyles)
 			{
 				if (c.name == aparam.getName()) // param was in the queue list
 				{
@@ -336,7 +336,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void UpdateStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
-			for (auto &c : widgetsStyles)
+			for (auto& c : widgetsStyles)
 			{
 				if (c.name == name) // param was in the queue list
 				{
@@ -442,22 +442,13 @@ namespace ofxImGuiSurfing
 		// Render now a parameter with a related ImGui widget with a custom style.
 		// Remember that must be called inside an guiManager::Begin/End() !
 
-		//TODO:
-		// new api
-
-		//public:
-		////-----------------------------------------------------------------
-		//bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
-		//{
-		//	return Add(aparam, type, bSameLine, amtPerRow, spacing);
-		//}
-
 	public:
 
 		//-----------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
-			// Will flag to true to do the final steps: sameline and spacing configs by args.
+			// Will flag to true to do the final steps: 
+			// same line and spacing config by args.
 			bool bDone = false;
 
 			// Will flag to notify if the ofParam widget changed.
@@ -474,9 +465,10 @@ namespace ofxImGuiSurfing
 
 			// 1. Handle hidden, disabled and inactive tags:
 
-			//-
+			//--
 
 			// If setted as hidden dont draw, but apply same line and spacing and return
+
 			if (type == OFX_IM_HIDDEN)
 			{
 				uniqueName.push();
@@ -503,7 +495,6 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					// Extra options
 					if (bSameLine) ImGui::SameLine();
 
 					if (spacing != -1)
@@ -527,7 +518,6 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					// Extra options
 					if (bSameLine) ImGui::SameLine();
 
 					float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
@@ -548,6 +538,7 @@ namespace ofxImGuiSurfing
 			//----
 
 			// Disable mouse interaction
+
 			else if (type == OFX_IM_INACTIVE)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -573,6 +564,7 @@ namespace ofxImGuiSurfing
 			const bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
 			const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 			const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
+			const bool isVoid = ptype == typeid(ofParameter<void>).name();
 
 			//TODO:
 			// is not called with groups here.. ?
@@ -585,9 +577,54 @@ namespace ofxImGuiSurfing
 
 			//--------
 
-			// 2.1. Bool
+			// 2.0 VOID
 
-			if (isBool)
+			if (isVoid)
+			{
+				ofParameter<void> p = aparam.cast<void>();
+
+				uniqueName.push();
+				{
+					switch (type)
+					{
+
+					case OFX_IM_DEFAULT:
+					case OFX_IM_BUTTON_SMALL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 1.25f);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON_BIG:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 2);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 3);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXXL:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 4);
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+						break;
+					}
+				}
+				uniqueName.pop();
+
+				bDone = true; // void
+			}
+
+			//--
+
+			// 2.1 BOOL
+
+			else if (isBool)
 			{
 				ofParameter<bool> p = aparam.cast<bool>();
 				auto tmpRef = p.get();
@@ -601,7 +638,7 @@ namespace ofxImGuiSurfing
 					{
 						// default:
 						std::string name = p.getName();
-						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+						if (ImGui::Checkbox(p.getName().c_str(), (bool*)&tmpRef))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -615,7 +652,7 @@ namespace ofxImGuiSurfing
 					{
 						// default:
 						std::string name = p.getName();
-						if (ImGui::Checkbox(p.getName().c_str(), (bool *)&tmpRef))
+						if (ImGui::Checkbox(p.getName().c_str(), (bool*)&tmpRef))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -772,12 +809,12 @@ namespace ofxImGuiSurfing
 				}
 				uniqueName.pop();
 
-				bDone = true;//bools
+				bDone = true; // bools
 			}
 
-			//-
+			//--
 
-			// 2.2. String
+			// 2.2. STRING
 
 			else if (isString)
 			{
@@ -837,9 +874,9 @@ namespace ofxImGuiSurfing
 				bDone = true;//strings
 			}
 
-			//-
+			//--
 
-			// 2.3. Float
+			// 2.3 FLOAT
 
 			else if (isFloat)
 			{
@@ -855,7 +892,7 @@ namespace ofxImGuiSurfing
 						std::string name = p.getName();
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+						if (ImGui::SliderFloat(p.getName().c_str(), (float*)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -870,7 +907,7 @@ namespace ofxImGuiSurfing
 						std::string name = p.getName();
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::SliderFloat(p.getName().c_str(), (float *)&tmpRef, p.getMin(), p.getMax()))
+						if (ImGui::SliderFloat(p.getName().c_str(), (float*)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -1087,7 +1124,7 @@ namespace ofxImGuiSurfing
 						const float speed = 0.01f;
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::DragFloat(p.getName().c_str(), (float *)&tmpRef, speed, p.getMin(), p.getMax()))
+						if (ImGui::DragFloat(p.getName().c_str(), (float*)&tmpRef, speed, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -1174,9 +1211,9 @@ namespace ofxImGuiSurfing
 				bDone = true;//floats
 			}
 
-			//-
+			//--
 
-			// 2.4. Int
+			// 2.4 INT
 
 			else if (isInt)
 			{
@@ -1192,7 +1229,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+						if (ImGui::SliderInt(p.getName().c_str(), (int*)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -1206,7 +1243,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::SliderInt(p.getName().c_str(), (int *)&tmpRef, p.getMin(), p.getMax()))
+						if (ImGui::SliderInt(p.getName().c_str(), (int*)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -1388,7 +1425,7 @@ namespace ofxImGuiSurfing
 						const float speed = 0.1;
 						bReturn = false;
 						IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						if (ImGui::DragInt(p.getName().c_str(), (int *)&tmpRef, speed, p.getMin(), p.getMax()))
+						if (ImGui::DragInt(p.getName().c_str(), (int*)&tmpRef, speed, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
@@ -1451,9 +1488,9 @@ namespace ofxImGuiSurfing
 				bDone = true;//int
 			}
 
-			//-
+			//--
 
-			// 2.5. Color
+			// 2.5 COLOR
 
 			else if (isFloatColor)
 			{
@@ -1534,12 +1571,12 @@ namespace ofxImGuiSurfing
 				}
 				uniqueName.pop();
 
-				bDone = true;//colors
+				bDone = true; // colors
 			}
 
 			//--------
 
-			// 2.6. Multidim vec2/vec3/vec4
+			// 2.6 MULTIDIM VEC2 / VEC3 / VEC4
 
 			else if (isMultiDimVec2)
 			{
@@ -1649,7 +1686,8 @@ namespace ofxImGuiSurfing
 
 			// 3. Closing, Ending last step.
 
-			if (bDone) //-> A widget has been populated, then we can apply the extra arguments..
+			//-> A widget has been populated, then we can apply the extra arguments..
+			if (bDone) 
 			{
 				// Extra options
 				// - Same line flag.
@@ -1677,6 +1715,7 @@ namespace ofxImGuiSurfing
 
 		//-------
 
+
 		// Groups (ofParameterGroup)
 
 	public:
@@ -1689,7 +1728,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT, ImGuiCond cond = ImGuiCond_Once)
-		//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
+			//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;
@@ -2129,7 +2168,7 @@ namespace ofxImGuiSurfing
 						if (parameterBool)
 						{
 							//TODO:
-							if (bSkipNoSerializable) 
+							if (bSkipNoSerializable)
 							{
 								if (!parameterBool->isSerializable()) continue;
 							}
