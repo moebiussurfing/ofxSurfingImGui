@@ -3,7 +3,7 @@
 
 	TODO:
 
-	+ fix log ofxImGuiSurfing::WindowPanels::isIntitiated: 
+	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 
 	
 	+ add clickable label toggle
 

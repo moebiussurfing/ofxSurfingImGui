@@ -233,7 +233,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//TODO: 
-	// pass labels as a pointer or reference
+	// pass labels vector as a pointer or reference..
 	// group all methods to a template or something
 
 	//--------------------------------------------------------------
@@ -383,11 +383,11 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
-		ImGui::Spacing();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
-		ImGui::Spacing();
+		//ImGui::Spacing();
+		//ImGui::Spacing();
 
 		return cChanged;
 	}

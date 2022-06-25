@@ -1728,7 +1728,6 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT, ImGuiCond cond = ImGuiCond_Once)
-			//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 		{
 			bool bIsOpen = false;
 			bool bMustHideGroup = false;

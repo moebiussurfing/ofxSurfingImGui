@@ -319,12 +319,14 @@ public:
 		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
+		//TODO:
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_None)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			widgetsManager.AddGroup(group, flagst, type);
+
 			return;
 		}
 
@@ -332,6 +334,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN;
 			widgetsManager.AddGroup(group, flagst, type);
+
 			return;
 		}
 
@@ -340,6 +343,7 @@ public:
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			widgetsManager.AddGroup(group, flagst, type);
+
 			return;
 		}
 
@@ -352,12 +356,14 @@ public:
 		{
 			type = OFX_IM_GROUP_TREE;
 			widgetsManager.AddGroup(group, flagst, type);
+
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
 			widgetsManager.AddGroup(group, flagst, type);
+
 			return;
 		}
 
@@ -523,6 +529,11 @@ public:
 	}
 	//--------------------------------------------------------------
 	void AddSeparator()
+	{
+		ofxImGuiSurfing::AddSeparator();
+	}
+	//--------------------------------------------------------------
+	void AddSeparated()
 	{
 		ofxImGuiSurfing::AddSeparator();
 	}
@@ -939,7 +950,7 @@ public:
 		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
 
-		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 
 		drawAdvancedSubPanel();
 	}
@@ -971,11 +982,11 @@ private:
 			else b = true;
 
 			// Keys
-			Add(bKeys, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
 
 			// Help
-			Add(bHelp, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-			Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
 			// MouseWheel
 			Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED);
@@ -1220,9 +1231,16 @@ public:
 		path_SubPathLabel = path + "_";
 	}
 
+	////--------------------------------------------------------------
+	//void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
+	//	path_SubPathLabel = "_" + path;
+	//}
+	
+	// New API
 	//--------------------------------------------------------------
-	void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
-		path_SubPathLabel = "_" + path;
+	void setName(std::string name) { // must call before setup. To allow multiple instances/windows settings
+		path_SubPathLabel = "_" + name;
+		windowsSpecialsOrganizer.setName(name);
 	}
 
 	//--------------------------------------------------------------
@@ -1261,15 +1279,18 @@ public:
 	bool beginWindowSpecial();
 	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
 	bool beginWindowSpecial(string name); // -> If you added windows to the engine you can begin the window passing his SAME name.
+	bool beginWindowSpecial(ofParameter<bool>& _bGui);
 
 	void endWindowSpecial(int index = -1);
-
-	bool beginWindowSpecial(ofParameter<bool>& _bGui);
+	//TODO:
+	void endWindowSpecial(ofParameter<bool>& _bGui);
 
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
 	int getWindowSpecialIndexForName(string name);
 
-	//--
+	//----
+
+	// Organizer Special Windows
 
 	//--------------------------------------------------------------
 	void setNameWindowsSpecialsOrganizer(std::string name) // Just optional to customize name.
@@ -1281,7 +1302,7 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowsSpecialsOrganizer() // Draws the main panel controller.
 	{
-		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 		if (beginWindow(windowsSpecialsOrganizer.bGui_WindowsSpecials))
 		{
@@ -1297,7 +1318,7 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowsAlignHelpers()
 	{
-		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 		if (beginWindow(bGui_WindowsAlignHelpers))
 		{
@@ -1331,21 +1352,24 @@ public:
 	struct SurfingImGuiWindowAtributes
 	{
 		// We queue here the bool params that enables the show/hide for each queued window
-		ofParameter<bool> bGui{ "Show Gui", true };
+		ofParameter<bool> bGui{ "_bGui", true };
 
-		//TODO: could be removed...not used..
-		ofParameter<bool> bAutoResize{ "Auto Resize", true };
-		ofParameter<bool> bExtra{ "Extra", false };
-		ofParameter<bool> bMinimize{ "Minimize", false };
-		ofParameter<bool> bAdvanced{ "Advanced", false };
-		ofParameter<bool> bDebug{ "Debug", false };
-		ofParameter<bool> bReset_Window{ "Reset Window", false };
+		////TODO: could be removed...not used..
+		//ofParameter<bool> bAutoResize{ "Auto Resize", true };
+		//ofParameter<bool> bExtra{ "Extra", false };
+		//ofParameter<bool> bMinimize{ "Minimize", false };
+		//ofParameter<bool> bAdvanced{ "Advanced", false };
+		//ofParameter<bool> bDebug{ "Debug", false };
+		//ofParameter<bool> bReset_Window{ "Reset Window", false };
 
-		ofParameter<bool> bSpecialWindow{ "_bSpecialWindow", false }; // to include below extra toggles when rendering
-
+		//TODO:
+		// Only one special window can be flagged as master anchor,
+		// then will be force to be the first window always!
+		ofParameter<bool> bMasterAnchor{ "MasterAnchor", false };
+		
 		//--------------------------------------------------------------
-		void setSpecialWindow(bool b) {
-			bSpecialWindow = b;
+		void setMasterAnchor(bool b) {
+			bMasterAnchor = b;
 		}
 
 		//ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
@@ -1372,6 +1396,11 @@ public:
 		windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
 	}
 
+	////--------------------------------------------------------------
+	//void setName(std::string name) {
+	//	windowsSpecialsOrganizer.setName(name);
+	//}
+
 public:
 
 	//--------------------------------------------------------------
@@ -1380,11 +1409,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(ofParameter<bool>& _bGui, bool powered = false) {
+	void addWindowSpecial(ofParameter<bool>& _bGui, bool bMaster = false) {
 
 		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.setSpecialWindow(powered);
+		win.setMasterAnchor(bMaster);
 
 		windowsSpecialsLayouts.push_back(win);
 
@@ -1402,7 +1431,7 @@ public:
 
 		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.setSpecialWindow(bPowered);
+		win.setMasterAnchor(bPowered);
 
 		windowsSpecialsLayouts.push_back(win);
 
@@ -1475,7 +1504,17 @@ public:
 		return bGui_WindowsAlignHelpers;
 	}
 
-	//--
+	// New API alias
+	//--------------------------------------------------------------
+	ofParameter<bool>& getGuiToggleAlignHelpers() { // align windows toggle to show the panel
+		return bGui_WindowsAlignHelpers;
+	}
+	//--------------------------------------------------------------
+	ofParameter<bool>& getGuiToggleOrganizer() { // organizer window for special windows only! Required to add. See the examples.
+		return windowsSpecialsOrganizer.bGui_WindowsSpecials;
+	}
+
+	//----
 
 	// Helpers to position ImGui windows 
 	// on the main ImGui viewport / canvas:
@@ -1511,59 +1550,78 @@ public:
 	// Set next window position after last window. 
 	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
 	//--------------------------------------------------------------
-	void setNextWindowOnViewport() {
-		ImGui::SetNextWindowPos(getTopRightWindowLast(), ImGuiCond_Appearing);
+	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing) {
+		// can't be setted to ImGuiCond_Always bc will feedback/apply with the same window!
+
+		ImGui::SetNextWindowPos(getTopRightWindowLast(), cond);
 	}
 
 	// Set next window position after the window named as the passed named and with the layout type distribution.
 	// layoutType=0 : top right 
 	// layoutType=1 : bottom left
-	// layoutType=2 : top left//TODO:BUG
-	// layoutType=3 : top up//TODO:
+	// layoutType=2 : top left //TODO: BUG
+	// layoutType=3 : top up //TODO:
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(string nameAnchorWindow = "-1", int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
+	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
 	{
-		if (nameAnchorWindow == "-1") {
-			setNextWindowOnViewport();
-			return;
-		}
+		//// Default for unnamed is queued after last window on screen..
+		//if (nameAnchorWindow == "-1") {
+		//	setNextWindowOnViewport();
+		//	return;
+		//}
+
+		// ImGuiCond_Always is for forced linking!
 
 		ImVec2 p;
 		ImGuiContext* GImGui = ImGui::GetCurrentContext();
 		ImGuiContext& g = *GImGui;
 		bool bready = false;
-		//int _pad = 0;
 		int _pad = windowsSpecialsOrganizer.pad;
 
 		for (ImGuiWindow* window : g.WindowsFocusOrder)
 		{
 			if (window->WasActive && window->Name == nameAnchorWindow)
 			{
-				if (layoutType == 0) {
-					// to the top right
+				// To the top right
+				if (layoutType == 0)
+				{
 					p = window->Pos + ImVec2(window->Size.x + _pad, 0);
 					bready = true;
 				}
-				else if (layoutType == 1) {
-					// to the bottom left
+
+				// To the bottom left
+				else if (layoutType == 1) 
+				{
 					p = window->Pos + ImVec2(0, window->Size.y);
 					bready = true;
 				}
-				if (layoutType == 2) {
-					// to the top left //TODO: BUG: we don't know the width of next window...
+
+				//TODO: BUG: we don't know the width of next window...
+				// To the top left 
+				else if (layoutType == 2)
+				{
 					p = window->Pos + ImVec2(window->Size.x - _pad - window->Size.x, 0);
 					bready = true;
 				}
+
+				//// Top up
 				//else if (layoutType == 3) {
-				//	// top up
 				//	p = window->Pos + ImVec2(0, 0 - _pad - window->Size.y);
 				//	bready = true;
 				//}
+
 				break;
 			}
 		}
+
 		if (bready) ImGui::SetNextWindowPos(ImVec2(p.x, p.y), cond);
+
 		return;
+	}
+
+	//--------------------------------------------------------------
+	string getWindowSpecialLast() const {
+		return windowsSpecialsOrganizer.getWindowSpecialLast();
 	}
 
 	//// Orientation cascade windows

@@ -2,11 +2,12 @@
 
 #include "ofMain.h"
 
+//#include "ofxSurfingImGui.h"
 #include "ofxImGui.h"
 
-// Fbo ImGui Window
-// from ofxMyUtil from https://github.com/Iwanaka
-
+//// Fbo ImGui Window
+//// from ofxMyUtil from https://github.com/Iwanaka
+//
 //namespace ofxImGuiSurfing {
 //
 //	//--------------------------------------------------------------

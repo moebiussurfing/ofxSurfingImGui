@@ -12,7 +12,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
-	
+
 	// Callbacks
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofAddListener(params_WindowSpecials.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -39,7 +39,10 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(windowsSpecialsOrganizer.pad);
 
 	// Exclude from settings
-	//bExtra.setSerializable(false);
+	bLockMove.setSerializable(false);
+	bNoScroll.setSerializable(false);
+	bAdvanced.setSerializable(false);
+	bExtra.setSerializable(false);
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);
 
@@ -49,14 +52,6 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	// it seems than requires to be false when using multi-context/instances
 	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
 	bAutoDraw = false;
-
-	//-
-
-	// Enable "Windows Special Organizer"
-	// Customize names
-	//setNameWindowsSpecialsOrganizer("ORGANIZER");
-	//windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal("Show All");
-	//windowsSpecialsOrganizer.setPath(path_Global);
 }
 
 //--------------------------------------------------------------
@@ -280,6 +275,9 @@ void ofxSurfing_ImGui_Manager::startup()
 		initiatieSpecialWindowsOrganizer();
 
 		//// Customize names
+		//// for file settings
+		//windowsSpecialsOrganizer.setName("Show Global");
+		
 		//windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal("Show Global");
 		//setNameWindowsSpecialsOrganizer("Organizer");
 
@@ -305,7 +303,7 @@ void ofxSurfing_ImGui_Manager::startup()
 	//}
 
 	//--
-	
+
 	// Aligners
 
 	windowsSpecialsOrganizer.bGui_WindowsAlignHelpers.makeReferenceTo(bGui_WindowsAlignHelpers);
@@ -320,14 +318,14 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	// Help Text Box
 
-	textBoxWidget.setPath(path_Global + "HelpBoxInternal/");
+	textBoxWidget.setPath(path_Global + "HelpBox_Internal/");
 	textBoxWidget.setup();
 
 	buildHelpInfo();
 
 	//-
 
-	textBoxWidgetApp.setPath(path_Global + "HelpBoxApp/");
+	textBoxWidgetApp.setPath(path_Global + "HelpBox_App/");
 	textBoxWidgetApp.setup();
 
 	//--
@@ -344,23 +342,23 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 	helpInfo += "GUI MANAGER \n";
 	helpInfo += "HELP INTERNAL \n\n";
 	helpInfo += "KEY COMMANDS \n\n";
-	
+
 	if (bHelpInternal) helpInfo += "I      HELP INTERNAL ON \n";
 	else helpInfo += "I      HELP INTERNAL OFF \n";
 
 	if (bHelp) helpInfo += "H      HELP APP ON \n";
 	else helpInfo += "H      HELP APP OFF \n";
-	
+
 	if (bMinimize) helpInfo += "`      MINIMIZE ON \n";
 	else helpInfo += "`      MINIMIZE OFF \n";
-	
+
 	if (bExtra) helpInfo += "E      EXTRA ON \n";
 	else helpInfo += "E      EXTRA OFF \n";
-	
+
 	if (bLog) helpInfo += "L      LOG ON \n";
 	else helpInfo += "L      LOG OFF \n";
 
-	if(bDebug) helpInfo += "D      DEBUG ON \n";
+	if (bDebug) helpInfo += "D      DEBUG ON \n";
 	else helpInfo += "D      DEBUG OFF \n";
 
 	helpInfo += "\n\n";
@@ -404,7 +402,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 }
 
 //----
- 
+
 // Fonts
 
 //--------------------------------------------------------------
@@ -451,7 +449,7 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 		if (guiPtr != nullptr) {
 			_customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
 		}
-		else 
+		else
 		{
 			_customFont = gui.addFont(path, size, nullptr, normalCharRanges);
 		}
@@ -499,7 +497,7 @@ void ofxSurfing_ImGui_Manager::pushStyleFont(int index)
 		if (customFonts[index] != nullptr)
 			ImGui::PushFont(customFonts[index]);
 	}
-	else 
+	else
 	{
 		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
@@ -1077,7 +1075,7 @@ void ofxSurfing_ImGui_Manager::begin() {
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		// Main Panels Controller
-		if (windowsSpecialsOrganizer.isIntitiated())
+		if (windowsSpecialsOrganizer.isUsing())
 		{
 			//TODO:
 			// Docking mode has the GUI toggles in other panels..
@@ -1337,7 +1335,7 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 	//--
 
 	//bool b = beginWindow(windowsSpecialsLayouts[index].bGui);
-	//if (windowsSpecialsLayouts[index].bSpecialWindow.get()) // window
+	//if (windowsSpecialsLayouts[index].bMasterAnchor.get()) // window
 	//{
 	//	if (windowsSpecialsLayouts[index].bAutoResize.get()) {
 	//		flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -1353,14 +1351,19 @@ bool ofxSurfing_ImGui_Manager::beginWindowSpecial(int index)
 //--------------------------------------------------------------
 bool ofxSurfing_ImGui_Manager::beginWindowSpecial(ofParameter<bool>& _bGui)
 {
+	//TODO:
+	if (!_bGui) return false;
+
 	int i = getWindowSpecialIndexForToggle(_bGui);
 
 	if (i != -1)
 	{
 		return beginWindowSpecial(i);
 	}
-	else {
+	else
+	{
 		ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
+
 		return false;
 	}
 }
@@ -1378,11 +1381,9 @@ int ofxSurfing_ImGui_Manager::getWindowSpecialIndexForName(string name)
 		}
 	}
 
-	{
-		ofLogError(__FUNCTION__) << "Special Window with name '" << name << "' not found!";
+	ofLogError(__FUNCTION__) << "Special Window with name '" << name << "' not found!";
 
-		return -1;
-	}
+	return -1;
 }
 
 //--------------------------------------------------------------
@@ -1400,11 +1401,27 @@ int ofxSurfing_ImGui_Manager::getWindowSpecialIndexForToggle(ofParameter<bool>& 
 		}
 	}
 
-	{
-		ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
+	ofLogError(__FUNCTION__) << "Special Window toggle not found! " << _bGui.getName();
 
-		return -1;
+	return -1;
+}
+
+//TODO:
+//--------------------------------------------------------------
+void ofxSurfing_ImGui_Manager::endWindowSpecial(ofParameter<bool>& _bGui)
+{
+	string name = _bGui.getName();
+	int i = getWindowSpecialIndexForName(name);
+
+	if (i == -1) {
+		ofLogError(__FUNCTION__) << "Special Window with bool param with name '" << name << "' not found!";
+
+		return;
 	}
+
+	endWindowSpecial(i);
+
+	return;
 }
 
 //--------------------------------------------------------------
@@ -1417,12 +1434,13 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 	if (index > windowsSpecialsLayouts.size() - 1)
 	{
 		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+
 		return;
 	}
 
 	//--
 
-	// skip window if hidden
+	// Skip window if hidden
 
 	if (!windowsSpecialsLayouts[index].bGui.get()) return;
 
@@ -1433,7 +1451,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	//--
 
-	//if (windowsSpecialsLayouts[_indexWindowsSpecials].bSpecialWindow.get())
+	//if (windowsSpecialsLayouts[_indexWindowsSpecials].bMasterAnchor.get())
 	//{
 	//	drawAdvancedControls();
 	//}
@@ -1453,7 +1471,7 @@ void ofxSurfing_ImGui_Manager::endWindowSpecial(int index)
 
 	//--
 
-	//workflow: to avoid use the index. but requires sequencial calling
+	// workflow: to avoid use the index. but requires sequencial calling
 	//_indexWindowsSpecials++;
 
 	ImGui::End();
@@ -1696,6 +1714,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_AppSettingsLayout.add(bPreviewSceneViewport);
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
+
 	params_AppSettings.add(params_AppSettingsLayout);
 
 	//--
@@ -2222,108 +2241,108 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 	//--
 
 	// gui layout
-	else if (name == bGui_LayoutsPresets.getName())
-	{
-		// workflow
-		if (!bGui_LayoutsPresets)
+		else if (name == bGui_LayoutsPresets.getName())
 		{
-			bGui_LayoutsExtra = false;
+			// workflow
+			if (!bGui_LayoutsPresets)
+			{
+				bGui_LayoutsExtra = false;
+			}
 		}
-	}
 
 	//--
 
 	// Reset 
 	// This toggle/flag is "sended" to the parent scope (ofApp), to resets something in our apps.
 	// Example: to resets the layout.
-	else if (name == bReset.getName() && bReset.get())
-	{
-		bReset = false;
+		else if (name == bReset.getName() && bReset.get())
+		{
+			bReset = false;
 
-		if (bResetPtr != nullptr) {
-			*bResetPtr = true;
+			if (bResetPtr != nullptr) {
+				*bResetPtr = true;
+			}
 		}
-	}
 
-	else if (name == bReset_Window.getName() && bReset_Window.get())
-	{
-		bReset_Window = false;
-	}
+		else if (name == bReset_Window.getName() && bReset_Window.get())
+		{
+			bReset_Window = false;
+		}
 
 	//--
 
 	// Solo Panel
 
-	else if (name == bSolo.getName() && bSolo.get())
-	{
-		// workflow
-		appLayoutIndex = -1;
-
-		// disable preset
-		for (int i = 0; i < bLayoutPresets.size(); i++)
+		else if (name == bSolo.getName() && bSolo.get())
 		{
-			bLayoutPresets[i].setWithoutEventNotifications(false);
+			// workflow
+			appLayoutIndex = -1;
+
+			// disable preset
+			for (int i = 0; i < bLayoutPresets.size(); i++)
+			{
+				bLayoutPresets[i].setWithoutEventNotifications(false);
+			}
 		}
-	}
 
 	//--
 
 	// Layout preset index
 
-	else if (name == appLayoutIndex.getName())
-	{
-		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
-
-		if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) //changed
+		else if (name == appLayoutIndex.getName())
 		{
-			ofLogNotice(__FUNCTION__) << "Changed: " << appLayoutIndex;
+			//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
+
+			if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) //changed
+			{
+				ofLogNotice(__FUNCTION__) << "Changed: " << appLayoutIndex;
+
+				//-
+
+				// 1. Auto save
+
+				if (bAutoSave_Layout)
+				{
+					// workaround:
+					// must save here bc usually we use the fallged on update save...
+					// only once per cycle allowed this way.
+					//force to ensure save bc update chain load and save below
+					//saveAppLayout(AppLayouts(appLayoutIndex_PRE));
+					std::string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
+
+					if (__ini_to_save_Str != "-1")
+					{
+						const char* _iniSave = NULL;
+						_iniSave = __ini_to_save_Str.c_str(); // flags to save on update
+
+						if (_iniSave != "-1")
+						{
+							saveLayoutPreset(_iniSave);
+						}
+					}
+				}
+
+				appLayoutIndex_PRE = appLayoutIndex.get();
+			}
 
 			//-
 
-			// 1. Auto save
+			// Hide all modules / GUI toggles
 
-			if (bAutoSave_Layout)
+			if (appLayoutIndex == -1)
 			{
-				// workaround:
-				// must save here bc usually we use the fallged on update save...
-				// only once per cycle allowed this way.
-				//force to ensure save bc update chain load and save below
-				//saveAppLayout(AppLayouts(appLayoutIndex_PRE));
-				std::string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
-
-				if (__ini_to_save_Str != "-1")
+				for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 				{
-					const char* _iniSave = NULL;
-					_iniSave = __ini_to_save_Str.c_str(); // flags to save on update
-
-					if (_iniSave != "-1")
-					{
-						saveLayoutPreset(_iniSave);
-					}
+					windowsSpecialsLayouts[i].bGui.set(false);
 				}
+				return; // not required bc loadAppLayout will be skipped when -1
 			}
 
-			appLayoutIndex_PRE = appLayoutIndex.get();
+			//-
+
+			// 2. Load layout
+			loadAppLayout(appLayoutIndex.get());
 		}
-
-		//-
-
-		// Hide all modules / GUI toggles
-
-		if (appLayoutIndex == -1)
-		{
-			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
-			{
-				windowsSpecialsLayouts[i].bGui.set(false);
-			}
-			return; // not required bc loadAppLayout will be skipped when -1
-		}
-
-		//-
-
-		// 2. Load layout
-		loadAppLayout(appLayoutIndex.get());
-	}
 
 	//-
 

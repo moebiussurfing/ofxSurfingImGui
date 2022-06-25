@@ -83,7 +83,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
 		//legacy
-		OFX_IM_TOGGLE_BUTTON_ROUNDED,//legacy
+		OFX_IM_TOGGLE_BUTTON_ROUNDED, // legacy. same size than small.
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
@@ -357,12 +357,19 @@ ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MI
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
-// width only
+// Width only
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
 { \
 ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, -1); \
 ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM \
+{ \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.4f, -1); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 3.f, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

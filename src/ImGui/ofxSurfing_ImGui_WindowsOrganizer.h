@@ -11,9 +11,11 @@
 
 	TODO:
 
-	+ fix bug crash when closing windows using the x
+	+ 
+	+ a window can be master. then always at first position. re sorting to first when appears.
+	+ fix bug crash when closing windows using the x.
 	+ store sorting queue ?
-	+ enable moving from all panels
+	+ enable moving from all panels.
 
 */
 
@@ -289,10 +291,8 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		bool isIntitiated()
+		bool isUsing()
 		{
-			ofLogNotice(__FUNCTION__);
-
 			return windowsSpecialsOrganizer.size() > 0;
 		}
 
@@ -309,10 +309,17 @@ namespace ofxImGuiSurfing
 		std::vector<WindowPanel> windowsSpecialsOrganizer; // all the added panels. hidden windows are not removed from here!
 		std::string path_Global = "";
 		std::string path_Settings = "_WindowsSpecial.json";
+		std::string name = "";
 
 		bool bInitialized = false;
 
 	public:
+
+		//--------------------------------------------------------------
+		void setName(std::string name)
+		{
+			this->name = "_" + name;
+		}
 
 		//--------------------------------------------------------------
 		void setPath(std::string path)
@@ -321,12 +328,12 @@ namespace ofxImGuiSurfing
 
 			path_Global = path;
 			ofxSurfingHelpers::CheckFolder(path_Global);
-			path_Settings = path_Global + "guiManager_" + params_Settings.getName() + ".json";
+			path_Settings = path_Global + "guiManager_" + params_Settings.getName()+ name + ".json";
 		}
 
 	private:
 
-		// just the enabled (visible) panels (not all the added panels). hidden windows are removed from here!
+		// Just the enabled (visible) panels (not all the added panels). hidden windows are removed from here!
 		std::vector<int> queueWindowsVisible;
 
 		ofParameterGroup params_Enablers{ "Enablers" };
@@ -854,21 +861,20 @@ namespace ofxImGuiSurfing
 
 			params_Enablers.add(e);
 
-			////TODO:
-			////better pointers
-			//WindowPanel p;
-			//windowsSpecialsOrganizer.push_back(p);
-			//windowsSpecialsOrganizer.back().id = windowsSpecialsOrganizer.size();
-			//windowsSpecialsOrganizer.back().pos = -1;
-			//windowsSpecialsOrganizer.back().bGui.makeReferenceTo(e);
-
 			WindowPanel p;
-
 			p.id = windowsSpecialsOrganizer.size(); // which special window is
 			p.indexPos = -1; // what position on visible windows queue. -1 = hidden
 			p.bGui.makeReferenceTo(e); // is visible
-
 			windowsSpecialsOrganizer.push_back(p);
+
+			////TODO:
+			//// better using pointers?
+			//// not working
+			//WindowPanel p;
+			//windowsSpecialsOrganizer.push_back(p);
+			//windowsSpecialsOrganizer.back().id = windowsSpecialsOrganizer.size();
+			//windowsSpecialsOrganizer.back().indexPos = -1;
+			//windowsSpecialsOrganizer.back().bGui.makeReferenceTo(e);
 		}
 
 	public:
@@ -1048,6 +1054,8 @@ namespace ofxImGuiSurfing
 			if (bAlignShapes) doAlignShapesNextWindow();
 		}
 
+		//--
+
 	public:
 
 		//--------------------------------------------------------------
@@ -1055,6 +1063,21 @@ namespace ofxImGuiSurfing
 			bGui_ShowAll.setName(name);
 		}
 
+		//TODO:
+		//--------------------------------------------------------------
+		string getWindowSpecialLast() const {
+			string name = "-1";
+
+			if (queueWindowsVisible.size() == 0) return name;//all hidden
+
+			int ilast = queueWindowsVisible.back();
+			name = windowsSpecialsOrganizer[ilast].bGui.getName();
+
+			return name;
+		}
+
+		//----
+		
 		//--------------------------------------------------------------
 		void drawWidgetsAlignHelpers(bool bMinimized = false)
 		{
@@ -1215,6 +1238,7 @@ namespace ofxImGuiSurfing
 			//-
 
 			// Windows
+
 			if (!bMinimized)
 				if (!bHideWindowsToggles)
 				{
