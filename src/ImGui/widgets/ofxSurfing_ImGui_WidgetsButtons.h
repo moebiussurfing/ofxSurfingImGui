@@ -298,6 +298,7 @@ namespace ofxImGuiSurfing
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
 		// Border when selected
+
 		float a = 0.5f;
 		float borderLineWidth = 1.0;
 		ImGuiStyle* style = &ImGui::GetStyle();
@@ -305,7 +306,9 @@ namespace ofxImGuiSurfing
 		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 		// Blink
-		if (bBlink) {
+
+		if (bBlink) 
+		{
 			float blinkValue = ofxImGuiSurfing::getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 			
@@ -323,6 +326,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		// Default
+
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;
 		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
@@ -335,10 +339,12 @@ namespace ofxImGuiSurfing
 			// that means that we can maybe collide not unique names! 
 			//std::string n = "#BT" + name + ofToString(counterBigToggle++);
 			//ofLogNotice(__FUNCITON__) << n;
+
 			std::string n = "##BIGTOGGLE_on_" + name + ofToString(1);
 			ImGui::PushID(n.c_str());
 			{
 				// Border to selected
+
 				if (border)
 				{
 					bDrawBorder = true;
@@ -403,7 +409,8 @@ namespace ofxImGuiSurfing
 		}
 
 		// Debug point
-		if (0) {
+		if (0) 
+		{
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 			const ImVec2 pdebug = ImGui::GetCursorScreenPos();
 			draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//a bit of offset
@@ -445,15 +452,12 @@ namespace ofxImGuiSurfing
 
 			if (blinkValue == -1) 
 			{
-
 				blinkValue = ofxImGuiSurfing::getFadeBlink();
-				//blinkValue = ofxImGuiSurfing::getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
 			else a = 1.0f;
 			
-			//a = ofClamp(a, 0, 1);
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			if (b) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(c_.x, c_.y, c_.z, c_.w * a));
@@ -471,7 +475,7 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		bool _boolToggle = tmpRef;  // default value, the button is disabled 
+		bool _boolToggle = tmpRef; // default value, the button is disabled 
 
 		// enabled
 		if (_boolToggle == true)
@@ -551,7 +555,8 @@ namespace ofxImGuiSurfing
 	// https://github.com/ocornut/imgui/issues/1537
 	// Usable with bool & ofParameter<bool>
 
-#define USE_BORDER_ROUNDE_TOGGLES // -> Enable to draw circle borders on the rounded toggle.. 
+	// -> Enable to draw circle borders on the rounded toggle.. 
+#define USE_BORDER_ROUNDE_TOGGLES 
 	// Btw can be disabled like on mini toggle style.
 
 	//--------------------------------------------------------------
