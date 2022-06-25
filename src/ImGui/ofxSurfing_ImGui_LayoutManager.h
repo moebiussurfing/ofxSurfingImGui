@@ -100,17 +100,17 @@ public:
 public:
 
 	void setupInitiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setup(ofxImGui::Gui& gui); // MODE B: can be instantiated out of the class, locally
-	void update(); // to manual update...
+	void setup(ofxImGui::Gui& gui); // MODE B: Can be instantiated out of the class, locally
+	void update(); // To manual update...
 	void draw(ofEventArgs& args);
 
 	//--------------------------------------------------------------
-	void setup()//->We will use the most common use to avoid to have to use any argument.
+	void setup() // -> We will use the most common use to avoid to have to use any argument.
 	{
 		setup(IM_GUI_MODE_INSTANTIATED);
 
-		//setup(IM_GUI_MODE_INSTANTIATED_DOCKING);//this crashes when multiple instances share dock stuff...
-		//we will need to activate only one Docking / "Layout Presets Engine" / guiManager instace!
+		//setup(IM_GUI_MODE_INSTANTIATED_DOCKING); // this crashes when multiple instances share dock stuff...
+		// We will need to activate only one Docking / "Layout Presets Engine" / guiManager instance!
 	}
 
 private:
@@ -122,7 +122,8 @@ private:
 
 private:
 
-	ofxSurfing_ImGui_WidgetsTypes widgetsManager; // -> The Widget Styles Manager
+	// -> The Widget Styles Manager
+	ofxSurfing_ImGui_WidgetsTypes widgetsManager; 
 
 	//----
 
@@ -130,16 +131,16 @@ private:
 
 public:
 
-	// ofParam's
+	// ofParameters 
 
-	// draw parameter into ImGui manager
+	// Draw parameter into ImGui manager
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
-	////TODO: a button without param
+	////TODO: A button without param
 	////--------------------------------------------------------------
 	//bool Add(SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	//{
@@ -148,21 +149,21 @@ public:
 
 	//----
 
-	// queue style for the parameter
+	// Queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
-	// queue style for the parameter
+	// Queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
-	// update style for the parameter
+	// Update style for the parameter
 	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{

@@ -48,11 +48,11 @@ namespace ofxImGuiSurfing
 		// Bool Styles
 
 		// Button
-		OFX_IM_BUTTON_SMALL,
-		OFX_IM_BUTTON,
-		OFX_IM_BUTTON_BIG,
-		OFX_IM_BUTTON_BIG_XXL,
-		OFX_IM_BUTTON_BIG_XXXL,
+		OFX_IM_BUTTON_SMALL,	// 1 = default
+		OFX_IM_BUTTON,			// 1.25
+		OFX_IM_BUTTON_BIG,		// 2
+		OFX_IM_BUTTON_BIG_XXL,	// 3
+		OFX_IM_BUTTON_BIG_XXXL,	// 4
 
 		// Toggle
 		OFX_IM_CHECKBOX, // ofxImGui standard

@@ -17,6 +17,8 @@
 
 //#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
 
+#define BLINK_MIN 0.2f 
+#define BLINK_MAX 0.5f 
 //------------------------------
 
 namespace ofxImGuiSurfing
@@ -38,7 +40,8 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = ofxImGuiSurfing::getFadeBlink();
-			a = ofClamp(blinkValue, 0.25, 0.75);
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
@@ -304,7 +307,8 @@ namespace ofxImGuiSurfing
 		// Blink
 		if (bBlink) {
 			float blinkValue = ofxImGuiSurfing::getFadeBlink();
-			a = ofClamp(blinkValue, 0.25, 0.75);
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
@@ -439,13 +443,19 @@ namespace ofxImGuiSurfing
 		{
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
-			if (blinkValue == -1) {
+			if (blinkValue == -1) 
+			{
+
 				blinkValue = ofxImGuiSurfing::getFadeBlink();
+				//blinkValue = ofxImGuiSurfing::getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
 			else a = 1.0f;
-			a = ofClamp(a, 0, 1);
+			
+			//a = ofClamp(a, 0, 1);
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
 			if (b) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(c_.x, c_.y, c_.z, c_.w * a));
 		}
 
