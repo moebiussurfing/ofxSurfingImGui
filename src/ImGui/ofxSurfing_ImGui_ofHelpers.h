@@ -19,46 +19,83 @@ namespace ofxImGuiSurfing
 {
 	//----
 
-	// Adds mouse wheel control to the last previous param widget (templated float/int)
 
+	//TODO: 
+	//--------------------------------------------------------------
+	inline bool GetMouseWheel()
+	{
+		ImGui::SetItemUsingMouseWheel();
+		bool bReturn = false;
+
+		if (ImGui::IsItemHovered())
+		{
+			float wheel = ImGui::GetIO().MouseWheel;
+
+			if (wheel)
+			{
+				if (ImGui::IsItemActive())
+				{
+					ImGui::ClearActiveID();
+				}
+				else
+				{
+					bReturn = true;
+				}
+			}
+		}
+
+		return bReturn;
+	}
+
+	// Adds mouse wheel control to the last previous param widget (templated float/int)
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
 	{
 		bool bUnknown = false;
-		bool bIsMultiDim = false;
 		bool bIsVoid = false;
+		bool bIsbool = false;
+		bool bIsInt = false;
+		bool bIsFloat = false;
+		bool bIsMultiDim = false;
+		bool bIsDim2 = false;
+		bool bIsDim3 = false;
+		bool bIsDim4 = false;
 
 		const auto& info = typeid(ParameterType);
 
 		if (info == typeid(float)) // FLOAT
 		{
+			bIsFloat = true;
 		}
 		else if (info == typeid(int)) // INT
 		{
+			bIsInt = true;
 		}
 		else if (info == typeid(bool)) // BOOL
 		{
+			bIsbool = true;
 		}
-		//TODO:
 		else if (info == typeid(void)) // VOID
 		{
 			bIsVoid = true;
-			return;
 		}
 
 		//TODO:
 		else if (info == typeid(ofDefaultVec2))
 		{
 			bIsMultiDim = true;
+			bIsDim2 = true;
 		}
 		else if (info == typeid(ofDefaultVec3))
 		{
 			bIsMultiDim = true;
+			bIsDim3 = true;
 		}
 		else if (info == typeid(ofDefaultVec4))
 		{
 			bIsMultiDim = true;
+			bIsDim4 = true;
 		}
 
 		// Unknown Types
@@ -66,36 +103,14 @@ namespace ofxImGuiSurfing
 		{
 			bUnknown = true;
 
-			ofLogWarning(__FUNCTION__) << "Could not add wheel to " << param.getName();
+			ofLogWarning(__FUNCTION__) << "Could not add mouse wheel to " << param.getName();
 
 			return;
 		}
 
-		//// TODO
-		//if (info == typeid(void)) return; // VOID
-
 		//--
 
-		if (!bUnknown)
 		{
-			if (!bIsMultiDim)
-			{
-				if (resolution == -1)
-				{
-					resolution = (param.getMax() - param.getMin()) / 100.f;
-					// 100 steps for all the param range
-				}
-			}
-			else
-			{
-				if (resolution == -1)
-				{
-					//resolution = (param.getMax().x - param.getMin().x) / 100.f; 
-					// 100 steps for all the param range
-					resolution = 0.1f; // hardcoded to 0.1 bc each dim could be different scale..
-				}
-			}
-
 			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
 
 			ImGui::SetItemUsingMouseWheel();
@@ -112,17 +127,80 @@ namespace ofxImGuiSurfing
 					}
 					else
 					{
-						if (info == typeid(bool)) { // BOOL
-							param = !param.get();
-						}
-						else if (info == typeid(void)) { // VOID
+						// BOOL
+						if (bIsbool) {
+							ofParameter<bool> p = param.cast<bool>();
+							p = !p.get();
 						}
 
-						// FLOAT, INT
-						else
+						// VOID
+						else if (bIsVoid) {
+							ofParameter<void> p = param.cast<void>();
+							p.trigger();
+						}
+
+						//TODO:
+						// must be fixed bc each dim slider could work independently...
+						// MULTIDIM
+						else if (bIsMultiDim)
 						{
-							param += wheel * (bCtrl ? resolution : resolution * 10);
-							param = ofClamp(param, param.getMin(), param.getMax()); // clamp
+							/*
+							if (resolution == -1)
+							{
+								//TODO:
+								// hardcoded to 0.1 bc each dim could be different scale..
+								resolution = 0.1f;
+							}
+
+							if (bIsDim2)
+							{
+								ofParameter<glm::vec2> p = param.cast<glm::vec2>();
+								p += wheel * (bCtrl ? resolution : resolution * 10);
+								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
+							}
+							else if (bIsDim3)
+							{
+								ofParameter<glm::vec3> p = param.cast<glm::vec3>();
+								p += wheel * (bCtrl ? resolution : resolution * 10);
+								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
+							}
+							else if (bIsDim2)
+							{
+								ofParameter<glm::vec4> p = param.cast<glm::vec4>();
+								p += wheel * (bCtrl ? resolution : resolution * 10);
+								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
+							}
+							*/
+						}
+
+						// INT
+						else if (bIsInt)
+						{
+							ofParameter<int> p = param.cast<int>();
+
+							if (resolution == -1)
+							{
+								resolution = (p.getMax() - p.getMin()) / 100.f;
+								// 100 steps for all the param range
+							}
+
+							p += wheel * (bCtrl ? resolution : resolution * 10);
+							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
+						}
+
+						// FLOAT
+						else if (bIsFloat)
+						{
+							ofParameter<float> p = param.cast<float>();
+
+							if (resolution == -1)
+							{
+								resolution = (p.getMax() - p.getMin()) / 100.f;
+								// 100 steps for all the param range
+							}
+
+							p += wheel * (bCtrl ? resolution : resolution * 10);
+							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 						}
 					}
 				}

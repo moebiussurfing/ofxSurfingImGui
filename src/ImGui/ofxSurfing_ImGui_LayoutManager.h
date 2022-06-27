@@ -123,7 +123,7 @@ private:
 private:
 
 	// -> The Widget Styles Manager
-	ofxSurfing_ImGui_WidgetsTypes widgetsManager; 
+	ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 
 	//----
 
@@ -133,7 +133,7 @@ public:
 
 	// ofParameters 
 
-	// Draw parameter into ImGui manager
+	// Draw styled parameter into ImGui manager
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
@@ -1236,7 +1236,7 @@ public:
 	//void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
 	//	path_SubPathLabel = "_" + path;
 	//}
-	
+
 	// New API
 	//--------------------------------------------------------------
 	void setName(std::string name) { // must call before setup. To allow multiple instances/windows settings
@@ -1367,7 +1367,7 @@ public:
 		// Only one special window can be flagged as master anchor,
 		// then will be force to be the first window always!
 		ofParameter<bool> bMasterAnchor{ "MasterAnchor", false };
-		
+
 		//--------------------------------------------------------------
 		void setMasterAnchor(bool b) {
 			bMasterAnchor = b;
@@ -1591,7 +1591,7 @@ public:
 				}
 
 				// To the bottom left
-				else if (layoutType == 1) 
+				else if (layoutType == 1)
 				{
 					p = window->Pos + ImVec2(0, window->Size.y);
 					bready = true;
@@ -2090,12 +2090,80 @@ public:
 		textBoxWidgetApp.setText(helpInfoApp);
 
 	}
+
+	//----
+
+	// NOTES
+
+	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
+	//guiManager.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+
+	//----
+
+
+public:
+
+	// Not ofParams helpers.
+	// CPP types 
+	// To speed up populate widgets without requiring to create ofParameters first.
+
+	//--------------------------------------------------------------
+	bool AddButton(string label, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		bool bReturn = false;
+
+		// widget width
+		// we get the sizes from the canvas layout!
+		float _ww = widgetsManager.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _h = getWidgetsHeightUnit();
+
+		switch (type)
+		{
+
+		case OFX_IM_DEFAULT:
+		case OFX_IM_BUTTON_SMALL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+		}
+
+		// Extra options
+		// - Same line flag.
+		// - Final y spacing.
+
+		if (bSameLine) ImGui::SameLine();
+		if (spacing != -1 && spacing != 0)
+		{
+			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
+		}
+
+		return bReturn;
+	}
+
+	void SameLine() { ImGui::SameLine(); };
 };
-
-//--
-
-// NOTES
-
-// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
-//guiManager.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
-

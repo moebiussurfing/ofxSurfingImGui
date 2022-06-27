@@ -39,14 +39,31 @@
 
 namespace ofxImGuiSurfing
 {
-	using namespace ImGui;
+	using namespace ImGui;	
+	
+	//--------------------------------------------------------------
+	inline void AddTooltip2(std::string text, bool bEnabled = true)//call after the pop up trigger widget
+	{
+		if (!bEnabled) return;
+
+		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
+		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextWrapped(text.c_str());
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
+		}
+	}
 
 	// Preset Clicker Matrix Buttons
 	// Index will change when a box is clicked
 	// Notice that index must start in 0 like we use on vectors!
 	//inline bool AddMatrixClicker(ofParameter<int>& _index, string label = "CLICKER", bool bOpen = false, bool bResponsive = true, int amountBtRow = 3)
 	//--------------------------------------------------------------
-	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
 	{
 		const int _amt = _index.getMax() - _index.getMin()+1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -75,28 +92,11 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		////TODO:
-		//// Tooltip
-		//string text = "sdofhosdhfosihf";
-		//float w = getWidgetsWidth(1);
-		//float h = 50;
-		//ImGui::InvisibleButton("empty", ImVec2(w, h), ImGuiButtonFlags_None); // fix widget width
-		//if (ImGui::IsItemHovered())
-		//{
-		//	ImGui::BeginTooltip();
-		//	ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-		//	ImGui::TextWrapped(text.c_str());
-		//	ImGui::PopTextWrapPos();
-		//	ImGui::EndTooltip();
-		//}
-
-		//--
-
 		bool cChanged = false;
 
-		if (sizey == -1)
+		if (__h == -1)
 		{
-			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -145,7 +145,7 @@ namespace ofxImGuiSurfing
 
 			// Toggle button matrix
 
-			ImVec2 sizebt(sizex, sizey);
+			ImVec2 sizebt(sizex, __h);
 
 			// Manually wrapping
 			// (we should eventually provide this as an automatic layout feature, but for now you can do it manually)
@@ -161,55 +161,55 @@ namespace ofxImGuiSurfing
 				{
 					string name = ofToString(ofToString(n));
 
-					// customize colors
+					// Customize colors
 					{
-						// when selected / active
+						// When selected / active
 						if (_index.get() == n)
 						{
 							if (bDrawBorder) bBorder = true;
 
-							// changes the colors
+							// Changes the colors
 							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
-							// border with alpha
+							// Border with alpha
 							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 						else
 						{
-							// do not changes the colors
+							// Do not changes the colors
 							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 							const ImVec4 colorBorder = style2.Colors[ImGuiCol_Border];
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 
-						// border
+						// Border
 						if (bBorder)
 						{
 							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
 							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 						}
 
-						// draw button
+						// Draw button
 						if (ImGui::Button(name.c_str(), sizebt))
 						{
 							_index = n;
 							cChanged = true;
-
-							// Example Use 
-							// trig load preset
-							//load(n); 
 						}
 
-						// border
+						if (toolTip != "") {
+							ofxImGuiSurfing::AddTooltip2(toolTip);
+						}
+
+						// Border
 						if (bBorder)
 						{
 							ImGui::PopStyleVar(1);
 							ImGui::PopStyleColor();
 						}
 
-						// customize colors
+						// Customize colors
 						ImGui::PopStyleColor(2);
 					}
 
@@ -237,8 +237,7 @@ namespace ofxImGuiSurfing
 	// group all methods to a template or something
 
 	//--------------------------------------------------------------
-	//inline bool AddMatrixClickerLabels(ofParameter<int>& _index, vector<char *> &labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
-	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float sizey = -1)
+	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -247,9 +246,9 @@ namespace ofxImGuiSurfing
 
 		bool cChanged = false;
 
-		if (sizey == -1)
+		if (__h == -1)
 		{
-			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -259,7 +258,6 @@ namespace ofxImGuiSurfing
 
 		string sid = "##MatrixClicker_" + _index.getName();
 		ImGui::PushID(sid.c_str());
-
 		{
 			int gap = 1;
 			float __spcx = ImGui::GetStyle().ItemSpacing.x;
@@ -274,31 +272,31 @@ namespace ofxImGuiSurfing
 			}
 
 			int _amt = _index.getMax() + 1;
-			float sizex;
+			float __w;
 
 			if (_amt > amountBtRow)
 			{
-				sizex = _sizex;
+				__w = _sizex;
 			}
 			else
 			{
 				if (_amt == 1)
 				{
-					sizex = __w100;
+					__w = __w100;
 				}
 				else
 				{
-					sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+					__w = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
 				}
 			}
 
-			sizex = MAX(5, sizex);
+			__w = MAX(5, __w);
 
 			//-
 
 			// Toggle button matrix
 
-			ImVec2 sizebt(sizex, sizey);
+			ImVec2 sizebt(__w, __h);
 
 			// Manually wrapping
 			// (we should eventually provide this as an automatic layout feature, but for now you can do it manually)
@@ -321,55 +319,56 @@ namespace ofxImGuiSurfing
 						else name = ofToString(ofToString(n));
 					}
 
-					// customize colors
+					// Customize colors
 					{
-						// when selected / active
+						// When selected / active
 						if (_index.get() == n)
 						{
 							if (bDrawBorder) bBorder = true;
 
-							// changes the colors
+							// Changes the colors
 							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
-							// border with alpha
+							// Border with alpha
 							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 						else
 						{
-							// do not changes the colors
+							// Do not changes the colors
 							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 							const ImVec4 colorBorder = style2.Colors[ImGuiCol_Border];
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 
-						// border
+						// Border
 						if (bBorder)
 						{
 							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
 							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 						}
 
-						// draw button
+						// Draw button
 						if (ImGui::Button(name.c_str(), sizebt))
 						{
 							_index = n;
 							cChanged = true;
-
-							// Example Use 
-							// trig load preset
-							//load(n); 
 						}
 
-						// border
+						if (toolTip != "") {
+
+							ofxImGuiSurfing::AddTooltip2(toolTip);
+						}
+
+						// Border
 						if (bBorder)
 						{
 							ImGui::PopStyleVar(1);
 							ImGui::PopStyleColor();
 						}
 
-						// customize colors
+						// Customize colors
 						ImGui::PopStyleColor(2);
 					}
 
@@ -381,18 +380,15 @@ namespace ofxImGuiSurfing
 				ImGui::PopID();
 			}
 		}
-
 		ImGui::PopID();
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
-		//ImGui::Spacing();
-		//ImGui::Spacing();
-
 		return cChanged;
 	}
 
-	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = true, float sizey = -1, bool bSpaced = true)
+	//--------------------------------------------------------------
+	inline bool AddMatrixClickerLabelsStrings(ofParameter<int>& _index, const std::vector<string> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = true, float __h = -1, bool bSpaced = true, string toolTip = "")
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -402,9 +398,9 @@ namespace ofxImGuiSurfing
 		bool cChanged = false;
 
 		// default height size for the toggle buttons
-		if (sizey == -1)
+		if (__h == -1)
 		{
-			sizey = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
 		ImGuiStyle *style = &ImGui::GetStyle();
@@ -420,40 +416,40 @@ namespace ofxImGuiSurfing
 			float __spcx = ImGui::GetStyle().ItemSpacing.x;
 			float __w100 = ImGui::GetContentRegionAvail().x - gap;
 
-			float _sizex = 5;
+			float ___w = 5;
 
-			if (!bResponsive) _sizex = 40;
+			if (!bResponsive) ___w = 40;
 			else
 			{
-				_sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+				___w = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
 			}
 
 			int _amt = _index.getMax() + 1;
-			float sizex;
+			float __w;
 
 			if (_amt > amountBtRow)
 			{
-				sizex = _sizex;
+				__w = ___w;
 			}
 			else
 			{
 				if (_amt == 1)
 				{
-					sizex = __w100;
+					__w = __w100;
 				}
 				else
 				{
-					sizex = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
+					__w = (__w100 - __spcx * (amountBtRow - 1)) / amountBtRow;
 				}
 			}
 
-			sizex = MAX(5, sizex);
+			__w = MAX(5, __w);
 
 			//-
 
 			// Toggle button matrix
 
-			ImVec2 sizebt(sizex, sizey);
+			ImVec2 sizebt(__w, __h);
 
 			// Manually wrapping
 			// (we should eventually provide this as an automatic layout feature, but for now you can do it manually)
@@ -476,55 +472,56 @@ namespace ofxImGuiSurfing
 						else name = ofToString(ofToString(n));
 					}
 
-					// customize colors
+					// Customize colors
 					{
-						// when selected / active
+						// When selected / active
 						if (_index.get() == n)
 						{
 							if (bDrawBorder) bBorder = true;
 
-							// changes the colors
+							// Changes the colors
 							const ImVec4 colorActive = style2.Colors[ImGuiCol_ButtonActive];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorActive);
-							// border with alpha
+							// Border with alpha
 							const ImVec4 colorBorder = ImVec4(0, 0, 0, 0.75f); // hardcoded
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 						else
 						{
-							// do not changes the colors
+							// Do not changes the colors
 							const ImVec4 colorButton = style2.Colors[ImGuiCol_Button];
 							ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
 							const ImVec4 colorBorder = style2.Colors[ImGuiCol_Border];
 							ImGui::PushStyleColor(ImGuiCol_Border, colorBorder);
 						}
 
-						// border
+						// Border
 						if (bBorder)
 						{
 							ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(borderLineColor.x, borderLineColor.y, borderLineColor.z, borderLineColor.w * a));
 							ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 						}
 
-						// draw button
+						// Draw button
 						if (ImGui::Button(name.c_str(), sizebt))
 						{
 							_index = n;
 							cChanged = true;
-
-							// Example Use 
-							// trig load preset
-							//load(n); 
 						}
 
-						// border
+						if (toolTip != "") {
+
+							ofxImGuiSurfing::AddTooltip2(toolTip);
+						}
+
+						// Border
 						if (bBorder)
 						{
 							ImGui::PopStyleVar(1);
 							ImGui::PopStyleColor();
 						}
 
-						// customize colors
+						// Customize colors
 						ImGui::PopStyleColor(2);
 					}
 
@@ -541,8 +538,8 @@ namespace ofxImGuiSurfing
 
 		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
 
-		if (bSpaced) ImGui::Spacing();
-		if (bSpaced) ImGui::Spacing();
+		//if (bSpaced) ImGui::Spacing();
+		//if (bSpaced) ImGui::Spacing();
 
 		return cChanged;
 	}
@@ -1170,8 +1167,8 @@ namespace ofxImGuiSurfing
 
 	//	float x = snap(p.x, 16.f);
 	//	float y = snap(p.y, 16.f);
-	//	float sizex = snap(size.x, 16.f);
-	//	float sizey = snap(size.y, 16.f);
+	//	float __w = snap(size.x, 16.f);
+	//	float __h = snap(size.y, 16.f);
 	//	ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
 	//}
 };

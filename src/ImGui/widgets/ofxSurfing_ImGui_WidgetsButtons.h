@@ -111,8 +111,30 @@ namespace ofxImGuiSurfing
 	// Big Buttons and toggles for BOOL ofParams
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
+	inline bool AddBigButton(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false) // button but using a bool not void param
 	{
+		// Border when selected
+
+		float a = 0.5f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		// Blink
+
+		if (bBlink)
+		{
+			float blinkValue = ofxImGuiSurfing::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		bool bDrawBorder = true;
+
+		//--
+
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
 		bool bPre = tmpRef;
@@ -122,6 +144,14 @@ namespace ofxImGuiSurfing
 		{
 			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
 			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+			// Border to selected
+			if (border)
+			{
+				bDrawBorder = true;
+				ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+			}
 
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -141,6 +171,13 @@ namespace ofxImGuiSurfing
 				}
 			}
 			ImGui::PopStyleColor(3);
+
+			// Border Blink
+			if (bDrawBorder && border)
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleVar(1);
+			}
 		}
 		ImGui::PopID();
 
@@ -300,7 +337,7 @@ namespace ofxImGuiSurfing
 		// Border when selected
 
 		float a = 0.5f;
-		float borderLineWidth = 1.0;
+		float borderLineWidth = 1.0f;
 		ImGuiStyle* style = &ImGui::GetStyle();
 		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -315,10 +352,10 @@ namespace ofxImGuiSurfing
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
-		//-
-
 		bool bDrawBorder = true;
 
+		//--
+		
 		std::string name = parameter.getName();
 		auto tmpRef = parameter.get();
 		bool bPre = tmpRef;
@@ -338,13 +375,12 @@ namespace ofxImGuiSurfing
 			// Warning: in this case we need to use the name to became the toggle functional
 			// that means that we can maybe collide not unique names! 
 			//std::string n = "#BT" + name + ofToString(counterBigToggle++);
-			//ofLogNotice(__FUNCITON__) << n;
 
 			std::string n = "##BIGTOGGLE_on_" + name + ofToString(1);
+
 			ImGui::PushID(n.c_str());
 			{
 				// Border to selected
-
 				if (border)
 				{
 					bDrawBorder = true;
@@ -355,6 +391,7 @@ namespace ofxImGuiSurfing
 				const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonHovered];
 				const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
 				const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
+
 				ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 1.0);
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorHover2);
 				ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
@@ -371,6 +408,7 @@ namespace ofxImGuiSurfing
 
 				ImGui::PopStyleColor(3);
 
+				// Border Blink
 				if (bDrawBorder && border)
 				{
 					ImGui::PopStyleColor();
@@ -413,7 +451,7 @@ namespace ofxImGuiSurfing
 		{
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 			const ImVec2 pdebug = ImGui::GetCursorScreenPos();
-			draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//a bit of offset
+			draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); // a bit of offset
 		}
 
 		//-
@@ -789,6 +827,43 @@ namespace ofxImGuiSurfing
 			bReturn = true;
 		}
 
+		return bReturn;
+	}
+
+	//----
+
+
+	//--------------------------------------------------------------
+	inline bool AddBigButton(string name, float w = -1, float h = -1) 
+	{
+		bool bReturn = false;
+
+		std::string n = "##BIGBUTTON" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+		{
+			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
+			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
+			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			{
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+
+					bReturn = true;
+				}
+			}
+			ImGui::PopStyleColor(3);
+		}
+		ImGui::PopID();
+		
 		return bReturn;
 	}
 };

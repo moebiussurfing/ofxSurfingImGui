@@ -3,13 +3,17 @@
 
 	TODO:
 
+	+ fix fails params string on groups
+
+	+ fix toggles do not trigs true when changes?
+	
 	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 
 	
-	+ add clickable label toggle
+	+ add clickeable label toggle
 
 	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
-	+ add tooltip types for styles
+	+ add tooltip types on styles on a new .Add(..arg
 
 	BUGS:
 
@@ -89,7 +93,7 @@
 //--------------------------------------------------------------
 
 // This header includes the main classes: 
-// layout, helpers and all my Surfing widgets.
+// Layout, helpers and all my Surfing widgets.
 // Some others are moved out of the /src folder bc they are less common.
 // You must include them manually from OFX_ADDON/_LIBS if you want to use it in your project.
 

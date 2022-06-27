@@ -39,7 +39,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
 		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there.
 		OFX_IM_DISABLED,	// Make it invisible, preserve the void spacing. it's a common height but could differs..
-		OFX_IM_SPACING,	// Make it invisible, preserve a custom (one standard line) spacing.
+		OFX_IM_SPACING,		// Make it invisible, preserve a custom (one standard line) spacing.
 		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control.
 		//TODO: could be an extra arg to allow different appearance for inactive types..
 
@@ -50,14 +50,34 @@ namespace ofxImGuiSurfing
 		// Button
 		OFX_IM_BUTTON_SMALL,	// 1 = default
 		OFX_IM_BUTTON,			// 1.25
+		OFX_IM_BUTTON_MEDIUM,	// 1.5
 		OFX_IM_BUTTON_BIG,		// 2
 		OFX_IM_BUTTON_BIG_XXL,	// 3
 		OFX_IM_BUTTON_BIG_XXXL,	// 4
 
+		// Border
+		OFX_IM_BUTTON_SMALL_BORDER,
+		OFX_IM_BUTTON_BORDER,
+		OFX_IM_BUTTON_MEDIUM_BORDER,
+		OFX_IM_BUTTON_BIG_BORDER,
+		OFX_IM_BUTTON_BIG_XXL_BORDER,
+		OFX_IM_BUTTON_BIG_XXXL_BORDER,
+
+		// Border Blink 
+		OFX_IM_BUTTON_SMALL_BORDER_BLINK,
+		OFX_IM_BUTTON_BORDER_BLINK,
+		OFX_IM_BUTTON_MEDIUM_BORDER_BLINK,
+		OFX_IM_BUTTON_BIG_BORDER_BLINK,
+		OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK,
+		OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK,
+
+		//--
+		
 		// Toggle
 		OFX_IM_CHECKBOX, // ofxImGui standard
 		OFX_IM_TOGGLE,
 		OFX_IM_TOGGLE_SMALL,
+		OFX_IM_TOGGLE_MEDIUM,
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
 		OFX_IM_TOGGLE_BIG_XXXL,
@@ -65,17 +85,21 @@ namespace ofxImGuiSurfing
 		// Border
 		OFX_IM_TOGGLE_SMALL_BORDER,
 		OFX_IM_TOGGLE_BORDER,
+		OFX_IM_TOGGLE_MEDIUM_BORDER,
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER,
 
-		// Blink border
+		// Border Blink 
 		OFX_IM_TOGGLE_SMALL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BORDER_BLINK,
+		OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK,
 
+		//--
+		
 		// Rounded
 		OFX_IM_TOGGLE_ROUNDED,
 		OFX_IM_TOGGLE_ROUNDED_MINI,
@@ -89,9 +113,9 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG,
 
-		//-
+		//--
 
-		// Float/Int Styles
+		// FLOAT / INT Styles
 
 		OFX_IM_SLIDER, // ofxImGui standard
 
