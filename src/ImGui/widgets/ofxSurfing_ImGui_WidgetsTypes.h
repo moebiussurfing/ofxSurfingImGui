@@ -912,7 +912,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED_BIG:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG:
-						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
+						//bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _h, 2 * _h));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
 						break;
 					}

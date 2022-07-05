@@ -803,6 +803,22 @@ namespace ofxImGuiSurfing
 	{
 		return AddToggleRoundedButton(parameter, bb);
 	}
+	
+	//--------------------------------------------------------------
+	inline bool AddCheckBox(ofParameter<bool>& parameter)
+	{
+		bool bReturn = false;
+		auto tmpRef = parameter.get();
+
+		if (ImGui::Checkbox(parameter.getName().c_str(), (bool*)&tmpRef))
+		{
+			parameter.set(tmpRef);
+			bReturn = true;
+		}
+
+		return bReturn;
+	}
+
 
 	//TODO: 
 	// not working..

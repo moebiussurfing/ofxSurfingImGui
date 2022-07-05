@@ -1654,6 +1654,16 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	float getWidgetsSpacingX() {
+		return ImGui::GetStyle().ItemSpacing.x;
+	}
+	//--------------------------------------------------------------
+	float getWidgetsSpacingY() {
+		return ImGui::GetStyle().ItemSpacing.y;
+	}
+
+	// Legacy API
+	//--------------------------------------------------------------
 	void refreshWidgetsSizes(float& _w100, float& _w50, float& _w33, float& _w25, float& _h) {
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 	}
@@ -2077,18 +2087,35 @@ public:
 private:
 
 	std::string helpInfo = "";
-	TextBoxWidget textBoxWidget;
+	TextBoxWidget textBoxWidgetInternal;
 
 	std::string helpInfoApp = "";
 	TextBoxWidget textBoxWidgetApp;
 
+	bool bUseHelpInfoInternal = false;
+	bool bUseHelpInfoApp = false;
+
+	//--
+
 public:
+	
+	//--------------------------------------------------------------
+	void setEnableHelpInfoInternal(bool b) {
+		bUseHelpInfoInternal = b;
+	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoApp(string text) {
 		helpInfoApp = text;
 		textBoxWidgetApp.setText(helpInfoApp);
+		bUseHelpInfoApp = true;
+	}
 
+	//--------------------------------------------------------------
+	void setHelpInfoInternal(string text) {
+		helpInfo = text;
+		textBoxWidgetInternal.setText(helpInfo);
+		bUseHelpInfoInternal = true;
 	}
 
 	//----
@@ -2106,6 +2133,19 @@ public:
 	// Not ofParams helpers.
 	// CPP types 
 	// To speed up populate widgets without requiring to create ofParameters first.
+
+	//--------------------------------------------------------------
+	bool AddButton(string label, ImVec2 sz)
+	{
+		bool bReturn = false;
+
+		float _ww = sz.x;
+		float _h = sz.y;
+
+		bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+
+		return bReturn;
+	}
 
 	//--------------------------------------------------------------
 	bool AddButton(string label, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -2164,6 +2204,22 @@ public:
 
 		return bReturn;
 	}
+
+
+	//TODO:
+	////--------------------------------------------------------------
+	//bool AddToggle(string label, ImVec2 sz)
+	//{
+	//	bool bReturn = false;
+
+	//	float _ww = sz.x;
+	//	float _h = sz.y;
+
+	//	bReturn = ofxImGuiSurfing::AddBigToggle(label, _ww, _h);
+
+	//	return bReturn;
+	//}
+
 
 	void SameLine() { ImGui::SameLine(); };
 };

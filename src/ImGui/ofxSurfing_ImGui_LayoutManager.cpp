@@ -11,7 +11,10 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	//----
 
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
-	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
+
+	// auto call draw
+	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_AFTER_APP);
+	//ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	// Callbacks
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -190,6 +193,15 @@ void ofxSurfing_ImGui_Manager::setupImGuiFonts()
 
 	std::string _path = "assets/fonts/"; // assets folder
 
+	// We can set an alternative font like a legacy font
+	ofFile fileToRead(_path + _fontName); // To check if font file exists
+	if (!fileToRead.exists()) 
+	{
+		_fontName = FONT_DEFAULT_FILE_LEGACY;
+		_fontSizeParam = FONT_DEFAULT_SIZE_LEGACY;
+	}
+
+
 	// font default
 	pushFont(_path + _fontName, _fontSizeParam); // queue default font too
 
@@ -201,7 +213,7 @@ void ofxSurfing_ImGui_Manager::setupImGuiFonts()
 
 	//--
 
-	// default
+	// set default
 	addFont(_path + _fontName, _fontSizeParam);
 }
 
@@ -214,7 +226,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
-	// Hardcoded settings
+	// Hard coded settings
 
 	bool bRestore = true;
 	bool bMouse = false;
@@ -318,8 +330,8 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	// Help Text Box
 
-	textBoxWidget.setPath(path_Global + "HelpBox_Internal/");
-	textBoxWidget.setup();
+	textBoxWidgetInternal.setPath(path_Global + "HelpBox_Internal/");
+	textBoxWidgetInternal.setup();
 
 	buildHelpInfo();
 
@@ -398,7 +410,8 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 		helpInfo += "Double click to Edit/Lock \n";
 	}
 
-	textBoxWidget.setText(helpInfo);
+	//setHelpInfoInternal(helpInfo);
+	textBoxWidgetInternal.setText(helpInfo);
 }
 
 //----
@@ -460,6 +473,9 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 			customFont = _customFont;
 			currFont = customFonts.size() - 1;
 		}
+	}
+	else {
+		ofLogError(__FUNCTION__) << path << " NOT FOUND!";
 	}
 	if (customFont != nullptr) io.FontDefault = customFont;
 
@@ -586,13 +602,13 @@ void ofxSurfing_ImGui_Manager::draw(ofEventArgs& args)
 	// Internal
 	if (bHelpInternal)
 	{
-		textBoxWidget.draw();
+		if(bUseHelpInfoInternal) textBoxWidgetInternal.draw();
 	}
 
 	// App
 	if (bHelp)
 	{
-		textBoxWidgetApp.draw();
+		if(bUseHelpInfoApp) textBoxWidgetApp.draw();
 	}
 }
 

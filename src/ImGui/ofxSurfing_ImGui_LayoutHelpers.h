@@ -56,8 +56,14 @@
 
 // Default Font
 
-#define FONT_DEFAULT_SIZE 11
-#define FONT_DEFAULT_FILE "telegrama_render.otf"
+// Legacy Font
+#define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
+#define FONT_DEFAULT_SIZE_LEGACY 11
+
+// New font
+#define FONT_DEFAULT_SIZE 14
+#define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+//#define FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
 
 //#define FONT_DEFAULT_SIZE 13
 //#define FONT_DEFAULT_FILE "PrgmtB.ttf"
