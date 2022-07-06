@@ -1652,6 +1652,11 @@ public:
 	float getWidgetsHeight() {
 		return ofxImGuiSurfing::getWidgetsHeight();
 	}
+	// Legacy
+	//--------------------------------------------------------------
+	float getWidgetsHeightUnit() {
+		return ofxImGuiSurfing::getWidgetsHeightUnit();
+	}
 
 	//--------------------------------------------------------------
 	float getWidgetsSpacingX() {
