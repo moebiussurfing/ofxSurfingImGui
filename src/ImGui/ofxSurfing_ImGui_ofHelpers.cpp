@@ -1138,7 +1138,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// lists and drop down enum/lists
+	// Lists and drop down enum / lists
 	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{

@@ -219,7 +219,8 @@ void ofApp::drawImGui()
 			guiManager.Add(lineWidth);//default style
 			guiManager.Add(separation);//default style
 
-			guiManager.endWindowSpecial(index);
+			guiManager.endWindowSpecial();
+			//guiManager.endWindowSpecial(index);
 		}
 	}
 
@@ -276,6 +277,7 @@ void ofApp::drawImGui()
 
 				ImGui::EndTabBar();
 			}
+
 			guiManager.endWindowSpecial();
 		}
 	}

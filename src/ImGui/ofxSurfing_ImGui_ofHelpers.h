@@ -327,7 +327,9 @@ namespace ofxImGuiSurfing
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
-		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
+		//if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
+
+		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
 		{
 			tmpRefi = ofClamp(tmpRefi, parameter.getMin(), parameter.getMax());
 			parameter.set(tmpRefi);
@@ -356,12 +358,14 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+
 		if (ImGui::InputFloat(p.getName().c_str(), (float*)&tmpRef, step, stepFast))
 		{
-			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
 			p.set(tmpRef);
 			bReturn = true;
 		}
+
 		IMGUI_SUGAR__STEPPER_WIDTH_POP;
 
 		ImGui::PopID();
@@ -382,7 +386,8 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
 
-		// Float
+		// FLOAT
+
 		if (info == typeid(float))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
@@ -396,7 +401,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-		// Int
+		// INT
+
 		else if (info == typeid(int))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
@@ -412,7 +418,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-		// Bool
+		// BOOL
+
 		else if (info == typeid(bool))
 		{
 			if (ImGui::Checkbox((parameter.getName().c_str()), (bool*)&tmpRef))
@@ -424,7 +431,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-		// Unknown
+		// UNKNOWN
+
 		if (info.name() == "" || info.name() == " ")
 			ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
 
@@ -479,12 +487,15 @@ namespace ofxImGuiSurfing
 			{
 				if (info.name() == "" || info.name() == " ")
 					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 				return false;
 			}
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return result;
 	}
 

@@ -5,6 +5,11 @@
 
 	+ fix fails params string on groups
 
+	+ auto midi knobs to FX:
+		set the master 6 knobs.
+		auto assign to these 6 knobs 
+		from current GUI editing / first plane page.
+
 	+ fix toggles do not trigs true when changes?
 	
 	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 

@@ -101,6 +101,7 @@ void ofApp::draw_SurfingWidgets_1()
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		guiManager.AddGroup(params_0);
 		guiManager.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+
 		guiManager.endWindowSpecial();
 	}
 }
@@ -116,6 +117,7 @@ void ofApp::draw_SurfingWidgets_2()
 		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
+
 		guiManager.endWindowSpecial();
 	}
 }
@@ -131,6 +133,7 @@ void ofApp::draw_SurfingWidgets_3()
 		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
 		guiManager.AddSpacingBigSeparated();
 		guiManager.AddGroup(params_2);
+
 		guiManager.endWindowSpecial();
 	}
 }
@@ -147,6 +150,7 @@ void ofApp::draw_SurfingWidgets_4()
 		guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
 		guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
+
 		guiManager.endWindowSpecial();
 	}
 }

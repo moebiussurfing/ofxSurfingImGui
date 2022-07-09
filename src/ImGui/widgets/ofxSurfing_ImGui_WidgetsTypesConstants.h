@@ -314,9 +314,12 @@ namespace ofxImGuiSurfing
 	// 2.
 
 	// For OFX_IM_STEPPER
+	
+//#define STEP_FACTOR .5f
+#define STEP_FACTOR .75f
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }

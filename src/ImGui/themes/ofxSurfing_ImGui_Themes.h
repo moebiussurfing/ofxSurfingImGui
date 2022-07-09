@@ -70,23 +70,31 @@ namespace ofxImGuiSurfing
 
 		ImGuiStyle *style = &ImGui::GetStyle();
 
-		style->FramePadding = ImVec2(6, 4);
 		style->ItemInnerSpacing = ImVec2(5, 4);
 		style->ItemSpacing = ImVec2(6, 4);
 		style->Alpha = 0.97f;
-		style->WindowRounding = 0;
-		style->FrameRounding = 4;
 		style->ColumnsMinSpacing = 50;
 		style->GrabMinSize = 18;
 		style->ScrollbarSize = 14;
 		style->ScrollbarRounding = 4;
-		style->TabRounding = 4;
-		style->WindowRounding = 2;
 		style->GrabRounding = 2;
 		style->IndentSpacing = 5;
-		style->FrameBorderSize = 1;
-		style->WindowBorderSize = 1;
+
+		style->TabRounding = 4;
 		style->TabBorderSize = 1;
+
+		style->FrameRounding = 4;
+		style->FrameBorderSize = 1;
+
+		style->FramePadding = ImVec2(6, 4);
+		//style->FramePadding = ImVec2(8,6);
+		//style->FramePadding = ImVec2(8,8);
+
+		style->WindowRounding = 2;
+		style->WindowBorderSize = 1;
+		//style->WindowPadding = ImVec2(20,20);
+		
+		//style->header= 1;
 
 		//-
 
