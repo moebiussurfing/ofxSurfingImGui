@@ -102,9 +102,11 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED://TODO:
+		setAutoSaveSettings(false);
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED: // -> guiManager.begin(); it's bypassed internally then can be remain uncommented.
+		setAutoSaveSettings(false);
 		break;
 	}
 
@@ -131,11 +133,11 @@ void ofxSurfing_ImGui_Manager::setupDocking()
 //--
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantiated GUI. Called by all modes.
+void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantiated GUI. Called by all modes except when using the external scope modes aka not instantiated.
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
-	//-
+	//--
 
 	// MouseWheel link
 	widgetsManager.bMouseWheel.makeReferenceTo(bMouseWheel);
@@ -143,14 +145,13 @@ void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantia
 	// MouseWheel link
 	windowsSpecialsOrganizer.bDebug.makeReferenceTo(bDebug);
 
-	//-
+	//--
 
 	setupImGui();
 
 	//--
 
 	path_Global = "Gui/";
-	//path_Global = "ImGui_Layout/";
 
 	path_ImLayouts = path_Global + "Presets/";
 
@@ -161,7 +162,8 @@ void ofxSurfing_ImGui_Manager::setupInitiate() { // For using internal instantia
 
 	//--
 
-	path_AppSettings = path_Global + "guiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";//this allow multiple addons instaces with settings
+	path_AppSettings = path_Global + "guiManager_" + bGui_LayoutsPanels.getName() + path_SubPathLabel + ".json";
+	// this allow multiple add-ons instances with non shared settings.
 
 	// Add the basic param settings
 	//TODO:
@@ -222,7 +224,7 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 {
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
-	//-
+	//--
 
 	ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 
@@ -234,25 +236,29 @@ void ofxSurfing_ImGui_Manager::setupImGui()
 	if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
-	// Setup imgui with the appropriate config flags
+	// Setup ImGui with the appropriate config flags
+
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
+
 	if (bDockingLayoutPresetsEngine) ImGui::GetIO().ConfigDockingWithShift = true;
 
-	// Uncomment below to "force" all imgui windows to be standalone
+	// Uncomment below to "force" all ImGui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
 
 	//--
 
 	// Fonts
+
 	setupImGuiFonts();
 
 	//--
 
-	// Theme:
+	// Theme
+	
 	// colors and sizes
 	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 }

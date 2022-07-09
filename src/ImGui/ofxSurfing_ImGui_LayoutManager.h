@@ -602,12 +602,13 @@ public:
 	// Special Windows Mode
 
 	SurfingImGuiWindowsMode specialsWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
+
 	//--------------------------------------------------------------
 	void setWindowsMode(SurfingImGuiWindowsMode mode) { // Call before setup.
 		specialsWindowsMode = mode;
 	}
 
-	// Instantiator
+	// Instantiation
 
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
@@ -2090,6 +2091,11 @@ public:
 	//--
 
 private:
+
+	// We have to independent help boxes.
+	// One is intended to be use as the add-on itself help (Internal Help),
+	// and another to be used as an external help (App Help).
+	// Can be initialized from outer scope.
 
 	std::string helpInfo = "";
 	TextBoxWidget textBoxWidgetInternal;
