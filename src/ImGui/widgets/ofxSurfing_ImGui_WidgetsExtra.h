@@ -39,8 +39,8 @@
 
 namespace ofxImGuiSurfing
 {
-	using namespace ImGui;	
-	
+	using namespace ImGui;
+
 	//--------------------------------------------------------------
 	inline void AddTooltip2(std::string text, bool bEnabled = true)//call after the pop up trigger widget
 	{
@@ -65,7 +65,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
 	{
-		const int _amt = _index.getMax() - _index.getMin()+1;
+		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
 
 		ImGui::Spacing();
@@ -99,7 +99,7 @@ namespace ofxImGuiSurfing
 			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		float a = 0.3;
 		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
 		float borderLineWidth = 1.0;
@@ -230,6 +230,17 @@ namespace ofxImGuiSurfing
 		return cChanged;
 	}
 
+
+	//--------------------------------------------------------------
+	inline bool AddMatrixClicker(ofParameter<int>& _index, float __h)
+	{
+		bool bResponsive = true;
+		int amountBtRow = 3;
+		const bool bDrawBorder = false;
+		string toolTip = "";
+		return AddMatrixClicker(_index, bResponsive, amountBtRow, bDrawBorder, __h, toolTip);
+	}
+
 	//--
 
 	//TODO: 
@@ -251,7 +262,7 @@ namespace ofxImGuiSurfing
 			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		float a = 0.3;
 		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
 		float borderLineWidth = 1.0;
@@ -312,8 +323,8 @@ namespace ofxImGuiSurfing
 				{
 					string name;
 
-					if(labels.size()==0) name = ofToString(ofToString(n));
-					else 
+					if (labels.size() == 0) name = ofToString(ofToString(n));
+					else
 					{
 						if (n < labels.size()) name = (labels[n]);
 						else name = ofToString(ofToString(n));
@@ -393,7 +404,7 @@ namespace ofxImGuiSurfing
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
 
-		if(bSpaced) ImGui::Spacing();
+		if (bSpaced) ImGui::Spacing();
 
 		bool cChanged = false;
 
@@ -403,7 +414,7 @@ namespace ofxImGuiSurfing
 			__h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		}
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		float a = 0.3;
 		ImVec4 borderLineColor = style->Colors[ImGuiCol_TextDisabled];
 		float borderLineWidth = 1.0;
@@ -552,7 +563,7 @@ namespace ofxImGuiSurfing
 	// buttons selector for files on a folder:
 	// creates a button for each file showing each file names
 	//--------------------------------------------------------------
-	static bool SelectFile(const std::string &path, std::string &selected, /*int &index, */const std::vector<std::string> &ext = {}) {
+	static bool SelectFile(const std::string& path, std::string& selected, /*int &index, */const std::vector<std::string>& ext = {}) {
 		bool ret = false;
 
 		float w = ImGui::GetContentRegionAvail().x;
@@ -571,12 +582,12 @@ namespace ofxImGuiSurfing
 				ofDirectory dir;
 				if (!ext.empty()) {
 					dir.allowExt("");
-					for (auto &&e : ext) {
+					for (auto&& e : ext) {
 						dir.allowExt(e);
 					}
 				}
 				dir.listDir(path);
-				for (auto &f : dir) {
+				for (auto& f : dir) {
 					ret |= SelectFile(f.path(), selected, ext);
 				}
 				TreePop();
@@ -594,7 +605,7 @@ namespace ofxImGuiSurfing
 	// buttons selector for files on a folder:
 	// creates a button for each file showing each file names
 	//--------------------------------------------------------------
-	static bool filesPicker(const std::string &path, std::string &selected, ofParameter<int>& _index, const std::vector<std::string> &ext = {}) {
+	static bool filesPicker(const std::string& path, std::string& selected, ofParameter<int>& _index, const std::vector<std::string>& ext = {}) {
 		bool ret = false;
 
 		float w = ImGui::GetContentRegionAvail().x;
@@ -618,7 +629,7 @@ namespace ofxImGuiSurfing
 				ofDirectory dir;
 				if (!ext.empty()) {
 					dir.allowExt("");
-					for (auto &&e : ext) {
+					for (auto&& e : ext) {
 						dir.allowExt(e);
 					}
 				}
@@ -631,7 +642,7 @@ namespace ofxImGuiSurfing
 				//	i++;
 				//}
 
-				for (auto &f : dir)
+				for (auto& f : dir)
 				{
 					ret |= filesPicker(f.path(), selected, _index, ext);
 				}
@@ -675,7 +686,7 @@ namespace ofxImGuiSurfing
 	using namespace ImGui;
 
 	//--------------------------------------------------------------
-	inline bool Pad2D(ImDrawList* drawList, float width, float height, float *_x, float *_y) {
+	inline bool Pad2D(ImDrawList* drawList, float width, float height, float* _x, float* _y) {
 
 		// visuals
 		enum { LINE_WIDTH = 2 }; // handlers: small lines width
@@ -709,8 +720,8 @@ namespace ofxImGuiSurfing
 			}
 		}
 
-		drawList->AddLine(ImVec2(bb.Min.x + (Canvas.x* *_x), bb.Min.y), ImVec2(bb.Min.x + (Canvas.x* *_x), bb.Max.y - 1), ImGui::GetColorU32(ImGuiCol_TextDisabled), LINE_WIDTH);
-		drawList->AddLine(ImVec2(bb.Min.x, bb.Min.y + (Canvas.y* *_y)), ImVec2(bb.Max.x - 1, bb.Min.y + (Canvas.y* *_y)), ImGui::GetColorU32(ImGuiCol_TextDisabled), LINE_WIDTH);
+		drawList->AddLine(ImVec2(bb.Min.x + (Canvas.x * *_x), bb.Min.y), ImVec2(bb.Min.x + (Canvas.x * *_x), bb.Max.y - 1), ImGui::GetColorU32(ImGuiCol_TextDisabled), LINE_WIDTH);
+		drawList->AddLine(ImVec2(bb.Min.x, bb.Min.y + (Canvas.y * *_y)), ImVec2(bb.Max.x - 1, bb.Min.y + (Canvas.y * *_y)), ImGui::GetColorU32(ImGuiCol_TextDisabled), LINE_WIDTH);
 
 
 		// DRAG from circle
@@ -718,7 +729,7 @@ namespace ofxImGuiSurfing
 
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
-		ImGui::SetCursorScreenPos(ImVec2(bb.Min.x + (Canvas.x* *_x) - 4, bb.Min.y + (Canvas.y* *_y) - 4));
+		ImGui::SetCursorScreenPos(ImVec2(bb.Min.x + (Canvas.x * *_x) - 4, bb.Min.y + (Canvas.y * *_y) - 4));
 		ImGui::InvisibleButton("circleGripBtn", ImVec2(8, 8));
 
 		static bool isDraggingCircle = false;
@@ -737,7 +748,7 @@ namespace ofxImGuiSurfing
 			if (isDraggingCircle) isDraggingCircle = false;
 		}
 
-		drawList->AddCircleFilled(ImVec2(bb.Min.x + (Canvas.x* *_x), bb.Min.y + (Canvas.y* *_y)), GRAB_RADIUS, IM_COL32(255, 255, 255, 245), 6);
+		drawList->AddCircleFilled(ImVec2(bb.Min.x + (Canvas.x * *_x), bb.Min.y + (Canvas.y * *_y)), GRAB_RADIUS, IM_COL32(255, 255, 255, 245), 6);
 
 		ImGui::SetCursorScreenPos(prevCursorPos);
 
@@ -852,14 +863,14 @@ namespace ofxImGuiSurfing
 
 		// Border when selected
 		float a = 0.5f;
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 		ImVec4 colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 		// Blink
 		static bool _bBlink;
 		_bBlink = bBlink && isHover;
-		if (_bBlink) 
+		if (_bBlink)
 		{
 			float blinkValue = ofxImGuiSurfing::getFadeBlink();
 			a = ofClamp(blinkValue, 0.25, 0.75);
@@ -874,14 +885,14 @@ namespace ofxImGuiSurfing
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, colText);
 		}
-		
+
 		{
 			if (ImGui::Button(desc, ImVec2(w, h)))
 			{
 				ofLaunchBrowser(url);
 			}
 		}
-		
+
 		if (_bBlink)
 		{
 			ImGui::PopStyleColor();
@@ -906,19 +917,19 @@ namespace ofxImGuiSurfing
 			if (tex->getWidth() / tex->getHeight() >= _tw / _th) {
 				if (tex->getWidth() > tex->getHeight()) {   // horizontal texture
 					drawW = _tw;
-					drawH = (_tw / tex->getWidth())*tex->getHeight();
+					drawH = (_tw / tex->getWidth()) * tex->getHeight();
 					posX = 0;
 					posY = (_th - drawH) / 2.0f;
 				}
 				else { // vertical texture
-					drawW = (tex->getWidth()*_th) / tex->getHeight();
+					drawW = (tex->getWidth() * _th) / tex->getHeight();
 					drawH = _th;
 					posX = (_tw - drawW) / 2.0f;
 					posY = 0;
 				}
 			}
 			else { // always considered vertical texture
-				drawW = (tex->getWidth()*_th) / tex->getHeight();
+				drawW = (tex->getWidth() * _th) / tex->getHeight();
 				drawH = _th;
 				posX = (_tw - drawW) / 2.0f;
 				posY = 0;
@@ -972,7 +983,7 @@ namespace ofxImGuiSurfing
 		if (onDrawList) {
 			char temp[256];
 			sprintf(temp, "%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
-			drawList->AddText(ImGui::GetFont(), ImGui::GetFontSize()*fontScale, pos, IM_COL32_WHITE, temp, NULL, 0.0f);
+			drawList->AddText(ImGui::GetFont(), ImGui::GetFontSize() * fontScale, pos, IM_COL32_WHITE, temp, NULL, 0.0f);
 		}
 		else {
 			ImGui::Text("%s %s:%s:%s", pre.c_str(), _sh.c_str(), _sm.c_str(), _ss.c_str());
@@ -1366,7 +1377,7 @@ namespace ofxImGuiSurfing
 
 		// Draw progress bar
 		float _prc;
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4 color;
 
 		// Fill bar color
@@ -1401,7 +1412,7 @@ namespace ofxImGuiSurfing
 
 		// draw progress bar
 		float _prc;
-		ImGuiStyle *style = &ImGui::GetStyle();
+		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4 color;
 
 		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
