@@ -129,14 +129,16 @@ namespace ofxImGuiSurfing
 					{
 						// BOOL
 						if (bIsbool) {
-							ofParameter<bool> p = param.cast<bool>();
-							p = !p.get();
+//							ofParameter<bool> p = param.cast<bool>();
+                            ofParameter<bool> p = dynamic_cast<ofParameter<bool>& >(param);
+                            p = !p.get();
 						}
 
 						// VOID
 						else if (bIsVoid) {
-							ofParameter<void> p = param.cast<void>();
-							p.trigger();
+//							ofParameter<void> p = param.cast<void>();
+                            ofParameter<void> p = dynamic_cast<ofParameter<void>& >(param);
+                            p.trigger();
 						}
 
 						//TODO:
@@ -176,8 +178,9 @@ namespace ofxImGuiSurfing
 						// INT
 						else if (bIsInt)
 						{
-							ofParameter<int> p = param.cast<int>();
-
+//							ofParameter<int> p = param.cast<int>();
+                            ofParameter<int> p = dynamic_cast<ofParameter<int>& >(param);
+                            
 							if (resolution == -1)
 							{
 								resolution = (p.getMax() - p.getMin()) / 100.f;
@@ -191,8 +194,9 @@ namespace ofxImGuiSurfing
 						// FLOAT
 						else if (bIsFloat)
 						{
-							ofParameter<float> p = param.cast<float>();
-
+//							ofParameter<float> p = param.cast<float>();
+                            ofParameter<float> p = dynamic_cast<ofParameter<float>& >(param);
+                            
 							if (resolution == -1)
 							{
 								resolution = (p.getMax() - p.getMin()) / 100.f;

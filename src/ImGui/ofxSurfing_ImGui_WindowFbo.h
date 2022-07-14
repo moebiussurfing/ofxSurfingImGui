@@ -301,16 +301,16 @@ class SurfingPreview
 {
 public:
 
-	SurfingPreview::SurfingPreview()
+	SurfingPreview()
 	{
 		setup();
-	}
+    };
 
-	SurfingPreview::~SurfingPreview()
+	~SurfingPreview()
 	{
 		ofxSurfingHelpers::saveGroup(params);
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // exit()
-	}
+    };
 
 public:
 
