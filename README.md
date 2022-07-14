@@ -83,13 +83,15 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ## CURRENT SYSTEMS
 - **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
+- **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
 ## AUTHOR
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
 ## THANKS
-_All source snippets and widgets from other authors are linked into header files. Thanks!_
+_All source snippets and widgets from other authors are linked into header files. Thanks!_  
+_Thanks [alptugan](https://github.com/alptugan) for macOS testing._  
 
 ## LICENSE
 **MIT License**
