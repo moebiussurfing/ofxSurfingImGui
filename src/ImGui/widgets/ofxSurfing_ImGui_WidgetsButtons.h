@@ -582,7 +582,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
 	{
-		AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+		return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
 	}
 
 	//--------------------------------------------------------------
