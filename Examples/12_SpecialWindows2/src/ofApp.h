@@ -76,20 +76,19 @@ public:
     ofParameter<bool> bGui; // this is the only visible toggle that will not be added as special window.
     void draw_MainWindow();
 
-	void draw_SurfingWidgets_1();
+	void draw_SurfingWidgets_1(); // this window will be handle without using special windows workflow, passing by name instead of passing the visible toggle param.
+
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
 	void draw_SurfingWidgets_4();
+    void draw_SurfingWidgets_5();
+	void draw_SurfingWidgets_6();
+
     ofParameter<bool> bGui_2;
     ofParameter<bool> bGui_3;
     ofParameter<bool> bGui_4;
-
-    // two more windows with local visible toggles,
-    // to be passed when adding as special windows.
     ofParameter<bool> bGui_5;
     ofParameter<bool> bGui_6;
-	void draw_SurfingWidgets_5();
-	void draw_SurfingWidgets_6();
 
     // help info
     void buildHelpInfo();
