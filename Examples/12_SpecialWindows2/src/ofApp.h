@@ -80,6 +80,9 @@ public:
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
 	void draw_SurfingWidgets_4();
+    ofParameter<bool> bGui_2;
+    ofParameter<bool> bGui_3;
+    ofParameter<bool> bGui_4;
 
     // two more windows with local visible toggles,
     // to be passed when adding as special windows.

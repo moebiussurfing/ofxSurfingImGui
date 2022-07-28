@@ -36,6 +36,9 @@ void ofApp::setup()
 
 	bGui.set("ofApp", true);
 
+	bGui_2.set("Window 2", true);
+	bGui_3.set("Window 3", true);
+	bGui_4.set("Window 4", true);
 	bGui_5.set("Window 5", true);
 	bGui_6.set("Window 6", true);
 
@@ -53,14 +56,14 @@ void ofApp::setup_ImGui()
 	guiManager.setup();
 
 	// when adding by name you need to use indexes when drawing the window!
-	guiManager.addWindowSpecial("myWindow 1");
-	guiManager.addWindowSpecial("myWindow 2");
-	guiManager.addWindowSpecial("myWindow 3");
-	guiManager.addWindowSpecial("myWindow 4");
+	guiManager.addWindowSpecial("myWindow 1");//using legacy style by name
 
 	// when can add special windows passing the visible toggle by argument.
 	// ofParameter name will be used to name the windows headers too.
 
+	guiManager.addWindowSpecial(bGui_2);
+	guiManager.addWindowSpecial(bGui_3);
+	guiManager.addWindowSpecial(bGui_4);
 	guiManager.addWindowSpecial(bGui_5);
 	guiManager.addWindowSpecial(bGui_6);
 
@@ -84,7 +87,6 @@ void ofApp::draw()
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
 		draw_SurfingWidgets_4();
-
 		draw_SurfingWidgets_5();
 		draw_SurfingWidgets_6();
 	}
@@ -131,12 +133,15 @@ void ofApp::draw_SurfingWidgets_1()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_2()
 {
+	if (!bGui_2) return;
+
 	//// A. we can begin the window passing the index, that we want to remember!
 	//if (guiManager.beginWindowSpecial(1)) 
 
 	// B. but we can remember the name used on setup too.
 	// it's the same that use the index 1. (as first starts with zero)
-	if (guiManager.beginWindowSpecial("myWindow 2"))
+
+	if (guiManager.beginWindowSpecial(bGui_2))
 	{
 		guiManager.AddLabelBig("> Window \n Special 2", false);
 		guiManager.AddGroup(params_1);
@@ -151,7 +156,9 @@ void ofApp::draw_SurfingWidgets_2()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_3()
 {
-	if (guiManager.beginWindowSpecial(2))
+	if (!bGui_3) return;
+
+	if (guiManager.beginWindowSpecial(bGui_3))
 	{
 		guiManager.AddLabelBig("> Window \n Special 3", false);
 		guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
@@ -166,7 +173,9 @@ void ofApp::draw_SurfingWidgets_3()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_4()
 {
-	if (guiManager.beginWindowSpecial(3))
+	if (!bGui_4) return;
+
+	if (guiManager.beginWindowSpecial(bGui_4))
 	{
 		guiManager.AddLabelBig("> Window \n Special 4", false);
 		guiManager.AddGroup(params_3);
@@ -182,6 +191,8 @@ void ofApp::draw_SurfingWidgets_4()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_5()
 {
+	if (!bGui_5) return;
+
 	if (guiManager.beginWindowSpecial(bGui_5))
 	{
 		guiManager.AddLabelBig("> Window \nSpecial 5", false);
@@ -193,6 +204,8 @@ void ofApp::draw_SurfingWidgets_5()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_6()
 {
+	if (!bGui_6) return;
+
 	if (guiManager.beginWindowSpecial(bGui_6))
 	{
 		guiManager.AddLabelBig("> Window \n Special 6", false);
