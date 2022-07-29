@@ -64,7 +64,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
   - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST **use this one! 
+  - You **MUST** use this one! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
@@ -99,7 +99,7 @@ An add-on by **moebiusSurfing**.
 ## THANKS
 
 _All source snippets and widgets from other authors are linked into header files. Thanks!_  
-_Thanks [@alptugan](https://github.com/alptugan) for **macOS** testing._  
+_Thanks [@alptugan](https://github.com/alptugan) for macOS testing._  
 
 ## LICENSE
 
