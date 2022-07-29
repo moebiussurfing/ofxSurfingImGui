@@ -31,7 +31,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 - Easy **Setup** and **Layout**.
 - **ofParameter Helpers**.
 - **ImGui Widgets** ported to **oF ofParameters**.
-- Useful methods and **snippets **to **speed-up layout **and **workflow**.
+- Useful methods and **snippets** to **speed-up layout** and **workflow**.
 - A **Layout Presets Engine**.
 - **Docking Helpers**.
 - Cool **Themes**.
@@ -80,7 +80,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
   - Multi context / instances: 
     - Several windows from different add-ons without colliding.  
   - Easy to update to future **NEW ImGui** versions.  
-    Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original ofxImGui from **@jvcleave**.  
+    Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
     
     </p>
