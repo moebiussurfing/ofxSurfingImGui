@@ -66,9 +66,9 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
-`data.zip` assets like font files.  
+`data.zip` assets like font files to put into `OF_APP/bin/.`  
 
-**NOTE**: **JetBrainsMono-Bold.ttf** will the font file for the current theme. If that font is not located, then it will search for **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font on **ImGui**.  
+**NOTE**: **JetBrainsMono-Bold.ttf** will the font file for the currently used theme. If that font is not located, then it will search for a kind of legacy font called **telegrama_render.otf**. If none of that fonts are located (`/data` can be empty), it will work too, but using the default bundled font from **ImGui**.  
 
 <details>
   <summary>Why an ofxImGui FORK?</summary>
