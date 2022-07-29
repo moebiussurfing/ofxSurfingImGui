@@ -154,7 +154,7 @@ void ofxSurfing_ImGui_Manager::setupInitiate()
 
 	// MouseWheel link
 	windowsSpecialsOrganizer.bDebug.makeReferenceTo(bDebug);
-	
+
 	// Minimizes link
 	bMinimizePresets.makeReferenceTo(bMinimize);
 	//bMinimizePanels.makeReferenceTo(bMinimize);
@@ -418,8 +418,8 @@ void ofxSurfing_ImGui_Manager::startup()
 		//rect0_Presets.set(ofRectangle(10, 10, 100, 100));
 		////rect2_Manager.set(ofRectangle(10, 10, 100, 100));
 
-		textBoxWidgetApp.setPosition(400,10);
-		textBoxWidgetInternal.setPosition(800,10);
+		textBoxWidgetApp.setPosition(400, 10);
+		textBoxWidgetInternal.setPosition(800, 10);
 	}
 }
 
@@ -430,15 +430,22 @@ void ofxSurfing_ImGui_Manager::startup()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::buildHelpInfo()
 {
+	// we recreate the help info during runtime when some variable changed
+
+	string l = "------------------------------------\n";//divider
+	string l2 = "\n" + l + "\n";
+
 	helpInfo = "";
 
 	//helpInfo += "GUI MANAGER \n";
+
 	helpInfo += "HELP INTERNAL \n\n";
 
 	//if (bHelp)
 	{
 		helpInfo += "Double click to Edit/Lock \n\n";
 	}
+	helpInfo += l;
 
 	helpInfo += "\n";
 	helpInfo += "KEY COMMANDS \n\n";
@@ -461,7 +468,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 	if (bDebug) helpInfo += "D      DEBUG ON \n";
 	else helpInfo += "D      DEBUG OFF \n";
 
-	helpInfo += "\n\n";
+	helpInfo += l2;
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 		if (bDockingLayoutPresetsEngine)
@@ -470,14 +477,14 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 			helpInfo += "\n";
 
 			helpInfo += "F1-F2-F3-F4      PRESETS \n";
-			helpInfo += "P1-P2-P3-P4 \n";
+			//helpInfo += "P1-P2-P3-P4 \n";
 			helpInfo += "\n";
 			helpInfo += "F5      LAYOUTS \n";
 			helpInfo += "F6      PANELS \n";
 			helpInfo += "F7      MANAGER \n";
 			helpInfo += "F8      EXTRA \n";
 			helpInfo += "F9      MINIMIZE \n";
-			helpInfo += "\n\n";
+			helpInfo += l2;
 
 			helpInfo += "HOW TO \n";
 			helpInfo += "\n";
@@ -488,7 +495,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 			helpInfo += "3. MOVE AND RESIZE THE PANELS. \n";
 			helpInfo += "\n";
 			helpInfo += "4. SET ANOTHER LAYOUT PRESET. \n";
-			helpInfo += "\n\n";
+			helpInfo += l2;
 
 			helpInfo += "MORE TIPS \n";
 			helpInfo += "\n";
@@ -504,7 +511,6 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 			helpInfo += "\n\n";
 		}
 
-	//setHelpInfoInternal(helpInfo);
 	textBoxWidgetInternal.setText(helpInfo);
 }
 
@@ -802,34 +808,25 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager()
 		AddBigToggle(bGui_LayoutsPanels, _w, _h, false);
 		AddBigToggle(bGui_LayoutsPresets, _w, _h, false);
 
-		if (!bMinimizePresets && !bGui_LayoutsPanels)
-		{
-			this->AddSpacingSeparated();
-		}
+		//if (!bMinimizePresets && !bGui_LayoutsPanels)
+		//{
+		//	this->AddSpacingSeparated();
+		//}
 
 		//--
 
-		this->AddSpacingSeparated();
-
-		//--
-
-		// Extra Params
-
-		if (!bMinimizePresets)
-		{
-			this->AddGroup(params_LayoutsExtra);
-		}
-
-		//--
-
+		// Show a mini version when the main panel is hidden!
 		if (!bGui_LayoutsPanels)
 		{
+			this->AddSpacingSeparated();
+
 			static bool bOpen = false;
 			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 			if (ImGui::CollapsingHeader("Panels", _flagw))
 			{
 				this->AddSpacing();
 
+				// All the queued special windows aka panels
 				for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 				{
 					AddToggleRoundedButton(windowsSpecialsLayouts[i].bGui);
@@ -848,6 +845,17 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager()
 					setShowAllPanels(false);
 				}
 			}
+		}
+
+		//--
+
+		// Extra Params
+
+		if (!bMinimizePresets)
+		{
+			this->AddSpacingSeparated();
+
+			this->AddGroup(params_LayoutsExtra);
 		}
 
 		//if (!bMinimizePresets)
@@ -1715,7 +1723,7 @@ void ofxSurfing_ImGui_Manager::beginDocking()
 	// All windows goes here before endDocking()
 
 	drawLayouts();
-	}
+}
 #endif
 
 //--------------------------------------------------------------
@@ -1877,7 +1885,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	h = 1;
 	//pad = 2;
 	pad = windowsSpecialsOrganizer.pad;
-	
+
 	//--
 
 	rect1_Panels.set(ofRectangle(x, y, w, h));
@@ -1885,7 +1893,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 
 	rect0_Presets.set(ofRectangle(10, y, w, h));
 	//rect0_Presets.set(ofRectangle(x, y, w, h));
-	
+
 	rect2_Manager.set(ofRectangle(x + 2 * (pad + w), y, w, h));
 
 	//--
@@ -2154,7 +2162,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets() // That's the window tittled
 
 			// Autosave
 
-			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h, true);
+			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.5 * _h, true);
 
 			// Save Button
 
@@ -2174,14 +2182,18 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresets() // That's the window tittled
 
 		//-
 
+		// Organizer panel visible toggle
+
 		if (!bMinimizePresets)
 		{
-			// Organizer panel visible toggle
+			this->Add(this->getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM); // Organizer
+		}
 
-			//this->Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED); // Aligners
-			this->Add(this->getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED); // Organizer
-			this->Add(this->getWindowsSpecialEnablerLinker(), OFX_IM_TOGGLE_ROUNDED); // Organizer
+		if (bMinimizePresets) this->AddSpacingSeparated();
+		this->Add(this->getWindowsSpecialEnablerLinker(), OFX_IM_TOGGLE_ROUNDED_MEDIUM); // Link
 
+		if (!bMinimizePresets)
+		{
 			this->AddSpacingSeparated();
 
 			//--
@@ -2368,11 +2380,16 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 {
 	std::string name = e.getName();
 
+	bool bskip = true;
 	if (name != "position" &&
 		name != "rect_Manager")
 	{
+		bskip = false;
 		ofLogNotice(__FUNCTION__) << name << " : " << e;
 	}
+	if (bskip) return;
+
+	//--
 
 	if (0) {}
 
@@ -2415,135 +2432,143 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 	{
 		buildHelpInfo();
 	}
-	else if (name == bMinimizePresets.getName())
-	{
-		buildHelpInfo();
-	}
+	//else if (name == bMinimizePresets.getName())
+	//{
+	//	buildHelpInfo();
+	//}
 
 	//----
 
-	// Skip callbacks when not using the Layout Presets Engine!
-	if (!surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
-		if (!bDockingLayoutPresetsEngine)
-			return;
+	//TODO:
+	// Skip below callbacks
+	// when not using the Layout Presets Engine!
+	// to improve the performance a bit
+	// by skipping the not required callbacks. 
+	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+		if (!bDockingLayoutPresetsEngine) return;
 
 	//--
 
+	if (0) {}
+
 	// Gui layout
-		else if (name == bGui_LayoutsPresets.getName())
+	else if (name == bGui_LayoutsPresets.getName())
+	{
+		// workflow
+		if (!bGui_LayoutsPresets)
 		{
-			// workflow
-			if (!bGui_LayoutsPresets)
-			{
-				bGui_LayoutsExtra = false;
-			}
+			bGui_LayoutsExtra = false;
 		}
+	}
 
 	//--
 
 	// Reset 
 	// This toggle/flag is "sended" to the parent scope (ofApp), to resets something in our apps.
 	// Example: to resets the layout.
-		else if (name == bReset.getName() && bReset.get())
-		{
-			bReset = false;
+	else if (name == bReset.getName() && bReset.get())
+	{
+		bReset = false;
 
-			if (bResetPtr != nullptr) {
-				*bResetPtr = true;
-			}
+		if (bResetPtr != nullptr) {
+			*bResetPtr = true;
 		}
+	}
 
-		else if (name == bReset_Window.getName() && bReset_Window.get())
-		{
-			bReset_Window = false;
-		}
+	else if (name == bReset_Window.getName() && bReset_Window.get())
+	{
+		bReset_Window = false;
+	}
 
 	//--
 
 	// Solo Panel
 
-		else if (name == bSolo.getName() && bSolo.get())
-		{
-			// workflow
-			appLayoutIndex = -1;
+	else if (name == bSolo.getName() && bSolo.get())
+	{
+		// workflow
+		appLayoutIndex = -1;
 
-			// disable preset
-			for (int i = 0; i < bLayoutPresets.size(); i++)
-			{
-				bLayoutPresets[i].setWithoutEventNotifications(false);
-			}
+		// disable preset
+		for (int i = 0; i < bLayoutPresets.size(); i++)
+		{
+			bLayoutPresets[i].setWithoutEventNotifications(false);
 		}
+	}
 
 	//--
 
 	// Layout preset index
 
-		else if (name == appLayoutIndex.getName())
+	else if (name == appLayoutIndex.getName())
+	{
+		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
+
+		if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) //changed
 		{
-			//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
+			ofLogNotice(__FUNCTION__) << "Changed: " << appLayoutIndex;
 
-			if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) //changed
+			//-
+
+			// 1. Auto save
+
+			if (bAutoSave_Layout)
 			{
-				ofLogNotice(__FUNCTION__) << "Changed: " << appLayoutIndex;
+				// workaround:
+				// must save here bc usually we use the fallged on update save...
+				// only once per cycle allowed this way.
+				//force to ensure save bc update chain load and save below
+				//saveAppLayout(AppLayouts(appLayoutIndex_PRE));
+				std::string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
 
-				//-
-
-				// 1. Auto save
-
-				if (bAutoSave_Layout)
+				if (__ini_to_save_Str != "-1")
 				{
-					// workaround:
-					// must save here bc usually we use the fallged on update save...
-					// only once per cycle allowed this way.
-					//force to ensure save bc update chain load and save below
-					//saveAppLayout(AppLayouts(appLayoutIndex_PRE));
-					std::string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
+					const char* _iniSave = NULL;
+					_iniSave = __ini_to_save_Str.c_str(); // flags to save on update
 
-					if (__ini_to_save_Str != "-1")
+					if (_iniSave != "-1")
 					{
-						const char* _iniSave = NULL;
-						_iniSave = __ini_to_save_Str.c_str(); // flags to save on update
-
-						if (_iniSave != "-1")
-						{
-							saveLayoutPreset(_iniSave);
-						}
+						saveLayoutPreset(_iniSave);
 					}
 				}
-
-				appLayoutIndex_PRE = appLayoutIndex.get();
 			}
 
-			//-
-
-			// Hide all modules / GUI toggles
-
-			if (appLayoutIndex == -1)
-			{
-				for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
-				{
-					windowsSpecialsLayouts[i].bGui.set(false);
-				}
-				return; // not required bc loadAppLayout will be skipped when -1
-			}
-
-			//-
-
-			// 2. Load layout
-			loadAppLayout(appLayoutIndex.get());
+			appLayoutIndex_PRE = appLayoutIndex.get();
 		}
+
+		//-
+
+		// Hide all panels
+
+		if (appLayoutIndex == -1)
+		{
+			for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
+			{
+				windowsSpecialsLayouts[i].bGui.set(false);
+			}
+
+			return; // not required bc loadAppLayout will be skipped when -1
+		}
+
+		//-
+
+		// 2. Load layout
+		loadAppLayout(appLayoutIndex.get());
+	}
 
 	//-
 
-	// Presets Selector exclusive toggles
-
+	// Presets Selector
+	// exclusive toggles
+	// Solo behavior
 	{
 		bool bSomeTrue = false;
 		for (int i = 0; i < bLayoutPresets.size(); i++)
 		{
 			if (name == bLayoutPresets[i].getName())
 			{
-				if (bLayoutPresets[i].get()) // true
+				// true
+				if (bLayoutPresets[i].get())
 				{
 					// workflow
 					if (bSolo.get()) bSolo = false;
@@ -2551,7 +2576,10 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 					appLayoutIndex = i;
 					bSomeTrue = true;
 				}
-				else { // false
+
+				// false
+				else
+				{
 					// avoid all false
 					bool bAllFalse = true;
 					for (int i = 0; i < bLayoutPresets.size(); i++)
@@ -2568,16 +2596,25 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 						// workflow B
 						//set to -1
-						appLayoutIndex = -1;
+						//appLayoutIndex = -1;
+
+						//TODO:
+						appLayoutIndex.set(-1);
+						//appLayoutIndex.setWithoutEventNotifications(-1);
 					}
 				}
 			}
 		}
-		if (bSomeTrue) {
+		if (bSomeTrue)
+		{
 			for (int i = 0; i < bLayoutPresets.size(); i++)
 			{
+				// put the other toggles to false
 				if (i != appLayoutIndex.get())
-					bLayoutPresets[i].set(false);
+				{
+					//bLayoutPresets[i].set(false);
+					bLayoutPresets[i].setWithoutEventNotifications(false);
+				}
 			}
 			return;
 		}
@@ -2585,22 +2622,28 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 	//-
 
-	// Solo Panels Selectors
+	// Solo Panels Selectors behavior
+
+	if (bSolo.get())
 	{
-		bool bSomeTrue = false;
+		// iterate all panels
+		// search for which one changed and to true
 		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
-			int iTrue = -1;
-			if (name == windowsSpecialsLayouts[i].bGui.getName() && windowsSpecialsLayouts[i].bGui.get()) {
-				iTrue = i;
-				if (bSolo.get())
+			// if that one has changed and it goes to true
+			if (name == windowsSpecialsLayouts[i].bGui.getName() && windowsSpecialsLayouts[i].bGui)
+			{
+				// set the others to false
+				for (int k = 0; k < windowsSpecialsLayouts.size(); k++)
 				{
-					for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
+					if (k != i && windowsSpecialsLayouts[i].bGui)
 					{
-						if (iTrue != i && iTrue != -1) windowsSpecialsLayouts[i].bGui.set(false);
+						//windowsSpecialsLayouts[i].bGui.setWithoutEventNotifications(false);
+						windowsSpecialsLayouts[i].bGui.set(false);
 					}
-					return;
 				}
+
+				return;
 			}
 		}
 	}

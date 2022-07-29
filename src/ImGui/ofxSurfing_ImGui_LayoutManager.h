@@ -3,6 +3,7 @@
 
 	TODO:
 
+	+ fix reset aligners. must apply only over special windows maybe.
 	+ fix make dockeable all windows on same space
 	+ fix multiple dock spaces that are colliding/one over another
 	+ fix viewport rectangle preview
@@ -27,7 +28,7 @@
 
 //-
 
-// -> We have some layout presets that we can load using keys:
+// Key commands for layout presets 
 // F1-F2-F3-F4 -> preset
 // F5: Window Presets
 // F6: Window Panels
@@ -618,6 +619,7 @@ public:
 	// Instantiation
 
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
+
 	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
 	//void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
 
@@ -1828,7 +1830,8 @@ private:
 	void saveLayoutPresetGroup(std::string path);
 	void loadLayoutPresetGroup(std::string path);
 
-	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; // index for the selected preset. -1 is none selected, useful too.
+	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; 
+	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
 	ofParameterGroup params_Layouts{ "LayoutsPresets" }; // all these params will be stored on each layout preset

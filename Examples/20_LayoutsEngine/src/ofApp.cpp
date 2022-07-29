@@ -75,14 +75,16 @@ This example shows how to use the
 
 LAYOUT PRESETS ENGINE
 
+----------------------------------------------
 
 OVERVIEW
 
-Speed-up the creation 
+Speed-up the creation and management 
 of Windows and their shape,
 states and settings.
-Powered with the Presets of 4 Layouts.
+Powered with Presets of 4 Layouts.
 
+----------------------------------------------
 
 WIDGETS
 
@@ -96,6 +98,7 @@ using different approaches:
 Look to other widget or styles examples 
 to learn more about this topic.
 
+----------------------------------------------
 
 MORE INFO
 
@@ -239,7 +242,7 @@ void ofApp::drawImGui()
 			
 			guiManager.AddSpacingBigSeparated();
 
-			guiManager.Add(separation); // default style
+			guiManager.Add(separation, OFX_IM_HSLIDER_BIG); // default style
 			guiManager.AddTooltip(ofToString(separation, guiManager.bHelp));
 
 			//--
