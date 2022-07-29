@@ -42,14 +42,21 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-	guiManager.setup();
+	// Initiate
+	 
+	guiManager.setup(IM_GUI_MODE_SPECIAL_WINDOWS);
+	
+	// Legacy Mode can be used too 
+	//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	//guiManager.setup();
 
+	// Queue windows
 	guiManager.addWindowSpecial("myWindow 1");
 	guiManager.addWindowSpecial("myWindow 2");
 	guiManager.addWindowSpecial("myWindow 3");
 	guiManager.addWindowSpecial("myWindow 4");
 
+	// Startup
 	guiManager.startup();
 }
 
@@ -77,7 +84,7 @@ void ofApp::draw_MainWindow() {
 	{
 		// Useful common toggles exposed:
 		 
-		// "Special Windows Organizer" 
+		// Special Windows Organizer 
 		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		guiManager.AddSpacingSeparated();
 

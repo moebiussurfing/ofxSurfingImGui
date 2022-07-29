@@ -4,35 +4,13 @@
 void ofApp::setup() {
 
 	ofSetFrameRate(60);
+	ofSetWindowPosition(-1920, 25);
 
 	//----
 
 	// Parameters
 
-	params1.setName("paramsGroup1");
-	params1.add(speed.set("speed1", 0.5, 0, 1));
-	params1.add(bPrevious.set("<", false));
-	params1.add(bNext.set(">", false));
-	params1.add(bEnable.set("Enable", true));
-	params1.add(bMode1.set("bMode1", false));
-	params1.add(bMode2.set("bMode2", true));
-	params1.add(bMode3.set("bMode3", false));
-	params1.add(bMode4.set("bMode4", false));
-	params1.add(lineWidth.set("width1", 0.5, 0, 1));
-	params1.add(separation.set("sep1", 50, 1, 100));
-	params1.add(shapeType.set("shape1", 0, -50, 50));
-	params1.add(size.set("size1", 100, 0, 100));
-	params1.add(amount.set("amount1", 10, 0, 25));
-
-	params2.setName("paramsGroup2");
-	params2.add(shapeType2.set("shape2", 0, -50, 50));
-	params2.add(size2.set("size2", 100, 0, 100));
-	params2.add(amount2.set("amnt2", 10, 0, 25));
-
-	params3.setName("paramsGroup3");
-	params3.add(lineWidth3.set("width3", 0.5, 0, 1));
-	params3.add(separation3.set("sep3", 50, 1, 100));
-	params3.add(speed3.set("speed3", 0.5, 0, 1));
+	setupScene();
 
 	//-----------
 
@@ -48,70 +26,97 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
-	// Instantiate
+	// Layout Presets Engine workflow
+
+	//-
+
+	// 1. Instantiate
 
 	// NOTICE that
-	// To enable the "Layout Presets Engine":
-	// To pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument is mandatory!
+	// To enable the "Layout Presets Engine"
+	// is mandatory to pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument !
 	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
 
 	//-
 
-	// "Layout Presets Engine"
+	// 2. Queue Windows
 
-	// Add the windows just with a name:
+	// Add the "target" windows just with a name:
 	// You will use these added windows easily, 
 	// but you must remember his index order!
 	// Each window will be added to the "Layout Presets Engine" and auto handled too.
-	// The engine will auto create bool toggles 
+	// The engine will auto create internal bool param toggles 
 	// (like the bGui we used before)
-	// to handle the show/hide window states
+	// to handle the show/hide window states.
+	// Notice that is important to remember the index sorting when queuing!
 
-	guiManager.addWindowSpecial("Main"); // index 0
-	guiManager.addWindowSpecial("Audio"); // index 1
-	guiManager.addWindowSpecial("Video1"); // index 2
-	guiManager.addWindowSpecial("Video2"); // index 3
-	guiManager.addWindowSpecial("Expert"); // index 4
+	guiManager.addWindowSpecial("Main");	// index 0
+	guiManager.addWindowSpecial("Audio");	// index 1
+	guiManager.addWindowSpecial("Video1");	// index 2
+	guiManager.addWindowSpecial("Video2");	// index 3
+	guiManager.addWindowSpecial("Expert");	// index 4
 
 	//-
 
-	// Startup
+	// 3. Startup
 
 	guiManager.startup();
-}
 
-//--------------------------------------------------------------
-void ofApp::setupImGuiStyles()
-{
-	guiManager.clearStyles();
+	//-
 
-	// Queue styles to params that will be applied 
-	// when drawing their widgets when populating the group where they are contained.
+	// 4. Optional Help Info for your App. Set after startup	
 
-	// params1
-	guiManager.AddStyle(lineWidth, OFX_IM_STEPPER);
-	//guiManager.AddStyle(lineWidth, OFX_IM_VSLIDER);
-	//guiManager.AddStyle(lineWidth, OFX_IM_DRAG);
+	string s = R"(
 
-	guiManager.AddStyle(bEnable, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
+HELP 
 
-	guiManager.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);//two per row. half size. next line same row.
-	guiManager.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false);//two per row. half size. next line not in same row.
+This example shows how to use the
 
-	guiManager.AddStyle(bMode1, OFX_IM_TOGGLE_BIG_BORDER, 2, true);
-	guiManager.AddStyle(bMode2, OFX_IM_TOGGLE_BIG_BORDER, 2, false);
-	guiManager.AddStyle(bMode3, OFX_IM_TOGGLE_BIG_BORDER, 2, true);
-	guiManager.AddStyle(bMode4, OFX_IM_TOGGLE_BIG_BORDER, 2, false);
+LAYOUT PRESETS ENGINE
 
-	// params2
-	guiManager.AddStyle(shapeType2, OFX_IM_STEPPER);
-	guiManager.AddStyle(size2, OFX_IM_HSLIDER_BIG_NO_LABELS);
-	guiManager.AddStyle(amount2, OFX_IM_DRAG);
 
-	// params3
-	guiManager.AddStyle(lineWidth3, OFX_IM_KNOB, 2, true);
-	guiManager.AddStyle(separation3, OFX_IM_KNOB, 2, false);
-	guiManager.AddStyle(speed3, OFX_IM_KNOB);
+OVERVIEW
+
+Speed-up the creation 
+of Windows and their shape,
+states and settings.
+Powered with the Presets of 4 Layouts.
+
+
+WIDGETS
+
+The ofParameter widgets are populated 
+using different approaches:
+
+* guiManager.Add(..       | API
+* ofxImGuiSurfing::Add(.. | Legacy 
+* ImGui::Button(..        | Raw
+
+Look to other widget or styles examples 
+to learn more about this topic.
+
+
+MORE INFO
+
+- All the Special Windows (aka Panels) 
+added to the manager will be 
+auto handled on the Layout Presets Engine.
+
+- It will memorize the windows positions, 
+sizes and which ones are activated or hidden.
+
+- Some optional Extra Params 
+can be included into what 
+each preset memorizes too.
+
+- By default we will have 4 Layout Presets. 
+Then we will organize that different modes, 
+sections or behaviors of our App,
+by customizing our layout distribution,
+and some Extra Params states.
+
+)";
+	guiManager.setHelpInfoApp(s);
 }
 
 //--------------------------------------------------------------
@@ -139,18 +144,14 @@ void ofApp::draw()
 	//----
 
 	// Scene
-	 
-	// Animate some vars
-	doAnimate();
 
-	// Log
-	logPopulate();
+	udpateScene();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImGuiDocking()
 {
-	//TODO: this can be removed for the moment...
+	//TODO: this cant be removed for the moment...
 	// Should allow to disable!
 
 	// Here (between beginDocking/endDocking) 
@@ -180,47 +181,55 @@ void ofApp::drawImGui()
 			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
 			float _h2 = 2 * _h; // double height
 
-			guiManager.AddLabelBig("myWindow_0", true);
+			// if guiManager.bHelp enabled, activates help tooltips on this window!
+
+			guiManager.AddLabelBig("myWindow_0", false);
+			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
+			guiManager.AddTooltip("Help enables some ToolTips and the Help Box on this Window!");
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			guiManager.AddTooltip("This is a Help Tool tip! It's " + (string)(bEnable ? "TRUE" : "FALSE"));//-> When bEnable is true, we add a tooltip to the previous widget.
-			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			guiManager.AddTooltip("Help enables some ToolTips and the Help Box!");
+			guiManager.AddTooltip("Activate sep1 animation", guiManager.bHelp);
+			guiManager.AddTooltip("This is a Help Tool tip! It's " + (string)(bEnable ? "TRUE" : "FALSE"), guiManager.bHelp);
 			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG_BORDER);
+			guiManager.AddTooltip("Show Log Window", guiManager.bHelp);
 			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
 			guiManager.AddTooltip("Speed controls the auto populated Log window speed", guiManager.bHelp);
 			guiManager.Add(amount, OFX_IM_HSLIDER);
 			guiManager.AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
 
-			ImGui::PushButtonRepeat(true);//-> pushing repeats trigs
+			ImGui::PushButtonRepeat(true); // -> pushing for repeats trigs
 			{
 				guiManager.refreshLayout();
 
 				if (guiManager.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
 				{
 					bPrevious = false;
-					lineWidth -= 0.1;
+					lineWidth -= 0.1f;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				guiManager.AddTooltip("Decrease lineWidth", guiManager.bHelp);
+				guiManager.AddTooltip("Decrease lineWidth " + ofToString(lineWidth), guiManager.bHelp);
 
 				ImGui::SameLine();
 
 				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h2))
 				{
 					bNext = false;
-					lineWidth += 0.1;
+					lineWidth += 0.1f;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				guiManager.AddTooltip("Increase lineWidth", guiManager.bHelp);
+				guiManager.AddTooltip("Increase lineWidth " + ofToString(lineWidth), guiManager.bHelp);
 			}
 			ImGui::PopButtonRepeat();
 
 			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
-			guiManager.Add(lineWidth);//default style
-			guiManager.Add(separation);//default style
+			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			guiManager.Add(lineWidth); // default style
+			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			guiManager.Add(separation); // default style
+			guiManager.AddTooltip(ofToString(separation, guiManager.bHelp));
+
+			//--
 
 			guiManager.endWindowSpecial();
-			//guiManager.endWindowSpecial(index);
 		}
 	}
 
@@ -230,8 +239,10 @@ void ofApp::drawImGui()
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			guiManager.AddLabelBig("myWindow_1", true);
+			guiManager.AddLabelBig("myWindow_1", false);
 			guiManager.AddGroup(params1);
+
+			//--
 
 			guiManager.endWindowSpecial();
 		}
@@ -278,6 +289,8 @@ void ofApp::drawImGui()
 				ImGui::EndTabBar();
 			}
 
+			//--
+
 			guiManager.endWindowSpecial();
 		}
 	}
@@ -289,13 +302,15 @@ void ofApp::drawImGui()
 		if (guiManager.beginWindowSpecial(index))
 		{
 			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddLabelBig("Hello, down!", false, true);
+			guiManager.AddLabelBig("Hello, down!", true, true);
+			guiManager.AddLabelBig("Hello, down!", true, true);
 			guiManager.AddSpacingBigSeparated();
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 			guiManager.AddSpacingBigSeparated();
 			guiManager.AddLabelBig("Hello, down!", false, true);
 			guiManager.AddLabelBig("Hello, down!", false, true);
+
+			//--
 
 			guiManager.endWindowSpecial();
 		}
@@ -304,8 +319,8 @@ void ofApp::drawImGui()
 	//----
 
 	index = 4;
-	//->This method can get the state (if it's open) of the special window.
-	//if (guiManager.getWindowSpecialVisible(index))
+	// ->This method can get the state (if it's open) of the special window.
+	// if (guiManager.getWindowSpecialVisible(index))
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
@@ -316,21 +331,89 @@ void ofApp::drawImGui()
 			ImGui::Text("Hello, left!");
 		}
 
-		//->Notice that could be out or inside of the brackets, like the above 1 to 3 windows.
-		//On raw ImGui windows it will crash if you don't handle the endWindows well.
-		//Here's is auto controlled.
+		// ->Notice that could be out or inside of the brackets, like the above 1 to 3 windows.
+		// On raw ImGui windows it will crash if you don't handle the endWindows well.
+		// Here's is auto controlled, more resilient to avoid errors.
 		guiManager.endWindowSpecial();
 	}
 }
 
+//--------------------------------------------------------------
+void ofApp::setupImGuiStyles()
+{
+	guiManager.clearStyles();
+
+	// Queue styles to params that will be applied 
+	// when drawing their widgets when populating the group where they are contained.
+
+	// params1
+	guiManager.AddStyle(lineWidth, OFX_IM_STEPPER);
+	//guiManager.AddStyle(lineWidth, OFX_IM_VSLIDER);
+	//guiManager.AddStyle(lineWidth, OFX_IM_DRAG);
+
+	guiManager.AddStyle(bEnable, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
+
+	guiManager.AddStyle(bPrevious, OFX_IM_BUTTON_SMALL, 2, true);//two per row. half size. next line same row.
+	guiManager.AddStyle(bNext, OFX_IM_BUTTON_SMALL, 2, false);//two per row. half size. next line not in same row.
+
+	guiManager.AddStyle(bMode1, OFX_IM_TOGGLE_BIG_BORDER, 2, true);
+	guiManager.AddStyle(bMode2, OFX_IM_TOGGLE_BIG_BORDER, 2, false);
+	guiManager.AddStyle(bMode3, OFX_IM_TOGGLE_BIG_BORDER, 2, true);
+	guiManager.AddStyle(bMode4, OFX_IM_TOGGLE_BIG_BORDER, 2, false);
+
+	// params2
+	guiManager.AddStyle(shapeType2, OFX_IM_STEPPER);
+	guiManager.AddStyle(size2, OFX_IM_HSLIDER_BIG_NO_LABELS);
+	guiManager.AddStyle(amount2, OFX_IM_DRAG);
+
+	// params3
+	guiManager.AddStyle(lineWidth3, OFX_IM_KNOB, 2, true);
+	guiManager.AddStyle(separation3, OFX_IM_KNOB, 2, false);
+	guiManager.AddStyle(speed3, OFX_IM_KNOB);
+}
+
 //--
 
+// A common Scene with ofParameters
+// just for this testing purposes.
+
 //--------------------------------------------------------------
-void ofApp::doAnimate()
+void ofApp::setupScene()
 {
+	params1.setName("paramsGroup1");
+	params1.add(speed.set("speed1", 0.5f, 0, 1));
+	params1.add(bPrevious.set("<", false));
+	params1.add(bNext.set(">", false));
+	params1.add(bEnable.set("Enable", true));
+	params1.add(bMode1.set("bMode1", false));
+	params1.add(bMode2.set("bMode2", true));
+	params1.add(bMode3.set("bMode3", false));
+	params1.add(bMode4.set("bMode4", false));
+	params1.add(lineWidth.set("width1", 0.5f, 0, 1));
+	params1.add(separation.set("sep1", 50, 1, 100));
+	params1.add(shapeType.set("shape1", 0, -50, 50));
+	params1.add(size.set("size1", 100, 0, 100));
+	params1.add(amount.set("amount1", 10, 0, 25));
+
+	params2.setName("paramsGroup2");
+	params2.add(shapeType2.set("shape2", 0, -50, 50));
+	params2.add(size2.set("size2", 100, 0, 100));
+	params2.add(amount2.set("amnt2", 10, 0, 25));
+
+	params3.setName("paramsGroup3");
+	params3.add(lineWidth3.set("width3", 0.5f, 0, 1));
+	params3.add(separation3.set("sep3", 50, 1, 100));
+	params3.add(speed3.set("speed3", 0.5, 0, 1));
+}
+
+//--------------------------------------------------------------
+void ofApp::udpateScene()
+{
+	// Animate some vars
+
 	if (!bEnable) return;
 
-	// animate
+	// Animate
 	float t = ofGetElapsedTimef();
 	float s = ofMap(amount, amount.getMax(), amount.getMin(), 1, 10);
 	t = ofWrap(t, 0, s);
@@ -338,10 +421,13 @@ void ofApp::doAnimate()
 
 	// Log 8 times per second at 60 fps
 	if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
+
+	// Log
+	updateLog();
 }
 
 //--------------------------------------------------------------
-void ofApp::logPopulate()
+void ofApp::updateLog()
 {
 	// Auto populate random log messages.
 	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);

@@ -3,16 +3,50 @@
 
 /*
 
-	This example shows how to use the "Layout Presets Engine".
+This example shows how to use the
 
-	It has some (special) Windows Engine to speed-up the creation of windows and their states/settings.
-	
-	The ofParameter widgets are populated using different approaches.
-	( Sometimes uses guiManager.Add(.. and some uses ofxImGuiSurfing::Add.. or raw ImGui::Button(.. )
-	Look to other widget or styles examples to learn more about this topic.
-	
-	The main topic of this examples is to learn how to use the "Layout Presets Engine" and Docking.
-	All the added windows will be auto included and handled on the "Layout Presets Engine".
+LAYOUT PRESETS ENGINE
+
+
+OVERVIEW
+
+Speed-up the creation
+of Windows and their shape,
+states and settings.
+Powered with the Presets of 4 Layouts.
+
+
+WIDGETS
+
+The ofParameter widgets are populated
+using different approaches:
+
+* guiManager.Add(..       | API
+* ofxImGuiSurfing::Add(.. | Legacy
+* ImGui::Button(..        | Raw
+
+Look to other widget or styles examples
+to learn more about this topic.
+
+
+MORE INFO
+
+- All the Special Windows (aka Panels)
+added to the manager will be
+auto handled on the Layout Presets Engine.
+
+- It will memorize the windows positions,
+sizes and which ones are activated or hidden.
+
+- Some optional Extra Params
+can be included into what
+each preset memorizes too.
+
+- By default we will have 4 Layout Presets.
+Then we will organize that different modes,
+sections or behaviors of our App,
+by customizing our layout distribution,
+and some Extra Params states.
 
 */
 
@@ -21,7 +55,7 @@
 
 #include "ofxSurfingImGui.h"
 
-class ofApp : public ofBaseApp 
+class ofApp : public ofBaseApp
 {
 public:
 
@@ -51,7 +85,7 @@ public:
 	ofParameter<int> shapeType2;
 	ofParameter<int> amount2;
 	ofParameter<int> size2;
-	
+
 	ofParameterGroup params3;
 	ofParameter<float> lineWidth3;
 	ofParameter<float> separation3;
@@ -60,15 +94,21 @@ public:
 
 	//-
 
-	// -> The ImGui Manager !
-	ofxSurfing_ImGui_Manager guiManager; 
+	// The ImGui Manager !
+
+	ofxSurfing_ImGui_Manager guiManager;
 
 	void setupImGui();
-	void setupImGuiStyles();
-	
+	void setupImGuiStyles(); // -> Custom styles for groups
+
 	void drawImGui();
 	void drawImGuiDocking();
 
-	void logPopulate(); // -> Generates random messages to test logging.
-	void doAnimate(); // -> Generates random variations to animate variables.
+	//-
+
+	// Scene
+
+	void setupScene();
+	void udpateScene(); // -> Generates random variations to animate variables.
+	void updateLog(); // -> Generates random messages to test logging.
 };

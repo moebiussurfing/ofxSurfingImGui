@@ -10,7 +10,7 @@
 	Many grouped windows, defined as specials, can be arranged linked together. 
     Can be auto distributed horizontally or vertically.
     
-    2. "Align Windows Engine": 
+    2. "Windows Align Engine": 
     Helpers to align/cascade/layout all visible windows.
 
 */
@@ -64,7 +64,7 @@ public:
 
 	void setup_ImGui();
 
-    ofParameter<bool> bGui;
+    ofParameter<bool> bGui; // -> Toggle to show visible the window panel
     void draw_MainWindow();
 
 	void draw_SurfingWidgets_1();

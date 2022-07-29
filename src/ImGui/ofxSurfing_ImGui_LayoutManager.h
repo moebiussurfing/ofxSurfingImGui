@@ -57,6 +57,8 @@
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
 
+#define DEFAULT_AMOUNT_PRESETS 4
+
 //--
 
 using namespace ofxImGuiSurfing;
@@ -70,8 +72,13 @@ namespace ofxImGuiSurfing
 	enum SurfingImGuiInstantiationMode {
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring main begin/end.
+		
+		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
-		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other addons.
+
+		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other add-ons.
+		//IM_GUI_MODE_SPECIAL_WINDOWS, // TODO: could simplify API, bc it's duplicated from 
+		//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
@@ -470,34 +477,34 @@ public:
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		ImGui::TextWrapped(t.c_str());
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelBig(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelHuge(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
+		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 
 	//--
@@ -810,8 +817,8 @@ public:
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
-	ofParameter<bool> bHelp{ "Help App", false };
-	ofParameter<bool> bHelpInternal{ "Help", false };
+	ofParameter<bool> bHelp{ "Help", false };
+	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
@@ -1765,7 +1772,7 @@ public:
 
 private:
 
-	void loadAppSettings();
+	bool loadAppSettings();	// Will return false if settings file do not exist. That happens when started for first time or after OF_APP/bin cleaning
 	void saveAppSettings();
 
 	//----
@@ -1826,7 +1833,7 @@ private:
 
 	ofParameterGroup params_Layouts{ "LayoutsPresets" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsExtra{ "ExtraParams" }; // all these params will be stored on each layout preset
+	ofParameterGroup params_LayoutsExtra{ "Extra Params" }; // all these params will be stored on each layout preset
 	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
 
 	int numPresetsDefault;
@@ -1885,7 +1892,7 @@ private:
 public:
 
 	void startupFirstFrame();
-	void setupDocking();
+	void setupDocking();//TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
 	void setImGuiLayoutPresets(bool b) {
@@ -1971,7 +1978,7 @@ private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresets{ "Layouts", true };
-	ofParameter<bool> bGui_LayoutsExtra{ "Extra", false };
+	ofParameter<bool> bGui_LayoutsExtra{ "Extra Params", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 	//ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
 
@@ -2023,18 +2030,23 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	void setShowAllWindows(bool b) {
+		setShowAllPanels(b);
+
+		//bModeLockControls = b;
+		bMenu = b;
+
+		bGui_LayoutsPanels = b;
+		bGui_LayoutsPresets = b;
+		bGui_LayoutsExtra = false;
+	}
+
+	//--------------------------------------------------------------
 	void setShowAllPanels(bool b) {
 		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
 		{
 			windowsSpecialsLayouts[i].bGui.set(b);
 		}
-		bMenu = b;
-
-		//bModeLockControls = b;
-
-		bGui_LayoutsPanels = b;
-		bGui_LayoutsPresets = b;
-		bGui_LayoutsExtra = false;
 	}
 
 	//--------------------------------------------------------------
@@ -2097,12 +2109,15 @@ private:
 	// and another to be used as an external help (App Help).
 	// Can be initialized from outer scope.
 
+	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
 	TextBoxWidget textBoxWidgetInternal;
 
+	// Help App: How to use our App 
 	std::string helpInfoApp = "";
 	TextBoxWidget textBoxWidgetApp;
 
+	// main help disablers
 	bool bUseHelpInfoInternal = false;
 	bool bUseHelpInfoApp = false;
 
@@ -2113,6 +2128,11 @@ public:
 	//--------------------------------------------------------------
 	void setEnableHelpInfoInternal(bool b) {
 		bUseHelpInfoInternal = b;
+	}
+	
+	//--------------------------------------------------------------
+	void setEnableHelpInfoApp(bool b) {
+		bUseHelpInfoApp = b;
 	}
 
 	//--------------------------------------------------------------
