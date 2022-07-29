@@ -31,11 +31,11 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 - Easy **Setup** and **Layout**.
 - **ofParameter Helpers**.
 - **ImGui Widgets** ported to **oF ofParameters**.
-- Useful methods and snippets to speed-up layout and workflow.
+- Useful methods and **snippets **to **speed-up layout **and **workflow**.
 - A **Layout Presets Engine**.
 - **Docking Helpers**.
 - Cool **Themes**.
-- Mouse Wheel control.
+- **Mouse Wheel** control with finetune (*+Ctrl*).
 
 <details>
   <summary>More ImGui Widgets</summary>
@@ -45,11 +45,13 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 - Vertical and Horizontal Sliders
 - Range Sliders
 - Styled Knobs
+- Tree folders
 - Inactive, hidden or locked styles
 - Hide labels and values
 - DearWidgets
 - Gradient Color Designer
 - Matrix Selectors
+- Enum combos selectors
 - Progress bars and waiting spinners
 - Files Browser
 - Curve Editors
@@ -61,8 +63,8 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
-  - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s FORK.
-  - You MUST use this one! 
+  - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s **FORK**.
+  - You **MUST **use this one! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
@@ -97,7 +99,7 @@ An add-on by **moebiusSurfing**.
 ## THANKS
 
 _All source snippets and widgets from other authors are linked into header files. Thanks!_  
-_Thanks [@alptugan](https://github.com/alptugan) for macOS testing._  
+_Thanks [@alptugan](https://github.com/alptugan) for **macOS** testing._  
 
 ## LICENSE
 
