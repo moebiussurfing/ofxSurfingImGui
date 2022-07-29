@@ -850,7 +850,7 @@ private:
 
 	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels", true };
-	ofParameter<bool> bMinimizePanels{ "Minimize", true };
+	//ofParameter<bool> bMinimizePanels{ "Minimize", true };
 	ofParameterGroup params_WindowPanels{ "Window Panels" };
 
 	ofParameterGroup params_WindowsEngine{ "Engine Windows" };

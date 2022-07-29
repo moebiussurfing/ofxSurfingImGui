@@ -154,6 +154,10 @@ void ofxSurfing_ImGui_Manager::setupInitiate()
 
 	// MouseWheel link
 	windowsSpecialsOrganizer.bDebug.makeReferenceTo(bDebug);
+	
+	// Minimizes link
+	bMinimizePresets.makeReferenceTo(bMinimize);
+	//bMinimizePanels.makeReferenceTo(bMinimize);
 
 	//--
 
@@ -406,9 +410,9 @@ void ofxSurfing_ImGui_Manager::startup()
 		bHelp = true;
 		bHelpInternal = false;
 
-		bMinimizePresets = false;
-		bMinimizePanels = false;
-		bMinimizePresets = false;
+		bMinimize = false;
+		//bMinimizePanels = false;
+		//bMinimizePresets = false;
 
 		//rect1_Panels.set(ofRectangle(ofGetWidth() / 2, 10, 100, 100));
 		//rect0_Presets.set(ofRectangle(10, 10, 100, 100));
@@ -1911,7 +1915,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	params_WindowPanels.add(bResetWindowPanels);
 	params_WindowPanels.add(bAutoResizePanels);
 
-	params_WindowPresets.add(bMinimizePanels);
+	//params_WindowPresets.add(bMinimizePanels);
 
 	params_WindowsEngine.add(params_WindowPresets);
 	params_WindowsEngine.add(params_WindowPanels);
@@ -3132,6 +3136,9 @@ void ofxSurfing_ImGui_Manager::drawMenuDocked()
 
 		if (ImGui::BeginMenu("Docking"))
 		{
+			if (ImGui::MenuItem("WARNING", "")) {};
+			ofxImGuiSurfing::AddTooltip2("Don't pay attention for this! \nThis is not operative here. \nJust for testing menus!\nPotential CRASH!");
+
 			dockspace_flags = ImGui::GetIO().ConfigFlags;
 
 			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
@@ -3151,7 +3158,7 @@ void ofxSurfing_ImGui_Manager::drawMenuDocked()
 		if (ImGui::BeginMenu("About"))
 		{
 			ofxImGuiSurfing::AddTooltipHelp(
-				"Don't pay attention for this text! This is not operative here. Just for testing menus!" "\n\n"
+				"WARNING\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!" "\n\n"
 				"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 				"- Drag from window title bar or their tab to dock/undock." "\n"
 				"- Drag from window menu button (upper-left button) to undock an entire node (all windows)." "\n"

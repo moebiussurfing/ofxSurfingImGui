@@ -64,7 +64,8 @@ void ofApp::setupImGui()
 
 	//-
 
-	// 4. Optional Help Info for your App. Set after startup	
+	// 4. Optional Help Info for your App
+	// Must set after startup	
 
 	string s = R"(
 
@@ -88,9 +89,9 @@ WIDGETS
 The ofParameter widgets are populated 
 using different approaches:
 
-* guiManager.Add(..       | API
-* ofxImGuiSurfing::Add(.. | Legacy 
 * ImGui::Button(..        | Raw
+* ofxImGuiSurfing::Add(.. | Legacy 
+* guiManager.Add(..       | API
 
 Look to other widget or styles examples 
 to learn more about this topic.
