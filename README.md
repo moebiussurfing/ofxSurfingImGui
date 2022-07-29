@@ -70,7 +70,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 `data.zip` assets like some font files to put into `OF_APP/bin/.`  
 
-**NOTE**: **JetBrainsMono-Bold.ttf** is the font file for the currently used theme. If that font is not located, then it will search for a kind of legacy font called **telegrama_render.otf**. If none of that fonts are located (`/data` can be empty), it will work too, but using the default bundled font from **ImGui**.  
+**NOTE**: The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located (then `/data` can also be empty), it will work too, but using the default bundled font from **ImGui**.  
 
 <details>
   <summary>Why an ofxImGui FORK?</summary>
