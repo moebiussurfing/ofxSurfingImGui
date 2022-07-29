@@ -12,7 +12,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
-	// auto call draw
+	// Auto call draw
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_AFTER_APP);
 	//ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 

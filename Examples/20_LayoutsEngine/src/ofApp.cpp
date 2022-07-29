@@ -185,16 +185,21 @@ void ofApp::drawImGui()
 
 			guiManager.AddLabelBig("myWindow_0", false);
 			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
-			guiManager.AddTooltip("Help enables some ToolTips and the Help Box on this Window!");
+			guiManager.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 			guiManager.AddTooltip("Activate sep1 animation", guiManager.bHelp);
 			guiManager.AddTooltip("This is a Help Tool tip! It's " + (string)(bEnable ? "TRUE" : "FALSE"), guiManager.bHelp);
 			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG_BORDER);
 			guiManager.AddTooltip("Show Log Window", guiManager.bHelp);
+
+			guiManager.AddSpacingBigSeparated();
+
 			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
 			guiManager.AddTooltip("Speed controls the auto populated Log window speed", guiManager.bHelp);
 			guiManager.Add(amount, OFX_IM_HSLIDER);
 			guiManager.AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
+			
+			guiManager.AddSpacingBigSeparated();
 
 			ImGui::PushButtonRepeat(true); // -> pushing for repeats trigs
 			{
@@ -219,11 +224,20 @@ void ofApp::drawImGui()
 				guiManager.AddTooltip("Increase lineWidth " + ofToString(lineWidth), guiManager.bHelp);
 			}
 			ImGui::PopButtonRepeat();
+			
+			guiManager.AddSpacingBigSeparated();
 
 			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
 			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
 			guiManager.Add(lineWidth); // default style
 			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			guiManager.Add(lineWidth, OFX_IM_STEPPER);
+			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			guiManager.Add(lineWidth, OFX_IM_KNOB);
+			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			
+			guiManager.AddSpacingBigSeparated();
+
 			guiManager.Add(separation); // default style
 			guiManager.AddTooltip(ofToString(separation, guiManager.bHelp));
 
@@ -324,11 +338,11 @@ void ofApp::drawImGui()
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
-			ImGui::Text("Hello, left!");
+			guiManager.AddLabel("Hello, left!", false, true);
+			guiManager.AddLabelBig("Hello, left!");
+			guiManager.AddLabelBig("Hello, left!", false);
+			guiManager.AddLabelHuge("Hello, left!", true, true);
+			guiManager.AddLabelHuge("Hello, left!", false, false);
 		}
 
 		// ->Notice that could be out or inside of the brackets, like the above 1 to 3 windows.
