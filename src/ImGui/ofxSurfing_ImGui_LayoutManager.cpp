@@ -2547,13 +2547,15 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 				windowsSpecialsLayouts[i].bGui.set(false);
 			}
 
-			return; // not required bc loadAppLayout will be skipped when -1
+			return; // not required bc loadAppLayout will be skipped when passed -1
 		}
 
 		//-
 
 		// 2. Load layout
 		loadAppLayout(appLayoutIndex.get());
+
+		return;
 	}
 
 	//-
@@ -2616,12 +2618,16 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 					bLayoutPresets[i].setWithoutEventNotifications(false);
 				}
 			}
+
 			return;
 		}
 	}
 
 	//-
 
+	//TODO:
+	// fix
+	// 
 	// Solo Panels Selectors behavior
 
 	if (bSolo.get())
@@ -2636,10 +2642,10 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 				// set the others to false
 				for (int k = 0; k < windowsSpecialsLayouts.size(); k++)
 				{
-					if (k != i && windowsSpecialsLayouts[i].bGui)
+					if (k != i /*&& windowsSpecialsLayouts[k].bGui*/)
 					{
-						//windowsSpecialsLayouts[i].bGui.setWithoutEventNotifications(false);
-						windowsSpecialsLayouts[i].bGui.set(false);
+						//windowsSpecialsLayouts[k].bGui.setWithoutEventNotifications(false);
+						windowsSpecialsLayouts[k].bGui.set(false);
 					}
 				}
 
