@@ -7,7 +7,6 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ( _Some examples, complementary docs and testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
 
-
 ## WORK IN PROGRESS!
 
 [Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/tree/master/Examples)  
@@ -24,10 +23,10 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
   </p>
+
 </details>
 
-
-## FEATURES 
+## FEATURES
 
 - Easy **Setup** and **Layout**.
 - **ofParameter Helpers**.
@@ -42,24 +41,25 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
   <summary>More ImGui Widgets</summary>
   <p>
 
-  - Big Toggles and Buttons
-  - Vertical and Horizontal Sliders
-  - Range Sliders
-  - Styled Knobs
-  - Inactive, hidden or locked styles
-  - Hide labels and values
-  - DearWidgets
-  - Gradient Color Designer
-  - Matrix Selectors
-  - Progress bars and waiting spinners
-  - Files Browser
-  - Curve Editors
-  - Bubbles Notifier System
+- Big Toggles and Buttons
+- Vertical and Horizontal Sliders
+- Range Sliders
+- Styled Knobs
+- Inactive, hidden or locked styles
+- Hide labels and values
+- DearWidgets
+- Gradient Color Designer
+- Matrix Selectors
+- Progress bars and waiting spinners
+- Files Browser
+- Curve Editors
+- Bubbles Notifier System
+  
   </p>
-</details>
-
+  </details>
 
 ## DEPENDENCIES
+
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
   - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s FORK.
   - You MUST use this one! 
@@ -67,31 +67,38 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
 `data.zip` assets like font files.  
- 
+
+**NOTE**: **JetBrainsMono-Bold.ttf** will the font file for the current theme. If that font is not located, then it will search for **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font on **ImGui**.  
+
 <details>
   <summary>Why an ofxImGui FORK?</summary>
   <p>
 
-  - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
-    - Multi context / instances: 
-        - Several windows from different add-ons without colliding.  
-    - Easy to update to future **NEW ImGui** versions.  
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+  - Multi context / instances: 
+    - Several windows from different add-ons without colliding.  
+  - Easy to update to future **NEW ImGui** versions.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original ofxImGui from **@jvcleave**.  
     And will be probably merged into the master branch.  
+    
     </p>
-</details>
+    </details>
 
 ## CURRENT SYSTEMS
+
 - **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
 ## AUTHOR
+
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2022*  
 
 ## THANKS
+
 _All source snippets and widgets from other authors are linked into header files. Thanks!_  
 _Thanks [alptugan](https://github.com/alptugan) for macOS testing._  
 
 ## LICENSE
+
 **MIT License**
