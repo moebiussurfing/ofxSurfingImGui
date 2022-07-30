@@ -277,6 +277,42 @@ public:
 		widgetsManager.clear(); // update sizes to current window shape
 	}
 
+	//-
+
+	// Disables a Widget and reduces transparency of most common colors.
+
+public:
+
+	//--------------------------------------------------------------
+	inline void pushInactive() {
+
+		const float a = 0.5f;
+
+		ImGuiStyle* style = &ImGui::GetStyle();
+
+		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
+		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
+		const ImVec4 cActive = style->Colors[ImGuiCol_ButtonActive];
+		const ImVec4 cSliderGrab = style->Colors[ImGuiCol_SliderGrab];
+		const ImVec4 cBorder = style->Colors[ImGuiCol_Border];
+		const ImVec4 cText = style->Colors[ImGuiCol_Text];
+
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
+
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+	}
+	//--------------------------------------------------------------
+	inline void popInactive() {
+		ImGui::PopItemFlag();
+
+		ImGui::PopStyleColor(6);
+	}
+
 	//----
 
 public:
@@ -852,6 +888,7 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
+
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
 	ofParameter<bool> bReset_Window{ "Reset Window", false };//TODO:
 	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
@@ -1070,7 +1107,30 @@ private:
 			if (ImGui::TreeNode("Windows"))
 			{
 				this->refreshLayout();
-				if (ImGui::TreeNode("Presets"))
+
+				//--
+
+				// Window 
+
+				/*
+				if (ImGui::TreeNode("_"))
+				{
+					this->refreshLayout();
+					Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					Add(bReset_Window, OFX_IM_BUTTON_SMALL);
+					if (bReset_Window) {
+						bReset_Window = false;
+						resetWindowImGui(false, true);
+					}
+					ImGui::TreePop();
+				}
+				*/
+
+				//--
+
+				// Window Layouts
+
+				if (ImGui::TreeNode("Layouts"))
 				{
 					this->refreshLayout();
 					Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
@@ -1082,26 +1142,26 @@ private:
 				//--
 
 				// Window Panels 
+
 				if (ImGui::TreeNode("Panels"))
 				{
 					this->refreshLayout();
 					Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED_SMALL);
-					if (bAutoResize_Panels)Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
+					Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
+					//if (bAutoResize_Panels) Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
 
 					// Landscape
 					//Add(bLandscape, OFX_IM_TOGGLE_ROUNDED);//TODO:
 
 					ImGui::TreePop();
 				}
+
 				ImGui::TreePop();
 			}
-			
+
 			this->refreshLayout();
 
 			//--
-
-			//// Auto resize 
-			//this->Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
 			ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1118,6 +1178,8 @@ private:
 
 					if (ImGui::TreeNode("MORE"))
 					{
+						this->Indent();
+						
 						ofxImGuiSurfing::AddSpacing();
 
 						/*
@@ -1133,32 +1195,19 @@ private:
 						// Auto resize
 						Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
 
-						////TODO:
-						//// Lock
-						//Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
-
 						// MouseWheel
 						this->Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
 						ofxImGuiSurfing::AddTooltip("Press CTRL+ for fine tunning");
 
+						////TODO:
+						//// Lock
+						//Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
+
 						//TODO:
 						//// No Scroll
 						//Add(bNoScroll, OFX_IM_TOGGLE_ROUNDED_MINI);
-
-						//TODO:
-						// Reset
-						// -> must be implemented for each app.
-
-						//TODO:
-						//// Reset window
-						//if (Add(bReset_Window, OFX_IM_TOGGLE_ROUNDED_MINI))
-						//{
-						//	//TODO:
-						//	//if (bReset_Window) {
-						//	//	bReset_Window = false;
-						//	//	resetWindowImGui(false, true);
-						//	//}
-						//}
+						
+						this->Unindent();
 
 						ImGui::TreePop();
 					}
@@ -1172,6 +1221,8 @@ private:
 
 					if (ImGui::TreeNode("GUI"))
 					{
+						this->Indent();
+
 						ofxImGuiSurfing::AddSpacing();
 
 						//// Minimize
@@ -1183,15 +1234,13 @@ private:
 						//// Menu
 						//Add(bMenu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
-						ImGui::Indent();
-
 						//--
 
 						// Debug
 						Add(bDebug, OFX_IM_TOGGLE_ROUNDED);
 						if (bDebug)
 						{
-							ImGui::Indent();
+							this->Indent();
 
 							//--
 
@@ -1245,40 +1294,10 @@ private:
 								ImGui::TreePop();
 							}
 
-							ImGui::Unindent();
+							this->Unindent();
 						}
 
-						//--
-
-						////TODO:
-						//// Check wheel
-						//// Check active widget
-						////https://github.com/ocornut/imgui/issues/4207
-						////https://github.com/ocornut/imgui/issues/789
-						////https://github.com/ocornut/imgui/issues/4303
-						//if (0)
-						//{
-						//	auto &io = ImGui::GetIO();
-						//	if (io.MouseHoveredViewport)
-						//	{
-						//		float wheel = io.MouseWheel;
-						//		std::string ss1 = "Mouse Wheel ";
-						//		if (wheel != 0)
-						//		{
-						//			ss1 += ofToString(wheel);
-						//		}
-						//		ImGui::Text(ss1.c_str());
-						//	}
-						//	string ss2;
-						//	ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
-						//	ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
-						//	ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
-						//	ImGui::Text(ss2.c_str());
-						//}
-
-						//ImGui::Separator();
-
-						ImGui::Unindent();
+						this->Unindent();
 
 						ImGui::TreePop();
 					}
@@ -1294,6 +1313,8 @@ private:
 
 						if (ImGui::TreeNode("DOCKING"))
 						{
+							this->Indent();
+							
 							ofxImGuiSurfing::AddSpacing();
 
 							//--
@@ -1313,6 +1334,8 @@ private:
 								}
 								ImGui::Unindent();
 							}
+							
+							this->Unindent();
 
 							ImGui::TreePop();
 						}
@@ -2084,7 +2107,7 @@ private:
 	void updateLayout();
 
 	void drawLayoutsPresetsEngine();//all the windows of the engine
-	void drawLayoutsPresetsTools();
+	void drawLayoutsPresetsManualWidgets();
 	void drawLayoutsLayoutPresets();
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
@@ -2130,29 +2153,25 @@ public:
 
 	ofParameter<bool> bMenu{ "Menu", false };
 
-	//TODO:
-	ofParameter <bool> bLinkWindows{ "Link Windows", true };//align windows engine
+	ofParameter <bool> bLinkWindows{ "Link Windows", true };//align windows engine. liked to the internal aligner.
 
 private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresetsSelector{ "Layouts", true };
-	ofParameter<bool> bGui_LayoutsPresetsManual{ "Manual", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
-	//ofParameter<bool> bGui_LayoutsPresetsSelector{ "Presets", true };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false };
 	// Can't be changed on runtime. cant include into settings
 
-	ofParameter<bool> bSolo{ "Solo", false };
-
 	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
-	//ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", true };
+
+	ofParameter<bool> bSolo{ "Solo", false };
 
 public:
 
-	ofParameter<bool> bLog{ "Log", false };
+	ofParameter<bool> bLog{ "Log", false };//show log window
 
 	//-
 
@@ -2165,11 +2184,10 @@ private:
 	//TODO:
 	vector<ofParameter<bool>> bWindowSpecials;
 
+	//TODO:
 	//ImGuiWindowFlags flagsWindowsLocked1;//used for presets panel
 	//ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
 	//ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
-
-	std::string titleWindowLabel;
 
 	//-
 
@@ -2185,12 +2203,12 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setReset(bool* b) {
+	void setReset(bool* b) {//link to an axternal / parent scope bool to assing to the internal reset button.
 		bResetPtr = b;
 	}
 
 	//--------------------------------------------------------------
-	void setShowAllWindows(bool b) {
+	void setShowAllWindows(bool b) {//show main internal windows and panels too
 		setShowAllPanels(b);
 
 		//bModeLockControls = b;
@@ -2198,7 +2216,7 @@ public:
 
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresetsSelector = b;
-		bGui_LayoutsPresetsManual = false;
+		//bGui_LayoutsPresetsManual = false;
 	}
 
 	//--------------------------------------------------------------
@@ -2225,45 +2243,6 @@ public:
 	void doSpecialWindowToggleVisible(int index) {
 		if (index >= windowsSpecialsLayouts.size()) return;//ignore
 		windowsSpecialsLayouts[index].bGui = !windowsSpecialsLayouts[index].bGui;
-	}
-
-	//-
-
-	//TODO:
-	// Should move to styles..
-	// Disables a Widget and reduces transparency of most common colors.
-
-public:
-
-	//--------------------------------------------------------------
-	inline void pushInactive() {
-
-		const float a = 0.5f;
-
-		ImGuiStyle* style = &ImGui::GetStyle();
-
-		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
-		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
-		const ImVec4 cActive = style->Colors[ImGuiCol_ButtonActive];
-		const ImVec4 cSliderGrab = style->Colors[ImGuiCol_SliderGrab];
-		const ImVec4 cBorder = style->Colors[ImGuiCol_Border];
-		const ImVec4 cText = style->Colors[ImGuiCol_Text];
-
-		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
-		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
-
-		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-	}
-
-	//--------------------------------------------------------------
-	inline void popInactive() {
-		ImGui::PopItemFlag();
-
-		ImGui::PopStyleColor(6);
 	}
 
 	//--
@@ -2405,3 +2384,34 @@ public:
 	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };
 };
+
+
+//--
+
+////TODO:
+//// Check wheel
+//// Check active widget
+////https://github.com/ocornut/imgui/issues/4207
+////https://github.com/ocornut/imgui/issues/789
+////https://github.com/ocornut/imgui/issues/4303
+//if (0)
+//{
+//	auto &io = ImGui::GetIO();
+//	if (io.MouseHoveredViewport)
+//	{
+//		float wheel = io.MouseWheel;
+//		std::string ss1 = "Mouse Wheel ";
+//		if (wheel != 0)
+//		{
+//			ss1 += ofToString(wheel);
+//		}
+//		ImGui::Text(ss1.c_str());
+//	}
+//	string ss2;
+//	ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
+//	ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
+//	ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
+//	ImGui::Text(ss2.c_str());
+//}
+
+//ImGui::Separator();

@@ -458,9 +458,12 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 	//helpInfo += "\n";
 
 	helpInfo += "LAYOUTS PRESETS ENGINE \n";
-	helpInfo += l2;
+	
+	helpInfo += "\n";
+	//helpInfo += l2;
 
-	helpInfo += l3 + "KEY COMMANDS \n\n";
+	helpInfo += l3 + "KEY COMMANDS \n";
+	helpInfo += "\n";
 
 	string st = "  ";
 
@@ -496,7 +499,8 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 		else
 			helpInfo += "D           Debug         " + st + " OFF \n";
 
-		helpInfo += l2;
+		helpInfo += "\n";
+		//helpInfo += l2;
 	}
 	else helpInfo += "\n";
 
@@ -504,19 +508,19 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 		if (bDockingLayoutPresetsEngine)
 		{
 			helpInfo += l3 + "PRESETS \n";
-			helpInfo += "\n";
-			helpInfo += "F1 - F2 - F3 - F4 \n";
+			//helpInfo += "\n";
+			helpInfo += "F1 F2 F3 F4 \n";
 			helpInfo += "\n";
 
 			helpInfo += l3 + "SECTIONS \n";
-			helpInfo += "\n";
+			//helpInfo += "\n";
 			helpInfo += "F5          LAYOUTS \n";
 			helpInfo += "F6          PANELS \n";
 			if (!bMinimize) helpInfo += "F7          MANAGER \n";
 			helpInfo += "\n";
 
 			helpInfo += l3 + "PANELS \n";
-			helpInfo += "\n";
+			//helpInfo += "\n";
 			helpInfo += "Ctrl+ \n";
 			helpInfo += "F1 .. F8    Panel # \n";
 			helpInfo += "A           All  \n";
@@ -531,19 +535,22 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 			if (!bMinimize)
 			{
 				helpInfo += l2;
+
 				helpInfo += l3 + "HOW TO \n";
-				helpInfo += "\n";
+				//helpInfo += "\n";
 				helpInfo += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
 				//helpInfo += "\n";
 				helpInfo += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
 				//helpInfo += "\n";
-				helpInfo += "3. Layout the PANELS around the App view port \n";
+				helpInfo += "3. Layout the PANELS around \nthe App view port \n";
 				//helpInfo += "\n";
 				helpInfo += "4. Pick another PRESET \n";
 
-				helpInfo += l2;
-				helpInfo += l3 + "MORE TIPS \n";
 				helpInfo += "\n";
+				//helpInfo += l2;
+				
+				helpInfo += l3 + "MORE TIPS \n";
+				//helpInfo += "\n";
 				helpInfo += "- Disable the Minimize toggle \nto show more controls. \n";
 				//helpInfo += "\n";
 				helpInfo += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
@@ -552,7 +559,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 				//helpInfo += "\n";
 				helpInfo += "- When no PRESET is enabled \nall PANELS will be hidden. \n";
 				//helpInfo += "\n";
-				helpInfo += "- On Docking Mode, press Shift when dragging \na window to lock to some viewport zone. \n";
+				helpInfo += "- On Docking Mode, \npress Shift when dragging \na window \nto lock to some viewport zone. \n";
 
 				//helpInfo += "\n";
 			}
@@ -922,7 +929,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsManager()
 //--------------------------------------------------------------
 void ofxSurfing_ImGui_Manager::drawLayoutsPresetsEngine() {
 
-	// Draws all sections except drawLayoutsManager() and drawLayoutsPresetsTools();
+	// Draws all sections except drawLayoutsManager() and drawLayoutsPresetsManualWidgets();
 
 	//TODO:
 	// How to make all windows dockeable in the same space ?
@@ -930,7 +937,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresetsEngine() {
 	{
 		drawLayoutsLayoutPresets(); // main presets clicker
 
-		if (!bMinimize_Presets) if (bGui_LayoutsPresetsManual) drawLayoutsPresetsTools();
+		//if (!bMinimize_Presets) if (bGui_LayoutsPresetsManual) drawLayoutsPresetsManualWidgets();
 	}
 
 	if (bGui_LayoutsPanels) drawLayoutsPanels();
@@ -1905,7 +1912,7 @@ void ofxSurfing_ImGui_Manager::setupLayout(int numPresets) //-> must call manual
 	//params_AppSettingsLayout.add(bModeLockPreset);
 
 	params_AppSettingsLayout.add(bGui_LayoutsPresetsSelector);
-	params_AppSettingsLayout.add(bGui_LayoutsPresetsManual);
+	//params_AppSettingsLayout.add(bGui_LayoutsPresetsManual);
 	params_AppSettingsLayout.add(bGui_LayoutsPanels);
 
 	params_AppSettingsLayout.add(bAutoSave_Layout);
@@ -2057,13 +2064,6 @@ void ofxSurfing_ImGui_Manager::loadAppLayout(int _index)
 		bLayoutPresets[_index].set(true);
 	}
 
-	// Window title
-	titleWindowLabel = _label + " " + _name;
-	//titleWindowLabel = _label + " " + ofToString(appLayoutIndex.get()) + " " + _name;
-
-	//// Apply window title
-	//ofSetWindowTitle(titleWindowLabel);
-
 	// ini
 	ini_to_load_Str = _name;
 	ini_to_load = ini_to_load_Str.c_str();
@@ -2168,6 +2168,16 @@ void ofxSurfing_ImGui_Manager::drawLayoutsLayoutPresets() // That's the window t
 
 		//--
 
+		// Panels
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
+
+		// Manager
+		if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
+
+		this->AddSpacingSeparated();
+
+		//--
+
 		// 2. The 4 Preset Toggles
 
 		this->AddLabelBig("Presets");
@@ -2179,46 +2189,15 @@ void ofxSurfing_ImGui_Manager::drawLayoutsLayoutPresets() // That's the window t
 			if (i % 2 == 0) ImGui::SameLine();//two toggles per row
 		}
 
-		//// Autosave/Save when minimized
-		//if (bMinimize_Presets)
-		//{
-		//	// Autosave
-		//	ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h, true);
-		//	//ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.75 * _h);
-		//	// Save Button
-		//	if (!bAutoSave_Layout.get())
-		//	{
-		//		ImGui::PushID("##SaveLayout0");
-		//		if (ImGui::Button("Save", ImVec2(_w1, 0.5 * _h)))
-		//		{
-		//			saveAppLayout(appLayoutIndex.get());
-		//		}
-		//		ImGui::PopID();
-		//	}
-		//}
-
-		this->AddSpacingSeparated();
-
 		//--
 
-		//if (bLayoutPresets.size() % 2 == 0) _w = _w1;//full width when using only one preset
-
-		//--
-
-		// Panels & Manager
-
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
-		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h / 2 : _h));
-
-		if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
-
-		//--
+		// 3. Save / Load
 
 		if (!bMinimize_Presets)
 		{
 			this->AddSpacingSeparated();
 
-			// Autosave
+			// Auto save
 
 			ofxImGuiSurfing::AddBigToggle(bAutoSave_Layout, _w1, 0.5 * _h, true);
 
@@ -2234,6 +2213,13 @@ void ofxSurfing_ImGui_Manager::drawLayoutsLayoutPresets() // That's the window t
 				ImGui::PopID();
 			}
 
+			this->AddSpacing();
+
+			//--
+
+			// Manual
+			drawLayoutsPresetsManualWidgets();
+
 			this->AddSpacingSeparated();
 			this->AddSpacing();
 		}
@@ -2244,6 +2230,7 @@ void ofxSurfing_ImGui_Manager::drawLayoutsLayoutPresets() // That's the window t
 		{
 			// Organizer panel visible toggle
 			this->Add(this->getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			this->AddSpacing();
 
 			// Link mode
 			this->Add(this->getWindowsSpecialEnablerLinker());
@@ -2260,88 +2247,28 @@ void ofxSurfing_ImGui_Manager::drawLayoutsLayoutPresets() // That's the window t
 			this->AddGroup(params_LayoutsExtra, SurfingImGuiGroupStyle_Collapsed);
 		}
 
-		//--
-
-		if (!bMinimize_Presets)
-		{
-			/*
-			this->AddSpacingSeparated();
-
-			//--
-
-			// Reset presets window
-			//TODO: not fully implemented
-			if (this->Add(bReset_PresetsWindow, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL))
-				bReset_PresetsWindow = true;
-
-			//--
-
-			// Auto resize presets window
-			this->Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-			*/
-
-			//--
-
-			// Manual Edit
-			this->AddSpacingSeparated();
-			this->Add(bGui_LayoutsPresetsManual, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-		}
-
 		this->endWindow();
 	}
 }
 
 //--------------------------------------------------------------
-void ofxSurfing_ImGui_Manager::drawLayoutsPresetsTools()
+void ofxSurfing_ImGui_Manager::drawLayoutsPresetsManualWidgets()
 {
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-	window_flags |= ImGuiWindowFlags_NoTitleBar;//hide header
-
-	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-
-	//--
-
 	bool bMin = false; // hide load buttons to simplify
 	float max = (bMin ? 150 : 175);
 
 	//----
 
-	int _pad = PADDING_PANELS;
-
-	ImGuiCond _flagc;
-	_flagc = ImGuiCond_Always;
-
-	const int i = 0;
-	ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY() + rectangles_Windows[i].get().getHeight() + _pad), _flagc);
-	ImGui::SetNextWindowSize(ofVec2f(rectangles_Windows[i].get().getWidth(), -1), _flagc);
-
-	//----
-
-	if (beginWindow(bGui_LayoutsPresetsManual, window_flags))
 	{
 		float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
 		float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 		float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 
-		/*
-		this->AddLabelBig("Extra Params");
-
-		if (!bMinimize_Presets)
-		{
-			ofxImGuiSurfing::AddToggleRounded(bMenu);
-			ofxImGuiSurfing::AddToggleRounded(bLog);
-			//ofxImGuiSurfing::AddToggleRounded(bKeys);
-			this->AddSpacingSeparated();
-		}
-		*/
-
 		//--
 
 		if (!bMinimize_Presets)
 		{
-			//this->AddLabelBig("Presets Tools");
-
-			//if (ImGui::CollapsingHeader("Presets Tools", ImGuiWindowFlags_None))
+			if (ImGui::CollapsingHeader("Manual", ImGuiWindowFlags_None))
 			{
 				ImVec2 bb{ (bMin ? _w1 : _w2), _h };
 
@@ -2417,10 +2344,6 @@ void ofxSurfing_ImGui_Manager::drawLayoutsPresetsTools()
 			createLayoutPreset();
 		}
 		*/
-
-		//--
-
-		this->endWindow();
 	}
 }
 
@@ -2516,18 +2439,13 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 	// Gui layout
 	else if (name == bGui_LayoutsPresetsSelector.getName())
 	{
-		// workflow
-		if (!bGui_LayoutsPresetsSelector)
-		{
-			bGui_LayoutsPresetsManual = false;
-		}
 		return;
 	}
 
 	//--
 
 	// Reset 
-	// This toggle/flag is "sended" to the parent scope (ofApp), to resets something in our apps.
+	// This toggle/flag is "sent" to the parent scope (ofApp), to resets something in our apps.
 	// Example: to resets the layout.
 	// That pointer must be created externally!
 	else if (name == bReset.getName() && bReset.get())

@@ -362,7 +362,7 @@ It has survived not only five centuries, but also the leap into electronic types
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 3");
+			guiManager.AddLabelHuge("Window 3", false);
 
 			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_ROUNDED_BIG);
 
@@ -387,7 +387,9 @@ It has survived not only five centuries, but also the leap into electronic types
 	{
 		if (guiManager.beginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 4");
+			guiManager.AddLabelHuge("Window 4", false);
+			
+			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
 			guiManager.AddLabel("Hello, left!", false, true);
 			guiManager.AddLabelBig("Hello, left!");
@@ -413,6 +415,7 @@ void ofApp::updateImGuiDockingHelper()
 		static bool binitiated = false;
 		if (!binitiated) {
 			binitiated = true; // Called only once!
+
 			doDockingReset();
 		}
 	}
@@ -420,12 +423,14 @@ void ofApp::updateImGuiDockingHelper()
 	// Reset layout by button GUI
 	if (bDockingReset) {
 		bDockingReset = false;
+
 		doDockingReset();
 	}
 
 	// Random layout by button GUI
 	if (bDockingRandom) {
 		bDockingRandom = false;
+
 		doDockingRandom();
 	}
 }
@@ -446,13 +451,15 @@ void ofApp::drawImGuiDockingHelper()
 		// Reset docking layout
 		if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
 		{
-			bDockingReset = true; // flag to call on a precise draw point, inside the draw begin/end context
+			bDockingReset = true; 
+			// flag to call on a precise draw point, inside the draw begin/end context
 		}
 
 		// Randomize docking layout
 		if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
 		{
-			bDockingRandom = true; // flag to call on a precise draw point, inside the draw begin/end context
+			bDockingRandom = true; 
+			// flag to call on a precise draw point, inside the draw begin/end context
 		}
 
 		// Show all Panels
