@@ -8,8 +8,9 @@
 
 /*
 
-Docking features is a bit WIP yet!
-Some zones are not allowed or not memorized..
+	Docking features is a WIP yet!
+	Some view-port zones are not allowed or not memorized correctly.
+	When enabling Linking Mode, presets have a bit weird behavior.
 
 */
 
@@ -42,12 +43,10 @@ public:
 	ofParameter<int> shapeType;
 	ofParameter<int> amount;
 	ofParameter<int> size;
-
 	ofParameterGroup params2;
 	ofParameter<int> shapeType2;
 	ofParameter<int> amount2;
 	ofParameter<int> size2;
-
 	ofParameterGroup params3;
 	ofParameter<float> lineWidth3;
 	ofParameter<float> separation3;
@@ -56,22 +55,22 @@ public:
 
 	//-
 
-	// The Gui Manager !
+	// The Gui Manager
 	ofxSurfing_ImGui_Manager guiManager;
 
 	void setupImGui();
 	void drawImGui();
 	void drawImGuiWindows();
 
-	ofParameter<bool> bGui_Docking{ "ofApp Docking", false };
-
 	//-
 
 	// Docking Stuff
 
-	// To learning purposes but also to be used as template for your projects.
+	// To learning purposes 
+	// but also to be used as template for your projects.
 	void updateImGuiDockingHelper();
 	void drawImGuiDockingHelper();
+	ofParameter<bool> bGui_Docking{ "ofApp Docking", false };
 
 	// An extra window with some triggers
 	// for hard-coded layout modifications. 

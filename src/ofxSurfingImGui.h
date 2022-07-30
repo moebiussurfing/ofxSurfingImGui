@@ -3,45 +3,47 @@
 
 	TODO:
 	
+	GENERAL
+	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
 	+ fix workflow handling layout presets breaks when Link is enabled.
 	+ fix reset aligners that populates out of the view port.
 		must apply only over special windows maybe ?
 
-	Docking
+	DOCKING
 		+ allow panel and presets dockable too!
 		+ fix make dockeable all windows on same space.
 		+ fix multiple dock spaces that are colliding/one over another.
-		+ fix viewport rectangle preview.
+		+ fix view-port rectangle preview.
 		+ add video view-port example.
 		+ docking overlaps sometimes on layout management
 
-	+ remake mode free and lockers simpler. a flag for each window.
+	HELPERS
+	+ fix fails ofParams for string on groups
+		+ add text input widget.
+	+ add the cool knobs.
+	+ fix toggles do not trigs/return true when changes?
+	+ add clickable label toggle widget.
+	+ add tool-tip types on styles on a new guiManager.Add(..arg
+	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
+	+ next / nested groups headers are weird hidden!
+	+ nested groups are (inheriting) expanded when parent is expanded.
+
+	SMALL THINGS
+	+ remake mode free and lockers simpler. a flag for each window ?
 	+ aspect ratio/fit modes for game view port.
+	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 
 
-	+ fix fails params string on groups
-
+	NEW FEATURES
 	+ auto midi knobs to FX:
 		set the master 6 knobs.
 		auto assign to these 6 knobs 
 		from current GUI editing / first plane page.
 
-	+ fix toggles do not trigs/return true when changes?
-	
-	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 
-	
-	+ add clickable label toggle widget.
-
-	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
-
-	+ add tool-tip types on styles on a new guiManager.Add(..arg
 */
 
 /*
 
 	BUGS:
-
-	+ next / nested groups headers are weird hidden!
-	+ nested groups are (inheriting) expanded when parent is expanded.
 
 */
 

@@ -462,6 +462,8 @@ void ofApp::drawImGuiDockingHelper()
 			// flag to call on a precise draw point, inside the draw begin/end context
 		}
 
+		guiManager.AddSpacingSeparated();
+
 		// Show all Panels
 		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
 		{

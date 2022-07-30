@@ -2102,8 +2102,6 @@ public:
 
 private:
 
-	//#define LAYOUT_WINDOW_WIDTH 150
-
 	void updateLayout();
 
 	void drawLayoutsPresetsEngine();//all the windows of the engine
@@ -2384,34 +2382,3 @@ public:
 	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };
 };
-
-
-//--
-
-////TODO:
-//// Check wheel
-//// Check active widget
-////https://github.com/ocornut/imgui/issues/4207
-////https://github.com/ocornut/imgui/issues/789
-////https://github.com/ocornut/imgui/issues/4303
-//if (0)
-//{
-//	auto &io = ImGui::GetIO();
-//	if (io.MouseHoveredViewport)
-//	{
-//		float wheel = io.MouseWheel;
-//		std::string ss1 = "Mouse Wheel ";
-//		if (wheel != 0)
-//		{
-//			ss1 += ofToString(wheel);
-//		}
-//		ImGui::Text(ss1.c_str());
-//	}
-//	string ss2;
-//	ss2 += "ID Hover  " + ofToString(ImGui::GetHoveredID()) + "\n";
-//	ss2 += "ID Focus  " + ofToString(ImGui::GetFocusID()) + "\n";
-//	ss2 += "ID Active " + ofToString(ImGui::GetActiveID());
-//	ImGui::Text(ss2.c_str());
-//}
-
-//ImGui::Separator();
