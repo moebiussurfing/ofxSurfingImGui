@@ -1,41 +1,8 @@
 
-/*
-
-	TODO:
-
-	+ fix workflow handling layout presets breaks when Link is enabled.
-	+ fix reset aligners. must apply only over special windows maybe.
-	+ fix make dockeable all windows on same space.
-	+ fix multiple dock spaces that are colliding/one over another.
-	+ fix viewport rectangle preview.
-	+ remake mode free and lockers simpler. a flag for each window.
-	+ aspect ratio/fit modes for game viewport.
-
-*/
-
-//-
-
-/*
-
-	NOTES:
-
-	Docking Help
-	https://github.com/ocornut/imgui/issues/2109
-
-	Docking Demo
-	https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
-
-	Toolbar Example
-	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
-
-*/
-
-//-
-
 //TODO:
-// Testing central viewport
-//#define FIXING_DOCKING // -> Need to fix yet
-#define FIXING_DRAW_VIEWPORT // -> To debug free space
+// Testing central view-port
+//#define FIXING_DOCKING		// -> Need to fix yet
+#define FIXING_DRAW_VIEWPORT	// -> To debug free space
 
 //-
 
@@ -86,6 +53,8 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
 
+	//--
+
 	// To enable Special windows mode.
 	// Then handles Organizer and Align windows.
 	enum SurfingImGuiWindowsMode
@@ -101,7 +70,6 @@ namespace ofxImGuiSurfing
 //--------------------------------------------------------------
 class ofxSurfing_ImGui_Manager
 {
-	//-
 
 public:
 
@@ -112,23 +80,26 @@ public:
 
 public:
 
-	// MODE A: 
-	// ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setupInitiate();
-
-	// MODE B: 
-	// Can be instantiated out of the class, locally
-	void setup(ofxImGui::Gui& gui);
-
 	//--------------------------------------------------------------
 	void setup() // -> We will use the most common use to avoid to have to require any argument.
 	{
 		setup(IM_GUI_MODE_INSTANTIATED);
 	}
 
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+
+private:
+
+	// MODE A: 
+	// ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setupInitiate();
+
 public:
 
-	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+	// MODE B: 
+	// TODO: WIP. Not tested in depth.
+	// Can be instantiated out of the class, locally
+	void setup(ofxImGui::Gui& gui);
 
 	//--
 
@@ -142,9 +113,10 @@ private:
 
 	//----
 
+	// The Widget Styles Manager
+
 private:
 
-	// -> The Widget Styles Manager
 	ofxSurfing_ImGui_WidgetsTypes widgetsManager;
 
 	//----
@@ -161,13 +133,6 @@ public:
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
-
-	////TODO: A button without param
-	////--------------------------------------------------------------
-	//bool Add(SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
-	//{
-	//	return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
-	//}
 
 	//----
 
@@ -317,6 +282,7 @@ public:
 public:
 
 	// Styles Engine
+	// 
 	// widgetsManager
 
 	//--------------------------------------------------------------
@@ -397,7 +363,6 @@ public:
 
 	//TODO: Auto creates a window for the group
 	//--------------------------------------------------------------
-	//void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -410,7 +375,6 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	//void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen, SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT)
 	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
 	{
 		if (!_bGui) return;
@@ -689,12 +653,16 @@ public:
 	//----
 
 	// Context getter shortcut
+	// sometimes useful,
+	// when requiring to access to some deep functions,
+	// like positioning windows on the view-port 
+	// like on Aligners and Organizer sections.
+	//https://github.com/ocornut/imgui/issues/5287
 
-	////TODO:
-	////https://github.com/ocornut/imgui/issues/5287
+//public:
+private:
 
-public:
-
+	//--------------------------------------------------------------
 	ImGuiContext* getContext() {
 		return ImGui::GetCurrentContext();
 	}
@@ -720,14 +688,22 @@ public:
 
 	// -> 1. BEGINs a Window
 
-	bool beginWindow(ofParameter<bool>& p); // will use the bool param for show/hide and the param name for the window name
-	bool beginWindow(std::string name, ofParameter<bool>& p); //  to change the name, and not use the param name.
+	bool beginWindow(ofParameter<bool>& p);
+	// will use the bool param for show/hide
+	// and the param name for the window name
+
+	bool beginWindow(std::string name, ofParameter<bool>& p);
+	//  to change the name, and not use the param name.
+
 	bool beginWindow(std::string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags);
-	bool beginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags); // will use the bool param for show/hide and the param name for the window name
+
+	bool beginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags);
+	// will use the bool param for show/hide and the param name for the window name
+
 	bool beginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
 	bool beginWindow(std::string name, bool* p_open);
-	bool beginWindow(std::string name /*= "Window"*/); // -> simpler. not working?
-	bool beginWindow(char* name = "Window"); // -> simpler. not working?
+	bool beginWindow(std::string name);
+	bool beginWindow(char* name = "Window");
 
 	//--
 
@@ -741,9 +717,12 @@ private:
 
 	// The ImGui instance options
 
-	bool bAutoDraw; //TODO: must be false when multiple ImGui instances created ?
+	bool bAutoDraw;
+	//TODO: must be false when multiple ImGui instances created ? 
+	// Currently not important, kind of deprecated.
+
 	bool bViewport = false;
-	bool bDockingModeCentered = false; //TODO: enables fullscreen ImGuiDockNodeFlags_PassthruCentralNode
+	bool bDockingModeCentered = false; //TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
 
 	//-
 
@@ -756,18 +735,28 @@ public:
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; }
 	// must be called before setup! default is false. For ImGui multi-instance.
+
 	void setImGuiAutoResize(bool b) { bAutoResize = b; }
 	// must be called before setup! default is false. For ImGui multi-instance.
+
+	//--
 
 	void setImGuiViewPort(bool b) { bViewport = b; }
 	// must be called before setup! 
 
 	void setImGuiDocking(bool b) { setDocking(b); }
 	// must call before setup
+
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
+
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
+	//--
+
+public:
+
 	// Force shared context
+
 	//--------------------------------------------------------------
 	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
 
@@ -841,7 +830,7 @@ public:
 
 private:
 
-	ofParameter<bool> bDrawView1{ "Draw View 1", false };
+	ofParameter<bool> bDrawView1{ "Draw View 1", false }; // debug drawing central zone for docking help
 
 	bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
@@ -852,11 +841,7 @@ private:
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-
 	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
-
-	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved too on settings when exit the app. 
-
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
@@ -872,13 +857,19 @@ public:
 	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
 	ofParameter<bool> bLandscape{ "Orientation", false };//TODO:could add a trigger to flip orientation
 
+	ofParameterGroup params_Advanced{ "Params Advanced" };
+	// -> These params are saved too on settings when exit and loaded when reopen the App. 
+
 private:
 
-	void buildHelpInfo();
+	void buildHelpInfo();//create or freshed the help info for the drawing help box
 
 	//--
 
-	// Rectangle to handle main window sections 
+	// Rectangles to handle main window sections 
+
+	// Positions and shape, bc we disable the ImGui management, 
+	// to exclude storing on presets and imgui.ini!
 
 private:
 
@@ -950,13 +941,14 @@ public:
 public:
 
 	// Window Log
-	ImGuiLogWindow log;
+	ImGuiLogWindow log;//public to allow acces from parent scope/ofApp
 
 	//--------------------------------------------------------------
 	void drawLogPanel() {
 		if (bLog) log.ImGui(bLog);
 	}
 
+	// Legacy API
 	//--------------------------------------------------------------
 	void addLog(std::string text)//print message to log window
 	{
@@ -966,15 +958,20 @@ public:
 
 public:
 
-	// Legacy API
 	//--------------------------------------------------------------
-	void logAdd(std::string text) {
-		if (bLog) log.AddText(text);
+	void printToLog(std::string text)//print message to log window
+	{
+		addLog(text);
 	}
-	//--------------------------------------------------------------
-	void AddLog(std::string text) {
-		if (bLog) log.AddText(text);
-	}
+	//// Legacy API
+	////--------------------------------------------------------------
+	//void logAdd(std::string text) {
+	//	addLog(text);
+	//}
+	////--------------------------------------------------------------
+	//void AddLog(std::string text) {
+	//	addLog(text);
+	//}
 
 	//----
 
@@ -1036,7 +1033,7 @@ private:
 
 		//--
 
-		ImGui::Indent();
+		this->Indent();
 		{
 			bool b = false;
 			if (!bUseAdvancedSubPanel)
@@ -1048,8 +1045,11 @@ private:
 			// Keys
 			this->Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
 
-			// Help
-			this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			// Help App
+			if (bUseHelpInfoApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			//hide if it's not settled by the user from ofApp!
+
+			// Help Internal
 			this->Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
 			// Menu
@@ -1058,36 +1058,50 @@ private:
 			// Log
 			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
 
-			//--
-			
-			// Window Panels 
-			// Landscape
-			//AddLabel("Window Panels");
-			if (ImGui::TreeNode("Window Panels"))
+			// Main Reset
+			// that can be linked using a pointer to an external trigger!
+			// Example: guiManager.setReset(&bResetDocking);
+			if (bResetPtr != nullptr)
 			{
-				Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED);
-				if (bAutoResize_Panels)Add(bReset_WindowPanels, OFX_IM_TOGGLE_ROUNDED);
-				//Add(bLandscape, OFX_IM_TOGGLE_ROUNDED);//TODO:
+				Add(bReset, OFX_IM_BUTTON_SMALL);
+				//this->AddTooltip("Must be assigned \nfrom parent scope \nby passing a bool \ntrigger as reference!");
+			}
 
+			if (ImGui::TreeNode("Windows"))
+			{
+				this->refreshLayout();
+				if (ImGui::TreeNode("Presets"))
+				{
+					this->refreshLayout();
+					Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					Add(bReset_PresetsWindow, OFX_IM_BUTTON_SMALL);
+
+					ImGui::TreePop();
+				}
+
+				//--
+
+				// Window Panels 
+				if (ImGui::TreeNode("Panels"))
+				{
+					this->refreshLayout();
+					Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					if (bAutoResize_Panels)Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
+
+					// Landscape
+					//Add(bLandscape, OFX_IM_TOGGLE_ROUNDED);//TODO:
+
+					ImGui::TreePop();
+				}
 				ImGui::TreePop();
 			}
+			
+			this->refreshLayout();
 
 			//--
 
 			//// Auto resize 
 			//this->Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-
-			//// Reset Window
-			////TODO: not fully implemented
-			//if (this->Add(bReset_PresetsWindow, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL))
-			//	bReset_PresetsWindow = true;
-
-			// Reset
-			if (bResetPtr != nullptr)
-			{
-				//this->AddSpacing();
-				Add(bReset, OFX_IM_TOGGLE_ROUNDED_MINI);
-			}
 
 			ofxImGuiSurfing::AddSpacingSeparated();
 
@@ -1306,7 +1320,7 @@ private:
 				}
 			}
 		}
-		ImGui::Unindent();
+		this->Unindent();
 	}
 
 public:

@@ -14,7 +14,6 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	// Auto call draw
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_AFTER_APP);
-	//ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
 
 	// Callbacks
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
@@ -81,7 +80,9 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 
 	switch (surfingImGuiMode)
 	{
+
 	case ofxImGuiSurfing::IM_GUI_MODE_UNKNOWN:
+		// nothing to do
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
@@ -117,6 +118,7 @@ void ofxSurfing_ImGui_Manager::setup(ofxImGuiSurfing::SurfingImGuiInstantiationM
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
 		setAutoSaveSettings(false);
 		break;
+
 	}
 
 	//--
@@ -348,6 +350,10 @@ void ofxSurfing_ImGui_Manager::startup()
 		{
 			// workflow
 			windowsSpecialsOrganizer.setHideWindows(true);
+
+			//TODO:
+			//Link both link toggles, local and the one inside the organizer object
+			bLinkWindows.makeReferenceTo(windowsSpecialsOrganizer.bLinkedWindowsSpecial);
 		}
 
 		// Docking mode has the GUI toggles in other panels..
@@ -357,6 +363,9 @@ void ofxSurfing_ImGui_Manager::startup()
 			//// force disable to avoid collide settings layout!
 			//windowsSpecialsOrganizer.bGui_WindowsSpecials = false;
 		}
+
+		//TODO: disabled bc must fix but behavior if enabled
+		bLinkWindows = false;
 	}
 
 	//--
@@ -367,7 +376,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 	//--
 
-	// Aligners
+	// Aligners visible toogle
 
 	windowsSpecialsOrganizer.bGui_WindowsAlignHelpers.makeReferenceTo(bGui_WindowsAlignHelpers);
 
@@ -379,6 +388,7 @@ void ofxSurfing_ImGui_Manager::startup()
 
 		textBoxWidgetInternal.setPath(path_Global + "HelpBox_Internal/");
 		textBoxWidgetInternal.setup();
+
 		buildHelpInfo();
 
 		//--
@@ -409,11 +419,11 @@ void ofxSurfing_ImGui_Manager::startup()
 	{
 		setShowAllPanels(false);//none
 
-		bHelp = true;
-		bHelpInternal = false;
+		//bHelp = true;//will be enable if it's setted only
+		bHelpInternal = true;
 
 		bMinimize = false;
-		//bMinimizePanels = false;
+		//bMinimizePanels = false;//now are or linked
 		//bMinimize_Presets = false;
 
 		//rect1_Panels.set(ofRectangle(ofGetWidth() / 2, 10, 100, 100));
@@ -495,8 +505,7 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 		{
 			helpInfo += l3 + "PRESETS \n";
 			helpInfo += "\n";
-			helpInfo += "F1 - F2 \n";
-			helpInfo += "F3 - F4 \n";
+			helpInfo += "F1 - F2 - F3 - F4 \n";
 			helpInfo += "\n";
 
 			helpInfo += l3 + "SECTIONS \n";
@@ -524,24 +533,26 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 				helpInfo += l2;
 				helpInfo += l3 + "HOW TO \n";
 				helpInfo += "\n";
-				helpInfo += "1. Click on P1-P2-P3-P4 \nTo pick a Preset \n";
+				helpInfo += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
 				//helpInfo += "\n";
-				helpInfo += "2. Toggle the Panels \nyou want visible \n";
+				helpInfo += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
 				//helpInfo += "\n";
-				helpInfo += "3. Layout the Panels \n";
+				helpInfo += "3. Layout the PANELS around the App view port \n";
 				//helpInfo += "\n";
-				helpInfo += "4. Pick another Preset \n";
+				helpInfo += "4. Pick another PRESET \n";
 
 				helpInfo += l2;
 				helpInfo += l3 + "MORE TIPS \n";
 				helpInfo += "\n";
-				helpInfo += "- Disable minimize toggle \nto show more controls. \n";
+				helpInfo += "- Disable the Minimize toggle \nto show more controls. \n";
 				//helpInfo += "\n";
-				helpInfo += "- Explore more deep into \n'Layout', 'Lanels' \nand 'Manager' windows. \n";
+				helpInfo += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
 				//helpInfo += "\n";
-				helpInfo += "- Each Preset can be thinked \nas an App mode or actived section. \n";
+				helpInfo += "- Each PRESET can be defined \nas a particular App Mode \nor an activated section. \n";
 				//helpInfo += "\n";
-				helpInfo += "- When no Preset is enabled \nall panels will be hidden. \n";
+				helpInfo += "- When no PRESET is enabled \nall PANELS will be hidden. \n";
+				//helpInfo += "\n";
+				helpInfo += "- On Docking Mode, press Shift when dragging \na window to lock to some viewport zone. \n";
 
 				//helpInfo += "\n";
 			}
@@ -3182,11 +3193,12 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 		{
 			bSolo = !bSolo;
 		}
-		// All
-		if ((key == 'a' && mod_CONTROL) || key == 1)
-		{
-			setShowAllPanels(true);
-		}
+		//TODO: Bug: collides with some other keys like shift + drag docking...
+		//// All
+		//if ((key == 'a' && mod_CONTROL) || key == 1)
+		//{
+		//	setShowAllPanels(true);
+		//}
 		// None
 		if ((key == 'n' && mod_CONTROL) || key == 14)
 		{

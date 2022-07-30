@@ -2,6 +2,21 @@
 /*
 
 	TODO:
+	
+	+ fix workflow handling layout presets breaks when Link is enabled.
+	+ fix reset aligners that populates out of the view port.
+		must apply only over special windows maybe ?
+
+	Docking
+		+ allow panel and presets dockable too!
+		+ fix make dockeable all windows on same space.
+		+ fix multiple dock spaces that are colliding/one over another.
+		+ fix viewport rectangle preview.
+		+ add video view-port example.
+		+ docking overlaps sometimes on layout management
+
+	+ remake mode free and lockers simpler. a flag for each window.
+	+ aspect ratio/fit modes for game view port.
 
 	+ fix fails params string on groups
 
@@ -10,63 +25,79 @@
 		auto assign to these 6 knobs 
 		from current GUI editing / first plane page.
 
-	+ fix toggles do not trigs true when changes?
+	+ fix toggles do not trigs/return true when changes?
 	
 	+ fix log ofxImGuiSurfing::WindowPanels::isUsing: 
 	
-	+ add clickeable label toggle
+	+ add clickable label toggle widget.
 
 	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
-	+ add tooltip types on styles on a new .Add(..arg
+	+ add tool-tip types on styles on a new guiManager.Add(..arg
+*/
+
+/*
 
 	BUGS:
 
 	+ next / nested groups headers are weird hidden!
-	+ nested groups are (heritating) expanded when parent is expanded.
-	+ fix windowsSpecial not drawing windows, when multiple instances?
-	+ it's maybe working on docking mode only?
-	+ docking overlaps sometimes on layout management
+	+ nested groups are (inheriting) expanded when parent is expanded.
 
 */
 
+/*
+
+	NOTES:
+
+	Docking Help
+	https://github.com/ocornut/imgui/issues/2109
+
+	Docking Demo
+	https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
+
+	Tool-bar Example
+	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
+
+*/
 
 //--------------------------------------------------------------
 
 
 /*
  
-// HOW TO
+// HOW TO:
 // RECOMMENDED OR COMMON USAGE
 // TOP SNIPPETS HERE !
 
+// #1 
 {
-	// .h
+	// ofApp.h
 	{
 		#include "ofxSurfingImGui.h"
 
 		ofxSurfing_ImGui_Manager guiManager;
-		ofParameter<bool> bGui{ "Show",true };
+		ofParameter<bool> bGui{ "ShowWindow", true };
 	}
 
-	// .cpp
+	// ofApp.cpp
 	{
-		// setup()
+		// ofApp::setup()
 
 		guiManager.setup(); 
 
 		//-------------------------------
 
-		// draw()
+		// ofApp::draw()
 
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTS
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 
 		guiManager.begin();
 		{
+			if(!bGui) return;
 			if (guiManager.beginWindow(bGui))
 			{
 				guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED);
-				if (!guiManager.bMinimize)
+				if (!guiManager.bMinimize){}
 
 				//..
 
@@ -145,6 +176,9 @@ using namespace ofxImGuiSurfing;
 	//--
 
 	// WINDOWS USING RAW ImGui (LEGACY)
+	// KIND OF DEPRECATED. 
+	// Better to use the add-on engine,
+	// but it will work using RAW ImGui too!
 
 	// 1.0 SIMPLE
 
@@ -164,9 +198,8 @@ using namespace ofxImGuiSurfing;
 
 	//--
 
-	// 1.2 WINDOW USING "OLD/LEGACY" ofxImGui
+	// 1.2 WINDOW USING MORE RAW (LEGACY)
 
-	// (DEPRECATED. Better to not use like this)
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
@@ -233,7 +266,7 @@ using namespace ofxImGuiSurfing;
 
 static float b = 1.0f;
 static float c = 0.5f;
-static int i = 3;// hue colors are from 0 to 7
+static int i = 3; // hue colors are from 0 to 7
 ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
 ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 
@@ -300,8 +333,8 @@ ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
 
 /*
 
-// AN EXTRA BEGIN/END PAIR
-// WITH A SNAPPING GRID
+// AN EXTRA BEGIN/END PAIR.
+// WITH A SNAPPING GRID.
 
 //--------------------------------------------------------------
 void Begin(const std::string& name) {
@@ -399,24 +432,27 @@ if (ImGui::BeginTabBar("Tabs Blah"))
 {
 	if (ImGui::BeginTabItem("Video"))
 	{
-		std::string str = "Erqwcrqwecrqwecrqwecrqwecrqwecrqwecr qervev qervewecrqwecrqwecrqwecr qervev qerve";
 		ImGui::Text("Blah blah");
+		std::string str = "text";
 		ImGui::TextWrapped(str.c_str());
+
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Audio"))
 	{
-		std::string str = "Wcwcrqwcr1121233adqervewecrqwecrqwecrqwecr qervev qerve";
 		ImGui::Text("Blah blah");
+		std::string str = "text";
 		ImGui::TextWrapped(str.c_str());
+
 		ImGui::EndTabItem();
 	}
 	if (ImGui::BeginTabItem("Controls"))
 	{
 		guiManager.drawAdvancedBundle();
+
 		ImGui::EndTabItem();
-}
-ImGui::EndTabBar();
+	}
+	ImGui::EndTabBar();
 }
 
 */
