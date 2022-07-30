@@ -3,7 +3,7 @@
 
 	TODO:
 
-	+ fix workflow handling layout presets breaks when Link is enabled.  
+	+ fix workflow handling layout presets breaks when Link is enabled.
 	+ fix reset aligners. must apply only over special windows maybe.
 	+ fix make dockeable all windows on same space.
 	+ fix multiple dock spaces that are colliding/one over another.
@@ -16,15 +16,15 @@
 //-
 
 /*
- 
+
 	NOTES:
-	
+
 	Docking Help
 	https://github.com/ocornut/imgui/issues/2109
-	
+
 	Docking Demo
 	https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
-	
+
 	Toolbar Example
 	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
 
@@ -52,7 +52,7 @@
 #include "ofxSurfing_ImGui_WindowsOrganizer.h"
 #include "TextBoxWidget.h"
 
-#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> constrait some window minimal shape sizes
+#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE // -> Constraint some window minimal shape sizes.
 
 #define DEFAULT_AMOUNT_PRESETS 4
 
@@ -67,28 +67,28 @@ using namespace ofxImGuiSurfing;
 namespace ofxImGuiSurfing
 {
 	// Argument to be used on setup(mode);
-	enum SurfingImGuiInstantiationMode 
+	enum SurfingImGuiInstantiationMode
 	{
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
-		
+
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring main begin/end.
 
 		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
 
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other add-ons.
-		
+
 		//IM_GUI_MODE_SPECIAL_WINDOWS, // TODO: could simplify API, bc it's duplicated from 
 		//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-		
+
 		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
-		
+
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
 
 	// To enable Special windows mode.
 	// Then handles Organizer and Align windows.
-	enum SurfingImGuiWindowsMode 
+	enum SurfingImGuiWindowsMode
 	{
 		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
 		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
@@ -112,11 +112,13 @@ public:
 
 public:
 
-	// MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setupInitiate(); 
-	
-	// MODE B: Can be instantiated out of the class, locally
-	void setup(ofxImGui::Gui& gui); 
+	// MODE A: 
+	// ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setupInitiate();
+
+	// MODE B: 
+	// Can be instantiated out of the class, locally
+	void setup(ofxImGui::Gui& gui);
 
 	//--------------------------------------------------------------
 	void setup() // -> We will use the most common use to avoid to have to require any argument.
@@ -461,7 +463,7 @@ public:
 	// More Widgets
 
 	// Combo list. 
-	
+
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------
@@ -752,7 +754,7 @@ public:
 
 	// Force autodraw
 	//--------------------------------------------------------------
-	void setImGuiAutodraw(bool b) { bAutoDraw = b; } 
+	void setImGuiAutodraw(bool b) { bAutoDraw = b; }
 	// must be called before setup! default is false. For ImGui multi-instance.
 	void setImGuiAutoResize(bool b) { bAutoResize = b; }
 	// must be called before setup! default is false. For ImGui multi-instance.
@@ -760,7 +762,7 @@ public:
 	void setImGuiViewPort(bool b) { bViewport = b; }
 	// must be called before setup! 
 
-	void setImGuiDocking(bool b) { setDocking(b); } 
+	void setImGuiDocking(bool b) { setDocking(b); }
 	// must call before setup
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
@@ -839,7 +841,7 @@ public:
 
 private:
 
-	ofParameter<bool> bPreviewSceneViewport{ "Viewport", false };
+	ofParameter<bool> bDrawView1{ "Draw View 1", false };
 
 	bool bUseAdvancedSubPanel = true; // enable advanced sub panel
 
@@ -868,6 +870,7 @@ public:
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
 	ofParameter<bool> bReset_Window{ "Reset Window", false };//TODO:
 	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
+	ofParameter<bool> bLandscape{ "Orientation", false };//TODO:could add a trigger to flip orientation
 
 private:
 
@@ -891,13 +894,14 @@ private:
 
 	//--
 
-	// Presets and Panels windows
+	// Presets windows
 	ofParameter<bool> bReset_PresetsWindow{ "Reset", false };
 	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize", true };
 	ofParameter<bool> bMinimize_Presets{ "Minimize", true };
 
-	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
-	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels", true };
+	// Panels windows
+	ofParameter<bool> bReset_WindowPanels{ "Reset", false };
+	ofParameter<bool> bAutoResize_Panels{ "Auto Resize", true };
 	//ofParameter<bool> bMinimizePanels{ "Minimize", true };
 
 	ofParameterGroup params_WindowPresets{ "Window Presets" };
@@ -985,7 +989,7 @@ private:
 	// Snippet to copy/paste into out ofApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//guiManager.drawAdvancedSubPanel();
-	 
+
 	//--------------------------------------------------------------
 	void drawAdvancedControls() {
 		drawAdvancedBundle();
@@ -999,7 +1003,7 @@ public:
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
-	
+
 	//--------------------------------------------------------------
 	void drawAdvancedBundle(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
 
@@ -1053,6 +1057,22 @@ private:
 
 			// Log
 			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
+
+			//--
+			
+			// Window Panels 
+			// Landscape
+			//AddLabel("Window Panels");
+			if (ImGui::TreeNode("Window Panels"))
+			{
+				Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED);
+				if (bAutoResize_Panels)Add(bReset_WindowPanels, OFX_IM_TOGGLE_ROUNDED);
+				//Add(bLandscape, OFX_IM_TOGGLE_ROUNDED);//TODO:
+
+				ImGui::TreePop();
+			}
+
+			//--
 
 			//// Auto resize 
 			//this->Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
@@ -1167,7 +1187,7 @@ private:
 							Add(bInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
 
-							//AddToggleRoundedButton(bPreviewSceneViewport);
+							//AddToggleRoundedButton(bDrawView1);
 
 							//-
 
@@ -1271,12 +1291,11 @@ private:
 							{
 								ImGui::Indent();
 								{
-									AddToggleRoundedButton(bUseLayoutPresetsManager);
-									AddToggleRoundedButton(bDockingLayoutPresetsEngine);
-									ToggleRoundedButton("Docking Centered", &bDockingModeCentered);
-									AddToggleRoundedButton(bPreviewSceneViewport);
-									//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
-									AddToggleRoundedButton(bDebugRectCentral);
+									//AddToggleRoundedButton(bUseLayoutPresetsManager);
+									//AddToggleRoundedButton(bDockingLayoutPresetsEngine);
+									ToggleRoundedButton("Dock Center", &bDockingModeCentered);
+									AddToggleRoundedButton(bDrawView1);
+									AddToggleRoundedButton(bDrawView2);
 								}
 								ImGui::Unindent();
 							}
@@ -1331,7 +1350,7 @@ public:
 	}
 
 private://hide to simplify
-	 
+
 	//--------------------------------------------------------------
 	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
@@ -1384,18 +1403,18 @@ public:
 
 	bool beginWindowSpecial();
 
-	bool beginWindowSpecial(int index); 
+	bool beginWindowSpecial(int index);
 	// -> If you added windows to the engine you can begin the window passing his index
 
-	bool beginWindowSpecial(string name); 
+	bool beginWindowSpecial(string name);
 	// -> If you added windows to the engine you can begin the window passing his SAME name.
 
 	bool beginWindowSpecial(ofParameter<bool>& _bGui);
 
 	//-
-	
+
 	// End
-	
+
 	void endWindowSpecial(int index = -1);
 	void endWindowSpecial(ofParameter<bool>& _bGui);
 
@@ -1602,9 +1621,9 @@ public:
 	}
 
 	//--
-	 
+
 	// Exposed helpers to external GUIs / scope.
-	  
+
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
 		return windowsSpecialsOrganizer.bLinkedWindowsSpecial;
@@ -1802,7 +1821,7 @@ public:
 	// Extra Params to include packed into layout presets too.
 	// By default we wil have menu and log toggles,
 	// but we can add more from our ofApp
-	 
+
 	//--------------------------------------------------------------
 	void addExtraParamToLayoutPresets(ofParameterGroup& group) {
 		params_LayoutsExtra.add(group);
@@ -1891,7 +1910,7 @@ private:
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning
 	// Then we can reset to some default variables and layout positions of our windows.
-	
+
 	void saveAppSettings();
 
 	//----
@@ -2003,7 +2022,7 @@ private:
 public:
 
 	//-> Must call manually after adding windows and layout presets
-	void setupLayout(int numPresets = DEFAULT_AMOUNT_PRESETS); 
+	void setupLayout(int numPresets = DEFAULT_AMOUNT_PRESETS);
 
 	// Some API simplifications 
 	//--------------------------------------------------------------
@@ -2015,7 +2034,7 @@ private:
 
 	bool bStartupCalled = false;
 
-//public:
+	//public:
 
 	void startupFirstFrame();
 	void setupDocking();//TODO: rename as presets + docking...
@@ -2046,16 +2065,16 @@ public:
 
 private:
 
-//#define LAYOUT_WINDOW_WIDTH 150
+	//#define LAYOUT_WINDOW_WIDTH 150
 
 	void updateLayout();
 
 	void drawLayoutsPresetsEngine();//all the windows of the engine
 	void drawLayoutsPresetsTools();
-	void drawLayoutsPresets();
+	void drawLayoutsLayoutPresets();
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
-	void drawOFnative();
+	void drawViewport_oFNative();
 
 
 	//// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.
@@ -2070,7 +2089,7 @@ private:
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
-	ofParameter<bool> bDebugRectCentral{ "Rect Central", false };
+	ofParameter<bool> bDrawView2{ "Draw View 2", false };
 
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central; // current free space viewport updated when changes
@@ -2104,17 +2123,17 @@ private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
 	ofParameter<bool> bGui_LayoutsPresetsSelector{ "Layouts", true };
-	ofParameter<bool> bGui_LayoutsPresetsTools{ "Tools", false };
+	ofParameter<bool> bGui_LayoutsPresetsManual{ "Manual", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
 	//ofParameter<bool> bGui_LayoutsPresetsSelector{ "Presets", true };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false }; 
+	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false };
 	// Can't be changed on runtime. cant include into settings
+
 	ofParameter<bool> bSolo{ "Solo", false };
 
-
-	ofParameter<bool> bDockingLayoutPresetsEngine{ "Docking Engine", false };
+	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
 	//ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", true };
 
 public:
@@ -2165,7 +2184,7 @@ public:
 
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresetsSelector = b;
-		bGui_LayoutsPresetsTools = false;
+		bGui_LayoutsPresetsManual = false;
 	}
 
 	//--------------------------------------------------------------
@@ -2183,7 +2202,7 @@ public:
 		const filesystem::path path = path_Global;
 		ofDirectory::removeDirectory(path, true, true);
 
-		// Remove ini file
+		// Remove imgui.ini file
 		const filesystem::path file = ofToDataPath("../imgui.ini");
 		ofFile::removeFile(file, true);
 	}
