@@ -3,36 +3,32 @@
 
 	TODO:
 
+	+ fix workflow handling layout presets breaks when Link is enabled.  
 	+ fix reset aligners. must apply only over special windows maybe.
-	+ fix make dockeable all windows on same space
-	+ fix multiple dock spaces that are colliding/one over another
-	+ fix viewport rectangle preview
-
-	+ remake mode free and lockers simpler. a flag for each window
-
-	+ aspect ratio/fit modes for game viewport
-	+ add help box
+	+ fix make dockeable all windows on same space.
+	+ fix multiple dock spaces that are colliding/one over another.
+	+ fix viewport rectangle preview.
+	+ remake mode free and lockers simpler. a flag for each window.
+	+ aspect ratio/fit modes for game viewport.
 
 */
 
 //-
 
-// Docking help
-// https://github.com/ocornut/imgui/issues/2109
+/*
+ 
+	NOTES:
+	
+	Docking Help
+	https://github.com/ocornut/imgui/issues/2109
+	
+	Docking Demo
+	https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
+	
+	Toolbar Example
+	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
 
-// Docking demo
-// https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
-
-// Toolbar example
-// https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
-
-//-
-
-// Key commands for layout presets 
-// F1-F2-F3-F4 -> preset
-// F5: Window Presets
-// F6: Window Panels
-// F7: Window Extra
+*/
 
 //-
 
@@ -65,26 +61,35 @@
 using namespace ofxImGuiSurfing;
 
 //TODO:
-// These arguments are to pass to setup(..) method and simplify instantiation and settings.
+// These arguments are to pass to setup(..) method 
+// to simplify instantiation and define settings.
 //--------------------------------------------------------------
 namespace ofxImGuiSurfing
 {
 	// Argument to be used on setup(mode);
-	enum SurfingImGuiInstantiationMode {
+	enum SurfingImGuiInstantiationMode 
+	{
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
+		
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring main begin/end.
 
 		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
 
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other add-ons.
+		
 		//IM_GUI_MODE_SPECIAL_WINDOWS, // TODO: could simplify API, bc it's duplicated from 
 		//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+		
 		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
+		
 		IM_GUI_MODE_NOT_INSTANTIATED // -> To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
 	};
 
-	enum SurfingImGuiWindowsMode {
+	// To enable Special windows mode.
+	// Then handles Organizer and Align windows.
+	enum SurfingImGuiWindowsMode 
+	{
 		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
 		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
 		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
@@ -107,21 +112,28 @@ public:
 
 public:
 
-	void setupInitiate(); // MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
-	void setup(ofxImGui::Gui& gui); // MODE B: Can be instantiated out of the class, locally
-	void update(); // To manual update...
-	void draw(ofEventArgs& args);
+	// MODE A: ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	void setupInitiate(); 
+	
+	// MODE B: Can be instantiated out of the class, locally
+	void setup(ofxImGui::Gui& gui); 
 
 	//--------------------------------------------------------------
-	void setup() // -> We will use the most common use to avoid to have to use any argument.
+	void setup() // -> We will use the most common use to avoid to have to require any argument.
 	{
 		setup(IM_GUI_MODE_INSTANTIATED);
-
-		//setup(IM_GUI_MODE_INSTANTIATED_DOCKING); // this crashes when multiple instances share dock stuff...
-		// We will need to activate only one Docking / "Layout Presets Engine" / guiManager instance!
 	}
 
+public:
+
+	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
+
+	//--
+
 private:
+
+	void update(); // To manual update...
+	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes.
 
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void keyReleased(ofKeyEventArgs& eventArgs);
@@ -182,7 +194,7 @@ public:
 
 public:
 
-	// ofParametersGroup's
+	// ofParametersGroup's 
 
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
@@ -446,10 +458,10 @@ public:
 
 	//----
 
-
 	// More Widgets
 
 	// Combo list. 
+	
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------
@@ -472,40 +484,55 @@ public:
 
 	//----
 
-	// Text with spacing
+	// Text with Uppercasing and Spacing
+
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		ImGui::TextWrapped(t.c_str());
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelBig(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelHuge(std::string label, bool bUppercase = true, bool bNoSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		//if (!bNoSpacing) ofxImGuiSurfing::AddSpacingBig();
 		if (!bNoSpacing) ofxImGuiSurfing::AddSpacing();
+	}
+
+	//--
+
+	// Simplified Text without Uppercasing not Spacing
+
+	//--------------------------------------------------------------
+	void AddText(std::string label)
+	{
+		AddLabel(label, false, true);
+	}
+	//--------------------------------------------------------------
+	void AddTextBig(std::string label)
+	{
+		AddLabelBig(label, false, true);
+	}
+	//--------------------------------------------------------------
+	void AddTextHuge(std::string label)
+	{
+		AddLabelHuge(label, false, true);
 	}
 
 	//--
@@ -516,11 +543,9 @@ public:
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
-
 	//----
 
-
-	// To help API coherence
+	// To help API coherence and/or Legacy
 	//--------------------------------------------------------------
 	void AddSpacingSmall()
 	{
@@ -593,35 +618,36 @@ public:
 	void Indent()
 	{
 		ImGui::Indent();
-		refreshLayout();
+		refreshLayout();//auto calculate widgets common sizes
 	}
 
 	//--------------------------------------------------------------
 	void Unindent()
 	{
 		ImGui::Unindent();
-		refreshLayout();
+		refreshLayout();//auto calculate widgets common sizes
 	}
 
 	//----
 
-public:
+private:
 
 	// Special Windows Mode
 
 	SurfingImGuiWindowsMode specialsWindowsMode = IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN;
+
+public:
 
 	//--------------------------------------------------------------
 	void setWindowsMode(SurfingImGuiWindowsMode mode) { // Call before setup.
 		specialsWindowsMode = mode;
 	}
 
+private:
+
 	// Instantiation
 
 	SurfingImGuiInstantiationMode surfingImGuiMode = IM_GUI_MODE_UNKNOWN;
-
-	void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode);
-	//void setup(ofxImGuiSurfing::SurfingImGuiInstantiationMode mode = IM_GUI_MODE_INSTANTIATED);
 
 	//----
 
@@ -635,10 +661,15 @@ private:
 
 	// Initiates ofxImGui with the common settings
 	void setupImGui();
+
+	// Prepare 3 different font sizes to use on labels or any widgets.
 	void setupImGuiFonts();
+
+	//--
 
 public:
 
+	//TODO: WIP
 	// To share the same Gui between/with other add-ons.
 
 	//--------------------------------------------------------------
@@ -673,7 +704,7 @@ public:
 	// API
 
 	// To the global context: 
-	// All the windows will be populated in between!
+	// All the windows MUST be populated in between!
 
 	// -> 1. Main BEGIN feed widgets!
 	void begin();
@@ -721,10 +752,16 @@ public:
 
 	// Force autodraw
 	//--------------------------------------------------------------
-	void setImGuiAutodraw(bool b) { bAutoDraw = b; } // must be called before setup! default is false. For ImGui multi-instance.
-	void setImGuiAutoResize(bool b) { bAutoResize = b; } // must be called before setup! default is false. For ImGui multi-instance.
-	void setImGuiViewPort(bool b) { bViewport = b; } // must be called before setup! 
-	void setImGuiDocking(bool b) { setDocking(b); } // must call before setup
+	void setImGuiAutodraw(bool b) { bAutoDraw = b; } 
+	// must be called before setup! default is false. For ImGui multi-instance.
+	void setImGuiAutoResize(bool b) { bAutoResize = b; }
+	// must be called before setup! default is false. For ImGui multi-instance.
+
+	void setImGuiViewPort(bool b) { bViewport = b; }
+	// must be called before setup! 
+
+	void setImGuiDocking(bool b) { setDocking(b); } 
+	// must call before setup
 	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
@@ -734,7 +771,7 @@ public:
 
 	//----
 
-	// Fonts runtime management 
+	// Fonts Runtime Management 
 
 private:
 
@@ -792,6 +829,7 @@ public:
 		return bMouseOverGui;
 	}
 
+	//TODO: WIP
 	//--------------------------------------------------------------
 	bool isOverInputText() {
 		return bInputText;
@@ -816,6 +854,7 @@ public:
 	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
 
 	ofParameterGroup params_Advanced{ "Params Advanced" }; // -> These are saved too on settings when exit the app. 
+
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
@@ -834,6 +873,12 @@ private:
 
 	void buildHelpInfo();
 
+	//--
+
+	// Rectangle to handle main window sections 
+
+private:
+
 	ofParameterGroup params_RectPanels{ "Rectangles Windows" };
 	vector<ofParameter<ofRectangle>> rectangles_Windows;
 
@@ -844,17 +889,19 @@ private:
 	ImGuiWindowFlags flags_wPr;
 	ImGuiWindowFlags flags_wPanels;
 
+	//--
+
 	// Presets and Panels windows
 	ofParameter<bool> bReset_PresetsWindow{ "Reset", false };
 	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize", true };
 	ofParameter<bool> bMinimize_Presets{ "Minimize", true };
-	ofParameterGroup params_WindowPresets{ "Window Presets" };
 
 	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
 	ofParameter<bool> bAutoResizePanels{ "AutoResize Panels", true };
 	//ofParameter<bool> bMinimizePanels{ "Minimize", true };
-	ofParameterGroup params_WindowPanels{ "Window Panels" };
 
+	ofParameterGroup params_WindowPresets{ "Window Presets" };
+	ofParameterGroup params_WindowPanels{ "Window Panels" };
 	ofParameterGroup params_WindowsEngine{ "Engine Windows" };
 
 private:
@@ -902,20 +949,18 @@ public:
 	ImGuiLogWindow log;
 
 	//--------------------------------------------------------------
-	void addLog(std::string text) {
+	void drawLogPanel() {
+		if (bLog) log.ImGui(bLog);
+	}
+
+	//--------------------------------------------------------------
+	void addLog(std::string text)//print message to log window
+	{
 		// Log
 		log.AddText(text);
 	}
 
 public:
-
-	// Snippets:
-	// ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bLog); // -> enabler
-	// guiManager.log.AddText(mMidiMessageHistoryStr); // -> feed
-	//--------------------------------------------------------------
-	void drawLogPanel() {
-		if (bLog) log.ImGui(bLog);
-	}
 
 	// Legacy API
 	//--------------------------------------------------------------
@@ -934,11 +979,13 @@ public:
 private:
 
 	// An advanced/extra common panel
-	// with some bool toggles commontly used.
+	// with some bool toggles commonly used.
 
+	// Example:
 	// Snippet to copy/paste into out ofApp:
 	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
 	//guiManager.drawAdvancedSubPanel();
+	 
 	//--------------------------------------------------------------
 	void drawAdvancedControls() {
 		drawAdvancedBundle();
@@ -946,12 +993,13 @@ private:
 
 public:
 
-	// Snippet:
-	// Example to copy/paste into out ofApp:
+	// Example:
+	// Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
 	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
 	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 	//guiManager.beginWindow("ofApp", NULL, window_flags);
+	
 	//--------------------------------------------------------------
 	void drawAdvancedBundle(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
 
@@ -1274,6 +1322,16 @@ private:
 public:
 
 	// Some tweaked settings modes
+
+	// New API
+	//--------------------------------------------------------------
+	void setName(std::string name) { // must call before setup. To allow multiple instances/windows settings
+		path_SubPathLabel = "_" + name;
+		windowsSpecialsOrganizer.setName(name);
+	}
+
+private://hide to simplify
+	 
 	//--------------------------------------------------------------
 	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
 		path_SubPathLabel = path + "_";
@@ -1284,17 +1342,11 @@ public:
 	//	path_SubPathLabel = "_" + path;
 	//}
 
-	// New API
-	//--------------------------------------------------------------
-	void setName(std::string name) { // must call before setup. To allow multiple instances/windows settings
-		path_SubPathLabel = "_" + name;
-		windowsSpecialsOrganizer.setName(name);
-	}
-
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b) { // must call before setup. IMPORTANT: if you are using multiple instances of this addon, must set only one to true or settings will not be handled correctly!
 		bAutoSaveSettings = b;
 	}
+
 
 	//--------------------------------------------------------------
 	void setAutoResize(bool b) { // must call before setup
@@ -1305,7 +1357,6 @@ public:
 	void setDocking(bool b) { // must call before setup
 		bDockingLayoutPresetsEngine = b;
 	}
-
 
 	//---------------------------
 
@@ -1324,17 +1375,39 @@ private:
 
 public:
 
+	// Main Important 
+	// API methods to populate widgets in between,
+	// inside previously queued Special Windows!
+	// to be called on DrawImGui()
+
+	// Begin
+
 	bool beginWindowSpecial();
-	bool beginWindowSpecial(int index); // -> If you added windows to the engine you can begin the window passing his index
-	bool beginWindowSpecial(string name); // -> If you added windows to the engine you can begin the window passing his SAME name.
+
+	bool beginWindowSpecial(int index); 
+	// -> If you added windows to the engine you can begin the window passing his index
+
+	bool beginWindowSpecial(string name); 
+	// -> If you added windows to the engine you can begin the window passing his SAME name.
+
 	bool beginWindowSpecial(ofParameter<bool>& _bGui);
 
+	//-
+	
+	// End
+	
 	void endWindowSpecial(int index = -1);
-	//TODO:
 	void endWindowSpecial(ofParameter<bool>& _bGui);
 
+	//--
+
+	// Rarely useful Helpers
+
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
+	//to get the index of an special window passing the toggle
+
 	int getWindowSpecialIndexForName(string name);
+	//to be used if you forgot or don't know the index
 
 	//----
 
@@ -1395,7 +1468,7 @@ public:
 
 	//--
 
-	//TODO:
+	//TODO: WIP
 	//--------------------------------------------------------------
 	struct SurfingImGuiWindowAtributes
 	{
@@ -1435,7 +1508,7 @@ private:
 
 public:
 
-	int getPad() { return windowsSpecialsOrganizer.pad; }
+	int getPad() { return windowsSpecialsOrganizer.pad; }//used pad between windows
 
 public:
 
@@ -1529,9 +1602,9 @@ public:
 	}
 
 	//--
-	// 
+	 
 	// Exposed helpers to external GUIs / scope.
-	//  
+	  
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
 		return windowsSpecialsOrganizer.bLinkedWindowsSpecial;
@@ -1726,7 +1799,10 @@ public:
 
 	// Layouts Engine
 
-	// Extra params to include packed into layout presets
+	// Extra Params to include packed into layout presets too.
+	// By default we wil have menu and log toggles,
+	// but we can add more from our ofApp
+	 
 	//--------------------------------------------------------------
 	void addExtraParamToLayoutPresets(ofParameterGroup& group) {
 		params_LayoutsExtra.add(group);
@@ -1811,12 +1887,16 @@ public:
 
 private:
 
-	bool loadAppSettings();	// Will return false if settings file do not exist. That happens when started for first time or after OF_APP/bin cleaning
+	bool loadAppSettings();//we store some internal stuff	
+	// Will return false if settings file do not exist.
+	// That happens when started for first time or after OF_APP/bin cleaning
+	// Then we can reset to some default variables and layout positions of our windows.
+	
 	void saveAppSettings();
 
 	//----
 
-	////TODO:
+	////TODO: WIP
 	//// To be marked outside the scope to populate widgets inside this execution point... ?
 	//// Should use lambda functions here!
 	////TODO: learn lambda functions..
@@ -1903,6 +1983,9 @@ private:
 
 public:
 
+	// We can customize the default preset names
+	// that are P1-P2-P3-P4 by default.
+
 	//--------------------------------------------------------------
 	void setPresetsNames(vector <std::string > names) {
 		if (names.size() != 4) {
@@ -1919,17 +2002,20 @@ private:
 
 public:
 
-	void setupLayout(int numPresets = 4); //-> must call manually after adding windows and layout presets
+	//-> Must call manually after adding windows and layout presets
+	void setupLayout(int numPresets = DEFAULT_AMOUNT_PRESETS); 
 
 	// Some API simplifications 
 	//--------------------------------------------------------------
 	void startup();
 
+	//-
+
 private:
 
 	bool bStartupCalled = false;
 
-public:
+//public:
 
 	void startupFirstFrame();
 	void setupDocking();//TODO: rename as presets + docking...
@@ -1960,7 +2046,7 @@ public:
 
 private:
 
-#define LAYOUT_WINDOW_WIDTH 150
+//#define LAYOUT_WINDOW_WIDTH 150
 
 	void updateLayout();
 
@@ -2023,7 +2109,8 @@ private:
 	//ofParameter<bool> bGui_LayoutsPresetsSelector{ "Presets", true };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false }; // Can't be changed on runtime. cant include into settings
+	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false }; 
+	// Can't be changed on runtime. cant include into settings
 	ofParameter<bool> bSolo{ "Solo", false };
 
 
@@ -2099,6 +2186,12 @@ public:
 		// Remove ini file
 		const filesystem::path file = ofToDataPath("../imgui.ini");
 		ofFile::removeFile(file, true);
+	}
+
+	//--------------------------------------------------------------
+	void doSpecialWindowToggleVisible(int index) {
+		if (index >= windowsSpecialsLayouts.size()) return;//ignore
+		windowsSpecialsLayouts[index].bGui = !windowsSpecialsLayouts[index].bGui;
 	}
 
 	//-
@@ -2201,8 +2294,8 @@ public:
 
 public:
 
-	// Not ofParams helpers.
-	// CPP types 
+	// Helpers to populate non ofParams,
+	// CPP types instead an mantain global styles.
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
@@ -2276,21 +2369,6 @@ public:
 		return bReturn;
 	}
 
-
-	//TODO:
-	////--------------------------------------------------------------
-	//bool AddToggle(string label, ImVec2 sz)
-	//{
-	//	bool bReturn = false;
-
-	//	float _ww = sz.x;
-	//	float _h = sz.y;
-
-	//	bReturn = ofxImGuiSurfing::AddBigToggle(label, _ww, _h);
-
-	//	return bReturn;
-	//}
-
-
+	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };
 };

@@ -39,6 +39,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
 	params_Advanced.add(bLog);
+	params_Advanced.add(bSolo);
 
 	params_Advanced.add(windowsSpecialsOrganizer.pad);
 
@@ -52,7 +53,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	//-
 
-	// -> TODO: BUG?: 
+	//TODO: BUG? 
 	// it seems than requires to be false when using multi-context/instances
 	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
 	bAutoDraw = false;
@@ -432,92 +433,116 @@ void ofxSurfing_ImGui_Manager::buildHelpInfo()
 {
 	// we recreate the help info during runtime when some variable changed
 
-	string l = "------------------------------------\n";//divider
-	string l2 = "\n" + l + "\n";
+	string l1 = "-----------------------------------\n";//divider
+	string l2 = "\n" + l1 + "\n";//spaciated divider
+	string l3 = "";//left indent
+	//string l3 = "  ";//left indent
 
 	helpInfo = "";
-
-	//helpInfo += "GUI MANAGER \n";
-
 	helpInfo += "HELP INTERNAL \n\n";
 
-	//bool b = textBoxWidgetInternal.isEditing();
-	//string se = b ? "EDIT | Lock" : "Edit | LOCK";
-	//helpInfo += "Double click to " + se + " \n\n";
+	//helpInfo += "Gui Manager \n\n";
+	//helpInfo += "Double click to EDIT/LOCK \n\n";
 	//helpInfo += l;
+	//helpInfo += "\n";
 
-	helpInfo += "Double click to EDIT/LOCK \n\n";
-	helpInfo += l;
-
-	helpInfo += "\n";
-	helpInfo += "KEY COMMANDS \n\n";
-
-	if (bHelpInternal) helpInfo += "I      HELP INTERNAL ON \n";
-	else helpInfo += "I      HELP INTERNAL OFF \n";
-
-	if (bHelp) helpInfo += "H      HELP APP ON \n";
-	else helpInfo += "H      HELP APP OFF \n";
-
-	if (bMinimize) helpInfo += "`      MINIMIZE ON \n";
-	else helpInfo += "`      MINIMIZE OFF \n";
-
-	if (bExtra) helpInfo += "E      EXTRA ON \n";
-	else helpInfo += "E      EXTRA OFF \n";
-
-	if (bLog) helpInfo += "L      LOG ON \n";
-	else helpInfo += "L      LOG OFF \n";
-
-	if (bDebug) helpInfo += "D      DEBUG ON \n";
-	else helpInfo += "D      DEBUG OFF \n";
-
+	helpInfo += "LAYOUTS PRESETS ENGINE \n";
 	helpInfo += l2;
+
+	helpInfo += l3 + "KEY COMMANDS \n\n";
+
+	string st = "  ";
+
+	if (bMinimize)
+		helpInfo += "`           Minimize      " + st + " ON  \n";
+	else
+		helpInfo += "`           Minimize      " + st + " OFF \n";
+
+	if (!bMinimize)
+	{
+		if (bHelp)
+			helpInfo += "H           Help App      " + st + " ON  \n";
+		else
+			helpInfo += "H           Help App      " + st + " OFF \n";
+
+		if (bHelpInternal)
+			helpInfo += "I           Help Internal " + st + " ON  \n";
+		else
+			helpInfo += "I           Help Internal " + st + " OFF \n";
+
+		if (bLog)
+			helpInfo += "L           Log Window    " + st + " ON  \n";
+		else
+			helpInfo += "L           Log Window    " + st + " OFF \n";
+
+		if (bExtra)
+			helpInfo += "E           Extra         " + st + " ON  \n";
+		else
+			helpInfo += "E           Extra         " + st + " OFF \n";
+
+		if (bDebug)
+			helpInfo += "D           Debug         " + st + " ON  \n";
+		else
+			helpInfo += "D           Debug         " + st + " OFF \n";
+
+		helpInfo += l2;
+	}
+	else helpInfo += "\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 		if (bDockingLayoutPresetsEngine)
 		{
-			helpInfo += "LAYOUTS PRESETS ENGINE \n";
+			helpInfo += l3 + "PRESETS \n";
+			helpInfo += "\n";
+			helpInfo += "F1 - F2 \n";
+			helpInfo += "F3 - F4 \n";
 			helpInfo += "\n";
 
-			helpInfo += "        PRESETS \n";
-			//helpInfo += "\n";
-			helpInfo += "F1-F2 \n";
-			helpInfo += "F3-F4 \n";
-			//helpInfo += "P1-P2-P3-P4 \n";
+			helpInfo += l3 + "SECTIONS \n";
+			helpInfo += "\n";
+			helpInfo += "F5          LAYOUTS \n";
+			helpInfo += "F6          PANELS \n";
+			if (!bMinimize) helpInfo += "F7          MANAGER \n";
 			helpInfo += "\n";
 
-			helpInfo += "F5      LAYOUTS \n";
-			helpInfo += "F6      PANELS \n";
-			if (!bMinimize) 
-				helpInfo += "F7      MANAGER \n";
-			helpInfo += "F8      TOOLS \n";
-			//helpInfo += "F9      MINIMIZE \n";
+			helpInfo += l3 + "PANELS \n";
+			helpInfo += "\n";
+			helpInfo += "Ctrl+ \n";
+			helpInfo += "F1 .. F8    Panel # \n";
+			helpInfo += "A           All  \n";
+			helpInfo += "N           None \n";
+			if (bSolo)
+				helpInfo += "S           Solo          " + st + " ON  \n";
+			else
+				helpInfo += "S           Solo          " + st + " OFF \n";
+
+			//--
 
 			if (!bMinimize)
 			{
 				helpInfo += l2;
-				helpInfo += "HOW TO \n";
+				helpInfo += l3+"HOW TO \n";
 				helpInfo += "\n";
-				helpInfo += "1. CLICK ON P1-P2-P3-P4 \nTO SET A LAYOUT PRESET. \n";
-				helpInfo += "\n";
-				helpInfo += "2. ENABLE OR HIDE THE PANELS \nYOU WANT VISIBLE \nFOR CURRENT PRESET. \n";
-				helpInfo += "\n";
-				helpInfo += "3. MOVE AND RESIZE THE PANELS. \n";
-				helpInfo += "\n";
-				helpInfo += "4. SET ANOTHER LAYOUT PRESET. \n";
+				helpInfo += "1. Click on P1-P2-P3-P4 \nTo pick a Preset \n";
+				//helpInfo += "\n";
+				helpInfo += "2. Toggle the Panels \nyou want visible \n";
+				//helpInfo += "\n";
+				helpInfo += "3. Layout the Panels \n";
+				//helpInfo += "\n";
+				helpInfo += "4. Pick another Preset \n";
 
 				helpInfo += l2;
-				helpInfo += "MORE TIPS \n";
+				helpInfo += l3 + "MORE TIPS \n";
 				helpInfo += "\n";
-				helpInfo += "- DISABLE MINIMIZE TOGGLES \nTO LOOK HIDDEN CONTROLS. \n";
-				helpInfo += "\n";
-				helpInfo += "- EXPLORE MORE DEEP INTO \n'LAYOUT', 'PANELS' \nAND 'MANAGER' WINDOWS. \n";
-				helpInfo += "\n";
-				helpInfo += "- EACH LAYOUT PRESET CAN BE THINKED \nAS AN APP MODE OR ACTIVED SECTION. \n";
-				helpInfo += "\n";
-				helpInfo += "- WHEN NO PRESET IS ENABLED \nALL PANELS WILL BE HIDDEN. \n";
-				helpInfo += "\n";
-				helpInfo += "- WHEN NO MINIMIZED, ON EXTRA ZONE, \nYOU CAN ENABLE MENU, \nLOG ON EACH PRESET. \n";
-				helpInfo += "\n\n";
+				helpInfo += "- Disable minimize toggle \nto show more controls. \n";
+				//helpInfo += "\n";
+				helpInfo += "- Explore more deep into \n'Layout', 'Lanels' \nand 'Manager' windows. \n";
+				//helpInfo += "\n";
+				helpInfo += "- Each Preset can be thinked \nas an App mode or actived section. \n";
+				//helpInfo += "\n";
+				helpInfo += "- When no Preset is enabled \nall panels will be hidden. \n";
+
+				//helpInfo += "\n";
 			}
 		}
 
@@ -2437,36 +2462,49 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 	else if (name == bHelpInternal.getName() && bHelpInternal)
 	{
 		buildHelpInfo();//recreate info
+		return;
 	}
 
 	// Help App / global. To be handled externally
 	else if (name == bHelp.getName())
 	{
 		buildHelpInfo();
+		return;
 	}
 
 	// Debug
 	else if (name == bDebug.getName())
 	{
 		buildHelpInfo();
+		return;
 	}
 
 	// Extra
 	else if (name == bExtra.getName())
 	{
 		buildHelpInfo();
+		return;
 	}
 
 	// Log
 	else if (name == bLog.getName())
 	{
 		buildHelpInfo();
+		return;
+	}
+
+	// Solo
+	else if (name == bSolo.getName())
+	{
+		buildHelpInfo();
+		return;
 	}
 
 	// Minimize
 	else if (name == bMinimize.getName())
 	{
 		buildHelpInfo();
+		return;
 	}
 	//else if (name == bMinimize_Presets.getName())
 	//{
@@ -2495,6 +2533,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		{
 			bGui_LayoutsPresetsTools = false;
 		}
+		return;
 	}
 
 	//--
@@ -2510,11 +2549,13 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		if (bResetPtr != nullptr) {
 			*bResetPtr = true;
 		}
+		return;
 	}
 
 	else if (name == bReset_Window.getName() && bReset_Window.get())
 	{
 		bReset_Window = false;
+		return;
 	}
 
 	//--
@@ -2531,6 +2572,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		{
 			bLayoutPresets[i].setWithoutEventNotifications(false);
 		}
+		return;
 	}
 
 	//--
@@ -2666,9 +2708,9 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 					//bLayoutPresets[i].setWithoutEventNotifications(false);
 				}
 			}
-
 			return;
 		}
+		return;
 	}
 
 	//-
@@ -2697,10 +2739,10 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 							windowsSpecialsLayouts[k].bGui.set(false);
 					}
 				}
-
 				return;
 			}
 		}
+		return;
 	}
 
 	//--
@@ -3013,7 +3055,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 	// Log
 	if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
 	{
-		std::string ss = ofToString((char)key);
+		std::string ss = "[ KEY " + ofToString((char)key) + " ]";
 		log.AddText(ss);
 	}
 
@@ -3029,7 +3071,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	//----
 
-	// Help 
+	// Help App
 	if (key == 'H')
 	{
 		bHelp = !bHelp;
@@ -3072,34 +3114,54 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 		//--
 
-		switch (key)
+		if (!mod_CONTROL) // CTRL not pressed
 		{
-		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
-		case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1]; break;
-		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
-		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
+			switch (key)
+			{
+			case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0]; break;
+			case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1]; break;
+			case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2]; break;
+			case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3]; break;
+				//TODO: amount of presets is hard-coded
+			}
 
-		default: break;
+			//--
+
+			if (key == OF_KEY_F5) // Presets
+			{
+				bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
+			}
+
+			else if (key == OF_KEY_F6) // Panels
+			{
+				bGui_LayoutsPanels = !bGui_LayoutsPanels;
+			}
+
+			else if (key == OF_KEY_F7) // Manager
+			{
+				bGui_LayoutsManager = !bGui_LayoutsManager;
+			}
+
+			//else if (key == OF_KEY_F8) // Tools
+			//{
+			//	bGui_LayoutsPresetsTools = !bGui_LayoutsPresetsTools;
+			//}
 		}
-
-		if (key == OF_KEY_F5 /*|| key == 'p'*/) // Presets
+		else // CTRL pressed
 		{
-			bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
-		}
-
-		else if (key == OF_KEY_F6) // Panels
-		{
-			bGui_LayoutsPanels = !bGui_LayoutsPanels;
-		}
-
-		else if (key == OF_KEY_F7) // Manager
-		{
-			bGui_LayoutsManager = !bGui_LayoutsManager;
-		}
-
-		else if (key == OF_KEY_F8) // Extra
-		{
-			bGui_LayoutsPresetsTools = !bGui_LayoutsPresetsTools;
+			switch (key)
+			{
+			case OF_KEY_F1: doSpecialWindowToggleVisible(0); break;
+			case OF_KEY_F2: doSpecialWindowToggleVisible(1); break;
+			case OF_KEY_F3: doSpecialWindowToggleVisible(2); break;
+			case OF_KEY_F4: doSpecialWindowToggleVisible(3); break;
+			case OF_KEY_F5: doSpecialWindowToggleVisible(4); break;
+			case OF_KEY_F6: doSpecialWindowToggleVisible(5); break;
+			case OF_KEY_F7: doSpecialWindowToggleVisible(6); break;
+			case OF_KEY_F8: doSpecialWindowToggleVisible(7); break;
+				//case OF_KEY_F9: doSpecialWindowToggleVisible(8); break;
+				//TODO: amount of panels is hard-coded
+			}
 		}
 
 		//else if (key == OF_KEY_F9) // Minimize
@@ -3109,10 +3171,22 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 		//--
 
+		//TODO: not working ctrl
+
 		// Solo
-		else if (key == 's' && mod_CONTROL)
+		if ((key == 's' && mod_CONTROL) || key == 19)
 		{
 			bSolo = !bSolo;
+		}
+		// All
+		if ((key == 'a' && mod_CONTROL) || key == 1)
+		{
+			setShowAllPanels(true);
+		}
+		// None
+		if ((key == 'n' && mod_CONTROL) || key == 14)
+		{
+			setShowAllPanels(false);
 		}
 
 		//// Unlock Dock 
@@ -3138,23 +3212,6 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 		//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
 		//}
 	}
-
-	//--
-
-	//// Key Enabler
-	//if (key == 'k')
-	//{
-	//	bKeys = !bKeys;
-	//	ofLogNotice(__FUNCTION__) << "KEYS: " << (bKeys ? "ON" : "OFF");
-	//	if (!bKeys)
-	//	{
-	//		ofLogNotice(__FUNCTION__) << "ALL KEYS DISABLED. PRESS 'k' TO ENABLE GAIN!";
-	//	}
-	//	else
-	//	{
-	//		ofLogNotice(__FUNCTION__) << "KEYS ENABLED BACK";
-	//	}
-	//}
 }
 
 //--------------------------------------------------------------

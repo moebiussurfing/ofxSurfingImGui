@@ -72,29 +72,30 @@ void ofApp::setupImGui()
 
 HELP APP 
 
-This example 
-shows how to use the
+About this example: 
+Learn to use the
 LAYOUT PRESETS ENGINE
 
 ----------------------------------------------
 
 1. OVERVIEW
 
-Speed-up the creation and management 
+Speed-Up the creation and management 
 of the Windows (aka Panels) of an App: 
 their positions, shape, visible states 
 and other settings.
 Powered with 4 Layout Presets and
-an improved user workflow. 
+an improved user Workflow. 
 
 ----------------------------------------------
 
 2. FEATURES
 
 - All the Special Windows (aka Panels) 
-added (.addWindowSpecial) to the manager 
-on ofApp::setup(), will be auto handled 
-by the LAYOUT PRESETS ENGINE.
+are added to the Manager 
+on ofApp::setup() (.addWindowSpecial)
+They will be auto handled by 
+the LAYOUT PRESETS ENGINE.
 
 - It will memorize the windows positions, 
 sizes and which ones are visible or hidden.
@@ -285,31 +286,46 @@ void ofApp::drawImGui()
 
 			guiManager.AddSpacingBigSeparated();
 
-			if (ImGui::BeginTabBar("myTabs"))
+			// Tabs
+
+			if (ImGui::BeginTabBar("_myTabs"))
 			{
 				if (ImGui::BeginTabItem("Video"))
 				{
-					guiManager.AddSpacingBig();
-					string str = "weqweqr qc wcrqw crqwecrqwec rqwec rqwe crqwecrqwecr qervev qervew ecrqwecr qwecrqwe cr qervev qerve";
-					ImGui::Text("Blah blah");
-					ImGui::TextWrapped(str.c_str());
+					guiManager.AddLabelBig("Blah Blah");
+					string str = R"(
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+)";
+					guiManager.AddText(str.c_str());
 					guiManager.AddSpacingBigSeparated();
 					guiManager.AddGroup(params1);
+
 					ImGui::EndTabItem();
 				}
+
 				if (ImGui::BeginTabItem("Audio"))
 				{
 					guiManager.AddSpacingBig();
-					string str = "weq12341 234w eqrqcwcrqwcr 112 1233a dqervewecr qwecrqwe crqw ecr qervev qerve";
-					ImGui::Text("Blah blah");
-					ImGui::TextWrapped(str.c_str());
+					guiManager.AddTextHuge("Blah Blah");
+					string str = R"(
+It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+)";
+					guiManager.AddTextBig(str.c_str());
+
 					ImGui::EndTabItem();
 				}
+
 				if (ImGui::BeginTabItem("Controls"))
 				{
 					guiManager.AddSpacingBig();
+					guiManager.AddTextHuge("Pump Up");
+					guiManager.AddTextBig("the Volume!");
+					guiManager.AddSpacingBig();
+
 					guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+
 					guiManager.drawAdvancedBundle();
+
 					ImGui::EndTabItem();
 				}
 
@@ -330,12 +346,12 @@ void ofApp::drawImGui()
 		{
 			guiManager.AddLabelBig("Hello, down!", false, true);
 			guiManager.AddLabelBig("Hello, down!", true, true);
-			guiManager.AddLabelBig("Hello, down!", true, true);
+			guiManager.AddLabelBig("Hello, down!", false, true);
 			guiManager.AddSpacingBigSeparated();
 			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 			guiManager.AddSpacingBigSeparated();
 			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddLabelBig("Hello, down!", false, true);
+			guiManager.AddLabelBig("Hello, down!", true, true);
 
 			//--
 

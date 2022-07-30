@@ -841,7 +841,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	static void AddTooltipHelp(const char* desc) {
-		ImGui::TextDisabled("(?)");
+		ImGui::TextDisabled("?");
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
