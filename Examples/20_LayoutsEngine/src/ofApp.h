@@ -4,49 +4,8 @@
 /*
 
 This example shows how to use the
-
 LAYOUT PRESETS ENGINE
-
-
-OVERVIEW
-
-Speed-up the creation
-of Windows and their shape,
-states and settings.
-Powered with the Presets of 4 Layouts.
-
-
-WIDGETS
-
-The ofParameter widgets are populated
-using different approaches:
-
-* guiManager.Add(..       | API
-* ofxImGuiSurfing::Add(.. | Legacy
-* ImGui::Button(..        | Raw
-
-Look to other widget or styles examples
-to learn more about this topic.
-
-
-MORE INFO
-
-- All the Special Windows (aka Panels)
-added to the manager will be
-auto handled on the Layout Presets Engine.
-
-- It will memorize the windows positions,
-sizes and which ones are activated or hidden.
-
-- Some optional Extra Params
-can be included into what
-each preset memorizes too.
-
-- By default we will have 4 Layout Presets.
-Then we will organize that different modes,
-sections or behaviors of our App,
-by customizing our layout distribution,
-and some Extra Params states.
+Activate Help toggle to read the floating help box info.
 
 */
 
@@ -62,9 +21,9 @@ public:
 	void setup();
 	void draw();
 
-	//-
+	//--
 
-	// Parameters
+	// Scene Parameters
 
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
@@ -92,23 +51,24 @@ public:
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
 
-	//-
+	//--
 
 	// The ImGui Manager !
 
 	ofxSurfing_ImGui_Manager guiManager;
 
 	void setupImGui();
-	void setupImGuiStyles(); // -> Custom styles for groups
-
 	void drawImGui();
+
+	// Optional
+	void setupImGuiStyles(); // -> Custom some styles for groups
 	void drawImGuiDocking();
 
-	//-
+	//--
 
 	// Scene
 
 	void setupScene();
 	void udpateScene(); // -> Generates random variations to animate variables.
-	void updateLog(); // -> Generates random messages to test logging.
+	void updateLog(); // -> Generates random messages to test the Log window.
 };

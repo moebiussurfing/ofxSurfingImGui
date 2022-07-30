@@ -73,7 +73,7 @@ namespace ofxImGuiSurfing
 	enum SurfingImGuiInstantiationMode {
 		IM_GUI_MODE_UNKNOWN = 0, // -> Could be undefied when using legacy api maybe.
 		IM_GUI_MODE_INSTANTIATED, // -> To include the ImGui context and requiring main begin/end.
-		
+
 		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING, // -> Allows docking between multiple instances.
 
@@ -819,7 +819,7 @@ public:
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
-	ofParameter<bool> bHelp{ "Help", false };
+	ofParameter<bool> bHelp{ "Help App", false };
 	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bExtra{ "Extra", false };
@@ -827,7 +827,7 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
-	ofParameter<bool> bReset_Window{ "Reset Window", false };
+	ofParameter<bool> bReset_Window{ "Reset Window", false };//TODO:
 	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
 
 private:
@@ -845,9 +845,9 @@ private:
 	ImGuiWindowFlags flags_wPanels;
 
 	// Presets and Panels windows
-	ofParameter<bool> bResetWindowPresets{ "Reset", false };
-	ofParameter<bool> bAutoResizePresets{ "AutoResize", true };
-	ofParameter<bool> bMinimizePresets{ "Minimize", true };
+	ofParameter<bool> bReset_PresetsWindow{ "Reset", false };
+	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize", true };
+	ofParameter<bool> bMinimize_Presets{ "Minimize", true };
 	ofParameterGroup params_WindowPresets{ "Window Presets" };
 
 	ofParameter<bool> bResetWindowPanels{ "Reset Panels", false };
@@ -961,12 +961,12 @@ public:
 		if (!bNoSperator) ImGui::Separator();
 		ImGui::Spacing();
 
-		Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+		this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
 		drawAdvancedSubPanel();
 	}
 
-	// legacy API
+	// Legacy API
 	//--------------------------------------------------------------
 	void drawAdvanced(bool bNoSperator = false, bool bNoSpacing = false) {
 		drawAdvancedBundle(bNoSperator, bNoSpacing);
@@ -987,103 +987,126 @@ private:
 		ImGui::Indent();
 		{
 			bool b = false;
-			if (!bUseAdvancedSubPanel) {
+			if (!bUseAdvancedSubPanel)
+			{
 				if (bHeader) b = ImGui::CollapsingHeader(params_Advanced.getName().c_str(), ImGuiTreeNodeFlags_None);
 			}
 			else b = true;
 
 			// Keys
-			Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
+			this->Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
 
 			// Help
-			Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
-			Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
+			this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			this->Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
-			// MouseWheel
-			Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED);
-			ofxImGuiSurfing::AddTooltip("Ctrl+ fine tunning");
+			// Menu
+			Add(bMenu, OFX_IM_TOGGLE_ROUNDED);
 
-			//--
+			// Log
+			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
 
-			// Windows
+			//// Auto resize 
+			//this->Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
-			ofxImGuiSurfing::AddSpacing();
+			//// Reset Window
+			////TODO: not fully implemented
+			//if (this->Add(bReset_PresetsWindow, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL))
+			//	bReset_PresetsWindow = true;
 
-			if (!bHeader || (bHeader && b))
+			// Reset
+			if (bResetPtr != nullptr)
 			{
-				ofxImGuiSurfing::AddSpacing();
+				//this->AddSpacing();
+				Add(bReset, OFX_IM_TOGGLE_ROUNDED_MINI);
+			}
 
-				if (ImGui::TreeNode("WINDOWS"))
-				{
-					ofxImGuiSurfing::AddSpacing();
+			ofxImGuiSurfing::AddSpacingSeparated();
 
-					// Align Helpers
-					Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
-
-					// Organizer Special Windows
-					if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
-						Add(windowsSpecialsOrganizer.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
-					}
-
-					// Auto resize
-					Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
-
-					//TODO:
-					// Lock
-					Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
-
-					// No Scroll
-					Add(bNoScroll, OFX_IM_TOGGLE_ROUNDED_MINI);
-
-					// Reset
-					//TODO:
-					// -> must be implemented for each app.
-
-					// Reset window
-					if (Add(bReset_Window, OFX_IM_TOGGLE_ROUNDED_MINI))
-					{
-						//TODO:
-						//if (bReset_Window) {
-						//	bReset_Window = false;
-						//	resetWindowImGui(false, true);
-						//}
-					}
-
-					ImGui::TreePop();
-				}
-
-				ofxImGuiSurfing::AddSpacing();
-
+			// Extra
+			Add(bExtra, OFX_IM_TOGGLE_ROUNDED);
+			if (bExtra)
+			{
 				//--
 
-				// Gui
-
-				if (ImGui::TreeNode("GUI"))
+				if (!bHeader || (bHeader && b))
 				{
+					// Windows
 					ofxImGuiSurfing::AddSpacing();
 
-					//// Minimize
-					//Add(bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-
-					// Log
-					Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-
-					// Extra
-					Add(bExtra, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-
-					if (bExtra)
+					if (ImGui::TreeNode("MORE"))
 					{
-						ImGui::Indent();
+						ofxImGuiSurfing::AddSpacing();
 
-						// Menu
-						ofxImGuiSurfing::AddToggleRoundedButton(bMenu);
+						/*
+						// Align Helpers
+						Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
+
+						// Organizer Special Windows
+						if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
+							Add(windowsSpecialsOrganizer.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
+						}
+						*/
+
+						// Auto resize
+						Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+						////TODO:
+						//// Lock
+						//Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+						// MouseWheel
+						this->Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+						ofxImGuiSurfing::AddTooltip("Press CTRL+ for fine tunning");
+
+						//TODO:
+						//// No Scroll
+						//Add(bNoScroll, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+						//TODO:
+						// Reset
+						// -> must be implemented for each app.
+
+						//TODO:
+						//// Reset window
+						//if (Add(bReset_Window, OFX_IM_TOGGLE_ROUNDED_MINI))
+						//{
+						//	//TODO:
+						//	//if (bReset_Window) {
+						//	//	bReset_Window = false;
+						//	//	resetWindowImGui(false, true);
+						//	//}
+						//}
+
+						ImGui::TreePop();
+					}
+
+					ofxImGuiSurfing::AddSpacing();
+
+					//--
+
+					// Gui
+					ofxImGuiSurfing::AddSpacing();
+
+					if (ImGui::TreeNode("GUI"))
+					{
+						ofxImGuiSurfing::AddSpacing();
+
+						//// Minimize
+						//Add(bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+						//// Log
+						//Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+						//// Menu
+						//Add(bMenu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+						ImGui::Indent();
 
 						//--
 
-						AddSpacingSeparated();
-
 						// Debug
-						ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
+						Add(bDebug, OFX_IM_TOGGLE_ROUNDED);
 						if (bDebug)
 						{
 							ImGui::Indent();
@@ -1092,30 +1115,6 @@ private:
 
 							//drawSpecialWindowsPanel();
 							//ImGui::Separator();
-
-							//--
-
-							//ImGui::Text("Docking");
-
-							if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
-							{
-								AddToggleRoundedButton(bDebugDocking);
-
-								if (bDebugDocking)
-								{
-									ImGui::Indent();
-
-									AddToggleRoundedButton(bUseLayoutPresetsManager);
-									AddToggleRoundedButton(bDockingLayoutPresetsEngine);
-									ToggleRoundedButton("bDockingModeCentered", &bDockingModeCentered);
-									AddToggleRoundedButton(bPreviewSceneViewport);
-									//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
-									AddToggleRoundedButton(bDebugRectCentral);
-
-									ImGui::Unindent();
-								}
-								ImGui::Separator();
-							}
 
 							Add(bInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
@@ -1127,44 +1126,45 @@ private:
 							ofxImGuiSurfing::AddSpacing();
 							ofxImGuiSurfing::AddSpacing();
 
-							if (ImGui::TreeNode("WINDOW INFO"))
+							if (ImGui::TreeNode("ELEMENTS"))
 							{
-								std::string _hwidget = "\nWidget Height:\n";
-								_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-								std::string _wwidget = "\nWidget Width:\n";
-								_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
-								std::string _wpanel = "\nPanel Width:\n";
-								_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
+								this->Indent();
+								{
+									this->AddSpacing();
 
-								std::string _wShape = "\nWindow Shape:\n";
-								_wShape += ofToString(ImGui::GetWindowPos().x);
-								_wShape += ", ";
-								_wShape += ofToString(ImGui::GetWindowPos().y);
-								_wShape += ", ";
-								_wShape += ofToString(ImGui::GetWindowWidth());
-								_wShape += ", ";
-								_wShape += ofToString(ImGui::GetWindowHeight());
+									this->AddLabelBig("Widget", false, true);
+									std::string _hwidget = "Unit Height:\n";
+									_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
+									ImGui::TextWrapped(_hwidget.c_str());
 
-								std::string ss = "";
-								ss += _hwidget + "\n";
-								ss += _wwidget + "\n";
-								ss += _wpanel + "\n";
-								ss += _wShape + "\n";
-								ImGui::TextWrapped(ss.c_str());
+									std::string _wwidget = "Full Width:\n";
+									_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
+									ImGui::TextWrapped(_wwidget.c_str());
+
+									this->AddSpacing();
+									this->AddLabelBig("Window", false, true);
+									std::string _wpanel = "Inner Width:\n";
+									_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
+									ImGui::TextWrapped(_wpanel.c_str());
+
+									std::string _wShape = "Shape:\n";
+									_wShape += ofToString(ImGui::GetWindowPos().x);
+									_wShape += ", ";
+									_wShape += ofToString(ImGui::GetWindowPos().y);
+									_wShape += ", ";
+									_wShape += ofToString(ImGui::GetWindowWidth());
+									_wShape += ", ";
+									_wShape += ofToString(ImGui::GetWindowHeight());
+									ImGui::TextWrapped(_wShape.c_str());
+									this->AddSpacing();
+								}
+								this->Unindent();
 
 								ImGui::TreePop();
 							}
 
 							ImGui::Unindent();
 						}
-
-						//ofxImGuiSurfing::AddSpacing();
-
-						AddSpacingSeparated();
-
-						// Reset
-						//ofxImGuiSurfing::AddToggleRoundedButton(bReset);
-						Add(bReset, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 						//--
 
@@ -1197,8 +1197,45 @@ private:
 						//ImGui::Separator();
 
 						ImGui::Unindent();
+
+						ImGui::TreePop();
 					}
-					ImGui::TreePop();
+
+					//--
+
+					// Docking
+					ofxImGuiSurfing::AddSpacing();
+
+					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+					{
+						ofxImGuiSurfing::AddSpacing();
+
+						if (ImGui::TreeNode("DOCKING"))
+						{
+							ofxImGuiSurfing::AddSpacing();
+
+							//--
+
+							//ImGui::Text("Docking");
+							AddToggleRoundedButton(bDebugDocking);
+							//TODO:
+							if (bDebugDocking)
+							{
+								ImGui::Indent();
+								{
+									AddToggleRoundedButton(bUseLayoutPresetsManager);
+									AddToggleRoundedButton(bDockingLayoutPresetsEngine);
+									ToggleRoundedButton("Docking Centered", &bDockingModeCentered);
+									AddToggleRoundedButton(bPreviewSceneViewport);
+									//ToggleRoundedButton("Viewport", &bPreviewSceneViewport);
+									AddToggleRoundedButton(bDebugRectCentral);
+								}
+								ImGui::Unindent();
+							}
+
+							ImGui::TreePop();
+						}
+					}
 				}
 			}
 		}
@@ -1830,7 +1867,7 @@ private:
 	void saveLayoutPresetGroup(std::string path);
 	void loadLayoutPresetGroup(std::string path);
 
-	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 }; 
+	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 };
 	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
@@ -1927,8 +1964,8 @@ private:
 
 	void updateLayout();
 
-	void drawLayouts();
-	void drawLayoutsExtra();
+	void drawLayoutsPresetsEngine();//all the windows of the engine
+	void drawLayoutsPresetsTools();
 	void drawLayoutsPresets();
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
@@ -1980,17 +2017,17 @@ public:
 private:
 
 	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
-	ofParameter<bool> bGui_LayoutsPresets{ "Layouts", true };
-	ofParameter<bool> bGui_LayoutsExtra{ "Extra Params", false };
+	ofParameter<bool> bGui_LayoutsPresetsSelector{ "Layouts", true };
+	ofParameter<bool> bGui_LayoutsPresetsTools{ "Tools", false };
 	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
-	//ofParameter<bool> bGui_LayoutsPresets{ "Presets", true };
+	//ofParameter<bool> bGui_LayoutsPresetsSelector{ "Presets", true };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-	ofParameter<bool> bUseLayoutPresetsManager{ "bUseLayoutPresetsManager", false }; // Can't be changed on runtime. cant include into settings
+	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false }; // Can't be changed on runtime. cant include into settings
 	ofParameter<bool> bSolo{ "Solo", false };
 
 
-	ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", false };
+	ofParameter<bool> bDockingLayoutPresetsEngine{ "Docking Engine", false };
 	//ofParameter<bool> bDockingLayoutPresetsEngine{ "bDockingLayoutPresetsEngine", true };
 
 public:
@@ -2040,8 +2077,8 @@ public:
 		bMenu = b;
 
 		bGui_LayoutsPanels = b;
-		bGui_LayoutsPresets = b;
-		bGui_LayoutsExtra = false;
+		bGui_LayoutsPresetsSelector = b;
+		bGui_LayoutsPresetsTools = false;
 	}
 
 	//--------------------------------------------------------------
@@ -2127,12 +2164,12 @@ private:
 	//--
 
 public:
-	
+
 	//--------------------------------------------------------------
 	void setEnableHelpInfoInternal(bool b) {
 		bUseHelpInfoInternal = b;
 	}
-	
+
 	//--------------------------------------------------------------
 	void setEnableHelpInfoApp(bool b) {
 		bUseHelpInfoApp = b;

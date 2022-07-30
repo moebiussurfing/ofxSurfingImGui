@@ -26,7 +26,8 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
-	// Layout Presets Engine workflow
+	// Layout Presets Engine 
+	// Setup steps
 
 	//-
 
@@ -69,57 +70,61 @@ void ofApp::setupImGui()
 
 	string s = R"(
 
-HELP 
+HELP APP 
 
-This example shows how to use the
-
+This example 
+shows how to use the
 LAYOUT PRESETS ENGINE
 
 ----------------------------------------------
 
-OVERVIEW
+1. OVERVIEW
 
 Speed-up the creation and management 
-of Windows and their shape,
-states and settings.
-Powered with Presets of 4 Layouts.
+of the Windows (aka Panels) of an App: 
+their positions, shape, visible states 
+and other settings.
+Powered with 4 Layout Presets and
+an improved user workflow. 
 
 ----------------------------------------------
 
-WIDGETS
-
-The ofParameter widgets are populated 
-using different approaches:
-
-* ImGui::Button(..        | Raw
-* ofxImGuiSurfing::Add(.. | Legacy 
-* guiManager.Add(..       | API
-
-Look to other widget or styles examples 
-to learn more about this topic.
-
-----------------------------------------------
-
-MORE INFO
+2. FEATURES
 
 - All the Special Windows (aka Panels) 
-added to the manager will be 
-auto handled on the Layout Presets Engine.
+added (.addWindowSpecial) to the manager 
+on ofApp::setup(), will be auto handled 
+by the LAYOUT PRESETS ENGINE.
 
 - It will memorize the windows positions, 
-sizes and which ones are activated or hidden.
+sizes and which ones are visible or hidden.
 
-- Some optional Extra Params 
-can be included into what 
-each preset memorizes too.
+- Some optional EXTRA PARAMS can be included 
+into what each Preset too.
+Menu and Log toggles are included by default.
 
 - By default we will have 4 Layout Presets. 
 Then we will organize that different modes, 
 sections or behaviors of our App,
-by customizing our layout distribution,
-and some Extra Params states.
+by customizing that Presets for each scenario.
+
+----------------------------------------------
+
+3. WIDGETS
+
+The ofParameter widgets are populated 
+as usual, using (in order of preference) 
+different approaches:
+
+* guiManager.Add(..       | API
+* ofxImGuiSurfing::Add(.. | API Helpers  
+* ImGui::Button(..        | RAW ImGui 
+
+Look to other Widgets or Styles Examples 
+to learn more about this topic.
 
 )";
+
 	guiManager.setHelpInfoApp(s);
 }
 
@@ -132,6 +137,8 @@ void ofApp::draw()
 
 	guiManager.begin();
 	{
+		//TODO: curreently required but not used.
+		// should remove to simplify.
 		drawImGuiDocking();
 
 		//--
@@ -139,7 +146,9 @@ void ofApp::draw()
 		// Render windows and widgets now!
 
 		// NOTICE than common and Raw ImGui windows and widgets can be drawn here too,
-		// But if you want to use the "Layout Presets Engine" you need to use the API and follow the rules!
+		// But if you want to use the "Layout Presets Engine",
+		// you need to use the API to populate windows (aka panels) 
+		// and to follow some rules!
 
 		drawImGui();
 	}
@@ -192,7 +201,7 @@ void ofApp::drawImGui()
 			guiManager.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
 			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 			guiManager.AddTooltip("Activate sep1 animation", guiManager.bHelp);
-			guiManager.AddTooltip("This is a Help Tool tip! It's " + (string)(bEnable ? "TRUE" : "FALSE"), guiManager.bHelp);
+			guiManager.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"), guiManager.bHelp);
 			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG_BORDER);
 			guiManager.AddTooltip("Show Log Window", guiManager.bHelp);
 
@@ -201,8 +210,8 @@ void ofApp::drawImGui()
 			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
 			guiManager.AddTooltip("Speed controls the auto populated Log window speed", guiManager.bHelp);
 			guiManager.Add(amount, OFX_IM_HSLIDER);
-			guiManager.AddTooltip("Speed up separation animator when bEnable is TRUE", guiManager.bHelp);
-			
+			guiManager.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE", guiManager.bHelp);
+
 			guiManager.AddSpacingBigSeparated();
 
 			ImGui::PushButtonRepeat(true); // -> pushing for repeats trigs
@@ -228,7 +237,7 @@ void ofApp::drawImGui()
 				guiManager.AddTooltip("Increase lineWidth " + ofToString(lineWidth), guiManager.bHelp);
 			}
 			ImGui::PopButtonRepeat();
-			
+
 			guiManager.AddSpacingBigSeparated();
 
 			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
@@ -239,7 +248,7 @@ void ofApp::drawImGui()
 			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
 			guiManager.Add(lineWidth, OFX_IM_KNOB);
 			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
-			
+
 			guiManager.AddSpacingBigSeparated();
 
 			guiManager.Add(separation, OFX_IM_HSLIDER_BIG); // default style
@@ -437,9 +446,6 @@ void ofApp::udpateScene()
 	t = ofWrap(t, 0, s);
 	separation = ofMap(t, 0, s, separation.getMin(), separation.getMax());
 
-	// Log 8 times per second at 60 fps
-	if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
-
 	// Log
 	updateLog();
 }
@@ -447,6 +453,16 @@ void ofApp::udpateScene()
 //--------------------------------------------------------------
 void ofApp::updateLog()
 {
+	// Make pauses
+	static int t1 = 600;
+	if ((ofGetFrameNum() % t1) == 0) t1 = (int)ofRandom(200, 600);
+	if (ofGetFrameNum() % t1 > (t1 * 0.75f)) {
+		return;
+	}
+
+	// Log 8 times per second at 60 fps
+	if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
+
 	// Auto populate random log messages.
 	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
 	if (ofGetFrameNum() % m == 0)
