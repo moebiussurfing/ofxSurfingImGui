@@ -1386,7 +1386,7 @@ public:
 		windowsSpecialsOrganizer.setName(name);
 	}
 
-private://hide to simplify
+private: // hide to simplify
 
 	//--------------------------------------------------------------
 	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
@@ -1399,7 +1399,7 @@ private://hide to simplify
 	//}
 
 	//--------------------------------------------------------------
-	void setAutoSaveSettings(bool b) { // must call before setup. IMPORTANT: if you are using multiple instances of this addon, must set only one to true or settings will not be handled correctly!
+	void setAutoSaveSettings(bool b) { // must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
 		bAutoSaveSettings = b;
 	}
 
@@ -1552,7 +1552,8 @@ public:
 		//ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
 	};
 
-	vector<SurfingImGuiWindowAtributes> windowsSpecialsLayouts; // Handles only the manually pre added special windows.
+	vector<SurfingImGuiWindowAtributes> windowsSpecialsLayouts;
+	// Handles only the manually pre added special windows.
 
 	//----
 

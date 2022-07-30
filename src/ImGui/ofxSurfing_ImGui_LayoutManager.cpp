@@ -4,8 +4,8 @@
 //--------------------------------------------------------------
 ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 {
-	// Simplify namespaces!
 	//TODO:
+	// Simplify namespaces!
 	namespace ofxSurfingImGui = ofxImGuiSurfing;
 
 	//----
@@ -55,7 +55,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	//TODO: BUG? 
 	// it seems than requires to be false when using multi-context/instances
-	// if is setted to true, sometimes it hangs and gui do not refresh/freezes.
+	// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
 	bAutoDraw = false;
 }
 
@@ -63,7 +63,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 ofxSurfing_ImGui_Manager::~ofxSurfing_ImGui_Manager() {
 
 	ofRemoveListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
-	ofRemoveListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_APP);
+	ofRemoveListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &ofxSurfing_ImGui_Manager::Changed_Params);
