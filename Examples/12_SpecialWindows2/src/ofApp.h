@@ -6,11 +6,11 @@
 
 	This example shows two of the extra engines of the ofxSurfingImGui Toolkit,
 	
-    1. "Windows Special Organizer".
+    1. WINDOWS SPECIAL ORGANIZER.
 	Many grouped windows, defined as specials, can be arranged linked together. 
     Can be auto distributed horizontally or vertically.
     
-    2. "Align Windows Engine": 
+    2. ALIGN WINDOWS ENGINE: 
     Helpers to align/cascade/layout all visible windows.
 
     3. We will learn how to create Special Windows using different workflows / API methods:
@@ -73,10 +73,13 @@ public:
 
 	void setup_ImGui();
 
-    ofParameter<bool> bGui; // this is the only visible toggle that will not be added as special window.
+    // this is the only visible toggle that will not be added as special window.
+    ofParameter<bool> bGui;
     void draw_MainWindow();
 
-	void draw_SurfingWidgets_1(); // this window will be handle without using special windows workflow, passing by name instead of passing the visible toggle param.
+	void draw_SurfingWidgets_1(); 
+    // this window will be handle without using special windows workflow, 
+    // passing by name instead of passing the visible toggle param.
 
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
@@ -90,7 +93,7 @@ public:
     ofParameter<bool> bGui_5;
     ofParameter<bool> bGui_6;
 
-    // help info
+    // Help info
     void buildHelpInfo();
     string helpInfo;
 };

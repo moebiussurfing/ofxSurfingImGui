@@ -34,8 +34,10 @@ void ofApp::setup()
 
 	//--
 
-	bGui.set("ofApp", true);
+	bGui.set("ofApp", true); // all the gui
 
+	// the first window don't have a visible bool toggle,
+	// and it's creating by passing a name, and drawn by passing his index when was created.
 	bGui_2.set("Window 2", true);
 	bGui_3.set("Window 3", true);
 	bGui_4.set("Window 4", true);
@@ -56,7 +58,7 @@ void ofApp::setup_ImGui()
 	guiManager.setup();
 
 	// when adding by name you need to use indexes when drawing the window!
-	guiManager.addWindowSpecial("myWindow 1");//using legacy style by name
+	guiManager.addWindowSpecial("Window 1"); // using legacy style by name
 
 	// when can add special windows passing the visible toggle by argument.
 	// ofParameter name will be used to name the windows headers too.
@@ -119,9 +121,18 @@ void ofApp::draw_MainWindow() {
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_1()
 {
-	if (guiManager.beginWindowSpecial(0))
+	// NOTICE that 
+	// we need to recall and pass the index of this first window! 
+	// That's because, instead of the other windows,
+	// for this window, we queued the window by adding a name.
+	// 
+	// So, there's two ways of adding and drawing Special Windows: 
+	// 1. by passing a bool param (acting as a visible toggle)
+	// 2. by passing a name when adding and passing which index was to drawing!
+
+	if (guiManager.beginWindowSpecial(0)) 
 	{
-		guiManager.AddLabelBig("> Window \n Special 1", false);
+		guiManager.AddLabelBig("> Window \nSpecial 1", false);
 		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		guiManager.AddGroup(params_0);
@@ -144,7 +155,7 @@ void ofApp::draw_SurfingWidgets_2()
 
 	if (guiManager.beginWindowSpecial(bGui_2))
 	{
-		guiManager.AddLabelBig("> Window \n Special 2", false);
+		guiManager.AddLabelBig("> Window \nSpecial 2", false);
 		guiManager.AddGroup(params_1);
 		guiManager.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
@@ -162,7 +173,7 @@ void ofApp::draw_SurfingWidgets_3()
 
 	if (guiManager.beginWindowSpecial(bGui_3))
 	{
-		guiManager.AddLabelBig("> Window \n Special 3", false);
+		guiManager.AddLabelBig("> Window \nSpecial 3", false);
 		guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
 		guiManager.Add(amount2, OFX_IM_KNOB, 2);
 		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
@@ -180,7 +191,7 @@ void ofApp::draw_SurfingWidgets_4()
 
 	if (guiManager.beginWindowSpecial(bGui_4))
 	{
-		guiManager.AddLabelBig("> Window \n Special 4", false);
+		guiManager.AddLabelBig("> Window \nSpecial 4", false);
 		guiManager.AddGroup(params_3);
 		guiManager.AddSpacingSeparated();
 		guiManager.Add(size2, OFX_IM_HSLIDER_BIG);
@@ -213,8 +224,9 @@ void ofApp::draw_SurfingWidgets_6()
 
 	if (guiManager.beginWindowSpecial(bGui_6))
 	{
-		guiManager.AddLabelBig("> Window \n Special 6", false);
+		guiManager.AddLabelBig("> Window \nSpecial 6", false);
 		guiManager.Add(amount2, OFX_IM_KNOB);
+
 		guiManager.endWindowSpecial();
 	}
 }

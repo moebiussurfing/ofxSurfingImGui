@@ -2292,6 +2292,9 @@ public:
 		textBoxWidgetInternal.setText(helpInfo);
 		bUseHelpInfoInternal = true;
 	}
+	// Useful in some rare scenarios to populate or hide the enabler toggle
+	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
+	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
 
 	//----
 

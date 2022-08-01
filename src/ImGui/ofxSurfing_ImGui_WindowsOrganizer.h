@@ -1102,7 +1102,8 @@ namespace ofxImGuiSurfing
 			float _w2 = getWidgetsWidth(2);
 
 			// Enable
-			ofxImGuiSurfing::AddBigToggle(bLinkedWindowsSpecial);
+			//ofxImGuiSurfing::AddBigToggle(bLinkedWindowsSpecial);
+			ofxImGuiSurfing::AddBigToggle(bLinkedWindowsSpecial, _w1, 2 * _h, true, true);//blinking
 
 			ofxImGuiSurfing::AddSpacing();
 

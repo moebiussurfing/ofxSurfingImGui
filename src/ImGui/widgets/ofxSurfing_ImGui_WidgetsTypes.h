@@ -485,7 +485,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// If setted as hidden don't draw, but apply same line and spacing and return
+			// If settled as hidden don't draw, but apply same line and spacing and return
 
 			if (type == OFX_IM_HIDDEN)
 			{

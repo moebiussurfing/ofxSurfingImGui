@@ -21,9 +21,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	//--
 
-	params_Advanced.add(bLinkWindows);
 	params_Advanced.add(bAutoResize);
-
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
 	params_Advanced.add(bReset_Window);
@@ -39,9 +37,9 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bDebug);
 	params_Advanced.add(bLog);
 	params_Advanced.add(bSolo);
-	//params_Advanced.add(bLandscape);//TODO:
-
+	params_Advanced.add(bLinkWindows);
 	params_Advanced.add(windowsSpecialsOrganizer.pad);
+	//params_Advanced.add(bLandscape);//TODO:
 
 	// Exclude from settings
 	bLockMove.setSerializable(false);
