@@ -489,6 +489,33 @@ if (ImGui::BeginTabBar("Tabs Blah"))
 
 */
 
+/*
+
+// EXAMPLE 3:
+// ADD MOUSE WHEEL TO THE FLOAT PARAM
+
+	ofxImGuiSurfing::AddParameter(bpm);
+
+	// Add mouse wheel to the float param
+	{
+		float wheel = ImGui::GetIO().MouseWheel;
+		bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
+		{
+			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(bpm);
+			float resolution = -1;
+
+			resolution = (p.getMax() - p.getMin()) / 800.f;//make smaller
+
+			//resolution = (p.getMax() - p.getMin()) / 100.f;
+			// 100 steps for all the param range
+
+			p += wheel * (bCtrl ? resolution : resolution * 10);
+			p = ofClamp(p, p.getMin(), p.getMax()); // clamp
+		}
+	}
+
+*/
+
 
 //--
 

@@ -19,7 +19,6 @@ namespace ofxImGuiSurfing
 {
 	//----
 
-
 	//TODO: 
 	//--------------------------------------------------------------
 	inline bool GetMouseWheel()

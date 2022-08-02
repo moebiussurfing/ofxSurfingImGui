@@ -11,7 +11,7 @@
 
 	TODO:
 
-	+ 
+	+
 	+ a window can be master. then always at first position. re sorting to first when appears.
 	+ fix bug crash when closing windows using the x.
 	+ store sorting queue ?
@@ -189,7 +189,7 @@ namespace ofxImGuiSurfing
 			for (ImGuiWindow* window : g.WindowsFocusOrder)
 			{
 				if (window->WasActive)
-				{					
+				{
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
 					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
@@ -250,7 +250,7 @@ namespace ofxImGuiSurfing
 			if (windows.Size > 0)
 			{
 				for (int n = 0; n < windows.Size; n++)
-				{	
+				{
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_WindowsAlignHelpers.getName() == ofToString(windows[n]->Name)) continue;
 					if (bGui_WindowsSpecials.getName() == ofToString(windows[n]->Name)) continue;
@@ -268,8 +268,8 @@ namespace ofxImGuiSurfing
 	public:
 
 		ofParameter<bool> bGui_WindowsSpecials{ "ORGANIZER", false }; // organizer window.
-		ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false}; // subpanel aligner window.
-		
+		ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false }; // subpanel aligner window.
+
 		ofParameter<bool> bGui_ShowAll{ "SHOW GLOBAL", true }; // extra global toggle to hide / show all the queued windows.
 
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
@@ -324,11 +324,11 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setPath(std::string path)
 		{
-			ofLogNotice(__FUNCTION__)<< path;
+			ofLogNotice(__FUNCTION__) << path;
 
 			path_Global = path;
 			ofxSurfingHelpers::CheckFolder(path_Global);
-			path_Settings = path_Global + "guiManager_" + params_Settings.getName()+ name + ".json";
+			path_Settings = path_Global + "guiManager_" + params_Settings.getName() + name + ".json";
 		}
 
 	private:
@@ -357,7 +357,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
-			ofLogNotice(__FUNCTION__)<<b;
+			ofLogNotice(__FUNCTION__) << b;
 
 			bHideWindowsToggles = b;
 
@@ -791,7 +791,7 @@ namespace ofxImGuiSurfing
 			for (ImGuiWindow* window : g.WindowsFocusOrder)
 			{
 				if (window->WasActive)
-				{					
+				{
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_WindowsAlignHelpers.getName() == ofToString(window->Name)) continue;
 					if (bGui_WindowsSpecials.getName() == ofToString(window->Name)) continue;
@@ -1063,12 +1063,11 @@ namespace ofxImGuiSurfing
 			bGui_ShowAll.setName(name);
 		}
 
-		//TODO:
+		// Get the name of the last special window (the window at the end of current drawn queue)
 		//--------------------------------------------------------------
 		string getWindowSpecialLast() const {
 			string name = "-1";
-
-			if (queueWindowsVisible.size() == 0) return name;//all hidden
+			if (queueWindowsVisible.size() == 0) return name;//all are hidden
 
 			int ilast = queueWindowsVisible.back();
 			name = windowsSpecialsOrganizer[ilast].bGui.getName();
@@ -1076,8 +1075,20 @@ namespace ofxImGuiSurfing
 			return name;
 		}
 
+		// Get the position of the last special window (the window at the end of current drawn queue)
+		//--------------------------------------------------------------
+		glm::vec2 getWindowSpecialLastTopRight() const {
+			glm::vec2 p = glm::vec2(-1. - 1);
+			if (queueWindowsVisible.size() == 0) return p;//all are hidden
+
+			int ilast = queueWindowsVisible.back();
+			p = windowsSpecialsOrganizer[ilast].getRectangle().getTopRight();
+
+			return p;
+		}
+
 		//----
-		
+
 		//--------------------------------------------------------------
 		void drawWidgetsAlignHelpers(bool bMinimized = false)
 		{

@@ -1797,9 +1797,17 @@ public:
 		return;
 	}
 
+	// Get the name of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
 	string getWindowSpecialLast() const {
 		return windowsSpecialsOrganizer.getWindowSpecialLast();
+	}
+
+	// Get the position of the last special window (the window at the end of current drawn queue)
+	//--------------------------------------------------------------
+	glm::vec2 getWindowSpecialLastTopRight() const {
+
+		return windowsSpecialsOrganizer.getWindowSpecialLastTopRight();
 	}
 
 	//// Orientation cascade windows

@@ -12,7 +12,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	ofAddListener(ofEvents().keyPressed, this, &ofxSurfing_ImGui_Manager::keyPressed);
 
-	// Auto call draw
+	// Auto call draw. Only to draw help boxes info.
 	ofAddListener(ofEvents().draw, this, &ofxSurfing_ImGui_Manager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	// Callbacks
