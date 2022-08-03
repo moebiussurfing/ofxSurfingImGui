@@ -375,6 +375,11 @@ public:
 		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+
+			//// ? return ?
+			//widgetsManager.AddGroup(group, flagst, type);
+
+			//return;
 		}
 
 		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)

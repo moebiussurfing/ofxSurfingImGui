@@ -2,7 +2,7 @@
 
 //TODO:
 // add customization for nested groups
-// pass some list of arguments to customize items/groups to be rendered with differents design...
+// pass some list of arguments to customize items/groups to be rendered with different design...
 //https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
 
 //--
@@ -12,7 +12,6 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	//void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen)//fails..
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
 		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!
@@ -20,7 +19,6 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//ImGui::PushID(group.getName().c_str());
 		ImGui::PushID(("##" + group.getName()).c_str());
 		{
 			bool bOpened;
@@ -143,6 +141,7 @@ namespace ofxImGuiSurfing
 	//--
 
 #if OF_VERSION_MINOR >= 10
+
 	//TODO: 
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<glm::tvec2<int>>& parameter, bool bfoldered)

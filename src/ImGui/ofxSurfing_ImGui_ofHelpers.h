@@ -17,6 +17,24 @@ TODO:
 
 namespace ofxImGuiSurfing
 {
+	//--
+
+	// Tree folders
+
+	//--------------------------------------------------------------
+	inline bool BeginTree(string label, bool open = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	{
+		if (open) flagsTree += ImGuiTreeNodeFlags_DefaultOpen;
+
+		return (ImGui::TreeNodeEx(label.c_str(), flagsTree));
+	}
+
+	//--------------------------------------------------------------
+	inline void EndTree()
+	{
+		ImGui::TreePop();
+	}
+
 	//----
 
 	//TODO: 

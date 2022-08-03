@@ -68,7 +68,8 @@ namespace ofxImGuiSurfing
 	// Mini Button and toggles for BOOL ofParams
 
 	//--------------------------------------------------------------
-	inline bool AddButtonMini(ofParameter<bool>& parameter, float w = -1, float h = -1) // button but using a bool not void param
+	// Mini button but using a bool param, not a void param
+	inline bool AddButtonMini(ofParameter<bool>& parameter, float w = -1, float h = -1)
 	{
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
@@ -104,6 +105,43 @@ namespace ofxImGuiSurfing
 
 		if (bPre != parameter) return true;
 		else return false;
+	}
+
+	//--
+
+	// Mini button but without any bool or void params
+	//--------------------------------------------------------------
+	inline bool AddButtonMini(string name, float w = -1, float h = -1)
+	{
+		bool bchanged = false;
+
+		std::string n = "##BUTTONMINI" + name + ofToString(1);
+		ImGui::PushID(n.c_str());
+		{
+			const auto sztx = ImGui::CalcTextSize(name.c_str());
+			if (w == -1) w = sztx.x + 2 * ImGui::GetStyle().ItemInnerSpacing.x;
+			if (h == -1) h = ofxImGuiSurfing::getWidgetsHeightUnit();
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+			const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+			ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			{
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+
+					bchanged = true;
+				}
+			}
+			ImGui::PopStyleColor(3);
+		}
+		ImGui::PopID();
+
+		return bchanged;;
 	}
 
 	//--
@@ -196,7 +234,7 @@ namespace ofxImGuiSurfing
 
 	// Button but using a BOOL not void param
 	//--------------------------------------------------------------
-	inline bool AddSmallButton(ofParameter<bool>& parameter, float w, float h) 
+	inline bool AddSmallButton(ofParameter<bool>& parameter, float w, float h)
 	{
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
@@ -247,7 +285,7 @@ namespace ofxImGuiSurfing
 	// Big Buttons and toggles for VOID ofParams
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<void>& parameter, float w = -1, float h = -1) 
+	inline bool AddBigButton(ofParameter<void>& parameter, float w = -1, float h = -1)
 	{
 		bool bReturn = false;
 		std::string name = parameter.getName();
@@ -344,18 +382,18 @@ namespace ofxImGuiSurfing
 
 		// Blink
 
-		if (bBlink) 
+		if (bBlink)
 		{
 			float blinkValue = ofxImGuiSurfing::getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
-			
+
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
 
 		bool bDrawBorder = true;
 
 		//--
-		
+
 		std::string name = parameter.getName();
 		auto tmpRef = parameter.get();
 		bool bPre = tmpRef;
@@ -447,7 +485,7 @@ namespace ofxImGuiSurfing
 		}
 
 		// Debug point
-		if (0) 
+		if (0)
 		{
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 			const ImVec2 pdebug = ImGui::GetCursorScreenPos();
@@ -488,14 +526,14 @@ namespace ofxImGuiSurfing
 		{
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 
-			if (blinkValue == -1) 
+			if (blinkValue == -1)
 			{
 				blinkValue = ofxImGuiSurfing::getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
 			else a = 1.0f;
-			
+
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			if (b) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(c_.x, c_.y, c_.z, c_.w * a));
@@ -803,7 +841,7 @@ namespace ofxImGuiSurfing
 	{
 		return AddToggleRoundedButton(parameter, bb);
 	}
-	
+
 	//--------------------------------------------------------------
 	inline bool AddCheckBox(ofParameter<bool>& parameter)
 	{
@@ -850,7 +888,7 @@ namespace ofxImGuiSurfing
 
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(string name, float w = -1, float h = -1) 
+	inline bool AddBigButton(string name, float w = -1, float h = -1)
 	{
 		bool bReturn = false;
 
@@ -879,7 +917,7 @@ namespace ofxImGuiSurfing
 			ImGui::PopStyleColor(3);
 		}
 		ImGui::PopID();
-		
+
 		return bReturn;
 	}
 };

@@ -45,6 +45,8 @@
 
 	BUGS:
 
+	- it seems than special windows engine, puts all toggles to false!
+
 */
 
 /*
