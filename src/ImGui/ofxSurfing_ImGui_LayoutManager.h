@@ -81,7 +81,7 @@ public:
 public:
 
 	//--------------------------------------------------------------
-	void setup() // -> We will use the most common use to avoid to have to require any argument.
+	void setup() // -> We will use the most common mode, to avoid to have to require any argument.
 	{
 		setup(IM_GUI_MODE_INSTANTIATED);
 	}
