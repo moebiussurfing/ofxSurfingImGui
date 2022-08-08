@@ -593,7 +593,7 @@ namespace ofxImGuiSurfing
 				TreePop();
 			}
 		}
-		else if (Button(ofFilePath::getFileName(path).c_str(), ImVec2(w, h))) {
+		else if (ImGui::Button(ofFilePath::getFileName(path).c_str(), ImVec2(w, h))) {
 			selected = path;
 			ret = true;
 		}
@@ -653,7 +653,7 @@ namespace ofxImGuiSurfing
 		else // a file
 		{
 			i++;
-			if (Button(ofFilePath::getFileName(path).c_str(), ImVec2(w, h))) {
+			if (ImGui::Button(ofFilePath::getFileName(path).c_str(), ImVec2(w, h))) {
 
 				selected = path;
 				ret = true;
