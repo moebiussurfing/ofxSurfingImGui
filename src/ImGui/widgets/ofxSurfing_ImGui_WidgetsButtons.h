@@ -176,6 +176,8 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		std::string name = parameter.getName();
 		bool bPre = tmpRef;
+		//fix
+		bool bChanged = false;
 
 		std::string n = "##BIGBUTTON" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
@@ -206,6 +208,7 @@ namespace ofxImGuiSurfing
 
 					tmpRef = true;
 					parameter.set(tmpRef);
+					bChanged = true;
 				}
 			}
 			ImGui::PopStyleColor(3);
@@ -221,8 +224,10 @@ namespace ofxImGuiSurfing
 
 		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(parameter);
 
-		if (bPre != parameter) return true;
-		else return false;
+		//if (bPre != parameter) return true;
+		//else return false;
+
+		return bChanged;
 	}
 
 	//--------------------------------------------------------------
