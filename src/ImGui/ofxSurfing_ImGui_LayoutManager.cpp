@@ -21,6 +21,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 
 	//--
 
+	// These params are handled into file settings!
 	params_Advanced.add(bAutoResize);
 	params_Advanced.add(bExtra);
 	params_Advanced.add(bReset);
@@ -30,6 +31,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bMinimize_Presets);
 	params_Advanced.add(bAdvanced);
+	params_Advanced.add(bGameMode);
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bHelp);
@@ -250,7 +252,7 @@ void ofxSurfing_ImGui_Manager::setupImGuiFonts()
 	pushFont(_path + _fontName, _fontSizeParam * 1.5f); // queue big font too
 
 	// Font huge
-	pushFont(_path + _fontName, _fontSizeParam * 2.f); // queue huge font too
+	pushFont(_path + _fontName, _fontSizeParam * 2.5f); // queue huge font too
 
 	//--
 

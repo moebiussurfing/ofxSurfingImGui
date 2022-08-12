@@ -891,6 +891,7 @@ public:
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bGameMode{ "Game Mode", false };
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 
