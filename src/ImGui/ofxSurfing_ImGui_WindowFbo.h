@@ -317,7 +317,7 @@ public:
 	ofParameter<bool> bGui_PreviewFloat{ "Preview", true };
 	//ofParameter<bool> bGui_PreviewFloat{ "Float", true };
 	ofParameter<bool> bGui_PreviewBig{ "Big", true };//big preview can be full screen, docked or draggable.
-	ofParameter<bool> bFullScreenPlot{ "Full Screen", true };//big preview will be drawn on the full screen
+	ofParameter<bool> bPlotFullScreen{ "Full Screen", true };//big preview will be drawn on the full screen
 	ofParameter<bool> bInDocked{ "Docked", false };//will occupy the space between docking panels
 	ofParameter<bool> bGui_Extra{ "Extra", false };//extra window for settings
 
@@ -363,7 +363,7 @@ public:
 		params.add(bGui_PreviewBig);
 		params.add(bGui_Extra);
 		params.add(bAutoResize_Preview);
-		params.add(bFullScreenPlot);
+		params.add(bPlotFullScreen);
 		params.add(scaleModeIndex);
 		params.add(bInDocked);
 		params.add(colorBg);
@@ -489,8 +489,8 @@ public:
 					{
 						ImGui::Indent();
 						{
-							ofxImGuiSurfing::AddToggleRounded(bFullScreenPlot);
-							if (!bFullScreenPlot)
+							ofxImGuiSurfing::AddToggleRounded(bPlotFullScreen);
+							if (!bPlotFullScreen)
 							{
 								ofxImGuiSurfing::AddToggleRounded(bInDocked);
 								if (!bInDocked) ofxImGuiSurfing::AddToggleRounded(rectDraggable.bEditMode);

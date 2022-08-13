@@ -476,15 +476,20 @@ public:
 	{
 		if (fileNames.empty()) return false;
 
+		string t = "##" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
 		int i = pIndex.get();
 		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice(__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::Spacing();
+		
+		ImGui::PopID();
 
 		return b;
 	}
@@ -753,6 +758,24 @@ public:
 	void endWindow();
 
 	//----
+	// 
+	// Tree / Folders Helpers
+	// 
+	//--------------------------------------------------------------
+	bool beginTree(string label, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	{
+		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
+		if (b) this->refreshLayout();
+		return b;
+	}
+	//--------------------------------------------------------------
+	void endTree()
+	{
+		ImGui::TreePop();
+		this->refreshLayout();
+	}
+
+	//----
 
 private:
 
@@ -891,7 +914,7 @@ public:
 	ofParameter<bool> bDebug{ "Debug", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
-	ofParameter<bool> bGameMode{ "Game Mode", false };
+	ofParameter<bool> bGui_GameMode{ "Game Mode", false };
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
 

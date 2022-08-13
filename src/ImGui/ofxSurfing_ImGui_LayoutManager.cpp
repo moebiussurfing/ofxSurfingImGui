@@ -31,7 +31,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bMinimize_Presets);
 	params_Advanced.add(bAdvanced);
-	params_Advanced.add(bGameMode);
+	params_Advanced.add(bGui_GameMode);
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bHelp);
@@ -603,7 +603,7 @@ bool ofxSurfing_ImGui_Manager::pushFont(std::string path, int size)
 	//TODO:
 	// should be a vector with several customFont to allow hot reloading..
 	// if not, last added font will be used
-	ofLogNotice(__FUNCTION__) << path << " : " << size;
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
@@ -693,20 +693,20 @@ void ofxSurfing_ImGui_Manager::processOpenFileSelection(ofFileDialogResult openF
 
 	std::string path = openFileResult.getPath();
 
-	ofLogNotice(__FUNCTION__) << "getName(): " << openFileResult.getName();
-	ofLogNotice(__FUNCTION__) << "getPath(): " << path;
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "getName(): " << openFileResult.getName();
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "getPath(): " << path;
 
 	ofFile file(path);
 
 	if (file.exists())
 	{
-		ofLogNotice(__FUNCTION__) << ("The file exists - now checking the type via file extension");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ("The file exists - now checking the type via file extension");
 		std::string fileExtension = ofToUpper(file.getExtension());
 
 		// We only want ttf/otf
 		if (fileExtension == "TTF" || fileExtension == "OTF") {
 
-			ofLogNotice(__FUNCTION__) << ("TTF or OTF found!");
+			ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ("TTF or OTF found!");
 
 			pushFont(path, size);
 		}
@@ -723,13 +723,13 @@ void ofxSurfing_ImGui_Manager::openFontFileDialog(int size)
 	// Check if the user picked a file
 	if (openFileResult.bSuccess) {
 
-		ofLogNotice(__FUNCTION__) << ("User selected a file");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ("User selected a file");
 
 		// We have a file, check it and process it
 		processOpenFileSelection(openFileResult, size);
 	}
 	else {
-		ofLogNotice(__FUNCTION__) << ("User hit cancel");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ("User hit cancel");
 	}
 }
 
@@ -773,7 +773,7 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 
 	if (ini_to_load)
 	{
-		ofLogNotice(__FUNCTION__) << "LOAD! " << ini_to_load;
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "LOAD! " << ini_to_load;
 
 		loadLayoutImGuiIni(ini_to_load);
 
@@ -782,7 +782,7 @@ void ofxSurfing_ImGui_Manager::updateLayout() {
 
 	if (ini_to_save)
 	{
-		ofLogNotice(__FUNCTION__) << "SAVE! " << ini_to_save;
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "SAVE! " << ini_to_save;
 
 		if (ini_to_save != "-1")
 		{
@@ -2028,7 +2028,7 @@ void ofxSurfing_ImGui_Manager::saveAppLayout(int _index)
 
 	ini_to_save_Str = getLayoutName(_index);
 
-	ofLogNotice(__FUNCTION__) << ini_to_save_Str;
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ini_to_save_Str;
 
 	if (ini_to_save_Str == "-1") return; // skip
 
@@ -2049,7 +2049,7 @@ void ofxSurfing_ImGui_Manager::loadAppLayout(int _index)
 	appLayoutIndex = ofClamp(_index, appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
 	std::string _name = getLayoutName(appLayoutIndex.get());
-	ofLogNotice(__FUNCTION__) << appLayoutIndex << ":" << _name;
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << appLayoutIndex << ":" << _name;
 
 	//std::string _label = APP_RELEASE_NAME;
 	std::string _label = "";
@@ -2071,8 +2071,8 @@ void ofxSurfing_ImGui_Manager::loadAppLayout(int _index)
 	// Group
 	loadLayoutPresetGroup(ini_to_load_Str);
 
-	ofLogNotice(__FUNCTION__) << "------------------------------------";
-	ofLogNotice(__FUNCTION__) << "ini_to_load    : " << ini_to_load;
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "------------------------------------";
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "ini_to_load    : " << ini_to_load;
 }
 
 //--------------------------------------------------------------
@@ -2357,7 +2357,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice(__FUNCTION__) << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << name << " : " << e;
 	}
 	if (bskip) return;
 
@@ -2493,7 +2493,7 @@ void ofxSurfing_ImGui_Manager::Changed_Params(ofAbstractParameter& e)
 
 		if (appLayoutIndex != appLayoutIndex_PRE)
 		{
-			ofLogNotice(__FUNCTION__) << "Changed: " << appLayoutIndex;
+			ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "Changed: " << appLayoutIndex;
 
 			//-
 
@@ -2977,7 +2977,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 	if (!bKeys) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << (char)key << " [" << key << "]";
 
 	// Modifiers
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
@@ -2996,10 +2996,10 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	if (0)
 	{
-		ofLogNotice(__FUNCTION__) << "mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
-		ofLogNotice(__FUNCTION__) << "mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
 	}
 
 	//----
@@ -3152,7 +3152,7 @@ void ofxSurfing_ImGui_Manager::keyPressed(ofKeyEventArgs& eventArgs)
 void ofxSurfing_ImGui_Manager::keyReleased(ofKeyEventArgs& eventArgs)
 {
 	const int& key = eventArgs.key;
-	ofLogNotice(__FUNCTION__) << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << (char)key << " [" << key << "]";
 
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
 	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
