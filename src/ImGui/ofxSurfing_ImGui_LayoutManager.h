@@ -761,18 +761,24 @@ public:
 	// 
 	// Tree / Folders Helpers
 	// 
+	//TODO: could improve by doing open stat handled by ImGui.. now is forced
 	//--------------------------------------------------------------
-	bool beginTree(string label, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	bool beginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
-		if (b) this->refreshLayout();
+		if (b) {
+			if(bIndented) this->Indent();
+			else this->refreshLayout();
+		}
+		
 		return b;
 	}
 	//--------------------------------------------------------------
-	void endTree()
+	void endTree(bool bIndented = true)
 	{
 		ImGui::TreePop();
-		this->refreshLayout();
+		if (bIndented) this->Unindent();
+		else this->refreshLayout();
 	}
 
 	//----
@@ -1519,6 +1525,11 @@ public:
 
 			endWindow();
 		}
+	}
+
+	//--------------------------------------------------------------
+	void setWindowsSpecialsOrientation(bool b) { // Set orientation of window special alignment! horz/vert
+			windowsSpecialsOrganizer.bOrientation = b;
 	}
 
 	//--------------------------------------------------------------

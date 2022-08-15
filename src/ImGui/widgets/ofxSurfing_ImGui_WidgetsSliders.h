@@ -454,15 +454,29 @@ namespace ofxImGuiSurfing
 		string name = parameter.getName();
 		bool bChanged = false;
 
-		if ((sz.x == -1) || (sz.y == -1))
+		//if ((sz.x == -1) || (sz.y == -1))
+		//{
+		//	float w = ImGui::GetContentRegionAvail().x;
+		//	float h = ImGui::GetContentRegionAvail().y;
+		//	float spcx = ImGui::GetStyle().ItemSpacing.x;
+		//	float spcy = ImGui::GetStyle().ItemSpacing.y;
+		//	if (sz.x == -1) sz.x = w - spcx;
+		//	if (sz.y == -1) sz.y = h - 2 * spcy;
+		//}
+
+		if (sz.x == -1)
 		{
 			float w = ImGui::GetContentRegionAvail().x;
-			float h = ImGui::GetContentRegionAvail().y;
 			float spcx = ImGui::GetStyle().ItemSpacing.x;
-			float spcy = ImGui::GetStyle().ItemSpacing.y;
 			if (sz.x == -1) sz.x = w - spcx;
+		}
+		if (sz.y == -1)
+		{
+			float h = ImGui::GetContentRegionAvail().y;
+			float spcy = ImGui::GetStyle().ItemSpacing.y;
 			if (sz.y == -1) sz.y = h - 2 * spcy;
 		}
+
 
 		ImGui::PushID(("##VSLIDER" + name).c_str());
 		{

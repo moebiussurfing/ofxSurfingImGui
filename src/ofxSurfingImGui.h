@@ -398,6 +398,18 @@ void EndWindow()
 
 /*
 
+// Special Windows 
+
+// Main toggle
+guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+
+*/
+
+//--
+
+
+/*
+
 // ANOTHER WINDOW WITH SNAPPING
 
 bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
@@ -646,3 +658,86 @@ https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
 }
 
 */
+
+/*
+
+	COMMON LEFT RIGHT ARROWS
+	TO BROWSE AN INDEX
+
+	if (guiManager.AddButton("<", OFX_IM_BUTTON_SMALL, 2)) {
+		////cycled
+		//if (index == index.getMin()) index = index.getMax();
+		//index--;
+		//limited
+		if (index > index.getMin()) index--;
+	};
+	guiManager.SameLine();
+	if (guiManager.AddButton(">", OFX_IM_BUTTON_SMALL, 2)) {
+		////cycled
+		//if (index == index.getMax()) index = index.getMin();
+		//index++;
+		//limited
+		if (index < index.getMax()) index++;
+	};
+
+*/
+
+
+
+// IMPROVE LAYOUT ENGINE
+// WITH TABLES/COLUMNS
+// AND AUTORESIZE WIDGETS WITH COLUMN DIVIDERS DRAGGING
+
+
+
+		/*
+		float spcx = ImGui::GetStyle().ItemSpacing.x;
+		float w100 = ImGui::GetContentRegionAvail().x;
+		float w = ofxImGuiSurfing::getWidgetsWidth(1) - spcx;
+		float w1 = w * 0.3f;
+		float w2 = w * 0.7f;
+
+		ImVec2 sz;
+		float h = 50;
+		float h2 = 150;
+
+		ImGui::Columns(2, "table1");
+
+		//ImGui::SetCursorPosX(w100 * 0.3f);
+		//ImGui::SetColumnWidth(0, w100 * 0.3f);
+		//ImGui::SetColumnWidth(1, w100 * 0.7f);
+
+		sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
+		ImGui::Button("but1", sz);
+
+		ImGui::NextColumn();
+
+		sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
+		ImGui::Button("but2", sz);
+
+		ImGui::Columns(1);
+
+		//--
+
+		ImGui::Columns(2, "table2");
+
+		static float wc = (ImGui::GetWindowWidth() - spcx);
+		ImGui::SetColumnWidth(0, wc * 0.4f);
+		//wc = ImGui::GetColumnWidth();//allow edit
+		//ImGui::SetColumnWidth(1, 100.0f);
+
+		static float tmpRef1 = 1;
+		static float tmpRef2 = 1;
+
+		sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
+		ImGui::VSliderFloat("v1", sz, &tmpRef1, 0, 1);
+
+		ImGui::NextColumn();
+
+		sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
+		ImGui::VSliderFloat("v2", sz, &tmpRef2, 0, 1);
+
+		ImGui::Columns(1);
+
+		//ofxImGuiSurfing::AddVSlider(smoothChannels[i]->ampInput, sz, bNoName, bNoNumber);
+		*/
