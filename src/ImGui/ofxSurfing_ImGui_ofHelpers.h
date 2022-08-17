@@ -289,7 +289,7 @@ namespace ofxImGuiSurfing
 	bool AddText(ofParameter<ParameterType>& parameter, bool label = true);
 
 	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns = 1);
-	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels);
+	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels, bool bRaw = false);
 
 	//-
 
@@ -378,7 +378,7 @@ namespace ofxImGuiSurfing
 		string n = "##STEPPERfloat" + name;// +ofToString(1);
 		ImGui::PushID(n.c_str());
 
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
 
 		if (ImGui::InputFloat(p.getName().c_str(), (float*)&tmpRef, step, stepFast))
 		{
@@ -387,7 +387,7 @@ namespace ofxImGuiSurfing
 			bReturn = true;
 		}
 
-		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+		IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
 
 		ImGui::PopID();
 
@@ -539,7 +539,7 @@ namespace ofxImGuiSurfing
 		return (ImTextureID)(uintptr_t)glID;
 	}
 
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values);
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
 
 } // namespace ofxImGuiSurfing

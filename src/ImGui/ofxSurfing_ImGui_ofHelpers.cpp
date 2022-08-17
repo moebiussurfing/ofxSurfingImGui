@@ -632,13 +632,14 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels)
+	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels, bool bRaw)
 	{
 		if (parameter.get() < 0) return false;
 		if (labels.size() == 0) return false;
 
 		const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sz.x - 0.5f * PADDING_COMBO);
+
+		if(!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sz.x - 0.5f * PADDING_COMBO);
 
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -672,13 +673,13 @@ namespace ofxImGuiSurfing
 			parameter.set(tmpRef);
 		}
 
-		ImGui::PopItemWidth();
+		if (!bRaw) ImGui::PopItemWidth();
 
 		return result;
 	}
 
 	//--------------------------------------------------------------
-	bool AddStepper(ofParameter<int>& parameter, int step, int stepFast)
+	bool AddStepper(ofParameter<int>& parameter, int step, int stepFast, bool bRaw = false)
 	{
 		if (step == -1 || stepFast == -1) {
 			step = (parameter.getMax() - parameter.getMin()) / 100.f;
@@ -690,7 +691,7 @@ namespace ofxImGuiSurfing
 		auto uniqueName = (("##StepperInt" + parameter.getName()).c_str());
 		ImGui::PushID(uniqueName);
 
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		if (!bRaw) IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
 		bool bChanged = false;
 		if (ImGui::InputInt((parameter.getName().c_str()), &tmpRef, step, stepFast))
@@ -700,7 +701,7 @@ namespace ofxImGuiSurfing
 			bChanged = true;
 		}
 
-		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+		if (!bRaw) IMGUI_SUGAR__STEPPER_WIDTH_POP;
 
 		ImGui::PopID();
 
@@ -708,7 +709,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddStepper(ofParameter<float>& parameter, float step, float stepFast)
+	bool AddStepper(ofParameter<float>& parameter, float step, float stepFast, bool bRaw = false)
 	{
 		if (step == -1 || stepFast == -1) {
 			step = (parameter.getMax() - parameter.getMin()) / 100.f;
@@ -720,7 +721,7 @@ namespace ofxImGuiSurfing
 		auto uniqueName = (("##StepperFloat" + parameter.getName()).c_str());
 		ImGui::PushID(uniqueName);
 
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		if (!bRaw) IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
 		bool bChanged = false;
 		if (ImGui::InputFloat((parameter.getName().c_str()), &tmpRef, step, stepFast))
@@ -730,7 +731,7 @@ namespace ofxImGuiSurfing
 			bChanged = true;
 		}
 
-		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+		if (!bRaw) IMGUI_SUGAR__STEPPER_WIDTH_POP;
 
 		ImGui::PopID();
 
@@ -1147,16 +1148,21 @@ namespace ofxImGuiSurfing
 		return true;
 	};
 	//--------------------------------------------------------------
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values /*,bool bUpperCase = true*/)
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw )
 	{
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO); // fix oversizes
+		// pass bRaw true to disable the widget padding and to draw it raw.
+		if(!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO); 
+		// fix oversizes
+
 		if (values.empty())
 		{
-			ImGui::PopItemWidth();
+			if (!bRaw) ImGui::PopItemWidth();
 			return false;
 		}
+
 		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
-		ImGui::PopItemWidth();
+		
+		if (!bRaw) ImGui::PopItemWidth();
 
 		return b;
 	}

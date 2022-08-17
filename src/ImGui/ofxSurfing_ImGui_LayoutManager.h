@@ -472,7 +472,7 @@ public:
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------
-	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -484,14 +484,160 @@ public:
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::Spacing();
-		
+
 		ImGui::PopID();
 
 		return b;
+	}
+
+	// Selector index directly with an int ofParam
+	// without name label and a button to browse next element.
+	//--------------------------------------------------------------
+	bool AddComboButton(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	{
+		// pass bRaw true to disable the widget padding and to draw it raw.
+
+		if (fileNames.empty()) return false;
+
+		string t = "##" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7f);
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
+		if (b)
+		{
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+		ImGui::PopItemWidth();
+
+		ImGui::PopID();
+
+		ImGui::SameLine();
+
+		float w = ImGui::GetContentRegionAvail().x;
+		t += ">";
+		ImGui::PushID(t.c_str());
+		if (ImGui::Button(">", ImVec2(w, 0)))
+		{
+			if (pIndex < pIndex.getMax()) pIndex++;
+			else pIndex = 0;
+			b = true;
+		}
+		ImGui::PopID();
+
+		ImGui::Spacing();
+
+		return b;
+	}
+	//--------------------------------------------------------------
+	bool AddComboButtonDual(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	{
+		// pass bRaw true to disable the widget padding and to draw it raw.
+
+		if (fileNames.empty()) return false;
+
+		string t = "##" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
+		if (b)
+		{
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+		ImGui::PopItemWidth();
+
+		ImGui::PopID();
+		
+		ImGui::SameLine();
+
+		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+		float w = ImGui::GetContentRegionAvail().x / 2 - __spcx;
+
+		string t1 = t+ "<";
+		ImGui::PushID(t.c_str());
+		if (ImGui::Button("<", ImVec2(w, 0)))
+		{
+			if (pIndex <= pIndex.getMin()) pIndex.getMax();
+			else pIndex--;
+			b = true;
+		}
+		ImGui::PopID();
+		ImGui::SameLine();
+
+		string t2 = t+ ">";
+		ImGui::PushID(t.c_str());
+		if (ImGui::Button(">", ImVec2(w, 0)))
+		{
+			if (pIndex < pIndex.getMax()) pIndex++;
+			else pIndex = 0;
+			b = true;
+		}
+		ImGui::PopID();
+
+		ImGui::Spacing();
+
+		return b;
+	}
+
+	//--
+
+	// Dual arrows for common use to browse an index to be processed outside
+	//--------------------------------------------------------------
+	int AddComboArrows(SurfingImGuiTypes style = OFX_IM_BUTTON_SMALL) {
+		//returns -1 to left or 1 to right pressed
+		int iReturn = 0;
+		if (AddButton("<", style, 2)) {
+			iReturn = -1;
+		};
+		SameLine();
+		if (AddButton(">", style, 2)) {
+			iReturn = 1;
+		};
+		return iReturn;
+	}
+
+	//--
+
+	// Dual arrows for common use to browse an index to be inside directly into the int parameter
+	//--------------------------------------------------------------
+	void AddComboArrows(ofParameter<int> paramIndex, SurfingImGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
+
+		//bool bchanged = false;//can be ignored
+		if (AddButton("<", style, 2)) {
+			//bchanged = true;
+			if (cycled) {
+				if (paramIndex == paramIndex.getMin()) paramIndex = paramIndex.getMax();
+				paramIndex--;
+			}
+			else {
+				if (paramIndex > paramIndex.getMin()) paramIndex--;
+			}
+		};
+		SameLine();
+		if (AddButton(">", style, 2)) {
+			//bchanged = true;
+			if (cycled) {
+				if (paramIndex == paramIndex.getMax()) paramIndex = paramIndex.getMin();
+				paramIndex++;
+			}
+			else {
+				if (paramIndex < paramIndex.getMax()) paramIndex++;
+			}
+		};
+		//return bchanged;
 	}
 
 	//----
@@ -767,10 +913,10 @@ public:
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
 		if (b) {
-			if(bIndented) this->Indent();
+			if (bIndented) this->Indent();
 			else this->refreshLayout();
 		}
-		
+
 		return b;
 	}
 	//--------------------------------------------------------------
@@ -780,6 +926,10 @@ public:
 		if (bIndented) this->Unindent();
 		else this->refreshLayout();
 	}
+
+	//--
+
+
 
 	//----
 
@@ -1214,7 +1364,7 @@ private:
 					if (ImGui::TreeNode("MORE"))
 					{
 						this->Indent();
-						
+
 						ofxImGuiSurfing::AddSpacing();
 
 						/*
@@ -1241,7 +1391,7 @@ private:
 						//TODO:
 						//// No Scroll
 						//Add(bNoScroll, OFX_IM_TOGGLE_ROUNDED_MINI);
-						
+
 						this->Unindent();
 
 						ImGui::TreePop();
@@ -1349,7 +1499,7 @@ private:
 						if (ImGui::TreeNode("DOCKING"))
 						{
 							this->Indent();
-							
+
 							ofxImGuiSurfing::AddSpacing();
 
 							//--
@@ -1369,7 +1519,7 @@ private:
 								}
 								ImGui::Unindent();
 							}
-							
+
 							this->Unindent();
 
 							ImGui::TreePop();
@@ -1529,7 +1679,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setWindowsSpecialsOrientation(bool b) { // Set orientation of window special alignment! horz/vert
-			windowsSpecialsOrganizer.bOrientation = b;
+		windowsSpecialsOrganizer.bOrientation = b;
 	}
 
 	//--------------------------------------------------------------
@@ -1866,7 +2016,15 @@ public:
 	//	windowsSpecialsOrganizer.bOrientation.set(!windowsSpecialsOrganizer.bOrientation.get());
 	//}
 
-	//--
+	//--	
+
+	//--------------------------------------------------------------
+	inline ofRectangle getWindowShape()
+	{
+		return ofxImGuiSurfing::getWindowShape();
+	}
+
+	//--	
 
 	//--------------------------------------------------------------
 	float getWidgetsWidth(int amnt) {
@@ -1927,6 +2085,16 @@ public:
 	//--------------------------------------------------------------
 	void addExtraParamToLayoutPresets(ofParameter<ofRectangle>& param) {
 		params_LayoutsExtra.add(param);
+	}
+
+	//--
+
+	//--------------------------------------------------------------
+	int getWindowSpecialPadSize() const
+	{
+		int pad = windowsSpecialsOrganizer.pad;
+		//glm::vec2 p(pad, pad);
+		return pad;
 	}
 
 	//----

@@ -217,6 +217,21 @@ namespace ofxImGuiSurfing
 		return ImGui::GetContentRegionAvail().y;
 	}
 
+	//--
+
+	// Helpers
+	// 
+	// Get current window shape
+	//--------------------------------------------------------------
+	inline ofRectangle getWindowShape()
+	{
+		return ofRectangle(
+			ImGui::GetWindowPos().x,
+			ImGui::GetWindowPos().y,
+			ImGui::GetWindowWidth(),
+			ImGui::GetWindowHeight());
+	}
+
 	//--------------------------------------------------------------
 	inline float getWidgetsWidth(int amntColumns = -1)
 	{

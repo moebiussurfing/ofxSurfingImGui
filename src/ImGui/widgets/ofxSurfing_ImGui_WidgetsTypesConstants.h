@@ -319,7 +319,14 @@ namespace ofxImGuiSurfing
 //#define STEP_FACTOR .55f
 //#define STEP_FACTOR .65f
 #define STEP_FACTOR .67f
+#define STEP_FACTOR_FLOAT .72f//to allow see 3 decimals, but shorter label name.
 //#define STEP_FACTOR .75f
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_FLOAT); }
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR); }
