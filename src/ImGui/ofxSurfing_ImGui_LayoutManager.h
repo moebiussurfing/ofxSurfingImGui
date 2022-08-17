@@ -538,7 +538,7 @@ public:
 		return b;
 	}
 	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	bool AddComboButtonDual(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bCycled = false)
 	{
 		// pass bRaw true to disable the widget padding and to draw it raw.
 
@@ -560,29 +560,32 @@ public:
 		ImGui::PopItemWidth();
 
 		ImGui::PopID();
-		
+
 		ImGui::SameLine();
 
 		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
 		float w = ImGui::GetContentRegionAvail().x / 2 - __spcx;
 
-		string t1 = t+ "<";
+		string t1 = t + "<";
 		ImGui::PushID(t.c_str());
 		if (ImGui::Button("<", ImVec2(w, 0)))
 		{
-			if (pIndex <= pIndex.getMin()) pIndex.getMax();
+			if (pIndex <= pIndex.getMin())
+				if (bCycled) pIndex.getMax();
+				else pIndex = pIndex.getMin();
 			else pIndex--;
 			b = true;
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 
-		string t2 = t+ ">";
+		string t2 = t + ">";
 		ImGui::PushID(t.c_str());
 		if (ImGui::Button(">", ImVec2(w, 0)))
 		{
 			if (pIndex < pIndex.getMax()) pIndex++;
-			else pIndex = 0;
+			else if (bCycled)
+				pIndex = 0;
 			b = true;
 		}
 		ImGui::PopID();
