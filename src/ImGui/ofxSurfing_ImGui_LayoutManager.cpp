@@ -29,6 +29,7 @@ ofxSurfing_ImGui_Manager::ofxSurfing_ImGui_Manager()
 	params_Advanced.add(bLockMove);
 	params_Advanced.add(bNoScroll);
 	params_Advanced.add(bMinimize);
+	params_Advanced.add(bLinkGlobal);
 	params_Advanced.add(bMinimize_Presets);
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bGui_GameMode);

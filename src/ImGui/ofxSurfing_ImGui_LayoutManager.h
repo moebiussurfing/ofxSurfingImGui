@@ -1066,6 +1066,7 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
 	ofParameter<bool> bMinimize{ "Minimize", true };
+	ofParameter<bool> bLinkGlobal{ "Link", true };//link windows between contexts/add-ons/ gui instances
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bHelp{ "Help App", false };
@@ -2002,6 +2003,22 @@ public:
 
 		return windowsSpecialsOrganizer.getWindowSpecialLastTopRight();
 	}
+
+	//--
+
+	// Set anchor first window form parent scope:
+	//--------------------------------------------------------------
+	glm::vec2 getWindowSpecialLastTopLeft() const {
+
+		return windowsSpecialsOrganizer.getWindowSpecialLastTopLeft();
+	}
+
+	//--------------------------------------------------------------
+	void setWindowSpecialFirstPosition(glm::vec2 pos) {
+		windowsSpecialsOrganizer.setWindowSpecialFirstPosition(pos);
+	}
+
+	//--
 
 	//// Orientation cascade windows
 	////--------------------------------------------------------------

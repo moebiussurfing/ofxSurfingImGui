@@ -1075,18 +1075,46 @@ namespace ofxImGuiSurfing
 			return name;
 		}
 
-		// Get the position of the last special window (the window at the end of current drawn queue)
+		// Get the position of the last special window (the window at the end of current drawn queue / at right)
 		//--------------------------------------------------------------
 		glm::vec2 getWindowSpecialLastTopRight() const {
-			glm::vec2 p = glm::vec2(-1. - 1);
-			if (queueWindowsVisible.size() == 0) return p;//all are hidden
+			glm::vec2 p = glm::vec2(-1, - 1);
+			if (queueWindowsVisible.size() == 0) return p;//skip when all are hidden
 
 			int ilast = queueWindowsVisible.back();
 			p = windowsSpecialsOrganizer[ilast].getRectangle().getTopRight();
 
 			return p;
 		}
+		// Get the position of the first special window (the window at the begin of current drawn queue / at left )
+		//--------------------------------------------------------------
+		glm::vec2 getWindowSpecialLastTopLeft() const {
+			glm::vec2 p = glm::vec2(-1, - 1);
+			if (queueWindowsVisible.size() == 0) return p;//skip when all are hidden
 
+			int ifirst = queueWindowsVisible[0];
+			p = windowsSpecialsOrganizer[ifirst].getRectangle().getTopLeft();
+
+			return p;
+		}
+
+		//--
+		
+		// Set anchor first window from a parent scope:
+		// // That feature allows to link grouped windows from many contexts / add-ons
+		//--------------------------------------------------------------
+		void setWindowSpecialFirstPosition(glm::vec2 pos) {
+			if (queueWindowsVisible.size() == 0) return;//skip when all are hidden
+			int ifirst = queueWindowsVisible[0];
+			glm::vec2 p(pos.x + pad, pos.y);//TODO: forced to horizontal align.
+			windowsSpecialsOrganizer[ifirst].setPosition(p);
+
+			//TODO:
+			// Force
+			//runShapeState(ifirst);
+		}
+
+		// 
 		//----
 
 		//--------------------------------------------------------------
