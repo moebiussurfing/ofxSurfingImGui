@@ -319,7 +319,7 @@ namespace ofxImGuiSurfing
 //#define STEP_FACTOR .55f
 //#define STEP_FACTOR .65f
 #define STEP_FACTOR .67f
-#define STEP_FACTOR_FLOAT .72f//to allow see 3 decimals, but shorter label name.
+#define STEP_FACTOR_FLOAT .72f//to allow see 3 decimals, but requires shorter label name better.
 //#define STEP_FACTOR .75f
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
@@ -352,6 +352,14 @@ namespace ofxImGuiSurfing
 
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
+
+// Amount of steps per widgets. will calculate range between max/min.
+//#define MOUSE_WHEEL_STEPS 10
+#define MOUSE_WHEEL_STEPS 100
+
+// How more fine is when CTRL pressed 
+//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 10
+#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
 
 	//----
 

@@ -195,32 +195,37 @@ namespace ofxImGuiSurfing
 						// INT
 						else if (bIsInt)
 						{
-//							ofParameter<int> p = param.cast<int>();
+//							ofParameter<int> p = param.cast<int>();//not dynamic makes error on macOS
                             ofParameter<int> p = dynamic_cast<ofParameter<int>& >(param);
                             
 							if (resolution == -1)
 							{
-								resolution = (p.getMax() - p.getMin()) / 100.f;
-								// 100 steps for all the param range
+								resolution = (p.getMax() - p.getMin()) / (float)MOUSE_WHEEL_STEPS;
+								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
 
-							p += wheel * (bCtrl ? resolution : resolution * 10);
+							int step = wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+							// make minim one unit
+							if (step < 0 && step > -1) step = -1;
+							else if (step > 0 && step < 1) step = 1;
+							p += step;
+
 							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 						}
 
 						// FLOAT
 						else if (bIsFloat)
 						{
-//							ofParameter<float> p = param.cast<float>();
+//							ofParameter<float> p = param.cast<float>();//not dynamic makes error on macOS
                             ofParameter<float> p = dynamic_cast<ofParameter<float>& >(param);
                             
 							if (resolution == -1)
 							{
-								resolution = (p.getMax() - p.getMin()) / 100.f;
-								// 100 steps for all the param range
+								resolution = (p.getMax() - p.getMin()) / (float)MOUSE_WHEEL_STEPS;
+								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
 
-							p += wheel * (bCtrl ? resolution : resolution * 10);
+							p += wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
 							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 						}
 					}

@@ -627,6 +627,15 @@ namespace ofxImGuiSurfing
 	{
 		return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
 	}
+	//--------------------------------------------------------------
+	inline bool AddToggleNamed(ofParameter<bool>& parameter, std::string nameTrue, std::string nameFalse)
+	{
+		bool bBlink = false;
+		float blinkValue = -1.0f;
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+		ImVec2 bb = ImVec2(-1, h);
+		return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+	}
 
 	//--------------------------------------------------------------
 
