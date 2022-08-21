@@ -45,24 +45,24 @@ ofApp.h
 
 ofxSurfingGui ui;
 ofParameter<bool> bGui{"Show Gui", true};
+ofParameterGroup params;
+..
 ```
 ofApp.cpp
 ```.cpp
 void ofApp::draw() 
 {
-	ui.begin();
-	{
-		if (ui.beginWindow(bGui))
-		{
-			// ImGui widgets goes here.
+    ui.begin();
+    {
+        if (ui.beginWindow(bGui))
+        {
+            // ImGui widgets goes here.
+            ui.AddGroup(params);
 
-			// This is an ofParameterGroup
-			ui.AddGroup(params);
-
-			ui.endWindow();
-		}
-	}
-	ui.end();
+            ui.endWindow();
+        }
+    }
+    ui.end();
 }
 ```
 
