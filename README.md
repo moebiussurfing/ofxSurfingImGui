@@ -60,6 +60,7 @@ void ofApp::draw()
             // ImGui widgets goes here.
             ui.AddGroup(params);
             ..
+            
             ui.endWindow();
         }
     }
