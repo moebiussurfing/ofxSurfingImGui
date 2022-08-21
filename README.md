@@ -39,17 +39,17 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ## CODE
 
-ofApp.h
-ofApp.h
+### ofApp.h
 ```.cpp
 #include "ofxSurfingImGui.h"
 
 ofxSurfingGui ui;
+
 ofParameter<bool> bGui{"Show Gui", true};
 ofParameterGroup params;
 ..
 ```
-ofApp.cpp
+### ofApp.cpp
 ```.cpp
 void ofApp::draw() 
 {
@@ -84,7 +84,7 @@ void ofApp::draw()
 
 - Inactive, hidden or locked styles
 
-- Hide labels and values
+- Hide, or floating tooltip, labels and values
 
 - DearWidgets
 
