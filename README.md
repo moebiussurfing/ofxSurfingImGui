@@ -40,6 +40,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ## CODE
 
 ofApp.h
+ofApp.h
 ```.cpp
 #include "ofxSurfingImGui.h"
 
@@ -58,7 +59,7 @@ void ofApp::draw()
         {
             // ImGui widgets goes here.
             ui.AddGroup(params);
-
+            ..
             ui.endWindow();
         }
     }
