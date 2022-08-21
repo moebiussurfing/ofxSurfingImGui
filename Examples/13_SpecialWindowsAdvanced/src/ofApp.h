@@ -4,19 +4,18 @@
 
 /*
 
-	This example shows two of the extra engines of the ofxSurfingImGui Toolkit,
-	
-    1. "Windows Special Organizer".
-	Many grouped windows, defined as specials, can be arranged linked together. 
-    Can be auto distributed horizontally or vertically.
-    
-    2. "Windows Align Engine": 
-    Helpers to align/cascade/layout all visible windows.
+	This example complements the previous example,
+    but also shows two instances of the ofxSurfingImGui Toolkit add-on,
+    both working together without colliding their ImGui windows
+    nor the extra engine features neither.
+    One instance of the Gui Manager is on ofApp 
+    and the other into the instantiated myClass object.
 
 */
 
 
 #include "ofxSurfingImGui.h"
+#include "myClass.h"
 
 class ofApp : public ofBaseApp
 {
@@ -26,7 +25,7 @@ public:
     void draw();
 	void keyPressed(int key);
 
-	//-
+	//--
 
     // Parameters
     
@@ -56,19 +55,39 @@ public:
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
 
-	//-
+	//--
 
 	// Gui
 
-	ofxSurfingGui ui;
+	ofxSurfing_ImGui_Manager ui;
 
 	void setup_ImGui();
 
-    ofParameter<bool> bGui; // -> Toggle to show visible the window panel
+    // this is the only visible toggle that will not be added as special window.
+    ofParameter<bool> bGui;
     void draw_MainWindow();
 
-	void draw_SurfingWidgets_1();
+	void draw_SurfingWidgets_1(); 
+    // this window will be handle without using special windows workflow, 
+    // passing by name instead of passing the visible toggle param.
+
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
 	void draw_SurfingWidgets_4();
+    void draw_SurfingWidgets_5();
+	void draw_SurfingWidgets_6();
+
+    ofParameter<bool> bGui_2;
+    ofParameter<bool> bGui_3;
+    ofParameter<bool> bGui_4;
+    ofParameter<bool> bGui_5;
+    ofParameter<bool> bGui_6;
+
+    // Help info
+    void buildHelpInfo();
+    string helpInfo;
+
+    //--
+
+    MyClass myClassObject;
 };

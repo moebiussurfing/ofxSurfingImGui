@@ -42,19 +42,33 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
   <p>
 
 - Big Toggles and Buttons
+
 - Vertical and Horizontal Sliders
+
 - Range Sliders
+
 - Styled Knobs
+
 - Tree folders
+
 - Inactive, hidden or locked styles
+
 - Hide labels and values
+
 - DearWidgets
+
 - Gradient Color Designer
+
 - Matrix Selectors
+
 - Enum combos selectors
+
 - Progress bars and waiting spinners
+
 - Files Browser
+
 - Curve Editors
+
 - Bubbles Notifier System
   
   </p>
@@ -77,8 +91,11 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
   <p>
 
 - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+  
   - Multi context / instances: 
+    
     - Several windows from different add-ons without colliding.  
+  
   - Easy to update to future **NEW ImGui** versions.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  

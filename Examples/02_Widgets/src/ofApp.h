@@ -3,7 +3,6 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "ofxSurfingHelpers.h"
 
 class ofApp : public ofBaseApp
 {
@@ -17,9 +16,9 @@ public:
 
 	//-
 
-	// ImGui
+	// ImGui Stuff
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	ofParameter<bool> bGui;
 	ofParameter<bool> bGui_1;
@@ -72,4 +71,10 @@ public:
 	ofParameter<ofColor> color1;
 	ofParameter<ofFloatColor> color2;
 	ofParameter<int> indexExpanded;
+
+	//-
+
+	// An easy callback
+
+	void Changed(ofAbstractParameter& e);
 };

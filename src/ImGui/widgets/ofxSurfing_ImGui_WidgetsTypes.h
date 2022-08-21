@@ -120,7 +120,12 @@ namespace ofxImGuiSurfing
 			widgetsStyles.clear();
 
 			uniqueName.reset();
-		}
+		};
+
+		//--------------------------------------------------------------
+		~ofxSurfing_ImGui_WidgetsTypes()
+		{
+		};
 
 		//-
 
@@ -457,7 +462,7 @@ namespace ofxImGuiSurfing
 		//----
 
 		// Render now a parameter with a related ImGui widget with a custom style.
-		// Remember that must be called inside an guiManager::Begin/End() !
+		// Remember that must be called inside an ui::Begin/End() !
 
 	public:
 
@@ -962,7 +967,7 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
-					//TODO: guiManager fonts are not available on this scope!
+					//TODO: ui fonts are not available on this scope!
 					//case OFX_IM_LABEL:
 					//{
 					//	//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
@@ -1846,7 +1851,7 @@ namespace ofxImGuiSurfing
 			bool bMustCloseTree = false; //TODO: -> add new
 			bool bMustDisableIndenting = false;
 
-			bool bSkipNoSerializable = false; //TODO: add to the guiManager object! to allow more customization.
+			bool bSkipNoSerializable = false; //TODO: add to the ui object! to allow more customization.
 
 			// Handle names/pushID's
 			// This is the root/first group

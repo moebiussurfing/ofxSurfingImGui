@@ -84,7 +84,7 @@ void ofApp::setup()
 
 	// Instantiate
 
-	guiManager.setup();
+	ui.setup();
 }
 
 //--------------------------------------------------------------
@@ -98,7 +98,7 @@ void ofApp::draw()
 {
 	if (!bGui) return;
 
-	guiManager.begin();
+	ui.begin();
 	{
 		drawImWindowMain();
 
@@ -107,103 +107,103 @@ void ofApp::draw()
 		drawImWindow3();
 		drawImWindow4();
 	}
-	guiManager.end();
+	ui.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindowMain()
 {
-	if (guiManager.beginWindow(bGui))
+	if (ui.beginWindow(bGui))
 	{
-		guiManager.AddLabelHuge("Examples/\n01_Widgets\nBasic");
-		guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.AddLabelHuge("Examples/\n01_Widgets\nBasic");
+		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
-		guiManager.AddLabelHuge("> Show Windows");
+		ui.AddLabelHuge("> Show Windows");
 
-		guiManager.Add(bGui_1, OFX_IM_TOGGLE_ROUNDED_BIG);
-		guiManager.AddTooltip("Some widgets");
+		ui.Add(bGui_1, OFX_IM_TOGGLE_ROUNDED_BIG);
+		ui.AddTooltip("Some widgets");
 
-		guiManager.Add(bGui_2, OFX_IM_TOGGLE_ROUNDED_BIG);
-		guiManager.AddTooltip("Some ImGui Raw");
+		ui.Add(bGui_2, OFX_IM_TOGGLE_ROUNDED_BIG);
+		ui.AddTooltip("Some ImGui Raw");
 
-		guiManager.Add(bGui_3, OFX_IM_TOGGLE_ROUNDED_BIG);
-		guiManager.AddTooltip("H & V Sliders");
+		ui.Add(bGui_3, OFX_IM_TOGGLE_ROUNDED_BIG);
+		ui.AddTooltip("H & V Sliders");
 
-		guiManager.Add(bGui_4, OFX_IM_TOGGLE_ROUNDED_BIG);
-		guiManager.AddTooltip("Sliders & Knobs");
+		ui.Add(bGui_4, OFX_IM_TOGGLE_ROUNDED_BIG);
+		ui.AddTooltip("Sliders & Knobs");
 
-		guiManager.drawAdvanced();
+		ui.drawAdvanced();
 
-		guiManager.endWindow();
+		ui.endWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow1()
 {
-	if (guiManager.beginWindow(bGui_1))
+	if (ui.beginWindow(bGui_1))
 	{
-		if (!guiManager.bMinimize)
+		if (!ui.bMinimize)
 		{
-			guiManager.AddLabelBig("> Two Multidims \nSplitted and foldered");
-			guiManager.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS);//split components
-			guiManager.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED);//split components
-			guiManager.AddSpacingBigSeparated();
+			ui.AddLabelBig("> Two Multidims \nSplitted and foldered");
+			ui.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS); // split components
+			ui.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED); // split components
+			ui.AddSpacingBigSeparated();
 
-			guiManager.Add(lineWidth2);//no arg. default style
-			guiManager.Add(separation2);//no arg. default style
+			ui.Add(lineWidth2); // no arg. default style
+			ui.Add(separation2); // no arg. default style
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 		}
 
 		//--
 
-		guiManager.AddLabelBig("> An ImGui Raw \nTree with Styles Engine");
+		ui.AddLabelBig("> An ImGui Raw \nTree with Styles Engine");
 
 		if (ImGui::CollapsingHeader("EDIT", ImGuiWindowFlags_None))
 		{
 			// When using raw trees,
 			// It's required to refresh indenting/responsive layout width!
 			// That's to not break the responsive layouting engine.
-			guiManager.refreshLayout();
+			ui.refreshLayout();
 
-			guiManager.AddSpacingBig();
+			ui.AddSpacingBig();
 
-			guiManager.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
-			guiManager.Add(bNext, OFX_IM_TOGGLE_BIG, 2);
+			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true); // next on same line
+			ui.Add(bNext, OFX_IM_TOGGLE_BIG, 2);
 			
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
-			guiManager.Add(speed3, OFX_IM_VSLIDER_NO_LABELS);// hide labels
-			guiManager.Add(speed4, OFX_IM_VSLIDER_NO_LABELS);
+			ui.Add(speed3, OFX_IM_VSLIDER_NO_LABELS); // hide labels
+			ui.Add(speed4, OFX_IM_VSLIDER_NO_LABELS);
 			
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 
-			if (!guiManager.bMinimize)
+			if (!ui.bMinimize)
 			{
-				guiManager.AddLabelBig("> Two \nofParameter\nGroup's");
+				ui.AddLabelBig("> Two \nofParameter\nGroup's");
 
-				guiManager.AddGroup(params2);
-				guiManager.AddGroup(params4);
+				ui.AddGroup(params2);
+				ui.AddGroup(params4);
 
-				guiManager.AddSpacingBig();
+				ui.AddSpacingBig();
 			}
 		}
 
-		guiManager.endWindow();
+		ui.endWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow2()
 {
-	if (guiManager.beginWindow(bGui_2))
+	if (ui.beginWindow(bGui_2))
 	{
-		guiManager.AddLabelBig("> ImGui Raw without Styles Engine");
+		ui.AddLabelBig("> ImGui Raw without Styles Engine");
 
 		if (ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			if (!guiManager.bMinimize)
+			if (!ui.bMinimize)
 			{
 				ImGui::TextWrapped("> Four custom V SLIDERS!");
 				ImGui::Spacing();
@@ -212,10 +212,10 @@ void ofApp::drawImWindow2()
 				ofxImGuiSurfing::AddSpacingBigSeparated();
 			}
 
-			float w = guiManager.getWidgetsWidth(2);//manually responsive
+			float w = ui.getWidgetsWidth(2); // manually responsive
 			float h = 200;
 
-			//custom sizes
+			// custom sizes
 			ofxImGuiSurfing::AddVSlider(speed3, ImVec2(w, h), true);
 			ImGui::SameLine();
 			ofxImGuiSurfing::AddVSlider(speed4, ImVec2(w, h), true);
@@ -227,69 +227,69 @@ void ofApp::drawImWindow2()
 			ImGui::TreePop();
 		}
 
-		guiManager.endWindow();
+		ui.endWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow3()
 {
-	if (guiManager.beginWindow(bGui_3))
+	if (ui.beginWindow(bGui_3))
 	{
-		if (!guiManager.bMinimize)
+		if (!ui.bMinimize)
 		{
-			guiManager.AddLabelBig("> Four Vertical Sliders No Labels");
+			ui.AddLabelBig("> Four Vertical Sliders No Labels");
 
-			guiManager.Add(speed3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-			guiManager.Add(speed4, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-			guiManager.Add(size3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-			guiManager.Add(size4, OFX_IM_VSLIDER_NO_LABELS, 4);
+			ui.Add(speed3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(speed4, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(size3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(size4, OFX_IM_VSLIDER_NO_LABELS, 4);
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 		}
 
-		guiManager.AddLabelHuge("> Four Horizontal Sliders Custom");
+		ui.AddLabelHuge("> Four Horizontal Sliders Custom");
 
-		guiManager.Add(speed3, OFX_IM_HSLIDER_NO_NAME);
-		guiManager.Add(speed4, OFX_IM_HSLIDER_NO_LABELS);
-		guiManager.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
-		guiManager.Add(size4, OFX_IM_HSLIDER_SMALL);
+		ui.Add(speed3, OFX_IM_HSLIDER_NO_NAME);
+		ui.Add(speed4, OFX_IM_HSLIDER_NO_LABELS);
+		ui.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
+		ui.Add(size4, OFX_IM_HSLIDER_SMALL);
 
-		guiManager.endWindow();
+		ui.endWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow4()
 {
-	if (guiManager.beginWindow(bGui_4))
+	if (ui.beginWindow(bGui_4))
 	{
-		if (!guiManager.bMinimize)
+		if (!ui.bMinimize)
 		{
-			guiManager.AddLabelBig("> Two Horizontal Sliders. Without Labels in One Row");
+			ui.AddLabelBig("> Two Horizontal Sliders. Without Labels in One Row");
 
-			guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, true);
-			guiManager.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, false);
+			ui.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, true);
+			ui.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, false);
 
-			guiManager.AddSpacingSeparated();
+			ui.AddSpacingSeparated();
 		}
 
-		guiManager.AddLabelHuge("> Four Knobs");
+		ui.AddLabelHuge("> Four Knobs");
 
-		guiManager.Add(speed3, OFX_IM_KNOB, 2, true);
-		guiManager.Add(speed4, OFX_IM_KNOB, 2);
+		ui.Add(speed3, OFX_IM_KNOB, 2, true);
+		ui.Add(speed4, OFX_IM_KNOB, 2);
 		
-		guiManager.AddSpacing();
+		ui.AddSpacing();
 
-		guiManager.Add(size3, OFX_IM_KNOB, 2, true);
-		guiManager.Add(size4, OFX_IM_KNOB, 2);
+		ui.Add(size3, OFX_IM_KNOB, 2, true);
+		ui.Add(size4, OFX_IM_KNOB, 2);
 
-		guiManager.AddSpacingBigSeparated();
+		ui.AddSpacingBigSeparated();
 		
-		guiManager.AddLabelBig("> An \nofParameter\nGroup");
+		ui.AddLabelBig("> An \nofParameter\nGroup");
 
-		guiManager.AddGroup(params3);
+		ui.AddGroup(params3);
 
-		guiManager.endWindow();
+		ui.endWindow();
 	}
 }

@@ -46,7 +46,7 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_INSTANTIATED_SINGLE, // -> To include the ImGui context and requiring begin/end but a single ImGui instance, no other add-ons.
 
 		//IM_GUI_MODE_SPECIAL_WINDOWS, // TODO: could simplify API, bc it's duplicated from 
-		//guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+		//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 		IM_GUI_MODE_REFERENCED, // TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
 
@@ -1129,7 +1129,7 @@ private:
 public:
 
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bGui_WindowsAlignHelpers{ "ALIGNERS", false };
+	ofParameter<bool> bGui_AlignHelpers{ "ALIGNERS", false };
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bLinkGlobal{ "Link", true };//link windows between contexts/add-ons/ gui instances
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
@@ -1235,7 +1235,7 @@ public:
 	ImGuiLogWindow log;//public to allow acces from parent scope/ofApp
 
 	//--------------------------------------------------------------
-	void drawLogPanel() {
+	void drawWindowLog() {
 		if (bLog) log.ImGui(bLog);
 	}
 
@@ -1275,8 +1275,8 @@ private:
 
 	// Example:
 	// Snippet to copy/paste into out ofApp:
-	//ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bAdvanced);
-	//guiManager.drawAdvancedSubPanel();
+	//ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
+	//ui.drawAdvancedSubPanel();
 
 	//--------------------------------------------------------------
 	void drawAdvancedControls() {
@@ -1288,9 +1288,22 @@ public:
 	// Example:
 	// Snippet to copy/paste into out ofApp:
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
-	//if (guiManager.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-	//if (guiManager.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
-	//guiManager.beginWindow("ofApp", NULL, window_flags);
+	//if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	//if (ui.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+	//ui.beginWindow("ofApp", NULL, window_flags);
+
+	//--------------------------------------------------------------
+	void drawWindowAdvanced(bool bForceVisible = false)
+	{
+		bool b;
+		if (!bForceVisible) b = beginWindow(bAdvanced);
+		else b = beginWindow(bAdvanced.getName());
+		if (b) {
+			//if (!bForceVisible)this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+			drawAdvancedSubPanel(true, bForceVisible);
+			endWindow();
+		}
+	}
 
 	//--------------------------------------------------------------
 	void drawAdvancedBundle(bool bNoSperator = false, bool bNoSpacing = false) { // -> Simpler call. Use this.
@@ -1317,10 +1330,12 @@ public:
 private:
 
 	//--------------------------------------------------------------
-	void drawAdvancedSubPanel(bool bHeader = true)
+	void drawAdvancedSubPanel(bool bHeader = true, bool bForceVisible = false)
 	{
-		if (!bAdvanced) return;
-		if (!bUseAdvancedSubPanel) return;
+		if (!bForceVisible) {
+			if (!bAdvanced) return;
+			if (!bUseAdvancedSubPanel) return;
+		}
 
 		//--
 
@@ -1351,7 +1366,7 @@ private:
 
 			// Main Reset
 			// that can be linked using a pointer to an external trigger!
-			// Example: guiManager.setReset(&bResetDocking);
+			// Example: ui.setReset(&bResetDocking);
 			if (bResetPtr != nullptr)
 			{
 				Add(bReset, OFX_IM_BUTTON_SMALL);
@@ -1438,11 +1453,11 @@ private:
 
 						/*
 						// Align Helpers
-						Add(bGui_WindowsAlignHelpers, OFX_IM_TOGGLE_ROUNDED);
+						Add(bGui_AlignHelpers, OFX_IM_TOGGLE_ROUNDED);
 
 						// Organizer Special Windows
 						if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
-							Add(windowsSpecialsOrganizer.bGui_WindowsSpecials, OFX_IM_TOGGLE_ROUNDED);
+							Add(specialWindowsOrganizer.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED);
 						}
 						*/
 
@@ -1623,7 +1638,7 @@ private:
 
 	std::string path_SubPathLabel = "";
 
-	ofParameterGroup params_AppSettings{ "guiManager" }; // -> Features states
+	ofParameterGroup params_AppSettings{ "ui" }; // -> Features states
 	//ofParameterGroup params_AppSettings{ "AppSettings" }; // -> Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // -> Layout states
 
@@ -1635,12 +1650,28 @@ public:
 
 	// New API
 	//--------------------------------------------------------------
-	void setName(std::string name) { // must call before setup. To allow multiple instances/windows settings
+	void setName(std::string name) {
+		// Must call before setup! To allow multiple instances/windows settings. 
+		// Notice that each instance will have his own folder path for setting files! 
+		// This name will be used on the folder name too.
 		path_SubPathLabel = "_" + name;
-		windowsSpecialsOrganizer.setName(name);
+		specialWindowsOrganizer.setName(name);
+
+		// split possible instances on different folders
+		path_Global = name + "/Gui/";
+		ofxSurfingHelpers::CheckFolder(path_Global);
+
+		// customize common windows duplicated on when using multiple instances.
+		// that's to avoid overlapping contents when imgui windows have the same name!
+		//specialWindowsOrganizer.bGui_SpecialWindows.setName(name);
+		setNameWindowSpecialWindowsOrganizer(name);
+
+		bGui_HelpersSpecialWindows.setName(name + " SW");
+		//bGui_AlignHelpers.setName(name + " ALIGNERS");
 	}
 
-private: // hide to simplify
+private: 
+	// Hide to simplify
 
 	//--------------------------------------------------------------
 	void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
@@ -1670,16 +1701,25 @@ private: // hide to simplify
 
 	//---------------------------
 
-	// Special Windows Management
+	// Special Windows Engine
 
-private:
+	//private:
 
 	//TODO:
+	// 
+	// That simplifies the API a bit..
+	// When calling endWindowSpecial,
+	// there's no need to pass what window/toggle/name is.
+	// Thats bc memorizes last index called on previous beginWindowSpecial.
+	// That must coincided if API is well used!
+	//  
+	// Should remove. deprecated
 	// To simplify a bit more the API workflow.
 	// Allows to omit the index argument on begin a window...
-	int _indexWindowsSpecials = 0;
+	int _indexLastBegin = -1;
 
-	std::string nameWindowSpecialsPanel = "";
+	//TODO:
+	//std::string nameWindowSpecialsPanel = "";
 
 	//--
 
@@ -1691,8 +1731,6 @@ public:
 	// to be called on DrawImGui()
 
 	// Begin
-
-	bool beginWindowSpecial();
 
 	bool beginWindowSpecial(int index);
 	// -> If you added windows to the engine you can begin the window passing his index
@@ -1706,7 +1744,19 @@ public:
 
 	// End
 
-	void endWindowSpecial(int index = -1);
+	// Notice that when you don't pass an argument or -1, 
+	// it will use the last beginWindowSpecial index!
+	// Use it with care!
+	void endWindowSpecial(int index); 
+	//--------------------------------------------------------------
+	void endWindowSpecial() {
+		endWindowSpecial(-1);
+	};
+	
+	// Notice that preferred usage is 
+	// by passing the bool toggle or the window name, 
+	// not only like when opening/beginWindowSpecial, 
+	// but also when closing/endWindowSpecial too!
 	void endWindowSpecial(ofParameter<bool>& _bGui);
 
 	//--
@@ -1714,33 +1764,34 @@ public:
 	// Rarely useful Helpers
 
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
-	//to get the index of an special window passing the toggle
+	// to get the index of an special window passing the toggle
 
 	int getWindowSpecialIndexForName(string name);
-	//to be used if you forgot or don't know the index
+	// to be used if you forgot or don't know the index
 
 	//----
 
 	// Organizer Special Windows
 
 	//--------------------------------------------------------------
-	void setNameWindowsSpecialsOrganizer(std::string name) // Just optional to customize name.
+	void setNameWindowSpecialWindowsOrganizer(std::string name) // Just optional to customize name.
 	{
-		nameWindowSpecialsPanel = name;
-		windowsSpecialsOrganizer.bGui_WindowsSpecials.setName(name);
+		//nameWindowSpecialsPanel = name;
+		specialWindowsOrganizer.bGui_SpecialWindows.setName("ORGANIZER " + name);
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowsSpecialsOrganizer() // Draws the main panel controller.
+	void drawWindowSpecialWindowsOrganizer() // Draws the main panel controller.
 	{
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		if (specialWindowsOrganizer.bGui_SpecialWindows)
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
-		if (beginWindow(windowsSpecialsOrganizer.bGui_WindowsSpecials))
+		if (beginWindow(specialWindowsOrganizer.bGui_SpecialWindows))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			windowsSpecialsOrganizer.drawWidgetsOrganizer(bMinimize);
+			specialWindowsOrganizer.drawWidgetsOrganizer(bMinimize);
 
 			endWindow();
 		}
@@ -1748,24 +1799,25 @@ public:
 
 	//--------------------------------------------------------------
 	void setWindowsSpecialsOrientation(bool b) { // Set orientation of window special alignment! horz/vert
-		windowsSpecialsOrganizer.bOrientation = b;
+		specialWindowsOrganizer.bOrientation = b;
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowsAlignHelpers()
+	void drawWindowAlignHelpers()
 	{
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		if (bGui_AlignHelpers)
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
-		if (beginWindow(bGui_WindowsAlignHelpers))
+		if (beginWindow(bGui_AlignHelpers))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			AddSpacing();
 
-			windowsSpecialsOrganizer.drawWidgetsAlignHelpers(bMinimize);
+			specialWindowsOrganizer.drawWidgetsAlignHelpers(bMinimize);
 
 			if (!bMinimize) {
 				AddSpacing();
-				ofxImGuiSurfing::AddStepperInt(windowsSpecialsOrganizer.pad);
+				ofxImGuiSurfing::AddStepperInt(specialWindowsOrganizer.pad);
 			}
 
 			endWindow();
@@ -1774,11 +1826,11 @@ public:
 
 	//--------------------------------------------------------------
 	bool getWindowsSpecialEnableGlobal() {
-		return windowsSpecialsOrganizer.bGui_ShowAll.get();
+		return specialWindowsOrganizer.bGui_ShowAll.get();
 	}
 	//--------------------------------------------------------------
 	bool getWindowSpecialVisibleGlobalState() const {
-		return windowsSpecialsOrganizer.bGui_ShowAll.get();
+		return specialWindowsOrganizer.bGui_ShowAll.get();
 	}
 
 	//--
@@ -1791,7 +1843,7 @@ public:
 		ofParameter<bool> bGui{ "_bGui", true };
 
 		////TODO: could be removed...not used..
-		//ofParameter<bool> bAutoResize{ "Auto Resize", true };
+		ofParameter<bool> bAutoResize{ "Auto Resize", true };
 		//ofParameter<bool> bExtra{ "Extra", false };
 		//ofParameter<bool> bMinimize{ "Minimize", false };
 		//ofParameter<bool> bAdvanced{ "Advanced", false };
@@ -1811,95 +1863,121 @@ public:
 		//ofParameter<ofRectangle> rectShapeWindow{ "_WindowSpahe", ofRectangle(), ofRectangle(), ofRectangle() };
 	};
 
-	vector<SurfingImGuiWindowAtributes> windowsSpecialsLayouts;
+	vector<SurfingImGuiWindowAtributes> specialWindowsLayouts;
 	// Handles only the manually pre added special windows.
 
 	//----
 
 	// Windows Special Engine
 
-private:
+//private:
+public:
 
-	WindowPanels windowsSpecialsOrganizer;
+	WindowPanels specialWindowsOrganizer;
 
 public:
 
-	int getPad() { return windowsSpecialsOrganizer.pad; }//used pad between windows
+	int getPad() { return specialWindowsOrganizer.pad; }//used pad between windows
 
 public:
 
 	//--------------------------------------------------------------
 	void setNameWindowsSpecialsEnableGlobal(std::string name) {
-		windowsSpecialsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
+		specialWindowsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
 	}
 
 	////--------------------------------------------------------------
 	//void setName(std::string name) {
-	//	windowsSpecialsOrganizer.setName(name);
+	//	specialWindowsOrganizer.setName(name);
 	//}
 
 public:
 
 	//--------------------------------------------------------------
-	void clearWindowsSpecial() {
-		windowsSpecialsLayouts.clear();
+	void clearSpecialWindows() {
+		specialWindowsLayouts.clear();
 	}
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(ofParameter<bool>& _bGui, bool bMaster = false) {
+	void addWindowSpecial(ofParameter<bool>& _bGui, bool _bAutoResize = true, bool _bMaster = false) {
 
 		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.setMasterAnchor(bMaster);
+		win.bAutoResize = _bAutoResize;
+		win.setMasterAnchor(_bMaster);//TODO:
 
-		windowsSpecialsLayouts.push_back(win);
+		// Queue
 
+		specialWindowsLayouts.push_back(win);
 		params_WindowSpecials.add(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
-			windowsSpecialsOrganizer.add(_bGui);
+			specialWindowsOrganizer.add(_bGui);
 		}
 	}
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(std::string name, bool bPowered = false) {
+	void addWindowSpecial(std::string name, bool _bAutoResize = true, bool _bPowered = false) {
+
+		// Security Checks
+
+		// Special windows mode
+		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Special Windows mode was not initiated.");
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force Special Windows mode to allow add special Windows!");
+
+			this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+		}
+
+		// Also to simplify a bit the api.
+		if (!bDoneSetup) {
+
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Setup was not previously done!");
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force run ofxSurfing_ImGui_Manager::setup() now!");
+
+			setup();
+		}
+
 		ofParameter<bool> _bGui{ name, true };
 
 		SurfingImGuiWindowAtributes win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.setMasterAnchor(bPowered);
+		win.bAutoResize = _bAutoResize;
+		win.setMasterAnchor(_bPowered);
 
-		windowsSpecialsLayouts.push_back(win);
+		// Queue
 
+		specialWindowsLayouts.push_back(win);
 		params_WindowSpecials.add(_bGui);
+
 		bWindowSpecials.push_back(_bGui);
 
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 		{
-			windowsSpecialsOrganizer.add(_bGui);
+			specialWindowsOrganizer.add(_bGui);
 		}
 	}
 
 	//--------------------------------------------------------------
 	std::string getWindowSpecialName(int index) {
-		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
+		if (index > specialWindowsLayouts.size() - 1 || index == -1)
 		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Out of range index for queued windows, " << index;
 
 			return "-1";
 		}
 
-		return windowsSpecialsLayouts[index].bGui.getName();
+		return specialWindowsLayouts[index].bGui.getName();
 	}
 
 	////--------------------------------------------------------------
 	//ofRectangle getRectangleWindowSpecial(int index) {
-	//	if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
+	//	if (index > specialWindowsLayouts.size() - 1 || index == -1)
 	//	{
-	//		ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+	//		ofLogError("ofxSurfingImGui") <<(__FUNCTION__) << "Out of range index for queued windows, " << index;
 	//	}
-	//	return windowsSpecialsLayouts[index].rectShapeWindow;
+	//	return specialWindowsLayouts[index].rectShapeWindow;
 	//}
 
 	////--------------------------------------------------------------
@@ -1908,13 +1986,13 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void initiatieSpecialWindowsOrganizer()
+	void initiateSpecialWindowsOrganizer()
 	{
-		windowsSpecialsOrganizer.setPath(path_Global);
+		specialWindowsOrganizer.setPath(path_Global);
 
-		windowsSpecialsOrganizer.setupInitiate();
+		specialWindowsOrganizer.setupInitiate();
 
-		//windowsSpecialsOrganizer.bLinkedWindowsSpecial.set(true);//force
+		//specialWindowsOrganizer.bLinkedSpecialWindows.set(true);//force
 	}
 
 	//--
@@ -1923,32 +2001,32 @@ public:
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialEnablerLinker() { // toggle to enable or disable
-		return windowsSpecialsOrganizer.bLinkedWindowsSpecial;
+		return specialWindowsOrganizer.bLinkedSpecialWindows;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialsGuiToggle() { // main toggle to show the panel
-		return windowsSpecialsOrganizer.bGui_WindowsSpecials;
+		return specialWindowsOrganizer.bGui_SpecialWindows;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsSpecialsGuiToggleAllGlobal() { // global toggle to show/hide the all panels
-		return windowsSpecialsOrganizer.bGui_ShowAll;
+		return specialWindowsOrganizer.bGui_ShowAll;
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowsAlignHelpersGuiToggle() { // align windows toggle to show the panel
-		return bGui_WindowsAlignHelpers;
+		return bGui_AlignHelpers;
 	}
 
 	// New API alias
 	//--------------------------------------------------------------
 	ofParameter<bool>& getGuiToggleAlignHelpers() { // align windows toggle to show the panel
-		return bGui_WindowsAlignHelpers;
+		return bGui_AlignHelpers;
 	}
 	//--------------------------------------------------------------
 	ofParameter<bool>& getGuiToggleOrganizer() { // organizer window for special windows only! Required to add. See the examples.
-		return windowsSpecialsOrganizer.bGui_WindowsSpecials;
+		return specialWindowsOrganizer.bGui_SpecialWindows;
 	}
 
 	//----
@@ -1988,8 +2066,8 @@ public:
 	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
 	//--------------------------------------------------------------
 	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing) {
-		// can't be setted to ImGuiCond_Always bc will feedback/apply with the same window!
 
+		// can't be settled to ImGuiCond_Always bc will feedback/apply with the same window!
 		ImGui::SetNextWindowPos(getTopRightWindowLast(), cond);
 	}
 
@@ -2013,7 +2091,7 @@ public:
 		ImGuiContext* GImGui = ImGui::GetCurrentContext();
 		ImGuiContext& g = *GImGui;
 		bool bready = false;
-		int _pad = windowsSpecialsOrganizer.pad;
+		int _pad = specialWindowsOrganizer.pad;
 
 		for (ImGuiWindow* window : g.WindowsFocusOrder)
 		{
@@ -2056,31 +2134,38 @@ public:
 		return;
 	}
 
+	//--
+
+	//TODO:
+	// Set anchor first window from a parent scope:
+	// That feature allows to link grouped windows from many contexts / add-ons.
+
 	// Get the name of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
 	string getWindowSpecialLast() const {
-		return windowsSpecialsOrganizer.getWindowSpecialLast();
+		return specialWindowsOrganizer.getWindowSpecialLast();
 	}
 
 	// Get the position of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
 	glm::vec2 getWindowSpecialLastTopRight() const {
 
-		return windowsSpecialsOrganizer.getWindowSpecialLastTopRight();
+		return specialWindowsOrganizer.getWindowSpecialLastTopRight();
 	}
 
-	//--
+	//-
 
-	// Set anchor first window form parent scope:
+	// Get anchor from first window taken from the parent scope
 	//--------------------------------------------------------------
 	glm::vec2 getWindowSpecialLastTopLeft() const {
 
-		return windowsSpecialsOrganizer.getWindowSpecialLastTopLeft();
+		return specialWindowsOrganizer.getWindowSpecialLastTopLeft();
 	}
 
+	// Set the anchor position from the parent scope
 	//--------------------------------------------------------------
 	void setWindowSpecialFirstPosition(glm::vec2 pos) {
-		windowsSpecialsOrganizer.setWindowSpecialFirstPosition(pos);
+		specialWindowsOrganizer.setWindowSpecialFirstPosition(pos);
 	}
 
 	//--
@@ -2088,17 +2173,17 @@ public:
 	//// Orientation cascade windows
 	////--------------------------------------------------------------
 	//void setSpecialWindowsOrganizerOrientationHorizontal() {
-	//	windowsSpecialsOrganizer.bOrientation.set(false);
+	//	specialWindowsOrganizer.bOrientation.set(false);
 	//}
 
 	////--------------------------------------------------------------
 	//void setSpecialWindowsOrganizerOrientationVertical() {
-	//	windowsSpecialsOrganizer.bOrientation.set(true);
+	//	specialWindowsOrganizer.bOrientation.set(true);
 	//}
 
 	////--------------------------------------------------------------
 	//void setToggleSpecialWindowsOrganizerOrientation() {
-	//	windowsSpecialsOrganizer.bOrientation.set(!windowsSpecialsOrganizer.bOrientation.get());
+	//	specialWindowsOrganizer.bOrientation.set(!specialWindowsOrganizer.bOrientation.get());
 	//}
 
 	//--	
@@ -2177,7 +2262,7 @@ public:
 	//--------------------------------------------------------------
 	int getWindowSpecialPadSize() const
 	{
-		int pad = windowsSpecialsOrganizer.pad;
+		int pad = specialWindowsOrganizer.pad;
 		//glm::vec2 p(pad, pad);
 		return pad;
 	}
@@ -2195,61 +2280,112 @@ public:
 	//--------------------------------------------------------------
 	bool getWindowSpecialVisibleState(int index) const // return visible toggle state
 	{
-		if (windowsSpecialsLayouts.size() == 0) return false;
-		else if (index > windowsSpecialsLayouts.size() - 1 || index == -1) return false;
-		else return windowsSpecialsLayouts[index].bGui.get();
+		if (specialWindowsLayouts.size() == 0) return false;
+		else if (index > specialWindowsLayouts.size() - 1 || index == -1) return false;
+		else return specialWindowsLayouts[index].bGui.get();
 	}
 
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowSpecialVisible(int index) // return bool parameter visible toggle
 	{
-		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
+		if (index > specialWindowsLayouts.size() - 1 || index == -1)
 		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Out of range index for queued windows, " << index;
 			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
 			return b;
 		}
 
-		return windowsSpecialsLayouts[index].bGui;
+		return specialWindowsLayouts[index].bGui;
 	}
 
 	// Easy populate all the Special Windows toggles. Call inside a window.
 	//--------------------------------------------------------------
-	void drawWindowSpecialsGuiToggles() {
-		for (size_t i = 0; i < windowsSpecialsLayouts.size(); i++)
+	void drawWidgetsSpecialWindowsToggles(SurfingImGuiTypes style = OFX_IM_TOGGLE_ROUNDED) {
+		for (size_t i = 0; i < specialWindowsLayouts.size(); i++)
 		{
-			Add(getWindowSpecialGuiToggle(i), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			this->Add(getWindowSpecialGuiToggle(i), style);
+		}
+	}
+
+	// Creates a Helper Window 
+	// with auto populated all the Special Windows toggles. 
+	// To be called outside a window, just between the main begin/end!
+	//--------------------------------------------------------------
+	void drawWindowSpecialWindows()
+	{
+		if (beginWindow(bGui_HelpersSpecialWindows))
+		{
+			this->AddLabelBig("Special Windows", false);
+
+			ImGui::Spacing();
+
+			float _h = getWidgetsHeight();
+			float _w1 = getWidgetsWidth(1);
+			float _w2 = getWidgetsWidth(2);
+
+			if (ImGui::Button("All", ImVec2(_w2, _h)))
+			{
+				for (auto& p : specialWindowsOrganizer.specialWindowsOrganizer) {
+					p.bGui = true;
+				}
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("None", ImVec2(_w2, _h)))
+			{
+				for (auto& p : specialWindowsOrganizer.specialWindowsOrganizer) {
+					p.bGui = false;
+				}
+			}
+
+			// Show global
+			this->Add(this->getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+
+			// All toggles
+			if (getWindowsSpecialsGuiToggleAllGlobal().get())
+			{
+				ImGui::Indent();
+				drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
+				ImGui::Unindent();
+			}
+
+			this->AddSpacingSeparated();
+
+			// Special Windows Organizer toggle 
+			this->Add(this->getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+
+			this->endWindow();
 		}
 	}
 
 	//--------------------------------------------------------------
 	void setWindowSpecialToggleVisibleAllGlobal()
 	{
-		windowsSpecialsOrganizer.bGui_ShowAll = !windowsSpecialsOrganizer.bGui_ShowAll;
+		specialWindowsOrganizer.bGui_ShowAll = !specialWindowsOrganizer.bGui_ShowAll;
 	}
 
 	//--------------------------------------------------------------
 	void setWindowSpecialToggleVisible(int index)
 	{
-		if (index > windowsSpecialsLayouts.size() - 1 || index == -1)
+		if (index > specialWindowsLayouts.size() - 1 || index == -1)
 		{
-			ofLogError(__FUNCTION__) << "Out of range index for queued windows, " << index;
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Out of range index for queued windows, " << index;
 
 			return;
 		}
 
-		windowsSpecialsLayouts[index].bGui = !windowsSpecialsLayouts[index].bGui;
+		specialWindowsLayouts[index].bGui = !specialWindowsLayouts[index].bGui;
 	}
 
 	//----
 
 private:
-
-	bool loadAppSettings();//we store some internal stuff	
+	
+	// We store many internal stuff like: minimize, advanced, extra, debug states...etc.	
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning
 	// Then we can reset to some default variables and layout positions of our windows.
 
+	bool loadAppSettings();
 	void saveAppSettings();
 
 	//----
@@ -2347,7 +2483,7 @@ public:
 	//--------------------------------------------------------------
 	void setPresetsNames(vector <std::string > names) {
 		if (names.size() != 4) {
-			ofLogError(__FUNCTION__) << "Names sizes are not equals to 4";
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Names sizes are not equals to 4";
 		}
 
 		namesPresets.clear();
@@ -2371,7 +2507,8 @@ public:
 
 private:
 
-	bool bStartupCalled = false;
+	bool bDoneStartup = false;
+	bool bDoneSetup = false;
 
 	//public:
 
@@ -2471,6 +2608,10 @@ private:
 
 public:
 
+	ofParameter<bool> bGui_HelpersSpecialWindows{ "Special Windows", false };
+
+public:
+
 	ofParameter<bool> bLog{ "Log", false };//show log window
 
 	//-
@@ -2521,9 +2662,9 @@ public:
 
 	//--------------------------------------------------------------
 	void setShowAllPanels(bool b) {
-		for (int i = 0; i < windowsSpecialsLayouts.size(); i++)
+		for (int i = 0; i < specialWindowsLayouts.size(); i++)
 		{
-			windowsSpecialsLayouts[i].bGui.set(b);
+			specialWindowsLayouts[i].bGui.set(b);
 		}
 	}
 
@@ -2541,8 +2682,8 @@ public:
 
 	//--------------------------------------------------------------
 	void doSpecialWindowToggleVisible(int index) {
-		if (index >= windowsSpecialsLayouts.size()) return;//ignore
-		windowsSpecialsLayouts[index].bGui = !windowsSpecialsLayouts[index].bGui;
+		if (index >= specialWindowsLayouts.size()) return;//ignore
+		specialWindowsLayouts[index].bGui = !specialWindowsLayouts[index].bGui;
 	}
 
 	//--
@@ -2556,11 +2697,11 @@ private:
 
 	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
-	TextBoxWidget textBoxWidgetInternal;
+	TextBoxWidget boxHelpInternal;
 
 	// Help App: How to use our App 
 	std::string helpInfoApp = "";
-	TextBoxWidget textBoxWidgetApp;
+	TextBoxWidget boxHelpApp;
 
 	// main help disablers
 	bool bUseHelpInfoInternal = false;
@@ -2583,14 +2724,14 @@ public:
 	//--------------------------------------------------------------
 	void setHelpInfoApp(string text) {
 		helpInfoApp = text;
-		textBoxWidgetApp.setText(helpInfoApp);
+		boxHelpApp.setText(helpInfoApp);
 		bUseHelpInfoApp = true;
 	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoInternal(string text) {
 		helpInfo = text;
-		textBoxWidgetInternal.setText(helpInfo);
+		boxHelpInternal.setText(helpInfo);
 		bUseHelpInfoInternal = true;
 	}
 	// Useful in some rare scenarios to populate or hide the enabler toggle
@@ -2602,7 +2743,7 @@ public:
 	// NOTES
 
 	// -> Optional to customize filename for the settings file for multiple instances on the same ofApp.
-	//guiManager.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
 
 	//----
 
@@ -2610,7 +2751,7 @@ public:
 public:
 
 	// Helpers to populate non ofParams,
-	// CPP types instead an mantain global styles.
+	// Raw CPP types instead an maintain global styles.
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
@@ -2667,6 +2808,85 @@ public:
 
 		case OFX_IM_BUTTON_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+		}
+
+		// Extra options
+		// - Same line flag.
+		// - Final y spacing.
+
+		if (bSameLine) ImGui::SameLine();
+		if (spacing != -1 && spacing != 0)
+		{
+			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
+		}
+
+		return bReturn;
+	}
+
+	//--
+
+	// Toggle
+
+	// Helpers to populate non ofParams,
+	// Raw CPP types instead an maintain global styles.
+	// To speed up populate widgets without requiring to create ofParameters first.
+	// A toggle passing a name and a boolean to show and get the boolean state.
+	//--------------------------------------------------------------
+	bool AddToggle(string label, bool& bState, ImVec2 sz)
+	{
+		bool bReturn = false;
+
+		float _ww = sz.x;
+		float _h = sz.y;
+
+		bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+
+		return bReturn;
+	}
+
+	//--------------------------------------------------------------
+	bool AddToggle(string label, bool& bState, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		bool bReturn = false;
+
+		// widget width
+		// we get the sizes from the canvas layout!
+		float _ww = widgetsManager.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _h = getWidgetsHeightUnit();
+
+		switch (type)
+		{
+
+		case OFX_IM_DEFAULT:
+		case OFX_IM_BUTTON_SMALL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 		}

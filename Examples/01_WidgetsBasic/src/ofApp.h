@@ -3,7 +3,6 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "ofxSurfingHelpers.h"
 
 class ofApp : public ofBaseApp
 {
@@ -18,7 +17,7 @@ public:
 
 	// ImGui
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	ofParameter<bool> bGui;
     void drawImWindowMain();

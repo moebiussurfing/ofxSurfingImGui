@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetWindowPosition(-1920, 20);
+
 	//--
 
 	// Parameters
@@ -54,9 +56,9 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	//// Can be omitted
-	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-	//ui.setup();
+	ui.setName("ofApp"); // -> Recommended to set a name when using multiple instances of the Gui Manager!
+	ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	ui.setup();
 
 	// when adding by name you need to use indexes when drawing the window!
 	ui.addWindowSpecial("Window 1"); // using legacy style by name
@@ -70,10 +72,14 @@ void ofApp::setup_ImGui()
 	ui.addWindowSpecial(bGui_5);
 	ui.addWindowSpecial(bGui_6);
 
-	//// Can be omitted
-	//ui.startup();
+	// bundle the object here too,
+	// to group on the toggles too
+	// we do not use beginWindowSpecial/endWindowSpecial methods.
+	ui.addWindowSpecial(myClassObject.bGui);
 
 	// all the window visible toggle states are auto handled between sessions.
+
+	ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -95,6 +101,18 @@ void ofApp::draw()
 		draw_SurfingWidgets_6();
 	}
 	ui.end();
+
+	//--
+
+	//TODO:
+	// link by anchor
+	auto p = ui.getWindowSpecialLastTopRight();
+	myClassObject.ui.setWindowSpecialFirstPosition(p);
+	//myClassObject.ui.specialWindowsOrganizer.doReOrganize();
+	//myClassObject.ui.specialWindowsOrganizer.doApplyLinkWindows();
+	//myClassObject.ui.specialWindowsOrganizer.update();
+	//myClassObject.ui.specialWindowsOrganizer.runShapeState(index);
+	myClassObject.draw();
 }
 
 //--------------------------------------------------------------
@@ -102,19 +120,35 @@ void ofApp::draw_MainWindow() {
 
 	if (ui.beginWindow(bGui))
 	{
-		// Useful common toggles exposed:
+		ui.AddLabelBig("Main Window");
 
-		// Special Windows Organizer
+		// Some internal optional stuff,
+		// as common toggles are exposed
+		  
+		// Special Windows Organizer toggle 
 		ui.Add(ui.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-		ui.Add(ui.bHelp, OFX_IM_TOGGLE_ROUNDED);
-		ui.AddSpacingSeparated();
+		ui.AddSpacing();
 
 		// Show global
-		ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+		
+		if (ui.getWindowsSpecialsGuiToggleAllGlobal()) {
+			ui.AddSpacing();
+			// Draw each Special Window toggle
+			ui.drawWidgetsSpecialWindowsToggles(OFX_IM_CHECKBOX);
+		}
 		ui.AddSpacingSeparated();
 
-		// Draw each Special Window toggle
-		ui.drawWidgetsSpecialWindowsToggles();
+		//-
+
+		ui.AddLabelBig("Another ofxImGuiSurfing instance", false);
+		ui.AddLabel("We can use many instances of the add-on simultaneously. Then we can combine multiple classes/add-ons without colliding their ImGui windows.", false);
+		ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
+		ui.AddSpacingSeparated();
+
+		//-
+		
+		ui.Add(ui.bHelp, OFX_IM_TOGGLE_ROUNDED);
 
 		ui.endWindow();
 	}
@@ -132,15 +166,16 @@ void ofApp::draw_SurfingWidgets_1()
 	// 1. by passing a bool param (acting as a visible toggle)
 	// 2. by passing a name when adding and passing which index was to drawing!
 
-	if (ui.beginWindowSpecial(0)) 
+	if (ui.beginWindowSpecial(0))
 	{
 		ui.AddLabelBig("> Special \nWindow 1", false);
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		ui.AddGroup(params_0);
-		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS); // hide labels
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(0);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -164,7 +199,8 @@ void ofApp::draw_SurfingWidgets_2()
 		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(bGui_2);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -182,7 +218,8 @@ void ofApp::draw_SurfingWidgets_3()
 		ui.AddSpacingBigSeparated();
 		ui.AddGroup(params_2);
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(bGui_3);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -201,7 +238,8 @@ void ofApp::draw_SurfingWidgets_4()
 		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(bGui_4);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -215,7 +253,8 @@ void ofApp::draw_SurfingWidgets_5()
 		ui.AddLabelBig("> Special \nWindow 5", false);
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(bGui_5);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -229,7 +268,8 @@ void ofApp::draw_SurfingWidgets_6()
 		ui.AddLabelBig("> Special \nWindow 6", false);
 		ui.Add(amount2, OFX_IM_KNOB);
 
-		ui.endWindowSpecial();
+		ui.endWindowSpecial(bGui_6);
+		//ui.endWindowSpecial();
 	}
 }
 
@@ -241,6 +281,11 @@ void ofApp::keyPressed(int key) {
 	else if (key == 'g') {
 		bGui = !bGui;
 	}
+
+	else if (key == '0') {
+		ui.setWindowSpecialToggleVisibleAllGlobal();
+	}
+
 	else if (key == '1') {
 		ui.setWindowSpecialToggleVisible(0);
 	}
@@ -253,33 +298,30 @@ void ofApp::keyPressed(int key) {
 	else if (key == '4') {
 		ui.setWindowSpecialToggleVisible(3);
 	}
-
 	else if (key == '5') {
 		ui.setWindowSpecialToggleVisible(4);
 	}
 	else if (key == '6') {
 		ui.setWindowSpecialToggleVisible(5);
 	}
-
-	else if (key == '0') {
-		ui.setWindowSpecialToggleVisibleAllGlobal();
-	}
 }
 
 //--------------------------------------------------------------
 void ofApp::buildHelpInfo()
 {
+	// We can use an internal Help Manager on the Gui Manager
+
 	helpInfo = "";
-	helpInfo += "HELP \n\n";
-	helpInfo += "12_SpecialWindows2 \n";
-	helpInfo += "\n";
-	helpInfo += "KEY COMMANDS \n";
-	helpInfo += "\n";
+	helpInfo += "HELP ofApp \n\n";
+	helpInfo += "13_SpecialWindowsAdvanced \n\n";
+	helpInfo += "KEY COMMANDS \n\n";
 	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
+
 	if (bGui)
 	{
 		helpInfo += "\n\n";
 		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getWindowSpecialVisibleGlobalState() ? "ON" : "OFF") + "\n";
+
 		if (ui.getWindowSpecialVisibleGlobalState())
 		{
 			helpInfo += "\n";
@@ -292,7 +334,8 @@ void ofApp::buildHelpInfo()
 		}
 	}
 	helpInfo += "\n\n";
-	helpInfo += "Double click to Edit/Lock \n";
+	helpInfo += "DoubleClick to Edit/Lock \n";
+	helpInfo += "LeftClick + RightClick to Close \n";
 
 	ui.setHelpInfoApp(helpInfo);
 }

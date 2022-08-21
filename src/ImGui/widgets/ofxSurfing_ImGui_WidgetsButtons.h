@@ -372,8 +372,9 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// Big Buttons and toggles for BOOLS ofParams
+	// Big Buttons (for void and boolean) and Toggles for boolean ofParams
 
+	// Legacy
 	//--------------------------------------------------------------
 	inline bool AddBigToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
@@ -504,13 +505,27 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border, bool bBlink) {
+	inline bool AddBigToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border = false, bool bBlink = false) {
 		return AddBigToggle(parameter, bb.x, bb.y, border, bBlink);
+	}
+
+	// Refactored names removing "big" tag
+	//--------------------------------------------------------------
+	inline bool AddToggle(ofParameter<bool>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
+	{
+		return AddBigToggle(parameter, w, h, border, bBlink);
+	}
+	//--------------------------------------------------------------
+	inline bool AddToggle(ofParameter<bool>& parameter, ImVec2 bb, bool border = false, bool bBlink = false) {
+		return AddToggle(parameter, bb.x, bb.y, border, bBlink);
 	}
 
 	//--
 
-	// Two states with two names. Also with blinking with setteable alpha border
+	// Toggles with two states with two names. 
+	// Also with blinking mode or with settable alpha border.
+	
+	// Legacy
 	//--------------------------------------------------------------
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
 	{
@@ -621,11 +636,22 @@ namespace ofxImGuiSurfing
 
 		return (bPre != tmpRef);
 	}
-
 	//--------------------------------------------------------------
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
 	{
 		return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+	}
+
+	// Refactored names removing "big" tag
+	//--------------------------------------------------------------
+	inline bool AddToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
+	{
+		return AddBigToggleNamed(parameter, w, h, nameTrue, nameFalse, bBlink, blinkValue);
+	}
+	//--------------------------------------------------------------
+	inline bool AddToggleNamed(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
+	{
+		return AddToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
 	}
 	//--------------------------------------------------------------
 	inline bool AddToggleNamed(ofParameter<bool>& parameter, std::string nameTrue, std::string nameFalse)
@@ -634,8 +660,18 @@ namespace ofxImGuiSurfing
 		float blinkValue = -1.0f;
 		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
 		ImVec2 bb = ImVec2(-1, h);
-		return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+		return AddToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+		//return AddBigToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
 	}
+	////--------------------------------------------------------------
+	//inline bool AddToggleNamed(ofParameter<bool>& parameter, std::string nameTrue, std::string nameFalse)
+	//{
+	//	bool bBlink = false;
+	//	float blinkValue = -1.0f;
+	//	float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+	//	ImVec2 bb = ImVec2(-1, h);
+	//	return AddToggleNamed(parameter, bb.x, bb.y, nameTrue, nameFalse, bBlink, blinkValue);
+	//}
 
 	//--------------------------------------------------------------
 
@@ -933,5 +969,140 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 
 		return bReturn;
+	}
+
+	//---
+
+	//--------------------------------------------------------------
+	inline bool AddBigToggle(std::string name, bool& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
+	{
+		// Border when selected
+
+		float a = 0.5f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		// Blink
+
+		if (bBlink)
+		{
+			float blinkValue = ofxImGuiSurfing::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		bool bDrawBorder = true;
+
+		//--
+
+		auto tmpRef = parameter;
+		bool bPre = tmpRef;
+
+		//--
+
+		// Default
+
+		if (w == -1) w = ImGui::GetContentRegionAvail().x;
+		if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+		bool _boolToggle = tmpRef; // default pre value, the button is disabled 
+
+		if (_boolToggle) // was enabled
+		{
+			// Warning: notice that each state has a different button, so we need to push different ID's!
+			// Warning: in this case we need to use the name to became the toggle functional
+			// that means that we can maybe collide not unique names! 
+			//std::string n = "#BT" + name + ofToString(counterBigToggle++);
+
+			std::string n = "##BIGTOGGLE_on_" + name + ofToString(1);
+
+			ImGui::PushID(n.c_str());
+			{
+				// Border to selected
+				if (border)
+				{
+					bDrawBorder = true;
+					ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+					ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+				}
+
+				const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonHovered];
+				const ImVec4 colorButton = style->Colors[ImGuiCol_ButtonActive];
+				const ImVec4 colorHover = style->Colors[ImGuiCol_ButtonHovered];
+
+				ImVec4 colorHover2 = ImVec4(colorHover.x, colorHover.y, colorHover.z, colorHover.w * 1.0);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorHover2);
+				ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover2);
+
+				ImGui::Button(name.c_str(), ImVec2(w, h));
+
+				if (ImGui::IsItemClicked(0)) // PowerOff
+				{
+					_boolToggle = false;
+					tmpRef = false;
+					parameter = (tmpRef);
+				}
+
+				ImGui::PopStyleColor(3);
+
+				// Border Blink
+				if (bDrawBorder && border)
+				{
+					ImGui::PopStyleColor();
+					ImGui::PopStyleVar(1);
+				}
+			}
+			ImGui::PopID();
+		}
+		else // was disabled
+		{
+			std::string n = "##BIGTOGGLE_off_" + name + ofToString(1);
+			ImGui::PushID(n.c_str());
+			{
+				const ImVec4 colorOn = style->Colors[ImGuiCol_FrameBg];
+				const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
+				ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
+				colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
+					colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
+
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+				ImGui::PushStyleColor(ImGuiCol_Button, colorOn);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorActive);
+				ImGui::PushStyleColor(ImGuiCol_Text, colorTextDisabled);
+
+				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
+				{
+					_boolToggle = true;
+					tmpRef = _boolToggle;
+					parameter = (tmpRef);
+				}
+
+				ImGui::PopStyleColor(4);
+			}
+			ImGui::PopID();
+		}
+
+		// Debug point
+		if (0)
+		{
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			const ImVec2 pdebug = ImGui::GetCursorScreenPos();
+			draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); // a bit of offset
+		}
+
+		//-
+
+		if (parameter != bPre) return true; // changed
+		else return false;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddBigToggle(std::string name, bool& parameter, ImVec2 bb, bool border, bool bBlink) {
+		return AddBigToggle(name, parameter, bb.x, bb.y, border, bBlink);
 	}
 };

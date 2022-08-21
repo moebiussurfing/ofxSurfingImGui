@@ -3,10 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup() 
 {
-	// parameters
-	params.setName("paramsGroup");// main container
-	params2.setName("paramsGroup2");// nested
-	params3.setName("paramsGroup3");// nested
+	// Parameters
+	params.setName("paramsGroup"); // main container
+	params2.setName("paramsGroup2"); // nested
+	params3.setName("paramsGroup3"); // nested
 	params.add(bPrevious.set("<", false));
 	params.add(bNext.set(">", false));
 	params.add(bEnable1.set("Enable1", false));
@@ -27,28 +27,32 @@ void ofApp::setup()
 	params2.add(params3);
 	params.add(params2);
 
-	guiManager.setup();
+	// Can be omitted in most scenarios..
+	//ui.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() 
 {
-	guiManager.begin();
+	ui.begin();
 	{
-		if (guiManager.beginWindow(bGui))
+		if (ui.beginWindow(bGui))
 		{
-			guiManager.AddGroup(params);
+			// ImGui widgets are placed here.
+			// ofParamaters widgets helpers be easy populate,
+			// But you can populate raw ImGui too.
 
-			guiManager.endWindow();
+			// This is an ofParameterGroup
+			ui.AddGroup(params);
+
+			ui.endWindow();
 		}
 	}
-	guiManager.end();
+	ui.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) 
 {
-	if (key == 'g') {
-		bGui = !bGui;
-	}
+	if (key == 'g') bGui = !bGui;
 }

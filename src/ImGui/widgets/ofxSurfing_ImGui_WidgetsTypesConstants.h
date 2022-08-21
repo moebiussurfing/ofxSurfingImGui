@@ -15,19 +15,19 @@ namespace ofxImGuiSurfing
 	/*
 
 	Arguments to the Styles Engine:
-	You can pass it as argument when adding each ofParameter to the guiManager.
+	You can pass it as argument when adding each ofParameter to the ui.
 
 	Examples:
 
-	guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-	guiManager.Add(floatValue, OFX_IM_VSLIDER);
-	guiManager.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
+	ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+	ui.Add(floatValue, OFX_IM_VSLIDER);
+	ui.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
 
 	// Two toggles in one row
-	guiManager.Add(bGui_1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
-	guiManager.Add(bGui_2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
+	ui.Add(bGui_1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
+	ui.Add(bGui_2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
 
-	guiManager.Add(bGui_3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
+	ui.Add(bGui_3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
 
 
 	*/

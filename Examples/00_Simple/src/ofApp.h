@@ -4,14 +4,15 @@
 
 #include "ofxSurfingImGui.h"
 
-class ofApp : public ofBaseApp{
-    
+class ofApp : public ofBaseApp
+{
 public:
+    
     void setup();
     void draw();
     void keyPressed(int key);
 
-    // parameters
+    // Parameters
     ofParameterGroup params;
     ofParameter<bool> bEnable1;
     ofParameter<bool> bEnable2;
@@ -36,5 +37,5 @@ public:
 
     ofParameter<bool> bGui{"Show Gui", true};
 
-    ofxSurfing_ImGui_Manager guiManager;
+    ofxSurfingGui ui;
 };

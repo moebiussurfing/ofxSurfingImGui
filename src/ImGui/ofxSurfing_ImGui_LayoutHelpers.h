@@ -33,7 +33,7 @@
 #define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
 #define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
-#define BUTTON_BIG_HEIGHT 50
+#define BUTTON_BIG_HEIGHT 50 // Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20
 
@@ -57,6 +57,9 @@
 
 // Default Font
 
+// Notice that if not any font file is located, will work as ImGui defalut,
+// So you don't need to put any files on bin/data to compile right!
+
 // Legacy Font
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
 #define FONT_DEFAULT_SIZE_LEGACY 11
@@ -78,14 +81,14 @@
 //--
 
 //// to help API memo
-//#define guiManager.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
-//#define guiManager.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
-//#define guiManager.AddSpacing() ofxImGuiSurfing::AddSpacing() 
-//#define guiManager.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
-//#define guiManager.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
-//#define guiManager.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
-//#define guiManager.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
-//#define guiManager.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
+//#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
+//#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
+//#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
+//#define ui.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
+//#define ui.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
+//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
+//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
+//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
 
 
 //------------------
@@ -98,6 +101,18 @@
 
 namespace ofxImGuiSurfing
 {
+	//--------------------------------------------------------------
+	inline float getWidgetsSpacingX()
+	{
+		return ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+	}
+	
+	//--------------------------------------------------------------
+	inline float getWidgetsSpacingY()
+	{
+		return ImGui::GetStyle().ItemSpacing.y; // y spacing between widgets
+	}
+
 	//--------------------------------------------------------------
 	inline float getWidgetsHeightRelative(int amntRows = -1) // height is relative to ImGui theme
 	{
@@ -120,6 +135,8 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
+	// Kind of Legacy
+	// Update all the common sizes in one line.
 	// We will update the sizes on any gui drawing point, 
 	// like inside a new foldered sub-window that could be indendeted and full size is being 
 	//--------------------------------------------------------------
@@ -150,6 +167,7 @@ namespace ofxImGuiSurfing
 		//__h = BUTTON_BIG_HEIGHT; // hardcoded
 	}
 
+	// Another alternative
 	// Just the more relevant sizes
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetsSizes(float& __w100, float& __w50, float& __w33, float& __w25, float& __h)
@@ -205,12 +223,25 @@ namespace ofxImGuiSurfing
 		}
 	}
 
+	// Get all the REAL available space inside the window, but counting the spacing and padding too!
+	// Notice that is not the window size / shape itself!
+	//--------------------------------------------------------------
+	inline float getWindowContentWidth()
+	{
+		return ImGui::GetContentRegionAvail().x;
+	}
+	//--------------------------------------------------------------
+	inline float getWindowContentHeight()
+	{
+		return ImGui::GetContentRegionAvail().y;
+	}
+
+	// Legacy
 	//--------------------------------------------------------------
 	inline float getPanelWidth()
 	{
 		return ImGui::GetContentRegionAvail().x;
 	}
-
 	//--------------------------------------------------------------
 	inline float getPanelHeight()
 	{
@@ -266,7 +297,7 @@ namespace ofxImGuiSurfing
 	inline float getWidgetsHeight(int amntRows = -1)
 	{
 		// notice that passing 1 will be full window height!
-		// that can be trouble when autosize window is allowed.
+		// that can be trouble when auto resize window is allowed.
 
 		float h;
 		if (amntRows == -1)
@@ -310,6 +341,8 @@ namespace ofxImGuiSurfing
 	}
 
 	//--
+
+	// Spacing and Separator Helpers
 
 	//--------------------------------------------------------------
 	inline void AddSpacingSmall()
@@ -387,6 +420,11 @@ namespace ofxImGuiSurfing
 	inline void AddSpaceY(int spacingy = 2)
 	{
 		ImGui::Dummy(ImVec2(0.0f, (float)spacingy)); // spacing
+	}
+	//--------------------------------------------------------------
+	inline void AddSpaceX(int spacingx = 2)
+	{
+		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
 
 } // namespace ofxImGuiSurfing

@@ -23,7 +23,7 @@
 	+ add the cool knobs.
 	+ fix toggles do not trigs/return true when changes?
 	+ add clickable label toggle widget.
-	+ add tool-tip types on styles on a new guiManager.Add(..arg
+	+ add tool-tip types on styles on a new ui.Add(..arg
 	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 	+ next / nested groups headers are weird hidden!
 	+ nested groups are (inheriting) expanded when parent is expanded.
@@ -31,7 +31,7 @@
 	SMALL THINGS
 	+ remake mode free and lockers simpler. a flag for each window ?
 	+ aspect ratio/fit modes for game view port.
-	+ fix log ofxImGuiSurfing::WindowPanels::isUsing:
+	+ fix log ofxImGuiSurfing::WindowPanels::isInitiated:
 
 	NEW FEATURES
 	+ auto midi knobs to FX:
@@ -39,6 +39,14 @@
 		auto assign to these 6 knobs
 		from current GUI editing / first plane page.
 
+	FEATURE
+	+ Probablynot required. 
+	But could think about linking multiple instances.
+	for example, to share organizer windows:
+	// Link internal stuff
+	ui.getWindowsSpecialsGuiToggle().makeReferenceTo(myClassObject.ui.getWindowsSpecialsGuiToggle());
+	Probably a better fix/workaround is to rename each common windows on each gui manager instance
+	or the pad between windows setting. we could pass pointers to all instances.
 */
 
 
@@ -81,7 +89,7 @@
 	{
 		#include "ofxSurfingImGui.h"
 
-		ofxSurfing_ImGui_Manager guiManager;
+		ofxSurfing_ImGui_Manager ui;
 		ofParameter<bool> bGui{ "ShowWindow", true };
 	}
 
@@ -89,7 +97,7 @@
 	{
 		// ofApp::setup()
 
-		guiManager.setup();
+		ui.setup();
 
 		//-------------------------------
 
@@ -97,20 +105,20 @@
 
 		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 
-		guiManager.begin();
+		ui.begin();
 		{
 			if(!bGui) return;
-			if (guiManager.beginWindow(bGui))
+			if (ui.beginWindow(bGui))
 			{
-				guiManager.Add(guiManager.bMinimize, OFX_IM_TOGGLE_ROUNDED);
-				if (!guiManager.bMinimize){}
+				ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+				if (!ui.bMinimize){}
 
 				//..
 
-				guiManager.endWindow();
+				ui.endWindow();
 			}
 		}
-		guiManager.end();
+		ui.end();
 	}
 }
 */
@@ -149,6 +157,9 @@
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
 
 using namespace ofxImGuiSurfing;
+
+// Short alias
+using ofxSurfingGui = ofxSurfing_ImGui_Manager;
 
 //--------------------------------------------------------------
 
@@ -223,7 +234,7 @@ using namespace ofxImGuiSurfing;
 
 	if (ImGui::TreeNode("_Tree"))
 	{
-		//guiManager.refreshLayout();
+		//ui.refreshLayout();
 		//.. -> widgets
 		ImGui::TreePop();
 	}
@@ -237,7 +248,7 @@ using namespace ofxImGuiSurfing;
 		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 		{
-			//guiManager.refreshLayout();
+			//ui.refreshLayout();
 			//.. -> widgets
 		}
 	}
@@ -252,7 +263,7 @@ using namespace ofxImGuiSurfing;
 		_flagt |= ImGuiTreeNodeFlags_Framed;
 		if (ImGui::TreeNodeEx("_TreeEx", _flagt))
 		{
-			//guiManager.refreshLayout();
+			//ui.refreshLayout();
 			//.. -> widgets
 			ImGui::TreePop();
 		}
@@ -405,7 +416,7 @@ using namespace ofxImGuiSurfing;
 	// Special Windows
 
 	// Main toggle
-	guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+	ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
 
 */
 
@@ -468,7 +479,7 @@ using namespace ofxImGuiSurfing;
 		}
 		if (ImGui::BeginTabItem("Controls"))
 		{
-			guiManager.drawAdvancedBundle();
+			ui.drawAdvancedBundle();
 
 			ImGui::EndTabItem();
 		}
@@ -490,8 +501,8 @@ using namespace ofxImGuiSurfing;
 		static ofParameter<bool> bPrev{ "<", false };
 		static ofParameter<bool> bNext{ ">", false };
 
-		guiManager.Add(bPrev, OFX_IM_BUTTON, 2, true);
-		guiManager.Add(bNext, OFX_IM_BUTTON, 2);
+		ui.Add(bPrev, OFX_IM_BUTTON, 2, true);
+		ui.Add(bNext, OFX_IM_BUTTON, 2);
 
 		if (bPrev)
 		{
@@ -639,28 +650,28 @@ using namespace ofxImGuiSurfing;
 	_fontSize = 11;
 	_fontName = "overpass-mono-bold.otf";
 	_path = "assets/fonts/" + _fontName;
-	guiManager.pushFont(_path, _fontSize);//index 0
+	ui.pushFont(_path, _fontSize);//index 0
 
 	_fontSize = 14;
 	_fontName = "RecMonoLinear-Bold-1.082.ttf";
 	_path = "assets/fonts/" + _fontName;
-	guiManager.pushFont(_path, _fontSize);//index 1
+	ui.pushFont(_path, _fontSize);//index 1
 
 	_fontSize = 17;
 	_fontName = "RecMonoLinear-Regular-1.082.ttf";
 	_path = "assets/fonts/" + _fontName;
-	guiManager.pushFont(_path, _fontSize);//index 2
+	ui.pushFont(_path, _fontSize);//index 2
 
-	guiManager.addFont(_path, _fontSize);
-	guiManager.setDefaultFontIndex(2);
+	ui.addFont(_path, _fontSize);
+	ui.setDefaultFontIndex(2);
 
 	// Customize Font
 	static bool bCustomFont = true;
-	if (bCustomFont) guiManager.pushStyleFont(1);
+	if (bCustomFont) ui.pushStyleFont(1);
 	{
 		//.. Will draw widgets using this font
 	}
-	if (bCustomFont) guiManager.popStyleFont();
+	if (bCustomFont) ui.popStyleFont();
 }
 
 */
@@ -674,15 +685,15 @@ using namespace ofxImGuiSurfing;
 	COMMON LEFT RIGHT ARROWS
 	TO BROWSE AN INDEX
 
-	if (guiManager.AddButton("<", OFX_IM_BUTTON_SMALL, 2)) {
+	if (ui.AddButton("<", OFX_IM_BUTTON_SMALL, 2)) {
 		////cycled
 		//if (index == index.getMin()) index = index.getMax();
 		//index--;
 		//limited
 		if (index > index.getMin()) index--;
 	};
-	guiManager.SameLine();
-	if (guiManager.AddButton(">", OFX_IM_BUTTON_SMALL, 2)) {
+	ui.SameLine();
+	if (ui.AddButton(">", OFX_IM_BUTTON_SMALL, 2)) {
 		////cycled
 		//if (index == index.getMax()) index = index.getMin();
 		//index++;
@@ -764,10 +775,10 @@ using namespace ofxImGuiSurfing;
 		TWO COLUMNS WITH 2 VERTICAL SLIDER WITH A RESET BUTTON ON EACH ONE.
 
 						//ImGui::Columns(2, "t1", false);
-						//guiManager.Add(smoothChannels[i]->ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
-						//guiManager.AddTooltip(ofToString(smoothChannels[i]->ampInput.get(), 2));
+						//ui.Add(smoothChannels[i]->ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
+						//ui.AddTooltip(ofToString(smoothChannels[i]->ampInput.get(), 2));
 						//ImGui::PushID("##RESET1");
-						//if (guiManager.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+						//if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
 						//	smoothChannels[i]->ampInput = 0;
 						//}
 						//ImGui::PopID();
@@ -776,10 +787,10 @@ using namespace ofxImGuiSurfing;
 						//// trigState
 						//if (smoothChannels[i]->bangDetectorIndex == 0)
 						//{
-						//	guiManager.Add(smoothChannels[i]->threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
-						//	guiManager.AddTooltip(ofToString(smoothChannels[i]->threshold.get(), 2));
+						//	ui.Add(smoothChannels[i]->threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
+						//	ui.AddTooltip(ofToString(smoothChannels[i]->threshold.get(), 2));
 						//	ImGui::PushID("##RESET2");
-						//	if (guiManager.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+						//	if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
 						//		smoothChannels[i]->threshold = 0.5f;
 						//	}
 						//	ImGui::PopID();
@@ -787,9 +798,9 @@ using namespace ofxImGuiSurfing;
 						//else if (smoothChannels[i]->bangDetectorIndex == 1)
 						//{
 						//	ImGui::Columns(2, "t2", false);
-						//	guiManager.Add(smoothChannels[i]->onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
+						//	ui.Add(smoothChannels[i]->onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
 						//	ImGui::NextColumn();
-						//	guiManager.Add(smoothChannels[i]->onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
+						//	ui.Add(smoothChannels[i]->onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
 						//	ImGui::Columns(1);
 						//}
 

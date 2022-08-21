@@ -70,13 +70,17 @@ void ofApp::setup_ImGui()
 
 	*/
 
+	// Currently these steps 1-2-(4)-5 can be omitted:
+
+	/*
 	// 1. Enable "Windows Special Organizer" mode
 	// Called before setup!
 	// (Can be commented, but Organizer Panel and the engine will be both disabled.)
-	guiManager.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 	// 2. Common setup
-	guiManager.setup();
+	ui.setup();
+	*/
 
 	// 3. Add and queue "Special Windows" to the Organizer
 	// Custom enablers names. 
@@ -86,47 +90,52 @@ void ofApp::setup_ImGui()
 
 	// We customize the panel names. 
 	// e.g: audio, video, advanced...etc
-	guiManager.addWindowSpecial("myWindow 1");
-	guiManager.addWindowSpecial("myWindow 2");
-	guiManager.addWindowSpecial("myWindow 3");
-	guiManager.addWindowSpecial("myWindow 4");
+	ui.addWindowSpecial("myWindow 1");
+	ui.addWindowSpecial("myWindow 2");
+	ui.addWindowSpecial("myWindow 3");
+	ui.addWindowSpecial("myWindow 4");
 
+	/*
 	//// 4. Optional: Customize names to help integrate into your App GUI's.
 	//// Rename "Organizer" to a custom name.
-	//guiManager.setNameWindowsSpecialsOrganizer("My Add-on");
+	//ui.setNameWindowsSpecialsOrganizer("My Add-on");
 
 	// 5. Startup
 	// Called after windows has been added.
-	guiManager.startup();
+	ui.startup();
+	*/
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	if (!bGui)return;
+	if (!bGui) return;
 
-	guiManager.begin();
+	ui.begin();
 	{
 		draw_MainWindow();
-
-		//--
 
 		draw_SurfingWidgets_1();
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
 		draw_SurfingWidgets_4();
 	}
-	guiManager.end();
+	ui.end();
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_MainWindow() 
+void ofApp::draw_MainWindow()
 {
-	float x = ofGetWidth() - 200;
-	float y = 10;
-	ImGuiCond flag = ImGuiCond_FirstUseEver;
-	ImGui::SetNextWindowPos(ImVec2(x, y), flag);
-	if (guiManager.beginWindow(bGui))
+	// Optional: set an initial position
+	if (bGui) 
+	{
+		float x = ofGetWidth() - 200;
+		float y = 10;
+		ImGuiCond flag = ImGuiCond_FirstUseEver;
+		ImGui::SetNextWindowPos(ImVec2(x, y), flag);
+	}
+
+	if (ui.beginWindow(bGui))
 	{
 		// Extra Panels
 		// Useful for your own GUI's:
@@ -136,33 +145,36 @@ void ofApp::draw_MainWindow()
 		// A. Toggles to show/hide Main panels.
 
 		// "Special Windows Organizer" 
-		guiManager.Add(guiManager.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.Add(ui.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
-		guiManager.AddSpacingSeparated();
+		ui.AddSpacingSeparated();
 
 		//--
 
 		// B. Toggles to show/hide Special Windows / panels.
 
-		guiManager.AddLabelBig("Special Windows");
+		ui.AddLabelBig("Special Windows");
 
 		// 1. Global toggle
-		guiManager.Add(guiManager.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
-		guiManager.AddSpacing();
+		ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.AddSpacing();
 
 		// 2. Each Window toggle
-		guiManager.drawWindowSpecialsGuiToggles();
+		if (ui.getWindowsSpecialsGuiToggleAllGlobal())
+			ui.drawWidgetsSpecialWindowsToggles();
 		// We can also get each toggle instead too:
-		//guiManager.Add(guiManager.getWindowSpecialGuiToggle(_index));
+		//ui.Add(ui.getWindowSpecialGuiToggle(_index));
 		//..
 
 		//--
 
-		// For internal debug purposes
-		guiManager.Add(guiManager.bDebug, OFX_IM_TOGGLE_ROUNDED);
-		if (guiManager.bDebug) guiManager.drawAdvanced();
+		ui.AddSpacingBigSeparated();
 
-		guiManager.endWindow();
+		// For internal debug purposes
+		ui.Add(ui.bDebug, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		if (ui.bDebug) ui.drawAdvanced();
+
+		ui.endWindow();
 	}
 }
 
@@ -173,60 +185,64 @@ void ofApp::draw_SurfingWidgets_1()
 	// passing which special window index is as argument.
 	// This is the only attention  we must pay by our selfs.
 
-	if (guiManager.beginWindowSpecial(0))
+	if (ui.beginWindowSpecial(0))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 1", false);
-		guiManager.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
-		guiManager.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
-		guiManager.AddGroup(params_0);
-		guiManager.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
-		guiManager.endWindowSpecial();
+		ui.AddLabelBig("> Special\nWindow 1", false);
+		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
+		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
+		ui.AddGroup(params_0);
+		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+
+		ui.endWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_2()
 {
-	if (guiManager.beginWindowSpecial(1))
+	if (ui.beginWindowSpecial(1))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 2", false);
-		guiManager.AddGroup(params_1);
-		guiManager.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		guiManager.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		guiManager.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		guiManager.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
-		guiManager.endWindowSpecial();
+		ui.AddLabelBig("> Special\nWindow 2", false);
+		ui.AddGroup(params_1);
+		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+		ui.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
+
+		ui.endWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_3()
 {
-	if (guiManager.beginWindowSpecial(2))
+	if (ui.beginWindowSpecial(2))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 3", false);
-		guiManager.Add(shapeType2, OFX_IM_KNOB, 2, true);
-		guiManager.Add(amount2, OFX_IM_KNOB, 2);
-		guiManager.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
-		guiManager.AddSpacingBigSeparated();
-		guiManager.AddGroup(params_2);
-		guiManager.endWindowSpecial();
+		ui.AddLabelBig("> Special\nWindow 3", false);
+		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
+		ui.Add(amount2, OFX_IM_KNOB, 2);
+		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
+		ui.AddSpacingBigSeparated();
+		ui.AddGroup(params_2);
+
+		ui.endWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_4()
 {
-	if (guiManager.beginWindowSpecial(3))
+	if (ui.beginWindowSpecial(3))
 	{
-		guiManager.AddLabelBig("> Window\nSpecial 4", false);
-		guiManager.AddGroup(params_3);
-		guiManager.AddSpacingSeparated();
-		guiManager.Add(size2, OFX_IM_HSLIDER_BIG);
-		guiManager.Add(lineWidth3, OFX_IM_HSLIDER);
-		guiManager.Add(speed3, OFX_IM_HSLIDER_SMALL);
-		guiManager.Add(separation3, OFX_IM_HSLIDER_MINI);
-		guiManager.endWindowSpecial();
+		ui.AddLabelBig("> Special\nWindow 4", false);
+		ui.AddGroup(params_3);
+		ui.AddSpacingSeparated();
+		ui.Add(size2, OFX_IM_HSLIDER_BIG);
+		ui.Add(lineWidth3, OFX_IM_HSLIDER);
+		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
+		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
+
+		ui.endWindowSpecial();
 	}
 }
 
@@ -240,19 +256,19 @@ void ofApp::keyPressed(int key) {
 	}
 
 	else if (key == '1') {
-		guiManager.setWindowSpecialToggleVisible(0);
+		ui.setWindowSpecialToggleVisible(0);
 	}
 	else if (key == '2') {
-		guiManager.setWindowSpecialToggleVisible(1);
+		ui.setWindowSpecialToggleVisible(1);
 	}
 	else if (key == '3') {
-		guiManager.setWindowSpecialToggleVisible(2);
+		ui.setWindowSpecialToggleVisible(2);
 	}
 	else if (key == '4') {
-		guiManager.setWindowSpecialToggleVisible(3);
+		ui.setWindowSpecialToggleVisible(3);
 	}
 
 	else if (key == '0') {
-		guiManager.setWindowSpecialToggleVisibleAllGlobal();
+		ui.setWindowSpecialToggleVisibleAllGlobal();
 	}
 }
