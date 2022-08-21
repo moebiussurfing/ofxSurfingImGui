@@ -37,6 +37,34 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 - Cool **Themes**.
 - **Mouse Wheel** control with finetune (*+Ctrl*).
 
+## CODE
+
+ofApp.h
+```.cpp
+#include "ofxSurfingImGui.h"
+ofxSurfingGui ui;
+ofParameter<bool> bGui{"Show Gui", true};
+```
+ofApp.cpp
+```.cpp
+void ofApp::draw() 
+{
+	ui.begin();
+	{
+		if (ui.beginWindow(bGui))
+		{
+			// ImGui widgets goes here.
+
+      // This is an ofParameterGroup
+			ui.AddGroup(params);
+
+			ui.endWindow();
+		}
+	}
+	ui.end();
+}
+```
+
 <details>
   <summary>More ImGui Widgets</summary>
   <p>
