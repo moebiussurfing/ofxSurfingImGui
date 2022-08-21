@@ -42,6 +42,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ofApp.h
 ```.cpp
 #include "ofxSurfingImGui.h"
+
 ofxSurfingGui ui;
 ofParameter<bool> bGui{"Show Gui", true};
 ```
@@ -55,7 +56,7 @@ void ofApp::draw()
 		{
 			// ImGui widgets goes here.
 
-      // This is an ofParameterGroup
+			// This is an ofParameterGroup
 			ui.AddGroup(params);
 
 			ui.endWindow();
