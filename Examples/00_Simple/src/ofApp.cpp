@@ -34,21 +34,32 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::draw() 
 {
-	ui.begin();
+	ui.Begin();
 	{
-		if (ui.beginWindow(bGui))
+		if (ui.BeginWindow(bGui))
 		{
 			// ImGui widgets are placed here.
 			// ofParamaters widgets helpers be easy populate,
 			// But you can populate raw ImGui too.
 
 			// This is an ofParameterGroup
+			// contained params are populated 
+			// as their default widgets styles
 			ui.AddGroup(params);
 
-			ui.endWindow();
+			// This is a separator line 
+			ui.AddSpacingBigSeparated();
+
+			// This is a param widget
+			ui.Add(amount2, OFX_IM_VSLIDER);
+
+			// This is a param widget
+			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+
+			ui.EndWindow();
 		}
 	}
-	ui.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------

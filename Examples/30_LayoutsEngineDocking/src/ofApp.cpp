@@ -49,7 +49,7 @@ void ofApp::setupImGui()
 	// NOTICE that
 	// To enable the "Layout Presets Engine"
 	// is mandatory to pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument !
-	guiManager.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
 
 	//-
 
@@ -64,11 +64,11 @@ void ofApp::setupImGui()
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
 
-	guiManager.addWindowSpecial("Main");	// index 0
-	guiManager.addWindowSpecial("Audio");	// index 1
-	guiManager.addWindowSpecial("Video1");	// index 2
-	guiManager.addWindowSpecial("Video2");	// index 3
-	guiManager.addWindowSpecial("Expert");	// index 4
+	ui.addWindowSpecial("Main");	// index 0
+	ui.addWindowSpecial("Audio");	// index 1
+	ui.addWindowSpecial("Video1");	// index 2
+	ui.addWindowSpecial("Video2");	// index 3
+	ui.addWindowSpecial("Expert");	// index 4
 
 	//-
 
@@ -84,7 +84,7 @@ void ofApp::setupImGui()
 		names.push_back("Live");
 		names.push_back("Mini");
 
-		guiManager.setPresetsNames(names);
+		ui.setPresetsNames(names);
 	}
 
 	//-
@@ -95,15 +95,15 @@ void ofApp::setupImGui()
 	// (Notice that this are params, not extra special windows!)
 	// Set to 1 to enable an to test it
 	if (1) {
-		guiManager.addExtraParamToLayoutPresets(bGui_Docking);
-		guiManager.addExtraParamToLayoutPresets(bEnable);
+		ui.addExtraParamToLayoutPresets(bGui_Docking);
+		ui.addExtraParamToLayoutPresets(bEnable);
 	}
 
 	//-
 
 	// 3. Startup:
 
-	guiManager.startup();
+	ui.startup();
 
 	//-
 
@@ -115,13 +115,13 @@ void ofApp::setupImGui()
 	// located on the Advanced section,
 	// But notice that it will call a local method on this scope (ofApp).
 	if (1) {
-		guiManager.setReset(&bDockingRandom);
-		//guiManager.setReset(&bDockingReset);
+		ui.setReset(&bDockingRandom);
+		//ui.setReset(&bDockingReset);
 	}
 
 	// Help info
 	string s = "HELP ofApp\n\nThis is an Example to learn \nthe Docking features.\n\nEnjoy!";
-	guiManager.setHelpInfoApp(s);
+	ui.setHelpInfoApp(s);
 }
 
 //--------------------------------------------------------------
@@ -147,7 +147,7 @@ void ofApp::drawImGui()
 
 	//--
 
-	guiManager.begin();
+	ui.Begin();
 	{
 		// 1. Docking
 
@@ -156,11 +156,11 @@ void ofApp::drawImGui()
 		// we can access all the docking space.
 		// It's required to copy in our projects.
 
-		guiManager.beginDocking();
+		ui.BeginDocking();
 		{
 			updateImGuiDockingHelper();
 		}
-		guiManager.endDocking();
+		ui.EndDocking();
 
 		//--
 
@@ -181,7 +181,7 @@ void ofApp::drawImGui()
 			drawImGuiWindows();
 		}
 	}
-	guiManager.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
@@ -194,7 +194,7 @@ void ofApp::drawImGuiWindows()
 
 	index = 0;
 	{
-		if (guiManager.beginWindowSpecial(index))
+		if (ui.BeginWindowSpecial(index))
 		{
 			// Some useful sizes to help layouting in some scenarios.
 			// e.g. when using raw ImGui widgets without the full engine.
@@ -203,40 +203,40 @@ void ofApp::drawImGuiWindows()
 			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
 			float _h2 = 2 * _h; // double height
 
-			// if guiManager.bHelp enabled, activates help tooltips on this window!
+			// if ui.bHelp enabled, activates help tooltips on this window!
 
-			guiManager.AddLabelHuge("Window 0", false);
+			ui.AddLabelHuge("Window 0", false);
 
-			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
-			guiManager.Add(guiManager.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
-			guiManager.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
-			guiManager.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			guiManager.AddTooltip("Activate sep1 animation", guiManager.bHelp);
-			guiManager.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"), guiManager.bHelp);
-			guiManager.Add(guiManager.bLog, OFX_IM_TOGGLE_BIG_BORDER);
-			guiManager.AddTooltip("Show Log Window", guiManager.bHelp);
+			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
+			ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
+			ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+			ui.AddTooltip("Activate sep1 animation", ui.bHelp);
+			ui.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"), ui.bHelp);
+			ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_BORDER);
+			ui.AddTooltip("Show Log Window", ui.bHelp);
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-			guiManager.Add(speed, OFX_IM_HSLIDER_BIG);
-			guiManager.AddTooltip("Speed controls the auto populated Log window speed", guiManager.bHelp);
-			guiManager.Add(amount, OFX_IM_HSLIDER);
-			guiManager.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE", guiManager.bHelp);
+			ui.Add(speed, OFX_IM_HSLIDER_BIG);
+			ui.AddTooltip("Speed controls the auto populated Log window speed", ui.bHelp);
+			ui.Add(amount, OFX_IM_HSLIDER);
+			ui.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE", ui.bHelp);
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
 			ImGui::PushButtonRepeat(true); // -> pushing for repeats trigs
 			{
-				guiManager.refreshLayout();
+				ui.refreshLayout();
 
-				if (guiManager.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
+				if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
 				{
 					bPrevious = false;
 					lineWidth -= 0.1f;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				guiManager.AddTooltip("Decrease lineWidth " + ofToString(lineWidth), guiManager.bHelp);
+				ui.AddTooltip("Decrease lineWidth " + ofToString(lineWidth), ui.bHelp);
 
 				ImGui::SameLine();
 
@@ -246,29 +246,29 @@ void ofApp::drawImGuiWindows()
 					lineWidth += 0.1f;
 					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 				}
-				guiManager.AddTooltip("Increase lineWidth " + ofToString(lineWidth), guiManager.bHelp);
+				ui.AddTooltip("Increase lineWidth " + ofToString(lineWidth), ui.bHelp);
 			}
 			ImGui::PopButtonRepeat();
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-			guiManager.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
-			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
-			guiManager.Add(lineWidth); // default style
-			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
-			guiManager.Add(lineWidth, OFX_IM_STEPPER);
-			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
-			guiManager.Add(lineWidth, OFX_IM_KNOB);
-			guiManager.AddTooltip(ofToString(lineWidth, guiManager.bHelp));
+			ui.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
+			ui.Add(lineWidth); // default style
+			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
+			ui.Add(lineWidth, OFX_IM_STEPPER);
+			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
+			ui.Add(lineWidth, OFX_IM_KNOB);
+			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-			guiManager.Add(separation, OFX_IM_HSLIDER_BIG); // default style
-			guiManager.AddTooltip(ofToString(separation, guiManager.bHelp));
+			ui.Add(separation, OFX_IM_HSLIDER_BIG); // default style
+			ui.AddTooltip(ofToString(separation, ui.bHelp));
 
 			//--
 
-			guiManager.endWindowSpecial();
+			ui.EndWindowSpecial();
 		}
 	}
 
@@ -276,17 +276,17 @@ void ofApp::drawImGuiWindows()
 
 	index = 1;
 	{
-		if (guiManager.beginWindowSpecial(index))
+		if (ui.BeginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 1", false);
+			ui.AddLabelHuge("Window 1", false);
 
-			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
-			guiManager.AddGroup(params1);
+			ui.AddGroup(params1);
 
 			//--
 
-			guiManager.endWindowSpecial();
+			ui.EndWindowSpecial();
 		}
 	}
 
@@ -294,15 +294,15 @@ void ofApp::drawImGuiWindows()
 
 	index = 2;
 	{
-		if (guiManager.beginWindowSpecial(index))
+		if (ui.BeginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 2", false);
+			ui.AddLabelHuge("Window 2", false);
 
-			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
 
-			guiManager.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
+			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
-			guiManager.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
 			// Tabs
 
@@ -310,39 +310,39 @@ void ofApp::drawImGuiWindows()
 			{
 				if (ImGui::BeginTabItem("Video"))
 				{
-					guiManager.AddLabelBig("Blah Blah");
+					ui.AddLabelBig("Blah Blah");
 					string str = R"(
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
 )";
-					guiManager.AddText(str.c_str());
-					guiManager.AddSpacingBigSeparated();
-					guiManager.AddGroup(params1);
+					ui.AddLabel(str.c_str());
+					ui.AddSpacingBigSeparated();
+					ui.AddGroup(params1);
 
 					ImGui::EndTabItem();
 				}
 
 				if (ImGui::BeginTabItem("Audio"))
 				{
-					guiManager.AddSpacingBig();
-					guiManager.AddTextHuge("Blah Blah");
+					ui.AddSpacingBig();
+					ui.AddLabelHuge("Blah Blah");
 					string str = R"(
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 )";
-					guiManager.AddTextBig(str.c_str());
+					ui.AddLabelBig(str.c_str());
 
 					ImGui::EndTabItem();
 				}
 
 				if (ImGui::BeginTabItem("Controls"))
 				{
-					guiManager.AddSpacingBig();
-					guiManager.AddTextHuge("Pump Up");
-					guiManager.AddTextBig("the Volume!");
-					guiManager.AddSpacingBig();
+					ui.AddSpacingBig();
+					ui.AddLabelHuge("Pump Up");
+					ui.AddLabelBig("the Volume!");
+					ui.AddSpacingBig();
 
-					guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+					ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 
-					guiManager.drawAdvancedBundle();
+					ui.DrawAdvancedBundle();
 
 					ImGui::EndTabItem();
 				}
@@ -352,7 +352,7 @@ It has survived not only five centuries, but also the leap into electronic types
 
 			//--
 
-			guiManager.endWindowSpecial();
+			ui.EndWindowSpecial();
 		}
 	}
 
@@ -360,24 +360,24 @@ It has survived not only five centuries, but also the leap into electronic types
 
 	index = 3;
 	{
-		if (guiManager.beginWindowSpecial(index))
+		if (ui.BeginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 3", false);
+			ui.AddLabelHuge("Window 3", false);
 
-			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_ROUNDED_BIG);
+			ui.Add(bGui_Docking, OFX_IM_TOGGLE_ROUNDED_BIG);
 
-			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddTextBig("Hello, down! Hello, down! Hello, down!");
-			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddSpacingBigSeparated();
-			guiManager.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-			guiManager.AddSpacingBigSeparated();
-			guiManager.AddLabelBig("Hello, down!", false, true);
-			guiManager.AddTextHuge("Hello, down! Hello, down! Hello, down!");
+			ui.AddLabelBig("Hello, down!", false, true);
+			ui.AddLabelBig("Hello, down! Hello, down! Hello, down!");
+			ui.AddLabelBig("Hello, down!", false, true);
+			ui.AddSpacingBigSeparated();
+			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+			ui.AddSpacingBigSeparated();
+			ui.AddLabelBig("Hello, down!", false, true);
+			ui.AddLabelHuge("Hello, down! Hello, down! Hello, down!");
 
 			//--
 
-			guiManager.endWindowSpecial();
+			ui.EndWindowSpecial();
 		}
 	}
 
@@ -385,19 +385,19 @@ It has survived not only five centuries, but also the leap into electronic types
 
 	index = 4;
 	{
-		if (guiManager.beginWindowSpecial(index))
+		if (ui.BeginWindowSpecial(index))
 		{
-			guiManager.AddLabelHuge("Window 4", false);
+			ui.AddLabelHuge("Window 4", false);
 			
-			guiManager.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
-			guiManager.AddLabel("Hello, left!", false, true);
-			guiManager.AddLabelBig("Hello, left!");
-			guiManager.AddLabelBig("Hello, left!", false);
-			guiManager.AddLabelHuge("Hello, left!", true, true);
-			guiManager.AddLabelHuge("Hello, left!", false, false);
+			ui.AddLabel("Hello, left!", false, true);
+			ui.AddLabelBig("Hello, left!");
+			ui.AddLabelBig("Hello, left!", false);
+			ui.AddLabelHuge("Hello, left!", true, true);
+			ui.AddLabelHuge("Hello, left!", false, false);
 
-			guiManager.endWindowSpecial();
+			ui.EndWindowSpecial();
 		}
 	}
 }
@@ -440,9 +440,9 @@ void ofApp::drawImGuiDockingHelper()
 {
 	if (!bGui_Docking) return;
 
-	if (guiManager.beginWindow(bGui_Docking))
+	if (ui.BeginWindow(bGui_Docking))
 	{
-		guiManager.AddLabelHuge("ofApp Docking Window", false);
+		ui.AddLabelHuge("ofApp Docking Window", false);
 
 		ImGui::TextWrapped("Reset Docking hard-coded Layouts");
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
@@ -462,15 +462,15 @@ void ofApp::drawImGuiDockingHelper()
 			// flag to call on a precise draw point, inside the draw begin/end context
 		}
 
-		guiManager.AddSpacingSeparated();
+		ui.AddSpacingSeparated();
 
 		// Show all Panels
 		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
 		{
-			guiManager.setShowAllPanels(true);
+			ui.setShowAllPanels(true);
 		}
 
-		guiManager.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -508,11 +508,11 @@ void ofApp::doDockingReset()
 	//ImGui::DockBuilderDockWindow("Advanced", dock_id_right);
 
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(0).c_str(), dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(1).c_str(), dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(2).c_str(), dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(3).c_str(), dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(4).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(0).c_str(), dock_id_top);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(1).c_str(), dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(2).c_str(), dock_id_down);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(3).c_str(), dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(4).c_str(), dock_id_right);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }
@@ -538,11 +538,11 @@ void ofApp::doDockingRandom()
 
 	// we now dock our windows into the docking node we made above
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
-	ImGui::DockBuilderDockWindow(guiManager.getWindowSpecialName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(2).c_str(), (idice == 2) ? dock_id_down : dock_id_top);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(3).c_str(), (idice == 0) ? dock_id_left : dock_id_right);
+	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(4).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
 
 	ImGui::DockBuilderFinish(dockspace_id);
 }
@@ -572,7 +572,7 @@ void ofApp::updateScene()
 	}
 
 	// Log 8 times per second at 60 fps
-	if (ofGetFrameNum() % (60 / 8) == 0) guiManager.addLog(separation.getName() + " : " + ofToString(separation));
+	if (ofGetFrameNum() % (60 / 8) == 0) ui.AddToLog(separation.getName() + " : " + ofToString(separation));
 
 	// Auto populate random log messages.
 	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
@@ -582,10 +582,10 @@ void ofApp::updateScene()
 
 		std::string ss = ofToString(ofGetFrameNum());
 		float _rnd = ofRandom(1);
-		if (_rnd < 0.2) guiManager.addLog(ss);
-		else if (_rnd < 0.4) guiManager.addLog(ofToString(_rnd));
-		else if (_rnd < 0.6) guiManager.addLog(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
-		else if (_rnd < 0.8) guiManager.addLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
-		else guiManager.addLog(ofGetTimestampString());
+		if (_rnd < 0.2) ui.AddToLog(ss);
+		else if (_rnd < 0.4) ui.AddToLog(ofToString(_rnd));
+		else if (_rnd < 0.6) ui.AddToLog(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
+		else if (_rnd < 0.8) ui.AddToLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
+		else ui.AddToLog(ofGetTimestampString());
 	}
 }

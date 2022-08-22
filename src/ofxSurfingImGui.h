@@ -31,7 +31,7 @@
 	SMALL THINGS
 	+ remake mode free and lockers simpler. a flag for each window ?
 	+ aspect ratio/fit modes for game view port.
-	+ fix log ofxImGuiSurfing::WindowPanels::isInitiated:
+	+ fix log ofxImGuiSurfing::WindowsOrganizer::isInitiated:
 
 	NEW FEATURES
 	+ auto midi knobs to FX:
@@ -44,7 +44,7 @@
 	But could think about linking multiple instances.
 	for example, to share organizer windows:
 	// Link internal stuff
-	ui.getWindowsSpecialsGuiToggle().makeReferenceTo(myClassObject.ui.getWindowsSpecialsGuiToggle());
+	ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
 	Probably a better fix/workaround is to rename each common windows on each gui manager instance
 	or the pad between windows setting. we could pass pointers to all instances.
 */
@@ -89,7 +89,7 @@
 	{
 		#include "ofxSurfingImGui.h"
 
-		ofxSurfing_ImGui_Manager ui;
+		SurfingGuiManager ui;
 		ofParameter<bool> bGui{ "ShowWindow", true };
 	}
 
@@ -108,14 +108,14 @@
 		ui.begin();
 		{
 			if(!bGui) return;
-			if (ui.beginWindow(bGui))
+			if (ui.BeginWindow(bGui))
 			{
 				ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
 				if (!ui.bMinimize){}
 
 				//..
 
-				ui.endWindow();
+				ui.EndWindow();
 			}
 		}
 		ui.end();
@@ -151,15 +151,15 @@
 // HEADERS
 //---------
 
-#include "ImGui/ofxSurfing_ImGui_ofHelpers.h"
-#include "ImGui/ofxSurfing_ImGui_LayoutManager.h"
+#include "ImGui/GuiManager.h"
+#include "ImGui/ofHelpers.h"
 #include "ImGui/widgets/ofxSurfing_ImGui_Widgets.h"
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
 
 using namespace ofxImGuiSurfing;
 
 // Short alias
-using ofxSurfingGui = ofxSurfing_ImGui_Manager;
+using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 
@@ -416,7 +416,7 @@ using ofxSurfingGui = ofxSurfing_ImGui_Manager;
 	// Special Windows
 
 	// Main toggle
-	ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
+	ui.Add(ui.getGuiToggleGlobal(), OFX_IM_TOGGLE_ROUNDED);
 
 */
 
@@ -479,7 +479,7 @@ using ofxSurfingGui = ofxSurfing_ImGui_Manager;
 		}
 		if (ImGui::BeginTabItem("Controls"))
 		{
-			ui.drawAdvancedBundle();
+			ui.DrawAdvancedBundle();
 
 			ImGui::EndTabItem();
 		}

@@ -92,7 +92,7 @@ void ofApp::setup()
 	// ImGui
 
 	// Instantiate
-
+	//can be omitted in many scenarios
 	ui.setup();
 
 	//--
@@ -139,7 +139,7 @@ void ofApp::draw()
 
 	if (!bGui) return;
 
-	ui.begin();
+	ui.Begin();
 	{
 		drawImWindowMain();
 
@@ -148,27 +148,27 @@ void ofApp::draw()
 		drawImWindow3();
 		drawImWindow4();
 	}
-	ui.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindowMain()
 {
-	if (ui.beginWindow(bGui))
+	if (ui.BeginWindow(bGui))
 	{
-		ui.AddLabelHuge("Examples/\n01_Widgets_Simple", false);
+		ui.AddLabelHuge("Examples/\n01_Widgets_Simple", false, true);
 
-		ui.AddLabelBig("> Helpers");
+		ui.AddLabelBig("> Helpers", true, true);
 
 		// The manager has some useful params for common functions.
 
 		// The minimize toggle will help us to hide stuff on our windows
-		// to simplify a bit the GUI when some windgets are not required to be visible.
+		// to simplify a bit the GUI when some widgets are not required to be visible.
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 		ui.AddSpacingSeparated();
 
 		// Align Helpers Window
-		ui.Add(ui.bGui_AlignHelpers, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 		//--
 
@@ -212,7 +212,7 @@ void ofApp::drawImWindowMain()
 
 		//if (!ui.bMinimize)
 		{
-			ui.AddLabelHuge("> Show Windows", false);
+			ui.AddLabelHuge("> Show Windows", true, true);
 
 			ui.Indent(); // indent
 			{
@@ -233,7 +233,7 @@ void ofApp::drawImWindowMain()
 
 		ui.AddSpacingBig();
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -244,11 +244,11 @@ void ofApp::drawImWindow1()
 	//-> Constraint next window dimensions to be smaller.
 	// Will limit the size and auto expanding size on this situation.
 
-	if (ui.beginWindow(bGui_1))
+	if (ui.BeginWindow(bGui_1))
 	{
 		if (!ui.bMinimize)
 		{
-			ui.AddLabelBig("> A Multidim Splitted");
+			ui.AddLabelHuge("> A Multidim Splitted", true, true);
 			ui.Add(pos_1, OFX_IM_MULTIDIM_SPLIT_SLIDERS);//split components
 			ui.AddSpacingBigSeparated();
 
@@ -259,7 +259,7 @@ void ofApp::drawImWindow1()
 
 		//--
 
-		ui.AddLabel("An ImGui Raw Tree with Styles Engine");
+		ui.AddLabelBig("An ImGui Raw Tree with Styles Engine");
 
 		static bool bOpen = true;
 		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
@@ -305,7 +305,7 @@ void ofApp::drawImWindow1()
 			}
 		}
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -314,10 +314,11 @@ void ofApp::drawImWindow2()
 {
 	if (bGui_2 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
 
-	if (ui.beginWindow(bGui_2))
+	if (ui.BeginWindow(bGui_2))
 	{
 		ui.AddLabelBig("> ImGui Raw without Styles Engine");
 
+		// This is raw ImGui notation:
 		static bool bOpen = true;//force open
 		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 		_flagt |= ImGuiTreeNodeFlags_Framed;
@@ -353,7 +354,7 @@ void ofApp::drawImWindow2()
 			ImGui::TreePop();
 		}
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -364,10 +365,10 @@ void ofApp::drawImWindow3()
 	//-> Constrait next window dimensions to be bigger.
 	// Will help to read the labels in this situation.
 
-	if (ui.beginWindow(bGui_3))
+	if (ui.BeginWindow(bGui_3))
 	{
 		// Using columns
-		ui.AddLabelHuge("> Four Vertical Sliders \n", false);
+		ui.AddLabelHuge("> Four Vertical Sliders \n", true, true);
 		ui.AddSpacing(); // space
 
 		//TODO:
@@ -390,7 +391,7 @@ void ofApp::drawImWindow3()
 
 		if (!ui.bMinimize)
 		{
-			ui.AddLabelBig("> Four Vertical Sliders No Name");
+			ui.AddLabelBig("> Four Vertical Sliders No Name", false, true);
 
 			ui.Add(speed3, OFX_IM_VSLIDER_NO_NAME, 4, true);
 			ui.Add(speed4, OFX_IM_VSLIDER_NO_NAME, 4, true);
@@ -399,13 +400,13 @@ void ofApp::drawImWindow3()
 			ui.AddSpacingSeparated();
 		}
 
-		ui.AddLabelHuge("> Four Horizontal Sliders Custom", false);
+		ui.AddLabelHuge("> Four Horizontal Sliders Custom", false, true);
 		ui.Add(speed3, OFX_IM_HSLIDER_NO_NAME);
 		ui.Add(speed4, OFX_IM_HSLIDER_NO_LABELS);
 		ui.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
 		ui.Add(size4, OFX_IM_HSLIDER_SMALL);
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -413,20 +414,20 @@ void ofApp::drawImWindow3()
 void ofApp::drawImWindow4()
 {
 	if (bGui_4 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
-	//-> Constrait next window dimensions to be bigger.
+	//-> Constraint next window dimensions to be bigger.
 	// Will help to read the labels in this situation.
 
-	if (ui.beginWindow(bGui_4))
+	if (ui.BeginWindow(bGui_4))
 	{
 		if (!ui.bMinimize)
 		{
-			ui.AddLabelBig("> Two Horizontal Sliders. Without Labels in One Row");
+			ui.AddLabelBig("> Two Horizontal Sliders. Without Labels in One Row", false, true);
 			ui.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, true);
 			ui.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, false);
 			ui.AddSpacingSeparated();
 		}
 
-		ui.AddLabelHuge("> Four Knobs", false);
+		ui.AddLabelHuge("> Four Knobs", false, true);
 		ui.Add(speed3, OFX_IM_KNOB, 4, true);
 		ui.Add(speed4, OFX_IM_KNOB, 4, true);
 		ui.Add(size3, OFX_IM_KNOB, 4, true);
@@ -436,7 +437,7 @@ void ofApp::drawImWindow4()
 		//--
 
 		// https://github.com/ocornut/imgui/issues/1131
-		ui.AddLabelBig("> Three Expandable Groups / Trees ");
+		ui.AddLabelBig("> Three Expandable Groups / Trees ", false, true);
 		{
 			static ImGuiCond cond = ImGuiCond_None;
 			static string label = "";
@@ -460,7 +461,7 @@ void ofApp::drawImWindow4()
 			ui.AddGroup(params2, open1, cond);
 			ui.AddGroup(params3, open2, cond);
 			ui.AddGroup(params4, open3, cond);
-			ui.endWindow();
+			ui.EndWindow();
 
 			if (cond == ImGuiCond_Always) { cond = ImGuiCond_Once; }
 		}

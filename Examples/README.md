@@ -10,17 +10,23 @@
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
-## 11_SpecialWindowsDebug
-![](11_SpecialWindowsDebug/Capture.PNG)  
-
-## 12_SpecialWindows2
-![](12_SpecialWindows2/Capture.PNG)  
-
-## 13_SpecialWindowsAdvanced
-![](13_SpecialWindowsAdvanced/Capture.PNG)  
+## 11_SpecialWindowsAdvanced
+![](11_SpecialWindowsAdvanced/Capture.PNG)  
 
 ## 20_LayoutsEngine
 ![](20_LayoutsEngine/Capture.PNG)  
 
 ## 30_LayoutsEngineDocking
 ![](30_LayoutsEngineDocking/Capture.PNG)  
+
+
+<details>
+  <summary>VIDEO</summary>
+  <p>
+
+#### Layout Presets Engine & Docking
+
+![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
+  </p>
+
+</details>

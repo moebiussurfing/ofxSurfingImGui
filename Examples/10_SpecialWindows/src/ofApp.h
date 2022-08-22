@@ -6,12 +6,12 @@
 
 	This example shows two of the extra engines of the ofxSurfingImGui Toolkit,
 	
-    1. "Windows Special Organizer".
+    1. SPECIAL WINDOWS ORGANIZER ENGINE
 	Many grouped windows, defined as specials, can be arranged linked together. 
     Can be auto distributed horizontally or vertically.
     
-    2. "Windows Align Engine": 
-    Helpers to align/cascade/layout all visible windows.
+    2. WINDOWS ALIGN ENGINE 
+    Helpers to align/cascade/layout all visible windows (except some internal ones).
 
 */
 
@@ -23,6 +23,7 @@ class ofApp : public ofBaseApp
 public:
     
     void setup();
+    void setupParams();
     void draw();
 	void keyPressed(int key);
 
@@ -63,10 +64,9 @@ public:
 	ofxSurfingGui ui;
 
 	void setup_ImGui();
+    ofParameter<bool> bGui; // Toggle to show visible the window panel
 
-    ofParameter<bool> bGui; // -> Toggle to show visible the window panel
     void draw_MainWindow();
-
 	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();

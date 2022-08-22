@@ -6,7 +6,6 @@
 void ofApp::setup()
 {
 	ofSetWindowPosition(-1920, 25);
-	ofSetWindowShape(1920, 1080 - 25);
 
 	bGui.set("bGui", true);
 
@@ -20,7 +19,21 @@ void ofApp::setup()
 	//--
 
 	// Parameters
+	setupParams();
 
+	//--
+
+	// ImGui
+
+	//// Instantiate
+	//// can be omitted in many scenarios 
+	//// (when not using docking or layout presets engine modes)
+	//ui.setup();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupParams()
+{
 	bPrevious.set("<", false);
 	bNext.set(">", false);
 	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
@@ -77,20 +90,6 @@ void ofApp::setup()
 	params4.add(separation4);
 	params4.add(color1);
 	params4.add(color2);
-
-	//--
-
-	// ImGui
-
-	// Instantiate
-
-	ui.setup();
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
-	if (key == 'g') bGui = !bGui;
 }
 
 //--------------------------------------------------------------
@@ -98,7 +97,7 @@ void ofApp::draw()
 {
 	if (!bGui) return;
 
-	ui.begin();
+	ui.Begin();
 	{
 		drawImWindowMain();
 
@@ -107,18 +106,25 @@ void ofApp::draw()
 		drawImWindow3();
 		drawImWindow4();
 	}
-	ui.end();
+	ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindowMain()
 {
-	if (ui.beginWindow(bGui))
+	if (ui.BeginWindow(bGui))
 	{
 		ui.AddLabelHuge("Examples/\n01_Widgets\nBasic");
-		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.AddSpacingBig();
 
-		ui.AddLabelHuge("> Show Windows");
+		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.AddTooltip("This internal toggle is very useful \nconditioning hiding some stuff \nto simplify our gui layout.");
+
+		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+		ui.AddSpacingSeparated();
+
+		ui.AddLabelBig("> Show Windows", true, true);
 
 		ui.Add(bGui_1, OFX_IM_TOGGLE_ROUNDED_BIG);
 		ui.AddTooltip("Some widgets");
@@ -132,19 +138,39 @@ void ofApp::drawImWindowMain()
 		ui.Add(bGui_4, OFX_IM_TOGGLE_ROUNDED_BIG);
 		ui.AddTooltip("Sliders & Knobs");
 
-		ui.drawAdvanced();
+		//--
 
-		ui.endWindow();
+		// An useful bundle of internal control/settings
+		ui.AddSpacingSeparated();
+		ui.DrawAdvancedBundle();
+
+		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow1()
 {
-	if (ui.beginWindow(bGui_1))
+	// We can constraint next window shape
+	// that's useful when long widget names can resize the window too much,
+	// bc we are using auto resize flags in most of the case.
+	static bool bConstraint = false;
+	if (bGui_1 && bConstraint)
+	{
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+	}
+
+	if (ui.BeginWindow(bGui_1))
 	{
 		if (!ui.bMinimize)
 		{
+			// This is a helper to populate widgets 
+			// from raw cpp types, not an ofParmater.
+			// could be useful sometimes.
+			ui.AddToggle("Constraint", bConstraint);
+			ui.AddTooltip("We can constraint next window shape ");
+			ui.AddSpacingBigSeparated();
+
 			ui.AddLabelBig("> Two Multidims \nSplitted and foldered");
 			ui.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS); // split components
 			ui.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED); // split components
@@ -160,7 +186,7 @@ void ofApp::drawImWindow1()
 
 		ui.AddLabelBig("> An ImGui Raw \nTree with Styles Engine");
 
-		if (ImGui::CollapsingHeader("EDIT", ImGuiWindowFlags_None))
+		if (ui.BeginTree("EDIT")) // This is helped tree using the add-on API
 		{
 			// When using raw trees,
 			// It's required to refresh indenting/responsive layout width!
@@ -171,16 +197,16 @@ void ofApp::drawImWindow1()
 
 			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true); // next on same line
 			ui.Add(bNext, OFX_IM_TOGGLE_BIG, 2);
-			
+
 			ui.AddSpacingSeparated();
 
 			ui.Add(speed3, OFX_IM_VSLIDER_NO_LABELS); // hide labels
 			ui.Add(speed4, OFX_IM_VSLIDER_NO_LABELS);
-			
-			ui.AddSpacingSeparated();
 
 			if (!ui.bMinimize)
 			{
+				ui.AddSpacingSeparated();
+
 				ui.AddLabelBig("> Two \nofParameter\nGroup's");
 
 				ui.AddGroup(params2);
@@ -188,20 +214,22 @@ void ofApp::drawImWindow1()
 
 				ui.AddSpacingBig();
 			}
+
+			ui.EndTree();
 		}
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow2()
 {
-	if (ui.beginWindow(bGui_2))
+	if (ui.BeginWindow(bGui_2))
 	{
 		ui.AddLabelBig("> ImGui Raw without Styles Engine");
 
-		if (ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen)) // This is a raw ImGui tree
 		{
 			if (!ui.bMinimize)
 			{
@@ -227,14 +255,14 @@ void ofApp::drawImWindow2()
 			ImGui::TreePop();
 		}
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow3()
 {
-	if (ui.beginWindow(bGui_3))
+	if (ui.BeginWindow(bGui_3))
 	{
 		if (!ui.bMinimize)
 		{
@@ -255,14 +283,14 @@ void ofApp::drawImWindow3()
 		ui.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
 		ui.Add(size4, OFX_IM_HSLIDER_SMALL);
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::drawImWindow4()
 {
-	if (ui.beginWindow(bGui_4))
+	if (ui.BeginWindow(bGui_4))
 	{
 		if (!ui.bMinimize)
 		{
@@ -278,18 +306,24 @@ void ofApp::drawImWindow4()
 
 		ui.Add(speed3, OFX_IM_KNOB, 2, true);
 		ui.Add(speed4, OFX_IM_KNOB, 2);
-		
+
 		ui.AddSpacing();
 
 		ui.Add(size3, OFX_IM_KNOB, 2, true);
 		ui.Add(size4, OFX_IM_KNOB, 2);
 
 		ui.AddSpacingBigSeparated();
-		
+
 		ui.AddLabelBig("> An \nofParameter\nGroup");
 
 		ui.AddGroup(params3);
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key)
+{
+	if (key == 'g') bGui = !bGui;
 }

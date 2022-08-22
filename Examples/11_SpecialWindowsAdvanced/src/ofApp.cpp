@@ -9,6 +9,37 @@ void ofApp::setup()
 
 	// Parameters
 
+	setupParams();
+
+	//--
+
+	// Gui Stuff
+
+	bGui.set("ofApp", true); // visible toggle for all the gui 
+
+	// The first window don't have a visible bool toggle,
+	// and it's creating by passing a name, and drawn by passing his index when was created.
+
+	// Visible Toggles for all the other windows, 
+	// who are special windows!
+	bGui_2.set("Window 2", true);
+	bGui_3.set("Window 3", true);
+	bGui_4.set("Window 4", true);
+	bGui_5.set("Window 5", true);
+	bGui_6.set("Window 6", true);
+
+	//--
+
+	setup_ImGui();
+
+	//--
+
+	buildHelpInfo();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupParams()
+{
 	params_0.setName("paramsGroup0");
 	params_0.add(bEnable0.set("Enable0", false));
 	params_0.add(speed0.set("speed0", 0.5, 0, 1));
@@ -33,37 +64,34 @@ void ofApp::setup()
 	params_3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params_3.add(speed3.set("speed3", 0.5, 0, 1));
 	params_3.add(separation3.set("separation3", 50, 1, 100));
-
-	//--
-
-	bGui.set("ofApp", true); // all the gui
-
-	// the first window don't have a visible bool toggle,
-	// and it's creating by passing a name, and drawn by passing his index when was created.
-	bGui_2.set("Window 2", true);
-	bGui_3.set("Window 3", true);
-	bGui_4.set("Window 4", true);
-	bGui_5.set("Window 5", true);
-	bGui_6.set("Window 6", true);
-
-	buildHelpInfo();
-
-	//--
-
-	setup_ImGui();
 }
 
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	ui.setName("ofApp"); // -> Recommended to set a name when using multiple instances of the Gui Manager!
-	ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-	ui.setup();
+	// Optional >
+	// Like it's happening here:
+	// Recommended to set a name when using multiple instances of the Gui Manager!
+	ui.setName("ofApp");
 
-	// when adding by name you need to use indexes when drawing the window!
+	//--
+
+	// Setup, and Startup is auto called when addWindowsSpecial is called!
+	// We can omit them to speed up initialization.
+	// The internal steps, or how we call the initialization process is like:
+	//ui.setName("ofApp"); 
+	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	//ui.setup();
+	//ui.addWindowSpecial(..
+	//ui.addWindowSpecial(..
+	//ui.startup();
+
+	//--
+
+	// When adding by name you need to use indexes when drawing the window!
 	ui.addWindowSpecial("Window 1"); // using legacy style by name
 
-	// when can add special windows passing the visible toggle by argument.
+	// When can add special windows passing the visible toggle by argument.
 	// ofParameter name will be used to name the windows headers too.
 
 	ui.addWindowSpecial(bGui_2);
@@ -72,24 +100,20 @@ void ofApp::setup_ImGui()
 	ui.addWindowSpecial(bGui_5);
 	ui.addWindowSpecial(bGui_6);
 
-	// bundle the object here too,
-	// to group on the toggles too
-	// we do not use beginWindowSpecial/endWindowSpecial methods.
-	ui.addWindowSpecial(myClassObject.bGui);
-
-	// all the window visible toggle states are auto handled between sessions.
-
-	ui.startup();
+	//// Bundle the object here too,
+	//// to group on the toggles too
+	//// we do not use BeginWindowSpecial/EndWindowSpecial methods.
+	//ui.addWindowSpecial(myClassObject.bGui);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	buildHelpInfo();
+	buildHelpInfo();//its better to call it once or when info update is required.
 
 	if (!bGui) return;
 
-	ui.begin();
+	ui.Begin();
 	{
 		draw_MainWindow();
 
@@ -100,57 +124,69 @@ void ofApp::draw()
 		draw_SurfingWidgets_5();
 		draw_SurfingWidgets_6();
 	}
-	ui.end();
+	ui.End();
 
 	//--
 
-	//TODO:
-	// link by anchor
-	auto p = ui.getWindowSpecialLastTopRight();
-	myClassObject.ui.setWindowSpecialFirstPosition(p);
-	//myClassObject.ui.specialWindowsOrganizer.doReOrganize();
-	//myClassObject.ui.specialWindowsOrganizer.doApplyLinkWindows();
-	//myClassObject.ui.specialWindowsOrganizer.update();
-	//myClassObject.ui.specialWindowsOrganizer.runShapeState(index);
+	// Another ImGui instance / context
+	if (0)
+	{
+		//TODO:
+		//WIP:
+		// Link both windows groups by an anchor:
+		auto p = ui.getWindowSpecialLastTopRight();
+		myClassObject.ui.setWindowSpecialFirstPosition(p);
+		//myClassObject.ui.windowsOrganizer.doReOrganize();
+		//myClassObject.ui.windowsOrganizer.doApplyLinkWindows();
+		//myClassObject.ui.windowsOrganizer.refreshUpdate();
+		//myClassObject.ui.windowsOrganizer.runShapeState(index);
+	}
+
 	myClassObject.draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw_MainWindow() {
 
-	if (ui.beginWindow(bGui))
+	if (ui.BeginWindow(bGui))
 	{
-		ui.AddLabelBig("Main Window");
+		ui.AddLabelBig("Main Window", true, true);
 
-		// Some internal optional stuff,
-		// as common toggles are exposed
-		  
-		// Special Windows Organizer toggle 
-		ui.Add(ui.getWindowsSpecialsGuiToggle(), OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		// Optional: 
+		// Some internal useful common toggles are exposed:
+		ui.AddLabel("These are internal windows toggles \
+					useful to populate related Windows \
+					when using Special Windows mode.");
 		ui.AddSpacing();
 
-		// Show global
-		ui.Add(ui.getWindowsSpecialsGuiToggleAllGlobal(), OFX_IM_TOGGLE_ROUNDED);
-		
-		if (ui.getWindowsSpecialsGuiToggleAllGlobal()) {
-			ui.AddSpacing();
-			// Draw each Special Window toggle
-			ui.drawWidgetsSpecialWindowsToggles(OFX_IM_CHECKBOX);
-		}
-		ui.AddSpacingSeparated();
+		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_SMALL);
+		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+		ui.AddSpacingBigSeparated();
+
+		// Auto populate all the toggles for all added Special Windows 
+		ui.AddLabelBig("Auto populate all the toggles for all added Special Windows", true, true);
+		ui.drawWidgetsSpecialWindowsToggles();
+
+		ui.AddSpacingBigSeparated();
 
 		//-
 
-		ui.AddLabelBig("Another ofxImGuiSurfing instance", false);
-		ui.AddLabel("We can use many instances of the add-on simultaneously. Then we can combine multiple classes/add-ons without colliding their ImGui windows.", false);
+		ui.AddLabelBig("Another ofxImGuiSurfing instance");
+		ui.AddLabel("We can use many instances of the add-on simultaneously. \
+			Then we can combine multiple classes/add-ons without colliding their ImGui windows.");
+		ui.AddSpacing();
+
 		ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
+
 		ui.AddSpacingSeparated();
 
 		//-
-		
+
 		ui.Add(ui.bHelp, OFX_IM_TOGGLE_ROUNDED);
 
-		ui.endWindow();
+		ui.EndWindow();
 	}
 }
 
@@ -166,16 +202,16 @@ void ofApp::draw_SurfingWidgets_1()
 	// 1. by passing a bool param (acting as a visible toggle)
 	// 2. by passing a name when adding and passing which index was to drawing!
 
-	if (ui.beginWindowSpecial(0))
+	if (ui.BeginWindowSpecial(0))
 	{
-		ui.AddLabelBig("> Special \nWindow 1", false);
+		ui.AddLabelBig("> Special \nWindow 1");
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		ui.AddGroup(params_0);
 		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS); // hide labels
 
-		ui.endWindowSpecial(0);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(0);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -185,22 +221,22 @@ void ofApp::draw_SurfingWidgets_2()
 	if (!bGui_2) return;
 
 	//// A. we can begin the window passing the index, that we want to remember!
-	//if (ui.beginWindowSpecial(1)) 
+	//if (ui.BeginWindowSpecial(1)) 
 
 	// B. but we can remember the name used on setup too.
 	// it's the same that use the index 1. (as first starts with zero)
 
-	if (ui.beginWindowSpecial(bGui_2))
+	if (ui.BeginWindowSpecial(bGui_2))
 	{
-		ui.AddLabelBig("> Special \nWindow 2", false);
+		ui.AddLabelBig("> Special \nWindow 2");
 		ui.AddGroup(params_1);
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
 
-		ui.endWindowSpecial(bGui_2);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(bGui_2);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -209,17 +245,17 @@ void ofApp::draw_SurfingWidgets_3()
 {
 	if (!bGui_3) return;
 
-	if (ui.beginWindowSpecial(bGui_3))
+	if (ui.BeginWindowSpecial(bGui_3))
 	{
-		ui.AddLabelBig("> Special \nWindow 3", false);
+		ui.AddLabelBig("> Special \nWindow 3");
 		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
 		ui.Add(amount2, OFX_IM_KNOB, 2);
 		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
 		ui.AddSpacingBigSeparated();
 		ui.AddGroup(params_2);
 
-		ui.endWindowSpecial(bGui_3);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(bGui_3);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -228,9 +264,9 @@ void ofApp::draw_SurfingWidgets_4()
 {
 	if (!bGui_4) return;
 
-	if (ui.beginWindowSpecial(bGui_4))
+	if (ui.BeginWindowSpecial(bGui_4))
 	{
-		ui.AddLabelBig("> Special \nWindow 4", false);
+		ui.AddLabelBig("> Special \nWindow 4");
 		ui.AddGroup(params_3);
 		ui.AddSpacingSeparated();
 		ui.Add(size2, OFX_IM_HSLIDER_BIG);
@@ -238,8 +274,8 @@ void ofApp::draw_SurfingWidgets_4()
 		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
 		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
 
-		ui.endWindowSpecial(bGui_4);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(bGui_4);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -248,13 +284,13 @@ void ofApp::draw_SurfingWidgets_5()
 {
 	if (!bGui_5) return;
 
-	if (ui.beginWindowSpecial(bGui_5))
+	if (ui.BeginWindowSpecial(bGui_5))
 	{
-		ui.AddLabelBig("> Special \nWindow 5", false);
+		ui.AddLabelBig("> Special \nWindow 5");
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
 
-		ui.endWindowSpecial(bGui_5);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(bGui_5);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -263,13 +299,13 @@ void ofApp::draw_SurfingWidgets_6()
 {
 	if (!bGui_6) return;
 
-	if (ui.beginWindowSpecial(bGui_6))
+	if (ui.BeginWindowSpecial(bGui_6))
 	{
-		ui.AddLabelBig("> Special \nWindow 6", false);
+		ui.AddLabelBig("> Special \nWindow 6");
 		ui.Add(amount2, OFX_IM_KNOB);
 
-		ui.endWindowSpecial(bGui_6);
-		//ui.endWindowSpecial();
+		//ui.EndWindowSpecial(bGui_6);
+		ui.EndWindowSpecial();
 	}
 }
 
@@ -309,8 +345,6 @@ void ofApp::keyPressed(int key) {
 //--------------------------------------------------------------
 void ofApp::buildHelpInfo()
 {
-	// We can use an internal Help Manager on the Gui Manager
-
 	helpInfo = "";
 	helpInfo += "HELP ofApp \n\n";
 	helpInfo += "13_SpecialWindowsAdvanced \n\n";
@@ -320,9 +354,9 @@ void ofApp::buildHelpInfo()
 	if (bGui)
 	{
 		helpInfo += "\n\n";
-		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getWindowSpecialVisibleGlobalState() ? "ON" : "OFF") + "\n";
+		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getGuiToggleGlobalState() ? "ON" : "OFF") + "\n";
 
-		if (ui.getWindowSpecialVisibleGlobalState())
+		if (ui.getGuiToggleGlobalState())
 		{
 			helpInfo += "\n";
 			helpInfo += "1      WINDOW 1 " + ofToString(ui.getWindowSpecialVisibleState(0) ? "ON" : "OFF") + "\n";
@@ -337,5 +371,7 @@ void ofApp::buildHelpInfo()
 	helpInfo += "DoubleClick to Edit/Lock \n";
 	helpInfo += "LeftClick + RightClick to Close \n";
 
+	// We can use an internal Help Manager on the Gui Manager
+	// Enabler toggle will be auto integrated in the common panels.
 	ui.setHelpInfoApp(helpInfo);
 }

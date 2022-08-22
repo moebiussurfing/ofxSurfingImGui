@@ -11,21 +11,6 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 [Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/tree/master/Examples)  
 
-<details>
-  <summary>SCREENSHOTS</summary>
-  <p>
-
-#### Widgets & Layout Engine
-
-![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/image/1_Widgets_Sliders2.PNG)  
-
-#### Layout Presets Engine & Docking
-
-![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
-  </p>
-
-</details>
-
 ## FEATURES
 
 - Easy **Setup** and **Layout**.
@@ -40,31 +25,34 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ## CODE
 
 ### ofApp.h
+
 ```.cpp
 #include "ofxSurfingImGui.h"
 
 ofxSurfingGui ui;
 
-ofParameter<bool> bGui{"Show Gui", true};
+ofParameter<bool> bGui{ "Show Gui", true };
 ofParameterGroup params;
 ..
 ```
+
 ### ofApp.cpp
+
 ```.cpp
 void ofApp::draw() 
 {
-    ui.begin();
+    ui.Begin();
     {
-        if (ui.beginWindow(bGui))
+        if (ui.BeginWindow(bGui))
         {
-            // ImGui widgets goes here.
+            /* ImGui widgets goes here */
             ui.AddGroup(params);
             ..
-            
-            ui.endWindow();
+
+            ui.EndWindow();
         }
     }
-    ui.end();
+    ui.End();
 }
 ```
 

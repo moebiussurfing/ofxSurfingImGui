@@ -4,11 +4,11 @@
 
 /*
 
-	This example complements the previous example,
+	This example complements the previous 10_SpecialWindows example,
     but also shows two instances of the ofxSurfingImGui Toolkit add-on,
-    both working together without colliding their ImGui windows
+    both working together without colliding their ImGui windows nor widgets,
     nor the extra engine features neither.
-    One instance of the Gui Manager is on ofApp 
+    One instance of the Gui Manager is in ofApp, 
     and the other into the instantiated myClass object.
 
 */
@@ -22,6 +22,7 @@ class ofApp : public ofBaseApp
 public:
     
     void setup();
+    void setupParams();
     void draw();
 	void keyPressed(int key);
 
@@ -59,24 +60,28 @@ public:
 
 	// Gui
 
-	ofxSurfing_ImGui_Manager ui;
+	SurfingGuiManager ui;
 
 	void setup_ImGui();
 
-    // this is the only visible toggle that will not be added as special window.
+    // This is the only visible toggle 
+    // that will not be added as special window.
     ofParameter<bool> bGui;
     void draw_MainWindow();
-
-	void draw_SurfingWidgets_1(); 
-    // this window will be handle without using special windows workflow, 
+	
+    // Non Special Window
+    void draw_SurfingWidgets_1(); 
+    // This window will be handle without using special windows workflow, 
     // passing by name instead of passing the visible toggle param.
 
+    // Special Windows
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
 	void draw_SurfingWidgets_4();
     void draw_SurfingWidgets_5();
 	void draw_SurfingWidgets_6();
 
+    // Visible toggles for the Special Windows
     ofParameter<bool> bGui_2;
     ofParameter<bool> bGui_3;
     ofParameter<bool> bGui_4;
@@ -89,5 +94,6 @@ public:
 
     //--
 
+    // Another ImGui "context" is running inside!
     MyClass myClassObject;
 };

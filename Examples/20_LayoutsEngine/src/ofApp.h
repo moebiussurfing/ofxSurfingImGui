@@ -55,7 +55,7 @@ public:
 
 	// The ImGui Manager !
 
-	ofxSurfing_ImGui_Manager guiManager;
+	ofxSurfingGui ui;
 
 	void setupImGui();
 	void drawImGui();

@@ -13,7 +13,7 @@
 #include "ofxSurfingHelpers.h"
 #include "ofxInteractiveRect.h"
 #include "ofxImGui.h"
-#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofHelpers.h"
 //#include "ofxSurfingImGui.h"
 
 namespace ofxImGuiSurfing

@@ -13,13 +13,10 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 
-#include "ofxSurfing_Timers.h"
-//#include "ofxSurfingHelpers.h"
-
-//#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofxSurfingHelpers.h"
 
 //------------------------------
 

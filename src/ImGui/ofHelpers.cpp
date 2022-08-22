@@ -1,4 +1,4 @@
-#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "ofHelpers.h"
 
 //TODO:
 // add customization for nested groups

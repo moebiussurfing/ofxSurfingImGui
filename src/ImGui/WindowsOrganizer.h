@@ -4,8 +4,10 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
-#include "ofxSurfing_ImGui_ofHelpers.h"
+#include "LayoutHelpers.h"
+#include "ofHelpers.h"
+
+#include "WindowPanel.h"
 
 /*
 
@@ -27,122 +29,24 @@ using namespace ofxImGuiSurfing;
 
 namespace ofxImGuiSurfing
 {
-	// One Window
-	//--------------------------------------------------------------
-	class WindowPanel {
-
-	public:
-
-		//--------------------------------------------------------------
-		WindowPanel() {
-		}
-
-		//--------------------------------------------------------------
-		~WindowPanel() {
-		}
-
-		//--------------------------------------------------------------
-		void getShapeState()
-		{
-			rShape = ofRectangle(
-				ImGui::GetWindowPos().x,
-				ImGui::GetWindowPos().y,
-				ImGui::GetWindowWidth(),
-				ImGui::GetWindowHeight());
-		}
-
-	public:
-
-		ofParameter<bool> bGui{ "bGui", true };
-
-		ofParameter<ofRectangle> rShape{ "rShape", ofRectangle(0,0,0,0), ofRectangle(0,0,0,0), ofRectangle(1920,1080,1920,1080) };
-
-		ofParameter<int> indexPos{ "IndexPos", -1, -1, 0 };
-
-		int id = -1; // -1 is for not visible ?. or its position on the queue / window from left to right
-
-	public:
-
-		//--------------------------------------------------------------
-		ofRectangle getShape() const
-		{
-			return rShape.get();
-		}
-
-		//--------------------------------------------------------------
-		ofRectangle getRectangle() const
-		{
-			return rShape.get();
-		}
-
-		//--------------------------------------------------------------
-		glm::vec2 getPosition() const
-		{
-			return glm::vec2(rShape->x, rShape->y);
-		}
-
-		//--------------------------------------------------------------
-		float getWidth() const
-		{
-			return rShape->getWidth();
-		}
-
-		//--------------------------------------------------------------
-		float getHeight() const
-		{
-			return rShape->getHeight();
-		}
-
-		//--------------------------------------------------------------
-		void setPosition(glm::vec2 pos)
-		{
-			rShape->x = pos.x;
-			rShape->y = pos.y;
-		}
-
-		//--------------------------------------------------------------
-		void setRectangle(ofRectangle r)
-		{
-			rShape = r;
-		}
-	};
-
-	//----
-
 	//--------------------------------------------------------------
 
 	// Container Manager for all the manager special windows to handle.
 
-	class WindowPanels
+	class WindowsOrganizer
 	{
 	public:
 
 		//--------------------------------------------------------------
-		WindowPanels()
+		WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
-			ofAddListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
-			ofAddListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-			ofAddListener(params_User.parameterChangedE(), this, &WindowPanels::Changed_Params);
+			ofAddListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
+			ofAddListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 
-			//-
-
-			params_User.add(bGui_SpecialWindows);
-			params_User.add(bGui_ShowAll);
-			params_User.add(bLinkedSpecialWindows);
-			params_User.add(bOrientation);
-			params_User.add(bAlignShapes);
-			params_User.add(bAlignShapesX);
-			params_User.add(bAlignShapesY);
-			params_User.add(bHeaders);
-			params_User.add(pad);
-			params_User.add(position_Anchor);
-			params_User.add(bAlignWindowsY);
-			params_User.add(bAlignWindowsX);
-			params_User.add(bAlignWindowsCascade);
-			params_User.add(bAlignWindowsReset);
-
+			//--
+			 
 			// Exclude
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
@@ -151,18 +55,17 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		~WindowPanels()
+		~WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
-			ofRemoveListener(params_Enablers.parameterChangedE(), this, &WindowPanels::Changed_Params_Enablers);
-			ofRemoveListener(params.parameterChangedE(), this, &WindowPanels::Changed_Params);
-			ofRemoveListener(params_User.parameterChangedE(), this, &WindowPanels::Changed_Params);
+			ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
+			ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 
 			if (bInitialized)
 			{
 				// Save
-				ofxImGuiSurfing::saveGroup(params_Settings, path_Settings);
+				ofxSurfingHelpers::saveGroup(params_AppSettings, path_Settings);
 			}
 		}
 
@@ -172,22 +75,23 @@ namespace ofxImGuiSurfing
 
 		//TODO:
 		// this is taken from ofxSurfingPresets
-		enum surfingAlignMode
+		enum SurfingAlignMode
 		{
 			SURFING_ALIGN_HORIZONTAL = 0,
 			SURFING_ALIGN_VERTICAL
 		};
-		surfingAlignMode modeAlignWindows = SURFING_ALIGN_HORIZONTAL;
+		SurfingAlignMode modeAlignWindows = SURFING_ALIGN_HORIZONTAL;
 
 		//--------------------------------------------------------------
 		void doAlignWindowsY()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
 
-			float _yMin = 1000; // set an y max to bottom. store the more hight/upper, lower y window coordinate
+			float _yMin = 1000;
+			// set an y max to bottom. store the more hight/upper, lower y window coordinate
 
 			ImVector<ImGuiWindow*> windows;
 			for (ImGuiWindow* window : g.WindowsFocusOrder)
@@ -195,7 +99,8 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
 
 					windows.push_back(window);
@@ -212,7 +117,8 @@ namespace ofxImGuiSurfing
 				for (int n = 0; n < windows.Size; n++)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(windows[n]->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(windows[n]->Name)) continue;
 
 					ImVec2 pos;
@@ -226,7 +132,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsX()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -239,7 +145,8 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
 
 					windows.push_back(window);
@@ -256,7 +163,8 @@ namespace ofxImGuiSurfing
 				for (int n = 0; n < windows.Size; n++)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(windows[n]->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(windows[n]->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(windows[n]->Name)) continue;
 
 					ImVec2 pos;
@@ -271,21 +179,28 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		// Organizer window.
-		ofParameter<bool> bGui_SpecialWindows{ "ORGANIZER", false };
+		// Link Organizer toggle
+		ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };
 
-		// Sub panel aligner window.
-		ofParameter<bool> bGui_AlignHelpers{ "ALIGNERS", false };
+		// Aligners toggle
+		ofParameter<bool> bGui_Aligners{ "ALIGNERS", false };
+
+		// Special Windows toggle
+		ofParameter<bool> bGui_SpecialWindows{ "SPECIAL WINDOWS", false };
 
 		// Extra global toggle to hide / show all the queued windows.
-		ofParameter<bool> bGui_ShowAll{ "SHOW GLOBAL", true };
+		ofParameter<bool> bGui_Global{ "GLOBAL", true };
+
+		//--
+
+	public:
 
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
 		ofParameter<bool> bAlignWindowsY{ "AlignY", false };
 		ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
 		ofParameter<bool> bAlignWindowsReset{ "Reset",false };
 
-		ofParameter<bool> bLinkedSpecialWindows{ "LINK",  true };
+		ofParameter<bool> bLinked{ "LINK",  true };
 		ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
 		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
 		ofParameter<bool> bAlignShapesX{ "ShapesX",  true };
@@ -293,7 +208,9 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 
-		ofParameter<glm::vec2> position_Anchor{ "Position Anchor", glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+		//TODO:
+		ofParameter<glm::vec2> position_Anchor{ "Position Anchor",
+			glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
 
 		//--
 
@@ -302,11 +219,13 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		bool isInitiated()
 		{
-			return (specialWindowsOrganizer.size() > 0);
+			return (windowsPanels.size() > 0);
 		}
 
-		std::vector<WindowPanel> specialWindowsOrganizer;
-		// All the added panels. Hidden windows are not removed from here! Just not drawn.
+		std::vector<WindowPanel> windowsPanels;
+		// All the added panels. 
+		// Hidden windows are not removed from here! 
+		// Just will not be drawn. Will be hidden.
 
 	private:
 
@@ -319,27 +238,33 @@ namespace ofxImGuiSurfing
 		float height_max = 0;
 
 		std::string path_Global = "";
-		std::string path_Settings = "_WindowsSpecial.json";
-		std::string name = "";
+		std::string path_Settings = "UI_Organizer_.json";
+		std::string nameLabel = "";
 
 		bool bInitialized = false;
+		bool bDoneStartupDelayed = false;
 
 	public:
 
 		//--------------------------------------------------------------
-		void setName(std::string name)
+		void setName(std::string _name)
 		{
-			this->name = "_" + name;
+			this->nameLabel = _name;
+
+			//bGui_Aligners.setName(nameLabel + " ALIGNERS");
+			//bGui_Organizer.setName(nameLabel + " ORGANIZER");
+			//bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
 		}
 
 		//--------------------------------------------------------------
-		void setPath(std::string path)
+		void setPathGlobal(std::string path)
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << path;
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << path;
 
 			path_Global = path;
 			ofxSurfingHelpers::CheckFolder(path_Global);
-			path_Settings = path_Global + "guiManager_" + params_Settings.getName() + name + ".json";
+
+			path_Settings = path_Global + nameLabel + "_UI_Organizer" + ".json";
 		}
 
 	private:
@@ -348,20 +273,8 @@ namespace ofxImGuiSurfing
 		// Hidden windows are removed from here!
 		std::vector<int> queueWindowsVisible;
 
-		ofParameterGroup params_Enablers{ "Enablers" };
-		ofParameterGroup params_Settings{ "WindowsSpecials" };
-		ofParameterGroup params{ "Params" }; // for callbacks only
-
-		//// Cascade orientation
-		//enum wOrientation
-		//{
-		//	W_HORIZ = 0,
-		//	W_VERT,
-		//	W_COUNT
-		//};
-		//wOrientation orientation;
-		//ofParameter<int> orientation_Index{ "Orient", 0, 0, W_COUNT - 1 };
-		//std::vector<string> sOrientation{ "HORIZONTAL", "VERTICAL" };
+		ofParameterGroup params_bGuiToggles{ "GuiToggles" };
+		ofParameterGroup params_AppSettings{ "Organizer" };
 
 		bool bHideWindowsToggles = false; //-> To disable when using the full layout engine. 
 
@@ -369,37 +282,43 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << b;
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << b;
 
 			bHideWindowsToggles = b;
 
 			if (bHideWindowsToggles) {
-				bGui_ShowAll = true;
-				bGui_ShowAll.setSerializable(false);
+				bGui_Global = true;
+				bGui_Global.setSerializable(false);
 			}
 		}
 
 		//-
 
-		ofParameterGroup params_User{ "Organizer" }; // To use on a external GUI 
+	private:
+
+		ofParameterGroup params_Panels{ "Panels" };// just to organize on the json file
+
+	public:
+
+		ofParameterGroup params_Settings{ "Organizer Settings" }; // To use on a external GUI 
 
 	public:
 
 		//--------------------------------------------------------------
-		ofParameterGroup& getParamsUser() {
-			return params_User;
+		ofParameterGroup& getParamsSettings() {
+			return params_Settings;
 		}
 
 	private:
 
 		//--------------------------------------------------------------
-		void Changed_Params(ofAbstractParameter& e)
+		void Changed_Settings(ofAbstractParameter& e)
 		{
 			//if (bDISABLE_CALLBACKS) return;
 
 			std::string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << name << " : " << e;
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << name << " : " << e;
 
 			//--
 
@@ -410,64 +329,11 @@ namespace ofxImGuiSurfing
 			//else if (name == position_Anchor.getName())
 			//{
 			//	// Position linked to first queued window
-			//	if (queueWindowsVisible.size() == 0 || specialWindowsOrganizer.size() == 0) return;
+			//	if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0) return;
 			//	// get the index of the first window
 			//	int id = queueWindowsVisible[0];
-			//	specialWindowsOrganizer[id].setPosition(position_Anchor.get());
+			//	windowsPanels[id].setPosition(position_Anchor.get());
 			//	doApplyLinkWindows();
-			//}
-
-			//--
-
-			// Align Shapes
-
-			//else if (name == bAlignShapesX.getName())
-			//{
-			//	////fix
-			//	//if (bAlignShapesX)
-			//	//{
-			//	//	bOrientation = bOrientation;
-			//	//}
-			//}
-
-			//else if (name == bAlignShapesY.getName())
-			//{
-			//	////fix
-			//	//if (bAlignShapesY)
-			//	//{
-			//	//	bOrientation = bOrientation;
-			//	//}
-			//}
-
-			//--
-
-			//else if (name == bOrientation.getName())
-			//{
-			//	//if (!bOrientation) orientation_Index = 0;
-			//	//else orientation_Index = 1;
-			//}
-
-			////--
-
-			//else if (name == pad.getName())
-			//{
-			//}
-
-			//--
-
-			////TODO: should recalculate..
-			//else if (name == bHeaders.getName())
-			//{
-			//	doApplyLinkWindows();
-			//}
-
-			//-
-
-			//else if (name == bGui_ShowAll.getName()) // global show
-			//{
-			//	// workaround 
-			//	// to avoid bad dimension on startup
-			//	bOrientation = bOrientation;
 			//}
 
 			//--
@@ -508,14 +374,17 @@ namespace ofxImGuiSurfing
 		//--
 
 		//--------------------------------------------------------------
-		void Changed_Params_Enablers(ofAbstractParameter& e) // each window show toggle changed
+		void Changed_Enablers(ofAbstractParameter& e) // each window show toggle changed
 		{
-			if (specialWindowsOrganizer.size() == 0) return;
+			if (windowsPanels.size() == 0) return;
+
 			if (bDISABLE_CALLBACKS) return;
 
-			bDISABLE_CALLBACKS = true;//is attending here..
+			bDISABLE_CALLBACKS = true; // Now is attending here..
+
 			std::string name = e.getName();
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << name << " : " << e;
+
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << name << " : " << e;
 
 			//--			
 
@@ -523,7 +392,7 @@ namespace ofxImGuiSurfing
 			// For each Special Window toggle
 			// Iterate (all) unsorted and some may hidden windows!
 
-			for (auto& p : specialWindowsOrganizer)
+			for (auto& p : windowsPanels)
 			{
 				// A bGui toggle is pressed...
 				// The toggles that are showers for each special window.
@@ -531,8 +400,8 @@ namespace ofxImGuiSurfing
 
 				if (p.bGui.getName() == name)
 				{
-					ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " id:" << p.id
-						<< " indexPos:" << p.indexPos << " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
+					ofLogNotice("ofxSurfingImGui") << "id:" << p.id << 
+						" indexPos:" << p.indexPos << " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
 
 					//--
 
@@ -558,7 +427,9 @@ namespace ofxImGuiSurfing
 						}
 						else
 						{
-							ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Should not be indexPos -1 for the window " << p.id << " that was hidden until now";
+							ofLogWarning("ofxSurfingImGui") << 
+								"Should not be indexPos -1 for the window p.id:" << p.id << 
+								" that was hidden until now";
 
 							bDISABLE_CALLBACKS = false;
 
@@ -579,7 +450,8 @@ namespace ofxImGuiSurfing
 					{
 						if (p.indexPos == -1)
 						{
-							ofLogError("ofxSurfingImGui") << (__FUNCTION__) <<"\n"<< "Should not be -1 ... if " << p.id << " was enabled until now";
+							ofLogWarning("ofxSurfingImGui") << 
+								"Should not be -1 ... if p.id:" << p.id << " was enabled until now";
 
 							bDISABLE_CALLBACKS = false;
 
@@ -599,7 +471,8 @@ namespace ofxImGuiSurfing
 
 							if (p.indexPos == 0)
 							{
-								ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Closing First! Window ID " << p.id;
+								ofLogWarning("ofxSurfingImGui") << 
+									"Closing First! Window ID p.id:" << p.id;
 
 								// Remove the window from the queue, from the position where it was:
 								queueWindowsVisible.erase(queueWindowsVisible.begin());
@@ -608,7 +481,7 @@ namespace ofxImGuiSurfing
 								{
 									//TODO:
 									int id = queueWindowsVisible[0]; // get the index of first window
-									specialWindowsOrganizer[id].setPosition(position_Anchor.get());
+									windowsPanels[id].setPosition(position_Anchor.get());
 								}
 
 								p.indexPos = -1; // mark as not visible/hidden
@@ -652,14 +525,13 @@ namespace ofxImGuiSurfing
 		}
 
 	private:
-		//public:
 
-			//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		void doReOrganize()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
-			if (queueWindowsVisible.size() == 0 || specialWindowsOrganizer.size() == 0) return;
+			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0) return;
 
 			//--
 
@@ -667,10 +539,10 @@ namespace ofxImGuiSurfing
 
 			// 1. Disable all
 
-			for (int i = 0; i < specialWindowsOrganizer.size(); i++)
+			for (int i = 0; i < windowsPanels.size(); i++)
 			{
-				specialWindowsOrganizer[i].indexPos = -1;
-				specialWindowsOrganizer[i].bGui.setWithoutEventNotifications(false);
+				windowsPanels[i].indexPos = -1;
+				windowsPanels[i].bGui.setWithoutEventNotifications(false);
 			}
 
 			//--
@@ -681,8 +553,8 @@ namespace ofxImGuiSurfing
 			{
 				int id = queueWindowsVisible[i];
 
-				specialWindowsOrganizer[id].indexPos = i;
-				specialWindowsOrganizer[id].bGui.setWithoutEventNotifications(true);
+				windowsPanels[id].indexPos = i;
+				windowsPanels[id].bGui.setWithoutEventNotifications(true);
 			}
 		}
 
@@ -693,7 +565,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsReset()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -719,7 +591,8 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
 
 					myWin w;
@@ -752,10 +625,10 @@ namespace ofxImGuiSurfing
 					bool bskip = false;
 					for (size_t k = 0; k < queueWindowsVisible.size(); k++)
 					{
-						string name = specialWindowsOrganizer[k].bGui.getName();
+						string name = windowsPanels[k].bGui.getName();
 						if (myWins[i].ImWin->Name == name)
 						{
-							if (name != specialWindowsOrganizer[0].bGui.getName()) bskip = true;
+							if (name != windowsPanels[0].bGui.getName()) bskip = true;
 							break;
 						}
 					}
@@ -773,14 +646,13 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsCascade()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
 
 			float _padx = 117;
 			float _pady = 25;
 
 			//--
 
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
 			ImVector<ImGuiWindow*> windows;
@@ -805,7 +677,8 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_AlignHelpers.getName() == ofToString(window->Name)) continue;
+					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
 					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
 
 					myWin w;
@@ -838,10 +711,10 @@ namespace ofxImGuiSurfing
 					bool bskip = false;
 					for (size_t k = 0; k < queueWindowsVisible.size(); k++)
 					{
-						string name = specialWindowsOrganizer[k].bGui.getName();
+						string name = windowsPanels[k].bGui.getName();
 						if (myWins[i].ImWin->Name == name)
 						{
-							if (name != specialWindowsOrganizer[0].bGui.getName()) bskip = true;
+							if (name != windowsPanels[0].bGui.getName()) bskip = true;
 							break;
 						}
 					}
@@ -867,82 +740,104 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void add(ofParameter<bool>& e) // Add Special Windows. Do it on setup!
+		void add(ofParameter<bool>& e) // Will be called when Add Special Windows. 
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << e.getName();
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << e.getName();
 
-			params_Enablers.add(e);
+			// Queue toggle
+			params_bGuiToggles.add(e);
 
+			// Queue window
 			WindowPanel p;
-			p.id = specialWindowsOrganizer.size(); // which special window is
+			p.id = windowsPanels.size(); // which special window is
 			p.indexPos = -1; // what position on visible windows queue. -1 = hidden
 			p.bGui.makeReferenceTo(e); // is visible
-			specialWindowsOrganizer.push_back(p);
+
+			windowsPanels.push_back(p);
 
 			////TODO:
 			//// better using pointers?
 			//// not working
 			//WindowPanel p;
-			//specialWindowsOrganizer.push_back(p);
-			//specialWindowsOrganizer.back().id = specialWindowsOrganizer.size();
-			//specialWindowsOrganizer.back().indexPos = -1;
-			//specialWindowsOrganizer.back().bGui.makeReferenceTo(e);
+			//windowsPanels.push_back(p);
+			//windowsPanels.back().id = windowsPanels.size();
+			//windowsPanels.back().indexPos = -1;
+			//windowsPanels.back().bGui.makeReferenceTo(e);
 		}
 
 	public:
 
 		//--------------------------------------------------------------
-		void doAlignShapesNextWindow()//must be called using runShapeState, called on begin() phase!
+		void doAlignShapesNextWindow() // must be called using runShapeState, called on begin() phase!
 		{
-			//ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			//ofLogVerbose("ofxSurfingImGui") <<"\n"<< (__FUNCTION__);
 
-			if (ofGetFrameNum() == 1) return;//skip first frame to be sure that it's prepared.
+			if (ofGetFrameNum() == 1) return; // skip first frame to be sure that all it's prepared.
 
 			//--
 
-			if (bOrientation)//vertical
+			if (bOrientation) // vertical
 			{
-				if (bAlignShapesX)
-					ImGui::SetNextWindowSize(ImVec2(width_max, 0));
+				if (bAlignShapesX) ImGui::SetNextWindowSize(ImVec2(width_max, 0));
 			}
-			else//horizontal
+			else // horizontal
 			{
-				if (bAlignShapesY)
-					ImGui::SetNextWindowSize(ImVec2(0, height_max));
+				if (bAlignShapesY) ImGui::SetNextWindowSize(ImVec2(0, height_max));
 			}
 		}
 
 		//--------------------------------------------------------------
 		void setupInitiate()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << nameLabel;
+
+			//-
+
+			params_Panels.add(bGui_Global);
+			params_Panels.add(bGui_Aligners);
+			params_Panels.add(bGui_Organizer);
+			params_Panels.add(bGui_SpecialWindows);
+			params_Settings.add(params_Panels);
+
+			params_Settings.add(bLinked);
+			params_Settings.add(bOrientation);
+			params_Settings.add(bAlignShapes);
+			params_Settings.add(bAlignShapesX);
+			params_Settings.add(bAlignShapesY);
+			params_Settings.add(bHeaders);
+			params_Settings.add(pad);
+			params_Settings.add(position_Anchor);
+			params_Settings.add(bAlignWindowsY);
+			params_Settings.add(bAlignWindowsX);
+			params_Settings.add(bAlignWindowsCascade);
+			params_Settings.add(bAlignWindowsReset);
+
+			// Settings Group
+			params_AppSettings.add(params_Settings);
 
 			//--
 
-			// Disable all
-			for (auto& p : params_Enablers)
-			{
-				if (p->type() == typeid(ofParameter<bool>).name())
-				{
-					ofParameter<bool> pm = p->cast<bool>();
-					pm = false;
-				}
-			}
-
-			//--
-
-			// To get notified by the callbacks
-			//params.add(params_User);
+			////TODO:
+			//// // workflow
+			//// Default state
+			//// Disable all
+			//for (auto& p : params_bGuiToggles)
+			//{
+			//	if (p->type() == typeid(ofParameter<bool>).name())
+			//	{
+			//		ofParameter<bool> pm = p->cast<bool>();
+			//		pm = false;
+			//	}
+			//}
 
 			//--
 
 			// To store session settings
 
-			params_Settings.add(params_User);
-
 			// Each window enabler will be added here..
 			// all of theme has been added during setup
-			params_Settings.add(params_Enablers);
+			params_AppSettings.add(params_bGuiToggles);
 
 			//--
 
@@ -950,13 +845,62 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void startupDelayed()
+		void startup()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << nameLabel;
 
 			//--
 
-			//// fixes
+			bDISABLE_CALLBACKS = false;
+
+			if (windowsPanels.size() != 0) bInitialized = true;
+
+			//--
+
+			// Load Settings
+			if (bInitialized) loadSettings();
+
+
+			//--
+
+			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0)
+			{
+				ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+				ofLogWarning("ofxSurfingImGui") << "Some Special Windows queue is empty!";
+
+			}
+			else
+			{
+				// Position linked to first queued window
+				int id = queueWindowsVisible[0];
+				windowsPanels[id].setPosition(position_Anchor.get());
+			}
+
+			//--
+
+			////TODO:
+			//doReOrganize();
+
+			//TODO:
+			if (bLinked) doApplyLinkWindows();
+		}
+
+		//--------------------------------------------------------------
+		void startupDelayed()
+		{
+			// Force some fixes
+
+			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << nameLabel;
+			
+			// Load Settings
+			if (bInitialized) loadSettings();
+
+			bDoneStartupDelayed = true;
+
+			//--
+
 			//bOrientation = bOrientation;
 			////bLockedWidth = bLockedWidth;
 			////bLockedHeight = bLockedHeight;
@@ -969,59 +913,29 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void startup()
+		void loadSettings()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
-
-			bDISABLE_CALLBACKS = false;
-
-			if (specialWindowsOrganizer.size() != 0) bInitialized = true;
-
-			//--
-
-			// Load Settings
-			if (bInitialized) ofxImGuiSurfing::loadGroup(params_Settings, path_Settings);
-
-
-			//--
-
-			if (queueWindowsVisible.size() == 0 || specialWindowsOrganizer.size() == 0)
-			{
-			}
-			else
-			{
-				// Position linked to first queued window
-				int id = queueWindowsVisible[0];
-				specialWindowsOrganizer[id].setPosition(position_Anchor.get());
-			}
-
-			//--
-
-			////TODO:
-			//doReOrganize();
-
-			//TODO:
-			if (bLinkedSpecialWindows) doApplyLinkWindows();
+			ofxSurfingHelpers::loadGroup(params_AppSettings, path_Settings);
 		}
 
 		//--
 
 	private:
 
-		bool bForceNext = false; // workaround required / to be used when hidding first window!
+		bool bForceNext = false; // workaround required / to be used when hiding first window!
 
 	public:
 
 		//--------------------------------------------------------------
 		void getShapeState(int i)
 		{
-			specialWindowsOrganizer[i].getShapeState();
+			windowsPanels[i].getShapeState();
 		}
 
 		//--------------------------------------------------------------
 		void runShapeState(int i) // To be effective, must be called just before begin()!
 		{
-			ofRectangle r = specialWindowsOrganizer[i].getShape();
+			ofRectangle r = windowsPanels[i].getShape();
 
 			ImGuiCond flagCond;
 
@@ -1042,7 +956,7 @@ namespace ofxImGuiSurfing
 				//float x = position_Anchor.get().x;
 				//float y = position_Anchor.get().y;
 				//glm::vec2 p = glm::vec2(x, y);
-				//specialWindowsOrganizer[id].setPosition(p);
+				//windowsPanels[id].setPosition(p);
 
 				flagCond = ImGuiCond_Always;
 			}
@@ -1071,41 +985,48 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void setNameWindowsSpecialsEnableGlobal(std::string name) {
-			bGui_ShowAll.setName(name);
+		void setNameWindowsSpecialsEnableGlobal(std::string name)
+		{
+			bGui_Global.setName(name);
 		}
+
+		//--
 
 		// Get the name of the last special window (the window at the end of current drawn queue)
 		//--------------------------------------------------------------
-		string getWindowSpecialLast() const {
+		string getWindowSpecialLast() const
+		{
 			string name = "-1";
 			if (queueWindowsVisible.size() == 0) return name;//all are hidden
 
 			int ilast = queueWindowsVisible.back();
-			name = specialWindowsOrganizer[ilast].bGui.getName();
+			name = windowsPanels[ilast].bGui.getName();
 
 			return name;
 		}
 
 		// Get the position of the last special window (the window at the end of current drawn queue / at right)
 		//--------------------------------------------------------------
-		glm::vec2 getWindowSpecialLastTopRight() const {
+		glm::vec2 getWindowSpecialLastTopRight() const
+		{
 			glm::vec2 p = glm::vec2(-1, -1);
 			if (queueWindowsVisible.size() == 0) return p;//skip when all are hidden
 
 			int ilast = queueWindowsVisible.back();
-			p = specialWindowsOrganizer[ilast].getRectangle().getTopRight();
+			p = windowsPanels[ilast].getRectangle().getTopRight();
 
 			return p;
 		}
+
 		// Get the position of the first special window (the window at the begin of current drawn queue / at left )
 		//--------------------------------------------------------------
-		glm::vec2 getWindowSpecialLastTopLeft() const {
+		glm::vec2 getWindowSpecialLastTopLeft() const
+		{
 			glm::vec2 p = glm::vec2(-1, -1);
 			if (queueWindowsVisible.size() == 0) return p;//skip when all are hidden
 
 			int ifirst = queueWindowsVisible[0];
-			p = specialWindowsOrganizer[ifirst].getRectangle().getTopLeft();
+			p = windowsPanels[ifirst].getRectangle().getTopLeft();
 
 			return p;
 		}
@@ -1116,18 +1037,18 @@ namespace ofxImGuiSurfing
 		// Set anchor first window from a parent scope:
 		// That feature allows to link grouped windows from many contexts / add-ons.
 		//--------------------------------------------------------------
-		void setWindowSpecialFirstPosition(glm::vec2 pos) {
+		void setWindowSpecialFirstPosition(glm::vec2 pos)
+		{
 			if (queueWindowsVisible.size() == 0) return;//skip when all are hidden
 			int ifirst = queueWindowsVisible[0];
 			glm::vec2 p(pos.x + pad, pos.y);//TODO: forced to horizontal align.
-			specialWindowsOrganizer[ifirst].setPosition(p);
+			windowsPanels[ifirst].setPosition(p);
 
 			//TODO:
 			// Force
 			//runShapeState(ifirst);
 		}
 
-		// 
 		//----
 
 		//--------------------------------------------------------------
@@ -1154,12 +1075,11 @@ namespace ofxImGuiSurfing
 			float _w2 = getWidgetsWidth(2);
 
 			// Enable
-			//ofxImGuiSurfing::AddBigToggle(bLinkedSpecialWindows);
-			ofxImGuiSurfing::AddBigToggle(bLinkedSpecialWindows, _w1, 2 * _h, true, true);//blinking
+			ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true);//blinking
 
 			ofxImGuiSurfing::AddSpacing();
 
-			if (bLinkedSpecialWindows)
+			if (bLinked)
 			{
 				// Orientation
 				string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
@@ -1252,7 +1172,7 @@ namespace ofxImGuiSurfing
 							// All the panels
 							std::string ss1 = "";
 							int i = 0;
-							for (auto& p : specialWindowsOrganizer)
+							for (auto& p : windowsPanels)
 							{
 								ss1 += "" + ofToString(i) + "";
 								ss1 += "\n";
@@ -1271,10 +1191,10 @@ namespace ofxImGuiSurfing
 
 							// Windows
 							std::string ss5 = "All Windows \n\n";
-							for (int i = 0; i < specialWindowsOrganizer.size(); i++)
+							for (int i = 0; i < windowsPanels.size(); i++)
 							{
 								if (i != 0) ss5 += ", ";
-								ss5 += ofToString(specialWindowsOrganizer[i].id);
+								ss5 += ofToString(windowsPanels[i].id);
 							}
 							ImGui::TextWrapped(ss5.c_str());
 							ofxImGuiSurfing::AddSpacingSeparated();
@@ -1288,7 +1208,7 @@ namespace ofxImGuiSurfing
 				}
 			}
 
-			//-
+			//--
 
 			// Windows
 
@@ -1308,14 +1228,14 @@ namespace ofxImGuiSurfing
 
 							if (ImGui::Button("All", ImVec2(_w2, _h)))
 							{
-								for (auto& p : specialWindowsOrganizer) {
+								for (auto& p : windowsPanels) {
 									p.bGui = true;
 								}
 							}
 							ImGui::SameLine();
 							if (ImGui::Button("None", ImVec2(_w2, _h)))
 							{
-								for (auto& p : specialWindowsOrganizer) {
+								for (auto& p : windowsPanels) {
 									p.bGui = false;
 								}
 							}
@@ -1327,12 +1247,12 @@ namespace ofxImGuiSurfing
 
 						// Global Enable 
 
-						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowAll);//medium
+						ofxImGuiSurfing::AddToggleRoundedButton(bGui_Global);//medium
 
-						if (bGui_ShowAll)
+						if (bGui_Global)
 						{
 							ImGui::Indent();
-							for (auto& p : specialWindowsOrganizer)
+							for (auto& p : windowsPanels)
 							{
 								ofxImGuiSurfing::AddToggleRoundedButton(p.bGui);
 							}
@@ -1349,27 +1269,28 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void update()
+		void refreshUpdate()
 		{
 			//--
 
-			// Startup Delayed
-			if (ofGetFrameNum() == 2) {
-				startupDelayed();
-			}
+			//// Startup Delayed
+			//if (ofGetFrameNum() == 1 && !bDoneStartupDelayed)
+			//{
+			//	startupDelayed();
+			//}
 
 			//--
 
 			// Skip
-			if (queueWindowsVisible.size() == 0 || specialWindowsOrganizer.size() == 0)
+			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0)
 			{
 				//TODO:
 				// workaround 
-				// to solve that sometimes hidding/showing windows are translated to the right..
+				// to solve that sometimes hiding/showing windows are translated to the right..
 				// force to improve when showing back 
-				for (size_t i = 0; i < specialWindowsOrganizer.size(); i++)
+				for (size_t i = 0; i < windowsPanels.size(); i++)
 				{
-					specialWindowsOrganizer[i].setPosition(position_Anchor.get());
+					windowsPanels[i].setPosition(position_Anchor.get());
 				}
 
 				return;
@@ -1381,13 +1302,13 @@ namespace ofxImGuiSurfing
 			// Required to allow move first window by the user!
 			//TODO: we could allow to move all windows with another engine..
 			int id = queueWindowsVisible[0];
-			glm::vec2 p = specialWindowsOrganizer[id].getPosition();
+			glm::vec2 p = windowsPanels[id].getPosition();
 			position_Anchor.setWithoutEventNotifications(p);
 
 			//--
 
 			// Update / Apply all links to windows
-			if (bLinkedSpecialWindows) doApplyLinkWindows();
+			if (bLinked) doApplyLinkWindows();
 		}
 
 		//--
@@ -1395,10 +1316,10 @@ namespace ofxImGuiSurfing
 	private:
 		//public:
 
-			//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		void doApplyLinkWindows() // Sets the position for all the visible windows.
 		{
-			if (queueWindowsVisible.size() == 0 || specialWindowsOrganizer.size() == 0) return;
+			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0) return;
 
 			//--
 
@@ -1411,7 +1332,7 @@ namespace ofxImGuiSurfing
 				for (int i = 0; i < queueWindowsVisible.size(); i++)
 				{
 					int id = queueWindowsVisible[i];
-					ofRectangle r = specialWindowsOrganizer[id].getRectangle();
+					ofRectangle r = windowsPanels[id].getRectangle();
 
 					// measure maxims w/h from all the windows to align shapes!
 					if (width_max < r.getWidth()) width_max = r.getWidth();
@@ -1434,7 +1355,8 @@ namespace ofxImGuiSurfing
 
 			for (int i = 0; i < queueWindowsVisible.size(); i++)
 			{
-				id = queueWindowsVisible[i]; // the original id of each window
+				// the original id of each window
+				id = queueWindowsVisible[i]; 
 
 				// first visible windows acts as anchor!
 				if (i == 0)
@@ -1443,18 +1365,18 @@ namespace ofxImGuiSurfing
 					y = position_Anchor.get().y;
 				}
 				p = glm::vec2(x, y);
-				specialWindowsOrganizer[id].setPosition(p);
+				windowsPanels[id].setPosition(p);
 
 				//--
 
-				if (bOrientation)//vertical
+				if (bOrientation) // vertical
 				{
-					h = specialWindowsOrganizer[id].getHeight();
+					h = windowsPanels[id].getHeight();
 					y = y + h + pad;
 				}
-				else//horizontal
+				else // horizontal
 				{
-					w = specialWindowsOrganizer[id].getWidth();
+					w = windowsPanels[id].getWidth();
 					x = x + w + pad;
 				}
 			}

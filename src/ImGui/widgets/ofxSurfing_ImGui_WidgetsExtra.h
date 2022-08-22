@@ -872,7 +872,7 @@ namespace ofxImGuiSurfing
 		_bBlink = bBlink && isHover;
 		if (_bBlink)
 		{
-			float blinkValue = ofxImGuiSurfing::getFadeBlink();
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
 			a = ofClamp(blinkValue, 0.25, 0.75);
 			colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}

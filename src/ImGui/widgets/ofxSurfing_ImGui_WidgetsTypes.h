@@ -6,8 +6,8 @@
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 
-#include "ofxSurfing_ImGui_ofHelpers.h"
-#include "ofxSurfing_ImGui_LayoutHelpers.h"
+#include "ofHelpers.h"
+#include "LayoutHelpers.h"
 #include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
 #include "ofxSurfing_ImGui_WidgetsTypesUniqueNames.h"
 

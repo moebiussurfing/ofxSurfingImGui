@@ -10,6 +10,7 @@ class ofApp : public ofBaseApp
 public:
 	
     void setup();
+    void setupParams();
     void draw();
     void keyPressed(int key);
 
