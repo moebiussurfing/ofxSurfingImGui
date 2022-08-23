@@ -1,61 +1,76 @@
 
 #pragma once
 
-//TODO:
-// Can't add libs bc area also defined/included too on classes that includes this class.
-//#include "ofxSurfingImGui.h"
-//#include "ofxSurfing_ImGui_ofHelpers.h"
+//--
 
+// Ratio Sizes between sizes of a widget type. 
 #define OFX_IM_WIDGETS_RATIO_BIG 1.5f
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
 #define OFX_IM_WIDGETS_RATIO_SMALL 0.4f
+
+// Window scrolling size on some windows/groups
+#define HEIGHT_SCROLL_GROUP 400
+
+//--
 
 namespace ofxImGuiSurfing
 {
 	/*
 
-	Arguments to the Styles Engine:
-	You can pass it as argument when adding each ofParameter to the ui.
+		Example:
 
-	Examples:
+		Arguments to the Styles Engine:
+		You can pass it as argument when adding each ofParameter to the ui.
 
-	ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-	ui.Add(floatValue, OFX_IM_VSLIDER);
-	ui.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
+		ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+		ui.Add(floatValue, OFX_IM_VSLIDER);
+		ui.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
 
-	// Two toggles in one row
-	ui.Add(bGui_1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
-	ui.Add(bGui_2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
+		// Two toggles in one row
+		ui.Add(bGui_1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
+		ui.Add(bGui_2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
 
-	ui.Add(bGui_3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
-
+		ui.Add(bGui_3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
 
 	*/
 
-	//These sizes are usually related to height! Because widgets widths are handled by the API args!
+	//--
+
+	// NOTE:
+	// Now, these sizes are usually related to height! 
+	// Because widgets widths are handled by the API args!
+	// TODO: IDEA: remake width management notation to use of percents.
+
 	//--------------------------------------------------------------
-	enum SurfingImGuiTypes
+	enum SurfingGuiTypes
 	{
-		OFX_IM_DEFAULT = 0,	// Default style for each widget. (kind of like ofxImGui does)
-		OFX_IM_HIDDEN,		// Omit widget. don't let spacing there.
-		OFX_IM_DISABLED,	// Make it invisible, preserve the void spacing. it's a common height but could differs..
-		OFX_IM_SPACING,		// Make it invisible, preserve a custom (one standard line) spacing.
-		OFX_IM_INACTIVE,	// Draws the widget. but makes it inactive. disables mouse control.
+		OFX_IM_DEFAULT = 0, // Default style for each widget. (kind of like ofxImGui does)
+		OFX_IM_HIDDEN, // Omit widget. don't let spacing there.
+		OFX_IM_DISABLED, // Make it invisible, preserve the void spacing. it's a common height but could differs..
+		OFX_IM_INACTIVE, // Draws the widget. but makes it inactive. disables mouse control.
+		OFX_IM_SPACING, // Make it invisible, preserve a custom (one standard line) spacing.
+
 		//TODO: could be an extra arg to allow different appearance for inactive types..
 
-		//-
+		//--
 
-		// Bool Styles
+		// Types / Styles
+
+		//--
+
+		// Bool 
 
 		// Button
-		OFX_IM_BUTTON_SMALL,	// 1 = default
-		OFX_IM_BUTTON,			// 1.25
-		OFX_IM_BUTTON_MEDIUM,	// 1.5
-		OFX_IM_BUTTON_BIG,		// 2
-		OFX_IM_BUTTON_BIG_XXL,	// 3
-		OFX_IM_BUTTON_BIG_XXXL,	// 4
+
+		OFX_IM_BUTTON_SMALL, // 1 = default
+		OFX_IM_BUTTON, // 1.25
+		OFX_IM_BUTTON_MEDIUM, // 1.5
+		OFX_IM_BUTTON_BIG, // 2
+		OFX_IM_BUTTON_BIG_XXL, // 3
+		OFX_IM_BUTTON_BIG_XXXL, // 4
 
 		// Border
+
 		OFX_IM_BUTTON_SMALL_BORDER,
 		OFX_IM_BUTTON_BORDER,
 		OFX_IM_BUTTON_MEDIUM_BORDER,
@@ -64,6 +79,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_XXXL_BORDER,
 
 		// Border Blink 
+
 		OFX_IM_BUTTON_SMALL_BORDER_BLINK,
 		OFX_IM_BUTTON_BORDER_BLINK,
 		OFX_IM_BUTTON_MEDIUM_BORDER_BLINK,
@@ -72,8 +88,9 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK,
 
 		//--
-		
+
 		// Toggle
+
 		OFX_IM_CHECKBOX, // ofxImGui standard
 		OFX_IM_TOGGLE,
 		OFX_IM_TOGGLE_SMALL,
@@ -83,6 +100,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXXL,
 
 		// Border
+
 		OFX_IM_TOGGLE_SMALL_BORDER,
 		OFX_IM_TOGGLE_BORDER,
 		OFX_IM_TOGGLE_MEDIUM_BORDER,
@@ -91,6 +109,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER,
 
 		// Border Blink 
+
 		OFX_IM_TOGGLE_SMALL_BORDER_BLINK,
 		OFX_IM_TOGGLE_BORDER_BLINK,
 		OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK,
@@ -99,15 +118,17 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK,
 
 		//--
-		
+
 		// Rounded
+
 		OFX_IM_TOGGLE_ROUNDED,
 		OFX_IM_TOGGLE_ROUNDED_MINI,
 		OFX_IM_TOGGLE_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
-		//legacy
-		OFX_IM_TOGGLE_BUTTON_ROUNDED, // legacy. same size than small.
+
+		// Legacy. removed 'button' word
+		OFX_IM_TOGGLE_BUTTON_ROUNDED, // same size than small.
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
@@ -122,6 +143,7 @@ namespace ofxImGuiSurfing
 		// Big Sliders
 
 		// Horizontal
+
 		OFX_IM_HSLIDER_BIG,
 		OFX_IM_HSLIDER_BIG_NO_NAME,
 		OFX_IM_HSLIDER_BIG_NO_NUMBER,
@@ -140,6 +162,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_MINI_NO_NUMBER,
 
 		// Vertical
+
 		OFX_IM_VSLIDER,
 		OFX_IM_VSLIDER_NO_NAME,
 		OFX_IM_VSLIDER_NO_NUMBER,
@@ -150,24 +173,47 @@ namespace ofxImGuiSurfing
 		OFX_IM_STEPPER,
 		OFX_IM_DRAG,
 
-		OFX_IM_KNOB,//notice that full width by default. too big!
-		OFX_IM_KNOB_TRAIL,//decorated
-		//OFX_IM_KNOB_SMALL,//TODO:
+		//--
+
+		// Knobs
+
+		// notice that full width by default, is too big!
+		// Legacy
+		OFX_IM_KNOB,
+		OFX_IM_KNOB_TRAIL, // decorated
+
+		//TODO:
+		// Adding NEW style knobs, 
+		// taken from Simon Altschuler https://github.com/altschuler/imgui-knobs
+
+		OFX_IM_KNOB_TICKKNOB,
+		OFX_IM_KNOB_DOTKNOB,
+		OFX_IM_KNOB_WIPERKNOB,
+		OFX_IM_KNOB_WIPERONLYKNOB,
+		OFX_IM_KNOB_WIPERDOTKNOB,
+		OFX_IM_KNOB_STEPPEDKNOB,
+		OFX_IM_KNOB_SPACEKNOB,
+
+		//--
 
 		OFX_IM_COMBO_MULTI,//TODO: multiple controls for fine tweak: slider + drag + stepper
 
-		//-
+		//--
 
 		// Strings
+
+		OFX_IM_TEXT_INPUT,//TODO:
+
 		OFX_IM_TEXT_DISPLAY,
-		OFX_IM_TEXT_INPUT,
-		OFX_IM_TEXT_BIG,
+		OFX_IM_TEXT_BIG,//TODO
+		//TODO: add labels
 		//OFX_IM_LABEL,//big font not accessible here..
 		//OFX_IM_LABEL_BIG,
 
-		//-
+		//--
 
 		// Colors
+
 		OFX_IM_COLOR_INPUT, // standard
 		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
 		OFX_IM_COLOR_NO_INPUTS, // without inputs
@@ -177,44 +223,53 @@ namespace ofxImGuiSurfing
 		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // double height
 		OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS,//TODO:
 
-		//-
+		//--
+
+		// Multidim 
 
 		//TODO: 
-		// for glm::vec
-		// Multidim
+		// for glm::vec2 vec3 vec4
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED,
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
+
+		//--
 
 		OFX_IM_NUM_TYPES
 	};
 
 	//--
 
-	//TODO: to simplify the api
+	// Group Style / State
+
+	//TODO: 
+	// To simplify the API
 	// We can use one only flag argument and multiple possibilities at the same time are allowed.
-	typedef int SurfingImGuiGroupStyle;
-	enum SurfingImGuiGroupStyle_
+	typedef int SurfingGuiGroupStyle;
+	enum SurfingGuiGroupStyle_
 	{
-		SurfingImGuiGroupStyle_None = 1 << 0,
-		SurfingImGuiGroupStyle_Collapsed = 1 << 1,
-		SurfingImGuiGroupStyle_NoHeader = 1 << 2,
-		SurfingImGuiGroupStyle_Hidden = 1 << 3,
-		SurfingImGuiGroupStyle_HeaderSmall = 1 << 4//uses ImGui tree without big header. just arrow
-		//SurfingImGuiGroupStyle_NoArrow = 1 << 5,
+		SurfingGuiGroupStyle_None = 1 << 0,
+		SurfingGuiGroupStyle_Collapsed = 1 << 1,
+		SurfingGuiGroupStyle_NoHeader = 1 << 2,
+		SurfingGuiGroupStyle_Hidden = 1 << 3,
+		SurfingGuiGroupStyle_HeaderSmall = 1 << 4 // uses ImGui tree without big header. just arrow.
+		//SurfingGuiGroupStyle_NoArrow = 1 << 5,
 	};
 
+	//--
+
+	// Group Style
 
 	//--------------------------------------------------------------
-	enum SurfingImGuiTypesGroups
+	enum SurfingGuiTypesGroups
 	{
 		OFX_IM_GROUP_DEFAULT = 0,// TODO: BUG: it's forced collapsed
 		OFX_IM_GROUP_COLLAPSED,
 		OFX_IM_GROUP_TREE_EX, // TODO: can be collapsed or opened
 		OFX_IM_GROUP_TREE, // TODO: BUG: it's forced collapsed
 		OFX_IM_GROUP_SCROLLABLE,
-		OFX_IM_GROUP_HIDDEN_HEADER, // hide hidder. TODO; fails on first group. not working
+		OFX_IM_GROUP_HIDDEN_HEADER, // hide header. TODO; fails on first group. not working
 		OFX_IM_GROUP_HIDDEN, // hide header and all the content
 
 		//OFX_IM_GROUP_WINDOWED, // creates a windows to populate into. Notice that must be a root group. can't be a nested! 
@@ -223,11 +278,33 @@ namespace ofxImGuiSurfing
 		OFX_IM_GROUP_NUM_TYPES
 	};
 
-	//-
+	//----
+
+	//TODO: 
+	// FEATURE:
+
+	// Flags
+
+	// Add a new flag to handle labels, active or tool tip NEW features
+	typedef int SurfingGuiFlags;
+	enum SurfingGuiFlags_
+	{
+		SurfingGuiFlags_None = 1 << 0,
+		SurfingGuiFlags_NoTitle = 1 << 1,
+		SurfingGuiFlags_NoInput = 1 << 2,
+		SurfingGuiFlags_TooltipValue = 1 << 3,
+		SurfingGuiFlags_TooltipHelp = 1 << 4,
+		SurfingGuiFlags_DragHorizontal = 1 << 5,
+		SurfingGuiFlags_Hidden = 1 << 6,
+		SurfingGuiFlags_Disabled = 1 << 7,
+		SurfingGuiFlags_Inactived = 1 << 8,
+	};
+
+	//----
 
 	// Helper to get the styles name for debugging purposes
 	//--------------------------------------------------------------
-	inline static std::string getSurfingImGuiTypesGroupsName(int i)
+	inline static std::string getSurfingGuiTypesGroupsName(int i)
 	{
 		std::string _groupInfo;
 		if (i == 0) _groupInfo = "OFX_IM_GROUP_DEFAULT";
@@ -262,14 +339,13 @@ namespace ofxImGuiSurfing
 	// A nice idea could be to get the longer param label name width 
 	// and use this max width to apply to our layouting engine...
 
-	// Some macro sugar to help fix how sliders force autoresize the panel widths.
+	// Some macro sugar to help fix how sliders force auto resize the panel widths.
 	// It's a 'rare behavior' that I am trying to correct doing this.
 
 	//-
 
-//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR // -> Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
-
-#define TEXT_LABEL_TO_RESIZE "----------" // -> This is a 10 chars string that we will use as default label width, to name wdigets.
+	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
+	// Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
 
 	//--
 
@@ -285,10 +361,6 @@ namespace ofxImGuiSurfing
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 #endif
-
-	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
-	// that could be weird because each slider will have a different width.
-	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
 	
 	//--
 
@@ -314,13 +386,11 @@ namespace ofxImGuiSurfing
 	// 2.
 
 	// For OFX_IM_STEPPER
-	
-//#define STEP_FACTOR .5f
-//#define STEP_FACTOR .55f
-//#define STEP_FACTOR .65f
+
 #define STEP_FACTOR .67f
-#define STEP_FACTOR_FLOAT .72f//to allow see 3 decimals, but requires shorter label name better.
-//#define STEP_FACTOR .75f
+
+#define STEP_FACTOR_FLOAT .72f 
+	// To allow see 3 decimals seen well, but requires shorter label name better.
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_FLOAT); }
@@ -334,10 +404,18 @@ namespace ofxImGuiSurfing
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
-//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x>200 ? ImGui::GetContentRegionAvail().x * 0.6 : ImGui::GetContentRegionAvail().x * 0.6);//sometimes looks weird..
-//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+	//--
 
-// fix autoresize grow... 
+	//TODO:
+#define TEXT_LABEL_TO_RESIZE "----------" 
+	// This is a 10 chars string that we will use as default label width, to name widgets.
+	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
+	// that could be weird because each slider will have a different width.
+	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+	 
+	//TODO:
+// Fix auto resize loop grow...
+// Using an standard text size for the widgets 
 //#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
 //	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
 //	const float gap = 40; \
@@ -350,22 +428,20 @@ namespace ofxImGuiSurfing
 
 	// Adds mouse wheel control to the last/previous ofParam widget (float/int) rendered.
 
-#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1,arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2);
-#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1);
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2); // param, flip
+//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
 
 // Amount of steps per widgets. will calculate range between max/min.
-//#define MOUSE_WHEEL_STEPS 10
 #define MOUSE_WHEEL_STEPS 100
 
 // How more fine is when CTRL pressed 
-//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 10
 #define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
 
-	//----
+//----
 
-	// 3.
+// 3.
 
-	// Adds Constraints Window Shapes
+// Adds Constraints Window Shapes (width and height)
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
 { \
@@ -443,14 +519,17 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 	// 4.
 
+	// Helper
+	//
 	// Draws a point on the ImGui cursor position for debugging when designing widgets
+	// 
 	//#define IMGUI_SUGAR__TEST_POINT \ 
 	//	{ \
 	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
 	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
 	//	} \
-
+	//
 	//#define IMGUI_SUGAR__TEST_POINT \ 
 	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \

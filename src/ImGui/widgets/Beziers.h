@@ -40,7 +40,7 @@
 #include <imgui_internal.h>
 #include <time.h>
 
-#include "ofxSurfing_ImGui_WidgetsButtons.h"
+#include "WidgetsButtons.h"
 #include "ofxSurfing_ImGui_ofHelpers.h"
 #include "ofxSurfing_ImGui_LayoutHelpers.h"
 

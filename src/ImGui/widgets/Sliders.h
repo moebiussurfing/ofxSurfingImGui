@@ -14,7 +14,7 @@
 #include "imgui_internal.h"
 
 #include "LayoutHelpers.h"
-#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "GuiConstants.h"
 
 #include "ofxSurfingHelpers.h"
 

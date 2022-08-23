@@ -2,6 +2,16 @@
 
 #include "ofMain.h"
 
+/*
+
+	TO USE
+	Code from https ://github.com/altschuler/imgui-knobs
+	MIT License
+
+	Copyright(c) 2022 Simon Altschuler
+
+*/
+
 
 //TODO: reuse mouse wheel methods from ofxSurfingImGui
 // collides with scope troubles..

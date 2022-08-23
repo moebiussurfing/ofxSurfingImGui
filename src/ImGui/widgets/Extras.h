@@ -3,19 +3,20 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-//#include "imgui.h"
 #include "imgui_internal.h"
 #include "imconfig.h"
 
 #define M_PI 3.14159265358979323846264338327950288
 
-// Must include from OFX_ADDON/_LIBS if you want to use it in your project.
+// Must include manually 
+// if you want to use it in your project.
+
 //#include "colors/imgui_color_gradient.h"
 //#include "ImGui/dear_widgets/dear_widgets.h"
 
 // TODO:
 // WIP
-// To add more uncoming new widgets here
+// To add more incoming new widgets here.
 // Some widget are already included!
 
 // Cute widgets !
@@ -28,7 +29,7 @@
 // https://github.com/ocornut/imgui/issues/1901#issuecomment-552185000
 // https://github.com/ocornut/imgui/issues/1901
 
-// Rotating text and icon demo for dear imgui 
+// Rotating text and icon demo for dear ImGui 
 // https://g
 
 // Mosaic project
@@ -36,6 +37,7 @@
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/core/imgui_plot.cpp
 // https://github.com/d3cod3/ofxVisualProgramming/blob/master/src/core/imgui_helpers.h
 
+//----
 
 namespace ofxImGuiSurfing
 {
@@ -856,10 +858,13 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::InvisibleButton("empty", ImVec2(224 * retinaScale, 1));  // fix widget width
 
+		bool bUseButton = true;
+
 		static bool isHover = false;
 
 		float w = getWidgetsWidth(1);
-		float h = 1.5 * getWidgetsHeightRelative();
+		float h = getWidgetsHeightRelative();
+		float h2 = 1.5f * h;
 
 		// Border when selected
 		float a = 0.5f;
@@ -886,11 +891,18 @@ namespace ofxImGuiSurfing
 			ImGui::PushStyleColor(ImGuiCol_Text, colText);
 		}
 
+		if(bUseButton)
 		{
 			if (ImGui::Button(desc, ImVec2(w, h)))
 			{
 				ofLaunchBrowser(url);
 			}
+		}
+		else 
+		{
+			//TODO: text clickable..
+			ImGui::TextWrapped(desc);
+			ImGui::InvisibleButton("##URL", { w, h});
 		}
 
 		if (_bBlink)

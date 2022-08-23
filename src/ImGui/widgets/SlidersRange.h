@@ -7,7 +7,7 @@
 
 #include "ofxImGui.h"
 
-#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "GuiConstants.h"
 
 #include "imgui_internal.h"
 

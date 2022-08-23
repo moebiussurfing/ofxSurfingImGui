@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define MAX_CAMERA_DISTANCE 500.0f
+#define MAX_DISTANCE 500.0f
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -36,11 +36,11 @@ void ofApp::setupParams()
 {
 	bPrevious.set("<", false);
 	bNext.set(">", false);
-	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	position.set("Position", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
-	rotation.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_CAMERA_DISTANCE), glm::vec3(2.f * MAX_CAMERA_DISTANCE));
+	value.set("value", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
+	valueMin.set("valueMin", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
+	valueMax.set("valueMax", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
+	position.set("Position", glm::vec3(0.f), glm::vec3(-MAX_DISTANCE), glm::vec3(MAX_DISTANCE));
+	rotation.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_DISTANCE), glm::vec3(2.f * MAX_DISTANCE));
 	lineWidth2.set("linew2", 0.5, 0, 1);
 	separation2.set("sep2", 50, 1, 100);
 	shapeType2.set("shape2", 0, -50, 50);
@@ -211,8 +211,6 @@ void ofApp::drawImWindow1()
 
 				ui.AddGroup(params2);
 				ui.AddGroup(params4);
-
-				ui.AddSpacingBig();
 			}
 
 			ui.EndTree();

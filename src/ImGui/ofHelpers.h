@@ -3,17 +3,22 @@
 
 /*
 
-ofParameter Helpers to easely render different widgets styles for each ofParma types.
+	ofParameter Helpers
+	to easily render different widgets styles
+	for each ofParm and different types.
 
-TODO:
-+ mouse wheel for multi dim params
+	TODO:
+	+ mouse wheel for multi dim params
 
 */
 
-#include "ofxImGui.h"
+//----
 
-#include "ofxSurfing_ImGui_Widgets.h"
-#include "ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "ofxImGui.h"
+#include "Widgets.h"
+#include "GuiConstants.h"
+
+//----
 
 namespace ofxImGuiSurfing
 {
@@ -37,7 +42,12 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	//TODO: 
+	// Mouse wheel
+
+	//TODO: ?
+	// To be notified that param associated changed by the mouse..?
+	// Gets only that is pressed as button, not as wheel stepping. 
+	// Useful for boolean switching, not used by float/int's.
 	//--------------------------------------------------------------
 	inline bool GetMouseWheel()
 	{
@@ -66,9 +76,16 @@ namespace ofxImGuiSurfing
 
 	// Adds mouse wheel control to the last previous param widget (templated float/int)
 	//--------------------------------------------------------------
+	//inline void AddMouseWheel(ofParameter<ParameterType>& param, bool bFlip = false, float resolution = -1)
+	//inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
+
 	template<typename ParameterType>
-	inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
+	inline void AddMouseWheel(ofParameter<ParameterType>& param, bool bFlip = false)
 	{
+		//TODO: allow customization
+		// Forced to default behavior/resolution stepping.
+		float resolution = -1;
+
 		bool bUnknown = false;
 		bool bIsVoid = false;
 		bool bIsbool = false;
@@ -119,7 +136,6 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bUnknown = true;
-
 			ofLogWarning(__FUNCTION__) << "Could not add mouse wheel to " << param.getName();
 
 			return;
@@ -128,7 +144,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		{
-			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
+			bool bCtrl = ImGui::GetIO().KeyCtrl; // CTRL key to fine tunning
 
 			ImGui::SetItemUsingMouseWheel();
 
@@ -144,23 +160,34 @@ namespace ofxImGuiSurfing
 					}
 					else
 					{
+						//--
+
 						// BOOL
-						if (bIsbool) {
-//							ofParameter<bool> p = param.cast<bool>();
-                            ofParameter<bool> p = dynamic_cast<ofParameter<bool>& >(param);
-                            p = !p.get();
+
+						if (bIsbool)
+						{
+							// non dynamic causes exception in macOS
+							ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(param);
+							p = !p.get();
 						}
+
+						//--
 
 						// VOID
-						else if (bIsVoid) {
-//							ofParameter<void> p = param.cast<void>();
-                            ofParameter<void> p = dynamic_cast<ofParameter<void>& >(param);
-                            p.trigger();
+
+						else if (bIsVoid)
+						{
+							ofParameter<void> p = dynamic_cast<ofParameter<void>&>(param);
+							p.trigger();
 						}
 
+						//--
+
 						//TODO:
-						// must be fixed bc each dim slider could work independently...
+						// Must be fixed bc each dim slider could work independently...
+
 						// MULTIDIM
+
 						else if (bIsMultiDim)
 						{
 							/*
@@ -192,43 +219,130 @@ namespace ofxImGuiSurfing
 							*/
 						}
 
+						//--
+
 						// INT
+
 						else if (bIsInt)
 						{
-//							ofParameter<int> p = param.cast<int>();//not dynamic makes error on macOS
-                            ofParameter<int> p = dynamic_cast<ofParameter<int>& >(param);
-                            
-							if (resolution == -1)
+							ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
+
+							int _step = 0;
+
+							if (resolution == -1) // default, not defined. must be calculated
 							{
-								resolution = (p.getMax() - p.getMin()) / (float)MOUSE_WHEEL_STEPS;
+								float _range = abs(p.getMax() - p.getMin());
+
+								//TODO: workflow should be improved..
+
+								if (_range < (float)MOUSE_WHEEL_STEPS)
+								{
+									if (bCtrl)
+									{
+										_step = 1;
+									}
+									else
+									{
+										_step = _range / 10;
+									}
+								}
+								else
+								{
+									// step resolution to guaranties that 100 steps walks the full range!
+									float _resolution = _range / (float)MOUSE_WHEEL_STEPS;
+									resolution = MAX(1, _resolution);
+
+									if (bCtrl)
+									{
+										_step = resolution;
+									}
+									else
+									{
+										_step = resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
+									}
+								}
+
+
 								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
 
-							int step = wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+							// Minimum step is one unit!
+							_step = MAX(1, _step);
+
+							//--
+
+							int step = wheel * _step;
+
 							// make minim one unit
-							if (step < 0 && step > -1) step = -1;
-							else if (step > 0 && step < 1) step = 1;
-							p += step;
+
+							//if (step < 0) {
+							//	step = MIN(-1, step);
+							//}
+							//else {
+							//	step = MAX(1, step);
+							//}
+
+							//// negative
+							//if (step < 0 && step > -1) step = MIN(- 1, step);
+							//
+							//// positive
+							//else if (step > 0 && step < 1) MAX(1, step);
+
+							// mouse wheel flipped
+							if (bFlip) p -= step;
+							else p += step;
 
 							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 						}
 
+						//--
+
 						// FLOAT
+
 						else if (bIsFloat)
 						{
-//							ofParameter<float> p = param.cast<float>();//not dynamic makes error on macOS
-                            ofParameter<float> p = dynamic_cast<ofParameter<float>& >(param);
-                            
+							// ofParameter<float> p = param.cast<float>();//not dynamic makes error on macOS
+							ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
+
 							if (resolution == -1)
 							{
+								// MOUSE_WHEEL_STEPS is 100 steps spread into all the param range
 								resolution = (p.getMax() - p.getMin()) / (float)MOUSE_WHEEL_STEPS;
-								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
 
-							p += wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+							float step = wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+
+							if (bFlip) p -= step;
+							else p += step;
+
 							p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 						}
 					}
+				}
+			}
+		}
+	}
+
+	//--------------------------------------------------------------
+	inline void AddMouseWheel(bool& p)
+	{
+		ImGui::SetItemUsingMouseWheel();
+
+		if (ImGui::IsItemHovered())
+		{
+			float wheel = ImGui::GetIO().MouseWheel;
+
+			if (wheel)
+			{
+				if (ImGui::IsItemActive())
+				{
+					ImGui::ClearActiveID();
+				}
+				else
+				{
+					// BOOL
+					//flip
+					p = !p;
 				}
 			}
 		}
@@ -241,6 +355,7 @@ namespace ofxImGuiSurfing
 
 		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
 		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
+
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
@@ -262,9 +377,12 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<glm::ivec3>& parameter, bool bfoldered = false);
 	bool AddParameter(ofParameter<glm::ivec4>& parameter, bool bfoldered = false);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false); // split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false);
+	// split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false);
+	// split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false);
+	// split each arg to big sliders. make a folder container.
 #endif
 
 	//TODO:
@@ -335,6 +453,8 @@ namespace ofxImGuiSurfing
 #endif
 
 	//----
+
+	// Stepper widgets. (with +/- buttons to increment/decrement)
 
 	bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
 	bool AddStepper(ofParameter<float>& parameter, float step = -1, float stepFast = -1);
@@ -412,6 +532,8 @@ namespace ofxImGuiSurfing
 		auto tmpRef = parameter.get();
 		const auto& info = typeid(ParameterType);
 
+		//--
+
 		// FLOAT
 
 		if (info == typeid(float))
@@ -426,6 +548,8 @@ namespace ofxImGuiSurfing
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 			return false;
 		}
+
+		//--
 
 		// INT
 
@@ -444,6 +568,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
+		//--
+
 		// BOOL
 
 		else if (info == typeid(bool))
@@ -456,6 +582,8 @@ namespace ofxImGuiSurfing
 
 			return false;
 		}
+
+		//--
 
 		// UNKNOWN
 

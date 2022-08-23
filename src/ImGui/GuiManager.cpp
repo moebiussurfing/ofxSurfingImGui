@@ -8,7 +8,7 @@ SurfingGuiManager::SurfingGuiManager()
 	// Simplify namespaces!
 	namespace ofxSurfingImGui = ofxImGuiSurfing;
 
-	path_Global = "Gui/"; 
+	path_Global = "Gui/";
 	// default path that will be used appended,
 	// or alone if setName(.. is not called!
 
@@ -33,6 +33,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bGui_GameMode);
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
+	params_Advanced.add(bMouseWheelFlip);
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
@@ -178,6 +179,7 @@ void SurfingGuiManager::setupInitiate()
 
 	// MouseWheel link
 	widgetsManager.bMouseWheel.makeReferenceTo(bMouseWheel);
+	widgetsManager.bMouseWheelFlip.makeReferenceTo(bMouseWheelFlip);
 
 	// MouseWheel link
 	windowsOrganizer.bDebug.makeReferenceTo(bDebug);
@@ -250,10 +252,12 @@ void SurfingGuiManager::setupImGuiFonts()
 	std::string _fontName;
 	float _fontSizeParam;
 
-	_fontName = FONT_DEFAULT_FILE; // WARNING: will not crash or notify you if the file font not present
+	// WARNING: will not crash or notify you if the font files are not present!
+	_fontName = FONT_DEFAULT_FILE; 
 	_fontSizeParam = FONT_DEFAULT_SIZE;
 
-	std::string _path = "assets/fonts/"; // assets folder
+	std::string _path = "assets/fonts/"; 
+	// assets folder
 
 	// To check if default font file exists
 	ofFile fileToRead(_path + _fontName);
@@ -261,6 +265,7 @@ void SurfingGuiManager::setupImGuiFonts()
 
 	// If font not located..
 	// We can set an alternative font like a legacy font
+
 	if (!b)
 	{
 		_fontName = FONT_DEFAULT_FILE_LEGACY;
@@ -268,6 +273,7 @@ void SurfingGuiManager::setupImGuiFonts()
 	}
 
 	// Then check if legacy font file exists
+
 	ofFile fileToRead2(_path + _fontName);
 	bool b2 = fileToRead2.exists();
 	if (b2)
@@ -396,7 +402,7 @@ void SurfingGuiManager::startup()
 	if (bDockingLayoutPresetsEngine)
 	{
 		// Default Layout with 4 presets.
-		setupLayout(DEFAULT_AMOUNT_PRESETS); 
+		setupLayout(DEFAULT_AMOUNT_PRESETS);
 
 		//--
 
@@ -481,7 +487,7 @@ void SurfingGuiManager::startup()
 
 	// Load some internal settings
 	bool bNoSettingsFound = !(loadAppSettings());
-	
+
 	// Will return false if settings file do not exist. 
 	// That happens when started for first time or after OF_APP/bin cleaning!
 	if (bNoSettingsFound)
@@ -496,13 +502,13 @@ void SurfingGuiManager::startup()
 	}
 
 	//--
-	
+
 	bDoneStartup = true;
 }
 
 //----
 
-// Help
+// Help (Internal)
 
 //--------------------------------------------------------------
 void SurfingGuiManager::buildHelpInfo()
@@ -567,6 +573,9 @@ void SurfingGuiManager::buildHelpInfo()
 			helpInfo += "D           Debug         " + st + " OFF \n";
 
 		helpInfo += "\n";
+		helpInfo += "DoubleClick to Edit/Lock \n";
+		helpInfo += "LeftClick + RightClick to Close \n";
+
 		//helpInfo += l2;
 	}
 	else helpInfo += "\n";
@@ -834,6 +843,8 @@ void SurfingGuiManager::draw(ofEventArgs& args)
 	//{
 	//	if (bUseHelpInfoApp) boxHelpApp.draw();
 	//}
+
+	//((ofApp*)ofGetAppPtr())->valueKnob8.get();
 }
 
 //--------------------------------------------------------------
@@ -1291,9 +1302,9 @@ void SurfingGuiManager::startupFirstFrame()
 void SurfingGuiManager::Begin() {
 
 	// Check that it's property initialized!
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) 
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << 
+		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" <<
 			("Initialization was not done properly. Check the examples / documentation.");
 
 		return;
@@ -1346,7 +1357,7 @@ void SurfingGuiManager::Begin() {
 	//TODO:
 	// Fix
 	//if (!bDockingLayoutPresetsEngine)
-	//	if (bMenu) drawMenu();
+	//if (bMenu) drawMenu();
 
 	//----
 
@@ -1417,10 +1428,8 @@ void SurfingGuiManager::End()
 	//TODO:
 	// Sometimes we could use an ofxImGui external or from a parent scope.
 	// This should be tested. bc it's kind of a deprecated idea/feature.
-	if (guiPtr != nullptr)
-		guiPtr->end();
-	else
-		gui.end();
+	if (guiPtr != nullptr) guiPtr->end();
+	else gui.end();
 }
 
 //--
@@ -1433,7 +1442,11 @@ bool SurfingGuiManager::BeginWindow(char* name)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return BeginWindow((string)name, NULL, fg);
+	bool b = BeginWindow((string)name, NULL, fg);
+	// required to avoid exceptions when minimizing the window.
+	if (!b) this->EndWindow();
+
+	return b;
 }
 
 //--------------------------------------------------------------
@@ -1442,7 +1455,11 @@ bool SurfingGuiManager::BeginWindow(std::string name)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return BeginWindow(name, NULL, fg);
+	bool b = BeginWindow(name, NULL, fg);
+	// required to avoid exceptions when minimizing the window.
+	if (!b) this->EndWindow();
+
+	return b;
 }
 
 //--------------------------------------------------------------
@@ -1453,7 +1470,11 @@ bool SurfingGuiManager::BeginWindow(std::string name, bool* p_open)
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
 
-	return BeginWindow(name, p_open, fg);
+	bool b = BeginWindow(name, p_open, fg);
+	// required to avoid exceptions when minimizing the window.
+	if (!b) this->EndWindow();
+
+	return b;
 }
 
 //--------------------------------------------------------------
@@ -1468,7 +1489,6 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p)
 		p.setName("__NONAME__");
 	}
 
-
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 	if (bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize; // windows can be auto resized or not
 
@@ -1481,7 +1501,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p)
 	// trig if changed
 	if (p.get() != tmpRef) p.set(tmpRef);
 
-	//TODO:
+	// required to avoid exceptions when minimizing the window.
 	//fix crashes when foldering
 	if (!b) this->EndWindow();
 
@@ -1803,7 +1823,7 @@ void SurfingGuiManager::EndWindowSpecial(int index)
 		if (windowsOrganizer.bLinked)
 		{
 			// Reads the window shape before end
-			windowsOrganizer.getShapeState(index); 
+			windowsOrganizer.getShapeState(index);
 
 			//TODO: make refresh faster
 			//windowsOrganizer.refreshUpdate();
@@ -2079,13 +2099,13 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	//--
 
-	rect1_Panels.set(ofRectangle(x, y, w, h));
-	//rect1_Panels.set(ofRectangle(x + (pad + w), y, w, h));
-
 	rect0_Presets.set(ofRectangle(10, y, w, h));
+	rect1_Panels.set(ofRectangle(x, y, w, h));
+	rect2_Manager.set(ofRectangle(x + 2 * (pad + w), y, w, h));
+
+	//rect1_Panels.set(ofRectangle(x + (pad + w), y, w, h));
 	//rect0_Presets.set(ofRectangle(x, y, w, h));
 
-	rect2_Manager.set(ofRectangle(x + 2 * (pad + w), y, w, h));
 
 	//--
 
@@ -2094,7 +2114,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	rectangles_Windows.emplace_back(rect1_Panels);
 	rectangles_Windows.emplace_back(rect2_Manager);
 
-	// to store settings to disk
+	// To store settings to disk
 	params_RectPanels.clear();
 	params_RectPanels.add(rect0_Presets);
 	params_RectPanels.add(rect1_Panels);
@@ -2123,7 +2143,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	//----
 
-	//TODO: simplify calls merging to one group only...
+	//TODO: Simplify calls merging to one group only...
 
 	// Callbacks
 	ofAddListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
@@ -2378,7 +2398,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		if (bMinimize_Presets || !bGui_LayoutsManager)
 		{
 			this->AddSpacingSeparated();
-			this->AddGroup(params_LayoutsExtra, SurfingImGuiGroupStyle_Collapsed);
+			this->AddGroup(params_LayoutsExtra, SurfingGuiGroupStyle_Collapsed);
 		}
 
 		this->EndWindow();

@@ -10,7 +10,7 @@
 #include "WindowsOrganizer.h"
 
 #include "ofxSurfing_ImGui_Themes.h"
-#include "ofxSurfing_ImGui_WidgetsTypes.h"
+#include "WidgetsManager.h"
 
 #include "ofxSurfingHelpers.h"
 #include "TextBoxWidget.h"
@@ -131,7 +131,7 @@ private:
 
 private:
 
-	ofxSurfing_ImGui_WidgetsTypes widgetsManager;
+	WidgetsManager widgetsManager;
 
 	//----
 
@@ -142,31 +142,39 @@ public:
 	// ofParameters 
 
 	// Draw styled parameter into ImGui manager
+	// 
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
+	}
+
+	//TODO:
+	//--------------------------------------------------------------
+	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
+	{
+		return widgetsManager.Add(aparam, type, amtPerRow, flags);
 	}
 
 	//----
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
-	void AddStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	void AddStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
-	void AddStyle(std::string name, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	void AddStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Update style for the parameter
 	//--------------------------------------------------------------
-	void UpdateStyle(ofAbstractParameter& aparam, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
@@ -178,33 +186,33 @@ public:
 	// ofParametersGroup's 
 
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	void AddStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
 		widgetsManager.AddStyleGroup(group, type, flags);
 	}
 	//--------------------------------------------------------------
-	void AddStyleGroup(std::string name, SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	void AddStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
 		widgetsManager.AddStyleGroup(name, type, flags);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& group, SurfingImGuiGroupStyle flags)
+	void AddStyleGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags)
 	{
-		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_Hidden)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			//type = OFX_IM_GROUP_HIDDEN;
 			//widgetsManager.AddStyleGroup(group, type, flagst);
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_NoHeader)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
@@ -212,18 +220,18 @@ public:
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
 			widgetsManager.AddStyleGroup(group, type, flagst);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
 			widgetsManager.AddStyleGroup(group, type, flagst);
@@ -238,7 +246,7 @@ public:
 	//TODO:
 	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a group.
 	//--------------------------------------------------------------
-	void AddStyleGroupForBools(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_TOGGLE)
+	void AddStyleGroupForBools(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_TOGGLE)
 	{
 		for (int i = 0; i < group.size(); i++)
 		{
@@ -254,7 +262,7 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddStyleGroupForFloats(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_HSLIDER)
+	void AddStyleGroupForFloats(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_HSLIDER)
 	{
 		for (int i = 0; i < group.size(); i++)
 		{
@@ -265,7 +273,7 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddStyleGroupForInts(ofParameterGroup& group, SurfingImGuiTypes type = OFX_IM_HSLIDER)
+	void AddStyleGroupForInts(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_HSLIDER)
 	{
 		for (int i = 0; i < group.size(); i++)
 		{
@@ -336,7 +344,7 @@ public:
 	// widgetsManager
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
+	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
 	{
 		widgetsManager.AddGroup(group, flags, typeGroup, cond);
 	}
@@ -346,22 +354,22 @@ public:
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
-		SurfingImGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
+		SurfingGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
 
 		widgetsManager.AddGroup(group, flags, typeGroup, cond);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	void AddGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
-		SurfingImGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//TODO:
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_None)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_None)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			widgetsManager.AddGroup(group, flagst, type);
@@ -369,7 +377,7 @@ public:
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_Hidden)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
 			widgetsManager.AddGroup(group, flagst, type);
@@ -377,7 +385,7 @@ public:
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_NoHeader)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
@@ -386,7 +394,7 @@ public:
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_Collapsed)
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 
@@ -396,14 +404,14 @@ public:
 			//return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
 			widgetsManager.AddGroup(group, flagst, type);
 
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingImGuiGroupStyle_HeaderSmall)
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
 			widgetsManager.AddGroup(group, flagst, type);
@@ -418,7 +426,7 @@ public:
 
 	//TODO: Auto creates a window for the group
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
+	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
 	{
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
@@ -430,7 +438,7 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingImGuiTypesGroups typeGroup)
+	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
 	{
 		if (!_bGui) return;
 
@@ -447,7 +455,7 @@ public:
 
 	//TODO: API update
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
 		if (!_bGui) return;
 
@@ -463,7 +471,7 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, SurfingImGuiGroupStyle flags = SurfingImGuiGroupStyle_None)
+	void AddGroupWindowed(ofParameterGroup& group, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -678,7 +686,7 @@ public:
 
 	// Dual arrows for common use to browse an index to be processed outside.
 	//--------------------------------------------------------------
-	int AddComboArrows(SurfingImGuiTypes style = OFX_IM_BUTTON_SMALL) {
+	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
 		//returns -1 to left or 1 to right pressed
 		int iReturn = 0;
 		if (AddButton("<", style, 2)) {
@@ -695,7 +703,7 @@ public:
 
 	// Dual arrows for common use to browse an index to be inside directly into the int parameter
 	//--------------------------------------------------------------
-	void AddComboArrows(ofParameter<int> paramIndex, SurfingImGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
+	void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
 
 		//bool bchanged = false;//can be ignored
 		if (AddButton("<", style, 2)) {
@@ -753,6 +761,12 @@ public:
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
 		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+	}
+
+	//--------------------------------------------------------------
+	void AddLinkURL(string label, string url, bool bBlink = false)
+	{
+		ofxImGuiSurfing::AddLinkURL(label.c_str(), url.c_str(), 1.0f, bBlink);
 	}
 
 	//--
@@ -999,7 +1013,8 @@ public:
 	// 
 	//TODO: could improve by doing open stat handled by ImGui.. now is forced
 	//--------------------------------------------------------------
-	bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	bool BeginTree(string label, bool open = false, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+		//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
 		if (b) {
@@ -1163,7 +1178,8 @@ public:
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bReset{ "Reset", false };
-	ofParameter<bool> bMouseWheel{ "MouseWheel", true };
+	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
+	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
 	ofParameter<bool> bGui_GameMode{ "Game Mode", false };
 	//to allow a type of super simple window for final user!
 
@@ -1234,7 +1250,6 @@ private:
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 	ofParameter<bool> bInputText{ "Input Text", false }; // user is over a text input
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
-
 	//--
 
 public:
@@ -1344,7 +1359,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize=false) { // Simpler call. Use this.
+	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false) { // Simpler call. Use this.
 
 		if (bMinimize && bListenToMinimize) return;
 
@@ -1506,6 +1521,7 @@ private:
 
 						// MouseWheel
 						this->Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+						this->Add(bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
 						ofxImGuiSurfing::AddTooltip("Press CTRL+ for fine tunning");
 
 						////TODO:
@@ -1676,7 +1692,7 @@ private:
 	std::string path_AppSettings;
 	std::string path_LayoutSettings;
 
-	std::string nameLabel = "";
+	std::string nameLabel = "SurfingGui";
 
 	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
@@ -1689,7 +1705,7 @@ public:
 
 	// API
 	//--------------------------------------------------------------
-	void setName(std::string name) 
+	void setName(std::string name)
 	{
 		// Must call before setup! 
 		// To allow the correct behavior when multiple instances/windows settings. 
@@ -1702,11 +1718,11 @@ public:
 		path_Global = nameLabel + "/Gui/";
 		ofxSurfingHelpers::CheckFolder(path_Global);
 		// Useful toggles for internal Windows
-		
+
 		windowsOrganizer.setPathGlobal(path_Global);
 
 		//--
-		
+
 		// Customize common windows duplicated on when using multiple instances.
 		// that's to avoid overlapping contents when ImGui windows have the same name!
 		bGui_Aligners.setName(nameLabel + " ALIGNERS");
@@ -1728,6 +1744,14 @@ public:
 		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
 
 	}
+
+	//--------------------------------------------------------------
+	void setMouseWheelFlip(bool bFlip = true)
+	{
+		bMouseWheelFlip = bFlip;
+	}
+
+	//--
 
 private:
 
@@ -1936,18 +1960,18 @@ public:
 
 	int getPad() { return windowsOrganizer.pad; }//used pad between windows
 
-//public:
-//
-//	//TODO: deprecated
-//	//--------------------------------------------------------------
-//	void setNameWindowsSpecialsEnableGlobal(std::string name) {
-//		windowsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
-//	}
+	//public:
+	//
+	//	//TODO: deprecated
+	//	//--------------------------------------------------------------
+	//	void setNameWindowsSpecialsEnableGlobal(std::string name) {
+	//		windowsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
+	//	}
 
-	////--------------------------------------------------------------
-	//void setName(std::string name) {
-	//	windowsOrganizer.setName(name);
-	//}
+		////--------------------------------------------------------------
+		//void setName(std::string name) {
+		//	windowsOrganizer.setName(name);
+		//}
 
 public:
 
@@ -1966,7 +1990,7 @@ public:
 
 		// Queue Window
 		windows.push_back(win);
-		
+
 		// Queue Toggle. only for callbacks ?
 		params_bGuiToggles.add(_bGui);
 
@@ -2353,7 +2377,7 @@ public:
 
 	// Easy populate all the Special Windows toggles. Call inside a window.
 	//--------------------------------------------------------------
-	void drawWidgetsSpecialWindowsToggles(SurfingImGuiTypes style = OFX_IM_TOGGLE_ROUNDED) {
+	void drawWidgetsSpecialWindowsToggles(SurfingGuiTypes style = OFX_IM_TOGGLE_ROUNDED) {
 		for (size_t i = 0; i < windows.size(); i++)
 		{
 			this->Add(getWindowSpecialGuiToggle(i), style);
@@ -2823,7 +2847,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool AddButton(string label, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
 
@@ -2865,7 +2889,85 @@ public:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
+
+			//--
+
+			// Adding more styles
+
+			// Border 
+
+		case OFX_IM_BUTTON_SMALL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+			// Border Blink
+
+		case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		default: {
+			ofLogWarning(__FUNCTION__) << "Could not create passed style for that widget button!";
+			ofLogWarning(__FUNCTION__) << "Widget is ignored and not drawn!";
+			break;
 		}
+		}
+
+		//----
 
 		// Extra options
 		// - Same line flag.
@@ -2897,33 +2999,31 @@ public:
 		float _h = sz.y;
 
 		bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+		if (bMouseWheel) ofxImGuiSurfing::AddMouseWheel(bState);
 
 		return bReturn;
 	}
+
 	////--------------------------------------------------------------
 	//bool AddToggle(string label, bool& bState)
 	//{
 	//	int w = ofxImGuiSurfing::getWidgetsWidth(1);
 	//	int h = ofxImGuiSurfing::getWidgetsHeightUnit();
 	//	ImVec2 sz(w, h);
-
 	//	bool bReturn = false;
-
 	//	float _ww = sz.x;
 	//	float _h = sz.y;
-
 	//	bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-
 	//	return bReturn;
 	//}
 
 	//--------------------------------------------------------------
-	bool AddToggle(string label, bool& bState, SurfingImGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
 
-		// widget width
-		// we get the sizes from the canvas layout!
+		// Widget width
+		// We get the sizes from the canvas layout!
 		float _ww = widgetsManager.getWidgetWidthOnRowPerAmount(amtPerRow);
 		float _h = getWidgetsHeightUnit();
 
@@ -2933,34 +3033,89 @@ public:
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
+			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
+
+			//--
+
+			// Rounded Toggles
+
+		case OFX_IM_TOGGLE_ROUNDED_MINI:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI://Legacy
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_SMALL:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL://Legacy
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED://Legacy
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM://Legacy
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_BIG:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG://Legacy
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+		default:
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogWarning("ofxSurfingImGui") << "Could not create passed style for that Toggle widget!";
+			break;
+
 		}
+
+		//----
 
 		// Extra options
 		// - Same line flag.

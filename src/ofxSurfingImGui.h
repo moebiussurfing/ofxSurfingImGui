@@ -40,7 +40,7 @@
 		from current GUI editing / first plane page.
 
 	FEATURE
-	+ Probablynot required. 
+	+ Probably not required. 
 	But could think about linking multiple instances.
 	for example, to share organizer windows:
 	// Link internal stuff
@@ -135,10 +135,6 @@
 #include "imgui_internal.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 
-//----
-
-//TODO:
-// namespace ofxSurfingImGui = ofxImGuiSurfing;
 
 //--------------------------------------------------------------
 
@@ -153,23 +149,23 @@
 
 #include "ImGui/GuiManager.h"
 #include "ImGui/ofHelpers.h"
-#include "ImGui/widgets/ofxSurfing_ImGui_Widgets.h"
+#include "ImGui/widgets/Widgets.h"
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
 
 using namespace ofxImGuiSurfing;
 
-// Short alias
+// Short alias for the main class.
 using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 
 /*
+
 		-----------------------
 		 MORE EXAMPLE SNIPPETS
 		-----------------------
 
-		LOOK RECOMMENDED USAGE ABOVE!
-		THESE ARE NOT RECOMMENDED / LEGACY AND DEPRECATED MODES!
+		LOOK RECOMMENDED USAGE BELOW!
 
 		LEARN HOW TO CREATE
 		WINDOWS, PANELS,
@@ -184,13 +180,14 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 /*
+
 	//--------------------------------------------------------------
 
 	// 1. HOW TO CREATE A WINDOW ?
 
 	THESE ARE DEPRECATED/LEGACY MODES THAT DO NOT USES THE ADDON POWERED API !
 
-	//--
+	//---
 
 	// WINDOWS USING RAW ImGui (LEGACY)
 	// KIND OF DEPRECATED.
@@ -200,20 +197,22 @@ using ofxSurfingGui = SurfingGuiManager;
 	// 1.0 SIMPLE
 
 	ImGui::Begin("myWindow");
-		{ }
+		{
+		}
 	ImGui::End();
 
-	//--
+	//----
 
 	// 1.1 WINDOW WITH NAME WITH FLAGS (LEGACY)
 
 	string _name = "myWindow";
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
-		{ }
+		{
+		}
 	ImGui::End();
 
-	//--
+	//----
 
 	// 1.2 WINDOW USING MORE RAW (LEGACY)
 
@@ -221,7 +220,8 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
-		{ }
+		{ 
+		}
 	ofxImGui::EndWindow(mainSettings);
 
 
@@ -239,7 +239,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		ImGui::TreePop();
 	}
 
-	//--
+	//----
 
 	// 2.2 COLLAPSING PANEL (framed and closed by default)
 
@@ -253,7 +253,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		}
 	}
 
-	//--
+	//----
 
 	// 2.3 TREE EX - TREE WITH FLAGS
 
@@ -269,7 +269,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		}
 	}
 
-	//--
+	//----
 
 */
 
@@ -297,10 +297,10 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// WINDOW TESTER
+	WINDOW HELPERS
 
+	FORCE WINDOW POSITION & SHAPE
 
-	// FORCE WINDOW POSITION & SHAPE
 	{
 		float x = 10;
 		float y = 10;
@@ -313,7 +313,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	//--
 
-	// WINDOW CONSTRAINTS FOR SHAPE SIZE
+	WINDOW CONSTRAINTS FOR SHAPE SIZE
+	
 	{
 		ImGuiCond flagsc = ImGuiCond_Appearing;
 		static int type = 0;
@@ -352,11 +353,12 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// AN EXTRA BEGIN/END PAIR.
-	// WITH A SNAPPING GRID.
+	AN EXTRA BEGIN/END PAIR.
+	WITH A SNAPPING GRID.
 
 	//--------------------------------------------------------------
-	void Begin(const std::string& name) {
+	void Begin(const std::string& name) 
+	{
 		const int snapSz = 20;
 		//const int snapSz = 16;
 
@@ -382,6 +384,7 @@ using ofxSurfingGui = SurfingGuiManager;
 			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
 		}
 	}
+
 	//--------------------------------------------------------------
 	void End() {
 		ImGui::End();
@@ -391,7 +394,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	//--
 
 
-	// ANOTHER EXTRA BEGIN/END PAIR
+	ANOTHER EXTRA BEGIN/END PAIR
 
 	//--------------------------------------------------------------
 	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
@@ -410,22 +413,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //----
 
-
 /*
 
-	// Special Windows
-
-	// Main toggle
-	ui.Add(ui.getGuiToggleGlobal(), OFX_IM_TOGGLE_ROUNDED);
-
-*/
-
-//----
-
-
-/*
-
-	// ANOTHER WINDOW WITH SNAPPING
+	ANOTHER WINDOW WITH SNAPPING TO A GRID
 
 	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
 	void EndWindow();
@@ -441,7 +431,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// IMGUI INFOS
+	IMGUI INFOS
 
 	auto io = ImGui::GetIO();
 	const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
@@ -452,12 +442,12 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
 
-	// TABS
+	TABS
 
 	if (ImGui::BeginTabBar("Tabs Blah"))
 	{
@@ -489,13 +479,15 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
 
-	// EXAMPLE 2:
-	// PREV / NEXT DUAL BUTTONS
+	EXAMPLE:
+	PREV / NEXT DUAL BUTTONS
+	That is implemented now 
+	into a widget called AddComboArrows(..
 
 	{
 		static ofParameter<bool> bPrev{ "<", false };
@@ -520,8 +512,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// EXAMPLE 3:
-	// ADD MOUSE WHEEL TO THE FLOAT PARAM
+	EXAMPLE:
+	ADD MOUSE WHEEL TO THE FLOAT PARAM
 
 		ofxImGuiSurfing::AddParameter(bpm);
 
@@ -546,7 +538,7 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 // DOCKSPACE
@@ -569,44 +561,47 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
-	//// DEMONSTRATE THE VARIOUS WINDOW FLAGS. TYPICALLY YOU WOULD JUST USE THE DEFAULT!
+// DEMONSTRATE THE VARIOUS WINDOW FLAGS. TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
-	//static bool no_titlebar = false;
-	//static bool no_scrollbar = false;
-	//static bool no_menu = false;
-	//static bool no_move = false;
-	//static bool no_resize = false;
-	//static bool no_collapse = false;
-	//static bool no_nav = false;
-	//static bool no_background = false;
-	//static bool no_bring_to_front = false;
-	//static bool no_docking = false;
+//static bool no_titlebar = false;
+//static bool no_scrollbar = false;
+//static bool no_menu = false;
+//static bool no_move = false;
+//static bool no_resize = false;
+//static bool no_collapse = false;
+//static bool no_nav = false;
+//static bool no_background = false;
+//static bool no_bring_to_front = false;
+//static bool no_docking = false;
 
-	////ImGuiWindowFlags window_flags = false;
-	//if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
-	//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-	//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-	//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-	//if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-	//if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-	//if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-	//if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-	//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-	//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-	//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
+////ImGuiWindowFlags window_flags = false;
+//if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
+//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
+//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
+//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
+//if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
+//if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
+//if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
+//if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
+//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
+//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
 
-	// GET WINDOW SHAPE. CALL BETWEEN BEGIN/END
+	GET WINDOW SHAPE. 
+	CALL BETWEEN BEGIN/END
 
-	ofRectangle rect = ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+		ofRectangle rect = ofRectangle(
+			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, 
+			ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 */
 
@@ -634,50 +629,50 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
-
-// HOW TO CUSTOMIZE FONT
-// AND USE DIFFERENT FONT STYLES?
 
 /*
 
-{
-	std::string _fontName;
-	std::string _path;
-	float _fontSize;
+	HOW TO CUSTOMIZE FONT
+	AND USE DIFFERENT FONT STYLES?
 
-	_fontSize = 11;
-	_fontName = "overpass-mono-bold.otf";
-	_path = "assets/fonts/" + _fontName;
-	ui.pushFont(_path, _fontSize);//index 0
-
-	_fontSize = 14;
-	_fontName = "RecMonoLinear-Bold-1.082.ttf";
-	_path = "assets/fonts/" + _fontName;
-	ui.pushFont(_path, _fontSize);//index 1
-
-	_fontSize = 17;
-	_fontName = "RecMonoLinear-Regular-1.082.ttf";
-	_path = "assets/fonts/" + _fontName;
-	ui.pushFont(_path, _fontSize);//index 2
-
-	ui.addFont(_path, _fontSize);
-	ui.setDefaultFontIndex(2);
-
-	// Customize Font
-	static bool bCustomFont = true;
-	if (bCustomFont) ui.pushStyleFont(1);
 	{
-		//.. Will draw widgets using this font
+		std::string _fontName;
+		std::string _path;
+		float _fontSize;
+
+		_fontSize = 11;
+		_fontName = "overpass-mono-bold.otf";
+		_path = "assets/fonts/" + _fontName;
+		ui.pushFont(_path, _fontSize);//index 0
+
+		_fontSize = 14;
+		_fontName = "RecMonoLinear-Bold-1.082.ttf";
+		_path = "assets/fonts/" + _fontName;
+		ui.pushFont(_path, _fontSize);//index 1
+
+		_fontSize = 17;
+		_fontName = "RecMonoLinear-Regular-1.082.ttf";
+		_path = "assets/fonts/" + _fontName;
+		ui.pushFont(_path, _fontSize);//index 2
+
+		ui.addFont(_path, _fontSize);
+		ui.setDefaultFontIndex(2);
+
+		// Customize Font
+		static bool bCustomFont = true;
+		if (bCustomFont) ui.pushStyleFont(1);
+		{
+			//.. Will draw widgets using this font
+		}
+		if (bCustomFont) ui.popStyleFont();
 	}
-	if (bCustomFont) ui.popStyleFont();
-}
 
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
@@ -685,26 +680,29 @@ using ofxSurfingGui = SurfingGuiManager;
 	COMMON LEFT RIGHT ARROWS
 	TO BROWSE AN INDEX
 
-	if (ui.AddButton("<", OFX_IM_BUTTON_SMALL, 2)) {
-		////cycled
-		//if (index == index.getMin()) index = index.getMax();
-		//index--;
-		//limited
-		if (index > index.getMin()) index--;
-	};
-	ui.SameLine();
-	if (ui.AddButton(">", OFX_IM_BUTTON_SMALL, 2)) {
-		////cycled
-		//if (index == index.getMax()) index = index.getMin();
-		//index++;
-		//limited
-		if (index < index.getMax()) index++;
-	};
+		// That is implemented now
+		// into a widget called AddComboArrows(..
+
+		if (ui.AddButton("<", OFX_IM_BUTTON_SMALL, 2)) {
+			////cycled
+			//if (index == index.getMin()) index = index.getMax();
+			//index--;
+			//limited
+			if (index > index.getMin()) index--;
+		};
+		ui.SameLine();
+		if (ui.AddButton(">", OFX_IM_BUTTON_SMALL, 2)) {
+			////cycled
+			//if (index == index.getMax()) index = index.getMin();
+			//index++;
+			//limited
+			if (index < index.getMax()) index++;
+		};
 
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
@@ -766,44 +764,47 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+//--------------------------------------------------------------
 
 
 /*
 
-		TODO: WIP:
-		TWO COLUMNS WITH 2 VERTICAL SLIDER WITH A RESET BUTTON ON EACH ONE.
+	TODO: WIP:
+	TWO COLUMNS WITH 2 VERTICAL SLIDER WITH A RESET BUTTON ON EACH ONE.
 
-						//ImGui::Columns(2, "t1", false);
-						//ui.Add(smoothChannels[i]->ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
-						//ui.AddTooltip(ofToString(smoothChannels[i]->ampInput.get(), 2));
-						//ImGui::PushID("##RESET1");
-						//if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-						//	smoothChannels[i]->ampInput = 0;
-						//}
-						//ImGui::PopID();
-						//ImGui::NextColumn();
+		//ImGui::Columns(2, "t1", false);
+		//ui.Add(smoothChannels[i]->ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
+		//ui.AddTooltip(ofToString(smoothChannels[i]->ampInput.get(), 2));
+		//ImGui::PushID("##RESET1");
+		//if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+		//	smoothChannels[i]->ampInput = 0;
+		//}
+		//ImGui::PopID();
+		//ImGui::NextColumn();
 
-						//// trigState
-						//if (smoothChannels[i]->bangDetectorIndex == 0)
-						//{
-						//	ui.Add(smoothChannels[i]->threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
-						//	ui.AddTooltip(ofToString(smoothChannels[i]->threshold.get(), 2));
-						//	ImGui::PushID("##RESET2");
-						//	if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-						//		smoothChannels[i]->threshold = 0.5f;
-						//	}
-						//	ImGui::PopID();
-						//}
-						//else if (smoothChannels[i]->bangDetectorIndex == 1)
-						//{
-						//	ImGui::Columns(2, "t2", false);
-						//	ui.Add(smoothChannels[i]->onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
-						//	ImGui::NextColumn();
-						//	ui.Add(smoothChannels[i]->onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
-						//	ImGui::Columns(1);
-						//}
+		//// trigState
+		//if (smoothChannels[i]->bangDetectorIndex == 0)
+		//{
+		//	ui.Add(smoothChannels[i]->threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
+		//	ui.AddTooltip(ofToString(smoothChannels[i]->threshold.get(), 2));
+		//	ImGui::PushID("##RESET2");
+		//	if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+		//		smoothChannels[i]->threshold = 0.5f;
+		//	}
+		//	ImGui::PopID();
+		//}
+		//else if (smoothChannels[i]->bangDetectorIndex == 1)
+		//{
+		//	ImGui::Columns(2, "t2", false);
+		//	ui.Add(smoothChannels[i]->onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
+		//	ImGui::NextColumn();
+		//	ui.Add(smoothChannels[i]->onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
+		//	ImGui::Columns(1);
+		//}
 
-						//ImGui::Columns(1);
+		//ImGui::Columns(1);
 
 */
+
+
+//--------------------------------------------------------------

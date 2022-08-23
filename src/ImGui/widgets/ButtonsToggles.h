@@ -12,7 +12,7 @@
 #include "imgui_internal.h"
 
 #include "ImGui/LayoutHelpers.h"
-#include "ImGui/widgets/ofxSurfing_ImGui_WidgetsTypesConstants.h"
+#include "ImGui/widgets/GuiConstants.h"
 //#include "ImGui/utils/ofxSurfing_Timers.h"
 #include "ofxSurfingHelpers.h"
 
@@ -855,6 +855,25 @@ namespace ofxImGuiSurfing
 	// There's a bug that when using
 	// ImGui::Dummy(ImVec2(0.0f, 2.0f));
 	// after the button it adds more spacing
+
+	//TODO: new widget to use without ofParameters, 
+	// to be used by raw c types.
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedButton(string label, bool &bState, ImVec2 bb = ImVec2(-1, -1))
+	{
+		bool bNoBorder = false;
+
+		bool bReturn = false;
+		auto tmpRef = bState;
+
+		if (ToggleRoundedButton(label.c_str(), (bool*)&tmpRef, bb, bNoBorder))
+		{
+			bState = tmpRef;
+			bReturn = true;
+		}
+
+		return bReturn;
+	}
 
 	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false)

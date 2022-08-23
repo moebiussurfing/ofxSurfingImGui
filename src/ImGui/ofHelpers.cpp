@@ -14,7 +14,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
 	{
-		//TODO: now we are using ofxSurfing_ImGui_WidgetsTypes.h helpers!
+		//TODO: now we are using WidgetsManager.h helpers!
 		// but these methods should work too.
 
 		//-
