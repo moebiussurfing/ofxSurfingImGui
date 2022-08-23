@@ -7,6 +7,9 @@
 ## 02_Widgets
 ![](02_Widgets/Capture.PNG)  
 
+## 03_WidgetsKnobs
+![](03_WidgetsKnobs/Capture.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 

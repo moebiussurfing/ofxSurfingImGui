@@ -28,7 +28,12 @@ void ofApp::setup()
 	//// Instantiate
 	//// can be omitted in many scenarios 
 	//// (when not using docking or layout presets engine modes)
-	//ui.setup();
+	ui.setup();
+
+	// to set natural direction
+	ui.setMouseWheelFlip(true);
+
+	ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -302,13 +307,12 @@ void ofApp::drawImWindow4()
 
 		ui.AddLabelHuge("> Four Knobs");
 
-		ui.Add(speed3, OFX_IM_KNOB, 2, true);
-		ui.Add(speed4, OFX_IM_KNOB, 2);
-
+		SurfingGuiTypes s = OFX_IM_KNOB_STEPPEDKNOB;
+		ui.Add(speed3, s, 2, true);
+		ui.Add(speed4, s, 2);
 		ui.AddSpacing();
-
-		ui.Add(size3, OFX_IM_KNOB, 2, true);
-		ui.Add(size4, OFX_IM_KNOB, 2);
+		ui.Add(size3, s, 2, true);
+		ui.Add(size4, s, 2);
 
 		ui.AddSpacingBigSeparated();
 

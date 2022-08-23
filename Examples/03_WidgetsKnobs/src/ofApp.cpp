@@ -8,7 +8,9 @@ void ofApp::setup()
 	ui.setup();
 
 	// flip for natural direction
-	//ui.setMouseWheelFlip(false); 
+	ui.setMouseWheelFlip(false); 
+	
+	ui.startup();
 }
 
 //--------------------------------------------------------------

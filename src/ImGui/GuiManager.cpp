@@ -133,7 +133,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 		break;
 
-		// ui.begin(); it's bypassed internally then can remain uncommented.
+		// ui.Begin(); it's bypassed internally then can remain uncommented.
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
 		setAutoSaveSettings(false);
 
