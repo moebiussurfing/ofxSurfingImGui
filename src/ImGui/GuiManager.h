@@ -15,7 +15,7 @@
 #include "ofxSurfingHelpers.h"
 #include "TextBoxWidget.h"
 
-//-
+//--
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
 // Constraint some window minimal shape sizes.
@@ -2273,7 +2273,7 @@ public:
 	//--	
 
 	//--------------------------------------------------------------
-	float getWidgetsWidth(int amnt) {
+	float getWidgetsWidth(int amnt=1) {
 		return ofxImGuiSurfing::getWidgetsWidth(amnt);
 	}
 

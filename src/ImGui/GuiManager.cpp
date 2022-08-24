@@ -428,8 +428,8 @@ void SurfingGuiManager::startup()
 
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
-			// workflow
-			windowsOrganizer.setHideWindows(true);
+			//// workflow
+			//windowsOrganizer.setHideWindows(true);
 		}
 
 		// Docking mode has the GUI toggles in other panels..
@@ -504,6 +504,8 @@ void SurfingGuiManager::startup()
 	//--
 
 	bDoneStartup = true;
+
+	//windowsOrganizer.bGui_Global = true;
 }
 
 //----
