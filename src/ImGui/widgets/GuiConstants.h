@@ -179,8 +179,8 @@ namespace ofxImGuiSurfing
 
 		// notice that full width by default, is too big!
 		// Legacy
-		OFX_IM_KNOB,
-		OFX_IM_KNOB_TRAIL, // decorated
+		OFX_IM_KNOB, // Legacy
+		OFX_IM_KNOB_TRAIL, // Legacy. decorated
 
 		//TODO:
 		// Adding NEW style knobs, 
@@ -430,6 +430,7 @@ namespace ofxImGuiSurfing
 
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2); // param, flip
 //#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
+#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
 
 // Amount of steps per widgets. will calculate range between max/min.
 #define MOUSE_WHEEL_STEPS 100

@@ -26,7 +26,7 @@ void ofApp::draw() {
 
 		//--
 
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
 
 		ui.BeginWindow(name.c_str(), NULL, _flagw);
 		{
@@ -60,6 +60,7 @@ void ofApp::draw() {
 
 				{
 					// Style selector
+					
 					vector<string> knobStyles;
 					knobStyles.push_back("TICKKNOB");
 					knobStyles.push_back("DOTKNOB");
@@ -70,6 +71,11 @@ void ofApp::draw() {
 					knobStyles.push_back("SPACEKNOB");
 					const int sz = (int)(knobStyles.size()) - 1;
 					static ofParameter<int> index{ "Style", 0, 0, sz };
+					
+					ui.Add(index, OFX_IM_KNOB, 4);
+					ui.Add(index, OFX_IM_HSLIDER_NO_LABELS);
+
+
 					ui.AddComboButtonDualLefted(index, knobStyles);
 					switch (index)
 					{

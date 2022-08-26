@@ -475,6 +475,12 @@ namespace ofxImGuiSurfing
 			return Add(aparam, type, amtPerRow, false, -1, flags);
 		}
 
+		//TODO new API
+		//-----------------------------------------------------------------
+		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int prctWidth = 100, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
+		{
+		}
+
 		//-----------------------------------------------------------------
 		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
@@ -497,6 +503,7 @@ namespace ofxImGuiSurfing
 
 			//----
 
+			//TODO: all the mouse wheel stuff could be moved to return place in one place only.
 			// 1. Handle hidden, disabled and inactive tags:
 
 			//--
@@ -748,6 +755,7 @@ namespace ofxImGuiSurfing
 						//-
 
 						// Border 
+
 					case OFX_IM_BUTTON_SMALL_BORDER:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1211,7 +1219,7 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
-					//-
+					//--
 
 					case OFX_IM_HSLIDER_BIG:
 					{
@@ -1313,7 +1321,7 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// Draggable
+					// Draggable number
 
 					case OFX_IM_DRAG:
 					{
@@ -1703,7 +1711,7 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// Drag
+					// Draggable number
 
 					case OFX_IM_DRAG:
 					{
@@ -1726,6 +1734,8 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// only implemented for floats
 
+					// Legacy
+					 
 					// Knob
 
 					case OFX_IM_KNOB:
@@ -1857,14 +1867,22 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoLabel;
 					flags |= ImGuiColorEditFlags_NoTooltip;
 
-					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR_NO_ALPHA)bReturn = ofxImGuiSurfing::AddParameter(p, false);
-					else if (type == OFX_IM_COLOR_NO_INPUTS) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
-					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
-					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+					if (type == OFX_IM_DEFAULT) 
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_INPUT) 
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_NO_ALPHA)
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_INPUTS) 
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
+					else if (type == OFX_IM_COLOR_NO_NAME) 
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+					else if (type == OFX_IM_COLOR_BOX) 
+						ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) 
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) 
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 					//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
@@ -1896,15 +1914,23 @@ namespace ofxImGuiSurfing
 					flags |= ImGuiColorEditFlags_NoLabel;
 					flags |= ImGuiColorEditFlags_NoTooltip;
 
-					if (type == OFX_IM_DEFAULT) bReturn = ofxImGuiSurfing::AddParameter(p);
+					if (type == OFX_IM_DEFAULT) 
+						bReturn = ofxImGuiSurfing::AddParameter(p);
 
-					else if (type == OFX_IM_COLOR_INPUT) bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR_NO_ALPHA) bReturn = ofxImGuiSurfing::AddParameter(p, false);
-					else if (type == OFX_IM_COLOR_NO_NAME) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
-					else if (type == OFX_IM_COLOR_NO_INPUTS) bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
-					else if (type == OFX_IM_COLOR_BOX) ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+					else if (type == OFX_IM_COLOR_INPUT) 
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+					else if (type == OFX_IM_COLOR_NO_ALPHA)
+						bReturn = ofxImGuiSurfing::AddParameter(p, false);
+					else if (type == OFX_IM_COLOR_NO_NAME) 
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+					else if (type == OFX_IM_COLOR_NO_INPUTS) 
+						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
+					else if (type == OFX_IM_COLOR_BOX)
+						ImGui::ColorButton("", tmpRef, flags);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) 
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) 
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
 					//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
@@ -1940,17 +1966,21 @@ namespace ofxImGuiSurfing
 					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
 					{
 						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+						//TODO:
 						//-> Should include sugar inside
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 					}
 					break;
+
 					case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
 					{
 						bReturn = ofxImGuiSurfing::AddParameter(p, true, true);
+						//TODO:
 						//-> Should include sugar inside
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 					}
 					break;
+					
 					default:
 						bReturn = ofxImGuiSurfing::AddParameter(p);
 						break;
