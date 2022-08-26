@@ -480,8 +480,14 @@ namespace ofxImGuiSurfing
 		//TODO new API
 		// Final step method, Draws using an absolute width
 		//-----------------------------------------------------------------
+		//bool Add(ofAbstractParameter& aparam, float width = -1, SurfingGuiTypes type = OFX_IM_DEFAULT, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
+			//bool bSameLine = false;
+			//int spacing = -1;
+
+			//-
+
 			if (width == -1) {
 				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 				ofLogWarning("ofxSurfingImGui") << "Width not passed! We will apply 100% width.";
@@ -2612,6 +2618,7 @@ namespace ofxImGuiSurfing
 							}
 							else
 							{
+								//TODO: WIP:
 								//Add(*parameterString, OFX_IM_DEFAULT);
 								////AddParameter(*parameterString);
 							}

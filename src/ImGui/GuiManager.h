@@ -155,8 +155,31 @@ public:
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, flags);
 	}
+	
+	//TODO: New API
+	// Final step method, Draws using an absolute width
+	//-----------------------------------------------------------------
+	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
+		//return widgetsManager.Add(aparam, type, width, bSameLine, spacing, flags);
+	//}
+	 
+	////-----------------------------------------------------------------
+	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
+	//	bool bSameLine = false; 
+	//	int spacing = -1;
+
+	//		return widgetsManager.Add(aparam, type, width, bSameLine, spacing, flags);
+	//}
+
+	////TODO avoid multiple ambiguous
+	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type) 
+	//{
+	//	return widgetsManager.Add(aparam, type, -1, false, -1, SurfingGuiFlags_None);
+	// }
 
 	//----
+
+	// STYLES
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------

@@ -1,15 +1,15 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup() 
+void ofApp::setup()
 {
 	ofSetWindowPosition(-1920, 25);
 
 	ui.setup();
 
 	// flip for natural direction
-	ui.setMouseWheelFlip(false); 
-	
+	ui.setMouseWheelFlip(false);
+
 	ui.startup();
 }
 
@@ -18,32 +18,34 @@ void ofApp::draw() {
 
 	ui.Begin();
 	{
-		string name = "Knobs";
-		ImGuiColorEditFlags _flagw = 
-			ui.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+		ImGuiColorEditFlags _flagw = ui.bAutoResize ?
+			ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 
 		static SurfingGuiTypes style; // knobs style
 
 		//--
 
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
 
-		ui.BeginWindow(name.c_str(), NULL, _flagw);
+		if (ui.BeginWindow("Knobs", NULL, _flagw))
 		{
 			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
 			ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED);
-			ui.AddSpacing();
-			if (!ui.bMinimize) {
-				if (ui.BeginTree("Extra", false)) // closed
-				{
-					ui.Add(ui.bAdvanced, OFX_IM_TOGGLE_ROUNDED_SMALL);
-					ui.AddSpacing();
-					ui.Add(ui.bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
-					ui.Add(ui.bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
-					ui.EndTree();
-				}
-				ui.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
+
+			ui.Add(ui.bExtra, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			//if (!ui.bMinimize)
+			if (ui.bExtra)
+			{
+				ui.Indent();
+				ui.Add(ui.bAdvanced, OFX_IM_TOGGLE_ROUNDED_SMALL);
+				ui.AddSpacing();
+				ui.Add(ui.bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+				ui.Add(ui.bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
+				ui.Unindent();
 			}
+
+			ui.AddSpacingBigSeparated();
 
 			//--
 
@@ -60,7 +62,7 @@ void ofApp::draw() {
 
 				{
 					// Style selector
-					
+
 					vector<string> knobStyles;
 					knobStyles.push_back("TICKKNOB");
 					knobStyles.push_back("DOTKNOB");
@@ -71,8 +73,13 @@ void ofApp::draw() {
 					knobStyles.push_back("SPACEKNOB");
 					const int sz = (int)(knobStyles.size()) - 1;
 					static ofParameter<int> index{ "Style", 0, 0, sz };
-					
-					ui.Add(index, OFX_IM_KNOB, 4);
+
+					//ui.Add(index, OFX_IM_KNOB, -1, SurfingGuiFlags_None);
+					ui.Add(valueKnob4, OFX_IM_KNOB, 2);
+					ui.SameLine();
+					ui.Add(index, OFX_IM_KNOB, 2);
+					//ui.Add(index, 100.f, OFX_IM_KNOB);
+
 					ui.Add(index, OFX_IM_HSLIDER_NO_LABELS);
 
 
@@ -143,7 +150,7 @@ void ofApp::draw() {
 
 		//--
 
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
 
 		if (ui.BeginWindow("Another Window"))
 		{
