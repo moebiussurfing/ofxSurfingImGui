@@ -457,6 +457,7 @@ void SurfingGuiManager::startup()
 	{
 		// Help Text Box internal
 
+		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
 		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
 		boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
 		boxHelpInternal.setup();
@@ -473,7 +474,7 @@ void SurfingGuiManager::startup()
 
 		//--
 
-		setEnableHelpInfoInternal(true);
+		//setEnableHelpInfoInternal(true);
 	}
 
 	//----
@@ -834,6 +835,7 @@ void SurfingGuiManager::draw(ofEventArgs& args)
 
 	// Internal
 	if (bUseHelpInfoInternal) boxHelpInternal.draw();
+	//boxHelpInternal.draw();
 	//if (bHelpInternal)
 	//{
 	//	if (bUseHelpInfoInternal) boxHelpInternal.draw();
@@ -841,6 +843,7 @@ void SurfingGuiManager::draw(ofEventArgs& args)
 
 	// App
 	if (bUseHelpInfoApp) boxHelpApp.draw();
+	//boxHelpApp.draw();
 	//if (bHelp)
 	//{
 	//	if (bUseHelpInfoApp) boxHelpApp.draw();

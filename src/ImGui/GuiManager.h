@@ -1430,7 +1430,8 @@ private:
 			this->Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
 
 			// Help App
-			if (bUseHelpInfoApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			//if (bUseHelpInfoApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
 			//hide if it's not settled by the user from ofApp!
 
 			// Help Internal
@@ -2810,7 +2811,7 @@ private:
 	bool bUseHelpInfoApp = false;
 
 	//--
-
+	
 public:
 
 	//--------------------------------------------------------------
@@ -2839,6 +2840,7 @@ public:
 	// Useful in some rare scenarios to populate or hide the enabler toggle
 	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
 	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
+	
 
 	//----
 

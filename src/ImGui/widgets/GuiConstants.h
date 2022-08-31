@@ -62,6 +62,7 @@ namespace ofxImGuiSurfing
 
 		// Button
 
+		//OFX_IM_BUTTON_MINI, // 1 = default
 		OFX_IM_BUTTON_SMALL, // 1 = default
 		OFX_IM_BUTTON, // 1.25
 		OFX_IM_BUTTON_MEDIUM, // 1.5
@@ -93,6 +94,7 @@ namespace ofxImGuiSurfing
 
 		OFX_IM_CHECKBOX, // ofxImGui standard
 		OFX_IM_TOGGLE,
+		//OFX_IM_TOGGLE_MINI,
 		OFX_IM_TOGGLE_SMALL,
 		OFX_IM_TOGGLE_MEDIUM,
 		OFX_IM_TOGGLE_BIG,

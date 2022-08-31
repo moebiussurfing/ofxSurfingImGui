@@ -935,6 +935,10 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void runShapeState(int i) // To be effective, must be called just before begin()!
 		{
+			if (windowsPanels.size() == 0) return;
+			if (queueWindowsVisible.size() == 0) return;
+			if (i > windowsPanels.size() - 1) return;
+
 			ofRectangle r = windowsPanels[i].getShape();
 
 			ImGuiCond flagCond;

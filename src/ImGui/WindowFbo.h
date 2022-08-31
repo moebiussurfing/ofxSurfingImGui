@@ -2,6 +2,10 @@
 
 #include "ofMain.h"
 
+
+//TODO:
+// derivate form a SurfingGui or pass as a pointer
+
 // - Class to handle a video preview window with some extra features
 // - Floating Fbo ImGui Window
 // - Draw on windows space
@@ -12,8 +16,9 @@
 
 #include "ofxSurfingHelpers.h"
 #include "ofxInteractiveRect.h"
-#include "ofxImGui.h"
 #include "ofHelpers.h"
+
+#include "ofxImGui.h"
 //#include "ofxSurfingImGui.h"
 
 namespace ofxImGuiSurfing
@@ -493,6 +498,7 @@ public:
 							if (!bFullScreen)
 							{
 								ofxImGuiSurfing::AddToggleRounded(bInDocked);
+								//ofxImGui::AddParameter(scaleModeIndex);//TODO: fix
 								if (!bInDocked) ofxImGuiSurfing::AddToggleRounded(rectDraggable.bEditMode);
 							}
 

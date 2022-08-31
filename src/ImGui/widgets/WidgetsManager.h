@@ -5,6 +5,7 @@
 
 #include "ofxImGui.h"
 #include "imgui_internal.h"
+#include "imgui_stdlib.h"
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
@@ -720,6 +721,12 @@ namespace ofxImGuiSurfing
 
 					//--
 
+					//case OFX_IM_BUTTON_MINI:
+					//	bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h * 0.7f);
+					//	if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					//	if (bMouseWheel) bReturn |= GetMouseWheel();
+					//	break;
+
 					case OFX_IM_BUTTON_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _h);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -837,6 +844,12 @@ namespace ofxImGuiSurfing
 
 						//--
 
+					//case OFX_IM_TOGGLE_MINI:
+					//	bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 0.9f);
+					//	if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					//	if (bMouseWheel) bReturn |= GetMouseWheel();
+					//	break;
+
 					case OFX_IM_TOGGLE_SMALL:
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -844,6 +857,7 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE:
+						//ImGui::PushItemFlag(ImGuiItemFlags)
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _h * 1.25f);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1023,10 +1037,20 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TEXT_INPUT://TODO:
 					{
-						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						ImGui::Text(tmpRef.c_str());
-						//ofxImGuiSurfing::AddParameter(p);//cant be included?
-						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+						{
+							int _w = getWidgetsWidth() * 0.9f;
+							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bool b = ImGui::InputText("##NAME", &s);
+								if (b) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
 					}
 					break;
 
