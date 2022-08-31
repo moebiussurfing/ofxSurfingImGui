@@ -264,11 +264,33 @@ namespace ImGuiKnobs {
 	template<typename DataType>
 	bool BaseKnob(const char* label, ImGuiDataType data_type, DataType* p_value, DataType v_min, DataType v_max, float speed, const char* format, ImGuiKnobVariant variant, float size, ImGuiKnobFlags flags, int steps = 10) {
 		auto knob = detail::knob_with_drag(label, data_type, p_value, v_min, v_max, speed, format, size, flags);
+		
+		//TODO: draw border
+		/*
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImGuiID id = window->GetID(label);
+		const float w = ImGui::CalcItemWidth();
+		const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+		const ImRect frame_bb(window->DC.CursorPos, window->DC.CursorPos + ImVec2(w, label_size.y + style.FramePadding.y * 2.0f));
+		// Draw frame
+		const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+		const ImU32 frame_col = ImGui::GetColorU32(g.ActiveId == id ? ImGuiCol_FrameBgActive : hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+		ImGui::RenderNavHighlight(frame_bb, id);
+		ImGui::RenderFrame(frame_bb.Min, frame_bb.Max, frame_col, true, g.Style.FrameRounding);
+		*/
+
 
 		switch (variant) {
 		case ImGuiKnobVariant_Tick: {
 			knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
 			knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetPrimaryColorSet());
+
+			////border
+			//color_set cols{ ImColor(1,0,0,1), ImColor(0,1,1,1), ImColor(1,0,0,1) };
+			//knob.draw_circle(0.95, cols, false, 32);
+
 			break;
 		}
 		case ImGuiKnobVariant_Dot: {
