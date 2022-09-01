@@ -235,7 +235,7 @@ namespace ofxImGuiSurfing
 
 								//TODO: workflow should be improved..
 
-								if (_range < (float)MOUSE_WHEEL_STEPS)
+								if (_range < MOUSE_WHEEL_STEPS)
 								{
 									if (bCtrl)
 									{
@@ -249,16 +249,16 @@ namespace ofxImGuiSurfing
 								else
 								{
 									// step resolution to guaranties that 100 steps walks the full range!
-									float _resolution = _range / (float)MOUSE_WHEEL_STEPS;
+									float _resolution = _range / MOUSE_WHEEL_STEPS;
 									resolution = MAX(1, _resolution);
 
-									if (bCtrl)
+									if (!bCtrl)
 									{
 										_step = resolution;
 									}
 									else
 									{
-										_step = resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
+										_step = resolution * MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
 									}
 								}
 
@@ -307,10 +307,10 @@ namespace ofxImGuiSurfing
 							if (resolution == -1)
 							{
 								// MOUSE_WHEEL_STEPS is 100 steps spread into all the param range
-								resolution = (p.getMax() - p.getMin()) / (float)MOUSE_WHEEL_STEPS;
+								resolution = (p.getMax() - p.getMin()) / MOUSE_WHEEL_STEPS;
 							}
 
-							float step = wheel * (bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+							float step = wheel * (!bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
 
 							if (bFlip) p -= step;
 							else p += step;
@@ -672,7 +672,40 @@ namespace ofxImGuiSurfing
 		return (ImTextureID)(uintptr_t)glID;
 	}
 
+	//----
+
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false);
 	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
+
+	//TODO:
+	static bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false);
+
+	//TODO:
+	// Combo list. 
+	// Selector index directly with an int ofParam
+	// without name label
+	//--------------------------------------------------------------
+	static bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw)
+	{
+		if (fileNames.empty()) return false;
+
+		string t = "##" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
+		if (b) {
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+
+		ImGui::Spacing();
+
+		ImGui::PopID();
+
+		return b;
+	}
+
 
 } // namespace ofxImGuiSurfing

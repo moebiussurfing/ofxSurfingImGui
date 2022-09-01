@@ -905,6 +905,12 @@ public:
 		refreshLayout();//auto calculate widgets common sizes
 	}
 
+	//--------------------------------------------------------------
+	void Separator()
+	{
+		ImGui::Separator();
+	}
+
 	//----
 
 private:
@@ -2232,6 +2238,12 @@ public:
 		if (bready) ImGui::SetNextWindowPos(ImVec2(p.x, p.y), cond);
 
 		return;
+	}
+	
+	//--------------------------------------------------------------
+	void setNextWindowAfterWindowNamedIfEnabled(ofParameter<bool>& bGui) {
+		if (!bGui.get()) return;
+		setNextWindowAfterWindowNamed(bGui.getName());
 	}
 
 	//--

@@ -1,4 +1,4 @@
-
+﻿
 /*
 
 	TODO:
@@ -76,6 +76,15 @@
 
 //--------------------------------------------------------------
 
+/* NOTES */
+/*
+* 
+* Trying rare chars
+string s = "hola";
+ofUTF8Append(s, '▽');
+ui.AddLabel(s);
+
+*/
 
 /*
 

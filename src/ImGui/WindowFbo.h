@@ -14,12 +14,14 @@
 
 //----
 
-#include "ofxSurfingHelpers.h"
-#include "ofxInteractiveRect.h"
-#include "ofHelpers.h"
-
 #include "ofxImGui.h"
-//#include "ofxSurfingImGui.h"
+//#include "ofHelpers.h"
+//#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
+
+#include "ofxSurfingHelpers.h"
+
+#include "ofxInteractiveRect.h"
+//#include "ofxSurfingBox.h"
 
 namespace ofxImGuiSurfing
 {
@@ -215,7 +217,9 @@ namespace ofxImGuiSurfing
 		//	ImGui::End();
 		//}
 
+
 		//-
+
 
 		////TODO:
 		//sourceID = loadTextureImage2D(pix.getData(), sz.x, sz.y);
@@ -309,32 +313,34 @@ public:
 	SurfingPreview()
 	{
 		setup();
-    };
+	};
 
 	~SurfingPreview()
 	{
-		ofxSurfingHelpers::saveGroup(params);
+		//ofxSurfingHelpers::saveGroup(params);
+
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // exit()
-    };
+	};
 
 public:
 
-	ofParameter<bool> bGui_PreviewFloat{ "Preview", true };
-	//ofParameter<bool> bGui_PreviewFloat{ "Float", true };
-	ofParameter<bool> bGui_PreviewBig{ "Big", true };//big preview can be full screen, docked or draggable.
+	ofParameter<bool> bGui_MiniPreview{ "MINI PREVIEW", true };
+	ofParameter<bool> bGui_Extra{ "PREVIEW EXTRA", false };//extra window for settings
+	ofParameter<bool> bGui_PreviewBig{ "BIG", true };//big preview can be full screen, docked or draggable.
+
 	ofParameter<bool> bFullScreen{ "Full Screen", true };//big preview will be drawn on the full screen
 	ofParameter<bool> bInDocked{ "Docked", false };//will occupy the space between docking panels
-	ofParameter<bool> bGui_Extra{ "Extra", false };//extra window for settings
 
-	ofParameter<ofColor> colorBg{ "Bg", ofColor(0),ofColor(0),ofColor(255) };
+	ofParameter<ofColor> colorBg{ "Bg", ofColor(0), ofColor(0), ofColor(255) };
 
-	ofScaleMode scaleMode;
 	ofxInteractiveRect rectDraggable = { "rectDraggable" };
+
+	ofFbo fboPreview;
 
 private:
 
 	// Fbo
-	ofFbo fboPreview;
+
 	ofFboSettings fboSettings;
 	ofParameter<bool> bGui_Preview;
 	GLuint sourceID;
@@ -347,16 +353,21 @@ public:
 		return params;
 	}
 
-private:
+	//private:
+
+	ofParameterGroup params;
 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bAutoResize_Preview{ "Auto Resize", true };
 	ofParameter<bool> bDebug{ "Debug", false };
 
-	std::vector<std::string> scaleModenames = { "FILL", "FIT", "CENTER", "STRETCH_TO_FILL" };
+	std::vector<std::string> scaleModenames =
+	{ "Fill", "Fit", "Center", "Stretch To Fill" };
 	ofParameter<int> scaleModeIndex{ "Scale Mode", 0, 0, 3 };
 
-	ofParameterGroup params;
+public:
+
+	ofScaleMode scaleMode;//what is applied to the viewport
 
 public:
 
@@ -364,7 +375,7 @@ public:
 	{
 		// Params
 		params.setName("SurfingPreview");
-		params.add(bGui_PreviewFloat);
+		params.add(bGui_MiniPreview);
 		params.add(bGui_PreviewBig);
 		params.add(bGui_Extra);
 		params.add(bAutoResize_Preview);
@@ -415,7 +426,7 @@ public:
 
 		// Startup
 
-		ofxSurfingHelpers::loadGroup(params);
+		//ofxSurfingHelpers::loadGroup(params);
 	};
 
 	void updateRectDraggable(ofRectangle r)
@@ -442,101 +453,6 @@ public:
 		fboPreview.end();
 	};
 
-	void draw_ImGuiPreview(bool _bMinimize = false, string label = "") // minimized hides extra window
-	{
-		//--
-
-		// 1. Preview Floating window
-
-			if (bGui_PreviewFloat)
-			{
-				ImGuiCond flagsCond = ImGuiCond_None;
-				flagsCond |= ImGuiCond_Appearing;
-
-				ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
-				if (bAutoResize_Preview) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-
-				string n = bGui_PreviewFloat.getName();
-				
-				//if (label != "") n += (" | " + label);
-				// Notice that if we change the window name on runtime. ini settings store one layout position for each used name...
-
-				ImGui::Begin(n.c_str(), (bool*)&bGui_PreviewFloat.get(), flagsw);
-				{
-					ofxImGuiSurfing::DrawFboPreview(fboPreview);
-
-					if (label != "") ImGui::Text(label.c_str());
-				}
-				ImGui::End();
-			}
-
-		//--
-
-		// 2. Preview Extra stuff window
-
-		if (!_bMinimize)
-		if (bGui_Extra)
-		{
-			ImGuiCond flagsCond = ImGuiCond_None;
-			flagsCond |= ImGuiCond_Appearing;
-
-			ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
-			if (bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
-
-			ImGui::Begin(bGui_Extra.getName().c_str(), (bool*)&bGui_Extra.get(), flagsw);
-			{
-				ImGui::Indent();
-				{
-					// Preview Big
-
-					ofxImGuiSurfing::AddToggleRounded(bGui_PreviewBig);
-					if (bGui_PreviewBig)
-					{
-						ImGui::Indent();
-						{
-							ofxImGuiSurfing::AddToggleRounded(bFullScreen);
-							if (!bFullScreen)
-							{
-								ofxImGuiSurfing::AddToggleRounded(bInDocked);
-								//ofxImGui::AddParameter(scaleModeIndex);//TODO: fix
-								if (!bInDocked) ofxImGuiSurfing::AddToggleRounded(rectDraggable.bEditMode);
-							}
-
-							//TODO:
-							//ofxImGuiSurfing::AddCombo(scaleModeIndex, scaleModenames);//TODO: fix
-							//ofxImGuiSurfing::AddParameter(colorBg);//TODO: fix
-						}
-						ImGui::Unindent();
-					}
-
-					// Preview Floating
-
-					ofxImGuiSurfing::AddToggleRounded(bGui_PreviewFloat);
-					if (bGui_PreviewFloat) {
-						ImGui::Indent();
-						ofxImGuiSurfing::AddToggleRounded(bAutoResize_Preview);
-						ImGui::Unindent();
-					}
-
-					// Debug only for floating window active
-					if (bGui_PreviewFloat) {
-						ImGui::Separator();
-
-						ofxImGuiSurfing::AddToggleRounded(bDebug);
-						if (bDebug)
-						{
-							ImGui::Indent();
-							ofxImGuiSurfing::BasicInfosWindow();
-							ImGui::Unindent();
-						}
-					}
-				}
-				ImGui::Unindent();
-			}
-			ImGui::End();
-		}
-	};
-
 	void Changed_Params(ofAbstractParameter& e)
 	{
 		string name = e.getName();
@@ -549,4 +465,118 @@ public:
 			scaleMode = ofScaleMode(scaleModeIndex.get());
 		}
 	};
+
+	/*
+	void draw_ImGui_Preview(bool _bMinimize = false, string label = "") // minimized hides extra window
+	{
+		//--
+
+		// 1. Preview Floating window
+
+		if (bGui_MiniPreview)
+		{
+			ImGuiCond flagsCond = ImGuiCond_None;
+			flagsCond |= ImGuiCond_Appearing;
+
+			ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
+			if (bAutoResize_Preview) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+
+			string n = bGui_MiniPreview.getName();
+
+			//if (label != "") n += (" | " + label);
+			// Notice that if we change the window name on runtime. ini settings store one layout position for each used name...
+
+			ImGui::Begin(n.c_str(), (bool*)&bGui_MiniPreview.get(), flagsw);
+			{
+				ofxImGuiSurfing::DrawFboPreview(fboPreview);
+
+				if (label != "") ImGui::Text(label.c_str());
+			}
+			ImGui::End();
+		}
+
+		//--
+
+		// 2. Preview Extra stuff window
+
+		if (!_bMinimize)
+			if (bGui_Extra)
+			{
+				ImGuiCond flagsCond = ImGuiCond_None;
+				flagsCond |= ImGuiCond_Appearing;
+
+				ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
+				if (bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
+
+				ImGui::Begin(bGui_Extra.getName().c_str(), (bool*)&bGui_Extra.get(), flagsw);
+				{
+					ImGui::Indent();
+					{
+						// Preview Big
+
+						ofxImGuiSurfing::AddToggleRounded(bGui_PreviewBig);
+						if (bGui_PreviewBig)
+						{
+							ImGui::Indent();
+							{
+								//ofxImGuiSurfing::VectorCombo2(scaleModeIndex, scaleModenames);//TODO: fix
+
+								float w = 0.5 * ofxImGuiSurfing::getWidgetsWidth();
+								ImGui::PushItemWidth(w);
+								ofxImGui::AddParameter(scaleModeIndex);//TODO: fix
+								ImGui::PopItemWidth();
+
+								if (scaleModeIndex <= scaleModenames.size() - 1)
+								{
+									string s = scaleModenames[scaleModeIndex.get()];
+									ImGui::Text(s.c_str());
+								}
+
+								//-
+
+								ofxImGuiSurfing::AddToggleRounded(bFullScreen);
+								if (!bFullScreen)
+								{
+									ofxImGuiSurfing::AddToggleRounded(bInDocked);
+									if (!bInDocked) ofxImGuiSurfing::AddToggleRounded(rectDraggable.bEditMode);
+								}
+
+								//TODO:
+								//ofxImGuiSurfing::AddParameter(colorBg);//TODO: fix
+							}
+							ImGui::Unindent();
+						}
+
+						//--
+
+						// Preview Floating
+
+						ofxImGuiSurfing::AddToggleRounded(bGui_MiniPreview);
+						if (bGui_MiniPreview)
+						{
+							ImGui::Indent();
+							ofxImGuiSurfing::AddToggleRounded(bAutoResize_Preview);
+							ImGui::Unindent();
+						}
+
+						// Debug only for floating window active
+						if (bGui_MiniPreview)
+						{
+							ImGui::Separator();
+
+							ofxImGuiSurfing::AddToggleRounded(bDebug);
+							if (bDebug)
+							{
+								ImGui::Indent();
+								ofxImGuiSurfing::BasicInfosWindow();
+								ImGui::Unindent();
+							}
+						}
+					}
+					ImGui::Unindent();
+				}
+				ImGui::End();
+			}
+	};
+	*/
 };

@@ -435,10 +435,11 @@ namespace ofxImGuiSurfing
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
 
 // Amount of steps per widgets. will calculate range between max/min.
-#define MOUSE_WHEEL_STEPS 100
+#define MOUSE_WHEEL_STEPS 100.f
 
 // How more fine is when CTRL pressed 
-#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
+#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 0.20f
+//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
 
 //----
 

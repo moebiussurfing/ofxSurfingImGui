@@ -506,9 +506,9 @@ namespace ofxImGuiSurfing
 
 		c.set(parameter.getName(),
 			ofFloatColor(
-				parameter.get().r / 255.f, 
-				parameter.get().g / 255.f, 
-				parameter.get().b / 255.f, 
+				parameter.get().r / 255.f,
+				parameter.get().g / 255.f,
+				parameter.get().b / 255.f,
 				parameter.get().a / 255.f),
 			ofFloatColor(0, 0, 0, 0),
 			ofFloatColor(1.f, 1.f, 1.f, 1.f)
@@ -565,7 +565,7 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars, bool multiline)
 	{
 		auto tmpRef = parameter.get();
-		char * cString = new char[maxChars];
+		char* cString = new char[maxChars];
 		strcpy(cString, tmpRef.c_str());
 		auto result = false;
 
@@ -639,7 +639,7 @@ namespace ofxImGuiSurfing
 
 		const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
 
-		if(!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sz.x - 0.5f * PADDING_COMBO);
+		if (!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sz.x - 0.5f * PADDING_COMBO);
 
 		auto result = false;
 		auto tmpRef = parameter.get();
@@ -1148,10 +1148,10 @@ namespace ofxImGuiSurfing
 		return true;
 	};
 	//--------------------------------------------------------------
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw )
+	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw)
 	{
 		// pass bRaw true to disable the widget padding and to draw it raw.
-		if(!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO); 
+		if (!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
 		// fix oversizes
 
 		if (values.empty())
@@ -1161,7 +1161,7 @@ namespace ofxImGuiSurfing
 		}
 
 		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
-		
+
 		if (!bRaw) ImGui::PopItemWidth();
 
 		return b;
@@ -1173,6 +1173,33 @@ namespace ofxImGuiSurfing
 		return ImGui::ListBox(label, currIndex, vector_getter,
 			static_cast<void*>(&values), values.size());
 	}
+
+	////TODO:
+	//// Combo list. 
+	//// Selector index directly with an int ofParam
+	//// without name label
+	////--------------------------------------------------------------
+	//static bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw)
+	//{
+	//	if (fileNames.empty()) return false;
+
+	//	string t = "##" + pIndex.getName();
+	//	ImGui::PushID(t.c_str());
+
+	//	int i = pIndex.get();
+	//	bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
+	//	if (b) {
+	//		i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+	//		pIndex.set(i);
+	//		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+	//	}
+
+	//	ImGui::Spacing();
+
+	//	ImGui::PopID();
+
+	//	return b;
+	//}
 }
 
 //--
