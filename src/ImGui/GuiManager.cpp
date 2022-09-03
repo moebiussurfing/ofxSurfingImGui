@@ -1407,7 +1407,7 @@ void SurfingGuiManager::End()
 
 	//--
 
-	DrawWindowLog();
+	DrawWindowLogIfEnabled();
 
 	//--
 
@@ -3150,7 +3150,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	// Log
 	if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
 	{
-		std::string ss = "[ KEY " + ofToString((char)key) + " ]";
+		std::string ss = "KEY " + ofToString((char)key) + "";
 		log.AddText(ss);
 	}
 

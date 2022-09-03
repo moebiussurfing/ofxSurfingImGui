@@ -135,11 +135,17 @@ namespace ofxImGuiSurfing {
 			ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
 			ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
 
+			//ImVec2 size_min = ImVec2(LOG_WINDOW_SIZE, 100);
+			//ImVec2 size_max = ImVec2(-1, -1);
+			//ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+
 			//if (!ImGui::Begin(name.c_str(), NULL, flags))
 			if (!ImGui::Begin(name.c_str(), (bool*)&bGui.get(), flags))
 			{
-				ImGui::End(); return;
+				ImGui::End(); 
+				return;
 			}
+
 			{
 				float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 				float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -157,7 +163,7 @@ namespace ofxImGuiSurfing {
 
 				ImGui::Spacing();
 
-				if (ImGui::Button("Clear", ImVec2(_w1, _h)))
+				if (ImGui::Button("CLEAR", ImVec2(_w1, _h)))
 				{
 					Clear();
 				}
@@ -181,6 +187,7 @@ namespace ofxImGuiSurfing {
 				}
 				ImGui::EndChild();
 			}
+
 			ImGui::End();
 		}
 	};

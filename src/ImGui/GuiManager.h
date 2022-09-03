@@ -1318,8 +1318,14 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void DrawWindowLog() {
+	void DrawWindowLogIfEnabled() {
 		if (bLog) log.ImGui(bLog);
+	}
+
+	//--------------------------------------------------------------
+	void DrawWindowLog() {
+		static ofParameter<bool>b{ "LOG", true };
+		log.ImGui(b);
 	}
 
 	// Legacy API
@@ -2011,6 +2017,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	SurfingGuiModeWindows getModeSpecial() const
+	{
+		return specialsWindowsMode;
+	}
+
+	//--------------------------------------------------------------
 	void addWindowSpecial(ofParameter<bool>& _bGui, bool _bAutoResize = true, bool _bMaster = false) {
 
 		SurfingImWindow win;
@@ -2241,8 +2253,8 @@ public:
 	}
 	
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamedIfEnabled(ofParameter<bool>& bGui) {
-		if (!bGui.get()) return;
+	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) {//passed anchor bGui / visible toggle 
+		//if (!bGui.get()) return;
 		setNextWindowAfterWindowNamed(bGui.getName());
 	}
 
@@ -2724,7 +2736,7 @@ private:
 
 public:
 
-	ofParameter<bool> bLog{ "Log", false };//show log window
+	ofParameter<bool> bLog{ "LOG", false };//show log window
 
 	//-
 
