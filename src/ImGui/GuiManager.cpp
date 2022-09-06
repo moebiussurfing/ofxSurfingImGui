@@ -44,7 +44,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bNoScroll);//TODO:
 
 	params_Advanced.add(bSolo);//used on layout presets engine
-	params_Advanced.add(bMinimize_Presets);
+	//params_Advanced.add(bMinimize_Presets);//need to rename
 
 	//params_Advanced.add(bLinkGlobal);
 	//params_Advanced.add(bLinked);

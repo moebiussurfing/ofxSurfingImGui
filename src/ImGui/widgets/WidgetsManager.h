@@ -478,10 +478,10 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		//TODO new API
+		//TODO:
+		// New API
 		// Final step method, Draws using an absolute width
 		//-----------------------------------------------------------------
-		//bool Add(ofAbstractParameter& aparam, float width = -1, SurfingGuiTypes type = OFX_IM_DEFAULT, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
 			//bool bSameLine = false;
