@@ -1218,7 +1218,7 @@ public:
 	ofParameter<bool> bLandscape{ "Orientation", false };
 	//TODO: could add a trigger to flip orientation
 
-	ofParameter<bool> bLinkGlobal{ "Link Global", true };
+	ofParameter<bool> bLinkGlobal{ "Link Global", true };//TODO:
 	//TODO: link windows between contexts/add-ons/ gui instances
 
 	ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };;
@@ -3182,3 +3182,32 @@ public:
 	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };
 };
+
+
+
+/*
+SNAP ENGINE
+auto snap = [=](float value, float snap_threshold) -> float {
+	float modulo = std::fmodf(value, snap_threshold);
+	float moduloRatio = std::fabsf(modulo) / snap_threshold;
+	if (moduloRatio < 0.5f)
+		value -= modulo;
+	else if (moduloRatio > (1.f - 0.5f))
+		value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
+	return value;
+};
+
+if (ui.BeginWindowSpecial(bGui_Main))
+{
+	//ImGui::Begin(name.data());
+	if (ImGui::IsItemActive()) {
+		auto p = ImGui::GetWindowPos();
+		auto size = ImGui::GetWindowSize();
+
+		float x = snap(p.x, 16.f);
+		float y = snap(p.y, 16.f);
+		float sizex = snap(size.x, 16.f);
+		float sizey = snap(size.y, 16.f);
+		ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
+	}
+*/

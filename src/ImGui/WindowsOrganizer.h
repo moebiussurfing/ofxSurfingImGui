@@ -933,7 +933,7 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void runShapeState(int i) // To be effective, must be called just before begin()!
+		void runShapeState(int i) // Sets position. To be effective, must be called just before begin()!
 		{
 			if (windowsPanels.size() == 0) return;
 			if (queueWindowsVisible.size() == 0) return;
