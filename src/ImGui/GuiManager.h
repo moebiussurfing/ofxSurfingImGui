@@ -155,14 +155,14 @@ public:
 	{
 		return widgetsManager.Add(aparam, type, amtPerRow, flags);
 	}
-	
+
 	//TODO: New API
 	// Final step method, Draws using an absolute width
 	//-----------------------------------------------------------------
 	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
 		//return widgetsManager.Add(aparam, type, width, bSameLine, spacing, flags);
 	//}
-	 
+
 	////-----------------------------------------------------------------
 	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
 	//	bool bSameLine = false; 
@@ -584,7 +584,7 @@ public:
 	}
 	// Same that above but with left/right arrows, place to the right.
 	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bCycled = false)
+	bool AddComboButtonDual(ofParameter<int> &pIndex, std::vector<std::string> fileNames, bool bCycled = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -614,10 +614,13 @@ public:
 		ImGui::PushID(t.c_str());
 		if (ImGui::Button("<", ImVec2(w, 0)))
 		{
-			if (pIndex <= pIndex.getMin())
-				if (bCycled) pIndex.getMax();
+			if (pIndex <= pIndex.getMin()) {
+				if (bCycled) pIndex = pIndex.getMax();
 				else pIndex = pIndex.getMin();
-			else pIndex--;
+			}
+			else {
+				pIndex--;
+			}
 			b = true;
 		}
 		ImGui::PopID();
@@ -628,8 +631,7 @@ public:
 		if (ImGui::Button(">", ImVec2(w, 0)))
 		{
 			if (pIndex < pIndex.getMax()) pIndex++;
-			else if (bCycled)
-				pIndex = 0;
+			else if (bCycled) pIndex = 0;
 			b = true;
 		}
 		ImGui::PopID();
@@ -2251,7 +2253,7 @@ public:
 
 		return;
 	}
-	
+
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) {//passed anchor bGui / visible toggle 
 		//if (!bGui.get()) return;
@@ -2321,7 +2323,7 @@ public:
 	//--	
 
 	//--------------------------------------------------------------
-	float getWidgetsWidth(int amnt=1) {
+	float getWidgetsWidth(int amnt = 1) {
 		return ofxImGuiSurfing::getWidgetsWidth(amnt);
 	}
 
@@ -2835,7 +2837,7 @@ private:
 	bool bUseHelpInfoApp = false;
 
 	//--
-	
+
 public:
 
 	//--------------------------------------------------------------
@@ -2864,7 +2866,7 @@ public:
 	// Useful in some rare scenarios to populate or hide the enabler toggle
 	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
 	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
-	
+
 
 	//----
 

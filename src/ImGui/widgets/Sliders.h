@@ -441,7 +441,7 @@ namespace ofxImGuiSurfing
 	*/
 
 
-	// Float
+	// Floating Big V Slider
 	//--------------------------------------------------------------
 	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
@@ -471,7 +471,8 @@ namespace ofxImGuiSurfing
 		{
 			float h = ImGui::GetContentRegionAvail().y;
 			float spcy = ImGui::GetStyle().ItemSpacing.y;
-			if (sz.y == -1) sz.y = h - 2 * spcy;
+			//if (sz.y == -1) sz.y = h - 2 * spcy;
+			if (sz.y == -1) sz.y = h - 4 * spcy;
 		}
 
 
