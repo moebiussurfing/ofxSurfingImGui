@@ -1150,9 +1150,16 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw)
 	{
-		// pass bRaw true to disable the widget padding and to draw it raw.
-		if (!bRaw) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
+		const int PADDING = 2;
+
 		// fix oversizes
+		// pass bRaw true to disable the widget padding and to draw it raw.
+		if (!bRaw) 
+		{
+			if (label != "") ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
+			else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING);
+		}
+
 
 		if (values.empty())
 		{

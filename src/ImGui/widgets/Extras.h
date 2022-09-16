@@ -227,7 +227,7 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 		ImGui::Spacing();
 
-		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		return cChanged;
 	}
@@ -250,7 +250,7 @@ namespace ofxImGuiSurfing
 	// group all methods to a template or something
 
 	//--------------------------------------------------------------
-	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
+	inline bool AddMatrixClickerLabels(ofParameter<int>& _index, const std::vector<char> labels, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "", bool bFlip = false)
 	{
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
@@ -317,9 +317,29 @@ namespace ofxImGuiSurfing
 			ImGuiStyle& style2 = ImGui::GetStyle();
 			float _windowVisible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
-			for (int n = 0; n < _amt; n++)
+			//int _from;
+			//int _to;
+			int _inc;
+			if (!bFlip) {
+				//_from = 0;
+				//_to = _amt;
+				_inc = 1;
+			}
+			else {
+				//_to = 0;
+				//_from = _amt;
+				_inc = -1;
+			}
+
+			//for (int n = _from; n < _to; n = n + _inc)
+			for (int _n = 0; _n < _amt; _n++)
 			{
 				bool bBorder = false;
+
+				int n = _n;
+				if (bFlip) {
+					n = _amt - 1 - _n;
+				}
 
 				ImGui::PushID(n);
 				{
@@ -385,17 +405,24 @@ namespace ofxImGuiSurfing
 						ImGui::PopStyleColor(2);
 					}
 
+					// The last button width
 					float last_button_x2 = ImGui::GetItemRectMax().x;
-					float next_button_x2 = last_button_x2 + style2.ItemSpacing.x + sizebt.x; // Expected position if next button was on same line
+					// Expected position if next button was on same line
+					float next_button_x2 = last_button_x2 + style2.ItemSpacing.x + sizebt.x;
 
-					if (n + 1 < _amt && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
+					if (!bFlip) {
+						if (n + 1 < _amt && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
+					}
+					else {
+						if (_n + 1 < _amt && next_button_x2 < _windowVisible_x2) ImGui::SameLine();
+					}
 				}
 				ImGui::PopID();
 			}
 		}
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		return cChanged;
 	}
@@ -549,7 +576,7 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice(__FUNCTION__) << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		//if (bSpaced) ImGui::Spacing();
 		//if (bSpaced) ImGui::Spacing();
@@ -891,18 +918,18 @@ namespace ofxImGuiSurfing
 			ImGui::PushStyleColor(ImGuiCol_Text, colText);
 		}
 
-		if(bUseButton)
+		if (bUseButton)
 		{
 			if (ImGui::Button(desc, ImVec2(w, h)))
 			{
 				ofLaunchBrowser(url);
 			}
 		}
-		else 
+		else
 		{
 			//TODO: text clickable..
 			ImGui::TextWrapped(desc);
-			ImGui::InvisibleButton("##URL", { w, h});
+			ImGui::InvisibleButton("##URL", { w, h });
 		}
 
 		if (_bBlink)

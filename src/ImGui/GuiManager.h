@@ -525,7 +525,7 @@ public:
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
-		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames));
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
