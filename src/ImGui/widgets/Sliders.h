@@ -105,13 +105,13 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
-	//inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+		//inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 	//--------------------------------------------------------------
 	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
-	//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+		//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
@@ -234,7 +234,7 @@ namespace ofxImGuiSurfing
 
 			// red rectangle
 			ImDrawFlags flags = ImDrawFlags_None;
-			draw_list->AddRectFilled(ImVec2(x1, y1+gap2), ImVec2(x2, y2 - 4), _cr, 0, flags);
+			draw_list->AddRectFilled(ImVec2(x1, y1 + gap2), ImVec2(x2, y2 - 4), _cr, 0, flags);
 
 			// limit lines
 			draw_list->AddLine(ImVec2(x1, y1), ImVec2(x1, y2), _cm, linew);
@@ -472,9 +472,11 @@ namespace ofxImGuiSurfing
 			float h = ImGui::GetContentRegionAvail().y;
 			float spcy = ImGui::GetStyle().ItemSpacing.y;
 			//if (sz.y == -1) sz.y = h - 2 * spcy;
-			if (sz.y == -1) sz.y = h - 4 * spcy;
+			float offset = bNoName ? 0 : ( 2 * spcy);
+			if (sz.y == -1) sz.y = h - 1 * spcy - offset;
 		}
 
+		//--
 
 		ImGui::PushID(("##VSLIDER" + name).c_str());
 		{

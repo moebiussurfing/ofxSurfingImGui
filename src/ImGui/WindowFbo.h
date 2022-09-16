@@ -122,12 +122,53 @@ namespace ofxImGuiSurfing
 		return new_texture;
 	}
 
+	/*
 	//--------------------------------------------------------------
 	inline void DrawFboPreview(const ofFbo& fbo)
 	{
 		if (!fbo.isAllocated()) return;
 
 		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
+
+		ImVec2 szWin = ImGui::GetContentRegionAvail(); // for example
+		ImVec2 szOut;
+
+		float w = fbo.getWidth();
+		float h = fbo.getHeight();
+		float ratio = h / w;
+		float pad = 0;
+		float ww;
+		float hh;
+		ww = szWin.x - pad;
+		hh = ww * ratio;
+
+		szOut = ImVec2(ww, hh);
+		ImGui::Image(textureID, szOut);
+	}
+	*/
+
+	//--------------------------------------------------------------
+	inline void DrawFboPreview(const ofFbo& fbo)
+	{
+		if (!fbo.isAllocated()) return;
+
+		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
+
+		//-
+		
+		/*
+		//TODO: WIP
+		//https://github.com/ocornut/imgui/issues/5627
+		float frame_height = ImGui::GetFrameHeight();
+		ImVec2 extra_size_needed = ImVec2(0.0f, frame_height); // For title-bar. Multiply by 2 if you have a menu.
+
+		//ComputeRatioedSize(CurrentSize - ExtraSizeNeeded) + ExtraSizeNeeded.
+		ComputeRatioedSize(CurrentSize - ExtraSizeNeeded) + ExtraSizeNeeded.
+		
+		extra_size_needed += ImVec2(ImGui::GetStyle().WindowBorderSize * 2, ImGui::GetStyle().WindowBorderSize * 2);
+		*/
+
+		//-
 
 		ImVec2 szWin = ImGui::GetContentRegionAvail(); // for example
 		ImVec2 szOut;

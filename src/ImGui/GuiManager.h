@@ -1892,6 +1892,15 @@ public:
 	int getWindowSpecialIndexForName(string name);
 	// to be used if you forgot or don't know the index
 
+	// Check if that param toggle is previously added as an special window
+	// that's useful when using passed as reference ui's
+	// when using multiple ui instances sharing the same object instance!
+	//--------------------------------------------------------------
+	bool isThereSpecialWindowFor(ofParameter<bool>& _bGui) {
+		bool b = this->getWindowSpecialIndexForName(_bGui.getName()) != -1;
+		return b;
+	}
+
 	//----
 
 	// Organizer for the Special Windows

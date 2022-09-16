@@ -929,8 +929,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 	//-
 
-	if (bGui_LayoutsManager)
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+	if (bGui_LayoutsManager) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 	if (BeginWindow(bGui_LayoutsManager, flagsMng))
 	{
@@ -942,22 +941,27 @@ void SurfingGuiManager::drawLayoutsManager()
 		float _w = ofxImGuiSurfing::getWidgetsWidth(1);
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
-		//-
+		//--
+		
+		if (!bGui_LayoutsPanels)
+		{
+			// Panels
+			AddBigToggle(bGui_LayoutsPanels, _w, _h, false);
 
-		// Panels
-		AddBigToggle(bGui_LayoutsPanels, _w, _h, false);
+			// Presets
+			AddBigToggle(bGui_LayoutsPresetsSelector, _w, _h, false);
 
-		// Presets
-		AddBigToggle(bGui_LayoutsPresetsSelector, _w, _h, false);
+			this->AddSpacingSeparated();
+		}
 
 		//--
+
+		// Panels
 
 		// Show a mini version when the main panel is hidden!
 
 		if (!bGui_LayoutsPanels)
 		{
-			this->AddSpacingSeparated();
-
 			static bool bOpen = false;
 			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
@@ -995,7 +999,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 		if (!bMinimize_Presets)
 		{
-			this->AddSpacingSeparated();
+			if (!bGui_LayoutsPanels) this->AddSpacingSeparated();
 			this->AddGroup(params_LayoutsExtra);
 		}
 
@@ -1005,6 +1009,8 @@ void SurfingGuiManager::drawLayoutsManager()
 
 		if (!bMinimize_Presets)
 		{
+			this->AddSpacingSeparated();
+
 			// a toggle that expands the other widgets
 			DrawAdvancedBundle();
 		}
@@ -1752,7 +1758,7 @@ int SurfingGuiManager::getWindowSpecialIndexForName(string name)
 		}
 	}
 
-	ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Special Window with name '" << name << "' not found!";
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Special Window with name '" << name << "' not found!";
 
 	return -1;
 }
@@ -2297,12 +2303,13 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	//----
 
 	// Position and size the window
+	if (bGui_LayoutsPresetsSelector) {
+		const int i = 0;
+		ImGui::SetNextWindowPos(ImVec2(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), prCond);
+		ImGui::SetNextWindowSize(ImVec2(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), prCond);
+	}
 
-	const int i = 0;
-	ImGui::SetNextWindowPos(ImVec2(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), prCond);
-	ImGui::SetNextWindowSize(ImVec2(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), prCond);
-
-	//-
+	//--
 
 	// Window
 
@@ -2331,7 +2338,8 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
 
 		// Manager
-		if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
+		//if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
+		if (!bMinimize_Presets) this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
 
 		this->AddSpacingSeparated();
 
@@ -2339,7 +2347,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 
 		// 2. The 4 Preset Toggles
 
-		this->AddLabelBig("Presets");
+		if (!bMinimize_Presets) this->AddLabelBig("Presets");
 
 		for (int i = 0; i < bLayoutPresets.size(); i++)
 		{
@@ -2396,14 +2404,17 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		}
 
 		//--
-
-		// Extra Params 
-
-		// when is minimized or manager window hidden
-		if (bMinimize_Presets || !bGui_LayoutsManager)
+		
+		if (!bMinimize_Presets) 
 		{
-			this->AddSpacingSeparated();
-			this->AddGroup(params_LayoutsExtra, SurfingGuiGroupStyle_Collapsed);
+			// Extra Params 
+
+			// when is minimized or manager window hidden
+			if (bMinimize_Presets || !bGui_LayoutsManager)
+			{
+				this->AddSpacingSeparated();
+				this->AddGroup(params_LayoutsExtra, SurfingGuiGroupStyle_Collapsed);
+			}
 		}
 
 		this->EndWindow();
