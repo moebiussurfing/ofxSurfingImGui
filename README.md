@@ -43,9 +43,10 @@ void ofApp::draw()
 {
     ui.Begin();
     {
+        /* windows goes here */
         if (ui.BeginWindow(bGui))
         {
-            /* ImGui widgets goes here */
+            /* widgets goes here */
             ui.AddGroup(params);
             ..
 
