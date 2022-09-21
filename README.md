@@ -31,7 +31,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ofxSurfingGui ui;
 
-ofParameter<bool> bGui{ "Show Gui", true };
+ofParameter<bool> bGui{ "Show", true };
 ofParameterGroup params;
 ..
 ```
