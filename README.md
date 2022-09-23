@@ -31,7 +31,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ofxSurfingGui ui;
 
-ofParameter<bool> bGui{ "Show Gui", true };
+ofParameter<bool> bGui{ "Show", true };
 ofParameterGroup params;
 ..
 ```
@@ -43,9 +43,10 @@ void ofApp::draw()
 {
     ui.Begin();
     {
+        /* windows goes here */
         if (ui.BeginWindow(bGui))
         {
-            /* ImGui widgets goes here */
+            /* widgets goes here */
             ui.AddGroup(params);
             ..
 
