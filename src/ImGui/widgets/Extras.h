@@ -317,28 +317,24 @@ namespace ofxImGuiSurfing
 			ImGuiStyle& style2 = ImGui::GetStyle();
 			float _windowVisible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
 
-			//int _from;
-			//int _to;
 			int _inc;
 			if (!bFlip) {
-				//_from = 0;
-				//_to = _amt;
 				_inc = 1;
 			}
 			else {
-				//_to = 0;
-				//_from = _amt;
 				_inc = -1;
 			}
 
-			//for (int n = _from; n < _to; n = n + _inc)
 			for (int _n = 0; _n < _amt; _n++)
 			{
 				bool bBorder = false;
 
-				int n = _n;
+				int n;
 				if (bFlip) {
 					n = _amt - 1 - _n;
+				}
+				else {
+					n = _n;
 				}
 
 				ImGui::PushID(n);

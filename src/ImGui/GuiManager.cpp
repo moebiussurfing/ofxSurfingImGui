@@ -913,7 +913,7 @@ void SurfingGuiManager::drawLayoutsManager()
 			r.setWidth(rectangles_Windows[0].get().getWidth());
 
 			//TODO:
-			//set same height than Layouts panel if visible
+			// set same height than Layouts panel if visible
 			if (bGui_LayoutsPanels) r.setHeight(rectangles_Windows[0].get().getHeight());
 
 			rectangles_Windows[2] = r;
@@ -965,7 +965,7 @@ void SurfingGuiManager::drawLayoutsManager()
 			static bool bOpen = false;
 			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
-			if (ImGui::CollapsingHeader("Panels", _flagw))
+			if (ImGui::CollapsingHeader("PANELS", _flagw))
 			{
 				this->AddSpacing();
 
@@ -991,6 +991,36 @@ void SurfingGuiManager::drawLayoutsManager()
 					setShowAllPanels(false);
 				}
 			}
+		}
+
+		//--
+
+		// Window Layouts
+
+		if (ImGui::TreeNode("LAYOUTS"))
+		{
+			this->refreshLayout();
+			Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
+			Add(bReset_PresetsWindow, OFX_IM_BUTTON_SMALL);
+
+			ImGui::TreePop();
+		}
+
+		//--
+
+		// Window Panels 
+
+		if (ImGui::TreeNode("PANELS"))
+		{
+			this->refreshLayout();
+			Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED_SMALL);
+			Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
+			//if (bAutoResize_Panels) Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
+
+			// Landscape
+			//Add(bLandscape, OFX_IM_TOGGLE_ROUNDED);//TODO:
+
+			ImGui::TreePop();
 		}
 
 		//--
@@ -1033,7 +1063,9 @@ void SurfingGuiManager::drawLayoutsPresetsEngine() {
 		//if (!bMinimize_Presets) if (bGui_LayoutsPresetsManual) drawLayoutsPresetsManualWidgets();
 	}
 
-	if (bGui_LayoutsPanels) drawLayoutsPanels();
+	if (bGui_LayoutsPanels) {
+		drawLayoutsPanels();
+	}
 
 	// Log
 	if (appLayoutIndex != -1) if (bLog) log.ImGui(bLog);
@@ -2303,7 +2335,9 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	//----
 
 	// Position and size the window
-	if (bGui_LayoutsPresetsSelector) {
+
+	if (bGui_LayoutsPresetsSelector)
+	{
 		const int i = 0;
 		ImGui::SetNextWindowPos(ImVec2(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), prCond);
 		ImGui::SetNextWindowSize(ImVec2(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), prCond);
@@ -2335,9 +2369,11 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		//--
 
 		// Panels
+
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
 
 		// Manager
+		 
 		//if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
 		if (!bMinimize_Presets) this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
 
@@ -2347,8 +2383,13 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 
 		// 2. The 4 Preset Toggles
 
-		if (!bMinimize_Presets) this->AddLabelBig("Presets");
+		// label
+		if (!bMinimize_Presets) {
+			this->AddLabelBig("PRESETS");
+			this->AddSpacing();
+		}
 
+		// toggles
 		for (int i = 0; i < bLayoutPresets.size(); i++)
 		{
 			ofxImGuiSurfing::AddBigToggle(bLayoutPresets[i], _w2, _h);
@@ -2385,21 +2426,24 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 			//--
 
 			// Manual
+
 			drawLayoutsPresetsManualWidgets();
 
 			this->AddSpacingSeparated();
 			this->AddSpacing();
 		}
 
-		//-
+		//--
 
 		if (!bMinimize_Presets)//maximized
 		{
 			// Organizer panel visible toggle
+
 			this->Add(bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 			this->AddSpacing();
 
-			// Link mode
+			// Link mode toggle
+
 			this->Add(this->getGuiToggleLinked());
 		}
 
@@ -2919,10 +2963,12 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 	// Notice that _bLandscape on first frame is not updated!
 	// Landscape
-	if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(700, 150));
+	if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(450, 100));
+	//if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(700, 150));
 
 	// Portrait
-	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(105, 300));
+	//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(105, 300));
+	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, 300));
 
 #endif
 
@@ -3052,7 +3098,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 		else
 		{
-			this->AddSpacing();
+			//this->AddSpacing();
 			this->AddSeparator();
 			this->AddSpacing();
 
@@ -3106,7 +3152,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 		// Portrait
 		else
 		{
-			this->AddSpacing();
+			//this->AddSpacing();
 			this->AddSeparator();
 			this->AddSpacing();
 		}

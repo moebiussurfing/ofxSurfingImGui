@@ -399,12 +399,12 @@ public:
 	ofParameterGroup params;
 
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
-	ofParameter<bool> bAutoResize_Preview{ "Auto Resize", true };
+	ofParameter<bool> bAutoResize_Preview{ "Auto Resize", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 
 	std::vector<std::string> scaleModenames =
 	{ "Fill", "Fit", "Center", "Stretch To Fill" };
-	ofParameter<int> scaleModeIndex{ "Scale Mode", 0, 0, 3 };
+	ofParameter<int> scaleModeIndex{ "Scale Mode", 1, 0, 3 };
 
 public:
 

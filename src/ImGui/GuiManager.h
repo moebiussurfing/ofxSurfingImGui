@@ -876,6 +876,21 @@ public:
 		ofxImGuiSurfing::AddSpacingHugeSeparated();
 	}
 
+	//--
+	
+	// Button Repeats
+	//--------------------------------------------------------------
+	void PushButtonRepeat(bool b = true)
+	{
+		ImGui::PushButtonRepeat(b);
+	}
+
+	//--------------------------------------------------------------
+	void PopButtonRepeat()
+	{
+		ImGui::PopButtonRepeat();
+	}
+
 	//----
 
 public:
@@ -1066,6 +1081,68 @@ public:
 	//--
 
 
+	//---
+
+	// Blink helpers
+
+//#define BLINK_MIN 0.2f 
+//#define BLINK_MAX 0.5f 
+
+	//--------------------------------------------------------------
+	inline void BeginBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			// Border when selected
+			float a = 0.5f;
+			float borderLineWidth = 1.0f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+			ImGui::PopStyleVar(1);
+		}
+	}
+
+	//--------------------------------------------------------------
+	inline void BeginBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			float a = 0.5f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float v = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
 
 	//----
 
@@ -1223,7 +1300,7 @@ public:
 	ofParameter<bool> bLinkGlobal{ "Link Global", true };//TODO:
 	//TODO: link windows between contexts/add-ons/ gui instances
 
-	ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };;
+	ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };
 	ofParameter<bool> bGui_Aligners{ "ALIGNERS", false };
 	ofParameter<bool> bGui_SpecialWindows{ "SPECIAL WINDOWS", false };
 
@@ -1492,7 +1569,7 @@ private:
 
 				// Window Layouts
 
-				if (ImGui::TreeNode("Layouts"))
+				if (ImGui::TreeNode("LAYOUTS"))
 				{
 					this->refreshLayout();
 					Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
@@ -1505,7 +1582,7 @@ private:
 
 				// Window Panels 
 
-				if (ImGui::TreeNode("Panels"))
+				if (ImGui::TreeNode("PANELS"))
 				{
 					this->refreshLayout();
 					Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED_SMALL);
@@ -1761,11 +1838,18 @@ public:
 
 		//--
 
+		// too long names..
+		/*
 		// Customize common windows duplicated on when using multiple instances.
 		// that's to avoid overlapping contents when ImGui windows have the same name!
 		bGui_Aligners.setName(nameLabel + " ALIGNERS");
 		bGui_Organizer.setName(nameLabel + " ORGANIZER");
 		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
+		*/
+		// use first letter only
+		bGui_Aligners.setName("ALIGNERS "+ ofToString(nameLabel[0]));
+		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
+		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
 
 		//--
 
@@ -2733,9 +2817,9 @@ public:
 
 private:
 
-	ofParameter<bool> bGui_LayoutsPanels{ "Panels", true };
-	ofParameter<bool> bGui_LayoutsPresetsSelector{ "Layouts", true };
-	ofParameter<bool> bGui_LayoutsManager{ "Manager", false };
+	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };
+	ofParameter<bool> bGui_LayoutsPresetsSelector{ "LAYOUTS", true };
+	ofParameter<bool> bGui_LayoutsManager{ "MANAGER", false };
 
 	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
 	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false };
@@ -2991,7 +3075,7 @@ public:
 			// Border Blink
 
 		case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h/*, true, true*/);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
@@ -3092,36 +3176,42 @@ public:
 
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
+		case OFX_IM_TOGGLE_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON:
+		case OFX_IM_TOGGLE:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM:
+		case OFX_IM_TOGGLE_MEDIUM:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG:
+		case OFX_IM_TOGGLE_BIG:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL:
+		case OFX_IM_TOGGLE_BIG_XXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL:
+		case OFX_IM_TOGGLE_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();

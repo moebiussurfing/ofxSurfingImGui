@@ -426,5 +426,4 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
-
 } // namespace ofxImGuiSurfing

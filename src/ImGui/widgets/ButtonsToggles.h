@@ -962,6 +962,28 @@ namespace ofxImGuiSurfing
 	{
 		bool bReturn = false;
 
+		/*
+		// Border when selected
+
+		float a = 0.5f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		// Blink
+
+		if (bBlink)
+		{
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+
+		bool bDrawBorder = true;
+		*/
+
 		std::string n = "##BIGBUTTON" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
