@@ -201,6 +201,11 @@ public:
 	{
 		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
+	//--------------------------------------------------------------
+	void UpdateStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		widgetsManager.UpdateStyle(name, type, amtPerRow, bSameLine, spacing);
+	}
 
 	//--
 
@@ -218,6 +223,62 @@ public:
 	{
 		widgetsManager.AddStyleGroup(name, type, flags);
 	}
+	//--------------------------------------------------------------
+	void UpdateStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	{
+		widgetsManager.UpdateStyleGroup(group, type, flags);
+	}
+	//--------------------------------------------------------------
+	void UpdateStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	{
+		widgetsManager.UpdateStyleGroup(name, type, flags);
+	}
+
+	//TODO: new API
+	//--------------------------------------------------------------
+	void AddStyleGroup(std::string name, SurfingGuiGroupStyle flags)
+	{
+		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
+
+		//if (flags & ImGuiKnobFlags_ValueTooltip &&
+
+		//TODO:
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
+		{
+			type = OFX_IM_GROUP_HIDDEN;
+			widgetsManager.AddStyleGroup(name, type, flagst);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
+		{
+			type = OFX_IM_GROUP_HIDDEN_HEADER;
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.AddStyleGroup(name, type, flagst);
+			return;
+		}
+
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE;
+			widgetsManager.AddStyleGroup(name, type, flagst);
+			return;
+		}
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE_EX;
+			widgetsManager.AddStyleGroup(name, type, flagst);
+			return;
+		}
+
+		widgetsManager.AddStyleGroup(name, type, flagst);
+	}
 
 	//TODO:
 	//--------------------------------------------------------------
@@ -228,10 +289,11 @@ public:
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
+		//TODO:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
-			//type = OFX_IM_GROUP_HIDDEN;
-			//widgetsManager.AddStyleGroup(group, type, flagst);
+			type = OFX_IM_GROUP_HIDDEN;
+			widgetsManager.AddStyleGroup(group, type, flagst);
 			return;
 		}
 
@@ -262,6 +324,97 @@ public:
 		}
 
 		widgetsManager.AddStyleGroup(group, type, flagst);
+	}
+
+	//--------------------------------------------------------------
+	void UpdateStyleGroup(std::string name, SurfingGuiGroupStyle flags)
+	{
+		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
+
+		//if (flags & ImGuiKnobFlags_ValueTooltip &&
+
+		//TODO:
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
+		{
+			type = OFX_IM_GROUP_HIDDEN;
+			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
+		{
+			type = OFX_IM_GROUP_HIDDEN_HEADER;
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			return;
+		}
+
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE;
+			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			return;
+		}
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE_EX;
+			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			return;
+		}
+
+		widgetsManager.UpdateStyleGroup(name, type, flagst);
+	}
+
+	//TODO:
+	//--------------------------------------------------------------
+	void UpdateStyleGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags)
+	{
+		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
+		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
+
+		//if (flags & ImGuiKnobFlags_ValueTooltip &&
+
+		//TODO:
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
+		{
+			type = OFX_IM_GROUP_HIDDEN;
+			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			return;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
+		{
+			type = OFX_IM_GROUP_HIDDEN_HEADER;
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			return;
+		}
+
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
+		{
+			flagst = ImGuiTreeNodeFlags_DefaultOpen;
+		}
+
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE;
+			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			return;
+		}
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
+		{
+			type = OFX_IM_GROUP_TREE_EX;
+			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			return;
+		}
+
+		widgetsManager.UpdateStyleGroup(group, type, flagst);
 	}
 
 	//--
@@ -322,7 +475,7 @@ public:
 		widgetsManager.clear(); // update sizes to current window shape
 	}
 
-	//-
+	//--
 
 	// Disables a Widget and reduces transparency of most common colors.
 

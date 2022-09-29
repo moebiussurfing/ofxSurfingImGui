@@ -259,7 +259,7 @@ namespace ofxImGuiSurfing
 		//			return;
 		//		}
 		//	}
-		//	ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
+		//	ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
 		//	return;
 		//}
 		////--------------------------------------------------------------
@@ -276,7 +276,7 @@ namespace ofxImGuiSurfing
 		//			return;
 		//		}
 		//	}
-		//	ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list!";
+		//	ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Widget " << name << " not found on styles list!";
 		//	return;
 		//}
 
@@ -294,7 +294,8 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Group " << name << " not found on styles list!";
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Group " << name << " not found on styles list! Added!";
+			AddStyleGroup(name, type, flags);
 			return;
 		}
 		//--------------------------------------------------------------
@@ -309,7 +310,8 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Group " << group.getName() << " not found on styles list!";
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Group " << group.getName() << " not found on styles list! Added!";
+			AddStyleGroup(group, type, flags);
 			return;
 		}
 
@@ -335,7 +337,7 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list. Added!";
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list. Added!";
 			AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 			return;
 		}
@@ -353,7 +355,7 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning(__FUNCTION__) << "Widget " << name << " not found on styles list. Added!";
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Widget " << name << " not found on styles list. Added!";
 			AddStyle(name, type, amtPerRow, bSameLine, spacing);
 			return;
 		}
@@ -612,12 +614,16 @@ namespace ofxImGuiSurfing
 
 			//TODO:
 			// is not called with groups here.. ?
-			//bool isGroup = ptype == typeid(ofParameterGroup).name();
-			//if (isGroup) 
-			//{
-			//	refreshPanelShape();
-			//	return false;
-			//}
+			// but we will warm the coder that maybe used Add instead of AddGroup, 
+			// when adding a group!
+			const bool isGroup = ptype == typeid(ofParameterGroup).name();
+			if (isGroup) 
+			{
+				ofLogWarning("ofxSurfingImGui") << "It seems you are adding an ofParamGroup with a wrong method!";
+				ofLogWarning("ofxSurfingImGui") << "Replace the call using AddGroup.";
+				//refreshPanelShape();
+				return false;
+			}
 
 			//--------
 
@@ -2701,7 +2707,7 @@ namespace ofxImGuiSurfing
 
 						// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
 						if (parameter->getName() == "" && parameter->getName() == " ")
-							ofLogWarning(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
+							ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 					}
 				}
 
