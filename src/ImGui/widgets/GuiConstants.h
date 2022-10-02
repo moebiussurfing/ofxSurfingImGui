@@ -62,7 +62,7 @@ namespace ofxImGuiSurfing
 
 		// Button
 
-		//OFX_IM_BUTTON_MINI, // 1 = default
+		//OFX_IM_BUTTON_MINI, // 1 = default. too small to place text well.
 		OFX_IM_BUTTON_SMALL, // 1 = default
 		OFX_IM_BUTTON, // 1.25
 		OFX_IM_BUTTON_MEDIUM, // 1.5

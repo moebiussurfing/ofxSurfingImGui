@@ -155,7 +155,7 @@ namespace ofxImGuiSurfing
 		ImTextureID textureID = (ImTextureID)(uintptr_t)fbo.getTexture().getTextureData().textureID;
 
 		//-
-		
+
 		/*
 		//TODO: WIP
 		//https://github.com/ocornut/imgui/issues/5627
@@ -164,7 +164,7 @@ namespace ofxImGuiSurfing
 
 		//ComputeRatioedSize(CurrentSize - ExtraSizeNeeded) + ExtraSizeNeeded.
 		ComputeRatioedSize(CurrentSize - ExtraSizeNeeded) + ExtraSizeNeeded.
-		
+
 		extra_size_needed += ImVec2(ImGui::GetStyle().WindowBorderSize * 2, ImGui::GetStyle().WindowBorderSize * 2);
 		*/
 
@@ -176,13 +176,14 @@ namespace ofxImGuiSurfing
 		float w = fbo.getWidth();
 		float h = fbo.getHeight();
 		float ratio = h / w;
+
 		float pad = 0;
-		float ww;
-		float hh;
-		ww = szWin.x - pad;
-		hh = ww * ratio;
+
+		float ww = szWin.x - pad;
+		float hh = ww * ratio;
 
 		szOut = ImVec2(ww, hh);
+
 		ImGui::Image(textureID, szOut);
 	}
 
