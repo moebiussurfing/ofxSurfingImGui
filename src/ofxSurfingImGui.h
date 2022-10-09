@@ -4,18 +4,19 @@
 	TODO:
 
 	GENERAL
+	+ add disabler for store settings
 	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
 	+ fix workflow handling layout presets breaks when Link is enabled.
 	+ fix reset aligners that populates out of the view port.
 		must apply only over special windows maybe ?
 
 	DOCKING
-		+ allow panel and presets dockable too!
-		+ fix make dockeable all windows on same space.
-		+ fix multiple dock spaces that are colliding/one over another.
-		+ fix view-port rectangle preview.
-		+ add video view-port example.
-		+ docking overlaps sometimes on layout management
+	+ allow panel and presets dockable too!
+	+ fix make dockeable all windows on same space.
+	+ fix multiple dock spaces that are colliding/one over another.
+	+ fix view-port rectangle preview.
+	+ add video view-port example.
+	+ docking overlaps sometimes on layout management
 
 	HELPERS
 	+ useful for multidim params
@@ -42,13 +43,14 @@
 		from current GUI editing / first plane page.
 
 	FEATURE
-	+ Probably not required. 
+	+ Probably not required.
 	But could think about linking multiple instances.
 	for example, to share organizer windows:
 	// Link internal stuff
 	ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
 	Probably a better fix/workaround is to rename each common windows on each gui manager instance
 	or the pad between windows setting. we could pass pointers to all instances.
+
 */
 
 
@@ -56,7 +58,9 @@
 
 	BUGS:
 
-	- it seems than special windows engine, puts all toggles to false!
+	- Strings inside paramGroups are not rendered!
+	- It seems than special windows engine
+	puts all toggles to false by default!
 
 */
 
@@ -71,7 +75,7 @@
 	Docking Demo
 	https://github.com/ocornut/imgui/blob/1ad1429c6df657f9694b619d53fa0e65e482f32b/imgui_demo.cpp#L7399-L7408
 
-	Tool-bar Example
+	Tool-Bar Example
 	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
 
 */
@@ -79,59 +83,13 @@
 //--------------------------------------------------------------
 
 /* NOTES */
-/*
-* 
-* Trying rare chars
-string s = "hola";
-ofUTF8Append(s, '▽');
-ui.AddLabel(s);
-
-*/
 
 /*
-
-// HOW TO:
-// RECOMMENDED OR COMMON USAGE
-// TOP SNIPPETS HERE !
-
-// #1
-{
-	// ofApp.h
-	{
-		#include "ofxSurfingImGui.h"
-
-		SurfingGuiManager ui;
-		ofParameter<bool> bGui{ "ShowWindow", true };
-	}
-
-	// ofApp.cpp
-	{
-		// ofApp::setup()
-
-		ui.setup();
-
-		//-------------------------------
-
-		// ofApp::draw()
-
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
-
-		ui.begin();
-		{
-			if(!bGui) return;
-			if (ui.BeginWindow(bGui))
-			{
-				ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
-				if (!ui.bMinimize){}
-
-				//..
-
-				ui.EndWindow();
-			}
-		}
-		ui.end();
-	}
-}
+	//TODO:
+	Trying rare chars text
+	string s = "hola";
+	ofUTF8Append(s, '▽');
+	ui.AddLabel(s);
 */
 
 
@@ -192,6 +150,57 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+// HOW TO:
+// RECOMMENDED OR COMMON USAGE
+// TOP SNIPPETS HERE !
+
+// #1
+{
+	// ofApp.h
+	{
+		#include "ofxSurfingImGui.h"
+
+		ofxSurfingGui ui;
+		ofParameter<bool> bGui{ "ShowWindow", true };
+	}
+
+	// ofApp.cpp
+	{
+		// ofApp::setup()
+		{
+			ui.setup();
+		}
+
+		// ofApp::draw()
+		{
+			if(!bGui_Global) return;
+			
+			ui.begin();
+			{
+				if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+				if (ui.BeginWindow(bGui))
+				{
+					ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+					if (!ui.bMinimize) {
+					}
+
+					//..
+
+					ui.EndWindow();
+				}
+			}
+			ui.end();
+		}
+	}
+}
+*/
+
+
+//----
+
+
+/*
+
 	//--------------------------------------------------------------
 
 	// 1. HOW TO CREATE A WINDOW ?
@@ -231,7 +240,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
-		{ 
+		{
 		}
 	ofxImGui::EndWindow(mainSettings);
 
@@ -325,7 +334,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	//--
 
 	WINDOW CONSTRAINTS FOR SHAPE SIZE
-	
+
 	{
 		ImGuiCond flagsc = ImGuiCond_Appearing;
 		static int type = 0;
@@ -368,7 +377,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	WITH A SNAPPING GRID.
 
 	//--------------------------------------------------------------
-	void Begin(const std::string& name) 
+	void Begin(const std::string& name)
 	{
 		const int snapSz = 20;
 		//const int snapSz = 16;
@@ -402,7 +411,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	}
 
 
-	//--
+	//----
 
 
 	ANOTHER EXTRA BEGIN/END PAIR
@@ -424,8 +433,11 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //----
 
+
 /*
 
+	//TODO:
+	EXAMPLE:
 	ANOTHER WINDOW WITH SNAPPING TO A GRID
 
 	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
@@ -442,6 +454,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	IMGUI INFOS
 
 	auto io = ImGui::GetIO();
@@ -458,6 +471,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	TABS
 
 	if (ImGui::BeginTabBar("Tabs Blah"))
@@ -497,7 +511,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	EXAMPLE:
 	PREV / NEXT DUAL BUTTONS
-	That is implemented now 
+	That is implemented now
 	into a widget called AddComboArrows(..
 
 	{
@@ -575,6 +589,7 @@ using ofxSurfingGui = SurfingGuiManager;
 //--------------------------------------------------------------
 
 
+// EXAMPLE:
 // DEMONSTRATE THE VARIOUS WINDOW FLAGS. TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
 //static bool no_titlebar = false;
@@ -607,11 +622,12 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	GET WINDOW SHAPE. 
+	EXAMPLE:
+	GET WINDOW SHAPE.
 	CALL BETWEEN BEGIN/END
 
 		ofRectangle rect = ofRectangle(
-			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, 
+			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
 			ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 */
@@ -645,6 +661,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	HOW TO CUSTOMIZE FONT
 	AND USE DIFFERENT FONT STYLES?
 
@@ -688,6 +705,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	COMMON LEFT RIGHT ARROWS
 	TO BROWSE AN INDEX
 
@@ -771,7 +789,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 		ImGui::Columns(1);
 
-		//ofxImGuiSurfing::AddVSlider(smoothChannels[i]->ampInput, sz, bNoName, bNoNumber);
+		//ofxImGuiSurfing::AddVSlider(ampInput, sz, bNoName, bNoNumber);
 */
 
 
@@ -781,39 +799,76 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	TODO: WIP:
-	TWO COLUMNS WITH 2 VERTICAL SLIDER WITH A RESET BUTTON ON EACH ONE.
+	TWO COLUMNS WITH 2 VERTICAL SLIDERS
+	USING TWO DIFERENT MODES / TEMPLATES
+	WITH A RESET BUTTON ON EACH ONE.
 
-		//ImGui::Columns(2, "t1", false);
-		//ui.Add(smoothChannels[i]->ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
-		//ui.AddTooltip(ofToString(smoothChannels[i]->ampInput.get(), 2));
-		//ImGui::PushID("##RESET1");
-		//if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-		//	smoothChannels[i]->ampInput = 0;
-		//}
-		//ImGui::PopID();
-		//ImGui::NextColumn();
+		ImGui::Columns(2, "t1", false);
+		ui.Add(ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
+		ui.AddTooltip(ofToString(ampInput.get(), 2));
+		ImGui::PushID("##RESET1");
+		if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+			ampInput = 0;
+		}
+		ImGui::PopID();
+		ImGui::NextColumn();
 
-		//// trigState
-		//if (smoothChannels[i]->bangDetectorIndex == 0)
-		//{
-		//	ui.Add(smoothChannels[i]->threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
-		//	ui.AddTooltip(ofToString(smoothChannels[i]->threshold.get(), 2));
-		//	ImGui::PushID("##RESET2");
-		//	if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-		//		smoothChannels[i]->threshold = 0.5f;
-		//	}
-		//	ImGui::PopID();
-		//}
-		//else if (smoothChannels[i]->bangDetectorIndex == 1)
-		//{
-		//	ImGui::Columns(2, "t2", false);
-		//	ui.Add(smoothChannels[i]->onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
-		//	ImGui::NextColumn();
-		//	ui.Add(smoothChannels[i]->onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
-		//	ImGui::Columns(1);
-		//}
+		// Template A
+		if (bangDetectorIndex == 0)
+		{
+			ui.Add(threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
+			ui.AddTooltip(ofToString(threshold.get(), 2));
+			ImGui::PushID("##RESET2");
+			if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+				threshold = 0.5f;
+			}
+			ImGui::PopID();
+		}
 
-		//ImGui::Columns(1);
+		// Template B
+		else if (bangDetectorIndex == 1)
+		{
+			ImGui::Columns(2, "t2", false);
+			ui.Add(onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
+			ImGui::NextColumn();
+			ui.Add(onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
+			ImGui::Columns(1);
+		}
+
+		ImGui::Columns(1);
+
+*/
+
+
+/*
+
+	THREE COLUMNS WITH A KNOB AND 2 VERTICAL SLIDERS
+	WITH A RESET BUTTON.
+	UI USED AS A POINTER REFERENCED.
+
+		ui->Add(bSmooth, OFX_IM_TOGGLE_ROUNDED_SMALL);
+		if (bSmooth)
+		{
+			ImGui::Columns(3, "", false);
+			ui->Add(smoothGain, OFX_IM_KNOB_DOTKNOB, 3);
+			ImGui::PushID("##R");
+			if (ui->AddButton("Reset", OFX_IM_BUTTON_SMALL, 3)) {
+				smoothGain = 0;
+				smoothVal1 = 0.5;
+				smoothVal2 = 0.5;
+			}
+			ImGui::PopID();
+			ImGui::NextColumn();
+			ui->Add(smoothVal1, OFX_IM_VSLIDER_NO_LABELS, 3);
+			string s;
+			s = smoothVal1.getName() + ofToString(smoothVal1.get(), 2);
+			ui->AddTooltip(s);
+			ImGui::NextColumn();
+			ui->Add(smoothVal2, OFX_IM_VSLIDER_NO_LABELS, 3);
+			s = smoothVal2.getName() + ofToString(smoothVal2.get(), 2);
+			ui->AddTooltip(s);
+			ImGui::Columns(1);
+		}
 
 */
 

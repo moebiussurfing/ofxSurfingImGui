@@ -48,7 +48,9 @@ void ofApp::draw()
         {
             /* widgets goes here */
             ui.AddGroup(params);
-            ..
+						ui.AddSpacing();
+            ui.Add(bEnable, OFX_IM_TOGGLE);
+						ui.Add(value, OFX_IM_HSLIDER_MINI);
 
             ui.EndWindow();
         }
@@ -135,8 +137,9 @@ An add-on by **moebiusSurfing**.
 
 ## THANKS
 
+_Super Thanks to [@Daandelange](https://github.com/Daandelange) for his **ofxImGui** fork._  
 _All source snippets and widgets from other authors are linked into header files. Thanks!_  
-_Thanks [@alptugan](https://github.com/alptugan) for macOS testing._  
+_Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing._  
 
 ## LICENSE
 

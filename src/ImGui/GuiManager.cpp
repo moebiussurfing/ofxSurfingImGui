@@ -32,11 +32,13 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bGui_GameMode);
 	params_Advanced.add(bKeys);
+	params_Advanced.add(bLogKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bMouseWheelFlip);
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
+	params_Advanced.add(bDebugMetrics);
 	params_Advanced.add(bLog);
 	params_Advanced.add(bReset);//TODO:
 	params_Advanced.add(bReset_Window);//TODO:
@@ -1435,6 +1437,8 @@ void SurfingGuiManager::Begin() {
 	// 3. Aligners
 
 	if (bGui_Aligners) drawWindowAlignHelpers();
+
+	if (bDebugMetrics) ImGui::ShowMetricsWindow();
 }
 
 //--------------------------------------------------------------
@@ -3205,6 +3209,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 	// Log
+	if(bLogKeys)
 	if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
 	{
 		std::string ss = "KEY " + ofToString((char)key) + "";

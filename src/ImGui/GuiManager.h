@@ -539,6 +539,9 @@ public:
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
+		////TODO: some subfolders make grow window width..
+		//refreshLayout();
+
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
@@ -916,29 +919,29 @@ public:
 	void AddLabel(std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 		ImGui::TextWrapped(t.c_str());
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelBig(std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 	}
 	//--------------------------------------------------------------
 	void AddLabelHuge(std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped(t.c_str());
 		popStyleFont();
-		if (bSpacing) ofxImGuiSurfing::AddSpacing();
+		if (bSpacing) this->AddSpacing();
 	}
 
 	//--------------------------------------------------------------
@@ -1433,9 +1436,11 @@ public:
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bKeys{ "Keys", true };
+	ofParameter<bool> bLogKeys{ "Log Keys", false };
 	ofParameter<bool> bHelp{ "Help App", false };
 	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bDebug{ "Debug", false };
+	ofParameter<bool> bDebugMetrics{ "Metrics", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bReset{ "Reset", false };
@@ -1755,7 +1760,7 @@ private:
 
 			//--
 
-			ofxImGuiSurfing::AddSpacingSeparated();
+			this->AddSpacingSeparated();
 
 			// Extra
 			Add(bExtra, OFX_IM_TOGGLE_ROUNDED);
@@ -1766,13 +1771,13 @@ private:
 				if (!bHeader || (bHeader && b))
 				{
 					// Windows
-					ofxImGuiSurfing::AddSpacing();
+					this->AddSpacing();
 
 					if (ImGui::TreeNode("MORE"))
 					{
 						this->Indent();
 
-						ofxImGuiSurfing::AddSpacing();
+						this->AddSpacing();
 
 						/*
 						// Align Helpers
@@ -1805,18 +1810,18 @@ private:
 						ImGui::TreePop();
 					}
 
-					ofxImGuiSurfing::AddSpacing();
+					this->AddSpacing();
 
 					//--
 
 					// Gui
-					ofxImGuiSurfing::AddSpacing();
+					this->AddSpacing();
 
 					if (ImGui::TreeNode("GUI"))
 					{
 						this->Indent();
 
-						ofxImGuiSurfing::AddSpacing();
+						this->AddSpacing();
 
 						//// Minimize
 						//Add(bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
@@ -1840,6 +1845,8 @@ private:
 							//drawSpecialWindowsPanel();
 							//ImGui::Separator();
 
+							Add(bDebugMetrics, OFX_IM_TOGGLE_ROUNDED_MINI);
+							this->AddSpacing();
 							Add(bInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
 
@@ -1847,8 +1854,8 @@ private:
 
 							//-
 
-							ofxImGuiSurfing::AddSpacing();
-							ofxImGuiSurfing::AddSpacing();
+							this->AddSpacing();
+							this->AddSpacing();
 
 							if (ImGui::TreeNode("ELEMENTS"))
 							{
@@ -1898,17 +1905,17 @@ private:
 					//--
 
 					// Docking
-					ofxImGuiSurfing::AddSpacing();
+					this->AddSpacing();
 
 					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 					{
-						ofxImGuiSurfing::AddSpacing();
+						this->AddSpacing();
 
 						if (ImGui::TreeNode("DOCKING"))
 						{
 							this->Indent();
 
-							ofxImGuiSurfing::AddSpacing();
+							this->AddSpacing();
 
 							//--
 

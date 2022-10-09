@@ -1060,6 +1060,7 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
+					//TODO; size not implemented here?
 					case OFX_IM_TEXT_BIG:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
@@ -2495,7 +2496,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
 						if (parameterVec3f)
@@ -2509,7 +2510,7 @@ namespace ofxImGuiSurfing
 							continue;
 						}
 
-						//-
+						//--
 
 						auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
 						if (parameterVec4f)

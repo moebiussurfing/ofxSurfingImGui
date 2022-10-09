@@ -207,7 +207,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TEXT_INPUT,//TODO:
 
 		OFX_IM_TEXT_DISPLAY,
-		OFX_IM_TEXT_BIG,//TODO
+		OFX_IM_TEXT_BIG,//TODO:
+		OFX_IM_TEXT_LONG,//TODO: paragraph size
 		//TODO: add labels
 		//OFX_IM_LABEL,//big font not accessible here..
 		//OFX_IM_LABEL_BIG,
