@@ -48,9 +48,9 @@ void ofApp::draw()
         {
             /* widgets goes here */
             ui.AddGroup(params);
-						ui.AddSpacing();
+            ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE);
-						ui.Add(value, OFX_IM_HSLIDER_MINI);
+            ui.Add(value, OFX_IM_HSLIDER_MINI);
 
             ui.EndWindow();
         }
