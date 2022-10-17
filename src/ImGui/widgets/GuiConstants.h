@@ -217,6 +217,7 @@ namespace ofxImGuiSurfing
 
 		// Colors
 
+		OFX_IM_COLOR, // standard
 		OFX_IM_COLOR_INPUT, // standard
 		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
 		OFX_IM_COLOR_NO_INPUTS, // without inputs
@@ -504,8 +505,8 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, -1); \
+ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.75f, -1); \
+ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.30f, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

@@ -740,7 +740,7 @@ public:
 	}
 	// Same that above but with left/right arrows, place to the right.
 	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int> &pIndex, std::vector<std::string> fileNames, bool bCycled = false)
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string> fileNames, bool bCycled = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -1033,7 +1033,7 @@ public:
 	}
 
 	//--
-	
+
 	// Button Repeats
 	//--------------------------------------------------------------
 	void PushButtonRepeat(bool b = true)
@@ -1239,11 +1239,13 @@ public:
 
 	//---
 
-	// Blink helpers
+	// Blink Helpers
 
 //#define BLINK_MIN 0.2f 
 //#define BLINK_MAX 0.5f 
 
+	// Will Blink the contained widgets between begin/end
+	 
 	//--------------------------------------------------------------
 	inline void BeginBlinkFrame(bool bBlink = true)
 	{
@@ -1298,6 +1300,26 @@ public:
 		{
 			ImGui::PopStyleColor();
 		}
+	}
+
+	// Border Highlight without blinking
+	//--------------------------------------------------------------
+	inline void BeginBorderFrame()
+	{
+		float a = 1.f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+	}
+	//--------------------------------------------------------------
+	inline void EndBorderFrame()
+	{
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar(1);
 	}
 
 	//----
@@ -2007,7 +2029,7 @@ public:
 		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
 		*/
 		// use first letter only
-		bGui_Aligners.setName("ALIGNERS "+ ofToString(nameLabel[0]));
+		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
 		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
 		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
 

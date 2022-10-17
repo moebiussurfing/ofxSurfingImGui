@@ -366,9 +366,9 @@ public:
 
 public:
 
-	ofParameter<bool> bGui_MiniPreview{ "MINI PREVIEW", true };
+	ofParameter<bool> bGui_MiniPreview{ "PREVIEW", true };
+	ofParameter<bool> bGui_PreviewBig{ "BIG", false };//big preview can be full screen, docked or draggable.
 	ofParameter<bool> bGui_Extra{ "PREVIEW EXTRA", false };//extra window for settings
-	ofParameter<bool> bGui_PreviewBig{ "BIG", true };//big preview can be full screen, docked or draggable.
 
 	ofParameter<bool> bFullScreen{ "Full Screen", true };//big preview will be drawn on the full screen
 	ofParameter<bool> bInDocked{ "Docked", false };//will occupy the space between docking panels
@@ -429,6 +429,8 @@ public:
 		params.add(rectDraggable.bEditMode);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // setup()
+
+		scaleMode = ofScaleMode(scaleModeIndex.get());
 
 		//-
 

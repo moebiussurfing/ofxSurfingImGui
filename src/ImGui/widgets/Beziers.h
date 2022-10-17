@@ -252,12 +252,12 @@ namespace ImGui
 			}
 		}
 
-		static bool bDebug = false;
-		ImGui::Checkbox("Debug", &bDebug);
+		static bool bEdit = false;
+		ImGui::Checkbox("Debug", &bEdit);
 		// draw preview (cycles every 1s)
 		static clock_t epoch = clock();
 		ImVec4 white(GetStyle().Colors[ImGuiCol_Text]);
-		if (bDebug) {
+		if (bEdit) {
 			for (int i = 0; i < 3; ++i) {
 				double now = ((clock() - epoch) / (double)CLOCKS_PER_SEC);
 				float delta = ((int)(now * 1000) % 1000) / 1000.f; delta += i / 3.f; if (delta > 1) delta -= 1;

@@ -5,6 +5,14 @@
 //#include "ofxSurfingImGui.h"
 #include "ofxImGui.h"
 
+/*
+
+	TODO:
+	add filer search box
+	https://github.com/ocornut/imgui/issues/300
+
+*/
+
 //// Fbo ImGui Window
 //// from ofxMyUtil from https://github.com/Iwanaka
 //
@@ -168,6 +176,9 @@ namespace ofxImGuiSurfing {
 					Clear();
 				}
 
+				static bool AutoScroll = false;
+				ImGui::Checkbox("AutoScroll", &AutoScroll);
+
 				ofxImGuiSurfing::AddSpacingSeparated();
 
 				ImGui::Spacing();
@@ -183,6 +194,9 @@ namespace ofxImGuiSurfing {
 					for (auto& l : logs)
 					{
 						ImGui::TextWrapped("%s", l.c_str());
+
+						if (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+							ImGui::SetScrollHereY(1.0f);
 					}
 				}
 				ImGui::EndChild();

@@ -161,7 +161,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		#include "ofxSurfingImGui.h"
 
 		ofxSurfingGui ui;
-		ofParameter<bool> bGui{ "ShowWindow", true };
+		ofParameter<bool> bGui{ "Show", true };
 	}
 
 	// ofApp.cpp
@@ -173,23 +173,23 @@ using ofxSurfingGui = SurfingGuiManager;
 
 		// ofApp::draw()
 		{
-			if(!bGui_Global) return;
-			
-			ui.begin();
+			ui.Begin();
 			{
 				if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+
 				if (ui.BeginWindow(bGui))
 				{
 					ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+					
 					if (!ui.bMinimize) {
 					}
 
-					//..
+					..
 
 					ui.EndWindow();
 				}
 			}
-			ui.end();
+			ui.End();
 		}
 	}
 }
@@ -500,6 +500,20 @@ using ofxSurfingGui = SurfingGuiManager;
 		}
 		ImGui::EndTabBar();
 	}
+
+*/
+
+
+//--------------------------------------------------------------
+
+
+/*
+ 
+	EXAMPLE:
+	COMBO USING A PARAM INT WITH DEFINED NAMES
+	
+	static vector<string>names{ "IGNORE","LEFT","RIGHT","CENTER" };
+	ui.AddCombo(indexParam, names);
 
 */
 
