@@ -978,6 +978,36 @@ public:
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
+	//--------------------------------------------------------------
+	void AddTooltip(ofAbstractParameter& p, bool bEnabled = true)
+	{
+		string s = p.getName();
+		s += "\n";
+
+		//TODO: add other types
+		if (p.type() == typeid(ofParameter<float>).name())
+		{
+			ofParameter<float> pm = p.cast<float>();
+			s += ofToString(pm.get(), 2);
+		}
+		else if (p.type() == typeid(ofParameter<int>).name())
+		{
+			ofParameter<int> pm = p.cast<int>();
+			s += ofToString(pm.get());
+		}
+		else if (p.type() == typeid(ofParameter<bool>).name())
+		{
+			ofParameter<bool> pm = p.cast<bool>();
+			s += ofToString((pm.get() ? "TRUE" : "FALSE"));
+		}
+		else {
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Type not implemented!");
+			return;
+		}
+
+		this->AddTooltip(s, bEnabled);
+	}
+
 	//----
 
 	// To help API coherence and/or Legacy
@@ -1245,7 +1275,7 @@ public:
 //#define BLINK_MAX 0.5f 
 
 	// Will Blink the contained widgets between begin/end
-	 
+
 	//--------------------------------------------------------------
 	inline void BeginBlinkFrame(bool bBlink = true)
 	{
