@@ -106,7 +106,7 @@ namespace ofxImGuiSurfing
 	{
 		return ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
 	}
-	
+
 	//--------------------------------------------------------------
 	inline float getWidgetsSpacingY()
 	{
@@ -146,13 +146,13 @@ namespace ofxImGuiSurfing
 		__spcy = ImGui::GetStyle().ItemSpacing.y; // y spacing between widgets
 
 		__w100 = ImGui::GetContentRegionAvail().x; // full window panel width
-		
+
 		//TODO:
 		// Not good when multiple levels..
 		// All widths a bit smaller to avoid lateral scroll bar
-		if (bWithScroll) 
+		if (bWithScroll)
 		{
-			ImGuiStyle *style = &ImGui::GetStyle();
+			ImGuiStyle* style = &ImGui::GetStyle();
 			__w100 -= style->ScrollbarSize + __spcx;
 			//__w100 -= 0.8f * style->ScrollbarSize;
 			//__w100 -= __spcx;
@@ -192,7 +192,7 @@ namespace ofxImGuiSurfing
 	// if (ImGui::Button("_Button", ImVec2(w, h))) { }
 
 	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetWidth(float &w, int amntColumns = -1)
+	inline void refreshImGui_WidgetWidth(float& w, int amntColumns = -1)
 	{
 		float __spcx = ImGui::GetStyle().ItemSpacing.x;
 		float __w100 = ImGui::GetContentRegionAvail().x;
@@ -207,7 +207,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void refreshImGui_WidgetHeight(float &h, int amntRows = -1)
+	inline void refreshImGui_WidgetHeight(float& h, int amntRows = -1)
 	{
 		if (amntRows == -1 || amntRows == 1)
 		{
@@ -426,4 +426,37 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
+
+	//----
+
+	// Constraints Helpers
+
+	/*
+	ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0),    ImVec2(-1, FLT_MAX));      // Vertical only
+	ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1),    ImVec2(FLT_MAX, -1));      // Horizontal only
+	ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
+	ImGui::SetNextWindowSizeConstraints(ImVec2(300, 0),   ImVec2(400, FLT_MAX));     // Width 300-400
+	ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0),     ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Square);// Always Square
+	ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0),     ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Step, (void*)100);// Fixed Step
+	*/
+
+	//--------------------------------------------------------------
+	inline void SetWindowContraints(ImVec2 width, ImVec2 height)
+	{
+		ImGui::SetNextWindowSizeConstraints(ImVec2(width.x, height.x), ImVec2(width.y, height.y));
+	}
+	//TODO: Notice that can be called both, they collide.
+	//--------------------------------------------------------------
+	inline void SetWindowContraintsWidth(float widthMin, float widthMax = -1)
+	{
+		if (widthMax == -1) widthMin = widthMax;
+		ImGui::SetNextWindowSizeConstraints(ImVec2(widthMin, 0), ImVec2(widthMax, FLT_MAX)); 
+	}
+	//--------------------------------------------------------------
+	inline void SetWindowContraintsHeight(float heightMin, float heightMax = -1)
+	{
+		if (heightMax == -1) heightMax = heightMin;
+		ImGui::SetNextWindowSizeConstraints(ImVec2(0, heightMin), ImVec2(FLT_MAX, heightMax));
+	}
+
 } // namespace ofxImGuiSurfing
