@@ -142,7 +142,7 @@ public:
 	// ofParameters 
 
 	// Draw styled parameter into ImGui manager
-	// 
+	// NOTE that 4 items per row is the limit yet!
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
