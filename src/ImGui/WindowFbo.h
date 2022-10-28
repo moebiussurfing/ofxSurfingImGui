@@ -403,8 +403,7 @@ public:
 	ofParameter<bool> bAutoResize_Preview{ "Auto Resize", false };
 	ofParameter<bool> bDebug{ "Debug", false };
 
-	std::vector<std::string> scaleModenames =
-	{ "Fill", "Fit", "Center", "Stretch To Fill" };
+	std::vector<std::string> scaleModenames = { "Fill", "Fit", "Center", "Stretch To Fill" };
 	ofParameter<int> scaleModeIndex{ "Scale Mode", 1, 0, 3 };
 
 public:
@@ -412,6 +411,11 @@ public:
 	ofScaleMode scaleMode;//what is applied to the viewport
 
 public:
+
+	//TODO:
+	void init(float w, float h)
+	{
+	}
 
 	void setup()
 	{
@@ -485,6 +489,11 @@ public:
 	{
 		rectDraggable.draw();
 	};
+
+	ofRectangle getRectangle() const {
+		ofRectangle r = rectDraggable;//cast
+		return r;
+	}
 
 	void begin()
 	{

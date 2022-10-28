@@ -1344,7 +1344,9 @@ void SurfingGuiManager::startupFirstFrame()
 // The RAW ImGui widgets and the API / Engine handled stuff too!
 // 
 //--------------------------------------------------------------
-void SurfingGuiManager::Begin() {
+void SurfingGuiManager::Begin()
+{
+	//bInputText=gui.getmouse
 
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
@@ -1469,6 +1471,8 @@ void SurfingGuiManager::End()
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+
+	//bInputText = ofxImGuiSurfing::WidgetsManager::bInputText;
 
 	//--
 

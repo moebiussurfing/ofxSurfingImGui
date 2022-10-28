@@ -3,6 +3,11 @@
 
 	TODO:
 
+	BUG
+	+ add bInputText getter
+	+ fix text input box to full width. no name.
+	+ allow half/third width on progress bar widget.
+
 	GENERAL
 	+ add disabler for store settings
 	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.

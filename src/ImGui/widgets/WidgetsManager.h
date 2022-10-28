@@ -20,7 +20,6 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 //-
-
 namespace ofxImGuiSurfing
 {
 	class WidgetsManager
@@ -50,6 +49,9 @@ namespace ofxImGuiSurfing
 
 		ofParameter<bool> bMouseWheel{ "Mouse Wheel", false };
 		ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
+
+		//TODO:
+		//static bool bInputText;
 
 		//--
 
@@ -689,7 +691,9 @@ namespace ofxImGuiSurfing
 			else if (isBool)
 			{
 				ofParameter<bool> p = aparam.cast<bool>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1026,7 +1030,9 @@ namespace ofxImGuiSurfing
 			else if (isString)
 			{
 				ofParameter<std::string> p = aparam.cast<std::string>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1041,11 +1047,49 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
+					case OFX_IM_TEXT_INPUT_NAMED://TODO:
+					{
+						{
+							int _w = getWidgetsWidth() * 0.9f;
+							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bool b = ImGui::InputText("##NAME", &s);
+								if (b) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+					}
+					break;
+
 					case OFX_IM_TEXT_INPUT://TODO:
 					{
 						{
 							int _w = getWidgetsWidth() * 0.9f;
 							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bool b = ImGui::InputText("##NAME", &s);
+								if (b) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+					}
+					break;
+
+					case OFX_IM_TEXT_INPUT_NO_NAME://TODO:
+					{
+						{
+							string s = tmpRef.c_str();
+							int _w = getWidgetsWidth() * 1.f;
 							ImGui::PushItemWidth(_w);
 							{
 								bool b = ImGui::InputText("##NAME", &s);
@@ -1099,7 +1143,9 @@ namespace ofxImGuiSurfing
 			else if (isFloat)
 			{
 				ofParameter<float> p = aparam.cast<float>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1530,7 +1576,9 @@ namespace ofxImGuiSurfing
 			else if (isInt)
 			{
 				ofParameter<int> p = aparam.cast<int>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1933,7 +1981,9 @@ namespace ofxImGuiSurfing
 			else if (isFloatColor)
 			{
 				ofParameter<ofFloatColor> p = aparam.cast<ofFloatColor>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1984,7 +2034,9 @@ namespace ofxImGuiSurfing
 			else if (isColor)
 			{
 				ofParameter<ofColor> p = aparam.cast<ofColor>();
-				auto tmpRef = p.get();
+				
+				auto & tmpRef = p.get();
+				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -2355,7 +2407,8 @@ namespace ofxImGuiSurfing
 				// Here, this is not the root/first group.
 				// We go populate the params widgets
 
-				for (auto parameter : group)
+				for (auto & parameter : group)
+				//for (auto parameter : group)
 				{
 					// 5.1 Group Parameter
 
@@ -2364,7 +2417,8 @@ namespace ofxImGuiSurfing
 					// This will not be the Group from the 0'th/root/parent level.
 					//--------------------------------------------------------------
 
-					auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+					auto & parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+					//auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 
 					// Will detect nested groups recursively
 					if (parameterGroup)
@@ -2614,7 +2668,9 @@ namespace ofxImGuiSurfing
 
 						// FLOAT
 
-						auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+						auto & parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+						//auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+						
 						if (parameterFloat)
 						{
 							auto c = getStyle(*parameterFloat);
@@ -2637,7 +2693,9 @@ namespace ofxImGuiSurfing
 
 						// INT
 
-						auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+						auto & parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+						//auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+						
 						if (parameterInt)
 						{
 							auto c = getStyle(*parameterInt);
@@ -2658,7 +2716,9 @@ namespace ofxImGuiSurfing
 
 						// BOOL
 
-						auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+						auto & parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+						//auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+						
 						if (parameterBool)
 						{
 							//TODO:
@@ -2685,7 +2745,9 @@ namespace ofxImGuiSurfing
 
 						// STRING
 
-						auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+						auto & parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+						//auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+						
 						if (parameterString)
 						{
 							auto c = getStyle(*parameterString);
@@ -2706,7 +2768,9 @@ namespace ofxImGuiSurfing
 
 						// FLOAT COLOR
 
-						auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						auto & parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						//auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						
 						if (parameterFloatColor)
 						{
 							auto c = getStyle(*parameterFloatColor);
@@ -2730,7 +2794,9 @@ namespace ofxImGuiSurfing
 
 						// COLOR
 
-						auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						auto & parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						//auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						
 						if (parameterColor)
 						{
 							auto c = getStyle(*parameterColor);
