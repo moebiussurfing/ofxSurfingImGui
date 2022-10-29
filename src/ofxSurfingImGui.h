@@ -24,6 +24,7 @@
 	+ docking overlaps sometimes on layout management
 
 	HELPERS
+	+ make colors smaller. multiline
 	+ useful for multidim params
 	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
 	+ fix fails ofParams for string on groups
@@ -677,6 +678,17 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 
+/*
+
+	EXAMPLE: 
+	INPUT TEXT WITH HUGE EXTRA FONT
+	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
+	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
+	{
+	};
+	ui.popStyleFont();
+
+*/
 
 /*
 

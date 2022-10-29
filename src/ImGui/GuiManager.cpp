@@ -289,6 +289,9 @@ void SurfingGuiManager::setupImGuiFonts()
 		// Font huge
 		pushFont(_path + _fontName, _fontSizeParam * 2.5f); // queue huge font too
 
+		// Font huge extra
+		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge font too
+
 		//--
 
 		// Set default

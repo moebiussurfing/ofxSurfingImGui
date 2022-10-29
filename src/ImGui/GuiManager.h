@@ -27,6 +27,19 @@
 //#define FIXING_DOCKING		// Need to fix yet
 #define FIXING_DRAW_VIEWPORT	// To debug free space
 
+// Font sizes
+#define IM_FONT_NORMAL 0
+#define IM_FONT_BIG 1
+#define IM_FONT_HUGE 2
+#define IM_FONT_HUGE_EXTRA 3
+/*
+* Example: Input text with huge font
+	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
+	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
+	{
+	};
+	ui.popStyleFont();
+*/
 //--
 
 using namespace ofxImGuiSurfing;
@@ -1112,6 +1125,20 @@ public:
 	void Separator()
 	{
 		ImGui::Separator();
+	}
+
+	// Make widgets a bit smaller.
+	// Useful when sliders make to grow the window automatically.
+	//--------------------------------------------------------------
+	void PushWidth(float prc)
+	{
+		float w = prc * this->getWidgetsWidth(1);
+		ImGui::PushItemWidth(w);
+	}
+	//--------------------------------------------------------------
+	void PopWidth()
+	{
+		ImGui::PopItemWidth();
 	}
 
 	//----
