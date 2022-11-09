@@ -4,7 +4,7 @@
 	TODO:
 
 	BUG
-	+ add bInputText getter
+	+ add bOverInputText getter
 	+ fix text input box to full width. no name.
 	+ allow half/third width on progress bar widget.
 

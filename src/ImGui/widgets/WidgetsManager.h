@@ -50,9 +50,6 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bMouseWheel{ "Mouse Wheel", false };
 		ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
 
-		//TODO:
-		//static bool bInputText;
-
 		//--
 
 	private:
@@ -1047,6 +1044,16 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
+					//TODO: size not implemented here?
+					//maybe can be accesses by the imgui pointer?
+					case OFX_IM_TEXT_BIG:
+					{
+						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+						ImGui::TextWrapped(tmpRef.c_str());
+						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+					}
+					break;
+
 					case OFX_IM_TEXT_INPUT_NAMED://TODO:
 					{
 						{
@@ -1054,8 +1061,8 @@ namespace ofxImGuiSurfing
 							string s = tmpRef.c_str();
 							ImGui::PushItemWidth(_w);
 							{
-								bool b = ImGui::InputText("##NAME", &s);
-								if (b) {
+								bReturn= ImGui::InputText("##NAME", &s);
+								if (bReturn) {
 									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
 									p.set(s);
 								}
@@ -1073,8 +1080,8 @@ namespace ofxImGuiSurfing
 							string s = tmpRef.c_str();
 							ImGui::PushItemWidth(_w);
 							{
-								bool b = ImGui::InputText("##NAME", &s);
-								if (b) {
+								bReturn = ImGui::InputText("##NAME", &s);
+								if (bReturn) {
 									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
 									p.set(s);
 								}
@@ -1092,8 +1099,8 @@ namespace ofxImGuiSurfing
 							int _w = getWidgetsWidth() * 1.f;
 							ImGui::PushItemWidth(_w);
 							{
-								bool b = ImGui::InputText("##NAME", &s);
-								if (b) {
+								bReturn = ImGui::InputText("##NAME", &s);
+								if (bReturn) {
 									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
 									p.set(s);
 								}
@@ -1101,15 +1108,6 @@ namespace ofxImGuiSurfing
 							ImGui::PopItemWidth();
 						}
 						////ofxImGuiSurfing::AddParameter(p);//cant be included?
-					}
-					break;
-
-					//TODO; size not implemented here?
-					case OFX_IM_TEXT_BIG:
-					{
-						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						ImGui::TextWrapped(tmpRef.c_str());
-						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
 

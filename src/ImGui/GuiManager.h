@@ -144,7 +144,7 @@ private:
 
 private:
 
-	WidgetsManager widgetsManager;
+	WidgetsManager _ui;
 
 	//----
 
@@ -159,21 +159,21 @@ public:
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		return widgetsManager.Add(aparam, type, amtPerRow, bSameLine, spacing);
+		return _ui.Add(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
 	{
-		return widgetsManager.Add(aparam, type, amtPerRow, flags);
+		return _ui.Add(aparam, type, amtPerRow, flags);
 	}
 
 	//TODO: New API
 	// Final step method, Draws using an absolute width
 	//-----------------------------------------------------------------
 	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
-		//return widgetsManager.Add(aparam, type, width, bSameLine, spacing, flags);
+		//return _ui.Add(aparam, type, width, bSameLine, spacing, flags);
 	//}
 
 	////-----------------------------------------------------------------
@@ -181,13 +181,13 @@ public:
 	//	bool bSameLine = false; 
 	//	int spacing = -1;
 
-	//		return widgetsManager.Add(aparam, type, width, bSameLine, spacing, flags);
+	//		return _ui.Add(aparam, type, width, bSameLine, spacing, flags);
 	//}
 
 	////TODO avoid multiple ambiguous
 	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type) 
 	//{
-	//	return widgetsManager.Add(aparam, type, -1, false, -1, SurfingGuiFlags_None);
+	//	return _ui.Add(aparam, type, -1, false, -1, SurfingGuiFlags_None);
 	// }
 
 	//----
@@ -198,26 +198,26 @@ public:
 	//--------------------------------------------------------------
 	void AddStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		widgetsManager.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
+		_ui.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		widgetsManager.AddStyle(name, type, amtPerRow, bSameLine, spacing);
+		_ui.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Update style for the parameter
 	//--------------------------------------------------------------
 	void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		widgetsManager.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
+		_ui.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
 	}
 	//--------------------------------------------------------------
 	void UpdateStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		widgetsManager.UpdateStyle(name, type, amtPerRow, bSameLine, spacing);
+		_ui.UpdateStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//--
@@ -229,22 +229,22 @@ public:
 	//--------------------------------------------------------------
 	void AddStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.AddStyleGroup(group, type, flags);
+		_ui.AddStyleGroup(group, type, flags);
 	}
 	//--------------------------------------------------------------
 	void AddStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.AddStyleGroup(name, type, flags);
+		_ui.AddStyleGroup(name, type, flags);
 	}
 	//--------------------------------------------------------------
 	void UpdateStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.UpdateStyleGroup(group, type, flags);
+		_ui.UpdateStyleGroup(group, type, flags);
 	}
 	//--------------------------------------------------------------
 	void UpdateStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		widgetsManager.UpdateStyleGroup(name, type, flags);
+		_ui.UpdateStyleGroup(name, type, flags);
 	}
 
 	//TODO: new API
@@ -260,7 +260,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			widgetsManager.AddStyleGroup(name, type, flagst);
+			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 
@@ -268,7 +268,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.AddStyleGroup(name, type, flagst);
+			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 
@@ -280,17 +280,17 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			widgetsManager.AddStyleGroup(name, type, flagst);
+			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			widgetsManager.AddStyleGroup(name, type, flagst);
+			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 
-		widgetsManager.AddStyleGroup(name, type, flagst);
+		_ui.AddStyleGroup(name, type, flagst);
 	}
 
 	//TODO:
@@ -306,7 +306,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			widgetsManager.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(group, type, flagst);
 			return;
 		}
 
@@ -314,7 +314,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(group, type, flagst);
 			return;
 		}
 
@@ -326,17 +326,17 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			widgetsManager.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(group, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			widgetsManager.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(group, type, flagst);
 			return;
 		}
 
-		widgetsManager.AddStyleGroup(group, type, flagst);
+		_ui.AddStyleGroup(group, type, flagst);
 	}
 
 	//--------------------------------------------------------------
@@ -351,7 +351,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 
@@ -359,7 +359,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 
@@ -371,17 +371,17 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			widgetsManager.UpdateStyleGroup(name, type, flagst);
+			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 
-		widgetsManager.UpdateStyleGroup(name, type, flagst);
+		_ui.UpdateStyleGroup(name, type, flagst);
 	}
 
 	//TODO:
@@ -397,7 +397,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(group, type, flagst);
 			return;
 		}
 
@@ -405,7 +405,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(group, type, flagst);
 			return;
 		}
 
@@ -417,17 +417,17 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(group, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			widgetsManager.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(group, type, flagst);
 			return;
 		}
 
-		widgetsManager.UpdateStyleGroup(group, type, flagst);
+		_ui.UpdateStyleGroup(group, type, flagst);
 	}
 
 	//--
@@ -441,7 +441,7 @@ public:
 		{
 			ofAbstractParameter& ap = group[i];
 			if (ap.type() == typeid(ofParameter<bool>).name()) {
-				widgetsManager.AddStyle(ap, type);
+				_ui.AddStyle(ap, type);
 			}
 
 			//TODO: make it recursive
@@ -457,7 +457,7 @@ public:
 		{
 			ofAbstractParameter& ap = group[i];
 			if (ap.type() == typeid(ofParameter<float>).name()) {
-				widgetsManager.AddStyle(ap, type);
+				_ui.AddStyle(ap, type);
 			}
 		}
 	}
@@ -468,7 +468,7 @@ public:
 		{
 			ofAbstractParameter& ap = group[i];
 			if (ap.type() == typeid(ofParameter<int>).name()) {
-				widgetsManager.AddStyle(ap, type);
+				_ui.AddStyle(ap, type);
 			}
 		}
 	}
@@ -479,13 +479,13 @@ public:
 	//--------------------------------------------------------------
 	void clearStyles()
 	{
-		widgetsManager.clear(); // update sizes to current window shape
+		_ui.clear(); // update sizes to current window shape
 	}
 
 	//--------------------------------------------------------------
 	void ClearStyles()
 	{
-		widgetsManager.clear(); // update sizes to current window shape
+		_ui.clear(); // update sizes to current window shape
 	}
 
 	//--
@@ -530,12 +530,12 @@ public:
 
 	// Styles Engine
 	// 
-	// widgetsManager
+	// _ui
 
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
 	{
-		widgetsManager.AddGroup(group, flags, typeGroup, cond);
+		_ui.AddGroup(group, flags, typeGroup, cond);
 	}
 
 	//--------------------------------------------------------------
@@ -545,7 +545,7 @@ public:
 		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
 		SurfingGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
 
-		widgetsManager.AddGroup(group, flags, typeGroup, cond);
+		_ui.AddGroup(group, flags, typeGroup, cond);
 	}
 
 	//TODO:
@@ -564,7 +564,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_None)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.AddGroup(group, flagst, type);
+			_ui.AddGroup(group, flagst, type);
 
 			return;
 		}
@@ -572,7 +572,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			widgetsManager.AddGroup(group, flagst, type);
+			_ui.AddGroup(group, flagst, type);
 
 			return;
 		}
@@ -581,7 +581,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			widgetsManager.AddGroup(group, flagst, type);
+			_ui.AddGroup(group, flagst, type);
 
 			return;
 		}
@@ -591,7 +591,7 @@ public:
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 
 			//// ? return ?
-			//widgetsManager.AddGroup(group, flagst, type);
+			//_ui.AddGroup(group, flagst, type);
 
 			//return;
 		}
@@ -599,19 +599,19 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			widgetsManager.AddGroup(group, flagst, type);
+			_ui.AddGroup(group, flagst, type);
 
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			widgetsManager.AddGroup(group, flagst, type);
+			_ui.AddGroup(group, flagst, type);
 
 			return;
 		}
 
-		widgetsManager.AddGroup(group, flagst, type);
+		_ui.AddGroup(group, flagst, type);
 	}
 
 	//----
@@ -624,7 +624,7 @@ public:
 
 		if (this->BeginWindow((string)group.getName(), NULL, flags))
 		{
-			widgetsManager.AddGroup(group, flags, typeGroup);
+			_ui.AddGroup(group, flags, typeGroup);
 
 			this->EndWindow();
 		}
@@ -639,7 +639,7 @@ public:
 		//if (this->BeginWindow((string)group.getName(), _bGui, flags))
 		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
 		{
-			widgetsManager.AddGroup(group, flags, typeGroup);
+			_ui.AddGroup(group, flags, typeGroup);
 
 			this->EndWindow();
 		}
@@ -657,7 +657,7 @@ public:
 		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
 		{
 			this->AddGroup(group, flags);
-			//widgetsManager.AddGroup(group, flags);
+			//_ui.AddGroup(group, flags);
 
 			this->EndWindow();
 		}
@@ -671,7 +671,7 @@ public:
 		if (this->BeginWindow((string)group.getName(), NULL, f))
 		{
 			this->AddGroup(group, flags);
-			//widgetsManager.AddGroup(group, flags);
+			//_ui.AddGroup(group, flags);
 
 			this->EndWindow();
 		}
@@ -1097,12 +1097,12 @@ public:
 	//--------------------------------------------------------------
 	void refreshLayout()
 	{
-		widgetsManager.refreshLayout(); // update sizes to current window shape
+		_ui.refreshLayout(); // update sizes to current window shape
 	}
 	//--------------------------------------------------------------
 	void resetUniqueNames()
 	{
-		widgetsManager.resetUniqueNames(); // update sizes to current window shape
+		_ui.resetUniqueNames(); // update sizes to current window shape
 	}
 
 	//--
@@ -1491,8 +1491,8 @@ public:
 
 	//TODO: WIP
 	//--------------------------------------------------------------
-	bool isOverInputText() {
-		return bInputText;
+	bool isOverInputText() const {
+		return bOverInputText;
 	}
 
 	//----
@@ -1590,10 +1590,12 @@ private:
 	ofParameterGroup params_WindowPanels{ "Window Panels" };
 	ofParameterGroup params_WindowsEngine{ "Engine Windows" };
 
-private:
+public:
 
+	ofParameter<bool> bOverInputText{ "Input Text", false }; // user is over a text input
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
-	ofParameter<bool> bInputText{ "Input Text", false }; // user is over a text input
+
+private:
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
 	//--
 
@@ -1926,7 +1928,7 @@ private:
 
 							Add(bDebugMetrics, OFX_IM_TOGGLE_ROUNDED_MINI);
 							this->AddSpacing();
-							Add(bInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
+							Add(bOverInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 							//AddToggleRoundedButton(bDrawView1);
@@ -3236,7 +3238,7 @@ public:
 
 		// widget width
 		// we get the sizes from the canvas layout!
-		float _ww = widgetsManager.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
 		float _h = getWidgetsHeightUnit();
 
 		switch (type)
@@ -3407,7 +3409,7 @@ public:
 
 		// Widget width
 		// We get the sizes from the canvas layout!
-		float _ww = widgetsManager.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
 		float _h = getWidgetsHeightUnit();
 
 		switch (type)

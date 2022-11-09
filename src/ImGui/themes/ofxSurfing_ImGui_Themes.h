@@ -66,9 +66,11 @@ namespace ofxImGuiSurfing
 	{
 		ofLogNotice(__FUNCTION__);
 
+		ImGuiStyle *style = &ImGui::GetStyle();
+
 		//-
 
-		ImGuiStyle *style = &ImGui::GetStyle();
+		// Sizes
 
 		style->ItemInnerSpacing = ImVec2(5, 4);
 		style->ItemSpacing = ImVec2(6, 4);
@@ -87,16 +89,18 @@ namespace ofxImGuiSurfing
 		style->FrameBorderSize = 1;
 
 		style->FramePadding = ImVec2(6, 4);
+		//style->FramePadding = ImVec2(6, 6);//breaks a bit
+		//style->FramePadding = ImVec2(8, 8);
 		//style->FramePadding = ImVec2(8,6);
-		//style->FramePadding = ImVec2(8,8);
 
 		style->WindowRounding = 2;
 		style->WindowBorderSize = 1;
-		//style->WindowPadding = ImVec2(20,20);
-		
-		//style->header= 1;
+
+		style->WindowPadding = ImVec2(10, 10);
 
 		//-
+
+		// Colors
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 

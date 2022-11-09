@@ -180,8 +180,8 @@ void SurfingGuiManager::setupInitiate()
 	//--
 
 	// MouseWheel link
-	widgetsManager.bMouseWheel.makeReferenceTo(bMouseWheel);
-	widgetsManager.bMouseWheelFlip.makeReferenceTo(bMouseWheelFlip);
+	_ui.bMouseWheel.makeReferenceTo(bMouseWheel);
+	_ui.bMouseWheelFlip.makeReferenceTo(bMouseWheelFlip);
 
 	// MouseWheel link
 	windowsOrganizer.bDebug.makeReferenceTo(bDebug);
@@ -1349,8 +1349,6 @@ void SurfingGuiManager::startupFirstFrame()
 //--------------------------------------------------------------
 void SurfingGuiManager::Begin()
 {
-	//bInputText=gui.getmouse
-
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
@@ -1475,7 +1473,19 @@ void SurfingGuiManager::End()
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
 	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
 
-	//bInputText = ofxImGuiSurfing::WidgetsManager::bInputText;
+	ImGuiIO& io = ImGui::GetIO();
+	bOverInputText = io.WantTextInput;
+
+	//// Debug
+	//{
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
+	//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
+	//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
+	//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
+	//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
+	//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
+	//}
 
 	//--
 
@@ -1659,7 +1669,7 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 
 	// Refresh layout
 	// Calculates sizes related to current window shape/size.
-	widgetsManager.refreshLayout();
+	_ui.refreshLayout();
 
 	return b;
 }
@@ -3204,7 +3214,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 //--------------------------------------------------------------
 void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 {
-	if (!bKeys) return;
+	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
@@ -3382,6 +3392,8 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 //--------------------------------------------------------------
 void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 {
+	if (!bKeys || this->bOverInputText) return;
+	
 	const int& key = eventArgs.key;
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
 
