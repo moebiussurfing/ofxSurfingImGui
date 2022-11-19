@@ -255,10 +255,10 @@ void SurfingGuiManager::setupImGuiFonts()
 	float _fontSizeParam;
 
 	// WARNING: will not crash or notify you if the font files are not present!
-	_fontName = FONT_DEFAULT_FILE; 
+	_fontName = FONT_DEFAULT_FILE;
 	_fontSizeParam = FONT_DEFAULT_SIZE;
 
-	std::string _path = "assets/fonts/"; 
+	std::string _path = "assets/fonts/";
 	// assets folder
 
 	// To check if default font file exists
@@ -289,8 +289,8 @@ void SurfingGuiManager::setupImGuiFonts()
 		// Font huge
 		pushFont(_path + _fontName, _fontSizeParam * 2.5f); // queue huge font too
 
-		// Font huge extra
-		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge font too
+		// Font huge xxl
+		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge xxl font too
 
 		//--
 
@@ -947,7 +947,7 @@ void SurfingGuiManager::drawLayoutsManager()
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightRelative();
 
 		//--
-		
+
 		if (!bGui_LayoutsPanels)
 		{
 			// Panels
@@ -1509,6 +1509,15 @@ bool SurfingGuiManager::BeginWindow(char* name)
 	bool b = BeginWindow((string)name, NULL, fg);
 	// required to avoid exceptions when minimizing the window.
 	if (!b) this->EndWindow();
+
+	return b;
+}
+
+//--------------------------------------------------------------
+bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags)
+{
+	std::string n = name;
+	bool b = BeginWindow(n, NULL, window_flags);
 
 	return b;
 }
@@ -2394,7 +2403,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
 
 		// Manager
-		 
+
 		//if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
 		if (!bMinimize_Presets) this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
 
@@ -2469,8 +2478,8 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		}
 
 		//--
-		
-		if (!bMinimize_Presets) 
+
+		if (!bMinimize_Presets)
 		{
 			// Extra Params 
 
@@ -3226,12 +3235,12 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 	// Log
-	if(bLogKeys)
-	if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
-	{
-		std::string ss = "KEY " + ofToString((char)key) + "";
-		log.AddText(ss);
-	}
+	if (bLogKeys)
+		if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
+		{
+			std::string ss = "KEY " + ofToString((char)key) + "";
+			log.AddText(ss);
+		}
 
 	//-
 
@@ -3393,7 +3402,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 {
 	if (!bKeys || this->bOverInputText) return;
-	
+
 	const int& key = eventArgs.key;
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
 

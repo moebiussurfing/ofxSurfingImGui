@@ -156,49 +156,66 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-// HOW TO:
-// RECOMMENDED OR COMMON USAGE
-// TOP SNIPPETS HERE !
+	// HOW TO MINIMAL:
 
-// #1
-{
-	// ofApp.h
-	{
-		#include "ofxSurfingImGui.h"
+	#include "ofxSurfingImGui.h"
+	ofxSurfingGui ui;
 
-		ofxSurfingGui ui;
-		ofParameter<bool> bGui{ "Show", true };
+	ui.Begin();
+	if (ui.BeginWindow()) {
+
+		ui.EndWindow();
 	}
+	ui.End();
 
-	// ofApp.cpp
+/*
+
+
+/*
+
+	// HOW TO:
+	// RECOMMENDED OR COMMON USAGE
+	// TOP SNIPPETS HERE !
+
+	// #1
 	{
-		// ofApp::setup()
+		// ofApp.h
 		{
-			ui.setup();
+			#include "ofxSurfingImGui.h"
+
+			ofxSurfingGui ui;
+			ofParameter<bool> bGui{ "Show", true };
 		}
 
-		// ofApp::draw()
+		// ofApp.cpp
 		{
-			ui.Begin();
+			// ofApp::setup()
 			{
-				if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
-
-				if (ui.BeginWindow(bGui))
-				{
-					ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
-					
-					if (!ui.bMinimize) {
-					}
-
-					..
-
-					ui.EndWindow();
-				}
+				ui.setup();
 			}
-			ui.End();
+
+			// ofApp::draw()
+			{
+				ui.Begin();
+				{
+					if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+
+					if (ui.BeginWindow(bGui))
+					{
+						ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
+
+						if (!ui.bMinimize) {
+						}
+
+						..
+
+						ui.EndWindow();
+					}
+				}
+				ui.End();
+			}
 		}
 	}
-}
 */
 
 
@@ -211,7 +228,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	// 1. HOW TO CREATE A WINDOW ?
 
-	THESE ARE DEPRECATED/LEGACY MODES THAT DO NOT USES THE ADDON POWERED API !
+	THESE ARE DEPRECATED/LEGACY MODES
+	THAT DO NOT USES THE ADDON POWERED API !
 
 	//---
 
@@ -256,7 +274,16 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	// 2. TREES
 
-	// 2.1 Simple TREE (no framed)
+	// 2.0 Simple TREE
+
+	if (ui.BeginTree("COLORS")) {
+		//.. -> widgets
+		ui.EndTree();
+	}
+
+	//----
+
+	// 2.1 Simple TREE LEGACY (no framed)
 
 	if (ImGui::TreeNode("_Tree"))
 	{
@@ -442,7 +469,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	//TODO:
+	TODO:
 	EXAMPLE:
 	ANOTHER WINDOW WITH SNAPPING TO A GRID
 
@@ -514,10 +541,10 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 /*
- 
+
 	EXAMPLE:
 	COMBO USING A PARAM INT WITH DEFINED NAMES
-	
+
 	static vector<string>names{ "IGNORE","LEFT","RIGHT","CENTER" };
 	ui.AddCombo(indexParam, names);
 
@@ -555,30 +582,55 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
 /*
 
 	EXAMPLE:
 	ADD MOUSE WHEEL TO THE FLOAT PARAM
 
-		ofxImGuiSurfing::AddParameter(bpm);
+	ofxImGuiSurfing::AddParameter(bpm);
 
-		// Add mouse wheel to the float param
+	// Add mouse wheel to the float param
+	{
+		float wheel = ImGui::GetIO().MouseWheel;
+		bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
 		{
-			float wheel = ImGui::GetIO().MouseWheel;
-			bool bCtrl = ImGui::GetIO().KeyCtrl; // ctrl to fine tunning
-			{
-				ofParameter<float> p = dynamic_cast<ofParameter<float>&>(bpm);
-				float resolution = -1;
+			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(bpm);
+			float resolution = -1;
 
-				resolution = (p.getMax() - p.getMin()) / 800.f;//make smaller
+			resolution = (p.getMax() - p.getMin()) / 800.f;//make smaller
 
-				//resolution = (p.getMax() - p.getMin()) / 100.f;
-				// 100 steps for all the param range
+			//resolution = (p.getMax() - p.getMin()) / 100.f;
+			// 100 steps for all the param range
 
-				p += wheel * (bCtrl ? resolution : resolution * 10);
-				p = ofClamp(p, p.getMin(), p.getMax()); // clamp
-			}
+			p += wheel * (bCtrl ? resolution : resolution * 10);
+			p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 		}
+	}
+
+*/
+
+
+/*
+
+	EXAMPLE
+	RESPONSIVE LAYOUT
+	2 DOUBLE HEIGHT BUTTONS IN ONE LINE +
+	3 SINGLE HEIGHT BUTTONS IN ONE LINE
+	WITH DIFFERENT PROPORTIONS
+
+	float w = ImGui::GetContentRegionAvail().x; // free x space or window width available
+	float h = ImGui::GetFrameHeight(); // single unit height
+	float hh = 2 * h; // double unit height
+	float spx = ImGui::GetStyle().ItemSpacing.x; // x spacing between each widgets on the same line
+	ImGui::Button("B1", ImVec2(w * 0.25 - spx, hh));
+	ImGui::SameLine();
+	ImGui::Button("B2", ImVec2(w * 0.75 - spx, hh));
+	ImGui::Button("B3", ImVec2(w * 1 / 3.f - spx, h));
+	ImGui::SameLine();
+	ImGui::Button("B4", ImVec2(w * 1 / 3.f - spx, h));
+	ImGui::SameLine();
+	ImGui::Button("B5", ImVec2(w * 1 / 3.f - spx, h));
 
 */
 
@@ -678,9 +730,10 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 
+
 /*
 
-	EXAMPLE: 
+	EXAMPLE:
 	INPUT TEXT WITH HUGE EXTRA FONT
 	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
 	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
@@ -689,6 +742,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	ui.popStyleFont();
 
 */
+
 
 /*
 
@@ -903,5 +957,11 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
+/*
+
+IMGUI_SUGAR__DEBUG_POINT(bDebug);
+
+*/
 
 //--------------------------------------------------------------

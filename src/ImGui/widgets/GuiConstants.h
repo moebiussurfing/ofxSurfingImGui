@@ -36,6 +36,19 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//--------------------------------------------------------------
+	enum SurfingFontTypes
+	{
+		OFX_IM_FONT_DEFAULT = 0,
+		OFX_IM_FONT_BIG,
+		OFX_IM_FONT_HUGE,
+		OFX_IM_FONT_HUGE_XXL,
+
+		OFX_IM_FONT_AMOUNT
+	};
+
+	//--
+
 	// NOTE:
 	// Now, these sizes are usually related to height! 
 	// Because widgets widths are handled by the API args!
@@ -371,7 +384,7 @@ namespace ofxImGuiSurfing
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PopItemWidth(); }
 
 #endif
-	
+
 	//--
 
 	//// B. Using an absolute size
@@ -528,36 +541,47 @@ ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
-	//----
+//----
 
-	// 4.
+// 4.
 
-	// Helper
-	//
-	// Draws a point on the ImGui cursor position for debugging when designing widgets
-	// 
-	//#define IMGUI_SUGAR__TEST_POINT \ 
-	//	{ \
-	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
-	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
-	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
-	//	} \
-	//
-	//#define IMGUI_SUGAR__TEST_POINT \ 
-	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
-	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
-	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+// Helper
+//
+// Draws a point on the ImGui cursor position for debugging when designing widgets
+// 
+//#define IMGUI_SUGAR__TEST_POINT \ 
+//	{ \
+//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+//	} \
+//
+//#define IMGUI_SUGAR__TEST_POINT \ 
+//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
 
-	//----
+//----
 
-	//// NOTES
-	//
-	////ImGui::SetCursorPosX(ImGui::GetCursorPosX() + sztx.x);
-	////ImGui::SetCursorPosY(ImGui::GetCursorPosY() + sztx.y);
-	//
-	////IMGUI_SUGAR__TEST_POINT;
-	//
-	//const ImVec2 pdebug = ImGui::GetCursorScreenPos();
-	//draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//can't use macros..
+//// NOTES
+//
+////ImGui::SetCursorPosX(ImGui::GetCursorPosX() + sztx.x);
+////ImGui::SetCursorPosY(ImGui::GetCursorPosY() + sztx.y);
+//
+////IMGUI_SUGAR__TEST_POINT;
+//
+//const ImVec2 pdebug = ImGui::GetCursorScreenPos();
+//draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//can't use macros..
 
-}
+
+//----
+
+
+// DEBUG WIDGETS
+
+// Draws a point on current cursor passing color
+#define IMGUI_SUGAR__DEBUG_POINT(argColor) ImGui::GetWindowDrawList()->AddCircleFilled(ImGui::GetCursorScreenPos(), 1, ImGui::GetColorU32(argColor), 25);
+
+// Passing color and point
+#define IMGUI_SUGAR__DEBUG_POINT2(argColor, argPoint) ImGui::GetWindowDrawList()->AddCircleFilled(argPoint, 1, ImGui::GetColorU32(argColor), 25);
+};

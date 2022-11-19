@@ -926,8 +926,34 @@ public:
 
 	//----
 
-	// Text with Uppercasing and Spacing
+	// MULTISIZE LABELS
 
+	// Text with optional Uppercasing and Spacing
+
+	//--------------------------------------------------------------
+	void AddLabel(std::string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false)
+	{
+		switch (fontType)
+		{
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->pushStyleFont(3); break;
+		}
+
+		std::string t = bUppercase ? ofToUpper(label) : label;
+		if (bSpacing) this->AddSpacing();
+		ImGui::TextWrapped(t.c_str());
+		if (bSpacing) this->AddSpacing();
+
+		switch (fontType)
+		{
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->popStyleFont(); break;
+		}
+	}
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
@@ -956,11 +982,43 @@ public:
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
+	//--------------------------------------------------------------
+	void AddLabelHugeXXL(std::string label, bool bUppercase = false, bool bSpacing = false)
+	{
+		std::string t = bUppercase ? ofToUpper(label) : label;
+		if (bSpacing) this->AddSpacing();
+		pushStyleFont(3);
+		ImGui::TextWrapped(t.c_str());
+		popStyleFont();
+		if (bSpacing) this->AddSpacing();
+	}
 
 	//--------------------------------------------------------------
-	void AddLinkURL(string label, string url, bool bBlink = false)
+	void AddLinkUrlButton(string label, string url, bool bBlink = false)
 	{
-		ofxImGuiSurfing::AddLinkURL(label.c_str(), url.c_str(), 1.0f, bBlink);
+		ofxImGuiSurfing::AddLinkUrlButton(label.c_str(), url.c_str(), 1.0f, bBlink);
+	}
+
+	//--------------------------------------------------------------
+	void AddLinkUrlLabel(string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT, bool bBlink = true)
+	{
+		switch (fontType)
+		{
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->pushStyleFont(3); break;
+		}
+
+		ofxImGuiSurfing::AddLinkUrlLabel(label.c_str(), url.c_str(), bBlink);
+
+		switch (fontType)
+		{
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->popStyleFont(); break;
+		}
 	}
 
 	//--
@@ -1259,6 +1317,7 @@ public:
 	bool BeginWindow(std::string name, bool* p_open);
 	bool BeginWindow(std::string name);
 	bool BeginWindow(char* name = "Window");
+	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
 
 	//--
 
@@ -1270,9 +1329,23 @@ public:
 	// 
 	// Tree / Folders Helpers
 	// 
-	//TODO: could improve by doing open stat handled by ImGui.. now is forced
+	//TODO: could improve by doing open state handled by imgui.ini. Now is forced
 	//--------------------------------------------------------------
-	bool BeginTree(string label, bool open = false, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	bool BeginTree(string label)
+	{
+		bool bIndented = true;
+		bool b = (ofxImGuiSurfing::BeginTree(label));
+		if (b) {
+			if (bIndented) this->Indent();
+			else this->refreshLayout();
+		}
+
+		return b;
+	}
+	//--------------------------------------------------------------
+	bool BeginTree(string label, bool open /*= false*/, bool bIndented /*= true*/, ImGuiTreeNodeFlags flagsTree /*= ImGuiTreeNodeFlags_Framed*/)
+		//bool BeginTree(string label, bool open = false, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 		//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));

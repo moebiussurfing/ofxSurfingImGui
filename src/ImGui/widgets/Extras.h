@@ -6,6 +6,8 @@
 #include "imgui_internal.h"
 #include "imconfig.h"
 
+#include "GuiConstants.h"
+
 #define M_PI 3.14159265358979323846264338327950288
 
 // Must include manually 
@@ -877,7 +879,122 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	static void AddLinkURL(const char* desc, const char* url, float retinaScale = 1.0f, bool bBlink = true)
+	static void AddLinkUrlLabel(const char* desc, const char* url, bool bBlink = true)
+	{
+		// Debug
+		static bool bDebug = 0;
+		//ImGui::Checkbox("Debug", &bDebug);
+		//ImGui::Spacing();
+
+		//--
+
+		//ImGui::BeginGroup(); // -> To detect complete is_hovered
+
+		std::string n = "##AddLinkUrlLabel" + ofToString(desc);
+		ImGui::PushID(n.c_str());
+
+		ImGuiWindow* window = ImGui::GetCurrentWindow();
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		ImVec4* colors = ImGui::GetStyle().Colors;
+
+		static bool is_clicked = false;
+		static bool is_actived = false;
+		static bool is_hovered = false;
+
+		float w = getWidgetsWidth(1);
+		float h1 = getWidgetsHeightRelative();
+		float h = 1 * h1;
+
+		ImVec2 from = ImGui::GetCursorScreenPos();
+		if (bDebug) IMGUI_SUGAR__DEBUG_POINT(ofColor::yellow);
+
+		ImVec2 to;
+
+		//--
+
+		// Text
+		{
+			// Border when selected
+			float a = 0.5f;
+			const ImVec4 c_ = colors[ImGuiCol_Text];
+			ImVec4 colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			// Blink
+			bool _bBlink = bBlink && is_hovered;
+			if (_bBlink)
+			{
+				a = ofClamp(ofxSurfingHelpers::getFadeBlink(), 0.25, 0.75);
+				colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+			}
+
+			if (_bBlink) ImGui::PushStyleColor(ImGuiCol_Text, colText);
+
+			{
+				ImGui::TextWrapped(desc);
+				//is_clicked = ImGui::IsItemClicked();
+				//is_actived = ImGui::IsItemActive();
+				//is_hovered = ImGui::IsItemHovered();
+			}
+
+			if (_bBlink) ImGui::PopStyleColor();
+
+			if (is_clicked)
+			{
+				ofLogNotice("ofxSurfingImGui") << "Clicked " << ofToString(desc);
+				ofLaunchBrowser(url);
+			}
+
+			to = ImGui::GetCursorScreenPos();
+			if (bDebug) IMGUI_SUGAR__DEBUG_POINT(ofColor::yellow);
+
+			h = to.y - from.y;
+		}
+
+		//--
+
+		// Box invisible to click
+
+		// Go up back
+		ImGui::SetCursorScreenPos(from);
+		//IMGUI_SUGAR__DEBUG_POINT(ofColor::green);
+
+		ImGui::InvisibleButton(desc, ImVec2(w, h), ImGuiButtonFlags_None);
+		is_clicked = ImGui::IsItemClicked();
+		is_actived = ImGui::IsItemActive();
+		is_hovered = ImGui::IsItemHovered();
+
+		//--
+
+		// Box draw
+		
+		if (bDebug)
+		{
+			// Go up back
+			ImGui::SetCursorScreenPos(from);
+			//IMGUI_SUGAR__DEBUG_POINT(ofColor::green);
+
+			ImVec4 color(1, 1, 1, 1);
+			if (is_clicked) color = ImVec4(1, 0, 0, 1);
+			if (is_hovered) color = ImVec4(0, 0, 1, 1);
+			if (is_actived) color = ImVec4(0, 1, 0, 1);
+
+			float rounding = 2;
+			ImDrawFlags flags = ImDrawFlags_None;
+			draw_list->AddRect(from, to + ImVec2(w, 0), ImGui::GetColorU32(color), rounding, flags);
+
+			IMGUI_SUGAR__DEBUG_POINT2(ofColor::blue, from);
+			IMGUI_SUGAR__DEBUG_POINT2(ofColor::blue, to);
+		}
+
+		//--
+
+		ImGui::PopID();
+
+		//ImGui::EndGroup();
+	}
+
+	//--------------------------------------------------------------
+	static void AddLinkUrlButton(const char* desc, const char* url, float retinaScale = 1.0f, bool bBlink = true)
 	{
 		ImGui::InvisibleButton("empty", ImVec2(224 * retinaScale, 1));  // fix widget width
 

@@ -26,11 +26,23 @@ namespace ofxImGuiSurfing
 
 	// Tree folders
 
+	//TODO: could improve by doing open state handled by imgui.ini. Now is forced
 	//--------------------------------------------------------------
-	inline bool BeginTree(string label, bool open = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	inline bool BeginTree(string label)
+	{
+		//ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_None;
+		ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed;
+
+		return (ImGui::TreeNodeEx(label.c_str(), flagsTree));
+	}
+
+	//--------------------------------------------------------------
+	inline bool BeginTree(string label, bool open /*= true*/, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		if (open) flagsTree += ImGuiTreeNodeFlags_DefaultOpen;
 
+		//TODO:
+		//return (ImGui::TreeNodeEx(label.c_str(), flagsTree, ImGuiCond_FirstUseEver));
 		return (ImGui::TreeNodeEx(label.c_str(), flagsTree));
 	}
 
