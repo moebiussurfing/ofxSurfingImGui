@@ -202,7 +202,8 @@ namespace ofxImGuiSurfing
 							cChanged = true;
 						}
 
-						if (toolTip != "") {
+						if (toolTip != "") 
+						{
 							ofxImGuiSurfing::AddTooltip2(toolTip);
 						}
 
@@ -871,9 +872,9 @@ namespace ofxImGuiSurfing
 		ImGui::TextDisabled("?");
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
-			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
 			ImGui::TextUnformatted(desc);
-			ImGui::PopTextWrapPos();
+			//ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
 	}

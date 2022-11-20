@@ -90,9 +90,6 @@ namespace ofxImGuiSurfing
 
 	// Adds mouse wheel control to the last previous param widget (templated float/int)
 	//--------------------------------------------------------------
-	//inline void AddMouseWheel(ofParameter<ParameterType>& param, bool bFlip = false, float resolution = -1)
-	//inline void AddMouseWheel(ofParameter<ParameterType>& param, float resolution = -1)
-
 	template<typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& param, bool bFlip = false)
 	{
@@ -109,6 +106,8 @@ namespace ofxImGuiSurfing
 		bool bIsDim2 = false;
 		bool bIsDim3 = false;
 		bool bIsDim4 = false;
+
+		string sTooltip = "-1";
 
 		const auto& info = typeid(ParameterType);
 
@@ -159,6 +158,15 @@ namespace ofxImGuiSurfing
 
 		{
 			bool bCtrl = ImGui::GetIO().KeyCtrl; // CTRL key to fine tunning
+			bool bAlt = ImGui::GetIO().KeyAlt; // ALT key to fine tunning
+
+			// Show floating value
+			if (bCtrl || bAlt)
+			{
+				if (bIsbool) sTooltip = dynamic_cast<ofParameter<bool>&>(param).get() ? "TRUE" : "FALSE";
+				else if (bIsInt) sTooltip = ofToString(dynamic_cast<ofParameter<int>&>(param).get());
+				else if (bIsFloat) sTooltip = ofToString(dynamic_cast<ofParameter<float>&>(param).get(), 2);
+			}
 
 			ImGui::SetItemUsingMouseWheel();
 
@@ -193,6 +201,8 @@ namespace ofxImGuiSurfing
 						{
 							ofParameter<void> p = dynamic_cast<ofParameter<void>&>(param);
 							p.trigger();
+
+							sTooltip = "TRIG";
 						}
 
 						//--
@@ -333,6 +343,21 @@ namespace ofxImGuiSurfing
 						}
 					}
 				}
+
+				if (bCtrl || bAlt)
+				{
+					if (sTooltip != "-1")
+					{
+						if (ImGui::IsItemHovered())
+						{
+							ImGui::BeginTooltip();
+							//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+							ImGui::Text(sTooltip.c_str());
+							//ImGui::PopTextWrapPos();
+							ImGui::EndTooltip();
+						}
+					}
+				}
 			}
 		}
 	}
@@ -368,7 +393,7 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	//inline bool GetMouseDoubleClick()
-	
+
 	inline bool GetAltMouseClick()
 	{
 		bool bModifier = ImGui::GetIO().KeyAlt;
@@ -414,7 +439,7 @@ namespace ofxImGuiSurfing
 
 		const auto& info = typeid(ParameterType);
 
-		if(0){}
+		if (0) {}
 
 		//else if (info == typeid(bool)) // BOOL
 		//{
@@ -482,7 +507,7 @@ namespace ofxImGuiSurfing
 				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
 				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
 				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
-				
+
 				p.set(_p);
 
 				bChanged = true;
