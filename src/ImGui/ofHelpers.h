@@ -376,7 +376,6 @@ namespace ofxImGuiSurfing
 		{
 			return true;
 		}
-
 		return false;
 	}
 
@@ -386,7 +385,6 @@ namespace ofxImGuiSurfing
 		{
 			return true;
 		}
-
 		return false;
 	}
 
