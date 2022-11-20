@@ -17,21 +17,6 @@
 
 //--
 
-#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
-// Constraint some window minimal shape sizes.
-
-#define DEFAULT_AMOUNT_PRESETS 4
-
-//TODO:
-// Testing central view-port
-//#define FIXING_DOCKING		// Need to fix yet
-#define FIXING_DRAW_VIEWPORT	// To debug free space
-
-// Font sizes
-#define IM_FONT_NORMAL 0
-#define IM_FONT_BIG 1
-#define IM_FONT_HUGE 2
-#define IM_FONT_HUGE_EXTRA 3
 /*
 * Example: Input text with huge font
 	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);

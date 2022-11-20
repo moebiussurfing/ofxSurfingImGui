@@ -18,27 +18,26 @@
 
 //--
 
+#define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
+// Constraint some window minimal shape sizes.
+
+#define DEFAULT_AMOUNT_PRESETS 4
+
+//TODO:
+// Testing central view-port
+//#define FIXING_DOCKING		// Need to fix yet
+#define FIXING_DRAW_VIEWPORT	// To debug free space
+
+// Font sizes
+#define IM_FONT_NORMAL 0
+#define IM_FONT_BIG 1
+#define IM_FONT_HUGE 2
+#define IM_FONT_HUGE_EXTRA 3
+
+//--
+
 namespace ofxImGuiSurfing
 {
-	/*
-
-		Example:
-
-		Arguments to the Styles Engine:
-		You can pass it as argument when adding each ofParameter to the ui.
-
-		ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-		ui.Add(floatValue, OFX_IM_VSLIDER);
-		ui.AddGroup(params, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_TREE);
-
-		// Two toggles in one row
-		ui.Add(bGui_1, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, true); // two in same line
-		ui.Add(bGui_2, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM, 2, false); // two
-
-		ui.Add(bGui_3, OFX_IM_TOGGLE, 1, false, 30); // one full width toggle but 20px spacing at end
-
-	*/
-
 	//--
 
 	//--------------------------------------------------------------
