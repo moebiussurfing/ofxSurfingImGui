@@ -833,58 +833,70 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	IMPROVE LAYOUT ENGINE
 	WITH TABLES/COLUMNS
-	AND AUTORESIZE WIDGETS WITH COLUMN DIVIDERS DRAGGING
+	AND AUTORESIZE WIDGETS 
+	WITH COLUMN DIVIDERS DRAGGING
 
 
-		float spcx = ImGui::GetStyle().ItemSpacing.x;
-		float w100 = ImGui::GetContentRegionAvail().x;
-		float w = ofxImGuiSurfing::getWidgetsWidth(1) - spcx;
-		float w1 = w * 0.3f;
-		float w2 = w * 0.7f;
+{
+	ui.AddSpacingBigSeparated();
 
-		ImVec2 sz;
-		float h = 50;
-		float h2 = 150;
+	ui.AddLabelBig("IMPROVE LAYOUT ENGINE WITH TABLES / COLUMNS AND AUTORESIZE WIDGETS WITH COLUMN DIVIDERS DRAGGING");
 
-		ImGui::Columns(2, "table1");
+	ui.AddSpacingBig();
 
-		//ImGui::SetCursorPosX(w100 * 0.3f);
-		//ImGui::SetColumnWidth(0, w100 * 0.3f);
-		//ImGui::SetColumnWidth(1, w100 * 0.7f);
+	float spcx = ImGui::GetStyle().ItemSpacing.x;
+	float w100 = ImGui::GetContentRegionAvail().x;
+	float w = ofxImGuiSurfing::getWidgetsWidth(1) - spcx;
+	float w1 = w * 0.3f;
+	float w2 = w * 0.7f;
 
-		sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
-		ImGui::Button("but1", sz);
+	ImVec2 sz;
+	float h = 50;
+	float h2 = 150;
 
-		ImGui::NextColumn();
+	ImGui::Columns(2, "##table1");
 
-		sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
-		ImGui::Button("but2", sz);
+	//ImGui::SetCursorPosX(w100 * 0.3f);
+	//ImGui::SetColumnWidth(0, w100 * 0.3f);
+	//ImGui::SetColumnWidth(1, w100 * 0.7f);
 
-		ImGui::Columns(1);
+	sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
+	ImGui::Button("but1", sz);
 
-		//--
+	ImGui::NextColumn();
 
-		ImGui::Columns(2, "table2");
+	sz = ImVec2(ImGui::GetContentRegionAvail().x, h);
+	ImGui::Button("but2", sz);
 
-		static float wc = (ImGui::GetWindowWidth() - spcx);
-		ImGui::SetColumnWidth(0, wc * 0.4f);
-		//wc = ImGui::GetColumnWidth();//allow edit
-		//ImGui::SetColumnWidth(1, 100.0f);
+	ImGui::Columns(1);
 
-		static float tmpRef1 = 1;
-		static float tmpRef2 = 1;
+	ui.AddSpacingBig();
 
-		sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
-		ImGui::VSliderFloat("v1", sz, &tmpRef1, 0, 1);
+	//--
 
-		ImGui::NextColumn();
+	ImGui::Columns(2, "##table2");
 
-		sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
-		ImGui::VSliderFloat("v2", sz, &tmpRef2, 0, 1);
+	static float wc = (ImGui::GetWindowWidth() - spcx);
+	//ImGui::SetColumnWidth(0, wc * 0.4f);
+	//wc = ImGui::GetColumnWidth();//allow edit
+	//ImGui::SetColumnWidth(1, 100.0f);
 
-		ImGui::Columns(1);
+	static float tmpRef1 = 1;
+	static float tmpRef2 = 1;
 
-		//ofxImGuiSurfing::AddVSlider(ampInput, sz, bNoName, bNoNumber);
+	sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
+	ImGui::VSliderFloat("v1", sz, &tmpRef1, 0, 1);
+
+	ImGui::NextColumn();
+
+	sz = ImVec2(ImGui::GetContentRegionAvail().x, h2);
+	ImGui::VSliderFloat("v2", sz, &tmpRef2, 0, 1);
+
+	ImGui::Columns(1);
+
+	ui.AddSpacingBigSeparated();
+}
+
 */
 
 
@@ -898,39 +910,49 @@ using ofxSurfingGui = SurfingGuiManager;
 	USING TWO DIFERENT MODES / TEMPLATES
 	WITH A RESET BUTTON ON EACH ONE.
 
-		ImGui::Columns(2, "t1", false);
-		ui.Add(ampInput, OFX_IM_VSLIDER_NO_NUMBER, 2);
-		ui.AddTooltip(ofToString(ampInput.get(), 2));
-		ImGui::PushID("##RESET1");
+	//--
+
+	static ofParameter<float> v1{ "v1",0.5, 0,1 };
+	static ofParameter<float> v2{ "v2",0, -1,1 };
+	static ofParameter<float> v3{ "v3",0, 0,1 };
+	static int bangDetectorIndex = 0;
+
+	ui.AddSpacingBigSeparated();
+
+	ImGui::Columns(2, "t1", false);
+	ui.Add(v1, OFX_IM_VSLIDER_NO_NUMBER, 2);
+	ImGui::PushID("##RESET1");
+	if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
+		v1 = 0;
+	}
+	ImGui::PopID();
+	ImGui::NextColumn();
+
+	// Template A
+	if (bangDetectorIndex == 0)
+	{
+		ui.Add(v2, OFX_IM_VSLIDER_NO_NUMBER, 2);
+		ui.AddTooltip(ofToString(v2.get(), 2));
+		ImGui::PushID("##RESET2");
 		if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-			ampInput = 0;
+			v2 = 0.5f;
 		}
 		ImGui::PopID();
+	}
+
+	// Template B
+	else if (bangDetectorIndex == 1)
+	{
+		ImGui::Columns(2, "t2", false);
+		ui.Add(v3, OFX_IM_VSLIDER_NO_LABELS);
 		ImGui::NextColumn();
-
-		// Template A
-		if (bangDetectorIndex == 0)
-		{
-			ui.Add(threshold, OFX_IM_VSLIDER_NO_NUMBER, 2);
-			ui.AddTooltip(ofToString(threshold.get(), 2));
-			ImGui::PushID("##RESET2");
-			if (ui.AddButton("Reset", OFX_IM_BUTTON_SMALL, 2)) {
-				threshold = 0.5f;
-			}
-			ImGui::PopID();
-		}
-
-		// Template B
-		else if (bangDetectorIndex == 1)
-		{
-			ImGui::Columns(2, "t2", false);
-			ui.Add(onsetGrow, OFX_IM_VSLIDER_NO_LABELS);
-			ImGui::NextColumn();
-			ui.Add(onsetDecay, OFX_IM_VSLIDER_NO_LABELS);
-			ImGui::Columns(1);
-		}
-
+		ui.Add(v3, OFX_IM_VSLIDER_NO_LABELS);
 		ImGui::Columns(1);
+	}
+
+	ImGui::Columns(1);
+
+	//--
 
 */
 
@@ -975,3 +997,15 @@ IMGUI_SUGAR__DEBUG_POINT(bDebug);
 */
 
 //--------------------------------------------------------------
+
+
+// DRAFT NOTES
+
+/*
+//TODO:
+// Gradient Colored buttons
+ui.AddSpacingHuge();
+ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
+
+ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+*/
