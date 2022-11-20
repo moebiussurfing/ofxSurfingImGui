@@ -56,7 +56,7 @@ SurfingGuiManager::SurfingGuiManager()
 	// Exclude from settings
 	bLockMove.setSerializable(false);
 	bNoScroll.setSerializable(false);
-	bAdvanced.setSerializable(false);
+	//bAdvanced.setSerializable(false);
 	bExtra.setSerializable(false);
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);

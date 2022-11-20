@@ -54,7 +54,9 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// Mouse wheel
+	// MOUSE
+
+	// Mouse Wheel
 
 	//TODO: ?
 	// To be notified that param associated changed by the mouse..?
@@ -336,7 +338,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddMouseWheel(bool& p)
+	inline void AddMouseWheel(bool& p) // toggle boolean state with mouse wheel
 	{
 		ImGui::SetItemUsingMouseWheel();
 
@@ -360,8 +362,204 @@ namespace ofxImGuiSurfing
 		}
 	}
 
+	//--
+
+	// Modified Clicks
+
 	//--------------------------------------------------------------
-	inline void AddTooltip(std::string text, bool bEnabled = true)//call after the pop up trigger widget
+	//inline bool GetMouseDoubleClick()
+	
+	inline bool GetAltMouseClick()
+	{
+		bool bModifier = ImGui::GetIO().KeyAlt;
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Right) && bModifier)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	inline bool GetRightMouseClick()
+	{
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	//--
+
+	// Reset params when Alt+Click called
+
+	template<typename ParameterType>
+	inline bool AddModifiedClick(ofParameter<ParameterType>& param)
+	{
+		bool bClick = GetRightMouseClick();
+		//bool bClick = GetAltMouseClick();
+
+		if (!bClick) return false;
+
+		bool bChanged = false;
+
+		bool bUnknown = false;
+		//bool bIsVoid = false;
+		//bool bIsbool = false;
+		bool bIsInt = false;
+		bool bIsFloat = false;
+		bool bIsMultiDim = false;
+		bool bIsDim2 = false;
+		bool bIsDim3 = false;
+		bool bIsDim4 = false;
+
+		const auto& info = typeid(ParameterType);
+
+		if(0){}
+
+		//else if (info == typeid(bool)) // BOOL
+		//{
+		//	bIsbool = true;
+		//}
+		//else if (info == typeid(void)) // VOID
+		//{
+		//	bIsVoid = true;
+		//}
+
+		else if (info == typeid(float)) // FLOAT
+		{
+			bIsFloat = true;
+		}
+		else if (info == typeid(int)) // INT
+		{
+			bIsInt = true;
+		}
+
+		//TODO:
+		else if (info == typeid(ofDefaultVec2))
+		{
+			bIsMultiDim = true;
+			bIsDim2 = true;
+		}
+		else if (info == typeid(ofDefaultVec3))
+		{
+			bIsMultiDim = true;
+			bIsDim3 = true;
+		}
+		else if (info == typeid(ofDefaultVec4))
+		{
+			bIsMultiDim = true;
+			bIsDim4 = true;
+		}
+
+		// Unknown Types
+		else
+		{
+			bUnknown = true;
+			ofLogWarning(__FUNCTION__) << "Could not add mouse wheel to " << param.getName();
+
+			return false;
+		}
+
+		//--
+
+		if (0) {}
+
+		//--
+
+		//TODO:
+		// Must be fixed bc each dim slider could work independently...
+
+		// MULTIDIM
+
+		else if (bIsMultiDim)
+		{
+			if (bIsDim2)
+			{
+				ofParameter<glm::vec2> p = param.cast<glm::vec2>();
+				glm::vec2 _p = p;
+
+				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
+				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
+				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
+				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
+				
+				p.set(_p);
+
+				bChanged = true;
+			}
+			else if (bIsDim3)
+			{
+				ofParameter<glm::vec3> p = param.cast<glm::vec3>();
+				glm::vec3 _p = p;
+
+				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
+				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
+				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
+				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
+				float centerZ = p.getMin().z + ((p.getMax().z - p.getMin().z) / 2.f);
+				_p.z = ofClamp(centerZ, p.getMin().z, p.getMax().z); // clamp
+
+				p.set(_p);
+
+				bChanged = true;
+			}
+			else if (bIsDim4)
+			{
+				ofParameter<glm::vec4> p = param.cast<glm::vec4>();
+				glm::vec4 _p = p;
+
+				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
+				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
+				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
+				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
+				float centerZ = p.getMin().z + ((p.getMax().z - p.getMin().z) / 2.f);
+				_p.z = ofClamp(centerZ, p.getMin().z, p.getMax().z); // clamp
+				float centerW = p.getMin().w + ((p.getMax().w - p.getMin().w) / 2.f);
+				_p.w = ofClamp(centerW, p.getMin().w, p.getMax().w); // clamp
+
+				p.set(_p);
+
+				bChanged = true;
+			}
+		}
+
+		//--
+
+		// INT
+
+		else if (bIsInt)
+		{
+			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
+
+			int center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
+			p = (int)ofClamp(center, p.getMin(), p.getMax()); // clamp
+
+			bChanged = true;
+		}
+
+		//--
+
+		// FLOAT
+
+		else if (bIsFloat)
+		{
+			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
+
+			float center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
+			p = ofClamp(center, p.getMin(), p.getMax()); // clamp
+
+			bChanged = true;
+		}
+
+		return bChanged;
+	}
+
+	//--
+
+	//--------------------------------------------------------------
+	inline void AddTooltip(std::string text, bool bEnabled = true) // call after the pop up trigger widget
 	{
 		if (!bEnabled) return;
 

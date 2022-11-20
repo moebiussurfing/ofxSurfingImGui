@@ -11,6 +11,11 @@
 // Window scrolling size on some windows/groups
 #define HEIGHT_SCROLL_GROUP 400
 
+// Knobs format to 3 decimals
+#define OFX_IM_FORMAT_WIDGETS "%.1f"
+#define OFX_IM_FORMAT_KNOBS "%.2f"
+#define OFX_IM_FORMAT_SLIDERS "%.2f"
+
 //--
 
 namespace ofxImGuiSurfing
@@ -192,7 +197,7 @@ namespace ofxImGuiSurfing
 
 		// Knobs
 
-		// notice that full width by default, is too big!
+		// Notice that full width by default, is usually too big!
 		// Legacy
 		OFX_IM_KNOB, // Legacy
 		OFX_IM_KNOB_TRAIL, // Legacy. decorated
@@ -584,4 +589,8 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 // Passing color and point
 #define IMGUI_SUGAR__DEBUG_POINT2(argColor, argPoint) ImGui::GetWindowDrawList()->AddCircleFilled(argPoint, 1, ImGui::GetColorU32(argColor), 25);
+
+//----
+
+
 };

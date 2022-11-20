@@ -26,7 +26,7 @@ namespace ofxImGuiSurfing
 
 	// Float
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")
+	inline bool AddBigSlider(ofParameter<float>& parameter, float w = -1, float h = -1, string name = "-1", string format = OFX_IM_FORMAT_SLIDERS)
 	{
 		if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
 		if (h == -1) h = getWidgetsHeightUnit(); // one unit height
@@ -65,7 +65,7 @@ namespace ofxImGuiSurfing
 
 	// Int. cloned from float.
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1", string format = "%.3f")
+	inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1", string format = OFX_IM_FORMAT_SLIDERS)
 	{
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;//full width
 		if (h == -1) h = getWidgetsHeightUnit();//one unit height
@@ -104,14 +104,14 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
-		//inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz, string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
+		//inline bool AddBigSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = "%.3f")// button but using a bool not void param
-		//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = "%.3f")// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
+		//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
@@ -147,7 +147,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = "%.3f";
+			else format = OFX_IM_FORMAT_SLIDERS;
 
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 		}
@@ -227,7 +227,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = "%.3f";
+			else format = OFX_IM_FORMAT_SLIDERS;
 
 			// big slider
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
@@ -304,7 +304,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = "%.3f";
+			else format = OFX_IM_FORMAT_SLIDERS;
 
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 
@@ -346,7 +346,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = "%.3f";
+			else format = OFX_IM_FORMAT_SLIDERS;
 
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 		}
@@ -410,7 +410,7 @@ namespace ofxImGuiSurfing
 			if (info == typeid(float)) // float
 			{
 				if (bNoNumber) format = "";
-				else format = "%.3f";
+				else format = OFX_IM_FORMAT_SLIDERS;
 
 				if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, (float)parameter.getMin(), (float)parameter.getMax(), format.c_str()))
 				{
@@ -464,16 +464,22 @@ namespace ofxImGuiSurfing
 		if (sz.x == -1)
 		{
 			float w = ImGui::GetContentRegionAvail().x;
-			float spcx = ImGui::GetStyle().ItemSpacing.x;
-			if (sz.x == -1) sz.x = w - spcx;
+			sz.x = w;
+			//if (sz.x == -1) sz.x = w;
+			//float spcx = ImGui::GetStyle().ItemSpacing.x;
+			//if (sz.x == -1) sz.x = w - spcx;
 		}
 		if (sz.y == -1)
 		{
-			float h = ImGui::GetContentRegionAvail().y;
+			//TODO:
 			float spcy = ImGui::GetStyle().ItemSpacing.y;
-			//if (sz.y == -1) sz.y = h - 2 * spcy;
+			float h = ImGui::GetContentRegionAvail().y;
+			//sz.y = h - 2 * spcy;
 			float offset = bNoName ? 0 : ( 2 * spcy);
-			if (sz.y == -1) sz.y = h - 1 * spcy - offset;
+			sz.y = h - 1 * spcy - offset;
+
+			//float h = ImGui::GetFrameHeight();
+			//sz.y = h * 5;
 		}
 
 		//--
@@ -492,7 +498,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = "%.3f";
+			else format = OFX_IM_FORMAT_SLIDERS;
 
 			name = "";//clear to not draw again right after the fader
 			if (ImGui::VSliderFloat(name.c_str(), sz, &tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
@@ -618,7 +624,7 @@ namespace ofxImGuiSurfing
 //{
 //	auto tmpRef = parameter.get();
 //
-//	if (ImGui::VSliderFloat(GetUniqueName2(parameter), size, &tmpRef, parameter.getMin(), parameter.getMax(), "%.3f", ImGuiSliderFlags_None))
+//	if (ImGui::VSliderFloat(GetUniqueName2(parameter), size, &tmpRef, parameter.getMin(), parameter.getMax(), OFX_IM_FORMAT_SLIDERS, ImGuiSliderFlags_None))
 //	{
 //		parameter.set(tmpRef);
 //		return true;
@@ -630,7 +636,7 @@ namespace ofxImGuiSurfing
 //inline bool ofxImGuiSurfing::AddVSlider2(std::string label, ofParameter<float>& parameter, ImVec2& size, bool bLabel)
 //{
 //	auto tmpRef = parameter.get();
-//	if (ImGui::VSliderFloat(GetUniqueName2(label), size, &tmpRef, parameter.getMin(), parameter.getMax(), "%.3f", ImGuiSliderFlags_None))
+//	if (ImGui::VSliderFloat(GetUniqueName2(label), size, &tmpRef, parameter.getMin(), parameter.getMax(), OFX_IM_FORMAT_SLIDERS, ImGuiSliderFlags_None))
 //	{
 //		parameter.set(tmpRef);
 //		return true;

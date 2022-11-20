@@ -7,6 +7,8 @@
 
 #define IMGUIKNOBS_PI 3.14159265358979323846
 
+#define KNOB_BIG 100.f
+
 namespace ImGuiKnobs {
 	namespace detail {
 		void draw_arc1(ImVec2 center, float radius, float start_angle, float end_angle, float thickness, ImColor color, int num_segments) {
@@ -94,11 +96,14 @@ namespace ImGuiKnobs {
 				auto dot_size = size * this->radius;
 				auto dot_radius = radius * this->radius;
 
+				bool bIsBig = radius > KNOB_BIG;
+
 				ImGui::GetWindowDrawList()->AddCircleFilled(
 					{ center[0] + cosf(angle) * dot_radius, center[1] + sinf(angle) * dot_radius },
 					dot_size,
 					is_active ? color.active : (is_hovered ? color.hovered : color.base),
 					segments);
+					//bIsBig ? 0.3 * segments : segments);
 			}
 
 			void draw_tick(float start, float end, float width, float angle, color_set color) {
@@ -258,13 +263,13 @@ namespace ImGuiKnobs {
 			// original
 			//return { colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg] };
 		}
-	}// namespace detail
+	} // namespace detail
 
 
 	template<typename DataType>
 	bool BaseKnob(const char* label, ImGuiDataType data_type, DataType* p_value, DataType v_min, DataType v_max, float speed, const char* format, ImGuiKnobVariant variant, float size, ImGuiKnobFlags flags, int steps = 10) {
 		auto knob = detail::knob_with_drag(label, data_type, p_value, v_min, v_max, speed, format, size, flags);
-		
+
 		//TODO: draw border
 		/*
 		ImGuiWindow* window = ImGui::GetCurrentWindow();

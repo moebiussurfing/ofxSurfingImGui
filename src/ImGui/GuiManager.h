@@ -155,7 +155,9 @@ public:
 	// ofParameters 
 
 	// Draw styled parameter into ImGui manager
+	//TODO:
 	// NOTE that 4 items per row is the limit yet!
+	// can be use the API methods passing width ratio
 	//--------------------------------------------------------------
 	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
@@ -168,6 +170,25 @@ public:
 	{
 		return _ui.Add(aparam, type, amtPerRow, flags);
 	}
+
+	//TODO:
+	// New API v0.2
+	// Passing width ratio
+	//-----------------------------------------------------------------
+	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/, float ratioWidth /*= 1.f*/, bool bSameLine = false, SurfingGuiFlags flags = SurfingGuiFlags_None)
+	{
+		return _ui.Add(aparam, type, amtPerRow, ratioWidth, bSameLine, flags);
+	}
+
+	////TODO:
+	//// New API v0.2
+	//// Passing ImVec2
+	////-----------------------------------------------------------------
+	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, ImVec2 sz, bool bSameLine /*= false*/, SurfingGuiFlags flags = SurfingGuiFlags_None)
+	//{
+	// //will require to add height for all methods!
+	//	return _ui.Add(aparam, type, amtPerRow, ratioWidth, bSameLine, flags);
+	//}
 
 	//TODO: New API
 	// Final step method, Draws using an absolute width
@@ -1018,6 +1039,15 @@ public:
 		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->popStyleFont(); break;
 		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->popStyleFont(); break;
 		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->popStyleFont(); break;
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+			ImGui::TextWrapped("Open Internet Browser");
+			ImGui::PopTextWrapPos();
+			ImGui::EndTooltip();
 		}
 	}
 

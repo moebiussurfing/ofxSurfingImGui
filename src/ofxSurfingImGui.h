@@ -3,6 +3,11 @@
 
 	TODO:
 
+	API UPDATE v0.3 / ofParams helpers
+	+ pass ImVec2 to all widgets
+	+ make templated for all types
+	+ add multi choice flags
+
 	BUG
 	+ add bOverInputText getter
 	+ fix text input box to full width. no name.
@@ -619,18 +624,23 @@ using ofxSurfingGui = SurfingGuiManager;
 	3 SINGLE HEIGHT BUTTONS IN ONE LINE
 	WITH DIFFERENT PROPORTIONS
 
-	float w = ImGui::GetContentRegionAvail().x; // free x space or window width available
+	float w = ImGui::GetContentRegionAvail().x;
 	float h = ImGui::GetFrameHeight(); // single unit height
-	float hh = 2 * h; // double unit height
-	float spx = ImGui::GetStyle().ItemSpacing.x; // x spacing between each widgets on the same line
-	ImGui::Button("B1", ImVec2(w * 0.25 - spx, hh));
+	float hh = 2 * h; // double height
+	float spx = ImGui::GetStyle().ItemSpacing.x; // spacing between two widgets
+	float _spx;
+	// Calculate spacing for each line:
+	// _spx = (spx * (amount - 1)) / amount;  // amount widgets per line
+	_spx = (spx * (2 - 1)) / 2;
+	ImGui::Button("B1", ImVec2(w * 0.25 - _spx, hh));
 	ImGui::SameLine();
-	ImGui::Button("B2", ImVec2(w * 0.75 - spx, hh));
-	ImGui::Button("B3", ImVec2(w * 1 / 3.f - spx, h));
+	ImGui::Button("B2", ImVec2(w * 0.75 - _spx, hh));
+	_spx = (spx * (3 - 1)) / 3;
+	ImGui::Button("B3", ImVec2(w * 1 / 3.f - _spx, h));
 	ImGui::SameLine();
-	ImGui::Button("B4", ImVec2(w * 1 / 3.f - spx, h));
+	ImGui::Button("B4", ImVec2(w * 1 / 3.f - _spx, h));
 	ImGui::SameLine();
-	ImGui::Button("B5", ImVec2(w * 1 / 3.f - spx, h));
+	ImGui::Button("B5", ImVec2(w * 1 / 3.f - _spx, h));
 
 */
 
