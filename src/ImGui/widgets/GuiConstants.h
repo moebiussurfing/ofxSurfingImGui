@@ -75,7 +75,7 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// Bool 
+		// Bool and void 
 
 		// Button
 
@@ -106,6 +106,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK,
 
 		//--
+
+		// Bool (not void)
 
 		// Toggle
 

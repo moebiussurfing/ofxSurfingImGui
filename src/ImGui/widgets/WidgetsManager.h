@@ -199,7 +199,7 @@ namespace ofxImGuiSurfing
 
 			widgetsStyles.push_back(c);
 		}
-		// This call by name is usefull when the param style is out of the current scope
+		// This call by name is useful when the param style is out of the current scope
 		//--------------------------------------------------------------
 		void AddStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
@@ -242,7 +242,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		// Update styles on runtime
-	//private:
+		//private:
 		//// Legacy api
 		////--------------------------------------------------------------
 		//void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
@@ -490,7 +490,8 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (width == -1) {
+			if (width == -1) 
+			{
 				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 				ofLogWarning("ofxSurfingImGui") << "Width not passed! We will apply 100% width.";
 
@@ -499,7 +500,8 @@ namespace ofxImGuiSurfing
 			}
 
 			float _ww = width;
-			float _hh = _h;//TODO: must add
+			float _hh = _h;
+			//TODO: must add
 
 			// Will flag to true to do the final steps: 
 			// same line and spacing config by args.
@@ -675,6 +677,87 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
+
+						//-
+
+						// Border 
+
+					case OFX_IM_BUTTON_SMALL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 1.25f, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_MEDIUM_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 1.5f, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 2, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 3, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXXL_BORDER:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 4, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+						//-
+
+						// Border Blink
+					case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 1.25f, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 1.5f, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 2, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 3, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+					case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
+						bReturn = ofxImGuiSurfing::AddBigButton(p, _ww, _hh * 4, true, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
+
+						//--
 					}
 				}
 				uniqueName.pop();
@@ -1500,6 +1583,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddModifiedClick(p);
 					}
 					break;
 
@@ -2375,7 +2459,9 @@ namespace ofxImGuiSurfing
 			bool bMustCloseTree = false; //TODO: -> add new
 			bool bMustDisableIndenting = false;
 
-			bool bSkipNoSerializable = false; //TODO: add to the ui object! to allow more customization.
+			bool bSkipNoSerializable = false; 
+			//TODO: add to the ui object! to allow more customization.
+			//we could auto hide param widgets if they are not serializable!
 
 			// Handle names/pushID's
 			// This is the root/first group
@@ -2765,8 +2851,6 @@ namespace ofxImGuiSurfing
 						// FLOAT
 
 						auto & parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-						//auto parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-						
 						if (parameterFloat)
 						{
 							auto c = getStyle(*parameterFloat);
@@ -2790,8 +2874,6 @@ namespace ofxImGuiSurfing
 						// INT
 
 						auto & parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-						//auto parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-						
 						if (parameterInt)
 						{
 							auto c = getStyle(*parameterInt);
@@ -2813,8 +2895,6 @@ namespace ofxImGuiSurfing
 						// BOOL
 
 						auto & parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-						//auto parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-						
 						if (parameterBool)
 						{
 							//TODO:
@@ -2839,11 +2919,28 @@ namespace ofxImGuiSurfing
 
 						//--
 
+						// VOID
+
+						auto & parameterVoid = std::dynamic_pointer_cast<ofParameter<void>>(parameter);
+						if (parameterVoid)
+						{
+							auto c = getStyle(*parameterVoid);
+							if (c.name != "-1")
+							{
+								Add(*parameterVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+							}
+							else
+							{
+								Add(*parameterVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+							}
+							continue;
+						}
+
+						//--
+
 						// STRING
 
 						auto & parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-						//auto parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-						
 						if (parameterString)
 						{
 							auto c = getStyle(*parameterString);
@@ -2865,8 +2962,6 @@ namespace ofxImGuiSurfing
 						// FLOAT COLOR
 
 						auto & parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-						//auto parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-						
 						if (parameterFloatColor)
 						{
 							auto c = getStyle(*parameterFloatColor);
@@ -2891,8 +2986,6 @@ namespace ofxImGuiSurfing
 						// COLOR
 
 						auto & parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-						//auto parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-						
 						if (parameterColor)
 						{
 							auto c = getStyle(*parameterColor);
@@ -2922,7 +3015,7 @@ namespace ofxImGuiSurfing
 
 				//------
 
-				// 3. Closings
+				// 3. Closers
 
 				// Handle names/pushID's
 

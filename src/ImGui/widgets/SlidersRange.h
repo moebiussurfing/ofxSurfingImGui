@@ -371,9 +371,14 @@ namespace ofxImGuiSurfing
 
 	// ofParameters Helpers
 
+	//TODO: must fix wrong layouting...
+	// mouse interacts when no expected
+	// add hide label
+	// wrong width
+	 
 	// Float
 	//--------------------------------------------------------------
-	inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = false)
+	inline static bool AddRangeParam(std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = false, bool bNoLabel = false)
 		//inline static bool AddRangeParam(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, const char* display_format = "%.3f  %.3f", float power = 1.0f, ImVec2 shape = ImVec2(-1, -1), bool bfullsize = true)
 	{
 		auto tmpRefMin = parameterMin.get();
@@ -382,6 +387,7 @@ namespace ofxImGuiSurfing
 		if (bfullsize) IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		ImGui::PushID(name.c_str());
+		if (bNoLabel) name = "";
 		if (RangeSliderFloat(name.c_str(), &tmpRefMin, &tmpRefMax, parameterMin.getMin(), parameterMax.getMax(), display_format, power, shape, bfullsize))
 		{
 			parameterMin.set(tmpRefMin);

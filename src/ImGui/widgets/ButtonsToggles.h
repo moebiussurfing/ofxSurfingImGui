@@ -291,16 +291,44 @@ namespace ofxImGuiSurfing
 	// Big Buttons and toggles for VOID ofParams
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(ofParameter<void>& parameter, float w = -1, float h = -1)
+	inline bool AddBigButton(ofParameter<void>& parameter, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
 		bool bReturn = false;
 		std::string name = parameter.getName();
+
+
+		// Border when selected
+		float a = 0.5f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		// Blink
+		if (bBlink)
+		{
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+		}
+		bool bDrawBorder = true;
+
 
 		std::string n = "##BIGBUTTON" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
 			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
 			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+
+
+			// Border to selected
+			if (border)
+			{
+				bDrawBorder = true;
+				ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+			}
+
 
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 colorButton = style->Colors[ImGuiCol_Button];
@@ -319,6 +347,14 @@ namespace ofxImGuiSurfing
 				}
 			}
 			ImGui::PopStyleColor(3);
+
+
+			// Border Blink
+			if (bDrawBorder && border)
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleVar(1);
+			}
 		}
 		ImGui::PopID();
 

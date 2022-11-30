@@ -1790,7 +1790,6 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
 {
-	//TODO:
 	if (!_bGui) return false;
 
 	int i = getWindowSpecialIndexForToggle(_bGui);
@@ -1802,6 +1801,12 @@ bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
 	else
 	{
 		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Special Window toggle not found! " << _bGui.getName();
+
+		//TODO:
+		// detect if there is no special window with that name, 
+		// and then call a normal window to avoid missing drawing.
+		// being prophylactic.
+		//return BeginWindow(_bGui);
 
 		return false;
 	}

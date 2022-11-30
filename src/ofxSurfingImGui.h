@@ -9,7 +9,6 @@
 	+ add multi choice flags
 
 	BUG
-	+ add bOverInputText getter
 	+ fix text input box to full width. no name.
 	+ allow half/third width on progress bar widget.
 
@@ -21,7 +20,7 @@
 		must apply only over special windows maybe ?
 
 	DOCKING
-	+ allow panel and presets dockable too!
+	+ allow panel and presets dockeable too!
 	+ fix make dockeable all windows on same space.
 	+ fix multiple dock spaces that are colliding/one over another.
 	+ fix view-port rectangle preview.
@@ -29,8 +28,10 @@
 	+ docking overlaps sometimes on layout management
 
 	HELPERS
-	+ make colors smaller. multiline
-	+ useful for multidim params
+	+ fix range slider to a new widget
+		add drag from range center
+	+ make colors smaller. multi line
+	+ useful for multi dim params
 	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
 	+ fix fails ofParams for string on groups
 		+ add text input widget.
@@ -55,12 +56,12 @@
 
 	FEATURE
 	+ Probably not required.
-	But could think about linking multiple instances.
-	for example, to share organizer windows:
-	// Link internal stuff
-	ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
-	Probably a better fix/workaround is to rename each common windows on each gui manager instance
-	or the pad between windows setting. we could pass pointers to all instances.
+		But could think about linking multiple instances.
+		for example, to share organizer windows:
+		// Link internal stuff
+		ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
+		Probably a better fix/workaround is to rename each common windows on each gui manager instance
+		or the pad between windows setting. we could pass pointers to all instances.
 
 */
 
@@ -158,29 +159,35 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //----
 
+// 0. TOP SNIPPETS HERE !
 
 /*
 
-	// HOW TO MINIMAL:
+	// HOW TO 
+	// MINIMAL SNIPPET
 
 	#include "ofxSurfingImGui.h"
 	ofxSurfingGui ui;
 
-	ui.Begin();
-	if (ui.BeginWindow()) {
+	void ofApp::drawGui() 
+	{
+		ui.Begin();
+		{
+			if (ui.BeginWindow("ofApp")) {
 
-		ui.EndWindow();
+				ui.EndWindow();
+			}
+		}
+		ui.End();
 	}
-	ui.End();
 
 /*
 
 
 /*
 
-	// HOW TO:
-	// RECOMMENDED OR COMMON USAGE
-	// TOP SNIPPETS HERE !
+	// HOW TO
+	// COMMON USAGE
 
 	// #1
 	{
@@ -194,16 +201,16 @@ using ofxSurfingGui = SurfingGuiManager;
 
 		// ofApp.cpp
 		{
-			// ofApp::setup()
+			ofApp::setup()
 			{
-				ui.setup();
+				//ui.setup();
 			}
 
-			// ofApp::draw()
+			ofApp::draw()
 			{
 				ui.Begin();
 				{
-					if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+					//if (bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 
 					if (ui.BeginWindow(bGui))
 					{
@@ -246,8 +253,8 @@ using ofxSurfingGui = SurfingGuiManager;
 	// 1.0 SIMPLE
 
 	ImGui::Begin("myWindow");
-		{
-		}
+	{
+	}
 	ImGui::End();
 
 	//----
@@ -257,8 +264,8 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
-		{
-		}
+	{
+	}
 	ImGui::End();
 
 	//----
@@ -269,8 +276,8 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
-		{
-		}
+	{
+	}
 	ofxImGui::EndWindow(mainSettings);
 
 
@@ -281,7 +288,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	// 2.0 Simple TREE
 
-	if (ui.BeginTree("COLORS")) {
+	if (ui.BeginTree("COLORS")) 
+	{
 		//.. -> widgets
 		ui.EndTree();
 	}

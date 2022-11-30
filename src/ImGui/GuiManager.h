@@ -768,7 +768,12 @@ public:
 
 		int i = pIndex.get();
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
+		ImGui::PushItemWidth(20);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
+
 		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
 		if (b)
 		{
@@ -1359,9 +1364,7 @@ public:
 		return b;
 	}
 	//--------------------------------------------------------------
-	bool BeginTree(string label, bool open /*= false*/, bool bIndented /*= true*/, ImGuiTreeNodeFlags flagsTree /*= ImGuiTreeNodeFlags_Framed*/)
-		//bool BeginTree(string label, bool open = false, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
-		//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	bool BeginTree(string label, bool open /*= false*/, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
 		if (b) {
@@ -1371,6 +1374,7 @@ public:
 
 		return b;
 	}
+
 	//--------------------------------------------------------------
 	void EndTree(bool bIndented = true)
 	{
