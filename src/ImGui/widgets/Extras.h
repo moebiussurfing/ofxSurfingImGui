@@ -880,7 +880,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	static void AddLinkUrlLabel(const char* desc, const char* url, bool bBlink = true)
+	static void AddLabelLinkURL(const char* desc, const char* url, bool bBlink = true)
 	{
 		// Debug
 		static bool bDebug = 0;
@@ -891,7 +891,7 @@ namespace ofxImGuiSurfing
 
 		//ImGui::BeginGroup(); // -> To detect complete is_hovered
 
-		std::string n = "##AddLinkUrlLabel" + ofToString(desc);
+		std::string n = "##AddLabelLinkURL" + ofToString(desc);
 		ImGui::PushID(n.c_str());
 
 		ImGuiWindow* window = ImGui::GetCurrentWindow();

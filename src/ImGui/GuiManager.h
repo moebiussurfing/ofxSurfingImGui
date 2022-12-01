@@ -692,7 +692,7 @@ public:
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------
-	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false)
+	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -700,14 +700,14 @@ public:
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
-		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, bRaw));
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
 			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
-		ImGui::Spacing();
+		//ImGui::Spacing();
 
 		ImGui::PopID();
 
@@ -768,7 +768,9 @@ public:
 
 		int i = pIndex.get();
 
-		ImGui::PushItemWidth(20);
+		//ImGui::PushItemWidth(20);//hide name
+		//ImGui::PushItemWidth(30);
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);//small name
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
@@ -1011,7 +1013,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLinkUrlLabel(string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT, bool bBlink = true)
+	void AddLabelLinkURL(string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT, bool bBlink = true)
 	{
 		switch (fontType)
 		{
@@ -1021,7 +1023,7 @@ public:
 		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->pushStyleFont(3); break;
 		}
 
-		ofxImGuiSurfing::AddLinkUrlLabel(label.c_str(), url.c_str(), bBlink);
+		ofxImGuiSurfing::AddLabelLinkURL(label.c_str(), url.c_str(), bBlink);
 
 		switch (fontType)
 		{
@@ -2747,6 +2749,11 @@ public:
 	}
 
 	//--	
+
+	//--------------------------------------------------------------
+	float getWidth() {
+		return ImGui::GetContentRegionAvail().x;
+	}
 
 	//--------------------------------------------------------------
 	float getWidgetsWidth(int amnt = 1) {
