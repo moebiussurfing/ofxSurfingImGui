@@ -3,6 +3,10 @@
 
 	TODO:
 
+	+ fix param colors
+	+ fix param string not drawn
+
+
 	API UPDATE v0.3 / ofParams helpers
 	+ pass ImVec2 to all widgets
 	+ make templated for all types
@@ -28,6 +32,8 @@
 	+ docking overlaps sometimes on layout management
 
 	HELPERS
+	+ make a new color widget.
+		use ImVec2 sz. no name.
 	+ fix range slider to a new widget
 		add drag from range center
 	+ make colors smaller. multi line

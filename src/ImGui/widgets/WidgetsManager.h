@@ -490,7 +490,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (width == -1) 
+			if (width == -1)
 			{
 				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 				ofLogWarning("ofxSurfingImGui") << "Width not passed! We will apply 100% width.";
@@ -619,7 +619,7 @@ namespace ofxImGuiSurfing
 			// but we will warm the coder that maybe used Add instead of AddGroup, 
 			// when adding a group!
 			const bool isGroup = ptype == typeid(ofParameterGroup).name();
-			if (isGroup) 
+			if (isGroup)
 			{
 				ofLogWarning("ofxSurfingImGui") << "It seems you are adding an ofParamGroup with a wrong method!";
 				ofLogWarning("ofxSurfingImGui") << "Replace the call using AddGroup.";
@@ -772,8 +772,8 @@ namespace ofxImGuiSurfing
 			else if (isBool)
 			{
 				ofParameter<bool> p = aparam.cast<bool>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -1111,8 +1111,8 @@ namespace ofxImGuiSurfing
 			else if (isString)
 			{
 				ofParameter<std::string> p = aparam.cast<std::string>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -1145,7 +1145,7 @@ namespace ofxImGuiSurfing
 							string s = tmpRef.c_str();
 							ImGui::PushItemWidth(_w);
 							{
-								bReturn= ImGui::InputText("##NAME", &s);
+								bReturn = ImGui::InputText("##NAME", &s);
 								if (bReturn) {
 									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
 									p.set(s);
@@ -1225,8 +1225,8 @@ namespace ofxImGuiSurfing
 			else if (isFloat)
 			{
 				ofParameter<float> p = aparam.cast<float>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -1703,8 +1703,8 @@ namespace ofxImGuiSurfing
 			else if (isInt)
 			{
 				ofParameter<int> p = aparam.cast<int>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -2138,8 +2138,8 @@ namespace ofxImGuiSurfing
 			else if (isFloatColor)
 			{
 				ofParameter<ofFloatColor> p = aparam.cast<ofFloatColor>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -2153,7 +2153,7 @@ namespace ofxImGuiSurfing
 
 					if (type == OFX_IM_DEFAULT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR||type == OFX_IM_COLOR_INPUT)
+					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
 					else if (type == OFX_IM_COLOR_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
@@ -2165,12 +2165,16 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
 					else if (type == OFX_IM_COLOR_BOX)
 						ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
+					else if (type == OFX_IM_COLOR_BOX_NO_NAME)
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, _hh));
+					//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+				//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
+					else if (type == OFX_IM_COLOR_BOX_NO_NAME_BIG)
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, 2 * _hh));
+					//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
 
-					//TODO: must merge..or to use a box with tooltips
+				//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
 						flags = ImGuiColorEditFlags_None;
 						flags |= ImGuiColorEditFlags_NoInputs;
@@ -2191,8 +2195,8 @@ namespace ofxImGuiSurfing
 			else if (isColor)
 			{
 				ofParameter<ofColor> p = aparam.cast<ofColor>();
-				
-				auto & tmpRef = p.get();
+
+				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
 
 				uniqueName.push();
@@ -2205,7 +2209,7 @@ namespace ofxImGuiSurfing
 					if (type == OFX_IM_DEFAULT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
 
-					else if (type == OFX_IM_COLOR||type == OFX_IM_COLOR_INPUT)
+					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
 					else if (type == OFX_IM_COLOR_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
@@ -2217,10 +2221,15 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_BOX)
 						ImGui::ColorButton("", tmpRef, flags);
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) // DEPRECATED
+						//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
+					else if (type == OFX_IM_COLOR_BOX_NO_NAME)
+						ImGui::ColorButton(("##" + p.getName()).c_str(), tmpRef, flags, ImVec2(_ww, _hh));
+
+					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) // DEPRECATED
+						//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
+					else if (type == OFX_IM_COLOR_BOX_NO_NAME_BIG)
+						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, 2 * _hh));
 
 					//TODO: must merge..or to use a box with tooltips
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
@@ -2459,7 +2468,7 @@ namespace ofxImGuiSurfing
 			bool bMustCloseTree = false; //TODO: -> add new
 			bool bMustDisableIndenting = false;
 
-			bool bSkipNoSerializable = false; 
+			bool bSkipNoSerializable = false;
 			//TODO: add to the ui object! to allow more customization.
 			//we could auto hide param widgets if they are not serializable!
 
@@ -2589,8 +2598,8 @@ namespace ofxImGuiSurfing
 				// Here, this is not the root/first group.
 				// We go populate the params widgets
 
-				for (auto & parameter : group)
-				//for (auto parameter : group)
+				for (auto& parameter : group)
+					//for (auto parameter : group)
 				{
 					// 5.1 Group Parameter
 
@@ -2599,7 +2608,7 @@ namespace ofxImGuiSurfing
 					// This will not be the Group from the 0'th/root/parent level.
 					//--------------------------------------------------------------
 
-					auto & parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+					auto& parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 					//auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
 
 					// Will detect nested groups recursively
@@ -2850,7 +2859,7 @@ namespace ofxImGuiSurfing
 
 						// FLOAT
 
-						auto & parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
+						auto& parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
 						if (parameterFloat)
 						{
 							auto c = getStyle(*parameterFloat);
@@ -2873,7 +2882,7 @@ namespace ofxImGuiSurfing
 
 						// INT
 
-						auto & parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
+						auto& parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
 						if (parameterInt)
 						{
 							auto c = getStyle(*parameterInt);
@@ -2894,7 +2903,7 @@ namespace ofxImGuiSurfing
 
 						// BOOL
 
-						auto & parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
+						auto& parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
 						if (parameterBool)
 						{
 							//TODO:
@@ -2921,7 +2930,7 @@ namespace ofxImGuiSurfing
 
 						// VOID
 
-						auto & parameterVoid = std::dynamic_pointer_cast<ofParameter<void>>(parameter);
+						auto& parameterVoid = std::dynamic_pointer_cast<ofParameter<void>>(parameter);
 						if (parameterVoid)
 						{
 							auto c = getStyle(*parameterVoid);
@@ -2940,7 +2949,7 @@ namespace ofxImGuiSurfing
 
 						// STRING
 
-						auto & parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
+						auto& parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
 						if (parameterString)
 						{
 							auto c = getStyle(*parameterString);
@@ -2961,7 +2970,7 @@ namespace ofxImGuiSurfing
 
 						// FLOAT COLOR
 
-						auto & parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						auto& parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
 						if (parameterFloatColor)
 						{
 							auto c = getStyle(*parameterFloatColor);
@@ -2985,7 +2994,7 @@ namespace ofxImGuiSurfing
 
 						// COLOR
 
-						auto & parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						auto& parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
 						if (parameterColor)
 						{
 							auto c = getStyle(*parameterColor);
@@ -3009,7 +3018,7 @@ namespace ofxImGuiSurfing
 
 						// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
 						if (parameter->getName() == "" && parameter->getName() == " ")
-							ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
+							ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
 					}
 				}
 

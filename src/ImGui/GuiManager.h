@@ -1352,8 +1352,8 @@ public:
 	// Tree / Folders Helpers
 	// 
 	//TODO: could improve by doing open state handled by imgui.ini. Now is forced
-	//--------------------------------------------------------------
 	//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	//--------------------------------------------------------------
 	bool BeginTree(string label)
 	{
 		bool bIndented = true;
@@ -1383,6 +1383,29 @@ public:
 		ImGui::TreePop();
 		if (bIndented) this->Unindent();
 		else this->refreshLayout();
+	}
+
+	//--
+	
+	//TODO:
+	//--------------------------------------------------------------
+	bool BeginChild(string label)
+	{
+		this->refreshLayout();
+
+		string t = "##CHILD" + label;
+		ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
+		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::BeginMenuBar();
+		ImGui::Text(label.c_str());
+		ImGui::EndMenuBar();
+
+		ImGui::NewLine();
+	}
+	//--------------------------------------------------------------
+	void EndChild()
+	{
+		ImGui::EndChild();
 	}
 
 	//--

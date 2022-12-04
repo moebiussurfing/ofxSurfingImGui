@@ -245,8 +245,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_COLOR_NO_INPUTS_NO_ALPHA, // without inputs
 		OFX_IM_COLOR_NO_NAME, //TODO: without name or controls
 		OFX_IM_COLOR_BOX, // small box color without controls
-		OFX_IM_COLOR_BOX_FULL_WIDTH,
-		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // double height
+		OFX_IM_COLOR_BOX_FULL_WIDTH, // DEPRECATED
+		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // DEPRECATED // double height
+		OFX_IM_COLOR_BOX_NO_NAME,
+		OFX_IM_COLOR_BOX_NO_NAME_BIG,
 		OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS,//TODO:
 
 		//--
