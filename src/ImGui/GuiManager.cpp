@@ -1204,20 +1204,30 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 					//-
 
 					static ofRectangle rectangle_Central_MAX_PRE;
-					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX) { // updates when layout changes..
-						rectangle_Central_MAX_PRE = rectangle_Central_MAX;
 
-						// fit exact rectangle to borders and scaled to fit
-						//rectangle_Central = DEMO3_Svg.getRect();
-						//if (rectangle_Central_MAX.getWidth() != 0 && rectangle_Central_MAX.getHeight() != 0) // avoid crash
-						rectangle_Central.scaleTo(rectangle_Central_MAX, OF_ASPECT_RATIO_KEEP, OF_ALIGN_HORZ_CENTER, OF_ALIGN_VERT_CENTER);
+					{
+						if (rectangle_Central_MAX_PRE != rectangle_Central_MAX)
+						{ // updates when layout changes..
+							rectangle_Central_MAX_PRE = rectangle_Central_MAX;
 
-						//// rescaled rectangle a bit
-						//float _scale = 0.7f;
-						//rectangle_Central_Transposed = rectangle_Central;
-						//rectangle_Central_Transposed.scaleFromCenter(_scale, _scale);//scale down to fit layout spacing better
-						//rectangle_Central_Transposed.translateY(rectangle_Central.getHeight() * 0.07);//move down a bit
-						//DEMO3_Svg.setRect(rectangle_Central_Transposed);
+							bool bSkip = false;
+							bSkip = (rectangle_Central.getWidth() == 0 || rectangle_Central.getHeight() == 0);
+							bSkip += (rectangle_Central_MAX.getWidth() == 0 || rectangle_Central_MAX.getHeight() == 0);
+							if (!bSkip)
+							{
+								// fit exact rectangle to borders and scaled to fit
+								//rectangle_Central = DEMO3_Svg.getRect();
+								//if (rectangle_Central_MAX.getWidth() != 0 && rectangle_Central_MAX.getHeight() != 0) // avoid crash
+								rectangle_Central.scaleTo(rectangle_Central_MAX, OF_ASPECT_RATIO_KEEP, OF_ALIGN_HORZ_CENTER, OF_ALIGN_VERT_CENTER);
+
+								//// rescaled rectangle a bit
+								//float _scale = 0.7f;
+								//rectangle_Central_Transposed = rectangle_Central;
+								//rectangle_Central_Transposed.scaleFromCenter(_scale, _scale);//scale down to fit layout spacing better
+								//rectangle_Central_Transposed.translateY(rectangle_Central.getHeight() * 0.07);//move down a bit
+								//DEMO3_Svg.setRect(rectangle_Central_Transposed);
+							}
+						}
 					}
 				}
 			}
@@ -2997,13 +3007,26 @@ void SurfingGuiManager::drawLayoutsPanels()
 #ifdef OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE
 
 	// Notice that _bLandscape on first frame is not updated!
+
+	const int NUM_WIDGETS = windows.size(); // expected num widgets
+	float ww = 450;
+	float hh = 300;
+	if (NUM_WIDGETS > 3) {
+		ww = 600;
+		hh = 450;
+	}
+
 	// Landscape
-	if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(450, 100));
+	if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, 100));
+
+	//if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(450, 100));
 	//if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(700, 150));
 
 	// Portrait
+	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, hh));
+
+	//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, 300));
 	//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(105, 300));
-	else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, 300));
 
 #endif
 
@@ -3099,7 +3122,8 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 		if (_bLandscape)
 		{
-			ImGui::Columns(3);
+			ImGui::Columns(3, "", false);
+			//ImGui::Columns(3);
 			ImGui::SetColumnWidth(0, _spcx + (_w + _spcx) * NUM_WIDGETS);
 		}
 
