@@ -373,12 +373,13 @@ It has survived not only five centuries, but also the leap into electronic types
 			ui.AddLabelBig("Hello, left!", false);
 			ui.AddLabelHuge("Hello, left!", true, true);
 			ui.AddLabelHuge("Hello, left!", false, false);
-		}
 
-		// ->Notice that could be out or inside of the brackets, like the above 1 to 3 windows.
-		// On raw ImGui windows it will crash if you don't handle the endWindows well.
-		// Here's is auto controlled, more resilient to avoid errors.
-		ui.EndWindowSpecial();
+			// ->Notice that End method must be called inside of the brackets, 
+			// like the above 1 to 3 windows.
+			// On raw ImGui windows it will crash if you don't handle the endWindows well.
+			// Here's is auto controlled, more resilient to avoid errors.
+			ui.EndWindowSpecial();
+		}
 	}
 }
 
