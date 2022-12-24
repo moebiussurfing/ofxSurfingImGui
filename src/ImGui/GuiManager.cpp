@@ -952,9 +952,11 @@ void SurfingGuiManager::drawLayoutsManager()
 		{
 			// Panels
 			AddBigToggle(bGui_LayoutsPanels, _w, _h, false);
+			this->AddTooltip("F6");
 
 			// Presets
 			AddBigToggle(bGui_LayoutsPresetsSelector, _w, _h, false);
+			this->AddTooltip("F5");
 
 			this->AddSpacingSeparated();
 		}
@@ -2416,11 +2418,15 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		// Panels
 
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
+		this->AddTooltip("F6");
 
 		// Manager
 
 		//if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
-		if (!bMinimize_Presets) this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
+		if (!bMinimize_Presets) {
+			this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
+			this->AddTooltip("F7");
+		}
 
 		this->AddSpacingSeparated();
 
@@ -2438,6 +2444,9 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		for (int i = 0; i < bLayoutPresets.size(); i++)
 		{
 			ofxImGuiSurfing::AddBigToggle(bLayoutPresets[i], _w2, _h);
+
+			string s = "F" + ofToString(i + 1);
+			this->AddTooltip(s);
 
 			if (i % 2 == 0) ImGui::SameLine();//two toggles per row
 		}
@@ -3011,7 +3020,17 @@ void SurfingGuiManager::drawLayoutsPanels()
 	const int NUM_WIDGETS = windows.size(); // expected num widgets
 	float ww = 450;
 	float hh = 300;
-	if (NUM_WIDGETS > 3) {
+
+	// set variable sizes to make all text (all/none) visible!
+	if (NUM_WIDGETS > 5) {
+		ww = 600 + 200;
+		hh = 450;
+	}
+	else if (NUM_WIDGETS > 4) {
+		ww = 600 + 100;
+		hh = 450;
+	}
+	else if (NUM_WIDGETS > 3) {
 		ww = 600;
 		hh = 450;
 	}
@@ -3055,9 +3074,11 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 	const int i = 1;
 
-	ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), pnCond);
-
-	ImGui::SetNextWindowSize(ofVec2f(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), pnCond);
+	if (bGui_LayoutsPanels)
+	{
+		ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()), pnCond);
+		ImGui::SetNextWindowSize(ofVec2f(rectangles_Windows[i].get().getWidth(), rectangles_Windows[i].get().getHeight()), pnCond);
+	}
 
 	//-
 
@@ -3224,8 +3245,12 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresetsSelector, _w100,
 			(bMinimize_Presets ? ofxImGuiSurfing::getPanelHeight() : _hWid), false);
+			this->AddTooltip("F5");
 
-		if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, false);
+		if (!bMinimize_Presets) {
+			ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, false);
+			this->AddTooltip("F7");
+		}
 
 		//--
 

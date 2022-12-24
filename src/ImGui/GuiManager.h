@@ -1642,7 +1642,8 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
-	ofParameter<bool> bGui_GameMode{ "Game Mode", false };
+	
+	ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 	//to allow a type of super simple window for final user!
 
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
@@ -2707,7 +2708,10 @@ public:
 
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) {//passed anchor bGui / visible toggle 
-		//if (!bGui.get()) return;
+		
+		//TODO:
+		if (!bGui.get()) return;
+	
 		setNextWindowAfterWindowNamed(bGui.getName());
 	}
 
