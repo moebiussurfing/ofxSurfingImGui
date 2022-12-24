@@ -1643,8 +1643,9 @@ public:
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
 	
-	ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 	//to allow a type of super simple window for final user!
+	ofParameter<bool> bGui_GameMode{ "GAME", false };
+	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
 	ofParameter<bool> bReset_Window{ "Reset Window", false };//TODO:
