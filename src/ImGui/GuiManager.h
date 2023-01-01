@@ -3409,32 +3409,32 @@ public:
 			// Border 
 
 		case OFX_IM_BUTTON_SMALL_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL_BORDER:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
@@ -3443,32 +3443,32 @@ public:
 			// Border Blink
 
 		case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h/*, true, true*/);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
-			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true, true);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 

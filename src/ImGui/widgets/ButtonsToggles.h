@@ -994,11 +994,10 @@ namespace ofxImGuiSurfing
 
 
 	//--------------------------------------------------------------
-	inline bool AddBigButton(string name, float w = -1, float h = -1)
+	inline bool AddBigButton(string name, float w = -1, float h = -1, bool border = false, bool bBlink = false)
 	{
 		bool bReturn = false;
 
-		/*
 		// Border when selected
 
 		float a = 0.5f;
@@ -1018,11 +1017,20 @@ namespace ofxImGuiSurfing
 		}
 
 		bool bDrawBorder = true;
-		*/
+
+		//--
 
 		std::string n = "##BIGBUTTON" + name + ofToString(1);
 		ImGui::PushID(n.c_str());
 		{
+			// Border to selected
+			if (border)
+			{
+				bDrawBorder = true;
+				ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+			}
+
 			if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
 			if (h == -1) h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 
@@ -1043,6 +1051,13 @@ namespace ofxImGuiSurfing
 				}
 			}
 			ImGui::PopStyleColor(3);
+
+			// Border Blink
+			if (bDrawBorder && border)
+			{
+				ImGui::PopStyleColor();
+				ImGui::PopStyleVar(1);
+			}
 		}
 		ImGui::PopID();
 

@@ -366,7 +366,7 @@ public:
 
 public:
 
-	ofParameter<bool> bGui_MiniPreview{ "PREVIEW", true };
+	ofParameter<bool> bGui_MiniPreview{ "MINI", true };
 	ofParameter<bool> bGui_PreviewBig{ "BIG", false };//big preview can be full screen, docked or draggable.
 	ofParameter<bool> bGui_Extra{ "PREVIEW EXTRA", false };//extra window for settings
 

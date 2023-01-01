@@ -3,6 +3,7 @@
 
 	TODO:
 
+	+ enable floating windows/context
 	+ fix param colors
 	+ fix param string not drawn
 
@@ -169,13 +170,13 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// HOW TO 
+	// HOW TO
 	// MINIMAL SNIPPET
 
 	#include "ofxSurfingImGui.h"
 	ofxSurfingGui ui;
 
-	void ofApp::drawGui() 
+	void ofApp::drawGui()
 	{
 		ui.Begin();
 		{
@@ -188,6 +189,9 @@ using ofxSurfingGui = SurfingGuiManager;
 	}
 
 /*
+
+
+//--
 
 
 /*
@@ -209,7 +213,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		{
 			ofApp::setup()
 			{
-				//ui.setup();
+				//ui.setup(); //-> in some cases can be omitted.
 			}
 
 			ofApp::draw()
@@ -247,7 +251,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	// 1. HOW TO CREATE A WINDOW ?
 
 	THESE ARE DEPRECATED/LEGACY MODES
-	THAT DO NOT USES THE ADDON POWERED API !
+	THAT DO NOT USES THE ADD-ON POWERED API !
 
 	//---
 
@@ -260,7 +264,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	ImGui::Begin("myWindow");
 	{
-	}
+	 }
 	ImGui::End();
 
 	//----
@@ -271,7 +275,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
 	{
-	}
+	 }
 	ImGui::End();
 
 	//----
@@ -283,18 +287,162 @@ using ofxSurfingGui = SurfingGuiManager;
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
 	{
-	}
+	 }
 	ofxImGui::EndWindow(mainSettings);
+
+/*
+
+
+//----
+
+
+/*
+
+	WINDOW HELPERS
+
+	FORCE WINDOW POSITION & SHAPE
+
+	{
+		float x = 10;
+		float y = 10;
+		float w = 200;
+		float h = 200;
+		ImGuiCond flag = ImGuiCond_Appearing;
+		ImGui::SetNextWindowPos(ImVec2(x, y), flag);
+		ImGui::SetNextWindowSize(ImVec2(w, h), flag);
+	}
+
+	//--
+
+	WINDOW CONSTRAINTS
+	FOR LIMITING SHAPE SIZE
+
+	{
+		ImGuiCond flagsc = ImGuiCond_Appearing;
+		static int type = 0;
+		if (type == 0) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX)); // Vertical only
+		if (type == 1) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1)); // Horizontal only
+		if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
+		if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1), ImVec2(500, -1)); // Width 400-500
+		if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 400), ImVec2(-1, 500)); // Height 400-500
+		ImGui::SetNextWindowPos(ImVec2(10, 10), flagsc);
+		ImGui::SetNextWindowSize(ImVec2(100, 100), flagsc);
+		ImGui::Begin("Window Control");
+		{
+			ImGui::SliderInt("TypeConstraints", &type, 0, 4);
+
+			int open_action = -1;
+			if (ImGui::Button("Expand"))
+				open_action = 0;
+			ImGui::SameLine();
+			if (ImGui::Button("collapse"))
+				open_action = 1;
+			ImGui::SameLine();
+
+			if (open_action != -1) {
+				ImGui::SetNextWindowCollapsed(open_action != 0);
+				//ImGui::SetNextItemOpen(open_action != 0);
+			}
+		}
+		ImGui::End();
+	}
+
+*/
+
+
+//----
+
+
+/*
+
+	EXAMPLE:
+	ANOTHER WINDOW WITH SNAPPING TO A GRID
+	AN EXTRA BEGIN/END PAIR.
+	WITH A SNAPPING GRID.
 
 
 	//--------------------------------------------------------------
+	void Begin(const std::string& name)
+	{
+		const int snapSz = 20;
+		//const int snapSz = 16;
 
+		auto snap = [=](float value, float snap_threshold) -> float {
+			float modulo = std::fmodf(value, snap_threshold);
+			float moduloRatio = std::fabsf(modulo) / snap_threshold;
+			if (moduloRatio < 0.5f)
+				value -= modulo;
+			else if (moduloRatio > (1.f - 0.5f))
+				value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
+			return value;
+		};
+
+		ImGui::Begin(name.data());
+		if (ImGui::IsItemActive()) {
+			auto p = ImGui::GetWindowPos();
+			auto size = ImGui::GetWindowSize();
+
+			float x = snap(p.x, snapSz);
+			float y = snap(p.y, snapSz);
+			float sizex = snap(size.x, snapSz);
+			float sizey = snap(size.y, snapSz);
+			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
+		}
+	}
+
+	//--------------------------------------------------------------
+	void End() {
+		ImGui::End();
+	}
+
+
+	//----
+
+	EXAMPLE:
+	ImGui RAW without the API add-on helpers.
+	ANOTHER EXTRA BEGIN/END PAIR
+
+	//--------------------------------------------------------------
+	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
+	{
+		return ImGui::Begin(name.c_str(), p_open, flags);
+	}
+
+	//--------------------------------------------------------------
+	void EndWindow()
+	{
+		ImGui::End();
+	}
+
+*/
+
+
+//----
+
+
+/*
+
+	EXAMPLE:
+	GET WINDOW SHAPE.
+	CALL BETWEEN BEGIN/END
+
+		ofRectangle rect = ofRectangle(
+			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
+			ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+*/
+
+
+//--------------------------------------------------------------
+
+
+/*
 
 	// 2. TREES
 
-	// 2.0 Simple TREE
+	// 2.0 Simple TREE (RECOMMENDED)
 
-	if (ui.BeginTree("COLORS")) 
+	if (ui.BeginTree("COLORS"))
 	{
 		//.. -> widgets
 		ui.EndTree();
@@ -340,10 +488,10 @@ using ofxSurfingGui = SurfingGuiManager;
 			ImGui::TreePop();
 		}
 	}
-
-	//----
-
 */
+
+//----
+
 
 
 //--------------------------------------------------------------
@@ -353,150 +501,14 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// HOW TO SET COLORS?
+	EXAMPLE:
+	HOW TO SET COLORS?
 
 	static float b = 1.0f;
 	static float c = 0.5f;
 	static int i = 3; // hue colors are from 0 to 7
 	ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
 	ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
-
-*/
-
-
-//----
-
-
-/*
-
-	WINDOW HELPERS
-
-	FORCE WINDOW POSITION & SHAPE
-
-	{
-		float x = 10;
-		float y = 10;
-		float w = 200;
-		float h = 200;
-		ImGuiCond flag = ImGuiCond_Appearing;
-		ImGui::SetNextWindowPos(ImVec2(x, y), flag);
-		ImGui::SetNextWindowSize(ImVec2(w, h), flag);
-	}
-
-	//--
-
-	WINDOW CONSTRAINTS FOR SHAPE SIZE
-
-	{
-		ImGuiCond flagsc = ImGuiCond_Appearing;
-		static int type = 0;
-		if (type == 0) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX)); // Vertical only
-		if (type == 1) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1)); // Horizontal only
-		if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
-		if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1), ImVec2(500, -1)); // Width 400-500
-		if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 400), ImVec2(-1, 500)); // Height 400-500
-		ImGui::SetNextWindowPos(ImVec2(10, 10), flagsc);
-		ImGui::SetNextWindowSize(ImVec2(100, 100), flagsc);
-		ImGui::Begin("Window Control");
-		{
-			ImGui::SliderInt("TypeConstraints", &type, 0, 4);
-
-			int open_action = -1;
-			if (ImGui::Button("Expand"))
-				open_action = 0;
-			ImGui::SameLine();
-			if (ImGui::Button("collapse"))
-				open_action = 1;
-			ImGui::SameLine();
-
-			if (open_action != -1) {
-				ImGui::SetNextWindowCollapsed(open_action != 0);
-				//ImGui::SetNextItemOpen(open_action != 0);
-			}
-		}
-		ImGui::End();
-	}
-
-*/
-
-
-//----
-
-
-/*
-
-	AN EXTRA BEGIN/END PAIR.
-	WITH A SNAPPING GRID.
-
-	//--------------------------------------------------------------
-	void Begin(const std::string& name)
-	{
-		const int snapSz = 20;
-		//const int snapSz = 16;
-
-		auto snap = [=](float value, float snap_threshold) -> float {
-			float modulo = std::fmodf(value, snap_threshold);
-			float moduloRatio = std::fabsf(modulo) / snap_threshold;
-			if (moduloRatio < 0.5f)
-				value -= modulo;
-			else if (moduloRatio > (1.f - 0.5f))
-				value = value - modulo + snap_threshold * ((value < 0.f) ? -1.f : 1.f);
-			return value;
-		};
-
-		ImGui::Begin(name.data());
-		if (ImGui::IsItemActive()) {
-			auto p = ImGui::GetWindowPos();
-			auto size = ImGui::GetWindowSize();
-
-			float x = snap(p.x, snapSz);
-			float y = snap(p.y, snapSz);
-			float sizex = snap(size.x, snapSz);
-			float sizey = snap(size.y, snapSz);
-			ImGui::SetWindowPos(ImFloor(ImVec2(x, y)));
-		}
-	}
-
-	//--------------------------------------------------------------
-	void End() {
-		ImGui::End();
-	}
-
-
-	//----
-
-
-	ANOTHER EXTRA BEGIN/END PAIR
-
-	//--------------------------------------------------------------
-	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags flags)
-	{
-		return ImGui::Begin(name.c_str(), p_open, flags);
-	}
-
-	//--------------------------------------------------------------
-	void EndWindow()
-	{
-		ImGui::End();
-	}
-
-*/
-
-
-//----
-
-
-/*
-
-	TODO:
-	EXAMPLE:
-	ANOTHER WINDOW WITH SNAPPING TO A GRID
-
-	bool BeginWindow(std::string name = "Window", bool* p_open = nullptr, ImGuiWindowFlags flags = ImGuiWindowFlags_None);
-	void EndWindow();
-
-	void Begin(const std::string& name);
-	void End();
 
 */
 
@@ -632,8 +644,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE
+	EXAMPLE:
 	RESPONSIVE LAYOUT
+
 	2 DOUBLE HEIGHT BUTTONS IN ONE LINE +
 	3 SINGLE HEIGHT BUTTONS IN ONE LINE
 	WITH DIFFERENT PROPORTIONS
@@ -686,7 +699,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 // EXAMPLE:
-// DEMONSTRATE THE VARIOUS WINDOW FLAGS. TYPICALLY YOU WOULD JUST USE THE DEFAULT!
+// DEMONSTRATE THE VARIOUS WINDOW FLAGS. 
+// TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
 //static bool no_titlebar = false;
 //static bool no_scrollbar = false;
@@ -714,19 +728,6 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 //--------------------------------------------------------------
-
-
-/*
-
-	EXAMPLE:
-	GET WINDOW SHAPE.
-	CALL BETWEEN BEGIN/END
-
-		ofRectangle rect = ofRectangle(
-			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
-			ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-
-*/
 
 
 //----
@@ -845,11 +846,11 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	IMPROVE LAYOUT ENGINE
 	WITH TABLES/COLUMNS
-	AND AUTORESIZE WIDGETS 
+	AND AUTORESIZE WIDGETS
 	WITH COLUMN DIVIDERS DRAGGING
-
 
 {
 	ui.AddSpacingBigSeparated();
@@ -919,6 +920,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	TODO: WIP:
 	TWO COLUMNS WITH 2 VERTICAL SLIDERS
 	USING TWO DIFERENT MODES / TEMPLATES
@@ -973,6 +975,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
 	THREE COLUMNS WITH A KNOB AND 2 VERTICAL SLIDERS
 	WITH A RESET BUTTON.
 	UI USED AS A POINTER REFERENCED.
@@ -1006,7 +1009,11 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-IMGUI_SUGAR__DEBUG_POINT(bDebug);
+	USEFUL WHE CREATING YOUR OWN WIDGETS FROM SCRATCH.
+	to debug the drawList
+
+	IMGUI_SUGAR__DEBUG_POINT(bDebug);
+	IMGUI_SUGAR__DEBUG_POINT2
 
 */
 
@@ -1016,10 +1023,11 @@ IMGUI_SUGAR__DEBUG_POINT(bDebug);
 // DRAFT NOTES
 
 /*
-//TODO:
-// Gradient Colored buttons
-ui.AddSpacingHuge();
-ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
 
-ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+	// GRADIENT COLORED BUTTONS
+
+	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
+
+	ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+
 */
