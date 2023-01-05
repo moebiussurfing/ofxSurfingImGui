@@ -1009,6 +1009,51 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
+	EXAMPLE:
+	A BIG COMBO SELECTOR
+	WITH AN INDEX PARAM, ARROWS, NAMES VECTOR
+	CUTE STYLED
+
+	{
+			// Style selector
+
+			ui.AddSpacingBigSeparated();
+			ui.AddLabelBig("Style Selector", true);
+
+			vector<string> knobStyles;
+			knobStyles.push_back("TICKKNOB");
+			knobStyles.push_back("DOTKNOB");
+			knobStyles.push_back("WIPERKNOB");
+			knobStyles.push_back("WIPERONLYKNOB");
+			knobStyles.push_back("WIPERDOTKNOB");
+			knobStyles.push_back("STEPPEDKNOB");
+			knobStyles.push_back("SPACEKNOB");
+			const int sz = (int)(knobStyles.size()) - 1;
+			static ofParameter<int> index{ "Style", 0, 0, sz };
+
+			ui.Add(index, OFX_IM_HSLIDER_NO_LABELS);
+
+			ui.AddComboButtonDualLefted(index, knobStyles);
+			switch (index)
+			{
+			case 0: style = OFX_IM_KNOB_TICKKNOB; break;
+			case 1: style = OFX_IM_KNOB_DOTKNOB; break;
+			case 2: style = OFX_IM_KNOB_WIPERKNOB; break;
+			case 3: style = OFX_IM_KNOB_WIPERONLYKNOB; break;
+			case 4: style = OFX_IM_KNOB_WIPERDOTKNOB; break;
+			case 5: style = OFX_IM_KNOB_STEPPEDKNOB; break;
+			case 6: style = OFX_IM_KNOB_SPACEKNOB; break;
+			}
+			
+			ui.AddSpacingBigSeparated();
+	}
+
+*/
+
+
+
+/*
+
 	USEFUL WHE CREATING YOUR OWN WIDGETS FROM SCRATCH.
 	to debug the drawList
 

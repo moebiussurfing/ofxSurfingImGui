@@ -283,6 +283,28 @@ namespace ImGuiKnobs {
 			// original
 			//return { colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg] };
 		}
+
+		// wiper's style
+		color_set GetWiperColorSet() {
+			auto* colors = ImGui::GetStyle().Colors;
+
+			auto base = colors[ImGuiCol_SliderGrab];
+			auto hovered = colors[ImGuiCol_SliderGrab];
+			auto active = colors[ImGuiCol_SliderGrabActive];
+			return { base, hovered, active };
+
+			//auto base = colors[ImGuiCol_FrameBgActive];
+			//auto active = colors[ImGuiCol_FrameBg];
+			//auto hovered = colors[ImGuiCol_FrameBgHovered];
+			//return { base, hovered, active };
+
+			//// test
+			//auto base = ImVec4(ofColor::red);
+			//auto hovered = ImVec4(ofColor::green);
+			//auto active = ImVec4(ofColor::blue);
+			//return {base, hovered, active};
+		}
+
 	} // namespace detail
 
 
@@ -329,11 +351,13 @@ namespace ImGuiKnobs {
 		}
 
 		case ImGuiKnobVariant_Wiper: {
-			knob.draw_circle(0.7, detail::GetSecondaryColorSet(), true, 32);
+			//knob.draw_circle(0.7, detail::GetSecondaryColorSet(), true, 32);
+			knob.draw_circle(0.7, detail::GetPrimaryColorSet(), true, 32);
 			knob.draw_arc(0.8, 0.41, knob.angle_min, knob.angle_max, detail::GetTrackColorSet(), 16, 2);
 
 			if (knob.t > 0.01) {
-				knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetPrimaryColorSet(), 16, 2);
+				knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetWiperColorSet(), 16, 2);
+				//knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetPrimaryColorSet(), 16, 2);
 			}
 			break;
 		}
@@ -341,14 +365,24 @@ namespace ImGuiKnobs {
 			knob.draw_arc(0.8, 0.41, knob.angle_min, knob.angle_max, detail::GetTrackColorSet(), 32, 2);
 
 			if (knob.t > 0.01) {
-				knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetPrimaryColorSet(), 16, 2);
+				//knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetPrimaryColorSet(), 16, 2);
+				knob.draw_arc(0.8, 0.43, knob.angle_min, knob.angle, detail::GetWiperColorSet(), 16, 2);
 			}
 			break;
 		}
 		case ImGuiKnobVariant_WiperDot: {
-			knob.draw_circle(0.6, detail::GetSecondaryColorSet(), true, 32);
-			knob.draw_arc(0.85, 0.41, knob.angle_min, knob.angle_max, detail::GetTrackColorSet(), 16, 2);
-			knob.draw_dot(0.1, 0.85, knob.angle, detail::GetPrimaryColorSet(), true, 12);
+			//knob.draw_circle(0.6, detail::GetSecondaryColorSet(), true, 32);
+			//knob.draw_arc(0.85, 0.41, knob.angle_min, knob.angle_max, detail::GetTrackColorSet(), 16, 2);
+			//knob.draw_dot(0.1, 0.85, knob.angle, detail::GetPrimaryColorSet(), true, 12);
+
+			knob.draw_circle(0.6, detail::GetPrimaryColorSet(), true, 32);
+			knob.draw_arc(0.85, 0.41, knob.angle_min, knob.angle_max, detail::GetPrimaryColorSet(), 16, 2);
+			knob.draw_dot(0.1, 0.85, knob.angle, detail::GetWiperColorSet(), true, 12);
+
+			//knob.draw_circle(0.6, detail::GetSecondaryColorSet(), true, 32);
+			//knob.draw_arc(0.85, 0.41, knob.angle_min, knob.angle_max, detail::GetWiperColorSet(), 16, 2);
+			//knob.draw_dot(0.1, 0.85, knob.angle, detail::GetSecondaryColorSet(), true, 12);
+
 			break;
 		}
 		case ImGuiKnobVariant_Stepped: {

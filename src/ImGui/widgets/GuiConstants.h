@@ -205,7 +205,8 @@ namespace ofxImGuiSurfing
 
 		//TODO:
 		// Adding NEW style knobs, 
-		// taken from Simon Altschuler https://github.com/altschuler/imgui-knobs
+		// taken from Simon Altschuler 
+		// https://github.com/altschuler/imgui-knobs
 
 		OFX_IM_KNOB_TICKKNOB,
 		OFX_IM_KNOB_DOTKNOB,
@@ -217,7 +218,8 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		OFX_IM_COMBO_MULTI,//TODO: multiple controls for fine tweak: slider + drag + stepper
+		OFX_IM_COMBO_MULTI,
+		//TODO: multiple controls for fine tweak: slider + drag + stepper
 
 		//--
 

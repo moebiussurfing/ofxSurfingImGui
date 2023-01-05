@@ -251,6 +251,7 @@ namespace ofxImGuiSurfing
 //--
 
 // Int Knob
+//TODO: broken!
 
 #define RATIO_DIM 0.90f
 
@@ -263,10 +264,12 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<int>& parameter, bool bTrail, f
 	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak
 
 	float tmpRef = parameter.get();
+	float min = parameter.getMin();
+	float max = parameter.getMax();
 	string n = parameter.getName();
 	bool b;
 	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
-	else b = ImGui::Knob(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), w, "%.f"/*"%d"*/);
+	else b = ImGui::Knob(n.c_str(), &tmpRef, min, max, w, "%d");
 	if (b)
 	{
 		parameter.set((int)tmpRef);
@@ -357,12 +360,7 @@ inline bool ofxImGuiSurfing::AddKnob(std::string label, ofParameter<float>& para
 }
 
 
-//-
-
-
-
-
-
+//----
 
 
 

@@ -53,9 +53,11 @@ void ofApp::draw() {
 			{
 				if (!ui.bMinimize) {
 					ui.AddLabelHuge("NEW STYLED KNOBS");
-					ui.AddLabelBig("from Simon Altschuler");
+					ui.AddLabelBig("These widgets are created\nby Simon Altschuler");
 					ui.AddLabelLinkURL("https://github.com/altschuler/imgui-knobs", "https://github.com/altschuler/imgui-knobs");
 					ui.AddSpacingBig();
+
+					ui.AddSpacingBigSeparated();
 					ui.AddLabelBig("Style Selector", true);
 				}
 				ui.AddSpacing();
@@ -74,14 +76,7 @@ void ofApp::draw() {
 					const int sz = (int)(knobStyles.size()) - 1;
 					static ofParameter<int> index{ "Style", 0, 0, sz };
 
-					//ui.Add(index, OFX_IM_KNOB, -1, SurfingGuiFlags_None);
-					ui.Add(valueKnob4, OFX_IM_KNOB, 2);
-					ui.SameLine();
-					ui.Add(index, OFX_IM_KNOB, 2);
-					//ui.Add(index, 100.f, OFX_IM_KNOB);
-
 					ui.Add(index, OFX_IM_HSLIDER_NO_LABELS);
-
 
 					ui.AddComboButtonDualLefted(index, knobStyles);
 					switch (index)
@@ -122,7 +117,7 @@ void ofApp::draw() {
 				// Draw
 				// NEW API, including flags
 				//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
-	
+
 				ui.Add(valueKnob1, style, 2, flags);
 				ui.SameLine();
 				ui.Add(valueKnob2, style, 2, flags);
@@ -171,6 +166,18 @@ void ofApp::draw() {
 			ui.Add(valueKnob6, OFX_IM_KNOB_WIPERONLYKNOB, 4, true);
 			ui.Add(valueKnob7, OFX_IM_KNOB_WIPERDOTKNOB, 4, true);
 			ui.Add(valueKnob8, OFX_IM_KNOB_STEPPEDKNOB, 4, false);
+
+			ui.AddSpacingBigSeparated();
+
+
+			if (!ui.bMinimize) ui.AddLabelHuge("OLD Legacy", false, true);
+
+			//ui.Add(index, OFX_IM_KNOB, -1, SurfingGuiFlags_None);
+			//ui.Add(index, OFX_IM_KNOB, 2);//TODO: int legacy knobs are broken!
+			//ui.SameLine();
+
+			ui.Add(valueKnob4, OFX_IM_KNOB, 4);
+			//ui.Add(index, 100.f, OFX_IM_KNOB);
 
 			ui.EndWindow();
 		}
