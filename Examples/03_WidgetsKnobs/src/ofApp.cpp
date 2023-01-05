@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 
 	ui.setup();
 
@@ -54,7 +54,7 @@ void ofApp::draw() {
 				if (!ui.bMinimize) {
 					ui.AddLabelHuge("NEW STYLED KNOBS");
 					ui.AddLabelBig("from Simon Altschuler");
-					ui.AddLinkURL("https://github.com/altschuler/imgui-knobs", "https://github.com/altschuler/imgui-knobs");
+					ui.AddLabelLinkURL("https://github.com/altschuler/imgui-knobs", "https://github.com/altschuler/imgui-knobs");
 					ui.AddSpacingBig();
 					ui.AddLabelBig("Style Selector", true);
 				}
@@ -121,6 +121,8 @@ void ofApp::draw() {
 
 				// Draw
 				// NEW API, including flags
+				//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
+	
 				ui.Add(valueKnob1, style, 2, flags);
 				ui.SameLine();
 				ui.Add(valueKnob2, style, 2, flags);

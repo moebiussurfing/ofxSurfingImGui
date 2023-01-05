@@ -103,7 +103,7 @@ namespace ImGuiKnobs {
 					dot_size,
 					is_active ? color.active : (is_hovered ? color.hovered : color.base),
 					segments);
-					//bIsBig ? 0.3 * segments : segments);
+				//bIsBig ? 0.3 * segments : segments);
 			}
 
 			void draw_tick(float start, float end, float width, float angle, color_set color) {
@@ -126,6 +126,16 @@ namespace ImGuiKnobs {
 					center,
 					circle_radius,
 					is_active ? color.active : (is_hovered ? color.hovered : color.base));
+
+				//border
+				//const float o = 0.f;
+				const ImU32 c = ImGui::GetColorU32(ImGui::GetStyle().Colors[ImGuiCol_Border]);
+				ImGui::GetWindowDrawList()->AddCircle(
+					center,
+					circle_radius,
+					c,
+					0, 2.f);
+
 			}
 
 			void draw_arc(float radius, float size, float start_angle, float end_angle, color_set color, int segments, int bezier_count) {
@@ -196,10 +206,15 @@ namespace ImGuiKnobs {
 		color_set GetPrimaryColorSet() {
 			auto* colors = ImGui::GetStyle().Colors;
 
-			auto base = colors[ImGuiCol_SliderGrab];
-			auto hovered = colors[ImGuiCol_SliderGrab];
-			auto active = colors[ImGuiCol_SliderGrabActive];
+			auto base = colors[ImGuiCol_FrameBgActive];
+			auto active = colors[ImGuiCol_FrameBg];
+			auto hovered = colors[ImGuiCol_FrameBgHovered];
 			return { base, hovered, active };
+
+			//auto base = colors[ImGuiCol_SliderGrab];
+			//auto hovered = colors[ImGuiCol_SliderGrab];
+			//auto active = colors[ImGuiCol_SliderGrabActive];
+			//return { base, hovered, active };
 
 			// test
 			//return {ImVec4(1,0,0,1), ImVec4(0,1,0,1), ImVec4(0,0,1,1) };
@@ -211,10 +226,15 @@ namespace ImGuiKnobs {
 		color_set GetSecondaryColorSet() {
 			auto* colors = ImGui::GetStyle().Colors;
 
-			auto base = colors[ImGuiCol_FrameBgActive];
-			auto active = colors[ImGuiCol_FrameBg];
-			auto hovered = colors[ImGuiCol_FrameBgHovered];
+			auto base = colors[ImGuiCol_SliderGrab];
+			auto hovered = colors[ImGuiCol_SliderGrab];
+			auto active = colors[ImGuiCol_SliderGrabActive];
 			return { base, hovered, active };
+
+			//auto base = colors[ImGuiCol_FrameBgActive];
+			//auto active = colors[ImGuiCol_FrameBg];
+			//auto hovered = colors[ImGuiCol_FrameBgHovered];
+			//return { base, hovered, active };
 
 			//// test
 			//auto base = ImVec4(ofColor::white);
@@ -290,6 +310,10 @@ namespace ImGuiKnobs {
 		switch (variant) {
 		case ImGuiKnobVariant_Tick: {
 			knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
+
+			//border
+			//knob.draw_circle(0.845, detail::GetPrimaryColorSet(), false, 32);
+
 			knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetPrimaryColorSet());
 
 			////border

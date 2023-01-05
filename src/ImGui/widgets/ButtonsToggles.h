@@ -842,6 +842,7 @@ namespace ofxImGuiSurfing
 				//if (!bNoBorder)
 				{
 					draw_list->AddCircleFilled(ImVec2(pos.x + radius + t * (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
+
 					draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * t * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
 				}
 #endif
