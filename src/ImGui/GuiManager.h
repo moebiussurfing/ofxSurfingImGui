@@ -717,7 +717,7 @@ public:
 	// Selector index directly with an int ofParam
 	// without name label and a button to browse next element. Processed inside this combo.
 	//--------------------------------------------------------------
-	bool AddComboButton(ofParameter<int> pIndex, std::vector<std::string> fileNames)
+	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames)
 	{
 		// Button is to trig/set next index.
 
@@ -759,7 +759,7 @@ public:
 	}
 	// Same that above but with left/right arrows, place to the right.
 	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string> fileNames, bool bCycled = false)
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string> &fileNames, bool bCycled = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -822,13 +822,15 @@ public:
 
 		return b;
 	}
-	// Same that above (with left/right arrows) but, placed to the left.
+
+	// Same than above (with left/right arrows) but, placed to the left.
 	//--------------------------------------------------------------
-	bool AddComboButtonDualLefted(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bCycled = false)
+	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
 	{
 		if (fileNames.empty()) return false;
 
 		float div = 0.7f;//proportion used for the combo
+		// 70% of the width is for the names and 30% for both arrows
 		// 1 - div (0.3) will be the proportion used by the arrows.
 
 		string t = "##" + pIndex.getName();
@@ -891,10 +893,80 @@ public:
 
 	//--
 
+	// Same than above (with left/right arrows) but, placed to the left and right and centered names.
+	//--------------------------------------------------------------
+	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
+	{
+		if (fileNames.empty()) return false;
+
+		float div = 0.7f; // proportion used for the combo names 
+		// 70% of the width is for the names and 30% for both arrows
+		// 1 - div (0.3) will be the proportion used by the arrows.
+
+		string t = "##" + pIndex.getName();
+		bool b = false;
+
+		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+		float w = 0.5f * (ImGui::GetContentRegionAvail().x * (1 - div) - __spcx);
+
+		string t1 = t + "<";
+		ImGui::PushID(t.c_str());
+		if (ImGui::Button("<", ImVec2(w, 0)))
+		{
+			if (pIndex <= pIndex.getMin())
+				if (bCycled) pIndex.getMax();
+				else pIndex = pIndex.getMin();
+			else pIndex--;
+			b = true;
+		}
+		ImGui::PopID();
+		ImGui::SameLine();
+
+		//--
+
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w - __spcx);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
+
+		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
+		if (b)
+		{
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+
+		ImGui::PopItemWidth();
+
+		ImGui::PopID();
+		
+		ImGui::SameLine();
+
+		//--
+
+		string t2 = t + ">";
+		ImGui::PushID(t.c_str());
+		if (ImGui::Button(">", ImVec2(w, 0)))
+		{
+			if (pIndex < pIndex.getMax()) pIndex++;
+			else if (bCycled)
+				pIndex = 0;
+			b = true;
+		}
+		ImGui::PopID();
+
+		return b;
+	}
+
+	//--
+
 	// Dual arrows for common use to browse an index to be processed outside.
+	// returns -1 to push-left or 1 to push-right pressed!
 	//--------------------------------------------------------------
 	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
-		//returns -1 to left or 1 to right pressed
 		int iReturn = 0;
 		if (AddButton("<", style, 2)) {
 			iReturn = -1;

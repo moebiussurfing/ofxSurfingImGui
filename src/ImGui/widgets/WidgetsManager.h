@@ -2176,9 +2176,10 @@ namespace ofxImGuiSurfing
 
 					if (type == OFX_IM_DEFAULT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUT)
+
+					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUTS)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR_NO_ALPHA)
+					else if (type == OFX_IM_COLOR_INPUTS_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
 					else if (type == OFX_IM_COLOR_NO_INPUTS_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
@@ -2186,29 +2187,17 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, true, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_NO_NAME)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
+
 					else if (type == OFX_IM_COLOR_BOX)
 						ImGui::ColorButton("", tmpRef, flags);
-					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
-					else if (type == OFX_IM_COLOR_BOX_NO_NAME)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, _hh));
-					//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-				//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
-					else if (type == OFX_IM_COLOR_BOX_NO_NAME_BIG)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, 2 * _hh));
-					//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
-
-				//TODO: must merge..or to use a box with tooltips
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
-						flags = ImGuiColorEditFlags_None;
-						flags |= ImGuiColorEditFlags_NoInputs;
-						flags |= ImGuiColorEditFlags_NoLabel;
-						flags |= ImGuiColorEditFlags_NoTooltip;
-						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-						bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-						ImGui::PopItemWidth();
-						ImGui::SameLine();
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					}
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2*_hh));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_NO_ALPHA)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh), true);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG_NO_ALPHA)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2 * _hh), true);
 				}
 				uniqueName.pop();
 
@@ -2232,9 +2221,9 @@ namespace ofxImGuiSurfing
 					if (type == OFX_IM_DEFAULT)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
 
-					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUT)
+					else if (type == OFX_IM_COLOR || type == OFX_IM_COLOR_INPUTS)
 						bReturn = ofxImGuiSurfing::AddParameter(p);
-					else if (type == OFX_IM_COLOR_NO_ALPHA)
+					else if (type == OFX_IM_COLOR_INPUTS_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false);
 					else if (type == OFX_IM_COLOR_NO_NAME)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoLabel);
@@ -2242,31 +2231,17 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, true, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_NO_INPUTS_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
+					
 					else if (type == OFX_IM_COLOR_BOX)
 						ImGui::ColorButton("", tmpRef, flags);
-					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH) // DEPRECATED
-						//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					else if (type == OFX_IM_COLOR_BOX_NO_NAME)
-						ImGui::ColorButton(("##" + p.getName()).c_str(), tmpRef, flags, ImVec2(_ww, _hh));
-
-					//else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG) // DEPRECATED
-						//ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, 2 * _h));
-					else if (type == OFX_IM_COLOR_BOX_NO_NAME_BIG)
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(_ww, 2 * _hh));
-
-					//TODO: must merge..or to use a box with tooltips
-					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS) {
-						flags = ImGuiColorEditFlags_None;
-						flags |= ImGuiColorEditFlags_NoInputs;
-						flags |= ImGuiColorEditFlags_NoLabel;
-						flags |= ImGuiColorEditFlags_NoTooltip;
-						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-						bReturn = ofxImGuiSurfing::AddParameter(p, false, flags);
-						ImGui::PopItemWidth();
-						ImGui::SameLine();
-						ImGui::ColorButton("", tmpRef, flags, ImVec2(ImGui::GetContentRegionAvail().x, _h));
-					}
-
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2 * _hh));
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_NO_ALPHA)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh), true);
+					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG_NO_ALPHA)
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2 * _hh), true);
 				}
 				uniqueName.pop();
 

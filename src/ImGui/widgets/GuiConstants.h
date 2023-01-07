@@ -240,22 +240,21 @@ namespace ofxImGuiSurfing
 
 		// Colors
 
-		OFX_IM_COLOR, // standard
-		OFX_IM_COLOR_INPUT, // standard
-		OFX_IM_COLOR_NO_ALPHA, // without the alpha control
+		OFX_IM_COLOR, // default
+		OFX_IM_COLOR_INPUTS, // default
+		OFX_IM_COLOR_INPUTS_NO_ALPHA, // without the alpha control
 		OFX_IM_COLOR_NO_INPUTS, // without inputs
 		OFX_IM_COLOR_NO_INPUTS_NO_ALPHA, // without inputs
 		OFX_IM_COLOR_NO_NAME, //TODO: without name or controls
 		OFX_IM_COLOR_BOX, // small box color without controls
-		OFX_IM_COLOR_BOX_FULL_WIDTH, // DEPRECATED
-		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // DEPRECATED // double height
-		OFX_IM_COLOR_BOX_NO_NAME,
-		OFX_IM_COLOR_BOX_NO_NAME_BIG,
-		OFX_IM_COLOR_BOX_FULL_WIDTH_CONTROLS,//TODO:
+		OFX_IM_COLOR_BOX_FULL_WIDTH, // full width
+		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG, // double height
+		OFX_IM_COLOR_BOX_FULL_WIDTH_NO_ALPHA, // full width. no alpha
+		OFX_IM_COLOR_BOX_FULL_WIDTH_BIG_NO_ALPHA, // double height. no alpha
 
 		//--
 
-		// Multidim 
+		// Multi dim 
 
 		//TODO: 
 		// for glm::vec2 vec3 vec4

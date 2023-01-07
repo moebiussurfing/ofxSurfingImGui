@@ -496,7 +496,8 @@ namespace ofxImGuiSurfing
 	}
 
 	//TODO:
-	//full customizable flags
+	// full customizable flags
+	// ofColor
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha, ImGuiColorEditFlags flags)
 	{
@@ -534,6 +535,7 @@ namespace ofxImGuiSurfing
 
 		return false;
 	}
+	// ofFloatColor
 	//--------------------------------------------------------------
 	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha, ImGuiColorEditFlags flags = ImGuiColorEditFlags_None)
 	{

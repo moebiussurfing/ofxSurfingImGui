@@ -11,6 +11,7 @@
 #include "ImGui/widgets/ButtonsToggles.h"
 #include "ImGui/widgets/Extras.h"
 #include "ImGui/widgets/Sliders.h"
+#include "ImGui/widgets/Colors.h"
 #include "ImGui/widgets/SlidersRange.h"
 #include "ImGui/widgets/Knobs.h"
 #include "ImGui/widgets/KnobsStyled.h"
