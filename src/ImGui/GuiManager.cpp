@@ -63,10 +63,10 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//-
 
-	//TODO: BUG? 
-	// it seems than requires to be false when using multi-context/instances
-	// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
-	bAutoDraw = false;
+	////TODO: BUG? 
+	//// it seems than requires to be false when using multi-context/instances
+	//// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
+	//bAutoDraw = false;
 }
 
 //--------------------------------------------------------------
@@ -102,7 +102,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
 		setAutoSaveSettings(true);
-		setImGuiAutodraw(true);
+		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 
@@ -118,7 +118,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 		setAutoSaveSettings(true);
-		setImGuiAutodraw(true);
+		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 
@@ -164,7 +164,7 @@ void SurfingGuiManager::setupDocking()
 	setAutoSaveSettings(true);
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
-	setImGuiAutodraw(true);
+	//setImGuiAutodraw(true);
 }
 
 //--
@@ -364,16 +364,13 @@ void SurfingGuiManager::setupImGui()
 
 	// Hard coded settings
 
-	bool bRestore = true;
-	bool bMouse = false;
-
 	if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
 	// Setup ImGui with the appropriate config flags
 
-	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
-	else gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
+	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
@@ -714,7 +711,7 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 		}
 	}
 	else {
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << path << " NOT FOUND!";
+		ofLogError("ofxSurfingImGui") << " " << (__FUNCTION__) << "\nFILE FONT " << path << " NOT FOUND!";
 	}
 	if (customFont != nullptr) io.FontDefault = customFont;
 
@@ -830,9 +827,10 @@ void SurfingGuiManager::update() { // -> Not being used by default
 
 //--------------------------------------------------------------
 //void SurfingGuiManager::draw() // -> Not being used by default
-void SurfingGuiManager::draw(ofEventArgs& args)
+void SurfingGuiManager::draw(ofEventArgs& args) // -> Auto called on each frame
 {
-	if (!bAutoDraw) if (customFont == nullptr) gui.draw();
+	//TODO:
+	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
 
 	//--
 
@@ -1506,6 +1504,10 @@ void SurfingGuiManager::End()
 	// This should be tested. bc it's kind of a deprecated idea/feature.
 	if (guiPtr != nullptr) guiPtr->end();
 	else gui.end();
+
+	//--
+
+	if (!bAutoDraw) gui.draw();
 }
 
 //--

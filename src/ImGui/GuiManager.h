@@ -759,7 +759,7 @@ public:
 	}
 	// Same that above but with left/right arrows, place to the right.
 	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string> &fileNames, bool bCycled = false)
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
 	{
 		if (fileNames.empty()) return false;
 
@@ -942,7 +942,7 @@ public:
 		ImGui::PopItemWidth();
 
 		ImGui::PopID();
-		
+
 		ImGui::SameLine();
 
 		//--
@@ -1176,6 +1176,8 @@ public:
 	//----
 
 	// To help API coherence and/or Legacy
+	// kind of shortcuts..
+	// could be simplified using namespaces..
 	//--------------------------------------------------------------
 	void AddSpacingSmall()
 	{
@@ -1458,7 +1460,7 @@ public:
 	}
 
 	//--
-	
+
 	//TODO:
 	//--------------------------------------------------------------
 	bool BeginChild(string label)
@@ -1570,16 +1572,63 @@ public:
 
 	//----
 
-private:
-
 	// The ImGui instance options
 
-	bool bAutoDraw;
-	//TODO: must be false when multiple ImGui instances created ? 
-	// Currently not important, kind of deprecated.
+private:
 
 	bool bViewport = false;
 	bool bDockingModeCentered = false; //TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
+
+	bool bRestoreIniSettings = true; // allow handling of .ini settings.
+	bool bMouseCursorFromImGui = true; // true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
+
+public:
+
+	// must be called before setup!
+	void setEnableRestoreIniSettings(bool b) { bRestoreIniSettings = b; }
+	void setEnablebMouseCursorFromImGui(bool b) { bMouseCursorFromImGui = b; }
+
+private:
+
+	bool bAutoDraw = true; // default drawn in the background
+	//bool bAutoDraw = false; // default drawn in in front
+	
+	//TODO: should add another boolean as in front/background.
+	// separated from bAutoDraw
+
+public:
+
+	//TODO: to be precise, we will use bAutoDraw not to draw manually but internally.
+	// we will call gui.draw() after gui.end()
+	// this way allows to draw upon the GUI panels.
+	// if is set to true, like is on default, 
+	// you can't draw as natively/OF in front of the gui.
+
+	//TODO: must be false when multiple ImGui instances created ? 
+	// Currently not important, kind of deprecated.
+
+	void setEnablebAutoDraw(bool b) { bAutoDraw = b; }
+	// kind of alias for a more comprehensive method name
+	void setEnablebDrawInBackground(bool b) { bAutoDraw = !b; }
+	void setEnablebDrawInFront(bool b) { bAutoDraw = b; }
+
+	void setToggleAutoDraw() {
+		//TODO: do not works
+		// can be modified during runtime...
+
+		bAutoDraw = !bAutoDraw;
+
+		//setupImGui();
+		
+		ImGuiConfigFlags flags = ImGuiConfigFlags_None;
+		if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
+		if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
+		
+		//gui.exit();//crash
+
+		if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+		else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	}
 
 	//-
 
@@ -1589,6 +1638,7 @@ public:
 	// Some options
 
 	// Force autodraw
+	// Legacy
 	//--------------------------------------------------------------
 	void setImGuiAutodraw(bool b) { bAutoDraw = b; }
 	// must be called before setup! default is false. For ImGui multi-instance.
@@ -1713,8 +1763,8 @@ public:
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
-	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
-	
+	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };//for natural direction
+
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
@@ -2708,6 +2758,7 @@ public:
 
 	// Set next window position after last window. 
 	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
+	// TODO: working ?
 	//--------------------------------------------------------------
 	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing) {
 
@@ -2716,10 +2767,11 @@ public:
 	}
 
 	// Set next window position after the window named as the passed named and with the layout type distribution.
-	// layoutType=0 : top right 
-	// layoutType=1 : bottom left
-	// layoutType=2 : top left //TODO: BUG
-	// layoutType=3 : top up //TODO:
+	// layoutType = 0 : top right 
+	// layoutType = 1 : bottom left
+	// layoutType = 2 : top left //TODO: BUG
+	// layoutType = 3 : top up //TODO:
+	// TODO: add vec2 offset...
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
 	{
@@ -2781,10 +2833,9 @@ public:
 
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) {//passed anchor bGui / visible toggle 
-		
 		//TODO:
 		if (!bGui.get()) return;
-	
+
 		setNextWindowAfterWindowNamed(bGui.getName());
 	}
 
