@@ -34,7 +34,6 @@ ofParameter<bool> bGui{ "Show", true };
 
 ofParameter<bool> bEnable{ "Enable", false };
 ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f  };
-
 ofParameterGroup params;
 ..
 ```
