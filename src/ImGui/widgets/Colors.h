@@ -34,7 +34,7 @@ namespace ofxImGuiSurfing
 		}
 		else
 		{
-			ofLogWarning("ofxSurfingImGui") << "ofParam type named " + name + " is not an ofColor or an ofFloatColor!";
+			ofLogWarning("ofxSurfingImGui") << "Color: ofParam type named " + name + " is not an ofColor or an ofFloatColor!";
 			return false;
 		}
 

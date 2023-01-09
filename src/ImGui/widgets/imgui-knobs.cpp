@@ -127,14 +127,14 @@ namespace ImGuiKnobs {
 					circle_radius,
 					is_active ? color.active : (is_hovered ? color.hovered : color.base));
 
-				//border
+				// border. no fill
 				//const float o = 0.f;
 				const ImU32 c = ImGui::GetColorU32(ImGui::GetStyle().Colors[ImGuiCol_Border]);
 				ImGui::GetWindowDrawList()->AddCircle(
 					center,
 					circle_radius,
 					c,
-					0, 2.f);
+					0, 1.5f);
 
 			}
 
@@ -333,12 +333,12 @@ namespace ImGuiKnobs {
 		case ImGuiKnobVariant_Tick: {
 			knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
 
-			//border
+			// border
 			//knob.draw_circle(0.845, detail::GetPrimaryColorSet(), false, 32);
 
 			knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetPrimaryColorSet());
 
-			////border
+			//// border
 			//color_set cols{ ImColor(1,0,0,1), ImColor(0,1,1,1), ImColor(1,0,0,1) };
 			//knob.draw_circle(0.95, cols, false, 32);
 

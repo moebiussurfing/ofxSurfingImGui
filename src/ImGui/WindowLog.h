@@ -8,7 +8,7 @@
 /*
 
 	TODO:
-	add filer search box
+	add filter to search box
 	https://github.com/ocornut/imgui/issues/300
 
 */

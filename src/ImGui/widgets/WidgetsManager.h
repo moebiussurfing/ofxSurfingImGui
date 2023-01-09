@@ -1284,7 +1284,7 @@ namespace ofxImGuiSurfing
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1300,7 +1300,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1310,7 +1310,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1320,7 +1320,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1330,7 +1330,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1342,7 +1342,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1352,7 +1352,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1362,7 +1362,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1372,7 +1372,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1384,7 +1384,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1394,7 +1394,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1404,7 +1404,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1414,7 +1414,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, true));
 						if (bMouseWheel) if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1426,7 +1426,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1436,7 +1436,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1446,7 +1446,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1456,7 +1456,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1472,7 +1472,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						//not works
 						//if (bSameLine) 
@@ -1490,7 +1490,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1502,7 +1502,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1514,7 +1514,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1553,7 +1553,7 @@ namespace ofxImGuiSurfing
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1566,7 +1566,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1582,7 +1582,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1597,7 +1597,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1606,7 +1606,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1615,7 +1615,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1624,7 +1624,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1633,7 +1633,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1642,7 +1642,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1651,7 +1651,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1670,19 +1670,19 @@ namespace ofxImGuiSurfing
 						bReturn |= ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww * 0.25f - pad, _ww * 0.75f), true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						ImGui::SameLine();
 
 						bReturn |= (ofxImGuiSurfing::AddKnob(p, false, _ww * 0.75f));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						bReturn |= ofxImGuiSurfing::AddStepperFloat(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1695,7 +1695,7 @@ namespace ofxImGuiSurfing
 						bReturn = AddStepperFloat(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						//const float step = 0.001f;
 						//const float stepFast = 0.1f;
@@ -1712,6 +1712,16 @@ namespace ofxImGuiSurfing
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 					}
 					break;
+
+					case OFX_IM_STEPPER_NO_LABEL:
+					{
+						bReturn = AddStepper(p, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+					}
+					break;
+
 					}
 				}
 				uniqueName.pop();
@@ -1761,7 +1771,7 @@ namespace ofxImGuiSurfing
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1777,7 +1787,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1787,7 +1797,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1797,7 +1807,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1807,7 +1817,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1821,7 +1831,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1831,7 +1841,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1849,7 +1859,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1861,7 +1871,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1871,7 +1881,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1881,7 +1891,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1891,7 +1901,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1903,7 +1913,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1913,7 +1923,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1923,7 +1933,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1933,7 +1943,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1948,7 +1958,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1959,7 +1969,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1970,7 +1980,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -1981,7 +1991,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2021,7 +2031,7 @@ namespace ofxImGuiSurfing
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2047,7 +2057,7 @@ namespace ofxImGuiSurfing
 						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2062,7 +2072,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2071,7 +2081,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2080,7 +2090,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2089,7 +2099,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2098,7 +2108,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2107,7 +2117,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2116,7 +2126,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 
@@ -2129,7 +2139,7 @@ namespace ofxImGuiSurfing
 						bReturn = AddStepperInt(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) if (bMouseWheel) bReturn |= AddModifiedClick(p);
+						if (bMouseWheel) if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						//const int step = 1;
 						//const int stepFast = 5;
@@ -2144,6 +2154,15 @@ namespace ofxImGuiSurfing
 						//}
 						//IMGUI_SUGAR__STEPPER_WIDTH_POP;
 						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					}
+					break;
+
+					case OFX_IM_STEPPER_NO_LABEL:
+					{
+						bReturn = AddStepper(p, true);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
 

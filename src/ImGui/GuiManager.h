@@ -687,7 +687,84 @@ public:
 
 	// More Widgets
 
-	// Combo list. 
+
+	// A bundle of controls
+	// for a single param
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddComboBundle(ofParameter<ParameterType>& p)
+	{
+		string name = p.getName();
+
+		bool bReturn = false;
+
+		const auto& t = typeid(ParameterType);
+		const bool isFloat = (t == typeid(float));
+		const bool isInt = (t == typeid(int));
+
+		if (!isFloat && !isInt) {
+			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
+			return false;
+		}
+
+		// label
+		this->AddLabelHuge(p.getName(), true, true);
+
+		// stepper
+		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
+
+		// slider
+		bReturn += this->Add(p, OFX_IM_HSLIDER_SMALL_NO_LABELS);
+
+		// arrows
+		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
+		{
+			float step = 0;
+			if (isInt) step = 1;
+			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
+
+			if (this->AddButton("<", OFX_IM_BUTTON_BIG, 2))
+			{
+				p -= step;
+				p = ofClamp(p, p.getMin(), p.getMax());
+				bReturn += true;
+			}
+			ImGui::SameLine();
+			if (this->AddButton(">", OFX_IM_BUTTON_BIG, 2))
+			{
+				p += step;
+				p = ofClamp(p, p.getMin(), p.getMax());
+				bReturn += true;
+			}
+		}
+		ImGui::PopButtonRepeat();
+
+		// knob
+		//this->Add(p, OFX_IM_KNOB_DOTKNOB);
+		float w = this->getWidgetsWidth(1);
+		ImGuiKnobFlags flags = 0;
+		flags += ImGuiKnobFlags_NoInput;
+		flags += ImGuiKnobFlags_NoTitle;
+		flags += ImGuiKnobFlags_ValueTooltip;//not works
+		//flags += ImGuiKnobFlags_DragHorizontal;
+		bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
+
+		// mouse
+		if (this->bMouseWheel) {
+			ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
+			ofxImGuiSurfing::GetMouseWheel();
+			ofxImGuiSurfing::AddMouseClickRightReset(p, true);
+		}
+
+		// tooltip
+		this->AddTooltip(p, true, false);
+
+		return bReturn;
+	}
+
+	//----
+
+	// Combo List. 
 
 	// Selector index directly with an int ofParam
 	// without name label
@@ -1143,6 +1220,18 @@ public:
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
+	//TODO: 
+	// To insert into ofParam widgets
+	// Showing the name and value.
+
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	void AddTooltip(ofParameter<ParameterType>& p, bool bEnabled = true, bool bNoName = true)
+	{
+		ofxImGuiSurfing::AddTooltip(p, bEnabled, bNoName);
+	}
+
+	/*
 	//--------------------------------------------------------------
 	void AddTooltip(ofAbstractParameter& p, bool bEnabled = true)
 	{
@@ -1172,6 +1261,7 @@ public:
 
 		this->AddTooltip(s, bEnabled);
 	}
+	*/
 
 	//----
 
@@ -1592,7 +1682,7 @@ private:
 
 	bool bAutoDraw = true; // default drawn in the background
 	//bool bAutoDraw = false; // default drawn in in front
-	
+
 	//TODO: should add another boolean as in front/background.
 	// separated from bAutoDraw
 
@@ -1619,11 +1709,11 @@ public:
 		bAutoDraw = !bAutoDraw;
 
 		//setupImGui();
-		
+
 		ImGuiConfigFlags flags = ImGuiConfigFlags_None;
 		if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
 		if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
-		
+
 		//gui.exit();//crash
 
 		if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);

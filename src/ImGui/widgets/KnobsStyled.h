@@ -67,10 +67,10 @@ namespace ofxImGuiSurfing
 
 		// Unknown Types
 
-		else 
+		else
 		{
 			bUnknown = true;
-			ofLogWarning(__FUNCTION__) << "Could not add a Styled Knob control to element " << parameter.getName() << " bc this type!";
+			ofLogWarning("ofxSurfingImGui") << "Could not add a Styled Knob control to element " << parameter.getName() << " bc this type!";
 
 			return false;
 		}

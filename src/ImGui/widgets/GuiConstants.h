@@ -192,6 +192,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR,
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
+		OFX_IM_STEPPER_NO_LABEL,
 		OFX_IM_DRAG,
 
 		//--
@@ -204,6 +205,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_KNOB_TRAIL, // Legacy. decorated
 
 		//TODO:
+		// Add more arguments: no label, no number...
 		// Adding NEW style knobs, 
 		// taken from Simon Altschuler 
 		// https://github.com/altschuler/imgui-knobs
@@ -219,7 +221,28 @@ namespace ofxImGuiSurfing
 		//--
 
 		OFX_IM_COMBO_MULTI,
-		//TODO: multiple controls for fine tweak: slider + drag + stepper
+		//TODO: multiple controls for fine tweak:
+		//slider + drag + stepper
+		/*
+		// A bundle of controls
+		// for a single param
+		ui.AddLabelBig(lineWidth.getName());
+		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
+		{
+			if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
+			{
+				lineWidth -= 0.1f;
+				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+			}
+			ImGui::SameLine();
+			if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
+			{
+				lineWidth += 0.1f;
+				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+			}
+		}
+		ImGui::PopButtonRepeat();
+		*/
 
 		//--
 

@@ -149,7 +149,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bUnknown = true;
-			ofLogWarning(__FUNCTION__) << "Could not add mouse wheel to " << param.getName();
+			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << param.getName();
 
 			return;
 		}
@@ -418,8 +418,10 @@ namespace ofxImGuiSurfing
 	// Reset params when Alt+Click called
 
 	template<typename ParameterType>
-	inline bool AddModifiedClick(ofParameter<ParameterType>& param)
+	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& param, bool bToMin = false)
 	{
+		//bToMin true to use min instead of the center value!
+
 		bool bClick = GetRightMouseClick();
 		//bool bClick = GetAltMouseClick();
 
@@ -480,7 +482,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bUnknown = true;
-			ofLogWarning(__FUNCTION__) << "Could not add mouse wheel to " << param.getName();
+			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << param.getName();
 
 			return false;
 		}
@@ -508,7 +510,8 @@ namespace ofxImGuiSurfing
 				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
 				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
 
-				p.set(_p);
+				if (bToMin) p.set(p.getMin());
+				else p.set(_p);
 
 				bChanged = true;
 			}
@@ -524,7 +527,8 @@ namespace ofxImGuiSurfing
 				float centerZ = p.getMin().z + ((p.getMax().z - p.getMin().z) / 2.f);
 				_p.z = ofClamp(centerZ, p.getMin().z, p.getMax().z); // clamp
 
-				p.set(_p);
+				if (bToMin) p.set(p.getMin());
+				else p.set(_p);
 
 				bChanged = true;
 			}
@@ -542,7 +546,8 @@ namespace ofxImGuiSurfing
 				float centerW = p.getMin().w + ((p.getMax().w - p.getMin().w) / 2.f);
 				_p.w = ofClamp(centerW, p.getMin().w, p.getMax().w); // clamp
 
-				p.set(_p);
+				if (bToMin) p.set(p.getMin());
+				else p.set(_p);
 
 				bChanged = true;
 			}
@@ -556,8 +561,11 @@ namespace ofxImGuiSurfing
 		{
 			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
 
-			int center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
-			p = (int)ofClamp(center, p.getMin(), p.getMax()); // clamp
+			if (bToMin) p.set(p.getMin());
+			else {
+				int center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
+				p = (int)ofClamp(center, p.getMin(), p.getMax()); // clamp
+			}
 
 			bChanged = true;
 		}
@@ -570,8 +578,11 @@ namespace ofxImGuiSurfing
 		{
 			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
 
-			float center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
-			p = ofClamp(center, p.getMin(), p.getMax()); // clamp
+			if (bToMin) p.set(p.getMin());
+			else {
+				float center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
+				p = ofClamp(center, p.getMin(), p.getMax()); // clamp
+			}
 
 			bChanged = true;
 		}
@@ -597,6 +608,34 @@ namespace ofxImGuiSurfing
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
+	}
+
+	//--
+
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	void AddTooltip(ofParameter<ParameterType>& p, bool bEnabled = true, bool bNoName = false)
+	{
+		bool bReturn = false;
+		string name = p.getName();
+		auto tmpRef = p.get();
+
+		const auto& t = typeid(ParameterType);
+		bool isFloat = (t == typeid(float));
+		bool isInt = (t == typeid(int));
+		bool isBool = (t == typeid(bool));
+
+		if (!isFloat && !isInt && !isBool) {
+			ofLogWarning("ofxSurfingImGui") << "Tooltip: ofParam type named " + name + " is not a Float, Int or Bool";
+		}
+
+		string s = "";
+		if (!bNoName) s += p.getName() + "\n";
+		if (isFloat) s += ofToString(p.get(), 3);//improve format
+		else if (isInt) s += ofToString(p.get());
+		else if (isBool) s += ofToString((p.get() ? "TRUE" : "FALSE"));
+
+		AddTooltip(s);
 	}
 
 	//----------------------
@@ -689,8 +728,8 @@ namespace ofxImGuiSurfing
 
 	// Stepper widgets. (with +/- buttons to increment/decrement)
 
-	bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
-	bool AddStepper(ofParameter<float>& parameter, float step = -1, float stepFast = -1);
+	//bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
+	//bool AddStepper(ofParameter<float>& parameter, float step = -1, float stepFast = -1);
 
 	//--------------------------------------------------------------
 	inline bool AddStepperInt(ofParameter<int>& parameter)
@@ -726,7 +765,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddStepperFloat(ofParameter<float>& p)
 	{
-		float step = (p.getMax() - p.getMin()) / 100.f;
+		float res = 100.f;
+		float step = (p.getMax() - p.getMin()) / res;
 		float stepFast = 100.f * step;
 
 		auto tmpRef = p.get();
@@ -746,6 +786,67 @@ namespace ofxImGuiSurfing
 		}
 
 		IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
+
+		ImGui::PopID();
+
+		return bReturn;
+	}
+
+	//--
+
+	// Stepper aux. to be used to not draw label. 
+	// useful to use on combo of widgets to populate one single variable!
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddStepper(ofParameter<ParameterType>& p, bool bNoLabel = false)
+	{
+		bool bReturn = false;
+		string name = p.getName();
+		auto tmpRef = p.get();
+
+		const auto& t = typeid(ParameterType);
+		bool isFloat = (t == typeid(float));
+		bool isInt = (t == typeid(int));
+		if (!isFloat && !isInt) {
+			ofLogWarning("ofxSurfingImGui") << "Stepper: ofParam type named " + name + " is not a Float or an Int";
+			return false;
+		}
+
+		//int
+		const ImU32 u32_one = 1;
+		static bool inputs_step = true;
+
+		//float
+		float res = 100.f;
+		float step = (p.getMax() - p.getMin()) / res;
+		float stepFast = 100.f * step;
+
+		string n = "##STEPPER" + name;
+		string label = ofToString(bNoLabel ? "" : name);
+
+		ImGui::PushID(n.c_str());
+
+		if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		else IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
+
+		if (isFloat)
+			if (ImGui::InputFloat(label.c_str(), (float*)&tmpRef, step, stepFast))
+			{
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				p.set(tmpRef);
+				bReturn = true;
+			}
+			else if (isInt)
+				if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32,
+					(int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
+				{
+					tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+					p.set(tmpRef);
+					bReturn = true;
+				}
+
+		if (bNoLabel) ImGui::PopItemWidth();
+		else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
 
 		ImGui::PopID();
 
@@ -821,7 +922,7 @@ namespace ofxImGuiSurfing
 		// UNKNOWN
 
 		if (info.name() == "" || info.name() == " ")
-			ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+			ofLogWarning("ofxSurfingImGui") << "Could not create GUI element for type " << info.name();
 
 		return false;
 	}
@@ -873,7 +974,7 @@ namespace ofxImGuiSurfing
 			else
 			{
 				if (info.name() == "" || info.name() == " ")
-					ofLogWarning(__FUNCTION__) << "Could not create GUI element for type " << info.name();
+					ofLogWarning("ofxSurfingImGui") << "Could not create GUI element for type " << info.name();
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
