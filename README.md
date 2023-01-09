@@ -34,6 +34,7 @@ ofParameter<bool> bGui{ "Show", true };
 
 ofParameter<bool> bEnable{ "Enable", false };
 ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f  };
+
 ofParameterGroup params;
 ..
 ```
@@ -45,10 +46,12 @@ void ofApp::draw()
 {
     ui.Begin();
     {
-        /* windows goes here */
+        /* Put windows here */
+
         if (ui.BeginWindow(bGui))
         {
             /* Put widgets here */
+
             ui.AddGroup(params);
             ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE);
