@@ -32,6 +32,8 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ofxSurfingGui ui;
 
 ofParameter<bool> bGui{ "Show", true };
+ofParameter<bool> bEnable{ "Enable", false };
+ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f  };
 ofParameterGroup params;
 ..
 ```
@@ -46,11 +48,11 @@ void ofApp::draw()
         /* windows goes here */
         if (ui.BeginWindow(bGui))
         {
-            /* widgets goes here */
+            /* Put widgets here */
             ui.AddGroup(params);
             ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE);
-            ui.Add(value, OFX_IM_HSLIDER_MINI);
+            ui.Add(speed, OFX_IM_HSLIDER_MINI);
 
             ui.EndWindow();
         }
