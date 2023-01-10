@@ -291,7 +291,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline float getWidgetsHeightUnit()
+	inline float getWidgetsHeightUnit() // uses font size and frame padding
 	{
 		return getWidgetsHeightRelative();
 	}
@@ -299,14 +299,16 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline float getWidgetsHeight(int amntRows = -1)
 	{
-		// notice that passing 1 will be full window height!
+		// Notice that passing 1 will be full window height!
 		// that can be trouble when auto resize window is allowed.
+		// that's bc we pass the amount of widgets we will want to fit per row!
+		// If we want one row of widgets, the widget height 
+		// will be the window available free height!
 
 		float h;
 		if (amntRows == -1)
 		{
 			h = getWidgetsHeightUnit();
-			//h = BUTTON_BIG_HEIGHT;
 		}
 		else
 		{
@@ -319,7 +321,14 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
-	// More helpers
+	// Available height from current drawlist position
+	//--------------------------------------------------------------
+	inline float getWindowHeightFree()
+	{
+		return getWidgetsHeight(1);
+	}
+
+	// More Helpers
 	// Get ImVec2 size for fast populate buttons
 	//--------------------------------------------------------------
 	inline ImVec2 getWidgetsShapeDefault()

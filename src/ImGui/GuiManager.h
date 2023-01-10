@@ -753,7 +753,7 @@ public:
 		if (this->bMouseWheel) {
 			ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
 			ofxImGuiSurfing::GetMouseWheel();
-			ofxImGuiSurfing::AddMouseClickRightReset(p, true);
+			ofxImGuiSurfing::AddMouseClickRightReset(p);
 		}
 
 		// tooltip
@@ -1962,27 +1962,27 @@ public:
 private:
 
 	// Window Log
-	ImGuiLogWindow log; // could be public 
+	SurfingLog log; // could be public 
 
 public:
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled() {
-		if (bLog) log.ImGui(bLog);
+		if (bLog) log.drawImGui(bLog);
 	}
 
 	//--------------------------------------------------------------
 	void DrawWindowLog() {
 		static ofParameter<bool>b{ "LOG", true };
-		log.ImGui(b);
+		log.drawImGui(b);
 	}
 
 	// Legacy API
 	//--------------------------------------------------------------
-	void AddToLog(std::string text)//print message to log window
+	void AddToLog(std::string text, int tag = -1) // print message to log window
 	{
 		// Log
-		log.AddText(text);
+		log.Add(text, tag);
 	}
 
 	//public:

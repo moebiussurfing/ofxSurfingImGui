@@ -1,22 +1,15 @@
 #pragma once
 
+//--
 
 /*
 
 	This example shows how to use the logging system.
 
-	TODO
-
-	check if intuitive direction
-	add filter search from ImGui Demo
-
-	Try and merge
-	Colored log
-	https://github.com/ocornut/imgui/issues/5796
-	https://github.com/ocornut/imgui/issues/5796#issuecomment-1288128069
-
 */
 
+
+//--
 
 
 #include "ofMain.h"
@@ -48,6 +41,12 @@ public:
 	void setupImGui();
 	void drawImGui();
 
-	void udpateScene(); // -> Generates random variations to animate variables.
-	void updateLog(); // -> Generates random messages to test the Log window.
+	// Generates random variations to animate variables.
+	// Log messages to test the Log window.
+	void updateLog(); 
+	ofParameter<bool> bEnable2;
+	ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
+	ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
+	ofParameter<float> progress2{ "Progress 2", 0 , 0, 1 };
+	//ofParameter<float> progress3{ "Progress 3", 0 , 0, 1 };
 };

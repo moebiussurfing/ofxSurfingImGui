@@ -430,14 +430,16 @@ namespace ofxImGuiSurfing
 	// Reset params when Alt+Click called
 
 	template<typename ParameterType>
-	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& param, bool bToMin = false)
+	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& param, bool bToMinByDefault = false)
 	{
 		// Behavior:
-		// right click : resets to center
+		// right click : resets to center by default
 		// ctrl+ : to min
 		// alt+ : to max
 
-		// bToMin : true to use min instead of the center value!
+		//TODO: should remove and DEPRECATE ?
+		// bToMinByDefault : true 
+		// to use min as default (when no mods) instead of the center value!
 
 		bool bRightClick = GetMouseClickRight();
 		if (!bRightClick) return false;
@@ -462,21 +464,10 @@ namespace ofxImGuiSurfing
 		bool bIsDim2 = false;
 		bool bIsDim3 = false;
 		bool bIsDim4 = false;
-		//bool bIsVoid = false;
-		//bool bIsbool = false;
 
 		const auto& info = typeid(ParameterType);
 
 		if (0) {}
-
-		//else if (info == typeid(bool)) // BOOL
-		//{
-		//	bIsbool = true;
-		//}
-		//else if (info == typeid(void)) // VOID
-		//{
-		//	bIsVoid = true;
-		//}
 
 		else if (info == typeid(float)) // FLOAT
 		{
@@ -487,7 +478,6 @@ namespace ofxImGuiSurfing
 			bIsInt = true;
 		}
 
-		//TODO:
 		else if (info == typeid(ofDefaultVec2))
 		{
 			bIsMultiDim = true;
@@ -536,7 +526,7 @@ namespace ofxImGuiSurfing
 				float centerY = p.getMin().y + ((p.getMax().y - p.getMin().y) / 2.f);
 				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
 
-				if (bToMin) p.set(p.getMin());
+				if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 				else if (bModCtrl) p.set(p.getMin());
 				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
@@ -555,7 +545,7 @@ namespace ofxImGuiSurfing
 				float centerZ = p.getMin().z + ((p.getMax().z - p.getMin().z) / 2.f);
 				_p.z = ofClamp(centerZ, p.getMin().z, p.getMax().z); // clamp
 
-				if (bToMin) p.set(p.getMin());
+				if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 				else if (bModCtrl) p.set(p.getMin());
 				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
@@ -576,7 +566,7 @@ namespace ofxImGuiSurfing
 				float centerW = p.getMin().w + ((p.getMax().w - p.getMin().w) / 2.f);
 				_p.w = ofClamp(centerW, p.getMin().w, p.getMax().w); // clamp
 
-				if (bToMin) p.set(p.getMin());
+				if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 				else if (bModCtrl) p.set(p.getMin());
 				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
@@ -593,7 +583,7 @@ namespace ofxImGuiSurfing
 		{
 			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
 
-			if (bToMin) p.set(p.getMin());
+			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
 			else if (bModAlt) p.set(p.getMax());
 			else {
@@ -612,7 +602,7 @@ namespace ofxImGuiSurfing
 		{
 			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
 
-			if (bToMin) p.set(p.getMin());
+			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
 			else if (bModAlt) p.set(p.getMax());
 			else {

@@ -461,6 +461,7 @@ void SurfingGuiManager::startup()
 
 		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
 		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
+		//boxHelpInternal.setName(bHelpInternal.getName());
 		boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
 		boxHelpInternal.setup();
 
@@ -471,6 +472,7 @@ void SurfingGuiManager::startup()
 		// Help Text Box app
 
 		boxHelpApp.bGui.makeReferenceTo(bHelp);
+		//boxHelpApp.setName(bHelp.getName());
 		boxHelpApp.setPath(path_Global + "HelpBox_App/");
 		boxHelpApp.setup();
 
@@ -1072,9 +1074,8 @@ void SurfingGuiManager::drawLayoutsPresetsEngine() {
 		drawLayoutsPanels();
 	}
 
-	// Log
-	if (appLayoutIndex != -1) if (bLog) log.ImGui(bLog);
-	//if (bLog) log.ImGui("Log");
+	//// Log
+	//if (appLayoutIndex != -1) DrawWindowLogIfEnabled();
 }
 
 //--------------------------------------------------------------
@@ -3297,17 +3298,17 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
 		{
 			std::string ss = "KEY " + ofToString((char)key) + "";
-			log.AddText(ss);
+			log.Add(ss, 3);
 		}
 
 	//-
 
 	if (0)
 	{
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << " mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << " mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << " mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << " mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
 	}
 
 	//----

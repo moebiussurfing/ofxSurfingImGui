@@ -1868,7 +1868,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL:
 					{
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1878,7 +1878,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_LABELS:
 					{
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1888,7 +1888,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_NAME:
 					{
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), true, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1898,7 +1898,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_HSLIDER_SMALL_NO_NUMBER:
 					{
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h / 2), false, true));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
