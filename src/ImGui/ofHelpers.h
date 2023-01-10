@@ -392,9 +392,11 @@ namespace ofxImGuiSurfing
 	// Modified Clicks
 
 	//--------------------------------------------------------------
+
+	//TODO:
 	//inline bool GetMouseDoubleClick()
 
-	inline bool GetAltMouseClick()
+	inline bool GetMouseClickRightAlt()
 	{
 		bool bModifier = ImGui::GetIO().KeyAlt;
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Right) && bModifier)
@@ -404,7 +406,17 @@ namespace ofxImGuiSurfing
 		return false;
 	}
 
-	inline bool GetRightMouseClick()
+	inline bool GetMouseClickRightCtrl()
+	{
+		bool bModifier = ImGui::GetIO().KeyCtrl;
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Right) && bModifier)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	inline bool GetMouseClickRight()
 	{
 		if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
 		{
@@ -420,24 +432,38 @@ namespace ofxImGuiSurfing
 	template<typename ParameterType>
 	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& param, bool bToMin = false)
 	{
-		//bToMin true to use min instead of the center value!
+		// Behavior:
+		// right click : resets to center
+		// ctrl+ : to min
+		// alt+ : to max
 
-		bool bClick = GetRightMouseClick();
-		//bool bClick = GetAltMouseClick();
+		// bToMin : true to use min instead of the center value!
 
-		if (!bClick) return false;
+		bool bRightClick = GetMouseClickRight();
+		if (!bRightClick) return false;
+
+		//--
+
+		// right clicked
+
+		//static bool bModCtrl;
+		//static bool bModAlt; 
+		bool  bModCtrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
+		bool bModAlt = ImGui::IsKeyDown(ImGuiKey_ModAlt);
+		
 
 		bool bChanged = false;
 
+		// param type
 		bool bUnknown = false;
-		//bool bIsVoid = false;
-		//bool bIsbool = false;
 		bool bIsInt = false;
 		bool bIsFloat = false;
 		bool bIsMultiDim = false;
 		bool bIsDim2 = false;
 		bool bIsDim3 = false;
 		bool bIsDim4 = false;
+		//bool bIsVoid = false;
+		//bool bIsbool = false;
 
 		const auto& info = typeid(ParameterType);
 
@@ -482,7 +508,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bUnknown = true;
-			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << param.getName();
+			ofLogWarning("ofxSurfingImGui") << "AddMouseClickRightReset : Could not add mouse wheel to " << param.getName();
 
 			return false;
 		}
@@ -511,6 +537,8 @@ namespace ofxImGuiSurfing
 				_p.y = ofClamp(centerY, p.getMin().y, p.getMax().y); // clamp
 
 				if (bToMin) p.set(p.getMin());
+				else if (bModCtrl) p.set(p.getMin());
+				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
 
 				bChanged = true;
@@ -528,6 +556,8 @@ namespace ofxImGuiSurfing
 				_p.z = ofClamp(centerZ, p.getMin().z, p.getMax().z); // clamp
 
 				if (bToMin) p.set(p.getMin());
+				else if (bModCtrl) p.set(p.getMin());
+				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
 
 				bChanged = true;
@@ -547,6 +577,8 @@ namespace ofxImGuiSurfing
 				_p.w = ofClamp(centerW, p.getMin().w, p.getMax().w); // clamp
 
 				if (bToMin) p.set(p.getMin());
+				else if (bModCtrl) p.set(p.getMin());
+				else if (bModAlt) p.set(p.getMax());
 				else p.set(_p);
 
 				bChanged = true;
@@ -562,6 +594,8 @@ namespace ofxImGuiSurfing
 			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
 
 			if (bToMin) p.set(p.getMin());
+			else if (bModCtrl) p.set(p.getMin());
+			else if (bModAlt) p.set(p.getMax());
 			else {
 				int center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
 				p = (int)ofClamp(center, p.getMin(), p.getMax()); // clamp
@@ -579,6 +613,8 @@ namespace ofxImGuiSurfing
 			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
 
 			if (bToMin) p.set(p.getMin());
+			else if (bModCtrl) p.set(p.getMin());
+			else if (bModAlt) p.set(p.getMax());
 			else {
 				float center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
 				p = ofClamp(center, p.getMin(), p.getMax()); // clamp

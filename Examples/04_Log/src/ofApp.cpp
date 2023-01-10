@@ -17,7 +17,7 @@ void ofApp::setupParams()
 	params.add(bNext.set(">"));
 	params.add(lineWidth.set("Width", 0.5f, 0, 1));
 	params.add(separation.set("Separation", 50, 1, 100));
-	params.add(amount.set("Amount", 10, 0, 25));
+	params.add(amountPauses.set("Pauses", 50, 0, 100));
 	params.add(bEnable.set("Enable", true));
 
 	ofAddListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
@@ -47,22 +47,28 @@ void ofApp::drawImGui()
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 		ui.AddSpacingBigSeparated();
 
-		ui.AddLabelBig("LOG SYSTEM");
+		ui.AddLabelHuge("LOG SYSTEM");
 		ui.AddSpacing();
 		ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
-		ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
-		ui.AddSpacing();
-
-		ui.AddLabel("Animate");
-		ui.Add(bEnable, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
-		ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
+		if (ui.bLog) {
+			ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+		}
 		ui.AddSpacingBigSeparated();
 
-		ui.Add(speed, OFX_IM_HSLIDER_BIG);
-		ui.AddTooltip("Sets the speed \nof animation to Log");
+		ui.AddLabelHuge("ANIMATE");
+		ui.AddSpacing();
+		ui.Add(bEnable, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+		ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
+		ui.AddSpacing();
+		if (bEnable) {
+			ui.AddLabelBig("MODIFIERS");
+			ui.Add(speed, OFX_IM_HSLIDER_BIG);
+			ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
 
-		ui.Add(amount, OFX_IM_HSLIDER_NO_LABELS);
-		ui.AddTooltip(amount, true, false);
+			ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL_NO_LABELS);
+			ui.AddTooltip("Density of \npause moments");
+			ui.AddTooltip(amountPauses, true, false);
+		}
 		ui.AddSpacingBigSeparated();
 
 		//--
@@ -95,7 +101,7 @@ void ofApp::udpateScene()
 	// Animate
 	if (0) {
 		float t = ofGetElapsedTimef();
-		float s = ofMap(amount, amount.getMax(), amount.getMin(), 1, 10);
+		float s = ofMap(amountPauses, amountPauses.getMax(), amountPauses.getMin(), 1, 10);
 		t = ofWrap(t, 0, s);
 		separation = ofMap(t, 0, s, separation.getMin(), separation.getMax());
 	}
@@ -108,9 +114,12 @@ void ofApp::udpateScene()
 void ofApp::updateLog()
 {
 	// Make pauses
+	float a = ofMap(amountPauses, amountPauses.getMax(), amountPauses.getMin(), 0.25f, 1.f);
 	static int t1 = 600;
 	if ((ofGetFrameNum() % t1) == 0) t1 = (int)ofRandom(200, 600);
-	if (ofGetFrameNum() % t1 > (t1 * 0.75f)) {
+	//if (ofGetFrameNum() % t1 > (t1 * 0.75f)) 
+	if (ofGetFrameNum() % t1 > (t1 * a)) 
+	{
 		return;
 	}
 

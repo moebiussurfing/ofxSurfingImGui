@@ -8,7 +8,7 @@
 	TODO
 
 	check if intuitive direction
-	add filter serach from ImGui Demo
+	add filter search from ImGui Demo
 
 	Try and merge
 	Colored log
@@ -39,7 +39,7 @@ public:
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;
 	ofParameter<float> speed;
-	ofParameter<int> amount;
+	ofParameter<int> amountPauses;
 
 	ofParameterGroup params;
 	void Changed_Params(ofAbstractParameter& e);

@@ -1362,8 +1362,8 @@ void SurfingGuiManager::Begin()
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" <<
-			("Initialization was not done properly. Check the examples / documentation.");
+		ofLogError("ofxSurfingImGui") << " " << (__FUNCTION__) << "\n" <<
+			("Initialization was not done properly. \nCheck the examples / documentation.");
 
 		return;
 	}
@@ -1507,6 +1507,8 @@ void SurfingGuiManager::End()
 
 	//--
 
+	//TODO: should add a new variable like bDrawInfront to draw back/foreground...
+	//TODO: maybe it's an ofxImGui feature..
 	if (!bAutoDraw) gui.draw();
 }
 
