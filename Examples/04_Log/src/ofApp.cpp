@@ -30,6 +30,14 @@ void ofApp::setupParams()
 void ofApp::setupImGui()
 {
 	ui.setup();
+
+	// Add custom tags to logger
+	{
+		SurfingLog::tagData tagOSC{ "[OSC]", ofColor::turquoise };
+		ui.AddLogTag(tagOSC);
+		SurfingLog::tagData tagMIDI{ "[MIDI]", ofColor::orange };
+		ui.AddLogTag(tagMIDI);
+	}
 }
 
 //--------------------------------------------------------------
@@ -47,9 +55,8 @@ void ofApp::drawImGui()
 
 	if (ui.BeginWindow("ofApp"))
 	{
-		bool b = !ui.bMinimize;//maximized alias
-
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+		bool b = !ui.bMinimize;//maximized alias
 		ui.AddSpacingBigSeparated();
 
 		if (b) ui.AddLabelHuge("LOG SYSTEM");
@@ -70,7 +77,7 @@ void ofApp::drawImGui()
 			ui.Add(speed, OFX_IM_HSLIDER_SMALL);
 			ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
 
-			ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL_NO_LABELS);
+			ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL);
 			ui.AddTooltip("Density of \npause moments");
 			ui.AddTooltip(amountPauses, true, false);
 
@@ -143,7 +150,7 @@ void ofApp::updateLog()
 		int d = ofMap(speed.get(), 0, 1, 120, 8);
 		progress1 = ofMap(f % d, 0, d, 0, 1, true);
 		if (f % d == 0)
-			ui.AddToLog(separation.getName() + " : " + ofToString(separation));
+			ui.AddToLog(ofToString(separation) + " <------ " + separation.getName(), "[NOTICE]"); // default with no color bc no tag
 	}
 
 	// Auto populate random log messages.
@@ -155,33 +162,32 @@ void ofApp::updateLog()
 		//progress3 = ofMap(f % m, 0, m, 0, 1, true);
 		if (ofNoise(t) < 0.4f) return; // skip one third
 
-		string ss = ofToString(f);
+		string ss = "FrameNum :" + ofToString(f);
 		float _rnd = ofRandom(1);
 		string s2 = "";
 
 		if (_rnd < 0.2)
-			ui.AddToLog(ss, 4);
+			ui.AddToLog(ss, "[VERBOSE]");
 
 		else if (_rnd < 0.4)
-			ui.AddToLog(ofToString(_rnd, 4));
+			ui.AddToLog(ofToString(_rnd, 4), "[ERROR]");
 
 		else if (_rnd < 0.6)
 		{
-			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "--...-.-.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--..")));
-			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "...-...-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--..")));
+			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "--...-.-.--..")) + "--" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--..")));
+			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "...-...-." : "---.--..")) + "..--------..-" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--..")));
 		}
 
 		else if (_rnd < 0.8)
 		{
-			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "....-..-." : "---.--..")) + "---...-.------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-....-....-.--..")));
-			s2 += ofToString((ofRandom(1) < 0.5 ? "...-....-." : "--.--") + ofToString("===//...--//-----.."));
+			s2 += ofToString(ofToString((ofRandom(1) < 0.5 ? "....-..-." : "---.--..")) + "---...-.---.---.." + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-....-....-.--..")));
+			s2 += ofToString((ofRandom(1) < 0.5 ? "...-....-." : "--.--") + ofToString("===//...--//--...---.."));
 		}
 
 		else
-			ui.AddToLog(ofGetTimestampString());
+			ui.AddToLog("Now we are: " + ofGetTimestampString(), "[VERBOSE]");
 
-		if (s2 != "") ui.AddToLog(s2, 2);
-
+		if (s2 != "") ui.AddToLog(s2, "[NOTICE]");
 	}
 }
 
@@ -189,12 +195,30 @@ void ofApp::updateLog()
 void ofApp::Changed_Params(ofAbstractParameter& e)
 {
 	std::string name = e.getName();
-	ofLogNotice() << name << " : " << e;
+	ofLogNotice() << name << ": " << e;
 
-	if (name == bPrevious.getName() || name == bNext.getName()) return;
+	// Log using the custom added tags!
 
-	string s = name + " : " + ofToString(e);
-	ui.AddToLog(s, 3);
+	// logged as "[OSC]"
+	if (name == bPrevious.getName() || name == bNext.getName()) {
+		ui.AddToLog(name, "[OSC]");
+		return;
+	}
+	if (name == amountPauses.getName()) {
+		ui.AddToLog(name + ": " + ofToString(e), "[OSC]");
+		return;
+	}
+
+	// logged as "[MIDI]"
+	if (name == separation.getName()) {
+		string s = name + ": " + ofToString(e);
+		ui.AddToLog(s, "[MIDI]");
+		return;
+	}
+
+	// all the rest are logged as "[WARNING]"
+	string s = name + ": " + ofToString(e);
+	ui.AddToLog(s, "[WARNING]");
 }
 
 //--------------------------------------------------------------

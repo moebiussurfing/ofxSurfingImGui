@@ -1961,8 +1961,11 @@ public:
 
 private:
 
+	// could be public 
+//public:
+
 	// Window Log
-	SurfingLog log; // could be public 
+	SurfingLog log; 
 
 public:
 
@@ -1977,33 +1980,38 @@ public:
 		log.drawImGui(b);
 	}
 
-	// Legacy API
+	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, int tag = -1) // print message to log window
+	void AddLogTag(SurfingLog::tagData tag)
+	{
+		log.AddTag(tag);
+	}
+
+	// These are the default tags
+	//"[INFO]"
+	//"[VERBOSE]"
+	//"[NOTICE]"
+	//"[WARNING]"
+	//"[ERROR]"
+
+	// Print message to log window passing the message and the tag name. must exist or added previously.
+	//--------------------------------------------------------------
+	void AddToLog(std::string text, string nameTag) 
+	{
+		// Log
+		log.Add(text, nameTag);
+	}
+	// Print message to log window passing the message and the tag index. must exist or added previously.
+	//--------------------------------------------------------------
+	void AddToLog(std::string text, int tag = -1) 
 	{
 		// Log
 		log.Add(text, tag);
 	}
 
-	//public:
-		//// Legacy API
-		////--------------------------------------------------------------
-		//void printToLog(std::string text)//print message to log window
-		//{
-		//	AddToLog(text);
-		//}
-		////--------------------------------------------------------------
-		//void logAdd(std::string text) {
-		//	AddToLog(text);
-		//}
-		////--------------------------------------------------------------
-		//void AddLog(std::string text) {
-		//	AddToLog(text);
-		//}
+	//----
 
-		//----
-
-		// Advanced Window
+	// Advanced Window
 
 private:
 

@@ -3,6 +3,10 @@
 
 	TODO:
 
+	+ check toggles color theme. correlate with slider grab.
+		hover do not change color!
+		the fix the knobs colors too.
+
 	+ enable floating windows/context
 	+ fix param colors
 	+ fix param string not drawn
@@ -1044,7 +1048,7 @@ using ofxSurfingGui = SurfingGuiManager;
 			case 5: style = OFX_IM_KNOB_STEPPEDKNOB; break;
 			case 6: style = OFX_IM_KNOB_SPACEKNOB; break;
 			}
-			
+
 			ui.AddSpacingBigSeparated();
 	}
 
@@ -1074,5 +1078,43 @@ using ofxSurfingGui = SurfingGuiManager;
 	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
 
 	ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+
+*/
+
+/*
+
+	// EXAMPLE
+	// POP UP. CONTEXT MENU 
+	
+	if (ImGui::Button("OPTIONS"))
+		ImGui::OpenPopup("popup from button");
+
+	if (ImGui::BeginPopup("popup from button"))
+	{
+		ImGui::Text("hello");
+		ImGui::ShoweDemoWindow();
+		ImGui::EndPopup();
+
+
+	static float value = 0.5f;
+	ImGui::PushItemWidth(100); ImGui::DragFloat("Context Menu", &value); ImGui::PopItemWidth();
+	if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1))
+		ImGui::OpenPopup("context menu");
+	ImGui::OpenPopup("context menu");
+	ImGui::SameLine(); ImGui::Text("<-- right-click");
+	if (ImGui::BeginPopup("context menu"))
+		if (ImGui::BeginPopup("context menu"))
+		{
+			{
+				ImGui::Text("hello");
+				//ShowExampleMenuFile();
+				if (ImGui::Selectable("Set to zero")) value = 0.0f;
+				if (ImGui::Selectable("Set to PI")) value = PI;
+				ImGui::EndPopup();
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::TreePop();
+	}
 
 */

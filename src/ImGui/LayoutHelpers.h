@@ -439,6 +439,12 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
 
+	//--------------------------------------------------------------
+	inline void AddLabel(string text)
+	{
+		ImGui::TextWrapped(text.c_str());
+	}
+
 	//----
 
 	// Constraints Helpers

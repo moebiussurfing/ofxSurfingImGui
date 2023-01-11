@@ -710,6 +710,7 @@ namespace ofxImGuiSurfing
 	bool AddText(ofParameter<ParameterType>& parameter, bool label = true);
 
 	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns = 1);
+
 	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels, bool bRaw = false);
 
 	//-

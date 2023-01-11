@@ -928,6 +928,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, float height, bool bNoBorder = false)
+	{
+		return AddToggleRoundedButton(parameter, ImVec2(1.15f * height, 1.15f * (2 / 3.f) * height), bNoBorder);
+	}
+
+	//--------------------------------------------------------------
 	inline bool AddToggleRoundedButton(ofParameter<bool>& parameter, std::string name, ImVec2 bb)
 	{
 		bool bReturn = false;

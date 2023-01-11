@@ -32,7 +32,6 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bGui_GameMode);
 	params_Advanced.add(bKeys);
-	params_Advanced.add(bLogKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bMouseWheelFlip);
 	params_Advanced.add(bHelp);
@@ -40,6 +39,8 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bDebug);
 	params_Advanced.add(bDebugMetrics);
 	params_Advanced.add(bLog);
+	params_Advanced.add(bLogKeys);
+	params_Advanced.add(log.params);
 	params_Advanced.add(bReset);//TODO:
 	params_Advanced.add(bReset_Window);//TODO:
 	params_Advanced.add(bLockMove);//TODO:

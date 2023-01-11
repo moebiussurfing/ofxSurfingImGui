@@ -4,11 +4,11 @@
 
 	TODO:
 
+	pass arg when add, not required index
+
 	add tags manually. ie:
-		OSC, MIDI, 
-	
-	check if intuitive direction
-	
+		OSC, MIDI,
+
 	add filter search from ImGui Demo
 	https://github.com/ocornut/imgui/issues/300
 
@@ -18,70 +18,139 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+//#include "ofHelpers.h"
 //#include "ofxSurfingImGui.h"
 
 namespace ofxImGuiSurfing
 {
-	//TODO:
-	//ofLogLevel l = OF_LOG_VERBOSE;
-	//ofSetLogLevel(l);
+	/*
 
-	//TODO: add colors
-	//enum IM_GUI_LOG_STYLE
-	//{
-	//	IM_GUI_LOG_STYLE_0 = 0,
-	//	IM_GUI_LOG_STYLE_1,
-	//	IM_GUI_LOG_STYLE_2
-	//};
-	//IM_GUI_LOG_STYLE style = IM_GUI_LOG_STYLE_0
+	USAGE:
+	LOGGER LOG;
+
+	log.add("[info] test i");
+	log.add("[warning] test w");
+	log.add("[error] test e");
+
+	log.draw("Logger", ImGui::GetCursorPos(), {300, 250}, false);
+
+	*/
+
+
+	//----
 
 	class SurfingLog
 	{
 	public:
 
 		//--------------------------------------------------------------
-		SurfingLog() {
+		SurfingLog()
+		{
+			// Infinite mode
 			this->clear();
+
+			// Buffered mode
+			//sizeLogBuffered = 20;
+			queLogBuffered = std::deque<std::string>();
+			this->clearBuffered();
+
+			buildTagsDefault();
+
+			params.add(bPause, bAutoScroll, bBuffered, sizeLogBuffered, bOptions);
+
+			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
+
 		};
 
 		//--------------------------------------------------------------
-		~SurfingLog() {
+		~SurfingLog()
+		{
 			this->clear();
+			this->clearBuffered();
+
+			ofRemoveListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
 
-		////--------------------------------------------------------------
-		//SurfingLog() : mLogSize(20), mLog(std::deque<std::string>()) {
-		//	this->clear();
-		//}
-
-		////TODO:
-		//// create styles
-		////std::map<std::string, ofLogLevel> m{ {"CPU", 10}, {"GPU", 15}, {"RAM", 20} };
-		//struct logTag
-		//{
-		//	string tag;
-		//	ofColor color;
-		//};
-
-		//----
 
 	private:
 
-		/*
+		ofParameter<bool> bPause{ "PAUSE" , false };
+		ofParameter<bool> bAutoScroll{ "Auto Scroll" , true };
+		ofParameter<bool> bBuffered{ "Limited" , false };
+		ofParameter<int> sizeLogBuffered{ "Size", 20, 0, 100 };
+		ofParameter<bool> bOptions{ "OPTIONS", false };
 
-		Usage:
-		Logger log;
+		void Changed_Params(ofAbstractParameter& e)
+		{
+			std::string n = e.getName();
+			ofLogNotice("SurfingLog") << n << ": " << e;
 
-		log.add("[info] test i");
-		log.add("[warning] test w");
-		log.add("[error] test e");
+			if (n == sizeLogBuffered.getName())
+			{
+				int diff = queLogBuffered.size() - sizeLogBuffered.get();
+				if (diff > 0) {
+					for (size_t i = 0; i < diff; i++)
+					{
+						queLogBuffered.pop_front();
+					}
+				}
+			}
+		}
 
-		log.draw("Logger", ImGui::GetCursorPos(), {300, 250}, false);
+	public:
 
-		*/
+		ofParameterGroup params{ "Logs" };
 
-		void add(const char* fmt, ...) {
-			char	buf[1024];
+		//----
+
+		// Infinite mode
+
+	public:
+
+		struct tagData
+		{
+			string name;
+			ofColor color;
+		};
+
+	private:
+
+		vector<tagData> tags;
+
+		void buildTagsDefault()
+		{
+			AddTag({ "[INFO]", ofColor::white });
+			AddTag({ "[VERBOSE]", ofColor::white });
+			AddTag({ "[NOTICE]", ofColor::green });
+			AddTag({ "[WARNING]", ofColor::yellow });
+			AddTag({ "[ERROR]", ofColor::red });
+		}
+
+	public:
+
+		// add custom tags passing name and color
+		void AddTag(tagData tag)
+		{
+			tags.push_back(tag);
+		}
+
+		//--
+
+	private:
+
+		void addBuffered(string msg) {
+			queLogBuffered.emplace_back(msg);
+			if (sizeLogBuffered.get() < queLogBuffered.size())
+				queLogBuffered.pop_front();
+
+			this->scroll_to_bottom = true;
+		}
+
+		//void add(const char* fmt, ...) 
+		void add(string msg, ...)
+		{
+			const char* fmt = msg.c_str();
+			char buf[1024];
 			va_list args;
 			va_start(args, fmt);
 			vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
@@ -90,23 +159,30 @@ namespace ofxImGuiSurfing
 			buff.push_back(strdup(buf));
 
 			this->scroll_to_bottom = true;
-		}
+		};
 
 		void clear() {
 			for (int i = 0; i < buff.Size; i++)
 				free(buff[i]);
 			buff.clear();
-		}
+		};
+
+		void draw() {
+			float p = 0;
+			float w = ofxImGuiSurfing::getWidgetsWidth(1);
+			float h = ofxImGuiSurfing::getWindowHeightFree();
+			bool bBorder = true;//used?
+
+			draw("Logger", ImGui::GetCursorPos(), { w - p, h - p }, bBorder);
+		};
 
 		void draw(const char* str_id, const ImVec2 pos, const ImVec2 size, const bool border)
 		{
-			//border not used
-
 			ImGui::SetCursorPos(pos);
 
 			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-			//flags |= ImGuiWindowFlags_NoScrollbar;
 
+			// border not used?
 			ImGui::BeginChild(str_id, size, border, flags);
 			{
 				for (int i = 0; i < buff.Size; i++) {
@@ -115,41 +191,13 @@ namespace ofxImGuiSurfing
 					ImVec4 color;
 					bool has_color = false;
 
-					ImGuiStyle* style = &ImGui::GetStyle();
-					const ImVec4 c = style->Colors[ImGuiCol_Text];
-					ofFloatColor c1 = ofColor::green;
-					ofFloatColor c2 = ofColor::yellow;
-					ofFloatColor c3 = ofColor::red;
-					ofFloatColor c4 = ofColor::orange;
-
-					if (strstr(item, "[INFO]")) {
-						color = c;
-						has_color = true;
-					}
-
-					else if (strstr(item, "[VERBOSE]")) {
-						color = c;
-						has_color = true;
-					}
-
-					else if (strstr(item, "[NOTICE]")) {
-						color = ImVec4(c1);
-						has_color = true;
-					}
-
-					else if (strstr(item, "[WARNING]")) {
-						color = ImVec4(c2);
-						has_color = true;
-					}
-
-					else if (strstr(item, "[ERROR]")) {
-						color = ImVec4(c3);
-						has_color = true;
-					}
-
-					else if (strncmp(item, "# ", 2) == 0) {
-						color = ImVec4(c4);
-						has_color = true;
+					for (auto t : tags)
+					{
+						if (strstr(item, t.name.c_str()))
+						{
+							color = t.color;
+							has_color = true;
+						}
 					}
 
 					if (has_color)
@@ -157,8 +205,9 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					//ImGui::TextUnformatted(item);
+					// draw text
 					ImGui::TextWrapped(item);
+					//ImGui::TextUnformatted(item);
 
 					//--
 
@@ -174,13 +223,83 @@ namespace ofxImGuiSurfing
 						ImGui::SetScrollHereY(1.0f);
 					this->scroll_to_bottom = false;
 				}
-
-				//ImGui::SetCursorPos({ pos.x + size.x - 66, pos.x + size.y - 36 });
-				//if (ImGui::Button("Clear", { 50, 20 }))
-				//	this->clear();
 			}
 			ImGui::EndChild();
-		}
+		};
+
+		void drawBuffered()
+		{
+			//TODO: 
+			// must fix
+			// auto fit
+			// set buffer log size to fit the window
+			if (sizeLogBuffered.get() == 0)
+			{
+				static int _pre = -1;
+				float _h = 1.f * ofxImGuiSurfing::getWidgetsHeightUnit();
+				float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit();
+				float _sph = ofxImGuiSurfing::GetFrameHeightWithSpacing();
+				int _count = (ImGui::GetWindowHeight() - _h - _sph) / (float)_h1;
+				if (_count != _pre) {
+					_pre = _count;
+
+					sizeLogBuffered = (_count + 1);
+					//setLogBufferedSize(_count + 1);
+				}
+			}
+
+			//--
+
+			ImGui::BeginChild("LoggerBuffered");
+			{
+				//TODO:
+				// macOS bug
+				//for each (string l in logs)
+
+				for (auto& m : queLogBuffered)
+				{
+					const char* item = m.c_str();
+
+					ImVec4 color;
+					bool has_color = false;
+
+					for (auto t : tags)
+					{
+						if (strstr(item, t.name.c_str()))
+						{
+							color = t.color;
+							has_color = true;
+						}
+					}
+
+					if (has_color)
+						ImGui::PushStyleColor(ImGuiCol_Text, color);
+
+					//--
+
+					ImGui::TextWrapped("%s", m.c_str());
+
+					//--
+
+					if (has_color)
+						ImGui::PopStyleColor();
+
+					//--
+
+					//if (bAutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+					//	ImGui::SetScrollHereY(1.0f);
+
+					if (bAutoScroll)
+					{
+						if (this->scroll_to_bottom)
+							ImGui::SetScrollHereY(1.0f);
+						this->scroll_to_bottom = false;
+					}
+				}
+			}
+			ImGui::EndChild();
+
+		};
 
 	private:
 
@@ -193,66 +312,81 @@ namespace ofxImGuiSurfing
 			void* buf = malloc(len);
 			IM_ASSERT(buf);
 			return (char*)memcpy(buf, (const void*)s, len);
-		}
-
-		ofParameter<bool> bPause{ "PAUSE" , false };
-		ofParameter<bool> bAutoScroll{ "Auto Scroll" , true };
+		};
 
 		//--
 
-	//public:
+		// Buffered mode
+
+	public:
 
 		////--------------------------------------------------------------
-		//void SetLogSize(unsigned long size) { mLogSize = size; }
-
-		////--------------------------------------------------------------
-		//void Clear() { mLog.clear(); }
-
-	//private:
-
-		//unsigned long mLogSize;
-		//std::deque<std::string> mLog;
-
-	//public:
-
-		//ofParameter<bool> bGui{"Show", true};
+		//void setLogBufferedSize(int size) { sizeLogBuffered = size; };
 
 		//--------------------------------------------------------------
-		//void AddTextToFile(std::string str, std::string path, bool append = false, bool withTimeStamp = false);
+		void clearBuffered() { queLogBuffered.clear(); };
+
+	private:
+
+		std::deque<std::string> queLogBuffered;
 
 	public:
 
 		//TODO:
 		//--------------------------------------------------------------
-		void Add(std::string msg, int tag = -1)
+		void Add(std::string msg, string nameTag)
+		{
+			// search if tag exists
+			for (size_t i = 0; i < tags.size(); i++)
+			{
+				if (nameTag == tags[i].name) {
+					Add(msg, (int)i);
+					return;
+				}
+			}
+
+			// tag do not exists
+			// print as default
+			ofLogWarning("SurfingLog") << "The tag " << nameTag << " do not exist. We will use the default tag.";
+			Add(msg);
+		}
+
+		//--------------------------------------------------------------
+		void Add(std::string msg, int itag = -1)
 		{
 			if (bPause) return;
 
 			string s = "";
 			string stag = "";
 
-			//TODO:
-			switch (tag)
+			////TODO: right align
+			//switch (itag)
+			//{
+			//case -1:
+			//case 0: stag = "   [INFO] "; break;
+			//case 1: stag = "[VERBOSE] "; break;
+			//case 2: stag = " [NOTICE] "; break;
+			//case 3: stag = "[WARNING] "; break;
+			//case 4: stag = "  [ERROR] "; break;
+			//}
+
+			if (itag < tags.size())
 			{
-			case -1:
-			case 0: stag = "   [INFO] "; break;
-			case 1: stag = "[VERBOSE] "; break;
-			case 2: stag = " [NOTICE] "; break;
-			case 3: stag = "[WARNING] "; break;
-			case 4: stag = "  [ERROR] "; break;
+				stag = tags[itag].name;
+				s += stag;
+				s += " ";
 			}
-
-			s += stag;
-			s += " ";
 			s += msg;
-
-			add(s.c_str());
 
 			//--
 
-			//mLog.emplace_back(msg);
-			//if (mLogSize < mLog.size()) mLog.pop_front();
-		}
+			if (!bBuffered) {
+				add(s);
+			}
+			else {
+				addBuffered(s);
+			}
+		};
 
 	public:
 
@@ -262,24 +396,24 @@ namespace ofxImGuiSurfing
 			if (!bGui) return;
 
 			std::string name = bGui.getName();
-
-			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			ImGuiWindowFlags flags;
+			flags = ImGuiWindowFlags_None;
 			flags |= ImGuiWindowFlags_NoScrollbar;
-			//flags |= ImGuiWindowFlags_;
 
-			// window shape
+			// Window shape
 			{
+				const int LOG_WINDOW_SIZE = 240;//minimal width
+				float hmin = (bOptions.get() ? 190 : 130);//minimal height
 				ImGuiCond cond = ImGuiCond_FirstUseEver;
-				const int LOG_WINDOW_SIZE = 240;
 
 				// app window
 				float w = ofGetWidth();
 				float h = ofGetHeight();
-
 				ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
 				ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
 
-				ImVec2 size_min = ImVec2(LOG_WINDOW_SIZE, LOG_WINDOW_SIZE);
+				// constraints
+				ImVec2 size_min = ImVec2(LOG_WINDOW_SIZE, hmin);
 				ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 			}
@@ -292,96 +426,133 @@ namespace ofxImGuiSurfing
 				return;
 			}
 
+			ofxImGuiSurfing::AddSpacing();
+
 			float _w = ofxImGuiSurfing::getWidgetsWidth(1);
 			float _h = 1.25f * ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
 
-			/*
-			{
-				static int _pre = -1;
-
-				float hl = ofxImGuiSurfing::getWidgetsHeightUnit();
-				float _sph = ofxImGuiSurfing::GetFrameHeightWithSpacing();
-
-				// auto fit
-				int _count = (ImGui::GetWindowHeight() - _h - _sph) / (float)hl;
-				if (_count != _pre) {
-					_pre = _count;
-					SetLogSize(_count + 1);
-				}
-
-				ofxImGuiSurfing::AddSpacing();
-				if (ImGui::Button("CLEAR", ImVec2(_w, _h)))
-				{
-					Clear();
-				}
-
-				static bool bAutoScroll = false;
-				ImGui::Checkbox("Auto Scroll", &bAutoScroll);
-
-				ofxImGuiSurfing::AddSpacingSeparated();
-				ofxImGuiSurfing::AddSpacing();
-			}
-			*/
-
-			ofxImGuiSurfing::AddSpacing();
-
-			ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w * 0.25, _h), true, true);
-			
-			ImGui::SameLine();
-
-			if (ImGui::Button("CLEAR", ImVec2(_w * 0.75 - _spx, _h)))
-			{
-				this->clear();
-			}
-			ofxImGuiSurfing::AddSpacing();
+			//--
 
 			float _hh = ofxImGuiSurfing::getWidgetsHeightUnit();
-			ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, ImVec2(1.15f * _hh, 1.15f * (2 / 3.f) * _hh), true);
+			ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hh, true);
+			ImGui::Spacing();
+			if (bOptions)
+			{
+				float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
+				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _h), true, true);
+				ImGui::SameLine();
+				if (ImGui::Button("CLEAR", ImVec2(_w2, _h)))
+				{
+					this->clear();
+					this->clearBuffered();
+				}
+				ofxImGuiSurfing::AddSpacing();
+				ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
 
-			//ImGui::Checkbox("Auto Scroll", &bAutoScroll);
+				ofxImGuiSurfing::AddCheckBox(bBuffered);
+				//ofxImGuiSurfing::AddToggleRoundedButton(bBuffered, _hh, true);
+				if (bBuffered)
+				{
+					ofxImGuiSurfing::SameLine();
+
+					//TODO: not working
+					//ImGui::DragInt("Size", &sizeLogBuffered, 1, 100);
+					//ofxImGuiSurfing::AddParameter(sizeLogBuffered);
+					// fix
+					{
+						ImGui::PushItemWidth(90);
+						string name = sizeLogBuffered.getName();
+						auto tmpRefi = sizeLogBuffered.get();
+						string n = "##STEPPERint" + name;// +ofToString(1);
+						const ImU32 u32_one = 1;
+						ImGui::PushID(n.c_str());
+						if (ImGui::InputScalar(sizeLogBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
+						{
+							tmpRefi = ofClamp(tmpRefi, sizeLogBuffered.getMin(), sizeLogBuffered.getMax());
+							sizeLogBuffered.set(tmpRefi);
+						}
+						ImGui::PopID();
+						ImGui::PopItemWidth();
+					}
+
+				}
+
+				//string s;
+				//if (bBuffered)s = "Limited Size";
+				//else s = "Infinite Size";
+				//ofxImGuiSurfing::AddTooltip(s);
+			}
+			//--
 
 			ofxImGuiSurfing::AddSpacingSeparated();
 			ofxImGuiSurfing::AddSpacing();
 
 			//--
 
-			bool bBorder = true;
-			float p = 0;
-			float w = ofxImGuiSurfing::getWidgetsWidth(1);
-			float h = ofxImGuiSurfing::getWindowHeightFree();
-			draw("Logger", ImGui::GetCursorPos(), { w - p, h - p }, bBorder);
-
-			//draw("Logger", ImGui::GetCursorPos(), { 300, 250 }, bBorder);
+			if (!bBuffered)
+			{
+				draw();
+			}
+			else
+			{
+				drawBuffered();
+			}
 
 			//--
-
-			/*
-			ImGui::BeginChild("Logs");
-			{
-				auto logs = mLog;
-
-				//TODO:
-				// macOS bug
-				//for each (string l in logs)
-
-				for (auto& l : logs)
-				{
-					ImGui::TextWrapped("%s", l.c_str());
-
-					if (bAutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-						ImGui::SetScrollHereY(1.0f);
-				}
-			}
-			ImGui::EndChild();
-			*/
 
 			ImGui::End();
 		}
 	};
+
 }
 
 
+
+
+//---
+
+
+
+
+/*
+ImGuiStyle* style = &ImGui::GetStyle();
+const ImVec4 c = style->Colors[ImGuiCol_Text];
+ofFloatColor c1 = ofColor::green;
+ofFloatColor c2 = ofColor::yellow;
+ofFloatColor c3 = ofColor::red;
+ofFloatColor c4 = ofColor::orange;
+
+if (strstr(item, "[INFO]")) {
+	color = c;
+	has_color = true;
+}
+
+else if (strstr(item, "[VERBOSE]")) {
+	color = c;
+	has_color = true;
+}
+
+else if (strstr(item, "[NOTICE]")) {
+	color = ImVec4(c1);
+	has_color = true;
+}
+
+else if (strstr(item, "[WARNING]")) {
+	color = ImVec4(c2);
+	has_color = true;
+}
+
+else if (strstr(item, "[ERROR]")) {
+	color = ImVec4(c3);
+	has_color = true;
+}
+
+else if (strncmp(item, "# ", 2) == 0) {
+	color = ImVec4(c4);
+	has_color = true;
+}
+*/
 
 //----
 
@@ -389,9 +560,6 @@ namespace ofxImGuiSurfing
 // TODO:
 // Save log file to disk
 // from ofxMyUtil from https://github.com/Iwanaka
-//
-// 
-// 
 
 ////--------------------------------------------------------------
 //void SurfingLog::AddTextToFile(std::string str, std::string path, bool append, bool withTimeStamp) {
