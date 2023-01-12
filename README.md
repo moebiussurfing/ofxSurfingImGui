@@ -9,7 +9,7 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 
 ## WORK IN PROGRESS!
 
-[Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/tree/master/Examples)  
+[Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/Examples/README.md)  
 
 ## FEATURES
 
@@ -34,7 +34,7 @@ ofParameter<bool> bGui{ "Show", true };
 
 ofParameter<bool> bEnable{ "Enable", false };
 ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f  };
-ofParameterGroup params;
+ofParameterGroup params{ "Group" };
 ..
 ```
 
