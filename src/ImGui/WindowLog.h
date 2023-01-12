@@ -1,46 +1,51 @@
 #pragma once
 
 /*
+	This code is mainly based on the snippet:
+	https://github.com/ocornut/imgui/issues/5796#issuecomment-1288128069
+	from @karl0st: https://github.com/karl0st
+*/
+
+/*
 
 	TODO:
-
-	pass arg when add, not required index
-
-	add tags manually. ie:
-		OSC, MIDI,
 
 	add filter search from ImGui Demo
 	https://github.com/ocornut/imgui/issues/300
 
 */
 
-
 #include "ofMain.h"
 
 #include "ofxImGui.h"
+
+//TODO: some widget fails..
 //#include "ofHelpers.h"
 //#include "ofxSurfingImGui.h"
 
 namespace ofxImGuiSurfing
 {
-	/*
-
-	USAGE:
-	LOGGER LOG;
-
-	log.add("[info] test i");
-	log.add("[warning] test w");
-	log.add("[error] test e");
-
-	log.draw("Logger", ImGui::GetCursorPos(), {300, 250}, false);
-
-	*/
-
-
-	//----
-
 	class SurfingLog
 	{
+		// formatting
+	private:
+
+		const int maxLenght = 8; // first or tag column width. to make right aligned
+		const string strSpacer = "   "; // space between tag column and the second of message column
+
+	public:
+
+		ofParameterGroup params{ "Log Settings" };
+
+	private:
+
+		ofParameter<bool> bPause{ "PAUSE" , false };
+		ofParameter<bool> bOptions{ "OPTIONS", false };
+		ofParameter<bool> bLimitedBuffered{ "Limited" , false };
+		ofParameter<bool> bAutoFit{ "AutoFit" , true };
+		ofParameter<int> sizeLogBuffered{ "Size", 20, 1, 100 };
+		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
+
 	public:
 
 		//--------------------------------------------------------------
@@ -56,7 +61,7 @@ namespace ofxImGuiSurfing
 
 			buildTagsDefault();
 
-			params.add(bPause, bAutoScroll, bBuffered, sizeLogBuffered, bOptions);
+			params.add(bPause, bAutoScroll, bLimitedBuffered, sizeLogBuffered, bOptions, bAutoFit);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 
@@ -74,12 +79,6 @@ namespace ofxImGuiSurfing
 
 	private:
 
-		ofParameter<bool> bPause{ "PAUSE" , false };
-		ofParameter<bool> bAutoScroll{ "Auto Scroll" , true };
-		ofParameter<bool> bBuffered{ "Limited" , false };
-		ofParameter<int> sizeLogBuffered{ "Size", 20, 0, 100 };
-		ofParameter<bool> bOptions{ "OPTIONS", false };
-
 		void Changed_Params(ofAbstractParameter& e)
 		{
 			std::string n = e.getName();
@@ -88,6 +87,7 @@ namespace ofxImGuiSurfing
 			if (n == sizeLogBuffered.getName())
 			{
 				int diff = queLogBuffered.size() - sizeLogBuffered.get();
+				// reduce resize
 				if (diff > 0) {
 					for (size_t i = 0; i < diff; i++)
 					{
@@ -96,10 +96,6 @@ namespace ofxImGuiSurfing
 				}
 			}
 		}
-
-	public:
-
-		ofParameterGroup params{ "Logs" };
 
 		//----
 
@@ -119,18 +115,64 @@ namespace ofxImGuiSurfing
 
 		void buildTagsDefault()
 		{
-			AddTag({ "[INFO]", ofColor::white });
-			AddTag({ "[VERBOSE]", ofColor::white });
-			AddTag({ "[NOTICE]", ofColor::green });
-			AddTag({ "[WARNING]", ofColor::yellow });
-			AddTag({ "[ERROR]", ofColor::red });
+			// to be used when log a message without tag.
+			// will use common text color
+			strEmpty = "";
+			for (size_t i = 0; i < maxLenght; i++)
+			{
+				strEmpty += " ";
+			}
+
+			AddTag({ "INFO", ofColor::white });
+			AddTag({ "VERBOSE", ofColor::white });
+			AddTag({ "NOTICE", ofColor::green });
+			AddTag({ "WARNING", ofColor::yellow });
+			AddTag({ "ERROR", ofColor::red });
+		}
+
+		string strEmpty = "";
+
+		string strAlign(string s) const
+		{
+			//TODO:
+			// to make right aligned
+			int l = s.length();
+			int diff = maxLenght - l;
+			if (diff > 0) {
+				string spre = "";
+				for (size_t i = 0; i < diff; i++)
+				{
+					spre += " ";
+				}
+				s = spre + s;
+			}
+
+			//s += " ";//end spacing
+
+			return s;
 		}
 
 	public:
-
+	
 		// add custom tags passing name and color
 		void AddTag(tagData tag)
 		{
+			////TODO:
+			//// to make right aligned
+			//const int maxLenght = 10;
+			//int l = tag.name.length();
+			//int diff = maxLenght - l;
+			//if (diff > 0) {
+			//	string spre = "";
+			//	for (size_t i = 0; i < diff; i++)
+			//	{
+			//		spre += " ";
+			//	}
+			//	tag.name = spre + tag.name;
+			//}
+
+			tag.name = strAlign(tag.name);
+
 			tags.push_back(tag);
 		}
 
@@ -143,7 +185,8 @@ namespace ofxImGuiSurfing
 			if (sizeLogBuffered.get() < queLogBuffered.size())
 				queLogBuffered.pop_front();
 
-			this->scroll_to_bottom = true;
+			if (bAutoScroll)
+				this->scroll_to_bottom = true;
 		}
 
 		//void add(const char* fmt, ...) 
@@ -158,7 +201,8 @@ namespace ofxImGuiSurfing
 			va_end(args);
 			buff.push_back(strdup(buf));
 
-			this->scroll_to_bottom = true;
+			if (bAutoScroll)
+				this->scroll_to_bottom = true;
 		};
 
 		void clear() {
@@ -200,6 +244,11 @@ namespace ofxImGuiSurfing
 						}
 					}
 
+					if (!has_color) {
+						string s = strEmpty + string(item);
+						item = s.c_str();
+					}
+
 					if (has_color)
 						ImGui::PushStyleColor(ImGuiCol_Text, color);
 
@@ -229,29 +278,20 @@ namespace ofxImGuiSurfing
 
 		void drawBuffered()
 		{
-			//TODO: 
-			// must fix
-			// auto fit
-			// set buffer log size to fit the window
-			if (sizeLogBuffered.get() == 0)
-			{
-				static int _pre = -1;
-				float _h = 1.f * ofxImGuiSurfing::getWidgetsHeightUnit();
-				float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit();
-				float _sph = ofxImGuiSurfing::GetFrameHeightWithSpacing();
-				int _count = (ImGui::GetWindowHeight() - _h - _sph) / (float)_h1;
-				if (_count != _pre) {
-					_pre = _count;
-
-					sizeLogBuffered = (_count + 1);
-					//setLogBufferedSize(_count + 1);
-				}
-			}
-
-			//--
-
 			ImGui::BeginChild("LoggerBuffered");
 			{
+				// force log size to current window size
+				if (bAutoFit)
+				{
+					ImGuiContext& g = *GImGui;
+					float h = g.FontSize + g.Style.FramePadding.y;
+					float hFree = ofxImGuiSurfing::getWindowContentHeight();
+					int amountLines = hFree / h;
+					sizeLogBuffered = amountLines;
+				}
+
+				//--
+
 				//TODO:
 				// macOS bug
 				//for each (string l in logs)
@@ -270,6 +310,11 @@ namespace ofxImGuiSurfing
 							color = t.color;
 							has_color = true;
 						}
+					}
+
+					if (!has_color) {
+						string s = strEmpty + m;
+						item = s.c_str();
 					}
 
 					if (has_color)
@@ -339,6 +384,8 @@ namespace ofxImGuiSurfing
 			// search if tag exists
 			for (size_t i = 0; i < tags.size(); i++)
 			{
+				nameTag = strAlign(nameTag);
+
 				if (nameTag == tags[i].name) {
 					Add(msg, (int)i);
 					return;
@@ -359,28 +406,17 @@ namespace ofxImGuiSurfing
 			string s = "";
 			string stag = "";
 
-			////TODO: right align
-			//switch (itag)
-			//{
-			//case -1:
-			//case 0: stag = "   [INFO] "; break;
-			//case 1: stag = "[VERBOSE] "; break;
-			//case 2: stag = " [NOTICE] "; break;
-			//case 3: stag = "[WARNING] "; break;
-			//case 4: stag = "  [ERROR] "; break;
-			//}
-
 			if (itag < tags.size())
 			{
 				stag = tags[itag].name;
 				s += stag;
-				s += " ";
+				s += strSpacer;
 			}
 			s += msg;
 
 			//--
 
-			if (!bBuffered) {
+			if (!bLimitedBuffered) {
 				add(s);
 			}
 			else {
@@ -403,7 +439,7 @@ namespace ofxImGuiSurfing
 			// Window shape
 			{
 				const int LOG_WINDOW_SIZE = 240;//minimal width
-				float hmin = (bOptions.get() ? 190 : 130);//minimal height
+				float hmin = (bOptions.get() ? 200 : 130);//minimal height
 				ImGuiCond cond = ImGuiCond_FirstUseEver;
 
 				// app window
@@ -448,11 +484,14 @@ namespace ofxImGuiSurfing
 					this->clearBuffered();
 				}
 				ofxImGuiSurfing::AddSpacing();
-				ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
+				ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
+				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hh, true);
 
-				ofxImGuiSurfing::AddCheckBox(bBuffered);
-				//ofxImGuiSurfing::AddToggleRoundedButton(bBuffered, _hh, true);
-				if (bBuffered)
+				if (bLimitedBuffered) {
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoFit);
+				}
+				if (bLimitedBuffered && !bAutoFit)
 				{
 					ofxImGuiSurfing::SameLine();
 
@@ -475,11 +514,17 @@ namespace ofxImGuiSurfing
 						ImGui::PopID();
 						ImGui::PopItemWidth();
 					}
+				}
 
+				if (!bLimitedBuffered) {
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+					//ImGui::Dummy({ 0,10 });
+					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
 				}
 
 				//string s;
-				//if (bBuffered)s = "Limited Size";
+				//if (bLimitedBuffered)s = "Limited Size";
 				//else s = "Infinite Size";
 				//ofxImGuiSurfing::AddTooltip(s);
 			}
@@ -490,7 +535,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (!bBuffered)
+			if (!bLimitedBuffered)
 			{
 				draw();
 			}

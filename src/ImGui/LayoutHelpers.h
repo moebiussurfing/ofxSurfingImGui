@@ -226,8 +226,9 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-	// Get all the REAL available space inside the window, but counting the spacing and padding too!
-	// Notice that is not the window size / shape itself!
+	// Get all the REAL available space inside the window, 
+	// but counting the spacing and padding too!
+	// Notice that is NOT the window size / shape itself!
 	//--------------------------------------------------------------
 	inline float getWindowContentWidth()
 	{

@@ -6,6 +6,7 @@
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
 		the fix the knobs colors too.
+		push buttons could be darken as if it was a 3D button..
 
 	+ enable floating windows/context
 	+ fix param colors

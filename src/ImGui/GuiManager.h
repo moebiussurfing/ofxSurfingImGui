@@ -1874,7 +1874,7 @@ public:
 
 	//--
 
-	ofParameterGroup params_Advanced{ "Params Advanced" };
+	ofParameterGroup params_Advanced{ "Advanced Settings" };
 	// These params are saved as settings when exit and loaded when reopen the App. 
 
 private:
