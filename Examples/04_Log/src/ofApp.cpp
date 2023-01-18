@@ -162,7 +162,7 @@ void ofApp::updateLog()
 		//progress3 = ofMap(f % m, 0, m, 0, 1, true);
 		if (ofNoise(t) < 0.4f) return; // skip one third
 
-		string ss = "FrameNum :" + ofToString(f);
+		string ss = "FrameNum: " + ofToString(f);
 		float _rnd = ofRandom(1);
 		string s2 = "";
 

@@ -3,6 +3,7 @@
 
 	TODO:
 
+	STYLE
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
 		the fix the knobs colors too.
@@ -1086,7 +1087,17 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	// EXAMPLE
 	// POP UP. CONTEXT MENU 
-	
+
+
+	// 1
+	// Options menu
+	if (ImGui::BeginPopup("Options"))
+	{
+		ImGui::Checkbox("Auto-scroll", &AutoScroll);
+		ImGui::EndPopup();
+	}
+	 
+	// 2
 	if (ImGui::Button("OPTIONS"))
 		ImGui::OpenPopup("popup from button");
 
@@ -1095,8 +1106,10 @@ using ofxSurfingGui = SurfingGuiManager;
 		ImGui::Text("hello");
 		ImGui::ShoweDemoWindow();
 		ImGui::EndPopup();
+	}
 
 
+	// 3
 	static float value = 0.5f;
 	ImGui::PushItemWidth(100); ImGui::DragFloat("Context Menu", &value); ImGui::PopItemWidth();
 	if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(1))
@@ -1119,3 +1132,4 @@ using ofxSurfingGui = SurfingGuiManager;
 	}
 
 */
+
