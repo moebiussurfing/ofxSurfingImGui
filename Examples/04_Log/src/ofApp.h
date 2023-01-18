@@ -26,7 +26,8 @@ public:
 
 	void setupParams();
 
-	ofParameter<bool> bEnable;
+	ofParameter<bool> bAnimate1;
+	ofParameter<bool> bAnimate2;
 	ofParameter<void> bPrevious;
 	ofParameter<void> bNext;
 	ofParameter<float> lineWidth;
@@ -44,7 +45,6 @@ public:
 	// Generates random variations to animate variables.
 	// Log messages to test the Log window.
 	void updateLog(); 
-	ofParameter<bool> bEnable2;
 	ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
 	ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
 	ofParameter<float> progress2{ "Progress 2", 0 , 0, 1 };

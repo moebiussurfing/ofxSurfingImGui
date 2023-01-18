@@ -10,7 +10,9 @@
 
 	TODO:
 
-	improve implemented filter. 
+	add timestamp. copy style from protokol
+
+	improve implemented filter.
 		could be a little slow bc it handles strings.
 		for some situations we should replace by:
 
@@ -35,15 +37,15 @@ namespace ofxImGuiSurfing
 {
 	class SurfingLog
 	{
-		// formatting
+		// columns formatting
 	private:
 
-		const int maxLenght = 8; // first or tag column width. to make right aligned
-		const string strSpacer = "   "; // space between tag column and the second of message column
-
+		const int maxTagLength = 8; // first or tag column width. to make tags right aligned.
+		const string strSpacer = "   "; // space between tags column and the second column with the message .
+		const string strSpacer2 = " ";//not required bc alignment adds some starting spaces
 	public:
 
-		ofParameterGroup params{ "Log Settings" };
+		ofParameterGroup params{ "Log Settings" };//settings are handled by the parent class. will be serialized on exit and loaded on start.
 
 	private:
 
@@ -53,9 +55,10 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bTight{ "Tight" , true };
 		ofParameter<bool> bOneLine{ "OneLine" , false };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
-		ofParameter<int> sizeLogBuffered{ "AmountLines", 20, 1, 100 };
+		ofParameter<int> sizeLimitedBuffered{ "AmountLines", 20, 1, 100 };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bFilter{ "Filter", true };
+		ofParameter<bool> bTimeStamp{ "TimeStamp", false };
 		ofParameter<string> strSearch{ "Search", "" };
 
 	public:
@@ -64,16 +67,16 @@ namespace ofxImGuiSurfing
 		SurfingLog()
 		{
 			// Infinite mode
-			this->clear();
+			this->clearUnlimited();
 
 			// Buffered mode
-			//sizeLogBuffered = 20;
-			queLogBuffered = std::deque<std::string>();
+			//sizeLimitedBuffered = 20;
+			bufferLimitedBuffered = std::deque<std::string>();
 			this->clearBuffered();
 
 			buildTagsDefault();
 
-			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, sizeLogBuffered, bOptions, bAutoFit, bFilter, strSearch);
+			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, sizeLimitedBuffered, bOptions, bAutoFit, bFilter, strSearch, bTimeStamp);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
@@ -81,7 +84,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		~SurfingLog()
 		{
-			this->clear();
+			this->clearUnlimited();
 			this->clearBuffered();
 
 			ofRemoveListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
@@ -95,18 +98,18 @@ namespace ofxImGuiSurfing
 			std::string n = e.getName();
 			ofLogNotice("SurfingLog") << n << ": " << e;
 
-			if (n == sizeLogBuffered.getName())
+			if (n == sizeLimitedBuffered.getName())
 			{
-				int diff = queLogBuffered.size() - sizeLogBuffered.get();
+				int diff = bufferLimitedBuffered.size() - sizeLimitedBuffered.get();
 				// reduce resize
 				if (diff > 0) {
 					for (size_t i = 0; i < diff; i++)
 					{
-						queLogBuffered.pop_front();
+						bufferLimitedBuffered.pop_front();
 					}
 				}
 			}
-		}
+		};
 
 		//----
 
@@ -128,10 +131,10 @@ namespace ofxImGuiSurfing
 		{
 			// to be used when log a message without tag.
 			// will use common text color
-			strEmpty = "";
-			for (size_t i = 0; i < maxLenght; i++)
+			strEmptyTag = "";
+			for (size_t i = 0; i < maxTagLength; i++)
 			{
-				strEmpty += " ";
+				strEmptyTag += " ";
 			}
 
 			AddTag({ "INFO", ofColor::white });
@@ -141,14 +144,14 @@ namespace ofxImGuiSurfing
 			AddTag({ "ERROR", ofColor::red });
 		}
 
-		string strEmpty = "";
+		string strEmptyTag = "";
 
 		string strAlign(string s) const
 		{
 			//TODO:
 			// to make right aligned
 			int l = s.length();
-			int diff = maxLenght - l;
+			int diff = maxTagLength - l;
 			if (diff > 0) {
 				string spre = "";
 				for (size_t i = 0; i < diff; i++)
@@ -161,7 +164,7 @@ namespace ofxImGuiSurfing
 			//s += " ";//end spacing
 
 			return s;
-		}
+		};
 
 	public:
 
@@ -170,9 +173,9 @@ namespace ofxImGuiSurfing
 		{
 			////TODO:
 			//// to make right aligned
-			//const int maxLenght = 10;
+			//const int maxTagLength = 10;
 			//int l = tag.name.length();
-			//int diff = maxLenght - l;
+			//int diff = maxTagLength - l;
 			//if (diff > 0) {
 			//	string spre = "";
 			//	for (size_t i = 0; i < diff; i++)
@@ -185,27 +188,33 @@ namespace ofxImGuiSurfing
 			tag.name = strAlign(tag.name);
 
 			tags.push_back(tag);
-		}
+		};
 
 		//--
+
+		void Clear() {
+			this->clearUnlimited();
+			this->clearBuffered();
+			//this->ClearFilter();
+		};
 
 	private:
 
 		void addBuffered(string msg)
 		{
-			queLogBuffered.emplace_back(msg);
-			if (sizeLogBuffered.get() < queLogBuffered.size())
+			bufferLimitedBuffered.emplace_back(msg);
+			if (sizeLimitedBuffered.get() < bufferLimitedBuffered.size())
 			{
-				queLogBuffered.pop_front();
+				bufferLimitedBuffered.pop_front();
 			}
 
 			if (bAutoScroll)
 				this->scroll_to_bottom = true;
-		}
+		};
 
-		//void add(const char* fmt, ...) 
-		void add(string msg, ...)
+		void addUnlimited(string msg, ...)
 		{
+			//void add(const char* fmt, ...) 
 			const char* fmt = msg.c_str();
 			char buf[1024];
 			va_list args;
@@ -213,16 +222,16 @@ namespace ofxImGuiSurfing
 			vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
 			buf[IM_ARRAYSIZE(buf) - 1] = 0;
 			va_end(args);
-			buff.push_back(strdup(buf));
+			bufferUnlimited.push_back(strdup(buf));
 
 			if (bAutoScroll)
 				this->scroll_to_bottom = true;
 		};
 
-		void clear() {
-			for (int i = 0; i < buff.Size; i++)
-				free(buff[i]);
-			buff.clear();
+		void clearUnlimited() {
+			for (int i = 0; i < bufferUnlimited.Size; i++)
+				free(bufferUnlimited[i]);
+			bufferUnlimited.clear();
 		};
 
 		void drawUnlimited() {
@@ -243,9 +252,9 @@ namespace ofxImGuiSurfing
 			// border not used?
 			ImGui::BeginChild(str_id, size, border, flags);
 			{
-				for (int i = 0; i < buff.Size; i++)
+				for (int i = 0; i < bufferUnlimited.Size; i++)
 				{
-					const char* item = buff[i];
+					const char* item = bufferUnlimited[i];
 
 					//--
 
@@ -276,7 +285,7 @@ namespace ofxImGuiSurfing
 					}
 
 					if (!has_color) {
-						string s = strEmpty + string(item);
+						string s = strEmptyTag + string(item);
 						item = s.c_str();
 					}
 
@@ -286,10 +295,7 @@ namespace ofxImGuiSurfing
 					//--
 
 					// draw text
-					if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-					if (bOneLine) ImGui::TextUnformatted(item);
-					else ImGui::TextWrapped(item);
-					if (bTight) ImGui::PopStyleVar();
+					drawText(item);
 
 					//--
 
@@ -321,12 +327,12 @@ namespace ofxImGuiSurfing
 					if (!bTight) h += g.Style.FramePadding.y;
 					float hFree = ofxImGuiSurfing::getWindowContentHeight();
 					int amountLines = hFree / h;
-					sizeLogBuffered = amountLines;
+					sizeLimitedBuffered = amountLines;
 				}
 
 				//--
 
-				for (auto& m : queLogBuffered)
+				for (auto& m : bufferLimitedBuffered)
 				{
 					// macOS bug
 					//for each (string l in logs)
@@ -361,7 +367,7 @@ namespace ofxImGuiSurfing
 					}
 
 					if (!has_color) {
-						string s = strEmpty + m;
+						string s = strEmptyTag + m;
 						item = s.c_str();
 					}
 
@@ -371,10 +377,7 @@ namespace ofxImGuiSurfing
 					//--
 
 					// draw text
-					if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-					if (bOneLine) ImGui::TextUnformatted("%s", m.c_str());
-					else ImGui::TextWrapped("%s", m.c_str());
-					if (bTight) ImGui::PopStyleVar();
+					drawText(m.c_str());
 
 					//--
 
@@ -383,9 +386,6 @@ namespace ofxImGuiSurfing
 				}
 
 				//--
-
-				//if (bAutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-				//	ImGui::SetScrollHereY(1.0f);
 
 				if (bAutoScroll)
 				{
@@ -399,7 +399,7 @@ namespace ofxImGuiSurfing
 
 	private:
 
-		ImVector<char*> buff;
+		ImVector<char*> bufferUnlimited;
 		bool scroll_to_bottom;
 
 		static char* strdup(const char* s) {
@@ -417,14 +417,16 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		//void setLogBufferedSize(int size) { sizeLogBuffered = size; };
+		//void setLogBufferedSize(int size) { sizeLimitedBuffered = size; };
 
 		//--------------------------------------------------------------
-		void clearBuffered() { queLogBuffered.clear(); };
+		void clearBuffered() { bufferLimitedBuffered.clear(); };
 
 	private:
 
-		std::deque<std::string> queLogBuffered;
+		std::deque<std::string> bufferLimitedBuffered;
+
+		//----
 
 	public:
 
@@ -447,33 +449,56 @@ namespace ofxImGuiSurfing
 			// print as default
 			ofLogWarning("SurfingLog") << "The tag " << nameTag << " do not exist. We will use the default tag.";
 			Add(msg);
-		}
+		};
 
 		//--------------------------------------------------------------
-		void Add(std::string msg, int itag = -1)
+		void Add(std::string msg, int itag = -1)//all add method will pass through this method..
 		{
 			if (bPause) return;
 
 			string s = "";
 			string stag = "";
 
-			if (itag < tags.size())
-			{
-				stag = tags[itag].name;
-				s += stag;
+			// timestamp
+			if (bTimeStamp) {
+				string timeFormat = "[%H:%M:%S]";
+				//string timeFormat = "%H:%M:%S";
+				//string timeFormat = "%H-%M-%S-%i";//+ms
+				//string timeFormat = "%Y-%m-%d-%H-%M-%S-%i";//+date
+				s += ofGetTimestampString(timeFormat);
+				//s += strSpacer2;//not required bc alignment adds some starting spaces
+			}
+
+			// not passed tag
+			if (itag == -1) {
+				s += strEmptyTag;
 				s += strSpacer;
 			}
+				// a tag has been passed
+			else 
+			{
+				if (itag < tags.size())
+				{
+					stag = tags[itag].name;
+					s += stag;
+					s += strSpacer;
+				}
+			}
+
+			// messages
 			s += msg;
 
 			//--
 
 			if (!bLimitedBuffered) {
-				add(s);
+				addUnlimited(s);
 			}
 			else {
 				addBuffered(s);
 			}
 		};
+
+		//----
 
 	public:
 
@@ -486,6 +511,8 @@ namespace ofxImGuiSurfing
 			ImGuiWindowFlags flags;
 			flags = ImGuiWindowFlags_None;
 			flags |= ImGuiWindowFlags_NoScrollbar;
+
+			string s;
 
 			// Window shape
 			{
@@ -515,105 +542,76 @@ namespace ofxImGuiSurfing
 
 			ofxImGuiSurfing::AddSpacing();
 
+			float _hh = ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _w = ofxImGuiSurfing::getWidgetsWidth(1);
-			float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
+			//float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
 
 			//--
 
-			float _hh = ofxImGuiSurfing::getWidgetsHeightUnit();
+			// pause
+			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
+			ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _h), true, true);
+			ImGui::SameLine();
+
+			// clear
+			if (ImGui::Button("CLEAR", ImVec2(_w2, _h)))
+			{
+				Clear();
+			}
+			ofxImGuiSurfing::AddSpacing();
+
 			ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hh, true);
 			ImGui::Spacing();
+
+			//--
+
 			if (bOptions)
 			{
-				float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
-				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _h), true, true);
-				ImGui::SameLine();
-				if (ImGui::Button("CLEAR", ImVec2(_w2, _h)))
-				{
-					this->clear();
-					this->clearBuffered();
-					//this->ClearFilter();
-				}
-				ofxImGuiSurfing::AddSpacing();
+				//--
+
+				// Mode
 
 				//ImGuiStyle * style = &ImGui::GetStyle();
 				//float h3 = style[FrameRect]
-				float w3 = 80;
-				ofxImGuiSurfing::AddBigToggleNamed(bLimitedBuffered, w3, 0.65*_h, "LIMITED", "UNLIMITED");
+				float w3 = 120;
+				ofxImGuiSurfing::AddBigToggleNamed(bLimitedBuffered, w3, 0.65 * _h, "LIMITED", "UNLIMITED");
 				//ofxImGuiSurfing::AddBigToggle(bLimitedBuffered, 50, _hh, true);
 				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hh, true);
 				//ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
-				{
-					string s = bLimitedBuffered ? "Buffer size of lines is limited" : "Buffer size of lines is unlimited.";
-					ofxImGuiSurfing::AddTooltip2(s);
-				}
 
-				//--
-
-				if (bLimitedBuffered)
+				// tooltip
 				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoFit);
-					string s = "Resize buffer to fit window size \nas amount of expected text lines.";
-					s += "\nAmount Lines: " + ofToString(queLogBuffered.size());
-					ofxImGuiSurfing::AddTooltip2(s);
-				}
-				if (bLimitedBuffered && !bAutoFit)
-				{
-					ofxImGuiSurfing::SameLine();
-
-					//TODO: not working
-					//ImGui::DragInt("Size", &sizeLogBuffered, 1, 100);
-					//ofxImGuiSurfing::AddParameter(sizeLogBuffered);
-					// fix
-					{
-						ImGui::PushItemWidth(90);
-						string name = sizeLogBuffered.getName();
-						auto tmpRefi = sizeLogBuffered.get();
-						string n = "##STEPPERint" + name;// +ofToString(1);
-						const ImU32 u32_one = 1;
-						ImGui::PushID(n.c_str());
-						if (ImGui::InputScalar(sizeLogBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
-						{
-							tmpRefi = ofClamp(tmpRefi, sizeLogBuffered.getMin(), sizeLogBuffered.getMax());
-							sizeLogBuffered.set(tmpRefi);
-						}
-						ImGui::PopID();
-						ImGui::PopItemWidth();
+					int amnt;
+					if (bLimitedBuffered) {
+						if (bAutoFit) amnt = bufferLimitedBuffered.size();
+						else amnt = sizeLimitedBuffered.get();
 					}
-				}
-
-				//--
-
-				if (!bLimitedBuffered)
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
-					//ImGui::Dummy({ 0,10 });
-					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
-					string s = "Amount Lines: " + ofToString(buff.size());
+					else {
+						amnt = bufferUnlimited.size();
+					}
+					s = (bLimitedBuffered ? "Buffer size \nof lines is limited" : "Buffer size \nof lines is \nunlimited.");
+					if (bLimitedBuffered) s += "\n\nYou can set AutoFit \nor to specify an \namount manually.";
+					s += "\n\nAmountLines: \n" + ofToString(amnt);
 					ofxImGuiSurfing::AddTooltip2(s);
 				}
-
-				ofxImGuiSurfing::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bTight);
-
-				ofxImGuiSurfing::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bOneLine);
-
-				//string s;
-				//if (bLimitedBuffered)s = "Limited Size";
-				//else s = "Infinite Size";
-				//ofxImGuiSurfing::AddTooltip(s);
 
 				//--
 
 				ImGui::SameLine();
-				bool copy = ImGui::Button("Copy");
-				string s = "Copy Log to Clipboard";
+				bool bCopy = ImGui::Button("Copy");
+				s = "Copy Log to Clipboard";
 				ofxImGuiSurfing::AddTooltip2(s);
-				if (copy) ImGui::LogToClipboard();
+				if (bCopy) ImGui::LogToClipboard();
+
+				//--
+
+				ImGui::SameLine();
+				bool bExport = ImGui::Button("Export");
+				s = "Export Log to \na file in data/ folder";
+				ofxImGuiSurfing::AddTooltip2(s);
+				//if (bExport) ImGui::LogToFile();
+				if (bExport) exportLogToFile();
 
 				//--
 
@@ -622,7 +620,7 @@ namespace ofxImGuiSurfing
 				ImGui::SameLine();
 				ofxImGuiSurfing::AddCheckBox(bFilter);
 				{
-					string s = bFilter ? "Write your pattern\nto filter log lines" : "Disabled";
+					s = bFilter ? "Write your pattern\nto filter log lines" : "Disabled";
 					ofxImGuiSurfing::AddTooltip2(s);
 				}
 				if (bFilter) {
@@ -632,10 +630,10 @@ namespace ofxImGuiSurfing
 					{
 						float _w = 60;
 						//float _w = getWidgetsWidth() * 0.9f;
-						string s = tmpRef.c_str();
+						s = tmpRef.c_str();
 						ImGui::PushItemWidth(_w);
 						{
-							bReturn = ImGui::InputText("Pattern", &s);
+							bReturn = ImGui::InputText("##Filter", &s);
 							if (bReturn)
 							{
 								ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
@@ -645,6 +643,73 @@ namespace ofxImGuiSurfing
 						ImGui::PopItemWidth();
 					}
 				}
+
+				//--
+
+				//ofxImGuiSurfing::SameLine();
+
+				//--
+
+				{
+					//ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bTimeStamp);
+				}
+
+				if (bLimitedBuffered)
+				{
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoFit);
+					s = "Resize buffer to fit window size \nas amount of expected text lines.";
+					//s += "\nAmount Lines: " + ofToString(bufferLimitedBuffered.size());
+					ofxImGuiSurfing::AddTooltip2(s);
+				}
+				if (bLimitedBuffered && !bAutoFit)
+				{
+					ofxImGuiSurfing::SameLine();
+
+					//TODO: not working
+					//ImGui::DragInt("Size", &sizeLimitedBuffered, 1, 100);
+					//ofxImGuiSurfing::AddParameter(sizeLimitedBuffered);
+					// fix
+					{
+						ImGui::PushItemWidth(90);
+						string name = sizeLimitedBuffered.getName();
+						auto tmpRefi = sizeLimitedBuffered.get();
+						string n = "##STEPPERint" + name;// +ofToString(1);
+						const ImU32 u32_one = 1;
+						ImGui::PushID(n.c_str());
+						if (ImGui::InputScalar(sizeLimitedBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
+						{
+							tmpRefi = ofClamp(tmpRefi, sizeLimitedBuffered.getMin(), sizeLimitedBuffered.getMax());
+							sizeLimitedBuffered.set(tmpRefi);
+						}
+						ImGui::PopID();
+						ImGui::PopItemWidth();
+					}
+				}
+
+				if (!bLimitedBuffered)
+				{
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+					//ImGui::Dummy({ 0,10 });
+					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
+				}
+
+				ofxImGuiSurfing::SameLine();
+				ofxImGuiSurfing::AddCheckBox(bTight);
+				s = "Compact interline height";
+				ofxImGuiSurfing::AddTooltip2(s);
+
+				ofxImGuiSurfing::SameLine();
+				ofxImGuiSurfing::AddCheckBox(bOneLine);
+				s = (bOneLine ? "Forces one line only.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
+				ofxImGuiSurfing::AddTooltip2(s);
+
+				//string s;
+				//if (bLimitedBuffered)s = "Limited Size";
+				//else s = "Infinite Size";
+				//ofxImGuiSurfing::AddTooltip2(s);
 			}
 
 			//--
@@ -667,112 +732,95 @@ namespace ofxImGuiSurfing
 
 			ImGui::End();
 		}
-	};
 
-}
+		//---
 
+		// TODO:
+		// Save log file to disk
 
+		//#include <fstream>
+		//#include <string>
+		//#include <iostream>
 
+		void exportLogToFile(string path = "")//pass path folder. the name will be auto settled by timestamp
+		{
+			ofLogNotice("SurfingLog") << "exportLogToFile:" << path;
 
-//---
+			if (path == "") path = ofToDataPath("", true);
+			path += "\\logs";//add subfolder
+			ofxSurfingHelpers::CheckFolder(path);//create folder if required
 
+			string timeFormat = "%Y-%m-%d-%H-%M";//+date
 
+			string n = "";//filename with ext
+			string s = "";//path complete 
 
+			//filename
+			n += "LogSurfing___";
+			n += ofGetTimestampString(timeFormat);
+			n += ".txt";
 
-/*
-ImGuiStyle* style = &ImGui::GetStyle();
-const ImVec4 c = style->Colors[ImGuiCol_Text];
-ofFloatColor c1 = ofColor::green;
-ofFloatColor c2 = ofColor::yellow;
-ofFloatColor c3 = ofColor::red;
-ofFloatColor c4 = ofColor::orange;
+			s = path + "\\" + n;
 
-if (strstr(item, "[INFO]")) {
-	color = c;
-	has_color = true;
-}
+			// A. using ImGui internal methods
+			ImGui::LogToFile(-1, s.c_str());
 
-else if (strstr(item, "[VERBOSE]")) {
-	color = c;
-	has_color = true;
-}
+			// log that action too!
+			string sl1 = ofToString("LOG FILE: ");
+			this->Add(sl1);
+			this->Add(n);
+			string sl2 = ofToString("SAVED TO: ");
+			this->Add(sl2);
+			this->Add(path);
 
-else if (strstr(item, "[NOTICE]")) {
-	color = ImVec4(c1);
-	has_color = true;
-}
+			//TODO: could auto open the log file byu using system commands
 
-else if (strstr(item, "[WARNING]")) {
-	color = ImVec4(c2);
-	has_color = true;
-}
+			//--
 
-else if (strstr(item, "[ERROR]")) {
-	color = ImVec4(c3);
-	has_color = true;
-}
+			//TODO:
+			//fails
+			//// B. using custom methods
+			//string text = "";
 
-else if (strncmp(item, "# ", 2) == 0) {
-	color = ImVec4(c4);
-	has_color = true;
-}
-*/
+			//if (!bLimitedBuffered)
+			//{
+			//	for (int i = 0; i < bufferUnlimited.Size; i++)
+			//	{
+			//		const char* item = bufferUnlimited[i];
+			//		string _s = string(item);
+			//		text += _s;
+			//		text += "\n";
+			//	}
+			//}
+			//else
+			//{
+			//	for (auto& m : bufferLimitedBuffered)
+			//	{
+			//		text += m;
+			//		text += "\n";
+			//	}
+			//}
 
-//----
+			//cout << endl << text << endl;
 
+			//std::cin >> text;
 
-// TODO:
-// Save log file to disk
-// from ofxMyUtil from https://github.com/Iwanaka
+			//std::ofstream out(s.c_str());
+			//out << text;
+			//out.close();
+		};
 
-////--------------------------------------------------------------
-//void SurfingLog::AddTextToFile(std::string str, std::string path, bool append, bool withTimeStamp) {
-//	AddText(str);
-//	if (withTimeStamp) str = ofGetTimestampString() + " " + str;
-//	TextToFile(path, str, append);
-//}
+		//--
 
-//namespace ofxImGuiSurfing {
-//
-//	//--------------------------------------------------------------
-//	inline bool TextToFile(const string& Path, const stringstream& Args, bool Append)
-//	{
-//		//ofFile f(path, ofFile::ReadWrite);
-//		//if (!f.exists()) f.create();
-//
-//		filebuf fb;
-//		if (Append) fb.open(Path, ios::app);
-//		else fb.open(Path, ios::out);
-//
-//		if (!fb.is_open()) return false;
-//
-//		ostream os(&fb);
-//		stringstream ss(Args.str());
-//
-//		if (ss.fail()) return false;
-//
-//		string temp;
-//		while (getline(ss, temp))
-//		{
-//			if (temp != "")
-//			{
-//				os << temp << endl;
-//			}
-//		}
-//
-//		fb.close();
-//		return true;
-//	}
-//	//--------------------------------------------------------------
-//	inline bool TextToFile(const string& Path, const char *Args, bool Append)
-//	{
-//		stringstream ss; ss << Args;
-//		return TextToFile(Path, ss, Append);
-//	}
-//	//--------------------------------------------------------------
-//	inline bool TextToFile(const std::string& Path, std::string Args, bool Append)
-//	{
-//		stringstream ss; ss << Args;
-//		return TextToFile(Path, ss, Append);
-//	}
-//}
+	private:
+
+		void drawText(const char* item) {
+			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+			if (bOneLine) ImGui::TextUnformatted(item);
+			else ImGui::TextWrapped(item);
+			if (bTight) ImGui::PopStyleVar();
+		}
+
+	};//class
+
+}//namespace

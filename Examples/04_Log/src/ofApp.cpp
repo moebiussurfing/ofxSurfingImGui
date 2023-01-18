@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetWindowPosition(-1920, 25);
+
 	setupParams();
 
 	setupImGui();
@@ -15,13 +17,13 @@ void ofApp::setupParams()
 {
 	params.setName("G");
 	params.add(speed.set("Speed", 0.5f, 0, 1));
+	params.add(amountPauses.set("Pauses", 50, 0, 100));
+	params.add(bAnimate1.set("Animate 1", true));
+	params.add(bAnimate2.set("Animate 2", false));
 	params.add(bPrevious.set("<"));
 	params.add(bNext.set(">"));
 	params.add(lineWidth.set("Width", 0.5f, 0, 1));
 	params.add(separation.set("Separation", 50, 1, 100));
-	params.add(amountPauses.set("Pauses", 50, 0, 100));
-	params.add(bEnable.set("Enable", true));
-	params.add(bEnable2.set("Animate", false));
 
 	ofAddListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
 }
@@ -43,6 +45,8 @@ void ofApp::setupImGui()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	ofSetWindowTitle("FPS " + ofToString(ofGetFrameRate(), 0));
+
 	drawImGui();
 
 	updateLog();
@@ -69,10 +73,10 @@ void ofApp::drawImGui()
 
 		if (b) ui.AddLabelHuge("ANIMATE");
 		if (b) ui.AddSpacing();
-		ui.Add(bEnable, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+		ui.Add(bAnimate1, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
 		ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
 		ui.AddSpacing();
-		if (bEnable) {
+		if (bAnimate1) {
 			if (b) ui.AddLabelBig("MODIFIERS");
 			ui.Add(speed, OFX_IM_HSLIDER_SMALL);
 			ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
@@ -105,7 +109,8 @@ void ofApp::drawImGui()
 		ui.AddSpacingBigSeparated();
 
 		ui.Add(separation, OFX_IM_HSLIDER_MINI);
-		ui.Add(bEnable2, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui.Add(bAnimate2, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
+		ui.AddTooltip("Animate Separation parameter.");
 
 		//--
 
@@ -119,11 +124,16 @@ void ofApp::drawImGui()
 void ofApp::updateLog()
 {
 	// Animate some vars
+	auto f = ofGetFrameNum();
+	
+	// ping every 2 seconds without tag
+	if (f % 120 == 0)
+	{
+		ui.AddToLog("PING");
+	}
 
-	if (!bEnable) return;
-
-	// Animate
-	if (bEnable2)
+	// Animate 2
+	if (bAnimate2 && f % 10 == 0)
 	{
 		float t = ofGetElapsedTimef();
 		float s = ofMap(amountPauses, amountPauses.getMax(), amountPauses.getMin(), 1, 10);
@@ -131,7 +141,7 @@ void ofApp::updateLog()
 		separation = ofMap(t, 0, s, separation.getMin(), separation.getMax());
 	}
 
-	auto f = ofGetFrameNum();
+	if (!bAnimate1) return;
 
 	// Make pauses
 	float a = ofMap(amountPauses, amountPauses.getMax(), amountPauses.getMin(), 0.25f, 1.f);
@@ -198,6 +208,10 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 	ofLogNotice() << name << ": " << e;
 
 	// Log using the custom added tags!
+
+	//// all the rest are logged as "[WARNING]"
+	//string s = name + ": " + ofToString(e);
+	//ui.AddToLog(s, "WARNING");
 
 	// logged as "OSC"
 	if (name == bPrevious.getName() || name == bNext.getName()) {
