@@ -126,10 +126,10 @@ void ofApp::updateLog()
 	// Animate some vars
 	auto f = ofGetFrameNum();
 	
-	// ping every 2 seconds without tag
+	// Ping every 2 seconds. 
 	if (f % 120 == 0)
 	{
-		ui.AddToLog("PING");
+		ui.AddToLog("PING"); // Raw without tag. 2nd argument empty
 	}
 
 	// Animate 2
