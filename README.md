@@ -14,14 +14,25 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 ## FEATURES
 
 - Easy **Setup** and **Layout**.
+- **Multiple instances** around classes and **ofxAddons**.
 - **ofParameter Helpers**.
-- **ImGui Widgets** ported to **oF ofParameters**.
-- Useful methods and **snippets** to **speed-up layout** and **workflow**.
+  - RAW **ImGui Widgets** ported to **oF ofParameters**.
+  - Added custom useful widgets: 
+      - Dropdown (Combo) lists with index selector and vector of names.
+      - Matrix buttons to an index / int param.
+      - Bundled widgets like arrows linked to int params browsing.
+- Useful methods and **Snippets** to **Speed-Up layout** and simple **Workflow**.
 - A **Layout Presets Engine**.
-- **Docking Helpers**.
-- Cool **Themes**.
-- **Mouse Wheel** control with finetune (*+Ctrl*).
-
+- Some **Docking Helpers**.
+- Cool **Themes** and helpers.
+- Extra **Mouse control** 
+  - Wheel for tweaking. _+Ctrl_ to finetune.
+  - Right button to reset to params center.
+    - _+Ctrl_ to reset to min.
+    - _+Alt_ to reset to max.
+- Powerful **Log Engine**.
+- Floating **Notifier System**.
+    
 ## CODE
 
 ### ofApp.h
@@ -64,38 +75,25 @@ void ofApp::draw()
 ```
 
 <details>
-  <summary>More ImGui Widgets</summary>
+  <summary>MORE IMGUI WIDGETS</summary>
   <p>
 
 - Big Toggles and Buttons
-
 - Vertical and Horizontal Sliders
-
 - Range Sliders
-
 - Styled Knobs
-
 - Tree folders
-
 - Inactive, hidden or locked styles
-
-- Hide, or floating tooltip, labels and values
-
+- Floating tooltip, labels and values
 - DearWidgets
-
 - Gradient Color Designer
-
 - Matrix Selectors
-
 - Enum combos selectors
-
 - Progress bars and waiting spinners
-
 - Files Browser
-
 - Curve Editors
-
 - Bubbles Notifier System
+- Profile plotters
   
   </p>
   </details>
