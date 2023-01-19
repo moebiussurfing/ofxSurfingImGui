@@ -61,6 +61,8 @@ for **openFrameworks** projects.
     
 ## EXAMPLE: HELLO WORLD
 
+![](Examples/00_HelloWorld/Capture.PNG)  
+
 ### ofApp.h
 
 ```.cpp
@@ -99,9 +101,6 @@ void ofApp::draw()
     ui.End();
 }
 ```
-
-![](Examples/00_HelloWorld/Capture.PNG)  
-
 
 ## DEPENDENCIES
 
