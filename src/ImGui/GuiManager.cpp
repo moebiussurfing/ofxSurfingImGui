@@ -756,7 +756,7 @@ bool SurfingGuiManager::addFont(std::string path, int size)
 
 //--
 
-// API user: workflow during draw to switch between font styles
+// API: workflow during draw to switch between font styles
 
 //--------------------------------------------------------------
 void SurfingGuiManager::pushStyleFont(int index)
@@ -771,7 +771,6 @@ void SurfingGuiManager::pushStyleFont(int index)
 		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
 }
-
 //--------------------------------------------------------------
 void SurfingGuiManager::popStyleFont()
 {
@@ -786,6 +785,18 @@ void SurfingGuiManager::popStyleFont()
 
 	ImGui::PopFont();
 }
+
+// NEW API: this is the preferred or recommended method!
+//--------------------------------------------------------------
+void SurfingGuiManager::PushFont(SurfingFontTypes style) {
+	int index = SurfingFontTypes(style);
+	this->pushStyleFont(index);
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::PopFont() {
+	this->popStyleFont();
+}
+
 
 //--
 
@@ -3268,7 +3279,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPresetsSelector, _w100,
 			(bMinimize_Presets ? ofxImGuiSurfing::getPanelHeight() : _hWid), false);
-			this->AddTooltip("F5");
+		this->AddTooltip("F5");
 
 		if (!bMinimize_Presets) {
 			ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w100, _hWid, false);

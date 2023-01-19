@@ -10,6 +10,14 @@
 
 	TODO:
 
+	make responsive to jumpline widgets that are out of the window
+		useful when window width is smaller than 200px
+
+	add method to remove default tags if desired. 
+		improves spacing when using short custom tags
+
+	highlight last message
+
 	improve implemented filter.
 	could be a little slow bc it handles strings.
 	for some situations we should replace by:
@@ -19,9 +27,9 @@
 	Better and newer from the ImGui Demo:
 	https://github.com/ocornut/imgui/blob/0359f6e94fb540501797de1f320082e4ad96ce9c/imgui_demo.cpp#L6859
 
-	could be instantiated kind of static to be shared between all the ofxSurfingImGui instances ?
-
 	could add log level (>) using the filter tags
+
+	could be instantiated kind of static to be shared between all the ofxSurfingImGui instances ?
 
 */
 
@@ -62,15 +70,15 @@ namespace ofxImGuiSurfing
 	private:
 
 		ofParameter<bool> bOptions{ "OPTIONS", false };
-		ofParameter<bool> bLimitedBuffered{ "Limited" , false };
+		ofParameter<bool> bLimitedBuffered{ "Limited" , true };
 		ofParameter<bool> bPause{ "PAUSE" , false };
 		ofParameter<bool> bTight{ "Tight" , true };
-		ofParameter<bool> bOneLine{ "OneLine" , true };
-		ofParameter<bool> bAutoFit{ "AutoFit" , true };
-		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
-		ofParameter<bool> bTimeStamp{ "TimeStamp", false };
+		ofParameter<bool> bOneLine{ "Single" , true };
+		ofParameter<bool> bAutoFit{ "Fit" , true };
+		ofParameter<bool> bAutoScroll{ "Scroll" , true };
+		ofParameter<bool> bTimeStamp{ "Time", false };
 		ofParameter<int> indexSizeFont{ "Font", 0, 0, 0 };
-		ofParameter<bool> bFilter{ "FILTER", true };
+		ofParameter<bool> bFilter{ "FILTER", false };
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
@@ -105,7 +113,7 @@ namespace ofxImGuiSurfing
 		};
 
 		//--------------------------------------------------------------
-		void setLogName(std::string name)
+		void setName(std::string name)
 		{
 			bGui.setName(name);
 		};
@@ -613,8 +621,11 @@ namespace ofxImGuiSurfing
 
 			// Window shape
 			{
-				const int LOG_WINDOW_SIZE = 240;//minimal width
-				float hmin = (bOptions.get() ? 200 : 130);//minimal height
+				// minimal width
+				const int LOG_WINDOW_SIZE = 175;
+				//const int LOG_WINDOW_SIZE = 240;
+
+				float hmin = (bOptions.get() ? 200 : 150);//minimal height
 				ImGuiCond cond = ImGuiCond_FirstUseEver;
 
 				// app window
@@ -716,6 +727,8 @@ namespace ofxImGuiSurfing
 				//--
 
 				ofxImGuiSurfing::AddCheckBox(bTimeStamp);
+				s = "Print timestamps";
+				ofxImGuiSurfing::AddTooltip2(s);
 
 				//unlimited
 				if (!bLimitedBuffered)

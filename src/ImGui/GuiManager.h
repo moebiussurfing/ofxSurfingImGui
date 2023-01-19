@@ -18,6 +18,7 @@
 //--
 
 using namespace ofxImGuiSurfing;
+using ofxImGuiSurfing::SurfingFontTypes;
 
 //----
 
@@ -1588,8 +1589,7 @@ public:
 //#define BLINK_MIN 0.2f 
 //#define BLINK_MAX 0.5f 
 
-	// Will Blink the contained widgets between begin/end
-
+	// Will Blink the contained text on widgets between begin/end
 	//--------------------------------------------------------------
 	inline void BeginBlinkFrame(bool bBlink = true)
 	{
@@ -1617,6 +1617,30 @@ public:
 		{
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar(1);
+		}
+	}
+
+	// Will make darker the contained text on widgets between begin/end
+	//--------------------------------------------------------------
+	inline void BeginDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			float a = FACTOR_DARKEN;
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			ImGui::PopStyleColor();
 		}
 	}
 
@@ -1794,10 +1818,15 @@ public:
 	void setDefaultFontIndex(int index);
 	void setDefaultFont();
 
+	//legacy
 	// Enable some previously added font
 	// Take care not pushing a non existing index or it will crash!
 	void pushStyleFont(int index);
 	void popStyleFont();
+
+	//NEW
+	void PushFont(SurfingFontTypes style);
+	void PopFont();
 
 	int getNumFonts() { return customFonts.size(); }
 
@@ -1983,10 +2012,11 @@ private:
 	SurfingLog log;
 
 public:
+
 	//--------------------------------------------------------------
 	void setLogName(std::string name)
 	{
-		log.setLogName(name);
+		log.setName(name);
 	}
 
 	//--------------------------------------------------------------
@@ -1995,7 +2025,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void DrawWindowLog() 
+	void DrawWindowLog()
 	{
 		log.drawImGui();
 
@@ -2003,23 +2033,42 @@ public:
 		//log.drawImGui(b);
 	}
 
+public:
+
 	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
 	void AddLogTag(SurfingLog::tagData tag)
 	{
 		log.AddTag(tag);
 	}
+	//--------------------------------------------------------------
+	void AddLogTag(string name, ofColor color)
+	{
+		this->AddLogTag(SurfingLog::tagData{ name,color });
+	}
 
 	// Print message to log window passing the message and the tag name. must exist or added previously.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, string nameTag)
+	void AddToLog(string text, string nameTag)
 	{
 		// Log
 		log.Add(text, nameTag);
 	}
+
+	//TODO:
+	////--------------------------------------------------------------
+	//void AddToLog(std::string text)
+	//{
+	//	// Log
+	//	this->AddToLog(text, -1);
+	//}
+
+//private:
+
 	// Print message to log window passing the message and the tag index. must exist or added previously.
+	// if there's no passed tag we will use no tag and default text color.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, int tag = -1)
+	void AddToLog(string text, int tag = -1)
 	{
 		// Log
 		log.Add(text, tag);
@@ -2463,6 +2512,13 @@ public:
 		// Link both link toggles, local and the one inside the organizer object
 		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
 
+		//--
+
+
+		//TODO:
+		//customize log window to allow multiple windows with different names
+		//bLog.setName(nameLabel);
+		//log.setName(nameLabel);
 	}
 
 	//--------------------------------------------------------------

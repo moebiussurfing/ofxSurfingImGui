@@ -16,10 +16,13 @@
 //#include "ImGui/utils/ofxSurfing_Timers.h"
 #include "ofxSurfingHelpers.h"
 
-//#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
+////#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
+//
+//#define BLINK_MIN 0.2f 
+//#define BLINK_MAX 0.5f 
+//
+//#define FACTOR_DARKEN 0.5f 
 
-#define BLINK_MIN 0.2f 
-#define BLINK_MAX 0.5f 
 //------------------------------
 
 namespace ofxImGuiSurfing
