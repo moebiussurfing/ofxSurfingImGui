@@ -2013,6 +2013,7 @@ private:
 
 public:
 
+	//TODO: need to fix that respect the deserialization..
 	//--------------------------------------------------------------
 	void setLogName(std::string name)
 	{
@@ -2514,9 +2515,9 @@ public:
 
 		//--
 
-
-		//TODO:
-		//customize log window to allow multiple windows with different names
+		////TODO: breaks serialization
+		////TODO: customize log window to allow multiple windows
+		//// with different names for bGui toggles too
 		//bLog.setName(nameLabel);
 		//log.setName(nameLabel);
 	}

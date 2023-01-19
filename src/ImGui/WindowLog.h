@@ -13,7 +13,7 @@
 	make responsive to jumpline widgets that are out of the window
 		useful when window width is smaller than 200px
 
-	add method to remove default tags if desired. 
+	add method to remove default tags if desired.
 		improves spacing when using short custom tags
 
 	highlight last message
@@ -52,6 +52,7 @@ namespace ofxImGuiSurfing
 {
 	class SurfingLog
 	{
+		//--
 
 		// columns formatting
 	private:
@@ -82,6 +83,7 @@ namespace ofxImGuiSurfing
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
+		ofParameter<bool> bMinimize{ "Minimize", false };
 
 		int amountLinesCurr = 0;
 
@@ -99,7 +101,7 @@ namespace ofxImGuiSurfing
 
 			buildTagsDefault();
 
-			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter);
+			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bMinimize);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
@@ -622,7 +624,8 @@ namespace ofxImGuiSurfing
 			// Window shape
 			{
 				// minimal width
-				const int LOG_WINDOW_SIZE = 175;
+				const int LOG_WINDOW_SIZE = 155;
+				//const int LOG_WINDOW_SIZE = 175;
 				//const int LOG_WINDOW_SIZE = 240;
 
 				float hmin = (bOptions.get() ? 200 : 150);//minimal height
@@ -648,183 +651,189 @@ namespace ofxImGuiSurfing
 				return;
 			}
 
-			ofxImGuiSurfing::AddSpacing();
-
 			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _w = ofxImGuiSurfing::getWidgetsWidth(1);
+			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 			//float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
 
-			//--
+			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, 0.8f * _hu, true);
 
-			// pause
-			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
-			ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _h), true, true);
-			ImGui::SameLine();
-
-			// clear
-			if (ImGui::Button("CLEAR", ImVec2(_w2, _h)))
+			if (!bMinimize)
 			{
-				Clear();
-			}
-			ofxImGuiSurfing::AddSpacing();
-
-			ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hu, true);
-			ImGui::Spacing();
-
-			//--
-
-			if (bOptions)
-			{
-				ImGui::Indent();
+				ofxImGuiSurfing::AddSpacing();
 
 				//--
 
-				// Modes toggle: 
-				// LIMITED or UNLIMITED
+				// pause
+				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _h), true, true);
+				ImGui::SameLine();
 
-				ofxImGuiSurfing::AddBigToggleNamed(bLimitedBuffered, 140, 0.65 * _h, "LIMITED", "UNLIMITED");
-				//ofxImGuiSurfing::AddBigToggle(bLimitedBuffered, 50, _hu, true);
-				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hu, true);
-				//ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
-
-				// Tooltip
+				// clear
+				if (ImGui::Button("CLEAR", ImVec2(_w2, _h)))
 				{
-					s = (bLimitedBuffered ? "Buffer size \nof lines is limited" : "Buffer size \nof lines is \nunlimited.");
-					if (bLimitedBuffered) s += "\n\nYou can set AutoFit \nor to specify an \namount manually.";
-					//s += "\n\nAmountLines: \n" + ofToString(amountLinesCurr);
-					ofxImGuiSurfing::AddTooltip2(s);
+					Clear();
 				}
+				ofxImGuiSurfing::AddSpacing();
 
-				// Amount lines counter
+				ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hu, true);
+				ImGui::Spacing();
+
+				//--
+
+				if (bOptions)
 				{
+					ImGui::Indent();
+
+					//--
+
+					// Modes toggle: 
+					// LIMITED or UNLIMITED
+
+					ofxImGuiSurfing::AddBigToggleNamed(bLimitedBuffered, 140, 0.65 * _h, "LIMITED", "UNLIMITED");
+					//ofxImGuiSurfing::AddBigToggle(bLimitedBuffered, 50, _hu, true);
+					//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hu, true);
+					//ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
+
+					// Tooltip
+					{
+						s = (bLimitedBuffered ? "Buffer size \nof lines is limited" : "Buffer size \nof lines is \nunlimited.");
+						if (bLimitedBuffered) s += "\n\nYou can set AutoFit \nor to specify an \namount manually.";
+						//s += "\n\nAmountLines: \n" + ofToString(amountLinesCurr);
+						ofxImGuiSurfing::AddTooltip2(s);
+					}
+
+					// Amount lines counter
+					{
+						ImGui::SameLine();
+						string s = ofToString(amountLinesCurr);
+						ImGui::Text(s.c_str());
+						s = "Amount of \nbuffered lines:\n" + s;
+						ofxImGuiSurfing::AddTooltip2(s);
+					}
+
+					//--
+
 					ImGui::SameLine();
-					string s = ofToString(amountLinesCurr);
-					ImGui::Text(s.c_str());
-					s = "Amount of \nbuffered lines:\n" + s;
+					ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+
+					ImGui::SameLine();
+					bool bCopy = ImGui::Button("Copy");
+					s = "Copy Log \nto Clipboard";
 					ofxImGuiSurfing::AddTooltip2(s);
-				}
+					if (bCopy) ImGui::LogToClipboard();
 
-				//--
+					//--
 
-				ImGui::SameLine();
-				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
-
-				ImGui::SameLine();
-				bool bCopy = ImGui::Button("Copy");
-				s = "Copy Log \nto Clipboard";
-				ofxImGuiSurfing::AddTooltip2(s);
-				if (bCopy) ImGui::LogToClipboard();
-
-				//--
-
-				ImGui::SameLine();
-				bool bExport = ImGui::Button("Export");
-				s = "Export Log \nto a file \nin data/ folder";
-				ofxImGuiSurfing::AddTooltip2(s);
-				if (bExport) exportLogToFile();
-
-				//--
-
-				ofxImGuiSurfing::AddCheckBox(bTimeStamp);
-				s = "Print timestamps";
-				ofxImGuiSurfing::AddTooltip2(s);
-
-				//unlimited
-				if (!bLimitedBuffered)
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
-					//ImGui::Dummy({ 0,10 });
-					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
-				}
-
-				ImGui::SameLine();
-				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
-
-				ofxImGuiSurfing::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bTight);
-				s = "Compact interline height";
-				ofxImGuiSurfing::AddTooltip2(s);
-
-				ofxImGuiSurfing::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bOneLine);
-				s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
-				ofxImGuiSurfing::AddTooltip2(s);
-
-				// Modes
-
-				// limited buffered
-				if (bLimitedBuffered)
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoFit);
-					s = "Resizes buffer to fit \nwindow height, \nas expected amount \nof text lines.";
-					s += "\nWill be affected by \nthe OneLine state.";
+					ImGui::SameLine();
+					bool bExport = ImGui::Button("Export");
+					s = "Export Log \nto a file \nin data/ folder";
 					ofxImGuiSurfing::AddTooltip2(s);
-					if (!bAutoFit)
+					if (bExport) exportLogToFile();
+
+					//--
+
+					ofxImGuiSurfing::AddCheckBox(bTimeStamp);
+					s = "Print timestamps";
+					ofxImGuiSurfing::AddTooltip2(s);
+
+					//unlimited
+					if (!bLimitedBuffered)
 					{
 						ofxImGuiSurfing::SameLine();
+						ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+						//ImGui::Dummy({ 0,10 });
+						//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
+					}
 
+					ImGui::SameLine();
+					ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bTight);
+					s = "Compact interline height";
+					ofxImGuiSurfing::AddTooltip2(s);
+
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bOneLine);
+					s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
+					ofxImGuiSurfing::AddTooltip2(s);
+
+					// Modes
+
+					// limited buffered
+					if (bLimitedBuffered)
+					{
+						ofxImGuiSurfing::SameLine();
+						ofxImGuiSurfing::AddCheckBox(bAutoFit);
+						s = "Resizes buffer to fit \nwindow height, \nas expected amount \nof text lines.";
+						s += "\nWill be affected by \nthe OneLine state.";
+						ofxImGuiSurfing::AddTooltip2(s);
+						if (!bAutoFit)
 						{
-							ImGui::PushItemWidth(90);
-							string name = amountLinesLimitedBuffered.getName();
-							auto tmpRefi = amountLinesLimitedBuffered.get();
-							string n = "##STEPPERint" + name;// +ofToString(1);
-							const ImU32 u32_one = 1;
-							ImGui::PushID(n.c_str());
-							if (ImGui::InputScalar(amountLinesLimitedBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
+							ofxImGuiSurfing::SameLine();
+
 							{
-								tmpRefi = ofClamp(tmpRefi, amountLinesLimitedBuffered.getMin(), amountLinesLimitedBuffered.getMax());
-								amountLinesLimitedBuffered.set(tmpRefi);
+								ImGui::PushItemWidth(90);
+								string name = amountLinesLimitedBuffered.getName();
+								auto tmpRefi = amountLinesLimitedBuffered.get();
+								string n = "##STEPPERint" + name;// +ofToString(1);
+								const ImU32 u32_one = 1;
+								ImGui::PushID(n.c_str());
+								if (ImGui::InputScalar(amountLinesLimitedBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
+								{
+									tmpRefi = ofClamp(tmpRefi, amountLinesLimitedBuffered.getMin(), amountLinesLimitedBuffered.getMax());
+									amountLinesLimitedBuffered.set(tmpRefi);
+								}
+								ImGui::PopID();
+								ImGui::PopItemWidth();
 							}
-							ImGui::PopID();
-							ImGui::PopItemWidth();
 						}
 					}
+
+					ofxImGuiSurfing::SameLine();
+
+					float ww = 83;
+					this->AddComboAux(indexSizeFont, namesCustomFonts, ww);
+
+					//--
+
+					// Filter
+
+					ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
+					{
+						s = bFilter ? "Write your keyword \nor pick a Tag \nto filter the Log" : "Disabled";
+						ofxImGuiSurfing::AddTooltip2(s);
+					}
+					if (bFilter)
+					{
+						ImGui::SameLine();
+
+						static bool bReturn;//not used
+						auto& tmpRef = strFilterKeyword.get();
+						float _w = ww;
+						s = tmpRef.c_str();
+						ImGui::PushItemWidth(_w);
+						bReturn = ImGui::InputText("##Filter", &s);
+						if (bReturn)
+						{
+							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+							strFilterKeyword.set(s);
+						}
+						ImGui::PopItemWidth();
+
+						ImGui::SameLine();
+						this->AddComboAux(indexTagFilter, namesTagsFiler, 85);
+					}
+
+					ImGui::Unindent();
 				}
-
-				ofxImGuiSurfing::SameLine();
-
-				float ww = 83;
-				this->AddComboAux(indexSizeFont, namesCustomFonts, ww);
 
 				//--
 
-				// Filter
-
-				ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
-				{
-					s = bFilter ? "Write your keyword \nor pick a Tag \nto filter the Log" : "Disabled";
-					ofxImGuiSurfing::AddTooltip2(s);
-				}
-				if (bFilter)
-				{
-					ImGui::SameLine();
-
-					static bool bReturn;//not used
-					auto& tmpRef = strFilterKeyword.get();
-					float _w = ww;
-					s = tmpRef.c_str();
-					ImGui::PushItemWidth(_w);
-					bReturn = ImGui::InputText("##Filter", &s);
-					if (bReturn)
-					{
-						ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-						strFilterKeyword.set(s);
-					}
-					ImGui::PopItemWidth();
-
-					ImGui::SameLine();
-					this->AddComboAux(indexTagFilter, namesTagsFiler, 85);
-				}
-
-				ImGui::Unindent();
+				ofxImGuiSurfing::AddSpacingSeparated();
 			}
-
-			//--
-
-			ofxImGuiSurfing::AddSpacingSeparated();
+			
 			ofxImGuiSurfing::AddSpacing();
 
 			//--
