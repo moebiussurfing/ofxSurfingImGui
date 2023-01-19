@@ -5,8 +5,12 @@ ofxSurfingImGui
 
 <br>
 
-## A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
-## for **openFrameworks** projects.  
+<h2>
+
+A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
+for **openFrameworks** projects.  
+
+</h2>
 
 <br>
 
