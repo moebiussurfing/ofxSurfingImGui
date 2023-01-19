@@ -91,11 +91,12 @@ void ofApp::draw()
         {
             /* Put widgets here */
 
-            ui.AddLabelBig("Hello World");
+            ui.AddLabelBig("HELLO WORLD");
+            ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-            ui.Add(speed, OFX_IM_HSLIDER_MINI);
+            ui.Add(speed, OFX_IM_HSLIDER);
             ui.AddSpacingSeparated();
-            ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+            ui.AddGroup(params, OFX_IM_GROUP_COLLAPSED);
 
             ui.EndWindow();
         }

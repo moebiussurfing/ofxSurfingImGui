@@ -28,14 +28,14 @@
 ## 30_LayoutsEngineDocking
 ![](30_LayoutsEngineDocking/Capture.PNG)  
 
+<br>
 
-<details>
-  <summary>VIDEO</summary>
-  <p>
+# VIDEOS
 
-#### Layout Presets Engine & Docking
+<h2>LOG SYSTEM</h2>
+
+[![](https://img.youtube.com/vi/UIvfpRFtEtY/maxresdefault.jpg)](https://youtu.be/UIvfpRFtEtY)
+
+<h2>LAYOUT PRESETS ENGINE & DOCKING</h2>
 
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  
-  </p>
-
-</details>
