@@ -108,7 +108,7 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[data.zip](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/assets.zip) assets like some font files to put into each project `OF_APP/bin/`.  
+[assets.zip](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/assets.zip) (in the root path) are assets like mainly  font files to put into each project `OF_APP/bin/data/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
