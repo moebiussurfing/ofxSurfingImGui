@@ -766,7 +766,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	EXAMPLE:
 	INPUT TEXT WITH HUGE EXTRA FONT
-	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
+	ui.pushStyleFont(IM_FONT_HUGE_XXL);
 	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
 	{
 	};
@@ -1144,7 +1144,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	AN INPUT TEXT 
 	BUT WITH HUGE FONT
 	
-	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
+	ui.pushStyleFont(IM_FONT_HUGE_XXL);
 	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
 	{
 		//..

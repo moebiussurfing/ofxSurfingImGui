@@ -61,7 +61,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bLimitedBuffered{ "Limited" , false };
 		ofParameter<bool> bPause{ "PAUSE" , false };
 		ofParameter<bool> bTight{ "Tight" , true };
-		ofParameter<bool> bOneLine{ "OneLine" , false };
+		ofParameter<bool> bOneLine{ "OneLine" , true };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bTimeStamp{ "TimeStamp", false };
@@ -649,6 +649,8 @@ namespace ofxImGuiSurfing
 
 			if (bOptions)
 			{
+				ImGui::Indent();
+
 				//--
 
 				// Modes toggle: 
@@ -697,44 +699,6 @@ namespace ofxImGuiSurfing
 
 				//--
 
-				// filter
-
-				ImGui::SameLine();
-				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
-
-				ImGui::SameLine();
-				//ofxImGuiSurfing::AddCheckBox(bFilter);
-				ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
-				{
-					s = bFilter ? "Write your keyword \nto filter log lines" : "Disabled";
-					ofxImGuiSurfing::AddTooltip2(s);
-				}
-				if (bFilter)
-				{
-					ImGui::SameLine();
-
-					//TODO: take from guiManager
-					//ofxImGuiSurfing::blink
-
-					static bool bReturn;
-					auto& tmpRef = strFilterKeyword.get();
-					float _w = 90;
-					s = tmpRef.c_str();
-					ImGui::PushItemWidth(_w);
-					bReturn = ImGui::InputText("##Filter", &s);
-					if (bReturn)
-					{
-						ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-						strFilterKeyword.set(s);
-					}
-					ImGui::PopItemWidth();
-
-					ImGui::SameLine();
-					this->AddComboAux(indexTagFilter, namesTagsFiler);
-				}
-
-				//--
-
 				ofxImGuiSurfing::AddCheckBox(bTimeStamp);
 
 				//unlimited
@@ -759,7 +723,7 @@ namespace ofxImGuiSurfing
 				s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 				ofxImGuiSurfing::AddTooltip2(s);
 
-				// modes
+				// Modes
 
 				// limited buffered
 				if (bLimitedBuffered)
@@ -790,16 +754,43 @@ namespace ofxImGuiSurfing
 						}
 					}
 				}
-				//else //unlimited
-				//{
-				//	ofxImGuiSurfing::SameLine();
-				//	ofxImGuiSurfing::AddCheckBox(bAutoScroll);
-				//	//ImGui::Dummy({ 0,10 });
-				//	//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
-				//}
 
 				ofxImGuiSurfing::SameLine();
-				this->AddComboAux(indexSizeFont, namesCustomFonts);
+
+				float ww = 83;
+				this->AddComboAux(indexSizeFont, namesCustomFonts, ww);
+
+				//--
+
+				// Filter
+
+				ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
+				{
+					s = bFilter ? "Write your keyword \nor pick a Tag \nto filter the Log" : "Disabled";
+					ofxImGuiSurfing::AddTooltip2(s);
+				}
+				if (bFilter)
+				{
+					ImGui::SameLine();
+
+					static bool bReturn;//not used
+					auto& tmpRef = strFilterKeyword.get();
+					float _w = ww;
+					s = tmpRef.c_str();
+					ImGui::PushItemWidth(_w);
+					bReturn = ImGui::InputText("##Filter", &s);
+					if (bReturn)
+					{
+						ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+						strFilterKeyword.set(s);
+					}
+					ImGui::PopItemWidth();
+
+					ImGui::SameLine();
+					this->AddComboAux(indexTagFilter, namesTagsFiler, 85);
+				}
+
+				ImGui::Unindent();
 			}
 
 			//--
@@ -935,10 +926,10 @@ namespace ofxImGuiSurfing
 			// take care if both sizes fonts/names changed! this is hardcoded now!
 			// Font sizes
 			namesCustomFonts.clear();
-			namesCustomFonts.push_back("NORMAL");
+			namesCustomFonts.push_back("DEFAULT");
 			namesCustomFonts.push_back("BIG");
 			namesCustomFonts.push_back("HUGE");
-			namesCustomFonts.push_back("HUGE_EXTRA");
+			namesCustomFonts.push_back("HUGE_XXL");
 		}
 
 	private:
@@ -983,7 +974,7 @@ namespace ofxImGuiSurfing
 		// added here as workaround bc some headers are not included here.
 		// and they can't not be included bc colliding between them...
 		//--------------------------------------------------------------
-		bool AddComboAux(ofParameter<int>& parameter, std::vector<std::string> labels)
+		bool AddComboAux(ofParameter<int>& parameter, std::vector<std::string> labels, float width = 90)
 		{
 			if (parameter.get() < 0) return false;
 			if (labels.size() == 0) return false;
@@ -991,7 +982,7 @@ namespace ofxImGuiSurfing
 			//const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
 			//ImGui::PushItemWidth(sz.x);
 
-			ImGui::PushItemWidth(90);
+			ImGui::PushItemWidth(width);
 
 			auto bReturn = false;
 			auto tmpRef = parameter.get();

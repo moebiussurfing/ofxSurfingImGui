@@ -1284,6 +1284,11 @@ public:
 		ofxImGuiSurfing::AddSeparator();
 	}
 	//--------------------------------------------------------------
+	void AddSeparatorVertical()
+	{
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+	}
+	//--------------------------------------------------------------
 	void AddSeparated()
 	{
 		ofxImGuiSurfing::AddSeparator();

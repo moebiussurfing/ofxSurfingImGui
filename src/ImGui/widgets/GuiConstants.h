@@ -29,10 +29,10 @@
 #define FIXING_DRAW_VIEWPORT	// To debug free space
 
 // Font sizes
-#define IM_FONT_NORMAL 0
+#define IM_FONT_DEFAULT 0
 #define IM_FONT_BIG 1
 #define IM_FONT_HUGE 2
-#define IM_FONT_HUGE_EXTRA 3
+#define IM_FONT_HUGE_XXL 3
 
 //--
 
