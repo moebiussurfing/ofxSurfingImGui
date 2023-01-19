@@ -36,7 +36,6 @@ for **openFrameworks** projects.
 - Powerful **Log System**.
 - Floating **Notifier System**.
 
-<hr>
     
 ## EXAMPLE CODE
 
@@ -103,7 +102,6 @@ void ofApp::draw()
   </p>
   </details>
 
-<hr>
 
 ## DEPENDENCIES
 
@@ -140,7 +138,6 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 
-<hr>
 
 ## CURRENT SYSTEMS
 
@@ -149,7 +146,6 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     * Last official Release: [0.11.2](https://openframeworks.cc/download/)
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
-<hr>
 
 <br>
 
