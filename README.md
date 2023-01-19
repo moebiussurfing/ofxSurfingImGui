@@ -1,14 +1,12 @@
 ofxSurfingImGui
 =============================
 
-# OVERVIEW
-
-<h2>
+<h1>
 
 A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for **openFrameworks** projects.  
 
-</h2>
+</h1>
 
 ## WORK IN PROGRESS!
 
