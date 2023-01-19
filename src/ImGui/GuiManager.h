@@ -1957,12 +1957,21 @@ public:
 
 	//----
 
-	// Log Window
+	// Log Syste, Window
+
+	// These are the default tags
+	//"INFO"
+	//"VERBOSE"
+	//"NOTICE"
+	//"WARNING"
+	//"ERROR"
+	// but you can add more custom tags too.
 
 private:
 
+	//TODO:
 	// could be public 
-//public:
+	//public:
 
 	// Window Log
 	SurfingLog log; 
@@ -1986,13 +1995,6 @@ public:
 	{
 		log.AddTag(tag);
 	}
-
-	// These are the default tags
-	//"[INFO]"
-	//"[VERBOSE]"
-	//"[NOTICE]"
-	//"[WARNING]"
-	//"[ERROR]"
 
 	// Print message to log window passing the message and the tag name. must exist or added previously.
 	//--------------------------------------------------------------
@@ -2050,8 +2052,10 @@ public:
 		}
 	}
 
+	// Simpler call. Should use this one.
 	//--------------------------------------------------------------
-	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false) { // Simpler call. Use this.
+	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false) 
+	{ 
 
 		if (bMinimize && bListenToMinimize) return;
 

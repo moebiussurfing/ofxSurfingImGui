@@ -456,6 +456,11 @@ void SurfingGuiManager::startup()
 
 	//--
 
+	// pass fonts to allow styles switching
+	log.setCustomFonts(customFonts);
+
+	//--
+
 	// Two Help Boxes
 	{
 		// Help Text Box internal
@@ -682,6 +687,8 @@ void SurfingGuiManager::clearFonts()
 	io.Fonts->Clear();
 }
 
+// API user: workflow during setup not in draw.
+
 //--------------------------------------------------------------
 bool SurfingGuiManager::pushFont(std::string path, int size)
 {
@@ -721,6 +728,8 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 	return b;
 }
 
+// API user: workflow during setup not in draw.
+
 //--------------------------------------------------------------
 bool SurfingGuiManager::addFont(std::string path, int size)
 {
@@ -743,6 +752,10 @@ bool SurfingGuiManager::addFont(std::string path, int size)
 
 	return b;
 }
+
+//--
+
+// API user: workflow during draw to switch between font styles
 
 //--------------------------------------------------------------
 void SurfingGuiManager::pushStyleFont(int index)
@@ -772,6 +785,8 @@ void SurfingGuiManager::popStyleFont()
 
 	ImGui::PopFont();
 }
+
+//--
 
 //--------------------------------------------------------------
 void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResult, int size = 10) {
@@ -2628,10 +2643,11 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	bool bskip = true;
 	if (name != "position" &&
+		name != log.amountLinesLimitedBuffered.getName() && //workaround
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "\n " << name << " : " << e;
 	}
 	if (bskip) return;
 

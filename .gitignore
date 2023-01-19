@@ -569,3 +569,6 @@ examples/1_Widgets/bin/imgui.ini
 Examples/03_WidgetsKnobs/enc_temp_folder/bdcb5e8ba83e5b9c8c60f4a6a2f415c/ofApp.cpp
 Examples/03_WidgetsKnobs/enc_temp_folder/60c66bd9b1d2471dc6f0a23a143544be/WidgetsManager.h
 Examples/03_WidgetsKnobs/enc_temp_folder/5f6943c647e0c87f7e3da735f6311823/GuiConstants.h
+Examples/04_Log/enc_temp_folder/f73a9743154e7ac8b342fe14bcf34c8/WindowLog.h
+*.txt
+Examples/04_Log/enc_temp_folder/44f2a82c4f95ccaced38b2dd33dcf3d8/WindowLog.h
