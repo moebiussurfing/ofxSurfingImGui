@@ -10,15 +10,11 @@ for **openFrameworks** projects.
 
 </h2>
 
-<hr>
-
 ## WORK IN PROGRESS!
 
 ( _Some examples, testing or new incoming widgets, complementary docs and more projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
 
 [Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/Examples/README.md)  
-
-<hr>
 
 # FEATURES
 
@@ -143,8 +139,6 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     
     </p>
     </details>
-
-<br>
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 
