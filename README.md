@@ -73,7 +73,7 @@ for **openFrameworks** projects.
 ofxSurfingGui ui;
 ofParameter<bool> bGui{ "Show", true };
 
-ofParameter<bool> bEnable{ "Enable", false };
+ofParameter<bool> bEnable{ "Enable", true };
 ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 ofParameterGroup params{ "MyGroup", bEnable, speed };
 ```
@@ -96,7 +96,7 @@ void ofApp::draw()
             ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
             ui.Add(speed, OFX_IM_HSLIDER);
             ui.AddSpacingSeparated();
-            ui.AddGroup(params, OFX_IM_GROUP_COLLAPSED);
+            ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
             ui.EndWindow();
         }

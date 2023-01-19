@@ -296,6 +296,7 @@ namespace ofxImGuiSurfing
 	// Group Style / State
 
 	//TODO: 
+	// NEW API V2
 	// To simplify the API
 	// We can use one only flag argument and multiple possibilities at the same time are allowed.
 	typedef int SurfingGuiGroupStyle;
