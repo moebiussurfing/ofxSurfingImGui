@@ -11,7 +11,7 @@ for **openFrameworks** projects.
 
 ( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
 
-[Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/Examples/README.md)  
+[EXAMPLES SCREENSHOTS](/Examples/README.md)  
 
 # FEATURES
 
