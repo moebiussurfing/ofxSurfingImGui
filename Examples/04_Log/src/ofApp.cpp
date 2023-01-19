@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 
 	setupParams();
 
@@ -31,6 +31,7 @@ void ofApp::setupParams()
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
+	ui.setEnablebMouseCursorFromImGui(false);
 	ui.setup();
 
 	// Add custom tags to logger
@@ -63,7 +64,7 @@ void ofApp::drawImGui()
 		bool b = !ui.bMinimize;//maximized alias
 		ui.AddSpacingBigSeparated();
 
-		if (b) ui.AddLabelHuge("LOG SYSTEM");
+		/*if (b) */ui.AddLabelHuge("LOG SYSTEM");
 		ui.AddSpacing();
 		ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
 		if (b) if (ui.bLog) {
@@ -96,21 +97,24 @@ void ofApp::drawImGui()
 				}
 			}
 		}
-		ui.AddSpacingBigSeparated();
 
 		//--
 
+		ui.AddSpacingBigSeparated();
+
+		ui.Add(bAnimate2, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+		//if (bAnimate2)
+		{
+			ui.Add(separation, OFX_IM_HSLIDER_SMALL);
+			ui.AddTooltip("Animate Separation parameter.");
+		}
+
+		//--
+
+		ui.AddSpacingBigSeparated();
 		// A bundle of controls
 		// for a single param
-		ui.AddComboBundle(lineWidth);
-
-		//--
-
-		ui.AddSpacingBigSeparated();
-
-		ui.Add(separation, OFX_IM_HSLIDER_MINI);
-		ui.Add(bAnimate2, OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
-		ui.AddTooltip("Animate Separation parameter.");
+		ui.AddComboBundle(lineWidth, ui.bMinimize);
 
 		//--
 
@@ -220,11 +224,15 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 		ui.AddToLog(name, "OSC");
 		return;
 	}
-	if (name == amountPauses.getName()) {
-		ui.AddToLog(name + ": " + ofToString(e), "OSC");
-		return;
-	}
-	if (name == speed.getName()) {
+	//if (name == amountPauses.getName()) {
+	//	ui.AddToLog(name + ": " + ofToString(e), "OSC");
+	//	return;
+	//}
+	//if (name == speed.getName()) {
+	//	ui.AddToLog(name + ": " + ofToString(e), "OSC");
+	//	return;
+	//}
+	if (name == lineWidth.getName()) {
 		ui.AddToLog(name + ": " + ofToString(e), "OSC");
 		return;
 	}

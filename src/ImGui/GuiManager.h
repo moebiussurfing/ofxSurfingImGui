@@ -17,16 +17,6 @@
 
 //--
 
-/*
-* Example: Input text with huge font
-	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
-	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
-	{
-	};
-	ui.popStyleFont();
-*/
-//--
-
 using namespace ofxImGuiSurfing;
 
 //----
@@ -692,7 +682,7 @@ public:
 	// for a single param
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddComboBundle(ofParameter<ParameterType>& p)
+	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
 	{
 		string name = p.getName();
 
@@ -708,13 +698,15 @@ public:
 		}
 
 		// label
-		this->AddLabelHuge(p.getName(), true, true);
-
+		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
+		else this->AddLabelBig(p.getName(), true, true);
+		
 		// stepper
 		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
+		//bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
 
 		// slider
-		bReturn += this->Add(p, OFX_IM_HSLIDER_SMALL_NO_LABELS);
+		bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
 
 		// arrows
 		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
@@ -723,14 +715,14 @@ public:
 			if (isInt) step = 1;
 			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
 
-			if (this->AddButton("<", OFX_IM_BUTTON_BIG, 2))
+			if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
 			{
 				p -= step;
 				p = ofClamp(p, p.getMin(), p.getMax());
 				bReturn += true;
 			}
 			ImGui::SameLine();
-			if (this->AddButton(">", OFX_IM_BUTTON_BIG, 2))
+			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
 			{
 				p += step;
 				p = ofClamp(p, p.getMin(), p.getMax());
@@ -739,25 +731,28 @@ public:
 		}
 		ImGui::PopButtonRepeat();
 
-		// knob
-		//this->Add(p, OFX_IM_KNOB_DOTKNOB);
-		float w = this->getWidgetsWidth(1);
-		ImGuiKnobFlags flags = 0;
-		flags += ImGuiKnobFlags_NoInput;
-		flags += ImGuiKnobFlags_NoTitle;
-		flags += ImGuiKnobFlags_ValueTooltip;//not works
-		//flags += ImGuiKnobFlags_DragHorizontal;
-		bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
+		if (!bMinimized)
+		{
+			// knob
+			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
+			float w = this->getWidgetsWidth(1);
+			ImGuiKnobFlags flags = 0;
+			flags += ImGuiKnobFlags_NoInput;
+			flags += ImGuiKnobFlags_NoTitle;
+			flags += ImGuiKnobFlags_ValueTooltip;//not works
+			//flags += ImGuiKnobFlags_DragHorizontal;
+			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
 
-		// mouse
-		if (this->bMouseWheel) {
-			ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
-			ofxImGuiSurfing::GetMouseWheel();
-			ofxImGuiSurfing::AddMouseClickRightReset(p);
+			// mouse
+			if (this->bMouseWheel) {
+				ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
+				ofxImGuiSurfing::GetMouseWheel();
+				ofxImGuiSurfing::AddMouseClickRightReset(p);
+			}
+
+			// tooltip
+			this->AddTooltip(p, true, false);
 		}
-
-		// tooltip
-		this->AddTooltip(p, true, false);
 
 		return bReturn;
 	}
@@ -1974,7 +1969,7 @@ private:
 	//public:
 
 	// Window Log
-	SurfingLog log; 
+	SurfingLog log;
 
 public:
 
@@ -1998,14 +1993,14 @@ public:
 
 	// Print message to log window passing the message and the tag name. must exist or added previously.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, string nameTag) 
+	void AddToLog(std::string text, string nameTag)
 	{
 		// Log
 		log.Add(text, nameTag);
 	}
 	// Print message to log window passing the message and the tag index. must exist or added previously.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, int tag = -1) 
+	void AddToLog(std::string text, int tag = -1)
 	{
 		// Log
 		log.Add(text, tag);
@@ -2054,8 +2049,8 @@ public:
 
 	// Simpler call. Should use this one.
 	//--------------------------------------------------------------
-	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false) 
-	{ 
+	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false)
+	{
 
 		if (bMinimize && bListenToMinimize) return;
 

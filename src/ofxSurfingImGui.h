@@ -1133,3 +1133,22 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
+//----
+
+
+/*
+ 
+	EXAMPLE 
+	
+	AN INPUT TEXT 
+	BUT WITH HUGE FONT
+	
+	ui.pushStyleFont(IM_FONT_HUGE_EXTRA);
+	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
+	{
+		//..
+	};
+	ui.popStyleFont();
+
+*/

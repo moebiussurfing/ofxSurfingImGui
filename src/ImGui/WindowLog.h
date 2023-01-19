@@ -53,7 +53,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		ofParameterGroup params{ "Log Settings" };//settings are handled by the parent class. will be serialized on exit and loaded on start.
-		ofParameter<int> amountLinesLimitedBuffered{ "AmountLines", 20, 1, 100 };//TODO: workaround: public for disable log on parent classes
+		ofParameter<int> amountLinesLimitedBuffered{ "Amount", 20, 1, 200 };//TODO: workaround: public for disable log on parent classes
 
 	private:
 
@@ -64,16 +64,17 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bOneLine{ "OneLine" , false };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
-		ofParameter<bool> bFilter{ "Filter", true };
 		ofParameter<bool> bTimeStamp{ "TimeStamp", false };
-		ofParameter<string> strSearch{ "Search", "" };
 		ofParameter<int> indexSizeFont{ "Font", 0, 0, 0 };
+		ofParameter<bool> bFilter{ "FILTER", true };
+		ofParameter<string> strFilterKeyword{ "Keyword", "" };
+		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
+		vector<string> namesTagsFiler;
 
 		int amountLinesCurr = 0;
 
 	public:
 
-		//--------------------------------------------------------------
 		SurfingLog()
 		{
 			// Infinite mode
@@ -86,12 +87,11 @@ namespace ofxImGuiSurfing
 
 			buildTagsDefault();
 
-			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strSearch, bTimeStamp, indexSizeFont);
+			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
 
-		//--------------------------------------------------------------
 		~SurfingLog()
 		{
 			this->clearUnlimited();
@@ -100,6 +100,22 @@ namespace ofxImGuiSurfing
 			ofRemoveListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
 
+	private:
+
+		void startupOnce()
+		{
+			static bool bDoneStartup = false;
+			if (bDoneStartup) return;
+
+			if (strFilterKeyword.get() == "")
+			{
+				//refresh
+				indexTagFilter = indexTagFilter;
+			}
+
+			ofLogNotice("ofxSurfingImGui") << "Startup done";
+			bDoneStartup = true;
+		}
 
 	private:
 
@@ -110,11 +126,36 @@ namespace ofxImGuiSurfing
 				ofLogNotice("SurfingLog") << n << ": " << e;
 			}
 
+			//workaround to fix combo behavior
+			if (n == strFilterKeyword.getName())
+			{
+				if (strFilterKeyword.get() == strAlign("NONE"))
+					strFilterKeyword.setWithoutEventNotifications("");
+				return;
+			}
+
+			if (n == indexTagFilter.getName())
+			{
+				string t = "";
+				if (indexTagFilter < namesTagsFiler.size() + 1)
+				{
+					t = namesTagsFiler[indexTagFilter.get()];
+					if (t == strAlign("NONE")) t = "";//clear
+					strFilterKeyword.set(t);
+
+					//workflow
+					if (!bFilter) bFilter = true;
+				}
+				return;
+			}
+
 			if (n == amountLinesLimitedBuffered.getName())
 			{
 				static int sizeLimitedBuffered_ = -1;
 				if (amountLinesLimitedBuffered != sizeLimitedBuffered_)
 				{
+					amountLinesLimitedBuffered = ofClamp(amountLinesLimitedBuffered.get(), amountLinesLimitedBuffered.getMin(), amountLinesLimitedBuffered.getMax());
+
 					sizeLimitedBuffered_ = amountLinesLimitedBuffered;
 					int diff = bufferBufferedLimited.size() - amountLinesLimitedBuffered.get();
 					// reduce resize
@@ -126,6 +167,7 @@ namespace ofxImGuiSurfing
 					}
 					ofLogNotice("SurfingLog") << n << ": " << e;
 				}
+				return;
 			}
 		};
 
@@ -157,6 +199,11 @@ namespace ofxImGuiSurfing
 				strEmptyTag += " ";
 			}
 
+			tags.clear();
+
+			namesTagsFiler.clear();
+			namesTagsFiler.push_back(strAlign("NONE"));
+
 			// these tags are hardcoded
 			AddTag({ "INFO", ofColor::white });
 			AddTag({ "VERBOSE", ofColor::white });
@@ -167,6 +214,7 @@ namespace ofxImGuiSurfing
 
 		string strEmptyTag = "";
 
+		// inserts spaces at left to align all tags
 		string strAlign(string s) const
 		{
 			//TODO:
@@ -209,6 +257,10 @@ namespace ofxImGuiSurfing
 			tag.name = strAlign(tag.name);
 
 			tags.push_back(tag);
+
+			// filter
+			indexTagFilter.setMax(tags.size());
+			namesTagsFiler.push_back(tag.name);
 		};
 
 		//--
@@ -283,7 +335,7 @@ namespace ofxImGuiSurfing
 					if (bFilter)
 					{
 						bool bFound = true;
-						string s1 = strSearch.get();
+						string s1 = strFilterKeyword.get();
 						string s2(item);
 						if (s1 != "")
 						{
@@ -362,7 +414,7 @@ namespace ofxImGuiSurfing
 					if (bFilter)
 					{
 						bool bFound = true;
-						string s1 = strSearch.get();
+						string s1 = strFilterKeyword.get();
 						if (s1 != "")
 						{
 							bFound = ofIsStringInString(m, s1);
@@ -522,6 +574,8 @@ namespace ofxImGuiSurfing
 		{
 			if (!bGui) return;
 
+			startupOnce();
+
 			// calculate how many lines are being drawn
 			// that depends on modes or settings
 			if (bLimitedBuffered) {
@@ -569,7 +623,7 @@ namespace ofxImGuiSurfing
 
 			ofxImGuiSurfing::AddSpacing();
 
-			float _hh = ofxImGuiSurfing::getWidgetsHeightUnit();
+			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _w = ofxImGuiSurfing::getWidgetsWidth(1);
 			//float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
@@ -588,7 +642,7 @@ namespace ofxImGuiSurfing
 			}
 			ofxImGuiSurfing::AddSpacing();
 
-			ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hh, true);
+			ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hu, true);
 			ImGui::Spacing();
 
 			//--
@@ -601,8 +655,8 @@ namespace ofxImGuiSurfing
 				// LIMITED or UNLIMITED
 
 				ofxImGuiSurfing::AddBigToggleNamed(bLimitedBuffered, 140, 0.65 * _h, "LIMITED", "UNLIMITED");
-				//ofxImGuiSurfing::AddBigToggle(bLimitedBuffered, 50, _hh, true);
-				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hh, true);
+				//ofxImGuiSurfing::AddBigToggle(bLimitedBuffered, 50, _hu, true);
+				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hu, true);
 				//ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
 
 				// Tooltip
@@ -625,6 +679,9 @@ namespace ofxImGuiSurfing
 				//--
 
 				ImGui::SameLine();
+				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+
+				ImGui::SameLine();
 				bool bCopy = ImGui::Button("Copy");
 				s = "Copy Log \nto Clipboard";
 				ofxImGuiSurfing::AddTooltip2(s);
@@ -643,9 +700,13 @@ namespace ofxImGuiSurfing
 				// filter
 
 				ImGui::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bFilter);
+				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+
+				ImGui::SameLine();
+				//ofxImGuiSurfing::AddCheckBox(bFilter);
+				ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
 				{
-					s = bFilter ? "Write your pattern\nto filter log lines" : "Disabled";
+					s = bFilter ? "Write your keyword \nto filter log lines" : "Disabled";
 					ofxImGuiSurfing::AddTooltip2(s);
 				}
 				if (bFilter)
@@ -656,22 +717,37 @@ namespace ofxImGuiSurfing
 					//ofxImGuiSurfing::blink
 
 					static bool bReturn;
-					auto& tmpRef = strSearch.get();
-					float _w = 100;
+					auto& tmpRef = strFilterKeyword.get();
+					float _w = 90;
 					s = tmpRef.c_str();
 					ImGui::PushItemWidth(_w);
 					bReturn = ImGui::InputText("##Filter", &s);
 					if (bReturn)
 					{
 						ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-						strSearch.set(s);
+						strFilterKeyword.set(s);
 					}
 					ImGui::PopItemWidth();
+
+					ImGui::SameLine();
+					this->AddComboAux(indexTagFilter, namesTagsFiler);
 				}
 
 				//--
 
 				ofxImGuiSurfing::AddCheckBox(bTimeStamp);
+
+				//unlimited
+				if (!bLimitedBuffered)
+				{
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+					//ImGui::Dummy({ 0,10 });
+					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
+				}
+
+				ImGui::SameLine();
+				ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 
 				ofxImGuiSurfing::SameLine();
 				ofxImGuiSurfing::AddCheckBox(bTight);
@@ -680,7 +756,7 @@ namespace ofxImGuiSurfing
 
 				ofxImGuiSurfing::SameLine();
 				ofxImGuiSurfing::AddCheckBox(bOneLine);
-				s = (bOneLine ? "Forces one line only.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
+				s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 				ofxImGuiSurfing::AddTooltip2(s);
 
 				// modes
@@ -690,7 +766,8 @@ namespace ofxImGuiSurfing
 				{
 					ofxImGuiSurfing::SameLine();
 					ofxImGuiSurfing::AddCheckBox(bAutoFit);
-					s = "Resize buffer to fit window size \nas amount of expected text lines.";
+					s = "Resizes buffer to fit \nwindow height, \nas expected amount \nof text lines.";
+					s += "\nWill be affected by \nthe OneLine state.";
 					ofxImGuiSurfing::AddTooltip2(s);
 					if (!bAutoFit)
 					{
@@ -713,13 +790,13 @@ namespace ofxImGuiSurfing
 						}
 					}
 				}
-				else //unlimited
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
-					//ImGui::Dummy({ 0,10 });
-					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
-				}
+				//else //unlimited
+				//{
+				//	ofxImGuiSurfing::SameLine();
+				//	ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+				//	//ImGui::Dummy({ 0,10 });
+				//	//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
+				//}
 
 				ofxImGuiSurfing::SameLine();
 				this->AddComboAux(indexSizeFont, namesCustomFonts);
@@ -914,7 +991,7 @@ namespace ofxImGuiSurfing
 			//const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
 			//ImGui::PushItemWidth(sz.x);
 
-			ImGui::PushItemWidth(95);
+			ImGui::PushItemWidth(90);
 
 			auto bReturn = false;
 			auto tmpRef = parameter.get();
