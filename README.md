@@ -61,7 +61,9 @@ for **openFrameworks** projects.
     
 ## EXAMPLE: HELLO WORLD
 
-![](Examples/00_HelloWorld/Capture.PNG)  
+<br>
+
+![](/Examples/00_HelloWorld/Capture.PNG)  
 
 ### ofApp.h
 
