@@ -106,11 +106,11 @@ void ofApp::draw()
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
-  - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST** use this one! 
+  - THE **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
+  - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-`data.zip` assets like some font files to put into `OF_APP/bin/.`  
+[data.zip](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/assets.zip) assets like some font files to put into each project `OF_APP/bin/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
