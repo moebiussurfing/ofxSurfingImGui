@@ -11,15 +11,17 @@
 	TODO:
 
 	improve implemented filter.
-		could be a little slow bc it handles strings.
-		for some situations we should replace by:
+	could be a little slow bc it handles strings.
+	for some situations we should replace by:
 
 	filter search from ImGui Demo
 	https://github.com/ocornut/imgui/issues/300
 	Better and newer from the ImGui Demo:
 	https://github.com/ocornut/imgui/blob/0359f6e94fb540501797de1f320082e4ad96ce9c/imgui_demo.cpp#L6859
 
-	could add log level using the filter
+	could be instantiated kind of static to be shared between all the ofxSurfingImGui instances ?
+
+	could add log level (>) using the filter tags
 
 */
 
@@ -51,6 +53,8 @@ namespace ofxImGuiSurfing
 		const string strSpacer2 = " ";//not required bc alignment adds some starting spaces
 
 	public:
+
+		ofParameter<bool>bGui{ "LOG", true };
 
 		ofParameterGroup params{ "Log Settings" };//settings are handled by the parent class. will be serialized on exit and loaded on start.
 		ofParameter<int> amountLinesLimitedBuffered{ "Amount", 20, 1, 200 };//TODO: workaround: public for disable log on parent classes
@@ -98,6 +102,12 @@ namespace ofxImGuiSurfing
 			this->clearBuffered();
 
 			ofRemoveListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
+		};
+
+		//--------------------------------------------------------------
+		void setLogName(std::string name)
+		{
+			bGui.setName(name);
 		};
 
 	private:
@@ -570,9 +580,15 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		void drawImGui(ofParameter<bool>& bGui)
+		void drawImGui()
 		{
-			if (!bGui) return;
+			drawImGui(bGui);
+		}
+
+		//--------------------------------------------------------------
+		void drawImGui(ofParameter<bool>& _bGui)
+		{
+			if (!_bGui) return;
 
 			startupOnce();
 
@@ -588,7 +604,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			std::string name = bGui.getName();
+			std::string name = _bGui.getName();
 			ImGuiWindowFlags flags;
 			flags = ImGuiWindowFlags_None;
 			flags |= ImGuiWindowFlags_NoScrollbar;
@@ -615,7 +631,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (!ImGui::Begin(name.c_str(), (bool*)&bGui.get(), flags))
+			if (!ImGui::Begin(name.c_str(), (bool*)&_bGui.get(), flags))
 			{
 				ImGui::End();
 				return;

@@ -700,7 +700,7 @@ public:
 		// label
 		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
 		else this->AddLabelBig(p.getName(), true, true);
-		
+
 		// stepper
 		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
 		//bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
@@ -1279,19 +1279,25 @@ public:
 		ofxImGuiSurfing::AddSpacing();
 	}
 	//--------------------------------------------------------------
-	void AddSeparator()
-	{
-		ofxImGuiSurfing::AddSeparator();
-	}
-	//--------------------------------------------------------------
-	void AddSeparatorVertical()
-	{
-		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
-	}
-	//--------------------------------------------------------------
 	void AddSeparated()
 	{
 		ofxImGuiSurfing::AddSeparator();
+	}
+	//--------------------------------------------------------------
+	void AddSeparator()//legacy
+	{
+		AddSeparated();
+	}
+	//--------------------------------------------------------------
+	void AddSeparatedVertical(bool bSameLine = true)
+	{
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+		if (bSameLine)this->SameLine();
+	}
+	//--------------------------------------------------------------
+	void AddSeparatorVertical(bool bSameLine = true)//legacy
+	{
+		AddSeparatedVertical(bSameLine);
 	}
 	//--------------------------------------------------------------
 	void AddSpacingBig()
@@ -1977,6 +1983,11 @@ private:
 	SurfingLog log;
 
 public:
+	//--------------------------------------------------------------
+	void setLogName(std::string name)
+	{
+		log.setLogName(name);
+	}
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled() {
@@ -1984,9 +1995,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void DrawWindowLog() {
-		static ofParameter<bool>b{ "LOG", true };
-		log.drawImGui(b);
+	void DrawWindowLog() 
+	{
+		log.drawImGui();
+
+		//static ofParameter<bool>b{ "LOG", true };
+		//log.drawImGui(b);
 	}
 
 	// Create a custom tag to be used after.

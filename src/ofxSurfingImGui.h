@@ -4,6 +4,10 @@
 	TODO:
 
 	STYLE
+	+ new knobs could be darker
+		smaller ones looks broken the thin border.
+		could be smaller
+
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
 		the fix the knobs colors too.

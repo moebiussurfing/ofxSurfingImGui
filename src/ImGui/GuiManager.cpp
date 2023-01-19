@@ -458,6 +458,7 @@ void SurfingGuiManager::startup()
 
 	// pass fonts to allow styles switching
 	log.setCustomFonts(customFonts);
+	log.bGui.makeReferenceTo(bLog);
 
 	//--
 
