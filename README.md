@@ -1,8 +1,7 @@
-ofxSurfingImGui
-=============================
 
 <h1>
 
+ofxSurfingImGui.  
 A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for **openFrameworks** projects.  
 
@@ -10,7 +9,7 @@ for **openFrameworks** projects.
 
 ## WORK IN PROGRESS!
 
-( _Some examples, testing or new incoming widgets, complementary docs and more projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
+( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
 
 [Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/Examples/README.md)  
 
