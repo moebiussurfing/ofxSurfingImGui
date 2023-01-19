@@ -1,9 +1,7 @@
 ofxSurfingImGui
 =============================
 
-## OVERVIEW
-
-<br>
+# OVERVIEW
 
 <h2>
 
@@ -12,17 +10,17 @@ for **openFrameworks** projects.
 
 </h2>
 
-<br>
-
-( _Some examples, testing or new incoming widgets, complementary docs and more projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
-
-<br>
+<hr>
 
 ## WORK IN PROGRESS!
 
+( _Some examples, testing or new incoming widgets, complementary docs and more projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
+
 [Examples Screenshots](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/Examples/README.md)  
 
-## FEATURES
+<hr>
+
+# FEATURES
 
 - Easy **Setup** and **Layout**.
 - **Multiple instances** around classes and **ofxAddons**.
@@ -43,8 +41,10 @@ for **openFrameworks** projects.
     - _+Alt_ to reset to max.
 - Powerful **Log System**.
 - Floating **Notifier System**.
+
+<hr>
     
-## CODE
+## EXAMPLE CODE
 
 ### ofApp.h
 
@@ -109,13 +109,14 @@ void ofApp::draw()
   </p>
   </details>
 
+<hr>
+
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
   - THE _AWESOME_ [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST** use this one! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp). / _Not required. For examples._  
 
 `data.zip` assets like some font files to put into `OF_APP/bin/.`  
 
@@ -143,6 +144,12 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     </p>
     </details>
 
+<br>
+
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
+
+<hr>
+
 ## CURRENT SYSTEMS
 
 - **Windows 10** / **VS 2022** / 
@@ -150,7 +157,11 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     * Last official Release: [0.11.2](https://openframeworks.cc/download/)
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
-## AUTHOR
+<hr>
+
+<br>
+
+# AUTHOR
 
 An add-on by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2023*  
