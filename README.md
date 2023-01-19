@@ -3,9 +3,16 @@ ofxSurfingImGui
 
 ## OVERVIEW
 
-An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** projects.  
+<br>
 
-( _Some examples, complementary docs and more testing projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
+## A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
+## for **openFrameworks** projects.  
+
+<br>
+
+( _Some examples, testing or new incoming widgets, complementary docs and more projects are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)._ )  
+
+<br>
 
 ## WORK IN PROGRESS!
 
@@ -24,13 +31,13 @@ An [ImGui](https://github.com/ocornut/imgui) **Toolkit** for **openFrameworks** 
 - Useful methods and **Snippets** to **Speed-Up layout** and simple **Workflow**.
 - A **Layout Presets Engine**.
 - Some **Docking Helpers**.
-- Cool **Themes** and helpers.
-- Extra **Mouse control** 
-  - Wheel for tweaking. _+Ctrl_ to finetune.
+- Cool **Themes**.
+- Extra **Mouse Control** 
+  - Wheel for Tweaking. _+Ctrl_ to Finetune.
   - Right button to reset to params center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- Powerful **Log Engine**.
+- Powerful **Log System**.
 - Floating **Notifier System**.
     
 ## CODE
@@ -88,12 +95,12 @@ void ofApp::draw()
 - DearWidgets
 - Gradient Color Designer
 - Matrix Selectors
-- Enum combos selectors
+- Dropdown / Combos selectors
 - Progress bars and waiting spinners
 - Files Browser
 - Curve Editors
 - Bubbles Notifier System
-- Profile plotters
+- Profile Plotters
   
   </p>
   </details>
@@ -108,10 +115,15 @@ void ofApp::draw()
 
 `data.zip` assets like some font files to put into `OF_APP/bin/.`  
 
-**NOTE**: The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located (then `/data` can also be empty), it will work too, but using the default bundled font from **ImGui**.  
+<details>
+  <summary>NOTE ABOUT THE FONTS</summary>
+
+The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located (then `/data` can also be empty), it will work too, but using the default bundled font from **ImGui**.  
+
+</details>
 
 <details>
-  <summary>Why an ofxImGui FORK?</summary>
+  <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
 - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
@@ -129,18 +141,20 @@ void ofApp::draw()
 
 ## CURRENT SYSTEMS
 
-- **Windows 10** / **VS 2022** / GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.  
+- **Windows 10** / **VS 2022** / 
+    * GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
+    * Last official Release: [0.11.2](https://openframeworks.cc/download/)
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
 ## AUTHOR
 
 An add-on by **moebiusSurfing**.  
-*( ManuMolina ) 2021-2022*  
+*( ManuMolina ) 2021-2023*  
 
 ## THANKS
 
-_Super Thanks to [@Daandelange](https://github.com/Daandelange) for his **ofxImGui** fork._  
-_All source snippets and widgets from other authors are linked into header files. Thanks!_  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui FORK**._  
+_All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing._  
 
 ## LICENSE
