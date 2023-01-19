@@ -10,17 +10,19 @@
 
 	TODO:
 
-	add timestamp. copy style from protokol
-
 	improve implemented filter.
 		could be a little slow bc it handles strings.
 		for some situations we should replace by:
 
 	filter search from ImGui Demo
 	https://github.com/ocornut/imgui/issues/300
-	Better from the ImGui Demo
+	Better and newer from the ImGui Demo:
+	https://github.com/ocornut/imgui/blob/0359f6e94fb540501797de1f320082e4ad96ce9c/imgui_demo.cpp#L6859
+
+	could add log level using the filter
 
 */
+
 
 //----
 
@@ -30,22 +32,28 @@
 #include "imgui_stdlib.h"
 
 //TODO: some widget fails..
-//#include "ofHelpers.h"
+// so we can't not use some methods... 
+// like pushing font styles...
 //#include "ofxSurfingImGui.h"
+//#include "ofHelpers.h"
+//#include "GuiManager.h"
 
 namespace ofxImGuiSurfing
 {
 	class SurfingLog
 	{
+
 		// columns formatting
 	private:
 
 		const int maxTagLength = 8; // first or tag column width. to make tags right aligned.
 		const string strSpacer = "   "; // space between tags column and the second column with the message .
 		const string strSpacer2 = " ";//not required bc alignment adds some starting spaces
+
 	public:
 
 		ofParameterGroup params{ "Log Settings" };//settings are handled by the parent class. will be serialized on exit and loaded on start.
+		ofParameter<int> amountLinesLimitedBuffered{ "AmountLines", 20, 1, 100 };//TODO: workaround: public for disable log on parent classes
 
 	private:
 
@@ -55,11 +63,11 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bTight{ "Tight" , true };
 		ofParameter<bool> bOneLine{ "OneLine" , false };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
-		ofParameter<int> sizeLimitedBuffered{ "AmountLines", 20, 1, 100 };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bFilter{ "Filter", true };
 		ofParameter<bool> bTimeStamp{ "TimeStamp", false };
 		ofParameter<string> strSearch{ "Search", "" };
+		ofParameter<int> indexSizeFont{ "Font", 0, 0, 0 };
 
 		int amountLinesCurr = 0;
 
@@ -72,13 +80,13 @@ namespace ofxImGuiSurfing
 			this->clearUnlimited();
 
 			// Buffered mode
-			//sizeLimitedBuffered = 20;
+			//amountLinesLimitedBuffered = 20;
 			bufferBufferedLimited = std::deque<std::string>();
 			this->clearBuffered();
 
 			buildTagsDefault();
 
-			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, sizeLimitedBuffered, bOptions, bAutoFit, bFilter, strSearch, bTimeStamp);
+			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strSearch, bTimeStamp, indexSizeFont);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
@@ -98,17 +106,25 @@ namespace ofxImGuiSurfing
 		void Changed_Params(ofAbstractParameter& e)
 		{
 			std::string n = e.getName();
-			ofLogNotice("SurfingLog") << n << ": " << e;
+			if (n != amountLinesLimitedBuffered.getName()) {
+				ofLogNotice("SurfingLog") << n << ": " << e;
+			}
 
-			if (n == sizeLimitedBuffered.getName())
+			if (n == amountLinesLimitedBuffered.getName())
 			{
-				int diff = bufferBufferedLimited.size() - sizeLimitedBuffered.get();
-				// reduce resize
-				if (diff > 0) {
-					for (size_t i = 0; i < diff; i++)
-					{
-						bufferBufferedLimited.pop_front();
+				static int sizeLimitedBuffered_ = -1;
+				if (amountLinesLimitedBuffered != sizeLimitedBuffered_)
+				{
+					sizeLimitedBuffered_ = amountLinesLimitedBuffered;
+					int diff = bufferBufferedLimited.size() - amountLinesLimitedBuffered.get();
+					// reduce resize
+					if (diff > 0) {
+						for (size_t i = 0; i < diff; i++)
+						{
+							bufferBufferedLimited.pop_front();
+						}
 					}
+					ofLogNotice("SurfingLog") << n << ": " << e;
 				}
 			}
 		};
@@ -133,12 +149,15 @@ namespace ofxImGuiSurfing
 		{
 			// to be used when log a message without tag.
 			// will use common text color
+			// this empty tag will have the size 
+			// of the bigger tag to maintain alignment
 			strEmptyTag = "";
 			for (size_t i = 0; i < maxTagLength; i++)
 			{
 				strEmptyTag += " ";
 			}
 
+			// these tags are hardcoded
 			AddTag({ "INFO", ofColor::white });
 			AddTag({ "VERBOSE", ofColor::white });
 			AddTag({ "NOTICE", ofColor::green });
@@ -205,7 +224,7 @@ namespace ofxImGuiSurfing
 		void addBuffered(string msg)
 		{
 			bufferBufferedLimited.emplace_back(msg);
-			if (sizeLimitedBuffered.get() < bufferBufferedLimited.size())
+			if (amountLinesLimitedBuffered.get() < bufferBufferedLimited.size())
 			{
 				bufferBufferedLimited.pop_front();
 			}
@@ -257,7 +276,6 @@ namespace ofxImGuiSurfing
 				for (int i = 0; i < bufferUnlimited.Size; i++)
 				{
 					const char* item = bufferUnlimited[i];
-					//char* item = bufferUnlimited[i];
 
 					//--
 
@@ -286,12 +304,6 @@ namespace ofxImGuiSurfing
 							color = t.color;
 							has_color = true;
 						}
-					}
-
-					if (!has_color)
-					{
-						string s = strEmptyTag + string(item);
-						item = s.c_str();
 					}
 
 					if (has_color)
@@ -332,7 +344,7 @@ namespace ofxImGuiSurfing
 					if (!bTight) h += g.Style.FramePadding.y;
 					float hFree = ofxImGuiSurfing::getWindowContentHeight();
 					int amountLines = hFree / h;
-					sizeLimitedBuffered = amountLines;
+					amountLinesLimitedBuffered = amountLines;
 				}
 
 				//--
@@ -372,19 +384,13 @@ namespace ofxImGuiSurfing
 						}
 					}
 
-					if (!has_color)
-					{
-						string s = strEmptyTag + m;
-						item = s.c_str();
-					}
-
 					if (has_color)
 						ImGui::PushStyleColor(ImGuiCol_Text, color);
 
 					//--
 
 					// draw text
-					drawText(m.c_str());
+					drawText(item);
 
 					//--
 
@@ -424,7 +430,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		//--------------------------------------------------------------
-		//void setLogBufferedSize(int size) { sizeLimitedBuffered = size; };
+		//void setLogBufferedSize(int size) { amountLinesLimitedBuffered = size; };
 
 		//--------------------------------------------------------------
 		void clearBuffered() { bufferBufferedLimited.clear(); };
@@ -520,7 +526,7 @@ namespace ofxImGuiSurfing
 			// that depends on modes or settings
 			if (bLimitedBuffered) {
 				if (bAutoFit) amountLinesCurr = bufferBufferedLimited.size();
-				else amountLinesCurr = sizeLimitedBuffered.get();
+				else amountLinesCurr = amountLinesLimitedBuffered.get();
 			}
 			else {
 				amountLinesCurr = bufferUnlimited.size();
@@ -599,26 +605,28 @@ namespace ofxImGuiSurfing
 				//ofxImGuiSurfing::AddToggleRoundedButton(bLimitedBuffered, _hh, true);
 				//ofxImGuiSurfing::AddCheckBox(bLimitedBuffered);
 
-				// tooltip
+				// Tooltip
 				{
 					s = (bLimitedBuffered ? "Buffer size \nof lines is limited" : "Buffer size \nof lines is \nunlimited.");
 					if (bLimitedBuffered) s += "\n\nYou can set AutoFit \nor to specify an \namount manually.";
-					s += "\n\nAmountLines: \n" + ofToString(amountLinesCurr);
+					//s += "\n\nAmountLines: \n" + ofToString(amountLinesCurr);
 					ofxImGuiSurfing::AddTooltip2(s);
 				}
 
-				// lines counter
+				// Amount lines counter
 				{
 					ImGui::SameLine();
 					string s = ofToString(amountLinesCurr);
 					ImGui::Text(s.c_str());
+					s = "Amount of \nbuffered lines:\n" + s;
+					ofxImGuiSurfing::AddTooltip2(s);
 				}
 
 				//--
 
 				ImGui::SameLine();
 				bool bCopy = ImGui::Button("Copy");
-				s = "Copy Log to Clipboard";
+				s = "Copy Log \nto Clipboard";
 				ofxImGuiSurfing::AddTooltip2(s);
 				if (bCopy) ImGui::LogToClipboard();
 
@@ -626,7 +634,7 @@ namespace ofxImGuiSurfing
 
 				ImGui::SameLine();
 				bool bExport = ImGui::Button("Export");
-				s = "Export Log to \na file in data/ folder";
+				s = "Export Log \nto a file \nin data/ folder";
 				ofxImGuiSurfing::AddTooltip2(s);
 				if (bExport) exportLogToFile();
 
@@ -663,60 +671,7 @@ namespace ofxImGuiSurfing
 
 				//--
 
-				//ofxImGuiSurfing::SameLine();
-
-				//--
-
-				{
-					//ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bTimeStamp);
-				}
-
-				// limited buffered
-				if (bLimitedBuffered)
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoFit);
-					s = "Resize buffer to fit window size \nas amount of expected text lines.";
-					//s += "\nAmount Lines: " + ofToString(bufferBufferedLimited.size());
-					ofxImGuiSurfing::AddTooltip2(s);
-					if (!bAutoFit)
-					{
-						ofxImGuiSurfing::SameLine();
-
-						//TODO: not working
-						//ImGui::DragInt("Size", &sizeLimitedBuffered, 1, 100);
-						//ofxImGuiSurfing::AddParameter(sizeLimitedBuffered);
-						// fix
-						{
-							ImGui::PushItemWidth(90);
-							string name = sizeLimitedBuffered.getName();
-							auto tmpRefi = sizeLimitedBuffered.get();
-							string n = "##STEPPERint" + name;// +ofToString(1);
-							const ImU32 u32_one = 1;
-							ImGui::PushID(n.c_str());
-							if (ImGui::InputScalar(sizeLimitedBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
-							{
-								tmpRefi = ofClamp(tmpRefi, sizeLimitedBuffered.getMin(), sizeLimitedBuffered.getMax());
-								sizeLimitedBuffered.set(tmpRefi);
-							}
-							ImGui::PopID();
-							ImGui::PopItemWidth();
-						}
-					}
-					//else {
-					//	ofxImGuiSurfing::SameLine();
-					//	string s = ofToString(sizeLimitedBuffered.get());
-					//	ImGui::Text(s.c_str());
-					//}
-				}
-				else //unlimited
-				{
-					ofxImGuiSurfing::SameLine();
-					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
-					//ImGui::Dummy({ 0,10 });
-					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
-				}
+				ofxImGuiSurfing::AddCheckBox(bTimeStamp);
 
 				ofxImGuiSurfing::SameLine();
 				ofxImGuiSurfing::AddCheckBox(bTight);
@@ -728,10 +683,46 @@ namespace ofxImGuiSurfing
 				s = (bOneLine ? "Forces one line only.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 				ofxImGuiSurfing::AddTooltip2(s);
 
-				//string s;
-				//if (bLimitedBuffered)s = "Limited Size";
-				//else s = "Infinite Size";
-				//ofxImGuiSurfing::AddTooltip2(s);
+				// modes
+
+				// limited buffered
+				if (bLimitedBuffered)
+				{
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoFit);
+					s = "Resize buffer to fit window size \nas amount of expected text lines.";
+					ofxImGuiSurfing::AddTooltip2(s);
+					if (!bAutoFit)
+					{
+						ofxImGuiSurfing::SameLine();
+
+						{
+							ImGui::PushItemWidth(90);
+							string name = amountLinesLimitedBuffered.getName();
+							auto tmpRefi = amountLinesLimitedBuffered.get();
+							string n = "##STEPPERint" + name;// +ofToString(1);
+							const ImU32 u32_one = 1;
+							ImGui::PushID(n.c_str());
+							if (ImGui::InputScalar(amountLinesLimitedBuffered.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, &u32_one, NULL, "%d"))
+							{
+								tmpRefi = ofClamp(tmpRefi, amountLinesLimitedBuffered.getMin(), amountLinesLimitedBuffered.getMax());
+								amountLinesLimitedBuffered.set(tmpRefi);
+							}
+							ImGui::PopID();
+							ImGui::PopItemWidth();
+						}
+					}
+				}
+				else //unlimited
+				{
+					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::AddCheckBox(bAutoScroll);
+					//ImGui::Dummy({ 0,10 });
+					//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hh, true);
+				}
+
+				ofxImGuiSurfing::SameLine();
+				this->AddComboAux(indexSizeFont, namesCustomFonts);
 			}
 
 			//--
@@ -741,14 +732,19 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (!bLimitedBuffered)
+			//TODO: font styled
+			pushStyleFont(indexSizeFont.get());
 			{
-				drawUnlimited();
+				if (!bLimitedBuffered)
+				{
+					drawUnlimited();
+				}
+				else
+				{
+					drawBufferedLimited();
+				}
 			}
-			else
-			{
-				drawBufferedLimited();
-			}
+			popStyleFont();
 
 			//--
 
@@ -772,7 +768,8 @@ namespace ofxImGuiSurfing
 			path += "\\logs";//add subfolder
 			ofxSurfingHelpers::CheckFolder(path);//create folder if required
 
-			string timeFormat = "%Y-%m-%d__%H-%M-%S";//+date/time
+			string timeFormat = "%Y-%m-%d";//+date
+			timeFormat += "___%H-%M-%S";//+time
 
 			string n = "";//filename with ext
 			string s = "";//path complete 
@@ -836,10 +833,126 @@ namespace ofxImGuiSurfing
 
 		void drawText(const char* item) {
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+
 			if (bOneLine) ImGui::TextUnformatted(item);
 			else ImGui::TextWrapped(item);
+
 			if (bTight) ImGui::PopStyleVar();
 		}
+
+		//--
+
+	public:
+
+		void setCustomFonts(vector<ImFont*> f) {
+			customFonts = f;
+
+			if (customFonts.size() == 0) {
+				ofLogError("SurfingLog") << "It looks that not any extra font styles are added!";
+
+			}
+
+			indexSizeFont.setMax(customFonts.size() - 1);
+
+			//TODO: these names could be copied to GuiManager too!
+			// take care if both sizes fonts/names changed! this is hardcoded now!
+			// Font sizes
+			namesCustomFonts.clear();
+			namesCustomFonts.push_back("NORMAL");
+			namesCustomFonts.push_back("BIG");
+			namesCustomFonts.push_back("HUGE");
+			namesCustomFonts.push_back("HUGE_EXTRA");
+		}
+
+	private:
+
+		vector<ImFont*> customFonts;
+		vector<string> namesCustomFonts;
+
+		// API user: workflow during draw to switch between font styles
+
+		bool bIgnoreNextPopFont = false;
+
+		//--------------------------------------------------------------
+		void pushStyleFont(int index)
+		{
+			if (index < customFonts.size())
+			{
+				if (customFonts[index] != nullptr)
+					ImGui::PushFont(customFonts[index]);
+			}
+			else
+			{
+				bIgnoreNextPopFont = true; // workaround to avoid crashes
+			}
+		}
+
+		//--------------------------------------------------------------
+		void popStyleFont()
+		{
+			//TODO: will crash if not pushed..
+			//workaround to avoid crashes
+			if (bIgnoreNextPopFont)
+			{
+				bIgnoreNextPopFont = false;
+
+				return;
+			}
+
+			ImGui::PopFont();
+		}
+
+		//TODO:
+		// added here as workaround bc some headers are not included here.
+		// and they can't not be included bc colliding between them...
+		//--------------------------------------------------------------
+		bool AddComboAux(ofParameter<int>& parameter, std::vector<std::string> labels)
+		{
+			if (parameter.get() < 0) return false;
+			if (labels.size() == 0) return false;
+
+			//const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
+			//ImGui::PushItemWidth(sz.x);
+
+			ImGui::PushItemWidth(95);
+
+			auto bReturn = false;
+			auto tmpRef = parameter.get();
+
+			auto uniqueName = (("##COMBO" + parameter.getName()).c_str());
+			ImGui::PushID(uniqueName);
+
+			if (ImGui::BeginCombo((parameter.getName().c_str()), labels.at(parameter.get()).c_str()))
+			{
+				for (size_t i = 0; i < labels.size(); ++i)
+				{
+					bool selected = (i == tmpRef);
+					if (ImGui::Selectable(labels[i].c_str(), selected))
+					{
+						tmpRef = i;
+						bReturn = true;
+					}
+					if (selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::PopID();
+
+			if (bReturn)
+			{
+				parameter.set(tmpRef);
+			}
+
+			ImGui::PopItemWidth();
+
+			return bReturn;
+		}
+
 
 	};//class
 

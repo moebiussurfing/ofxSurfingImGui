@@ -125,11 +125,13 @@ void ofApp::updateLog()
 {
 	// Animate some vars
 	auto f = ofGetFrameNum();
-	
+
 	// Ping every 2 seconds. 
 	if (f % 120 == 0)
 	{
-		ui.AddToLog("PING"); // Raw without tag. 2nd argument empty
+		static int counter = 0;
+		string s = "PING \t\t\t\t\t #" + ofToString(counter++);
+		ui.AddToLog(s); // Raw without tag. 2nd argument empty
 	}
 
 	// Animate 2
@@ -155,7 +157,7 @@ void ofApp::updateLog()
 	}
 
 	// Log d times per second at 60 fps
-	if (1)
+	//if (0)
 	{
 		int d = ofMap(speed.get(), 0, 1, 120, 8);
 		progress1 = ofMap(f % d, 0, d, 0, 1, true);
@@ -219,6 +221,10 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 		return;
 	}
 	if (name == amountPauses.getName()) {
+		ui.AddToLog(name + ": " + ofToString(e), "OSC");
+		return;
+	}
+	if (name == speed.getName()) {
 		ui.AddToLog(name + ": " + ofToString(e), "OSC");
 		return;
 	}
