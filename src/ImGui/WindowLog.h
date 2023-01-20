@@ -65,11 +65,13 @@ namespace ofxImGuiSurfing
 			this->clearUnlimited();
 
 			// Buffered mode
-			//amountLinesLimitedBuffered = 20;
 			bufferBufferedLimited = std::deque<std::string>();
 			this->clearBuffered();
 
 			buildTagsDefault();
+
+			// to fix overwrite filter enable on startup
+			//indexTagFilter.setSerializable(false);
 
 			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bMinimize);
 
@@ -107,18 +109,20 @@ namespace ofxImGuiSurfing
 			Add(msg);
 		};
 
-		void Add(std::string msg, int itag = -1)//all add method will pass through this method..
+		// all the other "add methods" will pass through this main method...
+		void Add(std::string msg, int itag = -1)
 		{
 			if (bPause) return;
 
 			string s = "";
 
-			// timestamp
+			// Timestamp
 			if (bTimeStamp)
 			{
+				string timeFormat = "%H:%M:%S ";
 				//string timeFormat = "%H-%M-%S-%i";//+ms
 				//string timeFormat = "%H:%M:%S.%i ";//Protokol style
-				string timeFormat = "%H:%M:%S ";
+
 				s += ofGetTimestampString(timeFormat);
 
 				//s += strSpacer2;//not required bc alignment adds some starting spaces
@@ -170,9 +174,9 @@ namespace ofxImGuiSurfing
 
 			// minimal window width
 			const float LOG_WINDOW_MIN_WIDTH = 100;
-			
+
 			float wWidgets = 110;//width for next widgets
-			
+
 			// calculate how many lines are being drawn
 			// that depends on modes or settings
 			if (bLimitedBuffered) {
@@ -223,26 +227,34 @@ namespace ofxImGuiSurfing
 			bool bDebug = 0;
 			if (bDebug) ofxImGuiSurfing::DebugContentRegionAvailX();
 
+			// Some useful sizes
 			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
-			float _hb = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
+			float _hb = ofxImGuiSurfing::getWidgetsHeightUnit() * 1.5f;
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 			float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
 
+			//--
+
+			// Rounded toggle
 			float ht = 0.8f * _hu;
 			float wt = 1.15f * ht;
+
+			// Align right
+			ofxImGuiSurfing::AddSpacingRightAlign(wt);
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
+
 			ofxImGuiSurfing::AddSpacing();
 
 			//--
 
 			if (!bMinimize)
 			{
-				// pause
+				// Pause
 				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_w2, _hb), true, true);
 				ImGui::SameLine();
 
-				// clear
+				// Clear
 				if (ImGui::Button("CLEAR", ImVec2(_w2, _hb)))
 				{
 					Clear();
@@ -251,30 +263,38 @@ namespace ofxImGuiSurfing
 				ofxImGuiSurfing::AddSpacingSeparated();
 
 				//--
-				 
+
 				// Filter
 				{
-					ofxImGuiSurfing::AddBigToggle(bFilter, _w1, _hu, true, true);
+					ofxImGuiSurfing::AddBigToggle(bFilter, _w1, _hb, true, true);
 					{
 						s = bFilter ? "Write your keyword \nor pick a Tag \nto filter the Log" : "Disabled";
 						ofxImGuiSurfing::AddTooltip2(s);
 					}
 					if (bFilter)
 					{
-						static bool bReturn;//not used
-						auto& tmpRef = strFilterKeyword.get();
 						float _w = _w1;
+
+						string sf;
+						auto& tmpRef = strFilterKeyword.get();
 						s = tmpRef.c_str();
 						ImGui::PushItemWidth(_w);
-						bReturn = ImGui::InputText("##Filter", &s);
-						if (bReturn)
+						static bool b;
+						b = ImGui::InputText("##Filter", &s);
+						if (b)
 						{
 							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
 							strFilterKeyword.set(s);
 						}
 						ImGui::PopItemWidth();
+						sf = "Input keyword";
+						ofxImGuiSurfing::AddTooltip2(sf);
+
+						//ImGui::SameLine();
 
 						this->AddComboAux(indexTagFilter, namesTagsFiler, _w);
+						sf = "Tags";
+						ofxImGuiSurfing::AddTooltip2(sf);
 					}
 
 					ofxImGuiSurfing::AddSpacingSeparated();
@@ -473,9 +493,10 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bMinimize{ " ", false };
 
 		int amountLinesCurr = 0;
+		bool bDoneStartup = false;
 
 	private:
-		
+
 		// columns formatting
 		const int maxTagLength = 8; // first or tag column width. to make tags right aligned.
 		const string strSpacer = "   "; // space between tags column and the second column with the message .
@@ -485,7 +506,6 @@ namespace ofxImGuiSurfing
 
 		void startupOnce()
 		{
-			static bool bDoneStartup = false;
 			if (bDoneStartup) return;
 
 			if (strFilterKeyword.get() == "")
@@ -494,8 +514,10 @@ namespace ofxImGuiSurfing
 				indexTagFilter = indexTagFilter;
 			}
 
-			ofLogNotice("ofxSurfingImGui") << "Startup done";
+			//bFilter = bFilter;
+
 			bDoneStartup = true;
+			ofLogNotice("ofxSurfingImGui") << "Startup done";
 		};
 
 	private:
@@ -525,7 +547,8 @@ namespace ofxImGuiSurfing
 					strFilterKeyword.set(t);
 
 					//workflow
-					if (!bFilter) bFilter = true;
+					//avoid overwrite with init callback
+					if (bDoneStartup && !bFilter) bFilter = true;
 				}
 				return;
 			}
@@ -881,7 +904,7 @@ namespace ofxImGuiSurfing
 
 		// Save log file to disk
 		// pass path folder. the name will be auto settled by timestamp
-		void exportLogToFile(string path = "") 
+		void exportLogToFile(string path = "")
 		{
 			ofLogNotice("SurfingLog") << "exportLogToFile:" << path;
 
@@ -952,7 +975,7 @@ namespace ofxImGuiSurfing
 
 	private:
 
-		void drawText(const char* item) 
+		void drawText(const char* item)
 		{
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
@@ -978,14 +1001,14 @@ namespace ofxImGuiSurfing
 			}
 			popStyleFont();
 		};
-		
+
 		//----
 
 		// API: workflow during draw to switch between font styles
 
 	public:
 
-		void setCustomFonts(vector<ImFont*> f) 
+		void setCustomFonts(vector<ImFont*> f)
 		{
 			customFonts = f;
 
@@ -996,8 +1019,11 @@ namespace ofxImGuiSurfing
 
 			indexSizeFont.setMax(customFonts.size() - 1);
 
-			//TODO: these names could be copied to GuiManager too!
-			// take care if both sizes fonts/names changed! this is hardcoded now!
+			//TODO: 
+			// WARNING! 
+			// these names could be copied to GuiManager too!
+			// take care if both sizes fonts/names changed! 
+			// this is hardcoded now!
 			// Font sizes
 			namesCustomFonts.clear();
 			namesCustomFonts.push_back("DEFAULT");

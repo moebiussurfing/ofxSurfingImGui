@@ -362,7 +362,13 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline float getWindowHeightFree()
 	{
-		return getWidgetsHeight(1);
+		//return getWidgetsHeight(1);
+		return ImGui::GetContentRegionAvail().y;
+	}
+	//--------------------------------------------------------------
+	inline float getWindowWidthFree()
+	{
+		return ImGui::GetContentRegionAvail().x;
 	}
 
 	//--
@@ -537,6 +543,24 @@ namespace ofxImGuiSurfing
 	inline void AddLabel(string text)
 	{
 		ImGui::TextWrapped(text.c_str());
+	}
+
+	//---
+
+	// Right Align Helpers
+	// Add spacing to right align, 
+	// i.e. by passing the width of the widget 
+	// you are trying to position 
+	// to the right window border.
+	//--------------------------------------------------------------
+	inline void AddSpacingRightAlign(float width = 100)
+	{
+		float pad = ImGui::GetStyle().WindowPadding.x;
+		//float pad = ImGui::GetStyle().ItemSpacing.x;
+
+		float wwidget = ImGui::GetContentRegionAvail().x - pad - width;
+		ImGui::Dummy(ImVec2{ wwidget,0 });
+		ImGui::SameLine();
 	}
 
 	//----
