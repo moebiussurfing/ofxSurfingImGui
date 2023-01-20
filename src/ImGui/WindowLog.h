@@ -1,35 +1,37 @@
 #pragma once
 
 /*
-	This code is mainly based on the snippet:
-	https://github.com/ocornut/imgui/issues/5796#issuecomment-1288128069
-	from @karl0st: https://github.com/karl0st
+
+		This code is initially based on the snippet:
+		https://github.com/ocornut/imgui/issues/5796#issuecomment-1288128069
+		from @karl0st: https://github.com/karl0st
+
 */
 
 /*
 
-	TODO:
+		TODO:
 
-	make responsive to jumpline widgets that are out of the window
-		useful when window width is smaller than 200px
+		make responsive to jumpline widgets that are out of the window
+			useful when window width is smaller than 200px
 
-	add method to remove default tags if desired.
-		improves spacing when using short custom tags
+		add method to remove default tags if desired.
+			improves spacing when using short custom tags
 
-	highlight last message
+		highlight last message
 
-	improve implemented filter.
-	could be a little slow bc it handles strings.
-	for some situations we should replace by:
+		improve implemented filter.
+		could be a little slow bc it handles strings.
+		for some situations we should replace by:
 
-	filter search from ImGui Demo
-	https://github.com/ocornut/imgui/issues/300
-	Better and newer from the ImGui Demo:
-	https://github.com/ocornut/imgui/blob/0359f6e94fb540501797de1f320082e4ad96ce9c/imgui_demo.cpp#L6859
+		filter search from ImGui Demo
+		https://github.com/ocornut/imgui/issues/300
+		Better and newer from the ImGui Demo:
+		https://github.com/ocornut/imgui/blob/0359f6e94fb540501797de1f320082e4ad96ce9c/imgui_demo.cpp#L6859
 
-	could add log level (>) using the filter tags
+		could add log level (>) using the filter tags
 
-	could be instantiated kind of static to be shared between all the ofxSurfingImGui instances ?
+		could be instantiated kind of static to be shared between all the ofxSurfingImGui instances ?
 
 */
 
@@ -50,6 +52,61 @@
 
 namespace ofxImGuiSurfing
 {
+	//TODO: these methods should be moved 
+	// to other helpers class
+	
+	// Debug Helpers
+	// Print the free space we have 
+	// for widgets currently on the window.
+	inline void DebugContentRegionAvailX() {
+		float wx = ImGui::GetContentRegionAvail().x;
+		string s = ofToString(wx);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+	inline void DebugContentRegionAvailY() {
+		float wy = ImGui::GetContentRegionAvail().y;
+		string s = ofToString(wy);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+	inline void DebugContentRegionAvail() {
+		float wx = ImGui::GetContentRegionAvail().x;
+		float wy = ImGui::GetContentRegionAvail().y;
+		string s = ofToString(wx) + ", " + ofToString(wy);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+
+	//--
+
+	// This method can be used to pass widgets 
+	// to next line when available space is lower.
+	// Then we can make sure that widgets 
+	// will fit inside the window when 
+	// the window it's resized to a lower size.
+	// So, widgets will not been drawn out of the visible part of the window.
+	// If available content region is lower than passed minAvailableSpaceToNotBreakLine
+	// then we won't call SameLine, and we will break the line.
+	// bDebug allows print the available space, 
+	// to help tweak the passed minAvailableSpaceToNotBreakLine.
+	inline void SameLineFit(float minAvailableSpaceToNotBreakLine = 200, bool bDebug = false)
+	{
+		float w = minAvailableSpaceToNotBreakLine;
+		if (w == -1) ImGui::SameLine();
+
+		float wx = ImGui::GetContentRegionAvail().x;
+		if (bDebug)
+		{
+			string s = ofToString(wx - w);
+			ImGui::SameLine();
+			ImGui::Text(s.c_str());
+		}
+		if (wx > w) ImGui::SameLine();
+	}
+
+	//------
+
 	class SurfingLog
 	{
 		//--
@@ -624,21 +681,21 @@ namespace ofxImGuiSurfing
 			// Window shape
 			{
 				// minimal width
-				const int LOG_WINDOW_SIZE = 155;
-				//const int LOG_WINDOW_SIZE = 175;
-				//const int LOG_WINDOW_SIZE = 240;
+				const float LOG_WINDOW_MIN_WIDTH = 130;
+				//const float LOG_WINDOW_MIN_WIDTH = 175;
+				//const float LOG_WINDOW_MIN_WIDTH = 240;
 
-				float hmin = (bOptions.get() ? 200 : 150);//minimal height
+				float LOG_WINDOW_MIN_HEIGHT = (bOptions.get() ? 200 : 150);//minimal height
 				ImGuiCond cond = ImGuiCond_FirstUseEver;
 
 				// app window
 				float w = ofGetWidth();
 				float h = ofGetHeight();
-				ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_SIZE - 10, 20), cond);
-				ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_SIZE, h - 100), cond);
+				ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_MIN_WIDTH - 10, 20), cond);
+				ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_MIN_WIDTH, h - 100), cond);
 
 				// constraints
-				ImVec2 size_min = ImVec2(LOG_WINDOW_SIZE, hmin);
+				ImVec2 size_min = ImVec2(LOG_WINDOW_MIN_WIDTH, LOG_WINDOW_MIN_HEIGHT);
 				ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 			}
@@ -650,6 +707,12 @@ namespace ofxImGuiSurfing
 				ImGui::End();
 				return;
 			}
+
+			// debug
+			bool bDebug = 0;
+			if (bDebug)
+				ofxImGuiSurfing::DebugContentRegionAvailX();
+
 
 			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
 			float _h = 1.5f * ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -705,7 +768,7 @@ namespace ofxImGuiSurfing
 
 					// Amount lines counter
 					{
-						ImGui::SameLine();
+						ofxImGuiSurfing::SameLineFit(160, bDebug);
 						string s = ofToString(amountLinesCurr);
 						ImGui::Text(s.c_str());
 						s = "Amount of \nbuffered lines:\n" + s;
@@ -714,10 +777,10 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					ImGui::SameLine();
-					ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+					//ImGui::SameLine();
+					//ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 
-					ImGui::SameLine();
+					ofxImGuiSurfing::SameLineFit(260, bDebug);
 					bool bCopy = ImGui::Button("Copy");
 					s = "Copy Log \nto Clipboard";
 					ofxImGuiSurfing::AddTooltip2(s);
@@ -746,15 +809,15 @@ namespace ofxImGuiSurfing
 						//ofxImGuiSurfing::AddToggleRoundedButton(bAutoScroll, _hu, true);
 					}
 
-					ImGui::SameLine();
-					ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+					//ImGui::SameLine();
+					//ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 
-					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::SameLineFit(350);
 					ofxImGuiSurfing::AddCheckBox(bTight);
 					s = "Compact interline height";
 					ofxImGuiSurfing::AddTooltip2(s);
 
-					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::SameLineFit(45, bDebug);
 					ofxImGuiSurfing::AddCheckBox(bOneLine);
 					s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 					ofxImGuiSurfing::AddTooltip2(s);
@@ -764,7 +827,7 @@ namespace ofxImGuiSurfing
 					// limited buffered
 					if (bLimitedBuffered)
 					{
-						ofxImGuiSurfing::SameLine();
+						ofxImGuiSurfing::SameLineFit(180, bDebug);
 						ofxImGuiSurfing::AddCheckBox(bAutoFit);
 						s = "Resizes buffer to fit \nwindow height, \nas expected amount \nof text lines.";
 						s += "\nWill be affected by \nthe OneLine state.";
@@ -791,7 +854,7 @@ namespace ofxImGuiSurfing
 						}
 					}
 
-					ofxImGuiSurfing::SameLine();
+					ofxImGuiSurfing::SameLineFit(300, bDebug);
 
 					float ww = 83;
 					this->AddComboAux(indexSizeFont, namesCustomFonts, ww);
@@ -800,14 +863,14 @@ namespace ofxImGuiSurfing
 
 					// Filter
 
-					ofxImGuiSurfing::AddBigToggle(bFilter, 60, _hu, true, true);
+					ofxImGuiSurfing::AddBigToggle(bFilter, ww, _hu, true, true);
 					{
 						s = bFilter ? "Write your keyword \nor pick a Tag \nto filter the Log" : "Disabled";
 						ofxImGuiSurfing::AddTooltip2(s);
 					}
 					if (bFilter)
 					{
-						ImGui::SameLine();
+						ofxImGuiSurfing::SameLineFit(200);
 
 						static bool bReturn;//not used
 						auto& tmpRef = strFilterKeyword.get();
@@ -822,8 +885,8 @@ namespace ofxImGuiSurfing
 						}
 						ImGui::PopItemWidth();
 
-						ImGui::SameLine();
-						this->AddComboAux(indexTagFilter, namesTagsFiler, 85);
+						ofxImGuiSurfing::SameLineFit(350);
+						this->AddComboAux(indexTagFilter, namesTagsFiler, ww);
 					}
 
 					ImGui::Unindent();
@@ -833,7 +896,7 @@ namespace ofxImGuiSurfing
 
 				ofxImGuiSurfing::AddSpacingSeparated();
 			}
-			
+
 			ofxImGuiSurfing::AddSpacing();
 
 			//--
