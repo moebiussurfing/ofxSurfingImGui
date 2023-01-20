@@ -1090,7 +1090,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	// EXAMPLE
-	// POP UP. CONTEXT MENU 
+	// POP UP. CONTEXT MENU
 
 
 	// 1
@@ -1100,7 +1100,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		ImGui::Checkbox("Auto-scroll", &AutoScroll);
 		ImGui::EndPopup();
 	}
-	 
+
 	// 2
 	if (ImGui::Button("OPTIONS"))
 		ImGui::OpenPopup("popup from button");
@@ -1142,17 +1142,44 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 /*
- 
-	EXAMPLE 
-	
-	AN INPUT TEXT 
+
+	EXAMPLE
+
+	AN INPUT TEXT
 	BUT WITH HUGE FONT
-	
+
 	ui.pushStyleFont(IM_FONT_HUGE_XXL);
 	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
 	{
 		//..
 	};
 	ui.popStyleFont();
+
+*/
+
+/*
+
+	SNIPPET
+
+	RESPONSIVE LAYOUT
+
+	bool bDebug = true;
+	ofxImGuiSurfing::SameLineFit(200);
+	this->AddComboAux(index, names, w);
+	if(bDebug) ofxImGuiSurfing::DebugContentRegionAvailX(); // -> stretch window
+
+
+*/
+
+/*
+
+	 SNIPPET
+
+	 Allows to make exact width of n widgets 
+	 to fit panel size for two buttons or columns per row:
+
+	 float h = getWidgetsHeightRelative(); // One unit height
+	 float w = getWidgetsWidth(2); // A button with the half window panel width.
+	 if (ImGui::Button("_Button", ImVec2(w, h))) { }
 
 */

@@ -1,4 +1,15 @@
+
 #pragma once
+
+/*
+
+	This class have widgets size constants 
+	and methods to get the window panel sizes,
+	for layout helping, spacing and separators helpers,
+	windows constraints,
+	...etc
+
+*/
 
 #include "ofMain.h"
 
@@ -6,37 +17,36 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-// This class have widgets size constants and methods to get the window panel sizes.
-
 //---
 
-// Fix weird behaviors when too big or small resized windows
+// Fix weird behaviors when too big or too small resized windows
 
-#define WINDOW_WIDTH_THRESHOLD 250 // when window width is less than that, we will use another pattern for some widgets.
-//#define WINDOW_WIDTH_THRESHOLD 300 // when window width is less than that, we will use another pattern for some widgets.
+#define WINDOW_WIDTH_THRESHOLD 250 
+// when window width is less than that, 
+// we will use another layout pattern for some widgets.
 
 #define PADDING_COMBO 0
-//#define PADDING_COMBO 2
 //#define PADDING_COMBO 15
-//#define PADDING_COMBO 20
-//#define PADDING_COMBO 13
 
 //----------
 
 // CONSTANTS
 
-//#define OFX_IMGUI_ABSOLUTE_HEIGHT // vs relative to theme. not implemented
-
-// Will be applied as minimal panel shape
+// Will be applied as minimum and standard window shape
 #define PANEL_WIDGETS_WIDTH 250
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 200
 #define PANEL_WIDGETS_HEIGHT_MIN 100
 
+// Legacy
 #define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
 #define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
-#define BUTTON_BIG_HEIGHT 50 // Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
+//--
+
+// DEPRECATED
+// Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
+#define BUTTON_BIG_HEIGHT 50 
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20
 
@@ -60,7 +70,7 @@
 
 // Default Font
 
-// Notice that if not any font file is located, will work as ImGui defalut,
+// Notice that if not any font file is located, will work as ImGui default,
 // So you don't need to put any files on bin/data to compile right!
 
 // Legacy Font
@@ -70,6 +80,10 @@
 // New font
 #define FONT_DEFAULT_SIZE 14
 #define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+
+// Other Candidates
+
+//#define FONT_DEFAULT_SIZE 14
 //#define FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
 
 //#define FONT_DEFAULT_SIZE 13
@@ -83,7 +97,9 @@
 
 //--
 
-//// to help API memo
+//TODO:
+//// To help API memo..
+//// Can we do that and avoid to create the class functions on GuiManager?
 //#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
 //#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
 //#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
@@ -98,9 +114,11 @@
 
 // Layout Helpers
 
-// Useful layout helpers 
-// Reads the ImGui panel window dimensions.
-// To update / recalculate the sizes / width to fit the panel window shape.
+// Useful layout helpers.
+// For responsive behavior. 
+// Gets the ImGui window dimensions.
+// To update / recalculate the sizes / width 
+// to fit the panel window shape.
 
 namespace ofxImGuiSurfing
 {
@@ -123,10 +141,6 @@ namespace ofxImGuiSurfing
 		if (amntRows == -1)
 		{
 			h = ImGui::GetFrameHeight();
-
-			//const int proportional = 1;
-			//if (ImGui::GetIO().FontDefault == nullptr) h = BUTTON_BIG_HEIGHT; // avoid crash when not customized font
-			//else h = proportional * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2); // multiply the them widget height
 		}
 		else
 		{
@@ -138,10 +152,16 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
+	//--
+
 	// Kind of Legacy
-	// Update all the common sizes in one line.
+	// Will be DEPRECATED with the new API V2.
+	
+	// Updates all the common useful sizes in one line.
 	// We will update the sizes on any gui drawing point, 
-	// like inside a new foldered sub-window that could be indendeted and full size is being 
+	// like inside a new folder, sub-folder that could be indented 
+	// and full size is being modified. 
+	// Then we need to refresh sizes!
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetsSizes(float& __spcx, float& __spcy, float& __w100, float& __h100, float& __w99, float& __w50, float& __w33, float& __w25, float& __h, bool bWithScroll = false)
 	{
@@ -187,12 +207,6 @@ namespace ofxImGuiSurfing
 	}
 
 	//--
-
-	// Example: 
-	// Allows to make exact width of n widgets to fit panel size for two buttons or columns per row:
-	// float h = getWidgetsHeightRelative(); // One unit height
-	// float w = getWidgetsWidth(2); // A button with the half window panel width. 
-	// if (ImGui::Button("_Button", ImVec2(w, h))) { }
 
 	//--------------------------------------------------------------
 	inline void refreshImGui_WidgetWidth(float& w, int amntColumns = -1)
@@ -254,8 +268,6 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// Helpers
-	// 
 	// Get current window shape
 	//--------------------------------------------------------------
 	inline ofRectangle getWindowShape()
@@ -322,13 +334,6 @@ namespace ofxImGuiSurfing
 		return h;
 	}
 
-	// Available height from current drawlist position
-	//--------------------------------------------------------------
-	inline float getWindowHeightFree()
-	{
-		return getWidgetsHeight(1);
-	}
-
 	// More Helpers
 	// Get ImVec2 size for fast populate buttons
 	//--------------------------------------------------------------
@@ -353,7 +358,74 @@ namespace ofxImGuiSurfing
 		return vv;
 	}
 
+	// Available height from current drawlist position
+	//--------------------------------------------------------------
+	inline float getWindowHeightFree()
+	{
+		return getWidgetsHeight(1);
+	}
+
 	//--
+
+	// Debug Helpers
+	// Print the free space we have 
+	// for widgets currently on the window.
+	//--------------------------------------------------------------
+	inline void DebugContentRegionAvailX() { // Put after the widget you want to measure to set the preceded SameLineFit
+		float wx = ImGui::GetContentRegionAvail().x;
+		string s = ofToString(wx);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+	//--------------------------------------------------------------
+	inline void DebugContentRegionAvailY() {
+		float wy = ImGui::GetContentRegionAvail().y;
+		string s = ofToString(wy);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+	//--------------------------------------------------------------
+	inline void DebugContentRegionAvail() {
+		float wx = ImGui::GetContentRegionAvail().x;
+		float wy = ImGui::GetContentRegionAvail().y;
+		string s = ofToString(wx) + ", " + ofToString(wy);
+		ImGui::SameLine();
+		ImGui::Text(s.c_str());
+	}
+
+	//--
+
+	// An alternative to SameLine() 
+	// but conditioned if it's finally applied or not.
+	// This method can be used to pass widgets 
+	// to next line when available space is lower.
+	// Then we can make sure that widgets 
+	// will fit inside the window when 
+	// the window it's resized to a lower size.
+	// So, widgets will not been drawn out of the visible part of the window.
+	// If available content region is lower than passed minAvailableSpaceToNotBreakLine
+	// then we won't call SameLine, and we will break the line.
+	// bDebug allows print the available space, 
+	// to help tweak the passed minAvailableSpaceToNotBreakLine.
+	//TODO: these is a workaround bc must be tweaked by hand. i.e. 
+	// each widget has his size, and will change even changing the text...
+	//--------------------------------------------------------------
+	inline void SameLineFit(float minAvailableSpaceToNotBreakLine = 200, bool bDebug = false)
+	{
+		float w = minAvailableSpaceToNotBreakLine;
+		if (w == -1) ImGui::SameLine();
+
+		float wx = ImGui::GetContentRegionAvail().x;
+		if (bDebug)
+		{
+			string s = ofToString(wx - w);
+			ImGui::SameLine();
+			ImGui::Text(s.c_str());
+		}
+		if (wx > w) ImGui::SameLine();
+	}
+
+	//----
 
 	// Spacing and Separator Helpers
 
@@ -382,6 +454,25 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Spacing();
 		ImGui::Separator();
+	}
+	//--------------------------------------------------------------
+	inline void AddSeparated()
+	{
+		ImGui::Spacing();
+		ImGui::Separator();
+	}
+
+	//--------------------------------------------------------------
+	inline void AddSeparatorVertical()
+	{
+		ImGui::SameLine();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+	}
+	//--------------------------------------------------------------
+	inline void AddSeparatedVertical()
+	{
+		ImGui::SameLine();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 	}
 
 	//--------------------------------------------------------------
@@ -440,6 +531,8 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
 
+	// Default font size 
+	// has here we don't have the GuiManger power...
 	//--------------------------------------------------------------
 	inline void AddLabel(string text)
 	{
@@ -469,7 +562,7 @@ namespace ofxImGuiSurfing
 	inline void SetWindowContraintsWidth(float widthMin, float widthMax = -1)
 	{
 		if (widthMax == -1) widthMin = widthMax;
-		ImGui::SetNextWindowSizeConstraints(ImVec2(widthMin, 0), ImVec2(widthMax, FLT_MAX)); 
+		ImGui::SetNextWindowSizeConstraints(ImVec2(widthMin, 0), ImVec2(widthMax, FLT_MAX));
 	}
 	//--------------------------------------------------------------
 	inline void SetWindowContraintsHeight(float heightMin, float heightMax = -1)

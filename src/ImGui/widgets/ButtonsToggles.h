@@ -564,7 +564,7 @@ namespace ofxImGuiSurfing
 
 	// Toggles with two states with two names. 
 	// Also with blinking mode or with settable alpha border.
-	
+
 	// Legacy
 	//--------------------------------------------------------------
 	inline bool AddBigToggleNamed(ofParameter<bool>& parameter, float w = -1, float h = -1, std::string nameTrue = "-1", std::string nameFalse = "-1", bool bBlink = false, float blinkValue = -1.0f)
@@ -733,7 +733,7 @@ namespace ofxImGuiSurfing
 		ImGui::BeginGroup(); // -> to detect complete isHover
 		{
 			//TODO:
-			// Should fix mouse over/inner pos checking to fix mouse wheel control..
+			// Should fix mouse over/inner position checking to fix mouse wheel control..
 
 			//cf = IM_COL32(255, 0, 255, 255); // test color
 
@@ -772,10 +772,10 @@ namespace ofxImGuiSurfing
 					bchanged = true;
 				}
 
-				//-
+				//-=
 
 				//TODO:
-				//how to animate power off too ?
+				// How to animate power off too ?
 
 				// Animated
 
@@ -800,14 +800,16 @@ namespace ofxImGuiSurfing
 				// State true
 				if (*v)
 				{
-					frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
+					frame_col = ImGui::GetColorU32(
+						is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBg : ImGuiCol_FrameBgHovered);
 					cf = frame_col;
 				}
 
 				// State false
 				else
 				{
-					frame_col = ImGui::GetColorU32(is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+					frame_col = ImGui::GetColorU32(
+						is_active ? ImGuiCol_FrameBgActive : is_hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
 					cf = frame_col;
 				}
 
@@ -822,7 +824,7 @@ namespace ofxImGuiSurfing
 				const ImU32 cb = ImGui::GetColorU32(colors[ImGuiCol_Border]);
 
 #ifdef USE_BORDER_ROUNDE_TOGGLES
-				//if (!bNoBorder)
+				if (!bNoBorder)
 				{
 					// B. No alpha changes
 					draw_list->AddRect(pos, ImVec2(pos.x + width, pos.y + height), cb, height * 0.5f);
@@ -842,10 +844,10 @@ namespace ofxImGuiSurfing
 				// 2.2 Border Small Circle
 
 #ifdef USE_BORDER_ROUNDE_TOGGLES
-				//if (!bNoBorder)
-				{
-					draw_list->AddCircleFilled(ImVec2(pos.x + radius + t * (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
+				draw_list->AddCircleFilled(ImVec2(pos.x + radius + t * (*v ? 1 : 0) * (width - radius * 2.0f), pos.y + radius), radius - 1.5f - 1, c1);//a bit of offset
 
+				if (!bNoBorder)
+				{
 					draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * t * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
 				}
 #endif
@@ -879,6 +881,8 @@ namespace ofxImGuiSurfing
 				const auto sztx = ImGui::CalcTextSize(str_id);
 				float xx = sztx.x + ImGui::GetStyle().FramePadding.x;
 				ImGui::Dummy(ImVec2(xx, 0));
+				
+				//TODO: sometimes spacing related to other widgets looks weird...
 			}
 			ImGui::PopID();
 		}
@@ -899,7 +903,7 @@ namespace ofxImGuiSurfing
 	//TODO: new widget to use without ofParameters, 
 	// to be used by raw c types.
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(string label, bool &bState, ImVec2 bb = ImVec2(-1, -1))
+	inline bool AddToggleRoundedButton(string label, bool& bState, ImVec2 bb = ImVec2(-1, -1))
 	{
 		bool bNoBorder = false;
 
@@ -1214,7 +1218,7 @@ namespace ofxImGuiSurfing
 	//TODO:
 	// Toggle Gradient
 	//https://github.com/ocornut/imgui/issues/4722
-	 
+
 	//// Header
 	//namespace ImGui
 	//{

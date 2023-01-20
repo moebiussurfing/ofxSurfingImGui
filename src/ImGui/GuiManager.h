@@ -2056,6 +2056,12 @@ public:
 		log.Add(text, nameTag);
 	}
 
+	//--------------------------------------------------------------
+	void ClearLogDefaultTags()//remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
+	{
+		log.clearDefaultTags();
+	};
+
 	//TODO:
 	////--------------------------------------------------------------
 	//void AddToLog(std::string text)
