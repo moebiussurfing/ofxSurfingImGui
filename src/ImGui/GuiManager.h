@@ -4,7 +4,7 @@
 
 /*
 
-	This class have widgets size useful Constants
+	This class has widgets size useful Constants
 
 */
 

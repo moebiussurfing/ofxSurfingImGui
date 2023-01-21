@@ -4,12 +4,12 @@
 
 /*
  
-	This class have widgets size useful Constants
+	This class has widgets size useful Constants
 
 */
 
 
-//----------
+//----
 
 // Fix weird behaviors when too big or too small resized windows
 
@@ -19,7 +19,7 @@
 
 #define PADDING_COMBO 0
 
-//----------
+//--
 
 // Will be applied as minimum and standard window shape
 #define PANEL_WIDGETS_WIDTH 250

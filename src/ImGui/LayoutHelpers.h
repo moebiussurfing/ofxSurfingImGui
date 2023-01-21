@@ -4,7 +4,7 @@
 
 /*
 
-	This class have methods to get the window panel sizes,
+	This class has methods to get the window panel sizes,
 	for layout helping, spacing and separators helpers,
 	windows constraints,
 	...etc

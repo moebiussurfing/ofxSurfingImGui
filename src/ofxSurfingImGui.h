@@ -1,40 +1,58 @@
 ﻿
+#pragma once
+
+
+/*
+
+	This class has is the main header.
+	The only one you need to include into your ofApp/Class
+
+*/
+
+
+//----
+
 /*
 
 	TODO:
 
 	STYLE
-	+ new knobs could be darker
-		smaller ones looks broken the thin border.
-		could be smaller
-
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
 		the fix the knobs colors too.
 		push buttons could be darken as if it was a 3D button..
-
 	+ enable floating windows/context
 	+ fix param colors
 	+ fix param string not drawn
 
-
-	API UPDATE v0.3 / ofParams helpers
+	API UPDATE v3 
+	/ ofParams helpers
 	+ pass ImVec2 to all widgets
 	+ make templated for all types
 	+ add multi choice flags
 
-	BUG
-	+ fix text input box to full width. no name.
-	+ allow half/third width on progress bar widget.
+	HELPERS
+	+ fix range slider to a new widget
+		add drag from range center
+	+ useful for multi dim params
+	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
+	+ fix toggles do not trigs/return true when changes ?
+	+ add clickable label toggle widget.
+	+ add tool-tip types on styles on a new ui.Add(..arg
+	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
+	+ API v2: fix nested groups with different styles
+		+ next / nested groups headers are weird hidden sometimes ?
+		+ nested groups are (inheriting) expanded when parent is expanded.
 
 	GENERAL
-	+ add disabler for store settings
+	+ add disabler for avoid store settings
 	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
+		something WIP with bAutoDraw..
 	+ fix workflow handling layout presets breaks when Link is enabled.
 	+ fix reset aligners that populates out of the view port.
 		must apply only over special windows maybe ?
 
-	DOCKING
+	DOCKING ( WIP )
 	+ allow panel and presets dockeable too!
 	+ fix make dockeable all windows on same space.
 	+ fix multiple dock spaces that are colliding/one over another.
@@ -42,26 +60,9 @@
 	+ add video view-port example.
 	+ docking overlaps sometimes on layout management
 
-	HELPERS
-	+ make a new color widget.
-		use ImVec2 sz. no name.
-	+ fix range slider to a new widget
-		add drag from range center
-	+ make colors smaller. multi line
-	+ useful for multi dim params
-	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
-	+ fix fails ofParams for string on groups
-		+ add text input widget.
-	+ add the cool knobs.
-	+ fix toggles do not trigs/return true when changes?
-	+ add clickable label toggle widget.
-	+ add tool-tip types on styles on a new ui.Add(..arg
-	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
-	+ next / nested groups headers are weird hidden!
-	+ nested groups are (inheriting) expanded when parent is expanded.
-
 	SMALL THINGS
-	+ remake mode free and lockers simpler. a flag for each window ?
+	+ remake mode free move and move locked simpler. 
+		a flag for each window ?
 	+ aspect ratio/fit modes for game view port.
 	+ fix log ofxImGuiSurfing::WindowsOrganizer::isInitiated:
 
@@ -74,6 +75,7 @@
 	FEATURE
 	+ Probably not required.
 		But could think about linking multiple instances.
+		Or populate as a kind of static to share between instances ?
 		for example, to share organizer windows:
 		// Link internal stuff
 		ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
@@ -87,9 +89,9 @@
 
 	BUGS:
 
-	- Strings inside paramGroups are not rendered!
-	- It seems than special windows engine
-	puts all toggles to false by default!
+	Strings inside paramGroups are not rendered ?
+	It seems than special windows engine
+	puts all toggles to false by default ?
 
 */
 
@@ -112,31 +114,22 @@
 
 //--------------------------------------------------------------
 
-
-#pragma once
-
 #include "ofMain.h"
 
 #include "ofxImGui.h"
 #include "imgui_internal.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 
-
 //--------------------------------------------------------------
 
 // This header includes the main classes: 
 // Layout, helpers and all my Surfing widgets.
-// Some others are moved out of the /src folder bc they are less common.
-// You must include them manually from OFX_ADDON/_LIBS if you want to use it in your project.
-
-//---------
-// HEADERS
-//---------
+// Some others are moved out of the /src folder 
+// bc they are less commonly used.
+// You must include them manually from 
+// OFX_ADDON/_LIBS if you want to use it in your project.
 
 #include "ImGui/GuiManager.h"
-
-//#include "ImGui/ofHelpers.h"
-//#include "ImGui/widgets/Widgets.h"
 
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
 
@@ -158,9 +151,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-		-----------------------
-		 MORE EXAMPLE SNIPPETS
-		-----------------------
+		MORE EXAMPLE SNIPPETS
+		---------------------
 
 		LOOK RECOMMENDED USAGE BELOW!
 
@@ -174,6 +166,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 //----
+
 
 // 0. TOP SNIPPETS HERE !
 
@@ -235,10 +228,10 @@ using ofxSurfingGui = SurfingGuiManager;
 					{
 						ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
 
-						if (!ui.bMinimize) {
+						if (!ui.bMinimize) { // not minimized
 						}
 
-						..
+						//..
 
 						ui.EndWindow();
 					}
@@ -272,8 +265,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	// 1.0 SIMPLE
 
 	ImGui::Begin("myWindow");
-	{
-	 }
+	{ }
 	ImGui::End();
 
 	//----
@@ -283,8 +275,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 	ImGui::Begin(_name.c_str(), NULL, _flagw);
-	{
-	 }
+	{ }
 	ImGui::End();
 
 	//----
@@ -295,8 +286,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	string _name = "myWindow";
 	ofxImGui::Settings mainSettings = ofxImGui::Settings();
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
-	{
-	 }
+	{ }
 	ofxImGui::EndWindow(mainSettings);
 
 /*
@@ -308,7 +298,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-
+	SNIPPET
 	FORCE WINDOW POSITION & SHAPE
 
 	{
@@ -321,8 +311,11 @@ using ofxSurfingGui = SurfingGuiManager;
 		ImGui::SetNextWindowSize(ImVec2(w, h), flag);
 	}
 
+
 	//--
 
+
+	SNIPPET
 	WINDOW CONSTRAINTS
 	FOR LIMITING SHAPE SIZE
 
@@ -435,9 +428,9 @@ using ofxSurfingGui = SurfingGuiManager;
 	GET WINDOW SHAPE.
 	CALL BETWEEN BEGIN/END
 
-		ofRectangle rect = ofRectangle(
-			ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
-			ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+	ofRectangle r = ofRectangle(
+		ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
+		ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
 */
 
@@ -447,34 +440,38 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// 2. TREES
+	// 2. TREES / folders
 
 	// 2.0 Simple TREE (RECOMMENDED)
 
 	if (ui.BeginTree("COLORS"))
 	{
 		//.. -> widgets
+
 		ui.EndTree();
 	}
 
 	//----
 
-	// 2.1 Simple TREE LEGACY (no framed)
+	// 2.1 Simple TREE RAW / LEGACY (no framed)
 
 	if (ImGui::TreeNode("_Tree"))
 	{
 		//ui.refreshLayout();
 		//.. -> widgets
+
 		ImGui::TreePop();
 	}
 
 	//----
 
-	// 2.2 COLLAPSING PANEL (framed and closed by default)
+	// 2.2 COLLAPSING RAW PANEL (framed and closed by default)
 
 	{
 		static bool bOpen = true;
-		ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+		ImGuiColorEditFlags _flagw = 
+			(bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
 		{
 			//ui.refreshLayout();
@@ -484,19 +481,24 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	//----
 
-	// 2.3 TREE EX - TREE WITH FLAGS
+	// 2.3 TREE EX - RAW TREE WITH FLAGS
 
 	{
 		static bool bOpen = true;
-		ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+		ImGuiTreeNodeFlags _flagt = 
+			(bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+
 		_flagt |= ImGuiTreeNodeFlags_Framed;
+
 		if (ImGui::TreeNodeEx("_TreeEx", _flagt))
 		{
 			//ui.refreshLayout();
 			//.. -> widgets
+
 			ImGui::TreePop();
 		}
 	}
+
 */
 
 //----
@@ -532,6 +534,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	ImGui::Text("%s", label.c_str());
 
 */
+
 
 /*
 
@@ -573,6 +576,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 // EXAMPLES AND SNIPPETS
+// MAINLY NOT IMGUI / RAW: 
+// USING THE ADD-ON API AND HELPERS
 
 
 /*
@@ -590,8 +595,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	EXAMPLE
 	PREV / NEXT DUAL BUTTONS
-	That is implemented now
-	into a widget called AddComboArrows(..
+	THAT IS IMPLEMENTED NOW
+	INTO A CUSTOM WIDGET CALLED 
+	AddComboArrows(..
 
 	{
 		static ofParameter<bool> bPrev{ "<", false };
@@ -618,7 +624,8 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	ADD MOUSE WHEEL TO THE FLOAT PARAM
+	ADD MOUSE WHEEL 
+	TO TWEAK A FLOAT PARAM
 
 	ofxImGuiSurfing::AddParameter(bpm);
 
@@ -676,12 +683,15 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	INPUT TEXT WITH HUGE EXTRA FONT
-	ui.pushStyleFont(IM_FONT_HUGE_XXL);
-	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
+	INPUT TEXT 
+	WITH HUGE FONT
+
+	static ofParameter<string>i{ "input text", "" };
+	ui.PushFont(OFX_IM_FONT_HUGE);
+	if (ui.Add(i, OFX_IM_TEXT_INPUT_NO_NAME))
 	{
 	};
-	ui.popStyleFont();
+	ui.PopFont();
 
 */
 
@@ -689,8 +699,16 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	HOW TO CUSTOMIZE FONT
+	HOW TO CUSTOMIZE FONTS
 	AND USE DIFFERENT FONT STYLES?
+
+	NOTICE: 
+	This is also done on GuiManager.h in the method
+	SurfingGuiManager::setupImGuiFonts()
+	By default there is 4 different font styles and sizes.
+	Maybe could be recommended to hardcoded your personalized fonts.
+	But also you can queue other fonts next to the default ones
+	maybe, like icons or fonts awesome stuff.
 
 	{
 		std::string _fontName;

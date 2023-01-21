@@ -678,7 +678,7 @@ void SurfingGuiManager::setDefaultFont()//will apply the first added font file
 	setDefaultFontIndex(0);
 }
 
-//TODO:
+//TODO: make it work on runtime..
 //--------------------------------------------------------------
 void SurfingGuiManager::clearFonts()
 {
@@ -688,25 +688,33 @@ void SurfingGuiManager::clearFonts()
 	io.Fonts->Clear();
 }
 
-// API user: workflow during setup not in draw.
-
+// API user: 
+// workflow during setup not in draw.
+ 
+//TODO: could return an int with the current index. 
+// Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
 bool SurfingGuiManager::pushFont(std::string path, int size)
 {
 	//TODO:
-	// should be a vector with several customFont to allow hot reloading..
-	// if not, last added font will be used
+	// It could be a vector with several customFont 
+	// to allow hot reloading..
+	// if not, last added font will be used as default.
+
 	ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " " << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
 
-	ofFile fileToRead(path); // a file that exists
+	ofFile fileToRead(path); 
+	// a file that exists
 	bool b = fileToRead.exists();
+
 	if (b)
 	{
 		ImFont* _customFont = nullptr;
-		if (guiPtr != nullptr) {
+		if (guiPtr != nullptr)
+		{
 			_customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
 		}
 		else
@@ -721,9 +729,11 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 			currFont = customFonts.size() - 1;
 		}
 	}
-	else {
+	else 
+	{
 		ofLogError("ofxSurfingImGui") << " " << (__FUNCTION__) << "\nFILE FONT " << path << " NOT FOUND!";
 	}
+
 	if (customFont != nullptr) io.FontDefault = customFont;
 
 	return b;

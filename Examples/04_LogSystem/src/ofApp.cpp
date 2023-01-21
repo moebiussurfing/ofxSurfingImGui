@@ -60,6 +60,7 @@ void ofApp::drawImGui()
 
 	if (ui.BeginWindow("ofApp"))
 	{
+
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 		bool b = !ui.bMinimize; // is maximized alias
 
