@@ -90,9 +90,11 @@ void ofApp::drawImGui()
 				ui.AddSpacingBig();
 				ui.Add(ui.bDebug, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
 				if (ui.bDebug) {
+					//ImGui::PushItem
 					ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
+					ui.Add(progress3, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					//ui.Add(ui.bDebugMetrics, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
 				}
 			}
@@ -175,6 +177,7 @@ void ofApp::updateLog()
 	if (f % m == 0)
 	{
 		auto t = ofGetElapsedTimef();
+		progress3 = ofMap(f % m, 0, m, 0, 1, true);
 		//progress3 = ofMap(f % m, 0, m, 0, 1, true);
 		if (ofNoise(t) < 0.4f) return; // skip one third
 

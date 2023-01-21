@@ -48,5 +48,5 @@ public:
 	ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
 	ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
 	ofParameter<float> progress2{ "Progress 2", 0 , 0, 1 };
-	//ofParameter<float> progress3{ "Progress 3", 0 , 0, 1 };
+	ofParameter<float> progress3{ "Progress 3", 0 , 0, 1 };
 };
