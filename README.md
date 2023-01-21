@@ -2,8 +2,8 @@
 
 <h1>
 
-ofxSurfingImGui  
-[DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
+ofxSurfingImGui.  
+A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for **openFrameworks** projects.  
 
 </h1>
@@ -19,22 +19,25 @@ for **openFrameworks** projects.
 
 # FEATURES
 
-- Easy **Setup** and **Layout**.
+- Easy **Setup**.
 - **Multiple instances** around your classes and **ofxAddons**.
-- **ofParameter Helpers**:
+- **ofParameter helpers**:
   - Many RAW **DearImGui widgets** ported.
   - Added custom useful widgets.
-- Useful API methods and **Snippets**: 
-  - **Speed-Up** layout.
+- Useful **API methods** and **snippets**: 
+  - **Speed-Up** responsive layout.
   - Simplify **workflow**.
+- 4 active **font sizes**.
 - Extra **Mouse Control** 
-  - Wheel for tweaking. _+Ctrl_ to finetune.
-  - Right button to reset to params center.
+  - Wheel for tweaking:
+    -  _+Ctrl_ to finetune.
+  - Right-click:
+    - To reset to param center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- Powerful **Log System**.
-- Floating **Notifier System**.
-- Cool **Themes** with 4 active font styles.
+- Cool **Themes**.
+- Powerful **Log System** with custom tags.
+- Floating **Notifier System**. ( WIP )
 - A **Layout Presets Engine**. ( WIP )
 - Some **Docking Helpers**. ( WIP )
 
@@ -44,9 +47,9 @@ for **openFrameworks** projects.
   <summary>MORE IMGUI WIDGETS</summary>
   <p>
 
-- Dropdown / Combo index selector and names.  
+- Dropdown / Combo index selector and names.
 
-- Matrix buttons to an index selector.  
+- Matrix buttons to an index selector.
 
 - Bundled widgets like arrows linked to int params browsing. 
 
