@@ -109,18 +109,6 @@
 
 */
 
-//--------------------------------------------------------------
-
-/* NOTES */
-
-/*
-	//TODO:
-	Trying rare chars text
-	string s = "hola";
-	ofUTF8Append(s, '▽');
-	ui.AddLabel(s);
-*/
-
 
 //--------------------------------------------------------------
 
@@ -146,9 +134,16 @@
 //---------
 
 #include "ImGui/GuiManager.h"
-#include "ImGui/ofHelpers.h"
-#include "ImGui/widgets/Widgets.h"
+
+//#include "ImGui/ofHelpers.h"
+//#include "ImGui/widgets/Widgets.h"
+
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
+
+
+//--
+
+// Alias and namespace's
 
 using namespace ofxImGuiSurfing;
 
@@ -156,6 +151,10 @@ using namespace ofxImGuiSurfing;
 using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
+
+//TODO: 
+// make an index/summary/list of
+// all the below EXAMPLES aNd SNIPPETS
 
 /*
 
@@ -303,12 +302,12 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 
-//----
+//--------------------------------------------------------------
+// WINDOW HELPERS
 
 
 /*
 
-	WINDOW HELPERS
 
 	FORCE WINDOW POSITION & SHAPE
 
@@ -505,9 +504,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 //--------------------------------------------------------------
-
-
-// MORE RAW IMGUI
+// RAW IMGUI EXAMPLES
 
 /*
 
@@ -523,9 +520,6 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
-
-
 /*
 
 	EXAMPLE
@@ -538,10 +532,6 @@ using ofxSurfingGui = SurfingGuiManager;
 	ImGui::Text("%s", label.c_str());
 
 */
-
-
-//--------------------------------------------------------------
-
 
 /*
 
@@ -578,7 +568,11 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
+//--
+
+
 //--------------------------------------------------------------
+// EXAMPLES AND SNIPPETS
 
 
 /*
@@ -590,9 +584,6 @@ using ofxSurfingGui = SurfingGuiManager;
 	ui.AddCombo(indexParam, names);
 
 */
-
-
-//--------------------------------------------------------------
 
 
 /*
@@ -682,90 +673,6 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//--------------------------------------------------------------
-
-
-// DOCKSPACE
-
-/*
-
-	// Flags for ImGui::DockSpace()
-	enum ImGuiDockNodeFlags_
-	{
-		ImGuiDockNodeFlags_None                         = 0,
-		ImGuiDockNodeFlags_KeepAliveOnly                = 1 << 0,   // Don't display the dockspace node but keep it alive. Windows docked into this dockspace node won't be undocked.
-		//ImGuiDockNodeFlags_NoCentralNode              = 1 << 1,   // Disable Central Node (the node which can stay empty)
-		ImGuiDockNodeFlags_NoDockingInCentralNode       = 1 << 2,   // Disable docking inside the Central Node, which will be always kept empty. Note: when turned off, existing docked nodes will be preserved.
-		ImGuiDockNodeFlags_NoSplit                      = 1 << 3,   // Disable splitting the node into smaller nodes. Useful e.g. when embedding dockspaces into a main root one (the root one may have splitting disabled to reduce confusion). Note: when turned off, existing splits will be preserved.
-		ImGuiDockNodeFlags_NoResize                     = 1 << 4,   // Disable resizing child nodes using the splitter/separators. Useful with programatically setup dockspaces.
-		ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
-		ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
-	};
-
-*/
-
-
-//--------------------------------------------------------------
-
-
-// EXAMPLE
-// DEMONSTRATE THE VARIOUS WINDOW FLAGS. 
-// TYPICALLY YOU WOULD JUST USE THE DEFAULT!
-
-//static bool no_titlebar = false;
-//static bool no_scrollbar = false;
-//static bool no_menu = false;
-//static bool no_move = false;
-//static bool no_resize = false;
-//static bool no_collapse = false;
-//static bool no_nav = false;
-//static bool no_background = false;
-//static bool no_bring_to_front = false;
-//static bool no_docking = false;
-
-////ImGuiWindowFlags window_flags = false;
-//if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
-//if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-//if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-//if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-//if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-//if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-//if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-//if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-//if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-//if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-//if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-
-
-//--------------------------------------------------------------
-
-
-//----
-
-
-/*
-
-	DOCKING NOTES
-
-	https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
-	https://github.com/ocornut/imgui/issues/3521
-
-	For now the slightly more legal way to do same hack as above is to set the
-	DockNodeFlagsOverrideSet / DockNodeFlagsOverrideClear members of ImGuiWindowClass + calling
-	SetNextWindowClass() to trigger this override but it's not solving the possibility of a conflict
-	between multiple windows with different requests, so it'll only fully work if there are also
-	constraints applied on how windows are docked with each others.
-
-	SetNextWindowClass()
-
-	https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
-
-*/
-
-
-//--------------------------------------------------------------
-
-
 /*
 
 	EXAMPLE
@@ -820,9 +727,6 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//--------------------------------------------------------------
-
-
 /*
 
 	EXAMPLE
@@ -849,9 +753,6 @@ using ofxSurfingGui = SurfingGuiManager;
 		};
 
 */
-
-
-//--------------------------------------------------------------
 
 
 /*
@@ -923,9 +824,6 @@ using ofxSurfingGui = SurfingGuiManager;
 }
 
 */
-
-
-//--------------------------------------------------------------
 
 
 /*
@@ -1061,39 +959,136 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-
 /*
+ 
+	EXAMPLE
+	MAKE SOME WIDGET SMALLER IN HEIGHT
 
-	DEBUG HELPERS
-	USEFUL WHE CREATING 
-	YOUR OWN WIDGETS FROM SCRATCH.
-	to debug the drawList
+	static ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
+	static ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
+	static ofParameter<float> progress2{ "Progress 2", 0 , 0, 1 };
+	static ofParameter<float> progress3{ "Progress 3", 0 , 0, 1 };
 
-	IMGUI_SUGAR__DEBUG_POINT(bDebug);
-	IMGUI_SUGAR__DEBUG_POINT2;
+	ui.Add(ui.bDebug, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+	if (ui.bDebug)
+	{
+		ui.Indent();
+
+		// make all smaller heights
+		ImGuiStyle* style = &ImGui::GetStyle();
+		ImVec2 sp1 = style->ItemSpacing;
+		ImVec2 sp2 = style->FramePadding;
+		sp1 = ImVec2{ sp.x, 1.f };
+		sp2 = ImVec2{ 0, 0 };
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp1);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+
+		ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
+		ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
+		ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
+		ui.Add(progress3, OFX_IM_PROGRESS_BAR_NO_TEXT);
+
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+
+		ui.Unindent();
+	}
 
 */
 
-//--------------------------------------------------------------
-
-
-// DRAFT NOTES
 
 /*
 
-	GRADIENT COLORED BUTTONS
+	EXAMPLE
 
-	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
+	AN INPUT TEXT
+	BUT WITH A BIG FONT
 
-	ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+	static ofParameter<string> i{ "input","" };
+	ui.PushFont(OFX_IM_FONT_BIG);
+	if (ui.Add(i, OFX_IM_TEXT_INPUT_NO_NAME))
+	{
+		//..
+	};
+	ui.PopFont();
 
 */
+
+
+/*
+
+	SNIPPET
+
+	RESPONSIVE LAYOUT
+
+	bool bDebug = true;
+	ofxImGuiSurfing::SameLineFit(200);
+	this->AddComboAux(index, names, w);
+	if(bDebug) ofxImGuiSurfing::DebugContentRegionAvailX(); // -> stretch window
+
+	//--
+
+	HANDLE LABELS WIDTH
+
+	// PushItemWidth(n);
+	// with n being a negative number.
+	// -n is the distance you want to be available for labels.
+	float w = ImGui::GetWindowContentRegionWidth() - ImGui::CalcItemWidth();
+	ImGui::PushItemWidth(-w);
+
+*/
+
+
+/*
+
+	SNIPPET
+
+	RIGHT ALIGNED WIDGETS
+	https://github.com/ocornut/imgui/issues/934#issuecomment-340231002
+
+	ImGui::SetNextWindowSize(ImVec2{400,400}, ImGuiCond_FirstUseEver);
+	if (ui.BeginWindow("Hello", ImGuiWindowFlags_None)) {
+
+		const float ItemSpacing = ImGui::GetStyle().ItemSpacing.x;
+		const float wpad = ImGui::GetStyle().WindowPadding.x;
+
+		static float HostButtonWidth = 100.0f; //The 100.0f is just a guess size for the first frame.
+		float offset = 0;
+		//float pos = HostButtonWidth + ItemSpacing ;
+		float pos = HostButtonWidth + wpad;
+		ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+		if (ImGui::SmallButton("Become host"))
+		{
+		}
+		HostButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
+
+		static float ClientButtonWidth = 100.0f;
+		pos += ClientButtonWidth + ItemSpacing;
+		ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+		if (ImGui::SmallButton("Connect as client"))
+		{
+		}
+		ClientButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
+
+		static float LocalButtonWidth = 100.0f;
+		pos += LocalButtonWidth + ItemSpacing;
+		ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+		if (ImGui::SmallButton("Play local"))
+		{
+		}
+		LocalButtonWidth = ImGui::GetItemRectSize().x; //Get the actual width for next frame.
+
+		ui.EndWindow();
+	}
+
+*/
+
 
 /*
 
 	EXAMPLE
 	POP UP. CONTEXT MENU
-
 
 	// 1
 	// Options menu
@@ -1143,53 +1138,135 @@ using ofxSurfingGui = SurfingGuiManager;
 //----
 
 
-/*
-
-	EXAMPLE
-
-	AN INPUT TEXT
-	BUT WITH HUGE FONT
-
-	ui.pushStyleFont(IM_FONT_HUGE_XXL);
-	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
-	{
-		//..
-	};
-	ui.popStyleFont();
-
-*/
-
+//--------------------------------------------------------------
+// RAM IMGUI 
+// WIDGET DESIGN
 
 /*
 
-	SNIPPET
+	DEBUG HELPERS
+	USEFUL WHE CREATING
+	YOUR OWN WIDGETS FROM SCRATCH.
+	to debug the drawList
 
-	RESPONSIVE LAYOUT
-
-	bool bDebug = true;
-	ofxImGuiSurfing::SameLineFit(200);
-	this->AddComboAux(index, names, w);
-	if(bDebug) ofxImGuiSurfing::DebugContentRegionAvailX(); // -> stretch window
-
+	IMGUI_SUGAR__DEBUG_POINT(bDebug);
+	IMGUI_SUGAR__DEBUG_POINT2;
 
 */
+
 
 //----
 
 
-// MISC / TRASH
+//--------------------------------------------------------------
+// DRAFT NOTES
+
+/*
+
+	GRADIENT COLORED BUTTONS
+
+	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
+
+	ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
+
+*/
+
+
+//----
+ 
+ 
+//--------------------------------------------------------------
+// DOCKSPACE
+
+/*
+
+	// Flags for ImGui::DockSpace()
+	enum ImGuiDockNodeFlags_
+	{
+		ImGuiDockNodeFlags_None                         = 0,
+		ImGuiDockNodeFlags_KeepAliveOnly                = 1 << 0,   // Don't display the dockspace node but keep it alive. Windows docked into this dockspace node won't be undocked.
+		//ImGuiDockNodeFlags_NoCentralNode              = 1 << 1,   // Disable Central Node (the node which can stay empty)
+		ImGuiDockNodeFlags_NoDockingInCentralNode       = 1 << 2,   // Disable docking inside the Central Node, which will be always kept empty. Note: when turned off, existing docked nodes will be preserved.
+		ImGuiDockNodeFlags_NoSplit                      = 1 << 3,   // Disable splitting the node into smaller nodes. Useful e.g. when embedding dockspaces into a main root one (the root one may have splitting disabled to reduce confusion). Note: when turned off, existing splits will be preserved.
+		ImGuiDockNodeFlags_NoResize                     = 1 << 4,   // Disable resizing child nodes using the splitter/separators. Useful with programatically setup dockspaces.
+		ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
+		ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
+	};
+
+*/
+
+
+/*
+
+	DOCKING NOTES
+
+	https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
+	https://github.com/ocornut/imgui/issues/3521
+
+	For now the slightly more legal way to do same hack as above is to set the
+	DockNodeFlagsOverrideSet / DockNodeFlagsOverrideClear members of ImGuiWindowClass + calling
+	SetNextWindowClass() to trigger this override but it's not solving the possibility of a conflict
+	between multiple windows with different requests, so it'll only fully work if there are also
+	constraints applied on how windows are docked with each others.
+
+	SetNextWindowClass()
+
+	https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
+
+*/
+
+
+/*
+ 
+	EXAMPLE
+	DEMONSTRATE THE VARIOUS WINDOW FLAGS. 
+	TYPICALLY YOU WOULD JUST USE THE DEFAULT!
+
+	static bool no_titlebar = false;
+	static bool no_scrollbar = false;
+	static bool no_menu = false;
+	static bool no_move = false;
+	static bool no_resize = false;
+	static bool no_collapse = false;
+	static bool no_nav = false;
+	static bool no_background = false;
+	static bool no_bring_to_front = false;
+	static bool no_docking = false;
+
+	//ImGuiWindowFlags window_flags = false;
+	if (bAutoResize)        window_flags |= ImGuiWindowFlags_AlwaysAutoResize;//not working, not ending expands..
+	if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
+	if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
+	if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
+	if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
+	if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
+	if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
+	if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
+	if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
+	if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+	if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
+
+*/
+
+
+//----
+
+
+//--------------------------------------------------------------
+// MISCELLANEOUS / TRASH
 // CANDIDATES TO BE REMOVED
 
 
 /*
 
 	 SNIPPET
-
 	 Allows to make exact width of n widgets 
 	 to fit panel size for two buttons or columns per row:
 
 	 float h = getWidgetsHeightRelative(); // One unit height
 	 float w = getWidgetsWidth(2); // A button with the half window panel width.
+	 if (ImGui::Button("A", ImVec2(w, h))) { }
+	 ImGui::SameLine();
 	 if (ImGui::Button("B", ImVec2(w, h))) { }
 
 */
@@ -1208,5 +1285,16 @@ using ofxSurfingGui = SurfingGuiManager;
 	EXAMPLE
 	ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
 	ui.DrawAdvancedSubPanel();
+
+*/
+
+/*
+
+	NOTES
+	
+	Trying rare chars text
+	string s = "hello";
+	ofUTF8Append(s, '▽');
+	ui.AddLabel(s);
 
 */

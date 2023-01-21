@@ -1567,6 +1567,15 @@ bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags)
 	return b;
 }
 
+////--------------------------------------------------------------
+//bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond)
+//{
+//	std::string n = name;
+//	bool b = BeginWindow(n, NULL, window_flags, cond);
+//
+//	return b;
+//}
+
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindow(std::string name)
 {
@@ -1671,9 +1680,16 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 // This is the main BeginWindow. 
 // All above methods will call this one!
 
+////--------------------------------------------------------------
+//bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None, ImGuiCond cond)
+//{
+//}
+
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
+	ImGuiCond cond = ImGuiCond_None;
+
 	//TODO: 
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 

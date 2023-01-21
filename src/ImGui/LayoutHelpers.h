@@ -1,15 +1,16 @@
 
 #pragma once
 
+
 /*
 
-	This class have widgets size constants
-	and methods to get the window panel sizes,
+	This class have methods to get the window panel sizes,
 	for layout helping, spacing and separators helpers,
 	windows constraints,
 	...etc
 
 */
+
 
 #include "ofMain.h"
 
@@ -17,83 +18,10 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
+#include "GuiConstants.h"
+#include "surfingTimers.h"
+
 //---
-
-// Fix weird behaviors when too big or too small resized windows
-
-#define WINDOW_WIDTH_THRESHOLD 250 
-// when window width is less than that, 
-// we will use another layout pattern for some widgets.
-
-#define PADDING_COMBO 0
-//#define PADDING_COMBO 15
-
-//----------
-
-// CONSTANTS
-
-// Will be applied as minimum and standard window shape
-#define PANEL_WIDGETS_WIDTH 250
-#define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 200
-#define PANEL_WIDGETS_HEIGHT_MIN 100
-
-// Legacy
-#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
-#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
-
-//--
-
-// DEPRECATED
-// Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
-#define BUTTON_BIG_HEIGHT 50 
-#define BUTTON_COLOR_SIZE 40
-#define BUTTON_SLIM_HEIGHT2 20
-
-#define WIDGET_SLIDER_HEIGHT 20
-#define WIDGET_COLOR_STRIP_COLOR_HEIGHT 15
-#define WIDGETS_HEIGHT 50 // will be applied to buttons/toggles heights
-
-#define WIDGET_LABEL_WIDTH 120
-
-//TODO:
-#define WIDGET_PARAM_PADDING 0 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 120 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-
-#define PADDING_PANELS 2 // space between some widgets or panels
-#define PADDING_WIDGETS 2 // space between some widgets or panels
-
-#define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
-
-//----
-
-// Default Font
-
-// Notice that if not any font file is located, will work as ImGui default,
-// So you don't need to put any files on bin/data to compile right!
-
-// Legacy Font
-#define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
-#define FONT_DEFAULT_SIZE_LEGACY 11
-
-// New font
-#define FONT_DEFAULT_SIZE 14
-#define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
-
-// Other Candidates
-
-//#define FONT_DEFAULT_SIZE 14
-//#define FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
-
-//#define FONT_DEFAULT_SIZE 13
-//#define FONT_DEFAULT_FILE "PrgmtB.ttf"
-
-//#define FONT_DEFAULT_SIZE 13
-//#define FONT_DEFAULT_FILE "PrgmtR.ttf"
-
-//#define FONT_DEFAULT_SIZE 14
-//#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
 
 //--
 
@@ -562,15 +490,6 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2{ wwidget,0 });
 		ImGui::SameLine();
 	}
-	
-	//--
-
-	////TODO:
-	//// PushItemWidth(n); 
-	//// with n being a negative number.
-	//// -n is the distance you want to be available for labels.
-	//float w = ImGui::GetWindowContentRegionWidth() - ImGui::CalcItemWidth();
-	//ImGui::PushItemWidth(-w);
 
 	//----
 
@@ -603,5 +522,201 @@ namespace ofxImGuiSurfing
 		if (heightMax == -1) heightMax = heightMin;
 		ImGui::SetNextWindowSizeConstraints(ImVec2(0, heightMin), ImVec2(FLT_MAX, heightMax));
 	}
+
+	//----
+
+	// Tree folders
+
+	//TODO: 
+	// Could improve by doing open state 
+	// handled by imgui.ini. 
+	// Now is forced!
+	// Could make a custom serializer by adding 
+	// all the trees to the GuiManager instance!
+	//--------------------------------------------------------------
+	inline bool BeginTree(string label)
+	{
+		//ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_None;
+		ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed;
+
+		return (ImGui::TreeNodeEx(label.c_str(), flagsTree));
+	}
+
+	//--------------------------------------------------------------
+	inline bool BeginTree(string label, bool open /*= true*/, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	{
+		if (open) flagsTree += ImGuiTreeNodeFlags_DefaultOpen;
+
+		//TODO:
+		//return (ImGui::TreeNodeEx(label.c_str(), flagsTree, ImGuiCond_FirstUseEver));
+		return (ImGui::TreeNodeEx(label.c_str(), flagsTree));
+	}
+
+	//--------------------------------------------------------------
+	inline void EndTree()
+	{
+		ImGui::TreePop();
+	}
+
+	//---
+
+	// Blink Helpers
+
+	// Will blink the contained text 
+	// on widgets between begin/end
+	//--------------------------------------------------------------
+	inline void BeginBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			// Border when selected
+			float a = 0.5f;
+			float borderLineWidth = 1.0f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+			ImGui::PopStyleVar(1);
+		}
+	}
+
+	// Will make darker the contained 
+	// text on widgets between begin/end
+	//--------------------------------------------------------------
+	inline void BeginDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			float a = FACTOR_DARKEN;
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
+
+	//--------------------------------------------------------------
+	inline void BeginBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			float a = 0.5f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float v = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
+
+	// Border Highlight without blinking
+	//--------------------------------------------------------------
+	inline void BeginBorderFrame()
+	{
+		float a = 1.f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+	}
+	//--------------------------------------------------------------
+	inline void EndBorderFrame()
+	{
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar(1);
+	}
+
+	//----
+
+	// Make widgets a bit smaller.
+	// Useful when sliders make to grow the window automatically.
+	//--------------------------------------------------------------
+	inline void PushWidth(float prc)
+	{
+		float w = prc * ImGui::GetContentRegionAvail().x;
+		ImGui::PushItemWidth(w);
+	}
+	//--------------------------------------------------------------
+	inline void PopWidth()
+	{
+		ImGui::PopItemWidth();
+	}
+
+	//----
+
+	// Debug Widgets Helpers
+	// Useful for developing new custom widgets.
+
+	/*
+	EXAMPLE
+	// draws a point where drawlist / cursors is currently pointing
+	IMGUI_SUGAR__TEST_POINT;
+	*/
+
+	//--
+
+	// Draws a point on current cursor passing color
+#define IMGUI_SUGAR__DEBUG_POINT(argColor) ImGui::GetWindowDrawList()->AddCircleFilled(ImGui::GetCursorScreenPos(), 1, ImGui::GetColorU32(argColor), 25);
+
+// Passing color and point
+#define IMGUI_SUGAR__DEBUG_POINT2(argColor, argPoint) ImGui::GetWindowDrawList()->AddCircleFilled(argPoint, 1, ImGui::GetColorU32(argColor), 25);
+
+	//--
+
+	// Draws a point on the ImGui cursor position 
+	// for debugging when designing widgets
+	// 
+	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//	{ \
+	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+	//	} \
+	//
+	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
+	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
+	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
+
+	//----
 
 } // namespace ofxImGuiSurfing

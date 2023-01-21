@@ -61,7 +61,8 @@ void ofApp::drawImGui()
 	if (ui.BeginWindow("ofApp"))
 	{
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-		bool b = !ui.bMinimize;//maximized alias
+		bool b = !ui.bMinimize; // is maximized alias
+
 		ui.AddSpacingBigSeparated();
 
 		/*if (b) */ui.AddLabelHuge("LOG SYSTEM");
@@ -89,13 +90,30 @@ void ofApp::drawImGui()
 			if (b) {
 				ui.AddSpacingBig();
 				ui.Add(ui.bDebug, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
-				if (ui.bDebug) {
-					//ImGui::PushItem
+				if (ui.bDebug)
+				{
+					ui.Indent();
+
+					ui.Add(ui.bDebugMetrics, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+
+					//make all smaller heights
+					ImGuiStyle* style = &ImGui::GetStyle();
+					ImVec2 sp = style->ItemSpacing;
+					ImVec2 sp2 = style->FramePadding;
+					sp = ImVec2{ sp.x, 1.f };
+					sp2 = ImVec2{ 0, 0 };
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp);
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+	
 					ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress3, OFX_IM_PROGRESS_BAR_NO_TEXT);
-					//ui.Add(ui.bDebugMetrics, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+
+					ImGui::PopStyleVar();
+					ImGui::PopStyleVar();
+
+					ui.Unindent();
 				}
 			}
 		}
@@ -174,12 +192,16 @@ void ofApp::updateLog()
 	// Auto populate random log messages.
 	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
 	progress2 = ofMap(f % m, 0, m, 0, 1, true);
+
 	if (f % m == 0)
 	{
 		auto t = ofGetElapsedTimef();
-		progress3 = ofMap(f % m, 0.4, 1, 0, 1, true);
-		//progress3 = ofMap(f % m, 0, m, 0, 1, true);
-		if (ofNoise(t) < 0.4f) return; // skip one third
+		float no = ofNoise(t);
+
+		progress3 = ofMap(no, 0, 0.4f, 0, 1, true);
+		//progress3 = ofMap(no, 0.4f, 1, 0, 1, true);
+
+		if (no < 0.4f) return; // skip one third
 
 		string ss = "FrameNum: " + ofToString(f);
 		float _rnd = ofRandom(1);

@@ -1,6 +1,89 @@
 
 #pragma once
 
+
+/*
+ 
+	This class have widgets size useful Constants
+
+*/
+
+
+//----------
+
+// Fix weird behaviors when too big or too small resized windows
+
+#define WINDOW_WIDTH_THRESHOLD 250 
+// when window width is less than that, 
+// we will use another layout pattern for some widgets.
+
+#define PADDING_COMBO 0
+
+//----------
+
+// Will be applied as minimum and standard window shape
+#define PANEL_WIDGETS_WIDTH 250
+#define PANEL_WIDGETS_HEIGHT 100
+#define PANEL_WIDGETS_WIDTH_MIN 200
+#define PANEL_WIDGETS_HEIGHT_MIN 100
+
+// LEGACY
+#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
+#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
+
+//--
+
+// DEPRECATED
+// Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
+#define BUTTON_BIG_HEIGHT 50 
+#define BUTTON_COLOR_SIZE 40
+#define BUTTON_SLIM_HEIGHT2 20
+
+#define WIDGET_SLIDER_HEIGHT 20
+#define WIDGET_COLOR_STRIP_COLOR_HEIGHT 15
+#define WIDGETS_HEIGHT 50 // will be applied to buttons/toggles heights
+
+#define WIDGET_LABEL_WIDTH 120
+
+//TODO:
+#define WIDGET_PARAM_PADDING 0 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//#define WIDGET_PARAM_PADDING 120 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+
+#define PADDING_PANELS 2 // space between some widgets or panels
+#define PADDING_WIDGETS 2 // space between some widgets or panels
+
+#define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
+
+//----
+
+// Default Font
+
+// Notice that if not any font file is located, will work as ImGui default,
+// So you don't need to put any files on bin/data to compile right!
+
+// LEGACY Font
+#define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
+#define FONT_DEFAULT_SIZE_LEGACY 11
+
+// New font
+#define FONT_DEFAULT_SIZE 14
+#define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+
+// Other Candidates
+
+//#define FONT_DEFAULT_SIZE 14
+//#define FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
+
+//#define FONT_DEFAULT_SIZE 13
+//#define FONT_DEFAULT_FILE "PrgmtB.ttf"
+
+//#define FONT_DEFAULT_SIZE 13
+//#define FONT_DEFAULT_FILE "PrgmtR.ttf"
+
+//#define FONT_DEFAULT_SIZE 14
+//#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
+
 //--
 
 // Ratio Sizes between sizes of a widget type. 
@@ -155,7 +238,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
 
-		// Legacy. removed 'button' word
+		// LEGACY. removed 'button' word
 		OFX_IM_TOGGLE_BUTTON_ROUNDED, // same size than small.
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
@@ -207,9 +290,9 @@ namespace ofxImGuiSurfing
 		// Knobs
 
 		// Notice that full width by default, is usually too big!
-		// Legacy
-		OFX_IM_KNOB, // Legacy
-		OFX_IM_KNOB_TRAIL, // Legacy. decorated
+		// LEGACY
+		OFX_IM_KNOB, // LEGACY
+		OFX_IM_KNOB_TRAIL, // LEGACY. decorated
 
 		//TODO:
 		// Add more arguments: no label, no number...
@@ -393,8 +476,10 @@ namespace ofxImGuiSurfing
 	// 1.
 
 	// BUG:
-	// Annoying behavior: sometimes the sliders are bigger bc the text long or something,
-	// Then all the window panels is being resized bigger if auto resize is enabled!
+	// Annoying behavior: 
+	// sometimes the sliders are bigger bc the text long or something,
+	// Then all the window panels is being resized bigger 
+	// if auto resize is enabled!
 
 	// workaround
 
@@ -408,7 +493,8 @@ namespace ofxImGuiSurfing
 	//-
 
 	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
-	// Comment this line to use a workaround to weird ImGui auto resize layouting on sliders widgets...
+	// Comment this line to use a workaround 
+	// to weird ImGui auto resize layouting on sliders widgets...
 
 	//--
 
@@ -454,7 +540,8 @@ namespace ofxImGuiSurfing
 
 #define STEP_FACTOR_FLOAT .7f 
 //#define STEP_FACTOR_FLOAT .72f 
-// To allow see 3 decimals seen well, but requires shorter label name better.
+// To allow see 3 decimals seen well, 
+// but requires preferably shorter label name.
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_FLOAT); }
@@ -470,21 +557,21 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//TODO:
 #define TEXT_LABEL_TO_RESIZE "----------" 
+	//TODO:
 	// This is a 10 chars string that we will use as default label width, to name widgets.
 	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
 	// that could be weird because each slider will have a different width.
 	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
 	 
 	//TODO:
-// Fix auto resize loop grow...
-// Using an standard text size for the widgets 
-//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-//	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-//	const float gap = 40; \
-//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
-//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
+	// Fix auto resize loop grow...
+	// Using an standard text size for the widgets 
+	//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
+	//	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+	//	const float gap = 40; \
+	//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
+	//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----
 
@@ -507,7 +594,11 @@ namespace ofxImGuiSurfing
 
 // 3.
 
+//TODO: should DEPRECATE these ratio constants a make absolute sizes.
+
 // Adds Constraints Window Shapes (width and height)
+
+// Width and height
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
 { \
@@ -543,6 +634,8 @@ ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MI
 ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MIN); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
+
+//--
 
 // Width only
 
@@ -580,52 +673,6 @@ ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, -1); \
 ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
-
-//----
-
-// 4.
-
-// Helper
-//
-// Draws a point on the ImGui cursor position for debugging when designing widgets
-// 
-//#define IMGUI_SUGAR__TEST_POINT \ 
-//	{ \
-//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
-//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
-//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
-//	} \
-//
-//#define IMGUI_SUGAR__TEST_POINT \ 
-//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
-//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
-//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
-
-//----
-
-//// NOTES
-//
-////ImGui::SetCursorPosX(ImGui::GetCursorPosX() + sztx.x);
-////ImGui::SetCursorPosY(ImGui::GetCursorPosY() + sztx.y);
-//
-////IMGUI_SUGAR__TEST_POINT;
-//
-//const ImVec2 pdebug = ImGui::GetCursorScreenPos();
-//draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255));//can't use macros..
-
-
-//----
-
-
-// DEBUG WIDGETS
-
-// Draws a point on current cursor passing color
-#define IMGUI_SUGAR__DEBUG_POINT(argColor) ImGui::GetWindowDrawList()->AddCircleFilled(ImGui::GetCursorScreenPos(), 1, ImGui::GetColorU32(argColor), 25);
-
-// Passing color and point
-#define IMGUI_SUGAR__DEBUG_POINT2(argColor, argPoint) ImGui::GetWindowDrawList()->AddCircleFilled(argPoint, 1, ImGui::GetColorU32(argColor), 25);
-
-//----
 
 
 };

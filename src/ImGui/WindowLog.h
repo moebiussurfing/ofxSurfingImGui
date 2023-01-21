@@ -174,7 +174,7 @@ namespace ofxImGuiSurfing
 			startupOnce();
 
 			// minimal window width
-			const float wWindowMin = 100;
+			float wWindowMin = 100;
 			float hWindowMin;
 			float wWidgets = 110;//width for next widgets
 

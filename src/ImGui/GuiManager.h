@@ -1,6 +1,14 @@
 
 #pragma once
 
+
+/*
+
+	This class have widgets size useful Constants
+
+*/
+
+
 #include "ofMain.h"
 
 #include "ofxImGui.h"
@@ -1512,11 +1520,13 @@ public:
 	bool BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags);
 	// will use the bool param for show/hide and the param name for the window name
 
-	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
-	bool BeginWindow(std::string name, bool* p_open);
 	bool BeginWindow(std::string name);
+	bool BeginWindow(std::string name, bool* p_open);
+	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
+	//bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	bool BeginWindow(char* name = "Window");
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
+	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
 
 	//--
 
