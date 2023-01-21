@@ -33,23 +33,23 @@ for **openFrameworks** projects.
 <details>
   <summary>MORE IMGUI WIDGETS</summary>
   <p>
-- Dropdown / Combo index selector and names.
-- Matrix buttons to an index selector.
-- Bundled widgets like arrows linked to int params browsing.
-- Big Toggles and Buttons.
-- Vertical and Horizontal Sliders.
-- Range Sliders.
-- Styled Knobs.
-- Tree folders.
-- Inactive, hidden or locked styles.
-- Floating tooltip, labels and values.
-- DearWidgets.
-- Gradient Color Designer.
-- Progress bars and waiting spinners.
-- Files Browser.
-- Curve Editors.
-- Bubbles Notifier System.
-- Profile Plotters.
+- Dropdown / Combo index selector and names.  
+- Matrix buttons to an index selector.  
+- Bundled widgets like arrows linked to int params browsing.  
+- Big Toggles and Buttons.  
+- Vertical and Horizontal Sliders.  
+- Range Sliders.  
+- Styled Knobs.  
+- Tree folders.  
+- Inactive, hidden or locked styles.  
+- Floating tooltip, labels and values.  
+- DearWidgets.  
+- Gradient Color Designer.  
+- Progress bars and waiting spinners.  
+- Files Browser.  
+- Curve Editors.  
+- Bubbles Notifier System.  
+- Profile Plotters.  
   
   </p>
   </details>
