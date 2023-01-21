@@ -38,6 +38,8 @@ for **openFrameworks** projects.
 - A **Layout Presets Engine**. ( WIP )
 - Some **Docking Helpers**. ( WIP )
 
+<br>
+
 <details>
   <summary>MORE IMGUI WIDGETS</summary>
   <p>
