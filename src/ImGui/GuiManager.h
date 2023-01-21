@@ -147,56 +147,56 @@ public:
 	// NOTE that 4 items per row is the limit yet!
 	// can be use the API methods passing width ratio
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		return _ui.Add(aparam, type, amtPerRow, bSameLine, spacing);
+		return _ui.Add(ap, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
+	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
 	{
-		return _ui.Add(aparam, type, amtPerRow, flags);
+		return _ui.Add(ap, type, amtPerRow, flags);
 	}
 
 	//TODO:
 	// New API v2
 	// Passing width ratio
 	//-----------------------------------------------------------------
-	bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/, float ratioWidth /*= 1.f*/, bool bSameLine = false, SurfingGuiFlags flags = SurfingGuiFlags_None)
+	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/, float ratioWidth /*= 1.f*/, bool bSameLine = false, SurfingGuiFlags flags = SurfingGuiFlags_None)
 	{
-		return _ui.Add(aparam, type, amtPerRow, ratioWidth, bSameLine, flags);
+		return _ui.Add(ap, type, amtPerRow, ratioWidth, bSameLine, flags);
 	}
 
 	////TODO:
 	//// New API v2
 	//// Passing ImVec2
 	////-----------------------------------------------------------------
-	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, ImVec2 sz, bool bSameLine /*= false*/, SurfingGuiFlags flags = SurfingGuiFlags_None)
+	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, ImVec2 sz, bool bSameLine /*= false*/, SurfingGuiFlags flags = SurfingGuiFlags_None)
 	//{
 	// //will require to add height for all methods!
-	//	return _ui.Add(aparam, type, amtPerRow, ratioWidth, bSameLine, flags);
+	//	return _ui.Add(ap, type, amtPerRow, ratioWidth, bSameLine, flags);
 	//}
 
 	//TODO: New API
 	// Final step method, Draws using an absolute width
 	//-----------------------------------------------------------------
-	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
-		//return _ui.Add(aparam, type, width, bSameLine, spacing, flags);
+	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
+		//return _ui.Add(ap, type, width, bSameLine, spacing, flags);
 	//}
 
 	////-----------------------------------------------------------------
-	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
+	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
 	//	bool bSameLine = false; 
 	//	int spacing = -1;
 
-	//		return _ui.Add(aparam, type, width, bSameLine, spacing, flags);
+	//		return _ui.Add(ap, type, width, bSameLine, spacing, flags);
 	//}
 
 	////TODO avoid multiple ambiguous
-	//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type) 
+	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type) 
 	//{
-	//	return _ui.Add(aparam, type, -1, false, -1, SurfingGuiFlags_None);
+	//	return _ui.Add(ap, type, -1, false, -1, SurfingGuiFlags_None);
 	// }
 
 	//----
@@ -205,9 +205,9 @@ public:
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
-	void AddStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	void AddStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		_ui.AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
+		_ui.AddStyle(ap, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Queue style for the parameter
@@ -219,9 +219,9 @@ public:
 
 	// Update style for the parameter
 	//--------------------------------------------------------------
-	void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	void UpdateStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
-		_ui.UpdateStyle(aparam, type, amtPerRow, bSameLine, spacing);
+		_ui.UpdateStyle(ap, type, amtPerRow, bSameLine, spacing);
 	}
 	//--------------------------------------------------------------
 	void UpdateStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
@@ -2063,6 +2063,7 @@ public:
 	//-
 
 	//TODO: add another mini xs rounded toggle
+	// WARNING: can use only one per window... bc no name no id tags!
 	//--------------------------------------------------------------
 	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false)
 	{
@@ -2073,12 +2074,14 @@ public:
 		float wt = 1.15f * ht;
 		float w = 1.15f * hu + 2;//weird offset
 
+		this->AddSpacing();
 		ofxImGuiSurfing::AddSpacingRightAlign(w);
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true);
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 		if(bSeparated) this->AddSpacingSeparated();
+		else this->AddSpacing();
 	}
 
 	//-

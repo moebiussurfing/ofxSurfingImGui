@@ -2,14 +2,17 @@
 
 /*
 
-    Show a bit more stuff 
-    from the API
+    To learn a bit more stuff from the API
+
     - minimizer
     - tool-tips
     - log window
+    - mouse over gui
     - note persistence of previous sessions for some settings.
 
 */
+
+//--
 
 #include "ofMain.h"
 

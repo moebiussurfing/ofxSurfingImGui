@@ -97,7 +97,7 @@ namespace ofxImGuiSurfing
 			{
 				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 				{
-					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 
 					tmpRef = true;
 					p.set(tmpRef);
@@ -136,7 +136,7 @@ namespace ofxImGuiSurfing
 			{
 				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 				{
-					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 
 					bchanged = true;
 				}
@@ -208,7 +208,7 @@ namespace ofxImGuiSurfing
 			{
 				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 				{
-					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 
 					tmpRef = true;
 					p.set(tmpRef);
@@ -264,7 +264,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 		{
-			ofLogVerbose(__FUNCTION__) << name << ": BANG";
+			ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 			tmpRef = true;
 			p.set(tmpRef);
 		}
@@ -344,7 +344,7 @@ namespace ofxImGuiSurfing
 			{
 				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 				{
-					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 					bReturn = true;
 					p.trigger();
 				}
@@ -389,7 +389,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 		if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 		{
-			ofLogVerbose(__FUNCTION__) << name << ": BANG";
+			ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 			bReturn = true;
 			p.trigger();
 		}
@@ -1059,7 +1059,7 @@ namespace ofxImGuiSurfing
 			{
 				if (ImGui::Button(name.c_str(), ImVec2(w, h)))
 				{
-					ofLogVerbose(__FUNCTION__) << name << ": BANG";
+					ofLogVerbose("ofxSurfingImGui") << name << ": BANG";
 
 					bReturn = true;
 				}

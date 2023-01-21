@@ -130,7 +130,7 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		SurfingImGuiTypes_Style getStyle(ofAbstractParameter& aparam) {
+		SurfingImGuiTypes_Style getStyle(ofAbstractParameter& ap) {
 
 			// https://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
 			//std::list<int> x{ 2, 3, 5, 7, 11, 13, 17, 19 };
@@ -142,7 +142,7 @@ namespace ofxImGuiSurfing
 
 			for (auto& c : widgetsStyles)
 			{
-				if (c.name == aparam.getName()) // param was added to the queue
+				if (c.name == ap.getName()) // param was added to the queue
 				{
 					return c;
 				}
@@ -159,7 +159,7 @@ namespace ofxImGuiSurfing
 			return cError;
 
 			//SurfingImGuiTypes_Style confDefault;
-			//confDefault.name = aparam.getName();
+			//confDefault.name = ap.getName();
 			//confDefault.bSameLine = false;
 			//confDefault.amtPerRow = 1;
 			//confDefault.spacing = -1;
@@ -188,10 +188,10 @@ namespace ofxImGuiSurfing
 
 		// Queue a customization config for future populate a param widget
 		//--------------------------------------------------------------
-		void AddStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		void AddStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
 			SurfingImGuiTypes_Style c;
-			c.name = aparam.getName();
+			c.name = ap.getName();
 			c.type = type;
 			c.bSameLine = bSameLine;
 			c.amtPerRow = amtPerRow;
@@ -245,11 +245,11 @@ namespace ofxImGuiSurfing
 		//private:
 		//// LEGACY api
 		////--------------------------------------------------------------
-		//void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
+		//void UpdateStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		//{
 		//	for (auto &c : widgetsStyles)
 		//	{
-		//		if (c.name == aparam.getName()) // param was in the queue list
+		//		if (c.name == ap.getName()) // param was in the queue list
 		//		{
 		//			c.type = type;
 		//			c.bSameLine = bSameLine;
@@ -258,7 +258,7 @@ namespace ofxImGuiSurfing
 		//			return;
 		//		}
 		//	}
-		//	ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list!";
+		//	ofLogWarning("ofxSurfingImGui")<<(__FUNCTION__) << "Widget " << ap.getName() << " not found on styles list!";
 		//	return;
 		//}
 		////--------------------------------------------------------------
@@ -323,11 +323,11 @@ namespace ofxImGuiSurfing
 
 		// Update styles on runtime
 		//--------------------------------------------------------------
-		void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+		void UpdateStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 		{
 			for (auto& c : widgetsStyles)
 			{
-				if (c.name == aparam.getName()) // param was in the queue list
+				if (c.name == ap.getName()) // param was in the queue list
 				{
 					c.type = type;
 					c.bSameLine = bSameLine;
@@ -336,8 +336,8 @@ namespace ofxImGuiSurfing
 					return;
 				}
 			}
-			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Widget " << aparam.getName() << " not found on styles list. Added!";
-			AddStyle(aparam, type, amtPerRow, bSameLine, spacing);
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Widget " << ap.getName() << " not found on styles list. Added!";
+			AddStyle(ap, type, amtPerRow, bSameLine, spacing);
 			return;
 		}
 		//--------------------------------------------------------------
@@ -409,7 +409,7 @@ namespace ofxImGuiSurfing
 
 		//-
 
-		//bool Add(ofAbstractParameter& aparam, WidgetsManager type) {
+		//bool Add(ofAbstractParameter& ap, WidgetsManager type) {
 		//	Add(bMode1, SurfingGuiTypesGroups::OFX_IM_TOGGLE_SMALL, 3, true);
 		//}
 
@@ -425,12 +425,12 @@ namespace ofxImGuiSurfing
 		//-
 
 		//--------------------------------------------------------------
-		SurfingGuiTypes getType(ofAbstractParameter& aparam)
+		SurfingGuiTypes getType(ofAbstractParameter& ap)
 		{
-			std::string name = aparam.getName();
+			std::string name = ap.getName();
 			SurfingGuiTypes rtype = SurfingGuiTypes(OFX_IM_DEFAULT);
 
-			auto type = aparam.type();
+			auto type = ap.type();
 			bool isBool = type == typeid(ofParameter<bool>).name();
 			if (!isBool) return rtype;
 
@@ -472,9 +472,9 @@ namespace ofxImGuiSurfing
 		//TODO:
 		// WIP:
 		//--------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags = SurfingGuiFlags_None)
+		bool Add(ofAbstractParameter& ap, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
-			return Add(aparam, type, amtPerRow, false, -1, flags);
+			return Add(ap, type, amtPerRow, false, -1, flags);
 		}
 
 		//--
@@ -483,7 +483,7 @@ namespace ofxImGuiSurfing
 		// New API v0.1
 		// Final step method, Draws using an absolute width
 		//-----------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
+		bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
 			//bool bSameLine = false;
 			//int spacing = -1;
@@ -598,7 +598,7 @@ namespace ofxImGuiSurfing
 
 			// 2. Detect Type of the ofAbstractParameter:
 
-			auto ptype = aparam.type();
+			auto ptype = ap.type();
 
 			// Filter expected ofParam Types
 
@@ -633,7 +633,7 @@ namespace ofxImGuiSurfing
 
 			if (isVoid)
 			{
-				ofParameter<void> p = aparam.cast<void>();
+				ofParameter<void> p = ap.cast<void>();
 
 				uniqueName.push();
 				{
@@ -771,7 +771,7 @@ namespace ofxImGuiSurfing
 
 			else if (isBool)
 			{
-				ofParameter<bool> p = aparam.cast<bool>();
+				ofParameter<bool> p = ap.cast<bool>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -1133,7 +1133,7 @@ namespace ofxImGuiSurfing
 
 			else if (isString)
 			{
-				ofParameter<std::string> p = aparam.cast<std::string>();
+				ofParameter<std::string> p = ap.cast<std::string>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -1247,7 +1247,7 @@ namespace ofxImGuiSurfing
 
 			else if (isFloat)
 			{
-				ofParameter<float> p = aparam.cast<float>();
+				ofParameter<float> p = ap.cast<float>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -1735,7 +1735,7 @@ namespace ofxImGuiSurfing
 
 			else if (isInt)
 			{
-				ofParameter<int> p = aparam.cast<int>();
+				ofParameter<int> p = ap.cast<int>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -2179,7 +2179,7 @@ namespace ofxImGuiSurfing
 
 			else if (isFloatColor)
 			{
-				ofParameter<ofFloatColor> p = aparam.cast<ofFloatColor>();
+				ofParameter<ofFloatColor> p = ap.cast<ofFloatColor>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -2225,7 +2225,7 @@ namespace ofxImGuiSurfing
 
 			else if (isColor)
 			{
-				ofParameter<ofColor> p = aparam.cast<ofColor>();
+				ofParameter<ofColor> p = ap.cast<ofColor>();
 
 				auto& tmpRef = p.get();
 				//auto tmpRef = p.get();
@@ -2275,7 +2275,7 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					ofParameter<glm::vec2> p = aparam.cast<glm::vec2>();
+					ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
 
 					switch (type)
 					{
@@ -2311,7 +2311,7 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					ofParameter<glm::vec3> p = aparam.cast<glm::vec3>();
+					ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
 
 					switch (type)
 					{
@@ -2342,7 +2342,7 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					ofParameter<glm::vec4> p = aparam.cast<glm::vec4>();
+					ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
 
 					switch (type)
 					{
@@ -2375,7 +2375,7 @@ namespace ofxImGuiSurfing
 			{
 				uniqueName.push();
 				{
-					ofParameter<ofRectangle> p = aparam.cast<ofRectangle>();
+					ofParameter<ofRectangle> p = ap.cast<ofRectangle>();
 
 					bReturn = ofxImGuiSurfing::AddParameter(p);
 				}
@@ -2418,7 +2418,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		//-----------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
+		bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
 			//// Will flag to true to do the final steps: 
 			//// same line and spacing config by args.
@@ -2437,7 +2437,7 @@ namespace ofxImGuiSurfing
 			else if (amtPerRow == 4) _ww = _w25; // quarter size
 			else _ww = _w100; // full width
 
-			return this->Add(aparam, type, _ww, bSameLine, spacing, flags);
+			return this->Add(ap, type, _ww, bSameLine, spacing, flags);
 		}
 
 		//--
@@ -2446,7 +2446,7 @@ namespace ofxImGuiSurfing
 		// New API v0.2
 		// Passing width ratio
 		//-----------------------------------------------------------------
-		bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/, float ratioWidth /*= 1.f*/, bool bSameLine/* = false*/, SurfingGuiFlags flags = SurfingGuiFlags_None)
+		bool Add(ofAbstractParameter& ap, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/, float ratioWidth /*= 1.f*/, bool bSameLine/* = false*/, SurfingGuiFlags flags = SurfingGuiFlags_None)
 		{
 			int spacing = -1;
 
@@ -2461,7 +2461,7 @@ namespace ofxImGuiSurfing
 			// The width that we will apply to that widget.
 			float _ww = _w100 * ratioWidth - _spx;
 
-			return this->Add(aparam, type, _ww, bSameLine, spacing, flags);
+			return this->Add(ap, type, _ww, bSameLine, spacing, flags);
 		}
 
 		//-------

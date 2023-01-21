@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	// add to custom tags to log system
 	ui.AddLogTag(myTag1, ofColor::yellow);
 	ui.AddLogTag(myTag2, ofColor::orange);
 
@@ -33,30 +34,31 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
-			// A right aligned extra minimizer
-			static ofParameter<bool> bMin{ "", false };
-			ui.AddMinimizerXsToggle(bMin);
-			if (!bMin)
+			ui.AddLogToggle(); // populate a toggle for the internal show log param.
+			ui.AddMinimizerToggle(); // populate a toggle for the internal minimized param.
+
+			// two different presentations depending if minimized or not
+			if (ui.isMinimized()) // minimized
 			{
-				ui.AddLogToggle(); // populate a toggle for the internal show log param.
-				ui.AddMinimizerToggle(); // populate a toggle for the internal minimized param.
+				ui.Add(speed, OFX_IM_HSLIDER_SMALL_NO_LABELS); // smaller with no name and no value number
+				ui.AddTooltip(speed, true, false); // tool-tip with name and value
+			}
+			else // not minimized aka maximized
+			{
+				ui.AddLabelBig("Hello World 2", true, true); // make uppercase and an extra space
 
-				// two different presentations depending if minimized or not
-				if (ui.isMinimized()) // minimized
+				ui.Add(speed, OFX_IM_HSLIDER_BIG);
+				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blink when true
+				if (bEnable)
 				{
-					ui.Add(speed, OFX_IM_HSLIDER_SMALL_NO_LABELS); // smaller with no name and no value number
-					ui.AddTooltip(speed, true, false); // tool-tip with name and value
-				}
-				else // not minimized aka maximized
-				{
-					ui.AddLabelBig("Hello World 2", true, true); // make uppercase and an extra space
+					// A right aligned extra minimizer
+					ui.AddSpacing();
+					ui.AddSpacingSeparated();
 
-					ui.Add(speed, OFX_IM_HSLIDER_BIG);
-					ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blink when true
-
-					if (bEnable)
+					static ofParameter<bool> bMin{ "", false };
+					ui.AddMinimizerXsToggle(bMin);
+					if (!bMin)
 					{
-						ui.AddSpacingSeparated();
 						ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed); // collapsed on startup
 					}
 				}
@@ -79,6 +81,8 @@ void ofApp::keyPressed(int key)
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
+	if (ui.isMouseOverGui()) return; // don't log if we are touching the ui
+
 	string sb = "";
 	if (button == 0) sb = "LEFT";
 	else if (button == 2) sb = "RIGHT";
@@ -90,6 +94,8 @@ void ofApp::mousePressed(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
+	if (ui.isMouseOverGui()) return; // don't log if we are touching the ui
+
 	string s = "Mouse Drag  " + ofToString(x) + "," + ofToString(y);
 
 	ui.AddToLog(s, "VERBOSE");
