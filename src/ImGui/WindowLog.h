@@ -173,8 +173,8 @@ namespace ofxImGuiSurfing
 			startupOnce();
 
 			// minimal window width
-			const float LOG_WINDOW_MIN_WIDTH = 100;
-
+			const float wWindowMin = 100;
+			float hWindowMin;
 			float wWidgets = 110;//width for next widgets
 
 			// calculate how many lines are being drawn
@@ -198,17 +198,17 @@ namespace ofxImGuiSurfing
 
 			// Window shape
 			{
-				float LOG_WINDOW_MIN_HEIGHT = (bOptions.get() ? 200 : 150);//minimal height
+				hWindowMin = (bOptions.get() ? 200 : 150);//minimal height
 				ImGuiCond cond = ImGuiCond_FirstUseEver;
 
 				// app window
 				float w = ofGetWidth();
 				float h = ofGetHeight();
-				ImGui::SetNextWindowPos(ImVec2(w - LOG_WINDOW_MIN_WIDTH - 10, 20), cond);
-				ImGui::SetNextWindowSize(ImVec2(LOG_WINDOW_MIN_WIDTH, h - 100), cond);
+				ImGui::SetNextWindowPos(ImVec2(w - wWindowMin - 10, 20), cond);
+				ImGui::SetNextWindowSize(ImVec2(wWindowMin, h - 100), cond);
 
 				// constraints
-				ImVec2 size_min = ImVec2(LOG_WINDOW_MIN_WIDTH, LOG_WINDOW_MIN_HEIGHT);
+				ImVec2 size_min = ImVec2(wWindowMin, hWindowMin);
 				ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 			}

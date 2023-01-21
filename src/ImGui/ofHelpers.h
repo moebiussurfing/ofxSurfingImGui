@@ -54,6 +54,128 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	// Blink Helpers
+
+	// Will blink the contained text 
+	// on widgets between begin/end
+	//--------------------------------------------------------------
+	inline void BeginBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			// Border when selected
+			float a = 0.5f;
+			float borderLineWidth = 1.0f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkFrame(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+			ImGui::PopStyleVar(1);
+		}
+	}
+
+	// Will make darker the contained text on widgets between begin/end
+	//--------------------------------------------------------------
+	inline void BeginDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			float a = FACTOR_DARKEN;
+
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndDarkenText(bool bEnable = true)
+	{
+		if (bEnable)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
+
+	//--------------------------------------------------------------
+	inline void BeginBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			float a = 0.5f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float v = ofxSurfingHelpers::getFadeBlink();
+			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_Text, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
+
+	// Border Highlight without blinking
+	//--------------------------------------------------------------
+	inline void BeginBorderFrame()
+	{
+		float a = 1.f;
+		float borderLineWidth = 1.0f;
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+		ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+		ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
+	}
+	//--------------------------------------------------------------
+	inline void EndBorderFrame()
+	{
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar(1);
+	}
+
+	//----
+
+	// Make widgets a bit smaller.
+	// Useful when sliders make to grow the window automatically.
+	//--------------------------------------------------------------
+	inline void PushWidth(float prc)
+	{
+		float w = prc * ImGui::GetContentRegionAvail().x;
+		ImGui::PushItemWidth(w);
+	}
+	//--------------------------------------------------------------
+	inline void PopWidth()
+	{
+		ImGui::PopItemWidth();
+	}
+
+	//----
+
 	// MOUSE
 
 	// Mouse Wheel

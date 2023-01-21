@@ -365,7 +365,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	ANOTHER WINDOW WITH SNAPPING TO A GRID
 	AN EXTRA BEGIN/END PAIR.
 	WITH A SNAPPING GRID.
@@ -408,7 +408,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	//----
 
-	EXAMPLE:
+	EXAMPLE
 	ImGui RAW without the API add-on helpers.
 	ANOTHER EXTRA BEGIN/END PAIR
 
@@ -432,7 +432,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	GET WINDOW SHAPE.
 	CALL BETWEEN BEGIN/END
 
@@ -511,7 +511,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	HOW TO SET COLORS?
 
 	static float b = 1.0f;
@@ -528,7 +528,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	IMGUI INFOS
 
 	auto io = ImGui::GetIO();
@@ -545,7 +545,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	TABS
 
 	if (ImGui::BeginTabBar("Tabs Blah"))
@@ -583,7 +583,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	COMBO USING A PARAM INT WITH DEFINED NAMES
 
 	static vector<string>names{ "IGNORE","LEFT","RIGHT","CENTER" };
@@ -597,7 +597,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	PREV / NEXT DUAL BUTTONS
 	That is implemented now
 	into a widget called AddComboArrows(..
@@ -626,7 +626,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	ADD MOUSE WHEEL TO THE FLOAT PARAM
 
 	ofxImGuiSurfing::AddParameter(bpm);
@@ -654,7 +654,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	RESPONSIVE LAYOUT
 
 	2 DOUBLE HEIGHT BUTTONS IN ONE LINE +
@@ -708,7 +708,7 @@ using ofxSurfingGui = SurfingGuiManager;
 //--------------------------------------------------------------
 
 
-// EXAMPLE:
+// EXAMPLE
 // DEMONSTRATE THE VARIOUS WINDOW FLAGS. 
 // TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
@@ -768,7 +768,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	INPUT TEXT WITH HUGE EXTRA FONT
 	ui.pushStyleFont(IM_FONT_HUGE_XXL);
 	if (ui.Add(word, OFX_IM_TEXT_INPUT_NO_NAME))
@@ -781,7 +781,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	HOW TO CUSTOMIZE FONT
 	AND USE DIFFERENT FONT STYLES?
 
@@ -825,7 +825,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	COMMON LEFT RIGHT ARROWS
 	TO BROWSE AN INDEX
 
@@ -856,7 +856,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	IMPROVE LAYOUT ENGINE
 	WITH TABLES/COLUMNS
 	AND AUTORESIZE WIDGETS
@@ -930,7 +930,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	TODO: WIP:
 	TWO COLUMNS WITH 2 VERTICAL SLIDERS
 	USING TWO DIFERENT MODES / TEMPLATES
@@ -985,7 +985,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	THREE COLUMNS WITH A KNOB AND 2 VERTICAL SLIDERS
 	WITH A RESET BUTTON.
 	UI USED AS A POINTER REFERENCED.
@@ -1019,7 +1019,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE:
+	EXAMPLE
 	A BIG COMBO SELECTOR
 	WITH AN INDEX PARAM, ARROWS, NAMES VECTOR
 	CUTE STYLED
@@ -1064,11 +1064,13 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	USEFUL WHE CREATING YOUR OWN WIDGETS FROM SCRATCH.
+	DEBUG HELPERS
+	USEFUL WHE CREATING 
+	YOUR OWN WIDGETS FROM SCRATCH.
 	to debug the drawList
 
 	IMGUI_SUGAR__DEBUG_POINT(bDebug);
-	IMGUI_SUGAR__DEBUG_POINT2
+	IMGUI_SUGAR__DEBUG_POINT2;
 
 */
 
@@ -1079,7 +1081,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// GRADIENT COLORED BUTTONS
+	GRADIENT COLORED BUTTONS
 
 	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
 
@@ -1089,8 +1091,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// EXAMPLE
-	// POP UP. CONTEXT MENU
+	EXAMPLE
+	POP UP. CONTEXT MENU
 
 
 	// 1
@@ -1157,6 +1159,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
 /*
 
 	SNIPPET
@@ -1171,6 +1174,13 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+//----
+
+
+// MISC / TRASH
+// CANDIDATES TO BE REMOVED
+
+
 /*
 
 	 SNIPPET
@@ -1180,6 +1190,23 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	 float h = getWidgetsHeightRelative(); // One unit height
 	 float w = getWidgetsWidth(2); // A button with the half window panel width.
-	 if (ImGui::Button("_Button", ImVec2(w, h))) { }
+	 if (ImGui::Button("B", ImVec2(w, h))) { }
+
+*/
+
+
+/*
+
+	ADVANCED WINDOW
+
+	EXAMPLE
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;;
+	if (ui.bAutoResize) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+	if (ui.bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
+	ui.BeginWindow("ofApp", NULL, window_flags);
+
+	EXAMPLE
+	ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
+	ui.DrawAdvancedSubPanel();
 
 */
