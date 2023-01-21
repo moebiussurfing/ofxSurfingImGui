@@ -13,7 +13,9 @@ for **openFrameworks** projects.
 
 ## WORK IN PROGRESS!
 
-( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
+<br>
+
+( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
 
 <br>
 
@@ -132,7 +134,8 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[assets.zip](assets.zip) (Located in the add-on root path) are mainly font files to put into each project `OF_APP/bin/data/`.  
+[assets.zip](assets.zip)  
+(Located in the add-on root path) are mainly font files to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
