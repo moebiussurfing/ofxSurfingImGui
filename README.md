@@ -11,22 +11,14 @@ for **openFrameworks** projects.
 
 ( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
 
-[EXAMPLES SCREENSHOTS](/Examples/README.md)  
-
 # FEATURES
 
 - Easy **Setup** and **Layout**.
 - **Multiple instances** around classes and **ofxAddons**.
 - **ofParameter Helpers**.
-  - RAW **ImGui Widgets** ported to **oF ofParameters**.
-  - Added custom useful widgets: 
-      - Dropdown (Combo) lists with index selector and vector of names.
-      - Matrix buttons to an index / int param.
-      - Bundled widgets like arrows linked to int params browsing.
+  - Many RAW **ImGui Widgets** ported to **oF ofParameters**.
+  - Added custom useful widgets.
 - Useful methods and **Snippets** to **Speed-Up layout** and simple **Workflow**.
-- A **Layout Presets Engine**.
-- Some **Docking Helpers**.
-- Cool **Themes**.
 - Extra **Mouse Control** 
   - Wheel for Tweaking. _+Ctrl_ to Finetune.
   - Right button to reset to params center.
@@ -34,30 +26,35 @@ for **openFrameworks** projects.
     - _+Alt_ to reset to max.
 - Powerful **Log System**.
 - Floating **Notifier System**.
+- Cool **Themes** with 4 active font styles.
+- A **Layout Presets Engine**. ( WIP )
+- Some **Docking Helpers**. ( WIP )
 
 <details>
   <summary>MORE IMGUI WIDGETS</summary>
   <p>
-
-- Big Toggles and Buttons
-- Vertical and Horizontal Sliders
-- Range Sliders
-- Styled Knobs
-- Tree folders
-- Inactive, hidden or locked styles
-- Floating tooltip, labels and values
-- DearWidgets
-- Gradient Color Designer
-- Matrix Selectors
-- Dropdown / Combos selectors
-- Progress bars and waiting spinners
-- Files Browser
-- Curve Editors
-- Bubbles Notifier System
-- Profile Plotters
+- Dropdown / Combo index selector and names.
+- Matrix buttons to an index selector.
+- Bundled widgets like arrows linked to int params browsing.
+- Big Toggles and Buttons.
+- Vertical and Horizontal Sliders.
+- Range Sliders.
+- Styled Knobs.
+- Tree folders.
+- Inactive, hidden or locked styles.
+- Floating tooltip, labels and values.
+- DearWidgets.
+- Gradient Color Designer.
+- Progress bars and waiting spinners.
+- Files Browser.
+- Curve Editors.
+- Bubbles Notifier System.
+- Profile Plotters.
   
   </p>
   </details>
+
+[EXAMPLES SCREENSHOTS](/Examples/README.md)  
     
 ## EXAMPLE: HELLO WORLD
 
