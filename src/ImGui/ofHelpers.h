@@ -1037,5 +1037,90 @@ namespace ofxImGuiSurfing
 		return b;
 	}
 
+	//--
 
+	//TODO:
+	// Must replace a bunch of GuiManager to move it here...
+	// 
+	// A bundle of controls
+	// for a single param
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	static bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
+	{
+		string name = p.getName();
+
+		bool bReturn = false;
+
+		const auto& t = typeid(ParameterType);
+		const bool isFloat = (t == typeid(float));
+		const bool isInt = (t == typeid(int));
+
+		if (!isFloat && !isInt) {
+			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
+			return false;
+		}
+
+		//TODO:
+		//// label
+		//if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
+		//else this->AddLabelBig(p.getName(), true, true);
+
+		//// stepper
+		//bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
+		////bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
+
+		//// slider
+		//bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
+
+		// arrows
+		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
+		{
+			float step = 0;
+			if (isInt) step = 1;
+			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
+
+			//if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
+			//{
+			//	p -= step;
+			//	p = ofClamp(p, p.getMin(), p.getMax());
+			//	bReturn += true;
+			//}
+			//ImGui::SameLine();
+			//if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
+			//{
+			//	p += step;
+			//	p = ofClamp(p, p.getMin(), p.getMax());
+			//	bReturn += true;
+			//}
+		}
+		ImGui::PopButtonRepeat();
+
+		if (!bMinimized)
+		{
+			// knob
+			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
+			float w = this->getWidgetsWidth(1);
+			ImGuiKnobFlags flags = 0;
+			flags += ImGuiKnobFlags_NoInput;
+			flags += ImGuiKnobFlags_NoTitle;
+			flags += ImGuiKnobFlags_ValueTooltip;//not works
+			//flags += ImGuiKnobFlags_DragHorizontal;
+			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
+
+			//// mouse
+			//if (this->bMouseWheel) {
+			//	ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
+			//	ofxImGuiSurfing::GetMouseWheel();
+			//	ofxImGuiSurfing::AddMouseClickRightReset(p);
+			//}
+
+			// tooltip
+			this->AddTooltip(p, true, false);
+		}
+
+		return bReturn;
+	}
+
+	//----
 } // namespace ofxImGuiSurfing

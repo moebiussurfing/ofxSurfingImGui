@@ -331,12 +331,14 @@ namespace ImGuiKnobs {
 
 		switch (variant) {
 		case ImGuiKnobVariant_Tick: {
-			knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
+			knob.draw_circle(0.85, detail::GetPrimaryColorSet(), true, 32);
+			//knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
 
 			// border
 			//knob.draw_circle(0.845, detail::GetPrimaryColorSet(), false, 32);
 
-			knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetPrimaryColorSet());
+			knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetSecondaryColorSet());
+			//knob.draw_tick(0.5, 0.85, 0.08, knob.angle, detail::GetPrimaryColorSet());
 
 			//// border
 			//color_set cols{ ImColor(1,0,0,1), ImColor(0,1,1,1), ImColor(1,0,0,1) };

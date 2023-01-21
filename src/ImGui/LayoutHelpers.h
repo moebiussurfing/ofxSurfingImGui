@@ -14,29 +14,13 @@
 
 #include "ofMain.h"
 
-//#include "ofxImGui.h"
 #include "imgui.h"
 #include "imgui_internal.h"
+//#include "ofxImGui.h"
 
 #include "GuiConstants.h"
+
 #include "surfingTimers.h"
-
-//---
-
-//--
-
-//TODO:
-//// To help API memo..
-//// Can we do that and avoid to create the class functions on GuiManager?
-//#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
-//#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
-//#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
-//#define ui.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
-//#define ui.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
-//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
-//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
-//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
-
 
 //------------------
 
@@ -491,6 +475,14 @@ namespace ofxImGuiSurfing
 		ImGui::SameLine();
 	}
 
+	// Adds horizontal spacing to center a widget.
+	//--------------------------------------------------------------
+	inline void AddSpacingPad(float width = 100)
+	{
+		ImGui::Dummy(ImVec2{ width, 0 });
+		ImGui::SameLine();
+	}
+
 	//----
 
 	// Constraints Helpers
@@ -509,7 +501,7 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::SetNextWindowSizeConstraints(ImVec2(width.x, height.x), ImVec2(width.y, height.y));
 	}
-	//TODO: Notice that can be called both, they collide.
+	//TODO: Notice that can't be called both, they collide.
 	//--------------------------------------------------------------
 	inline void SetWindowContraintsWidth(float widthMin, float widthMax = -1)
 	{
@@ -596,6 +588,7 @@ namespace ofxImGuiSurfing
 
 	// Will make darker the contained 
 	// text on widgets between begin/end
+	// (kind of widget disabled) 
 	//--------------------------------------------------------------
 	inline void BeginDarkenText(bool bEnable = true)
 	{

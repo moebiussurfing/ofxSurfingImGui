@@ -78,6 +78,20 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
 		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
 	};
+
+	//--
+
+	//TODO:
+	//// To help API memo..
+	//// Can we do that and avoid to create the class functions on GuiManager?
+	//#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
+	//#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
+	//#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
+	//#define ui.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
+	//#define ui.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
+	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
+	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
+	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
 }
 
 //--------
@@ -690,9 +704,17 @@ public:
 
 	// More Widgets
 
-
 	// A bundle of controls
 	// for a single param
+	
+	////TODO: move to ofHelpers.h (#1049) 
+	////--------------------------------------------------------------
+	//template<typename ParameterType>
+	//bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
+	//{
+	//	ofxImGuiSurfing::AddComboBundle(p, bMinimized);
+	//}
+
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
@@ -771,6 +793,8 @@ public:
 	}
 
 	//----
+
+	//TODO: move to ofHelpers.h
 
 	// Combo List. 
 
@@ -1096,7 +1120,7 @@ public:
 
 	//----
 
-	// MULTISIZE LABELS
+	// Multi size Labels
 
 	// Text with optional Uppercasing and Spacing
 
@@ -1162,6 +1186,8 @@ public:
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
+
+	//--
 
 	//--------------------------------------------------------------
 	void AddLinkUrlButton(string label, string url, bool bBlink = false)
@@ -1439,12 +1465,12 @@ private:
 	// ImGui Instance/Context
 
 	// We have two mode for instantiate ImGui
-	
+
 	// A. ImGui is inside the add-on
-	ofxImGui::Gui gui; 
-	
+	ofxImGui::Gui gui;
+
 	// B. To be used when ImGui is passed by reference in the parent scope (ofApp)
-	ofxImGui::Gui* guiPtr = NULL; 
+	ofxImGui::Gui* guiPtr = NULL;
 
 	//--
 
@@ -1539,9 +1565,9 @@ public:
 	void EndWindow();
 
 	//----
-	 
+
 	// Tree / Folders Helpers
-	 
+
 	//TODO: could improve by doing open state handled by imgui.ini. Now is forced.
 	//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	//--------------------------------------------------------------
@@ -1608,7 +1634,7 @@ public:
 	//--------------------------------------------------------------
 	inline void BeginBlinkFrame(bool bBlink = true)
 	{
-		ofxImGuiSurfing::BeginBlinkFrame(bBlink );
+		ofxImGuiSurfing::BeginBlinkFrame(bBlink);
 	}
 	//--------------------------------------------------------------
 	inline void EndBlinkFrame(bool bBlink = true)
@@ -1741,7 +1767,7 @@ public:
 	void setImGuiDocking(bool b) { setDocking(b); }
 	// Must call before setup
 
-	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; } 
+	void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; }
 	// Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 
 	void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
@@ -1930,9 +1956,9 @@ public:
 	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 
 private:
-	
+
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
-	 
+
 	//--
 
 public:
@@ -2040,22 +2066,22 @@ public:
 	void AddToLog(string text, int tag = -1)
 	{
 		log.Add(text, tag);
-	}	
+	}
 
 	//----
 
 	// Common Widgets populate
-	 
+
 	// Some simple alias and helpers
 	// to populate internal params,
 	// to speed up common usage:
-	 
+
 	// Minimize state
 	//--------------------------------------------------------------
 	void AddMinimizerToggle(bool bSeparated = true)
 	{
 		this->Add(this->bMinimize, OFX_IM_TOGGLE_ROUNDED);
-		if(bSeparated)this->AddSpacingSeparated();
+		if (bSeparated)this->AddSpacingSeparated();
 	}
 	bool isMinimized() const { return bMinimize.get(); }
 	bool isMaximized() const { return !bMinimize.get(); }
@@ -2080,12 +2106,12 @@ public:
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 
-		if(bSeparated) this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 		else this->AddSpacing();
 	}
 
 	//-
-	
+
 	//--------------------------------------------------------------
 	void AddLogToggle(bool bSeparated = true)
 	{

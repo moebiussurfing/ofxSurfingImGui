@@ -9,8 +9,6 @@
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
-
-#include "GuiConstants.h"
 #include "GuiUniqueNames.h"
 
 //-
@@ -1083,7 +1081,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_TOGGLE_ROUNDED_MINI:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
-						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.15f * _hh, 1.15f * (2 / 3.f) * _hh), true);
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.15f * _hh, 1.15f * (2 / 3.f) * _hh), false);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
@@ -1250,7 +1248,6 @@ namespace ofxImGuiSurfing
 				ofParameter<float> p = ap.cast<float>();
 
 				auto& tmpRef = p.get();
-				//auto tmpRef = p.get();
 
 				uniqueName.push();
 				{
@@ -1657,10 +1654,19 @@ namespace ofxImGuiSurfing
 
 					//---- 
 
-					//TODO:
-					// Populate many widgets for one single parameter variable
+					// Populate many widgets 
+					// for one single parameter variable.
+					// to allow fine tune or different workflow.
+
 					case OFX_IM_COMBO_MULTI:
 					{
+						//TODO:
+						// Replace for the new one
+						//ofxImGuiSurfing::AddComboBundle(p);
+												
+						//TODO:
+						// too ugly
+						// LEGACY
 						float pad = ImGui::GetStyle().FramePadding.x;
 
 						bReturn |= (ofxImGuiSurfing::AddDragFloatSlider(p));
@@ -1683,6 +1689,7 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+						
 					}
 					break;
 

@@ -4,7 +4,8 @@
 #include "ofMain.h"
 #include "ofxImGui.h" 
 
-//TODO: enabled (commented) to enforce unique names engine...
+//TODO: 
+// enabled (commented) to enforce unique names engine...
 //#define DISABLE_ID_PUSH_POP
 
 namespace ofxImGuiSurfing

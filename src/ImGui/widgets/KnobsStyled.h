@@ -1,11 +1,3 @@
-/*
-
-	TODO:
-	add double click to reset.
-
-*/
-
-//--
 
 #pragma once
 
@@ -15,10 +7,11 @@
 #include "imgui_internal.h"
 #include "GuiConstants.h"
 
-#include "imgui-knobs.h" // All the magic is here!
+// All the magic is here!
+// Code from https://github.com/altschuler/imgui-knobs
+#include "imgui-knobs.h" 
 
 using namespace ImGui;
-
 
 //#define SPEED_RATIO 250
 

@@ -11,17 +11,20 @@
 
 //----
 
-// Fix weird behaviors when too big or too small resized windows
+// To fix weird behaviors 
+// when too big or too small resized windows
 
 #define WINDOW_WIDTH_THRESHOLD 250 
-// when window width is less than that, 
+// when a window width is less than that, 
+// we can consider that the window is too small.
 // we will use another layout pattern for some widgets.
 
-#define PADDING_COMBO 0
+#define PADDING_COMBO 0 // to fix some weird label forcing oversize window
 
 //--
 
-// Will be applied as minimum and standard window shape
+// Will be applied as minimum 
+// and standard window shape
 #define PANEL_WIDGETS_WIDTH 250
 #define PANEL_WIDGETS_HEIGHT 100
 #define PANEL_WIDGETS_WIDTH_MIN 200
@@ -34,7 +37,9 @@
 //--
 
 // DEPRECATED
-// Some absolute sizes are deprecated! now we use sizes relatives to the ImGui theme
+/*
+// Some absolute sizes are deprecated! 
+// Now we use sizes relatives to the ImGui theme
 #define BUTTON_BIG_HEIGHT 50 
 #define BUTTON_COLOR_SIZE 40
 #define BUTTON_SLIM_HEIGHT2 20
@@ -46,14 +51,16 @@
 #define WIDGET_LABEL_WIDTH 120
 
 //TODO:
-#define WIDGET_PARAM_PADDING 0 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 40 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 120 // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+#define WIDGET_PARAM_PADDING 0 
+// text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//#define WIDGET_PARAM_PADDING 40 
+// // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
+//#define WIDGET_PARAM_PADDING 120 
+// text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
 
 #define PADDING_PANELS 2 // space between some widgets or panels
 #define PADDING_WIDGETS 2 // space between some widgets or panels
-
-#define TEXT_INACTIVE_ALPHA 0.30f // for use on toggle buttons
+*/
 
 //----
 
@@ -104,13 +111,14 @@
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
 // Constraint some window minimal shape sizes.
 
-#define DEFAULT_AMOUNT_PRESETS 4
+#define DEFAULT_AMOUNT_PRESETS 4 // Layout Presets Engine
 
 //TODO:
 // Testing central view-port
 //#define FIXING_DOCKING		// Need to fix yet
 #define FIXING_DRAW_VIEWPORT	// To debug free space
 
+// DEPRECATED
 // Font sizes
 #define IM_FONT_DEFAULT 0
 #define IM_FONT_BIG 1
@@ -119,12 +127,14 @@
 
 //--
 
+#define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
+
 #define BLINK_MIN 0.2f 
 #define BLINK_MAX 0.5f 
 
 #define FACTOR_DARKEN 0.2f 
 
-//--
+//----
 
 namespace ofxImGuiSurfing
 {
@@ -233,13 +243,15 @@ namespace ofxImGuiSurfing
 		// Rounded
 
 		OFX_IM_TOGGLE_ROUNDED,
+		OFX_IM_TOGGLE_ROUNDED_MINI_XS,//TODO:
 		OFX_IM_TOGGLE_ROUNDED_MINI,
 		OFX_IM_TOGGLE_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
 
-		// LEGACY. removed 'button' word
+		// LEGACY. Now we removed 'button' word
 		OFX_IM_TOGGLE_BUTTON_ROUNDED, // same size than small.
+		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI_XS,//TODO:
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL,
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM,
@@ -311,7 +323,9 @@ namespace ofxImGuiSurfing
 		//--
 
 		OFX_IM_COMBO_MULTI,
-		//TODO: multiple controls for fine tweak:
+		
+		//TODO: 
+		// multiple controls for fine tweak:
 		//slider + drag + stepper
 		/*
 		// A bundle of controls
@@ -431,7 +445,8 @@ namespace ofxImGuiSurfing
 
 	// Flags
 
-	// Add a new flag to handle labels, active or tool tip NEW features
+	// Add a new flag to handle labels, 
+	// active or tool tip NEW features
 	typedef int SurfingGuiFlags;
 	enum SurfingGuiFlags_
 	{
@@ -490,7 +505,7 @@ namespace ofxImGuiSurfing
 	// Some macro sugar to help fix how sliders force auto resize the panel widths.
 	// It's a 'rare behavior' that I am trying to correct doing this.
 
-	//-
+	//--
 
 	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
 	// Comment this line to use a workaround 
@@ -558,6 +573,7 @@ namespace ofxImGuiSurfing
 	//--
 
 #define TEXT_LABEL_TO_RESIZE "----------" 
+
 	//TODO:
 	// This is a 10 chars string that we will use as default label width, to name widgets.
 	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
