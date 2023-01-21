@@ -15,9 +15,8 @@
 		highlight last message
 
 		improve implemented filter performance.
-		could be a little slow bc it handles strings.
+		could be a little slow bc it handles strings instead of const chars.
 		for some situations we should replace by:
-
 		filter search from ImGui Demo
 		https://github.com/ocornut/imgui/issues/300
 		Better and newer from the ImGui Demo:
@@ -60,7 +59,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		SurfingLog()
+		SurfingLog::SurfingLog()
 		{
 			// Unlimited mode
 			this->clearUnlimited();
@@ -79,7 +78,7 @@ namespace ofxImGuiSurfing
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
 
-		~SurfingLog()
+		SurfingLog::~SurfingLog()
 		{
 			this->clearUnlimited();
 			this->clearBuffered();
@@ -230,7 +229,7 @@ namespace ofxImGuiSurfing
 
 			// Some useful sizes
 			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
-			float _hb = ofxImGuiSurfing::getWidgetsHeightUnit() * 1.5f;
+			float _hb = _hu * 1.5f;
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 			float _spx = ofxImGuiSurfing::getWidgetsSpacingX();
@@ -411,6 +410,7 @@ namespace ofxImGuiSurfing
 
 					//--
 
+					// Move to always visible top zone
 					//// Filter
 					//{
 					//	ofxImGuiSurfing::AddBigToggle(bFilter, wWidgets, _hu, true, true);
@@ -500,9 +500,9 @@ namespace ofxImGuiSurfing
 	private:
 
 		// columns formatting
-		const int maxTagLength = 8; // first or tag column width. to make tags right aligned.
+		int maxTagLength = 8; // first column or tag width. to make tags right aligned.
 		const string strSpacer = "   "; // space between tags column and the second column with the message .
-		const string strSpacer2 = " ";//not required bc alignment adds some starting spaces
+		const string strSpacer2 = " "; // not required bc alignment adds some starting spaces
 
 	private:
 
@@ -655,6 +655,13 @@ namespace ofxImGuiSurfing
 		// add custom tags passing name and color
 		void AddTag(tagData tag)
 		{
+			// if tag is bigger in chars than the default tags adapt max size (8 chars by default)
+			if (tag.name.size() > maxTagLength)
+			{ 
+				maxTagLength = tag.name.size();
+				buildTagsDefault();
+			}
+
 			////TODO:
 			//// to make right aligned
 			//const int maxTagLength = 10;

@@ -243,7 +243,7 @@ namespace ofxImGuiSurfing
 
 		// Update styles on runtime
 		//private:
-		//// Legacy api
+		//// LEGACY api
 		////--------------------------------------------------------------
 		//void UpdateStyle(ofAbstractParameter& aparam, SurfingGuiTypes type = OFX_IM_DEFAULT, bool bSameLine = false, int amtPerRow = 1, int spacing = -1)
 		//{
@@ -1081,7 +1081,7 @@ namespace ofxImGuiSurfing
 						// Rounded Toggles
 
 					case OFX_IM_TOGGLE_ROUNDED_MINI:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI://Legacy
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.15f * _hh, 1.15f * (2 / 3.f) * _hh), true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1089,7 +1089,7 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE_ROUNDED_SMALL:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL://Legacy
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.35f * _hh, 1.35f * (2 / 3.f) * _hh));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1097,7 +1097,7 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE_ROUNDED:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED://Legacy
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1105,7 +1105,7 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM://Legacy
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _hh, 2 * (2 / 3.f) * _hh));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1113,7 +1113,7 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE_ROUNDED_BIG:
-					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG://Legacy
+					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
 						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2.5f * _hh, 2.5f * (2 / 3.f) * _hh));
 						//bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _hh, 2 * _hh));
@@ -2040,7 +2040,7 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// only implemented for floats
 
-					// Legacy
+					// LEGACY
 
 					// Knob
 

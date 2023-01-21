@@ -41,27 +41,31 @@ namespace ofxImGuiSurfing
 	enum SurfingGuiMode
 	{
 		IM_GUI_MODE_UNKNOWN = 0,
-		// Could be un defied when using LEGACY API maybe.
+		// Could be undefined when using LEGACY API maybe.
 
 		IM_GUI_MODE_INSTANTIATED,
-		// To include the ImGui context and requiring main begin/end.
+		// To include the ImGui context 
+		// and requiring main begin/end.
 
 		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING,
 		// Allows docking between multiple instances.
 
 		IM_GUI_MODE_INSTANTIATED_SINGLE,
-		// To include the ImGui context and requiring begin/end but a single ImGui instance, no other add-ons.
+		// To include the ImGui context and requiring begin/end 
+		// but a single ImGui instance, no other add-ons.
 
 		//IM_GUI_MODE_SPECIAL_WINDOWS, 
 		// // TODO: could simplify API, bc it's duplicated from 
 		//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 		IM_GUI_MODE_REFERENCED,
-		// TODO: -> To receive the parent (ofApp scope) ImGui object as reference.
+		// TODO: -> To receive the parent (ofApp scope) 
+		// ImGui object as reference.
 
 		IM_GUI_MODE_NOT_INSTANTIATED
-		// To render windows and widgets only. Inside an external ImGui context begin/end (newFrame).
+		// To render windows and widgets only. 
+		// Inside an external ImGui context begin/end (newFrame).
 	};
 
 	//--
@@ -2036,6 +2040,63 @@ public:
 	void AddToLog(string text, int tag = -1)
 	{
 		log.Add(text, tag);
+	}	
+
+	//----
+
+	// Common Widgets populate
+	 
+	// Some simple alias and helpers
+	// to populate internal params,
+	// to speed up common usage:
+	 
+	// Minimize state
+	//--------------------------------------------------------------
+	void AddMinimizerToggle(bool bSeparated = true)
+	{
+		this->Add(this->bMinimize, OFX_IM_TOGGLE_ROUNDED);
+		if(bSeparated)this->AddSpacingSeparated();
+	}
+	bool isMinimized() const { return bMinimize.get(); }
+	bool isMaximized() const { return !bMinimize.get(); }
+
+	//-
+
+	//TODO: add another mini xs rounded toggle
+	//--------------------------------------------------------------
+	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false)
+	{
+		// Right aligned
+		 
+		//float ht = 0.8f * _hu;
+		//float wt = 1.15f * ht;
+		//// Align right
+		//ofxImGuiSurfing::AddSpacingRightAlign(1.15f * _hu);//mini
+		////ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
+		//ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
+
+		float hu = this->getWidgetsHeightUnit();
+		float ht = 0.8f * hu;
+		float wt = 1.15f * ht;
+		float w = 1.15f * hu + 2;
+
+		ofxImGuiSurfing::AddSpacingRightAlign(w);
+		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true);
+
+		//float offset = 8;
+		//float _w = 1.15f * _h + offset;//weird offset
+		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
+
+		if(bSeparated) this->AddSpacingSeparated();
+	}
+
+	//-
+	
+	//--------------------------------------------------------------
+	void AddLogToggle(bool bSeparated = true)
+	{
+		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	//----
