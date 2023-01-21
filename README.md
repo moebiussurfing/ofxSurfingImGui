@@ -29,14 +29,14 @@ for **openFrameworks** projects.
   - **Speed-Up** responsive layout.
   - Simplify **workflow**.
 - 4 active **font sizes**.
-- Extra **Mouse Control** 
+- Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
   - Right-click:
     - To reset to param center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- **Themes**.
+- **Themes** and editor.
 - Windows organizer, aligner and linker.
 - **Log System** with custom tags.
 - **Notifier System**. ( WIP )
@@ -50,7 +50,6 @@ for **openFrameworks** projects.
   <p>
 
 - Dropdown / Combo index selector and names.
-
 - Matrix buttons to an index selector.
 
 - Bundled widgets like arrows linked to int params browsing. 
