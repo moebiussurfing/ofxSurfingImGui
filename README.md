@@ -11,6 +11,8 @@ for **openFrameworks** projects.
 
 ( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
 
+<br>
+
 # FEATURES
 
 - Easy **Setup** and **Layout**.
@@ -123,6 +125,8 @@ void ofApp::draw()
 }
 ```
 
+<br>
+
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
@@ -165,7 +169,6 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     * GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official Release: [0.11.2](https://openframeworks.cc/download/)
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
-
 
 <br>
 
