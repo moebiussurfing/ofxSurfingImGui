@@ -28,6 +28,7 @@ for **openFrameworks** projects.
   - Help on **windows** and **widgets**.
   - **Speed-Up** responsive layout.
   - Simplify **workflow**.
+  - Internal params and persistent settings.
 - 4 active **font sizes**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
@@ -51,13 +52,9 @@ for **openFrameworks** projects.
 
 - Dropdown / Combo index selector and names.
 - Matrix buttons to an index selector.
-
 - Bundled widgets like arrows linked to int params browsing. 
-
-- Big Toggles and Buttons.  
-
-- Vertical and Horizontal Sliders.  
-
+- Big Toggles and Buttons.
+- Vertical and Horizontal Sliders.
 - Range Sliders. 
 
 - Styled Knobs.  
