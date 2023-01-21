@@ -7,6 +7,9 @@ for **openFrameworks** projects.
 
 </h1>
 
+<br>
+<br>
+
 ## WORK IN PROGRESS!
 
 ( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
@@ -167,7 +170,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 
 - **Windows 10** / **VS 2022** / 
     * GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official Release: [0.11.2](https://openframeworks.cc/download/)
+    * Last official release [0.11.2](https://openframeworks.cc/download/)
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
 <br>
