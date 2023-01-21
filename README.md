@@ -140,7 +140,7 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[assets.zip](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/assets.zip) (in the add-on root path) are mainly  font files to put into each project `OF_APP/bin/data/`.  
+[assets.zip](assets.zip) (Located in the add-on root path) are mainly font files to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
@@ -176,7 +176,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 
 - **Windows 10** / **VS 2022** / 
     * GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [0.11.2](https://openframeworks.cc/download/)
+    * Last official release [0.11.2](https://openframeworks.cc/download/).
 - **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
 
 <br>
