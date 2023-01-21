@@ -38,7 +38,8 @@
 #include "ofxImGui.h"
 #include "imgui_stdlib.h"
 
-//TODO: some widget fails..
+//TODO: 
+// Some widget fails..
 // so we can't not use some methods... 
 // like pushing font styles...
 //#include "ofxSurfingImGui.h"
@@ -241,7 +242,8 @@ namespace ofxImGuiSurfing
 			float wt = 1.15f * ht;
 
 			// Align right
-			ofxImGuiSurfing::AddSpacingRightAlign(wt);
+			ofxImGuiSurfing::AddSpacingRightAlign(1.15f * _hu);//mini
+			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
 			ofxImGuiSurfing::AddSpacing();

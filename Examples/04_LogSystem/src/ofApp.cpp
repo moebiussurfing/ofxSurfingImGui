@@ -177,7 +177,7 @@ void ofApp::updateLog()
 	if (f % m == 0)
 	{
 		auto t = ofGetElapsedTimef();
-		progress3 = ofMap(f % m, 0, m, 0, 1, true);
+		progress3 = ofMap(f % m, 0.4, 1, 0, 1, true);
 		//progress3 = ofMap(f % m, 0, m, 0, 1, true);
 		if (ofNoise(t) < 0.4f) return; // skip one third
 

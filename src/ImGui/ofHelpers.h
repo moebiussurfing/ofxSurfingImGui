@@ -52,7 +52,7 @@ namespace ofxImGuiSurfing
 		ImGui::TreePop();
 	}
 
-	//----
+	//---
 
 	// Blink Helpers
 

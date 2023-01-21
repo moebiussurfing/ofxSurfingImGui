@@ -3,7 +3,7 @@
 
 /*
 
-	This class have widgets size constants 
+	This class have widgets size constants
 	and methods to get the window panel sizes,
 	for layout helping, spacing and separators helpers,
 	windows constraints,
@@ -156,7 +156,7 @@ namespace ofxImGuiSurfing
 
 	// Kind of Legacy
 	// Will be DEPRECATED with the new API V2.
-	
+
 	// Updates all the common useful sizes in one line.
 	// We will update the sizes on any gui drawing point, 
 	// like inside a new folder, sub-folder that could be indented 
@@ -562,6 +562,15 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2{ wwidget,0 });
 		ImGui::SameLine();
 	}
+	
+	//--
+
+	////TODO:
+	//// PushItemWidth(n); 
+	//// with n being a negative number.
+	//// -n is the distance you want to be available for labels.
+	//float w = ImGui::GetWindowContentRegionWidth() - ImGui::CalcItemWidth();
+	//ImGui::PushItemWidth(-w);
 
 	//----
 
