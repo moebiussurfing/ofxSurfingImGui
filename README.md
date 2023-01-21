@@ -72,7 +72,9 @@ for **openFrameworks** projects.
   </details>
 
 <br>
+
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
+
 <br>
     
 ## EXAMPLE: HELLO WORLD
