@@ -2067,24 +2067,15 @@ public:
 	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false)
 	{
 		// Right aligned
-		 
-		//float ht = 0.8f * _hu;
-		//float wt = 1.15f * ht;
-		//// Align right
-		//ofxImGuiSurfing::AddSpacingRightAlign(1.15f * _hu);//mini
-		////ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
-		//ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
 		float hu = this->getWidgetsHeightUnit();
 		float ht = 0.8f * hu;
 		float wt = 1.15f * ht;
-		float w = 1.15f * hu + 2;
+		float w = 1.15f * hu + 2;//weird offset
 
 		ofxImGuiSurfing::AddSpacingRightAlign(w);
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true);
 
-		//float offset = 8;
-		//float _w = 1.15f * _h + offset;//weird offset
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 		if(bSeparated) this->AddSpacingSeparated();
