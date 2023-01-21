@@ -19,12 +19,13 @@ for **openFrameworks** projects.
 
 # FEATURES
 
-- Easy **Setup**.
+- Easy **setup**.
 - **Multiple instances** around your classes and **ofxAddons**.
 - **ofParameter helpers**:
   - Many RAW **DearImGui widgets** ported.
   - Added custom useful widgets.
 - Useful **API methods** and **snippets**: 
+  - Help on **windows** and **widgets**.
   - **Speed-Up** responsive layout.
   - Simplify **workflow**.
 - 4 active **font sizes**.
@@ -35,11 +36,12 @@ for **openFrameworks** projects.
     - To reset to param center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- Cool **Themes**.
-- Powerful **Log System** with custom tags.
-- Floating **Notifier System**. ( WIP )
-- A **Layout Presets Engine**. ( WIP )
-- Some **Docking Helpers**. ( WIP )
+- **Themes**.
+- Windows organizer, aligner and linker.
+- **Log System** with custom tags.
+- **Notifier System**. ( WIP )
+- **Layout Presets Engine**. ( WIP )
+- **Docking Helpers**. ( WIP )
 
 <br>
 
