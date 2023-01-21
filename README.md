@@ -19,13 +19,15 @@ for **openFrameworks** projects.
 # FEATURES
 
 - Easy **Setup** and **Layout**.
-- **Multiple instances** around classes and **ofxAddons**.
-- **ofParameter Helpers**.
-  - Many RAW **ImGui Widgets** ported to **oF ofParameters**.
+- **Multiple instances** around your classes and **ofxAddons**.
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** ported.
   - Added custom useful widgets.
-- Useful methods and **Snippets** to **Speed-Up layout** and simple **Workflow**.
+- Useful API methods and **Snippets**: 
+  - **Speed-Up** layout.
+  - Simplify **workflow**.
 - Extra **Mouse Control** 
-  - Wheel for Tweaking. _+Ctrl_ to Finetune.
+  - Wheel for tweaking. _+Ctrl_ to finetune.
   - Right button to reset to params center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
@@ -139,6 +141,8 @@ void ofApp::draw()
 
 [assets.zip](https://github.com/moebiussurfing/ofxSurfingImGui/blob/a2eb866717cb829cea049fa3c4c0fd68da6ec1df/assets.zip) (in the add-on root path) are mainly  font files to put into each project `OF_APP/bin/data/`.  
 
+<br>
+
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
 
@@ -165,6 +169,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 
+<br>
 
 ## CURRENT SYSTEMS
 
