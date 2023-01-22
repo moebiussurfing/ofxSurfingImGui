@@ -74,10 +74,9 @@ for **openFrameworks** projects.
   </details>
 
 <br>
+<br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
-
-<br>
     
 ## EXAMPLE: HELLO WORLD
 
@@ -134,7 +133,7 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[assets.zip](assets.zip) Located in the add-on root path. Mainly font files to put into each project `OF_APP/bin/data/`.  
+* [assets.zip](assets.zip): located in the add-on root path. Mainly font files to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
@@ -161,6 +160,8 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     
     </p>
     </details>
+
+<br>
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 
