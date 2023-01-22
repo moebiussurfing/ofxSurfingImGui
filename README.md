@@ -14,6 +14,7 @@ for **openFrameworks** projects.
 ## WORK IN PROGRESS!
 
 <br>
+<br>
 
 ( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
 
@@ -74,10 +75,11 @@ for **openFrameworks** projects.
   </details>
 
 <br>
-<br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
-    
+ 
+<br>
+  
 ## EXAMPLE: HELLO WORLD
 
 <br>
