@@ -75,7 +75,7 @@ for **openFrameworks** projects.
   </details>
 
 <br>
-
+<br>
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
  
 <br>
