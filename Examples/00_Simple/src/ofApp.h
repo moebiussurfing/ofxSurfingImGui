@@ -13,7 +13,6 @@ public:
 	void draw();
 	void keyPressed(int key);
 
-	// Parameters
 	ofParameterGroup params;
 	ofParameter<bool> bEnable1;
 	ofParameter<bool> bEnable2;

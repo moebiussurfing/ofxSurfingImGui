@@ -4,6 +4,7 @@
 void ofApp::setup()
 {
 	// Parameters
+
 	params.setName("paramsGroup"); // main container
 	params2.setName("paramsGroup2"); // nested
 	params3.setName("paramsGroup3"); // nested
@@ -28,6 +29,8 @@ void ofApp::setup()
 	params.add(params2);
 
 	//--
+	
+	// Linear to logarithmic
 
 	vIn.set("vIn", 0.5f, 0.f, 1.f);
 	vOut1.set("vOut1", 0.5f, 0.f, 1.f);
@@ -90,6 +93,7 @@ void ofApp::draw()
 
 			//--
 
+			// Linear to logarithmic
 			ui.AddLabelBig("LINEAR TO LOGARITHMIC");
 			ui.Add(vIn, OFX_IM_HSLIDER_SMALL);
 			ui.AddTooltip("linear");

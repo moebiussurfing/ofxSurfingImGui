@@ -2492,16 +2492,21 @@ namespace ofxImGuiSurfing
 			bool bMustCloseTree = false; //TODO: -> add new
 			bool bMustDisableIndenting = false;
 
+			// workflow
 			bool bSkipNoSerializable = false;
-			//TODO: add to the ui object! to allow more customization.
-			//we could auto hide param widgets if they are not serializable!
+			//TODO: add to the ui object! 
+			// to allow more customization.
+			// we could auto hide param widgets 
+			// if they are not serializable!
 
 			// Handle names/pushID's
 			// This is the root/first group
-			// Level is about how many deep on nested groups we are
+			// Level is about how many deep 
+			// on nested groups we are
 
 			//TODO:
-			// -> Must remove all return calls inside below to not break pushIDs if we want to use ID's!
+			// -> Must remove all return calls inside 
+			// below to not break pushIDs if we want to use ID's!
 
 			ImGui::PushID(("##GROUP_" + group.getName()).c_str());
 
@@ -2633,13 +2638,13 @@ namespace ofxImGuiSurfing
 					//--------------------------------------------------------------
 
 					auto& pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
-					//auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
 
 					// Will detect nested groups recursively
 					if (pGroup)
 					{
 						refreshLayout(); // ?
-						uniqueName.pushGroup(); //TODO: should be in another place ?
+						uniqueName.pushGroup(); 
+						//TODO: should be in another place ?
 
 						// -> Unique id for possible name repeated params inside many groups.
 						std::string ss = "##" + ofToString(uniqueName.getLevel()) + pGroup->getName();
@@ -2787,11 +2792,13 @@ namespace ofxImGuiSurfing
 
 					//--
 
+					//TODO:
 					//// Skip params inside the group if is not opened or collapsed.
 					//bool binclude = false;
 					////binclude = (uniqueName.isOpen(uniqueName.getLevel());
 					//binclude = (uniqueName.getLevel() == 0 && bIsOpen) || (uniqueName.getLevel() != 0);
 					//if (binclude)
+
 					{
 						//--
 
@@ -2866,21 +2873,6 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
-						//if (parameterOfFloatColor)
-						//{
-						//	AddParameter(*parameterOfFloatColor);
-						//	continue;
-						//}
-						//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
-						//if (parameterOfColor)
-						//{
-						//	AddParameter(*parameterOfColor);
-						//	continue;
-						//}
-
-						//--
-
 						// Float
 
 						auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
@@ -2925,7 +2917,7 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// BOOL
+						// Bool
 
 						auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
 						if (pBool)
@@ -2952,7 +2944,7 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// VOID
+						// Void
 
 						auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
 						if (pVoid)
@@ -2971,7 +2963,7 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// STRING
+						// String
 
 						auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
 						if (pString)
@@ -3040,7 +3032,11 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
+						// If we arrive here, 
+						// the param type is unknown 
+						// and will be ignored, 
+						// not rendered on the panel.
+
 						if (p->getName() == "" && p->getName() == " ")
 							ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Could not create GUI element for parameter " << p->getName() << "'";
 					}
@@ -3058,7 +3054,8 @@ namespace ofxImGuiSurfing
 					{
 						if (0) {}
 
-						else if (typeGroup == SurfingGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
+						else if (
+							typeGroup == SurfingGuiTypesGroups::OFX_IM_GROUP_DEFAULT ||
 							typeGroup == SurfingGuiTypesGroups::OFX_IM_GROUP_COLLAPSED)
 						{
 							// Do not requires closing/pop
@@ -3095,7 +3092,8 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// Prophylactic. Maybe not required...
+			// Prophylactic. 
+			// Maybe not required...
 			this->refreshLayout();
 		}
 	};
