@@ -2119,6 +2119,13 @@ public:
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
+	//--------------------------------------------------------------
+	void AddAutoResizeToggle(bool bSeparated = true)
+	{
+		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	}
+
 	//----
 
 	// Advanced Window

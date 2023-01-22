@@ -382,23 +382,23 @@ namespace ofxImGuiSurfing
 
 		////TODO: GetUniqueName?
 		////--------------------------------------------------------------
-		//bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars = 255, bool multiline = false)
+		//bool AddParameter(ofParameter<std::string>& p, size_t maxChars = 255, bool multiline = false)
 		//{
-		//	auto tmpRef = parameter.get();
+		//	auto tmpRef = p.get();
 		//	char * cString = new char[maxChars];
 		//	strcpy(cString, tmpRef.c_str());
 		//	auto result = false;
 		//	if (multiline)
 		//	{
-		//		if (ImGui::InputTextMultiline(GetUniqueName(parameter), cString, maxChars))
+		//		if (ImGui::InputTextMultiline(GetUniqueName(p), cString, maxChars))
 		//		{
-		//			parameter.set(cString);
+		//			p.set(cString);
 		//			result = true;
 		//		}
 		//	}
-		//	else if (ImGui::InputText(GetUniqueName(parameter), cString, maxChars))
+		//	else if (ImGui::InputText(GetUniqueName(p), cString, maxChars))
 		//	{
-		//		parameter.set(cString);
+		//		p.set(cString);
 		//		result = true;
 		//	}
 		//	delete[] cString;
@@ -2504,6 +2504,7 @@ namespace ofxImGuiSurfing
 			// -> Must remove all return calls inside below to not break pushIDs if we want to use ID's!
 
 			ImGui::PushID(("##GROUP_" + group.getName()).c_str());
+
 			{
 				// A. 
 				// This is the root parent group/header:
@@ -2574,7 +2575,7 @@ namespace ofxImGuiSurfing
 							//float hratio = 1.0; // 1. is the same height of items (considerates that font size is 14)
 							//int h = 14;
 							//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-							//int hhh = parameterGroup->size() * hratio * hh;
+							//int hhh = pGroup->size() * hratio * hh;
 
 							// B. Height hardcoded
 							int hhh = HEIGHT_SCROLL_GROUP;
@@ -2622,8 +2623,7 @@ namespace ofxImGuiSurfing
 				// Here, this is not the root/first group.
 				// We go populate the params widgets
 
-				for (auto& parameter : group)
-					//for (auto parameter : group)
+				for (auto& p : group)
 				{
 					// 5.1 Group Parameter
 
@@ -2632,27 +2632,27 @@ namespace ofxImGuiSurfing
 					// This will not be the Group from the 0'th/root/parent level.
 					//--------------------------------------------------------------
 
-					auto& parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
-					//auto parameterGroup = std::dynamic_pointer_cast<ofParameterGroup>(parameter);
+					auto& pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
+					//auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
 
 					// Will detect nested groups recursively
-					if (parameterGroup)
+					if (pGroup)
 					{
 						refreshLayout(); // ?
 						uniqueName.pushGroup(); //TODO: should be in another place ?
 
 						// -> Unique id for possible name repeated params inside many groups.
-						std::string ss = "##" + ofToString(uniqueName.getLevel()) + parameterGroup->getName();
+						std::string ss = "##" + ofToString(uniqueName.getLevel()) + pGroup->getName();
 						ImGui::PushID(ss.c_str());
 						{
-							auto c = getStyleGroup(*parameterGroup);
+							auto c = getStyleGroup(*pGroup);
 							if (c.name != "-1") // the overwrite
 							{
 								typeGroup = SurfingGuiTypesGroups(c.type); // overwrite main type
 								flags = c.flags;
 							}
 
-							std::string name = parameterGroup->getName();
+							std::string name = pGroup->getName();
 
 							//----
 
@@ -2661,13 +2661,13 @@ namespace ofxImGuiSurfing
 							// Hidden
 							//else if (typeGroup == SurfingGuiTypesGroups::OFX_IM_GROUP_HIDDE_ALL_HEADERS)
 							//{
-							//	AddGroup(*parameterGroup, flags, typeGroup);
+							//	AddGroup(*pGroup, flags, typeGroup);
 							//}
 							//else if (typeGroup == SurfingGuiTypesGroups::OFX_IM_GROUP_ONLY_FIRST_HEADER)
 							//{
 							//	ImGui::Indent();
-							//	bool b = ImGui::CollapsingHeader(parameterGroup->getName().c_str(), flags);
-							//	if (b) AddGroup(*parameterGroup, flags, typeGroup);
+							//	bool b = ImGui::CollapsingHeader(pGroup->getName().c_str(), flags);
+							//	if (b) AddGroup(*pGroup, flags, typeGroup);
 							//	ImGui::Unindent();
 							//}
 
@@ -2682,7 +2682,7 @@ namespace ofxImGuiSurfing
 								{
 									refreshLayout(); // ?
 
-									AddGroup(*parameterGroup, flags, typeGroup);
+									AddGroup(*pGroup, flags, typeGroup);
 								}
 								if (!bMustDisableIndenting) ImGui::Unindent();
 							}
@@ -2692,7 +2692,7 @@ namespace ofxImGuiSurfing
 								ImGui::Indent();
 								refreshLayout(); // ?
 								bool b = ImGui::CollapsingHeader(name.c_str(), flags);
-								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+								if (b) AddGroup(*pGroup, flags, typeGroup);
 								ImGui::Unindent();
 							}
 
@@ -2701,7 +2701,7 @@ namespace ofxImGuiSurfing
 								ImGui::Indent();
 								refreshLayout(); // ?
 								bool b = ImGui::CollapsingHeader(name.c_str(), flags);
-								if (b) AddGroup(*parameterGroup, flags, typeGroup);
+								if (b) AddGroup(*pGroup, flags, typeGroup);
 								ImGui::Unindent();
 							}
 
@@ -2717,7 +2717,7 @@ namespace ofxImGuiSurfing
 								{
 									ImGui::Indent();
 									refreshLayout(); // ?
-									AddGroup(*parameterGroup, flags, typeGroup);
+									AddGroup(*pGroup, flags, typeGroup);
 									ImGui::Unindent();
 
 									ImGui::TreePop();
@@ -2730,7 +2730,7 @@ namespace ofxImGuiSurfing
 								{
 									ImGui::Indent();
 									refreshLayout(); // ?
-									AddGroup(*parameterGroup, flags, typeGroup);
+									AddGroup(*pGroup, flags, typeGroup);
 									ImGui::Unindent();
 
 									ImGui::TreePop();
@@ -2746,7 +2746,7 @@ namespace ofxImGuiSurfing
 								//float hratio = 1.0; // 1. is the same height of items (considerate that font size is 14)
 								//int h = 14;
 								//int hh = style.FramePadding.y + style.ItemSpacing.y + h;
-								//int hhh = parameterGroup->size() * hratio * hh;
+								//int hhh = pGroup->size() * hratio * hh;
 
 								// B. Height hardcoded
 								int hhh = HEIGHT_SCROLL_GROUP;
@@ -2759,7 +2759,7 @@ namespace ofxImGuiSurfing
 									ImGui::Indent();
 									ImGui::BeginChild(name.c_str(), ImVec2(0, hhh), false);
 									refreshLayout(true); // ?
-									AddGroup(*parameterGroup, flags, typeGroup);
+									AddGroup(*pGroup, flags, typeGroup);
 									ImGui::EndChild();
 									ImGui::Unindent();
 								}
@@ -2799,42 +2799,42 @@ namespace ofxImGuiSurfing
 
 #if OF_VERSION_MINOR >= 10
 
-						auto parameterVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(parameter);
-						if (parameterVec2f)
+						auto pVec2f = std::dynamic_pointer_cast<ofParameter<glm::vec2>>(p);
+						if (pVec2f)
 						{
-							auto c = getStyle(*parameterVec2f);
-							if (c.name != "-1") AddParameter(*parameterVec2f);//if not added style for this param
+							auto c = getStyle(*pVec2f);
+							if (c.name != "-1") AddParameter(*pVec2f);//if not added style for this param
 							else {
-								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec2f, true);
-								else AddParameter(*parameterVec2f);
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*pVec2f, true);
+								else AddParameter(*pVec2f);
 							}
 							continue;
 						}
 
 						//--
 
-						auto parameterVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(parameter);
-						if (parameterVec3f)
+						auto pVec3f = std::dynamic_pointer_cast<ofParameter<glm::vec3>>(p);
+						if (pVec3f)
 						{
-							auto c = getStyle(*parameterVec3f);
-							if (c.name == "-1") AddParameter(*parameterVec3f);
+							auto c = getStyle(*pVec3f);
+							if (c.name == "-1") AddParameter(*pVec3f);
 							else {
-								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec3f, true);
-								else AddParameter(*parameterVec3f);
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*pVec3f, true);
+								else AddParameter(*pVec3f);
 							}
 							continue;
 						}
 
 						//--
 
-						auto parameterVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(parameter);
-						if (parameterVec4f)
+						auto pVec4f = std::dynamic_pointer_cast<ofParameter<glm::vec4>>(p);
+						if (pVec4f)
 						{
-							auto c = getStyle(*parameterVec4f);
-							if (c.name != "-1") AddParameter(*parameterVec4f);
+							auto c = getStyle(*pVec4f);
+							if (c.name != "-1") AddParameter(*pVec4f);
 							else {
-								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*parameterVec4f, true);
-								else AddParameter(*parameterVec4f);
+								if (c.type == OFX_IM_MULTIDIM_SPLIT_SLIDERS) ofxImGuiSurfing::AddParameter(*pVec4f, true);
+								else AddParameter(*pVec4f);
 							}
 							continue;
 						}
@@ -2845,34 +2845,34 @@ namespace ofxImGuiSurfing
 						// Unknown types
 						// Should add styles for old ofVec...
 
-						auto parameterOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(parameter);
-						if (parameterOfVec2f)
+						auto pOfVec2f = std::dynamic_pointer_cast<ofParameter<ofVec2f>>(p);
+						if (pOfVec2f)
 						{
-							AddParameter(*parameterOfVec2f);
+							AddParameter(*pOfVec2f);
 							continue;
 						}
-						auto parameterOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(parameter);
-						if (parameterOfVec3f)
+						auto pOfVec3f = std::dynamic_pointer_cast<ofParameter<ofVec3f>>(p);
+						if (pOfVec3f)
 						{
-							AddParameter(*parameterOfVec3f);
+							AddParameter(*pOfVec3f);
 							continue;
 						}
-						auto parameterOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(parameter);
-						if (parameterOfVec4f)
+						auto pOfVec4f = std::dynamic_pointer_cast<ofParameter<ofVec4f>>(p);
+						if (pOfVec4f)
 						{
-							AddParameter(*parameterOfVec4f);
+							AddParameter(*pOfVec4f);
 							continue;
 						}
 
 						//--
 
-						//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
+						//auto parameterOfFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
 						//if (parameterOfFloatColor)
 						//{
 						//	AddParameter(*parameterOfFloatColor);
 						//	continue;
 						//}
-						//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
+						//auto parameterOfColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
 						//if (parameterOfColor)
 						//{
 						//	AddParameter(*parameterOfColor);
@@ -2881,44 +2881,44 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// FLOAT
+						// Float
 
-						auto& parameterFloat = std::dynamic_pointer_cast<ofParameter<float>>(parameter);
-						if (parameterFloat)
+						auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
+						if (pFloat)
 						{
-							auto c = getStyle(*parameterFloat);
+							auto c = getStyle(*pFloat);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// default style
 							else
 							{
-								//AddParameter(*parameterFloat);
+								//AddParameter(*pFloat);
 								// fixing to allow mouse wheel..
-								Add(*parameterFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pFloat, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
 
 						//--
 
-						// INT
+						// Int
 
-						auto& parameterInt = std::dynamic_pointer_cast<ofParameter<int>>(parameter);
-						if (parameterInt)
+						auto& pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
+						if (pInt)
 						{
-							auto c = getStyle(*parameterInt);
+							auto c = getStyle(*pInt);
 							if (c.name != "-1")
 							{
-								Add(*parameterInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
-								//AddParameter(*parameterInt);
+								//AddParameter(*pInt);
 								// fixing to allow mouse wheel..
-								Add(*parameterInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pInt, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -2927,25 +2927,25 @@ namespace ofxImGuiSurfing
 
 						// BOOL
 
-						auto& parameterBool = std::dynamic_pointer_cast<ofParameter<bool>>(parameter);
-						if (parameterBool)
+						auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
+						if (pBool)
 						{
 							//TODO:
 							if (bSkipNoSerializable)
 							{
-								if (!parameterBool->isSerializable()) continue;
+								if (!pBool->isSerializable()) continue;
 							}
 
-							auto c = getStyle(*parameterBool);
+							auto c = getStyle(*pBool);
 							if (c.name != "-1")
 							{
-								Add(*parameterBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
-								//AddParameter(*parameterBool);
+								//AddParameter(*pBool);
 								// fixing to allow mouse wheel..
-								Add(*parameterBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pBool, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -2954,17 +2954,17 @@ namespace ofxImGuiSurfing
 
 						// VOID
 
-						auto& parameterVoid = std::dynamic_pointer_cast<ofParameter<void>>(parameter);
-						if (parameterVoid)
+						auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
+						if (pVoid)
 						{
-							auto c = getStyle(*parameterVoid);
+							auto c = getStyle(*pVoid);
 							if (c.name != "-1")
 							{
-								Add(*parameterVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
-								Add(*parameterVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pVoid, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -2973,42 +2973,42 @@ namespace ofxImGuiSurfing
 
 						// STRING
 
-						auto& parameterString = std::dynamic_pointer_cast<ofParameter<std::string>>(parameter);
-						if (parameterString)
+						auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
+						if (pString)
 						{
-							auto c = getStyle(*parameterString);
+							auto c = getStyle(*pString);
 							if (c.name != "-1")
 							{
-								Add(*parameterString, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pString, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							else
 							{
 								//TODO: WIP:
-								//Add(*parameterString, OFX_IM_DEFAULT);
-								////AddParameter(*parameterString);
+								//Add(*pString, OFX_IM_DEFAULT);
+								////AddParameter(*pString);
 							}
 							continue;
 						}
 
 						//--
 
-						// FLOAT COLOR
+						// Float color
 
-						auto& parameterFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(parameter);
-						if (parameterFloatColor)
+						auto& pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
+						if (pFloatColor)
 						{
-							auto c = getStyle(*parameterFloatColor);
+							auto c = getStyle(*pFloatColor);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// Default style
 							else
 							{
-								//AddParameter(*parameterFloatColor);
+								//AddParameter(*pFloatColor);
 								// fixing to allow mouse wheel..
-								Add(*parameterFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pFloatColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 
 							}
 							continue;
@@ -3016,24 +3016,24 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// COLOR
+						// Color
 
-						auto& parameterColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(parameter);
-						if (parameterColor)
+						auto& pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
+						if (pColor)
 						{
-							auto c = getStyle(*parameterColor);
+							auto c = getStyle(*pColor);
 
 							// If the parameter widget is not added explicitly, will populate it as the default appearance
 							if (c.name != "-1")
 							{
-								Add(*parameterColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							// Default style
 							else
 							{
-								//AddParameter(*parameterColor);
+								//AddParameter(*pColor);
 								// fixing to allow mouse wheel..
-								Add(*parameterColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
+								Add(*pColor, c.type, c.amtPerRow, c.bSameLine, c.spacing);
 							}
 							continue;
 						}
@@ -3041,8 +3041,8 @@ namespace ofxImGuiSurfing
 						//--
 
 						// If we arrive here, the param type is unknown and will be ignored, not rendered on the panel.
-						if (parameter->getName() == "" && parameter->getName() == " ")
-							ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Could not create GUI element for parameter " << parameter->getName() << "'";
+						if (p->getName() == "" && p->getName() == " ")
+							ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Could not create GUI element for parameter " << p->getName() << "'";
 					}
 				}
 
@@ -3092,6 +3092,11 @@ namespace ofxImGuiSurfing
 
 			//TODO:
 			ImGui::PopID();
+
+			//--
+
+			// Prophylactic. Maybe not required...
+			this->refreshLayout();
 		}
 	};
 

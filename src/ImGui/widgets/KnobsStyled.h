@@ -1,6 +1,14 @@
 
 #pragma once
 
+/*
+
+	TODO:
+
+	- center labels. useful when big names and centered widget
+
+*/
+
 #include "ofMain.h"
 
 #include "ofxImGui.h"
@@ -8,20 +16,21 @@
 #include "GuiConstants.h"
 
 // All the magic is here!
-// Code from https://github.com/altschuler/imgui-knobs
+// Code from 
+// https://github.com/altschuler/imgui-knobs
 #include "imgui-knobs.h" 
 
 using namespace ImGui;
 
 //#define SPEED_RATIO 250
 
-//-
+//--
 
 namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	inline bool AddKnobStyled(ofParameter<ParameterType>& parameter, SurfingGuiTypes type = OFX_IM_KNOB_TICKKNOB, float size = 0, string format = "-1", SurfingGuiFlags flags = 0, float speed = 0)
+	inline bool AddKnobStyled(ofParameter<ParameterType>& p, SurfingGuiTypes type = OFX_IM_KNOB_TICKKNOB, float size = 0, string format = "-1", SurfingGuiFlags flags = 0, float speed = 0)
 	{
 		ImGuiKnobFlags _flags = 0;
 
@@ -31,8 +40,8 @@ namespace ofxImGuiSurfing
 		if (flags & SurfingGuiFlags_TooltipValue) _flags += ImGuiKnobFlags_ValueTooltip;
 		if (flags & SurfingGuiFlags_DragHorizontal) _flags += ImGuiKnobFlags_DragHorizontal;
 
-		auto tmpRef = parameter.get();
-		string n = parameter.getName();
+		auto tmpRef = p.get();
+		string n = p.getName();
 		const auto& info = typeid(ParameterType);
 
 		bool b = false;
@@ -63,7 +72,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bUnknown = true;
-			ofLogWarning("ofxSurfingImGui") << "Could not add a Styled Knob control to element " << parameter.getName() << " bc this type!";
+			ofLogWarning("ofxSurfingImGui") << "Could not add a Styled Knob control to element " << p.getName() << " bc this type!";
 
 			return false;
 		}
@@ -73,7 +82,7 @@ namespace ofxImGuiSurfing
 		//// Fix speed bug
 		//if (speed == -1)
 		//{
-		//	speed = (abs)(parameter.getMax() - parameter.getMin()) / (float)SPEED_RATIO;
+		//	speed = (abs)(p.getMax() - p.getMin()) / (float)SPEED_RATIO;
 		//}
 
 		//--
@@ -83,25 +92,25 @@ namespace ofxImGuiSurfing
 		if (info == typeid(float))
 		{
 			if (type == OFX_IM_KNOB_TICKKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, _flags);
 
 			else if (type == OFX_IM_KNOB_DOTKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERONLYKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERDOTKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, _flags);
 
 			else if (type == OFX_IM_KNOB_STEPPEDKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags);
 
 			else if (type == OFX_IM_KNOB_SPACEKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, _flags);
 		}
 
 		//--
@@ -111,32 +120,32 @@ namespace ofxImGuiSurfing
 		else if (info == typeid(int))
 		{
 			if (type == OFX_IM_KNOB_TICKKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Tick, size, _flags);
 
 			else if (type == OFX_IM_KNOB_DOTKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Dot, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Wiper, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERONLYKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperOnly, size, _flags);
 
 			else if (type == OFX_IM_KNOB_WIPERDOTKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, _flags);
 
 			else if (type == OFX_IM_KNOB_STEPPEDKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags);
 
 			else if (type == OFX_IM_KNOB_SPACEKNOB) b =
-				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, parameter.getMin(), parameter.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, _flags);
+				ImGuiKnobs::KnobInt(n.c_str(), (int*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, _flags);
 		}
 
-		//-
+		//--
 
 		if (b)
 		{
-			parameter.set(tmpRef);
+			p.set(tmpRef);
 			return true;
 		}
 

@@ -1,14 +1,14 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup() 
+void ofApp::setup()
 {
 	// Parameters
 	params.setName("paramsGroup"); // main container
 	params2.setName("paramsGroup2"); // nested
 	params3.setName("paramsGroup3"); // nested
-	params.add(bPrevious.set("<", false));
-	params.add(bNext.set(">", false));
+	params.add(bPrevious.set("<"));
+	params.add(bNext.set(">"));
 	params.add(bEnable1.set("Enable1", false));
 	params.add(bEnable2.set("Enable2", false));
 	params.add(bEnable3.set("Enable3", false));
@@ -27,17 +27,45 @@ void ofApp::setup()
 	params2.add(params3);
 	params.add(params2);
 
-	// Can be omitted in most scenarios..
+	//--
+
+	vIn.set("vIn", 0.5f, 0.f, 1.f);
+	vOut1.set("vOut1", 0.5f, 0.f, 1.f);
+	vOut2.set("vOut2", 0.5f, 0.f, 1.f);
+	vOut3.set("vOut3", 0.5f, 0.f, 1.f);
+
+	// Callback for vIn
+	// convert input linear to log
+	listener = vIn.newListener([this](float& v) {
+
+		vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
+	vOut2 = ofxSurfingHelpers::exponentialFunction(vIn) / 10.f;
+	vOut3 = ofxSurfingHelpers::squaredFunction(vIn);
+
+	ofLogNotice() << v << " -> " << vOut1.get() << " : " << vOut2.get();
+		});
+
+	vIn = vIn; // refresh callback
+
+	//--
+
+	// Can be omitted in many scenarios..
 	//ui.setup();
 }
 
 //--------------------------------------------------------------
-void ofApp::draw() 
+void ofApp::draw()
 {
 	ui.Begin();
 	{
 		if (ui.BeginWindow(bGui))
 		{
+			ui.AddMinimizerToggle(false);
+			ui.AddAutoResizeToggle(false);
+			ui.AddSpacingBigSeparated();
+
+			//--
+
 			// ImGui widgets are placed here.
 			// ofParamaters widgets helpers be easy populate,
 			// But you can populate raw ImGui too.
@@ -45,16 +73,35 @@ void ofApp::draw()
 			// This is an ofParameterGroup
 			// contained params are populated 
 			// as their default widgets styles
-			ui.AddGroup(params);
+			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
 			// This is a separator line 
 			ui.AddSpacingBigSeparated();
+
+			//--
 
 			// This is a param widget
 			ui.Add(amount2, OFX_IM_VSLIDER);
 
 			// This is a param widget
 			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+
+			ui.AddSpacingBigSeparated();
+
+			//--
+
+			ui.AddLabelBig("LINEAR TO LOGARITHMIC");
+			ui.Add(vIn, OFX_IM_HSLIDER_SMALL);
+			ui.AddTooltip("linear");
+			ui.AddSpacingBig();
+			ui.Add(vOut1, OFX_IM_HSLIDER_MINI);
+			ui.AddTooltip("reversedExponential");
+			ui.Add(vOut2, OFX_IM_HSLIDER_MINI);
+			ui.AddTooltip("exponential");
+			ui.Add(vOut3, OFX_IM_HSLIDER_MINI);
+			ui.AddTooltip("squared");
+
+			//--
 
 			ui.EndWindow();
 		}
@@ -63,7 +110,7 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key) 
+void ofApp::keyPressed(int key)
 {
 	if (key == 'g') bGui = !bGui;
 }
