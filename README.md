@@ -13,70 +13,62 @@ for **openFrameworks** projects.
 
 ## WORK IN PROGRESS!
 
-( _Some new examples, testing or new incoming widgets, and complementary docs are now moved to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a Testing Sandbox._ )  
+<br>
+
+( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
 
 <br>
 
 # FEATURES
 
-- Easy **Setup** and **Layout**.
+- Easy **setup**.
 - **Multiple instances** around your classes and **ofxAddons**.
-- **ofParameter Helpers**:
+- **ofParameter helpers**:
   - Many RAW **DearImGui widgets** ported.
   - Added custom useful widgets.
-- Useful API methods and **Snippets**: 
-  - **Speed-Up** layout.
+- Useful **API methods** and **snippets**: 
+  - Help on **windows** and **widgets**.
+  - **Speed-Up** responsive layout.
   - Simplify **workflow**.
-- Extra **Mouse Control** 
-  - Wheel for tweaking. _+Ctrl_ to finetune.
-  - Right button to reset to params center.
+  - Internal params and persistent settings.
+- 4 active **font sizes**.
+- Extra **Mouse Control**: 
+  - Wheel for tweaking:
+    -  _+Ctrl_ to finetune.
+  - Right-click:
+    - To reset to param center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- Powerful **Log System**.
-- Floating **Notifier System**.
-- Cool **Themes** with 4 active font styles.
-- A **Layout Presets Engine**. ( WIP )
-- Some **Docking Helpers**. ( WIP )
+- **Themes** and editor.
+- Windows organizer, aligner and linker.
+- **Log System** with custom tags.
+- **Notifier System**. ( WIP )
+- **Layout Presets Engine**. ( WIP )
+- **Docking Helpers**. ( WIP )
 
 <br>
 
 <details>
   <summary>MORE IMGUI WIDGETS</summary>
   <p>
-
-- Dropdown / Combo index selector and names.  
-
-- Matrix buttons to an index selector.  
-
-- Bundled widgets like arrows linked to int params browsing. 
-
-- Big Toggles and Buttons.  
-
-- Vertical and Horizontal Sliders.  
-
-- Range Sliders. 
-
-- Styled Knobs.  
-
-- Tree folders.  
-
-- Inactive, hidden or locked styles.  
-
-- Floating tooltip, labels and values.  
-
-- DearWidgets.  
-
-- Gradient Color Designer.  
-
-- Progress bars and waiting spinners.  
-
-- Files Browser.  
-
-- Curve Editors.  
-
-- Bubbles Notifier System.  
-
-- Profile Plotters.  
+    
+- Big Toggles and Buttons.
+- Vertical and Horizontal Sliders.
+- Range Sliders.
+- Styled Knobs.
+- Tree folders.
+- Inactive, hidden or locked styles.
+- Floating tooltip, labels and values.
+- Dropdown / Combo index selector and names.
+- Matrix buttons to an index selector.
+- Bundled widgets like arrows linked to int params browsing.
+- DearWidgets.
+- Gradient Color Designer.
+- Progress bars and waiting spinners.
+- Files Browser.
+- Curve Editors.
+- Bubbles Notifier System.
+- Profile Plotters.
   
   </p>
   </details>
@@ -142,7 +134,7 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[assets.zip](assets.zip) (Located in the add-on root path) are mainly font files to put into each project `OF_APP/bin/data/`.  
+[assets.zip](assets.zip) Located in the add-on root path. Mainly font files to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
