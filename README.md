@@ -14,6 +14,7 @@ for **openFrameworks** projects.
 ## WORK IN PROGRESS!
 
 <br>
+<br>
 
 ( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
 
@@ -74,12 +75,13 @@ for **openFrameworks** projects.
   </details>
 
 <br>
+<br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
-
+ 
 <br>
-    
-## EXAMPLE: HELLO WORLD
+  
+## EXAMPLE: HelloWorld
 
 <br>
 
@@ -134,7 +136,7 @@ void ofApp::draw()
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-[assets.zip](assets.zip) Located in the add-on root path. Mainly font files to put into each project `OF_APP/bin/data/`.  
+* [assets.zip](assets.zip): located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
@@ -162,6 +164,8 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     </p>
     </details>
 
+<br>
+
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 
 <br>
@@ -169,9 +173,9 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 ## CURRENT SYSTEMS
 
 - **Windows 10** / **VS 2022** / 
-    * GitHub [patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [0.11.2](https://openframeworks.cc/download/).
-- **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / **oF 0.11.2**
+    * GitHub [oF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
+    * Last official release [oF 0.11.2](https://openframeworks.cc/download/).
+- **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / [oF 0.11.2](https://openframeworks.cc/download/).
 
 <br>
 
