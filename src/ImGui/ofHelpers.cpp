@@ -1,8 +1,10 @@
 #include "ofHelpers.h"
 
 //TODO:
-// add customization for nested groups
-// pass some list of arguments to customize items/groups to be rendered with different design...
+// Add customization for nested groups
+// pass some list of arguments 
+// to customize items/groups 
+// to be rendered with different design...
 //https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
 
 //--
@@ -12,20 +14,20 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags)
+	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags)
 	{
 		//TODO: now we are using WidgetsManager.h helpers!
 		// but these methods should work too.
 
 		//-
 
-		ImGui::PushID(("##" + group.getName()).c_str());
+		ImGui::PushID(("##" + g.getName()).c_str());
 		{
 			bool bOpened;
 
-			bOpened = ImGui::CollapsingHeader(group.getName().c_str(), flags);
-			//bOpened = (!ImGui::TreeNodeEx(group.getName().c_str()));
-			//bOpened = (!ImGui::TreeNode(group.getName().c_str()));
+			bOpened = ImGui::CollapsingHeader(g.getName().c_str(), flags);
+			//bOpened = (!ImGui::TreeNodeEx(g.getName().c_str()));
+			//bOpened = (!ImGui::TreeNode(g.getName().c_str()));
 
 			if (!bOpened)
 			{
@@ -35,14 +37,16 @@ namespace ofxImGuiSurfing
 
 			//-
 
-			for (auto p : group)
+			for (auto p : g)
 			{
-				// Group.
-				auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
-				if (pGroup)
+				// Param Group
+				auto pg = std::dynamic_pointer_cast<ofParameterGroup>(p);
+				if (pg)
 				{
 					// Recurse through contents.
-					AddGroup(*pGroup, ImGuiTreeNodeFlags_None); // -> default: all with same style and non indent ?
+					AddGroup(*pg, ImGuiTreeNodeFlags_None); 
+					
+					// -> default: all with same style and non indent ?
 					//ImGui::Indent();
 
 					continue;
@@ -122,12 +126,12 @@ namespace ofxImGuiSurfing
 				if (p->getName() == "" && p->getName() == " ")
 					ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Could not create GUI element for p " << p->getName() << "'";
 
-				//-
+				//--
 
-				//if (pGroup) ImGui::Unindent();
+				//if (pg) ImGui::Unindent();
 			}
 
-			//-
+			//--
 
 			{
 				// End tree.

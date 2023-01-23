@@ -440,7 +440,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	// 2. TREES / folders
+	// 2. TREES / Folders
 
 	// 2.0 Simple TREE (RECOMMENDED)
 
@@ -501,8 +501,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
-//----
 
+//----
 
 
 //--------------------------------------------------------------
@@ -846,8 +846,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	EXAMPLE
 	TODO: WIP:
+
+	EXAMPLE
 	TWO COLUMNS WITH 2 VERTICAL SLIDERS
 	USING TWO DIFERENT MODES / TEMPLATES
 	WITH A RESET BUTTON ON EACH ONE.
@@ -902,7 +903,9 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	THREE COLUMNS WITH A KNOB AND 2 VERTICAL SLIDERS
+	THREE COLUMNS 
+	WITH A KNOB AND 
+	2 VERTICAL SLIDERS
 	WITH A RESET BUTTON.
 	UI USED AS A POINTER REFERENCED.
 
@@ -937,7 +940,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	EXAMPLE
 	A BIG COMBO SELECTOR
-	WITH AN INDEX PARAM, ARROWS, NAMES VECTOR
+	WITH AN INDEX PARAM, 
+	ARROWS, NAMES VECTOR
 	CUTE STYLED
 
 	{
@@ -980,7 +984,9 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
  
 	EXAMPLE
-	MAKE SOME WIDGET SMALLER IN HEIGHT
+	MAKE SOME WIDGET 
+	SMALLER THAN MINIMUM 
+	IN HEIGHT
 
 	static ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
 	static ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
@@ -1019,7 +1025,6 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-
 	AN INPUT TEXT
 	BUT WITH A BIG FONT
 
@@ -1106,7 +1111,8 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	POP UP. CONTEXT MENU
+	POP UP. 
+	CONTEXT MENU
 
 	// 1
 	// Options menu
@@ -1153,12 +1159,14 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
 
 
 //--------------------------------------------------------------
 // RAM IMGUI 
+ 
+
 // WIDGET DESIGN
+
 
 /*
 
@@ -1173,15 +1181,42 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
+/*
+
+	SNIPPET
+	DUAL TOOLTIP
+
+	ImGui::Begin("Test Multi Tooltip");
+	ImGui::Button("Hello");
+	if (ImGui::IsItemHovered())
+	{
+		ImVec2 m = ImGui::GetIO().MousePos;
+		ImGui::SetNextWindowPos(ImVec2(m.x - 10, m.y));
+		ImGui::Begin("1", NULL, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("FIRST TOOLTIP");
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(m.x + 100, m.y));
+		ImGui::Begin("2", NULL, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Text("SECOND TOOLTIP");
+		ImGui::End();
+	}
+	ImGui::End();
+
+*/
+
+
 
 
 //--------------------------------------------------------------
 // DRAFT NOTES
 
+
 /*
 
-	GRADIENT COLORED BUTTONS
+	GRADIENT
+	COLORED 
+	BUTTONS
 
 	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
 
@@ -1190,13 +1225,15 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
  
  
 //--------------------------------------------------------------
 // DOCKSPACE
 
+
 /*
+
+	DOCKING FLAGS
 
 	// Flags for ImGui::DockSpace()
 	enum ImGuiDockNodeFlags_
@@ -1216,7 +1253,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	DOCKING NOTES
+	DOCKING 
+	NOTES
 
 	https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
 	https://github.com/ocornut/imgui/issues/3521
@@ -1236,8 +1274,8 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
  
-	EXAMPLE
-	DEMONSTRATE THE VARIOUS WINDOW FLAGS. 
+	SNIPPET
+	VARIOUS WINDOW FLAGS. 
 	TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
 	static bool no_titlebar = false;
@@ -1267,7 +1305,6 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-//----
 
 
 //--------------------------------------------------------------
@@ -1306,6 +1343,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
 /*
 
 	NOTES
@@ -1316,3 +1354,4 @@ using ofxSurfingGui = SurfingGuiManager;
 	ui.AddLabel(s);
 
 */
+

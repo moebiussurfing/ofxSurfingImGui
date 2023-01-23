@@ -16,15 +16,16 @@
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
 #include "WindowsOrganizer.h"
-
-#include "ofxSurfing_ImGui_Themes.h"
 #include "WidgetsManager.h"
 
 #include "ofxSurfingHelpers.h"
-#include "TextBoxWidget.h"
+#include "ofxSurfing_ImGui_Themes.h"
 
-//--
+#include "TextBoxWidget.h" //TODO: could be replace by native ImGui widgets.
 
+//----
+
+// Alias
 using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
 

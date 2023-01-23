@@ -294,7 +294,6 @@ namespace ofxImGuiSurfing
 
 						else if (bIsFloat)
 						{
-							// ofParameter<float> p = ap.cast<float>();//not dynamic makes error on macOS
 							ofParameter<float> p = dynamic_cast<ofParameter<float>&>(ap);
 
 							if (resolution == -1)
@@ -415,13 +414,10 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// right clicked
+		// Right clicked
 
-		//static bool bModCtrl;
-		//static bool bModAlt; 
-		bool  bModCtrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
+		bool bModCtrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
 		bool bModAlt = ImGui::IsKeyDown(ImGuiKey_ModAlt);
-		
 
 		bool bChanged = false;
 
@@ -479,9 +475,11 @@ namespace ofxImGuiSurfing
 		//--
 
 		//TODO:
-		// Must be fixed bc each dim slider could work independently...
+		// Must be fixed bc each dim slider 
+		// could work independently 
+		// with the mouse extra controls...
 
-		// MULTIDIM
+		// Multidim
 
 		else if (bIsMultiDim)
 		{
@@ -588,12 +586,14 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	inline void AddTooltip(std::string text, bool bEnabled = true) // call after the pop up trigger widget
+	inline void AddTooltip(std::string text, bool bEnabled = true)
 	{
 		if (!bEnabled) return;
 
-		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) // delayed
-		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500) // delayed // not work ?
+		//TODO:
+		// delayed. not work ?
+		//if (IsItemHovered() && GImGui->HoveredIdTimer > 1000) 
+		//if (ImGui::IsItemHovered() && GImGui->HoveredIdTimer > 500)
 
 		if (ImGui::IsItemHovered())
 		{
@@ -607,6 +607,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	// Pass the param and will auto populate a tooltip with the param name and value.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	void AddTooltip(ofParameter<ParameterType>& p, bool bEnabled = true, bool bNoName = false)
@@ -619,9 +620,11 @@ namespace ofxImGuiSurfing
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
 		bool isBool = (t == typeid(bool));
+		bool isVoid = (t == typeid(void));
 
-		if (!isFloat && !isInt && !isBool) {
-			ofLogWarning("ofxSurfingImGui") 
+		if (!isFloat && !isInt && !isBool && !isVoid) 
+		{
+			ofLogWarning("ofxSurfingImGui")
 				<< "Tooltip: ofParam type named " + name + " is not a Float, Int or Bool";
 		}
 
@@ -634,11 +637,66 @@ namespace ofxImGuiSurfing
 		AddTooltip(s);
 	}
 
+	//--
+
+	//TODO:
+	// Pinned Tooltip Window
+	// 
+	// Moving is locked. must be controlled by higher level.
+	// Return window dimensions so higher level can handle click / moving window 
+	// Taken from:
+	// https://github.com/ocornut/imgui/issues/1345
+	// https://github.com/mikesart/gpuvis/blob/108d9c358a5f92cae5f79918025b9215a1771628/src/gpuvis_utils.cpp#L790
+	// 
+	// Example:
+	// ofRectangle rc{ 100, 100, 100, 100 };
+	// AddTooltipPinned("Pinned Tooltip", ImVec2{ 200, 200 }, &rc, str.c_str());
+	//--------------------------------------------------------------
+	inline void AddTooltipPinned(const char* name, const ImVec2& pos, ofRectangle* prc, const char* str)
+	{
+		if (str && str[0])
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			const ImVec2 mousepos_orig = io.MousePos;
+			ImGuiWindowFlags flags =
+				ImGuiWindowFlags_Tooltip |
+				ImGuiWindowFlags_NoTitleBar |
+				ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoResize |
+				ImGuiWindowFlags_NoSavedSettings |
+				ImGuiWindowFlags_AlwaysAutoResize;
+
+			io.MousePos = pos;
+
+			ImGui::Begin(name, NULL, flags);
+
+			//if (name[0] != '#')
+			//{
+			//	//imgui_text_bg(ImGui::GetStyleColorVec4(ImGuiCol_Header), "%s%s%s",
+			//	//	s_textclrs().str(TClr_Bright), name, s_textclrs().str(TClr_Def));
+			//}
+
+			ImGui::Text("%s", str);
+
+			if (prc)
+			{
+				prc->x = ImGui::GetWindowPos().x;
+				prc->y = ImGui::GetWindowPos().y;
+				prc->width = ImGui::GetWindowSize().x;
+				prc->height = ImGui::GetWindowSize().y;
+			}
+
+			ImGui::End();
+
+			io.MousePos = mousepos_orig;
+		}
+	}
+
 	//----------------------
 
 	// ofParameter's Helpers
 
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
+	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
 	bool AddParameter(ofParameter<glm::ivec2>& p, bool bfoldered = false);
@@ -724,7 +782,8 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// Stepper widgets. (with +/- buttons to increment/decrement)
+	// Stepper widgets
+	// (with +/- buttons to increment/decrement)
 
 	//bool AddStepper(ofParameter<int>& p, int step = -1, int stepFast = -1);
 	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
@@ -742,8 +801,6 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-
-		//if (ImGui::InputScalar(p.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 
 		if (ImGui::InputScalar(p.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
 		{
@@ -771,7 +828,7 @@ namespace ofxImGuiSurfing
 		bool bReturn = false;
 
 		string name = p.getName();
-		string n = "##STEPPERfloat" + name;// +ofToString(1);
+		string n = "##STEPPERfloat" + name;
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
@@ -792,8 +849,10 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	// Stepper aux. to be used to not draw label. 
-	// useful to use on combo of widgets to populate one single variable!
+	// Stepper alternative
+	// To be used to not draw the label. 
+	// Useful to use on combo of widgets 
+	// to populate one single variable!
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddStepper(ofParameter<ParameterType>& p, bool bNoLabel = false)
@@ -806,15 +865,16 @@ namespace ofxImGuiSurfing
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
 		if (!isFloat && !isInt) {
-			ofLogWarning("ofxSurfingImGui") << "Stepper: ofParam type named " + name + " is not a Float or an Int";
+			ofLogWarning("ofxSurfingImGui") << 
+				"Stepper: ofParam type named " + name + " is not a Float or an Int";
 			return false;
 		}
 
-		// int
+		// Int
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		// float
+		// Float
 		float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
 		float stepFast = 100.f * step;
@@ -854,13 +914,12 @@ namespace ofxImGuiSurfing
 	//----
 
 	// These are mainly the original ofxImGui methods:
-	// Clean of Styles with the default styles.
+	// Clean of my API stuff / styles,
+	// and with the default styles.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& p, std::string format)
 	{
-		//std::string format = "%.3f";//TODO:
-
 		auto tmpRef = p.get();
 		const auto& info = typeid(ParameterType);
 
@@ -943,6 +1002,33 @@ namespace ofxImGuiSurfing
 		return true;
 	}
 
+	//--------------------------------------------------------------
+	inline void AddTextBoxWindow(string nameWindow, string text, bool bNoHeader = true)
+	{
+		const char* name = nameWindow.c_str();
+		const char* str = text.c_str();
+
+		if (str && str[0])
+		{
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			flags += ImGuiWindowFlags_AlwaysAutoResize;
+			//flags += ImGuiWindowFlags_NoResize;
+			//flags += ImGuiWindowFlags_Tooltip;
+			//flags += ImGuiWindowFlags_NoTitleBar;
+			//flags += ImGuiWindowFlags_NoMove;
+			//flags += ImGuiWindowFlags_NoSavedSettings;
+
+			//if (bNoHeader) flags += ImGuiWindowFlags_NoDecoration;
+			if (bNoHeader) flags += ImGuiWindowFlags_NoTitleBar;
+
+			ImGui::Begin(name, NULL, flags);
+
+			ImGui::Text("%s", str);
+
+			ImGui::End();
+		}
+	}
+
 	//--
 
 	//--------------------------------------------------------------
@@ -972,7 +1058,8 @@ namespace ofxImGuiSurfing
 			else
 			{
 				if (info.name() == "" || info.name() == " ")
-					ofLogWarning("ofxSurfingImGui") << "Could not create GUI element for type " << info.name();
+					ofLogWarning("ofxSurfingImGui") << 
+					"Could not create GUI element for type " << info.name();
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
@@ -987,7 +1074,7 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	// Image Textures
+	// Image and Textures helpers
 	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{
@@ -1041,9 +1128,9 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//TODO:
+	//TODO: WIP:
+	// Hard to be implemented here..
 	// Must replace a bunch of GuiManager to move it here...
-	// 
 	// A bundle of controls
 	// for a single param
 	//--------------------------------------------------------------
@@ -1064,18 +1151,18 @@ namespace ofxImGuiSurfing
 		}
 
 		//TODO:
-		//// label
+		//// Label
 		//if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
 		//else this->AddLabelBig(p.getName(), true, true);
 
-		//// stepper
+		//// Stepper
 		//bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
 		////bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
 
-		//// slider
+		//// Slider
 		//bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
 
-		// arrows
+		// Arrows
 		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
 		{
 			float step = 0;
@@ -1100,7 +1187,7 @@ namespace ofxImGuiSurfing
 
 		if (!bMinimized)
 		{
-			// knob
+			// Knob
 			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
 			float w = this->getWidgetsWidth(1);
 			ImGuiKnobFlags flags = 0;
