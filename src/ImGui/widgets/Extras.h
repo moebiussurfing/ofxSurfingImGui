@@ -1,5 +1,13 @@
 #pragma once
 
+/*
+
+	TODO: 
+	clean
+
+*/
+
+
 #include "ofMain.h"
 
 #include "ofxImGui.h"
@@ -8,7 +16,9 @@
 
 #include "GuiConstants.h"
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
+#endif
 
 // Must include manually 
 // if you want to use it in your project.
@@ -1955,9 +1965,9 @@ namespace ofxImGuiSurfing
 	}
 
 	//-----
-
+	
 	//--------------------------------------------------------------
-	inline void ProgressBar2(float valuePrc, float max = 1.0f, bool noText = true)
+	inline void AddProgressBar2(const float valuePrc, float max = 1.0f, bool noText = true)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
 		const float pad = 0;
@@ -1988,15 +1998,15 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<float> valuePrc, float max = -1.0f, bool noText = false)
+	inline void AddProgressBar(ofParameter<float>& valuePrc, float max = -1.0f, bool noText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1.0f) ofxImGuiSurfing::ProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
-		else ofxImGuiSurfing::ProgressBar2(valuePrc.get(), 1.0f, noText);
+		if (max == -1.0f) ofxImGuiSurfing::AddProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
+		else ofxImGuiSurfing::AddProgressBar2(valuePrc.get(), 1.0f, noText);
 	}
 
 	//--------------------------------------------------------------
-	inline void ProgressBar2(int valuePrc, int max = 100, bool noText = false)
+	inline void AddProgressBar2(const int valuePrc, int max = 100, bool noText = false)
 	{
 		float _w100 = ImGui::GetContentRegionAvail().x;
 		float pad = 0;
@@ -2022,11 +2032,11 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<int> valuePrc, int max = -1, bool noText = false)
+	inline void AddProgressBar(ofParameter<int>& valuePrc, int max = -1, bool noText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1) ProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
-		else ProgressBar2(valuePrc.get(), max, noText);
+		if (max == -1) AddProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
+		else AddProgressBar2(valuePrc.get(), max, noText);
 	}
 };
 
