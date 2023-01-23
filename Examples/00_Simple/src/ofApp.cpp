@@ -41,7 +41,7 @@ void ofApp::setup()
 	// convert input linear to log
 	listener = vIn.newListener([this](float& v) {
 
-		vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
+	vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
 	vOut2 = ofxSurfingHelpers::exponentialFunction(vIn) / 10.f;
 	vOut3 = ofxSurfingHelpers::squaredFunction(vIn);
 

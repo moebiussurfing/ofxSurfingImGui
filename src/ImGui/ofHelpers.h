@@ -60,13 +60,13 @@ namespace ofxImGuiSurfing
 	// Adds mouse wheel control to the last previous param widget (templated float/int)
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	inline void AddMouseWheel(ofParameter<ParameterType>& param, bool bFlip = false)
+	inline void AddMouseWheel(ofParameter<ParameterType>& ap, bool bFlip = false)
 	{
 		//TODO: allow customization
 		// Forced to default behavior/resolution stepping.
 		float resolution = -1;
 
-		bool bUnknown = false;
+		bool bIsUnknown = false;
 		bool bIsVoid = false;
 		bool bIsbool = false;
 		bool bIsInt = false;
@@ -80,19 +80,19 @@ namespace ofxImGuiSurfing
 
 		const auto& info = typeid(ParameterType);
 
-		if (info == typeid(float)) // FLOAT
+		if (info == typeid(float)) // Float
 		{
 			bIsFloat = true;
 		}
-		else if (info == typeid(int)) // INT
+		else if (info == typeid(int)) // Int
 		{
 			bIsInt = true;
 		}
-		else if (info == typeid(bool)) // BOOL
+		else if (info == typeid(bool)) // Bool
 		{
 			bIsbool = true;
 		}
-		else if (info == typeid(void)) // VOID
+		else if (info == typeid(void)) // Void
 		{
 			bIsVoid = true;
 		}
@@ -117,8 +117,8 @@ namespace ofxImGuiSurfing
 		// Unknown Types
 		else
 		{
-			bUnknown = true;
-			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << param.getName();
+			bIsUnknown = true;
+			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << ap.getName();
 
 			return;
 		}
@@ -132,9 +132,9 @@ namespace ofxImGuiSurfing
 			// Show floating value
 			if (bCtrl || bAlt)
 			{
-				if (bIsbool) sTooltip = dynamic_cast<ofParameter<bool>&>(param).get() ? "TRUE" : "FALSE";
-				else if (bIsInt) sTooltip = ofToString(dynamic_cast<ofParameter<int>&>(param).get());
-				else if (bIsFloat) sTooltip = ofToString(dynamic_cast<ofParameter<float>&>(param).get(), 2);
+				if (bIsbool) sTooltip = dynamic_cast<ofParameter<bool>&>(ap).get() ? "TRUE" : "FALSE";
+				else if (bIsInt) sTooltip = ofToString(dynamic_cast<ofParameter<int>&>(ap).get());
+				else if (bIsFloat) sTooltip = ofToString(dynamic_cast<ofParameter<float>&>(ap).get(), 2);
 			}
 
 			ImGui::SetItemUsingMouseWheel();
@@ -153,22 +153,22 @@ namespace ofxImGuiSurfing
 					{
 						//--
 
-						// BOOL
+						// Bool
 
 						if (bIsbool)
 						{
 							// non dynamic causes exception in macOS
-							ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(param);
+							ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(ap);
 							p = !p.get();
 						}
 
 						//--
 
-						// VOID
+						// Void
 
 						else if (bIsVoid)
 						{
-							ofParameter<void> p = dynamic_cast<ofParameter<void>&>(param);
+							ofParameter<void> p = dynamic_cast<ofParameter<void>&>(ap);
 							p.trigger();
 
 							sTooltip = "TRIG";
@@ -193,19 +193,19 @@ namespace ofxImGuiSurfing
 
 							if (bIsDim2)
 							{
-								ofParameter<glm::vec2> p = param.cast<glm::vec2>();
+								ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
 								p += wheel * (bCtrl ? resolution : resolution * 10);
 								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 							}
 							else if (bIsDim3)
 							{
-								ofParameter<glm::vec3> p = param.cast<glm::vec3>();
+								ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
 								p += wheel * (bCtrl ? resolution : resolution * 10);
 								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 							}
 							else if (bIsDim2)
 							{
-								ofParameter<glm::vec4> p = param.cast<glm::vec4>();
+								ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
 								p += wheel * (bCtrl ? resolution : resolution * 10);
 								p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 							}
@@ -214,11 +214,11 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// INT
+						// Int
 
 						else if (bIsInt)
 						{
-							ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
+							ofParameter<int> p = dynamic_cast<ofParameter<int>&>(ap);
 
 							int _step = 0;
 
@@ -290,12 +290,12 @@ namespace ofxImGuiSurfing
 
 						//--
 
-						// FLOAT
+						// Float
 
 						else if (bIsFloat)
 						{
-							// ofParameter<float> p = param.cast<float>();//not dynamic makes error on macOS
-							ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
+							// ofParameter<float> p = ap.cast<float>();//not dynamic makes error on macOS
+							ofParameter<float> p = dynamic_cast<ofParameter<float>&>(ap);
 
 							if (resolution == -1)
 							{
@@ -348,7 +348,7 @@ namespace ofxImGuiSurfing
 				}
 				else
 				{
-					// BOOL
+					// Bool
 					//flip
 					p = !p;
 				}
@@ -399,7 +399,7 @@ namespace ofxImGuiSurfing
 	// Reset params when Alt+Click called
 
 	template<typename ParameterType>
-	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& param, bool bToMinByDefault = false)
+	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& ap, bool bToMinByDefault = false)
 	{
 		// Behavior:
 		// right click : resets to center by default
@@ -426,7 +426,7 @@ namespace ofxImGuiSurfing
 		bool bChanged = false;
 
 		// param type
-		bool bUnknown = false;
+		bool bIsUnknown = false;
 		bool bIsInt = false;
 		bool bIsFloat = false;
 		bool bIsMultiDim = false;
@@ -438,11 +438,11 @@ namespace ofxImGuiSurfing
 
 		if (0) {}
 
-		else if (info == typeid(float)) // FLOAT
+		else if (info == typeid(float)) // Float
 		{
 			bIsFloat = true;
 		}
-		else if (info == typeid(int)) // INT
+		else if (info == typeid(int)) // Int
 		{
 			bIsInt = true;
 		}
@@ -466,8 +466,8 @@ namespace ofxImGuiSurfing
 		// Unknown Types
 		else
 		{
-			bUnknown = true;
-			ofLogWarning("ofxSurfingImGui") << "AddMouseClickRightReset : Could not add mouse wheel to " << param.getName();
+			bIsUnknown = true;
+			ofLogWarning("ofxSurfingImGui") << "AddMouseClickRightReset : Could not add mouse wheel to " << ap.getName();
 
 			return false;
 		}
@@ -487,7 +487,7 @@ namespace ofxImGuiSurfing
 		{
 			if (bIsDim2)
 			{
-				ofParameter<glm::vec2> p = param.cast<glm::vec2>();
+				ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
 				glm::vec2 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
@@ -504,7 +504,7 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim3)
 			{
-				ofParameter<glm::vec3> p = param.cast<glm::vec3>();
+				ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
 				glm::vec3 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
@@ -523,7 +523,7 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim4)
 			{
-				ofParameter<glm::vec4> p = param.cast<glm::vec4>();
+				ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
 				glm::vec4 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
@@ -546,11 +546,11 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// INT
+		// Int
 
 		else if (bIsInt)
 		{
-			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(param);
+			ofParameter<int> p = dynamic_cast<ofParameter<int>&>(ap);
 
 			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
@@ -565,11 +565,11 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// FLOAT
+		// Float
 
 		else if (bIsFloat)
 		{
-			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(param);
+			ofParameter<float> p = dynamic_cast<ofParameter<float>&>(ap);
 
 			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
@@ -621,11 +621,12 @@ namespace ofxImGuiSurfing
 		bool isBool = (t == typeid(bool));
 
 		if (!isFloat && !isInt && !isBool) {
-			ofLogWarning("ofxSurfingImGui") << "Tooltip: ofParam type named " + name + " is not a Float, Int or Bool";
+			ofLogWarning("ofxSurfingImGui") 
+				<< "Tooltip: ofParam type named " + name + " is not a Float, Int or Bool";
 		}
 
 		string s = "";
-		if (!bNoName) s += p.getName() + "\n";
+		if (!bNoName) s += ap.getName() + "\n";
 		if (isFloat) s += ofToString(p.get(), 3);//improve format
 		else if (isInt) s += ofToString(p.get());
 		else if (isBool) s += ofToString((p.get() ? "TRUE" : "FALSE"));
@@ -640,59 +641,60 @@ namespace ofxImGuiSurfing
 	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddParameter(ofParameter<glm::ivec2>& parameter, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec3>& parameter, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec4>& parameter, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec2>& p, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec3>& p, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec4>& p, bool bfoldered = false);
 
-	bool AddParameter(ofParameter<glm::vec2>& parameter, bool bsplit = false, bool bfoldered = false);
+	//TODO:
+	bool AddParameter(ofParameter<glm::vec2>& p, bool bsplit = false, bool bfoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec3>& parameter, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec3>& p, bool bsplit = false, bool bfoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec4>& parameter, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec4>& p, bool bsplit = false, bool bfoldered = false);
 	// split each arg to big sliders. make a folder container.
 #endif
 
 	//TODO:
-	bool AddParameter(ofParameter<ofVec2f>& parameter);
-	bool AddParameter(ofParameter<ofVec3f>& parameter);
-	bool AddParameter(ofParameter<ofVec4f>& parameter);
+	bool AddParameter(ofParameter<ofVec2f>& p);
+	bool AddParameter(ofParameter<ofVec3f>& p);
+	bool AddParameter(ofParameter<ofVec4f>& p);
 
-	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha = true);
-	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha = true);
+	bool AddParameter(ofParameter<ofColor>& p, bool alpha = true);
+	bool AddParameter(ofParameter<ofFloatColor>& p, bool alpha = true);
 
 	//TODO:
-	bool AddParameter(ofParameter<ofColor>& parameter, bool alpha, ImGuiColorEditFlags flags);
-	bool AddParameter(ofParameter<ofFloatColor>& parameter, bool alpha, ImGuiColorEditFlags flags);
+	bool AddParameter(ofParameter<ofColor>& p, bool alpha, ImGuiColorEditFlags flags);
+	bool AddParameter(ofParameter<ofFloatColor>& p, bool alpha, ImGuiColorEditFlags flags);
 
-	bool AddParameter(ofParameter<ofRectangle>& parameter);
+	bool AddParameter(ofParameter<ofRectangle>& p);
 
-	bool AddParameter(ofParameter<std::string>& parameter, size_t maxChars = 255, bool multiline = false);
+	bool AddParameter(ofParameter<std::string>& p, size_t maxChars = 255, bool multiline = false);
 
-	bool AddParameter(ofParameter<void>& parameter, float width = 0);
+	bool AddParameter(ofParameter<void>& p, float width = 0);
 
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format = "%.3f");
+	bool AddParameter(ofParameter<ParameterType>& p, std::string format = "%.3f");
 
 	//--
 
 	template<typename ParameterType>
-	bool AddText(ofParameter<ParameterType>& parameter, bool label = true);
+	bool AddText(ofParameter<ParameterType>& p, bool label = true);
 
-	bool AddRadio(ofParameter<int>& parameter, std::vector<std::string> labels, int columns = 1);
+	bool AddRadio(ofParameter<int>& p, std::vector<std::string> labels, int columns = 1);
 
-	bool AddCombo(ofParameter<int>& parameter, std::vector<std::string> labels, bool bRaw = false);
+	bool AddCombo(ofParameter<int>& p, std::vector<std::string> labels, bool bRaw = false);
 
-	//-
+	//--
 
-	bool AddSlider(ofParameter<float>& parameter, const char* format = "%.3f", float power = 1.0f);
+	bool AddSlider(ofParameter<float>& p, const char* format = "%.3f", float power = 1.0f);
 
-	bool AddRange(const std::string& name, ofParameter<int>& parameterMin, ofParameter<int>& parameterMax, int speed = 1);
-	bool AddRange(const std::string& name, ofParameter<float>& parameterMin, ofParameter<float>& parameterMax, float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<int>& pMin, ofParameter<int>& pMax, int speed = 1);
+	bool AddRange(const std::string& name, ofParameter<float>& pMin, ofParameter<float>& pMax, float speed = 0.01f);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddRange(const std::string& name, ofParameter<glm::vec2>& parameterMin, ofParameter<glm::vec2>& parameterMax, float speed = 0.01f);
-	bool AddRange(const std::string& name, ofParameter<glm::vec3>& parameterMin, ofParameter<glm::vec3>& parameterMax, float speed = 0.01f);
-	bool AddRange(const std::string& name, ofParameter<glm::vec4>& parameterMin, ofParameter<glm::vec4>& parameterMax, float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec2>& pMin, ofParameter<glm::vec2>& pMax, float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec3>& pMin, ofParameter<glm::vec3>& pMax, float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec4>& pMin, ofParameter<glm::vec4>& pMax, float speed = 0.01f);
 #endif
 
 #if OF_VERSION_MINOR >= 10
@@ -724,29 +726,29 @@ namespace ofxImGuiSurfing
 
 	// Stepper widgets. (with +/- buttons to increment/decrement)
 
-	//bool AddStepper(ofParameter<int>& parameter, int step = -1, int stepFast = -1);
-	//bool AddStepper(ofParameter<float>& parameter, float step = -1, float stepFast = -1);
+	//bool AddStepper(ofParameter<int>& p, int step = -1, int stepFast = -1);
+	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
 
 	//--------------------------------------------------------------
-	inline bool AddStepperInt(ofParameter<int>& parameter)
+	inline bool AddStepperInt(ofParameter<int>& p)
 	{
 		bool bChanged = false;
-		auto tmpRefi = parameter.get();
+		auto tmpRefi = p.get();
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		string name = parameter.getName();
+		string name = p.getName();
 		string n = "##STEPPERint" + name;// +ofToString(1);
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
-		//if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
+		//if (ImGui::InputScalar(p.getName().c_str(), ImGuiDataType_U32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%u"))
 
-		if (ImGui::InputScalar(parameter.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
+		if (ImGui::InputScalar(p.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
 		{
-			tmpRefi = ofClamp(tmpRefi, parameter.getMin(), parameter.getMax());
-			parameter.set(tmpRefi);
+			tmpRefi = ofClamp(tmpRefi, p.getMin(), p.getMax());
+			p.set(tmpRefi);
 
 			bChanged = true;
 		}
@@ -808,11 +810,11 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-		//int
+		// int
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		//float
+		// float
 		float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
 		float stepFast = 100.f * step;
@@ -855,23 +857,23 @@ namespace ofxImGuiSurfing
 	// Clean of Styles with the default styles.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddParameter(ofParameter<ParameterType>& parameter, std::string format)
+	bool AddParameter(ofParameter<ParameterType>& p, std::string format)
 	{
 		//std::string format = "%.3f";//TODO:
 
-		auto tmpRef = parameter.get();
+		auto tmpRef = p.get();
 		const auto& info = typeid(ParameterType);
 
 		//--
 
-		// FLOAT
+		// Float
 
 		if (info == typeid(float))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			if (ImGui::SliderFloat((parameter.getName().c_str()), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format.c_str()))
+			if (ImGui::SliderFloat((p.getName().c_str()), (float*)&tmpRef, p.getMin(), p.getMax(), format.c_str()))
 			{
-				parameter.set(tmpRef);
+				p.set(tmpRef);
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
 			}
@@ -881,14 +883,14 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// INT
+		// Int
 
 		else if (info == typeid(int))
 		{
 			IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-			if (ImGui::SliderInt((parameter.getName().c_str()), (int*)&tmpRef, parameter.getMin(), parameter.getMax()))
+			if (ImGui::SliderInt((p.getName().c_str()), (int*)&tmpRef, p.getMin(), p.getMax()))
 			{
-				parameter.set(tmpRef);
+				p.set(tmpRef);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 				return true;
@@ -900,13 +902,13 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// BOOL
+		// Bool
 
 		else if (info == typeid(bool))
 		{
-			if (ImGui::Checkbox((parameter.getName().c_str()), (bool*)&tmpRef))
+			if (ImGui::Checkbox((p.getName().c_str()), (bool*)&tmpRef))
 			{
-				parameter.set(tmpRef);
+				p.set(tmpRef);
 				return true;
 			}
 
@@ -915,7 +917,7 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// UNKNOWN
+		// Unknown
 
 		if (info.name() == "" || info.name() == " ")
 			ofLogWarning("ofxSurfingImGui") << "Could not create GUI element for type " << info.name();
@@ -927,15 +929,15 @@ namespace ofxImGuiSurfing
 
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddText(ofParameter<ParameterType>& parameter, bool label)
+	bool AddText(ofParameter<ParameterType>& p, bool label)
 	{
 		if (label)
 		{
-			ImGui::LabelText((parameter.getName().c_str()), ofToString(parameter.get()).c_str());
+			ImGui::LabelText((p.getName().c_str()), ofToString(p.get()).c_str());
 		}
 		else
 		{
-			ImGui::Text(ofToString(parameter.get()).c_str());
+			ImGui::Text(ofToString(p.get()).c_str());
 		}
 
 		return true;

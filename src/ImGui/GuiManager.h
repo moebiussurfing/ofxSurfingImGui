@@ -2126,6 +2126,13 @@ public:
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
+	//--------------------------------------------------------------
+	void AddDebugToggle(bool bSeparated = true)
+	{
+		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	}
+
 	//----
 
 	// Advanced Window
