@@ -6,9 +6,18 @@
 	ofParameter Helpers
 	to easily render different widgets styles
 	for each ofParm and different types.
+*/
 
+/*
 	TODO:
-	+ mouse wheel for multi dim params
+
+	fix mouse wheel for multi dim params
+
+	Add customization for nested groups
+	pass some list of arguments
+	to customize items/groups
+	to be rendered with different styles:
+	https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
 
 */
 
@@ -62,7 +71,9 @@ namespace ofxImGuiSurfing
 	template<typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& ap, bool bFlip = false)
 	{
-		//TODO: allow customization
+		//TODO: 
+		// Workaround
+		// Allow customization
 		// Forced to default behavior/resolution stepping.
 		float resolution = -1;
 
@@ -254,7 +265,6 @@ namespace ofxImGuiSurfing
 										_step = resolution * MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
 									}
 								}
-
 
 								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
@@ -622,7 +632,7 @@ namespace ofxImGuiSurfing
 		bool isBool = (t == typeid(bool));
 		bool isVoid = (t == typeid(void));
 
-		if (!isFloat && !isInt && !isBool && !isVoid) 
+		if (!isFloat && !isInt && !isBool && !isVoid)
 		{
 			ofLogWarning("ofxSurfingImGui")
 				<< "Tooltip: ofParam type named " + name + " is not a Float, Int or Bool";
@@ -649,6 +659,7 @@ namespace ofxImGuiSurfing
 	// https://github.com/mikesart/gpuvis/blob/108d9c358a5f92cae5f79918025b9215a1771628/src/gpuvis_utils.cpp#L790
 	// 
 	// Example:
+	// string str = "wertwertwert";
 	// ofRectangle rc{ 100, 100, 100, 100 };
 	// AddTooltipPinned("Pinned Tooltip", ImVec2{ 200, 200 }, &rc, str.c_str());
 	//--------------------------------------------------------------
@@ -667,6 +678,10 @@ namespace ofxImGuiSurfing
 				ImGuiWindowFlags_AlwaysAutoResize;
 
 			io.MousePos = pos;
+
+			auto x = prc->x;
+			auto y = prc->y;
+			SetNextWindowPos(ImVec2(x, y), ImGuiCond_Always);
 
 			ImGui::Begin(name, NULL, flags);
 
@@ -865,7 +880,7 @@ namespace ofxImGuiSurfing
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
 		if (!isFloat && !isInt) {
-			ofLogWarning("ofxSurfingImGui") << 
+			ofLogWarning("ofxSurfingImGui") <<
 				"Stepper: ofParam type named " + name + " is not a Float or an Int";
 			return false;
 		}
@@ -1005,6 +1020,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddTextBoxWindow(string nameWindow, string text, bool bNoHeader = true)
 	{
+		nameWindow = ofToUpper(nameWindow);
 		const char* name = nameWindow.c_str();
 		const char* str = text.c_str();
 
@@ -1022,6 +1038,11 @@ namespace ofxImGuiSurfing
 			if (bNoHeader) flags += ImGuiWindowFlags_NoTitleBar;
 
 			ImGui::Begin(name, NULL, flags);
+
+			//TODO:
+			// Should be bigger font..
+			ImGui::Text("%s", name);
+			ImGui::Spacing();
 
 			ImGui::Text("%s", str);
 
@@ -1058,7 +1079,7 @@ namespace ofxImGuiSurfing
 			else
 			{
 				if (info.name() == "" || info.name() == " ")
-					ofLogWarning("ofxSurfingImGui") << 
+					ofLogWarning("ofxSurfingImGui") <<
 					"Could not create GUI element for type " << info.name();
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;

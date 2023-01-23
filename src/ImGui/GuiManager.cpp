@@ -1633,10 +1633,10 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p)
 	// workaround
 	// fix to trig the ofParams callbacks
 	// when closed window by the x on the upper right corner.
-	bool tmpRef = p.get();
-	bool b = BeginWindow(p.getName().c_str(), (bool*)&tmpRef, window_flags);
+	bool tmp = p.get();
+	bool b = BeginWindow(p.getName().c_str(), (bool*)&tmp, window_flags);
 	// trig if changed
-	if (p.get() != tmpRef) p.set(tmpRef);
+	if (p.get() != tmp) p.set(tmp);
 
 	// required to avoid exceptions when minimizing the window.
 	//fix crashes when foldering
@@ -1675,10 +1675,10 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 	// workaround
 	// fix to trig the ofParams callbacks
 	// when closed window by the x on the upper right corner.
-	bool tmpRef = p.get();
-	bool b = BeginWindow(p.getName().c_str(), (bool*)&tmpRef, window_flags);
+	bool tmp = p.get();
+	bool b = BeginWindow(p.getName().c_str(), (bool*)&tmp, window_flags);
 	// trig if changed
-	if (p.get() != tmpRef) p.set(tmpRef);
+	if (p.get() != tmp) p.set(tmp);
 
 	//TODO:
 	//fix crashes when foldering

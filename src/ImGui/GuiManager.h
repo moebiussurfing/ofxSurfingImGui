@@ -251,9 +251,9 @@ public:
 	// ofParametersGroup's 
 
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	void AddStyleGroup(ofParameterGroup& g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		_ui.AddStyleGroup(group, type, flags);
+		_ui.AddStyleGroup(g, type, flags);
 	}
 	//--------------------------------------------------------------
 	void AddStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
@@ -261,9 +261,9 @@ public:
 		_ui.AddStyleGroup(name, type, flags);
 	}
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(ofParameterGroup& group, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
+	void UpdateStyleGroup(ofParameterGroup& g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
-		_ui.UpdateStyleGroup(group, type, flags);
+		_ui.UpdateStyleGroup(g, type, flags);
 	}
 	//--------------------------------------------------------------
 	void UpdateStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
@@ -319,7 +319,7 @@ public:
 
 	//TODO:
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags)
+	void AddStyleGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags)
 	{
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
@@ -330,7 +330,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			_ui.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 
@@ -338,7 +338,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			_ui.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 
@@ -350,17 +350,17 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			_ui.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			_ui.AddStyleGroup(group, type, flagst);
+			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 
-		_ui.AddStyleGroup(group, type, flagst);
+		_ui.AddStyleGroup(g, type, flagst);
 	}
 
 	//--------------------------------------------------------------
@@ -410,7 +410,7 @@ public:
 
 	//TODO:
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags)
+	void UpdateStyleGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags)
 	{
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
@@ -421,7 +421,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			_ui.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 
@@ -429,7 +429,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			_ui.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 
@@ -441,29 +441,29 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			_ui.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			_ui.UpdateStyleGroup(group, type, flagst);
+			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 
-		_ui.UpdateStyleGroup(group, type, flagst);
+		_ui.UpdateStyleGroup(g, type, flagst);
 	}
 
 	//--
 
 	//TODO:
-	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a group.
+	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a g.
 	//--------------------------------------------------------------
-	void AddStyleGroupForBools(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_TOGGLE)
+	void AddStyleGroupForBools(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_TOGGLE)
 	{
-		for (int i = 0; i < group.size(); i++)
+		for (int i = 0; i < g.size(); i++)
 		{
-			ofAbstractParameter& ap = group[i];
+			ofAbstractParameter& ap = g[i];
 			if (ap.type() == typeid(ofParameter<bool>).name()) {
 				_ui.AddStyle(ap, type);
 			}
@@ -475,22 +475,22 @@ public:
 		}
 	}
 	//--------------------------------------------------------------
-	void AddStyleGroupForFloats(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_HSLIDER)
+	void AddStyleGroupForFloats(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_HSLIDER)
 	{
-		for (int i = 0; i < group.size(); i++)
+		for (int i = 0; i < g.size(); i++)
 		{
-			ofAbstractParameter& ap = group[i];
+			ofAbstractParameter& ap = g[i];
 			if (ap.type() == typeid(ofParameter<float>).name()) {
 				_ui.AddStyle(ap, type);
 			}
 		}
 	}
 	//--------------------------------------------------------------
-	void AddStyleGroupForInts(ofParameterGroup& group, SurfingGuiTypes type = OFX_IM_HSLIDER)
+	void AddStyleGroupForInts(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_HSLIDER)
 	{
-		for (int i = 0; i < group.size(); i++)
+		for (int i = 0; i < g.size(); i++)
 		{
-			ofAbstractParameter& ap = group[i];
+			ofAbstractParameter& ap = g[i];
 			if (ap.type() == typeid(ofParameter<int>).name()) {
 				_ui.AddStyle(ap, type);
 			}
@@ -557,24 +557,24 @@ public:
 	// _ui
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
+	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup, ImGuiCond cond = ImGuiCond_Once)
 	{
-		_ui.AddGroup(group, flags, typeGroup, cond);
+		_ui.AddGroup(g, flags, typeGroup, cond);
 	}
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, bool bOpen, ImGuiCond cond = ImGuiCond_None)
+	void AddGroup(ofParameterGroup& g, bool bOpen, ImGuiCond cond = ImGuiCond_None)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
 		SurfingGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
 
-		_ui.AddGroup(group, flags, typeGroup, cond);
+		_ui.AddGroup(g, flags, typeGroup, cond);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& group, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
+	void AddGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
 		////TODO: some subfolders make grow window width..
 		//refreshLayout();
@@ -588,7 +588,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_None)
 		{
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			_ui.AddGroup(group, flagst, type);
+			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
@@ -596,7 +596,7 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
 		{
 			type = OFX_IM_GROUP_HIDDEN;
-			_ui.AddGroup(group, flagst, type);
+			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
@@ -605,7 +605,7 @@ public:
 		{
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
-			_ui.AddGroup(group, flagst, type);
+			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
@@ -615,7 +615,7 @@ public:
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 
 			//// ? return ?
-			//_ui.AddGroup(group, flagst, type);
+			//_ui.AddGroup(g, flagst, type);
 
 			//return;
 		}
@@ -623,47 +623,47 @@ public:
 		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE;
-			_ui.AddGroup(group, flagst, type);
+			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
 		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
 		{
 			type = OFX_IM_GROUP_TREE_EX;
-			_ui.AddGroup(group, flagst, type);
+			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
 
-		_ui.AddGroup(group, flagst, type);
+		_ui.AddGroup(g, flagst, type);
 	}
 
 	//----
 
 	//TODO: Auto creates a window for the group
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
+	void AddGroupWindowed(ofParameterGroup& g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
 	{
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (this->BeginWindow((string)group.getName(), NULL, flags))
+		if (this->BeginWindow((string)g.getName(), NULL, flags))
 		{
-			_ui.AddGroup(group, flags, typeGroup);
+			_ui.AddGroup(g, flags, typeGroup);
 
 			this->EndWindow();
 		}
 	}
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
+	void AddGroupWindowed(ofParameterGroup& g, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
 	{
 		if (!_bGui) return;
 
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		//if (this->BeginWindow((string)group.getName(), _bGui, flags))
+		//if (this->BeginWindow((string)g.getName(), _bGui, flags))
 		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
 		{
-			_ui.AddGroup(group, flags, typeGroup);
+			_ui.AddGroup(g, flags, typeGroup);
 
 			this->EndWindow();
 		}
@@ -671,7 +671,7 @@ public:
 
 	//TODO: API update
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, ofParameter<bool>& _bGui, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
+	void AddGroupWindowed(ofParameterGroup& g, ofParameter<bool>& _bGui, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
 		if (!_bGui) return;
 
@@ -680,22 +680,22 @@ public:
 
 		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
 		{
-			this->AddGroup(group, flags);
-			//_ui.AddGroup(group, flags);
+			this->AddGroup(g, flags);
+			//_ui.AddGroup(g, flags);
 
 			this->EndWindow();
 		}
 	}
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& group, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
+	void AddGroupWindowed(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (this->BeginWindow((string)group.getName(), NULL, f))
+		if (this->BeginWindow((string)g.getName(), NULL, f))
 		{
-			this->AddGroup(group, flags);
-			//_ui.AddGroup(group, flags);
+			this->AddGroup(g, flags);
+			//_ui.AddGroup(g, flags);
 
 			this->EndWindow();
 		}
@@ -3169,8 +3169,8 @@ public:
 	// but we can add more from our ofApp
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameterGroup& group) {
-		params_LayoutsExtra.add(group);
+	void addExtraParamToLayoutPresets(ofParameterGroup& g) {
+		params_LayoutsExtra.add(g);
 	}
 	//--------------------------------------------------------------
 	void addExtraParamToLayoutPresets(ofParameter<bool>& param) {
