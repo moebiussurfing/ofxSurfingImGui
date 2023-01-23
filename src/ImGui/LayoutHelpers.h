@@ -464,6 +464,9 @@ namespace ofxImGuiSurfing
 	// i.e. by passing the width of the widget 
 	// you are trying to position 
 	// to the right window border.
+	// Example: 
+	// align right minus 21px
+	// AddSpacingRightAlign(21);
 	//--------------------------------------------------------------
 	inline void AddSpacingRightAlign(float width = 100)
 	{
@@ -473,6 +476,21 @@ namespace ofxImGuiSurfing
 		float wwidget = ImGui::GetContentRegionAvail().x - pad - width;
 		ImGui::Dummy(ImVec2{ wwidget,0 });
 		ImGui::SameLine();
+	}
+
+	// Displace next widgets from the default spacing.
+	// Useful to force position some widgets, 
+	// that we don't like the default spacing.
+	// Example: 
+	// push up 15px:
+	// AddSpacingOffset(ImVec2{ 0,-15 });
+	//--------------------------------------------------------------
+	inline void AddSpacingOffset(ImVec2 diff)
+	{
+		auto dl = ImGui::GetWindowDrawList();
+		auto pf = ImGui::GetCursorPos();
+		auto pt = pf + diff;
+		ImGui::SetCursorPos(pt);
 	}
 
 	// Adds horizontal spacing to center a widget.

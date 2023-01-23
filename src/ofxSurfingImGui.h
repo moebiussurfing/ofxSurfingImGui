@@ -1067,7 +1067,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	SNIPPET
 
-	RIGHT ALIGNED WIDGETS
+	RIGHT 
+	ALIGNED
+	WIDGETS
 	https://github.com/ocornut/imgui/issues/934#issuecomment-340231002
 
 	ImGui::SetNextWindowSize(ImVec2{400,400}, ImGuiCond_FirstUseEver);
