@@ -205,14 +205,36 @@ namespace ofxImGuiSurfing
 		return w;
 	}
 
+	// LEGACY
+	// Note that this is not the shape of the complete window, from the borders!
+	// Just the available space after applying inner paddings!
 	//--------------------------------------------------------------
 	inline float getWindowWidth()
 	{
-		return getWidgetsWidth();
+		return ImGui::GetContentRegionAvail().x;
+		//return getWidgetsWidth();
+	}
+	//--------------------------------------------------------------
+	inline float getWindowHeight()
+	{
+		return ImGui::GetContentRegionAvail().y;
 	}
 
+	// NEW API:
 	//--------------------------------------------------------------
-	inline float getWidgetsHeightUnit() // uses font size and frame padding
+	inline float getWindowWidthAvail()
+	{
+		return ImGui::GetContentRegionAvail().x;
+	}
+	//--------------------------------------------------------------
+	inline float getWindowHeightAvail()
+	{
+		return ImGui::GetContentRegionAvail().y;
+	}
+
+	// Height related to the theme. Uses font size and frame padding!
+	//--------------------------------------------------------------
+	inline float getWidgetsHeightUnit() 
 	{
 		return ImGui::GetFrameHeight(); 
 		//return getWidgetsHeightRelative();

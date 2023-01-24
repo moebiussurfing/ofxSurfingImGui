@@ -2081,7 +2081,7 @@ public:
 
 	// Minimize state
 	//--------------------------------------------------------------
-	void AddMinimizerToggle(bool bSeparated = true)
+	void AddMinimizerToggle(bool bSeparated = false)
 	{
 		this->Add(this->bMinimize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
@@ -2116,21 +2116,21 @@ public:
 	//-
 
 	//--------------------------------------------------------------
-	void AddLogToggle(bool bSeparated = true)
+	void AddLogToggle(bool bSeparated = false)
 	{
 		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	//--------------------------------------------------------------
-	void AddAutoResizeToggle(bool bSeparated = true)
+	void AddAutoResizeToggle(bool bSeparated = false)
 	{
 		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	//--------------------------------------------------------------
-	void AddDebugToggle(bool bSeparated = true)
+	void AddDebugToggle(bool bSeparated = false)
 	{
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
@@ -2139,7 +2139,7 @@ public:
 	bool isDebugDisabled() const { return !bDebug.get(); }
 
 	//--------------------------------------------------------------
-	void AddExtraToggle(bool bSeparated = true)
+	void AddExtraToggle(bool bSeparated = false)
 	{
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
@@ -2180,7 +2180,6 @@ public:
 	//--------------------------------------------------------------
 	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false)
 	{
-
 		if (bMinimize && bListenToMinimize) return;
 
 		if (bSpacing) ImGui::Spacing();

@@ -55,10 +55,10 @@ SurfingGuiManager::SurfingGuiManager()
 	//params_Advanced.add(bLandscape);//TODO:
 
 	// Exclude from settings
+	//bAdvanced.setSerializable(false);
+	//bExtra.setSerializable(false);
 	bLockMove.setSerializable(false);
 	bNoScroll.setSerializable(false);
-	//bAdvanced.setSerializable(false);
-	bExtra.setSerializable(false);
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);
 

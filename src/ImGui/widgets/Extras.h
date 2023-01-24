@@ -15,6 +15,7 @@
 
 #include "GuiConstants.h"
 #include "surfingTimers.h"
+#include "imgui_plot.h"
 
 //----
 
@@ -423,13 +424,19 @@ namespace ofxImGuiSurfing
 
 	//------------------------------------------------
 
+	//TODO. add flip
+	// 2D Pad for two float vars
 	// Taken from
 	// https://github.com/d3cod3/ofxVisualProgramming
 	// https://github.com/d3cod3/ofxVisualProgramming/blob/66e7d578fab47a413e7604efe208bd276ab2927c/src/core/imgui_controls.cpp#L287
-
+	// Warning. Probably should be normalized.
 	//--------------------------------------------------------------
-	inline bool AddPad2D(float* _x, float* _y, ImVec2 sz = ImVec2{ -1,-1 })
+	inline bool AddPad2D(float* _x, float* _y, ImVec2 sz = ImVec2{ -1,-1 }, bool bFlipx = false, bool bFlipy = false)
 	{
+		// visuals
+		enum { LINE_WIDTH = 2 }; // handlers: small lines width
+		enum { GRAB_RADIUS = 6 }; // handlers: circle radius
+
 		float w;
 		float h;
 
@@ -447,15 +454,6 @@ namespace ofxImGuiSurfing
 		}
 		else h = sz.y;
 
-		ImDrawList* draw_list = ImGui::GetWindowDrawList();
-		ImGuiStyle& style = GImGui->Style;
-
-		// visuals
-		enum { LINE_WIDTH = 2 }; // handlers: small lines width
-		enum { GRAB_RADIUS = 6 }; // handlers: circle radius
-
-		ImGuiWindow* Window = ImGui::GetCurrentWindow();
-
 		// Prepare canvas
 
 		float dimx;
@@ -463,13 +461,19 @@ namespace ofxImGuiSurfing
 		dimx = w;
 		dimy = h;
 
+		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		ImGuiStyle& style = GImGui->Style;
+		ImGuiWindow* Window = ImGui::GetCurrentWindow();
+
 		ImVec2 Canvas(dimx, dimy);
 		ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
 		ImGui::ItemSize(bb);
 
+		float rounding = style.FrameRounding;
+
 		// Bg
 		draw_list->
-			AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg));
+			AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg), rounding);
 
 		// Boxes
 		const int amt = 4;
@@ -478,7 +482,11 @@ namespace ofxImGuiSurfing
 
 		if (Canvas.x >= amt)
 		{
-			for (int i = 0; i <= Canvas.x; i += static_cast<int>((Canvas.x / amt)))
+			//for (int i = 0; i <= Canvas.x; i += static_cast<int>((Canvas.x / amt)))
+			// Now we exclude first and last lines bc drawing bg rectangle!
+
+			float wb = static_cast<int>((Canvas.x / amt));
+			for (int i = wb; i <= Canvas.x - wb; i += wb)
 			{
 				draw_list->
 					AddLine(
@@ -490,8 +498,10 @@ namespace ofxImGuiSurfing
 
 		// Grid
 
-		if (Canvas.y >= amt) {
-			for (int i = 0; i <= Canvas.y; i += static_cast<int>((Canvas.y / amt)))
+		if (Canvas.y >= amt)
+		{
+			float hb = static_cast<int>((Canvas.y / amt));
+			for (int i = hb; i <= Canvas.y - hb; i += hb)
 			{
 				draw_list->
 					AddLine(
@@ -504,7 +514,7 @@ namespace ofxImGuiSurfing
 		// Border
 
 		draw_list->
-			AddRect(bb.GetTL(), bb.GetBR() + ImVec2{ 1,1 }, ImGui::GetColorU32(ImGuiCol_Border));
+			AddRect(bb.GetTL(), bb.GetBR() + ImVec2{ 1,1 }, ImGui::GetColorU32(ImGuiCol_Border), rounding);
 
 		// Cross lines
 
@@ -593,9 +603,17 @@ namespace ofxImGuiSurfing
 
 						ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
 
+				//--
+
 				// Set values to vars!
 				*_x = _pos.x;
 				*_y = _pos.y;
+
+				////flipped
+				//if (bFlipx) *_x = _pos.x;
+				//else *_x = (1 - _pos.x);
+				//if (bFlipx) *_y = _pos.y;
+				//else *_y = (1 - _pos.y);
 
 				bChanged = true;
 			}
@@ -621,8 +639,9 @@ namespace ofxImGuiSurfing
 		return bChanged;
 	}
 
+	// 2D Pad for two float parameters
 	//--------------------------------------------------------------
-	inline bool AddPad2D(ofParameter<float>& x, ofParameter<float>& y, ImVec2 sz = ImVec2{ -1,-1 })
+	inline bool AddPad2D(ofParameter<float>& x, ofParameter<float>& y, ImVec2 sz = ImVec2{ -1,-1 }, bool bFlipx = false, bool bFlipy = false)
 	{
 		//ImGui::Spacing();
 
@@ -635,7 +654,7 @@ namespace ofxImGuiSurfing
 		float t1 = x.get();
 		float t2 = y.get();
 
-		if (ofxImGuiSurfing::AddPad2D(&t1, &t2, ImVec2{ sz.x, sz.y }))
+		if (ofxImGuiSurfing::AddPad2D(&t1, &t2, ImVec2{ sz.x, sz.y }, bFlipx, bFlipy))
 		{
 			x.set(t1);
 			y.set(t2);
@@ -740,15 +759,17 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO: some method could be redundant, should remove.
+
 	//--------------------------------------------------------------
-	inline void AddProgressBar(const float valuePrc, float max = 1.0f, bool noText = true)
+	inline void AddProgressBar(const float vPrc, float max = 1.0f, bool bNoText = true)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
 		const float pad = 0;
 
 		//TODO:
 		//char* overlay = 0;
-		//if (noText) overlay = "";
+		//if (bNoText) overlay = "";
 
 		// Draw progress bar
 		float _prc;
@@ -756,40 +777,40 @@ namespace ofxImGuiSurfing
 		ImVec4 color;
 
 		// Fill bar color
-		color = style->Colors[ImGuiCol_SliderGrabActive]; 
+		color = style->Colors[ImGuiCol_SliderGrabActive];
 		//color = style->Colors[ImGuiCol_ButtonHovered]; // a bit dark
 		// We can force change this color on theme... only used here. Better to fit the theme style.
-		
+
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
-		if (max == 1.0f) _prc = valuePrc;
-		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
+		if (max == 1.0f) _prc = vPrc;
+		else _prc = ofMap(vPrc, 0, max, 0.f, 1.0f);
 
-		if (noText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 0));//transparent
+		if (bNoText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 0));//transparent
 		{
 			ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
 		}
-		if (noText) ImGui::PopStyleColor();
+		if (bNoText) ImGui::PopStyleColor();
 
 		ImGui::PopStyleColor();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<float>& valuePrc, float max = -1.0f, bool noText = false)
+	inline void AddProgressBar(ofParameter<float>& pPrc, float max = -1.0f, bool bNoText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1.0f) ofxImGuiSurfing::AddProgressBar(valuePrc.get(), valuePrc.getMax(), noText);
-		else ofxImGuiSurfing::AddProgressBar(valuePrc.get(), 1.0f, noText);
+		if (max == -1.0f) ofxImGuiSurfing::AddProgressBar(pPrc.get(), pPrc.getMax(), bNoText);
+		else ofxImGuiSurfing::AddProgressBar(pPrc.get(), 1.0f, bNoText);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<float>& valuePrc, bool noText)
+	inline void AddProgressBar(ofParameter<float>& pPrc, bool bNoText)
 	{
-		AddProgressBar(valuePrc, -1.f, noText);
+		AddProgressBar(pPrc, -1.f, bNoText);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(const int valuePrc, int max = 100, bool noText = false)
+	inline void AddProgressBar(const int vPrc, int max = 100, bool bNoText = false)
 	{
 		float _w100 = ImGui::GetContentRegionAvail().x;
 		float pad = 0;
@@ -802,30 +823,30 @@ namespace ofxImGuiSurfing
 		color = style->Colors[ImGuiCol_SliderGrabActive];
 		//color = style->Colors[ImGuiCol_ButtonHovered];
 		//we can force change this color on theme... only used here
-		
+
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
-		if (max == 100) _prc = valuePrc / 100.f;
-		else _prc = ofMap(valuePrc, 0, max, 0.f, 1.0f);
+		if (max == 100) _prc = vPrc / 100.f;
+		else _prc = ofMap(vPrc, 0, max, 0.f, 1.0f);
 
-		if (noText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0));
+		if (bNoText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 0));
 
 		ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
 
-		if (noText) ImGui::PopStyleColor();
+		if (bNoText) ImGui::PopStyleColor();
 
 		ImGui::PopStyleColor();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar(ofParameter<int>& valuePrc, int max = -1, bool noText = false)
+	inline void AddProgressBar(ofParameter<int>& pPrc, int max = -1, bool bNoText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1) AddProgressBar(valuePrc.get(), valuePrc.getMax(), noText);
-		else AddProgressBar(valuePrc.get(), max, noText);
+		if (max == -1) AddProgressBar(pPrc.get(), pPrc.getMax(), bNoText);
+		else AddProgressBar(pPrc.get(), max, bNoText);
 	}
 
-	//--
+	//----
 
 	//--------------------------------------------------------------
 	inline void drawOfTexture(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH) {
@@ -865,35 +886,91 @@ namespace ofxImGuiSurfing
 
 	//--
 
-#include "imgui_plot.h"
-
-// Taken from: 
-// https://github.com/d3cod3/ofxVisualProgramming/blob/66e7d578fab47a413e7604efe208bd276ab2927c/src/core/imgui_helpers.h#L134
-//--------------------------------------------------------------
-	inline void drawWaveform(ImVec2 dim, float* data, int dataSize, float thickness, ImU32 color, float retinaScale = 1.0f) {
+	// Taken from: 
+	// https://github.com/d3cod3/ofxVisualProgramming/blob/66e7d578fab47a413e7604efe208bd276ab2927c/src/core/imgui_helpers.h#L134
+	//--------------------------------------------------------------
+	inline void drawWaveform(ImVec2 sz, float* data, int dataSize, float thickness, ImU32 color, float retinaScale = 1.0f) {
 
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
-		int IMGUI_EX_NODE_FOOTER_HEIGHT = 20;
+		ImGuiStyle& style = GImGui->Style;
+		ImGuiWindow* Window = ImGui::GetCurrentWindow();
+		ImVec2 Canvas(sz.x, sz.y);
+		ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
+
+		//int IMGUI_EX_NODE_FOOTER_HEIGHT = 20;
 
 		// draw signal background
-		drawList->AddRectFilled(ImGui::GetWindowPos(), ImGui::GetWindowPos() + dim, IM_COL32_BLACK);
+		//drawList->AddRectFilled(bb.Min, bb.Max, IM_COL32_BLACK);
+		//drawList->AddRectFilled(ImGui::GetWindowPos(), ImGui::GetWindowPos() + sz, IM_COL32_BLACK);
 
 		// draw signal plot
 		ImGuiEx::PlotConfig conf;
 		conf.values.ys = data;
 		conf.values.count = dataSize;
 		conf.values.color = color;
-		conf.scale.min = -1;
+		conf.scale.min = 0;
 		conf.scale.max = 1;
-		conf.tooltip.show = false;
+		conf.tooltip.show = true;
 		conf.tooltip.format = "x=%.2f, y=%.2f";
 		conf.grid_x.show = false;
 		conf.grid_y.show = false;
-		conf.frame_size = ImVec2(dim.x - (20 * retinaScale), dim.y - ((IMGUI_EX_NODE_HEADER_HEIGHT + IMGUI_EX_NODE_FOOTER_HEIGHT) * retinaScale));
+		conf.frame_size = sz;
+		//conf.frame_size = sz - ImVec2{ 10,10 };
+
+		//conf.selection = true;
+
+		//conf.fill
+
+		//conf.frame_size =
+		//	ImVec2(
+		//		sz.x - (20 * retinaScale), 
+		//		sz.y - ((IMGUI_EX_NODE_HEADER_HEIGHT + IMGUI_EX_NODE_FOOTER_HEIGHT) * retinaScale));
+
 		conf.line_thickness = thickness;
 
-		ImGuiEx::Plot("plot", conf);
+		ImGuiEx::Plot("PLOT", conf);
 	}
+
+	/*
+	void Demo_RealtimePlots() {
+		ImGui::BulletText("Move your mouse to change the data!");
+		ImGui::BulletText("This example assumes 60 FPS. Higher FPS requires larger buffer size.");
+		static ScrollingBuffer sdata1, sdata2;
+		static RollingBuffer   rdata1, rdata2;
+		ImVec2 mouse = ImGui::GetMousePos();
+		static float t = 0;
+		t += ImGui::GetIO().DeltaTime;
+		sdata1.AddPoint(t, mouse.x * 0.0005f);
+		rdata1.AddPoint(t, mouse.x * 0.0005f);
+		sdata2.AddPoint(t, mouse.y * 0.0005f);
+		rdata2.AddPoint(t, mouse.y * 0.0005f);
+
+		static float history = 10.0f;
+		ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
+		rdata1.Span = history;
+		rdata2.Span = history;
+
+		static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+
+		if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150))) {
+			ImPlot::SetupAxes(NULL, NULL, flags, flags);
+			ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
+			ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+			ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
+			ImPlot::PlotShaded("Mouse X", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), -INFINITY, 0, sdata1.Offset, 2 * sizeof(float));
+			ImPlot::PlotLine("Mouse Y", &sdata2.Data[0].x, &sdata2.Data[0].y, sdata2.Data.size(), 0, sdata2.Offset, 2 * sizeof(float));
+			ImPlot::EndPlot();
+		}
+		if (ImPlot::BeginPlot("##Rolling", ImVec2(-1, 150))) {
+			ImPlot::SetupAxes(NULL, NULL, flags, flags);
+			ImPlot::SetupAxisLimits(ImAxis_X1, 0, history, ImGuiCond_Always);
+			ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+			ImPlot::PlotLine("Mouse X", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 0, 2 * sizeof(float));
+			ImPlot::PlotLine("Mouse Y", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 0, 2 * sizeof(float));
+			ImPlot::EndPlot();
+		}
+	}
+	*/
 
 	//--
 
