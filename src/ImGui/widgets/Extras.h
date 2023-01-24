@@ -454,9 +454,6 @@ namespace ofxImGuiSurfing
 		enum { LINE_WIDTH = 2 }; // handlers: small lines width
 		enum { GRAB_RADIUS = 6 }; // handlers: circle radius
 
-		//TODO:
-		//bool szGrip = 20;
-
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
 
 		// Prepare canvas
@@ -535,21 +532,27 @@ namespace ofxImGuiSurfing
 
 		ImVec2 prevCursorPos = ImGui::GetCursorScreenPos();
 
+		////TODO:
+		// can't make it bigger
+		//bool szGrip = 20;
+		//ImGui::SetCursorScreenPos(
+		//	ImVec2(
+		//		bb.Min.x + (Canvas.x * *_x) - szGrip/2,
+		//		bb.Min.y + (Canvas.y * *_y) - szGrip/2));
+		//ImGui::InvisibleButton("circleGripBtn", ImVec2(szGrip, szGrip));
+
 		ImGui::SetCursorScreenPos(
 			ImVec2(
 				bb.Min.x + (Canvas.x * *_x) - 4,
 				bb.Min.y + (Canvas.y * *_y) - 4));
-
 		ImGui::InvisibleButton("circleGripBtn", ImVec2(8, 8));
 
 		bool bHover = ImGui::IsItemHovered();
 		{
 			_c1 = style.Colors[bHover ? ImGuiCol_Text : ImGuiCol_TextDisabled];
-			//c1 = ImGui::GetColorU32(bHover ? ImGuiCol_Text: ImGuiCol_TextDisabled);
-
 			c2 = ImGui::GetColorU32(bHover ? ImGuiCol_Text : ImGuiCol_TextDisabled);
 		}
-		float a = 1;
+		float a = 1;//alpha
 		if (bHover) a = ofMap(ofxSurfingHelpers::Bounce(), 0, 1, 0.4, 1);//blink
 		c1 = ImGui::GetColorU32(ImVec4(_c1.x, _c1.y, _c1.z, _c1.w * 0.35f * a));//less opacity
 
@@ -753,7 +756,10 @@ namespace ofxImGuiSurfing
 		ImVec4 color;
 
 		// Fill bar color
-		color = style->Colors[ImGuiCol_ButtonHovered]; // We can force change this color on theme... only used here. Better to fit the theme style.
+		color = style->Colors[ImGuiCol_SliderGrabActive]; 
+		//color = style->Colors[ImGuiCol_ButtonHovered]; // a bit dark
+		// We can force change this color on theme... only used here. Better to fit the theme style.
+		
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		if (max == 1.0f) _prc = valuePrc;
