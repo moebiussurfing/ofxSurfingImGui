@@ -35,7 +35,7 @@ namespace ofxImGuiSurfing
 	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
 
 	//--------------------------------------------------------------
-	inline void drawOFTexture(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH ){
+	inline void drawOfTexture(ofTexture* tex, float& _tw, float& _th, float& posX, float& posY, float& drawW, float& drawH ){
 	  if(tex->isAllocated()){
 		if(tex->getWidth()/tex->getHeight() >= _tw/_th){
 		  if(tex->getWidth() > tex->getHeight()){   // horizontal texture

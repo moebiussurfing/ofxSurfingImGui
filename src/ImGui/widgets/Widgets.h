@@ -1,15 +1,17 @@
 #pragma once
 
-//--------------------------------------------------------------
+/*
 
-// This header includes ALL my extra ImGui widgets
+	This header includes all 
+	the extra ImGui widgets headers.
 
-//---------
-// HEADERS
-//---------
+*/
+
+//--
 
 #include "ImGui/widgets/ButtonsToggles.h"
 #include "ImGui/widgets/Extras.h"
+#include "ImGui/widgets/MatrixClickers.h"
 #include "ImGui/widgets/Sliders.h"
 #include "ImGui/widgets/Colors.h"
 #include "ImGui/widgets/SlidersRange.h"
@@ -20,5 +22,3 @@
 
 #include "ImGui/WindowFbo.h"
 #include "ImGui/WindowLog.h"
-
-//#include "ImGui/widgets/imgui-knobs.h"

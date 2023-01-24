@@ -117,3 +117,32 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 };
+
+//--
+
+//// https://github.com/companje/ofxExtras/blob/master/src/ofxExtras.cpp
+//	void ofxSetColorHSB(int h, int s, int b, int a) {
+//    unsigned char hsv[] = {(unsigned char)h,(unsigned char)s,(unsigned char)b};
+//    unsigned char rgb[] = {0,0,0};
+//
+//    if (hsv[2] == 0); // black
+//	else if (hsv[1] == 0) { rgb[0]=b;  rgb[1]=b; rgb[2]=b; } // grays
+//    else {
+//        float h = hsv[0] * 6. / 255.;
+//        float s = hsv[1] / 255.;
+//        int hCategory = (int) floorf(h);
+//        float hRemainder = h - hCategory;
+//        unsigned char pv = (unsigned char) ((1.f - s) * hsv[2]);
+//        unsigned char qv = (unsigned char) ((1. - s * hRemainder) * hsv[2]);
+//        unsigned char tv = (unsigned char) ((1. - s * (1.-hRemainder)) * hsv[2]);
+//        switch (hCategory) {
+//            case 0: rgb[0] = hsv[2]; rgb[1] = tv; rgb[2] = pv; break; //r
+//            case 1: rgb[0] = qv; rgb[1] = hsv[2]; rgb[2] = pv; break; //g
+//            case 2: rgb[0] = pv; rgb[1] = hsv[2]; rgb[2] = tv; break;
+//            case 3: rgb[0] = pv; rgb[1] = qv; rgb[2] = hsv[2]; break; //b
+//            case 4: rgb[0] = tv; rgb[1] = pv; rgb[2] = hsv[2]; break;
+//            case 5: rgb[0] = hsv[2]; rgb[1] = pv; rgb[2] = qv; break; //back to r
+//        }
+//    }
+//    ofSetColor(rgb[0],rgb[1],rgb[2],a);
+//}

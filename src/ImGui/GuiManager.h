@@ -25,9 +25,11 @@
 
 //----
 
-// Alias
+// Aliases
+
 using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
+using namespace ofxSurfingHelpers;
 
 //----
 
@@ -37,7 +39,7 @@ using ofxImGuiSurfing::SurfingFontTypes;
 //--------------------------------------------------------------
 namespace ofxImGuiSurfing
 {
-	// Argument to be used on setup(mode);
+	// Argument to be used on ui.setup(mode);
 
 	enum SurfingGuiMode
 	{
@@ -57,11 +59,11 @@ namespace ofxImGuiSurfing
 		// but a single ImGui instance, no other add-ons.
 
 		//IM_GUI_MODE_SPECIAL_WINDOWS, 
-		// // TODO: could simplify API, bc it's duplicated from 
+		//TODO: could simplify API, bc it's duplicated from 
 		//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 		IM_GUI_MODE_REFERENCED,
-		// TODO: -> To receive the parent (ofApp scope) 
+		//TODO: -> To receive the parent (ofApp scope) 
 		// ImGui object as reference.
 
 		IM_GUI_MODE_NOT_INSTANTIATED
@@ -93,7 +95,7 @@ namespace ofxImGuiSurfing
 	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
 	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
 	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
-}
+} // namespace
 
 //--------
 
@@ -127,7 +129,7 @@ private:
 public:
 
 	// MODE B: 
-	// TODO: WIP. Not tested in depth.
+	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
 	void setup(ofxImGui::Gui& gui);
 
@@ -2133,6 +2135,17 @@ public:
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
+	bool isDebugEnabled() const { return bDebug.get(); }
+	bool isDebugDisabled() const { return !bDebug.get(); }
+
+	//--------------------------------------------------------------
+	void AddExtraToggle(bool bSeparated = true)
+	{
+		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	}
+	bool isExtraEnabled() const { return bExtra.get(); }
+	bool isExtraDisabled() const { return !bExtra.get(); }
 
 	//----
 
@@ -2747,7 +2760,7 @@ public:
 
 	//--
 
-	//TODO: WIP
+	//TODO: WIP:
 	//--------------------------------------------------------------
 	struct SurfingImWindow
 	{
@@ -2979,7 +2992,7 @@ public:
 
 	// Set next window position after last window. 
 	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
-	// TODO: working ?
+	//TODO: working ?
 	//--------------------------------------------------------------
 	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing) {
 
@@ -2992,7 +3005,7 @@ public:
 	// layoutType = 1 : bottom left
 	// layoutType = 2 : top left //TODO: BUG
 	// layoutType = 3 : top up //TODO:
-	// TODO: add vec2 offset...
+	//TODO: add vec2 offset...
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
 	{
@@ -3326,7 +3339,7 @@ private:
 
 	//----
 
-	////TODO: WIP
+	////TODO: WIP:
 	//// To be marked outside the scope to populate widgets inside this execution point... ?
 	//// Should use lambda functions here!
 	////TODO: learn lambda functions..

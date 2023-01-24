@@ -99,7 +99,6 @@ namespace ofxImGuiSurfing
 		__w99 = __w100 - __spcx;
 		__h100 = ImGui::GetContentRegionAvail().y; // full window panel height
 		__h = getWidgetsHeightRelative(); // relative to theme
-		//__h = BUTTON_BIG_HEIGHT; // hardcoded
 	}
 
 	// Another alternative
@@ -115,7 +114,6 @@ namespace ofxImGuiSurfing
 		__w33 = (__w100 - __spcx * 2) / 3;
 		__w25 = (__w100 - __spcx * 3) / 4;
 		__h = getWidgetsHeightRelative();
-		//__h = BUTTON_BIG_HEIGHT;
 	}
 
 	//--
@@ -140,8 +138,6 @@ namespace ofxImGuiSurfing
 	{
 		if (amntRows == -1 || amntRows == 1)
 		{
-			//h = ofxImGuiSurfing::getWidgetsHeightUnit();
-			//h = BUTTON_BIG_HEIGHT;
 			h = getWidgetsHeightRelative();
 		}
 		else
@@ -218,7 +214,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline float getWidgetsHeightUnit() // uses font size and frame padding
 	{
-		return getWidgetsHeightRelative();
+		return ImGui::GetFrameHeight(); 
+		//return getWidgetsHeightRelative();
 	}
 
 	//--------------------------------------------------------------

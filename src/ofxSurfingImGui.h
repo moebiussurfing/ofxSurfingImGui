@@ -1310,8 +1310,34 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 //--------------------------------------------------------------
-// MISCELLANEOUS / TRASH
-// CANDIDATES TO BE REMOVED
+// RARE DEMOS
+
+
+/*
+	EXAMPLE
+	This is a rotating text demo.
+
+	if (ui.BeginWindow("DEMO", ImGuiWindowFlags_None))
+	{
+		//ofxImGuiSurfing::DebugCheckVersionAndDataLayout();
+
+		ImVec2 diff{ 40, 40 };
+		//ImVec2 diff{ ImGui::GetWindowWidth() / 2, ImGui::GetWindowHeight() / 2 };
+		ofxImGuiSurfing::AddSpacingOffset(diff);
+
+		demo.ImRotateStart();
+		ui.AddLabelHugeXXL("HELLO WORLD");
+		demo.ImRotateEnd(0.0005f * ::GetTickCount());
+
+		//demo.ImRotateDemo("HelloWorld");
+
+		ui.EndWindow();
+	}
+*/
+
+
+//--------------------------------------------------------------
+// MISCELLANEOUS
 
 
 /*
