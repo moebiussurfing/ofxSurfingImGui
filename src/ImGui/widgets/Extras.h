@@ -14,6 +14,7 @@
 #include "imconfig.h"
 
 #include "GuiConstants.h"
+#include "surfingTimers.h"
 
 //----
 
@@ -431,22 +432,29 @@ namespace ofxImGuiSurfing
 	{
 		float w;
 		float h;
-		if (sz.x == -1) {
+
+		//fix bug oversize
+		float offset = 4;
+
+		if (sz.x == -1) {//full width 
 			float spx = ImGui::GetStyle().ItemSpacing.x;
-			w = ofxImGuiSurfing::getWindowWidth();
+			w = ofxImGuiSurfing::getWindowWidth() - offset;
 		}
 		else w = sz.x;
-		if (sz.y == -1) {
+		if (sz.y == -1) {//4 units height
 			float spy = ImGui::GetStyle().ItemSpacing.y;
-			h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
+			h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4 - offset;
 		}
 		else h = sz.y;
 
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
+		ImGuiStyle& style = GImGui->Style;
 
 		// visuals
 		enum { LINE_WIDTH = 2 }; // handlers: small lines width
 		enum { GRAB_RADIUS = 6 }; // handlers: circle radius
+
+		//TODO:
 		//bool szGrip = 20;
 
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
@@ -461,6 +469,10 @@ namespace ofxImGuiSurfing
 		ImVec2 Canvas(dimx, dimy);
 		ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
 		ImGui::ItemSize(bb);
+
+		// Bg
+		draw_list->
+			AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg));
 
 		// Boxes
 		const int amt = 4;
@@ -491,6 +503,11 @@ namespace ofxImGuiSurfing
 						IM_COL32(255, 255, 255, 20));
 			}
 		}
+
+		// Border
+
+		draw_list->
+			AddRect(bb.GetTL(), bb.GetBR() + ImVec2{ 1,1 }, ImGui::GetColorU32(ImGuiCol_Border));
 
 		// Cross lines
 
@@ -527,49 +544,48 @@ namespace ofxImGuiSurfing
 
 		bool bHover = ImGui::IsItemHovered();
 		{
-			ImGuiStyle& style = GImGui->Style;
 			_c1 = style.Colors[bHover ? ImGuiCol_Text : ImGuiCol_TextDisabled];
 			//c1 = ImGui::GetColorU32(bHover ? ImGuiCol_Text: ImGuiCol_TextDisabled);
 
 			c2 = ImGui::GetColorU32(bHover ? ImGuiCol_Text : ImGuiCol_TextDisabled);
 		}
-		c1 = ImGui::GetColorU32(ImVec4(_c1.x, _c1.y, _c1.z, _c1.w * 0.35f));//less opacity
+		float a = 1;
+		if (bHover) a = ofMap(ofxSurfingHelpers::Bounce(), 0, 1, 0.4, 1);//blink
+		c1 = ImGui::GetColorU32(ImVec4(_c1.x, _c1.y, _c1.z, _c1.w * 0.35f * a));//less opacity
 
 		static bool isDraggingCircle = false;
 		if (ImGui::IsItemActive() && ImGui::IsMouseDragging(0))
 		{
-			if (!isDraggingCircle)
-			{
-				isDraggingCircle = true;
-			}
-
 			bool bFixLock = false;
-			/*
-			//TODO:
-			// fix bug
-			// over resize width
-			// when dragging right border..
-			float offset = 1;
-			if (ImGui::GetMousePos().x - bb.Min.x >= w - offset)
-			{
-				bFixLock = true;
-			}
-			if (ImGui::GetMousePos().y - bb.Min.y >= h - offset)
-			{
-				bFixLock = true;
-			}
-			if (bFixLock)
-			{
-				//cout << "WARNING" << endl;
-			}
-			*/
+
+			////TODO:
+			//// fix bug
+			//// over resize width
+			//// when dragging right border..
+			//float offset = 1;
+			//if (ImGui::GetMousePos().x - bb.Min.x >= w - offset)
+			//{
+			//	bFixLock = true;
+			//}
+			//if (ImGui::GetMousePos().y - bb.Min.y >= h - offset)
+			//{
+			//	bFixLock = true;
+			//}
+			//if (bFixLock)
+			//{
+			//	//cout << "WARNING" << endl;
+			//}
 
 			if (!bFixLock)
 			{
+				if (!isDraggingCircle)
+				{
+					isDraggingCircle = true;
+				}
+
 				ImVec2 _pos =
 					ImClamp(
-						ImVec2(
-							(ImGui::GetMousePos().x - bb.Min.x) / Canvas.x,
+						ImVec2((ImGui::GetMousePos().x - bb.Min.x) / Canvas.x,
 							(ImGui::GetMousePos().y - bb.Min.y) / Canvas.y),
 
 						ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f));
@@ -577,8 +593,6 @@ namespace ofxImGuiSurfing
 				// Set values to vars!
 				*_x = _pos.x;
 				*_y = _pos.y;
-				//*_x = MIN(_pos.x, w);
-				//*_y = MIN(_pos.y, h);
 
 				bChanged = true;
 			}
@@ -596,7 +610,7 @@ namespace ofxImGuiSurfing
 					bb.Min.x + (Canvas.x * *_x),
 					bb.Min.y + (Canvas.y * *_y)),
 				GRAB_RADIUS,
-				ImGui::GetColorU32(c2), 6);
+				ImGui::GetColorU32(c2), 10);
 		//IM_COL32(255, 255, 255, 245), 6);
 
 		ImGui::SetCursorScreenPos(prevCursorPos);
