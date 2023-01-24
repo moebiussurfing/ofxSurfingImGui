@@ -1528,7 +1528,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_PROGRESS_BAR_NO_TEXT:
 					{
-						ofxImGuiSurfing::AddProgressBar(p, -1, true);
+						ofxImGuiSurfing::AddProgressBar(p, true);
+						//ofxImGuiSurfing::AddProgressBar(p, -1, true);
 						bReturn = false;
 					}
 					break;

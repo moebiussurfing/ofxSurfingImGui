@@ -741,7 +741,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar2(const float valuePrc, float max = 1.0f, bool noText = true)
+	inline void AddProgressBar(const float valuePrc, float max = 1.0f, bool noText = true)
 	{
 		const float _w100 = ImGui::GetContentRegionAvail().x;
 		const float pad = 0;
@@ -778,12 +778,18 @@ namespace ofxImGuiSurfing
 	inline void AddProgressBar(ofParameter<float>& valuePrc, float max = -1.0f, bool noText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1.0f) ofxImGuiSurfing::AddProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
-		else ofxImGuiSurfing::AddProgressBar2(valuePrc.get(), 1.0f, noText);
+		if (max == -1.0f) ofxImGuiSurfing::AddProgressBar(valuePrc.get(), valuePrc.getMax(), noText);
+		else ofxImGuiSurfing::AddProgressBar(valuePrc.get(), 1.0f, noText);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddProgressBar2(const int valuePrc, int max = 100, bool noText = false)
+	inline void AddProgressBar(ofParameter<float>& valuePrc, bool noText)
+	{
+		AddProgressBar(valuePrc, -1.f, noText);
+	}
+
+	//--------------------------------------------------------------
+	inline void AddProgressBar(const int valuePrc, int max = 100, bool noText = false)
 	{
 		float _w100 = ImGui::GetContentRegionAvail().x;
 		float pad = 0;
@@ -793,7 +799,10 @@ namespace ofxImGuiSurfing
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4 color;
 
-		color = style->Colors[ImGuiCol_ButtonHovered];//we can force change this color on theme... only used here
+		color = style->Colors[ImGuiCol_SliderGrabActive];
+		//color = style->Colors[ImGuiCol_ButtonHovered];
+		//we can force change this color on theme... only used here
+		
 		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, color);
 
 		if (max == 100) _prc = valuePrc / 100.f;
@@ -812,8 +821,8 @@ namespace ofxImGuiSurfing
 	inline void AddProgressBar(ofParameter<int>& valuePrc, int max = -1, bool noText = false)
 	{
 		// Always starts on 0.0f but max can be 1.0f, 100..
-		if (max == -1) AddProgressBar2(valuePrc.get(), valuePrc.getMax(), noText);
-		else AddProgressBar2(valuePrc.get(), max, noText);
+		if (max == -1) AddProgressBar(valuePrc.get(), valuePrc.getMax(), noText);
+		else AddProgressBar(valuePrc.get(), max, noText);
 	}
 
 	//--
