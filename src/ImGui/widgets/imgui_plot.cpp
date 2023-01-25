@@ -438,7 +438,8 @@ namespace ImGuiEx {
 
 	}
 
-	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max, ImU32 color) {
+	// Modified version from moebiusSurfinmg
+	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max, ImU32 color, bool bFill) {
 
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
 
@@ -451,8 +452,17 @@ namespace ImGuiEx {
 
 		float bin_w = Canvas.x / data->size();
 
-		for (unsigned int i = 0; i < data->size(); i++) {
-			drawList->AddRect(ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))), ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
+		for (unsigned int i = 0; i < data->size(); i++) 
+		{
+			if(bFill)
+			drawList->AddRectFilled(
+				ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))), 
+				ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
+	
+			else 
+				drawList->AddRect(
+					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))), 
+					ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
 		}
 
 	}

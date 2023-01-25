@@ -738,11 +738,14 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddVoidWidget()
 	{
+		// Unit height
 		float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+		float w = 10;
 
 		//TODO:
-		ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
-		//ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_Disabled);
+		ImGui::InvisibleButton("_inv_", ImVec2(w, h), ImGuiButtonFlags_None);
+
+		//ImGui::InvisibleButton("_inv_", ImVec2(w, h), ImGuiButtonFlags_Disabled);
 		//ImGui::Dummy(ImVec2(0, 2 * ImGui::GetStyle().ItemSpacing.y + 2 * ImGui::GetStyle().ItemInnerSpacing.y)); // hide widget
 	}
 	//TODO: Useful to hide widgets. Mainly useful when passing paramGroups
@@ -911,7 +914,7 @@ namespace ofxImGuiSurfing
 		//conf.grid_x.show = true;
 		//conf.grid_x.size = 1024;
 		conf.grid_y.show = true;
-		conf.grid_y.size= 4;
+		conf.grid_y.size = 4;
 
 		conf.frame_size = sz;
 
@@ -927,6 +930,7 @@ namespace ofxImGuiSurfing
 		conf.line_thickness = thickness;
 
 		ImGuiEx::Plot("PLOT", conf);
+
 	}
 
 	// Data must be a vector of normalized (0,1) floats 
@@ -985,6 +989,70 @@ namespace ofxImGuiSurfing
 				size,
 				1.f,
 				ImGui::GetColorU32(ImGuiCol_PlotLines));
+		}
+
+		if (bWindowed && b)
+		{
+			ImGui::End();
+		}
+	}
+
+	//float* data
+	//--------------------------------------------------------------
+	inline void AddFFT(string name, std::vector<float>* data, float max, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	{
+		bool bFill = true;
+
+		bool b = false;
+		if (bWindowed)
+		{
+			float ww = 300;
+			float r = (9 / 16.f);
+			float hh = ww * r;
+			ImGui::SetNextWindowSize(ImVec2{ ww, hh }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSizeConstraints(ImVec2{ 10, 10 }, ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
+
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			if (bNoHeader) flags += ImGuiWindowFlags_NoDecoration;
+			b = ImGui::Begin(name.c_str(), NULL, flags);
+			if (!b) {
+				ImGui::End();
+				return;
+			}
+		}
+
+		float w;
+		float h;
+		if (sz.x == -1) {//full width 
+			float spx = ImGui::GetStyle().ItemSpacing.x;
+			w = ofxImGuiSurfing::getWindowWidth();
+		}
+		else w = sz.x;
+		if (sz.y == -1) {//4 units height
+			float spy = ImGui::GetStyle().ItemSpacing.y;
+			h = ofxImGuiSurfing::getWindowHeightAvail();
+			//h = ofxImGuiSurfing::getWidgetsHeightUnit();
+		}
+		else h = sz.y;
+		sz = ImVec2(w, h);
+
+
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
+		ImGuiStyle& style = GImGui->Style;
+		ImGuiWindow* Window = ImGui::GetCurrentWindow();
+
+		ImVec2 Canvas(sz.x, sz.y);
+		ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
+
+
+		if ((bWindowed && b) || !bWindowed)
+		{
+			// Bg
+			float rounding = style.FrameRounding;
+			drawList->AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg), rounding);
+
+			// Plot
+			ImGuiEx::PlotBands(drawList, w, h, data, max, ImGui::GetColorU32(ImGuiCol_PlotLines), bFill);
 		}
 
 		if (bWindowed && b)
