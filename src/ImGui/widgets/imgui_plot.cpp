@@ -112,10 +112,12 @@ namespace ImGuiEx {
 			return status;
 		const bool hovered = ImGui::ItemHoverable(frame_bb, id);
 
+		// Bg
 		ImGui::RenderFrame(
 			frame_bb.Min,
 			frame_bb.Max,
-			ImGui::GetColorU32(ImGuiCol_Border),
+			ImGui::GetColorU32(ImGuiCol_FrameBg),//
+			//ImGui::GetColorU32(ImGuiCol_Border),//black
 			true,
 			style.FrameRounding);
 
@@ -355,7 +357,7 @@ namespace ImGuiEx {
 		return status;
 	}
 
-	//modified by moebiusSurfing
+	// Modified version from moebiusSurfing
 	void VUMeter(ImDrawList* drawList, float width, float height, float valueVol, bool horizontal) {
 
 		// Customized Vu by moebiusSurfing: 
@@ -438,7 +440,7 @@ namespace ImGuiEx {
 
 	}
 
-	// Modified version from moebiusSurfinmg
+	// Modified version from moebiusSurfing
 	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max, ImU32 color, bool bFill) {
 
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
@@ -452,16 +454,16 @@ namespace ImGuiEx {
 
 		float bin_w = Canvas.x / data->size();
 
-		for (unsigned int i = 0; i < data->size(); i++) 
+		for (unsigned int i = 0; i < (data->size()); i++)
 		{
-			if(bFill)
-			drawList->AddRectFilled(
-				ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))), 
-				ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
-	
-			else 
+			if (bFill)
+				drawList->AddRectFilled(
+					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))),
+					ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
+
+			else
 				drawList->AddRect(
-					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))), 
+					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))),
 					ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
 		}
 

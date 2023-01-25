@@ -887,6 +887,7 @@ namespace ofxImGuiSurfing
 
 	// Taken from: 
 	// https://github.com/d3cod3/ofxVisualProgramming/blob/66e7d578fab47a413e7604efe208bd276ab2927c/src/core/imgui_helpers.h#L134
+	// Originally from: https://github.com/soulthreads/imgui-plot
 	//--------------------------------------------------------------
 	inline void drawWaveform(ImVec2 sz, float* data, int dataSize, float thickness, ImU32 color, float retinaScale = 1.0f) {
 
@@ -907,25 +908,27 @@ namespace ofxImGuiSurfing
 		conf.values.ys = data;
 		conf.values.count = dataSize;
 		conf.values.color = color;
+
 		conf.scale.min = 0;
 		conf.scale.max = 1;
+
 		conf.tooltip.show = true;
 		conf.tooltip.format = "sample  %.0f \n   rms  %.2f";
+
 		//conf.grid_x.show = true;
 		//conf.grid_x.size = 1024;
-		conf.grid_y.show = true;
-		conf.grid_y.size = 4;
+		//conf.grid_x.subticks = 4;
+
+		//conf.grid_y.show = true;
+		//conf.grid_y.size = 0.5f;
+		//conf.grid_y.subticks = 1;
 
 		conf.frame_size = sz;
 
+		//conf.scale.type = ImGuiEx::PlotConfig::Scale::Linear;
+		//conf.scale.type = ImGuiEx::PlotConfig::Scale::Log10;//crashes
+
 		//conf.selection = true;
-
-		//conf.fill
-
-		//conf.frame_size =
-		//	ImVec2(
-		//		sz.x - (20 * retinaScale), 
-		//		sz.y - ((IMGUI_EX_NODE_HEADER_HEIGHT + IMGUI_EX_NODE_FOOTER_HEIGHT) * retinaScale));
 
 		conf.line_thickness = thickness;
 
@@ -1052,6 +1055,7 @@ namespace ofxImGuiSurfing
 			drawList->AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg), rounding);
 
 			// Plot
+			//ImU32 col_base = ImGui::GetColorU32(ImGuiCol_PlotLines);
 			ImGuiEx::PlotBands(drawList, w, h, data, max, ImGui::GetColorU32(ImGuiCol_PlotLines), bFill);
 		}
 
@@ -1067,16 +1071,41 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddVU(string name, float value, bool bHorizontal = false, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
 	{
+		// last frame window shape
+		static float w_;
+		static float h_;
+
+		//--
+
 		bool b = false;
 		if (bWindowed)
 		{
-			float ww = 60;
-			float hh = ww * 10;
-			ImGui::SetNextWindowSize(ImVec2{ ww, hh }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSizeConstraints(ImVec2{ 10, 10 }, ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
+			//TODO
+			bool bFlipped = false;
+			static bool bHorizontal_ = bHorizontal;
+			if (bHorizontal_ != bHorizontal)
+			{
+				bHorizontal_ = bHorizontal;
+
+				ImGui::SetNextWindowSize(ImVec2{ h_, w_ }, ImGuiCond_Always);
+				bFlipped = true;
+			}
+
+			if (!bFlipped)
+			{
+				// default
+				float ww = 60;
+				float hh = ww * 10;
+				ImGui::SetNextWindowSize(ImVec2{ ww, hh }, ImGuiCond_FirstUseEver);
+			}
+
+			ImGui::SetNextWindowSizeConstraints(
+				ImVec2{ 10, 10 },
+				ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
 
 			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 			if (bNoHeader) flags += ImGuiWindowFlags_NoDecoration;
+
 			b = ImGui::Begin(name.c_str(), NULL, flags);
 			if (!b) {
 				ImGui::End();
@@ -1086,21 +1115,50 @@ namespace ofxImGuiSurfing
 
 		float w;
 		float h;
-		if (sz.x == -1) {
-			w = ofxImGuiSurfing::getWindowWidthAvail();
+		//if (!bFlipped)
+		{
+			if (sz.x == -1) {
+				w = ofxImGuiSurfing::getWindowWidthAvail();
+			}
+			else w = sz.x;
+			if (sz.y == -1) {
+				if (!bWindowed) h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
+				else h = ofxImGuiSurfing::getWindowHeightAvail();
+			}
+			else h = sz.y;
+			sz = ImVec2(w, h);
 		}
-		else w = sz.x;
-		if (sz.y == -1) {
-			if (!bWindowed) h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
-			else h = ofxImGuiSurfing::getWindowHeightAvail();
-		}
-		else h = sz.y;
-		sz = ImVec2(w, h);
 
 		if ((bWindowed && b) || !bWindowed)
 		{
 			ImDrawList* drawList = ImGui::GetWindowDrawList();
+
 			ImGuiEx::VUMeter(drawList, w, h, value, bHorizontal);
+		}
+
+		// memorizes window shape on last frame!
+		w_ = ImGui::GetWindowWidth();
+		h_ = ImGui::GetWindowHeight();
+
+		// flip window
+		// maintain correct ratio
+		if (bHorizontal) 
+		{
+			if (h_ > w_) 
+			{
+				float tmp = h_;
+				h_ = w_;
+				w_ = tmp;
+			}
+		}
+		else 
+		{
+			if (h_ < w_) 
+			{
+				float tmp = h_;
+				h_ = w_;
+				w_ = tmp;
+			}
 		}
 
 		if (bWindowed && b)
@@ -1113,7 +1171,9 @@ namespace ofxImGuiSurfing
 
 } // namespace
 
+
 //----
+
 
 // Some experimental stuff,
 // GL or rare ImGui demos.
