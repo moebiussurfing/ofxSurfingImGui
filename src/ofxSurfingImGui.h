@@ -1383,3 +1383,32 @@ using ofxSurfingGui = SurfingGuiManager;
 
 */
 
+
+
+//TODO: blur fx
+/*
+
+public:
+
+	// Helper function to apply blur effect on an ImGui window
+	inline void ApplyBlur(ImGuiWindow window) {
+		ImGuiContext& g = ImGui::GetCurrentContext();
+		//ImGuiContext& g = GImGui;
+		ImVec2 pad_pos = window->DC.CursorPos;
+		ImVec2 pad_size = window->Size;
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::BeginChild("##blur", pad_size, true, 0);
+		ImGui::PopStyleVar();
+		ImGui::GetWindowDrawList()->AddRectFilled(pad_pos, ImVec2(pad_pos.x + pad_size.x, pad_pos.y + pad_size.y), ImColor(0, 0, 0, 128));
+		ImGui::EndChild();
+	}
+
+	// Usage example
+	inline void Example() {
+		ImGui::Begin("Blurred window");
+		ImGui::Text("This window has a blur effect applied to it.");
+		ApplyBlur(ImGui::GetCurrentWindow());
+		ImGui::End();
+	}
+
+*/

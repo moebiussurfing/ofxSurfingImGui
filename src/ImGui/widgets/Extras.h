@@ -23,7 +23,7 @@
 // to be added to the add-on.
 // Some widgets are already included!
 
-// Cute widgets !
+// Cute widgets!
 // https://github.com/soufianekhiat/DearWidgets
 
 // Spin arrows widget
@@ -933,7 +933,6 @@ namespace ofxImGuiSurfing
 		conf.line_thickness = thickness;
 
 		ImGuiEx::Plot("PLOT", conf);
-
 	}
 
 	// Data must be a vector of normalized (0,1) floats 
@@ -1000,7 +999,28 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-	//float* data
+	// EXAMPLE:
+	// 
+	// .h
+	// static constexpr size_t nBandsToGet = 128;
+	// std::array<float, nBandsToGet> fftSmoothed{ {0} };
+	// std::vector<float> data;
+	// 
+	// .cpp
+	// ofxImGuiSurfing::AddFFT(bGui_FFT.getName(), &data, 1.f);
+	// 
+	// audioIn(ofSoundBuffer& input)
+	// float* val = ofSoundGetSpectrum(nBandsToGet);
+	// for (int i = 0; i < nBandsToGet; i++) {
+	//		fftSmoothed[i] *= 0.96f;
+	//		if (fftSmoothed[i] < val[i]) fftSmoothed[i] = ofClamp(val[i], 0, 1);
+	// }
+	// data.clear();
+	// for (size_t i = 0; i < nBandsToGet; i++)
+	// {
+	//		data.push_back(fftSmoothed[i]);
+	// }
+	// TODO: add method to pass arrays too float* data?
 	//--------------------------------------------------------------
 	inline void AddFFT(string name, std::vector<float>* data, float max, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
 	{
@@ -1057,6 +1077,10 @@ namespace ofxImGuiSurfing
 			// Plot
 			//ImU32 col_base = ImGui::GetColorU32(ImGuiCol_PlotLines);
 			ImGuiEx::PlotBands(drawList, w, h, data, max, ImGui::GetColorU32(ImGuiCol_PlotLines), bFill);
+
+			// Border
+			drawList->
+				AddRect(bb.GetTL(), bb.GetBR() + ImVec2{ 1,1 }, ImGui::GetColorU32(ImGuiCol_Border), rounding);
 		}
 
 		if (bWindowed && b)
@@ -1069,7 +1093,7 @@ namespace ofxImGuiSurfing
 
 	// Value must be normalized (0,1)
 	//--------------------------------------------------------------
-	inline void AddVU(string name, float value, bool bHorizontal = false, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	inline void AddVU(string name, float value, bool bHorizontal = false, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false, float padding = 1.f, int divisions = 20)
 	{
 		// last frame window shape
 		static float w_;
@@ -1133,7 +1157,7 @@ namespace ofxImGuiSurfing
 		{
 			ImDrawList* drawList = ImGui::GetWindowDrawList();
 
-			ImGuiEx::VUMeter(drawList, w, h, value, bHorizontal);
+			ImGuiEx::VUMeter(drawList, w, h, value, bHorizontal, padding, divisions);
 		}
 
 		// memorizes window shape on last frame!
@@ -1142,18 +1166,18 @@ namespace ofxImGuiSurfing
 
 		// flip window
 		// maintain correct ratio
-		if (bHorizontal) 
+		if (bHorizontal)
 		{
-			if (h_ > w_) 
+			if (h_ > w_)
 			{
 				float tmp = h_;
 				h_ = w_;
 				w_ = tmp;
 			}
 		}
-		else 
+		else
 		{
-			if (h_ < w_) 
+			if (h_ < w_)
 			{
 				float tmp = h_;
 				h_ = w_;
@@ -1269,3 +1293,27 @@ public:
 		//ImRotateEnd(0.005f * ::GetTickCount() * !ImGui::IsItemHovered(), center);
 	}
 };
+
+//namespace ofxImGuiSurfing
+//{
+//	// Helper function to apply blur effect on an ImGui window
+//	void ApplyBlur(ImGuiWindow window) {
+//		ImGuiContext& g = GImGui;
+//		ImVec2 pad_pos = window->DC.CursorPos;
+//		ImVec2 pad_size = window->Size;
+//		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+//		ImGui::BeginChild("##blur", pad_size, true, 0);
+//		ImGui::PopStyleVar();
+//		ImGui::GetWindowDrawList()->AddRectFilled(pad_pos, ImVec2(pad_pos.x + pad_size.x, pad_pos.y + pad_size.y), ImColor(0, 0, 0, 128));
+//		ImGui::EndChild();
+//	}
+//
+//	// Usage example
+//	void Example() {
+//		ImGui::Begin("Blurred window");
+//		ImGui::Text("This window has a blur effect applied to it.");
+//		ApplyBlur(ImGui::GetCurrentWindow());
+//		ImGui::End();
+//	}
+//
+//}

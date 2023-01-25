@@ -479,9 +479,11 @@ namespace ofxImGuiSurfing
 	//---
 
 	// Right Align Helpers
-	// Add spacing to right align, 
-	// i.e. by passing the width of the widget 
-	// you are trying to position 
+	// Push left from right border
+	// Adds x spacing to right align widgets. 
+	// i.e. 
+	// by passing the excected width of the widget 
+	// you are moving the next widget position 
 	// to the right window border.
 	// Example: 
 	// align right minus 21px

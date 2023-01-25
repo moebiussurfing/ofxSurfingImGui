@@ -358,15 +358,17 @@ namespace ImGuiEx {
 	}
 
 	// Modified version from moebiusSurfing
-	void VUMeter(ImDrawList* drawList, float width, float height, float valueVol, bool horizontal) {
-
+	void VUMeter(ImDrawList* drawList, float width, float height, float valueVol, bool horizontal, float padding, int divisions)
+	{
 		// Customized Vu by moebiusSurfing: 
 		// more divisions
 		// different colors
 
 		// visuals
 		//enum { SUBDIVISIONS = 14 };
-		enum { SUBDIVISIONS = 20 };
+		//enum { SUBDIVISIONS = divisions };
+
+		int SUBDIVISIONS = divisions;
 
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
 
@@ -393,7 +395,13 @@ namespace ImGuiEx {
 		//float round = 2.5f;
 		float round = 0;
 
-		if (horizontal) {
+		float pd = padding;
+		//float pd = 4;
+		//float pd = 1;
+		//float pd = 0;
+
+		if (horizontal) // horizontal
+		{
 			// prepare canvas
 			const float dim = width > 0 ? width : ImGui::GetContentRegionAvail().x;
 			ImVec2 Canvas(dim, height);
@@ -404,18 +412,25 @@ namespace ImGuiEx {
 			if (Canvas.x >= SUBDIVISIONS) {
 				for (int i = 0; i < numRect; i++) {
 					if (i < l0) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y), ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - 2), bb.Max.y - 1), c0, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c0, round);
 					}
 					else if (i >= l0 && i < l1) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y), ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - 2), bb.Max.y - 1), c1, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c1, round);
 					}
 					else if (i >= l1 && i < SUBDIVISIONS) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y), ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - 2), bb.Max.y - 1), c2, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
+							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c2, round);
 					}
 				}
 			}
 		}
-		else {
+		else // vertical
+		{
 			// prepare canvas
 			const float dim = height > 0 ? height : ImGui::GetContentRegionAvail().y;
 			ImVec2 Canvas(width, dim);
@@ -426,13 +441,19 @@ namespace ImGuiEx {
 			if (Canvas.y >= SUBDIVISIONS) {
 				for (int i = 0; i < numRect; i++) {
 					if (i < l0) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)), ImVec2(bb.Max.x - 1, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - 2)), c0, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
+							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c0, round);
 					}
 					else if (i >= l0 && i < l1) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)), ImVec2(bb.Max.x - 1, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - 2)), c1, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
+							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c1, round);
 					}
 					else if (i >= l1 && i < SUBDIVISIONS) {
-						drawList->AddRectFilled(ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)), ImVec2(bb.Max.x - 1, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - 2)), c2, round);
+						drawList->AddRectFilled(
+							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
+							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c2, round);
 					}
 				}
 			}
