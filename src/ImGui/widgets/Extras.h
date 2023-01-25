@@ -1070,17 +1070,23 @@ namespace ofxImGuiSurfing
 
 		if ((bWindowed && b) || !bWindowed)
 		{
+
 			// Bg
 			float rounding = style.FrameRounding;
 			drawList->AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg), rounding);
 
 			// Plot
-			//ImU32 col_base = ImGui::GetColorU32(ImGuiCol_PlotLines);
-			ImGuiEx::PlotBands(drawList, w, h, data, max, ImGui::GetColorU32(ImGuiCol_PlotLines), bFill);
+			 
+			//auto c = ImGui::GetColorU32(ImGuiCol_PlotLines);
+			// alpha 
+			ImVec4 _c = style.Colors[ImGuiCol_PlotLines];
+			float a = 0.5f;
+			auto c = ImGui::GetColorU32(ImVec4(_c.x, _c.y, _c.z, a * _c.w));
+
+			ImGuiEx::PlotBands(drawList, w, h, data, max, c, bFill);
 
 			// Border
-			drawList->
-				AddRect(bb.GetTL(), bb.GetBR() + ImVec2{ 1,1 }, ImGui::GetColorU32(ImGuiCol_Border), rounding);
+			drawList-> AddRect(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_Border), rounding);
 		}
 
 		if (bWindowed && b)

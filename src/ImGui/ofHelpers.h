@@ -825,9 +825,9 @@ namespace ofxImGuiSurfing
 			bChanged = true;
 		}
 
-		ImGui::PopID();
-
 		IMGUI_SUGAR__STEPPER_WIDTH_POP;
+
+		ImGui::PopID();
 
 		return bChanged;
 	}

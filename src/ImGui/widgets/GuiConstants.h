@@ -14,7 +14,8 @@
 // To fix weird behaviors 
 // when too big or too small resized windows
 
-#define WINDOW_WIDTH_THRESHOLD 250 
+#define WINDOW_WIDTH_THRESHOLD 300 
+//#define WINDOW_WIDTH_THRESHOLD 250 
 // when a window width is less than that, 
 // we can consider that the window is too small.
 // we will use another layout pattern for some widgets.

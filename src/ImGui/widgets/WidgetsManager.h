@@ -940,14 +940,14 @@ namespace ofxImGuiSurfing
 					//	break;
 
 					case OFX_IM_TOGGLE_SMALL:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						//ImGui::PushItemFlag(ImGuiItemFlags)
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.25f);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -955,28 +955,28 @@ namespace ofxImGuiSurfing
 						break;
 
 					case OFX_IM_TOGGLE_MEDIUM:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.5f);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 2);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 3);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXXL:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 4);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -987,42 +987,42 @@ namespace ofxImGuiSurfing
 						// Border
 
 					case OFX_IM_TOGGLE_SMALL_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.25f, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_MEDIUM_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.5f, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 2, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 3, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXXL_BORDER:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 4, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1033,42 +1033,42 @@ namespace ofxImGuiSurfing
 						// Border Blink
 
 					case OFX_IM_TOGGLE_SMALL_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.25f, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 1.5f, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 2, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 3, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
 
 					case OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK:
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddBigToggle(p, _ww, _hh * 4, true, true);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1080,7 +1080,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED_MINI:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.15f * _hh, 1.15f * (2 / 3.f) * _hh), false);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1088,7 +1088,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED_SMALL:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(1.35f * _hh, 1.35f * (2 / 3.f) * _hh));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1096,7 +1096,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1104,7 +1104,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2 * _hh, 2 * (2 / 3.f) * _hh));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1112,7 +1112,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_TOGGLE_ROUNDED_BIG:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
-						if(isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
 						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(2.5f * _hh, 2.5f * (2 / 3.f) * _hh));
 						//bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(3 * _hh, 2 * _hh));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1241,7 +1241,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// 2.3 FLOAT
+			// 2.3 Float
 
 			else if (isFloat)
 			{
@@ -1664,7 +1664,7 @@ namespace ofxImGuiSurfing
 						//TODO:
 						// Replace for the new one
 						//ofxImGuiSurfing::AddComboBundle(p);
-												
+
 						//TODO:
 						// too ugly
 						// LEGACY
@@ -1690,7 +1690,7 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
-						
+
 					}
 					break;
 
@@ -1700,10 +1700,12 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_STEPPER:
 					{
+						//ImGui::PushItemWidth(100);
 						bReturn = AddStepperFloat(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+						//ImGui::PopItemWidth();
 
 						//const float step = 0.001f;
 						//const float stepFast = 0.1f;
@@ -1739,7 +1741,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// 2.4 INT
+			// 2.4 Int
 
 			else if (isInt)
 			{
@@ -2144,10 +2146,12 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_STEPPER:
 					{
+						//ImGui::PushItemWidth(100);
 						bReturn = AddStepperInt(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+						//ImGui::PopItemWidth();
 
 						//const int step = 1;
 						//const int stepFast = 5;
@@ -2220,7 +2224,7 @@ namespace ofxImGuiSurfing
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
 						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh));
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG)
-						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2*_hh));
+						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, 2 * _hh));
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_NO_ALPHA)
 						ofxImGuiSurfing::addColorBox(p, ImVec2(_ww, _hh), true);
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH_BIG_NO_ALPHA)
@@ -2258,7 +2262,7 @@ namespace ofxImGuiSurfing
 						bReturn = ofxImGuiSurfing::AddParameter(p, true, ImGuiColorEditFlags_NoInputs);
 					else if (type == OFX_IM_COLOR_NO_INPUTS_NO_ALPHA)
 						bReturn = ofxImGuiSurfing::AddParameter(p, false, ImGuiColorEditFlags_NoInputs);
-					
+
 					else if (type == OFX_IM_COLOR_BOX)
 						ImGui::ColorButton("", tmpRef, flags);
 					else if (type == OFX_IM_COLOR_BOX_FULL_WIDTH)
@@ -2644,7 +2648,7 @@ namespace ofxImGuiSurfing
 					if (pGroup)
 					{
 						refreshLayout(); // ?
-						uniqueName.pushGroup(); 
+						uniqueName.pushGroup();
 						//TODO: should be in another place ?
 
 						// -> Unique id for possible name repeated params inside many groups.
