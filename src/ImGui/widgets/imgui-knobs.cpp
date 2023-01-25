@@ -393,11 +393,14 @@ namespace ImGuiKnobs {
 			for (auto n = 0.f; n < steps; n++) {
 				auto a = n / (steps - 1);
 				auto angle = knob.angle_min + (knob.angle_max - knob.angle_min) * a;
-				knob.draw_tick(0.7, 0.9, 0.04, angle, detail::GetPrimaryColorSet());
+				knob.draw_tick(0.7, 0.9, 0.04, angle, detail::GetSecondaryColorSet());
+				//knob.draw_tick(0.7, 0.9, 0.04, angle, detail::GetPrimaryColorSet());
 			}
 
-			knob.draw_circle(0.6, detail::GetSecondaryColorSet(), true, 32);
-			knob.draw_dot(0.12, 0.4, knob.angle, detail::GetPrimaryColorSet(), true, 12);
+			//knob.draw_circle(0.6, detail::GetSecondaryColorSet(), true, 32);
+			//knob.draw_dot(0.12, 0.4, knob.angle, detail::GetPrimaryColorSet(), true, 12);
+			knob.draw_circle(0.6, detail::GetPrimaryColorSet(), true, 32);
+			knob.draw_dot(0.12, 0.4, knob.angle, detail::GetSecondaryColorSet(), true, 12);
 			break;
 		}
 		case ImGuiKnobVariant_Space: {

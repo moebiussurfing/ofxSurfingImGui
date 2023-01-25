@@ -677,10 +677,9 @@ namespace ofxImGuiSurfing
 			h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
 		}
 		else h = sz.y;
-
 		sz = ImVec2(w, h);
 
-		ImGui::PushID(1);
+		ImGui::PushID("##PLOT");
 
 		static float min = parameter.getMin();
 		static float max = parameter.getMax();
@@ -689,15 +688,15 @@ namespace ofxImGuiSurfing
 		ImGui::Text(name.c_str());
 
 		static bool bOn = true;
+		ImGui::Checkbox("On", &bOn);
 
 		// Fill an array of contiguous float values to plot
 		// Tip: If your float aren't contiguous but part of a structure, 
 		// you can pass a pointer to your first float
 		// and the sizeof() of your structure in the "stride" parameter.
 
-		//static const size_t duration = 60 * 4;//fps * secs
-		//static float values[duration] = {};
-		static float values[120] = {};
+		static const size_t duration = 60 * 4;//fps * secs
+		static float values[duration] = {};
 
 		static int values_offset = 0;
 		static double refresh_time = 0.0;
@@ -729,9 +728,6 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PlotLines("", values, IM_ARRAYSIZE(values), values_offset, overlay, min, max, sz);
-		//ImGui::PlotLines(name.c_str(), values, IM_ARRAYSIZE(values), values_offset, overlay, min, max, sz);
-
-		ImGui::Checkbox("On", &bOn);
 
 		ImGui::PopID();
 	}
@@ -911,11 +907,13 @@ namespace ofxImGuiSurfing
 		conf.scale.min = 0;
 		conf.scale.max = 1;
 		conf.tooltip.show = true;
-		conf.tooltip.format = "x=%.2f, y=%.2f";
-		conf.grid_x.show = false;
-		conf.grid_y.show = false;
+		conf.tooltip.format = "sample  %.0f \n   rms  %.2f";
+		//conf.grid_x.show = true;
+		//conf.grid_x.size = 1024;
+		conf.grid_y.show = true;
+		conf.grid_y.size= 4;
+
 		conf.frame_size = sz;
-		//conf.frame_size = sz - ImVec2{ 10,10 };
 
 		//conf.selection = true;
 
@@ -931,46 +929,117 @@ namespace ofxImGuiSurfing
 		ImGuiEx::Plot("PLOT", conf);
 	}
 
-	/*
-	void Demo_RealtimePlots() {
-		ImGui::BulletText("Move your mouse to change the data!");
-		ImGui::BulletText("This example assumes 60 FPS. Higher FPS requires larger buffer size.");
-		static ScrollingBuffer sdata1, sdata2;
-		static RollingBuffer   rdata1, rdata2;
-		ImVec2 mouse = ImGui::GetMousePos();
-		static float t = 0;
-		t += ImGui::GetIO().DeltaTime;
-		sdata1.AddPoint(t, mouse.x * 0.0005f);
-		rdata1.AddPoint(t, mouse.x * 0.0005f);
-		sdata2.AddPoint(t, mouse.y * 0.0005f);
-		rdata2.AddPoint(t, mouse.y * 0.0005f);
+	// Data must be a vector of normalized (0,1) floats 
+	// EXAMPLE:
+	// int MAX = 1024;//h
+	// vector<float> history;
+	// history.assign(MAX, 0.0);//setup
+	// history.push_back(value);//add value
+	// if (history.size() >= MAX) {// refresh
+	//		history.erase(history.begin(), history.begin() + 1);
+	//}
+	//--------------------------------------------------------------
+	inline void AddWaveform(string name, float* data, uint32_t size, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	{
+		bool b = false;
+		if (bWindowed)
+		{
+			// default size
+			float ww = 400;
+			float r = (9 / 16.f);
+			float hh = ww * r;
+			ImGui::SetNextWindowSize(ImVec2{ ww, hh }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSizeConstraints(ImVec2{ 100, 100 * r }, ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
 
-		static float history = 10.0f;
-		ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
-		rdata1.Span = history;
-		rdata2.Span = history;
-
-		static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
-
-		if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150))) {
-			ImPlot::SetupAxes(NULL, NULL, flags, flags);
-			ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
-			ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
-			ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
-			ImPlot::PlotShaded("Mouse X", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), -INFINITY, 0, sdata1.Offset, 2 * sizeof(float));
-			ImPlot::PlotLine("Mouse Y", &sdata2.Data[0].x, &sdata2.Data[0].y, sdata2.Data.size(), 0, sdata2.Offset, 2 * sizeof(float));
-			ImPlot::EndPlot();
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			if (bNoHeader) flags += ImGuiWindowFlags_NoDecoration;
+			b = ImGui::Begin(name.c_str(), NULL, flags);
+			if (!b) {
+				ImGui::End();
+				return;
+			}
 		}
-		if (ImPlot::BeginPlot("##Rolling", ImVec2(-1, 150))) {
-			ImPlot::SetupAxes(NULL, NULL, flags, flags);
-			ImPlot::SetupAxisLimits(ImAxis_X1, 0, history, ImGuiCond_Always);
-			ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
-			ImPlot::PlotLine("Mouse X", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 0, 2 * sizeof(float));
-			ImPlot::PlotLine("Mouse Y", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 0, 2 * sizeof(float));
-			ImPlot::EndPlot();
+
+		float spx = ofxImGuiSurfing::getWidgetsSpacingX();
+		float w;
+		float h;
+		if (sz.x == -1) {
+			w = ofxImGuiSurfing::getWindowWidthAvail() /*+ spx*/;//fix
+		}
+		else w = sz.x;
+		if (sz.y == -1) {
+			if (!bWindowed) h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
+			else h = ofxImGuiSurfing::getWindowHeightAvail();
+		}
+		else h = sz.y;
+		sz = ImVec2(w, h);
+
+		if ((bWindowed && b) || !bWindowed)
+		{
+			// fix workaround
+			ofxImGuiSurfing::AddSpacingOffset(ImVec2{ 1.5f * spx, 0 });
+
+			ofxImGuiSurfing::drawWaveform(
+				sz,
+				&data[0],
+				size,
+				1.f,
+				ImGui::GetColorU32(ImGuiCol_PlotLines));
+		}
+
+		if (bWindowed && b)
+		{
+			ImGui::End();
 		}
 	}
-	*/
+
+	//--
+
+	// Value must be normalized (0,1)
+	//--------------------------------------------------------------
+	inline void AddVU(string name, float value, bool bHorizontal = false, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	{
+		bool b = false;
+		if (bWindowed)
+		{
+			float ww = 60;
+			float hh = ww * 10;
+			ImGui::SetNextWindowSize(ImVec2{ ww, hh }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSizeConstraints(ImVec2{ 10, 10 }, ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
+
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			if (bNoHeader) flags += ImGuiWindowFlags_NoDecoration;
+			b = ImGui::Begin(name.c_str(), NULL, flags);
+			if (!b) {
+				ImGui::End();
+				return;
+			}
+		}
+
+		float w;
+		float h;
+		if (sz.x == -1) {
+			w = ofxImGuiSurfing::getWindowWidthAvail();
+		}
+		else w = sz.x;
+		if (sz.y == -1) {
+			if (!bWindowed) h = ofxImGuiSurfing::getWidgetsHeightUnit() * 4;
+			else h = ofxImGuiSurfing::getWindowHeightAvail();
+		}
+		else h = sz.y;
+		sz = ImVec2(w, h);
+
+		if ((bWindowed && b) || !bWindowed)
+		{
+			ImDrawList* drawList = ImGui::GetWindowDrawList();
+			ImGuiEx::VUMeter(drawList, w, h, value, bHorizontal);
+		}
+
+		if (bWindowed && b)
+		{
+			ImGui::End();
+		}
+	}
 
 	//--
 
