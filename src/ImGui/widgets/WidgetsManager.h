@@ -17,7 +17,8 @@
 #include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
 
-//-
+//--
+
 namespace ofxImGuiSurfing
 {
 	class WidgetsManager
@@ -567,7 +568,9 @@ namespace ofxImGuiSurfing
 				{
 					if (bSameLine) ImGui::SameLine();
 
-					//TODO: could be take from style argument, not hard coded like that
+					//TODO: 
+					//could be take from style argument, 
+					//not hard coded like that
 					float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
 					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
 
@@ -613,7 +616,7 @@ namespace ofxImGuiSurfing
 			const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
 
 			//TODO:
-			// is not called with groups here.. ?
+			// Is not called with groups here.. ?
 			// but we will warm the coder that maybe used Add instead of AddGroup, 
 			// when adding a group!
 			const bool isGroup = ptype == typeid(ofParameterGroup).name();
@@ -627,7 +630,7 @@ namespace ofxImGuiSurfing
 
 			//--------
 
-			// 2.0 VOID
+			// 2.0 Void
 
 			if (isVoid)
 			{
@@ -765,7 +768,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// 2.1 BOOL
+			// 2.1 Bool
 
 			else if (isBool)
 			{
@@ -1127,7 +1130,7 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// 2.2. STRING
+			// 2.2. String
 
 			else if (isString)
 			{
@@ -2142,7 +2145,7 @@ namespace ofxImGuiSurfing
 
 					//---- 
 
-					// Stepper
+					// Stepper (Int)
 
 					case OFX_IM_STEPPER:
 					{

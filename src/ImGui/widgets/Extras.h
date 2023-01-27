@@ -17,6 +17,10 @@
 #include "surfingTimers.h"
 #include "imgui_plot.h"
 
+#include "Sliders.h"
+// to enable sliders for the big vertical floating slider. 
+//#include "WidgetsManager.h"//TODO: to enable mouse..
+
 //----
 
 // Some interesting widgets candidates 
@@ -1022,7 +1026,7 @@ namespace ofxImGuiSurfing
 	// }
 	// TODO: add method to pass arrays too float* data?
 	//--------------------------------------------------------------
-	inline void AddFFT(string name, std::vector<float>* data, float max, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	inline void AddFFT(string name, std::vector<float>* data, float max, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false, float start = 0.f, float end = 1.f)
 	{
 		bool bFill = true;
 
@@ -1076,17 +1080,17 @@ namespace ofxImGuiSurfing
 			drawList->AddRectFilled(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_FrameBg), rounding);
 
 			// Plot
-			 
+
 			//auto c = ImGui::GetColorU32(ImGuiCol_PlotLines);
 			// alpha 
 			ImVec4 _c = style.Colors[ImGuiCol_PlotLines];
 			float a = 0.5f;
 			auto c = ImGui::GetColorU32(ImVec4(_c.x, _c.y, _c.z, a * _c.w));
 
-			ImGuiEx::PlotBands(drawList, w, h, data, max, c, bFill);
+			ImGuiEx::PlotBands(drawList, w, h, data, max, c, start, end, bFill);
 
 			// Border
-			drawList-> AddRect(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_Border), rounding);
+			drawList->AddRect(bb.GetTL(), bb.GetBR(), ImGui::GetColorU32(ImGuiCol_Border), rounding);
 		}
 
 		if (bWindowed && b)
@@ -1105,19 +1109,22 @@ namespace ofxImGuiSurfing
 		static float w_;
 		static float h_;
 
+		static bool bMustRefresh = false;
+
 		//--
 
-		bool b = false;
+		bool b = false;//opened
 		if (bWindowed)
 		{
 			//TODO
 			bool bFlipped = false;
 			static bool bHorizontal_ = bHorizontal;
-			if (bHorizontal_ != bHorizontal)
+			if (bHorizontal_ != bHorizontal || bMustRefresh)
 			{
 				bHorizontal_ = bHorizontal;
+				bMustRefresh = false;
 
-				ImGui::SetNextWindowSize(ImVec2{ h_, w_ }, ImGuiCond_Always);
+				ImGui::SetNextWindowSize(ImVec2{ w_, h_ }, ImGuiCond_Always);
 				bFlipped = true;
 			}
 
@@ -1130,7 +1137,7 @@ namespace ofxImGuiSurfing
 			}
 
 			ImGui::SetNextWindowSizeConstraints(
-				ImVec2{ 10, 10 },
+				ImVec2{ 1, 1 },
 				ImVec2{ (float)ofGetWidth(), (float)ofGetHeight() });
 
 			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
@@ -1176,18 +1183,24 @@ namespace ofxImGuiSurfing
 		{
 			if (h_ > w_)
 			{
+				//bHorizontal = false;
+
 				float tmp = h_;
 				h_ = w_;
 				w_ = tmp;
+				bMustRefresh = true;
 			}
 		}
 		else
 		{
 			if (h_ < w_)
 			{
+				//bHorizontal = true;
+
 				float tmp = h_;
 				h_ = w_;
 				w_ = tmp;
+				bMustRefresh = true;
 			}
 		}
 
@@ -1199,6 +1212,246 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	// A big slider windowed but transparent.
+	// values are to add level lines like thresholds.
+	// 
+	// EXAMPLE1
+	// ofxImGuiSurfing::AddSliderBigVerticalFloating(control);
+	// 
+	// EXAMPLE2
+	// Optionally we can color the grab slider and to pass some colored markers too:
+	//ofColor colorGrab = ofColor::pink;
+	//vector<SliderMarks> marks;
+	//SliderMarks m1;
+	//m1.color = ofColor::yellow;
+	//m1.value = deviceIn_VU_Value;
+	//marks.push_back(m1);
+	//SliderMarks m2;
+	//m2.color = ofColor::orange;
+	//m2.value = ofMap(glm::cos(ofGetElapsedTimef()), -1, 1, 0, 1, true);
+	//marks.push_back(m2);
+	//ofxImGuiSurfing::AddSliderBigVerticalFloating(threshold, ImVec2(-1, -1), true, &colorGrab, &marks);
+
+	struct SliderMarks
+	{
+		float value;
+		ofColor color;
+	};
+
+	//--------------------------------------------------------------
+	inline void AddSliderBigVerticalFloating(ofParameter<float>& p, ImVec2 sz = ImVec2(-1, -1), bool bNoTitle = true, ofColor* colorGrab = nullptr, vector<SliderMarks>* marks = nullptr)
+	{
+		ImGui::BeginGroup();
+
+		static bool bDone = false;
+		if (!bDone)
+		{
+			bDone = true;
+
+			ImGuiCond flagsCond = ImGuiCond_None;
+			flagsCond |= ImGuiCond_FirstUseEver;
+			flagsCond = ImGuiCond_FirstUseEver;
+
+			// window shapes
+			static float ww;
+			static float hh;
+			static float xx;
+			static float yy;
+
+			int padx = 10;
+			int pady = 10;
+			int pady2 = 50;
+
+			if (sz.x == -1) {
+				//full width 
+				//float spx = ImGui::GetStyle().ItemSpacing.x;
+				//ww = ofxImGuiSurfing::getWindowWidthAvail() ;
+
+				ww = 150;
+				xx = ofGetWidth() - ww - padx;
+			}
+			else ww = sz.x;
+			if (sz.y == -1) {
+				//full height
+				//float spy = ImGui::GetStyle().ItemSpacing.y;
+				//hh = ofxImGuiSurfing::getWindowHeightAvail();
+
+				yy = pady;
+				hh = ofGetHeight() - yy - pady;
+			}
+			else hh = sz.y;
+
+			//--
+
+			ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
+			ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
+		}
+
+		//--
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(40, 200));
+		{
+			// transparent window Bg
+			// without scroll bar
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+			window_flags |= ImGuiWindowFlags_NoBackground;
+			window_flags |= ImGuiWindowFlags_NoScrollbar;
+
+			if (bNoTitle) window_flags |= ImGuiWindowFlags_NoTitleBar;
+
+			bool b = ImGui::Begin(p.getName().c_str(), NULL, window_flags);
+			if (!b) {
+				ImGui::End();
+				return;
+			}
+
+			if (b)
+			{
+				float x1, x2, gap, yy, ww, hh;
+				float linew;
+				ImDrawList* draw_list = ImGui::GetWindowDrawList();
+				ImVec2 cursor = ImGui::GetCursorScreenPos();
+				float w0 = ofxImGuiSurfing::getWindowWidthAvail();
+				hh = ofxImGuiSurfing::getWindowHeightAvail();
+
+				//--
+
+				// Line dividers
+				// 4 lines / quarters
+
+				{
+					int div = 4;
+
+					// markers zones
+
+					float linea = 0.8f;
+					//float linea = 0.3f;
+
+					//auto c = ImVec4(0, 0, 0, 1.f);//black
+					auto c = ImGui::GetStyle().Colors[ImGuiCol_Border];
+					//auto c = ImGui::GetStyle().Colors[ImGuiCol_SeparatorActive];
+
+					ImVec4 cm;
+					//ImVec4 cm = ImVec4(c.x, c.y, c.z, c.w * linea);
+
+					for (size_t i = 0; i < div - 1; i++)
+					{
+						// more stronger for the center line 
+						if (!(i % 2 == 0) && (i == div / 2 - 1))
+						{
+							cm = ImVec4(c.x, c.y, c.z, c.w * MIN(1, linea * 1.0f));
+							linew = 2.f;
+
+							gap = w0 * 0.07f; // x padding to borders
+							ww = w0 - 2 * gap;
+							x1 = cursor.x + gap;
+							x2 = x1 + ww;
+						}
+						else // other lines
+						{
+							cm = ImVec4(c.x, c.y, c.z, c.w * linea);
+							linew = 1.f;
+
+							gap = w0 * 0.1f; // x padding to borders
+							ww = w0 - 2 * gap;
+							x1 = cursor.x + gap;
+							x2 = x1 + ww;
+						}
+
+						yy = cursor.y + (i + 1) * (1 / (float)div) * hh;
+
+						draw_list->AddLine(ImVec2(x1, yy), ImVec2(x2, yy), ImGui::GetColorU32(cm), linew);
+					}
+				}
+
+				//--
+
+				if (marks != nullptr)
+				{
+					ww = ofxImGuiSurfing::getWindowWidthAvail();
+					x1 = cursor.x;
+					x2 = x1 + ww;
+
+					for (auto& m : *marks)
+					{
+						ofColor c = m.color;
+						float v = m.value;
+
+						yy = cursor.y + (1.f - v) * hh;
+
+						draw_list->AddLine(ImVec2(x1, yy), ImVec2(x2, yy), ImGui::GetColorU32(c), linew);
+					}
+				}
+
+				//--
+
+				// v slider
+
+				// change grab slider
+				if (colorGrab != nullptr) {
+					ImVec4 cg = ImVec4(*colorGrab);
+					auto c1 = ImGui::GetColorU32(cg);
+					auto c2 = ImGui::GetColorU32(ImVec4(cg.x, cg.y, cg.z, 0.5f * cg.w));
+					ImGui::PushStyleColor(ImGuiCol_SliderGrabActive, c1);
+					ImGui::PushStyleColor(ImGuiCol_SliderGrab, c2);
+				}
+
+				// change Bg
+				auto c0 = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+				ImVec4 _cBg = ImVec4(c0.x, c0.y, c0.z, c0.w * 0.2);
+				ImGui::PushStyleColor(ImGuiCol_FrameBg, _cBg);
+				ImGui::PushStyleColor(ImGuiCol_FrameBgActive, _cBg);
+				ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, _cBg);
+				{
+					ImVec2 sz = ImVec2(-1.f, -1.f);
+					bool bNoName = true;
+					bool bNoNumber = true;
+
+					ofxImGuiSurfing::AddVSlider(p, sz, bNoName, bNoNumber);
+				}
+				ImGui::PopStyleColor(3);
+
+				// change grab slider
+				if (colorGrab != nullptr)
+				{
+					ImGui::PopStyleColor(2);
+				}
+
+				if (b)
+				{
+					ImGui::End();
+				}
+			}
+		}
+		ImGui::PopStyleVar();
+
+		//string s
+		//ofxImGuiSurfing::AddTooltip(s);
+
+		//--
+
+		//TODO: add mouse
+
+		//bool b = true;
+		//ofxImGuiSurfing::AddMouseWheel(b);
+		//IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p);
+		//bool bReturn = GetMouseWheel();
+		//ofxImGuiSurfing::AddMouseWheel(p);
+		//ofxImGuiSurfing::AddMouseWheel(p, false);
+		//ofxImGuiSurfing::AddMouseClickRightReset(p);
+
+		//bool bReturn = false;
+		//bool bMouseWheel = true;
+		//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+		//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+		//if (bMouseWheel) bReturn |= GetMouseWheel();
+		//if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+
+		//--
+
+		ImGui::EndGroup();
+	}
+
 } // namespace
 
 
@@ -1208,8 +1461,10 @@ namespace ofxImGuiSurfing
 // Some experimental stuff,
 // GL or rare ImGui demos.
 
+//--
+
 // This is a class for 
-// Rotating text (and icon demo) for dear imgui
+// Rotating a text (and icon demo)
 // https://gist.github.com/carasuca/e72aacadcf6cf8139de46f97158f790f#file-imrotatedemo-cpp
 
 //#include "imgui_internal.h"
@@ -1247,7 +1502,7 @@ public:
 	DemoRotatingText() {};
 	~DemoRotatingText() {};
 
-	int rotation_start_index;
+	int rotation_start_index = -1;
 
 	//ImVec2 operator-(const ImVec2& l, const ImVec2& r) { return{ l.x - r.x, l.y - r.y }; }
 

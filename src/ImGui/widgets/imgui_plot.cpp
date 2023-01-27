@@ -378,13 +378,27 @@ namespace ImGuiEx {
 		//auto c1 = IM_COL32(255, 254, 65, 220);//yellow
 		//auto c2 = IM_COL32(255, 64, 1, 220);//red
 
-		// B&W
-		int g1 = 14;
-		int g0 = 32;
-		auto c0 = IM_COL32(g0, g0, g0, 220);
-		auto c1 = IM_COL32(255, 254, 65, 48);//yellow
-		//auto c1 = IM_COL32(g1, g1, g1, 220);
-		auto c2 = IM_COL32(255, 64, 1, 128);//red
+		bool bColors = true;
+
+		ImU32 c2;
+		ImU32 c1;
+		ImU32 c0;
+		if (bColors) 
+		{
+			c2 = IM_COL32(255, 64, 1, 128);//red
+			c1 = IM_COL32(255, 254, 65, 128);//yellow
+			c0 = IM_COL32(64, 255, 1, 128);//green
+		}
+		else 
+		{
+			// B&W
+			int g2 = 255;
+			int g1 = 100;
+			int g0 = 32;
+			c2 = IM_COL32(g2, g2, g2, 220);//greys
+			c1 = IM_COL32(g1, g1, g1, 220);//greys
+			c0 = IM_COL32(g0, g0, g0, 220);
+		}
 
 		// limits
 		int l1 = (0.92 * SUBDIVISIONS);//>red
@@ -392,8 +406,9 @@ namespace ImGuiEx {
 		//int l1 = ((13.f / 14.f) * SUBDIVISIONS);//red
 		//int l0 = ((10.f / 14.f) * SUBDIVISIONS);
 
-		//float round = 2.5f;
 		float round = 0;
+		//float round = 5;//breaks shapes on vertical
+		//float round = 2.5f;
 
 		float pd = padding;
 		//float pd = 4;
@@ -416,12 +431,12 @@ namespace ImGuiEx {
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c0, round);
 					}
-					else if (i >= l0 && i < l1) {
+					else if (i < l1) {
 						drawList->AddRectFilled(
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c1, round);
 					}
-					else if (i >= l1 && i < SUBDIVISIONS) {
+					else if (i < SUBDIVISIONS) {
 						drawList->AddRectFilled(
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i), bb.Min.y),
 							ImVec2(bb.Min.x + ((Canvas.x / SUBDIVISIONS) * i) + ((Canvas.x / SUBDIVISIONS) - pd), bb.Max.y), c2, round);
@@ -445,12 +460,12 @@ namespace ImGuiEx {
 							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
 							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c0, round);
 					}
-					else if (i >= l0 && i < l1) {
+					else if (i < l1) {
 						drawList->AddRectFilled(
 							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
 							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c1, round);
 					}
-					else if (i >= l1 && i < SUBDIVISIONS) {
+					else if (i < SUBDIVISIONS) {
 						drawList->AddRectFilled(
 							ImVec2(bb.Min.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i)),
 							ImVec2(bb.Max.x, bb.Max.y - ((Canvas.y / SUBDIVISIONS) * i) - ((Canvas.y / SUBDIVISIONS) - pd)), c2, round);
@@ -458,11 +473,10 @@ namespace ImGuiEx {
 				}
 			}
 		}
-
 	}
 
 	// Modified version from moebiusSurfing
-	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max, ImU32 color, bool bFill) {
+	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max, ImU32 color, float start, float end, bool bFill) {
 
 		ImGuiWindow* Window = ImGui::GetCurrentWindow();
 
@@ -473,19 +487,29 @@ namespace ImGuiEx {
 		ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
 		ImGui::ItemSize(bb);
 
-		float bin_w = Canvas.x / data->size();
+		//int sz = data->size();
+		//float bin_w = Canvas.x / sz;
+		
+		int iStart = data->size() * start;
+		int iEnd = data->size() * end;
+		int sz = iEnd - iStart;
+		float bin_w = Canvas.x / sz;
 
-		for (unsigned int i = 0; i < (data->size()); i++)
+		//for (int i = 0; i < (data->size()); i++)
+		
+		int ii;
+		for (int i = iStart; i < iEnd; i++)
 		{
+			int ii = i - iStart;
 			if (bFill)
 				drawList->AddRectFilled(
-					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))),
-					ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
+					ImVec2(bb.Min.x + (bin_w * ii), bb.Min.y + (Canvas.y * (max - data->at(ii)))),
+					ImVec2(bb.Min.x + (bin_w * ii) + bin_w, bb.Max.y), color);
 
 			else
 				drawList->AddRect(
-					ImVec2(bb.Min.x + (bin_w * i), bb.Min.y + (Canvas.y * (max - data->at(i)))),
-					ImVec2(bb.Min.x + (bin_w * i) + bin_w, bb.Max.y), color);
+					ImVec2(bb.Min.x + (bin_w * ii), bb.Min.y + (Canvas.y * (max - data->at(ii)))),
+					ImVec2(bb.Min.x + (bin_w * ii) + bin_w, bb.Max.y), color);
 		}
 
 	}

@@ -117,6 +117,6 @@ namespace ImGuiEx {
 	// Modified version from moebiusSurfing
 	void VUMeter(ImDrawList* drawList, float width, float height, float _vol, bool horizontal = true, float padding = 1.f, int divisions = 20);
 
-	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max = 1.0f, ImU32 color = IM_COL32(255, 255, 120, 255), bool bFill = false);
+	void PlotBands(ImDrawList* drawList, float width, float height, std::vector<float>* data, float max = 1.0f, ImU32 color = IM_COL32(255, 255, 120, 255), float start = 0.f, float end = 1.f, bool bFill = false);
 
 }

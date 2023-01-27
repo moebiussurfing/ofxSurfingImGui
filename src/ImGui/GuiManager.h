@@ -1940,9 +1940,9 @@ private:
 	//--
 
 	// Presets windows
-	ofParameter<bool> bReset_PresetsWindow{ "Reset", false };
-	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize", true };
-	ofParameter<bool> bMinimize_Presets{ "Minimize", true };
+	ofParameter<bool> bReset_PresetsWindow{ "Reset P", false };
+	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize P", true };
+	ofParameter<bool> bMinimize_Presets{ "Minimize P", true };
 
 	// Panels windows
 	ofParameter<bool> bReset_WindowPanels{ "Reset", false };
