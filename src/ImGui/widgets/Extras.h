@@ -52,6 +52,18 @@
 
 namespace ofxImGuiSurfing
 {
+	// Useful data 
+	// to be passed to some widgets
+	struct SliderMarks
+	{
+		float pad;
+		float thick;
+		float value;
+		ofColor color;
+	};
+
+	//----
+
 	//--------------------------------------------------------------
 	inline void AddTooltip2(std::string text, bool bEnabled = true)//call after the pop up trigger widget
 	{
@@ -668,9 +680,13 @@ namespace ofxImGuiSurfing
 		return false;
 	}
 
+	//--
+
 	//--------------------------------------------------------------
-	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1, -1))
+	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz/* = ImVec2(-1, -1)*/, vector<SliderMarks>* marks = nullptr, bool bMinimized = false)
 	{
+		//TODO: note than param should be normalized.. ?
+
 		float w;
 		float h;
 		if (sz.x == -1) {
@@ -683,16 +699,24 @@ namespace ofxImGuiSurfing
 		else h = sz.y;
 		sz = ImVec2(w, h);
 
+		//--
+
 		ImGui::PushID("##PLOT");
 
 		static float min = parameter.getMin();
 		static float max = parameter.getMax();
 		static std::string name = parameter.getName();
 
-		ImGui::Text(name.c_str());
+		if (!bMinimized)
+			ImGui::Text(name.c_str());
 
 		static bool bOn = true;
-		ImGui::Checkbox("On", &bOn);
+		if (!bMinimized) {
+			ImGui::Checkbox("On", &bOn);
+		}
+		else {//maximized force on
+			if (!bOn) bOn = true;
+		}
 
 		// Fill an array of contiguous float values to plot
 		// Tip: If your float aren't contiguous but part of a structure, 
@@ -720,7 +744,9 @@ namespace ofxImGuiSurfing
 			refresh_time += 1.0f / 60.0f;
 		}
 
+		//static bool bOverlayAvg = true;
 		static bool bOverlayAvg = false;
+
 		static char overlay[32] = "";
 		if (bOverlayAvg)
 		{
@@ -733,8 +759,47 @@ namespace ofxImGuiSurfing
 
 		ImGui::PlotLines("", values, IM_ARRAYSIZE(values), values_offset, overlay, min, max, sz);
 
+		//--
+
+		// Marks
+
+		if (marks != nullptr)
+		{
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+			ImVec2 cursor = ImGui::GetCursorScreenPos();
+			float ypad = ImGui::GetStyle().ItemSpacing.y;
+
+			for (auto& m : *marks)
+			{
+				float v = ofMap(m.value, 0, 1, parameter.getMin(), parameter.getMax(), true);
+				float y = cursor.y - ypad - (v * sz.y);
+				float x1 = cursor.x - m.pad;
+				float x2 = x1 + sz.x + 2 * m.pad;
+
+				draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(m.color), m.thick);
+			}
+		}
+
 		ImGui::PopID();
 	}
+	//--------------------------------------------------------------
+	inline void AddPlot(ofParameter<float>& parameter)
+	{
+		ImVec2 sz = ImVec2(-1, -1);
+		vector<SliderMarks>* marks = nullptr;
+		AddPlot(parameter, sz, marks);
+	}
+	//--------------------------------------------------------------
+	inline void AddPlot(ofParameter<float>& parameter, vector<SliderMarks>* marks, bool bMinimized = false)
+	{
+		ImVec2 sz = ImVec2(-1, -1);
+		AddPlot(parameter, sz, marks, bMinimized);
+	}
+	////--------------------------------------------------------------
+	//inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1, -1), vector<SliderMarks>* marks)
+	//{
+	//	AddPlot(parameter, sz, marks);
+	//}
 
 	//----
 
@@ -948,8 +1013,10 @@ namespace ofxImGuiSurfing
 	// if (history.size() >= MAX) {// refresh
 	//		history.erase(history.begin(), history.begin() + 1);
 	//}
+	// 
+
 	//--------------------------------------------------------------
-	inline void AddWaveform(string name, float* data, uint32_t size, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false)
+	inline void AddWaveform(string name, float* data, uint32_t size, bool bWindowed = true, ImVec2 sz = ImVec2(-1, -1), bool bNoHeader = false, vector<SliderMarks>* marks = nullptr)
 	{
 		bool b = false;
 		if (bWindowed)
@@ -986,8 +1053,11 @@ namespace ofxImGuiSurfing
 
 		if ((bWindowed && b) || !bWindowed)
 		{
-			// fix workaround
+			// fix workaround 
+			// wrong padding layout..
 			ofxImGuiSurfing::AddSpacingOffset(ImVec2{ 1.5f * spx, 0 });
+			
+			//ImVec2 cursor = ImGui::GetCursorPos();
 
 			ofxImGuiSurfing::drawWaveform(
 				sz,
@@ -995,13 +1065,43 @@ namespace ofxImGuiSurfing
 				size,
 				1.f,
 				ImGui::GetColorU32(ImGuiCol_PlotLines));
+
+			//--
+
+			// Marks
+
+			if (marks != nullptr)
+			{
+				//float xpad = ImGui::GetStyle().ItemSpacing.x;
+				float ypad = ImGui::GetStyle().ItemSpacing.y;
+				ImDrawList* draw_list = ImGui::GetWindowDrawList();
+				ImVec2 cursor = ImGui::GetCursorScreenPos();
+
+				for (auto& m : *marks)
+				{
+					float v = m.value;
+					float y = cursor.y - ypad - (v * sz.y);
+					float x1 = cursor.x - m.pad;
+					float x2 = x1 + sz.x + 2 * m.pad;
+
+					draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(m.color), m.thick);
+				}
+			}
 		}
 
 		if (bWindowed && b)
 		{
 			ImGui::End();
 		}
-	}
+	};
+
+	////--------------------------------------------------------------
+	//inline void AddWaveform(string name, float* data, uint32_t size, vector<SliderMarks>* marks = nullptr)
+	//{
+	//	AddWaveform(name, data, size, true, ImVec2(-1, -1), false, marks);
+	//};
+
+	//--
 
 	// EXAMPLE:
 	// 
@@ -1232,11 +1332,6 @@ namespace ofxImGuiSurfing
 	//marks.push_back(m2);
 	//ofxImGuiSurfing::AddSliderBigVerticalFloating(threshold, ImVec2(-1, -1), true, &colorGrab, &marks);
 
-	struct SliderMarks
-	{
-		float value;
-		ofColor color;
-	};
 
 	//--------------------------------------------------------------
 	inline void AddSliderBigVerticalFloating(ofParameter<float>& p, ImVec2 sz = ImVec2(-1, -1), bool bNoTitle = true, ofColor* colorGrab = nullptr, vector<SliderMarks>* marks = nullptr)
@@ -1320,20 +1415,17 @@ namespace ofxImGuiSurfing
 				// 4 lines / quarters
 
 				{
-					int div = 4;
+					const int div = 4;
+					const float linea = 0.4f;
 
-					// markers zones
-
-					float linea = 0.8f;
-					//float linea = 0.3f;
-
-					//auto c = ImVec4(0, 0, 0, 1.f);//black
 					auto c = ImGui::GetStyle().Colors[ImGuiCol_Border];
+					//auto c = ImVec4(0, 0, 0, 1.f);//black
 					//auto c = ImGui::GetStyle().Colors[ImGuiCol_SeparatorActive];
 
 					ImVec4 cm;
 					//ImVec4 cm = ImVec4(c.x, c.y, c.z, c.w * linea);
 
+					// markers zones
 					for (size_t i = 0; i < div - 1; i++)
 					{
 						// more stronger for the center line 
@@ -1371,18 +1463,19 @@ namespace ofxImGuiSurfing
 				if (marks != nullptr)
 				{
 					ww = ofxImGuiSurfing::getWindowWidthAvail();
-					x1 = cursor.x;
-					x2 = x1 + ww;
 
 					for (auto& m : *marks)
 					{
+						x1 = cursor.x - m.pad;
+						x2 = x1 + ww + 2 * m.pad;
+
 						ofColor c = m.color;
 						float v = m.value;
 
-						yy = cursor.y + (1.f - v) * hh;
+						float y = cursor.y + (1.f - v) * hh;
 
-						linew = 6.f;
-						draw_list->AddLine(ImVec2(x1, yy), ImVec2(x2, yy), ImGui::GetColorU32(c), linew);
+						linew = m.thick;
+						draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(c), linew);
 					}
 				}
 
