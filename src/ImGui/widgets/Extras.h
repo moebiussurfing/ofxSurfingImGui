@@ -1366,6 +1366,8 @@ namespace ofxImGuiSurfing
 
 				//--
 
+				// Marks
+
 				if (marks != nullptr)
 				{
 					ww = ofxImGuiSurfing::getWindowWidthAvail();
@@ -1379,13 +1381,14 @@ namespace ofxImGuiSurfing
 
 						yy = cursor.y + (1.f - v) * hh;
 
+						linew = 4.f;
 						draw_list->AddLine(ImVec2(x1, yy), ImVec2(x2, yy), ImGui::GetColorU32(c), linew);
 					}
 				}
 
 				//--
 
-				// v slider
+				// V Slider
 
 				// change grab slider
 				if (colorGrab != nullptr) {

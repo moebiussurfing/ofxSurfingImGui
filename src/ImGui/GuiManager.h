@@ -1846,11 +1846,13 @@ public:
 
 public:
 
+	// To disable app interactins (like camera movements) when mouse is over any ui window.
 	//--------------------------------------------------------------
 	bool isMouseOverGui() const {
 		return bMouseOverGui;
 	}
 
+	// To disable keyboard when typing into any ui widget.
 	//--------------------------------------------------------------
 	bool isOverInputText() const {
 		return bOverInputText;
