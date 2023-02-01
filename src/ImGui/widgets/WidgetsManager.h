@@ -1640,7 +1640,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_STEPPEDKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						const int steps = abs(p.getMax() - p.getMin());
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags, steps);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);

@@ -620,11 +620,11 @@ namespace ofxImGuiSurfing
 	// Pass the param and will auto populate a tooltip with the param name and value.
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	void AddTooltip(ofParameter<ParameterType>& p, bool bEnabled = true, bool bNoName = false)
+	void AddTooltip(ofParameter<ParameterType>& ap, bool bEnabled = true, bool bNoName = false)
 	{
 		bool bReturn = false;
-		string name = p.getName();
-		auto tmpRef = p.get();
+		string name = ap.getName();
+		auto tmpRef = ap.get();
 
 		const auto& t = typeid(ParameterType);
 		bool isFloat = (t == typeid(float));
@@ -640,9 +640,9 @@ namespace ofxImGuiSurfing
 
 		string s = "";
 		if (!bNoName) s += ap.getName() + "\n";
-		if (isFloat) s += ofToString(p.get(), 3);//improve format
-		else if (isInt) s += ofToString(p.get());
-		else if (isBool) s += ofToString((p.get() ? "TRUE" : "FALSE"));
+		if (isFloat) s += ofToString(ap.get(), 3);//improve format
+		else if (isInt) s += ofToString(ap.get());
+		else if (isBool) s += ofToString((ap.get() ? "TRUE" : "FALSE"));
 
 		AddTooltip(s);
 	}

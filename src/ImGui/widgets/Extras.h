@@ -1324,7 +1324,7 @@ namespace ofxImGuiSurfing
 	//vector<SliderMarks> marks;
 	//SliderMarks m1;
 	//m1.color = ofColor::yellow;
-	//m1.value = deviceIn_VU_Value;
+	//m1.value = deviceIn_vuValue;
 	//marks.push_back(m1);
 	//SliderMarks m2;
 	//m2.color = ofColor::orange;
@@ -1412,10 +1412,14 @@ namespace ofxImGuiSurfing
 				//--
 
 				// Line dividers
-				// 4 lines / quarters
-
+				bool bDrawDividers = false;
+				if (bDrawDividers)
 				{
-					const int div = 4;
+					// center only
+					const int div = 2;
+					// 4 lines / quarters
+					//const int div = 4;
+
 					const float linea = 0.4f;
 
 					auto c = ImGui::GetStyle().Colors[ImGuiCol_Border];

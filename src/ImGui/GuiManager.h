@@ -709,7 +709,7 @@ public:
 
 	// A bundle of controls
 	// for a single param
-	
+
 	////TODO: move to ofHelpers.h (#1049) 
 	////--------------------------------------------------------------
 	//template<typename ParameterType>
@@ -1891,6 +1891,7 @@ public:
 
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
+	ofParameter<bool> bSolo_GameMode{ "SOLO GAME", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
@@ -2019,12 +2020,12 @@ public:
 	void setLogName(std::string name)
 	{
 		log.setName(name);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled() {
 		if (bLog) log.drawImGui(bLog);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void DrawWindowLog()
@@ -2033,7 +2034,7 @@ public:
 
 		//static ofParameter<bool>b{ "LOG", true };
 		//log.drawImGui(b);
-	}
+	};
 
 public:
 
@@ -2042,12 +2043,12 @@ public:
 	void AddLogTag(SurfingLog::tagData tag)
 	{
 		log.AddTag(tag);
-	}
+	};
 	//--------------------------------------------------------------
 	void AddLogTag(string name, ofColor color)
 	{
 		this->AddLogTag(SurfingLog::tagData{ name,color });
-	}
+	};
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
@@ -2056,7 +2057,7 @@ public:
 	{
 		// Log
 		log.Add(text, nameTag);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
@@ -2071,9 +2072,11 @@ public:
 	void AddToLog(string text, int tag = -1)
 	{
 		log.Add(text, tag);
-	}
+	};
 
 	//----
+
+	// Helper
 
 	// Common Widgets populate
 
@@ -2083,15 +2086,25 @@ public:
 
 	// Minimize state
 	//--------------------------------------------------------------
-	void AddMinimizerToggle(bool bSeparated = false)
+	bool AddMinimize(bool bSeparated = false) {
+		AddMinimizeToggle(bSeparated);
+		return bMinimize.get();
+	};
+	void AddMinimizeToggle(bool bSeparated = false)
 	{
 		this->Add(this->bMinimize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
-	}
+	};
 	bool isMinimized() const { return bMinimize.get(); }
 	bool isMaximized() const { return !bMinimize.get(); }
 
-	//-
+	// legacy
+	void AddMinimizerToggle(bool bSeparated = false)
+	{
+		AddMinimizeToggle(bSeparated);
+	};
+
+	//--
 
 	//TODO: add another mini xs rounded toggle
 	// WARNING: can use only one per window... bc no name no id tags!
@@ -2113,39 +2126,55 @@ public:
 
 		if (bSeparated) this->AddSpacingSeparated();
 		else this->AddSpacing();
-	}
+	};
 
-	//-
+	//--
 
 	//--------------------------------------------------------------
+	bool AddLog(bool bSeparated = false) {
+		AddLogToggle(bSeparated);
+		return bLog.get();
+	};
 	void AddLogToggle(bool bSeparated = false)
 	{
 		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
-	}
+	};
 
 	//--------------------------------------------------------------
+	bool AddAutoResize(bool bSeparated = false) {
+		AddAutoResizeToggle(bSeparated);
+		return bAutoResize.get();
+	};
 	void AddAutoResizeToggle(bool bSeparated = false)
 	{
 		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
-	}
+	};
 
 	//--------------------------------------------------------------
+	bool AddDebug(bool bSeparated = false) {
+		AddDebugToggle(bSeparated);
+		return bDebug.get();
+	};
 	void AddDebugToggle(bool bSeparated = false)
 	{
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
-	}
+	};
 	bool isDebugEnabled() const { return bDebug.get(); }
 	bool isDebugDisabled() const { return !bDebug.get(); }
 
 	//--------------------------------------------------------------
+	bool AddExtra(bool bSeparated = false) {
+		AddExtraToggle(bSeparated);
+		return bExtra.get();
+	};
 	void AddExtraToggle(bool bSeparated = false)
 	{
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
-	}
+	};
 	bool isExtraEnabled() const { return bExtra.get(); }
 	bool isExtraDisabled() const { return !bExtra.get(); }
 

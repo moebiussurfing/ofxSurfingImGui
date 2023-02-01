@@ -30,7 +30,7 @@ namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	inline bool AddKnobStyled(ofParameter<ParameterType>& p, SurfingGuiTypes type = OFX_IM_KNOB_TICKKNOB, float size = 0, string format = "-1", SurfingGuiFlags flags = 0, float speed = 0)
+	inline bool AddKnobStyled(ofParameter<ParameterType>& p, SurfingGuiTypes type = OFX_IM_KNOB_TICKKNOB, float size = 0, string format = "-1", SurfingGuiFlags flags = 0, float speed = 0, int steps = -1)
 	{
 		ImGuiKnobFlags _flags = 0;
 
@@ -107,7 +107,7 @@ namespace ofxImGuiSurfing
 				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_WiperDot, size, _flags);
 
 			else if (type == OFX_IM_KNOB_STEPPEDKNOB) b =
-				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags);
+				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Stepped, size, _flags, steps);
 
 			else if (type == OFX_IM_KNOB_SPACEKNOB) b =
 				ImGuiKnobs::Knob(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax(), speed, format.c_str(), ImGuiKnobVariant_Space, size, _flags);

@@ -31,6 +31,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bMinimize);
 	params_Advanced.add(bAdvanced);
 	params_Advanced.add(bGui_GameMode);
+	params_Advanced.add(bSolo_GameMode);
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bMouseWheelFlip);
@@ -2685,7 +2686,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "\n " << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui")<< ":Changed " << name << " : " << e;
 	}
 	if (bskip) return;
 
