@@ -1002,7 +1002,7 @@ using ofxSurfingGui = SurfingGuiManager;
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec2 sp1 = style->ItemSpacing;
 		ImVec2 sp2 = style->FramePadding;
-		sp1 = ImVec2{ sp.x, 1.f };
+		sp1 = ImVec2{ sp1.x, 1.f };
 		sp2 = ImVec2{ 0, 0 };
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp1);
@@ -1173,7 +1173,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	DEBUG HELPERS
-	USEFUL WHE CREATING
+	USEFUL WHEN CREATING
 	YOUR OWN WIDGETS FROM SCRATCH.
 	to debug the drawList
 
@@ -1206,7 +1206,6 @@ using ofxSurfingGui = SurfingGuiManager;
 	ImGui::End();
 
 */
-
 
 
 
@@ -1308,7 +1307,6 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 
-
 //--------------------------------------------------------------
 // RARE DEMOS
 
@@ -1384,12 +1382,10 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
-
 //TODO: blur fx
 /*
 
-public:
-
+	//TODO: not works..
 	// Helper function to apply blur effect on an ImGui window
 	inline void ApplyBlur(ImGuiWindow *window)
 	{
@@ -1417,6 +1413,23 @@ public:
 		auto window = ImGui::GetCurrentWindow();
 		ApplyBlur(window);
 
-		I
+*/
+
+
+/*
+
+		// SNIPPET
+		// WIDGET SLIDE WITH NAME 
+		// EXACTLY ALIGNED
+
+		static float scale = 1.f;
+		{
+			string n = "Scale";
+			auto sz = ImGui::CalcTextSize(n.c_str());
+			float w = ui.getWidgetsWidth(1) - ui.getWidgetsSpacingX() - sz.x;
+			ImGui::PushItemWidth(w);
+			ImGui::SliderFloat(n.c_str(), &scale, 0, 1);
+			ImGui::PopItemWidth();
+		}
 
 */

@@ -683,7 +683,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz/* = ImVec2(-1, -1)*/, vector<SliderMarks>* marks = nullptr, bool bMinimized = false)
+	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz/* = ImVec2(-1, -1)*/, vector<SliderMarks>* marks = nullptr, bool bMinimized = false, float scale = 1.f)
 	{
 		//TODO: note than param should be normalized.. ?
 
@@ -704,7 +704,16 @@ namespace ofxImGuiSurfing
 		ImGui::PushID("##PLOT");
 
 		static float min = parameter.getMin();
-		static float max = parameter.getMax();
+		//static float max = parameter.getMax();
+		// scaled
+		const int MAX_SCALE = 5;
+		float g = ofMap(scale, 0.f, 1.f, 1.f, 1.f / (float)(MAX_SCALE * scale), true);
+		if (scale == 0) {
+			g = 1;//fix nand
+			//cout << g << endl;
+		}
+		float max = parameter.getMax() * g;
+
 		static std::string name = parameter.getName();
 
 		if (!bMinimized)
@@ -724,6 +733,7 @@ namespace ofxImGuiSurfing
 		// and the sizeof() of your structure in the "stride" parameter.
 
 		static const size_t duration = 60 * 4;//fps * secs
+
 		static float values[duration] = {};
 
 		static int values_offset = 0;
@@ -744,9 +754,9 @@ namespace ofxImGuiSurfing
 			refresh_time += 1.0f / 60.0f;
 		}
 
-		//static bool bOverlayAvg = true;
+		// Label
 		static bool bOverlayAvg = false;
-
+		//static bool bOverlayAvg = true;
 		static char overlay[32] = "";
 		if (bOverlayAvg)
 		{
@@ -771,11 +781,14 @@ namespace ofxImGuiSurfing
 
 			for (auto& m : *marks)
 			{
-				float v = ofMap(m.value, 0, 1, parameter.getMin(), parameter.getMax(), true);
+				//scaled
+				float f = m.value * (1.f / g);
+				float v = ofMap(f, 0, 1, parameter.getMin(), parameter.getMax(), true);
 				float y = cursor.y - ypad - (v * sz.y);
 				float x1 = cursor.x - m.pad;
 				float x2 = x1 + sz.x + 2 * m.pad;
-
+				
+				if(f< parameter.getMax())//don't draw if it's out of plot
 				draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(m.color), m.thick);
 			}
 		}
@@ -790,10 +803,10 @@ namespace ofxImGuiSurfing
 		AddPlot(parameter, sz, marks);
 	}
 	//--------------------------------------------------------------
-	inline void AddPlot(ofParameter<float>& parameter, vector<SliderMarks>* marks, bool bMinimized = false)
+	inline void AddPlot(ofParameter<float>& parameter, vector<SliderMarks>* marks, bool bMinimized = false, float scale = 1.f)
 	{
 		ImVec2 sz = ImVec2(-1, -1);
-		AddPlot(parameter, sz, marks, bMinimized);
+		AddPlot(parameter, sz, marks, bMinimized, scale);
 	}
 	////--------------------------------------------------------------
 	//inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1, -1), vector<SliderMarks>* marks)
@@ -1056,7 +1069,7 @@ namespace ofxImGuiSurfing
 			// fix workaround 
 			// wrong padding layout..
 			ofxImGuiSurfing::AddSpacingOffset(ImVec2{ 1.5f * spx, 0 });
-			
+
 			//ImVec2 cursor = ImGui::GetCursorPos();
 
 			ofxImGuiSurfing::drawWaveform(

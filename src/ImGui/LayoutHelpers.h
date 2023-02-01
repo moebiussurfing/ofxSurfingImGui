@@ -700,6 +700,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	// Make widgets a bit smaller.
+	// Normalized Prc related to window width.
 	// Useful when sliders make to grow the window automatically.
 	//--------------------------------------------------------------
 	inline void PushWidth(float prc)
@@ -713,6 +714,27 @@ namespace ofxImGuiSurfing
 		ImGui::PopItemWidth();
 	}
 
+	// Set minimum height for widgets and removes inner y spacing too.
+	//--------------------------------------------------------------
+	inline void PushMinimalHeights()
+	{
+		// make all smaller heights
+		ImGuiStyle* style = &ImGui::GetStyle();
+		ImVec2 sp1 = style->ItemSpacing;
+		ImVec2 sp2 = style->FramePadding;
+		sp1 = ImVec2{ sp1.x, 1.f };
+		sp2 = ImVec2{ 0, 0 };
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp1);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+	}
+	//--------------------------------------------------------------
+	inline void PopMinimalHeights()
+	{
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+	}
+	
 	//----
 
 	// Debug Widgets Helpers

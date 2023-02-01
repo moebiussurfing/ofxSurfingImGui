@@ -1537,6 +1537,44 @@ namespace ofxImGuiSurfing
 					}
 					break;
 
+					case OFX_IM_PROGRESS_BAR_MINI:
+					{
+						// make all smaller heights
+						ImGuiStyle* style = &ImGui::GetStyle();
+						ImVec2 sp1 = style->ItemSpacing;
+						ImVec2 sp2 = style->FramePadding;
+						sp1 = ImVec2{ sp1.x, 1.f };
+						sp2 = ImVec2{ 0, 0 };
+
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp1);
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+						ofxImGuiSurfing::AddProgressBar(p);
+						ImGui::PopStyleVar();
+						ImGui::PopStyleVar();
+
+						bReturn = false;
+					}
+					break;
+
+					case OFX_IM_PROGRESS_BAR_MINI_NO_TEXT:
+					{
+						// make all smaller heights
+						ImGuiStyle* style = &ImGui::GetStyle();
+						ImVec2 sp1 = style->ItemSpacing;
+						ImVec2 sp2 = style->FramePadding;
+						sp1 = ImVec2{ sp1.x, 1.f };
+						sp2 = ImVec2{ 0, 0 };
+
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp1);
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+						ofxImGuiSurfing::AddProgressBar(p, true);
+						ImGui::PopStyleVar();
+						ImGui::PopStyleVar();
+
+						bReturn = false;
+					}
+					break;
+
 					//--
 
 					// Draggable number
