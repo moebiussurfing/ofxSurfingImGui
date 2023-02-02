@@ -2109,18 +2109,28 @@ public:
 	//TODO: add another mini xs rounded toggle
 	// WARNING: can use only one per window... bc no name no id tags!
 	//--------------------------------------------------------------
-	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false)
+	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false, bool bNoLabel = true)
 	{
 		// Right aligned
 
 		float hu = this->getWidgetsHeightUnit();
 		float ht = 0.8f * hu;
 		float wt = 1.15f * ht;
-		float w = 1.15f * hu + 2;//weird offset
+		float w = 1.15f * hu;
 
-		this->AddSpacing();
+		if (!bNoLabel) {
+			string n = b.getName();
+			auto sz = ImGui::CalcTextSize(n.c_str());
+			w = w + sz.x;
+			w += 2;
+		}
+		else w -= 8;//fix
+
+		//this->AddSpacing();
 		ofxImGuiSurfing::AddSpacingRightAlign(w);
-		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true);
+
+		//remove label
+		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true, bNoLabel);
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 

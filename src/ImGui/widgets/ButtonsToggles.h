@@ -726,7 +726,7 @@ namespace ofxImGuiSurfing
 	// Btw can be disabled like on mini toggle style.
 
 	//--------------------------------------------------------------
-	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false)
+	inline bool ToggleRoundedButton(const char* str_id, bool* v, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false, bool bNoLabel = false)
 	{
 		bool bchanged = false;
 
@@ -851,37 +851,42 @@ namespace ofxImGuiSurfing
 					draw_list->AddCircle(ImVec2(pos.x + radius + (*v ? 1 : 0) * t * (width - radius * 2.0f), pos.y + radius), radius - 1.5f, cb);
 				}
 #endif
-				//TODO:
-				//// Align text to right border
-				//auto io = ImGui::GetIO();
-				//const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
-				//const auto size = ImGui::CalcTextSize(label.c_str());
-				//ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
-				//ImGui::Text("%s", label.c_str());
-
-				ImGui::SameLine();
-
 				//--
 
-				// 3. Text Label
+				if (!bNoLabel)
+				{
+					//TODO:
+					//// Align text to right border
+					//auto io = ImGui::GetIO();
+					//const auto label = ct::toStr("Dear ImGui %s (Docking)", ImGui::GetVersion());
+					//const auto size = ImGui::CalcTextSize(label.c_str());
+					//ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
+					//ImGui::Text("%s", label.c_str());
 
-				float fontSize = ImGui::GetFontSize();
-				const float offset_xt = 0;
-				const float offset_yt = height / 2 - fontSize / 2;
-				const ImVec2 p1 = ImGui::GetCursorScreenPos();
-				const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
-				const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
+					ImGui::SameLine();
 
-				draw_list->AddText(pt, ct, str_id);
+					//--
 
-				//--
+					// 3. Text Label
 
-				// 4. Adjust frame end ?
+					float fontSize = ImGui::GetFontSize();
+					const float offset_xt = 0;
+					const float offset_yt = height / 2 - fontSize / 2;
+					const ImVec2 p1 = ImGui::GetCursorScreenPos();
+					const ImU32 ct = ImGui::GetColorU32(ImGuiCol_Text);
+					const ImVec2 pt = ImVec2(p1.x + offset_xt, p1.y + offset_yt);
 
-				const auto sztx = ImGui::CalcTextSize(str_id);
-				float xx = sztx.x + ImGui::GetStyle().FramePadding.x;
-				ImGui::Dummy(ImVec2(xx, 0));
-				
+					draw_list->AddText(pt, ct, str_id);
+
+					//--
+
+					// 4. Adjust frame end ?
+
+					const auto sztx = ImGui::CalcTextSize(str_id);
+					float xx = sztx.x + ImGui::GetStyle().FramePadding.x;
+					ImGui::Dummy(ImVec2(xx, 0));
+				}
+
 				//TODO: sometimes spacing related to other widgets looks weird...
 			}
 			ImGui::PopID();
@@ -903,14 +908,14 @@ namespace ofxImGuiSurfing
 	//TODO: new widget to use without ofParameters, 
 	// to be used by raw c types.
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(string label, bool& bState, ImVec2 bb = ImVec2(-1, -1))
+	inline bool AddToggleRoundedButton(string label, bool& bState, ImVec2 bb = ImVec2(-1, -1), bool bNoLabel = false)
 	{
 		bool bNoBorder = false;
 
 		bool bReturn = false;
 		auto tmpRef = bState;
 
-		if (ToggleRoundedButton(label.c_str(), (bool*)&tmpRef, bb, bNoBorder))
+		if (ToggleRoundedButton(label.c_str(), (bool*)&tmpRef, bb, bNoBorder, bNoLabel))
 		{
 			bState = tmpRef;
 			bReturn = true;
@@ -920,12 +925,12 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(ofParameter<bool>& p, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false)
+	inline bool AddToggleRoundedButton(ofParameter<bool>& p, ImVec2 bb = ImVec2(-1, -1), bool bNoBorder = false, bool bNoLabel = false)
 	{
 		bool bReturn = false;
 		auto tmpRef = p.get();
 
-		if (ToggleRoundedButton(p.getName().c_str(), (bool*)&tmpRef, bb, bNoBorder))
+		if (ToggleRoundedButton(p.getName().c_str(), (bool*)&tmpRef, bb, bNoBorder, bNoLabel))
 		{
 			p.set(tmpRef);
 			bReturn = true;
@@ -935,9 +940,9 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButton(ofParameter<bool>& p, float height, bool bNoBorder = false)
+	inline bool AddToggleRoundedButton(ofParameter<bool>& p, float height, bool bNoBorder = false, bool bNoLabel = false)
 	{
-		return AddToggleRoundedButton(p, ImVec2(1.15f * height, 1.15f * (2 / 3.f) * height), bNoBorder);
+		return AddToggleRoundedButton(p, ImVec2(1.15f * height, 1.15f * (2 / 3.f) * height), bNoBorder, bNoLabel);
 	}
 
 	//--------------------------------------------------------------
@@ -1313,7 +1318,7 @@ namespace ofxImGuiSurfing
 
 		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, g.LastItemData.StatusFlags);
 		return pressed;
-	}
+			}
 
 	//--
-};
+		};

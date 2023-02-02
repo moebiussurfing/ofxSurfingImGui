@@ -683,7 +683,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz/* = ImVec2(-1, -1)*/, vector<SliderMarks>* marks = nullptr, bool bMinimized = false, float scale = 1.f)
+	inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz/* = ImVec2(-1, -1)*/, vector<SliderMarks>* marks = nullptr, bool bMinimized = false, float scale = 1.f, bool bOverlayAvg = false)
 	{
 		//TODO: note than param should be normalized.. ?
 
@@ -704,26 +704,35 @@ namespace ofxImGuiSurfing
 		ImGui::PushID("##PLOT");
 
 		static float min = parameter.getMin();
-		//static float max = parameter.getMax();
-		// scaled
-		const int MAX_SCALE = 5;
-		float g = ofMap(scale, 0.f, 1.f, 1.f, 1.f / (float)(MAX_SCALE * scale), true);
-		if (scale == 0) {
-			g = 1;//fix nand
-			//cout << g << endl;
+
+		static float max;
+		float g = 1.f;
+		{
+			if (scale == 0.f)
+			{
+				g = 1.f;//fix 
+				//cout << g;
+			}
+			else
+			{
+				// re scaled
+				const float MAX_SCALE = 4.f;
+				g = ofMap(scale, 0.f, 1.f, 1.f, (1.f / (float)(MAX_SCALE * scale)), true);
+			}
+
+			max = parameter.getMax() * g;
 		}
-		float max = parameter.getMax() * g;
 
 		static std::string name = parameter.getName();
 
-		if (!bMinimized)
-			ImGui::Text(name.c_str());
+		if (!bMinimized) ImGui::Text(name.c_str());
 
 		static bool bOn = true;
 		if (!bMinimized) {
 			ImGui::Checkbox("On", &bOn);
 		}
-		else {//maximized force on
+		// maximized force on
+		else {
 			if (!bOn) bOn = true;
 		}
 
@@ -754,17 +763,17 @@ namespace ofxImGuiSurfing
 			refresh_time += 1.0f / 60.0f;
 		}
 
-		// Label
-		static bool bOverlayAvg = false;
+		// Label Avg
 		//static bool bOverlayAvg = true;
-		static char overlay[32] = "";
+		//static char overlay[32] = "";
+		char overlay[32] = "";
 		if (bOverlayAvg)
 		{
 			float average = 0.0f;
 			for (int n = 0; n < IM_ARRAYSIZE(values); n++)
 				average += values[n];
 			average /= (float)IM_ARRAYSIZE(values);
-			sprintf(overlay, "avg %f", average);
+			sprintf(overlay, "AVG %.2f", average);//one decimal
 		}
 
 		ImGui::PlotLines("", values, IM_ARRAYSIZE(values), values_offset, overlay, min, max, sz);
@@ -787,9 +796,9 @@ namespace ofxImGuiSurfing
 				float y = cursor.y - ypad - (v * sz.y);
 				float x1 = cursor.x - m.pad;
 				float x2 = x1 + sz.x + 2 * m.pad;
-				
-				if(f< parameter.getMax())//don't draw if it's out of plot
-				draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(m.color), m.thick);
+
+				if (f < parameter.getMax())//don't draw if it's out of plot
+					draw_list->AddLine(ImVec2(x1, y), ImVec2(x2, y), ImGui::GetColorU32(m.color), m.thick);
 			}
 		}
 
@@ -803,10 +812,10 @@ namespace ofxImGuiSurfing
 		AddPlot(parameter, sz, marks);
 	}
 	//--------------------------------------------------------------
-	inline void AddPlot(ofParameter<float>& parameter, vector<SliderMarks>* marks, bool bMinimized = false, float scale = 1.f)
+	inline void AddPlot(ofParameter<float>& parameter, vector<SliderMarks>* marks, bool bMinimized = false, float scale = 1.f, bool bOverlayAvg = false)
 	{
 		ImVec2 sz = ImVec2(-1, -1);
-		AddPlot(parameter, sz, marks, bMinimized, scale);
+		AddPlot(parameter, sz, marks, bMinimized, scale, bOverlayAvg);
 	}
 	////--------------------------------------------------------------
 	//inline void AddPlot(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1, -1), vector<SliderMarks>* marks)
