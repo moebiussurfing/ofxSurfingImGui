@@ -2111,26 +2111,42 @@ public:
 	//--------------------------------------------------------------
 	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false, bool bNoLabel = true)
 	{
-		// Right aligned
+		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI_XS);
+
+		//TODO:
 
 		float hu = this->getWidgetsHeightUnit();
 		float ht = 0.8f * hu;
-		float wt = 1.15f * ht;
-		float w = 1.15f * hu;
+		float w = 1.55f * ht;
+		//float w = 1.15f * ht;
 
-		if (!bNoLabel) {
+		if (!bNoLabel) // label
+		{
 			string n = b.getName();
 			auto sz = ImGui::CalcTextSize(n.c_str());
 			w = w + sz.x;
-			w += 2;
+			w += this->getWidgetsSpacingX();
+			w += this->getWidgetsSpacingX();
+			//w += 2;
 		}
-		else w -= 8;//fix
+		else // no label
+		{
+			//w -= getWidgetsSpacingX();
+			//w -= getWindowSpacingX();
+			//w += getWidgetsSpacingX();
+			//w -= 4;//fix
+			//w -= 8;//fix
+		}
 
+		// Right aligned
+	
 		//this->AddSpacing();
 		ofxImGuiSurfing::AddSpacingRightAlign(w);
 
 		//remove label
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true, bNoLabel);
+		
+		this->AddTooltip(b.get() ? "Maximize" : "Minimize");
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 
@@ -2139,6 +2155,18 @@ public:
 	};
 
 	//--
+
+	//--------------------------------------------------------------
+	bool AddKeys(bool bSeparated = false) {
+		AddKeysToggle(bSeparated);
+		return this->isKeys();
+	};
+	void AddKeysToggle(bool bSeparated = false)
+	{
+		this->Add(this->bKeys, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isKeys() const { return bKeys.get() && !this->isOverInputText(); }
 
 	//--------------------------------------------------------------
 	bool AddLog(bool bSeparated = false) {
@@ -3203,6 +3231,12 @@ public:
 	//--------------------------------------------------------------
 	float getWidgetsSpacingY() {
 		return ImGui::GetStyle().ItemSpacing.y;
+	}
+
+
+	//--------------------------------------------------------------
+	float getWindowSpacingX() {
+		return ImGui::GetStyle().WindowPadding.x;
 	}
 
 	// LEGACY API
