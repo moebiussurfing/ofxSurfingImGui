@@ -1666,6 +1666,7 @@ public:
 
 		return MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
 	}
+
 	//--
 
 	//TODO:
