@@ -1252,6 +1252,12 @@ public:
 	//--
 
 	//--------------------------------------------------------------
+	void AddTooltipHelp(std::string text)
+	{
+		ofxImGuiSurfing::AddTooltipHelp(text.c_str());
+	}
+
+	//--------------------------------------------------------------
 	void AddTooltip(std::string text, bool bEnabled = true)
 	{
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
@@ -1603,6 +1609,62 @@ public:
 		ImGui::TreePop();
 		if (bIndented) this->Unindent();
 		else this->refreshLayout();
+	}
+
+	//--
+
+	// Menu
+
+	//--------------------------------------------------------------
+	bool BeginMenu(const string label, bool enabled = true)
+	{
+		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
+		if (b) this->refreshLayout();
+		return b;
+	}
+	//--------------------------------------------------------------
+	void EndMenu() {
+		ImGui::EndMenu();
+		this->refreshLayout();
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItem(const string label, ofParameter<bool>& b, bool enabled = true)
+	{
+		bool selected = b.get();
+		const char* shortcut = NULL;
+
+		// return true when activated.
+		return ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+	}
+	//--------------------------------------------------------------
+	bool MenuItem(ofParameter<bool>& b, bool enabled = true)
+	{
+		string label = b.getName();
+		bool selected = b.get();
+		const char* shortcut = NULL;
+
+		return ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+	}
+	//--------------------------------------------------------------
+	bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
+	{
+		string label = pb.getName();
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+	//--------------------------------------------------------------
+	bool MenuItemButton(const string label)
+	{
+		const char* shortcut = NULL;
+		bool selected = false;
+		bool enabled = true;
+
+		return MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
 	}
 
 	//--
@@ -2139,13 +2201,13 @@ public:
 		}
 
 		// Right aligned
-	
+
 		//this->AddSpacing();
 		ofxImGuiSurfing::AddSpacingRightAlign(w);
 
 		//remove label
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true, bNoLabel);
-		
+
 		this->AddTooltip(b.get() ? "Maximize" : "Minimize");
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
