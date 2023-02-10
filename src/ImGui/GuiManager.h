@@ -2782,7 +2782,7 @@ public:
 		if (BeginWindow(bGui_Organizer))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			AddSpacing();
+			AddSpacingSeparated();
 
 			windowsOrganizer.drawWidgetsOrganizer(bMinimize);
 
@@ -2803,7 +2803,7 @@ public:
 		if (BeginWindow(bGui_Aligners))
 		{
 			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			AddSpacing();
+			AddSpacingSeparated();
 
 			windowsOrganizer.drawWidgetsAlignHelpers(bMinimize);
 

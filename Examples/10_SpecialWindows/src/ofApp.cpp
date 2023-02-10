@@ -50,6 +50,7 @@ void ofApp::setup_ImGui()
 	// NOTE:
 	// Setup, and Startup is auto called when addWindowsSpecial is called!
 	// We can omit them to speed up initialization.
+	// FYI
 	// The internal steps are:
 	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 	//ui.setup();
@@ -89,17 +90,21 @@ void ofApp::draw_MainWindow() {
 	// not an special window nor their features.
 	if (ui.BeginWindow(bGui))
 	{
+		/* Put ImGui widgets here! */
+		
 		ui.AddLabelBig("> Hello from ofApp");
 		ui.AddSpacingSeparated();
+		ui.AddMinimizerToggle(true);
 
-		/* Put ImGui widgets here! */
 
 		// Optional: 
 		// Some internal useful common bool toggles are exposed:
 		// the main window who contains almost all the others.
-		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_MEDIUM); 
-		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
-		ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED); 
+		if (ui.isMaximized()) {
+			ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+			ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
+		}
 
 		ui.EndWindow();
 	}
