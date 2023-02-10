@@ -37,10 +37,19 @@ public:
 		b4.set("b4", true);
 		b5.set("b5", true);
 		b6.set("b6", true);
+	};
+
+	~MyClass() {
+		// Session Settings
+		ofxSurfingHelpers::saveGroup(params);
+	};
+
+	void setupImGui() {
 
 		ui.setName("MyClass");
 
 		// Can be omitted in most scenarios
+		// TODO: not the case here! why?
 		ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 		ui.setup();
 
@@ -52,17 +61,15 @@ public:
 		// Can be omitted in most scenarios
 		ui.startup();
 
+		//--
+
 		// Session Settings
 		params.add(bGui);
 		ofxSurfingHelpers::loadGroup(params);
 	};
 
-	~MyClass() {
-		// Session Settings
-		ofxSurfingHelpers::saveGroup(params);
-	};
-
-	void draw() {
+	void draw() 
+	{
 		////fix
 		//if (ofGetFrameNum() == 1) {
 		//	bGui_1 = true;
@@ -113,6 +120,8 @@ public:
 				ui.EndWindowSpecial();
 			}
 
+			//--
+
 			if (ui.BeginWindowSpecial(bGui_2))
 			{
 				ui.Add(b2, OFX_IM_TOGGLE_BIG);
@@ -123,6 +132,8 @@ public:
 
 				ui.EndWindowSpecial();
 			}
+
+			//--
 
 			// make some constraints
 			if (bGui_3) 

@@ -100,6 +100,11 @@ void ofApp::setup_ImGui()
 	ui.addWindowSpecial(bGui_5);
 	ui.addWindowSpecial(bGui_6);
 
+	//--
+	 
+	myClassObject.setupImGui();
+
+	//// OPTIONAL
 	//// Bundle the object here too,
 	//// to group on the toggles too
 	//// we do not use BeginWindowSpecial/EndWindowSpecial methods.
@@ -129,18 +134,19 @@ void ofApp::draw()
 	//--
 
 	// Another ImGui instance / context
-	if (0)
-	{
-		//TODO:
-		//WIP:
-		// Link both windows groups by an anchor:
-		auto p = ui.getWindowSpecialLastTopRight();
-		myClassObject.ui.setWindowSpecialFirstPosition(p);
-		//myClassObject.ui.windowsOrganizer.doReOrganize();
-		//myClassObject.ui.windowsOrganizer.doApplyLinkWindows();
-		//myClassObject.ui.windowsOrganizer.refreshUpdate();
-		//myClassObject.ui.windowsOrganizer.runShapeState(index);
-	}
+	
+	//if (1)
+	//{
+	//	//TODO:
+	//	//WIP:
+	//	// Link both windows groups by an anchor:
+	//	auto p = ui.getWindowSpecialLastTopRight();
+	//	myClassObject.ui.setWindowSpecialFirstPosition(p);
+	//	//myClassObject.ui.windowsOrganizer.doReOrganize();
+	//	//myClassObject.ui.windowsOrganizer.doApplyLinkWindows();
+	//	//myClassObject.ui.windowsOrganizer.refreshUpdate();
+	//	//myClassObject.ui.windowsOrganizer.runShapeState(index);
+	//}
 
 	myClassObject.draw();
 }
@@ -176,10 +182,17 @@ void ofApp::draw_MainWindow() {
 		ui.AddLabelBig("Another ofxImGuiSurfing instance");
 		ui.AddLabel("We can use many instances of the add-on simultaneously. \
 			Then we can combine multiple classes/add-ons without colliding their ImGui windows.");
-		ui.AddSpacing();
+		ui.AddSpacingBig();
 
 		ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
-
+		ui.AddSpacing();
+		if (myClassObject.bGui) {
+			ui.Indent();
+			ui.Add(myClassObject.bGui_1);
+			ui.Add(myClassObject.bGui_2);
+			ui.Add(myClassObject.bGui_3);
+			ui.Unindent();
+		}
 		ui.AddSpacingSeparated();
 
 		//-
