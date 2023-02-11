@@ -162,7 +162,7 @@ namespace ofxImGuiSurfing
 			if (logLevel == OF_LOG_VERBOSE) Add(msg, "VERBOSE");
 			else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");
 			else if (logLevel == OF_LOG_WARNING) Add(msg, "WARNING");
-			else if (logLevel == OF_LOG_ERROR) Add(msg, "ERROR");
+			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
 			else {
 				ofLogWarning("ofxSurfingImGui") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
 			}
