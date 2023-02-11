@@ -2322,7 +2322,17 @@ bool SurfingGuiManager::loadAppSettings()
 //--------------------------------------------------------------
 void SurfingGuiManager::saveAppSettings()
 {
-	if (bAutoSaveSettings) ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings, true);
+	if (bAutoSaveSettings)
+	{
+		//TODO:
+		// Double check again that folder exist.
+		// This is already made on setup or when a custom setName is made.
+		ofxSurfingHelpers::CheckFolder(path_Global);
+		// Could use:
+		//ofFilePath::getEnclosingDirectory(…)
+
+		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings, true);
+	}
 }
 
 //--------------------------------------------------------------
