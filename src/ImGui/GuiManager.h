@@ -2136,6 +2136,12 @@ public:
 		log.Add(text, tag);
 	};
 
+	//--------------------------------------------------------------
+	void AddToLog(string text, ofLogLevel logLevel)
+	{
+		log.Add(text, logLevel);
+	};
+
 	//----
 
 	// Helper

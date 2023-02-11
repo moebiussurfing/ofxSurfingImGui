@@ -157,6 +157,17 @@ namespace ofxImGuiSurfing
 			}
 		};
 
+		void Add(std::string msg, ofLogLevel logLevel)
+		{
+			if (logLevel == OF_LOG_VERBOSE) Add(msg, "VERBOSE");
+			else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");
+			else if (logLevel == OF_LOG_WARNING) Add(msg, "WARNING");
+			else if (logLevel == OF_LOG_ERROR) Add(msg, "ERROR");
+			else {
+				ofLogWarning("ofxSurfingImGui") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
+			}
+		};
+
 		//----
 
 	public:
@@ -657,7 +668,7 @@ namespace ofxImGuiSurfing
 		{
 			// if tag is bigger in chars than the default tags adapt max size (8 chars by default)
 			if (tag.name.size() > maxTagLength)
-			{ 
+			{
 				maxTagLength = tag.name.size();
 				buildTagsDefault();
 			}
