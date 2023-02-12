@@ -12,6 +12,12 @@
 
 		TODO:
 
+		add feature to allow addLog without 
+			any explicit tag, but a custom color.
+			this is a big upgrade of how it's implemented the engine now.
+			could be an "UNKNOWN" tag and storing the color..
+			could create an struct of a message: string msg + ofColor color
+
 		highlight last message
 
 		improve implemented filter performance.
@@ -163,7 +169,8 @@ namespace ofxImGuiSurfing
 			else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");
 			else if (logLevel == OF_LOG_WARNING) Add(msg, "WARNING");
 			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
-			else {
+			else
+			{
 				ofLogWarning("ofxSurfingImGui") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
 			}
 		};
@@ -788,6 +795,7 @@ namespace ofxImGuiSurfing
 						{
 							color = t.color;
 							has_color = true;
+							break;
 						}
 					}
 
