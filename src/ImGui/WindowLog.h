@@ -12,11 +12,12 @@
 
 		TODO:
 
-		add feature to allow addLog without 
-			any explicit tag, but a custom color.
+		add feature to allow addLog without any explicit tag, but a custom color.
 			this is a big upgrade of how it's implemented the engine now.
 			could be an "UNKNOWN" tag and storing the color..
 			could create an struct of a message: string msg + ofColor color
+
+		add filter by log level as ofLog does
 
 		highlight last message
 

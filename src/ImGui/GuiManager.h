@@ -1953,7 +1953,7 @@ public:
 
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
-	ofParameter<bool> bSolo_GameMode{ "SOLO GAME", false };
+	ofParameter<bool> bSolo_GameMode{ "GAME MODE", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
@@ -2176,6 +2176,11 @@ public:
 
 	//TODO: add another mini xs rounded toggle
 	// WARNING: can use only one per window... bc no name no id tags!
+	//--------------------------------------------------------------
+	void AddMinimizerXsToggle()
+	{
+		AddMinimizerXsToggle(this->bMinimize);
+	}
 	//--------------------------------------------------------------
 	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false, bool bNoLabel = true)
 	{

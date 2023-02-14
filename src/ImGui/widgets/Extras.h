@@ -1539,6 +1539,19 @@ namespace ofxImGuiSurfing
 					ImGui::PopStyleColor(2);
 				}
 
+				//// tooltip
+				//string s = p.getName() + " " + ofToString(p.get(), 2);
+				////ofxImGuiSurfing::AddTooltip(s);
+				//if (ImGui::IsItemHovered())
+				//{
+				//	ImGui::BeginTooltip();
+				//	//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 100.0f);
+				//	ImGui::TextWrapped(s.c_str());
+				//	//ImGui::PopTextWrapPos();
+				//	ImGui::EndTooltip();
+				//}
+
+				// end window
 				if (b)
 				{
 					ImGui::End();

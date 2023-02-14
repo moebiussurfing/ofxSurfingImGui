@@ -442,6 +442,8 @@ namespace ofxImGuiSurfing
 
 
 	// Floating Big V Slider
+	//TODO: add name and number over the grab knob!
+	// big text label.
 	//--------------------------------------------------------------
 	inline bool AddVSlider(ofParameter<float>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), bool bNoName = false, bool bNoNumber = false)
 	{
