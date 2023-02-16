@@ -1953,7 +1953,7 @@ public:
 
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
-	ofParameter<bool> bSolo_GameMode{ "GAME MODE", false };
+	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
@@ -3206,8 +3206,10 @@ public:
 		return;
 	}
 
+	// Passed anchor bGui / visible toggle to position next window next to passed window.
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) {//passed anchor bGui / visible toggle 
+	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) 
+	{ 
 		//TODO:
 		if (!bGui.get()) return;
 

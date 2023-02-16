@@ -876,7 +876,8 @@ namespace ofxImGuiSurfing
 		if (max == 1.0f) _prc = vPrc;
 		else _prc = ofMap(vPrc, 0, max, 0.f, 1.0f);
 
-		if (bNoText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 0));//transparent
+		// make text transparent
+		if (bNoText) ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 0));
 		{
 			ImGui::ProgressBar(_prc, ImVec2(_w100 - pad, 0));
 		}
@@ -935,6 +936,82 @@ namespace ofxImGuiSurfing
 		if (max == -1) AddProgressBar(pPrc.get(), pPrc.getMax(), bNoText);
 		else AddProgressBar(pPrc.get(), max, bNoText);
 	}
+
+	//--
+
+	// TODO: could add not normalized min max
+	// TODO: should add text label
+	// Take from https://github.com/ocornut/imgui/issues/5263
+
+	//--------------------------------------------------------------
+	inline void AddProgressBarVertical(const char* label, const float value, const ImVec2& sz, const float min_value = 0, const float max_value = 1)
+	{
+		auto& style = ImGui::GetStyle();
+		auto draw_list = ImGui::GetWindowDrawList();
+		auto& cursor_pos = ImGui::GetCursorScreenPos();
+
+		float thickness = 1.f;
+
+		float fraction = (value - min_value) / max_value;
+
+		ImVec2 rect_start{ cursor_pos };
+		ImVec2 rect_size{ sz.x, sz.y };
+		ImVec2 rect_end{ rect_start + rect_size };
+
+		//ImVec2 rect_sizeInner{ sz.x , sz.y };
+		ImVec2 rect_sizeInner{ sz.x - 2 * thickness, sz.y - 2 * thickness };
+
+		ImVec2 rect_fill{ rect_sizeInner * ImVec2{ 1, fraction } };
+		ImVec2 rect_fill2{ rect_sizeInner * ImVec2{ 1, 1 - fraction } };
+
+		// Bg
+		draw_list->AddRectFilled(rect_start, rect_start + rect_size, ImGui::GetColorU32(ImGuiCol_FrameBg), style.FrameRounding);
+
+		ImVec2 r1{ rect_start.x + thickness, rect_start.y + thickness + rect_fill2.y };
+		//ImVec2 r1{ rect_start.x, rect_start.y + rect_fill2.y };
+
+		ImVec2 r2{ r1.x + rect_fill.x, r1.y + rect_fill.y };
+
+		ImDrawFlags flags = ImDrawFlags_None;
+		//flags += ImDrawFlags_RoundCornersBottom;
+		//flags += ImDrawFlags_RoundCornersTop;
+		if (value == 1) flags += ImDrawFlags_RoundCornersAll;
+		else flags += ImDrawFlags_RoundCornersBottom;
+		//if (value == 1) flags += ImDrawFlags_RoundCornersMask_;
+
+		// Fill
+		if (value != 0)//workaround 
+		{
+			draw_list->AddRectFilled(
+				r1,
+				r2,
+				ImGui::GetColorU32(ImGuiCol_SliderGrabActive),
+				style.FrameRounding,
+				flags
+			);
+		}
+
+		// Border
+		draw_list->AddRect(rect_start, rect_start + rect_size, ImGui::GetColorU32(ImGuiCol_Border), style.FrameRounding);
+
+
+		//const string value_text = is_h ? format("{:.2f}", value) : format("{:.1f}", value);
+		//draw_list->AddText(rect_start + (rect_size - CalcTextSize(value_text.c_str())) / 2, GetColorU32(ImGuiCol_Text), value_text.c_str());
+		//if (label) {
+		//    draw_list->AddText(
+		//        rect_start + ImVec2{ is_h ? rect_size.x + style.ItemInnerSpacing.x : (rect_size.x - label_size.x) / 2, style.FramePadding.y + (is_h ? 0 : rect_size.y) },
+		//        GetColorU32(ImGuiCol_Text), label);
+		//}
+	};
+
+	//--------------------------------------------------------------
+	inline void AddProgressBarVertical(ofParameter<float>& pPrc, ImVec2& sz)
+	{
+		auto label = pPrc.getName().c_str();
+
+		const float value = pPrc.get();
+		AddProgressBarVertical(label, value, sz);
+	};
 
 	//----
 
