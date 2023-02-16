@@ -206,7 +206,6 @@ public:
 	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
 	//	bool bSameLine = false; 
 	//	int spacing = -1;
-
 	//		return _ui.Add(ap, type, width, bSameLine, spacing, flags);
 	//}
 
@@ -1609,6 +1608,26 @@ public:
 		ImGui::TreePop();
 		if (bIndented) this->Unindent();
 		else this->refreshLayout();
+	}
+
+	//--
+
+	// Columns
+
+	//--------------------------------------------------------------
+	void BeginColumns(int amount, string labelID, bool border = false)
+	{
+		ImGui::Columns(amount, labelID.c_str(), border);
+	}
+	//--------------------------------------------------------------
+	void NextColumn()
+	{
+		ImGui::NextColumn();
+	}
+	//--------------------------------------------------------------
+	void EndColumns(int amountDefault = 1)
+	{
+		ImGui::Columns(amountDefault);
 	}
 
 	//--
@@ -3208,8 +3227,8 @@ public:
 
 	// Passed anchor bGui / visible toggle to position next window next to passed window.
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui) 
-	{ 
+	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui)
+	{
 		//TODO:
 		if (!bGui.get()) return;
 

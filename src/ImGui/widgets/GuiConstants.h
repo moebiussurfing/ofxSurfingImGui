@@ -135,6 +135,8 @@
 
 #define FACTOR_DARKEN 0.2f 
 
+#define VERTICAL_AMOUNT_UNITS 5.0f 
+
 //--
 
 #ifndef M_PI

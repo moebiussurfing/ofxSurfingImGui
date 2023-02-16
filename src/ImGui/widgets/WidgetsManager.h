@@ -1469,7 +1469,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0;//fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1487,7 +1487,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0;//fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1499,7 +1499,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0;//fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1511,7 +1511,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0;//fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2007,7 +2007,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, false));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2018,7 +2018,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, false));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), true, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2029,7 +2029,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), false, true));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), false, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2040,7 +2040,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * 5), true, true));
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS), true, true));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);

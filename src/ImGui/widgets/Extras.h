@@ -943,9 +943,53 @@ namespace ofxImGuiSurfing
 	// TODO: should add text label
 	// Take from https://github.com/ocornut/imgui/issues/5263
 
-	//--------------------------------------------------------------
-	inline void AddProgressBarVertical(const char* label, const float value, const ImVec2& sz, const float min_value = 0, const float max_value = 1)
+	// TODO: there's a small offset on border that could be fixed by inspiring from:
+	// Original code from ProgressBar
+	/*
+	// size_arg (for each axis) < 0.0f: align to end, 0.0f: auto, > 0.0f: specified size
+	void ImGui::ProgressBar(float fraction, const ImVec2& size_arg, const char* overlay)
 	{
+		ImGuiWindow* window = GetCurrentWindow();
+		if (window->SkipItems)
+			return;
+
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+
+		ImVec2 pos = window->DC.CursorPos;
+		ImVec2 size = CalcItemSize(size_arg, CalcItemWidth(), g.FontSize + style.FramePadding.y * 2.0f);
+		ImRect bb(pos, pos + size);
+		ItemSize(size, style.FramePadding.y);
+		if (!ItemAdd(bb, 0))
+			return;
+
+		// Render
+		fraction = ImSaturate(fraction);
+		RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg), true, style.FrameRounding);
+		bb.Expand(ImVec2(-style.FrameBorderSize, -style.FrameBorderSize));
+		const ImVec2 fill_br = ImVec2(ImLerp(bb.Min.x, bb.Max.x, fraction), bb.Max.y);
+		RenderRectFilledRangeH(window->DrawList, bb, GetColorU32(ImGuiCol_PlotHistogram), 0.0f, fraction, style.FrameRounding);
+
+		// Default displaying the fraction as percentage string, but user can override it
+		char overlay_buf[32];
+		if (!overlay)
+		{
+			ImFormatString(overlay_buf, IM_ARRAYSIZE(overlay_buf), "%.0f%%", fraction * 100 + 0.01f);
+			overlay = overlay_buf;
+		}
+
+		ImVec2 overlay_size = CalcTextSize(overlay, NULL);
+		if (overlay_size.x > 0.0f)
+			RenderTextClipped(ImVec2(ImClamp(fill_br.x + style.ItemSpacing.x, bb.Min.x, bb.Max.x - overlay_size.x - style.ItemInnerSpacing.x), bb.Min.y), bb.Max, overlay, NULL, &overlay_size, ImVec2(0.0f, 0.5f), &bb);
+	}
+	*/
+
+	//--------------------------------------------------------------
+	inline void AddProgressBarVertical(const char* label, const float value, const ImVec2& sz)
+	{
+		const float min_value = 0;
+		const float max_value = 1;
+
 		auto& style = ImGui::GetStyle();
 		auto draw_list = ImGui::GetWindowDrawList();
 		auto& cursor_pos = ImGui::GetCursorScreenPos();
@@ -1003,14 +1047,17 @@ namespace ofxImGuiSurfing
 		//        GetColorU32(ImGuiCol_Text), label);
 		//}
 	};
-
 	//--------------------------------------------------------------
 	inline void AddProgressBarVertical(ofParameter<float>& pPrc, ImVec2& sz)
 	{
-		auto label = pPrc.getName().c_str();
+		ImGui::BeginGroup();
 
+		auto label = pPrc.getName().c_str();
 		const float value = pPrc.get();
+
 		AddProgressBarVertical(label, value, sz);
+
+		ImGui::EndGroup();
 	};
 
 	//----
