@@ -282,6 +282,8 @@ void SurfingGuiManager::setupImGuiFonts()
 	bool b2 = fileToRead2.exists();
 	if (b2)
 	{
+		//gui.begin();
+
 		// Font default
 		pushFont(_path + _fontName, _fontSizeParam); // queue default font too
 
@@ -298,12 +300,14 @@ void SurfingGuiManager::setupImGuiFonts()
 
 		// Set default
 		addFont(_path + _fontName, _fontSizeParam);
+		
+		//gui.end();
 	}
 
 	// Legacy not found neither,
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "Expected file fonts not found!";
+		ofLogError("ofxSurfingImGui::setupImGuiFonts") << " Expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "ImGui will use his own bundled default font.";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
@@ -385,8 +389,9 @@ void SurfingGuiManager::setupImGui()
 	//--
 
 	// Fonts
-
+#ifdef OFX_IMGUI_USE_FONTS
 	setupImGuiFonts();
+#endif
 
 	//--
 
@@ -691,23 +696,27 @@ void SurfingGuiManager::clearFonts()
 
 // API user: 
 // workflow during setup not in draw.
- 
+
 //TODO: could return an int with the current index. 
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
 bool SurfingGuiManager::pushFont(std::string path, int size)
 {
+#ifndef OFX_IMGUI_USE_FONTS
+	return false;
+#endif
+
 	//TODO:
 	// It could be a vector with several customFont 
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
-	ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " " << path << " : " << size;
+	ofLogNotice("ofxSurfingImGui::pushFont") << " " << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
 
-	ofFile fileToRead(path); 
+	ofFile fileToRead(path);
 	// a file that exists
 	bool b = fileToRead.exists();
 
@@ -730,9 +739,9 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 			currFont = customFonts.size() - 1;
 		}
 	}
-	else 
+	else
 	{
-		ofLogError("ofxSurfingImGui") << " " << (__FUNCTION__) << "\nFILE FONT " << path << " NOT FOUND!";
+		ofLogError("ofxSurfingImGui::pushFont") << " FILE FONT " << path << " NOT FOUND!";
 	}
 
 	if (customFont != nullptr) io.FontDefault = customFont;
@@ -745,6 +754,10 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 //--------------------------------------------------------------
 bool SurfingGuiManager::addFont(std::string path, int size)
 {
+#ifndef OFX_IMGUI_USE_FONTS
+	return false;
+#endif
+
 	//TODO:
 	// should be a vector with several customFont to allow hot reloading..
 	// if not, last added font will be used
@@ -772,6 +785,10 @@ bool SurfingGuiManager::addFont(std::string path, int size)
 //--------------------------------------------------------------
 void SurfingGuiManager::pushStyleFont(int index)
 {
+#ifndef OFX_IMGUI_USE_FONTS
+	return;
+#endif
+
 	if (index < customFonts.size())
 	{
 		if (customFonts[index] != nullptr)
@@ -785,6 +802,10 @@ void SurfingGuiManager::pushStyleFont(int index)
 //--------------------------------------------------------------
 void SurfingGuiManager::popStyleFont()
 {
+#ifndef OFX_IMGUI_USE_FONTS
+	return;
+#endif
+
 	//TODO: will crash if not pushed..
 	//workaround to avoid crashes
 	if (bIgnoreNextPopFont)
@@ -800,11 +821,19 @@ void SurfingGuiManager::popStyleFont()
 // NEW API: this is the preferred or recommended method!
 //--------------------------------------------------------------
 void SurfingGuiManager::PushFont(SurfingFontTypes style) {
+#ifndef OFX_IMGUI_USE_FONTS
+	return;
+#endif
+
 	int index = SurfingFontTypes(style);
 	this->pushStyleFont(index);
 }
 //--------------------------------------------------------------
 void SurfingGuiManager::PopFont() {
+#ifndef OFX_IMGUI_USE_FONTS
+	return;
+#endif
+
 	this->popStyleFont();
 }
 
@@ -2696,7 +2725,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui")<< ":Changed " << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui") << ":Changed " << name << " : " << e;
 	}
 	if (bskip) return;
 

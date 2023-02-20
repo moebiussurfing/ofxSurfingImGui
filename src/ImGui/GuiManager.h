@@ -23,6 +23,12 @@
 
 #include "TextBoxWidget.h" //TODO: could be replace by native ImGui widgets.
 
+//--
+
+// Debug
+
+#define OFX_IMGUI_USE_FONTS
+
 //----
 
 // Aliases

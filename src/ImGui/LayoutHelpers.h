@@ -63,6 +63,10 @@ namespace ofxImGuiSurfing
 
 		return h;
 	}
+	//--------------------------------------------------------------
+	inline float getTextLineHeightWithSpacing() {
+		return ImGui::GetTextLineHeightWithSpacing();
+	}
 
 	//--
 

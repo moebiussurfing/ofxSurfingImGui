@@ -1046,6 +1046,9 @@ namespace ofxImGuiSurfing
 		//        rect_start + ImVec2{ is_h ? rect_size.x + style.ItemInnerSpacing.x : (rect_size.x - label_size.x) / 2, style.FramePadding.y + (is_h ? 0 : rect_size.y) },
 		//        GetColorU32(ImGuiCol_Text), label);
 		//}
+
+        ImGui::SetCursorScreenPos(rect_end);
+
 	};
 	//--------------------------------------------------------------
 	inline void AddProgressBarVertical(ofParameter<float>& pPrc, ImVec2& sz)
