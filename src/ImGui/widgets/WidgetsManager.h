@@ -615,18 +615,20 @@ namespace ofxImGuiSurfing
 			const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 			const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
 
+			///*
 			//TODO:
 			// Is not called with groups here.. ?
 			// but we will warm the coder that maybe used Add instead of AddGroup, 
 			// when adding a group!
 			const bool isGroup = ptype == typeid(ofParameterGroup).name();
-			if (isGroup)
+			if (isGroup && ofGetFrameNum() % 60 == 0)//slowdown
 			{
 				ofLogWarning("ofxSurfingImGui") << "It seems you are adding an ofParamGroup with a wrong method!";
-				ofLogWarning("ofxSurfingImGui") << "Replace the call using AddGroup.";
+				ofLogWarning("ofxSurfingImGui") << "Replace the call Add using AddGroup instead.";
 				//refreshPanelShape();
 				return false;
 			}
+			//*/
 
 			//--------
 
