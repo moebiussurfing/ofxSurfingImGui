@@ -115,6 +115,7 @@ void ofApp::draw()
 			// as their default widgets styles
 			// (but we could queue custom styles for each param too 
 			// that will be applied when populating the group widgets)
+			// Note that these ofParams are local in ofApp.
 			ui.AddGroup(params);
 
 			//--
