@@ -12,7 +12,6 @@
 class ofApp : public ofBaseApp
 {
 public:
-
 	void setup();
 	void draw();
 	void keyPressed(int key);
@@ -32,6 +31,7 @@ public:
 
 	ofParameter<bool> bGui{ "my_ofApp", true };
 
+  	// Local ui object that will be shared to some of the instantiated classes
 	ofxSurfingGui ui;
 
 	//--
