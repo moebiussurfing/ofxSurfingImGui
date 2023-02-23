@@ -1,3 +1,13 @@
+
+/*
+
+	This is a WIP example to explore the workflow and debug how to combine multiple instances of ofxImGui 
+	inside an ofxSurfingImGui class. Is a kind of a higher level class, with more OF helpers and a Toolkit with new features.
+	Many classes with some instantiated objects will populate widgets for ofParams but using different approaches.
+
+*/
+
+
 #pragma once
 
 #include "ofMain.h"
