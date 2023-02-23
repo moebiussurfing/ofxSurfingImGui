@@ -21,16 +21,16 @@ void ofApp::setup()
 	ui.setName("ofApp"); // Optional naming to separate settings folders and avoid sharing some ui states.
 	ui.setup(); // Can be omitted in many scenarios..
 
-	// WIP: TODO: Note that some empty/undesired folders are created into bin/data. This must be fixed...
+	// WIP: TODO: Note that some empty/undesired folders now are created into bin/data. This must be fixed...
 
-	// This object will receive and store this local ui into a pointer to populate widgets on there: inside the class draw method.
+	// This C object will receive and store this local ui into a pointer to populate widgets on there: inside the class draw method.
 	C.setUiPtr(&ui);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	if (!bGui) return;
+	if (!bGui) return; // this is the global show visible toggle
 
 	ui.Begin();
 	{
@@ -43,11 +43,12 @@ void ofApp::draw()
 			//--
 
 			// These are some of the available useful internal toggles.
-			// Note the minimize, auto resize, debug, extra, log...
+			// Note the minimize, auto resize, debug, extra, advanced, log window...
 			// and other boolean/toggles are handled and store into the ofxSurfingGui object. 
-			// Then they will be shared between classes objects if they share the same ui.
-			ui.AddMinimizerToggle(false);
-			ui.AddAutoResizeToggle(false);
+			// Then they will be shared between classes objects if they share the same ui. 
+			// (Or independent if do not shares the ui.)
+			ui.AddMinimizerToggle();
+			ui.AddAutoResizeToggle();
 			ui.AddSpacingBigSeparated();
 
 			//--
@@ -57,19 +58,24 @@ void ofApp::draw()
 			ui.AddSpacing();
 
 			// Show / hide each class window
-			SurfingGuiTypes style = OFX_IM_TOGGLE_ROUNDED_MEDIUM;
+			SurfingGuiTypes style = OFX_IM_TOGGLE_ROUNDED_MEDIUM; // a style shared between widgets
 			ui.Add(A.bGui, style);
 			ui.Add(B.bGui, style);
 			ui.Add(C.bGui, style);
 			ui.Add(D.bGui, style);
 
-			// This is a separator line with spacing
+			// This is a separator line with more spacing
 			ui.AddSpacingBigSeparated();
 
 			//--
 
 			ui.AddLabel("These are exposed or public ofParams from the classes objects but populated here");
-
+			// This approach is an alternative approach: 
+			// instead of drawing the widgets inside each class object, 
+			// and having to pass by reference the ui from here / the parent ofApp 
+			// or requiring instantiating another new ui inside each object.
+			
+			// A folder / tree populating widgets styled as default. 
 			if (ui.BeginTree("ofParams")) {
 
 				ui.AddLabel("A");
@@ -92,9 +98,11 @@ void ofApp::draw()
 
 			//--
 
-			// This is an ofParameterGroup
-			// contained ofParams are populated 
+			// This is an ofParameterGroup.
+			// Contained ofParams are populated 
 			// as their default widgets styles
+			// (but we could queue custom styles for each param too 
+			// that will be applied when populating the group widgets)
 			ui.AddGroup(params);
 
 			//--
@@ -114,7 +122,8 @@ void ofApp::draw()
 		A.draw();
 
 		// We want to draw widgets inside the class (eg: to not expose public ofParams here in ofApp) 
-		// but using the local instantiated ofxSurfingGui object! (not an ui internally instantiated in the class)
+		// but using the local instantiated ofxSurfingGui object! 
+		// (There´s not an ofxSurfingImGui ui internally instantiated in the class object! Neither a referenced pointer stored.)
 		D.draw(&ui);
 	}
 	ui.End();
@@ -122,15 +131,17 @@ void ofApp::draw()
 	//--
 
 	// This two objects will call Begin/End internally
+	// so, they will go outside the above used Begin/End.
 	
 	B.draw(); 
-	// this one has his own ui instance! 
-	// So is not linked to the local ofApp ui. 
-	// (some internal settings are neither shared)
+	// this one has his own ofxSurfingImGui ui instance! 
+	// So it´s not linked to the local ofApp ui. 
+	// (some internal settings are neither shared 
+	// and also will have a separated bin/data folder for some persistent stored settings.)
 	
 	C.draw(); 
-	// this one shares the ui instance from ofApp! 
-	// It's passed by reference on setup.
+	// this one shares the ofxSurfingImGui ui instance from ofApp! 
+	// Note that it has been passed by reference on ofApp::setup.
 }
 
 //--------------------------------------------------------------
