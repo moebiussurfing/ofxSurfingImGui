@@ -93,7 +93,19 @@ void ofApp::draw()
 
 				ui.EndTree();
 			}
+			// Note that using this above approach, we could also create a window 
+			// for populating these widgets: the widgets from each object.
+			// (Should be out of this above window but in between Begin/End)
+			/*
+			if (ui.BeginWindow(C.bGui))
+			{
+				ui.Add(C.speed);
+				ui.Add(C.lineWidth);
 
+				ui.EndWindow();
+			}
+			*/
+			
 			ui.AddSpacingBigSeparated();
 
 			//--
