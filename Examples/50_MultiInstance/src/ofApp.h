@@ -7,6 +7,7 @@
 #include "myClassA.h"
 #include "myClassB.h"
 #include "myClassC.h"
+#include "myClassD.h"
 
 class ofApp : public ofBaseApp
 {
@@ -29,7 +30,7 @@ public:
 	ofParameter<int> amount;
 	ofParameter<int> size;
 
-	ofParameter<bool> bGui{ "myOfApp", true };
+	ofParameter<bool> bGui{ "my_ofApp", true };
 
 	ofxSurfingGui ui;
 
@@ -37,6 +38,7 @@ public:
 
 	myClassA A;
 	myClassB B;
-	myClassB C;
+	myClassC C;
+	myClassD D;
 
 };

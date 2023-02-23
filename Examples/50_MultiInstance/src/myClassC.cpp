@@ -26,18 +26,21 @@ void myClassC::setup()
 //--------------------------------------------------------------
 void myClassC::draw()
 {
-	ui.Begin();
+	if (ui == nullptr) return;
+	if (!bGui) return;
+
+	ui->Begin();
 	{
-		if (ui.BeginWindow(bGui))
+		if (ui->BeginWindow(bGui))
 		{
-			ui.AddMinimizerToggle(false);
-			ui.AddAutoResizeToggle(false);
-			ui.AddSpacingBigSeparated();
+			ui->AddMinimizerToggle();
+			ui->AddAutoResizeToggle();
+			ui->AddSpacingBigSeparated();
 
-			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
-			ui.EndWindow();
+			ui->EndWindow();
 		}
 	}
-	ui.End();
+	ui->End();
 };

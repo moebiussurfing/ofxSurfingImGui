@@ -4,7 +4,7 @@
 
 #include "ofxSurfingImGui.h"
 
-class myClassC : public ofBaseApp
+class myClassC
 {
 public:
 

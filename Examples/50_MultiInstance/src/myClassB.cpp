@@ -20,20 +20,26 @@ void myClassB::setup()
 	//--
 
 	// Can be omitted in many scenarios..
-	//ui.setup();
+	ui.setName("B"); // Optional naming to separate settings folders and avoid sharing some ui states.
+	ui.setup();
 };
 
 //--------------------------------------------------------------
 void myClassB::draw()
 {
+	if (!bGui) return;
+
 	ui.Begin();
 	{
 		if (ui.BeginWindow(bGui))
 		{
-			ui.AddMinimizerToggle(false);
-			ui.AddAutoResizeToggle(true);
+			ui.AddMinimizerToggle();
+			ui.AddAutoResizeToggle();
+			ui.AddSpacingBigSeparated();
 
 			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			ui.Add(speed, OFX_IM_KNOB_DOTKNOB, 2, true);
+			ui.Add(separation, OFX_IM_KNOB_DOTKNOB, 2);
 
 			ui.EndWindow();
 		}

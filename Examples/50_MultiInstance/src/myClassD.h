@@ -4,23 +4,23 @@
 
 #include "ofxSurfingImGui.h"
 
-class myClassB
+class myClassD
 {
 public:
 
-	myClassB();
-	~myClassB();
+	myClassD();
+	~myClassD();
 
 	void setup();
-	void draw();
+	void draw(ofxSurfingGui* _ui);
 
 	ofParameterGroup params;
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;
 	ofParameter<float> speed;
 	ofParameter<int> shapeType;
+	ofParameter<int> amount;
+	ofParameter<int> size;
 
-	ofxSurfingGui ui;
-
-	ofParameter<bool> bGui{ "myClassB", true };
+	ofParameter<bool> bGui{ "myClassD", true };
 };
