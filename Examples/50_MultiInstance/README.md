@@ -9,8 +9,10 @@
 	
 	--  
 	
-	ofxSurfingImGui is a kind of a ( WIP ) higher level class, with more OF ofParameters helpers and a Toolkit with more features:  
-	Styled widgets, layout helpers, windows management, window aligners, layout presets, log and floating notifications engine,  
+	ofxSurfingImGui is a kind of a ( WIP ) higher level class,  
+	with more OF ofParameters helpers and a Toolkit with more features:  
+	Styled widgets, layout helpers, windows management, window aligners,  
+	layout presets, log and floating notifications engine,  
 	docking helpers, profile and plotting tools, and much more.  
 	
 	Important: ui acts as a manager, registering the populated windows and ofParams widgets  
