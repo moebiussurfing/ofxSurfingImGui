@@ -50,7 +50,7 @@ for **openFrameworks** projects.
 <br>
 
 <details>
-  <summary>MORE IMGUI WIDGETS</summary>
+  <summary>WIDGETS LIST</summary>
   <p>
     
 - Big Toggles and Buttons.
@@ -70,6 +70,7 @@ for **openFrameworks** projects.
 - Curve Editors.
 - Bubbles Notifier System.
 - Profile Plotters.
+- ...
   
   </p>
   </details>
@@ -86,6 +87,9 @@ for **openFrameworks** projects.
 <br>
 
 ![](/Examples/00_HelloWorld/Capture.PNG)  
+
+<details>
+  <summary>CODE</summary>
 
 ### ofApp.h
 
@@ -127,17 +131,19 @@ void ofApp::draw()
 }
 ```
 
+</details>
+
 <br>
 
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
   - THE **AWESOME** ~~[@Daandelange](https://github.com/Daandelange)'s **FORK**~~.
-    - NEW BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)  
+    - NEW TEMPORARY BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)  
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-* [assets.zip](assets.zip):  
+* [Assets.zip](assets.zip):  
 Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
@@ -153,7 +159,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** ? 
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
   
   - Multi context / instances: 
     
@@ -177,7 +183,8 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 - **Windows 10** / **VS 2022** / 
     * GitHub [oF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [oF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 11.6.7 Big Sur** / **Xcode 13.2.1** / [oF 0.11.2](https://openframeworks.cc/download/).
+- **macOS 12.5 Monterey** / **Xcode 14.2** / [Intel] / [oF 0.11.2](https://openframeworks.cc/download/). 
+   
 
 <br>
 
@@ -188,10 +195,10 @@ An add-on by **moebiusSurfing**.
 
 ## THANKS
 
-_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui FORK**._  
-_All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange)  
+for **HIS AWESOME ofxImGui FORK**._  
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing._  
-
+_All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 ## LICENSE
 
 **MIT License**

@@ -495,7 +495,10 @@ namespace ofxImGuiSurfing
 		{
 			if (bIsDim2)
 			{
-				ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
+                // non dynamic causes exception in macOS
+                // example: ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(ap);
+                ofParameter<glm::vec2> p = dynamic_cast<glm::vec2&>(ap);
+                //ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
 				glm::vec2 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
@@ -512,8 +515,9 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim3)
 			{
-				ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
-				glm::vec3 _p = p;
+                //ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
+                ofParameter<glm::vec3> p = dynamic_cast<glm::vec3&>(ap);
+                glm::vec3 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
 				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
@@ -531,8 +535,9 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim4)
 			{
-				ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
-				glm::vec4 _p = p;
+                //ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
+                ofParameter<glm::vec4> p = dynamic_cast<glm::vec4&>(ap);
+                glm::vec4 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
 				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
@@ -1210,8 +1215,10 @@ namespace ofxImGuiSurfing
 		{
 			// Knob
 			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
-			float w = this->getWidgetsWidth(1);
-			ImGuiKnobFlags flags = 0;
+			//float w = this->getWidgetsWidth(1);
+            float w = ofxImGuiSurfing::getWidgetsWidth(1);
+            
+            ImGuiKnobFlags flags = 0;
 			flags += ImGuiKnobFlags_NoInput;
 			flags += ImGuiKnobFlags_NoTitle;
 			flags += ImGuiKnobFlags_ValueTooltip;//not works
@@ -1226,7 +1233,8 @@ namespace ofxImGuiSurfing
 			//}
 
 			// tooltip
-			this->AddTooltip(p, true, false);
+            //this->AddTooltip(p, true, false);
+            ofxImGuiSurfing::AddTooltip(p, true, false);
 		}
 
 		return bReturn;

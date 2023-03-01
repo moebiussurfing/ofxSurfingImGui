@@ -992,7 +992,7 @@ namespace ofxImGuiSurfing
 
 		auto& style = ImGui::GetStyle();
 		auto draw_list = ImGui::GetWindowDrawList();
-		auto& cursor_pos = ImGui::GetCursorScreenPos();
+		auto cursor_pos = ImGui::GetCursorScreenPos();
 
 		float thickness = 1.f;
 
@@ -1807,7 +1807,8 @@ public:
 		ImRotateStart();
 		ImGui::Text(text.c_str());
 		center = ImRotationCenter();
-		ImRotateEnd(0.0005f * ::GetTickCount(), center);
+		//ImRotateEnd(0.0005f * ImGui::GetTickCount(), center);
+        ImRotateEnd(0.0005f * ofGetLastFrameTime(), center);
 
 		// icon 
 		//ImRotateStart(); ImGui::SameLine();
