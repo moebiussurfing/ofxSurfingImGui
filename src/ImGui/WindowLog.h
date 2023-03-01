@@ -66,7 +66,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
-		SurfingLog::SurfingLog()
+		SurfingLog()
 		{
 			// Unlimited mode
 			this->clearUnlimited();
@@ -85,7 +85,7 @@ namespace ofxImGuiSurfing
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
 
-		SurfingLog::~SurfingLog()
+		~SurfingLog()
 		{
 			this->clearUnlimited();
 			this->clearBuffered();

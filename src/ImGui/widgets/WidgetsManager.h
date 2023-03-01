@@ -2686,7 +2686,9 @@ namespace ofxImGuiSurfing
 					// This will not be the Group from the 0'th/root/parent level.
 					//--------------------------------------------------------------
 
-					auto& pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
+                    // macOS fix
+					//auto& pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
+                    auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
 
 					// Will detect nested groups recursively
 					if (pGroup)
@@ -2923,9 +2925,11 @@ namespace ofxImGuiSurfing
 						//--
 
 						// Float
-
-						auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
-						if (pFloat)
+                        
+                        // macOS fix
+                        auto pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
+                        //auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
+                        if (pFloat)
 						{
 							auto c = getStyle(*pFloat);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -2947,8 +2951,11 @@ namespace ofxImGuiSurfing
 
 						// Int
 
-						auto& pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
-						if (pInt)
+                        // macOS fix
+                        //auto& pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
+                        auto pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
+                        
+                        if (pInt)
 						{
 							auto c = getStyle(*pInt);
 							if (c.name != "-1")
@@ -2968,8 +2975,10 @@ namespace ofxImGuiSurfing
 
 						// Bool
 
-						auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
-						if (pBool)
+                        // macOS fix
+                        //auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
+                        auto pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
+                        if (pBool)
 						{
 							//TODO:
 							if (bSkipNoSerializable)
@@ -2995,8 +3004,10 @@ namespace ofxImGuiSurfing
 
 						// Void
 
-						auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
-						if (pVoid)
+                        // macOS fix
+                        //auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
+                        auto pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
+                        if (pVoid)
 						{
 							auto c = getStyle(*pVoid);
 							if (c.name != "-1")
@@ -3013,9 +3024,11 @@ namespace ofxImGuiSurfing
 						//--
 
 						// String
-
-						auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
-						if (pString)
+                        
+                        // macOS fix
+                        //auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
+                        auto pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
+                        if (pString)
 						{
 							auto c = getStyle(*pString);
 							if (c.name != "-1")
@@ -3035,8 +3048,10 @@ namespace ofxImGuiSurfing
 
 						// Float color
 
-						auto& pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
-						if (pFloatColor)
+                        // macOS fix
+                        //auto& pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
+                        auto pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
+                        if (pFloatColor)
 						{
 							auto c = getStyle(*pFloatColor);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -3059,8 +3074,10 @@ namespace ofxImGuiSurfing
 
 						// Color
 
-						auto& pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
-						if (pColor)
+                        // macOS fix
+                        //auto& pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
+                        auto pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
+                        if (pColor)
 						{
 							auto c = getStyle(*pColor);
 
