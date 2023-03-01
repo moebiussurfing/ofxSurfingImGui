@@ -238,9 +238,9 @@ namespace ofxImGuiSurfing
 
 	// Height related to the theme. Uses font size and frame padding!
 	//--------------------------------------------------------------
-	inline float getWidgetsHeightUnit() 
+	inline float getWidgetsHeightUnit()
 	{
-		return ImGui::GetFrameHeight(); 
+		return ImGui::GetFrameHeight();
 		//return getWidgetsHeightRelative();
 	}
 
@@ -517,6 +517,16 @@ namespace ofxImGuiSurfing
 		auto pt = pf + diff;
 		ImGui::SetCursorPos(pt);
 	}
+	//--------------------------------------------------------------
+	inline void AddSpacingX(float x)
+	{
+		AddSpacingOffset(ImVec2{ x, 0 });
+	}
+	//--------------------------------------------------------------
+	inline void AddSpacingY(float y)
+	{
+		AddSpacingOffset(ImVec2{ 0, y });
+	}
 
 	// Adds horizontal spacing to center a widget.
 	//--------------------------------------------------------------
@@ -525,7 +535,12 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2{ width, 0 });
 		ImGui::SameLine();
 	}
-
+	////--------------------------------------------------------------
+	//inline void AddSpacingX(float x = 100)
+	//{
+	//	AddSpacingPad(x);
+	//}
+	
 	//----
 
 	// Constraints Helpers
@@ -738,7 +753,7 @@ namespace ofxImGuiSurfing
 		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 	}
-	
+
 	//----
 
 	// Debug Widgets Helpers

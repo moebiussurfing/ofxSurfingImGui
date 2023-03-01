@@ -230,6 +230,7 @@ namespace ofxImGuiSurfing
 				ImVec2 size_min = ImVec2(wWindowMin, hWindowMin);
 				ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+
 			}
 
 			//----
@@ -263,6 +264,8 @@ namespace ofxImGuiSurfing
 			ofxImGuiSurfing::AddSpacingRightAlign(1.15f * _hu);//mini
 			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
+
+			if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
 
 			ofxImGuiSurfing::AddSpacing();
 
