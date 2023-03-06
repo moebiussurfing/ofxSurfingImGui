@@ -16,6 +16,9 @@
 
 	TODO:
 
+	MAR 2023
+		make ofxInteractiveBoxText derived to ImGui
+
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
@@ -24,6 +27,7 @@
 	+ enable floating windows/context
 	+ fix param colors
 	+ fix param string not drawn
+	+ remake theme loader using void * functions
 
 	API UPDATE v3 
 	/ ofParams helpers
@@ -134,7 +138,7 @@
 #include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
 
 
-//--
+//--------------------------------------------------------------
 
 // Alias and namespace's
 
@@ -145,8 +149,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 
+
 //TODO: 
-// make an index/summary/list of
+// Make an index/summary/list of
 // all the below EXAMPLES aNd SNIPPETS
 
 /*

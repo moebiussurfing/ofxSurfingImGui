@@ -130,8 +130,10 @@
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
-#define BLINK_MIN 0.2f 
-#define BLINK_MAX 0.5f 
+//#define BLINK_MIN 0.2f 
+//#define BLINK_MAX 0.5f 
+#define BLINK_MIN 0.5f 
+#define BLINK_MAX 1.0f 
 
 #define FACTOR_DARKEN 0.2f 
 

@@ -21,24 +21,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-//
+
+
 /*
-example
-Image pickerImage;
-ImGui::ImageButton(pickerImage.textureID, ImVec2(pickerImage.mWidth, pickerImage.mHeight));
-ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
-ImVec2 mouseUVCoord = (io.MousePos - rc.Min) / rc.GetSize();
-mouseUVCoord.y = 1.f - mouseUVCoord.y;
-                        
 
-if (io.KeyShift && io.MouseDown[0] && mouseUVCoord.x >= 0.f && mouseUVCoord.y >= 0.f)
-{
-        int width = pickerImage.mWidth;
-        int height = pickerImage.mHeight;
+    Example
 
-        imageInspect(width, height, pickerImage.GetBits(), mouseUVCoord, displayedTextureSize);
-}
+    Image pickerImage;
+    ImGui::ImageButton(pickerImage.textureID, ImVec2(pickerImage.mWidth, pickerImage.mHeight));
+
+    ImGuiIO& io = ImGui::GetIO();
+    ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+    ImVec2 mouseUVCoord = (io.MousePos - rc.Min) / rc.GetSize();
+    mouseUVCoord.y = 1.f - mouseUVCoord.y;
+
+
+    if (io.KeyShift && io.MouseDown[0] && mouseUVCoord.x >= 0.f && mouseUVCoord.y >= 0.f)
+    {
+            int width = pickerImage.mWidth;
+            int height = pickerImage.mHeight;
+
+            imageInspect(width, height, pickerImage.GetBits(), mouseUVCoord, displayedTextureSize);
+    }
+
 */
+
+
+//--
+
 #pragma once
 
 #include "ofxImGui.h"
@@ -117,11 +127,15 @@ namespace ImageInspect
             }
         }
     }
+
     inline void drawNormal(ImDrawList* draw_list, const ImRect& rc, float x, float y)
     {
         draw_list->AddCircle(rc.GetCenter(), rc.GetWidth() / 2.f, 0x20AAAAAA, 24, 1.f);
         draw_list->AddCircle(rc.GetCenter(), rc.GetWidth() / 4.f, 0x20AAAAAA, 24, 1.f);
-        draw_list->AddLine(rc.GetCenter(), rc.GetCenter() + ImVec2(x, y) * rc.GetWidth() / 2.f, 0xFF0000FF, 2.f);
+
+        //fix
+        //draw_list->AddLine(rc.GetCenter(), rc.GetCenter() + ImVec2(x, y) * rc.GetWidth() / 2.f, 0xFF0000FF, 2.f);
+        draw_list->AddLine(rc.GetCenter(), rc.GetCenter() + ImVec2(x * (rc.GetWidth() / 2.f), y * (rc.GetWidth() / 2.f)) , 0xFF0000FF, 2.f);
     }
 
     inline void inspect(const int width,

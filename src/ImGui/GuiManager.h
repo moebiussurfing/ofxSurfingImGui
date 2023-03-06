@@ -2298,8 +2298,25 @@ public:
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	bool isDebug() const { return bDebug.get(); }
 	bool isDebugEnabled() const { return bDebug.get(); }
 	bool isDebugDisabled() const { return !bDebug.get(); }
+
+
+
+	//--------------------------------------------------------------
+	bool AddAdvanced(bool bSeparated = false) {
+		AddAdvancedToggle(bSeparated);
+		return bAdvanced.get();
+	};
+	void AddAdvancedToggle(bool bSeparated = false)
+	{
+		this->Add(this->bAdvanced, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isAdvanced() const { return bAdvanced.get(); }
+	bool isAdvancedEnabled() const { return bAdvanced.get(); }
+	bool isAdvancedDisabled() const { return !bAdvanced.get(); }
 
 	//--------------------------------------------------------------
 	bool AddExtra(bool bSeparated = false) {
@@ -2311,6 +2328,7 @@ public:
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	bool isExtra() const { return bExtra.get(); }
 	bool isExtraEnabled() const { return bExtra.get(); }
 	bool isExtraDisabled() const { return !bExtra.get(); }
 

@@ -675,7 +675,8 @@ namespace ofxImGuiSurfing
 	{
 		if (bBlink)
 		{
-			float a = 0.5f;
+			float a = 1.f;
+			//float a = 0.5f;
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);

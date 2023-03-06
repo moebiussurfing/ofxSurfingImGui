@@ -533,7 +533,7 @@ void SurfingGuiManager::startup()
 //--------------------------------------------------------------
 void SurfingGuiManager::buildHelpInfo()
 {
-	ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui:buildHelpInfo()");
 
 	// we recreate the help info during runtime when some variable changed
 
@@ -2725,7 +2725,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui") << ":Changed " << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui") << "Changed: " << name << ": " << e;
 	}
 	if (bskip) return;
 
@@ -2861,7 +2861,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 		if (appLayoutIndex != appLayoutIndex_PRE)
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << " Changed: " << appLayoutIndex;
+			ofLogNotice("ofxSurfingImGui") << "Changed: " << appLayoutIndex;
 
 			//-
 
@@ -2941,7 +2941,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 					appLayoutIndex = i;
 					bSomeTrue = true;
 
-					continue;//bc only one will be changed at once. no need to check the others.
+					continue; // bc only one will be changed at once. no need to check the others.
 				}
 
 				// is changed to false
@@ -3380,7 +3380,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui") << (char)key << " [" << key << "]";
 
 	// Modifiers
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
@@ -3400,10 +3400,10 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	if (0)
 	{
-		ofLogNotice("ofxSurfingImGui") << " mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << " mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << " mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << " mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << "mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << "mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << "mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
+		ofLogNotice("ofxSurfingImGui") << "mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
 	}
 
 	//----
