@@ -2136,6 +2136,12 @@ public:
 	{
 		this->AddLogTag(SurfingLog::tagData{ name,color });
 	};
+	//--------------------------------------------------------------
+	void AddLogTag(ofColor color)//not using any tag. to remove left spacing
+	{
+		string name = "";
+		AddLogTag(name, color);
+	};
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
@@ -2156,11 +2162,15 @@ public:
 	// Must exist or been added previously.
 	// if there's no passed tag we will use no tag and default text color.
 	//--------------------------------------------------------------
-	void AddToLog(string text, int tag = -1)
+	void AddToLog(string text, int tag/* = -1*/)
 	{
 		log.Add(text, tag);
 	};
-
+	//--------------------------------------------------------------
+	void AddToLog(string text)//TODO:adding empty tag...
+	{
+		log.Add(text, "");
+	};
 	//--------------------------------------------------------------
 	void AddToLog(string text, ofLogLevel logLevel)
 	{

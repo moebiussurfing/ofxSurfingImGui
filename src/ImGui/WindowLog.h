@@ -75,6 +75,7 @@ namespace ofxImGuiSurfing
 			bufferBufferedLimited = std::deque<std::string>();
 			this->clearBuffered();
 
+			maxTagLengthSession = maxTagLengthDefault;
 			buildTagsDefault();
 
 			// to fix overwrite filter enable on startup
@@ -265,7 +266,9 @@ namespace ofxImGuiSurfing
 			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
-			if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
+			// Reduce y spacing
+			if(bMinimize) ofxImGuiSurfing::AddSpacingY(-8);
+			//if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
 
 			ofxImGuiSurfing::AddSpacing();
 
@@ -522,9 +525,10 @@ namespace ofxImGuiSurfing
 	private:
 
 		// columns formatting
-		int maxTagLength = 8; // first column or tag width. to make tags right aligned.
-		const string strSpacer = "   "; // space between tags column and the second column with the message .
-		const string strSpacer2 = " "; // not required bc alignment adds some starting spaces
+		const int maxTagLengthDefault = 8; // first column or tag width. to make tags right aligned.
+		int maxTagLengthSession = -1;
+		/*const */string strSpacer = "   "; // space between tags column and the second column with the message .
+		//const string strSpacer2 = " "; // not required bc alignment adds some starting spaces
 
 	private:
 
@@ -614,7 +618,10 @@ namespace ofxImGuiSurfing
 			tags.clear();
 
 			namesTagsFiler.clear();
+			//namesTagsFiler.push_back(strAlign(""));
 			namesTagsFiler.push_back(strAlign("NONE"));
+
+			maxTagLengthSession = 0;
 		};
 
 	private:
@@ -628,7 +635,8 @@ namespace ofxImGuiSurfing
 			// this empty tag will have the size 
 			// of the bigger tag to maintain alignment
 			strEmptyTag = "";
-			for (size_t i = 0; i < maxTagLength; i++)
+			//maxTagLengthSession = maxTagLengthDefault;
+			for (size_t i = 0; i < maxTagLengthSession; i++)
 			{
 				strEmptyTag += " ";
 			}
@@ -657,7 +665,7 @@ namespace ofxImGuiSurfing
 			//TODO:
 			// to make right aligned
 			int l = s.length();
-			int diff = maxTagLength - l;
+			int diff = maxTagLengthSession - l;
 			if (diff > 0) {
 				string spre = "";
 				for (size_t i = 0; i < diff; i++)
@@ -678,17 +686,23 @@ namespace ofxImGuiSurfing
 		void AddTag(tagData tag)
 		{
 			// if tag is bigger in chars than the default tags adapt max size (8 chars by default)
-			if (tag.name.size() > maxTagLength)
+			if (tag.name.size() > maxTagLengthSession)
 			{
-				maxTagLength = tag.name.size();
+				maxTagLengthSession = tag.name.size();
 				buildTagsDefault();
+			}
+
+			//TODO:
+			//remove margin when not using tags, or an empty tag
+			if (maxTagLengthSession == 0) {
+				strSpacer = "";
 			}
 
 			////TODO:
 			//// to make right aligned
-			//const int maxTagLength = 10;
+			//const int maxTagLengthDefault = 10;
 			//int l = tag.name.length();
-			//int diff = maxTagLength - l;
+			//int diff = maxTagLengthDefault - l;
 			//if (diff > 0) {
 			//	string spre = "";
 			//	for (size_t i = 0; i < diff; i++)
