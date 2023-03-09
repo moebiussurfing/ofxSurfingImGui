@@ -16,8 +16,8 @@
 
 	TODO:
 
-	MAR 2023
-		make ofxInteractiveBoxText derived to ImGui
+	IDEAS
+		make an ofxInteractiveBoxText derived class to be used in ImGui
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
@@ -34,6 +34,9 @@
 	+ pass ImVec2 to all widgets
 	+ make templated for all types
 	+ add multi choice flags
+	+ add a mode to show all tooltips at same time,
+		kind of a help mode.
+		that requires deep remake of the core
 
 	HELPERS
 	+ fix range slider to a new widget
@@ -93,9 +96,11 @@
 
 	BUGS:
 
-	Strings inside paramGroups are not rendered ?
+	Strings params inside paramGroups are not rendered ?
+	
 	It seems than special windows engine
-	puts all toggles to false by default ?
+		puts all toggles to false by default ?
+		should store state to simply handling that maually/externally
 
 */
 

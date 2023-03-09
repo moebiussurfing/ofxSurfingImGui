@@ -1031,9 +1031,9 @@ namespace ofxImGuiSurfing
 		void drawText(const char* item)
 		{
 			if (bSeparators) {
-				ImGui::Spacing();
+				if (!bTight) ImGui::Spacing();
 				ImGui::Separator();
-				ImGui::Spacing();
+				if (!bTight) ImGui::Spacing();
 			}
 
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));

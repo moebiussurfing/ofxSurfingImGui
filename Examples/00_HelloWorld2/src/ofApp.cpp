@@ -36,6 +36,7 @@ void ofApp::draw()
 		{
 			ui.AddLogToggle(); // populate a toggle for the internal show log param.
 			ui.AddMinimizerToggle(); // populate a toggle for the internal minimized param.
+			ui.AddSpacingBigSeparated();
 
 			// two different presentations depending if minimized or not
 			if (ui.isMinimized()) // minimized
@@ -45,8 +46,11 @@ void ofApp::draw()
 			}
 			else // not minimized aka maximized
 			{
-				ui.AddLabelBig("Hello World 2", true, true); // make uppercase and an extra space
+				ui.AddLabelBig("Hello World 2", true, true); // make it uppercase and an extra space
 
+				string s = "Drag the mouse and click left or right button outside or inside the UI and look into the Log Window.";
+				ui.AddLabel(s);
+				ui.AddSpacingBigSeparated();
 				ui.Add(speed, OFX_IM_HSLIDER_BIG);
 				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blink when true
 				if (bEnable)
@@ -76,6 +80,10 @@ void ofApp::keyPressed(int key)
 	ui.AddToLog("KEY: " + ofToString(char(key)), "WARNING");
 
 	if (key == ' ') bGui = !bGui;
+	if (key == 'f') {
+		ofToggleFullscreen();
+		//ofSetFullscreen(true);
+	};
 }
 
 //--------------------------------------------------------------
@@ -99,4 +107,9 @@ void ofApp::mouseDragged(int x, int y, int button)
 	string s = "Mouse Drag  " + ofToString(x) + "," + ofToString(y);
 
 	ui.AddToLog(s, "VERBOSE");
+}
+
+//--------------------------------------------------------------
+void ofApp::exit()
+{
 }

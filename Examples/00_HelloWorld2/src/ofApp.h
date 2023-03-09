@@ -4,15 +4,18 @@
 
     To learn a bit more stuff from the API
 
-    - minimizer
-    - tool-tips
-    - log window
-    - mouse over gui
+    - commontly useful minimizer toggle.
+    - tool-tips for widgets.
+    - the Log window.
+    - mouse over gui.
     - note persistence of previous sessions for some settings.
+    - text labels and spacing usage.
 
 */
 
-//--
+
+//----
+
 
 #include "ofMain.h"
 
@@ -28,6 +31,7 @@ public:
     void keyPressed(int key);
     void mousePressed(int x, int y, int button);
     void mouseDragged(int x, int y, int button);
+    void exit();
 
     ofxSurfingGui ui;
     ofParameter<bool> bGui{ "Show", true };
