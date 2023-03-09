@@ -417,7 +417,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingBig()
+	inline void AddSpacingBig()//triple space
 	{
 		ImGui::Spacing();
 		ImGui::Spacing();

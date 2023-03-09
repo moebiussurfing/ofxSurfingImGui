@@ -1353,7 +1353,7 @@ public:
 		AddSeparatedVertical(bSameLine);
 	}
 	//--------------------------------------------------------------
-	void AddSpacingBig()
+	void AddSpacingBig()//triple space
 	{
 		ofxImGuiSurfing::AddSpacingBig();
 	}

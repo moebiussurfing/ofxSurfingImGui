@@ -81,7 +81,7 @@ namespace ofxImGuiSurfing
 			// to fix overwrite filter enable on startup
 			//indexTagFilter.setSerializable(false);
 
-			params.add(bPause, bTight, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bMinimize);
+			params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bMinimize);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
@@ -397,6 +397,12 @@ namespace ofxImGuiSurfing
 					s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 					ofxImGuiSurfing::AddTooltip2(s);
 
+					ofxImGuiSurfing::AddCheckBox(bSeparators);
+					s = "Add separator line between messages.";
+					ofxImGuiSurfing::AddTooltip2(s);
+
+					//--
+
 					// Modes
 
 					// limited buffered
@@ -509,6 +515,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bPause{ "PAUSE" , false };
 		ofParameter<bool> bTight{ "Tight" , true };
 		ofParameter<bool> bOneLine{ "OneLine" , true };
+		ofParameter<bool> bSeparators{ "Separators" , false};
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
@@ -1023,6 +1030,12 @@ namespace ofxImGuiSurfing
 
 		void drawText(const char* item)
 		{
+			if (bSeparators) {
+				ImGui::Spacing();
+				ImGui::Separator();
+				ImGui::Spacing();
+			}
+
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
 			if (bOneLine) ImGui::TextUnformatted(item);
