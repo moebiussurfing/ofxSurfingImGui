@@ -66,7 +66,7 @@ namespace ofxImGuiSurfing
 
 			ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
 			ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
-			
+
 			if (!bDoneExit)
 			{
 				exit();
@@ -85,14 +85,14 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void exit(ofEventArgs& e)
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
 
 			exit();
 		}
 		//--------------------------------------------------------------
 		void exit()
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
 
 			if (bInitialized)
 			{

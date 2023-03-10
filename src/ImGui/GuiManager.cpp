@@ -69,7 +69,8 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//--
 
-	//TODO: not implemented yet
+	//TODO: For functions not implemented yet.
+	
 	// Exclude from settings
 	//bAdvanced.setSerializable(false);
 	//bExtra.setSerializable(false);
@@ -88,7 +89,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager() {
-	ofLogNotice(__FUNCTION__) << "Destructor!";
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Destructor!";
 
 	if (!bDoneExit) 
 	{
@@ -106,7 +107,7 @@ SurfingGuiManager::~SurfingGuiManager() {
 //--------------------------------------------------------------
 void SurfingGuiManager::exit(ofEventArgs& e)
 {
-	ofLogNotice(__FUNCTION__) << "(ofEventArgs& e)";
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
 	ofLogNotice("ofxSurfingImGui") << "Calling exit() by ofEvents().exit with maximum priority!";
 	ofLogNotice("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
 
@@ -116,7 +117,7 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 //--------------------------------------------------------------
 void SurfingGuiManager::exit()
 {
-	ofLogNotice(__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
@@ -2413,7 +2414,7 @@ void SurfingGuiManager::saveAppSettings()
 		// Could use:
 		//ofFilePath::getEnclosingDirectory(…)
 
-		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings, true);
+		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings);
 		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
 	}
 	else {
@@ -3616,7 +3617,7 @@ void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice(__FUNCTION__) << " " << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
 
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
 	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
