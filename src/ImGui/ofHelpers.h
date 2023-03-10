@@ -330,7 +330,7 @@ namespace ofxImGuiSurfing
 						{
 							ImGui::BeginTooltip();
 							//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-							ImGui::Text(sTooltip.c_str());
+							ImGui::Text("%s", sTooltip.c_str());
 							//ImGui::PopTextWrapPos();
 							ImGui::EndTooltip();
 						}
@@ -614,7 +614,7 @@ namespace ofxImGuiSurfing
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextWrapped(text.c_str());
+			ImGui::TextWrapped("%s", text.c_str());
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}

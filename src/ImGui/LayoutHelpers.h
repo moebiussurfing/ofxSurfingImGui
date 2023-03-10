@@ -316,14 +316,14 @@ namespace ofxImGuiSurfing
 		float wx = ImGui::GetContentRegionAvail().x;
 		string s = ofToString(wx);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 	//--------------------------------------------------------------
 	inline void DebugContentRegionAvailY() {
 		float wy = ImGui::GetContentRegionAvail().y;
 		string s = ofToString(wy);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 	//--------------------------------------------------------------
 	inline void DebugContentRegionAvail() {
@@ -331,7 +331,7 @@ namespace ofxImGuiSurfing
 		float wy = ImGui::GetContentRegionAvail().y;
 		string s = ofToString(wx) + ", " + ofToString(wy);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 
 	//--
@@ -361,7 +361,7 @@ namespace ofxImGuiSurfing
 		{
 			string s = ofToString(wx - w);
 			ImGui::SameLine();
-			ImGui::Text(s.c_str());
+			ImGui::Text("%s", s.c_str());
 		}
 		if (wx > w) ImGui::SameLine();
 	}
@@ -477,7 +477,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddLabel(string text)
 	{
-		ImGui::TextWrapped(text.c_str());
+		ImGui::TextWrapped("%s", text.c_str());
 	}
 
 	//---

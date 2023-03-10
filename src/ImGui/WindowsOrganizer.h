@@ -1203,7 +1203,7 @@ namespace ofxImGuiSurfing
 								ss4 += "" + ofToString(id);
 							}
 
-							ImGui::TextWrapped(ss4.c_str());
+							ImGui::TextWrapped("%s", ss4.c_str());
 							ofxImGuiSurfing::AddSpacingSeparated();
 
 							// Queue visible
@@ -1213,7 +1213,7 @@ namespace ofxImGuiSurfing
 								if (i != 0) ss2 += ", ";
 								ss2 += ofToString(queueWindowsVisible[i]);
 							}
-							ImGui::TextWrapped(ss2.c_str());
+							ImGui::TextWrapped("%s", ss2.c_str());
 							ofxImGuiSurfing::AddSpacingSeparated();
 
 							// All the panels
@@ -1233,7 +1233,7 @@ namespace ofxImGuiSurfing
 
 								i++;
 							}
-							ImGui::TextWrapped(ss1.c_str());
+							ImGui::TextWrapped("%s", ss1.c_str());
 							ofxImGuiSurfing::AddSpacingSeparated();
 
 							// Windows
@@ -1243,11 +1243,11 @@ namespace ofxImGuiSurfing
 								if (i != 0) ss5 += ", ";
 								ss5 += ofToString(windowsPanels[i].id);
 							}
-							ImGui::TextWrapped(ss5.c_str());
+							ImGui::TextWrapped("%s", ss5.c_str());
 							ofxImGuiSurfing::AddSpacingSeparated();
 
 							ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
-							ImGui::TextWrapped(ss1.c_str());
+							ImGui::TextWrapped("%s", ss1.c_str());
 
 							ImGui::Unindent();
 						}

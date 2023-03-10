@@ -1149,7 +1149,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_TEXT_DISPLAY:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						ImGui::Text(tmpRef.c_str());
+						ImGui::Text("%s", tmpRef.c_str());
 						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;
@@ -1159,7 +1159,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_TEXT_BIG:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						ImGui::TextWrapped(tmpRef.c_str());
+						ImGui::TextWrapped("%s", tmpRef.c_str());
 						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					}
 					break;

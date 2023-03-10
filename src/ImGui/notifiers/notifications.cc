@@ -158,7 +158,7 @@ void NotificationManager::DrawNotification(float t, const char *msg)
         // expand a bit
         ImGui::Text("\n");
         string _msg = "  " + string(msg) + "  ";
-        ImGui::Text(_msg.c_str());
+		ImGui::Text("%s", _msg.c_str());
         ImGui::Text("\n");
     }
     ImGui::PopStyleColor();
