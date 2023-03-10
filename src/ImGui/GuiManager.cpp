@@ -14,12 +14,27 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//----
 
+	// ofApp / core callbacks
+	
+	//TODO: 
+	// Fix exit exceptions on RF..
+	//ofAddListener(ofEvents().exit, this, &ofApp::exit, OF_EVENT_ORDER_EXIT + OF_EVENT_ORDER_APP);
+	////In this example, we use OF_EVENT_ORDER_EXIT + OF_EVENT_ORDER_APP as the priority value when we attach our exit() function to the exit event.This ensures that our listener function will be called with the maximum priority when the ofApp object is about to exit.
+
+	int minValue = std::numeric_limits<int>::min();
+	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
+	//ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit);
+
+	//--
+
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
-	// Auto call draw. Only to draw help boxes info.
+	// Auto call draw. Only to draw help boxes / OF native info. ?
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
-	// Callbacks
+	//----
+	 
+	// App callbacks
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofAddListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
@@ -55,6 +70,7 @@ SurfingGuiManager::SurfingGuiManager()
 	//params_Advanced.add(windowsOrganizer.pad);
 	//params_Advanced.add(bLandscape);//TODO:
 
+	//TODO: not implemented yet
 	// Exclude from settings
 	//bAdvanced.setSerializable(false);
 	//bExtra.setSerializable(false);
@@ -74,14 +90,32 @@ SurfingGuiManager::SurfingGuiManager()
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager() {
 
+	//workaround for legacy projects or to fix if we fogot to call exit..
+	if (!bDoneExit) {
+		exit();
+		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
+		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
+	}
+	else {
+		ofLogNotice("ofxSurfingImGui") << "Ommited callig exit() in destructor. It was already done!";
+	}
+}
+
+//--------------------------------------------------------------
+void SurfingGuiManager::exit() {
+
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
-	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
+
+	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
+	//ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
 	saveAppSettings();
+
+	bDoneExit = true;
 }
 
 //--
@@ -3559,7 +3593,7 @@ void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
+	ofLogNotice(__FUNCTION__) << " " << (char)key << " [" << key << "]";
 
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
 	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);

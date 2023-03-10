@@ -138,6 +138,12 @@ public:
 	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
 	void setup(ofxImGui::Gui& gui);
+	
+//public:
+private:
+	void exit();
+private:
+	bool bDoneExit = false;
 
 	//--
 

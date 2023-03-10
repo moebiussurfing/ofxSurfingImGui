@@ -37,12 +37,16 @@ void ofApp::draw()
 
 	ui.Begin();
 	{
+		// Close the Window by pressing the top right X.
+		// This state is handled internally by bGui bool param!
+		// Press space to toggle bGui and show it again.
+
 		if (ui.BeginWindow(bGui))
 		{
 			string s = "HELP\n\n";
 			s += "Enable the Log Window using the above rounded toggle.\n\n";
 			s += "Drag the mouse and click left or right button outside or inside the UI, ";
-			s += "move speed slider... \nThen go look into the Log Window.";
+			s += "move speed slider... \n\nThen go look into the Log Window!";
 			s += "\n\nPress SPACE to show/hide the UI.";
 
 			ui.AddLogToggle(); // populate a toggle for the internal show log param.
@@ -53,8 +57,8 @@ void ofApp::draw()
 			{
 				ui.AddKeysToggle(); // populate a toggle for the internal keys enabler param.
 				string s2 = "Keys Enabler will allow some \ninternal key commands.\n";
-				s2 += "Press '`' to toggle the Minimizer state.\n";
-				s2 += "Press 'L' to toggle the Log Window visible.";
+				s2 += "Press ` to toggle the Minimizer state.\n";
+				s2 += "Press L to toggle the Log Window visible.";
 				ui.AddTooltip(s2); // a tooltip will be pinned to the previous widget!
 			}
 
@@ -87,7 +91,9 @@ void ofApp::draw()
 
 					// A right aligned extra minimizer
 					// but using a local bool param.
-					static ofParameter<bool> bMin{ "", false };
+					// not that is not stored into settings file,
+					// but other internal toggles it does!
+					static ofParameter<bool> bMin{ "", true };
 					ui.AddMinimizerXsToggle(bMin);
 					if (!bMin)
 					{
