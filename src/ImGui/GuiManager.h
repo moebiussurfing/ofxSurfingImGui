@@ -1876,7 +1876,9 @@ public:
 	// Force shared context
 
 	//--------------------------------------------------------------
-	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
+	void setImGuiSharedMode(bool b) {
+		//gui.setSharedMode(b); // Not anymore, fully automatic now
+	}
 
 	//----
 
