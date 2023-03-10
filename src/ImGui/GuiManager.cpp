@@ -15,15 +15,11 @@ SurfingGuiManager::SurfingGuiManager()
 	//----
 
 	// ofApp / core callbacks
-	
+
 	//TODO: 
 	// Fix exit exceptions on RF..
-	//ofAddListener(ofEvents().exit, this, &ofApp::exit, OF_EVENT_ORDER_EXIT + OF_EVENT_ORDER_APP);
-	////In this example, we use OF_EVENT_ORDER_EXIT + OF_EVENT_ORDER_APP as the priority value when we attach our exit() function to the exit event.This ensures that our listener function will be called with the maximum priority when the ofApp object is about to exit.
-
 	int minValue = std::numeric_limits<int>::min();
 	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
-	//ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit);
 
 	//--
 
@@ -33,8 +29,9 @@ SurfingGuiManager::SurfingGuiManager()
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	//----
-	 
+
 	// App callbacks
+
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofAddListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
@@ -70,6 +67,8 @@ SurfingGuiManager::SurfingGuiManager()
 	//params_Advanced.add(windowsOrganizer.pad);
 	//params_Advanced.add(bLandscape);//TODO:
 
+	//--
+
 	//TODO: not implemented yet
 	// Exclude from settings
 	//bAdvanced.setSerializable(false);
@@ -79,7 +78,7 @@ SurfingGuiManager::SurfingGuiManager()
 	bReset.setSerializable(false);
 	bReset_Window.setSerializable(false);
 
-	//-
+	//--
 
 	////TODO: BUG? 
 	//// it seems than requires to be false when using multi-context/instances
@@ -89,20 +88,34 @@ SurfingGuiManager::SurfingGuiManager()
 
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager() {
+	ofLogNotice(__FUNCTION__) << "Destructor!";
 
-	//workaround for legacy projects or to fix if we fogot to call exit..
-	if (!bDoneExit) {
+	if (!bDoneExit) 
+	{
 		exit();
 		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
 		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
 	}
-	else {
+	else 
+	{
 		ofLogNotice("ofxSurfingImGui") << "Ommited callig exit() in destructor. It was already done!";
 	}
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::exit() {
+void SurfingGuiManager::exit(ofEventArgs& e)
+{
+	ofLogNotice(__FUNCTION__) << "(ofEventArgs& e)";
+	ofLogNotice("ofxSurfingImGui") << "Calling exit() by ofEvents().exit with maximum priority!";
+	ofLogNotice("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
+
+	exit();
+}
+
+//--------------------------------------------------------------
+void SurfingGuiManager::exit()
+{
+	ofLogNotice(__FUNCTION__);
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
@@ -123,7 +136,7 @@ void SurfingGuiManager::exit() {
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 	if (bDoneSetup) {
-		ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__) << (" Setup was already done. Skip that call!");
+		ofLogWarning(__FUNCTION__) << "Setup was already done. Skip that call!";
 	}
 
 	surfingImGuiMode = mode;
@@ -334,7 +347,7 @@ void SurfingGuiManager::setupImGuiFonts()
 
 		// Set default
 		addFont(_path + _fontName, _fontSizeParam);
-		
+
 		//gui.end();
 	}
 

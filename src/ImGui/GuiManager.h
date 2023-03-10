@@ -142,6 +142,7 @@ public:
 //public:
 private:
 	void exit();
+	void exit(ofEventArgs& e);
 private:
 	bool bDoneExit = false;
 
