@@ -1708,13 +1708,14 @@ public:
 		this->refreshLayout();
 
 		string t = "##CHILD" + label;
-		ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
+		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
 		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::BeginMenuBar();
 		ImGui::Text(label.c_str());
 		ImGui::EndMenuBar();
 
 		ImGui::NewLine();
+		return ret;
 	}
 	//--------------------------------------------------------------
 	void EndChild()
