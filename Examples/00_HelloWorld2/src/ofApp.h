@@ -2,14 +2,17 @@
 
 /*
 
-    To learn a bit more stuff from the API
+    TO LEARN A BIT MORE 
+    ABOUT THE API:
 
-    - commontly useful minimizer toggle.
-    - tool-tips for widgets.
-    - the Log window.
-    - mouse over gui.
-    - note persistence of previous sessions for some settings.
-    - text labels and spacing usage.
+    - Spacing and separators.
+    - Commontly useful minimizer toggle.
+    - Tooltips for widgets.
+    - The Log Window.
+    - Mouse over gui.
+    - Note persistence of previous sessions for some settings.
+    - Text labels.
+    - Some keycommands examples.
 
 */
 

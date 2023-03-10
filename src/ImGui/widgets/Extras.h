@@ -89,9 +89,10 @@ namespace ofxImGuiSurfing
 
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
-			//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextUnformatted(desc);
-			//ImGui::PopTextWrapPos();
+			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 15.0f);
+			ImGui::TextWrapped(desc);
+			//ImGui::TextUnformatted(desc);
+			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
 	}

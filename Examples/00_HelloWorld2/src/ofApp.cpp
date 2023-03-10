@@ -30,12 +30,34 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	if (!bGui) return;
+	// Not mandatory, but
+	// this will allow to hide the Log Window too. 
+	// That's bc is auto drawn when calling ui.End()!
+
 	ui.Begin();
 	{
 		if (ui.BeginWindow(bGui))
 		{
+			string s = "HELP\n\n";
+			s += "Enable the Log Window using the above rounded toggle.\n\n";
+			s += "Drag the mouse and click left or right button outside or inside the UI, ";
+			s += "move speed slider... \nThen go look into the Log Window.";
+			s += "\n\nPress SPACE to show/hide the UI.";
+
 			ui.AddLogToggle(); // populate a toggle for the internal show log param.
 			ui.AddMinimizerToggle(); // populate a toggle for the internal minimized param.
+
+			//if (!ui.isMinimized()) 
+			if (ui.isMaximized()) // does the same than the above line
+			{
+				ui.AddKeysToggle(); // populate a toggle for the internal keys enabler param.
+				string s2 = "Keys Enabler will allow some \ninternal key commands.\n";
+				s2 += "Press '`' to toggle the Minimizer state.\n";
+				s2 += "Press 'L' to toggle the Log Window visible.";
+				ui.AddTooltip(s2); // a tooltip will be pinned to the previous widget!
+			}
+
 			ui.AddSpacingBigSeparated();
 
 			// two different presentations depending if minimized or not
@@ -43,22 +65,28 @@ void ofApp::draw()
 			{
 				ui.Add(speed, OFX_IM_HSLIDER_SMALL_NO_LABELS); // smaller with no name and no value number
 				ui.AddTooltip(speed, true, false); // tool-tip with name and value
+				ui.AddSpacingDouble();
+				ui.AddTooltipHelp(s);
 			}
 			else // not minimized aka maximized
 			{
-				ui.AddLabelBig("Hello World 2", true, true); // make it uppercase and an extra space
+				ui.AddLabelBig("Hello World 2", true, true); // make it uppercase and add an extra space
 
-				string s = "Drag the mouse and click left or right button outside or inside the UI and look into the Log Window.";
+				ui.AddSpacingDouble();
+				ui.BeginBlinkText();
 				ui.AddLabel(s);
+				ui.EndBlinkText();
+
 				ui.AddSpacingBigSeparated();
-				ui.Add(speed, OFX_IM_HSLIDER_BIG);
-				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blink when true
+				ui.Add(speed, OFX_IM_HSLIDER);
+				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
 				if (bEnable)
 				{
-					// A right aligned extra minimizer
 					ui.AddSpacing();
 					ui.AddSpacingSeparated();
 
+					// A right aligned extra minimizer
+					// but using a local bool param.
 					static ofParameter<bool> bMin{ "", false };
 					ui.AddMinimizerXsToggle(bMin);
 					if (!bMin)
@@ -80,10 +108,7 @@ void ofApp::keyPressed(int key)
 	ui.AddToLog("KEY: " + ofToString(char(key)), "WARNING");
 
 	if (key == ' ') bGui = !bGui;
-	if (key == 'f') {
-		ofToggleFullscreen();
-		//ofSetFullscreen(true);
-	};
+	if (key == 'f') ofToggleFullscreen();
 }
 
 //--------------------------------------------------------------

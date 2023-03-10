@@ -1531,6 +1531,7 @@ void SurfingGuiManager::End()
 
 	//--
 
+	// auto handles drawing. not need to draw manually!
 	DrawWindowLogIfEnabled();
 
 	//--

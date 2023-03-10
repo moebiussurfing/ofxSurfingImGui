@@ -524,7 +524,7 @@ namespace ofxImGuiSurfing
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
-		ofParameter<bool> bMinimize{ " ", false };
+		ofParameter<bool> bMinimize{ " ", false };//
 
 		int amountLinesCurr = 0;
 		bool bDoneStartup = false;

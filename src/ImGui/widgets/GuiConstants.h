@@ -95,6 +95,10 @@
 //--
 
 // Ratio Sizes between sizes of a widget type. 
+//TODO:
+// fix for HSLIDERS.. 
+// should be used by toggles and buttons too!
+#define OFX_IM_WIDGETS_RATIO_DEFAULT 0.7f
 #define OFX_IM_WIDGETS_RATIO_BIG 1.5f
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
 #define OFX_IM_WIDGETS_RATIO_SMALL 0.4f

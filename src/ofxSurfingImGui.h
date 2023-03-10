@@ -28,6 +28,7 @@
 	+ fix param colors
 	+ fix param string not drawn
 	+ remake theme loader using void * functions
+	+ add tooltip with paragrag/ wrapped
 
 	API UPDATE v3 
 	/ ofParams helpers
