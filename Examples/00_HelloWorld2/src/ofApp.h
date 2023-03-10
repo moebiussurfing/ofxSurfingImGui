@@ -13,6 +13,9 @@
     - Note persistence of previous sessions for some settings.
     - Text labels.
     - Some keycommands examples.
+    - Make blink widgets.
+    - Make font bigger on widgets.
+
 
 */
 

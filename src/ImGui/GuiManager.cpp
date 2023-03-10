@@ -358,7 +358,7 @@ void SurfingGuiManager::setupImGuiFonts()
 	// Legacy not found neither,
 	else
 	{
-		ofLogError("ofxSurfingImGui::setupImGuiFonts") << " Expected file fonts not found!";
+		ofLogError("ofxSurfingImGui:setupImGuiFonts") << " Expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "ImGui will use his own bundled default font.";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
@@ -762,7 +762,7 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
-	ofLogNotice("ofxSurfingImGui::pushFont") << " " << path << " : " << size;
+	ofLogNotice("ofxSurfingImGui:pushFont") << " " << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
@@ -792,7 +792,7 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 	}
 	else
 	{
-		ofLogError("ofxSurfingImGui::pushFont") << " FILE FONT " << path << " NOT FOUND!";
+		ofLogError("ofxSurfingImGui:pushFont") << " FILE FONT " << path << " NOT FOUND!";
 	}
 
 	if (customFont != nullptr) io.FontDefault = customFont;

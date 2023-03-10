@@ -70,20 +70,41 @@ void ofApp::draw()
 				ui.Add(speed, OFX_IM_HSLIDER_SMALL_NO_LABELS); // smaller with no name and no value number
 				ui.AddTooltip(speed, true, false); // tool-tip with name and value
 				ui.AddSpacingDouble();
+
+				// make font bigger
+				ui.PushFont(OFX_IM_FONT_BIG);
 				ui.AddTooltipHelp(s);
+				ui.PopFont();
 			}
 			else // not minimized aka maximized
 			{
-				ui.AddLabelBig("Hello World 2", true, true); // make it uppercase and add an extra space
+				// make it uppercase and add an extra space (true, true)
+				if (bEnable) ui.AddLabelHuge("Hello World 2", true, true); 
+				else ui.AddLabelBig("Hello World 2", true, true); 
 
 				ui.AddSpacingDouble();
+				
+				// make it blink
 				if (bEnable) ui.BeginBlinkText();
+				// make font bigger
+				if (bEnable) ui.PushFont(OFX_IM_FONT_BIG);
+
 				ui.AddLabel(s);
+				
+				if (bEnable) ui.PopFont();
 				if (bEnable) ui.EndBlinkText();
 
 				ui.AddSpacingBigSeparated();
 				ui.Add(speed, OFX_IM_HSLIDER);
+
 				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
+				s = "Will enable:\n\n";
+				s += "1. Bigger font\n";
+				s += "   (on above HELP text)\n";
+				s += "2. Blink text\n";
+				s += "3. Show/hide bottom widgets";
+				ui.AddTooltip(s);
+
 				if (bEnable)
 				{
 					ui.AddSpacing();
