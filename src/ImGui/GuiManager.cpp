@@ -16,7 +16,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 	// ofApp / core callbacks
 
-	//TODO: 
+	//TODO:
 	// Fix exit exceptions on RF..
 	int minValue = std::numeric_limits<int>::min();
 	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
@@ -70,7 +70,7 @@ SurfingGuiManager::SurfingGuiManager()
 	//--
 
 	//TODO: For functions not implemented yet.
-	
+
 	// Exclude from settings
 	//bAdvanced.setSerializable(false);
 	//bExtra.setSerializable(false);
@@ -81,7 +81,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//--
 
-	////TODO: BUG? 
+	////TODO: BUG?
 	//// it seems than requires to be false when using multi-context/instances
 	//// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
 	//bAutoDraw = false;
@@ -91,14 +91,14 @@ SurfingGuiManager::SurfingGuiManager()
 SurfingGuiManager::~SurfingGuiManager() {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Destructor!";
 
-	if (!bDoneExit) 
+	if (!bDoneExit)
 	{
 		exit();
 
 		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
 		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
 	}
-	else 
+	else
 	{
 		ofLogNotice("ofxSurfingImGui") << "Succesfully omitted calling exit() in destructor. It was already done!";
 	}
@@ -138,7 +138,7 @@ void SurfingGuiManager::exit()
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
-	if (bDoneSetup) 
+	if (bDoneSetup)
 	{
 		ofLogWarning(__FUNCTION__) << "Setup was already done. Skipping this call!";
 	}
@@ -254,7 +254,7 @@ void SurfingGuiManager::setupInitiate()
 
 		// Add LINK to extra params
 		// that allows that each presets could have his own link state enabled or disabled.
-		// to allow linking or floating windows. 
+		// to allow linking or floating windows.
 		this->addExtraParamToLayoutPresets(bLinked);
 	}
 
@@ -404,9 +404,9 @@ void SurfingGuiManager::setupImGuiFonts()
 	}
 	*/
 
-	// If we don't found any of the font, 
+	// If we don't found any of the font,
 	// we will let ImGui to use his default bundled font,
-	// The label sizes widgets, and the 3 font types will not be working, 
+	// The label sizes widgets, and the 3 font types will not be working,
 	// all styles will be the same.
 }
 
@@ -557,7 +557,7 @@ void SurfingGuiManager::startup()
 	// Load some internal settings
 	bool bNoSettingsFound = !(loadAppSettings());
 
-	// Will return false if settings file do not exist. 
+	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning!
 	if (bNoSettingsFound)
 	{
@@ -745,10 +745,10 @@ void SurfingGuiManager::clearFonts()
 	io.Fonts->Clear();
 }
 
-// API user: 
+// API user:
 // workflow during setup not in draw.
 
-//TODO: could return an int with the current index. 
+//TODO: could return an int with the current index.
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
 bool SurfingGuiManager::pushFont(std::string path, int size)
@@ -758,7 +758,7 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 #endif
 
 	//TODO:
-	// It could be a vector with several customFont 
+	// It could be a vector with several customFont
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
@@ -1134,7 +1134,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 		//--
 
-		// Window Panels 
+		// Window Panels
 
 		if (ImGui::TreeNode("PANELS"))
 		{
@@ -1222,15 +1222,15 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 
 			// a. Define the ofWindow as a docking space
 
-			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0)); // Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0)); // Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 			//ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);
 			//ImGui::PopStyleColor();
 
 			//-
 
-			// b. Lockable settings 
+			// b. Lockable settings
 
-			// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+			// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 			//ImGuiDockNodeFlags flagsDock;
 			//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -1355,9 +1355,9 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 
 		//----
 
-		//// b. Lockable settings 
+		//// b. Lockable settings
 
-		//// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+		//// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 		////ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 		//ImGuiDockNodeFlags flagsDock;
 		//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -1394,7 +1394,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 	{
 		ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
 		if (centralNode)
-			//if (centralNode && centralNode->IsEmpty()) 
+			//if (centralNode && centralNode->IsEmpty())
 		{
 			ImRect availableSpace = centralNode->Rect();
 			//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
@@ -1451,7 +1451,7 @@ void SurfingGuiManager::startupFirstFrame()
 		setup();
 	}
 
-	// Force call startup(). 
+	// Force call startup().
 	// Maybe user forgets to do it or to speed up the API setup in some scenarios.
 	// i.e. when not using special windows or layout engine
 	if (!bDoneStartup)
@@ -1472,10 +1472,10 @@ void SurfingGuiManager::startupFirstFrame()
 //----
 
 // Global ImGui being/end like ofxImGui
-// 
+//
 // All the ImGui Stuff goes in between here,
 // The RAW ImGui widgets and the API / Engine handled stuff too!
-// 
+//
 //--------------------------------------------------------------
 void SurfingGuiManager::Begin()
 {
@@ -1504,7 +1504,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Reset unique names
-	// Here it handles the queued ofParams names 
+	// Here it handles the queued ofParams names
 	// to avoid colliding by using push/pop id's tags.
 	resetUniqueNames();
 
@@ -1769,7 +1769,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 	return b;
 }
 
-// This is the main BeginWindow. 
+// This is the main BeginWindow.
 // All above methods will call this one!
 
 ////--------------------------------------------------------------
@@ -1782,10 +1782,10 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 {
 	ImGuiCond cond = ImGuiCond_None;
 
-	//TODO: 
+	//TODO:
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
-	//TODO: 
+	//TODO:
 	//if (bReset_Window) {
 	//	bReset_Window = false;
 	//	resetWindowImGui(false, true);
@@ -1794,8 +1794,8 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 	//--
 
 	// Reset unique names
-	// This is to handle the widgets ID to avoid repeat an used name, 
-	// avoiding colliding between them 
+	// This is to handle the widgets ID to avoid repeat an used name,
+	// avoiding colliding between them
 	// when params are re used on the same window/scope.
 
 	resetUniqueNames();
@@ -1820,7 +1820,7 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 	//	return false;
 	//}
 
-	// When we are instantiating ImGui externally, 
+	// When we are instantiating ImGui externally,
 	// not inside this addon,
 	// we don't handle the font and theme.
 	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
@@ -1875,7 +1875,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	//--
 
 	//TODO:
-	// Skip window if hidden 
+	// Skip window if hidden
 	// (bGui = false)
 	if (!windows[index].bGui.get())
 		return false;
@@ -1896,7 +1896,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 		// Run the linking engine when this is enabled
 		if (windowsOrganizer.bLinked)
 		{
-			//TODO: 
+			//TODO:
 			// make refresh faster
 			// can be moved to global begin() to reduce calls ?
 			// maybe is better like that bc it's called many times.. ?
@@ -1915,7 +1915,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	// Auto resize
 
 	// global
-	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize; 
+	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
 	if (windows[index].bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 	// independent for each window
@@ -1956,7 +1956,7 @@ bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
 		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Special Window toggle not found! " << _bGui.getName();
 
 		//TODO:
-		// detect if there is no special window with that name, 
+		// detect if there is no special window with that name,
 		// and then call a normal window to avoid missing drawing.
 		// being prophylactic.
 		//return BeginWindow(_bGui);
@@ -2083,7 +2083,7 @@ void SurfingGuiManager::beginDocking()
 
 	ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
 	// Fixes imgui to expected behaviour, having a transparent central node in passthru mode.
-	// Alternative: Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+	// Alternative: Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 	//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 
 	//dockingFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode; // Uncomment to always keep an empty "central node" (a visible oF space)
@@ -2133,9 +2133,9 @@ void SurfingGuiManager::BeginDocking()
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
 	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
 	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace", nullptr, window_flags);
@@ -2220,7 +2220,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	// Extra params that will be included into each preset.
 	// Then can be different and memorized in different states too,
-	// like the common panels. 
+	// like the common panels.
 
 	params_LayoutsExtra.add(bMenu);
 	params_LayoutsExtra.add(bLog);
@@ -2412,7 +2412,7 @@ void SurfingGuiManager::saveAppSettings()
 		// This is already made on setup or when a custom setName is made.
 		ofxSurfingHelpers::CheckFolder(path_Global);
 		// Could use:
-		//ofFilePath::getEnclosingDirectory(…)
+		//ofFilePath::getEnclosingDirectory(O)
 
 		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings);
 		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
@@ -2663,7 +2663,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 
 		if (!bMinimize_Presets)
 		{
-			// Extra Params 
+			// Extra Params
 
 			// when is minimized or manager window hidden
 			if (bMinimize_Presets || !bGui_LayoutsManager)
@@ -2855,7 +2855,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Skip below callbacks
 	// when not using the Layout Presets Engine!
 	// to improve the performance a bit
-	// by skipping the not required callbacks. 
+	// by skipping the not required callbacks.
 	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 		if (!bDockingLayoutPresetsEngine) return;
 
@@ -2871,7 +2871,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	//--
 
-	// Reset 
+	// Reset
 	// This toggle/flag is "sent" to the parent scope (ofApp), to resets something in our apps.
 	// Example: to resets the layout.
 	// That pointer must be created externally!
@@ -2916,7 +2916,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	{
 		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
-		//if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) 
+		//if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/)
 
 		if (appLayoutIndex != appLayoutIndex_PRE)
 		{
@@ -3484,19 +3484,19 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		bMinimize = !bMinimize;
 	}
 
-	// Extra 
+	// Extra
 	else if (key == 'E' && !mod_CONTROL)
 	{
 		bExtra = !bExtra;
 	}
 
-	// Debug 
+	// Debug
 	else if (key == 'D' && !mod_CONTROL)
 	{
 		bDebug = !bDebug;
 	}
 
-	// Log 
+	// Log
 	else if (key == 'L' && !mod_CONTROL)
 	{
 		bLog = !bLog;
@@ -3586,7 +3586,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			setShowAllPanels(false);
 		}
 
-		//// Unlock Dock 
+		//// Unlock Dock
 		//else if (key == 'l')
 		//{
 		//	bModeLock1 = !bModeLock1;
