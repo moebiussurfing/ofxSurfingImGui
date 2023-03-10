@@ -56,7 +56,7 @@ void ofApp::draw()
 			if (ui.isMaximized()) // does the same than the above line
 			{
 				ui.AddKeysToggle(); // populate a toggle for the internal keys enabler param.
-				string s2 = "Keys Enabler will allow some \ninternal key commands.\n";
+				string s2 = "Keys Enabler \n\nwill allow some \ninternal key commands.\n\n";
 				s2 += "Press ` to toggle the Minimizer state.\n";
 				s2 += "Press L to toggle the Log Window visible.";
 				ui.AddTooltip(s2); // a tooltip will be pinned to the previous widget!
@@ -77,9 +77,9 @@ void ofApp::draw()
 				ui.AddLabelBig("Hello World 2", true, true); // make it uppercase and add an extra space
 
 				ui.AddSpacingDouble();
-				ui.BeginBlinkText();
+				if (bEnable) ui.BeginBlinkText();
 				ui.AddLabel(s);
-				ui.EndBlinkText();
+				if (bEnable) ui.EndBlinkText();
 
 				ui.AddSpacingBigSeparated();
 				ui.Add(speed, OFX_IM_HSLIDER);
@@ -88,6 +88,7 @@ void ofApp::draw()
 				{
 					ui.AddSpacing();
 					ui.AddSpacingSeparated();
+					ui.AddSpacingDouble();
 
 					// A right aligned extra minimizer
 					// but using a local bool param.

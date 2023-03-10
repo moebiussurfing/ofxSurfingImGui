@@ -113,7 +113,7 @@ namespace ofxImGuiSurfing
 
 			// B. tag do not exists
 			// print as default
-			ofLogWarning("SurfingLog") << "The tag " << nameTag << " do not exist. We will use the default tag.";
+			ofLogWarning("ofxSurfingImGui::SurfingLog") << "The tag " << nameTag << " do not exist. We will use the default tag.";
 			Add(msg);
 		};
 
@@ -173,7 +173,7 @@ namespace ofxImGuiSurfing
 			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
 			else
 			{
-				ofLogWarning("ofxSurfingImGui") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
+				ofLogWarning("ofxSurfingImGui::SurfingLog") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
 			}
 		};
 
@@ -309,7 +309,7 @@ namespace ofxImGuiSurfing
 						b = ImGui::InputText("##Filter", &s);
 						if (b)
 						{
-							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+							ofLogNotice("ofxSurfingImGui::SurfingLog") << "InputText:" << s.c_str();
 							strFilterKeyword.set(s);
 						}
 						ImGui::PopItemWidth();
@@ -460,7 +460,7 @@ namespace ofxImGuiSurfing
 					//		bReturn = ImGui::InputText("##Filter", &s);
 					//		if (bReturn)
 					//		{
-					//			ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+					//			ofLogNotice("ofxSurfingImGui::SurfingLog") << "InputText:" << s.c_str();
 					//			strFilterKeyword.set(s);
 					//		}
 					//		ImGui::PopItemWidth();
@@ -552,7 +552,7 @@ namespace ofxImGuiSurfing
 			//bFilter = bFilter;
 
 			bDoneStartup = true;
-			ofLogNotice("ofxSurfingImGui") << "Startup done";
+			ofLogNotice("ofxSurfingImGui::SurfingLog") << "Startup done";
 		};
 
 	private:
@@ -561,7 +561,7 @@ namespace ofxImGuiSurfing
 		{
 			std::string n = e.getName();
 			if (n != amountLinesLimitedBuffered.getName()) {
-				ofLogNotice("SurfingLog") << n << ": " << e;
+				ofLogNotice("ofxSurfingImGui::SurfingLog") << n << ": " << e;
 			}
 
 			//workaround to fix combo behavior
@@ -604,7 +604,7 @@ namespace ofxImGuiSurfing
 							bufferBufferedLimited.pop_front();
 						}
 					}
-					ofLogNotice("SurfingLog") << n << ": " << e;
+					ofLogNotice("ofxSurfingImGui::SurfingLog") << n << ": " << e;
 				}
 				return;
 			}
@@ -959,7 +959,7 @@ namespace ofxImGuiSurfing
 		// pass path folder. the name will be auto settled by timestamp
 		void exportLogToFile(string path = "")
 		{
-			ofLogNotice("SurfingLog") << "exportLogToFile:" << path;
+			ofLogNotice("ofxSurfingImGui::SurfingLog") << "exportLogToFile:" << path;
 
 			if (path == "") path = ofToDataPath("", true);
 			path += "\\logs";//add subfolder
@@ -1072,7 +1072,7 @@ namespace ofxImGuiSurfing
 			customFonts = f;
 
 			if (customFonts.size() == 0) {
-				ofLogError("SurfingLog") << "It looks that not any extra font styles are added!";
+				ofLogError("ofxSurfingImGui::SurfingLog") << "It looks that not any extra font styles are added!";
 
 			}
 
