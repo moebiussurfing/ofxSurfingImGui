@@ -17,6 +17,8 @@
 #include "surfingTimers.h"
 #include "imgui_plot.h"
 
+#include "ofHelpers.h" // For AddImage()
+
 #include "Sliders.h"
 // to enable sliders for the big vertical floating slider. 
 //#include "WidgetsManager.h"//TODO: to enable mouse..
@@ -1097,7 +1099,8 @@ namespace ofxImGuiSurfing
 			ImVec2 cursor_pos = ImGui::GetCursorPos();
 			ImGui::SetCursorPos(ImVec2(posX, posY + IMGUI_EX_NODE_HEADER_HEIGHT));
 
-			ofxImGui::AddImage(*tex, ofVec2f(drawW, drawH));
+			// I'm very weirdly unable to bind this...
+			//ofxImGuiSurfing::AddImage(*tex, ofVec2f(drawW, drawH));
 
 			ImGui::SetCursorPos(cursor_pos);
 
