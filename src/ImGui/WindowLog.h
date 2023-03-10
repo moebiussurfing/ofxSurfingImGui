@@ -173,7 +173,7 @@ namespace ofxImGuiSurfing
 			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
 			else
 			{
-				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
+				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString((short)logLevel) << " Unknown";
 			}
 		};
 
