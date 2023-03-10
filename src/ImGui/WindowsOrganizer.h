@@ -40,13 +40,18 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			ofAddListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
 			ofAddListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 
+			//TODO: 
+			// Fix exit exceptions on RF..
+			int minValue = std::numeric_limits<int>::min();
+			ofAddListener(ofEvents().exit, this, &WindowsOrganizer::exit, minValue);
+
 			//--
-			 
+
 			// Exclude
 			bAlignWindowsY.setSerializable(false);
 			bAlignWindowsX.setSerializable(false);
@@ -57,18 +62,56 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		~WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Destructor!";
 
 			ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
 			ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
-
-			if (bInitialized)
+			
+			if (!bDoneExit)
 			{
-				// Save
-				ofxSurfingHelpers::saveGroup(params_AppSettings, path_Settings);
+				exit();
+
+				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Forced exit() in destructor!";
+				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "exit() was not called yet...";
+			}
+			else
+			{
+				ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Succesfully omitted calling exit() in destructor. It was already done!";
 			}
 		}
 
+	private:
+		bool bDoneExit = false;
+		//--------------------------------------------------------------
+		void exit(ofEventArgs& e)
+		{
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+			exit();
+		}
+		//--------------------------------------------------------------
+		void exit()
+		{
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+			if (bInitialized)
+			{
+				ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Saving settings";
+
+				// Save
+				ofxSurfingHelpers::saveGroup(params_AppSettings, path_Settings);
+			}
+			else {
+				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Skipped Saving settings";
+				ofLogWarning("ofxSurfingImGui") << "bInitialized was unexpectedly false!";
+			}
+
+			bDoneExit = true;
+		}
+
+		//--
+
+	public:
 		ofParameter<bool> bDebug{ "Debug", false };
 
 		//--
@@ -85,7 +128,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsY()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -132,7 +175,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsX()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -259,7 +302,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setPathGlobal(std::string path)
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << path;
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << path;
 
 			path_Global = path;
 			ofxSurfingHelpers::CheckFolder(path_Global);
@@ -282,7 +325,7 @@ namespace ofxImGuiSurfing
 
 		//--------------------------------------------------------------
 		void setHideWindows(bool b) {
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << b;
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << b;
 
 			bHideWindowsToggles = b;
 
@@ -318,7 +361,7 @@ namespace ofxImGuiSurfing
 
 			std::string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << name << " : " << e;
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "\n" << name << " : " << e;
 
 			//--
 
@@ -384,7 +427,7 @@ namespace ofxImGuiSurfing
 
 			std::string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << "\n" << name << " : " << e;
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "\n" << name << " : " << e;
 
 			//--			
 
@@ -400,7 +443,7 @@ namespace ofxImGuiSurfing
 
 				if (p.bGui.getName() == name)
 				{
-					ofLogNotice("ofxSurfingImGui") << "id:" << p.id << 
+					ofLogNotice("ofxSurfingImGui") << "id:" << p.id <<
 						" indexPos:" << p.indexPos << " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
 
 					//--
@@ -427,8 +470,8 @@ namespace ofxImGuiSurfing
 						}
 						else
 						{
-							ofLogWarning("ofxSurfingImGui") << 
-								"Should not be indexPos -1 for the window p.id:" << p.id << 
+							ofLogWarning("ofxSurfingImGui") <<
+								"Should not be indexPos -1 for the window p.id:" << p.id <<
 								" that was hidden until now";
 
 							bDISABLE_CALLBACKS = false;
@@ -450,7 +493,7 @@ namespace ofxImGuiSurfing
 					{
 						if (p.indexPos == -1)
 						{
-							ofLogWarning("ofxSurfingImGui") << 
+							ofLogWarning("ofxSurfingImGui") <<
 								"Should not be -1 ... if p.id:" << p.id << " was enabled until now";
 
 							bDISABLE_CALLBACKS = false;
@@ -471,7 +514,7 @@ namespace ofxImGuiSurfing
 
 							if (p.indexPos == 0)
 							{
-								ofLogWarning("ofxSurfingImGui") << 
+								ofLogWarning("ofxSurfingImGui") <<
 									"Closing First! Window ID p.id:" << p.id;
 
 								// Remove the window from the queue, from the position where it was:
@@ -529,7 +572,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doReOrganize()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0) return;
 
@@ -565,7 +608,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsReset()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -646,7 +689,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsCascade()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 			float _padx = 117;
 			float _pady = 25;
@@ -742,7 +785,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void add(ofParameter<bool>& e) // Will be called when Add Special Windows. 
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << e.getName();
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << e.getName();
 
 			// Queue toggle
 			params_bGuiToggles.add(e);
@@ -789,7 +832,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setupInitiate()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 			ofLogNotice("ofxSurfingImGui") << nameLabel;
 
 			//-
@@ -847,7 +890,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void startup()
 		{
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 			ofLogNotice("ofxSurfingImGui") << nameLabel;
 
 			//--
@@ -866,7 +909,7 @@ namespace ofxImGuiSurfing
 
 			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0)
 			{
-				ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 				ofLogWarning("ofxSurfingImGui") << "Some Special Windows queue is empty!";
 
 			}
@@ -891,9 +934,9 @@ namespace ofxImGuiSurfing
 		{
 			// Force some fixes
 
-			ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 			ofLogNotice("ofxSurfingImGui") << nameLabel;
-			
+
 			// Load Settings
 			if (bInitialized) loadSettings();
 
@@ -1360,7 +1403,7 @@ namespace ofxImGuiSurfing
 			for (int i = 0; i < queueWindowsVisible.size(); i++)
 			{
 				// the original id of each window
-				id = queueWindowsVisible[i]; 
+				id = queueWindowsVisible[i];
 
 				// first visible windows acts as anchor!
 				if (i == 0)

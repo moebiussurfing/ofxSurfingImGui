@@ -93,12 +93,13 @@ SurfingGuiManager::~SurfingGuiManager() {
 	if (!bDoneExit) 
 	{
 		exit();
+
 		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
 		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
 	}
 	else 
 	{
-		ofLogNotice("ofxSurfingImGui") << "Ommited callig exit() in destructor. It was already done!";
+		ofLogNotice("ofxSurfingImGui") << "Succesfully omitted calling exit() in destructor. It was already done!";
 	}
 }
 
@@ -126,6 +127,7 @@ void SurfingGuiManager::exit()
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
+	ofLogNotice("ofxSurfingImGui") << "Listener has been removed. Now we are going to save the session settings.";
 	saveAppSettings();
 
 	bDoneExit = true;
@@ -135,8 +137,9 @@ void SurfingGuiManager::exit()
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
-	if (bDoneSetup) {
-		ofLogWarning(__FUNCTION__) << "Setup was already done. Skip that call!";
+	if (bDoneSetup) 
+	{
+		ofLogWarning(__FUNCTION__) << "Setup was already done. Skipping this call!";
 	}
 
 	surfingImGuiMode = mode;
@@ -2399,6 +2402,8 @@ bool SurfingGuiManager::loadAppSettings()
 //--------------------------------------------------------------
 void SurfingGuiManager::saveAppSettings()
 {
+	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
+
 	if (bAutoSaveSettings)
 	{
 		//TODO:
@@ -2409,6 +2414,11 @@ void SurfingGuiManager::saveAppSettings()
 		//ofFilePath::getEnclosingDirectory(…)
 
 		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings, true);
+		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
+	}
+	else {
+		ofLogWarning("ofxSurfingImGui") << "By passed saveAppSettings()";
+		ofLogWarning("ofxSurfingImGui") << "bAutoSaveSettings was disabled!";
 	}
 }
 
