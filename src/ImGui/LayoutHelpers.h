@@ -779,14 +779,14 @@ namespace ofxImGuiSurfing
 	// Draws a point on the ImGui cursor position 
 	// for debugging when designing widgets
 	// 
-	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//#define IMGUI_SUGAR__TEST_POINT \
 	//	{ \
 	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
 	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
 	//	} \
 	//
-	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//#define IMGUI_SUGAR__TEST_POINT \
 	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
 	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
