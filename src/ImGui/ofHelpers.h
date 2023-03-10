@@ -914,7 +914,8 @@ namespace ofxImGuiSurfing
 				p.set(tmpRef);
 				bReturn = true;
 			}
-			else if (isInt)
+			else{
+				if (isInt){
 				if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32,
 					(int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
 				{
@@ -922,6 +923,8 @@ namespace ofxImGuiSurfing
 					p.set(tmpRef);
 					bReturn = true;
 				}
+				}
+			}
 
 		if (bNoLabel) ImGui::PopItemWidth();
 		else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
