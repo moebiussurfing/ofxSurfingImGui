@@ -201,13 +201,13 @@ using ofxSurfingGui = SurfingGuiManager;
 		ui.End();
 	}
 
-/*
+/ *
 
 
 //--
 
 
-/*
+/ *
 
 	// HOW TO
 	// COMMON USAGE
@@ -300,14 +300,14 @@ using ofxSurfingGui = SurfingGuiManager;
 	{ }
 	ofxImGui::EndWindow(mainSettings);
 
-/*
+/ *
 
 
 //--------------------------------------------------------------
 // WINDOW HELPERS
 
 
-/*
+/ *
 
 	SNIPPET
 	FORCE WINDOW POSITION & SHAPE
