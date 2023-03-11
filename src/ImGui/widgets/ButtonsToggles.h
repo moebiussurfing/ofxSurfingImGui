@@ -58,7 +58,7 @@ namespace ofxImGuiSurfing
 			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 		}
 
-		ImGui::TextWrapped(text.c_str());
+		ImGui::TextWrapped("%s", text.c_str());
 
 		//if (border)
 		{

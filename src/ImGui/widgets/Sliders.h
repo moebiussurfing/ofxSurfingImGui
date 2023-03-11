@@ -141,7 +141,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(("##HSLIDER" + name).c_str());
 		{
 			if (!bNoName) {
-				ImGui::Text(name.c_str());
+				ImGui::Text("%s", name.c_str());
 				name = "";
 			}
 
@@ -221,7 +221,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(("##HSLIDERRNG" + name).c_str());
 		{
 			if (!bNoName) {
-				ImGui::Text(name.c_str());
+				ImGui::Text("%s", name.c_str());
 				name = "";
 			}
 
@@ -298,7 +298,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(("##HSLIDERRNG" + name).c_str());
 		{
 			if (!bNoName) {
-				ImGui::Text(name.c_str());
+				ImGui::Text("%s", name.c_str());
 				name = "";
 			}
 
@@ -340,7 +340,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(("##HSLIDER" + name).c_str());
 		{
 			if (!bNoName) {
-				ImGui::Text(name.c_str());
+				ImGui::Text("%s", name.c_str());
 				name = "";//-> to do not label name again. the right one to the fader
 			}
 
@@ -494,7 +494,7 @@ namespace ofxImGuiSurfing
 				name = "";
 			}
 			else {
-				ImGui::Text(name.c_str());//doubles name
+				ImGui::Text("%s", name.c_str());//doubles name
 				//ImGui::SameLine();
 			}
 
@@ -548,7 +548,7 @@ namespace ofxImGuiSurfing
 				name = "";
 			}
 			else {
-				ImGui::Text(name.c_str());
+				ImGui::Text("%s", name.c_str());
 				//ImGui::SameLine();
 			}
 

@@ -1152,7 +1152,7 @@ public:
 
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 
 		switch (fontType)
@@ -1168,7 +1168,7 @@ public:
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 	}
 	//--------------------------------------------------------------
@@ -1177,7 +1177,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1187,7 +1187,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1197,7 +1197,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(3);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1708,13 +1708,14 @@ public:
 		this->refreshLayout();
 
 		string t = "##CHILD" + label;
-		ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
+		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
 		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::BeginMenuBar();
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s", label.c_str());
 		ImGui::EndMenuBar();
 
 		ImGui::NewLine();
+		return ret;
 	}
 	//--------------------------------------------------------------
 	void EndChild()
@@ -1876,7 +1877,9 @@ public:
 	// Force shared context
 
 	//--------------------------------------------------------------
-	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
+	void setImGuiSharedMode(bool b) {
+		//gui.setSharedMode(b); // Not anymore, fully automatic now
+	}
 
 	//----
 
@@ -2620,17 +2623,17 @@ private:
 									this->AddLabelBig("Widget", false, true);
 									std::string _hwidget = "Unit Height:\n";
 									_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-									ImGui::TextWrapped(_hwidget.c_str());
+									ImGui::TextWrapped("%s", _hwidget.c_str());
 
 									std::string _wwidget = "Full Width:\n";
 									_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
-									ImGui::TextWrapped(_wwidget.c_str());
+									ImGui::TextWrapped("%s", _wwidget.c_str());
 
 									this->AddSpacing();
 									this->AddLabelBig("Window", false, true);
 									std::string _wpanel = "Inner Width:\n";
 									_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
-									ImGui::TextWrapped(_wpanel.c_str());
+									ImGui::TextWrapped("%s", _wpanel.c_str());
 
 									std::string _wShape = "Shape:\n";
 									_wShape += ofToString(ImGui::GetWindowPos().x);
@@ -2640,7 +2643,7 @@ private:
 									_wShape += ofToString(ImGui::GetWindowWidth());
 									_wShape += ", ";
 									_wShape += ofToString(ImGui::GetWindowHeight());
-									ImGui::TextWrapped(_wShape.c_str());
+									ImGui::TextWrapped("%s", _wShape.c_str());
 									this->AddSpacing();
 								}
 								this->Unindent();

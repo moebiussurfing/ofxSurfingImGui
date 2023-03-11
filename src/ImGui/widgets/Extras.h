@@ -17,6 +17,8 @@
 #include "surfingTimers.h"
 #include "imgui_plot.h"
 
+#include "ofHelpers.h" // For AddImage()
+
 #include "Sliders.h"
 // to enable sliders for the big vertical floating slider. 
 //#include "WidgetsManager.h"//TODO: to enable mouse..
@@ -76,7 +78,7 @@ namespace ofxImGuiSurfing
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextWrapped(text.c_str());
+			ImGui::TextWrapped("%s", text.c_str());
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
@@ -90,7 +92,7 @@ namespace ofxImGuiSurfing
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 15.0f);
-			ImGui::TextWrapped(desc);
+			ImGui::TextWrapped("%s", desc);
 			//ImGui::TextUnformatted(desc);
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
@@ -199,7 +201,7 @@ namespace ofxImGuiSurfing
 			if (_bBlink) ImGui::PushStyleColor(ImGuiCol_Text, colText);
 
 			{
-				ImGui::TextWrapped(desc);
+				ImGui::TextWrapped("%s", desc);
 				//is_clicked = ImGui::IsItemClicked();
 				//is_actived = ImGui::IsItemActive();
 				//is_hovered = ImGui::IsItemHovered();
@@ -311,7 +313,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			//TODO: text clickable..
-			ImGui::TextWrapped(desc);
+			ImGui::TextWrapped("%s", desc);
 			ImGui::InvisibleButton("##URL", { w, h });
 		}
 
@@ -668,7 +670,7 @@ namespace ofxImGuiSurfing
 		//s += x.getName();
 		//s += " / ";
 		//s += y.getName();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 
 		float t1 = x.get();
 		float t2 = y.get();
@@ -728,7 +730,7 @@ namespace ofxImGuiSurfing
 
 		static std::string name = parameter.getName();
 
-		if (!bMinimized) ImGui::Text(name.c_str());
+		if (!bMinimized) ImGui::Text("%s", name.c_str());
 
 		static bool bOn = true;
 		if (!bMinimized) {
@@ -1097,7 +1099,8 @@ namespace ofxImGuiSurfing
 			ImVec2 cursor_pos = ImGui::GetCursorPos();
 			ImGui::SetCursorPos(ImVec2(posX, posY + IMGUI_EX_NODE_HEADER_HEIGHT));
 
-			ofxImGui::AddImage(*tex, ofVec2f(drawW, drawH));
+			// I'm very weirdly unable to bind this...
+			//ofxImGuiSurfing::AddImage(*tex, ofVec2f(drawW, drawH));
 
 			ImGui::SetCursorPos(cursor_pos);
 
@@ -1808,7 +1811,7 @@ public:
 		// text
 		ImVec2 center;
 		ImRotateStart();
-		ImGui::Text(text.c_str());
+		ImGui::Text("%s", text.c_str());
 		center = ImRotationCenter();
 		//ImRotateEnd(0.0005f * ImGui::GetTickCount(), center);
         ImRotateEnd(0.0005f * ofGetLastFrameTime(), center);

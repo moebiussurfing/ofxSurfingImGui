@@ -95,8 +95,8 @@ namespace ofxImGuiSurfing
 	{
 		string str1 = "Size " + ofToString(ImGui::GetWindowSize().x, 0) + "," + ofToString(ImGui::GetWindowSize().y, 0);
 		string str2 = "Pos  " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
-		ImGui::Text(str2.c_str());
-		ImGui::Text(str1.c_str());
+		ImGui::Text("%s", str2.c_str());
+		ImGui::Text("%s", str1.c_str());
 	}
 
 	//--------------------------------------------------------------

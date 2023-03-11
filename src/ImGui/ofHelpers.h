@@ -330,7 +330,7 @@ namespace ofxImGuiSurfing
 						{
 							ImGui::BeginTooltip();
 							//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-							ImGui::Text(sTooltip.c_str());
+							ImGui::Text("%s", sTooltip.c_str());
 							//ImGui::PopTextWrapPos();
 							ImGui::EndTooltip();
 						}
@@ -614,7 +614,7 @@ namespace ofxImGuiSurfing
 		{
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-			ImGui::TextWrapped(text.c_str());
+			ImGui::TextWrapped("%s", text.c_str());
 			ImGui::PopTextWrapPos();
 			ImGui::EndTooltip();
 		}
@@ -914,7 +914,8 @@ namespace ofxImGuiSurfing
 				p.set(tmpRef);
 				bReturn = true;
 			}
-			else if (isInt)
+			else{
+				if (isInt){
 				if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32,
 					(int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
 				{
@@ -922,6 +923,8 @@ namespace ofxImGuiSurfing
 					p.set(tmpRef);
 					bReturn = true;
 				}
+				}
+			}
 
 		if (bNoLabel) ImGui::PopItemWidth();
 		else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;

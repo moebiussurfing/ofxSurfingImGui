@@ -173,7 +173,7 @@ namespace ofxImGuiSurfing
 			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
 			else
 			{
-				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
+				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString((short)logLevel) << " Unknown";
 			}
 		};
 
@@ -353,7 +353,7 @@ namespace ofxImGuiSurfing
 					{
 						ofxImGuiSurfing::SameLineFit(160, bDebug);
 						string s = ofToString(amountLinesCurr);
-						ImGui::Text(s.c_str());
+						ImGui::Text("%s", s.c_str());
 						s = "Amount of \nbuffered lines:\n" + s;
 						ofxImGuiSurfing::AddTooltip2(s);
 					}
@@ -1039,7 +1039,7 @@ namespace ofxImGuiSurfing
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
 			if (bOneLine) ImGui::TextUnformatted(item);
-			else ImGui::TextWrapped(item);
+			else ImGui::TextWrapped("%s", item);
 
 			if (bTight) ImGui::PopStyleVar();
 		};
