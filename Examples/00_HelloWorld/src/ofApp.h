@@ -8,6 +8,7 @@ class ofApp : public ofBaseApp
 {
 public:
     
+    void setup();
     void draw();
     void keyPressed(int key);
 
@@ -17,4 +18,6 @@ public:
     ofParameter<bool> bEnable{ "Enable", true };
     ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
     ofParameterGroup params{ "MyGroup", bEnable, speed };
+
+    bool bDoneSetup = false;
 };

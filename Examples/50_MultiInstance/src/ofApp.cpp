@@ -25,6 +25,10 @@ void ofApp::setup()
 
 	// This C object will receive and store this local ui into a pointer to populate widgets on there: inside the class draw method.
 	C.setUiPtr(&ui);
+
+
+	std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
+	C.setDrawWidgetsFunction(myFunctionDraw);
 }
 
 //--------------------------------------------------------------

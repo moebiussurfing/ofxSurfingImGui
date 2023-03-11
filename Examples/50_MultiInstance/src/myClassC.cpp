@@ -37,7 +37,14 @@ void myClassC::draw()
 			ui->AddAutoResizeToggle();
 			ui->AddSpacingBigSeparated();
 
-			ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);;
+
+			ui->AddSpacingHugeSeparated();
+			ui->AddLabelHuge("ADVACED");
+			ui->AddLabelBig("This is a passed (to C object) render function but defined in ofApp! (instead of inside the C class)");
+			ui->AddLabel("std::function<void()>");
+
+			if (functionDraw != nullptr) functionDraw();
 
 			ui->EndWindow();
 		}
