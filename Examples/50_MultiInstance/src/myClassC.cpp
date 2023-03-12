@@ -34,18 +34,23 @@ void myClassC::draw()
 		if (ui->BeginWindow(bGui))
 		{
 			ui->AddMinimizerToggle();
-			ui->AddAutoResizeToggle();
+
+			if (ui->isMaximized()) {
+				ui->AddAutoResizeToggle();
+				ui->AddSpacingBigSeparated();
+				ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);;
+			}
+
 			ui->AddSpacingBigSeparated();
-
-			ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);;
-
-			ui->AddSpacingHugeSeparated();
 			ui->AddLabelHuge("ADVACED");
-			ui->AddLabelBig("This is a passed (to C object) render function but defined in ofApp! (instead of inside the C class)");
-			ui->AddLabel("std::function<void()>");
+			ui->AddSpacing();
+			ui->AddLabelBig("This is a passed (to C object) render function \nbut defined in ofApp! \n(instead of inside the C class)");
+			ui->AddSpacing();
+			ui->AddLabel("std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this)");
+			ui->AddSpacing();
+			ui->AddLabel("C.setDrawWidgetsFunction(myFunctionDraw);");
 
 			if (functionDraw != nullptr) functionDraw();
-
 			ui->EndWindow();
 		}
 	}

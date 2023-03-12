@@ -75,9 +75,9 @@ public:
 		ui.AddSpacingBigSeparated();
 		ui.AddLabelBig("Hello std::function<void()>");
 		ui.AddLabel("Where is the drawer?");
-		static bool b = false;
+		static bool b = true;
 		ImGui::Checkbox("b", &b);
-		if (b) ImGui::Text("Here it is! It's defined in (parent) ofApp, not myClassC object!");
+		if (b) ImGui::Text("Here it is! \nIt's defined in (parent) ofApp, \nnot myClassC object!");
 		ui.AddSpacingBig();
 	}
 };
