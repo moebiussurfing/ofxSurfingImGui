@@ -119,6 +119,8 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 void SurfingGuiManager::exit()
 {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
+	return;//fixing crash
+
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
