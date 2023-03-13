@@ -1,19 +1,8 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
-	ui.setup();
-}
-
-//--------------------------------------------------------------
 void ofApp::draw()
 {
-	//if (!bDoneSetup) {
-	//	bDoneSetup = true;
-	//	ui.setup();
-	//}
-
 	ui.Begin();
 	{
 		/* Put windows here */

@@ -110,20 +110,13 @@ class SurfingGuiManager
 {
 
 public:
-
 	SurfingGuiManager();
 	~SurfingGuiManager();
 
 	//--
 
 public:
-
-	//--------------------------------------------------------------
-	void setup() // We will use the most common mode, to avoid to have to require any argument.
-	{
-		setup(IM_GUI_MODE_INSTANTIATED);
-	}
-
+	void setup(); // We will use the most common mode, to avoid to have to require any argument.
 	void setup(ofxImGuiSurfing::SurfingGuiMode mode);
 
 private:
@@ -133,13 +126,11 @@ private:
 	void setupInitiate();
 
 public:
-
 	// MODE B: 
 	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
 	void setup(ofxImGui::Gui& gui);
 	
-//public:
 private:
 	void exit();
 	void exit(ofEventArgs& e);
@@ -150,7 +141,10 @@ private:
 
 private:
 
-	void update(); // To manual update...
+	void update(); // To manual update.
+	void update(ofEventArgs& args); 
+
+	void draw(); // To manual draw.
 	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes.
 
 	void keyPressed(ofKeyEventArgs& eventArgs);
@@ -161,7 +155,6 @@ private:
 	// The Widget Styles Manager
 
 private:
-
 	WidgetsManager _ui;
 
 	//----
@@ -3677,7 +3670,7 @@ private:
 
 	//public:
 
-	void startupFirstFrame();
+	void setupForced();
 	void setupDocking();//TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
