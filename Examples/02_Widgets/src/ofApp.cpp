@@ -1,12 +1,12 @@
 #include "ofApp.h"
 
-#define MAX_CAMERA_DISTANCE 500.0f
+#define MAX_D 500.0f
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
 	ofSetFrameRate(60);
-	ofSetWindowPosition(-1920, 25);
+	//ofSetWindowPosition(-1920, 25);
 
 	//--
 
@@ -25,11 +25,11 @@ void ofApp::setup()
 
 	bPrevious.set("<", false);
 	bNext.set(">", false);
-	value.set("value", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	valueMin.set("valueMin", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	valueMax.set("valueMax", 0.f, -MAX_CAMERA_DISTANCE, MAX_CAMERA_DISTANCE);
-	pos_1.set("pos_1", glm::vec3(0.f), glm::vec3(-MAX_CAMERA_DISTANCE), glm::vec3(MAX_CAMERA_DISTANCE));
-	rot_1.set("rot_1", glm::vec3(0.f), glm::vec3(-2.f * MAX_CAMERA_DISTANCE), glm::vec3(2.f * MAX_CAMERA_DISTANCE));
+	value.set("value", 0.f, -MAX_D, MAX_D);
+	valueMin.set("valueMin", 0.f, -MAX_D, MAX_D);
+	valueMax.set("valueMax", 0.f, -MAX_D, MAX_D);
+	pos_1.set("pos_1", glm::vec3(0.f), glm::vec3(-MAX_D), glm::vec3(MAX_D));
+	rot_1.set("rot_1", glm::vec3(0.f), glm::vec3(-2.f * MAX_D), glm::vec3(2.f * MAX_D));
 	lineWidth2.set("linew2", 0.5, 0, 1);
 	separation2.set("sep2", 50, 1, 100);
 	shapeType2.set("shape2", 0, -50, 50);
@@ -101,8 +101,8 @@ void ofApp::setup()
 	// Will be used ONLY when populating widgets on groups content.
 	{
 		ui.clearStyles();
-		ui.AddStyle(color1, OFX_IM_COLOR_NO_ALPHA);
-		ui.AddStyle(color2, OFX_IM_COLOR_NO_NAME);
+		ui.AddStyle(color1, OFX_IM_COLOR_INPUTS_NO_ALPHA);
+		ui.AddStyle(color2, OFX_IM_COLOR_INPUTS_NO_ALPHA);
 	}
 
 	//--
@@ -133,7 +133,7 @@ void ofApp::Changed(ofAbstractParameter& e)
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	//ofClear(color1);
+	ofClear(color1);
 
 	//--
 
@@ -169,6 +169,9 @@ void ofApp::drawImWindowMain()
 
 		// Align Helpers Window
 		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		
+		ui.AddSpacing();
+		ui.Add(bConstraint, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
 		//--
 
@@ -208,7 +211,7 @@ void ofApp::drawImWindowMain()
 			}
 		}
 
-		ui.AddSpacingBigSeparated(); // space separted
+		ui.AddSpacingBigSeparated(); // space separated
 
 		//if (!ui.bMinimize)
 		{
@@ -240,7 +243,7 @@ void ofApp::drawImWindowMain()
 //--------------------------------------------------------------
 void ofApp::drawImWindow1()
 {
-	//if (bGui_1 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+	if (bGui_1 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 	//-> Constraint next window dimensions to be smaller.
 	// Will limit the size and auto expanding size on this situation.
 
@@ -312,7 +315,7 @@ void ofApp::drawImWindow1()
 //--------------------------------------------------------------
 void ofApp::drawImWindow2()
 {
-	if (bGui_2 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
+	if (bGui_2 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
 	if (ui.BeginWindow(bGui_2))
 	{
@@ -324,12 +327,15 @@ void ofApp::drawImWindow2()
 		_flagt |= ImGuiTreeNodeFlags_Framed;
 		if (ImGui::TreeNodeEx("EXPAND", _flagt))
 		{
+			ui.refreshLayout();//as we used a raw ImGui::Tree, we need to check/update layout manually!
+
 			// statics vars are useful sometimes for fast prototyping on ImGui
 			static ofParameter<bool> bBig{ "Big", false };
 
 			if (!ui.bMinimize)
 			{
-				ImGui::Checkbox("Big", (bool*)&bBig.get());
+				//ImGui::Checkbox("Big", (bool*)&bBig.get());
+				ui.Add(bBig, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 				ImGui::Spacing();
 
 				ImGui::TextWrapped("> Four custom V SLIDERS!");
@@ -361,7 +367,7 @@ void ofApp::drawImWindow2()
 //--------------------------------------------------------------
 void ofApp::drawImWindow3()
 {
-	if (bGui_3 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
+	if (bGui_3 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 	//-> Constrait next window dimensions to be bigger.
 	// Will help to read the labels in this situation.
 
@@ -413,7 +419,7 @@ void ofApp::drawImWindow3()
 //--------------------------------------------------------------
 void ofApp::drawImWindow4()
 {
-	if (bGui_4 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG;
+	if (bGui_4 && bConstraint) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 	//-> Constraint next window dimensions to be bigger.
 	// Will help to read the labels in this situation.
 

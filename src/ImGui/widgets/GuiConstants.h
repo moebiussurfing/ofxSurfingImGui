@@ -682,40 +682,75 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 // Width only
 
+//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
+//{ \
+//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, -1); \
+//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, -1); \
+//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+//} \
+
+//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM \
+//{ \
+//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.4f, -1); \
+//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 3.f, -1); \
+//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+//} \
+
+//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
+//{ \
+//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.75f, -1); \
+//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.30f, -1); \
+//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+//} \
+
+//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
+//{ \
+//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, -1); \
+//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, -1); \
+//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+//} \
+
+//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
+//{ \
+//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, -1); \
+//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, -1); \
+//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+//} \
+
+
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, -1); \
+ImVec2 size_min = ImVec2(400, -1); \
+ImVec2 size_max = ImVec2(600, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.4f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 3.f, -1); \
+ImVec2 size_min = ImVec2(300, -1); \
+ImVec2 size_max = ImVec2(500, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.75f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.30f, -1); \
+ImVec2 size_min = ImVec2(220, -1); \
+ImVec2 size_max = ImVec2(400, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, -1); \
+ImVec2 size_min = ImVec2(150, -1); \
+ImVec2 size_max = ImVec2(250, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, -1); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, -1); \
+ImVec2 size_min = ImVec2(100, -1); \
+ImVec2 size_max = ImVec2(100, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
-
 
 };

@@ -17,7 +17,8 @@
 	TODO:
 
 	IDEAS
-		make an ofxInteractiveBoxText derived class to be used in ImGui
+		- make an ofxInteractiveBoxText derived class to be used in ImGui
+		- add debug info pos,sz for each window
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
@@ -96,6 +97,8 @@
 /*
 
 	BUGS:
+
+	Fix knobs, int knobs etc
 
 	Strings params inside paramGroups are not rendered ?
 	

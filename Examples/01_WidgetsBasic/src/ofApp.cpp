@@ -1,12 +1,8 @@
 #include "ofApp.h"
 
-#define MAX_DISTANCE 500.0f
-
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 25);
-
 	bGui.set("bGui", true);
 
 	// These toggles are very useful to handle the windows show/hide states.
@@ -23,29 +19,22 @@ void ofApp::setup()
 
 	//--
 
-	// ImGui
-
-	//// Instantiate
-	//// can be omitted in many scenarios 
-	//// (when not using docking or layout presets engine modes)
-	ui.setup();
-
-	// to set natural direction
-	ui.setMouseWheelFlip(true);
-
-	ui.startup();
+	//// Optional ImGui
+	//// Set mouse wheel natural direction
+	//ui.setMouseWheelFlip(true);
 }
 
 //--------------------------------------------------------------
 void ofApp::setupParams()
 {
-	bPrevious.set("<", false);
-	bNext.set(">", false);
-	value.set("value", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
-	valueMin.set("valueMin", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
-	valueMax.set("valueMax", 0.f, -MAX_DISTANCE, MAX_DISTANCE);
-	position.set("Position", glm::vec3(0.f), glm::vec3(-MAX_DISTANCE), glm::vec3(MAX_DISTANCE));
-	rotation.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_DISTANCE), glm::vec3(2.f * MAX_DISTANCE));
+	bPrevious.set("<");
+	bNext.set(">");
+
+	value.set("value", 0.f, -MAX_D, MAX_D);
+	valueMin.set("valueMin", 0.f, -MAX_D, MAX_D);
+	valueMax.set("valueMax", 0.f, -MAX_D, MAX_D);
+	position.set("Position", glm::vec3(0.f), glm::vec3(-MAX_D), glm::vec3(MAX_D));
+	rotation.set("Rotation", glm::vec3(0.f), glm::vec3(-2.f * MAX_D), glm::vec3(2.f * MAX_D));
 	lineWidth2.set("linew2", 0.5, 0, 1);
 	separation2.set("sep2", 50, 1, 100);
 	shapeType2.set("shape2", 0, -50, 50);
@@ -119,17 +108,20 @@ void ofApp::drawImWindowMain()
 {
 	if (ui.BeginWindow(bGui))
 	{
-		ui.AddLabelHuge("Examples/\n01_Widgets\nBasic");
+		ui.AddLabelBig("Examples/\n01_\nWidgetsBasic");
 		ui.AddSpacingBig();
 
-		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+		ui.AddMinimizerToggle();
 		ui.AddTooltip("This internal toggle is very useful \nconditioning hiding some stuff \nto simplify our gui layout.");
-
-		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+		if (ui.isMaximized()) {
+			ui.AddAutoResizeToggle();
+			ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+		}
 
 		ui.AddSpacingSeparated();
 
-		ui.AddLabelBig("> Show Windows", true, true);
+		ui.AddLabelBig("> Show \nWindows", true, true);
+		ui.AddSpacing();
 
 		ui.Add(bGui_1, OFX_IM_TOGGLE_ROUNDED_BIG);
 		ui.AddTooltip("Some widgets");
@@ -142,12 +134,15 @@ void ofApp::drawImWindowMain()
 
 		ui.Add(bGui_4, OFX_IM_TOGGLE_ROUNDED_BIG);
 		ui.AddTooltip("Sliders & Knobs");
-
+		
 		//--
 
-		// An useful bundle of internal control/settings
-		ui.AddSpacingSeparated();
-		ui.DrawAdvancedBundle();
+		if (ui.isMaximized()) {
+
+			// An useful bundle of internal control/settings
+			ui.AddSpacingSeparated();
+			ui.DrawAdvancedBundle();
+		}
 
 		ui.EndWindow();
 	}
@@ -160,7 +155,8 @@ void ofApp::drawImWindow1()
 	// that's useful when long widget names can resize the window too much,
 	// bc we are using auto resize flags in most of the case.
 	static bool bConstraint = false;
-	if (bGui_1 && bConstraint)
+	// take care that window is enabled (bGui_1), to not apply constraints to other window instead!
+	if (bGui_1 && bConstraint) 
 	{
 		IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
 	}
@@ -170,20 +166,28 @@ void ofApp::drawImWindow1()
 		if (!ui.bMinimize)
 		{
 			// This is a helper to populate widgets 
-			// from raw cpp types, not an ofParmater.
+			// from raw cpp types, not an ofParameter.
 			// could be useful sometimes.
 			ui.AddToggle("Constraint", bConstraint);
-			ui.AddTooltip("We can constraint next window shape ");
+			ui.AddTooltip("We can constraint this Window shape \n(applied to next window shape \nafter the\nIMGUI_SUGAR__WINDOWS_CONSTRAINTS \ncall!)");
 			ui.AddSpacingBigSeparated();
 
-			ui.AddLabelBig("> Two Multidims \nSplitted and foldered");
-			ui.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS); // split components
-			ui.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED); // split components
+			ui.AddLabelHuge("Multidims", true, true);
+			
+			ui.AddLabelBig("> One default for Multidim");
+			ui.Add(rotation); // default
+			ui.AddSpacingBigSeparated();
+
+			ui.AddLabelBig("> One Multidim \nSplitted");
+			ui.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS); // split components
+			ui.AddSpacingBigSeparated();
+
+			ui.AddLabelBig("> One Multidim \nSplitted and foldered");
+			ui.Add(position, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED); // split components
 			ui.AddSpacingBigSeparated();
 
 			ui.Add(lineWidth2); // no arg. default style
 			ui.Add(separation2); // no arg. default style
-
 			ui.AddSpacingBigSeparated();
 		}
 
@@ -198,22 +202,17 @@ void ofApp::drawImWindow1()
 			// That's to not break the responsive layouting engine.
 			ui.refreshLayout();
 
-			ui.AddSpacingBig();
+			ui.AddSpacing();
 
-			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG, 2, true); // next on same line
-			ui.Add(bNext, OFX_IM_TOGGLE_BIG, 2);
-
-			ui.AddSpacingSeparated();
-
-			ui.Add(speed3, OFX_IM_VSLIDER_NO_LABELS); // hide labels
-			ui.Add(speed4, OFX_IM_VSLIDER_NO_LABELS);
+			// ofParama<void> types requires button style! 
+			// will not work with toggle styles!
+			ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2, true); // next on same line
+			ui.Add(bNext, OFX_IM_BUTTON_BIG, 2);
 
 			if (!ui.bMinimize)
 			{
 				ui.AddSpacingSeparated();
-
 				ui.AddLabelBig("> Two \nofParameter\nGroup's");
-
 				ui.AddGroup(params2);
 				ui.AddGroup(params4);
 			}
@@ -230,9 +229,16 @@ void ofApp::drawImWindow2()
 {
 	if (ui.BeginWindow(bGui_2))
 	{
-		ui.AddLabelBig("> ImGui Raw without Styles Engine");
+		ui.AddLabelHuge("> ImGui Raw without Styles Engine");
+		ui.AddSpacingBig();
 
-		if (ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen)) // This is a raw ImGui tree
+		// We can make the header bigger
+		ui.PushFont(OFX_IM_FONT_BIG);
+		bool b = ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen);
+		ui.AddSpacingBig();
+		ui.PopFont();
+
+		if (b) // This is a raw ImGui tree
 		{
 			if (!ui.bMinimize)
 			{
@@ -243,7 +249,7 @@ void ofApp::drawImWindow2()
 				ofxImGuiSurfing::AddSpacingBigSeparated();
 			}
 
-			float w = ui.getWidgetsWidth(2); // manually responsive
+			float w = ui.getWidgetsWidth(2); // manually responsive. 2 widgets (half size) per row.
 			float h = 200;
 
 			// custom sizes
@@ -269,20 +275,25 @@ void ofApp::drawImWindow3()
 	{
 		if (!ui.bMinimize)
 		{
-			ui.AddLabelBig("> Four Vertical Sliders No Labels");
-
+			ui.AddLabelBig("> Four Vertical Sliders \nNo Labels but with Tooltips \nwith value and name.");
+			ui.AddSpacing();
 			ui.Add(speed3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.AddTooltip(speed3, true, false);
 			ui.Add(speed4, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.AddTooltip(speed4, true, false);
 			ui.Add(size3, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.AddTooltip(size3, true, false);
 			ui.Add(size4, OFX_IM_VSLIDER_NO_LABELS, 4);
+			ui.AddTooltip(size4, true, false);
 
 			ui.AddSpacingSeparated();
 		}
 
 		ui.AddLabelHuge("> Four Horizontal Sliders Custom");
-
+		ui.AddSpacing();
 		ui.Add(speed3, OFX_IM_HSLIDER_NO_NAME);
 		ui.Add(speed4, OFX_IM_HSLIDER_NO_LABELS);
+		ui.AddTooltip(speed4);//no name
 		ui.Add(size3, OFX_IM_HSLIDER_SMALL_NO_NUMBER);
 		ui.Add(size4, OFX_IM_HSLIDER_SMALL);
 
@@ -297,27 +308,31 @@ void ofApp::drawImWindow4()
 	{
 		if (!ui.bMinimize)
 		{
-			ui.AddLabelBig("> Two Horizontal Sliders. Without Labels in One Row");
-
+			ui.AddLabelBig("> Two Horizontal Sliders. \nWithout Labels in One Row\nwith a Tooltip");
+			ui.AddSpacingBig();
 			ui.Add(speed3, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, true);
+			ui.AddTooltip(speed3, true, false);
 			ui.Add(speed4, OFX_IM_HSLIDER_SMALL_NO_LABELS, 2, false);
+			ui.AddTooltip(speed4, true, false);
+			ui.AddSpacingBig();
 
 			ui.AddSpacingSeparated();
 		}
 
 		ui.AddLabelHuge("> Four Knobs");
 
-		SurfingGuiTypes s = OFX_IM_KNOB_STEPPEDKNOB;
+		SurfingGuiTypes s = OFX_IM_KNOB_TICKKNOB;
+		//SurfingGuiTypes s = OFX_IM_KNOB_STEPPEDKNOB;
+
 		ui.Add(speed3, s, 2, true);
 		ui.Add(speed4, s, 2);
 		ui.AddSpacing();
 		ui.Add(size3, s, 2, true);
 		ui.Add(size4, s, 2);
-
+		
 		ui.AddSpacingBigSeparated();
 
 		ui.AddLabelBig("> An \nofParameter\nGroup");
-
 		ui.AddGroup(params3);
 
 		ui.EndWindow();

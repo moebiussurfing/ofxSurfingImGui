@@ -4,11 +4,11 @@
 
 #include "ofxSurfingImGui.h"
 
+#define MAX_D 500.0f
+
 class ofApp : public ofBaseApp
 {
-
 public:
-	
     void setup();
     void setupParams();
     void draw();
@@ -17,7 +17,6 @@ public:
 	//-
 
 	// ImGui
-
 	ofxSurfingGui ui;
 
 	ofParameter<bool> bGui;
@@ -36,23 +35,19 @@ public:
 	//-
 
     // Groups
-    
 	ofParameterGroup params1;
     ofParameterGroup params2;
     ofParameterGroup params3;
     ofParameterGroup params4;
 
-	//-
-
     // Parameters
-	
 	ofParameter<glm::vec3> rotation;
 	ofParameter<glm::vec3> position;
 	ofParameter<float> value;
 	ofParameter<float> valueMin;
 	ofParameter<float> valueMax;
-    ofParameter<bool> bPrevious;
-    ofParameter<bool> bNext;
+    ofParameter<void> bPrevious;
+    ofParameter<void> bNext;
 	ofParameter<float> knob1;
 	ofParameter<float> knob2;
 	ofParameter<int> amount2;

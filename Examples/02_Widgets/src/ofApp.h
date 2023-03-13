@@ -1,3 +1,13 @@
+/*
+
+	Similar to /01_WidgetsBasic
+	
+	- Press 1 to 6 to test themes
+	- Move slider for 'select expanded' so unfold a group.
+
+*/
+
+
 #pragma once
 
 #include "ofMain.h"

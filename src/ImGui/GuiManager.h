@@ -86,6 +86,7 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
 		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
 		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
+		//TODO: add other modes
 	};
 
 	//--
@@ -101,9 +102,10 @@ namespace ofxImGuiSurfing
 	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
 	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
 	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
+
 } // namespace
 
-//--------
+//----
 
 //--------------------------------------------------------------
 class SurfingGuiManager
@@ -113,16 +115,16 @@ public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
 
-	//--
+	//----
 
 public:
 	void setup(); // We will use the most common mode, to avoid to have to require any argument.
-	void setup(ofxImGuiSurfing::SurfingGuiMode mode);
+	void setup(ofxImGuiSurfing::SurfingGuiMode mode); // Allows fully personalize the manager features. 
 
 private:
-
 	// MODE A: 
-	// ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	// ofxImGui is instantiated inside the class, 
+	// the we can forgot of declare ofxImGui here (ofApp scope).
 	void setupInitiate();
 
 public:
@@ -130,7 +132,9 @@ public:
 	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
 	void setup(ofxImGui::Gui& gui);
-	
+
+	//----
+
 private:
 	void exit();
 	void exit(ofEventArgs& e);
@@ -140,9 +144,8 @@ private:
 	//--
 
 private:
-
 	void update(); // To manual update.
-	void update(ofEventArgs& args); 
+	void update(ofEventArgs& args);
 
 	void draw(); // To manual draw.
 	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes.
@@ -157,9 +160,20 @@ private:
 private:
 	WidgetsManager _ui;
 
+	//--
+
+private:
+	bool bDisableStartupReset = false;
+	bool bDoForceStartupResetLayout = false;
+	bool bDoneDoForceStartupResetLayout = false;
+public:
+	void doResetLayout();//must be called between Begin/End
+	void setDisableStartupReset(bool b) { bDisableStartupReset = b; }
+
 	//----
 
 	// Styles API
+	// v2.0
 
 public:
 
@@ -278,7 +292,7 @@ public:
 		_ui.UpdateStyleGroup(name, type, flags);
 	}
 
-	//TODO: new API
+	//TODO: New API
 	//--------------------------------------------------------------
 	void AddStyleGroup(std::string name, SurfingGuiGroupStyle flags)
 	{
@@ -464,7 +478,7 @@ public:
 	//--
 
 	//TODO:
-	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a g.
+	// Helper to auto populate the styles of each type (bool, floats, int's) contained on a g.
 	//--------------------------------------------------------------
 	void AddStyleGroupForBools(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_TOGGLE)
 	{
@@ -583,7 +597,7 @@ public:
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
-		////TODO: some subfolders make grow window width..
+		////TODO: some sub folders make grow window width..
 		//refreshLayout();
 
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
@@ -3063,7 +3077,7 @@ public:
 		// Special windows mode
 		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Special Windows mode was not initiated.");
-			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force Special Windows mode to allow add special Windows!");
+			ofLogWarning("ofxSurfingImGui") << ("Force Special Windows mode to allow add special Windows!");
 
 			this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 		}
@@ -3072,7 +3086,7 @@ public:
 		if (!bDoneSetup) {
 
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Setup was not previously done!");
-			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force run SurfingGuiManager::setup() now!");
+			ofLogWarning("ofxSurfingImGui") << ("Force run SurfingGuiManager::setup() now!");
 
 			setup();
 		}
@@ -3670,7 +3684,7 @@ private:
 
 	//public:
 
-	void setupForced();
+	void setupStartupForced();
 	void setupDocking();//TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
@@ -3846,6 +3860,8 @@ public:
 	//--
 
 private:
+	//TODO: replace help boxes 
+	// with new ImGui classes
 
 	// We have to independent help boxes.
 	// One is intended to be use as the add-on itself help (Internal Help),

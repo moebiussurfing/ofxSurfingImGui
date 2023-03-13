@@ -101,7 +101,7 @@ SurfingGuiManager::~SurfingGuiManager() {
 	}
 	else
 	{
-		ofLogNotice("ofxSurfingImGui") << "Succesfully omitted calling exit() in destructor. It was already done!";
+		ofLogNotice("ofxSurfingImGui") << "Successfully omitted calling exit() in destructor. It was already done!";
 	}
 }
 
@@ -241,7 +241,11 @@ void SurfingGuiManager::setupInitiate()
 	// For using internal instantiated GUI.
 	// Called by all modes except when using the external scope modes aka not instantiated.
 	// In that case we will only use the widgets helpers into a parent/external ImGui context!
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) {
+
+		ofLogWarning("ofxSurfingImGui") << "Aborted setupIntitiate() bc surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED";
+		return;
+	}
 
 	//--
 
@@ -260,7 +264,7 @@ void SurfingGuiManager::setupInitiate()
 
 	//TODO:
 	// When using docking/presets mode
-	// we enable special windows by default
+	// we force enable special windows by default
 	if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
@@ -477,6 +481,14 @@ void SurfingGuiManager::startup()
 
 	//--
 
+	//TODO:
+	//workflow
+	// enable organizer by default.
+	// no need to call manually.
+	setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+
+	//--
+
 	// Finally the last initialization process step
 
 	if (bDockingLayoutPresetsEngine)
@@ -533,6 +545,7 @@ void SurfingGuiManager::startup()
 
 	//--
 
+	// Log
 	// pass fonts to allow styles switching
 	log.setCustomFonts(customFonts);
 	//log.bGui.makeReferenceTo(bLog);
@@ -541,7 +554,7 @@ void SurfingGuiManager::startup()
 
 	// Two Help Boxes
 	{
-		// Help Text Box internal
+		// A. Help Text Box internal
 
 		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
 		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
@@ -553,7 +566,7 @@ void SurfingGuiManager::startup()
 
 		//--
 
-		// Help Text Box app
+		// B. Help Text Box app
 
 		boxHelpApp.bGui.makeReferenceTo(bHelp);
 		//boxHelpApp.setName(bHelp.getName());
@@ -581,13 +594,23 @@ void SurfingGuiManager::startup()
 	// That happens when started for first time or after OF_APP/bin cleaning!
 	if (bNoSettingsFound)
 	{
-		setShowAllPanels(false);//none
+		ofLogWarning("ofxSurfingImGui") << "No file settings found!";
+		ofLogWarning("ofxSurfingImGui") << "Probably the app is opening for the the first time.";
+		ofLogWarning("ofxSurfingImGui") << "We will reset the windows layout to avoid overlap of windows.";
 
+		// hide all special windows, if they are queued.
+		setShowAllPanels(false);
+
+		// forced default params
 		bHelpInternal = true;
 		bMinimize = false;
 
+		// help
 		boxHelpApp.setPosition(400, 10);
 		boxHelpInternal.setPosition(800, 10);
+
+		// workflow
+		bDoForceStartupResetLayout = true;
 	}
 
 	//--
@@ -972,9 +995,9 @@ void SurfingGuiManager::update() { // -> Not being used by default
 
 	// Force call Startup
 	//if ((ofGetFrameNum() <= 1) && (!bDoneStartup || !bDoneSetup)
-	if (!bDoneSetup)
+	if (!bDoneSetup || !bDoneStartup)
 	{
-		setupForced();
+		setupStartupForced();
 	}
 }
 
@@ -1478,13 +1501,13 @@ void SurfingGuiManager::drawViewport_oFNative() {
 #endif
 
 //--------------------------------------------------------------
-void SurfingGuiManager::setupForced()
+void SurfingGuiManager::setupStartupForced()
 {
 	ofLogWarning(__FUNCTION__);
 
 	if (!bDoneSetup)
 	{
-		ofLogWarning("ofxSurfingImGui") << "Setup() was not done!";
+		ofLogWarning("ofxSurfingImGui") << "Setup() was not called/done!";
 		ofLogWarning("ofxSurfingImGui") << "Force a default Setup() call!";
 
 		setup();
@@ -1534,7 +1557,7 @@ void SurfingGuiManager::Begin()
 	//if (ofGetFrameNum() <= 1) 
 	//	if (!bDoneStartup || !bDoneSetup)
 	//{
-	//	setupForced();
+	//	setupStartupForced();
 	//}
 
 	//--
@@ -1623,6 +1646,19 @@ void SurfingGuiManager::End()
 
 	//--
 
+	//TODO:
+	//workflow
+	// if there's no settings files, it means that the app it's opened by first time,
+	// then probably the windows will be overlapped..
+	if (ofGetFrameNum() > 1)
+		if (!bDisableStartupReset && bDoForceStartupResetLayout && !bDoneDoForceStartupResetLayout)
+		{
+			doResetLayout();
+			bDoneDoForceStartupResetLayout = true;
+		}
+
+	//--
+
 	// auto handles drawing. not need to draw manually!
 	DrawWindowLogIfEnabled();
 
@@ -1634,7 +1670,11 @@ void SurfingGuiManager::End()
 
 	//--
 
+	//TODO: could set the default font instead of Pop..
+	// bc that will be prophylactic if pushed too many fonts by error!
 	if (customFont != nullptr) ImGui::PopFont();
+
+	//--
 
 	// Mouse lockers helpers
 	// Here we check if mouse is over gui to disable other external stuff
@@ -1660,6 +1700,8 @@ void SurfingGuiManager::End()
 	//}
 
 	//--
+
+	// ImGui End
 
 	//TODO:
 	// Sometimes we could use an ofxImGui external or from a parent scope.
@@ -2217,14 +2259,14 @@ void SurfingGuiManager::EndDocking()
 
 	if (bMenu) drawMenuDocked();
 
-	//-
+	//--
 
 	//ImGuiIO& io = ImGui::GetIO();
 	//if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	//{
 	//}
 
-	 // End the parent window that contains the Dockspace:
+	// End the parent window that contains the Dockspace:
 	ImGui::End(); // ?
 }
 
@@ -3841,6 +3883,17 @@ void SurfingGuiManager::drawMenu()
 	}
 }
 
+//--
+
+//--------------------------------------------------------------
+void SurfingGuiManager::doResetLayout()
+{
+	ofLogNotice("ofxSurfingImGui") << "Reset layout of windows.";
+
+	windowsOrganizer.doAlignWindowsReset();
+
+	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
+}
 
 //----
 
@@ -3887,7 +3940,7 @@ void SurfingGuiManager::drawSpecialWindowsPanel()
 
 //--
 
-// Special behaviour to control windows
+// Special behavior to control windows
 
 //// Free layout
 //else if (name == bModeFree.getName())

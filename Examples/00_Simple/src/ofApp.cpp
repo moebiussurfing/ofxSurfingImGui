@@ -29,7 +29,7 @@ void ofApp::setup()
 	params.add(params2);
 
 	//--
-	
+
 	// Linear to logarithmic
 
 	vIn.set("vIn", 0.5f, 0.f, 1.f);
@@ -38,10 +38,10 @@ void ofApp::setup()
 	vOut3.set("vOut3", 0.5f, 0.f, 1.f);
 
 	// Callback for vIn
-	// convert input linear to log
+	// and convert input linear to log
 	listener = vIn.newListener([this](float& v) {
 
-	vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
+		vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
 	vOut2 = ofxSurfingHelpers::exponentialFunction(vIn) / 10.f;
 	vOut3 = ofxSurfingHelpers::squaredFunction(vIn);
 
@@ -63,8 +63,8 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
-			ui.AddMinimizerToggle(false);
-			ui.AddAutoResizeToggle(false);
+			ui.AddMinimizerToggle();
+			ui.AddAutoResizeToggle();
 			ui.AddSpacingBigSeparated();
 
 			//--
@@ -73,18 +73,28 @@ void ofApp::draw()
 			// ofParamaters widgets helpers be easy populate,
 			// But you can populate raw ImGui too.
 
-			// This is an ofParameterGroup
-			// contained params are populated 
-			// as their default widgets styles
-			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			// Check the state of the internal toggle minimize
+			if (ui.isMaximized())
+			{
 
-			// This is a separator line 
-			ui.AddSpacingBigSeparated();
+				// This is an ofParameterGroup
+				// contained params are populated 
+				// as their default widgets styles
+				ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+
+				// This is a separator line 
+				ui.AddSpacingBigSeparated();
+
+				// This is a big param widget
+				ui.Add(amount2, OFX_IM_VSLIDER);
+			}
+			else {
+
+				// This is a default size param widget
+				ui.Add(amount2);
+			}
 
 			//--
-
-			// This is a param widget
-			ui.Add(amount2, OFX_IM_VSLIDER);
 
 			// This is a param widget
 			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
@@ -95,9 +105,31 @@ void ofApp::draw()
 
 			// Linear to logarithmic
 			ui.AddLabelBig("LINEAR TO LOGARITHMIC");
-			ui.Add(vIn, OFX_IM_HSLIDER_SMALL);
+			ui.Add(vIn, OFX_IM_HSLIDER);
 			ui.AddTooltip("linear");
+
 			ui.AddSpacingBig();
+
+			//--
+
+			// Some useful methods to help a bit on align
+
+			//// align right
+			//{
+			//	float sz = ImGui::CalcTextSize(">").x;
+			//	ofxImGuiSurfing::AddSpacingRightAlign(sz);
+			//	ui.AddLabelBig(">");
+			//}
+			// align center
+			{
+				float sz = ImGui::CalcTextSize(">").x;
+				float w = ui.getWidgetsWidth();
+				ofxImGuiSurfing::AddSpacingRightAlign(sz + w / 2);
+				ui.AddLabelBig(">");
+			}
+
+			ui.AddSpacingBig();
+
 			ui.Add(vOut1, OFX_IM_HSLIDER_MINI);
 			ui.AddTooltip("reversedExponential");
 			ui.Add(vOut2, OFX_IM_HSLIDER_MINI);

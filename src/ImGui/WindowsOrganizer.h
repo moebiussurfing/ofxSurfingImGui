@@ -649,7 +649,8 @@ namespace ofxImGuiSurfing
 			}
 			if (myWins.size() == 0) return; // skip
 
-			// Sort, the more lefted window will be used as anchor!
+			// Sort, the more to-the-left window 
+			// will be used as anchor!
 			std::sort(myWins.begin(), myWins.end(), myobject);
 
 			float w = myWins[0].sz.x;
@@ -778,6 +779,61 @@ namespace ofxImGuiSurfing
 			}
 		}
 
+		//--------------------------------------------------------------
+		string getWindowMoreLefted()
+		{
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+			ImGuiContext* GImGui = ImGui::GetCurrentContext();
+			ImGuiContext& g = *GImGui;
+			ImVector<ImGuiWindow*> windows;
+
+			struct myWin {
+				ImVec2 pos;
+				ImVec2 sz;
+				int id;
+				string name;
+				ImGuiWindow* ImWin;
+			};
+
+			struct myclass {
+				bool operator() (myWin w1, myWin w2) { return (w1.pos.x < w2.pos.x); }
+			} myobject;
+
+			vector<myWin> myWins;
+
+			int _id = 0;
+			for (ImGuiWindow* window : g.WindowsFocusOrder)
+			{
+				if (window->WasActive)
+				{
+					// skip: don't align the Organizer or Aligners Windows!
+					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
+					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
+					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
+
+					myWin w;
+					w.ImWin = window;
+					w.pos = window->Pos;
+					w.sz = window->Size;
+					w.name = window->Name;
+					w.id = _id++;
+					myWins.push_back(w);
+				}
+			}
+
+			if (myWins.size() == 0) {
+				string s = "-1";
+				return s;
+			}
+
+			// Sort, the more to-the-left window 
+			// will be used as anchor!
+			std::sort(myWins.begin(), myWins.end(), myobject);
+
+			return myWins[0].name;
+		}
+
 		//----
 
 	public:
@@ -828,6 +884,8 @@ namespace ofxImGuiSurfing
 				if (bAlignShapesY) ImGui::SetNextWindowSize(ImVec2(0, height_max));
 			}
 		}
+
+		//----
 
 		//--------------------------------------------------------------
 		void setupInitiate()
