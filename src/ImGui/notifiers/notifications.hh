@@ -20,7 +20,6 @@
 #include "ofMain.h"
 
 #include "ofxImGui.h"
-//#include "ofxSurfingImGui.h"
 
 #include <stdint.h>
 #include <deque>
