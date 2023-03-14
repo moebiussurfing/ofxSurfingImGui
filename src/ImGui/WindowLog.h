@@ -12,6 +12,8 @@
 
 		TODO:
 
+		add set public shape size method
+
 		add feature to allow addLog without any explicit tag, but a custom color.
 			this is a big upgrade of how it's implemented the engine now.
 			could be an "UNKNOWN" tag and storing the color..
@@ -267,7 +269,7 @@ namespace ofxImGuiSurfing
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
 			// Reduce y spacing
-			if(bMinimize) ofxImGuiSurfing::AddSpacingY(-8);
+			if (bMinimize) ofxImGuiSurfing::AddSpacingY(-8);
 			//if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
 
 			ofxImGuiSurfing::AddSpacing();
@@ -508,6 +510,9 @@ namespace ofxImGuiSurfing
 		ofParameter<int> amountLinesLimitedBuffered{ "Amount", 20, 1, 200 };
 		//TODO: workaround: public for disable log on parent classes
 
+		//TODOL clamp
+		void setFontSize(int i) { indexSizeFont = i; }
+
 	private:
 
 		ofParameter<bool> bOptions{ "OPTIONS", false };
@@ -515,7 +520,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bPause{ "PAUSE" , false };
 		ofParameter<bool> bTight{ "Tight" , true };
 		ofParameter<bool> bOneLine{ "OneLine" , true };
-		ofParameter<bool> bSeparators{ "Separators" , false};
+		ofParameter<bool> bSeparators{ "Separators" , false };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
@@ -524,7 +529,7 @@ namespace ofxImGuiSurfing
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
-		ofParameter<bool> bMinimize{ " ", false };//
+		ofParameter<bool> bMinimize{ " ", true };
 
 		int amountLinesCurr = 0;
 		bool bDoneStartup = false;

@@ -2112,12 +2112,18 @@ private:
 
 	//TODO:
 	// could be public 
-	//public:
+//public:
 
 	// Window Log
 	SurfingLog log;
 
 public:
+
+	//--------------------------------------------------------------
+	void setLogFontSize(int indexFont) {
+		indexFont = ofClamp(indexFont, 0, 3);//hardcoded
+		log.setFontSize(indexFont);
+	}
 
 	//TODO: need to fix that respect the deserialization..
 	//--------------------------------------------------------------

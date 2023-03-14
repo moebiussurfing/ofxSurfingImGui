@@ -74,9 +74,12 @@
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
 #define FONT_DEFAULT_SIZE_LEGACY 11
 
-// New font
+// New font LEGACY
 #define FONT_DEFAULT_SIZE 14
 #define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+
+#define OFX_IM_FONT_DEFAULT_FILE FONT_DEFAULT_FILE 
+//#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
 // Other Candidates
 

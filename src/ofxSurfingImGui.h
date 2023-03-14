@@ -19,6 +19,7 @@
 	IDEAS
 		- make an ofxInteractiveBoxText derived class to be used in ImGui
 		- add debug info pos,sz for each window
+		- add isFirsTimeStartup() to allow force default settings
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
