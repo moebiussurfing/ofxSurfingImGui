@@ -25,7 +25,6 @@
 
 #include "ofxImGui.h"
 #include "Widgets.h"
-
 #include "GuiSugar.h"
 //#include "GuiConstants.h"
 

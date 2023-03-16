@@ -1,6 +1,9 @@
 #pragma once
 
-// included on C++17
+// Taken from https://github.com/ALEHACKsp/imgui-tricks
+
+//TODO:
+// Must be included if < C++17
 namespace std
 {
 	template<typename T>
@@ -11,17 +14,17 @@ namespace std
 }
 
 
-
 /*
-* ImGui Tricks v1.02
+* ImGui Tricks v1.02+
 * ImTricks is a library that simplifies and increases the functionality of ImGui.
-* At the moment, Imtrucks adds functions to speed up the creation of animated menus,
+* At the moment, ImTricks adds functions to speed up the creation of animated menus,
 * adds a notification system, and also adds support for ImColor in ColorEdit3/ColorEdit4.
 *
 * Made with love by pers0na2.
 */
 
 //#include <windows.h>
+
 #include <map>
 #include <string>
 #include <vector>

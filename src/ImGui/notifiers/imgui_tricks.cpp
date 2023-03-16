@@ -65,7 +65,6 @@ namespace ImTricks {
 
 			return ImGui::ColorConvertFloat4ToU32(lerp);
 		}
-
 	}
 
 	namespace NotifyManager {
@@ -83,6 +82,8 @@ namespace ImTricks {
 
 			const auto ScreenSize = ImGui::GetIO().DisplaySize;
 			ImVec2 NotifyPos = ScreenSize - ImVec2(320.f, 50.f);
+
+			//--
 
 			auto DrawNotify = [&draw, &NotifyPos](NotifyStruct notify) {
 
@@ -102,7 +103,11 @@ namespace ImTricks {
 					break;
 				}
 
+				//TODO: resize to text size and right align!
+
 				draw->AddRectFilled(NotifyPos, ImVec2(NotifyPos.x + 5.f, NotifyPos.y + 30), StateColor, 1.f);
+
+				std::cout << notify.message << std::endl;
 
 				const auto TextSize = ImGui::CalcTextSize(notify.message);
 				const auto TextPos = NotifyPos + ImVec2(15.f, 15.f - TextSize.y / 2.f);
@@ -112,6 +117,9 @@ namespace ImTricks {
 				NotifyPos.y -= 40.f;
 			};
 
+			//--
+
+			// iterate all notes
 			for (auto notify : notifies) {
 				if (notify.time < GetTickCount64())
 					continue;
