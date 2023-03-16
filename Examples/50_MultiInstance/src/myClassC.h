@@ -20,6 +20,8 @@ public:
 		functionDraw = f;
 	};
 
+	ofxSurfingGui* ui = nullptr;
+
 	void setUiPtr(ofxSurfingGui* _ui);
 
 	ofParameterGroup params;
@@ -27,8 +29,6 @@ public:
 	ofParameter<float> separation;
 	ofParameter<float> speed;
 	ofParameter<int> shapeType;
-
-	ofxSurfingGui* ui;
 
 	ofParameter<bool> bGui{ "myClassC", true };
 
