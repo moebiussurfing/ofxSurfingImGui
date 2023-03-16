@@ -137,13 +137,13 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
-  - THE **AWESOME** ~~[@Daandelange](https://github.com/Daandelange)'s **FORK**~~.
-    - NEW TEMPORARY BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) (_dear imgui, v1.89.3_)  
+  - THE **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
+    - ~~NEW TEMPORARY BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)~~  
   - You **MUST USE THIS ONE**! 
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
-* [Assets.zip](assets.zip):  
+* [assets.zip](assets.zip):  
 Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
@@ -159,7 +159,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
   
   - Multi context / instances: 
     

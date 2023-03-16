@@ -55,6 +55,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bLog);
 	params_Advanced.add(bLogKeys);
 	params_Advanced.add(log.params);
+	params_Advanced.add(bNotifier);
 	params_Advanced.add(bReset);//TODO:
 	params_Advanced.add(bReset_Window);//TODO:
 	params_Advanced.add(bLockMove);//TODO:
@@ -103,6 +104,10 @@ SurfingGuiManager::~SurfingGuiManager() {
 	{
 		ofLogNotice("ofxSurfingImGui") << "Successfully omitted calling exit() in destructor. It was already done!";
 	}
+
+	// Delete pointers
+	delete customFont;
+	for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
 }
 
 //--------------------------------------------------------------
@@ -551,6 +556,16 @@ void SurfingGuiManager::startup()
 	// pass fonts to allow styles switching
 	log.setCustomFonts(customFonts);
 	//log.bGui.makeReferenceTo(bLog);
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+	notifier.setDuration(4000);
+
+	//notifier.setIndexFont(0);
+	notifier.setIndexFont(1);
+	//notifier.setIndexFont(2);
+	//notifier.setIndexFont(3);
+#endif
 
 	//--
 
@@ -1661,8 +1676,14 @@ void SurfingGuiManager::End()
 
 	//--
 
+	// Log
 	// auto handles drawing. not need to draw manually!
 	DrawWindowLogIfEnabled();
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+	DrawNotifierIfEnabled();
+#endif
 
 	//--
 
@@ -1672,34 +1693,39 @@ void SurfingGuiManager::End()
 
 	//--
 
+	// Font
+
 	//TODO: could set the default font instead of Pop..
 	// bc that will be prophylactic if pushed too many fonts by error!
 	if (customFont != nullptr) ImGui::PopFont();
 
 	//--
 
-	// Mouse lockers helpers
-	// Here we check if mouse is over gui to disable other external stuff
-	// e.g. easyCam draggable moving, text input boxes, key commands...
+	// Mouse and Keyboard
+	{
+		// Mouse lockers helpers
+		// Here we check if mouse is over gui to disable other external stuff
+		// e.g. easyCam draggable moving, text input boxes, key commands...
 
-	bMouseOverGui = false;
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+		bMouseOverGui = false;
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
 
-	ImGuiIO& io = ImGui::GetIO();
-	bOverInputText = io.WantTextInput;
+		ImGuiIO& io = ImGui::GetIO();
+		bOverInputText = io.WantTextInput;
 
-	//// Debug
-	//{
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
-	//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
-	//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
-	//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
-	//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
-	//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
-	//}
+		//// Debug
+		//{
+		//	ImGuiIO& io = ImGui::GetIO();
+		//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
+		//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
+		//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
+		//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
+		//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
+		//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
+		//}
+	}
 
 	//--
 
@@ -2309,6 +2335,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	params_LayoutsExtra.add(bMenu);
 	params_LayoutsExtra.add(bLog);
+	params_LayoutsExtra.add(bNotifier);
 	//TODO: should be removed if handled by preset engine..
 
 

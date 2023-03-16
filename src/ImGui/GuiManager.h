@@ -23,6 +23,15 @@
 
 #include "TextBoxWidget.h" //TODO: could be replace by native ImGui widgets.
 
+//TODO: move here! now breaks!
+//#include "ImGui/WindowFbo.h"
+//#include "ImGui/WindowLog.h"
+
+#define OFX_USE_NOTIFIER
+#ifdef OFX_USE_NOTIFIER
+#include "ImGui/notifiers/surfingNotifier.h"
+#endif
+
 //--
 
 // Debug
@@ -1950,7 +1959,11 @@ public:
 
 public:
 
-	// To disable app interactins (like camera movements) when mouse is over any ui window.
+	// To disable app interactions (like camera movements) when mouse is over any ui window.
+	//--------------------------------------------------------------
+	bool isOverGui() const {
+		return (bMouseOverGui.get() && bMouseOverGui.get());
+	}
 	//--------------------------------------------------------------
 	bool isMouseOverGui() const {
 		return bMouseOverGui;
@@ -1992,6 +2005,9 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };//for natural direction
+
+	ofParameter<bool> bLog{ "LOG", false };//show log window
+	ofParameter<bool> bNotifier{ "NOTIFIER", true };//show notifier
 
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
@@ -2112,12 +2128,23 @@ private:
 
 	//TODO:
 	// could be public 
-	//public:
+//public:
 
 	// Window Log
 	SurfingLog log;
 
+#ifdef OFX_USE_NOTIFIER
+	// Notifier with floating boxes
+	SurfingNotifier notifier;
+#endif
+
 public:
+
+	//--------------------------------------------------------------
+	void setLogFontSize(int indexFont) {
+		indexFont = ofClamp(indexFont, 0, 3);//hardcoded
+		log.setFontSize(indexFont);
+	}
 
 	//TODO: need to fix that respect the deserialization..
 	//--------------------------------------------------------------
@@ -2130,6 +2157,14 @@ public:
 	void DrawWindowLogIfEnabled() {
 		if (bLog) log.drawImGui(bLog);
 	};
+
+#ifdef OFX_USE_NOTIFIER
+	//--------------------------------------------------------------
+	void DrawNotifierIfEnabled() {
+		if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
+		//if (bNotifier) notifier.draw(bDebug.get());
+	};
+#endif
 
 	//--------------------------------------------------------------
 	void DrawWindowLog()
@@ -2201,14 +2236,43 @@ public:
 
 	//----
 
+public:
+
+#ifdef OFX_USE_NOTIFIER
+	//--------------------------------------------------------------
+	void AddToNotifier(string text, string nameTag)
+	{
+		notifier.Add(text, nameTag);
+	};
+	//--------------------------------------------------------------
+	void AddToNotifier(string text)//TODO:adding empty tag...
+	{
+		notifier.Add(text, "");
+	};
+	//--------------------------------------------------------------
+	void AddToNotifier(string text, ofLogLevel logLevel)
+	{
+		notifier.Add(text, logLevel);
+	};
+	//TODO: add tag system..
+	////--------------------------------------------------------------
+	//void AddToNotifier(string text, int tag/* = -1*/)
+	//{
+	//	notifier.Add(text, tag);
+	//};
+#endif
+
+	//----
+
 	// Helper
 
-	// Common Widgets populate
+	// Populate Common Widgets for internal toggle params
 
 	// Some simple alias and helpers
 	// to populate internal params,
 	// to speed up common usage:
 
+public:
 	// Minimize state
 	//--------------------------------------------------------------
 	bool AddMinimize(bool bSeparated = false) {
@@ -2286,6 +2350,8 @@ public:
 
 	//--
 
+	// Fast toggle rendered for common internal toggles
+
 	//--------------------------------------------------------------
 	bool AddKeys(bool bSeparated = false) {
 		AddKeysToggle(bSeparated);
@@ -2296,7 +2362,14 @@ public:
 		this->Add(this->bKeys, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddKeysToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bKeys, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isKeys() const { return bKeys.get() && !this->isOverInputText(); }
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddLog(bool bSeparated = false) {
@@ -2308,6 +2381,33 @@ public:
 		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddLogToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bLog, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+
+	//--
+
+//#ifdef OFX_USE_NOTIFIER
+	//--------------------------------------------------------------
+	bool AddNotifier(bool bSeparated = false) {
+		AddNotifierToggle(bSeparated);
+		return bNotifier.get();
+	};
+	void AddNotifierToggle(bool bSeparated = false)
+	{
+		this->Add(this->bNotifier, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddNotifierToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bNotifier, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+//#endif
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddAutoResize(bool bSeparated = false) {
@@ -2319,6 +2419,13 @@ public:
 		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddAutoResizeToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bAutoResize, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddDebug(bool bSeparated = false) {
@@ -2330,11 +2437,16 @@ public:
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddDebugToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bDebug, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isDebug() const { return bDebug.get(); }
 	bool isDebugEnabled() const { return bDebug.get(); }
 	bool isDebugDisabled() const { return !bDebug.get(); }
 
-
+	//--
 
 	//--------------------------------------------------------------
 	bool AddAdvanced(bool bSeparated = false) {
@@ -2346,10 +2458,17 @@ public:
 		this->Add(this->bAdvanced, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddAdvancedToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bAdvanced, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isAdvanced() const { return bAdvanced.get(); }
 	bool isAdvancedEnabled() const { return bAdvanced.get(); }
 	bool isAdvancedDisabled() const { return !bAdvanced.get(); }
 
+	//--
+	
 	//--------------------------------------------------------------
 	bool AddExtra(bool bSeparated = false) {
 		AddExtraToggle(bSeparated);
@@ -2358,6 +2477,11 @@ public:
 	void AddExtraToggle(bool bSeparated = false)
 	{
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddExtraToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bExtra, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
 	bool isExtra() const { return bExtra.get(); }
@@ -3480,6 +3604,20 @@ public:
 	// with auto populated all the Special Windows toggles. 
 	// To be called outside a window, just between the main begin/end!
 	//--------------------------------------------------------------
+	void drawWidgetsSpecialWindows(bool bFoldered)
+	{
+		if (bFoldered)
+		{
+			bool b = this->BeginTree("Windows");
+			if (b)
+			{
+				drawWidgetsSpecialWindows();
+				this->EndTree();
+			}
+		}
+		else drawWidgetsSpecialWindows();
+	}
+	//--------------------------------------------------------------
 	void drawWidgetsSpecialWindows()
 	{
 		float _h = getWidgetsHeight();
@@ -3507,7 +3645,9 @@ public:
 		if (windowsOrganizer.bGui_Global)
 		{
 			ImGui::Indent();
+
 			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
+
 			ImGui::Unindent();
 		}
 
@@ -3777,10 +3917,6 @@ private:
 	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
 
 	ofParameter<bool> bSolo{ "Solo", false };
-
-public:
-
-	ofParameter<bool> bLog{ "LOG", false };//show log window
 
 	//-
 

@@ -18,7 +18,8 @@
 #include "imgui_internal.h"
 //#include "ofxImGui.h"
 
-#include "GuiConstants.h"
+#include "GuiSugar.h"
+//#include "GuiConstants.h"
 
 #include "surfingTimers.h"
 
