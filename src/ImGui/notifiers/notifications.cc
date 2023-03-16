@@ -15,10 +15,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
-#include "notifications.hh"
-//#include "common.hh"
 
+#include "notifications.hh"
+
+//#include "common.hh"
 //#include "xemu-notifications.h"
 
 //NotificationManager notification_manager;
@@ -26,6 +26,9 @@
 NotificationManager::NotificationManager()
 {
     m_active = false;
+}
+NotificationManager::~NotificationManager()
+{
 }
 
 void NotificationManager::QueueNotification(const char *msg)

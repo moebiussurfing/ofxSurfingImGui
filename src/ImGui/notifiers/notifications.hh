@@ -16,6 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+/* 
+
+ImGui based notifcation system.
+
+*/
+
 #pragma once
 #include "ofMain.h"
 
@@ -41,6 +48,8 @@ private:
 
 public:
     NotificationManager();
+    ~NotificationManager();
+
     void QueueNotification(const char *msg);
     void QueueError(const char *msg);
     void Draw();

@@ -100,7 +100,7 @@ namespace ImTricks {
 
 		void drawImGuiControls()
 		{
-			ImGui::Begin("Debug Notifier");
+			ImGui::Begin("Debug surfingNotifier");
 
 			ImGui::SliderInt("indexFont", &indexFont, 0, 3);
 			ImGui::SliderInt("duration", &duration, 300, 10000);
