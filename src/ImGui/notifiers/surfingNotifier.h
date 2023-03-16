@@ -28,7 +28,7 @@ public:
 	};
 
 	void setDuration(int duration) {
-		ImTricks::NotifyManager::duration = 5000;
+		ImTricks::NotifyManager::duration = duration;
 	};
 
 private:

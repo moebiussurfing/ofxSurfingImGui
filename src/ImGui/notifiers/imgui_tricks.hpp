@@ -92,7 +92,7 @@ namespace ImTricks {
 		//	if (ImGui::Button("Create Notify", { 120, 25 }))
 		//		ImTricks::NotifyManager::AddNotify("The notification was displayed successfully.", ImTrickNotify_Success);
 		*/
-		extern void AddNotify(std::string  message, NotifyState state);
+		extern void AddNotify(std::string message, NotifyState state);
 
 		/*
 		// Description:
