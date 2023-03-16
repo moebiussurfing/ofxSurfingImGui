@@ -15,7 +15,7 @@ namespace std
 
 
 /*
-* ImGui Tricks v1.02+
+* ImGui Tricks v1.02+ (modified by @moebiusSurfing
 * ImTricks is a library that simplifies and increases the functionality of ImGui.
 * At the moment, ImTricks adds functions to speed up the creation of animated menus,
 * adds a notification system, and also adds support for ImColor in ColorEdit3/ColorEdit4.
@@ -29,19 +29,18 @@ namespace std
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <ofColor.h>
 
 #include <imgui.h>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui_internal.h>
 
-#ifndef IMGUI_TRICK_ONCE
-#define IMGUI_TRICK_ONCE
-
 enum NotifyState : int {
-	ImTrickNotify_Success = 0,
-	ImTrickNotify_Warning = 1,
-	ImTrickNotify_Danger = 2,
-	ImTrickNotify_Default = 3
+	ImTrickNotify_Info = 0,
+	ImTrickNotify_Verbose = 1,
+	ImTrickNotify_Notice = 2,
+	ImTrickNotify_Warning = 3,
+	ImTrickNotify_Error = 4
 };
 
 namespace ImTricks {
@@ -79,9 +78,9 @@ namespace ImTricks {
 	namespace NotifyManager {
 
 		struct NotifyStruct {
-			const char* message;
+			std::string message;
 			NotifyState state;
-			ULONGLONG time;
+			uint64_t time;
 		};
 
 		extern std::vector<NotifyStruct> notifies;
@@ -93,7 +92,7 @@ namespace ImTricks {
 		//	if (ImGui::Button("Create Notify", { 120, 25 }))
 		//		ImTricks::NotifyManager::AddNotify("The notification was displayed successfully.", ImTrickNotify_Success);
 		*/
-		extern void AddNotify(const char* message, NotifyState state);
+		extern void AddNotify(std::string  message, NotifyState state);
 
 		/*
 		// Description:
@@ -102,8 +101,13 @@ namespace ImTricks {
 		// Usage:
 		// ImTricks::NotifyManager::HandleNotifies(ImGui::GetForegroundDrawList());
 		*/
-		extern void HandleNotifies(ImDrawList* draw = ImGui::GetForegroundDrawList());
+		extern void HandleNotifies(ImDrawList* draw = ImGui::GetForegroundDrawList(), std::vector<ImFont*> *fonts = nullptr);
 
+		extern void drawImGuiControls();
+		extern void clear();
+	
+		extern int indexFont;
+		extern int duration;
 	}
 
 
@@ -115,5 +119,3 @@ namespace ImTricks {
 
 	}
 }
-
-#endif

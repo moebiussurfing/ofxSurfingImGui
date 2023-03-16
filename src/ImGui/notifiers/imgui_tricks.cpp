@@ -71,62 +71,227 @@ namespace ImTricks {
 
 		std::vector<NotifyStruct> notifies;
 
-		void AddNotify(const char* message, NotifyState state) {
-			notifies.push_back({ message, state, GetTickCount64() + 3000 });
-		}
+		float offsetx = 0;
 
-		void HandleNotifies(ImDrawList* draw) {
+		//const int wmaxDef = 0;//flick bug
+		const int wmaxDef = 200;
 
-			if (notifies.empty())
+		//TODO: add editor to save settings
+		// hardcoded
+		int duration = 3000;
+		float wmax = wmaxDef;//starting pad
+		float pdx0 = 20;//pad to right x border 
+		float pdy0 = 20;//pad to bottom y border 
+		float pdx = 15;//text in
+		float pdy = 15;//text in
+		float spy = 15;//spacing between bubbles
+		float rd = 0.f;//rounded bubble if != 0.
+		float rdmk = 1.f;//rounded left mark
+		float wmk = 5.f;//width colored left mark
+		float pbmk = 0.f;//padding left mark
+		bool bAlign = false;
+		bool bUseColor = true;
+
+
+		//TODO:
+		int indexFont = 0;//default
+		//int indexFont = 1;//big
+		//int indexFont = 2;//huge
+
+		void drawImGuiControls()
+		{
+			ImGui::Begin("Debug Notifier");
+
+			ImGui::SliderInt("duration", &duration, 300, 10000);
+			ImGui::SliderFloat("wmax", &wmax, 100, 800);
+			ImGui::SliderFloat("pdx0", &pdx0, 0, 100);
+			ImGui::SliderFloat("pdy0", &pdy0, 0, 100);
+			ImGui::SliderFloat("pdx", &pdx, 0, 100);
+			ImGui::SliderFloat("pdy", &pdy, 0, 100);
+			ImGui::SliderFloat("spy", &spy, 0, 100);
+			ImGui::SliderFloat("rd", &rd, 0, 100);
+			ImGui::SliderFloat("rdmk", &rdmk, 0, 100);
+			ImGui::SliderFloat("wmk", &wmk, 0, 100);
+			ImGui::SliderFloat("pbmk", &pbmk, 0, 100);
+			ImGui::Checkbox("bAlign", &bAlign);
+			ImGui::Checkbox("bUseColor", &bUseColor);
+			if (ImGui::Button("Reset"))
+			{
+				duration = 3000;
+				wmax = 100;//starting pad
+				pdx0 = 20;//pad to right x border 
+				pdy0 = 20;//pad to bottom y border 
+				pdx = 15;//text in
+				pdy = 15;//text in
+				spy = 15;//spacing between bubbles
+				rd = 0.f;//rounded bubble if != 0.
+				rdmk = 1.f;//rounded left mark
+				wmk = 5.f;//width colored left mark
+				pbmk = 0.f;//padding left mark
+				bAlign = false;
+				bUseColor = true;
+
+				clear();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Clear")) clear();
+
+			ImGui::End();
+		};
+
+		ImVec2 bbox = ImVec2(500, 100);
+
+		void AddNotify(std::string message, NotifyState state)
+		{
+			uint64_t t = GetTickCount64();//TODO: WIN_32 only!
+			notifies.push_back({ message, state, t + duration });//store end time
+		};
+
+		void clear() {
+			notifies.clear();
+			wmax = wmaxDef;//reset
+		};
+
+		void HandleNotifies(ImDrawList* draw, std::vector<ImFont*>* fonts) {
+
+			if (notifies.empty()) {
+				wmax = wmaxDef;//reset
 				return;
-
+			}
 			const auto ScreenSize = ImGui::GetIO().DisplaySize;
-			ImVec2 NotifyPos = ScreenSize - ImVec2(320.f, 50.f);
+
+			//ImVec2 NotifyPos = ScreenSize - ImVec2(0, bbox.y);
+			ImVec2 NotifyPos = ScreenSize - ImVec2(wmax, bbox.y);
+
+			NotifyPos -= ImVec2(pdx0, pdy0);
 
 			//--
 
-			auto DrawNotify = [&draw, &NotifyPos](NotifyStruct notify) {
+			//TODO:
+			// what to push font bigger..
 
-				const auto NotifyEndPos = NotifyPos + ImVec2(300, 30);
+			bool bPushed = false;
+			if (fonts != nullptr)
+			{
+				if (fonts->size() > 0)
+				{
+					size_t i = indexFont;//pick the size 0 to 3 in ofxsurfingImgui
 
-				draw->AddRectFilled(NotifyPos, NotifyEndPos, ImGui::GetColorU32(ImGuiCol_PopupBg), ImGui::GetStyle().PopupRounding);
+					size_t sz = fonts->size();
+					i = MIN(i, sz - 1);
 
-				auto StateColor = ImColor(45, 45, 45);
+					ImFont* font = (*fonts)[i];
+					ImGui::PushFont(font);
+					bPushed = true;
+				}
+			}
 
-				switch (notify.state) {
-				case ImTrickNotify_Success: StateColor = ImColor(0, 255, 0); break;
-				case ImTrickNotify_Warning: StateColor = ImColor(130, 255, 0); break;
-				case ImTrickNotify_Danger: StateColor = ImColor(255, 0, 0); break;
-				case ImTrickNotify_Default:
-				default:
-					StateColor = ImColor(45, 45, 45);
-					break;
+			auto DrawNotify = [=, &draw, &NotifyPos](NotifyStruct notify)
+			{
+				ImVec2 szText = ImGui::CalcTextSize(notify.message.c_str());
+
+				bbox = szText + ImVec2(pdx + pdx, pdy + pdy);
+
+				if (bbox.x > wmax) wmax = bbox.x;
+				//NotifyPos -= ImVec2(wmax, 0);
+
+				ImVec2 NotifyEndPos = NotifyPos + bbox;
+
+				//TODO: right align text
+				if (bAlign)
+				{
+					offsetx = wmax - szText.x;
+					NotifyPos += ImVec2(offsetx, 0);
 				}
 
-				//TODO: resize to text size and right align!
+				//1. bbox bg
+				draw->AddRectFilled(NotifyPos, NotifyEndPos,
+					ImGui::GetColorU32(ImGuiCol_PopupBg),
+					((rd == 0) ? ImGui::GetStyle().PopupRounding : rd));
 
-				draw->AddRectFilled(NotifyPos, ImVec2(NotifyPos.x + 5.f, NotifyPos.y + 30), StateColor, 1.f);
+				ImColor StateColor;
+				switch (notify.state)
+				{
+				case ImTrickNotify_Verbose: StateColor = ImColor(ofColor::white); break;
+				case ImTrickNotify_Notice: StateColor = ImColor(ofColor::green); break;
+				case ImTrickNotify_Warning: StateColor = ImColor(ofColor::yellow); break;
+				case ImTrickNotify_Error: StateColor = ImColor(ofColor::red); break;
+				case ImTrickNotify_Info: default: StateColor = ImColor(ofColor::white); break;
+				}
 
-				std::cout << notify.message << std::endl;
+				// 2. Text
+				const auto TextPos = NotifyPos + ImVec2(pdx, pdy);
 
-				const auto TextSize = ImGui::CalcTextSize(notify.message);
-				const auto TextPos = NotifyPos + ImVec2(15.f, 15.f - TextSize.y / 2.f);
+				//3. bbox left colored mark 
+				draw->AddRectFilled(ImVec2(NotifyPos.x - wmk - pbmk, NotifyPos.y),
+					ImVec2(NotifyPos.x - pbmk, NotifyPos.y + bbox.y), StateColor, rdmk);
 
-				draw->AddText(TextPos, ImGui::GetColorU32(ImGuiCol_Text), notify.message);
+				ImU32 c;
+				if (bUseColor) c = ImGui::GetColorU32(ImVec4(StateColor));
+				else c = ImGui::GetColorU32(ImGuiCol_Text);
 
-				NotifyPos.y -= 40.f;
+				draw->AddText(TextPos, c, notify.message.c_str());
+
+				if (bbox.x > wmax) wmax = bbox.x;
+
+				NotifyPos.y -= bbox.y;
+				NotifyPos.y -= spy;
 			};
 
 			//--
 
-			// iterate all notes
-			for (auto notify : notifies) {
-				if (notify.time < GetTickCount64())
-					continue;
+			//auto DrawNotify = [=, &draw, &NotifyPos] NotifyStruct notify)
+			//{
+			//	//const auto NotifyEndPos = NotifyPos + ImVec2(300, 30);
+			//	const auto NotifyEndPos = NotifyPos + ImVec2(w - pd, h - pd);
 
-				DrawNotify(notify);
+			//	draw->AddRectFilled(NotifyPos, NotifyEndPos, ImGui::GetColorU32(ImGuiCol_PopupBg), (rd == 0) ? ImGui::GetStyle().PopupRounding : rd);
+
+			//	auto StateColor = ImColor(45, 45, 45);
+
+			//	switch (notify.state)
+			//	{
+			//	case ImTrickNotify_Verbose: StateColor = ImColor(ofColor::white); break;
+			//	case ImTrickNotify_Notice: StateColor = ImColor(ofColor::green); break;
+			//	case ImTrickNotify_Warning: StateColor = ImColor(ofColor::yellow); break;
+			//	case ImTrickNotify_Error: StateColor = ImColor(ofColor::red); break;
+			//	case ImTrickNotify_Info: default: StateColor = ImColor(ofColor::white); break;
+			//	}
+
+			//	//TODO: resize to text size and right align!
+
+			//	draw->AddRectFilled(NotifyPos, ImVec2(NotifyPos.x + 5.f, NotifyPos.y + 30), StateColor, rdmk);
+
+			//	const auto szText = ImGui::CalcTextSize(notify.message.c_str());
+			//	const auto TextPos = NotifyPos + ImVec2(pdx, pdy - szText.y / 2.f);
+
+			//	draw->AddText(TextPos, ImGui::GetColorU32(ImGuiCol_Text), notify.message.c_str());
+
+			//	NotifyPos.y -= spy;
+			//};
+
+			//--
+
+			uint64_t t = GetTickCount64();//TODO: WIN_32 only!
+
+			// iterate all notes
+			for (auto& n : notifies)
+			{
+				// skip/continue if passed end time for each message
+				if (t > n.time) continue;
+				//if (n.time < t) continue;
+
+				DrawNotify(n);
 			}
-		}
+
+			//--
+
+			if (bPushed)
+			{
+				ImGui::PopFont();
+			}
+
+		};
 	}
 
 	namespace Widgets {

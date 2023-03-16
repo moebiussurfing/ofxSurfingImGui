@@ -2161,7 +2161,8 @@ public:
 #ifdef OFX_USE_NOTIFIER
 	//--------------------------------------------------------------
 	void DrawNotifierIfEnabled() {
-		if (bNotifier) notifier.draw();
+		if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
+		//if (bNotifier) notifier.draw(bDebug.get());
 	};
 #endif
 
@@ -2388,6 +2389,7 @@ public:
 
 	//--
 
+//#ifdef OFX_USE_NOTIFIER
 	//--------------------------------------------------------------
 	bool AddNotifier(bool bSeparated = false) {
 		AddNotifierToggle(bSeparated);
@@ -2403,6 +2405,7 @@ public:
 		this->Add(this->bNotifier, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+//#endif
 
 	//--
 

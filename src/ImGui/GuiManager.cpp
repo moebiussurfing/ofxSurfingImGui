@@ -104,6 +104,10 @@ SurfingGuiManager::~SurfingGuiManager() {
 	{
 		ofLogNotice("ofxSurfingImGui") << "Successfully omitted calling exit() in destructor. It was already done!";
 	}
+
+	// Delete pointers
+	delete customFont;
+	for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
 }
 
 //--------------------------------------------------------------
@@ -552,6 +556,16 @@ void SurfingGuiManager::startup()
 	// pass fonts to allow styles switching
 	log.setCustomFonts(customFonts);
 	//log.bGui.makeReferenceTo(bLog);
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+	notifier.setDuration(5000);
+
+	//notifier.setIndexFont(0);
+	notifier.setIndexFont(1);
+	//notifier.setIndexFont(2);
+	//notifier.setIndexFont(3);
+#endif
 
 	//--
 
