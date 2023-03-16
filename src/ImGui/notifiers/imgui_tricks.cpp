@@ -79,17 +79,17 @@ namespace ImTricks {
 		//TODO: add editor to save settings
 		// hardcoded
 		int duration = 3000;
-		float wmax = wmaxDef;//starting pad
+		float wmax = wmaxDef;//getting max width o all bubbles. starting pad
 		float pdx0 = 20;//pad to right x border 
 		float pdy0 = 20;//pad to bottom y border 
 		float pdx = 15;//text in
 		float pdy = 15;//text in
 		float spy = 15;//spacing between bubbles
-		float rd = 0.f;//rounded bubble if != 0.
+		float rd = 3.f;//rounded bubble if != 0.
 		float rdmk = 1.f;//rounded left mark
 		float wmk = 5.f;//width colored left mark
 		float pbmk = 0.f;//padding left mark
-		bool bAlign = false;
+		bool bAlignRight = true;
 		bool bUseColor = true;
 
 
@@ -102,8 +102,8 @@ namespace ImTricks {
 		{
 			ImGui::Begin("Debug Notifier");
 
+			ImGui::SliderInt("indexFont", &indexFont, 0, 3);
 			ImGui::SliderInt("duration", &duration, 300, 10000);
-			ImGui::SliderFloat("wmax", &wmax, 100, 800);
 			ImGui::SliderFloat("pdx0", &pdx0, 0, 100);
 			ImGui::SliderFloat("pdy0", &pdy0, 0, 100);
 			ImGui::SliderFloat("pdx", &pdx, 0, 100);
@@ -113,7 +113,8 @@ namespace ImTricks {
 			ImGui::SliderFloat("rdmk", &rdmk, 0, 100);
 			ImGui::SliderFloat("wmk", &wmk, 0, 100);
 			ImGui::SliderFloat("pbmk", &pbmk, 0, 100);
-			ImGui::Checkbox("bAlign", &bAlign);
+			ImGui::Checkbox("bAlignRight", &bAlignRight);
+			if(!bAlignRight) ImGui::SliderFloat("wmax", &wmax, 100, 800);
 			ImGui::Checkbox("bUseColor", &bUseColor);
 			if (ImGui::Button("Reset"))
 			{
@@ -124,11 +125,11 @@ namespace ImTricks {
 				pdx = 15;//text in
 				pdy = 15;//text in
 				spy = 15;//spacing between bubbles
-				rd = 0.f;//rounded bubble if != 0.
+				rd = 3.f;//rounded bubble if != 0.
 				rdmk = 1.f;//rounded left mark
 				wmk = 5.f;//width colored left mark
 				pbmk = 0.f;//padding left mark
-				bAlign = false;
+				bAlignRight = true;
 				bUseColor = true;
 
 				clear();
@@ -152,31 +153,32 @@ namespace ImTricks {
 			wmax = wmaxDef;//reset
 		};
 
-		void HandleNotifies(ImDrawList* draw, std::vector<ImFont*>* fonts) {
-
+		void HandleNotifies(ImDrawList* draw, std::vector<ImFont*>* fonts)
+		{
 			if (notifies.empty()) {
 				wmax = wmaxDef;//reset
 				return;
 			}
-			const auto ScreenSize = ImGui::GetIO().DisplaySize;
+			const auto szScreen = ImGui::GetIO().DisplaySize;
 
-			//ImVec2 NotifyPos = ScreenSize - ImVec2(0, bbox.y);
-			ImVec2 NotifyPos = ScreenSize - ImVec2(wmax, bbox.y);
+			//ImVec2 NotifyPos = szScreen - ImVec2(0, bbox.y);
 
+			ImVec2 NotifyPos;
+			if (!bAlignRight) NotifyPos = szScreen - ImVec2(wmax, bbox.y);
+			else NotifyPos = szScreen - ImVec2(0, bbox.y);
+
+			// padding to bottom right/down borders
 			NotifyPos -= ImVec2(pdx0, pdy0);
 
 			//--
 
-			//TODO:
-			// what to push font bigger..
-
+			// Push font size
 			bool bPushed = false;
 			if (fonts != nullptr)
 			{
 				if (fonts->size() > 0)
 				{
 					size_t i = indexFont;//pick the size 0 to 3 in ofxsurfingImgui
-
 					size_t sz = fonts->size();
 					i = MIN(i, sz - 1);
 
@@ -185,6 +187,10 @@ namespace ImTricks {
 					bPushed = true;
 				}
 			}
+
+			//--
+
+			// Draw lambda function:
 
 			auto DrawNotify = [=, &draw, &NotifyPos](NotifyStruct notify)
 			{
@@ -195,17 +201,22 @@ namespace ImTricks {
 				if (bbox.x > wmax) wmax = bbox.x;
 				//NotifyPos -= ImVec2(wmax, 0);
 
-				ImVec2 NotifyEndPos = NotifyPos + bbox;
+				ImVec2 NotifyPos_;
 
 				//TODO: right align text
-				if (bAlign)
-				{
-					offsetx = wmax - szText.x;
-					NotifyPos += ImVec2(offsetx, 0);
+				if (bAlignRight) {
+					offsetx = szText.x;
+					NotifyPos_ = NotifyPos - ImVec2(offsetx + pdx + pdx, 0); // Offset
+				}
+				else {
+					offsetx = 0;
+					NotifyPos_ = NotifyPos; // No offset
 				}
 
+				ImVec2 NotifyEndPos = NotifyPos_ + bbox;
+
 				//1. bbox bg
-				draw->AddRectFilled(NotifyPos, NotifyEndPos,
+				draw->AddRectFilled(NotifyPos_, NotifyEndPos,
 					ImGui::GetColorU32(ImGuiCol_PopupBg),
 					((rd == 0) ? ImGui::GetStyle().PopupRounding : rd));
 
@@ -220,11 +231,11 @@ namespace ImTricks {
 				}
 
 				// 2. Text
-				const auto TextPos = NotifyPos + ImVec2(pdx, pdy);
+				const auto TextPos = NotifyPos_ + ImVec2(pdx, pdy);
 
 				//3. bbox left colored mark 
-				draw->AddRectFilled(ImVec2(NotifyPos.x - wmk - pbmk, NotifyPos.y),
-					ImVec2(NotifyPos.x - pbmk, NotifyPos.y + bbox.y), StateColor, rdmk);
+				draw->AddRectFilled(ImVec2(NotifyPos_.x - wmk - pbmk, NotifyPos_.y),
+					ImVec2(NotifyPos_.x - pbmk, NotifyPos_.y + bbox.y), StateColor, rdmk);
 
 				ImU32 c;
 				if (bUseColor) c = ImGui::GetColorU32(ImVec4(StateColor));
@@ -234,41 +245,10 @@ namespace ImTricks {
 
 				if (bbox.x > wmax) wmax = bbox.x;
 
+				// Spacing up!
 				NotifyPos.y -= bbox.y;
 				NotifyPos.y -= spy;
 			};
-
-			//--
-
-			//auto DrawNotify = [=, &draw, &NotifyPos] NotifyStruct notify)
-			//{
-			//	//const auto NotifyEndPos = NotifyPos + ImVec2(300, 30);
-			//	const auto NotifyEndPos = NotifyPos + ImVec2(w - pd, h - pd);
-
-			//	draw->AddRectFilled(NotifyPos, NotifyEndPos, ImGui::GetColorU32(ImGuiCol_PopupBg), (rd == 0) ? ImGui::GetStyle().PopupRounding : rd);
-
-			//	auto StateColor = ImColor(45, 45, 45);
-
-			//	switch (notify.state)
-			//	{
-			//	case ImTrickNotify_Verbose: StateColor = ImColor(ofColor::white); break;
-			//	case ImTrickNotify_Notice: StateColor = ImColor(ofColor::green); break;
-			//	case ImTrickNotify_Warning: StateColor = ImColor(ofColor::yellow); break;
-			//	case ImTrickNotify_Error: StateColor = ImColor(ofColor::red); break;
-			//	case ImTrickNotify_Info: default: StateColor = ImColor(ofColor::white); break;
-			//	}
-
-			//	//TODO: resize to text size and right align!
-
-			//	draw->AddRectFilled(NotifyPos, ImVec2(NotifyPos.x + 5.f, NotifyPos.y + 30), StateColor, rdmk);
-
-			//	const auto szText = ImGui::CalcTextSize(notify.message.c_str());
-			//	const auto TextPos = NotifyPos + ImVec2(pdx, pdy - szText.y / 2.f);
-
-			//	draw->AddText(TextPos, ImGui::GetColorU32(ImGuiCol_Text), notify.message.c_str());
-
-			//	NotifyPos.y -= spy;
-			//};
 
 			//--
 
@@ -279,7 +259,6 @@ namespace ImTricks {
 			{
 				// skip/continue if passed end time for each message
 				if (t > n.time) continue;
-				//if (n.time < t) continue;
 
 				DrawNotify(n);
 			}

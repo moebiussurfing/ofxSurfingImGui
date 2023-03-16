@@ -559,7 +559,7 @@ void SurfingGuiManager::startup()
 
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
-	notifier.setDuration(5000);
+	notifier.setDuration(4000);
 
 	//notifier.setIndexFont(0);
 	notifier.setIndexFont(1);
