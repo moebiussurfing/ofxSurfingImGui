@@ -4,9 +4,18 @@
 /*
 
 	ofParameter Helpers
-	to easily render different widgets styles
-	for each ofParm and different types.
+
+	to easily render any ofParameter
+	using different widgets styles for each different types.
+
+	NOTE:
+	This class can be included on a header to help with ofParams.
+	The will avoid to include the big and full "ofxSurfingImGui.h",
+	the one that acts as Gui Manager, but then
+	we can not use the full power of the API.
+
 */
+
 
 /*
 	TODO:
@@ -21,12 +30,12 @@
 
 */
 
+
 //----
 
 #include "ofxImGui.h"
 #include "Widgets.h"
-#include "GuiSugar.h"
-//#include "GuiConstants.h"
+#include "GuiSugar.h"//includes "GuiConstants.h"
 
 //----
 
@@ -496,10 +505,10 @@ namespace ofxImGuiSurfing
 		{
 			if (bIsDim2)
 			{
-                // non dynamic causes exception in macOS
-                // example: ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(ap);
-                ofParameter<glm::vec2> p = dynamic_cast<glm::vec2&>(ap);
-                //ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
+				// non dynamic causes exception in macOS
+				// example: ofParameter<bool> p = dynamic_cast<ofParameter<bool>&>(ap);
+				ofParameter<glm::vec2> p = dynamic_cast<glm::vec2&>(ap);
+				//ofParameter<glm::vec2> p = ap.cast<glm::vec2>();
 				glm::vec2 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
@@ -516,9 +525,9 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim3)
 			{
-                //ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
-                ofParameter<glm::vec3> p = dynamic_cast<glm::vec3&>(ap);
-                glm::vec3 _p = p;
+				//ofParameter<glm::vec3> p = ap.cast<glm::vec3>();
+				ofParameter<glm::vec3> p = dynamic_cast<glm::vec3&>(ap);
+				glm::vec3 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
 				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
@@ -536,9 +545,9 @@ namespace ofxImGuiSurfing
 			}
 			else if (bIsDim4)
 			{
-                //ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
-                ofParameter<glm::vec4> p = dynamic_cast<glm::vec4&>(ap);
-                glm::vec4 _p = p;
+				//ofParameter<glm::vec4> p = ap.cast<glm::vec4>();
+				ofParameter<glm::vec4> p = dynamic_cast<glm::vec4&>(ap);
+				glm::vec4 _p = p;
 
 				float centerX = p.getMin().x + ((p.getMax().x - p.getMin().x) / 2.f);
 				_p.x = ofClamp(centerX, p.getMin().x, p.getMax().x); // clamp
@@ -908,15 +917,16 @@ namespace ofxImGuiSurfing
 		if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		else IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
 
-		if (isFloat)
+		if (isFloat) {
 			if (ImGui::InputFloat(label.c_str(), (float*)&tmpRef, step, stepFast))
 			{
 				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
-			else{
-				if (isInt){
+		}
+		else {
+			if (isInt) {
 				if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32,
 					(int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
 				{
@@ -924,8 +934,8 @@ namespace ofxImGuiSurfing
 					p.set(tmpRef);
 					bReturn = true;
 				}
-				}
 			}
+		}
 
 		if (bNoLabel) ImGui::PopItemWidth();
 		else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
@@ -1220,9 +1230,9 @@ namespace ofxImGuiSurfing
 			// Knob
 			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
 			//float w = this->getWidgetsWidth(1);
-            float w = ofxImGuiSurfing::getWidgetsWidth(1);
-            
-            ImGuiKnobFlags flags = 0;
+			float w = ofxImGuiSurfing::getWidgetsWidth(1);
+
+			ImGuiKnobFlags flags = 0;
 			flags += ImGuiKnobFlags_NoInput;
 			flags += ImGuiKnobFlags_NoTitle;
 			flags += ImGuiKnobFlags_ValueTooltip;//not works
@@ -1237,8 +1247,8 @@ namespace ofxImGuiSurfing
 			//}
 
 			// tooltip
-            //this->AddTooltip(p, true, false);
-            ofxImGuiSurfing::AddTooltip(p, true, false);
+			//this->AddTooltip(p, true, false);
+			ofxImGuiSurfing::AddTooltip(p, true, false);
 		}
 
 		return bReturn;

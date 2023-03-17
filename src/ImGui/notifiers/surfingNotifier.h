@@ -2,24 +2,67 @@
 #include "ofMain.h"
 
 #include "imgui_tricks.hpp"
+#include "ofxSurfingHelpers.h"
 
 class SurfingNotifier
 {
 public:
-	SurfingNotifier() 
+	SurfingNotifier()
+	{
+		//setup();
+
+		//TODO:
+		// Fix exit exceptions on RF..
+		int minValue = std::numeric_limits<int>::min();
+		ofAddListener(ofEvents().exit, this, &SurfingNotifier::exit, minValue);
+	};
+
+	~SurfingNotifier()
+	{
+		ofRemoveListener(ofEvents().exit, this, &SurfingNotifier::exit);
+		//exit();
+	};
+
+public:
+	void setPath(string path) {
+		path_Global = path;
+	};
+
+private:
+	std::string path_Global = "";
+	std::string name_Settings = "SurfingNotifier_Settings.json";
+
+	bool bDoneSetup = false;
+
+public:
+	void setup()
 	{
 		buildTagsDefault();
+		ImTricks::NotifyManager::doReset();
+
+		ofxSurfingHelpers::loadGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+
+		bDoneSetup = true;
 	};
 
-	~SurfingNotifier() 
+private:
+	void exit(ofEventArgs& e)
 	{
+		exit();
+	};
+	void exit() 
+	{
+		ofxSurfingHelpers::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
 	};
 
-	void draw(bool bDebug = false, vector<ImFont*> *fonts = nullptr)
+public:
+	void draw(bool bDebug_ = false, vector<ImFont*>* fonts = nullptr)
 	{
+		if (!bDoneSetup) { setup(); }
+
 		ImTricks::NotifyManager::HandleNotifies(ImGui::GetForegroundDrawList(), fonts);
 
-		if(bDebug) ImTricks::NotifyManager::drawImGuiControls();
+		if (bDebug_) ImTricks::NotifyManager::drawImGuiControls();
 	};
 
 	void setIndexFont(int index) {

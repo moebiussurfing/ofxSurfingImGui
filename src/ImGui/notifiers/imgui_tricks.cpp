@@ -73,69 +73,133 @@ namespace ImTricks {
 
 		float offsetx = 0;
 
-		//const int wmaxDef = 0;//flick bug
-		const int wmaxDef = 200;
+		const int wmaxDef = 0;//flick bug
+		//const int wmaxDef = 200;
+		float widthMax_ = wmaxDef;//getting max width o all bubbles. starting pad
 
 		//TODO: add editor to save settings
 		// hardcoded
-		int duration = 3000;
-		float wmax = wmaxDef;//getting max width o all bubbles. starting pad
-		float pdx0 = 20;//pad to right x border 
-		float pdy0 = 20;//pad to bottom y border 
-		float pdx = 15;//text in
-		float pdy = 15;//text in
-		float spy = 15;//spacing between bubbles
-		float rd = 3.f;//rounded bubble if != 0.
-		float rdmk = 1.f;//rounded left mark
-		float wmk = 5.f;//width colored left mark
-		float pbmk = 0.f;//padding left mark
-		bool bAlignRight = true;
-		bool bUseColor = true;
-
-
-		//TODO:
+#ifndef USE_IM_GUI_TRICKS_PARAMS
 		int indexFont = 0;//default
-		//int indexFont = 1;//big
-		//int indexFont = 2;//huge
+		int duration = 3000;
+		int padx = 20;//pad to right x border 
+		int pady = 20;//pad to bottom y border 
+		int padxInner = 15;//text in
+		int padyInner = 15;//text in
+		int ySpacing = 15;//spacing between bubbles
+		float round = 3.f;//rounded bubble if != 0.
+		bool bUseColorMark = true;
+		float mkRounded = 1.f;//rounded left mark
+		int mkWidth = 5.f;//width colored left mark
+		int mkPad = 0.f;//padding left mark
+		bool bAlignRight = true;
+		bool bRightColorMark = false;
+		bool bUseTagColor = true;
+		bool bBg = true;
+#else
+		// These init value will be overwritten by calling setup()!
+		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
+		ofParameter<int> duration{ "Duration", 3000, 300, 10000 };
+		ofParameter<int> padx{ "Pad x", 20, -50, 100 };//pad to right x border 
+		ofParameter<int> pady{ "Pad y", 20, -50, 100 };//pad to bottom y border 
+		ofParameter<int> padxInner{ "Inner Pad x", 15, 0, 100 };//text in
+		ofParameter<int> padyInner{ "Inner Pad y", 15, 0, 100 };//text in
+		ofParameter<int> ySpacing{ "Spacing y", 5, -50, 100 };//spacing between bubbles
+		ofParameter<float> round{ "Round", 3.f, 0, 100 };//rounded bubble if != 0.
+		ofParameter<bool> bUseColorMark{ "Color Mark", true };
+		ofParameter<bool> bRightColorMark{ "CM Right", false };
+		ofParameter<float> mkRounded{ "CM Round", 1.f, 0, 100 };//rounded left mark
+		ofParameter<int> mkWidth{ "CM Width",5, 1, 200 };//width colored left mark
+		ofParameter<int> mkPad{ "CM Pad", 0, 0, 200 };//padding left mark
+		ofParameter<bool> bAlignRight{ "Align Right",true };
+		ofParameter<bool> bUseTagColor{ "Tag Color", true };
+		ofParameter<bool> bBg{ "Bg", true };
+
+		ofParameterGroup params{ "surfingNotifier", indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
+#endif
+
+		void doReset()
+		{
+			widthMax_ = 100;//starting pad
+
+			indexFont = 1;
+
+			duration = 3000;
+			padx = 5;//pad to right x border 
+			pady = 0;//pad to bottom y border 
+			padxInner = 40;//text in
+			padyInner = 20;//text in
+			ySpacing = 5;//spacing between bubbles
+			round = 3.f;//rounded bubble if != 0.
+			mkRounded = 1.f;//rounded left mark
+			mkWidth = 5;//width colored left mark
+			mkPad = 0;//padding left mark
+			bAlignRight = true;
+			bRightColorMark = false;
+			bUseTagColor = true;
+			bBg = true;
+
+			clear();
+		}
 
 		void drawImGuiControls()
 		{
-			ImGui::Begin("Debug surfingNotifier");
+			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
+
+			ImGui::Begin("Debug surfingNotifier", NULL, flags);
+#ifndef USE_IM_GUI_TRICKS_PARAMS
 
 			ImGui::SliderInt("indexFont", &indexFont, 0, 3);
 			ImGui::SliderInt("duration", &duration, 300, 10000);
-			ImGui::SliderFloat("pdx0", &pdx0, 0, 100);
-			ImGui::SliderFloat("pdy0", &pdy0, 0, 100);
-			ImGui::SliderFloat("pdx", &pdx, 0, 100);
-			ImGui::SliderFloat("pdy", &pdy, 0, 100);
-			ImGui::SliderFloat("spy", &spy, 0, 100);
-			ImGui::SliderFloat("rd", &rd, 0, 100);
-			ImGui::SliderFloat("rdmk", &rdmk, 0, 100);
-			ImGui::SliderFloat("wmk", &wmk, 0, 100);
-			ImGui::SliderFloat("pbmk", &pbmk, 0, 100);
-			ImGui::Checkbox("bAlignRight", &bAlignRight);
-			if(!bAlignRight) ImGui::SliderFloat("wmax", &wmax, 100, 800);
-			ImGui::Checkbox("bUseColor", &bUseColor);
-			if (ImGui::Button("Reset"))
-			{
-				duration = 3000;
-				wmax = 100;//starting pad
-				pdx0 = 20;//pad to right x border 
-				pdy0 = 20;//pad to bottom y border 
-				pdx = 15;//text in
-				pdy = 15;//text in
-				spy = 15;//spacing between bubbles
-				rd = 3.f;//rounded bubble if != 0.
-				rdmk = 1.f;//rounded left mark
-				wmk = 5.f;//width colored left mark
-				pbmk = 0.f;//padding left mark
-				bAlignRight = true;
-				bUseColor = true;
-
-				clear();
+			ImGui::SliderInt("padx", &padx, 0, 100);
+			ImGui::SliderInt("pady", &pady, 0, 100);
+			ImGui::SliderInt("padxInner", &padxInner, 0, 100);
+			ImGui::SliderInt("padyInner", &padyInner, 0, 100);
+			ImGui::SliderInt("ySpacing", &ySpacing, 0, 100);
+			ImGui::SliderFloat("round", &round, 0, 100);
+			ImGui::Checkbox("Color Mark", &bUseColorMark);
+			if (bUseColorMark) {
+				ImGui::Checkbox("CM Right", &bRightColorMark);
+				ImGui::SliderFloat("CM Round", &mkRounded, 0, 100);
+				ImGui::SliderInt("CM Width", &mkWidth, 0, 100);
+				ImGui::SliderInt("CM Pad", &mkPad, 0, 100);
 			}
+			ImGui::Checkbox("bAlignRight", &bAlignRight);
+			ImGui::Checkbox("bUseTagColor", &bUseTagColor);
+			ImGui::Checkbox("bBg", &bBg);
+			if (!bAlignRight) ImGui::SliderFloat("widthMax_", &widthMax_, 100, 800);
+#else
+			ofxImGuiSurfing::AddParameter(duration);
+			ofxImGuiSurfing::AddStepper(indexFont);
+			ofxImGuiSurfing::AddStepper(padx);
+			ofxImGuiSurfing::AddStepper(pady);
+			ofxImGuiSurfing::AddStepper(padxInner);
+			ofxImGuiSurfing::AddStepper(padyInner);
+			ofxImGuiSurfing::AddStepper(ySpacing);
+			ofxImGuiSurfing::AddStepper(round);
+			ofxImGuiSurfing::AddParameter(bUseColorMark);
+			if (bUseColorMark) {
+				ImGui::Indent();
+				ofxImGuiSurfing::AddParameter(bRightColorMark);
+				ofxImGuiSurfing::AddStepper(mkRounded);
+				ofxImGuiSurfing::AddStepper(mkWidth);
+				ofxImGuiSurfing::AddStepper(mkPad);
+				ImGui::Unindent();
+			}
+			ofxImGuiSurfing::AddParameter(bAlignRight);
+			ofxImGuiSurfing::AddParameter(bUseTagColor);
+			ofxImGuiSurfing::AddParameter(bBg);
+#endif
+			if (ImGui::Button("Reset")) { doReset(); }
 			ImGui::SameLine();
 			if (ImGui::Button("Clear")) clear();
+
+			ImGui::Spacing();
+			ImGui::Spacing();
+			string s = "";
+			s += "Amount: ";
+			s += ofToString(notifies.size(), 0);
+			ImGui::Text(s.c_str());
 
 			ImGui::End();
 		};
@@ -150,13 +214,13 @@ namespace ImTricks {
 
 		void clear() {
 			notifies.clear();
-			wmax = wmaxDef;//reset
+			widthMax_ = wmaxDef;//reset
 		};
 
 		void HandleNotifies(ImDrawList* draw, std::vector<ImFont*>* fonts)
 		{
 			if (notifies.empty()) {
-				wmax = wmaxDef;//reset
+				widthMax_ = wmaxDef;//reset
 				return;
 			}
 			const auto szScreen = ImGui::GetIO().DisplaySize;
@@ -164,11 +228,15 @@ namespace ImTricks {
 			//ImVec2 NotifyPos = szScreen - ImVec2(0, bbox.y);
 
 			ImVec2 NotifyPos;
-			if (!bAlignRight) NotifyPos = szScreen - ImVec2(wmax, bbox.y);
+			if (!bAlignRight) NotifyPos = szScreen - ImVec2(widthMax_, bbox.y);
 			else NotifyPos = szScreen - ImVec2(0, bbox.y);
 
 			// padding to bottom right/down borders
-			NotifyPos -= ImVec2(pdx0, pdy0);
+			NotifyPos = NotifyPos - ImVec2(padx, pady);
+			//NotifyPos -= ImVec2(padx, pady);
+
+			NotifyPos.y -= ySpacing;
+			//NotifyPos.y -= pady;
 
 			//--
 
@@ -196,19 +264,20 @@ namespace ImTricks {
 			{
 				ImVec2 szText = ImGui::CalcTextSize(notify.message.c_str());
 
-				bbox = szText + ImVec2(pdx + pdx, pdy + pdy);
+				bbox = szText + ImVec2(padxInner + padxInner, padyInner + padyInner);
 
-				if (bbox.x > wmax) wmax = bbox.x;
-				//NotifyPos -= ImVec2(wmax, 0);
+				if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
 				ImVec2 NotifyPos_;
 
 				//TODO: right align text
-				if (bAlignRight) {
+				if (bAlignRight)
+				{
 					offsetx = szText.x;
-					NotifyPos_ = NotifyPos - ImVec2(offsetx + pdx + pdx, 0); // Offset
+					NotifyPos_ = NotifyPos - ImVec2(offsetx + padxInner + padxInner, 0); // Offset
 				}
-				else {
+				else
+				{
 					offsetx = 0;
 					NotifyPos_ = NotifyPos; // No offset
 				}
@@ -216,38 +285,47 @@ namespace ImTricks {
 				ImVec2 NotifyEndPos = NotifyPos_ + bbox;
 
 				//1. bbox bg
-				draw->AddRectFilled(NotifyPos_, NotifyEndPos,
-					ImGui::GetColorU32(ImGuiCol_PopupBg),
-					((rd == 0) ? ImGui::GetStyle().PopupRounding : rd));
+				if (bBg) {
+					draw->AddRectFilled(NotifyPos_, NotifyEndPos,
+						ImGui::GetColorU32(ImGuiCol_PopupBg),
+						((round == 0) ? ImGui::GetStyle().PopupRounding : round));
+				}
 
-				ImColor StateColor;
+				ImColor colorState;
 				switch (notify.state)
 				{
-				case ImTrickNotify_Verbose: StateColor = ImColor(ofColor::white); break;
-				case ImTrickNotify_Notice: StateColor = ImColor(ofColor::green); break;
-				case ImTrickNotify_Warning: StateColor = ImColor(ofColor::yellow); break;
-				case ImTrickNotify_Error: StateColor = ImColor(ofColor::red); break;
-				case ImTrickNotify_Info: default: StateColor = ImColor(ofColor::white); break;
+				case ImTrickNotify_Verbose: colorState = ImColor(ofColor::white); break;
+				case ImTrickNotify_Notice: colorState = ImColor(ofColor::green); break;
+				case ImTrickNotify_Warning: colorState = ImColor(ofColor::yellow); break;
+				case ImTrickNotify_Error: colorState = ImColor(ofColor::red); break;
+				case ImTrickNotify_Info: default: colorState = ImColor(ofColor::white); break;
 				}
 
 				// 2. Text
-				const auto TextPos = NotifyPos_ + ImVec2(pdx, pdy);
+				const auto TextPos = NotifyPos_ + ImVec2(padxInner, padyInner);
 
-				//3. bbox left colored mark 
-				draw->AddRectFilled(ImVec2(NotifyPos_.x - wmk - pbmk, NotifyPos_.y),
-					ImVec2(NotifyPos_.x - pbmk, NotifyPos_.y + bbox.y), StateColor, rdmk);
+				//3. bbox left colored mark
+				if (bUseColorMark)
+				{
+					if (!bRightColorMark)
+						draw->AddRectFilled(ImVec2(NotifyPos_.x - mkWidth - mkPad, NotifyPos_.y), 
+							ImVec2(NotifyPos_.x - mkPad, NotifyPos_.y + bbox.y), colorState, mkRounded);
+					else
+						draw->AddRectFilled(ImVec2(NotifyEndPos.x + mkPad, NotifyPos_.y), 
+							ImVec2(NotifyEndPos.x + mkPad + mkWidth, NotifyPos_.y + bbox.y), colorState, mkRounded);
+				}
 
 				ImU32 c;
-				if (bUseColor) c = ImGui::GetColorU32(ImVec4(StateColor));
+				if (bUseTagColor) c = ImGui::GetColorU32(ImVec4(colorState));
 				else c = ImGui::GetColorU32(ImGuiCol_Text);
 
 				draw->AddText(TextPos, c, notify.message.c_str());
 
-				if (bbox.x > wmax) wmax = bbox.x;
+				if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
 				// Spacing up!
 				NotifyPos.y -= bbox.y;
-				NotifyPos.y -= spy;
+				NotifyPos.y -= ySpacing;
 			};
 
 			//--
@@ -258,7 +336,9 @@ namespace ImTricks {
 			for (auto& n : notifies)
 			{
 				// skip/continue if passed end time for each message
-				if (t > n.time) continue;
+				if (t > n.time) {
+					continue;
+				}
 
 				DrawNotify(n);
 			}
@@ -270,6 +350,10 @@ namespace ImTricks {
 				ImGui::PopFont();
 			}
 
+			// remove all elements from the vector whose endTime is less than t
+			notifies.erase(std::remove_if(notifies.begin(), notifies.end(),
+				[t](const NotifyStruct& n) { return t > n.time; }),
+				notifies.end());
 		};
 	}
 

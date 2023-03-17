@@ -4,13 +4,15 @@
 
 /*
 
-	This example shows how to use the Notifier system and Log system together.
+	This example shows how to use the Notifier system.
+	Most settings are customizable.
+	
+	Also will show the Log system together.
 
 */
 
 
 //--
-
 
 #include "ofMain.h"
 
@@ -21,7 +23,6 @@
 class ofApp : public ofBaseApp
 {
 public:
-
 	void setup();
 	void draw();
 	void exit();
@@ -29,7 +30,7 @@ public:
 
 	void setupParams();
 
-	ofParameter<bool> bAnimate1;
+	ofParameter<bool> bAnimate;
 	ofParameter<float> speed;
 	ofParameter<int> amountPauses;
 	ofParameter<float> separation;

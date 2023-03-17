@@ -1,6 +1,13 @@
 #pragma once
 
-// Taken from https://github.com/ALEHACKsp/imgui-tricks
+#define USE_IM_GUI_TRICKS_PARAMS 
+#define USE_IM_GUI_TRICKS_PRESETS
+
+//#define USE_IM_GUI_TRICKS_PARAMS 
+// -> define in your project (ie: ofApp.h) before including ofxSufringImGui
+
+// Modified version originally 
+// taken from https://github.com/ALEHACKsp/imgui-tricks
 
 //TODO:
 // Must be included if < C++17
@@ -25,15 +32,20 @@ namespace std
 
 //#include <windows.h>
 
+// C++
 #include <map>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <ofColor.h>
 
-#include <imgui.h>
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui_internal.h>
+// OF
+#include <ofColor.h>
+#include <ofParameter.h>
+
+#include "ofHelpers.h"
+//#include <imgui.h>
+//#define IMGUI_DEFINE_MATH_OPERATORS
+//#include <imgui_internal.h>
 
 enum NotifyState : int {
 	ImTrickNotify_Info = 0,
@@ -72,6 +84,7 @@ namespace ImTricks {
 		extern ImColor FastColorLerp(ImColor start, ImColor end, float stage);
 	}
 
+
 	/*
 	// The NotifyManager namespace contains everything you need to easily create notifications in your interface.
 	*/
@@ -105,9 +118,16 @@ namespace ImTricks {
 
 		extern void drawImGuiControls();
 		extern void clear();
-	
+		extern void doReset();
+
+#ifndef USE_IM_GUI_TRICKS_PARAMS
 		extern int indexFont;
 		extern int duration;
+#else
+		extern ofParameter<int> indexFont;
+		extern ofParameter<int> duration;
+		extern ofParameterGroup params;
+#endif
 	}
 
 

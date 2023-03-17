@@ -97,24 +97,29 @@ SurfingGuiManager::~SurfingGuiManager() {
 	{
 		exit();
 
-		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
-		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
+		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet as expected.";
+		ofLogWarning("ofxSurfingImGui") << "Now forcing exit() here in destructor!";
 	}
 	else
 	{
-		ofLogNotice("ofxSurfingImGui") << "Successfully omitted calling exit() in destructor. It was already done!";
+		ofLogWarning("ofxSurfingImGui") << "exit() was already called before as expected.";
+		ofLogWarning("ofxSurfingImGui") << "It was already done!";
+		ofLogWarning("ofxSurfingImGui") << "So we successfully omitted calling exit() herre in destructor.";
 	}
 
-	// Delete pointers
-	delete customFont;
-	for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
+	//TODO:
+	//// Delete pointers
+	//delete customFont;
+	//for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
+
+	ofRemoveListener(ofEvents().exit, this, &SurfingGuiManager::exit);
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::exit(ofEventArgs& e)
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
-	ofLogNotice("ofxSurfingImGui") << "Calling exit() by ofEvents().exit with maximum priority!";
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " > exit(ofEventArgs& e)";
+	ofLogNotice("ofxSurfingImGui") << "Called by ofEvents().exit with maximum priority! Now calling exit().";
 	ofLogNotice("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
 
 	exit();
@@ -124,8 +129,7 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 void SurfingGuiManager::exit()
 {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
-	return;//fixing crash
-
+	//return;//TODO: fixing crash
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
@@ -559,12 +563,17 @@ void SurfingGuiManager::startup()
 
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
-	notifier.setDuration(4000);
+
+	notifier.setPath(path_Global);
+	notifier.setup();
+	//notifier.setDuration(4000);
 
 	//notifier.setIndexFont(0);
-	notifier.setIndexFont(1);
+	//notifier.setIndexFont(1);
 	//notifier.setIndexFont(2);
 	//notifier.setIndexFont(3);
+
+
 #endif
 
 	//--
@@ -698,7 +707,7 @@ void SurfingGuiManager::buildHelpInfo()
 		else
 			helpInfo += "E           Extra         " + st + " OFF \n";
 
-		if (bDebug)
+		if (bDebug) 
 			helpInfo += "D           Debug         " + st + " ON  \n";
 		else
 			helpInfo += "D           Debug         " + st + " OFF \n";
@@ -1362,8 +1371,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 					float hh = availableSpace.GetSize().y;
 					rectangle_Central_MAX = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
 
-					bool bDebug = bDrawView2.get();
-					if (bDebug)
+					bool bDebug_ = bDrawView2.get();
+					if (bDebug_)
 					{
 						int _wl = 2;
 						int pad = 10;

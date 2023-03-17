@@ -3,9 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	int h = 35;
-	ofSetWindowPosition(1920, h);
-	ofSetWindowShape(1920, 1080 - h);
+	ofxSurfingHelpers::SurfSetMyMonitor(0);
 
 	setupParams();
 
@@ -17,10 +15,10 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::setupParams()
 {
-	params.setName("G");
+	params.setName("ofApp");
 	params.add(speed.set("Speed", 0.5f, 0, 1));
 	params.add(amountPauses.set("Pauses", 50, 0, 100));
-	params.add(bAnimate1.set("Animate 1", true));
+	params.add(bAnimate.set("Animate", true));
 
 	ofAddListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
 }
@@ -29,6 +27,7 @@ void ofApp::setupParams()
 void ofApp::setupImGui()
 {
 	//ui.setEnablebMouseCursorFromImGui(false);
+	ui.setName("myOfApp");
 	ui.setup();
 }
 
@@ -58,33 +57,33 @@ void ofApp::drawImGui()
 
 		ui.AddSpacingBigSeparated();
 
-		ui.AddLabelHuge("NOTIFIER SYSTEM");
+		ui.AddLabelBig("NOTIFIER SYSTEM");
 		ui.AddSpacing();
 		ui.Add(ui.bNotifier, OFX_IM_TOGGLE_BIG_XXL_BORDER);
 		if (ui.AddButton("Random Notify", OFX_IM_BUTTON_BIG)) {
 			doRandomNotifyLog();
 		};
 
-		ui.AddSpacingBigSeparated();
-
-		ui.AddLabelHuge("LOG SYSTEM");
-		ui.AddSpacing();
-		ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
-		if (b) if (ui.bLog) {
-			ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
-		}
-
 		if (ui.isMaximized()) {
 			ui.AddSpacingBigSeparated();
 
-			if (b) ui.AddLabelBig("ANIMATE");
-			if (b) ui.AddSpacing();
-			ui.Add(bAnimate1, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+			ui.AddLabelBig("LOG SYSTEM");
+			ui.AddSpacing();
+			ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
+			if (ui.bLog) {
+				ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+			}
+
+			ui.AddSpacingBigSeparated();
+
+			ui.AddLabelBig("ANIMATE");
+			ui.AddSpacing();
+			ui.Add(bAnimate, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
 			ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
 			ui.AddSpacing();
-			if (bAnimate1)
+			if (bAnimate)
 			{
-				if (b) ui.AddLabelBig("MODIFIERS");
+				ui.AddLabelBig("Modifiers");
 				ui.Add(speed, OFX_IM_HSLIDER_SMALL);
 				ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
 
@@ -108,15 +107,15 @@ void ofApp::updateLog()
 	// Animate some vars
 	auto f = ofGetFrameNum();
 
-	// Ping every 2 seconds. 
-	if (f % 120 == 0)
+	// Ping every x seconds. 
+	if (f % (4 * 120) == 0)
 	{
 		static int counter = 0;
 		string s = "PING \t\t\t\t\t #" + ofToString(counter++);
-		this->AddNotifyLog(s); // Raw without tag. 2nd argument empty
+		this->AddNotifyLog(s, OF_LOG_WARNING); // Raw without tag. 2nd argument empty
 	}
 
-	if (!bAnimate1) return;
+	if (!bAnimate) return;
 
 	// Make pauses
 	float a = ofMap(amountPauses, amountPauses.getMax(), amountPauses.getMin(), 0.25f, 1.f);
@@ -161,6 +160,8 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+	if (key == 'a') bAnimate = !bAnimate;
+
 	doRandomNotifyLog();
 }
 
@@ -178,24 +179,27 @@ void ofApp::AddNotifyLog(string text, string nameTag)
 	ui.AddToNotifier(text, nameTag);
 	ui.AddToLog(text, nameTag);
 };
+
 //--------------------------------------------------------------
 void ofApp::AddNotifyLog(string text, ofLogLevel level)
 {
 	ui.AddToNotifier(text, level);
 	ui.AddToLog(text, level);
 };
+
 //--------------------------------------------------------------
 void ofApp::doRandomNotifyLog()
 {
 	float r = ofRandom(1.f);
 	if (r < 0.5f)
 	{
-		auto d = ofxSurfingHelpers::getRandomLogData();
+		ofxSurfingHelpers::logData d = ofxSurfingHelpers::getRandomLogData();
 		this->AddNotifyLog(d.text, d.log);
 	}
 	else
 	{
 		ofxSurfingHelpers::logData d;
+		d.log = OF_LOG_VERBOSE;
 		d.text = getTextRandomSentence();
 		this->AddNotifyLog(d.text, d.log);
 	}
