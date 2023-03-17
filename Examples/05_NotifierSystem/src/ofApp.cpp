@@ -62,6 +62,8 @@ void ofApp::drawImGui()
 		ui.Add(ui.bNotifier, OFX_IM_TOGGLE_BIG_XXL_BORDER);
 		if (ui.AddButton("Random Notify", OFX_IM_BUTTON_BIG)) {
 			doRandomNotifyLog();
+		};if (ui.AddButton("Clear", OFX_IM_BUTTON)) {
+			ui.doClearNotifier();
 		};
 
 		if (ui.isMaximized()) {

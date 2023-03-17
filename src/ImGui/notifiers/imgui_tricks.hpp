@@ -42,10 +42,13 @@ namespace std
 #include <ofColor.h>
 #include <ofParameter.h>
 
-#include "ofHelpers.h"
-//#include <imgui.h>
-//#define IMGUI_DEFINE_MATH_OPERATORS
-//#include <imgui_internal.h>
+#ifndef USE_IM_GUI_TRICKS_PARAMS
+#include <imgui.h>
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include <imgui_internal.h>
+#else
+#include "ofHelpers.h" // for OF
+#endif
 
 enum NotifyState : int {
 	ImTrickNotify_Info = 0,
@@ -117,7 +120,7 @@ namespace ImTricks {
 		extern void HandleNotifies(ImDrawList* draw = ImGui::GetForegroundDrawList(), std::vector<ImFont*> *fonts = nullptr);
 
 		extern void drawImGuiControls();
-		extern void clear();
+		extern void doClear();
 		extern void doReset();
 
 #ifndef USE_IM_GUI_TRICKS_PARAMS

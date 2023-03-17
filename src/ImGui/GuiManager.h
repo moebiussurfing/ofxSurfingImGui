@@ -2240,6 +2240,16 @@ public:
 
 #ifdef OFX_USE_NOTIFIER
 	//--------------------------------------------------------------
+	void doResetNotifier()
+	{
+		notifier.doReset();
+	};
+	//--------------------------------------------------------------
+	void doClearNotifier()
+	{
+		notifier.doClear();
+	};
+	//--------------------------------------------------------------
 	void AddToNotifier(string text, string nameTag)
 	{
 		notifier.Add(text, nameTag);

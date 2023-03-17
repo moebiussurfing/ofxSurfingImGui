@@ -139,7 +139,7 @@ namespace ImTricks {
 			bUseTagColor = true;
 			bBg = true;
 
-			clear();
+			doClear();
 		}
 
 		void drawImGuiControls()
@@ -192,7 +192,7 @@ namespace ImTricks {
 #endif
 			if (ImGui::Button("Reset")) { doReset(); }
 			ImGui::SameLine();
-			if (ImGui::Button("Clear")) clear();
+			if (ImGui::Button("Clear")) doClear();
 
 			ImGui::Spacing();
 			ImGui::Spacing();
@@ -212,7 +212,7 @@ namespace ImTricks {
 			notifies.push_back({ message, state, t + duration });//store end time
 		};
 
-		void clear() {
+		void doClear() {
 			notifies.clear();
 			widthMax_ = wmaxDef;//reset
 		};
@@ -235,8 +235,25 @@ namespace ImTricks {
 			NotifyPos = NotifyPos - ImVec2(padx, pady);
 			//NotifyPos -= ImVec2(padx, pady);
 
-			NotifyPos.y -= ySpacing;
-			//NotifyPos.y -= pady;
+			//NotifyPos.y -= ySpacing;
+			////NotifyPos.y -= pady;
+
+			// Spacing up!
+			if (1) {
+				NotifyPos.y -= ySpacing;
+			}
+			else {
+				//TODO:
+				// anim
+				bool state = 1;
+				float min = 0;
+				float max = ySpacing;
+				float speed = 0.05;
+				//float speed = (1000 / 60.f) * 400;
+				float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
+				NotifyPos.y -= offsety_;
+			}
+
 
 			//--
 
@@ -308,10 +325,10 @@ namespace ImTricks {
 				if (bUseColorMark)
 				{
 					if (!bRightColorMark)
-						draw->AddRectFilled(ImVec2(NotifyPos_.x - mkWidth - mkPad, NotifyPos_.y), 
+						draw->AddRectFilled(ImVec2(NotifyPos_.x - mkWidth - mkPad, NotifyPos_.y),
 							ImVec2(NotifyPos_.x - mkPad, NotifyPos_.y + bbox.y), colorState, mkRounded);
 					else
-						draw->AddRectFilled(ImVec2(NotifyEndPos.x + mkPad, NotifyPos_.y), 
+						draw->AddRectFilled(ImVec2(NotifyEndPos.x + mkPad, NotifyPos_.y),
 							ImVec2(NotifyEndPos.x + mkPad + mkWidth, NotifyPos_.y + bbox.y), colorState, mkRounded);
 				}
 
@@ -324,8 +341,21 @@ namespace ImTricks {
 				if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
 				// Spacing up!
+				if (1) {
 				NotifyPos.y -= bbox.y;
 				NotifyPos.y -= ySpacing;
+				}
+				else {
+					//TODO:
+					// anim
+					bool state = 1;
+					float min = 0;
+					float max = bbox.y + ySpacing;
+					float speed = 0.05;
+					//float speed = (1000 / 60.f) * 400;
+					float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
+					NotifyPos.y -= offsety_;
+				}
 			};
 
 			//--

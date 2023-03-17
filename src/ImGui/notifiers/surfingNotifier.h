@@ -96,6 +96,9 @@ private:
 	};
 
 public:
+	void doReset() { ImTricks::NotifyManager::doReset(); };
+	void doClear() { ImTricks::NotifyManager::doClear(); };
+
 	//TODO: allow customize
 	void AddTag(tagData tag)
 	{
