@@ -4,4 +4,5 @@
 ![](Capture.PNG)
 
 </br>
-![VIDEO](https://www.youtube.com/shorts/k_xXJXmjUYQ)
+
+https://www.youtube.com/shorts/k_xXJXmjUYQ
