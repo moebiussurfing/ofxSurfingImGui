@@ -3,7 +3,6 @@
 
 ![](Capture.PNG)
 
-<h2>VIDEO SCREENCAST</h2>
 </br>
 
-[![VIDEO SCREENCAST](https://img.youtube.com/vi/UIvfpRFtEtY/maxresdefault.jpg)](https://youtu.be/UIvfpRFtEtY)
+https://www.youtube.com/shorts/k_xXJXmjUYQ
