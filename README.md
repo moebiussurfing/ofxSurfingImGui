@@ -40,10 +40,11 @@ for **openFrameworks** projects.
     - To reset to param center.
     - _+Ctrl_ to reset to min.
     - _+Alt_ to reset to max.
-- **Themes** and editor.
-- Windows organizer, aligner and linker.
+- **Themes** and editor ( WIP ).
+- Windows organizer, aligner, cascade and group/linker.
 - **Log System** with custom tags.
-- **Notifier System**. ( WIP )
+- **Notifier System**.
+- **Text Editor** ( WIP )
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
 
@@ -139,8 +140,8 @@ void ofApp::draw()
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) (_dear imgui, v1.89.3_)  
   - THE **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-    - ~~NEW TEMPORARY BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)~~  
   - You **MUST USE THIS ONE**! 
+  
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
 
 * [assets.zip](assets.zip):  
@@ -181,9 +182,9 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 ## CURRENT SYSTEMS
 
 - **Windows 10** / **VS 2022** / 
-    * GitHub [oF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [oF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** / [Intel] / [oF 0.11.2](https://openframeworks.cc/download/). 
+    * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
+    * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
+- **macOS 12.5 Monterey** / **Xcode 14.2** / [Intel] / [OF 0.11.2](https://openframeworks.cc/download/). 
    
 
 <br>
@@ -195,9 +196,8 @@ An add-on by **moebiusSurfing**.
 
 ## THANKS
 
-_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange)  
-for **HIS AWESOME ofxImGui FORK**._  
-_Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing._  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (mantained) FORK** and some **macOS** fixes._  
+_Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 ## LICENSE
 
