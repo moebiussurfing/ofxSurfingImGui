@@ -15,6 +15,8 @@ class SurfingTextEditor
 {
 
 private:
+	
+	string name = "Text Editor Demo";
 
 	//std::string *textContent;
 
@@ -32,12 +34,23 @@ private:
 	//-
 
 public:
+	
+	void setName(string n) { name = n; }
 
+	//--------------------------------------------------------------
+	void setup(string name) {
+		setName(name);
+	}
 	//--------------------------------------------------------------
 	void setup() {
 	}
 
 	//--
+
+	//--------------------------------------------------------------
+	string getText() const {
+		return editor.GetText();
+	}
 
 	//--------------------------------------------------------------
 	void setText(string str, bool bResetPathSave = true) {
@@ -56,17 +69,17 @@ public:
 
 		//-
 
-		ofLogNotice(__FUNCTION__) << "load ifstream fileToEdit: " << ofToString(fileToEdit);
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
 
 		std::ifstream t(fileToEdit);
 		if (t.good())
 		{
 			std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 			editor.SetText(str);
-			ofLogNotice(__FUNCTION__) << "loaded file: " << ofToString(fileToEdit);
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
 		}
 		else {
-			ofLogNotice(__FUNCTION__) << "file not found! " << ofToString(fileToEdit);
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
 		}
 	}
 
@@ -94,8 +107,9 @@ public:
 		//--
 
 		auto cpos = editor.GetCursorPosition();
-		ImGui::Begin("Text Editor Demo", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
+		ImGui::Begin(name.c_str(), nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
 		ImGui::SetWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);
+
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
@@ -188,7 +202,9 @@ public:
 			//baseName.c_str()
 		);
 
-		editor.Render("TextEditor");
+		editor.Render(name.c_str());
+		//editor.Render("TextEditor");
+
 		ImGui::End();
 	}
 
@@ -250,16 +266,16 @@ public:
 ////if (0)
 //{
 //	fileToEdit = (char*)(ofFilePath::getAbsolutePath("text1.txt").c_str());
-//	ofLogNotice(__FUNCTION__) << "load ifstream fileToEdit: " << ofToString(fileToEdit);
+//	ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
 //	//std::ifstream t("text.txt");
 //	std::ifstream t(fileToEdit);
 //	if (t.good())
 //	{
 //		std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 //		editor.SetText(str);
-//		ofLogNotice(__FUNCTION__) << "loaded file: " << ofToString(fileToEdit);
+//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
 //	}
 //	else {
-//		ofLogNotice(__FUNCTION__) << "file not found! " << ofToString(fileToEdit);
+//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
 //	}
 //}	

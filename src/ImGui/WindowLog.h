@@ -169,13 +169,24 @@ namespace ofxImGuiSurfing
 
 		void Add(std::string msg, ofLogLevel logLevel)
 		{
-			if (logLevel == OF_LOG_VERBOSE) Add(msg, "VERBOSE");
-			else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");
-			else if (logLevel == OF_LOG_WARNING) Add(msg, "WARNING");
-			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
+			if (logLevel == OF_LOG_VERBOSE && logLevelUi <= OF_LOG_VERBOSE) Add(msg, "VERBOSE");
+			else if (logLevel == OF_LOG_NOTICE && logLevelUi <= OF_LOG_NOTICE) Add(msg, "NOTICE");
+			else if (logLevel == OF_LOG_WARNING && logLevelUi <= OF_LOG_WARNING) Add(msg, "WARNING");
+			else if (logLevel == OF_LOG_ERROR && logLevelUi <= OF_LOG_ERROR) Add(msg, "ERROR");
+			else if (logLevel == OF_LOG_FATAL_ERROR && logLevelUi <= OF_LOG_FATAL_ERROR) Add(msg, "ERROR");//TODO: add fatal error
 			else
 			{
 				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString((short)logLevel) << " Unknown";
+			}
+
+			//TODO:
+			static bool bLogToOF = true;
+			if (bLogToOF) {
+				if (logLevel == OF_LOG_VERBOSE) ofLogVerbose() << msg;
+				else if (logLevel == OF_LOG_NOTICE) ofLogNotice() << msg;
+				else if (logLevel == OF_LOG_WARNING) ofLogWarning() << msg;
+				else if (logLevel == OF_LOG_ERROR) ofLogError() << msg;
+				else if (logLevel == OF_LOG_FATAL_ERROR) ofLogFatalError() << msg;
 			}
 		};
 
@@ -691,6 +702,11 @@ namespace ofxImGuiSurfing
 
 			return s;
 		};
+
+		ofLogLevel logLevelUi = OF_LOG_VERBOSE;
+
+	public:
+		void setLogLevel(ofLogLevel logLevel) { this->logLevelUi = logLevel; }
 
 	public:
 

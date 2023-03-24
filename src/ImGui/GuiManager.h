@@ -2176,6 +2176,8 @@ public:
 	};
 
 public:
+	//--------------------------------------------------------------
+	void setLogLevel(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
 
 	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
@@ -2221,7 +2223,8 @@ public:
 	//--------------------------------------------------------------
 	void AddToLog(string text)//TODO:adding empty tag...
 	{
-		log.Add(text, "");
+		//log.Add(text, "");
+		log.Add(text, OF_LOG_NOTICE);
 	};
 	//--------------------------------------------------------------
 	void AddToLog(string text, ofLogLevel logLevel)

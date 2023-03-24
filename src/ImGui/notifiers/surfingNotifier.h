@@ -92,7 +92,7 @@ private:
 		AddTag({ "NOTICE", ofColor::green });
 		AddTag({ "WARNING", ofColor::yellow });
 		AddTag({ "ERROR", ofColor::red });
-		AddTag({ "OF_LOG_FATAL_ERROR", ofColor::red });
+		AddTag({ "FATAL_ERROR", ofColor::red });
 	};
 
 public:
