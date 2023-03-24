@@ -22,26 +22,26 @@ for **openFrameworks** projects.
 
 # FEATURES
 
-- Easy **setup**.
+- Super Easy **setup**.
 - **Multiple instances** around your classes and **ofxAddons**.
 - **ofParameter helpers**:
-  - Many RAW **DearImGui widgets** ported.
+  - Many RAW **DearImGui widgets** adapted.
   - Added custom useful widgets.
-- Useful **API methods** and **snippets**: 
-  - Help on **windows** and **widgets**.
-  - **Speed-Up** responsive layout.
+- Useful **API methods** and **Snippets**: 
+  - Help on **Windows** and **Widgets**.
+  - **Speed-Up** responsive Layout helpers.
   - Simplify **workflow**.
   - Internal params and persistent settings.
-- 4 active **font sizes**.
+- Four active **font sizes** for labels and paragraphs.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
   - Right-click:
-    - To reset to param center.
-    - _+Ctrl_ to reset to min.
-    - _+Alt_ to reset to max.
-- **Themes** and editor ( WIP ).
-- Windows organizer, aligner, cascade and group/linker.
+    - To Reset to param center.
+    - _+Ctrl_ to Reset to min.
+    - _+Alt_ to Reset to max.
+- **Themes** with **Editor** ( WIP ).
+- Windows Organizer, aligner, cascade and group/linker.
 - **Log System** with custom tags.
 - **Notifier System**.
 - **Text Editor** ( WIP )
@@ -58,18 +58,18 @@ for **openFrameworks** projects.
 - Vertical and Horizontal Sliders.
 - Range Sliders.
 - Styled Knobs.
-- Tree folders.
-- Inactive, hidden or locked styles.
-- Floating tooltip, labels and values.
+- Tree and indented folders.
+- Floating tooltips, labels and values.
 - Dropdown / Combo index selector and names.
 - Matrix buttons to an index selector.
-- Bundled widgets like arrows linked to int params browsing.
+- Bundled widgets like arrows linked to int params for browsing.
 - DearWidgets.
 - Gradient Color Designer.
 - Progress bars and waiting spinners.
 - Files Browser.
 - Curve Editors.
-- Bubbles Notifier System.
+- Log and Notifier System.
+- Text Editor, for live coding or text content.
 - Profile Plotters.
 - ...
   
@@ -138,21 +138,21 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) (_dear imgui, v1.89.3_)  
-  - THE **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST USE THIS ONE**! 
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) (_Dear ImGui, v1.89.4_)  
+  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
+  - You **MUST use this one**! 
   
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+  - _Removed and partially integrated into core soon_
 
-* [assets.zip](assets.zip):  
-Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
+* [assets.zip](assets.zip): Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
 
-The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located (then `/data` can also be empty), it will work too, but using the default bundled font from **ImGui**.  
+The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
 
@@ -166,7 +166,7 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
     
     - Several windows from different add-ons without colliding.  
   
-  - Easy to update to future **NEW ImGui** versions.  
+  - Easy to update to future **NEW ImGui** releases.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
     
@@ -197,8 +197,11 @@ An add-on by **moebiusSurfing**.
 ## THANKS
 
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (mantained) FORK** and some **macOS** fixes._  
+
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
+
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+
 ## LICENSE
 
 **MIT License**
