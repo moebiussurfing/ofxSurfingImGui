@@ -138,12 +138,12 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) (_Dear ImGui, v1.89.4_)  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) Dear ImGui v1.89.4 / BackEnd_:  
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
   
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-  - _Removed and partially integrated into core soon_
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers):  
+  - _Removed and partially integrated into core soon_.
 
 * [assets.zip](assets.zip):
   - Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
