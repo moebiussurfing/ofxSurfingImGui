@@ -186,7 +186,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** / **Intel** / [OF 0.11.2](https://openframeworks.cc/download/).  
-    * Not tested on **M1**/**M2** Apple silicon. (Testers are welcome).
+    * Not tested on **M1**/**M2** __Apple Silicon__. (Testers are welcome!).
    
 
 <br>
