@@ -21,6 +21,12 @@
 ## 04_LogSystem
 ![](04_LogSystem/Capture.PNG)  
 
+## 05_NotifierSystem
+![](05_NotifierSystem/Capture.PNG)  
+
+## 06_TextEditor
+![](06_TextEditor/Capture.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
