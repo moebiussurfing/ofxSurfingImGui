@@ -145,7 +145,8 @@ void ofApp::draw()
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
   - _Removed and partially integrated into core soon_
 
-* [assets.zip](assets.zip): Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
+* [assets.zip](assets.zip):
+  - Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
