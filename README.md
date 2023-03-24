@@ -138,7 +138,7 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) Dear ImGui v1.89.4 / BackEnd:  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / Dear ImGui v1.89.4 / BackEnd:  
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
   
