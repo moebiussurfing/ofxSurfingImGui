@@ -14,9 +14,11 @@
 
 #include "ofMain.h"
 
-#include "imgui.h"
+//#include "imgui.h"
+//#include "imgui_internal.h"
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
-//#include "ofxImGui.h"
+#include "ofxImGui.h"
 
 #include "GuiSugar.h"
 //#include "GuiConstants.h"

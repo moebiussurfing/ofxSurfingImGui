@@ -3,8 +3,10 @@
 #include "ofMain.h"
 
 //#include "imgui.h"
-#include "ofxImGui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
+#include "ofxImGui.h"
+
 #include "imconfig.h"
 
 #define IM_GUI_KNOB_CIRCLE_SEGMENTS 48 // Circle resolution "quality". Could be size dependant to improve performance.

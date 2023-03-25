@@ -5,6 +5,8 @@
 // https://github.com/ocornut/imgui/issues/76
 // Taken from: https://github.com/wasikuss/imgui/commit/a50515ace6d9a62ebcd69817f1da927d31c39bb1
 
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+#include "imgui_internal.h"
 #include "ofxImGui.h"
 
 #include "GuiConstants.h"

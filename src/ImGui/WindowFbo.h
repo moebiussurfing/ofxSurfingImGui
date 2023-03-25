@@ -14,7 +14,10 @@
 
 //----
 
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+#include "imgui_internal.h"
 #include "ofxImGui.h"
+
 //#include "ofHelpers.h"
 //#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
 
