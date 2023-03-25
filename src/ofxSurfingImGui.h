@@ -149,10 +149,11 @@
 // Alias and namespace's
 
 using namespace ofxImGuiSurfing;
-//using ofxImGuiSurfing::SurfingFontTypes;
+using ofxImGuiSurfing::SurfingFontTypes;
 //using namespace ofxImGuiSurfing;
 
 // Short alias for the main gui manager class.
+// To be used into ofApp.
 #define ofxSurfingGui SurfingGuiManager//TODO: works but could be weak..
 //using ofxSurfingGui = SurfingGuiManager;//TODO: fails..
 //typedef SurfingGuiManager ofxSurfingGui;//breaks all 

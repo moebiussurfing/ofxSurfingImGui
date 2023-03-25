@@ -4,7 +4,6 @@
 void ofApp::setup()
 {
 	// Parameters
-
 	params.setName("paramsGroup"); // main container
 	params2.setName("paramsGroup2"); // nested
 	params3.setName("paramsGroup3"); // nested
@@ -41,9 +40,9 @@ void ofApp::setup()
 	// and convert input linear to log
 	listener = vIn.newListener([this](float& v) {
 
-		vOut1 = ofxSurfingHelpers::reversedExponentialFunction(vIn * 10.f);
-	vOut2 = ofxSurfingHelpers::exponentialFunction(vIn) / 10.f;
-	vOut3 = ofxSurfingHelpers::squaredFunction(vIn);
+		vOut1 = ofxImGuiSurfing::reversedExponentialFunction(vIn * 10.f);
+	vOut2 = ofxImGuiSurfing::exponentialFunction(vIn) / 10.f;
+	vOut3 = ofxImGuiSurfing::squaredFunction(vIn);
 
 	ofLogNotice() << v << " -> " << vOut1.get() << " : " << vOut2.get();
 		});
@@ -54,6 +53,25 @@ void ofApp::setup()
 
 	// Can be omitted in many scenarios..
 	//ui.setup();
+
+	//--
+
+	// Optional help
+
+	// enable internal help about how the addon works
+	ui.setEnableHelpInfoInternal();
+
+	// Set app help text.
+	//ui.setEnableHelpInfoApp();//auto forced
+	string s = "Examples/00_Simple \n\n";
+	s += "This example shows learning to:\n\n";
+	s += "- Populate many ofParameters.\n";
+	s += "- Populate an ofParamterGroup.\n";
+	s += "- Use exponential helpers for sliders.\n";
+	s += "- Populate common internal bool toggles:\n";
+	s += "  minimize, auto resize, help windows.\n";
+	s += "- Set and show internal and app help windows.\n";
+	ui.setHelpInfoApp(s);
 }
 
 //--------------------------------------------------------------
@@ -65,6 +83,11 @@ void ofApp::draw()
 		{
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
+			ui.AddKeysToggle();
+			ui.AddSpacing();
+			ui.AddHelpToggle();
+			ui.AddHelpInternalToggle();
+
 			ui.AddSpacingBigSeparated();
 
 			//--
@@ -76,7 +99,6 @@ void ofApp::draw()
 			// Check the state of the internal toggle minimize
 			if (ui.isMaximized())
 			{
-
 				// This is an ofParameterGroup
 				// contained params are populated 
 				// as their default widgets styles
@@ -88,8 +110,8 @@ void ofApp::draw()
 				// This is a big param widget
 				ui.Add(amount2, OFX_IM_VSLIDER);
 			}
-			else {
-
+			else
+			{
 				// This is a default size param widget
 				ui.Add(amount2);
 			}
@@ -114,13 +136,14 @@ void ofApp::draw()
 
 			// Some useful methods to help a bit on align
 
-			//// align right
+			//// Align right
 			//{
 			//	float sz = ImGui::CalcTextSize(">").x;
 			//	ofxImGuiSurfing::AddSpacingRightAlign(sz);
 			//	ui.AddLabelBig(">");
 			//}
-			// align center
+
+			// Align center
 			{
 				float sz = ImGui::CalcTextSize(">").x;
 				float w = ui.getWidgetsWidth();

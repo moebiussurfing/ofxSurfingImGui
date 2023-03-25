@@ -15,6 +15,7 @@
     - Some key-commands examples.
     - Make blink widgets.
     - Make font bigger on widgets.
+    - Set a widget inactive.
 
 */
 

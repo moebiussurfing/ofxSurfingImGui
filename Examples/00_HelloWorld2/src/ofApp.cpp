@@ -69,7 +69,8 @@ void ofApp::draw()
 			s += "1. Bigger font\n";
 			s += "   (on above HELP text)\n";
 			s += "2. Blink text\n";
-			s += "3. Show/hide bottom widgets";
+			s += "3. Show/hide bottom widgets\n";
+			s += "4. When Enabled is false, \nSpeed will be deactivated";
 			ui.AddTooltip(s);
 
 			ui.AddSpacingBigSeparated();
@@ -105,7 +106,20 @@ void ofApp::draw()
 				if (bEnable) ui.EndBlinkText();
 
 				ui.AddSpacingBigSeparated();
-				ui.Add(speed, OFX_IM_HSLIDER);
+
+				if (!bEnable) {
+					ui.PushInactive();
+					ui.Add(speed, OFX_IM_HSLIDER);
+					ui.PopInactive();
+					s = "Widget is deactivated\nwhen Enabled is false\nSo can not be touched.";
+					ui.AddLabel(s);
+
+				}
+				else {
+					ui.Add(speed, OFX_IM_HSLIDER);
+					s = "Widget is activated\nwhen Enabled\nSo it can be touched.";
+					ui.AddTooltip(s);
+				}
 
 				if (bEnable)
 				{

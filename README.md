@@ -24,7 +24,7 @@ for **openFrameworks** projects.
 
 - Super Easy **setup**.
 - **Multiple instances** around your classes and **ofxAddons**.
-- **ofParameter helpers**:
+- **ofParameter Helpers**:
   - Many RAW **DearImGui widgets** adapted.
   - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
@@ -41,7 +41,7 @@ for **openFrameworks** projects.
     - _+Ctrl_ to Reset to min.
     - _+Alt_ to Reset to max.
 - **Themes** with **Editor** ( WIP ).
-- Windows Organizer, aligner, cascade and group/linker.
+- **Windows Organizer**, aligner, cascade and group/linker.
 - **Log System** with custom tags.
 - **Notifier System**.
 - **Text Editor** ( WIP )
@@ -118,7 +118,7 @@ void ofApp::draw()
         {
             /* Put widgets here */
 
-            ui.AddLabelBig("HELLO WORLD");
+            ui.AddLabelBig("00_HelloWorld");
             ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
             ui.Add(speed, OFX_IM_HSLIDER);
@@ -138,15 +138,11 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop) / Dear ImGui v1.89.4 / BackEnd:  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop): Dear ImGui v1.89.4 / BackEnd:  
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
-  
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers):  
-  - _Removed and partially integrated into core soon_.
 
-* [assets.zip](assets.zip):
-  - Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
+* [assets.zip](assets.zip): Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
 
 <br>
 
@@ -186,7 +182,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** / **Intel** / [OF 0.11.2](https://openframeworks.cc/download/).  
-    * Not tested on **M1**/**M2** _Apple Silicon_ yet. (Testers are welcome!).
+    * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
 
 <br>
@@ -198,7 +194,7 @@ An add-on by **moebiusSurfing**.
 
 ## THANKS
 
-_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (mantained) FORK** and some **macOS** fixes._  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK** and some **macOS** fixes._  
 
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 

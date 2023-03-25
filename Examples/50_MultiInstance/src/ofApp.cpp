@@ -53,6 +53,7 @@ void ofApp::draw()
 			// (Or independent if do not shares the ui.)
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
+			//ui.AddAdvancedToggle();
 			ui.AddSpacingBigSeparated();
 
 			//--

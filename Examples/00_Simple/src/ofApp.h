@@ -1,9 +1,22 @@
 #pragma once
 
+/*
+
+This example shows learning to:
+
+- Populate many ofParameters.
+- Populate an ofParamterGroup.
+- Use exponential helpers for sliders.
+- Populate common internal bool toggles:
+	minimize, auto resize, help windows.
+- Set and show internal and app help windows.
+
+
+*/
+
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "surfingMaths.h"
 
 class ofApp : public ofBaseApp
 {

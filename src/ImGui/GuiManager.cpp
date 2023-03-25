@@ -582,11 +582,10 @@ void SurfingGuiManager::startup()
 	{
 		// A. Help Text Box internal
 
-		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
-		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
-		//boxHelpInternal.setName(bHelpInternal.getName());
-		//boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
-		//boxHelpInternal.setup();
+		helpInternal.setCustomFonts(customFonts);
+		helpInternal.bGui.makeReferenceTo(bHelpInternal);
+		//helpInternal.setName(bHelpInternal.getName());
+		helpInternal.setTitle(bHelpInternal.getName());
 
 		buildHelpInfo();
 
@@ -594,10 +593,10 @@ void SurfingGuiManager::startup()
 
 		// B. Help Text Box app
 
-		boxHelpApp.bGui.makeReferenceTo(bHelp);
-		//boxHelpApp.setName(bHelp.getName());
-		//boxHelpApp.setPath(path_Global + "HelpBox_App/");
-		//boxHelpApp.setup();
+		helpApp.setCustomFonts(customFonts);
+		helpApp.bGui.makeReferenceTo(bHelp);
+		helpApp.setTitle(bHelp.getName());
+		//helpApp.setName(bHelp.getName());
 
 		//--
 
@@ -632,8 +631,8 @@ void SurfingGuiManager::startup()
 		bMinimize = false;
 
 		//// help
-		//boxHelpApp.setPosition(400, 10);
-		//boxHelpInternal.setPosition(800, 10);
+		//helpApp.setPosition(400, 10);
+		//helpInternal.setPosition(800, 10);
 
 		// workflow
 		bDoForceStartupResetLayout = true;
@@ -663,7 +662,8 @@ void SurfingGuiManager::buildHelpInfo()
 	//string l3 = "  ";//left indent
 
 	helpInfo = "";
-	helpInfo += "HELP INTERNAL \n\n";
+
+	//if(!helpInternal.bHeader) helpInfo += "HELP INTERNAL \n\n";
 
 	//helpInfo += "Gui Manager \n\n";
 	//helpInfo += "Double click to EDIT/LOCK \n\n";
@@ -680,56 +680,60 @@ void SurfingGuiManager::buildHelpInfo()
 
 	string st = "  ";
 
-	if (bMinimize)
-		helpInfo += "`           Minimize      " + st + " ON  \n";
-	else
-		helpInfo += "`           Minimize      " + st + " OFF \n";
-
-	if (!bMinimize)
+	//if (!bMinimize)
 	{
-		if (bHelp)
-			helpInfo += "H           Help App      " + st + " ON  \n";
+		if (bKeys)
+			helpInfo += "            Keys          " + st + " ON  \n";
 		else
-			helpInfo += "H           Help App      " + st + " OFF \n";
+			helpInfo += "            Keys          " + st + " OFF \n";
+
+		if (bMinimize)
+			helpInfo += string(bKeys ? "`" : " ") + "           Minimize      " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "`" : " ") + "           Minimize      " + st + " OFF \n";
+
+		if (bHelp)
+			helpInfo += string(bKeys ? "H" : " ") + "           Help App      " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "H" : " ") + "           Help App      " + st + " OFF \n";
 
 		if (bHelpInternal)
-			helpInfo += "I           Help Internal " + st + " ON  \n";
+			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " ON  \n";
 		else
-			helpInfo += "I           Help Internal " + st + " OFF \n";
+			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " OFF \n";
 
 		if (bLog)
-			helpInfo += "L           Log Window    " + st + " ON  \n";
+			helpInfo += string(bKeys ? "L" : " ") + "           Log Window    " + st + " ON  \n";
 		else
-			helpInfo += "L           Log Window    " + st + " OFF \n";
+			helpInfo += string(bKeys ? "L" : " ") + "           Log Window    " + st + " OFF \n";
 
 		if (bExtra)
-			helpInfo += "E           Extra         " + st + " ON  \n";
+			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " ON  \n";
 		else
-			helpInfo += "E           Extra         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " OFF \n";
 
-		if (bDebug) 
-			helpInfo += "D           Debug         " + st + " ON  \n";
+		if (bDebug)
+			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " ON  \n";
 		else
-			helpInfo += "D           Debug         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " OFF \n";
 
-		helpInfo += "\n";
-		helpInfo += "DoubleClick to Edit/Lock \n";
-		helpInfo += "LeftClick + RightClick to Close \n";
-
+		//helpInfo += "\n";
 		//helpInfo += l2;
 	}
-	else helpInfo += "\n";
+	//else helpInfo += "\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) {
 		if (bDockingLayoutPresetsEngine)
 		{
 			helpInfo += l3 + "PRESETS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "F1 F2 F3 F4 \n";
 			helpInfo += "\n";
 
 			helpInfo += l3 + "SECTIONS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "F5          LAYOUTS \n";
 			helpInfo += "F6          PANELS \n";
 			if (!bMinimize) helpInfo += "F7          MANAGER \n";
@@ -737,10 +741,12 @@ void SurfingGuiManager::buildHelpInfo()
 
 			helpInfo += l3 + "PANELS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "Ctrl+ \n";
 			helpInfo += "F1 .. F8    Panel # \n";
 			helpInfo += "A           All  \n";
 			helpInfo += "N           None \n";
+
 			if (bSolo)
 				helpInfo += "S           Solo          " + st + " ON  \n";
 			else
@@ -754,6 +760,7 @@ void SurfingGuiManager::buildHelpInfo()
 
 				helpInfo += l3 + "HOW TO \n";
 				//helpInfo += "\n";
+
 				helpInfo += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
 				//helpInfo += "\n";
 				helpInfo += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
@@ -767,6 +774,7 @@ void SurfingGuiManager::buildHelpInfo()
 
 				helpInfo += l3 + "MORE TIPS \n";
 				//helpInfo += "\n";
+
 				helpInfo += "- Disable the Minimize toggle \nto show more controls. \n";
 				//helpInfo += "\n";
 				helpInfo += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
@@ -782,7 +790,7 @@ void SurfingGuiManager::buildHelpInfo()
 		}
 	}
 
-	boxHelpInternal.setText(helpInfo);
+	helpInternal.setText(helpInfo);
 }
 
 //----
@@ -1032,28 +1040,6 @@ void SurfingGuiManager::draw()
 {
 	//TODO:
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
-
-	//--
-
-	// Draw Help boxes
-
-	// Internal
-	if (bUseHelpInfoInternal) boxHelpInternal.draw();
-	//boxHelpInternal.draw();
-	//if (bHelpInternal)
-	//{
-	//	if (bUseHelpInfoInternal) boxHelpInternal.draw();
-	//}
-
-	// App
-	if (bUseHelpInfoApp) boxHelpApp.draw();
-	//boxHelpApp.draw();
-	//if (bHelp)
-	//{
-	//	if (bUseHelpInfoApp) boxHelpApp.draw();
-	//}
-
-	//((ofApp*)ofGetAppPtr())->valueKnob8.get();
 }
 
 //--------------------------------------------------------------
@@ -1665,6 +1651,42 @@ void SurfingGuiManager::Begin()
 }
 
 //--------------------------------------------------------------
+void SurfingGuiManager::drawWindowsExtraManager() {
+
+	// Auto handles drawing of extra windows. Not required to draw manually!
+
+	// Log
+	DrawWindowLogIfEnabled();
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+	DrawNotifierIfEnabled();
+#endif
+
+	//--
+
+#ifdef FIXING_DRAW_VIEWPORT
+	if (bDrawView1) drawViewport_oFNative();
+#endif
+
+	//--
+
+	// Draw Help windows
+
+	// Internal
+	if (bUseHelpInfoInternal) {
+		if (helpInternal.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
+		helpInternal.draw();
+	}
+
+	// App
+	if (bUseHelpInfoApp) {
+		if (helpApp.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
+		helpApp.draw();
+	}
+}
+
+//--------------------------------------------------------------
 void SurfingGuiManager::End()
 {
 	// Check that it's property initialized!
@@ -1685,20 +1707,7 @@ void SurfingGuiManager::End()
 
 	//--
 
-	// Log
-	// auto handles drawing. not need to draw manually!
-	DrawWindowLogIfEnabled();
-
-	// Notifier
-#ifdef OFX_USE_NOTIFIER
-	DrawNotifierIfEnabled();
-#endif
-
-	//--
-
-#ifdef FIXING_DRAW_VIEWPORT
-	if (bDrawView1) drawViewport_oFNative();
-#endif
+	drawWindowsExtraManager();
 
 	//--
 
@@ -1711,30 +1720,7 @@ void SurfingGuiManager::End()
 	//--
 
 	// Mouse and Keyboard
-	{
-		// Mouse lockers helpers
-		// Here we check if mouse is over gui to disable other external stuff
-		// e.g. easyCam draggable moving, text input boxes, key commands...
-
-		bMouseOverGui = false;
-		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-
-		ImGuiIO& io = ImGui::GetIO();
-		bOverInputText = io.WantTextInput;
-
-		//// Debug
-		//{
-		//	ImGuiIO& io = ImGui::GetIO();
-		//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
-		//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
-		//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
-		//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
-		//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
-		//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
-		//}
-	}
+	doCheckOverGui();
 
 	//--
 
@@ -2959,12 +2945,20 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		return;
 	}
 
+	// Keys
+	else if (name == bKeys.getName())
+	{
+		buildHelpInfo();
+		return;
+	}
+
 	// Minimize
 	else if (name == bMinimize.getName())
 	{
 		buildHelpInfo();
 		return;
 	}
+
 	//else if (name == bMinimize_Presets.getName())
 	//{
 	//	buildHelpInfo();

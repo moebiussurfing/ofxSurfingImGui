@@ -553,7 +553,7 @@ public:
 public:
 
 	//--------------------------------------------------------------
-	inline void pushInactive() {
+	inline void PushInactive() {
 
 		const float a = 0.5f;
 
@@ -576,7 +576,7 @@ public:
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 	}
 	//--------------------------------------------------------------
-	inline void popInactive() {
+	inline void PopInactive() {
 		ImGui::PopItemFlag();
 
 		ImGui::PopStyleColor(6);
@@ -1545,6 +1545,33 @@ public:
 
 public:
 
+	//--------------------------------------------------------------
+	void doCheckOverGui()
+	{
+		// Mouse lockers helpers
+		// Here we check if mouse is over gui to disable other external stuff
+		// e.g. easyCam draggable moving, text input boxes, key commands...
+
+		bMouseOverGui = false;
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+
+		ImGuiIO& io = ImGui::GetIO();
+		bOverInputText = io.WantTextInput;
+
+		//// Debug
+		//{
+		//	ImGuiIO& io = ImGui::GetIO();
+		//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
+		//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
+		//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
+		//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
+		//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
+		//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
+		//}
+	}
+
 	// To disable app interactions (like camera movements) when mouse is over any ui window.
 	//--------------------------------------------------------------
 	bool isOverGui() const {
@@ -2004,11 +2031,11 @@ public:
 		this->Add(this->bNotifier, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
-//#endif
+	//#endif
 
-	//--
+		//--
 
-	//--------------------------------------------------------------
+		//--------------------------------------------------------------
 	bool AddAutoResize(bool bSeparated = false) {
 		AddAutoResizeToggle(bSeparated);
 		return bAutoResize.get();
@@ -2048,6 +2075,46 @@ public:
 	//--
 
 	//--------------------------------------------------------------
+	bool AddHelp(bool bSeparated = false) {
+		AddHelpToggle(bSeparated);
+		return bHelp.get();
+	};
+	void AddHelpToggle(bool bSeparated = false)
+	{
+		this->Add(this->bHelp, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bHelp, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isHelp() const { return bHelp.get(); }
+	bool isHelpEnabled() const { return bHelp.get(); }
+	bool isHelpDisabled() const { return !bHelp.get(); }
+
+	//--------------------------------------------------------------
+	bool AddHelpInternal(bool bSeparated = false) {
+		AddHelpInternalToggle(bSeparated);
+		return bHelpInternal.get();
+	};
+	void AddHelpInternalToggle(bool bSeparated = false)
+	{
+		this->Add(this->bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bHelpInternal, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isHelpInternal() const { return bHelpInternal.get(); }
+	bool isHelpInternalEnabled() const { return bHelpInternal.get(); }
+	bool isHelpInternalDisabled() const { return !bHelpInternal.get(); }
+
+	//--
+
+	//--------------------------------------------------------------
 	bool AddAdvanced(bool bSeparated = false) {
 		AddAdvancedToggle(bSeparated);
 		return bAdvanced.get();
@@ -2067,7 +2134,7 @@ public:
 	bool isAdvancedDisabled() const { return !bAdvanced.get(); }
 
 	//--
-	
+
 	//--------------------------------------------------------------
 	bool AddExtra(bool bSeparated = false) {
 		AddExtraToggle(bSeparated);
@@ -3435,6 +3502,9 @@ private:
 
 public:
 
+	void drawWindowsExtraManager();//will be called at End(), 
+	//to draw other internal and auto handled windows/modules.
+
 	void drawMenu();
 	void drawMenuDocked();
 
@@ -3605,11 +3675,11 @@ private:
 
 	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
-	HelpWidget boxHelpInternal;
+	HelpWidget helpInternal;
 
 	// Help App: How to use our App 
 	std::string helpInfoApp = "";
-	HelpWidget boxHelpApp;
+	HelpWidget helpApp;
 
 	// main help disablers
 	bool bUseHelpInfoInternal = false;
@@ -3620,26 +3690,27 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setEnableHelpInfoInternal(bool b) {
+	void setEnableHelpInfoInternal(bool b = true) {
 		bUseHelpInfoInternal = b;
 	}
 
 	//--------------------------------------------------------------
-	void setEnableHelpInfoApp(bool b) {
+	void setEnableHelpInfoApp(bool b = true) {
 		bUseHelpInfoApp = b;
 	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoApp(string text) {
+		if(!bUseHelpInfoApp) setEnableHelpInfoApp();//force
 		helpInfoApp = text;
-		boxHelpApp.setText(helpInfoApp);
+		helpApp.setText(helpInfoApp);
 		bUseHelpInfoApp = true;
 	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoInternal(string text) {
 		helpInfo = text;
-		boxHelpInternal.setText(helpInfo);
+		helpInternal.setText(helpInfo);
 		bUseHelpInfoInternal = true;
 	}
 	// Useful in some rare scenarios to populate or hide the enabler toggle
