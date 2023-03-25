@@ -1,3 +1,2 @@
 ofxImGui
-ofxSurfingHelpers
 ofxSurfingImGui

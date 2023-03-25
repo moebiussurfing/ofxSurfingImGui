@@ -1,4 +1,3 @@
 ofxImGui
-ofxSurfingHelpers
 ofxSurfingImGui
 ofxWindowApp

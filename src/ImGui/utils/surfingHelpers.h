@@ -24,6 +24,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void SurfSetMyMonitor(int layout = 0)
 	{
+		ofLogWarning("ofxSurfingImGui") << "SurfSetMyMonitor " << layout;
+
 		int h = 38; // window bar height on WIN_32
 		int offset = 12;
 		int hw = h - offset;
@@ -53,13 +55,13 @@ namespace ofxImGuiSurfing
 		if (path == "")
 		{
 			path = g.getName() + "_Settings.json"; // a default filename
-			ofLogWarning("ofxSurfingHelpers") << "loadGroup " << "Path is empty! Using a default instead!";
+			ofLogWarning("ofxSurfingImGui") << "loadGroup " << "Path is empty! Using a default instead!";
 		}
 
 		if (debug)
 		{
-			ofLogNotice("ofxSurfingHelpers") << "loadGroup `" << g.getName() << "` to `" << path << "`";
-			ofLogNotice("ofxSurfingHelpers") << "ofParameters: \n\n  " << g.toString();
+			ofLogNotice("ofxSurfingImGui") << "loadGroup `" << g.getName() << "` to `" << path << "`";
+			ofLogNotice("ofxSurfingImGui") << "ofParameters: \n\n  " << g.toString();
 		}
 
 		ofJson settings;
@@ -75,8 +77,8 @@ namespace ofxImGuiSurfing
 		// Returns false if no file preset yet.
 		ofFile f;
 		bool b = f.doesFileExist(path);
-		if (b) ofLogNotice("ofxSurfingHelpers") << "loadGroup: `" << g.getName() << "` at `" << path << "`";
-		else ofLogError("ofxSurfingHelpers") << "Error loading: `" << g.getName() << "` at `" << path << "` Not found!";
+		if (b) ofLogNotice("ofxSurfingImGui") << "loadGroup: `" << g.getName() << "` at `" << path << "`";
+		else ofLogError("ofxSurfingImGui") << "Error loading: `" << g.getName() << "` at `" << path << "` Not found!";
 
 		return b; // Returns true if it's ok
 	}
@@ -86,29 +88,29 @@ namespace ofxImGuiSurfing
 	{
 		if (path == "") {
 			path = g.getName() + "_Settings.json";
-			ofLogWarning("ofxSurfingHelpers") << "saveGroup " << "Path is empty! Using a default instead!";
+			ofLogWarning("ofxSurfingImGui") << "saveGroup " << "Path is empty! Using a default instead!";
 		}
 
 		if (debug) {
-			ofLogNotice("ofxSurfingHelpers") << g.getName() << " to `" << path << "`";
-			ofLogNotice("ofxSurfingHelpers") << "ofParameters: \n\n  " << g.toString();
+			ofLogNotice("ofxSurfingImGui") << g.getName() << " to `" << path << "`";
+			ofLogNotice("ofxSurfingImGui") << "ofParameters: \n\n  " << g.toString();
 		}
 
 		// Create folder if folder do not exist!
 		// From now, will not rerquire to call manually:
-		//ofxSurfingHelpers::CheckFolder(path);
+		//ofxSurfingImGui::CheckFolder(path);
 
 		if (!ofDirectory::doesDirectoryExist(ofFilePath::getEnclosingDirectory(path))) {
 			ofFilePath::createEnclosingDirectory(path);
-			ofLogWarning("ofxSurfingHelpers") << "Created enclosing folder for: " << path;
+			ofLogWarning("ofxSurfingImGui") << "Created enclosing folder for: " << path;
 		}
 
 		ofJson settings;
 		ofSerialize(settings, g);
 		bool b = ofSavePrettyJson(path, settings);
 
-		if (b) ofLogVerbose("ofxSurfingHelpers") << "Save: `" << g.getName() << "` at " << path;
-		else ofLogError("ofxSurfingHelpers") << "Error saving: `" << g.getName() << "` at " << path;
+		if (b) ofLogVerbose("ofxSurfingImGui") << "Save: `" << g.getName() << "` at " << path;
+		else ofLogError("ofxSurfingImGui") << "Error saving: `" << g.getName() << "` at " << path;
 
 		return b;
 	}
@@ -141,7 +143,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void CheckFolder(string _path)
 	{
-		//ofLogNotice("ofxSurfingHelpers")<<(__FUNCTION__) << _path;
+		//ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << _path;
 
 		//TODO: A clean alternative..
 		/*
@@ -156,7 +158,7 @@ namespace ofxImGuiSurfing
 		//// Workaround to avoid error when folders are folder/subfolder
 		//auto _fullPath = ofSplitString(_path, "/");
 		//for (int i = 0; i < _fullPath.size(); i++) {
-		//	ofLogNotice("ofxSurfingHelpers")<<(__FUNCTION__) << ofToString(i) << " " << _fullPath[i];
+		//	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ofToString(i) << " " << _fullPath[i];
 		//}
 
 		// /bin/data/
@@ -165,7 +167,7 @@ namespace ofxImGuiSurfing
 		// Check if folder path exist
 		if (!dataDirectory.isDirectory())
 		{
-			ofLogError("ofxSurfingHelpers") << (__FUNCTION__) << "FOLDER NOT FOUND! TRYING TO CREATE...";
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "FOLDER NOT FOUND! TRYING TO CREATE...";
 
 			// Try to create folder
 			bool b = dataDirectory.createDirectory(ofToDataPath(_path, true), false, true);
@@ -173,12 +175,12 @@ namespace ofxImGuiSurfing
 			// Added enable recursive to allow create nested subfolders if required
 
 			// Debug if creation has been succeded
-			if (b) ofLogNotice("ofxSurfingHelpers") << "CREATED '" << _path << "' SUCCESSFULLY!";
-			else ofLogError("ofxSurfingHelpers") << "UNABLE TO CREATE '" << _path << "' FOLDER!";
+			if (b) ofLogNotice("ofxSurfingImGui") << "CREATED '" << _path << "' SUCCESSFULLY!";
+			else ofLogError("ofxSurfingImGui") << "UNABLE TO CREATE '" << _path << "' FOLDER!";
 		}
 		else
 		{
-			ofLogVerbose("ofxSurfingHelpers") << _path << " Found!";// nothing to do
+			ofLogVerbose("ofxSurfingImGui") << _path << " Found!";// nothing to do
 		}
 	}
 

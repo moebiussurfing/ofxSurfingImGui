@@ -4,8 +4,6 @@
 
 #include "ofxSurfingImGui.h"
 
-using ofxSurfingGui = SurfingGuiManager;//TODO: fails..
-
 class ofApp : public ofBaseApp
 {
 public:

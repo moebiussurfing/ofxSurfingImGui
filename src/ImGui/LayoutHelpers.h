@@ -14,16 +14,13 @@
 
 #include "ofMain.h"
 
-//#include "imgui.h"
-//#include "imgui_internal.h"
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
 #include "GuiSugar.h"
-//#include "GuiConstants.h"
+#include "GuiConstants.h"
 
-//#include "surfingTimers.h"
 #include "surfingHelpers.h"
  
 //------------------
@@ -539,6 +536,7 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2{ width, 0 });
 		ImGui::SameLine();
 	}
+
 	////--------------------------------------------------------------
 	//inline void AddSpacingX(float x = 100)
 	//{
