@@ -3701,7 +3701,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setHelpInfoApp(string text) {
-		if(!bUseHelpInfoApp) setEnableHelpInfoApp();//force
+		if (!bUseHelpInfoApp) setEnableHelpInfoApp();//force
 		helpInfoApp = text;
 		helpApp.setText(helpInfoApp);
 		bUseHelpInfoApp = true;
@@ -3722,6 +3722,9 @@ public:
 
 	//----
 
+	// Exposed widgets from namespace ofxImGuiSurf from Combos.h
+	//TODO: should bypass that using aliases or something else.
+
 	// Button and toggle to be used faster, without param.
 
 	bool AddButton(string label, ImVec2 sz) {
@@ -3739,6 +3742,40 @@ public:
 	{
 		return ofxImGuiSurfing::AddToggle(label, bState, type, amtPerRow, bSameLine, spacing);
 	}
+
+	//--
+
+	// Combos
+
+	// a bundle of direfferent widgets for a single ofParam, int or float. 
+	template<typename ParameterType>
+	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false) {
+		return ofxImGuiSurfing::AddComboBundle(p, bMinimized);
+	}
+
+	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false) {
+		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
+	}
+	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames) {
+		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
+	}
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false) {
+		return ofxImGuiSurfing::AddComboButtonDual(pIndex, fileNames, bCycled);
+	}
+	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false) {
+		return ofxImGuiSurfing::AddComboButtonDualLefted(pIndex, fileNames, bCycled);
+	}
+	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
+	{
+		return ofxImGuiSurfing::AddComboButtonDualCenteredNames(pIndex, fileNames, bCycled);
+	}
+	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
+		return ofxImGuiSurfing::AddComboArrows(style);
+	}
+	void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
+		return ofxImGuiSurfing::AddComboArrows(paramIndex, style, cycled);
+	}
+
 
 	//----
 

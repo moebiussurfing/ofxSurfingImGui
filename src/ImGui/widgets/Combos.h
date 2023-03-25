@@ -13,6 +13,7 @@ using namespace ImGui;
 
 namespace ofxImGuiSurfing
 {
+	// Legacy. remove?
 	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
@@ -143,7 +144,7 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	//TODO: move to ofHelpers.h
+	// moved from ofHelpers.h
 
 	// Combo List. 
 
@@ -474,6 +475,7 @@ namespace ofxImGuiSurfing
 	// Lists and drop down enum / lists
 
 
+	/*
 	//TODO:
 	inline bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false);
 
@@ -503,6 +505,7 @@ namespace ofxImGuiSurfing
 
 		return b;
 	};
+	*/
 
 	//--------------------------------------------------------------
 	inline bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
