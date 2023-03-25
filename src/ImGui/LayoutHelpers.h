@@ -21,8 +21,9 @@
 #include "GuiSugar.h"
 //#include "GuiConstants.h"
 
-#include "surfingTimers.h"
-
+//#include "surfingTimers.h"
+#include "surfingHelpers.h"
+ 
 //------------------
 
 // Layout Helpers
@@ -627,7 +628,7 @@ namespace ofxImGuiSurfing
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
@@ -682,7 +683,7 @@ namespace ofxImGuiSurfing
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float v = ofxSurfingHelpers::getFadeBlink();
+			float v = getFadeBlink();
 			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 

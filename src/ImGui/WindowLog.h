@@ -984,7 +984,7 @@ namespace ofxImGuiSurfing
 
 			if (path == "") path = ofToDataPath("", true);
 			path += "\\logs";//add subfolder
-			ofxSurfingHelpers::CheckFolder(path);//create folder if required
+			CheckFolder(path);//create folder if required
 
 			string timeFormat = "%Y-%m-%d";//+date
 			timeFormat += "___%H-%M-%S";//+time

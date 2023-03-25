@@ -13,8 +13,10 @@
 #include "imgui_internal.h"
 #include "imconfig.h"
 
+#include "surfingHelpers.h"
+//#include "surfingTimers.h"
+
 #include "GuiConstants.h"
-#include "surfingTimers.h"
 #include "imgui_plot.h"
 
 #include "ofHelpers.h" // For AddImage()
@@ -194,7 +196,7 @@ namespace ofxImGuiSurfing
 			bool _bBlink = bBlink && is_hovered;
 			if (_bBlink)
 			{
-				a = ofClamp(ofxSurfingHelpers::getFadeBlink(), 0.25, 0.75);
+				a = ofClamp(getFadeBlink(), 0.25, 0.75);
 				colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 			}
 
@@ -289,7 +291,7 @@ namespace ofxImGuiSurfing
 		_bBlink = bBlink && isHover;
 		if (_bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, 0.25, 0.75);
 			colText = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -584,7 +586,7 @@ namespace ofxImGuiSurfing
 			c2 = ImGui::GetColorU32(bHover ? ImGuiCol_Text : ImGuiCol_TextDisabled);
 		}
 		float a = 1;//alpha
-		if (bHover) a = ofMap(ofxSurfingHelpers::Bounce(), 0, 1, 0.4, 1);//blink
+		if (bHover) a = ofMap(Bounce(), 0, 1, 0.4, 1);//blink
 		c1 = ImGui::GetColorU32(ImVec4(_c1.x, _c1.y, _c1.z, _c1.w * 0.35f * a));//less opacity
 
 		static bool isDraggingCircle = false;

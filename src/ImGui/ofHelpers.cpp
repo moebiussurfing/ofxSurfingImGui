@@ -642,6 +642,7 @@ namespace ofxImGuiSurfing
 		return result;
 	}
 
+	/*
 	//--------------------------------------------------------------
 	bool AddCombo(ofParameter<int>& p, std::vector<std::string> labels, bool bRaw)
 	{
@@ -688,6 +689,7 @@ namespace ofxImGuiSurfing
 
 		return result;
 	}
+	*/
 
 	//--------------------------------------------------------------
 	bool AddStepper(ofParameter<int>& p, int step, int stepFast, bool bRaw = false)
@@ -1148,49 +1150,49 @@ namespace ofxImGuiSurfing
 
 	// Lists and drop down enum / lists
 
-	//--------------------------------------------------------------
-	static auto vector_getter = [](void* vec, int idx, const char** out_text)
-	{
-		auto& vector = *static_cast<std::vector<std::string>*>(vec);
-		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		*out_text = vector.at(idx).c_str();
-		return true;
-	};
+	////--------------------------------------------------------------
+	//static auto vector_getter = [](void* vec, int idx, const char** out_text)
+	//{
+	//	auto& vector = *static_cast<std::vector<std::string>*>(vec);
+	//	if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+	//	*out_text = vector.at(idx).c_str();
+	//	return true;
+	//};
 
-	//--------------------------------------------------------------
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw)
-	{
-		const int PADDING = 0;
+	////--------------------------------------------------------------
+	//bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw)
+	//{
+	//	const int PADDING = 0;
 
-		// fix oversizes
-		// pass bRaw true to disable the widget padding and to draw it raw.
-		if (!bRaw)
-		{
-			if (label != "") ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
-			else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING);
-		}
+	//	// fix oversizes
+	//	// pass bRaw true to disable the widget padding and to draw it raw.
+	//	if (!bRaw)
+	//	{
+	//		if (label != "") ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
+	//		else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING);
+	//	}
 
 
-		if (values.empty())
-		{
-			if (!bRaw) ImGui::PopItemWidth();
-			return false;
-		}
+	//	if (values.empty())
+	//	{
+	//		if (!bRaw) ImGui::PopItemWidth();
+	//		return false;
+	//	}
 
-		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
+	//	bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
 
-		if (!bRaw) ImGui::PopItemWidth();
+	//	if (!bRaw) ImGui::PopItemWidth();
 
-		return b;
-	}
+	//	return b;
+	//}
 
-	//--------------------------------------------------------------
-	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
-	{
-		if (values.empty()) { return false; }
-		return ImGui::ListBox(label, currIndex, vector_getter,
-			static_cast<void*>(&values), values.size());
-	}
+	////--------------------------------------------------------------
+	//bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
+	//{
+	//	if (values.empty()) { return false; }
+	//	return ImGui::ListBox(label, currIndex, vector_getter,
+	//		static_cast<void*>(&values), values.size());
+	//}
 
 	////TODO:
 	//// Combo list. 

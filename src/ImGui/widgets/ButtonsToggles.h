@@ -14,7 +14,9 @@
 #include "ImGui/LayoutHelpers.h"
 #include "ImGui/widgets/GuiConstants.h"
 //#include "ImGui/utils/ofxSurfing_Timers.h"
-#include "ofxSurfingHelpers.h"
+
+#include "surfingHelpers.h"
+
 
 ////#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
 //
@@ -43,7 +45,7 @@ namespace ofxImGuiSurfing
 		// Blink
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -167,7 +169,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -309,7 +311,7 @@ namespace ofxImGuiSurfing
 		// Blink
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -430,7 +432,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -588,7 +590,7 @@ namespace ofxImGuiSurfing
 
 			if (blinkValue == -1)
 			{
-				blinkValue = ofxSurfingHelpers::getFadeBlink();
+				blinkValue = getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
@@ -1029,7 +1031,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -1100,7 +1102,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);

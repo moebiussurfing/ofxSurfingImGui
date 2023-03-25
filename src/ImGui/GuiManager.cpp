@@ -303,9 +303,9 @@ void SurfingGuiManager::setupInitiate()
 		path_ImLayouts = path_Global + "Presets/";
 
 		// Create folders if required
-		ofxSurfingHelpers::CheckFolder(path_Global);
+		CheckFolder(path_Global);
 
-		if (bUseLayoutPresetsManager) ofxSurfingHelpers::CheckFolder(path_ImLayouts);
+		if (bUseLayoutPresetsManager) CheckFolder(path_ImLayouts);
 
 		//--
 
@@ -585,8 +585,8 @@ void SurfingGuiManager::startup()
 		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
 		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
 		//boxHelpInternal.setName(bHelpInternal.getName());
-		boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
-		boxHelpInternal.setup();
+		//boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
+		//boxHelpInternal.setup();
 
 		buildHelpInfo();
 
@@ -596,8 +596,8 @@ void SurfingGuiManager::startup()
 
 		boxHelpApp.bGui.makeReferenceTo(bHelp);
 		//boxHelpApp.setName(bHelp.getName());
-		boxHelpApp.setPath(path_Global + "HelpBox_App/");
-		boxHelpApp.setup();
+		//boxHelpApp.setPath(path_Global + "HelpBox_App/");
+		//boxHelpApp.setup();
 
 		//--
 
@@ -631,9 +631,9 @@ void SurfingGuiManager::startup()
 		bHelpInternal = true;
 		bMinimize = false;
 
-		// help
-		boxHelpApp.setPosition(400, 10);
-		boxHelpInternal.setPosition(800, 10);
+		//// help
+		//boxHelpApp.setPosition(400, 10);
+		//boxHelpInternal.setPosition(800, 10);
 
 		// workflow
 		bDoForceStartupResetLayout = true;
@@ -1384,8 +1384,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 						ofColor cl = ofColor::white;
 						//ofColor cl = ofColor::orange;
 
-						//int g = 255 * ofxSurfingHelpers::Bounce(0.5);
-						int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+						//int g = 255 * Bounce(0.5);
+						int a = 255.f * ofMap(Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 						ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 						//ofColor c = ofColor(g, a);
 						ofSetColor(c);
@@ -1493,7 +1493,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 
 			// create rectangle
 			rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, availableSpace.GetWidth(), availableSpace.GetHeight());
-			float v = ofxSurfingHelpers::Bounce(1);
+			float v = Bounce(1);
 			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
 		}
 	}
@@ -1502,7 +1502,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 		auto view = ofGetCurrentViewport();
 		auto viewCenter = view.getCenter();
 		rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
-		float v = ofxSurfingHelpers::Bounce(1);
+		float v = Bounce(1);
 		rectangle_Central.setSize(view.getWidth() * v, view.getHeight() * v);
 	}
 
@@ -1512,7 +1512,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 		ofSetLineWidth(4);
 		ofColor cl = ofColor::white;
 		//ofColor cl = ofColor::yellow;
-		int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+		int a = 255.f * ofMap(Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 		ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 		ofSetColor(c);
 		ofFill();
@@ -2514,7 +2514,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 bool SurfingGuiManager::loadAppSettings()
 {
 	bool b = false;
-	if (bAutoSaveSettings) b = ofxSurfingHelpers::loadGroup(params_AppSettings, path_AppSettings, true);
+	if (bAutoSaveSettings) b = loadGroup(params_AppSettings, path_AppSettings, true);
 
 	return b;
 
@@ -2531,11 +2531,11 @@ void SurfingGuiManager::saveAppSettings()
 		//TODO:
 		// Double check again that folder exist.
 		// This is already made on setup or when a custom setName is made.
-		ofxSurfingHelpers::CheckFolder(path_Global);
+		CheckFolder(path_Global);
 		// Could use:
 		//ofFilePath::getEnclosingDirectory(O)
 
-		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings);
+		saveGroup(params_AppSettings, path_AppSettings);
 		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
 	}
 	else {
@@ -3247,13 +3247,13 @@ void SurfingGuiManager::loadLayoutImGuiIni(std::string path)
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutPresetGroup(std::string path)
 {
-	ofxSurfingHelpers::saveGroup(params_Layouts, path_ImLayouts + path + ".json");
+	saveGroup(params_Layouts, path_ImLayouts + path + ".json");
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutPresetGroup(std::string path)
 {
-	ofxSurfingHelpers::loadGroup(params_Layouts, path_ImLayouts + path + ".json");
+	loadGroup(params_Layouts, path_ImLayouts + path + ".json");
 }
 
 //----

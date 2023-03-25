@@ -2,19 +2,18 @@
 #pragma once
 
 
+//NOTE:
 /*
 
-	This class has is the main header.
-	The only one you need to include into your ofApp/Class
+	This is the main header for that toolkit/ofxAddon.
+	The only one you need to include into your ofApp/Class!
 
 */
 
-
 //----
 
+//TODO:
 /*
-
-	TODO:
 
 	IDEAS
 		- make an ofxInteractiveBoxText derived class to be used in ImGui
@@ -32,7 +31,7 @@
 	+ remake theme loader using void * functions
 	+ add tooltip with paragrag/ wrapped
 
-	API UPDATE v3 
+	API UPDATE v3
 	/ ofParams helpers
 	+ pass ImVec2 to all widgets
 	+ make templated for all types
@@ -71,7 +70,7 @@
 	+ docking overlaps sometimes on layout management
 
 	SMALL THINGS
-	+ remake mode free move and move locked simpler. 
+	+ remake mode free move and move locked simpler.
 		a flag for each window ?
 	+ aspect ratio/fit modes for game view port.
 	+ fix log ofxImGuiSurfing::WindowsOrganizer::isInitiated:
@@ -94,25 +93,21 @@
 
 */
 
-
+//BUGS:
 /*
-
-	BUGS:
 
 	Fix knobs, int knobs etc
 
 	Strings params inside paramGroups are not rendered ?
-	
+
 	It seems than special windows engine
 		puts all toggles to false by default ?
 		should store state to simply handling that maually/externally
 
 */
 
-
+//NOTES:
 /*
-
-	NOTES:
 
 	Docking Help
 	https://github.com/ocornut/imgui/issues/2109
@@ -126,13 +121,16 @@
 */
 
 
+//using ofxSurfingGui = SurfingGuiManager;
+
 //--------------------------------------------------------------
 
-#include "ofMain.h"
+//#include "ofMain.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
+//#include "ImHelpers.h"//from ofxImGui
 
 //--------------------------------------------------------------
 
@@ -143,22 +141,23 @@
 // You must include them manually from 
 // OFX_ADDON/_LIBS if you want to use it in your project.
 
-#include "ImGui/GuiManager.h"
-
-#include "ImGui/themes/ofxSurfing_ImGui_ThemesEditor.h"
-
+#include "GuiManager.h"
 
 //--------------------------------------------------------------
 
 // Alias and namespace's
 
-using namespace ofxImGuiSurfing;
+//using namespace ofxImGuiSurfing;
 
-// Short alias for the main class.
-using ofxSurfingGui = SurfingGuiManager;
+// Short alias for the main gui manager class.
+//#define ofxSurfingGui SurfingGuiManager//works but weak..
+//using ofxSurfingGui = SurfingGuiManager;//TODO: fails..
 
 //--------------------------------------------------------------
 
+// Done!
+
+//-
 
 //TODO: 
 // Make an index/summary/list of
@@ -484,7 +483,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	{
 		static bool bOpen = true;
-		ImGuiColorEditFlags _flagw = 
+		ImGuiColorEditFlags _flagw =
 			(bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
 		if (ImGui::CollapsingHeader("_Collapsing", _flagw))
@@ -500,7 +499,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	{
 		static bool bOpen = true;
-		ImGuiTreeNodeFlags _flagt = 
+		ImGuiTreeNodeFlags _flagt =
 			(bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 
 		_flagt |= ImGuiTreeNodeFlags_Framed;
@@ -611,7 +610,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	EXAMPLE
 	PREV / NEXT DUAL BUTTONS
 	THAT IS IMPLEMENTED NOW
-	INTO A CUSTOM WIDGET CALLED 
+	INTO A CUSTOM WIDGET CALLED
 	AddComboArrows(..
 
 	{
@@ -639,7 +638,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	ADD MOUSE WHEEL 
+	ADD MOUSE WHEEL
 	TO TWEAK A FLOAT PARAM
 
 	ofxImGuiSurfing::AddParameter(bpm);
@@ -698,7 +697,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	INPUT TEXT 
+	INPUT TEXT
 	WITH HUGE FONT
 
 	static ofParameter<string>i{ "input text", "" };
@@ -717,7 +716,7 @@ using ofxSurfingGui = SurfingGuiManager;
 	HOW TO CUSTOMIZE FONTS
 	AND USE DIFFERENT FONT STYLES?
 
-	NOTICE: 
+	NOTICE:
 	This is also done on GuiManager.h in the method
 	SurfingGuiManager::setupImGuiFonts()
 	By default there is 4 different font styles and sizes.
@@ -918,8 +917,8 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	THREE COLUMNS 
-	WITH A KNOB AND 
+	THREE COLUMNS
+	WITH A KNOB AND
 	2 VERTICAL SLIDERS
 	WITH A RESET BUTTON.
 	UI USED AS A POINTER REFERENCED.
@@ -955,7 +954,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	EXAMPLE
 	A BIG COMBO SELECTOR
-	WITH AN INDEX PARAM, 
+	WITH AN INDEX PARAM,
 	ARROWS, NAMES VECTOR
 	CUTE STYLED
 
@@ -997,10 +996,10 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 /*
- 
+
 	EXAMPLE
-	MAKE SOME WIDGET 
-	SMALLER THAN MINIMUM 
+	MAKE SOME WIDGET
+	SMALLER THAN MINIMUM
 	IN HEIGHT
 
 	static ofParameter<float> progress0{ "Progress 0", 0 , 0, 1 };
@@ -1082,7 +1081,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 	SNIPPET
 
-	RIGHT 
+	RIGHT
 	ALIGNED
 	WIDGETS
 	https://github.com/ocornut/imgui/issues/934#issuecomment-340231002
@@ -1128,7 +1127,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	EXAMPLE
-	POP UP. 
+	POP UP.
 	CONTEXT MENU
 
 	// 1
@@ -1180,7 +1179,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 //--------------------------------------------------------------
 // RAM IMGUI 
- 
+
 
 // WIDGET DESIGN
 
@@ -1231,7 +1230,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	GRADIENT
-	COLORED 
+	COLORED
 	BUTTONS
 
 	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
@@ -1241,8 +1240,8 @@ using ofxSurfingGui = SurfingGuiManager;
 */
 
 
- 
- 
+
+
 //--------------------------------------------------------------
 // DOCKSPACE
 
@@ -1269,7 +1268,7 @@ using ofxSurfingGui = SurfingGuiManager;
 
 /*
 
-	DOCKING 
+	DOCKING
 	NOTES
 
 	https://github.com/ocornut/imgui/issues/3521#issuecomment-737249739
@@ -1289,9 +1288,9 @@ using ofxSurfingGui = SurfingGuiManager;
 
 
 /*
- 
+
 	SNIPPET
-	VARIOUS WINDOW FLAGS. 
+	VARIOUS WINDOW FLAGS.
 	TYPICALLY YOU WOULD JUST USE THE DEFAULT!
 
 	static bool no_titlebar = false;
@@ -1356,7 +1355,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	 SNIPPET
-	 Allows to make exact width of n widgets 
+	 Allows to make exact width of n widgets
 	 to fit panel size for two buttons or columns per row:
 
 	 float h = getWidgetsHeightRelative(); // One unit height
@@ -1388,7 +1387,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 	NOTES
-	
+
 	Trying rare chars text
 	string s = "hello";
 	ofUTF8Append(s, '▽');
@@ -1434,7 +1433,7 @@ using ofxSurfingGui = SurfingGuiManager;
 /*
 
 		// SNIPPET
-		// WIDGET SLIDE WITH NAME 
+		// WIDGET SLIDE WITH NAME
 		// EXACTLY ALIGNED
 
 		static float scale = 1.f;

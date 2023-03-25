@@ -16,7 +16,8 @@
 #include "LayoutHelpers.h"
 #include "GuiConstants.h"
 
-#include "ofxSurfingHelpers.h"
+#include "surfingHelpers.h"
+
 
 //------------------------------
 

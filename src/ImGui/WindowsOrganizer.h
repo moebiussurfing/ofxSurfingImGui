@@ -99,7 +99,7 @@ namespace ofxImGuiSurfing
 				ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Saving settings";
 
 				// Save
-				ofxSurfingHelpers::saveGroup(params_AppSettings, path_Settings);
+				saveGroup(params_AppSettings, path_Settings);
 			}
 			else {
 				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Skipped Saving settings";
@@ -305,7 +305,7 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << path;
 
 			path_Global = path;
-			ofxSurfingHelpers::CheckFolder(path_Global);
+			CheckFolder(path_Global);
 
 			path_Settings = path_Global + nameLabel + "_UI_Organizer" + ".json";
 		}
@@ -1016,7 +1016,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void loadSettings()
 		{
-			ofxSurfingHelpers::loadGroup(params_AppSettings, path_Settings);
+			loadGroup(params_AppSettings, path_Settings);
 		}
 
 		//--

@@ -770,7 +770,7 @@ namespace ofxImGuiSurfing
 
 	bool AddRadio(ofParameter<int>& p, std::vector<std::string> labels, int columns = 1);
 
-	bool AddCombo(ofParameter<int>& p, std::vector<std::string> labels, bool bRaw = false);
+	//bool AddCombo(ofParameter<int>& p, std::vector<std::string> labels, bool bRaw = false);
 
 	//--
 
@@ -1133,126 +1133,321 @@ namespace ofxImGuiSurfing
 
 	//----
 
-	bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false);
-	bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values);
-
 	//TODO:
-	static bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false);
+	//public://added inline 
+	static bool bMouseWheel = true;//this was originally an internal from guiManager
 
-	//TODO:
-	// Combo list. 
-	// Selector index directly with an int ofParam
-	// without name label
+	// Helpers to populate non ofParams,
+	// Raw CPP types instead an maintain global styles.
+	// To speed up populate widgets without requiring to create ofParameters first.
+
 	//--------------------------------------------------------------
-	static bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw)
+	inline bool AddButton(string label, ImVec2 sz)
 	{
-		if (fileNames.empty()) return false;
-
-		string t = "##" + pIndex.getName();
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-		bool b = (ofxImGuiSurfing::VectorCombo(" ", &i, fileNames));
-		if (b) {
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-
-		ImGui::Spacing();
-
-		ImGui::PopID();
-
-		return b;
-	}
-
-	//--
-
-	//TODO: WIP:
-	// Hard to be implemented here..
-	// Must replace a bunch of GuiManager to move it here...
-	// A bundle of controls
-	// for a single param
-	//--------------------------------------------------------------
-	template<typename ParameterType>
-	static bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
-	{
-		string name = p.getName();
-
 		bool bReturn = false;
 
-		const auto& t = typeid(ParameterType);
-		const bool isFloat = (t == typeid(float));
-		const bool isInt = (t == typeid(int));
+		float _ww = sz.x;
+		float _h = sz.y;
 
-		if (!isFloat && !isInt) {
-			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
-			return false;
+		bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+
+		return bReturn;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		//fixes
+
+		//--
+
+		bool bReturn = false;
+		// widget width
+		// we get the sizes from the canvas layout!
+		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
+		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _h = getWidgetsHeightUnit();
+
+		switch (type)
+		{
+
+		case OFX_IM_DEFAULT:
+		case OFX_IM_BUTTON_SMALL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+			// Adding more styles
+
+			// Border 
+
+		case OFX_IM_BUTTON_SMALL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL_BORDER:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+			// Border Blink
+
+		case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
+			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true, true);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		default: {
+			ofLogWarning(__FUNCTION__) << "Could not create passed style for that widget button!";
+			ofLogWarning(__FUNCTION__) << "Widget is ignored and not drawn!";
+			break;
+		}
 		}
 
-		//TODO:
-		//// Label
-		//if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
-		//else this->AddLabelBig(p.getName(), true, true);
+		//----
 
-		//// Stepper
-		//bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
-		////bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
+		// Extra options
+		// - Same line flag.
+		// - Final y spacing.
 
-		//// Slider
-		//bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
-
-		// Arrows
-		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
+		if (bSameLine) ImGui::SameLine();
+		if (spacing != -1 && spacing != 0)
 		{
-			float step = 0;
-			if (isInt) step = 1;
-			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
-
-			//if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			//{
-			//	p -= step;
-			//	p = ofClamp(p, p.getMin(), p.getMax());
-			//	bReturn += true;
-			//}
-			//ImGui::SameLine();
-			//if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			//{
-			//	p += step;
-			//	p = ofClamp(p, p.getMin(), p.getMax());
-			//	bReturn += true;
-			//}
-		}
-		ImGui::PopButtonRepeat();
-
-		if (!bMinimized)
-		{
-			// Knob
-			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
-			//float w = this->getWidgetsWidth(1);
-			float w = ofxImGuiSurfing::getWidgetsWidth(1);
-
-			ImGuiKnobFlags flags = 0;
-			flags += ImGuiKnobFlags_NoInput;
-			flags += ImGuiKnobFlags_NoTitle;
-			flags += ImGuiKnobFlags_ValueTooltip;//not works
-			//flags += ImGuiKnobFlags_DragHorizontal;
-			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
-
-			//// mouse
-			//if (this->bMouseWheel) {
-			//	ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
-			//	ofxImGuiSurfing::GetMouseWheel();
-			//	ofxImGuiSurfing::AddMouseClickRightReset(p);
-			//}
-
-			// tooltip
-			//this->AddTooltip(p, true, false);
-			ofxImGuiSurfing::AddTooltip(p, true, false);
+			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 		}
 
 		return bReturn;
 	}
 
-	//----
+	//--
+
+	// Toggle
+
+	// Helpers to populate non ofParams,
+	// Raw CPP types instead an maintain global styles.
+	// To speed up populate widgets without requiring to create ofParameters first.
+	// A toggle passing a name and a boolean to show and get the boolean state.
+	//--------------------------------------------------------------
+	inline bool AddToggle(string label, bool& bState, ImVec2 sz)
+	{
+		bool bReturn = false;
+
+		float _ww = sz.x;
+		float _h = sz.y;
+
+		bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+		if (bMouseWheel) ofxImGuiSurfing::AddMouseWheel(bState);
+
+		return bReturn;
+	}
+
+	////--------------------------------------------------------------
+	//bool AddToggle(string label, bool& bState)
+	//{
+	//	int w = ofxImGuiSurfing::getWidgetsWidth(1);
+	//	int h = ofxImGuiSurfing::getWidgetsHeightUnit();
+	//	ImVec2 sz(w, h);
+	//	bool bReturn = false;
+	//	float _ww = sz.x;
+	//	float _h = sz.y;
+	//	bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+	//	return bReturn;
+	//}
+
+	//--------------------------------------------------------------
+	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		bool bReturn = false;
+
+		// Widget width
+		// We get the sizes from the canvas layout!
+		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
+		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
+		float _h = getWidgetsHeightUnit();
+
+		switch (type)
+		{
+
+		case OFX_IM_DEFAULT:
+		case OFX_IM_BUTTON_SMALL:
+		case OFX_IM_TOGGLE_SMALL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON:
+		case OFX_IM_TOGGLE:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_MEDIUM:
+		case OFX_IM_TOGGLE_MEDIUM:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG:
+		case OFX_IM_TOGGLE_BIG:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXL:
+		case OFX_IM_TOGGLE_BIG_XXL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_BUTTON_BIG_XXXL:
+		case OFX_IM_TOGGLE_BIG_XXXL:
+			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+			// Rounded Toggles
+
+		case OFX_IM_TOGGLE_ROUNDED_MINI:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_SMALL:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState);
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+		case OFX_IM_TOGGLE_ROUNDED_BIG:
+		case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
+			if (bMouseWheel) AddMouseWheel(bState);
+			if (bMouseWheel) bReturn |= GetMouseWheel();
+			break;
+
+			//--
+
+		default:
+			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
+			ofLogWarning("ofxSurfingImGui") << "Could not create passed style for that Toggle widget!";
+			break;
+
+		}
+
+		//----
+
+		// Extra options
+		// - Same line flag.
+		// - Final y spacing.
+
+		if (bSameLine) ImGui::SameLine();
+		if (spacing != -1 && spacing != 0)
+		{
+			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
+		}
+
+		return bReturn;
+	}
+
+
 } // namespace ofxImGuiSurfing
