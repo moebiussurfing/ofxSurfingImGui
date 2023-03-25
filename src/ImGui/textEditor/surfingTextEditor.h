@@ -63,7 +63,7 @@ public:
 
 	//--------------------------------------------------------------
 	void exit() {
-		ofxSurfingHelpers::save(params);
+		ofxImGuiSurfing::save(params);
 	}
 
 	//--------------------------------------------------------------
@@ -74,7 +74,7 @@ public:
 		params.add(bShowInfo);
 		params.add(sizeFont);
 
-		ofxSurfingHelpers::load(params);
+		ofxImGuiSurfing::load(params);
 	}
 
 	//--
