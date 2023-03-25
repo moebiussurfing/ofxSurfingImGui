@@ -183,14 +183,17 @@ namespace ImageInspect
 			}
 		}
 
-		if (0)
+		if (1)
 		{
 			ImGui::SameLine();
 
 			// center quad
 			const ImVec2 pos = pickRc.Min + ImVec2(float(zoomSize), float(zoomSize)) * quadSize;
 			draw_list->AddRect(pos, pos + quadSize, 0xFF0000FF, 0.f, 15, 2.f);
+		}
 
+			if (0)
+			{
 			// normal direction
 			ImGui::InvisibleButton("AndOneMore", ImVec2(zoomRectangleWidth, zoomRectangleWidth));
 			ImRect normRc(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());

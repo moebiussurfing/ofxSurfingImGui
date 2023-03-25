@@ -83,7 +83,7 @@ for **openFrameworks** projects.
  
 <br>
   
-## EXAMPLE: HelloWorld
+## EXAMPLE: 00_HelloWorld
 
 <br>
 

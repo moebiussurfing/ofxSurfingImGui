@@ -3717,6 +3717,28 @@ public:
 	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
 	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
 
+	//--------------------------------------------------------------
+	void SameLine() { ImGui::SameLine(); };
+
+	//----
+
+	// Button and toggle to be used faster, without param.
+
+	bool AddButton(string label, ImVec2 sz) {
+		return ofxImGuiSurfing::AddButton(label, sz);
+	}
+	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		return ofxImGuiSurfing::AddButton(label, type, amtPerRow, bSameLine, spacing);
+	}
+	bool AddToggle(string label, bool& bState, ImVec2 sz)
+	{
+		return ofxImGuiSurfing::AddToggle(label, bState, sz);
+	}
+	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		return ofxImGuiSurfing::AddToggle(label, bState, type, amtPerRow, bSameLine, spacing);
+	}
 
 	//----
 
@@ -3726,8 +3748,4 @@ public:
 	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
 
 	//----
-
-	//--------------------------------------------------------------
-	void SameLine() { ImGui::SameLine(); };
-
 };
