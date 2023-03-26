@@ -5,13 +5,13 @@ void ofApp::setup()
 {
 	ofSetFrameRate(60);
 
-	ofxSurfingHelpers::SurfSetMyMonitor(1);
+	ofxImGuiSurfing::SurfSetMyMonitor(1);
 
 	ui.setup();
 
 	textEditor.setup("myEditor");
-	load("SurfingTextEditor_Settings.json");
-	//textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
+	//load("SurfingTextEditor_Settings.json");
+	textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
 	textEditor.setCustomFonts(ui.getFontsPtr(), ui.getFontsNames());
 
 	// custom keywords

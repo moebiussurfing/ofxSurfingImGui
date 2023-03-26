@@ -12,7 +12,7 @@ using namespace std;
 
 */
 
-#define ofxSurfingHelpers ofxImGuiSurfing
+//#define ofxSurfingHelpers ofxImGuiSurfing
 //using ofxSurfingHelpers = ofxImGuiSurfing;
 
 // namespace ofxSurfingHelpers

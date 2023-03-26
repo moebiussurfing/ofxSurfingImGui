@@ -341,7 +341,7 @@ public:
 			if (w > 500) {
 				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
 				ImGui::BeginColumns("#cols", 2, fc);
-				ImGui::SetColumnWidth(1, w/2);
+				ImGui::SetColumnWidth(1, w / 2);
 				ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
 				ImGui::Columns(1);
 			}
@@ -432,6 +432,7 @@ public:
 			{
 				// Draw Text content
 				editor.Render(name.c_str());
+				ImGui::Spacing();
 			}
 			if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PopFont();
 		}
