@@ -282,11 +282,13 @@ namespace ofxImGuiSurfing
 			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
-			// Reduce y spacing
-			if (bMinimize) ofxImGuiSurfing::AddSpacingY(-8);
-			//if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
-
 			ofxImGuiSurfing::AddSpacing();
+
+			// Reduce y spacing
+			if (bMinimize) {
+				if (0) ofxImGuiSurfing::AddSpacingY(-8);
+				else ofxImGuiSurfing::Separator();
+			}
 
 			//--
 
