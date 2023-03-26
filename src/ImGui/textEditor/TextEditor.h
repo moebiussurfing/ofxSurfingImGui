@@ -14,6 +14,9 @@
 class IMGUI_API TextEditor
 {
 public:
+
+	bool bShowLineNumbers = false;
+
 	enum class PaletteIndex
 	{
 		Default,

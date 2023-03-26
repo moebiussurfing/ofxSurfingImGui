@@ -73,9 +73,11 @@ public:
 	ofParameter<bool> bMenus{ "Menus", false };
 	ofParameter<int> fontIndex{ "Font", 0, 0, 3 };
 	ofParameter<int> themeIndex{ "Theme", 0, 0, 3 };
-	ofParameter<bool> bPath{ "Full Path" , false };
-	ofParameter<bool> bBreakLines{ "BreakLines" , false };
-	ofParameter<int> lineWidth{ "LineWidth", 40, 1, 200 };//in chars
+	ofParameter<bool> bPath{ "Path" , false };
+	ofParameter<bool> bName{ "Name" , false };
+	ofParameter<bool> bBreakLines{ "BreakLines" , true };
+	ofParameter<int> lineWidth{ "LineWidth", 30, 10, 120 };//in chars
+	ofParameter<bool> bNumberLines{ "NumberLines", false };
 
 	void addKeyword(string keyword) {//call on setup
 		keywords.push_back(keyword);
@@ -177,8 +179,10 @@ public:
 		params.add(fontIndex);
 		params.add(themeIndex);
 		params.add(bPath);
+		params.add(bName);
 		params.add(lineWidth);
 		params.add(bBreakLines);
+		params.add(bNumberLines);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
@@ -301,6 +305,13 @@ public:
 
 				this->setText(textRaw);
 			}
+
+			return;
+		}
+
+		if (name == bNumberLines.getName())
+		{
+			editor.bShowLineNumbers = bNumberLines;
 
 			return;
 		}
@@ -430,28 +441,32 @@ public:
 		{
 			//ofxImGuiSurfing::AddGroup(params);
 
-			if (!bMenus) ofxImGuiSurfing::SameLineIfAvailForWidht();
+			if (!bMenus) ofxImGuiSurfing::SameLineIfAvailForWidth();
 
 			ofxImGuiSurfing::AddCheckBox(bMenus);
-			ofxImGuiSurfing::SameLineIfAvailForWidht();
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bShowInfo);
-			ofxImGuiSurfing::SameLineIfAvailForWidht();
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
 			if (bShowInfo) {
+				ofxImGuiSurfing::AddCheckBox(bName);
+				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ofxImGuiSurfing::AddCheckBox(bPath);
-				ofxImGuiSurfing::SameLineIfAvailForWidht();
+				ofxImGuiSurfing::SameLineIfAvailForWidth();
+				ofxImGuiSurfing::AddCheckBox(bNumberLines);
+				ofxImGuiSurfing::SameLineIfAvailForWidth();
 			}
 			ofxImGuiSurfing::AddCheckBox(bAdvanced);
 
-			//ofxImGuiSurfing::SameLineIfAvailForWidht();
+			//ofxImGuiSurfing::SameLineIfAvailForWidth();
 			//ofxImGuiSurfing::AddSeparatorVertical();
-			//ofxImGuiSurfing::SameLineIfAvailForWidht();
+			//ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bBreakLines);
 			if (bBreakLines) {
-				ofxImGuiSurfing::SameLineIfAvailForWidht();
+				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ImGui::PushItemWidth(90);
 				ofxImGuiSurfing::AddStepperInt(lineWidth, true);
 				ImGui::PopItemWidth();
-				ofxImGuiSurfing::SameLineIfAvailForWidht();
+				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ImGui::PushItemWidth(70);
 				ofxImGuiSurfing::AddParameter(lineWidth);
 				ImGui::PopItemWidth();
@@ -485,7 +500,7 @@ public:
 		{
 			bIntitiated = true;
 
-			//TODO: 
+			//TODO: customizable
 			// Language
 			lang = TextEditor::LanguageDefinition::C();
 			//lang = TextEditor::LanguageDefinition::Json();
@@ -537,17 +552,18 @@ public:
 
 			if (bShowInfo)
 			{
-				if (bPath) 
+				if (bPath)
 				{
 					ImGui::Text(pathEditing.c_str());
 				}
-				else 
+				if (bName)
 				{
 					if (0) {
-					pathEditingFileName = ofFilePath::getFileName(pathEditing);
-					auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
-					ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
+						pathEditingFileName = ofFilePath::getFileName(pathEditing);
+						auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
+						ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
 					}
+
 					ImGui::Text(pathEditingFileName.c_str());
 				}
 
