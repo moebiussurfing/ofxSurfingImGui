@@ -492,7 +492,7 @@ namespace ofxImGuiSurfing
 	// Push left from right border
 	// Adds x spacing to right align widgets! 
 	// i.e. 
-	// by passing the excected width of the widget 
+	// by passing the expected width of the widget 
 	// you are moving the next widget position 
 	// to the right window border.
 	// Example: 

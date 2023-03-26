@@ -5,6 +5,10 @@
 	Taken from a more updated fork!
 	https://github.com/santaclose/ImGuiColorTextEdit
 
+	Other ideas:
+	https://github.com/mekhontsev/imgui_md
+	https://github.com/juliettef/imgui_markdown
+
 */
 
 #include "ofMain.h"
@@ -14,6 +18,44 @@
 #include "ofxSurfingImGui.h"
 
 #include "TextEditor.h"
+
+//--
+
+//TODO: break lines for text formatting
+//https://stackoverflow.com/questions/6891652/formatting-a-string-into-multiple-lines-of-a-specific-length-in-c-c
+
+//#include <iostream>
+//#include <string>
+namespace ofxImGuiSurfing
+{
+	inline string splitInLines(string source, std::size_t width, string whitespace = " \t\r")
+	{
+		std::size_t  currIndex = width - 1;
+		std::size_t  sizeToElim;
+		while (currIndex < source.length())
+		{
+			currIndex = source.find_last_of(whitespace, currIndex + 1);
+			if (currIndex == string::npos)
+				break;
+			currIndex = source.find_last_not_of(whitespace, currIndex);
+			if (currIndex == string::npos)
+				break;
+			sizeToElim = source.find_first_not_of(whitespace, currIndex + 1) - currIndex - 1;
+			source.replace(currIndex + 1, sizeToElim, "\n");
+			currIndex += (width + 1); //due to the recently inserted "\n"
+		}
+		return source;
+	}
+
+	/*
+	int main() {
+		string source = "Shankle drumstick corned beef, chuck turkey chicken pork chop venison beef strip steak cow sausage. Tail short loin shoulder ball tip, jowl drumstick rump. Tail tongue ball tip meatloaf, bresaola short loin tri-tip fatback pork loin sirloin shank flank biltong. Venison short loin andouille.";
+		string result = splitInLines(source, 60);
+		std::cout << result;
+		return 0;
+	}
+	*/
+}
 
 
 //--------------------------------------------------------------
@@ -29,15 +71,17 @@ public:
 	ofParameter<bool> bShowInfo{ "Info", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bMenus{ "Menus", false };
-	ofParameter<int> font{ "Font", 0, 0, 3 };
-	ofParameter<int> theme{ "Theme", 0, 0, 3 };
+	ofParameter<int> fontIndex{ "Font", 0, 0, 3 };
+	ofParameter<int> themeIndex{ "Theme", 0, 0, 3 };
 	ofParameter<bool> bPath{ "Full Path" , false };
+	ofParameter<bool> bBreakLines{ "BreakLines" , false };
+	ofParameter<int> lineWidth{ "LineWidth", 40, 1, 200 };//in chars
 
 	void addKeyword(string keyword) {//call on setup
 		keywords.push_back(keyword);
 
 		//lang.mKeywords.insert("CPP");
-		//lang.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("CPP", TextEditor::PaletteIndex::Identifier));
+		//lang.mTokenRegexStrings.push_back(std::make_pair<string, TextEditor::PaletteIndex>("CPP", TextEditor::PaletteIndex::Identifier));
 	}
 
 private:
@@ -69,11 +113,11 @@ public:
 
 		}
 
-		font.setMax(customFonts.size() - 1);
+		fontIndex.setMax(customFonts.size() - 1);
 
 		buildFontNames();
 
-		font = font;
+		fontIndex = fontIndex;
 	};
 
 private:
@@ -94,7 +138,9 @@ private:
 	TextEditor editor;
 	TextEditor::TextEditor::LanguageDefinition lang;
 
-	std::string pathEditing = "-1"; // related to data path
+	string pathEditing = "-1"; // related to data path
+
+	string textRaw = "";
 
 	bool bIntitiated = false;
 
@@ -117,7 +163,8 @@ public:
 	void exit() {
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // exit()
 
-		ofxImGuiSurfing::save(params);
+		string p = params.getName() + "_" + name + ".json";
+		ofxImGuiSurfing::saveGroup(params, p);
 	}
 
 	//--------------------------------------------------------------
@@ -127,28 +174,59 @@ public:
 		params.add(bAdvanced);
 		params.add(bMenus);
 		params.add(bShowInfo);
-		params.add(font);
-		params.add(theme);
+		params.add(fontIndex);
+		params.add(themeIndex);
 		params.add(bPath);
+		params.add(lineWidth);
+		params.add(bBreakLines);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
-		ofxImGuiSurfing::load(params);
+		string p = params.getName() + "_" + name + ".json";
+		ofxImGuiSurfing::loadGroup(params, p);
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	string getText() const {
+	string getTextRaw() const {
+		return textRaw;
+	}
+
+	//--------------------------------------------------------------
+	string getText() const {//get editor text 
 		return editor.GetText();
 	}
 
 	//--------------------------------------------------------------
-	void setText(string str, bool bResetPathSave = true) {
-		editor.SetText(str);
+	void setTextBreakLines(string s, int widthInChars) {
+		//textRaw = s;
+
+		string ss = ofxImGuiSurfing::splitInLines(s, widthInChars);
+		editor.SetText(ss);
+	}
+
+	//--------------------------------------------------------------
+	void setText(string s) {
+		textRaw = s;
+
+		if (bBreakLines) setTextBreakLines(s, lineWidth);//split lines
+		else editor.SetText(s);
+
+		//pathEditing = "-1";
+	}
+
+	/*
+	//--------------------------------------------------------------
+	void setText(string s, bool bResetPathSave = true) {
+		textRaw = s;
+
+		if (bBreakLines) setTextBreakLines(s, lineWidth);//split lines
+		else editor.SetText(s);
 
 		if (bResetPathSave) pathEditing = "-1";
 	}
+	*/
 
 	//--------------------------------------------------------------
 	void loadText(string path) {
@@ -165,8 +243,11 @@ public:
 		std::ifstream t(fileToEdit);
 		if (t.good())
 		{
-			std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-			editor.SetText(str);
+			string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+
+			textRaw = str;
+			this->setText(str);
+
 			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
 		}
 		else {
@@ -179,9 +260,9 @@ public:
 		string name = e.getName();
 		ofLogNotice() << __FUNCTION__ << name << " : " << e;
 
-		if (name == theme.getName())
+		if (name == themeIndex.getName())
 		{
-			switch (theme)
+			switch (themeIndex)
 			{
 			case 0: editor.SetPalette(TextEditor::GetDarkPalette()); break;
 			case 1: editor.SetPalette(TextEditor::GetLightPalette()); break;
@@ -191,10 +272,34 @@ public:
 			return;
 		}
 
-		if (name == font.getName())
+		if (name == fontIndex.getName())
 		{
 			for (size_t j = 0; j < bs.size(); j++) {
-				bs[j] = (font.get() == j);
+				bs[j] = (fontIndex.get() == j);
+			}
+
+			return;
+		}
+
+		if (name == lineWidth.getName())
+		{
+			static int i = -1;
+			if (lineWidth != i) {
+				i = lineWidth;
+
+				this->setText(textRaw);
+			}
+
+			return;
+		}
+
+		if (name == bBreakLines.getName())
+		{
+			static bool b = !bBreakLines;
+			if (bBreakLines != b) {
+				b = bBreakLines;
+
+				this->setText(textRaw);
 			}
 
 			return;
@@ -212,7 +317,9 @@ public:
 			{
 				if (ImGui::MenuItem("New"))
 				{
+					setText("");
 				}
+
 				if (ImGui::MenuItem("Load"))
 				{
 					////TODO: open dialog
@@ -220,10 +327,12 @@ public:
 					//textEditor.loadText(path);
 				}
 
-				if (pathEditing != "-1")
+				//if (pathEditing != "-1")
 				{
 					if (ImGui::MenuItem("Save"))
 					{
+						////TODO: open dialog
+
 						auto textToSave = editor.GetText();
 						stringstream ssTextToSave;
 						ssTextToSave << textToSave;
@@ -232,17 +341,11 @@ public:
 						TextToFile(ofFilePath::getAbsolutePath(pathEditing), ssTextToSave, false);
 					}
 				}
-				//else {
-				//	if (ImGui::MenuItem("New!"))
-				//	{
-				//	}
-				//}
 
-				if (ImGui::MenuItem("Clear"))
-				{
-					setText("");
-					//break;
-				}
+				//if (ImGui::MenuItem("Clear"))
+				//{
+				//	setText("");
+				//}
 
 				ImGui::EndMenu();
 			}
@@ -292,13 +395,13 @@ public:
 				for (size_t i = 0; i < customFonts.size(); i++) {
 					if (ofxImGuiSurfing::MenuItemToggle(bs[i]))
 					{
-						if (bs[i]) font = i;
+						if (bs[i]) fontIndex = i;
 
 						bool bAllFalse = true;
 						for (size_t j = 0; j < bs.size(); j++) {
 							if (bs[j]) bAllFalse = false;
 						}
-						if (bAllFalse) { font = font; }//force true if has been disabled
+						if (bAllFalse) { fontIndex = fontIndex; }//force true if has been disabled
 					};
 				}
 
@@ -307,10 +410,10 @@ public:
 
 			if (ImGui::BeginMenu("Theme"))
 			{
-				if (ImGui::MenuItem("Dark palette", NULL, theme.get() == 0)) theme = 0;
-				if (ImGui::MenuItem("Light palette", NULL, theme.get() == 1)) theme = 1;
-				if (ImGui::MenuItem("Retro blue palette", NULL, theme.get() == 2)) theme = 2;
-				if (ImGui::MenuItem("Mariana palette", NULL, theme.get() == 3)) theme = 3;
+				if (ImGui::MenuItem("Dark palette", NULL, themeIndex.get() == 0)) themeIndex = 0;
+				if (ImGui::MenuItem("Light palette", NULL, themeIndex.get() == 1)) themeIndex = 1;
+				if (ImGui::MenuItem("Retro blue palette", NULL, themeIndex.get() == 2)) themeIndex = 2;
+				if (ImGui::MenuItem("Mariana palette", NULL, themeIndex.get() == 3)) themeIndex = 3;
 
 				ImGui::EndMenu();
 			}
@@ -322,9 +425,12 @@ public:
 	void drawImGuiInternal() {
 
 		if (!bMenus) ofxImGuiSurfing::AddParameter(bExtra);
+
 		if (bExtra)
 		{
 			//ofxImGuiSurfing::AddGroup(params);
+
+			if (!bMenus) ofxImGuiSurfing::SameLineIfAvailForWidht();
 
 			ofxImGuiSurfing::AddCheckBox(bMenus);
 			ofxImGuiSurfing::SameLineIfAvailForWidht();
@@ -336,16 +442,35 @@ public:
 			}
 			ofxImGuiSurfing::AddCheckBox(bAdvanced);
 
-			//make smaller if window is big
-			float w = ofxImGuiSurfing::getWidgetsWidth();
-			if (w > 500) {
-				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
-				ImGui::BeginColumns("#cols", 2, fc);
-				ImGui::SetColumnWidth(1, w / 2);
-				ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
-				ImGui::Columns(1);
+			//ofxImGuiSurfing::SameLineIfAvailForWidht();
+			//ofxImGuiSurfing::AddSeparatorVertical();
+			//ofxImGuiSurfing::SameLineIfAvailForWidht();
+			ofxImGuiSurfing::AddCheckBox(bBreakLines);
+			if (bBreakLines) {
+				ofxImGuiSurfing::SameLineIfAvailForWidht();
+				ImGui::PushItemWidth(90);
+				ofxImGuiSurfing::AddStepperInt(lineWidth, true);
+				ImGui::PopItemWidth();
+				ofxImGuiSurfing::SameLineIfAvailForWidht();
+				ImGui::PushItemWidth(70);
+				ofxImGuiSurfing::AddParameter(lineWidth);
+				ImGui::PopItemWidth();
 			}
-			else ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
+
+			//font size
+			if (customFonts.size() != 0)
+			{
+				//make smaller if window is big
+				float w = ofxImGuiSurfing::getWidgetsWidth();
+				if (w > 500) {
+					ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+					ImGui::BeginColumns("#cols", 2, fc);
+					ImGui::SetColumnWidth(1, w / 2);
+					ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+					ImGui::Columns(1);
+				}
+				else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+			}
 		}
 
 		ImGui::Spacing();
@@ -412,11 +537,17 @@ public:
 
 			if (bShowInfo)
 			{
-				if (bPath) {
+				if (bPath) 
+				{
 					ImGui::Text(pathEditing.c_str());
 				}
-				else {
+				else 
+				{
+					if (0) {
 					pathEditingFileName = ofFilePath::getFileName(pathEditing);
+					auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
+					ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
+					}
 					ImGui::Text(pathEditingFileName.c_str());
 				}
 
@@ -428,14 +559,22 @@ public:
 					editor.GetLanguageDefinitionName());
 			}
 
-			if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PushFont(customFonts[font]);
+			//ImGui::Spacing();
+			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
 			{
 				// Draw Text content
-				editor.Render(name.c_str());
-				ImGui::Spacing();
+				//editor.Render(name.c_str());
+
+				bool aParentIsFocused = false;
+				const ImVec2& aSize = ImVec2();
+				bool aBorder = 0;
+
+				editor.Render(name.c_str(), aParentIsFocused, aSize, aBorder);
 			}
-			if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PopFont();
+			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PopFont();
+			ImGui::Spacing();
 		}
+
 		ImGui::End();
 	}
 
@@ -481,7 +620,7 @@ public:
 //load content:
 //problems on char / string types... 
 
-//std::string _name = "text.txt";
+//string _name = "text.txt";
 //ofLog()<<"(&ofToDataPath(_name)[0]):" << ofToString((&ofToDataPath(_name)[0]));
 
 //string inputPath = ofFilePath::getAbsolutePath("input");
@@ -503,7 +642,7 @@ public:
 //	std::ifstream t(fileToEdit);
 //	if (t.good())
 //	{
-//		std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+//		string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 //		editor.SetText(str);
 //		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
 //	}

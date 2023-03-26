@@ -1496,8 +1496,8 @@ private:
 
 public:
 
-	vector<ImFont*> getFontsPtr() { return customFonts; }
-	vector<string> getFontsNames() { return namesCustomFonts; }
+	vector<ImFont*> getFontsPtr() { return customFonts; }//Warning: setup() must be called before!
+	vector<string> getFontsNames() { return namesCustomFonts; }//Warning: setup() must be called before!
 
 	int getNumFonts() { return customFonts.size(); }
 
@@ -3780,6 +3780,12 @@ public:
 		return ofxImGuiSurfing::AddComboArrows(paramIndex, style, cycled);
 	}
 
+	//----
+
+	void AddComboFontsSelector(ofParameter<int> &index) {
+		ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+
+	}
 
 	//----
 

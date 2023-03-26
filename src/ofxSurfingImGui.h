@@ -16,34 +16,34 @@
 /*
 
 	IDEAS
-		- make an ofxInteractiveBoxText derived class to be used in ImGui
-		- add debug info pos,sz for each window
-		- add isFirsTimeStartup() to allow force default settings
+		- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
+		- add debug info pos,sz for each window.
+		- add isFirsTimeStartup() to allow force default settings.
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
 		hover do not change color!
 		the fix the knobs colors too.
 		push buttons could be darken as if it was a 3D button..
-	+ enable floating windows/context
-	+ fix param colors
-	+ fix param string not drawn
-	+ remake theme loader using void * functions
-	+ add tooltip with paragrag/ wrapped
+	+ enable floating windows/context.
+	+ fix param colors.
+	+ fix param string not drawn.
+	+ remake theme loader using void * functions.
+	+ add tooltip with paragrag/ wrapped.
 
 	API UPDATE v3
-	/ ofParams helpers
-	+ pass ImVec2 to all widgets
-	+ make templated for all types
-	+ add multi choice flags
+	/ ofParams helpers.
+	+ pass ImVec2 to all widgets.
+	+ make templated for all types.
+	+ add multi choice flags.
 	+ add a mode to show all tooltips at same time,
 		kind of a help mode.
-		that requires deep remake of the core
+		that requires deep remake of the core.
 
 	HELPERS
-	+ fix range slider to a new widget
-		add drag from range center
-	+ useful for multi dim params
+	+ fix range slider to a new widget.
+		add drag from range center.
+	+ useful for multi dim params.
 	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
 	+ fix toggles do not trigs/return true when changes ?
 	+ add clickable label toggle widget.
@@ -54,7 +54,7 @@
 		+ nested groups are (inheriting) expanded when parent is expanded.
 
 	GENERAL
-	+ add disabler for avoid store settings
+	+ add disabler for avoid store settings.
 	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
 		something WIP with bAutoDraw..
 	+ fix workflow handling layout presets breaks when Link is enabled.
@@ -67,7 +67,7 @@
 	+ fix multiple dock spaces that are colliding/one over another.
 	+ fix view-port rectangle preview.
 	+ add video view-port example.
-	+ docking overlaps sometimes on layout management
+	+ docking overlaps sometimes on layout management.
 
 	SMALL THINGS
 	+ remake mode free move and move locked simpler.
@@ -78,7 +78,7 @@
 	NEW FEATURES
 	+ auto midi knobs to FX:
 		set the master 6 knobs.
-		auto assign to these 6 knobs
+		auto assign to these 6 knobs.
 		from current GUI editing / first plane page.
 
 	FEATURE

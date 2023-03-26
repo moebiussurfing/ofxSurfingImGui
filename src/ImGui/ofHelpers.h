@@ -823,20 +823,21 @@ namespace ofxImGuiSurfing
 	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
 
 	//--------------------------------------------------------------
-	inline bool AddStepperInt(ofParameter<int>& p)
+	inline bool AddStepperInt(ofParameter<int>& p, bool bNoLabel = false)
 	{
 		bool bChanged = false;
 		auto tmpRefi = p.get();
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		string name = p.getName();
+		string name = bNoLabel ? "" : p.getName();
 		string n = "##STEPPERint" + name;// +ofToString(1);
+
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 
-		if (ImGui::InputScalar(p.getName().c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
+		if (ImGui::InputScalar(name.c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
 		{
 			tmpRefi = ofClamp(tmpRefi, p.getMin(), p.getMax());
 			p.set(tmpRefi);
@@ -863,11 +864,12 @@ namespace ofxImGuiSurfing
 
 		string name = p.getName();
 		string n = "##STEPPERfloat" + name;
+
 		ImGui::PushID(n.c_str());
 
 		IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
 
-		if (ImGui::InputFloat(p.getName().c_str(), (float*)&tmpRef, step, stepFast))
+		if (ImGui::InputFloat(name.c_str(), (float*)&tmpRef, step, stepFast))
 		{
 			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
 			p.set(tmpRef);
