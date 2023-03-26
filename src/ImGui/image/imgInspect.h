@@ -51,6 +51,8 @@
 
 #pragma once
 
+#include "ofMain.h"
+
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
@@ -142,9 +144,13 @@ namespace ImageInspect
 	inline void inspect(const int width,
 		const int height,
 		const unsigned char* const bits,
-		ImVec2 mouseUVCoord,
+		ImVec2 mouseUVCoord_,
 		ImVec2 displayedTextureSize)
 	{
+		ImVec2 mouseUVCoord = ImVec2(
+			ofClamp(mouseUVCoord_.x, 0, 1),
+			ofClamp(mouseUVCoord_.y, 0, 1));
+
 		ImGui::BeginTooltip();
 
 		ImGui::BeginGroup();
@@ -192,8 +198,8 @@ namespace ImageInspect
 			draw_list->AddRect(pos, pos + quadSize, 0xFF0000FF, 0.f, 15, 2.f);
 		}
 
-			if (0)
-			{
+		if (0)
+		{
 			// normal direction
 			ImGui::InvisibleButton("AndOneMore", ImVec2(zoomRectangleWidth, zoomRectangleWidth));
 			ImRect normRc(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
@@ -225,29 +231,36 @@ namespace ImageInspect
 		uint32_t texel = ((uint32_t*)bits)[i];
 		//uint32_t texel = ((uint32_t*)bits)[(basey - zoomSize * 2 - 1) * width + basex];
 
-		ImVec4 color = ImColor(texel);
-		ImVec4 colHSV;
-		ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, colHSV.x, colHSV.y, colHSV.z);
-		ImGui::Text("U %1.3f V %1.3f", mouseUVCoord.x, mouseUVCoord.y);
-		ImGui::Text("Coord %d %d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
-		//ImGui::Separator();
-		//ImGui::Text("R 0x%02x  G 0x%02x  B 0x%02x", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
-		ImGui::Text("R %1.3f G %1.3f B %1.3f", color.x, color.y, color.z);
+		// size
+		ImGui::Text("w,h %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
+
+		// uv	
+		ImGui::Text("U,V %1.3f,%1.3f", mouseUVCoord.x, mouseUVCoord.y);
+
+		// coord
+		ImGui::Text("x,y %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
+
+		if (0) {
+			ImVec4 color = ImColor(texel);
+			ImVec4 colHSV;
+			ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, colHSV.x, colHSV.y, colHSV.z);
+			//ImGui::Separator();
+			//ImGui::Text("R 0x%02x  G 0x%02x  B 0x%02x", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
+			ImGui::Text("R %1.3f G %1.3f B %1.3f", color.x, color.y, color.z);
+
+			//ImGui::Separator();
+
+			//ImGui::Text(
+				//"H 0x%02x  S 0x%02x  V 0x%02x", int(colHSV.x * 255.f), int(colHSV.y * 255.f), int(colHSV.z * 255.f));
+			ImGui::Text("H %1.3f S %1.3f V %1.3f", colHSV.x, colHSV.y, colHSV.z);
+
+			//ImGui::Separator();
+
+			//ImGui::Text("Alpha 0x%02x", int(color.w * 255.f));
+			ImGui::Text("Alpha %1.3f", color.w);
+		}
 
 		//ImGui::Separator();
-
-		//ImGui::Text(
-			//"H 0x%02x  S 0x%02x  V 0x%02x", int(colHSV.x * 255.f), int(colHSV.y * 255.f), int(colHSV.z * 255.f));
-		ImGui::Text("H %1.3f S %1.3f V %1.3f", colHSV.x, colHSV.y, colHSV.z);
-
-		//ImGui::Separator();
-
-		//ImGui::Text("Alpha 0x%02x", int(color.w * 255.f));
-		ImGui::Text("Alpha %1.3f", color.w);
-
-		//ImGui::Separator();
-
-		ImGui::Text("Size %d, %d", int(displayedTextureSize.x), int(displayedTextureSize.y));
 
 		ImGui::EndGroup();
 
