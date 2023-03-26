@@ -30,26 +30,76 @@ public:
 	ofParameter<bool> bGui{ "TextEditor", true };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bShowInfo{ "Info", false };
+	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bMenus{ "Menus", false };
-	ofParameter<int> sizeFont{ "Size", 0, 0, 3 };
+	ofParameter<int> font{ "Font", 0, 0, 3 };
+	ofParameter<int> theme{ "Theme", 0, 0, 3 };
+
+	void addKeyword(string keyword) {//call on setup
+		keywords.push_back(keyword);
+
+		//lang.mKeywords.insert("CPP");
+		//lang.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("CPP", TextEditor::PaletteIndex::Identifier));
+	}
 
 private:
+	void buildFontNames() {
+		if (bs.size() != 0) bs.clear();
+		for (size_t i = 0; i < customFonts.size(); i++) {
+			string n = namesCustomFonts[i];
+			ofParameter<bool> pb{ n, false };
+			bs.emplace_back(pb);
+			//bs.push_back(pb);
+		}
+	};
+public:
+	void setCustomFonts(vector<ImFont*> f, vector<string> names)
+	{
+		setCustomFontsNames(names);
+		setCustomFonts(f);
+	};
+	void setCustomFontsNames(vector<string> names)
+	{
+		namesCustomFonts = names;
+	};
+	void setCustomFonts(vector<ImFont*> f)
+	{
+		customFonts = f;
+
+		if (customFonts.size() == 0) {
+			ofLogError("ofxSurfingImGui:SurfingLog") << "It looks that not any extra font styles are added!";
+
+		}
+
+		font.setMax(customFonts.size() - 1);
+
+		buildFontNames();
+
+		font = font;
+	};
+
+private:
+	vector<ofParameter<bool>> bs;
+
+private:
+
+	vector<ImFont*> customFonts;
+	vector<string> namesCustomFonts;
+
+	vector<string> keywords;
+
 	string name = "Text Editor Demo";
 
-	//std::string *textContent;
-
-	//static const char* fileToEdit = "ImGuiColorTextEdit/TextEditor.cpp";
 	char* fileToEdit;
 
 	TextEditor editor;
-
 	TextEditor::TextEditor::LanguageDefinition lang;
 
-	std::string pathEditing = "-1"; // realted to data path
+	std::string pathEditing = "-1"; // related to data path
 
 	bool bIntitiated = false;
 
-	//-
+	//--
 
 public:
 
@@ -63,6 +113,8 @@ public:
 
 	//--------------------------------------------------------------
 	void exit() {
+		ofRemoveListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // exit()
+
 		ofxImGuiSurfing::save(params);
 	}
 
@@ -70,9 +122,13 @@ public:
 	void setup() {
 		params.add(bGui);
 		params.add(bExtra);
+		params.add(bAdvanced);
 		params.add(bMenus);
 		params.add(bShowInfo);
-		params.add(sizeFont);
+		params.add(font);
+		params.add(theme);
+
+		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
 		ofxImGuiSurfing::load(params);
 	}
@@ -115,6 +171,33 @@ public:
 		}
 	}
 
+	void Changed_Params(ofAbstractParameter& e)
+	{
+		string name = e.getName();
+		ofLogNotice() << __FUNCTION__ << name << " : " << e;
+
+		if (name == theme.getName())
+		{
+			switch (theme)
+			{
+			case 0: editor.SetPalette(TextEditor::GetDarkPalette()); break;
+			case 1: editor.SetPalette(TextEditor::GetLightPalette()); break;
+			case 2: editor.SetPalette(TextEditor::GetRetroBluePalette()); break;
+			case 3: editor.SetPalette(TextEditor::GetMarianaPalette()); break;
+			}
+			return;
+		}
+
+		if (name == font.getName())
+		{
+			for (size_t j = 0; j < bs.size(); j++) {
+				bs[j] = (font.get() == j);
+			}
+
+			return;
+		}
+	}
+
 	//--
 
 	//--------------------------------------------------------------
@@ -124,6 +207,9 @@ public:
 		{
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("New"))
+				{
+				}
 				if (ImGui::MenuItem("Load"))
 				{
 					////TODO: open dialog
@@ -143,11 +229,11 @@ public:
 						TextToFile(ofFilePath::getAbsolutePath(pathEditing), ssTextToSave, false);
 					}
 				}
-				else {
-					if (ImGui::MenuItem("New!"))
-					{
-					}
-				}
+				//else {
+				//	if (ImGui::MenuItem("New!"))
+				//	{
+				//	}
+				//}
 
 				if (ImGui::MenuItem("Clear"))
 				{
@@ -165,9 +251,9 @@ public:
 					editor.SetReadOnly(ro);
 				ImGui::Separator();
 
-				if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, !ro && editor.CanUndo()))
+				if (ImGui::MenuItem("Undo", "Ctrl-Z", nullptr, !ro && editor.CanUndo()))
 					editor.Undo();
-				if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, !ro && editor.CanRedo()))
+				if (ImGui::MenuItem("Redo", "Ctrl-Shift-Z", nullptr, !ro && editor.CanRedo()))
 					editor.Redo();
 
 				ImGui::Separator();
@@ -191,12 +277,38 @@ public:
 
 			if (ImGui::BeginMenu("View"))
 			{
-				if (ImGui::MenuItem("Dark palette"))
-					editor.SetPalette(TextEditor::GetDarkPalette());
-				if (ImGui::MenuItem("Light palette"))
-					editor.SetPalette(TextEditor::GetLightPalette());
-				if (ImGui::MenuItem("Retro blue palette"))
-					editor.SetPalette(TextEditor::GetRetroBluePalette());
+				ofxImGuiSurfing::MenuItemToggle(bExtra);
+				ofxImGuiSurfing::MenuItemToggle(bAdvanced);
+				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Font"))
+			{
+				for (size_t i = 0; i < customFonts.size(); i++) {
+					if (ofxImGuiSurfing::MenuItemToggle(bs[i]))
+					{
+						if(bs[i]) font = i;
+
+						bool bAllFalse = true;
+						for (size_t j = 0; j < bs.size(); j++) {
+							if (bs[j]) bAllFalse = false;
+						}
+						if (bAllFalse) { font = font; }//force true if has been disabled
+					};
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Theme"))
+			{
+				if (ImGui::MenuItem("Dark palette", NULL, theme.get() == 0)) theme = 0;
+				if (ImGui::MenuItem("Light palette", NULL, theme.get() == 1)) theme = 1;
+				if (ImGui::MenuItem("Retro blue palette", NULL, theme.get() == 2)) theme = 2;
+				if (ImGui::MenuItem("Mariana palette", NULL, theme.get() == 3)) theme = 3;
+
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
@@ -205,9 +317,14 @@ public:
 
 	//--------------------------------------------------------------
 	void drawImGuiInternal() {
-		ofxImGuiSurfing::AddParameter(bExtra);
-		if (bExtra) {
-			ofxImGuiSurfing::AddGroup(params);
+		if (!bMenus) ofxImGuiSurfing::AddParameter(bExtra);
+		if (bExtra)
+		{
+			//ofxImGuiSurfing::AddGroup(params);
+			ofxImGuiSurfing::AddCheckBox(bShowInfo);
+			ofxImGuiSurfing::AddCheckBox(bMenus);
+			ofxImGuiSurfing::AddCheckBox(bAdvanced);
+			ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
 		}
 	}
 
@@ -220,21 +337,28 @@ public:
 		{
 			bIntitiated = true;
 
+			// Language
 			lang = TextEditor::LanguageDefinition::C();
 			//lang = TextEditor::LanguageDefinition::Json();
 			//lang = TextEditor::LanguageDefinition::Lua();
 
-			editor.SetLanguageDefinition(lang);
-
-			if (1) {
-				editor.SetShowWhitespaces(true);
-				editor.SetShowShortTabGlyphs(true);
-				editor.SetColorizerEnable(true);
+			//TODO: custom tags
+			for (auto& k : keywords) {
+				lang.mKeywords.insert(k);
 			}
 
-			//editor.SetPalette(TextEditor::GetLightPalette());
-			//editor.SetPalette(TextEditor::GetDarkPalette());
-			editor.SetPalette(TextEditor::GetMarianaPalette());
+			editor.SetLanguageDefinition(lang);
+		}
+
+		//--
+
+		static bool bAdvanced_ = !bAdvanced.get();
+		if (bAdvanced_ = !bAdvanced.get()) {
+			bAdvanced_ = bAdvanced.get();
+
+			editor.SetShowWhitespaces(bAdvanced.get());
+			editor.SetShowShortTabGlyphs(bAdvanced.get());
+			editor.SetColorizerEnable(bAdvanced.get());
 		}
 
 		//--
@@ -260,7 +384,8 @@ public:
 		//string baseName = ofFilePath::getFileName(pathEditing);
 		//static string baseName = ofFilePath::getFileName(ofFilePath::getAbsolutePath(pathEditing));
 
-		if (bShowInfo) {
+		if (bShowInfo)
+		{
 			//ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s",
 			//	cpos.mLine + 1,
 			//	cpos.mColumn + 1,
@@ -283,8 +408,16 @@ public:
 			);
 		}
 
-		editor.Render(name.c_str());
-		//editor.Render("TextEditor");
+		// Draw Text content
+
+		if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PushFont(customFonts[font]);
+		{
+
+			editor.Render(name.c_str());
+			//editor.Render("TextEditor");
+
+		}
+		if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PopFont();
 
 		ImGui::End();
 	}

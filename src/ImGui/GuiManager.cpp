@@ -378,6 +378,18 @@ void SurfingGuiManager::setupImGuiFonts()
 		// Font huge xxl
 		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge xxl font too
 
+		//TODO: 
+		// WARNING! 
+		// these names could be copied to GuiManager too!
+		// take care if both sizes fonts/names changed! 
+		// this is hardcoded now!
+		// Font sizes
+		namesCustomFonts.clear();
+		namesCustomFonts.push_back("DEFAULT");
+		namesCustomFonts.push_back("BIG");
+		namesCustomFonts.push_back("HUGE");
+		namesCustomFonts.push_back("HUGE_XXL");
+
 		//--
 
 		// Set default
@@ -558,7 +570,8 @@ void SurfingGuiManager::startup()
 
 	// Log
 	// pass fonts to allow styles switching
-	log.setCustomFonts(customFonts);
+	log.setCustomFonts(customFonts, namesCustomFonts);
+	//log.setCustomFontsNames(namesCustomFonts);
 	//log.bGui.makeReferenceTo(bLog);
 
 	// Notifier

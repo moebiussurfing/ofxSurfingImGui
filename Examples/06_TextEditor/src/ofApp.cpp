@@ -5,12 +5,20 @@ void ofApp::setup()
 {
 	ofSetFrameRate(60);
 
+	ofxSurfingHelpers::SurfSetMyMonitor(1);
+	//ofxImGuiSurfing::SurfSetMyMonitor(1);
+
 	ui.setup();
 
 	textEditor.setup("myEditor");
-
 	textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
-	//textEditor.loadText(ofToDataPath("files/ofxSurfingTextSubtitle_Settings.json", true));
+	textEditor.setCustomFonts(ui.getFontsPtr(), ui.getFontsNames());
+
+	// custom keywords
+	textEditor.addKeyword("CPP");
+	textEditor.addKeyword("C++");
+	textEditor.addKeyword("the");
+	textEditor.addKeyword("a");
 }
 
 //--------------------------------------------------------------
@@ -38,7 +46,7 @@ void ofApp::keyPressed(int key)
 	switch (key)
 	{
 	case '1': {
-		string path = ofToDataPath("files/ofxSurfingTextSubtitle_Settings.json", true);
+		string path = ofToDataPath("SurfingTextEditor_Settings.json", true);
 		textEditor.loadText(path);
 		break;
 	}

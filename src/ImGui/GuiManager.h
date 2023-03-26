@@ -1492,8 +1492,28 @@ private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
 	bool bIgnoreNextPopFont = false;
+	vector<string> namesCustomFonts;
 
 public:
+
+	vector<ImFont*> getFontsPtr() { return customFonts; }
+	vector<string> getFontsNames() { return namesCustomFonts; }
+
+	int getNumFonts() { return customFonts.size(); }
+
+	//--------------------------------------------------------------
+	string getFontName(int index) {
+		string s = "UNKNOWN";
+
+		if (index < customFonts.size())
+		{
+			if (customFonts[index] != nullptr)
+				s = (customFonts[index]->ConfigData->Name);
+			return s;
+		}
+
+		return s;
+	}
 
 	void clearFonts();
 
@@ -1524,22 +1544,6 @@ public:
 	//NEW
 	void PushFont(SurfingFontTypes style);
 	void PopFont();
-
-	int getNumFonts() { return customFonts.size(); }
-
-	//--------------------------------------------------------------
-	string getFontName(int index) {
-		string s = "UNKNOWN";
-
-		if (index < customFonts.size())
-		{
-			if (customFonts[index] != nullptr)
-				s = (customFonts[index]->ConfigData->Name);
-			return s;
-		}
-
-		return s;
-	}
 
 	//----
 

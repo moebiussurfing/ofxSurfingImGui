@@ -12,6 +12,9 @@ using namespace std;
 
 */
 
+#define ofxSurfingHelpers ofxImGuiSurfing
+//using ofxSurfingHelpers = ofxImGuiSurfing;
+
 // namespace ofxSurfingHelpers
 namespace ofxImGuiSurfing
 {
@@ -188,7 +191,7 @@ namespace ofxImGuiSurfing
 
 	//----
 
-}; // namespace  
+} // namespace  
 
 //namespace ofxSurfingHelpers
 namespace ofxImGuiSurfing
@@ -327,4 +330,4 @@ namespace ofxImGuiSurfing
 		float smooth = (target < value) ? smooth0 : smooth1;
 		ofxKuValueSmooth(value, target, smooth);
 	}
-};
+}

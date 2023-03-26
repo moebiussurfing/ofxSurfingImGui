@@ -1090,7 +1090,15 @@ namespace ofxImGuiSurfing
 		// API: workflow during draw to switch between font styles
 
 	public:
-
+		void setCustomFonts(vector<ImFont*> f, vector<string> names)
+		{
+			setCustomFontsNames(names);
+			setCustomFonts(f);
+		};
+		void setCustomFontsNames(vector<string> names)
+		{
+			namesCustomFonts = names;
+		};
 		void setCustomFonts(vector<ImFont*> f)
 		{
 			customFonts = f;
@@ -1101,18 +1109,6 @@ namespace ofxImGuiSurfing
 			}
 
 			indexSizeFont.setMax(customFonts.size() - 1);
-
-			//TODO: 
-			// WARNING! 
-			// these names could be copied to GuiManager too!
-			// take care if both sizes fonts/names changed! 
-			// this is hardcoded now!
-			// Font sizes
-			namesCustomFonts.clear();
-			namesCustomFonts.push_back("DEFAULT");
-			namesCustomFonts.push_back("BIG");
-			namesCustomFonts.push_back("HUGE");
-			namesCustomFonts.push_back("HUGE_XXL");
 		};
 
 	private:

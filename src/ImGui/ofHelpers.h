@@ -1454,4 +1454,17 @@ namespace ofxImGuiSurfing
 	}
 
 
+	//--------------------------------------------------------------
+	inline bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
+	{
+		string label = pb.getName();
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+
 } // namespace ofxImGuiSurfing

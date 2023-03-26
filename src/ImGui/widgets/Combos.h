@@ -13,7 +13,6 @@ using namespace ImGui;
 
 namespace ofxImGuiSurfing
 {
-	// Legacy. remove?
 	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
 	{
@@ -26,14 +25,14 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false)
 	{
-		const int PADDING = 0;
+		//const int PADDING = 0;
 
 		// fix oversizes
 		// pass bRaw true to disable the widget padding and to draw it raw.
 		if (!bRaw)
 		{
 			if (label != "") ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING_COMBO);
-			else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - PADDING);
+			else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		}
 
 
