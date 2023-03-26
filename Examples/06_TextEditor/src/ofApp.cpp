@@ -6,12 +6,12 @@ void ofApp::setup()
 	ofSetFrameRate(60);
 
 	ofxSurfingHelpers::SurfSetMyMonitor(1);
-	//ofxImGuiSurfing::SurfSetMyMonitor(1);
 
 	ui.setup();
 
 	textEditor.setup("myEditor");
-	textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
+	load("SurfingTextEditor_Settings.json");
+	//textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
 	textEditor.setCustomFonts(ui.getFontsPtr(), ui.getFontsNames());
 
 	// custom keywords
@@ -45,25 +45,19 @@ void ofApp::keyPressed(int key)
 
 	switch (key)
 	{
-	case '1': {
-		string path = ofToDataPath("SurfingTextEditor_Settings.json", true);
-		textEditor.loadText(path);
-		break;
-	}
-	case '2': {
-		string path = ofToDataPath("files/text1.txt", true);
-		textEditor.loadText(path);
-		break;
-	}
-	case '3': {
-		string path = ofToDataPath("files/text2.txt", true);
-		textEditor.loadText(path);
-		break;
-	}
+	case '1': load("SurfingTextEditor_Settings.json"); break;
+	case '2': load("files/text1.txt"); break;
+	case '3': load("files/text2.txt"); break;
 	case '4': {
 		string str = "Garc�a Castell�n pone la X de Kitchen a Fern�ndez D�az\n y tapona la investigaci�n a Rajoy, \nla c�pula del PP y \nel CNI El juez \ndetermina que la decisi�n \nde espiar a B�rcenas con \nfondos reservados para evitar problemas judiciales \nal presidente y a Cospedal no \ntrascendi� del Ministerio del Interior.\nEl cierre de la instrucci�n llega \ncuando Anticorrupci�n apunta al CNI en \nel episodio del 'falso cura\n' e investiga una segunda Kitchen \nen la c�rcel";
 		textEditor.setText(str);
 		break;
 	}
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::load(string _path) {
+	string path = ofToDataPath(_path, true);
+	textEditor.loadText(path);
 }

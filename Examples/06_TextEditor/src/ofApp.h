@@ -21,4 +21,5 @@ public:
 	ofxSurfingGui ui;
 
 	SurfingTextEditor textEditor;
+	void load(string path);
 };

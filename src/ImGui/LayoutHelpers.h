@@ -227,6 +227,11 @@ namespace ofxImGuiSurfing
 
 	// NEW API:
 	//--------------------------------------------------------------
+	inline void SameLineIfAvailForWidht(float w = 140)
+	{
+		if (ImGui::GetContentRegionAvail().x > w) ImGui::SameLine();
+	}
+	//--------------------------------------------------------------
 	inline float getWindowWidthAvail()
 	{
 		return ImGui::GetContentRegionAvail().x;

@@ -2,19 +2,16 @@
 
 /*
 
-More updated fork.
-https://github.com/santaclose/ImGuiColorTextEdit
+	Taken from a more updated fork!
+	https://github.com/santaclose/ImGuiColorTextEdit
 
 */
 
 #include "ofMain.h"
 
-//#include <fstream>
-//#include <streambuf>
-
-#include "ofxSurfingImGui.h"
-//#include "ofHelpers.h"
 //#include "imgui.h"
+//#include "ofHelpers.h"
+#include "ofxSurfingImGui.h"
 
 #include "TextEditor.h"
 
@@ -34,6 +31,7 @@ public:
 	ofParameter<bool> bMenus{ "Menus", false };
 	ofParameter<int> font{ "Font", 0, 0, 3 };
 	ofParameter<int> theme{ "Theme", 0, 0, 3 };
+	ofParameter<bool> bPath{ "Full Path" , false };
 
 	void addKeyword(string keyword) {//call on setup
 		keywords.push_back(keyword);
@@ -80,6 +78,7 @@ public:
 
 private:
 	vector<ofParameter<bool>> bs;
+	string pathEditingFileName;
 
 private:
 
@@ -103,7 +102,10 @@ private:
 
 public:
 
-	void setName(string n) { name = n; }
+	void setName(string n) {
+		name = n;
+		bGui.setName(n);
+	}
 
 	//--------------------------------------------------------------
 	void setup(string name) {
@@ -127,6 +129,7 @@ public:
 		params.add(bShowInfo);
 		params.add(font);
 		params.add(theme);
+		params.add(bPath);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
@@ -289,7 +292,7 @@ public:
 				for (size_t i = 0; i < customFonts.size(); i++) {
 					if (ofxImGuiSurfing::MenuItemToggle(bs[i]))
 					{
-						if(bs[i]) font = i;
+						if (bs[i]) font = i;
 
 						bool bAllFalse = true;
 						for (size_t j = 0; j < bs.size(); j++) {
@@ -317,15 +320,35 @@ public:
 
 	//--------------------------------------------------------------
 	void drawImGuiInternal() {
+
 		if (!bMenus) ofxImGuiSurfing::AddParameter(bExtra);
 		if (bExtra)
 		{
 			//ofxImGuiSurfing::AddGroup(params);
-			ofxImGuiSurfing::AddCheckBox(bShowInfo);
+
 			ofxImGuiSurfing::AddCheckBox(bMenus);
+			ofxImGuiSurfing::SameLineIfAvailForWidht();
+			ofxImGuiSurfing::AddCheckBox(bShowInfo);
+			ofxImGuiSurfing::SameLineIfAvailForWidht();
+			if (bShowInfo) {
+				ofxImGuiSurfing::AddCheckBox(bPath);
+				ofxImGuiSurfing::SameLineIfAvailForWidht();
+			}
 			ofxImGuiSurfing::AddCheckBox(bAdvanced);
-			ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
+
+			//make smaller if window is big
+			float w = ofxImGuiSurfing::getWidgetsWidth();
+			if (w > 500) {
+				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+				ImGui::BeginColumns("#cols", 2, fc);
+				ImGui::SetColumnWidth(1, w/2);
+				ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
+				ImGui::Columns(1);
+			}
+			else ofxImGuiSurfing::AddComboButtonDualLefted(font, namesCustomFonts);
 		}
+
+		ImGui::Spacing();
 	}
 
 	//--------------------------------------------------------------
@@ -337,12 +360,13 @@ public:
 		{
 			bIntitiated = true;
 
+			//TODO: 
 			// Language
 			lang = TextEditor::LanguageDefinition::C();
 			//lang = TextEditor::LanguageDefinition::Json();
 			//lang = TextEditor::LanguageDefinition::Lua();
 
-			//TODO: custom tags
+			// Custom tags
 			for (auto& k : keywords) {
 				lang.mKeywords.insert(k);
 			}
@@ -350,10 +374,11 @@ public:
 			editor.SetLanguageDefinition(lang);
 		}
 
-		//--
+		//----
 
 		static bool bAdvanced_ = !bAdvanced.get();
-		if (bAdvanced_ = !bAdvanced.get()) {
+		if (bAdvanced_ != bAdvanced.get())
+		{
 			bAdvanced_ = bAdvanced.get();
 
 			editor.SetShowWhitespaces(bAdvanced.get());
@@ -369,62 +394,54 @@ public:
 		f += ImGuiWindowFlags_HorizontalScrollbar;
 		if (bMenus) f += ImGuiWindowFlags_MenuBar;
 
-		ImGui::SetWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
-		ImGui::Begin(name.c_str(), nullptr, f);
+		//fix 
+		//if (!bMenus && !bExtra)bExtra = 1;
 
-		if (bMenus) {
-			drawImGuiMenus();
-		}
+		//ImGui::Begin(name.c_str(), nullptr, f);
 
-		drawImGuiInternal();
+		auto& p = bGui;
+		bool tmp = p.get();
+		if (tmp) ImGui::SetWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+		ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
+		if (p.get() != tmp) p.set(tmp);
 
-		//std::filesystem::path filepath = ofFilePath::getAbsolutePath(pathEditing);
-		//ofFilePath filepath = (ofFilePath::getAbsolutePath(pathEditing));
-		//string name = filepath.getFileName();
-		//string baseName = ofFilePath::getFileName(pathEditing);
-		//static string baseName = ofFilePath::getFileName(ofFilePath::getAbsolutePath(pathEditing));
-
-		if (bShowInfo)
 		{
-			//ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s",
-			//	cpos.mLine + 1,
-			//	cpos.mColumn + 1,
-			//	editor.GetTotalLines(),
-			//	editor.IsOverwrite() ? "Ovr" : "Ins",
-			//	editor.CanUndo() ? "*" : " ",
-			//	editor.GetLanguageDefinitionName(),
-			//	//editor.GetLanguageDefinition().mName.c_str(),
-			//	pathEditing.c_str()
-			//	//baseName.c_str()
-			//);
+			if (bMenus) drawImGuiMenus();
 
-			ImGui::Text(pathEditing.c_str());
+			drawImGuiInternal();
 
-			ImGui::Text("%6d/%-6d %6d lines  | %s",
-				cpos.mLine + 1,
-				cpos.mColumn + 1,
-				editor.GetTotalLines(),
-				editor.IsOverwrite() ? "Ovr" : "Ins"
-			);
+			if (bShowInfo)
+			{
+				if (bPath) {
+					ImGui::Text(pathEditing.c_str());
+				}
+				else {
+					pathEditingFileName = ofFilePath::getFileName(pathEditing);
+					ImGui::Text(pathEditingFileName.c_str());
+				}
+
+				ImGui::Text("%4d/%-4d %4d lines | %s | %s",
+					cpos.mLine + 1,
+					cpos.mColumn + 1,
+					editor.GetTotalLines(),
+					editor.IsOverwrite() ? "Ovr" : "Ins",
+					editor.GetLanguageDefinitionName());
+			}
+
+			if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PushFont(customFonts[font]);
+			{
+				// Draw Text content
+				editor.Render(name.c_str());
+			}
+			if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PopFont();
 		}
-
-		// Draw Text content
-
-		if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PushFont(customFonts[font]);
-		{
-
-			editor.Render(name.c_str());
-			//editor.Render("TextEditor");
-
-		}
-		if (font < customFonts.size()) if (customFonts[font] != nullptr) ImGui::PopFont();
-
 		ImGui::End();
 	}
 
-	//-
+	//--
 
-	// added
+	//TODO: add open/save dialog
+
 	//--------------------------------------------------------------
 	bool TextToFile(const string& Path, const stringstream& Args, bool Append)
 	{
