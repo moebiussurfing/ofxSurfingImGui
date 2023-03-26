@@ -131,7 +131,7 @@ namespace ImageInspect
 		}
 	}
 
-	inline void drawNormal(ImDrawList* draw_list, const ImRect& rc, float x, float y)
+	inline void drawNormal(ImDrawList* draw_list, const ImRect& rc, float x, float y, ofColor* c = nullptr)
 	{
 		draw_list->AddCircle(rc.GetCenter(), rc.GetWidth() / 2.f, 0x20AAAAAA, 24, 1.f);
 		draw_list->AddCircle(rc.GetCenter(), rc.GetWidth() / 4.f, 0x20AAAAAA, 24, 1.f);
@@ -145,7 +145,7 @@ namespace ImageInspect
 		const int height,
 		const unsigned char* const bits,
 		ImVec2 mouseUVCoord_,
-		ImVec2 displayedTextureSize)
+		ImVec2 displayedTextureSize, ofColor* c = nullptr)
 	{
 		ImVec2 mouseUVCoord = ImVec2(
 			ofClamp(mouseUVCoord_.x, 0, 1),
@@ -240,8 +240,14 @@ namespace ImageInspect
 		// coord
 		ImGui::Text("x,y %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
 
+		ImVec4 color = ImColor(texel);
+		if (c != nullptr)
+		{
+			c->set(color);
+		}
+
+		// color
 		if (0) {
-			ImVec4 color = ImColor(texel);
 			ImVec4 colHSV;
 			ImGui::ColorConvertRGBtoHSV(color.x, color.y, color.z, colHSV.x, colHSV.y, colHSV.z);
 			//ImGui::Separator();
