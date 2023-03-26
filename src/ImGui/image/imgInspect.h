@@ -147,9 +147,16 @@ namespace ImageInspect
 		ImVec2 mouseUVCoord_,
 		ImVec2 displayedTextureSize, ofColor* c = nullptr)
 	{
-		ImVec2 mouseUVCoord = ImVec2(
-			ofClamp(mouseUVCoord_.x, 0, 1),
-			ofClamp(mouseUVCoord_.y, 0, 1));
+		ImClamp(mouseUVCoord_, ImVec2{ 0,0 }, ImVec2{ 1,1 });
+		ImVec2 mouseUVCoord = mouseUVCoord_;
+
+		//ImVec2 mouseUVCoord = ImVec2(
+		//	ofClamp(mouseUVCoord_.x, 0, 1),
+		//	ofClamp(mouseUVCoord_.y, 0, 1));
+
+		//ImVec2 mouseUVCoord = mouseUVCoord.ImClamp(
+		//	ofClamp(mouseUVCoord_.x, 0, 1),
+		//	ofClamp(mouseUVCoord_.y, 0, 1));
 
 		ImGui::BeginTooltip();
 
@@ -176,14 +183,22 @@ namespace ImageInspect
 		{
 			for (int x = -zoomSize; x <= zoomSize; x++)
 			{
+				//TODO; should skip when x or y < 0
+				
 				//fix
 				//uint32_t texel = ((uint32_t*)bits)[(basey - y) * width + x + basex];
 				size_t i = (basey - y) * width + x + basex;
+
+				//size_t size = sizeof(((uint32_t*)bits)) / sizeof(((uint32_t*)bits)[0]);
 				//size_t sz = ((uint32_t*)bits).size();
-				size_t size = sizeof(((uint32_t*)bits)) / sizeof(((uint32_t*)bits)[0]);
 				//size_t size = sizeof(((uint32_t*)bits)) / sizeof(((uint32_t*)bits)[0]);
 
+				//TODO:
+				size_t szt = sizeof((uint32_t*)bits);
+				i = MIN(i, szt - 1);
+
 				uint32_t texel = ((uint32_t*)bits)[i];
+
 				ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
 				draw_list->AddRectFilled(pos, pos + quadSize, texel);
 			}
@@ -226,20 +241,28 @@ namespace ImageInspect
 
 		ImGui::BeginGroup();
 
-		//fix
-		int i = (basey - zoomSize * 2 - 1) * width + basex;
-		uint32_t texel = ((uint32_t*)bits)[i];
 		//uint32_t texel = ((uint32_t*)bits)[(basey - zoomSize * 2 - 1) * width + basex];
+		//fix
+		float z = zoomSize * 2;
+		size_t i = (basey - z - 1) * width + basex;
+		//size_t sz = ((uint32_t*)bits).size();
+		//size_t sz = IM_ARRAYSIZE(bits);
+		size_t sz = sizeof(bits);
+		size_t szt = sizeof((uint32_t*)bits);
+
+		i = MIN(i, szt - 1);
+		uint32_t texel = ((uint32_t*)bits)[i];
 
 		// size
 		ImGui::Text("w,h %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
 
 		// uv	
-		ImGui::Text("U,V %1.3f,%1.3f", mouseUVCoord.x, mouseUVCoord.y);
+		ImGui::Text("U,V %1.2f,%1.2f", mouseUVCoord.x, mouseUVCoord.y);
 
 		// coord
 		ImGui::Text("x,y %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
 
+		// parent color ptr
 		ImVec4 color = ImColor(texel);
 		if (c != nullptr)
 		{
