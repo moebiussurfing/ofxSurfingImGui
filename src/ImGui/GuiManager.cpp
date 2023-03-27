@@ -718,9 +718,9 @@ void SurfingGuiManager::buildHelpInfo()
 			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " OFF \n";
 
 		if (bLog)
-			helpInfo += string(bKeys ? "L" : " ") + "           Log Window    " + st + " ON  \n";
+			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "L" : " ") + "           Log Window    " + st + " OFF \n";
+			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " OFF \n";
 
 		if (bExtra)
 			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " ON  \n";
