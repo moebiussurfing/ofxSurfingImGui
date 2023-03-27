@@ -683,10 +683,12 @@ void SurfingGuiManager::buildHelpInfo()
 	//helpInfo += l;
 	//helpInfo += "\n";
 
-	helpInfo += "LAYOUTS PRESETS ENGINE \n";
-
-	helpInfo += "\n";
-	//helpInfo += l2;
+	//TODO: check mode
+	if (0) {
+		helpInfo += "LAYOUTS PRESETS ENGINE \n";
+		helpInfo += "\n";
+		//helpInfo += l2;
+	}
 
 	helpInfo += l3 + "KEY COMMANDS \n";
 	helpInfo += "\n";

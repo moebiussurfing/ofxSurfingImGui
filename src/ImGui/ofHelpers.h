@@ -1168,11 +1168,14 @@ namespace ofxImGuiSurfing
 		//--
 
 		bool bReturn = false;
+
+		float _h = getWidgetsHeightUnit();
+		
 		// widget width
 		// we get the sizes from the canvas layout!
+		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);//TODO: BUG:
+		//TODO: BUG: here we don't have access to manager!
 		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
-		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
-		float _h = getWidgetsHeightUnit();
 
 		switch (type)
 		{
@@ -1455,7 +1458,8 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
-
+	//----
+	
 	//--------------------------------------------------------------
 	inline bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
 	{
