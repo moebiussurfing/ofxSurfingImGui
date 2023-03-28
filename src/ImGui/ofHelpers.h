@@ -855,8 +855,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddStepperFloat(ofParameter<float>& p)
 	{
-		//TODO:
-		bool bRelative = false;
+		//TODO: vs absolute
+		bool bRelative = 0;
 
 		float res;
 		float step;
@@ -865,14 +865,14 @@ namespace ofxImGuiSurfing
 		if (bRelative) {
 			res = 100.f;
 			step = (p.getMax() - p.getMin()) / res;
-			stepFast = 100.f * step;
 		}
 		else
 		{
-			res = 10000.f;
-			step = (p.getMax() - p.getMin()) / res;
-			stepFast = 100.f * step;
+			step = 0.001f;
+			//res = 1000.f;
+			//step = (p.getMax() - p.getMin()) / res;
 		}
+		stepFast = 100.f * step;
 
 		//--
 
@@ -927,6 +927,7 @@ namespace ofxImGuiSurfing
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
+		//TODO: adde above relative/absolute wf
 		// Float
 		float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
@@ -1187,7 +1188,7 @@ namespace ofxImGuiSurfing
 		bool bReturn = false;
 
 		float _h = getWidgetsHeightUnit();
-		
+
 		// widget width
 		// we get the sizes from the canvas layout!
 		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);//TODO: BUG:
@@ -1476,7 +1477,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//----
-	
+
 	//--------------------------------------------------------------
 	inline bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
 	{
