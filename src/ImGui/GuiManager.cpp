@@ -596,20 +596,20 @@ void SurfingGuiManager::startup()
 		// A. Help Text Box internal
 
 		helpInternal.setCustomFonts(customFonts);
-		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		//helpInternal.setName(bHelpInternal.getName());
+		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		helpInternal.setTitle(bHelpInternal.getName());
 
-		buildHelpInfo();
+		doBuildHelpInfo();
 
 		//--
 
 		// B. Help Text Box app
 
 		helpApp.setCustomFonts(customFonts);
+		//helpApp.setName(bHelp.getName());
 		helpApp.bGui.makeReferenceTo(bHelp);
 		helpApp.setTitle(bHelp.getName());
-		//helpApp.setName(bHelp.getName());
 
 		//--
 
@@ -663,7 +663,7 @@ void SurfingGuiManager::startup()
 // Help (Internal)
 
 //--------------------------------------------------------------
-void SurfingGuiManager::buildHelpInfo()
+void SurfingGuiManager::doBuildHelpInfo()
 {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
@@ -673,6 +673,9 @@ void SurfingGuiManager::buildHelpInfo()
 	string l2 = "\n" + l1 + "\n";//spaciated divider
 	string l3 = "";//left indent
 	//string l3 = "  ";//left indent
+	string l4 = "           ";//spcaing 1st column
+
+	//--
 
 	helpInfo = "";
 
@@ -699,39 +702,39 @@ void SurfingGuiManager::buildHelpInfo()
 	//if (!bMinimize)
 	{
 		if (bKeys)
-			helpInfo += "            Keys          " + st + " ON  \n";
+			helpInfo += " " + l4 + "Keys          " + st + " ON  \n";
 		else
-			helpInfo += "            Keys          " + st + " OFF \n";
+			helpInfo += " " + l4 + "Keys          " + st + " OFF \n";
 
 		if (bMinimize)
-			helpInfo += string(bKeys ? "`" : " ") + "           Minimize      " + st + " ON  \n";
+			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "`" : " ") + "           Minimize      " + st + " OFF \n";
+			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " OFF \n";
 
 		if (bDebug)
-			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " ON  \n";
+			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " OFF \n";
 
 		if (bExtra)
-			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " ON  \n";
+			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " OFF \n";
 
 		if (bLog)
-			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " ON  \n";
+			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " OFF \n";
+			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
 
 		if (bHelp)
-			helpInfo += string(bKeys ? "H" : " ") + "           Help App      " + st + " ON  \n";
+			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "H" : " ") + "           Help App      " + st + " OFF \n";
+			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " OFF \n";
 
 		if (bHelpInternal)
-			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " ON  \n";
+			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
 		else
-			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " OFF \n";
+			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
 
 
 		//helpInfo += "\n";
@@ -2923,62 +2926,62 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Help internal
 	else if (name == bHelpInternal.getName() && bHelpInternal)
 	{
-		buildHelpInfo();//recreate info
+		doBuildHelpInfo();//recreate info
 		return;
 	}
 
 	// Help App / global. To be handled externally
 	else if (name == bHelp.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Debug
 	else if (name == bDebug.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Extra
 	else if (name == bExtra.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Log
 	else if (name == bLog.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Solo
 	else if (name == bSolo.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Keys
 	else if (name == bKeys.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Minimize
 	else if (name == bMinimize.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	//else if (name == bMinimize_Presets.getName())
 	//{
-	//	buildHelpInfo();
+	//	doBuildHelpInfo();
 	//}
 
 	//----

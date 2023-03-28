@@ -1567,6 +1567,7 @@ public:
 		// https://github.com/ocornut/imgui/issues/6021
 		//bMouseOverGui |= ImGui::IsAnyItemHovered();
 
+		// New approach
 		bMouseOverGui = ImGui::GetIO().WantCaptureMouse;
 
 		//--
@@ -1663,7 +1664,7 @@ public:
 
 private:
 
-	void buildHelpInfo();//create or freshed the help info for the drawing help box
+	void doBuildHelpInfo();//create or freshed the help info for the drawing help box
 
 	//--
 
