@@ -671,9 +671,10 @@ void SurfingGuiManager::doBuildHelpInfo()
 
 	string l1 = "-----------------------------------\n";//divider
 	string l2 = "\n" + l1 + "\n";//spaciated divider
-	string l3 = "";//left indent
-	//string l3 = "  ";//left indent
-	string l4 = "           ";//spcaing 1st column
+	//left indent
+	//string l3 = "  ";
+	string l3 = "";
+	string l4 = "     ";//spacing 1st column
 
 	//--
 
