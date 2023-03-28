@@ -684,7 +684,8 @@ void SurfingGuiManager::buildHelpInfo()
 	//helpInfo += "\n";
 
 	//TODO: check mode
-	if (0) {
+	//if (0) {
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) {
 		helpInfo += "LAYOUTS PRESETS ENGINE \n";
 		helpInfo += "\n";
 		//helpInfo += l2;
@@ -707,6 +708,21 @@ void SurfingGuiManager::buildHelpInfo()
 		else
 			helpInfo += string(bKeys ? "`" : " ") + "           Minimize      " + st + " OFF \n";
 
+		if (bDebug)
+			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " OFF \n";
+
+		if (bExtra)
+			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " OFF \n";
+
+		if (bLog)
+			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " OFF \n";
+
 		if (bHelp)
 			helpInfo += string(bKeys ? "H" : " ") + "           Help App      " + st + " ON  \n";
 		else
@@ -717,20 +733,6 @@ void SurfingGuiManager::buildHelpInfo()
 		else
 			helpInfo += string(bKeys ? "I" : " ") + "           Help Internal " + st + " OFF \n";
 
-		if (bLog)
-			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " ON  \n";
-		else
-			helpInfo += string(bKeys ? "L" : " ") + "           Log           " + st + " OFF \n";
-
-		if (bExtra)
-			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " ON  \n";
-		else
-			helpInfo += string(bKeys ? "E" : " ") + "           Extra         " + st + " OFF \n";
-
-		if (bDebug)
-			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " ON  \n";
-		else
-			helpInfo += string(bKeys ? "D" : " ") + "           Debug         " + st + " OFF \n";
 
 		//helpInfo += "\n";
 		//helpInfo += l2;

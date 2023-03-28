@@ -1556,10 +1556,22 @@ public:
 		// Here we check if mouse is over gui to disable other external stuff
 		// e.g. easyCam draggable moving, text input boxes, key commands...
 
+		/*
 		bMouseOverGui = false;
 		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
 		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+		*/
+
+		// https://github.com/ocornut/imgui/issues/4205
+		// https://github.com/ocornut/imgui/issues/6021
+		//bMouseOverGui |= ImGui::IsAnyItemHovered();
+
+		bMouseOverGui = ImGui::GetIO().WantCaptureMouse;
+
+		//--
+
+		// Text input
 
 		ImGuiIO& io = ImGui::GetIO();
 		bOverInputText = io.WantTextInput;
@@ -4106,7 +4118,7 @@ public:
 
 	//----
 
-	void AddComboFontsSelector(ofParameter<int> &index) {
+	void AddComboFontsSelector(ofParameter<int>& index) {
 		ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 
 	}
