@@ -855,9 +855,26 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool AddStepperFloat(ofParameter<float>& p)
 	{
-		float res = 100.f;
-		float step = (p.getMax() - p.getMin()) / res;
-		float stepFast = 100.f * step;
+		//TODO:
+		bool bRelative = false;
+
+		float res;
+		float step;
+		float stepFast;
+
+		if (bRelative) {
+			res = 100.f;
+			step = (p.getMax() - p.getMin()) / res;
+			stepFast = 100.f * step;
+		}
+		else
+		{
+			res = 10000.f;
+			step = (p.getMax() - p.getMin()) / res;
+			stepFast = 100.f * step;
+		}
+
+		//--
 
 		auto tmpRef = p.get();
 		bool bReturn = false;
