@@ -48,7 +48,7 @@ public:
 		if (!bGui) return;
 
 		float r = 3; // window rounded 
-		float p = 20; // window padding to borders
+		float p = 25; // window padding to borders
 
 		// Spacing after title
 		//string sp = "\n\n";
