@@ -10,7 +10,7 @@
 // taken from https://github.com/ALEHACKsp/imgui-tricks
 
 //TODO:
-// Must be included if < C++17
+// Must be added if < C++17
 namespace std
 {
 	template<typename T>

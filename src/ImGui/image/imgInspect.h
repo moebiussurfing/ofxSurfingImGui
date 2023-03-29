@@ -1,3 +1,21 @@
+/*
+
+	A modified version by @moebiusSurfing
+	
+	TODO:
+
+	- make an OF class helper: 
+		store zooms, easy get color,
+	- Picked color seems is not being the one from the center pixel
+	- Zoom image is y flipped
+	
+	Added 24 bits format.
+	Added exposed public:
+	bool bDebug, int* zoomSize_, int* zoomRectangleWidth_, ofColor* c
+
+*/
+
+
 // https://github.com/CedricGuillemet/imgInspect
 //
 // The MIT License(MIT)
@@ -150,7 +168,9 @@ namespace ImageInspect
 		const unsigned char* const bits,
 		ImVec2 mouseUVCoord_,
 		ImVec2 displayedTextureSize,
-		bool bdebug = false,
+		//added:
+		bool b24bits = false,//default is 32bit
+		bool bDebug = false,
 		int* zoomSize_ = nullptr,
 		int* zoomRectangleWidth_ = nullptr,
 		ofColor* c = nullptr)
@@ -159,35 +179,38 @@ namespace ImageInspect
 		//static int zoomSize = 4;
 		//static const float zoomRectangleWidth = 160.f;
 
-		//default
+		// default used if not passed..
 		int zoomSize = 4;
 		float zoomRectangleWidth = 160.f;
 		if (zoomSize_ != nullptr && zoomRectangleWidth_ != nullptr) {
 			zoomSize = *zoomSize_;
 			zoomRectangleWidth = *zoomRectangleWidth_;
 		}
-		
-		bool bdebug2 = 0;
 
-		//-
+		bool bdebug2 = 1;
+
+		//--
 
 		// clamp
 		ImClamp(mouseUVCoord_, ImVec2{ 0,0 }, ImVec2{ 1,1 });
 		ImVec2 mouseUVCoord = mouseUVCoord_;
 
+		// clamp the zoom zone inside the image
 		const int basex = ImClamp(int(mouseUVCoord.x * width), zoomSize, width - zoomSize);
 		const int basey = ImClamp(int(mouseUVCoord.y * height), zoomSize, height - zoomSize);
 
-		//-
+		const float quadWidth = zoomRectangleWidth / float(zoomSize * 2 + 1);
+		const ImVec2 quadSize(quadWidth, quadWidth);
 
-		if (bdebug) {
+		//--
+
+		if (bDebug) {
 			ImVec2 size_min{ zoomRectangleWidth + 150, -1 };
 			ImVec2 size_max{ 1000,1000 };
-			//ImVec2 size_max{ -1,-1 };
 			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 		}
 
-		//-
+		//--
 
 		ImGui::BeginTooltip();
 		{
@@ -201,42 +224,66 @@ namespace ImageInspect
 				ImGui::InvisibleButton("AnotherInvisibleMan", ImVec2(zoomRectangleWidth, zoomRectangleWidth));
 				const ImRect pickRc(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 
+				// bg box
 				ImU32 c = 0xFF000000;
 				//ImU32 c = ImColor(0, 255, 0, 255);//0xFF000000
-
 				draw_list->AddRectFilled(pickRc.Min, pickRc.Max, c);
 
-				const float quadWidth = zoomRectangleWidth / float(zoomSize * 2 + 1);
-				const ImVec2 quadSize(quadWidth, quadWidth);
-
+				// draw each big pixel
 				for (int y = -zoomSize; y <= zoomSize; y++)
 				{
 					for (int x = -zoomSize; x <= zoomSize; x++)
 					{
-						//TODO; should skip when x or y < 0
-
-						//fix
+						// fix
 						//uint32_t texel = ((uint32_t*)bits)[(basey - y) * width + x + basex];
 
 						size_t i = (basey - y) * width + x + basex;
 
-						//clamp
+						// clamp index
 						size_t sz = width * height;
 						static bool b = 1;
-						if (b) i = MIN(i, sz - 1);
-	
-						uint32_t texel = ((uint32_t*)bits)[i];
+						if (b) {
+							i = MIN(i, sz - 1);
+							i = MAX(i, 0);
+						}
 
-						ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
+						// color
+						//uint32_t texel = ((uint32_t*)bits)[i];
+
+						uint32_t texel;
+						if (b24bits)
+						{
+							// 24 bits
+							const uint8_t* pixel = bits + i * 3;
+							texel = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0];
+
+							ImVec4 ct = ImColor(texel);
+							ImVec4 c = ImColor(ct.x, ct.y, ct.z, 1.f);
+							ImU32 ctexel = GetColorU32(c);
+							texel = ctexel;
+						}
+						else
+						{
+							// 32 bits
+							texel = ((uint32_t*)bits)[i];
+						}
+
+						// draw each big pixel as a rectangle
+						
+						ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;//y flipped
+						
+						//mirror y. that breaks the get color?
+						//ImVec2 pos = ImVec2(pickRc.Min.x, pickRc.Max.y) + ImVec2(float(x + zoomSize), float(-y - zoomSize)) * quadSize;
+					
 						draw_list->AddRectFilled(pos, pos + quadSize, texel);
 					}
 				}
 
+				// center quad
 				if (1)
 				{
 					ImGui::SameLine();
 
-					// center quad
 					const ImVec2 pos = pickRc.Min + ImVec2(float(zoomSize), float(zoomSize)) * quadSize;
 
 					ImU32 c = ImColor(0, 0, 0, 200);//black
@@ -279,28 +326,43 @@ namespace ImageInspect
 				// fix
 				//uint32_t texel = ((uint32_t*)bits)[(basey - zoomSize * 2 - 1) * width + basex];
 
+				// TODO: Picked color seems is not being the one from the center pixel
+
 				size_t i = (basey - zoomSize * 2 - 1) * width + basex;
 
-				//clamp
+				// clamp index
 				size_t sz = width * height;
 				static bool b = 1;
-				if (b) i = MIN(i, sz - 1);
+				if (b) {
+					i = MIN(i, sz - 1);
+					i = MAX(i, 0);
+				}
 				if (0) {
 					ImGui::Text("sz: %d", sz);
 					ImGui::Text("i:  %d", i);
 					ImGui::Spacing();
 				}
 
-				uint32_t texel = ((uint32_t*)bits)[i];
+				// color
+				//uint32_t texel = ((uint32_t*)bits)[i];
 
-				// Get to parent color ptr
+				uint32_t texel;
+				if (b24bits) {
+					const uint8_t* pixel = bits + i * 3;
+					texel = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0];
+				}
+				else {
+					texel = ((uint32_t*)bits)[i];
+				}
+
+				// Get to parent color Ptr
 				ImVec4 color = ImColor(texel);
 				if (c != nullptr)
 				{
 					c->set(color);
 				}
 
-				if (bdebug) {
+				if (bDebug) {
 					if (bdebug2) {
 
 						// uv	
@@ -320,6 +382,41 @@ namespace ImageInspect
 
 					// alpha
 					ImGui::Text("alpha:  %1.1f", color.w);
+
+					//--
+
+					// debug
+					string s;
+					ImGui::Spacing();
+					ImGui::Spacing();
+					ImGui::Separator();
+					ImGui::Spacing();
+					ImGui::Spacing();
+
+					s = "24 bits: " + ofToString(b24bits ? "TRUE" : "FALSE");
+					ImGui::Text(s.c_str());
+
+					s = "basex: " + ofToString(basex);
+					ImGui::Text(s.c_str());
+
+					s = "basey: " + ofToString(basey);
+					ImGui::Text(s.c_str());
+
+					s = "zoomSize: " + ofToString(zoomSize);
+					ImGui::Text(s.c_str());
+
+					s = "zoomRectWidth: " + ofToString(zoomRectangleWidth);
+					ImGui::Text(s.c_str());
+
+					s = "quadWidth: " + ofToString(quadWidth);
+					ImGui::Text(s.c_str());
+
+					int npx = zoomRectangleWidth / quadWidth;
+					s = "Pix: " + ofToString(npx) + "x" + ofToString(npx);
+					ImGui::Text(s.c_str());
+
+					s = "nPix: " + ofToString(npx * npx);
+					ImGui::Text(s.c_str());
 
 					// color
 					/*

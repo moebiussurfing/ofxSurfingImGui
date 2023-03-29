@@ -67,6 +67,8 @@ namespace ImTricks {
 		}
 	}
 
+	//----
+
 	namespace NotifyManager {
 
 		std::vector<NotifyStruct> notifies;
@@ -97,6 +99,8 @@ namespace ImTricks {
 		bool bUseTagColor = true;
 		bool bBg = true;
 #else
+		ofParameter<bool> bGui{ "Debug Notifier", true };
+
 		// These init value will be overwritten by calling setup()!
 		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
 		ofParameter<int> duration{ "Duration", 3000, 300, 10000 };
@@ -115,7 +119,7 @@ namespace ImTricks {
 		ofParameter<bool> bUseTagColor{ "Tag Color", true };
 		ofParameter<bool> bBg{ "Bg", true };
 
-		ofParameterGroup params{ "surfingNotifier", indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
+		ofParameterGroup params{ "surfingNotifier", bGui, indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
 #endif
 
 		void doReset()
@@ -144,64 +148,74 @@ namespace ImTricks {
 
 		void drawImGuiControls()
 		{
+			if (!bGui) return;
+
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
 
-			ImGui::Begin("Debug surfingNotifier", NULL, flags);
+			bool tmp = bGui.get();
+			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, flags);
+			if (bGui.get() != tmp) bGui.set(tmp);
+
+			//ImGui::Begin("Debug surfingNotifier", NULL, flags);
+			if (b)
+			{
 #ifndef USE_IM_GUI_TRICKS_PARAMS
 
-			ImGui::SliderInt("indexFont", &indexFont, 0, 3);
-			ImGui::SliderInt("duration", &duration, 300, 10000);
-			ImGui::SliderInt("padx", &padx, 0, 100);
-			ImGui::SliderInt("pady", &pady, 0, 100);
-			ImGui::SliderInt("padxInner", &padxInner, 0, 100);
-			ImGui::SliderInt("padyInner", &padyInner, 0, 100);
-			ImGui::SliderInt("ySpacing", &ySpacing, 0, 100);
-			ImGui::SliderFloat("round", &round, 0, 100);
-			ImGui::Checkbox("Color Mark", &bUseColorMark);
-			if (bUseColorMark) {
-				ImGui::Checkbox("CM Right", &bRightColorMark);
-				ImGui::SliderFloat("CM Round", &mkRounded, 0, 100);
-				ImGui::SliderInt("CM Width", &mkWidth, 0, 100);
-				ImGui::SliderInt("CM Pad", &mkPad, 0, 100);
-			}
-			ImGui::Checkbox("bAlignRight", &bAlignRight);
-			ImGui::Checkbox("bUseTagColor", &bUseTagColor);
-			ImGui::Checkbox("bBg", &bBg);
-			if (!bAlignRight) ImGui::SliderFloat("widthMax_", &widthMax_, 100, 800);
+				ImGui::SliderInt("indexFont", &indexFont, 0, 3);
+				ImGui::SliderInt("duration", &duration, 300, 10000);
+				ImGui::SliderInt("padx", &padx, 0, 100);
+				ImGui::SliderInt("pady", &pady, 0, 100);
+				ImGui::SliderInt("padxInner", &padxInner, 0, 100);
+				ImGui::SliderInt("padyInner", &padyInner, 0, 100);
+				ImGui::SliderInt("ySpacing", &ySpacing, 0, 100);
+				ImGui::SliderFloat("round", &round, 0, 100);
+				ImGui::Checkbox("Color Mark", &bUseColorMark);
+				if (bUseColorMark) {
+					ImGui::Checkbox("CM Right", &bRightColorMark);
+					ImGui::SliderFloat("CM Round", &mkRounded, 0, 100);
+					ImGui::SliderInt("CM Width", &mkWidth, 0, 100);
+					ImGui::SliderInt("CM Pad", &mkPad, 0, 100);
+				}
+				ImGui::Checkbox("bAlignRight", &bAlignRight);
+				ImGui::Checkbox("bUseTagColor", &bUseTagColor);
+				ImGui::Checkbox("bBg", &bBg);
+				if (!bAlignRight) ImGui::SliderFloat("widthMax_", &widthMax_, 100, 800);
 #else
-			ofxImGuiSurfing::AddParameter(duration);
-			ofxImGuiSurfing::AddStepper(indexFont);
-			ofxImGuiSurfing::AddStepper(padx);
-			ofxImGuiSurfing::AddStepper(pady);
-			ofxImGuiSurfing::AddStepper(padxInner);
-			ofxImGuiSurfing::AddStepper(padyInner);
-			ofxImGuiSurfing::AddStepper(ySpacing);
-			ofxImGuiSurfing::AddStepper(round);
-			ofxImGuiSurfing::AddParameter(bUseColorMark);
-			if (bUseColorMark) {
-				ImGui::Indent();
-				ofxImGuiSurfing::AddParameter(bRightColorMark);
-				ofxImGuiSurfing::AddStepper(mkRounded);
-				ofxImGuiSurfing::AddStepper(mkWidth);
-				ofxImGuiSurfing::AddStepper(mkPad);
-				ImGui::Unindent();
-			}
-			ofxImGuiSurfing::AddParameter(bAlignRight);
-			ofxImGuiSurfing::AddParameter(bUseTagColor);
-			ofxImGuiSurfing::AddParameter(bBg);
+				ofxImGuiSurfing::AddParameter(duration);
+				ofxImGuiSurfing::AddStepper(indexFont);
+				ofxImGuiSurfing::AddStepper(padx);
+				ofxImGuiSurfing::AddStepper(pady);
+				ofxImGuiSurfing::AddStepper(padxInner);
+				ofxImGuiSurfing::AddStepper(padyInner);
+				ofxImGuiSurfing::AddStepper(ySpacing);
+				ofxImGuiSurfing::AddStepper(round);
+				ofxImGuiSurfing::AddParameter(bUseColorMark);
+				if (bUseColorMark) {
+					ImGui::Indent();
+					ofxImGuiSurfing::AddParameter(bRightColorMark);
+					ofxImGuiSurfing::AddStepper(mkRounded);
+					ofxImGuiSurfing::AddStepper(mkWidth);
+					ofxImGuiSurfing::AddStepper(mkPad);
+					ImGui::Unindent();
+				}
+				ofxImGuiSurfing::AddParameter(bAlignRight);
+				ofxImGuiSurfing::AddParameter(bUseTagColor);
+				ofxImGuiSurfing::AddParameter(bBg);
 #endif
-			if (ImGui::Button("Reset")) { doReset(); }
-			ImGui::SameLine();
-			if (ImGui::Button("Clear")) doClear();
+				if (ImGui::Button("Reset")) { doReset(); }
+				ImGui::SameLine();
+				if (ImGui::Button("Clear")) doClear();
 
-			ImGui::Spacing();
-			ImGui::Spacing();
-			string s = "";
-			s += "Amount: ";
-			s += ofToString(notifies.size(), 0);
-			ImGui::Text(s.c_str());
+				ImGui::Spacing();
+				ImGui::Spacing();
+				string s = "";
+				s += "Amount: ";
+				s += ofToString(notifies.size(), 0);
+				ImGui::Text(s.c_str());
+			}
 
-			ImGui::End();
+			if (b) ImGui::End();
+			//ImGui::End();
 		};
 
 		ImVec2 bbox = ImVec2(500, 100);
@@ -342,8 +356,8 @@ namespace ImTricks {
 
 				// Spacing up!
 				if (1) {
-				NotifyPos.y -= bbox.y;
-				NotifyPos.y -= ySpacing;
+					NotifyPos.y -= bbox.y;
+					NotifyPos.y -= ySpacing;
 				}
 				else {
 					//TODO:
