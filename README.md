@@ -65,8 +65,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <details>
   <summary>WIDGETS LIST</summary>
-  <p>
-    
+  <p>    
 - Big Toggles and Buttons.
 - Vertical and Horizontal Sliders.
 - Range Sliders.
@@ -90,7 +89,6 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   </details>
 
 <br>
-<br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
  
@@ -102,7 +100,6 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <details>
   <summary>CODE</summary>
-
 #### ofApp.h
 
 ```.cpp
@@ -145,8 +142,6 @@ void ofApp::draw()
 
 </details>
 
-<br>
-
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop): Dear ImGui v1.89.4 / BackEnd:  
@@ -167,11 +162,8 @@ void ofApp::draw()
 * **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
 * [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
-<br>
-
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
-
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
@@ -187,10 +179,8 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
     
-    </p>
-    </details>
-
-<br>
+ </p>
+</details>
 
 ## CURRENT SYSTEMS
 
@@ -200,8 +190,6 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). (**Intel**)  
     * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
-<br>
-
 # AUTHOR
 
 An addon by **moebiusSurfing**.  
@@ -215,4 +203,4 @@ _All source snippets and widgets from other authors are linked into header files
 
 ## LICENSE
 
-**MIT License**
+**MIT LICENSE**
