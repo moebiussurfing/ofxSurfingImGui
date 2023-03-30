@@ -3,7 +3,7 @@
 <h1>
   
 ofxSurfingImGui.  
-A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
+A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for [openFrameworks](https://openframeworks.cc/) projects.  
   
 </h1>
