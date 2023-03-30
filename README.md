@@ -16,11 +16,11 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <br><br>
 
-### WORK IN PROGRESS!
+#### WORK IN PROGRESS!
 
 <br><br>
 
-# FEATURES
+## FEATURES
 
 - **Simple Setup**:
   - Simplified user **workflow**.
@@ -57,7 +57,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 - **Image Inspector**:
     - With pixel color picker.
 - **Themes**:
-    - With styles **Editor** and serializers ( WIP ).
+    - With styles **Editor** and serializers. ( WIP )
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
@@ -103,7 +103,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 <details>
   <summary>CODE</summary>
 
-### ofApp.h
+#### ofApp.h
 
 ```.cpp
 #include "ofxSurfingImGui.h"
@@ -116,7 +116,7 @@ ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 ofParameterGroup params{ "MyGroup", bEnable, speed };
 ```
 
-### ofApp.cpp
+#### ofApp.cpp
 
 ```.cpp
 void ofApp::draw() 
@@ -153,7 +153,16 @@ void ofApp::draw()
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
 
-## DATA FILES
+<details>
+  <summary>OTHER</summary>
+  
+* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) / _**New WIP examples** and new incoming widgets: a **Testing Sandbox**._
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
+
+</details>
+
+### DATA FILES
 
 * **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
 * [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
@@ -166,7 +175,7 @@ void ofApp::draw()
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
-
+  
 <details>
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
@@ -184,15 +193,6 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     </p>
     </details>
 
-<br>
-
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
-  
-<br>
-
-( _**New WIP examples**, testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
-  
 <br>
 
 ## CURRENT SYSTEMS
