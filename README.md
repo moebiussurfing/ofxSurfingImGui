@@ -98,8 +98,6 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   
 ## EXAMPLE: 00_HelloWorld
 
-<br>
-
 ![](/Examples/00_HelloWorld/Capture.PNG)  
 
 <details>
