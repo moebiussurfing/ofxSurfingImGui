@@ -51,7 +51,7 @@ for **openFrameworks** projects.
 - **Docking Helpers**. ( WIP )
 - **Themes**:
     - with **Editor** and serializers ( WIP ).
-- 
+ 
 <br>
 
 <details>
