@@ -1,12 +1,14 @@
 <br>
 
 <h1>
-
 ofxSurfingImGui.  
 A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for **openFrameworks** projects.  
-
 </h1>
+
+<h2>
+An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
+</h2>
 
 ### WORK IN PROGRESS!
 
