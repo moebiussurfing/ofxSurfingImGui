@@ -27,6 +27,10 @@
 ## 06_TextEditor
 ![](06_TextEditor/Capture.PNG)  
 
+## 07_ImageInspect
+![](07_ImageInspect/Capture.PNG)  
+![](07_ImageInspect/Capture2.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 

@@ -37,14 +37,15 @@ for **openFrameworks** projects.
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
   - Right-click:
-    - To Reset to param center.
-    - _+Ctrl_ to Reset to min.
-    - _+Alt_ to Reset to max.
+    - To Reset to param Center.
+    - _+Ctrl_ to Reset to Min.
+    - _+Alt_ to Reset to Max.
 - **Themes** with **Editor** ( WIP ).
 - **Windows Organizer**, aligner, cascade and group/linker.
 - **Log System** with custom tags.
 - **Notifier System**.
-- **Text Editor** ( WIP )
+- **Text Editor**. ( WIP )
+- **Image Inspector**.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
 
@@ -142,7 +143,9 @@ void ofApp::draw()
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
 
-* [assets.zip](assets.zip): Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
+* **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
+
+* [assets.zip](assets.zip): (Optional) Located in the add-on root path. More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <br>
 
