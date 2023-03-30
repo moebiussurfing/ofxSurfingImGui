@@ -8,11 +8,13 @@ for **openFrameworks** projects.
   
 </h1>
 
-<h2>
+<h3>
   
 An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
   
-</h2>
+</h3>
+
+<br>
 
 ### WORK IN PROGRESS!
 
