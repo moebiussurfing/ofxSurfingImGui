@@ -10,17 +10,17 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <h3>
   
-(An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).)    
+( An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop). )    
   
 </h3>
 
 <br><br>
 
-### WORK IN PROGRESS!
+#### WORK IN PROGRESS!
 
 <br><br>
 
-# FEATURES
+## FEATURES
 
 - **Simple Setup**:
   - Simplified user **workflow**.
@@ -57,7 +57,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 - **Image Inspector**:
     - With pixel color picker.
 - **Themes**:
-    - With styles **Editor** and serializers ( WIP ).
+    - With styles **Editor** and serializers. ( WIP )
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
@@ -65,7 +65,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <details>
   <summary>WIDGETS LIST</summary>
-  <p>
+  <p>    
     
 - Big Toggles and Buttons.
 - Vertical and Horizontal Sliders.
@@ -90,7 +90,6 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   </details>
 
 <br>
-<br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
  
@@ -102,8 +101,8 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <details>
   <summary>CODE</summary>
-
-### ofApp.h
+  
+#### ofApp.h
 
 ```.cpp
 #include "ofxSurfingImGui.h"
@@ -116,7 +115,7 @@ ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 ofParameterGroup params{ "MyGroup", bEnable, speed };
 ```
 
-### ofApp.cpp
+#### ofApp.cpp
 
 ```.cpp
 void ofApp::draw() 
@@ -145,55 +144,46 @@ void ofApp::draw()
 
 </details>
 
-<br>
-
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop): Dear ImGui v1.89.4 / BackEnd:  
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
 
-## DATA FILES
+<details>
+  <summary>OTHER</summary>
+  
+* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) / _**New WIP examples** and new incoming widgets: a **Testing Sandbox**._
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
+
+</details>
+
+### DATA FILES
 
 * **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
 * [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
-<br>
-
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
-
+  
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
-
+  
 <details>
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
 - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
-  
   - Multi context / instances: 
-    
     - Several windows from different add-ons without colliding.  
-  
   - Easy to update to future **NEW ImGui** releases.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
     
-    </p>
-    </details>
-
-<br>
-
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
-  
-<br>
-
-( _**New WIP examples**, testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
-  
-<br>
+ </p>
+</details>
 
 ## CURRENT SYSTEMS
 
@@ -203,8 +193,6 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). (**Intel**)  
     * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
-<br>
-
 # AUTHOR
 
 An addon by **moebiusSurfing**.  
@@ -213,11 +201,9 @@ An addon by **moebiusSurfing**.
 ## THANKS
 
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK** and some **macOS** fixes._  
-
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
-
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 
 ## LICENSE
 
-**MIT License**
+**MIT LICENSE**
