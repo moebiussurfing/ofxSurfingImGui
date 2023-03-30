@@ -130,6 +130,7 @@ namespace ImTricks {
 		extern ofParameter<int> indexFont;
 		extern ofParameter<int> duration;
 		extern ofParameterGroup params;
+		extern ofParameter<bool> bGui;
 #endif
 	}
 

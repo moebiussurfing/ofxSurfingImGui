@@ -52,6 +52,11 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
 	params_Advanced.add(bDebugMetrics);
+
+#ifdef OFX_USE_NOTIFIER
+	params_Advanced.add(notifier.bGui);
+#endif
+
 	params_Advanced.add(bLog);
 	params_Advanced.add(bLogKeys);
 	params_Advanced.add(log.params);
@@ -585,7 +590,6 @@ void SurfingGuiManager::startup()
 	//notifier.setIndexFont(1);
 	//notifier.setIndexFont(2);
 	//notifier.setIndexFont(3);
-
 
 #endif
 

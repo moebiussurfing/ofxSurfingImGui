@@ -17,6 +17,8 @@ public:
 		// Fix exit exceptions on RF..
 		int minValue = std::numeric_limits<int>::min();
 		ofAddListener(ofEvents().exit, this, &SurfingNotifier::exit, minValue);
+		
+		bGui.makeReferenceTo(ImTricks::NotifyManager::bGui);
 	};
 
 	~SurfingNotifier()
@@ -30,9 +32,11 @@ public:
 		path_Global = path;
 	};
 
+	ofParameter<bool> bGui{ "Debug Notifier", false };
+
 private:
 	std::string path_Global = "";
-	std::string name_Settings = "SurfingNotifier_Settings.json";
+	std::string name_Settings = "SurfingGui_Notifier_Settings.json";
 
 	bool bDoneSetup = false;
 

@@ -99,8 +99,8 @@ namespace ImTricks {
 		bool bUseTagColor = true;
 		bool bBg = true;
 #else
-		ofParameter<bool> bGui{ "Debug Notifier", true };
-
+		ofParameter<bool> bGui{ "Debug Notifier", false };
+		
 		// These init value will be overwritten by calling setup()!
 		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
 		ofParameter<int> duration{ "Duration", 3000, 300, 10000 };

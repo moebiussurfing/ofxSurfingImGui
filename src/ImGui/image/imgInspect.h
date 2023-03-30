@@ -75,6 +75,8 @@
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
+//#include <algorithm>
+
 namespace ImageInspect
 {
 	inline float getFadeBlink(float min = 0.20, float max = 0.80, float freq = 0.15) {
@@ -222,11 +224,8 @@ namespace ImageInspect
 
 							// clamp index
 							size_t sz = width * height;
-							static bool b = 1;
-							if (b) {
-								i = MIN(i, sz - 1);
-								i = MAX(i, 0);
-							}
+							i = MIN(i, sz - 1);
+							i = MAX(i, 0);
 
 							// color
 							//uint32_t texel = ((uint32_t*)bits)[i];
@@ -246,7 +245,8 @@ namespace ImageInspect
 
 							// draw each big pixel as a rectangle
 
-							ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;//y flipped
+							ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
+							//y flipped
 
 							//mirror y. that breaks the get color?
 							//ImVec2 pos = ImVec2(pickRc.Min.x, pickRc.Max.y) + ImVec2(float(x + zoomSize), float(-y - zoomSize)) * quadSize;
@@ -269,37 +269,23 @@ namespace ImageInspect
 
 						const ImVec2 pos = pickRc.Min + ImVec2(float(zoomSize), float(zoomSize)) * quadSize;
 
-						int a = 255 * getFadeBlink();
-						ImU32 c;
-						if (0) c = ImColor(0, 0, 0, a);//black
-						else c = ImColor(255, 255, 255, a);//white
-						//c = ImColor(255, 0, 0, a);//red
+						//one color with blink alpha
+						//int a = 255 * getFadeBlink();
+						//ImU32 c;
+						//if (0) c = ImColor(0, 0, 0, a);//black
+						//else c = ImColor(255, 255, 255, a);//white
+						////c = ImColor(255, 0, 0, a);//red
+
+						//alternate b/w
+						int v1 = 0;
+						int v2 = 255;
+						int v = ImLerp(v1, v2, getFadeBlink(0, 1, 0.15f * 1));
+						float a = getFadeBlink(0.2, 0.8, 0.15f * 0.5f);
+						a *= getFadeBlink(0, 0.8, 0.15f * 0.5f);
+						ImU32 c = IM_COL32(v, v, v, 255 * a);
 
 						draw_list->AddRect(pos, pos + quadSize, c, 0.f, 15, 2.f);
 					}
-
-					/*
-					if (0)
-					{
-						// normal direction
-						ImGui::InvisibleButton("AndOneMore", ImVec2(zoomRectangleWidth, zoomRectangleWidth));
-						ImRect normRc(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
-						for (int y = -zoomSize; y <= zoomSize; y++)
-						{
-							for (int x = -zoomSize; x <= zoomSize; x++)
-							{
-								uint32_t texel = ((uint32_t*)bits)[(basey - y) * width + x + basex];
-								const ImVec2 posQuad = normRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
-								//draw_list->AddRectFilled(pos, pos + quadSize, texel);
-								const float nx = float(texel & 0xFF) / 128.f - 1.f;
-								const float ny = float((texel & 0xFF00) >> 8) / 128.f - 1.f;
-								const ImRect rc(posQuad, posQuad + quadSize);
-								drawNormal(draw_list, rc, nx, ny);
-							}
-						}
-					}
-					*/
-
 				}
 				ImGui::EndGroup();
 
@@ -318,46 +304,41 @@ namespace ImageInspect
 
 					// clamp index
 					size_t sz = width * height;
-					static bool b = 1;
-					if (b) {
-						i = MIN(i, sz - 1);
-						i = MAX(i, 0);
-					}
-					if (0) {
-						ImGui::Text("sz: %d", sz);
-						ImGui::Text("i:  %d", i);
-						ImGui::Spacing();
-					}
+					i = MIN(i, sz - 1);
+					i = MAX(i, 0);
 
 					// color
 					//uint32_t texel = ((uint32_t*)bits)[i];
 
 					uint32_t texel;
-					if (b24bits) {
+
+					if (b24bits) // 24 bits
+					{
 						const uint8_t* pixel = bits + i * 3;
 						texel = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0];
 					}
-					else {
+					else // 32 bits
+					{
 						texel = ((uint32_t*)bits)[i];
 					}
 
 					// Get to parent color Ptr
 					ImVec4 color = ImColor(colorCenter);
 					//ImVec4 color = ImColor(texel);
-					if (c != nullptr)
-					{
-						c->set(color);
-					}
+
+					if (c != nullptr) c->set(color);
 
 					if (bDebug) {
-						// uv	
-						ImGui::Text("U,V:    %1.1f,%1.1f", mouseUVCoord.x, mouseUVCoord.y);
+						//ImGui::Text(" ");
 
-						// size
-						ImGui::Text("w,h:    %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
+						// uv	
+						ImGui::Text("U,V:    %1.2f,%1.2f", mouseUVCoord.x, mouseUVCoord.y);
 
 						// coord
 						ImGui::Text("x,y:    %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
+
+						// size
+						ImGui::Text("w,h:    %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
 
 						ImGui::Separator();
 
@@ -365,7 +346,7 @@ namespace ImageInspect
 						ImGui::Text("R,G,B:  %d,%d,%d", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
 
 						// alpha
-						ImGui::Text("alpha:  %1.1f", color.w * 255.f);
+						ImGui::Text("alpha:  %d", INT(color.w * 255.f));
 
 						//--
 
@@ -377,8 +358,9 @@ namespace ImageInspect
 							ImGui::Spacing();
 							ImGui::Spacing();
 
-							s = "DEBUG ADVANCED: ";
+							s = "DEBUG ADVANCED";
 							ImGui::Text(s.c_str());
+							ImGui::Spacing();
 
 							s = "24 bits: " + ofToString(b24bits ? "TRUE" : "FALSE");
 							ImGui::Text(s.c_str());
