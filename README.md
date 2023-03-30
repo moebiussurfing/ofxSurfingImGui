@@ -14,12 +14,11 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
   
 </h3>
 
-<br>
+<br><br>
 
 ### WORK IN PROGRESS!
 
-<br>
-<br>
+<br><br>
 
 # FEATURES
 
