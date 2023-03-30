@@ -15,7 +15,11 @@ for **openFrameworks** projects.
 
 # FEATURES
 
-- Simple **setup**.
+- **Simple Setup**:
+  - Simplified user **workflow**.
+  - Many useful **Internal states** and persistent settings:
+    - Minimize, debug, extra, advanced, auto resize...
+    - Log, Notifier and windows visibility and distribution. 
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
@@ -23,12 +27,8 @@ for **openFrameworks** projects.
   - Many RAW **DearImGui widgets** adapted.
   - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
-  - Help on **Windows** and **Widgets**.
+  - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
-  - Simplifies user **workflow**.
-  - Many useful **Internal states** and persistent settings:
-    - Minimize, debug, extra, advanced, auto resize...
-    - Log, Notifier, windows distribution. 
 - Four active **Font Sizes** for labels and paragraphs.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
@@ -46,13 +46,13 @@ for **openFrameworks** projects.
 - **Text Editor**: 
     - Language marks.
     - Font sizes, color themes.
-    - Clipboard access and undo/redo history.
+    - Clipboard access and **undo/redo** history.
 - **Image Inspector**:
     - With pixel color picker.
-- **Layout Presets Engine**. ( WIP )
-- **Docking Helpers**. ( WIP )
 - **Themes**:
     - With styles **Editor** and serializers ( WIP ).
+- **Layout Presets Engine**. ( WIP )
+- **Docking Helpers**. ( WIP )
  
 <br>
 
