@@ -19,8 +19,8 @@ for **openFrameworks** projects.
 
 - Simple **setup**.
 - **Multiple instances**:
-  - Many ui´s around your classes and **ofxAddons**.
-  - all together without colliding and integrated.
+  - Many windows around your classes and **ofxAddons**.
+  - All together without colliding.
 - **ofParameter Helpers**:
   - Many RAW **DearImGui widgets** adapted.
   - Added custom useful widgets.
