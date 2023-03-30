@@ -4,6 +4,9 @@
 
 #include "ofxSurfingImGui.h"
 
+#include <functional>
+using callback_t = std::function<void()>;
+
 class myClassC
 {
 public:
@@ -13,6 +16,11 @@ public:
 
 	void setup();
 	void draw();
+	void setDrawWidgetsFunction(callback_t f = nullptr) {
+		functionDraw = f;
+	};
+
+	ofxSurfingGui* ui = nullptr;
 
 	void setUiPtr(ofxSurfingGui* _ui);
 
@@ -22,7 +30,7 @@ public:
 	ofParameter<float> speed;
 	ofParameter<int> shapeType;
 
-	ofxSurfingGui* ui;
-
 	ofParameter<bool> bGui{ "myClassC", true };
+
+	std::function<void()> functionDraw = nullptr;
 };

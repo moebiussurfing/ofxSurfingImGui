@@ -4,13 +4,6 @@
 void ofApp::setup()
 {
 	//ofSetWindowPosition(-1920, 25);
-
-	ui.setup();
-
-	// flip for natural direction
-	ui.setMouseWheelFlip(false);
-
-	ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -18,34 +11,33 @@ void ofApp::draw() {
 
 	ui.Begin();
 	{
-		ImGuiColorEditFlags _flagw = ui.bAutoResize ?
-			ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
+		ImGuiColorEditFlags _flagw = ui.bAutoResize ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 
 		static SurfingGuiTypes style; // knobs style
 
 		//--
 
-		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
-
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		if (ui.BeginWindow("Knobs", NULL, _flagw))
 		{
 			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_ROUNDED);
 			ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED);
 			ui.AddSpacingBigSeparated();
 
-			ui.Add(ui.bExtra, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-			//if (!ui.bMinimize)
-			if (ui.bExtra)
-			{
-				ui.Indent();
-				ui.Add(ui.bAdvanced, OFX_IM_TOGGLE_ROUNDED_SMALL);
-				ui.AddSpacing();
-				ui.Add(ui.bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
-				ui.Add(ui.bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
-				ui.Unindent();
+			if (!ui.bMinimize) {
+				ui.Add(ui.bExtra, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+				if (ui.bExtra)
+				{
+					ui.Indent();
+					ui.Add(ui.bAdvanced, OFX_IM_TOGGLE_ROUNDED_SMALL);
+					ui.AddSpacing();
+					ui.Add(ui.bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+					ui.Add(ui.bMouseWheelFlip, OFX_IM_TOGGLE_ROUNDED_MINI);
+					ui.Unindent();
+				}
+				ui.AddSpacingBigSeparated();
 			}
 
-			ui.AddSpacingBigSeparated();
 
 			//--
 
@@ -97,13 +89,15 @@ void ofApp::draw() {
 				static bool bImGuiKnobFlags_NoInput = false;
 				static bool bImGuiKnobFlags_TooltipValue = true;
 				static bool bImGuiKnobFlags_DragHorizontal = true;
+
 				SurfingGuiFlags flags = SurfingGuiFlags_None;
 				if (bImGuiKnobFlags_NoTitle) flags += SurfingGuiFlags_NoTitle;
 				if (bImGuiKnobFlags_NoInput) flags += SurfingGuiFlags_NoInput;
 				if (bImGuiKnobFlags_TooltipValue) flags += SurfingGuiFlags_TooltipValue;
 				if (bImGuiKnobFlags_DragHorizontal) flags += SurfingGuiFlags_DragHorizontal;
 
-				if (!ui.bMinimize) {
+				//if (!ui.bMinimize)
+				{
 					ui.AddSpacingBigSeparated();
 					ui.AddLabelHuge("NEW API with Flags", false, true);
 					SurfingGuiTypes s = OFX_IM_TOGGLE_ROUNDED_MINI;
@@ -116,7 +110,7 @@ void ofApp::draw() {
 
 				// Draw
 				// NEW API, including flags
-				//bool Add(ofAbstractParameter& aparam, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
+				//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
 
 				ui.Add(valueKnob1, style, 2, flags);
 				ui.SameLine();
@@ -147,8 +141,7 @@ void ofApp::draw() {
 
 		//--
 
-		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
-
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		if (ui.BeginWindow("Another Window"))
 		{
 			// Draw

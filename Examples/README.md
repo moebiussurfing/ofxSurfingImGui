@@ -21,6 +21,16 @@
 ## 04_LogSystem
 ![](04_LogSystem/Capture.PNG)  
 
+## 05_NotifierSystem
+![](05_NotifierSystem/Capture.PNG)  
+
+## 06_TextEditor
+![](06_TextEditor/Capture.PNG)  
+
+## 07_ImageInspect
+![](07_ImageInspect/Capture.PNG)  
+![](07_ImageInspect/Capture2.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
@@ -41,6 +51,6 @@
 
 [![](https://img.youtube.com/vi/UIvfpRFtEtY/maxresdefault.jpg)](https://youtu.be/UIvfpRFtEtY)
 
-<h2>LAYOUT PRESETS ENGINE & DOCKING</h2>
+<h2>LAYOUT PRESETS ENGINE & DOCKING ( WIP )</h2>
 
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  

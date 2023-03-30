@@ -11,17 +11,30 @@
 
 #include "ofMain.h"
 
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+#include "imgui_internal.h"
 #include "ofxImGui.h"
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
+
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
 
-#include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGui_Themes.h"
+#include "ofxSurfing_ImGui_ThemesEditor.h"
+#include "Combos.h"
 
-#include "TextBoxWidget.h" //TODO: could be replace by native ImGui widgets.
+#include "surfingHelpers.h"
+#include "HelpWidget.h"
+
+//TODO: move here! now breaks!
+//#include "ImGui/WindowFbo.h"
+//#include "ImGui/WindowLog.h"
+
+#define OFX_USE_NOTIFIER
+#ifdef OFX_USE_NOTIFIER
+#include "ImGui/notifiers/surfingNotifier.h"
+#endif
 
 //--
 
@@ -35,7 +48,8 @@
 
 using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
-using namespace ofxSurfingHelpers;
+//using namespace ofxSurfingHelpers;
+
 
 //----
 
@@ -86,6 +100,7 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
 		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
 		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
+		//TODO: add other modes
 	};
 
 	//--
@@ -101,45 +116,38 @@ namespace ofxImGuiSurfing
 	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
 	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
 	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
+
 } // namespace
 
-//--------
+//----
 
 //--------------------------------------------------------------
 class SurfingGuiManager
 {
-
 public:
-
 	SurfingGuiManager();
 	~SurfingGuiManager();
 
-	//--
+	//----
 
 public:
-
-	//--------------------------------------------------------------
-	void setup() // We will use the most common mode, to avoid to have to require any argument.
-	{
-		setup(IM_GUI_MODE_INSTANTIATED);
-	}
-
-	void setup(ofxImGuiSurfing::SurfingGuiMode mode);
+	void setup(); // We will use the most common mode, to avoid to have to require any argument.
+	void setup(ofxImGuiSurfing::SurfingGuiMode mode); // Allows fully personalize the manager features. 
 
 private:
-
 	// MODE A: 
-	// ofxImGui is instantiated inside the class, the we can forgot of declare ofxImGui here (ofApp scope).
+	// ofxImGui is instantiated inside the class, 
+	// the we can forgot of declare ofxImGui here (ofApp scope).
 	void setupInitiate();
 
 public:
-
 	// MODE B: 
 	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
 	void setup(ofxImGui::Gui& gui);
-	
-//public:
+
+	//----
+
 private:
 	void exit();
 	void exit(ofEventArgs& e);
@@ -149,8 +157,10 @@ private:
 	//--
 
 private:
+	void update(); // To manual update.
+	void update(ofEventArgs& args);
 
-	void update(); // To manual update...
+	void draw(); // To manual draw.
 	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes.
 
 	void keyPressed(ofKeyEventArgs& eventArgs);
@@ -161,12 +171,22 @@ private:
 	// The Widget Styles Manager
 
 private:
-
 	WidgetsManager _ui;
+
+	//--
+
+private:
+	bool bDisableStartupReset = false;
+	bool bDoForceStartupResetLayout = false;
+	bool bDoneDoForceStartupResetLayout = false;
+public:
+	void doResetLayout();//must be called between Begin/End
+	void setDisableStartupReset(bool b) { bDisableStartupReset = b; }
 
 	//----
 
 	// Styles API
+	// v2.0
 
 public:
 
@@ -285,7 +305,7 @@ public:
 		_ui.UpdateStyleGroup(name, type, flags);
 	}
 
-	//TODO: new API
+	//TODO: New API
 	//--------------------------------------------------------------
 	void AddStyleGroup(std::string name, SurfingGuiGroupStyle flags)
 	{
@@ -471,7 +491,7 @@ public:
 	//--
 
 	//TODO:
-	// Helper to auto populate the styles of each type (bool, floats, ints) contained on a g.
+	// Helper to auto populate the styles of each type (bool, floats, int's) contained on a g.
 	//--------------------------------------------------------------
 	void AddStyleGroupForBools(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_TOGGLE)
 	{
@@ -532,8 +552,9 @@ public:
 
 public:
 
+	//TODO: copy/move to ofHelpers
 	//--------------------------------------------------------------
-	inline void pushInactive() {
+	inline void PushInactive() {
 
 		const float a = 0.5f;
 
@@ -556,7 +577,7 @@ public:
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 	}
 	//--------------------------------------------------------------
-	inline void popInactive() {
+	inline void PopInactive() {
 		ImGui::PopItemFlag();
 
 		ImGui::PopStyleColor(6);
@@ -590,7 +611,7 @@ public:
 	//--------------------------------------------------------------
 	void AddGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
 	{
-		////TODO: some subfolders make grow window width..
+		////TODO: some sub folders make grow window width..
 		//refreshLayout();
 
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
@@ -717,424 +738,6 @@ public:
 
 	//----
 
-	// More Widgets
-
-	// A bundle of controls
-	// for a single param
-
-	////TODO: move to ofHelpers.h (#1049) 
-	////--------------------------------------------------------------
-	//template<typename ParameterType>
-	//bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
-	//{
-	//	ofxImGuiSurfing::AddComboBundle(p, bMinimized);
-	//}
-
-	//--------------------------------------------------------------
-	template<typename ParameterType>
-	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
-	{
-		string name = p.getName();
-
-		bool bReturn = false;
-
-		const auto& t = typeid(ParameterType);
-		const bool isFloat = (t == typeid(float));
-		const bool isInt = (t == typeid(int));
-
-		if (!isFloat && !isInt) {
-			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
-			return false;
-		}
-
-		// label
-		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
-		else this->AddLabelBig(p.getName(), true, true);
-
-		// stepper
-		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
-		//bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
-
-		// slider
-		bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
-
-		// arrows
-		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
-		{
-			float step = 0;
-			if (isInt) step = 1;
-			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
-
-			if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			{
-				p -= step;
-				p = ofClamp(p, p.getMin(), p.getMax());
-				bReturn += true;
-			}
-			ImGui::SameLine();
-			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			{
-				p += step;
-				p = ofClamp(p, p.getMin(), p.getMax());
-				bReturn += true;
-			}
-		}
-		ImGui::PopButtonRepeat();
-
-		if (!bMinimized)
-		{
-			// knob
-			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
-			float w = this->getWidgetsWidth(1);
-			ImGuiKnobFlags flags = 0;
-			flags += ImGuiKnobFlags_NoInput;
-			flags += ImGuiKnobFlags_NoTitle;
-			flags += ImGuiKnobFlags_ValueTooltip;//not works
-			//flags += ImGuiKnobFlags_DragHorizontal;
-			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
-
-			// mouse
-			if (this->bMouseWheel) {
-				ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
-				ofxImGuiSurfing::GetMouseWheel();
-				ofxImGuiSurfing::AddMouseClickRightReset(p);
-			}
-
-			// tooltip
-			this->AddTooltip(p, true, false);
-		}
-
-		return bReturn;
-	}
-
-	//----
-
-	//TODO: move to ofHelpers.h
-
-	// Combo List. 
-
-	// Selector index directly with an int ofParam
-	// without name label
-	//--------------------------------------------------------------
-	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
-	{
-		if (fileNames.empty()) return false;
-
-		string t = "##" + pIndex.getName();
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, bRaw));
-		if (b) {
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-
-		//ImGui::Spacing();
-
-		ImGui::PopID();
-
-		return b;
-	}
-
-	// Selector index directly with an int ofParam
-	// without name label and a button to browse next element. Processed inside this combo.
-	//--------------------------------------------------------------
-	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames)
-	{
-		// Button is to trig/set next index.
-
-		if (fileNames.empty()) return false;
-
-		string t = "##" + pIndex.getName();
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7f);
-		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
-		if (b)
-		{
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-		ImGui::PopItemWidth();
-
-		ImGui::PopID();
-
-		ImGui::SameLine();
-
-		float w = ImGui::GetContentRegionAvail().x;
-		t += ">";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button(">", ImVec2(w, 0)))
-		{
-			if (pIndex < pIndex.getMax()) pIndex++;
-			else pIndex = 0;
-			b = true;
-		}
-		ImGui::PopID();
-
-		ImGui::Spacing();
-
-		return b;
-	}
-	// Same that above but with left/right arrows, place to the right.
-	//--------------------------------------------------------------
-	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
-	{
-		if (fileNames.empty()) return false;
-
-		string t = "##" + pIndex.getName();
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-
-		//ImGui::PushItemWidth(20);//hide name
-		//ImGui::PushItemWidth(30);
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);//small name
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
-
-		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
-		if (b)
-		{
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-		ImGui::PopItemWidth();
-
-		ImGui::PopID();
-
-		ImGui::SameLine();
-
-		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
-		float w = ImGui::GetContentRegionAvail().x / 2 - __spcx;
-
-		string t1 = t + "<";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button("<", ImVec2(w, 0)))
-		{
-			if (pIndex <= pIndex.getMin()) {
-				if (bCycled) pIndex = pIndex.getMax();
-				else pIndex = pIndex.getMin();
-			}
-			else {
-				pIndex--;
-			}
-			b = true;
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
-
-		string t2 = t + ">";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button(">", ImVec2(w, 0)))
-		{
-			if (pIndex < pIndex.getMax()) pIndex++;
-			else if (bCycled) pIndex = 0;
-			b = true;
-		}
-		ImGui::PopID();
-
-		ImGui::Spacing();
-
-		return b;
-	}
-
-	// Same than above (with left/right arrows) but, placed to the left.
-	//--------------------------------------------------------------
-	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
-	{
-		if (fileNames.empty()) return false;
-
-		float div = 0.7f;//proportion used for the combo
-		// 70% of the width is for the names and 30% for both arrows
-		// 1 - div (0.3) will be the proportion used by the arrows.
-
-		string t = "##" + pIndex.getName();
-		bool b = false;
-
-		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
-		float w = 0.5f * (ImGui::GetContentRegionAvail().x * (1 - div) - __spcx);
-
-		string t1 = t + "<";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button("<", ImVec2(w, 0)))
-		{
-			if (pIndex <= pIndex.getMin())
-				if (bCycled) pIndex.getMax();
-				else pIndex = pIndex.getMin();
-			else pIndex--;
-			b = true;
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
-
-		string t2 = t + ">";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button(">", ImVec2(w, 0)))
-		{
-			if (pIndex < pIndex.getMax()) pIndex++;
-			else if (bCycled)
-				pIndex = 0;
-			b = true;
-		}
-		ImGui::PopID();
-
-		ImGui::SameLine();
-
-		//--
-
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
-
-		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
-		if (b)
-		{
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-
-		ImGui::PopItemWidth();
-
-		ImGui::PopID();
-
-		ImGui::Spacing();
-
-		return b;
-	}
-
-	//--
-
-	// Same than above (with left/right arrows) but, placed to the left and right and centered names.
-	//--------------------------------------------------------------
-	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
-	{
-		if (fileNames.empty()) return false;
-
-		float div = 0.7f; // proportion used for the combo names 
-		// 70% of the width is for the names and 30% for both arrows
-		// 1 - div (0.3) will be the proportion used by the arrows.
-
-		string t = "##" + pIndex.getName();
-		bool b = false;
-
-		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
-		float w = 0.5f * (ImGui::GetContentRegionAvail().x * (1 - div) - __spcx);
-
-		string t1 = t + "<";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button("<", ImVec2(w, 0)))
-		{
-			if (pIndex <= pIndex.getMin())
-				if (bCycled) pIndex.getMax();
-				else pIndex = pIndex.getMin();
-			else pIndex--;
-			b = true;
-		}
-		ImGui::PopID();
-		ImGui::SameLine();
-
-		//--
-
-		ImGui::PushID(t.c_str());
-
-		int i = pIndex.get();
-
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w - __spcx);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
-
-		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
-		if (b)
-		{
-			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
-			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
-		}
-
-		ImGui::PopItemWidth();
-
-		ImGui::PopID();
-
-		ImGui::SameLine();
-
-		//--
-
-		string t2 = t + ">";
-		ImGui::PushID(t.c_str());
-		if (ImGui::Button(">", ImVec2(w, 0)))
-		{
-			if (pIndex < pIndex.getMax()) pIndex++;
-			else if (bCycled)
-				pIndex = 0;
-			b = true;
-		}
-		ImGui::PopID();
-
-		return b;
-	}
-
-	//--
-
-	// Dual arrows for common use to browse an index to be processed outside.
-	// returns -1 to push-left or 1 to push-right pressed!
-	//--------------------------------------------------------------
-	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
-		int iReturn = 0;
-		if (AddButton("<", style, 2)) {
-			iReturn = -1;
-		};
-		SameLine();
-		if (AddButton(">", style, 2)) {
-			iReturn = 1;
-		};
-		return iReturn;
-	}
-
-	//--
-
-	// Dual arrows for common use to browse an index to be inside directly into the int parameter
-	//--------------------------------------------------------------
-	void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
-
-		//bool bchanged = false;//can be ignored
-		if (AddButton("<", style, 2)) {
-			//bchanged = true;
-			if (cycled) {
-				if (paramIndex == paramIndex.getMin()) paramIndex = paramIndex.getMax();
-				paramIndex--;
-			}
-			else {
-				if (paramIndex > paramIndex.getMin()) paramIndex--;
-			}
-		};
-		SameLine();
-		if (AddButton(">", style, 2)) {
-			//bchanged = true;
-			if (cycled) {
-				if (paramIndex == paramIndex.getMax()) paramIndex = paramIndex.getMin();
-				paramIndex++;
-			}
-			else {
-				if (paramIndex < paramIndex.getMax()) paramIndex++;
-			}
-		};
-		//return bchanged;
-	}
-
-	//----
-
 	// Multi size Labels
 
 	// Text with optional Uppercasing and Spacing
@@ -1152,7 +755,7 @@ public:
 
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 
 		switch (fontType)
@@ -1168,7 +771,7 @@ public:
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 	}
 	//--------------------------------------------------------------
@@ -1177,7 +780,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1187,7 +790,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1197,7 +800,7 @@ public:
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(3);
-		ImGui::TextWrapped(t.c_str());
+		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
@@ -1708,13 +1311,14 @@ public:
 		this->refreshLayout();
 
 		string t = "##CHILD" + label;
-		ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
+		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
 		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::BeginMenuBar();
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s", label.c_str());
 		ImGui::EndMenuBar();
 
 		ImGui::NewLine();
+		return ret;
 	}
 	//--------------------------------------------------------------
 	void EndChild()
@@ -1876,7 +1480,9 @@ public:
 	// Force shared context
 
 	//--------------------------------------------------------------
-	void setImGuiSharedMode(bool b) { gui.setSharedMode(b); }
+	void setImGuiSharedMode(bool b) {
+		//gui.setSharedMode(b); // Not anymore, fully automatic now
+	}
 
 	//----
 
@@ -1887,8 +1493,28 @@ private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
 	bool bIgnoreNextPopFont = false;
+	vector<string> namesCustomFonts;
 
 public:
+
+	vector<ImFont*> getFontsPtr() { return customFonts; }//Warning: setup() must be called before!
+	vector<string> getFontsNames() { return namesCustomFonts; }//Warning: setup() must be called before!
+
+	int getNumFonts() { return customFonts.size(); }
+
+	//--------------------------------------------------------------
+	string getFontName(int index) {
+		string s = "UNKNOWN";
+
+		if (index < customFonts.size())
+		{
+			if (customFonts[index] != nullptr)
+				s = (customFonts[index]->ConfigData->Name);
+			return s;
+		}
+
+		return s;
+	}
 
 	void clearFonts();
 
@@ -1920,27 +1546,55 @@ public:
 	void PushFont(SurfingFontTypes style);
 	void PopFont();
 
-	int getNumFonts() { return customFonts.size(); }
-
-	//--------------------------------------------------------------
-	string getFontName(int index) {
-		string s = "UNKNOWN";
-
-		if (index < customFonts.size())
-		{
-			if (customFonts[index] != nullptr)
-				s = (customFonts[index]->ConfigData->Name);
-			return s;
-		}
-
-		return s;
-	}
-
 	//----
 
 public:
 
-	// To disable app interactins (like camera movements) when mouse is over any ui window.
+	//--------------------------------------------------------------
+	void doCheckOverGui()
+	{
+		// Mouse lockers helpers
+		// Here we check if mouse is over gui to disable other external stuff
+		// e.g. easyCam draggable moving, text input boxes, key commands...
+
+		/*
+		bMouseOverGui = false;
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+		bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+		*/
+
+		// https://github.com/ocornut/imgui/issues/4205
+		// https://github.com/ocornut/imgui/issues/6021
+		//bMouseOverGui |= ImGui::IsAnyItemHovered();
+
+		// New approach
+		bMouseOverGui = ImGui::GetIO().WantCaptureMouse;
+
+		//--
+
+		// Text input
+
+		ImGuiIO& io = ImGui::GetIO();
+		bOverInputText = io.WantTextInput;
+
+		//// Debug
+		//{
+		//	ImGuiIO& io = ImGui::GetIO();
+		//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
+		//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
+		//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
+		//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
+		//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
+		//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
+		//}
+	}
+
+	// To disable app interactions (like camera movements) when mouse is over any ui window.
+	//--------------------------------------------------------------
+	bool isOverGui() const {
+		return (bMouseOverGui.get() && bMouseOverGui.get());
+	}
 	//--------------------------------------------------------------
 	bool isMouseOverGui() const {
 		return bMouseOverGui;
@@ -1983,6 +1637,9 @@ public:
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };//for natural direction
 
+	ofParameter<bool> bLog{ "LOG", false };//show log window
+	ofParameter<bool> bNotifier{ "NOTIFIER", true };//show notifier
+
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
 	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
@@ -2008,7 +1665,7 @@ public:
 
 private:
 
-	void buildHelpInfo();//create or freshed the help info for the drawing help box
+	void doBuildHelpInfo();//create or freshed the help info for the drawing help box
 
 	//--
 
@@ -2102,12 +1759,23 @@ private:
 
 	//TODO:
 	// could be public 
-	//public:
+//public:
 
 	// Window Log
 	SurfingLog log;
 
+#ifdef OFX_USE_NOTIFIER
+	// Notifier with floating boxes
+	SurfingNotifier notifier;
+#endif
+
 public:
+
+	//--------------------------------------------------------------
+	void setLogFontSize(int indexFont) {
+		indexFont = ofClamp(indexFont, 0, 3);//hardcoded
+		log.setFontSize(indexFont);
+	}
 
 	//TODO: need to fix that respect the deserialization..
 	//--------------------------------------------------------------
@@ -2121,6 +1789,14 @@ public:
 		if (bLog) log.drawImGui(bLog);
 	};
 
+#ifdef OFX_USE_NOTIFIER
+	//--------------------------------------------------------------
+	void DrawNotifierIfEnabled() {
+		if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
+		//if (bNotifier) notifier.draw(bDebug.get());
+	};
+#endif
+
 	//--------------------------------------------------------------
 	void DrawWindowLog()
 	{
@@ -2131,6 +1807,8 @@ public:
 	};
 
 public:
+	//--------------------------------------------------------------
+	void setLogLevel(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
 
 	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
@@ -2176,7 +1854,8 @@ public:
 	//--------------------------------------------------------------
 	void AddToLog(string text)//TODO:adding empty tag...
 	{
-		log.Add(text, "");
+		//log.Add(text, "");
+		log.Add(text, OF_LOG_NOTICE);
 	};
 	//--------------------------------------------------------------
 	void AddToLog(string text, ofLogLevel logLevel)
@@ -2191,14 +1870,53 @@ public:
 
 	//----
 
+public:
+
+#ifdef OFX_USE_NOTIFIER
+	//--------------------------------------------------------------
+	void doResetNotifier()
+	{
+		notifier.doReset();
+	};
+	//--------------------------------------------------------------
+	void doClearNotifier()
+	{
+		notifier.doClear();
+	};
+	//--------------------------------------------------------------
+	void AddToNotifier(string text, string nameTag)
+	{
+		notifier.Add(text, nameTag);
+	};
+	//--------------------------------------------------------------
+	void AddToNotifier(string text)//TODO:adding empty tag...
+	{
+		notifier.Add(text, "");
+	};
+	//--------------------------------------------------------------
+	void AddToNotifier(string text, ofLogLevel logLevel)
+	{
+		notifier.Add(text, logLevel);
+	};
+	//TODO: add tag system..
+	////--------------------------------------------------------------
+	//void AddToNotifier(string text, int tag/* = -1*/)
+	//{
+	//	notifier.Add(text, tag);
+	//};
+#endif
+
+	//----
+
 	// Helper
 
-	// Common Widgets populate
+	// Populate Common Widgets for internal toggle params
 
 	// Some simple alias and helpers
 	// to populate internal params,
 	// to speed up common usage:
 
+public:
 	// Minimize state
 	//--------------------------------------------------------------
 	bool AddMinimize(bool bSeparated = false) {
@@ -2276,6 +1994,8 @@ public:
 
 	//--
 
+	// Fast toggle rendered for common internal toggles
+
 	//--------------------------------------------------------------
 	bool AddKeys(bool bSeparated = false) {
 		AddKeysToggle(bSeparated);
@@ -2286,7 +2006,14 @@ public:
 		this->Add(this->bKeys, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddKeysToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bKeys, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isKeys() const { return bKeys.get() && !this->isOverInputText(); }
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddLog(bool bSeparated = false) {
@@ -2298,8 +2025,35 @@ public:
 		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddLogToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bLog, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 
+	//--
+
+//#ifdef OFX_USE_NOTIFIER
 	//--------------------------------------------------------------
+	bool AddNotifier(bool bSeparated = false) {
+		AddNotifierToggle(bSeparated);
+		return bNotifier.get();
+	};
+	void AddNotifierToggle(bool bSeparated = false)
+	{
+		this->Add(this->bNotifier, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddNotifierToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bNotifier, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	//#endif
+
+		//--
+
+		//--------------------------------------------------------------
 	bool AddAutoResize(bool bSeparated = false) {
 		AddAutoResizeToggle(bSeparated);
 		return bAutoResize.get();
@@ -2309,6 +2063,13 @@ public:
 		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddAutoResizeToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bAutoResize, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddDebug(bool bSeparated = false) {
@@ -2320,11 +2081,56 @@ public:
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddDebugToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bDebug, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isDebug() const { return bDebug.get(); }
 	bool isDebugEnabled() const { return bDebug.get(); }
 	bool isDebugDisabled() const { return !bDebug.get(); }
 
+	//--
 
+	//--------------------------------------------------------------
+	bool AddHelp(bool bSeparated = false) {
+		AddHelpToggle(bSeparated);
+		return bHelp.get();
+	};
+	void AddHelpToggle(bool bSeparated = false)
+	{
+		this->Add(this->bHelp, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bHelp, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isHelp() const { return bHelp.get(); }
+	bool isHelpEnabled() const { return bHelp.get(); }
+	bool isHelpDisabled() const { return !bHelp.get(); }
+
+	//--------------------------------------------------------------
+	bool AddHelpInternal(bool bSeparated = false) {
+		AddHelpInternalToggle(bSeparated);
+		return bHelpInternal.get();
+	};
+	void AddHelpInternalToggle(bool bSeparated = false)
+	{
+		this->Add(this->bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bHelpInternal, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	bool isHelpInternal() const { return bHelpInternal.get(); }
+	bool isHelpInternalEnabled() const { return bHelpInternal.get(); }
+	bool isHelpInternalDisabled() const { return !bHelpInternal.get(); }
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddAdvanced(bool bSeparated = false) {
@@ -2336,9 +2142,16 @@ public:
 		this->Add(this->bAdvanced, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
+	void AddAdvancedToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bAdvanced, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
 	bool isAdvanced() const { return bAdvanced.get(); }
 	bool isAdvancedEnabled() const { return bAdvanced.get(); }
 	bool isAdvancedDisabled() const { return !bAdvanced.get(); }
+
+	//--
 
 	//--------------------------------------------------------------
 	bool AddExtra(bool bSeparated = false) {
@@ -2348,6 +2161,11 @@ public:
 	void AddExtraToggle(bool bSeparated = false)
 	{
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	};
+	void AddExtraToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bExtra, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	};
 	bool isExtra() const { return bExtra.get(); }
@@ -2620,17 +2438,17 @@ private:
 									this->AddLabelBig("Widget", false, true);
 									std::string _hwidget = "Unit Height:\n";
 									_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
-									ImGui::TextWrapped(_hwidget.c_str());
+									ImGui::TextWrapped("%s", _hwidget.c_str());
 
 									std::string _wwidget = "Full Width:\n";
 									_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
-									ImGui::TextWrapped(_wwidget.c_str());
+									ImGui::TextWrapped("%s", _wwidget.c_str());
 
 									this->AddSpacing();
 									this->AddLabelBig("Window", false, true);
 									std::string _wpanel = "Inner Width:\n";
 									_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
-									ImGui::TextWrapped(_wpanel.c_str());
+									ImGui::TextWrapped("%s", _wpanel.c_str());
 
 									std::string _wShape = "Shape:\n";
 									_wShape += ofToString(ImGui::GetWindowPos().x);
@@ -2640,7 +2458,7 @@ private:
 									_wShape += ofToString(ImGui::GetWindowWidth());
 									_wShape += ", ";
 									_wShape += ofToString(ImGui::GetWindowHeight());
-									ImGui::TextWrapped(_wShape.c_str());
+									ImGui::TextWrapped("%s", _wShape.c_str());
 									this->AddSpacing();
 								}
 								this->Unindent();
@@ -2745,7 +2563,7 @@ public:
 
 		// split possible instances on different folders
 		path_Global = nameLabel + "/Gui/";
-		ofxSurfingHelpers::CheckFolder(path_Global);
+		CheckFolder(path_Global);
 		// Useful toggles for internal Windows
 
 		windowsOrganizer.setPathGlobal(path_Global);
@@ -3067,7 +2885,7 @@ public:
 		// Special windows mode
 		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Special Windows mode was not initiated.");
-			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force Special Windows mode to allow add special Windows!");
+			ofLogWarning("ofxSurfingImGui") << ("Force Special Windows mode to allow add special Windows!");
 
 			this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 		}
@@ -3076,7 +2894,7 @@ public:
 		if (!bDoneSetup) {
 
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Setup was not previously done!");
-			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Force run SurfingGuiManager::setup() now!");
+			ofLogWarning("ofxSurfingImGui") << ("Force run SurfingGuiManager::setup() now!");
 
 			setup();
 		}
@@ -3392,7 +3210,7 @@ public:
 	// Layouts Engine
 
 	// Extra Params to include packed into layout presets too.
-	// By default we wil have menu and log toggles,
+	// By default we will have menu and log toggles,
 	// but we can add more from our ofApp
 
 	//--------------------------------------------------------------
@@ -3470,6 +3288,20 @@ public:
 	// with auto populated all the Special Windows toggles. 
 	// To be called outside a window, just between the main begin/end!
 	//--------------------------------------------------------------
+	void drawWidgetsSpecialWindows(bool bFoldered)
+	{
+		if (bFoldered)
+		{
+			bool b = this->BeginTree("Windows");
+			if (b)
+			{
+				drawWidgetsSpecialWindows();
+				this->EndTree();
+			}
+		}
+		else drawWidgetsSpecialWindows();
+	}
+	//--------------------------------------------------------------
 	void drawWidgetsSpecialWindows()
 	{
 		float _h = getWidgetsHeight();
@@ -3497,7 +3329,9 @@ public:
 		if (windowsOrganizer.bGui_Global)
 		{
 			ImGui::Indent();
+
 			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
+
 			ImGui::Unindent();
 		}
 
@@ -3674,7 +3508,7 @@ private:
 
 	//public:
 
-	void startupFirstFrame();
+	void setupStartupForced();
 	void setupDocking();//TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
@@ -3685,6 +3519,9 @@ private:
 	//--
 
 public:
+
+	void drawWindowsExtraManager();//will be called at End(), 
+	//to draw other internal and auto handled windows/modules.
 
 	void drawMenu();
 	void drawMenuDocked();
@@ -3712,7 +3549,7 @@ private:
 	void drawLayoutPresetsEngine();
 	void drawViewport_oFNative();
 
-
+	//TODO:
 	//// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.
 	//ofParameter<bool> bModeFree{ "Free", true }; // A allows storing position for control windows too
 	//ofParameter<bool> bModeForced{ "Forced", false }; // Locked to free space on viewport
@@ -3767,10 +3604,6 @@ private:
 	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
 
 	ofParameter<bool> bSolo{ "Solo", false };
-
-public:
-
-	ofParameter<bool> bLog{ "LOG", false };//show log window
 
 	//-
 
@@ -3850,6 +3683,8 @@ public:
 	//--
 
 private:
+	//TODO: replace help boxes 
+	// with new ImGui classes
 
 	// We have to independent help boxes.
 	// One is intended to be use as the add-on itself help (Internal Help),
@@ -3858,11 +3693,11 @@ private:
 
 	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
-	TextBoxWidget boxHelpInternal;
+	HelpWidget helpInternal;
 
 	// Help App: How to use our App 
 	std::string helpInfoApp = "";
-	TextBoxWidget boxHelpApp;
+	HelpWidget helpApp;
 
 	// main help disablers
 	bool bUseHelpInfoInternal = false;
@@ -3873,51 +3708,71 @@ private:
 public:
 
 	//--------------------------------------------------------------
-	void setEnableHelpInfoInternal(bool b) {
+	void setEnableHelpInfoInternal(bool b = true) {
 		bUseHelpInfoInternal = b;
 	}
 
 	//--------------------------------------------------------------
-	void setEnableHelpInfoApp(bool b) {
+	void setEnableHelpInfoApp(bool b = true) {
 		bUseHelpInfoApp = b;
 	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoApp(string text) {
+		if (!bUseHelpInfoApp) setEnableHelpInfoApp();//force
 		helpInfoApp = text;
-		boxHelpApp.setText(helpInfoApp);
+		helpApp.setText(helpInfoApp);
 		bUseHelpInfoApp = true;
 	}
 
 	//--------------------------------------------------------------
 	void setHelpInfoInternal(string text) {
 		helpInfo = text;
-		boxHelpInternal.setText(helpInfo);
+		helpInternal.setText(helpInfo);
 		bUseHelpInfoInternal = true;
 	}
 	// Useful in some rare scenarios to populate or hide the enabler toggle
 	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
 	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
 
+	//--------------------------------------------------------------
+	void SameLine() { ImGui::SameLine(); };
 
 	//----
 
-	// NOTES
+	// Exposed widgets from namespace ofxImGuiSurf from Combos.h
+	//TODO: should bypass that using aliases or something else.
 
-	// Optional to customize filename for the settings file for multiple instances on the same ofApp.
-	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+	//TODO: BUG: after moving into ofHelpers. broken layouts..
 
-	//----
+	// Button and toggle to be used faster, without param.
 
+	/*
+	bool AddButton(string label, ImVec2 sz) {
+		return ofxImGuiSurfing::AddButton(label, sz);
+	}
+	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		return ofxImGuiSurfing::AddButton(label, type, amtPerRow, bSameLine, spacing);
+	}
+	bool AddToggle(string label, bool& bState, ImVec2 sz)
+	{
+		return ofxImGuiSurfing::AddToggle(label, bState, sz);
+	}
+	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	{
+		return ofxImGuiSurfing::AddToggle(label, bState, type, amtPerRow, bSameLine, spacing);
+	}
+	*/
 
-public:
-
+	//TODO: back here bc bug!
+	//TODO: must fix:
 	// Helpers to populate non ofParams,
 	// Raw CPP types instead an maintain global styles.
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
-	bool AddButton(string label, ImVec2 sz)
+	inline bool AddButton(string label, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -3930,14 +3785,21 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
+		//fixes
+
+		//--
+
 		bool bReturn = false;
+
+		float _h = getWidgetsHeightUnit();
 
 		// widget width
 		// we get the sizes from the canvas layout!
-		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
-		float _h = getWidgetsHeightUnit();
+		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);//TODO: BUG:
+		//TODO: BUG: here we don't have access to manager!
+		//float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
 
 		switch (type)
 		{
@@ -4074,7 +3936,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 	// A toggle passing a name and a boolean to show and get the boolean state.
 	//--------------------------------------------------------------
-	bool AddToggle(string label, bool& bState, ImVec2 sz)
+	inline bool AddToggle(string label, bool& bState, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -4101,14 +3963,16 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
 
+		float _h = getWidgetsHeightUnit();
+
 		// Widget width
 		// We get the sizes from the canvas layout!
-		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
-		float _h = getWidgetsHeightUnit();
+		//float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
+		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);//original
 
 		switch (type)
 		{
@@ -4219,6 +4083,54 @@ public:
 		return bReturn;
 	}
 
-	//--------------------------------------------------------------
-	void SameLine() { ImGui::SameLine(); };
+	//----
+
+	// Bundle
+
+	// A bundle of different widgets 
+	// but for a single ofParam: int or float. 
+
+	template<typename ParameterType>
+	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false) {
+		return ofxImGuiSurfing::AddComboBundle(p, bMinimized);
+	}
+
+	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false) {
+		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
+	}
+	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames) {
+		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
+	}
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false) {
+		return ofxImGuiSurfing::AddComboButtonDual(pIndex, fileNames, bCycled);
+	}
+	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false) {
+		return ofxImGuiSurfing::AddComboButtonDualLefted(pIndex, fileNames, bCycled);
+	}
+	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
+	{
+		return ofxImGuiSurfing::AddComboButtonDualCenteredNames(pIndex, fileNames, bCycled);
+	}
+	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
+		return ofxImGuiSurfing::AddComboArrows(style);
+	}
+	void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
+		return ofxImGuiSurfing::AddComboArrows(paramIndex, style, cycled);
+	}
+
+	//----
+
+	void AddComboFontsSelector(ofParameter<int>& index) {
+		ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+
+	}
+
+	//----
+
+	// NOTES
+
+	// Optional to customize filename for the settings file for multiple instances on the same ofApp.
+	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
+
+	//----
 };

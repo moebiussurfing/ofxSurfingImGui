@@ -14,14 +14,15 @@
 
 #include "ofMain.h"
 
-#include "imgui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
-//#include "ofxImGui.h"
+#include "ofxImGui.h"
 
+#include "GuiSugar.h"
 #include "GuiConstants.h"
 
-#include "surfingTimers.h"
-
+#include "surfingHelpers.h"
+ 
 //------------------
 
 // Layout Helpers
@@ -226,6 +227,11 @@ namespace ofxImGuiSurfing
 
 	// NEW API:
 	//--------------------------------------------------------------
+	inline void SameLineIfAvailForWidth(float w = 140)//TODO; not checking each widget..
+	{
+		if (ImGui::GetContentRegionAvail().x > w) ImGui::SameLine();
+	}
+	//--------------------------------------------------------------
 	inline float getWindowWidthAvail()
 	{
 		return ImGui::GetContentRegionAvail().x;
@@ -316,14 +322,14 @@ namespace ofxImGuiSurfing
 		float wx = ImGui::GetContentRegionAvail().x;
 		string s = ofToString(wx);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 	//--------------------------------------------------------------
 	inline void DebugContentRegionAvailY() {
 		float wy = ImGui::GetContentRegionAvail().y;
 		string s = ofToString(wy);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 	//--------------------------------------------------------------
 	inline void DebugContentRegionAvail() {
@@ -331,7 +337,7 @@ namespace ofxImGuiSurfing
 		float wy = ImGui::GetContentRegionAvail().y;
 		string s = ofToString(wx) + ", " + ofToString(wy);
 		ImGui::SameLine();
-		ImGui::Text(s.c_str());
+		ImGui::Text("%s", s.c_str());
 	}
 
 	//--
@@ -361,7 +367,7 @@ namespace ofxImGuiSurfing
 		{
 			string s = ofToString(wx - w);
 			ImGui::SameLine();
-			ImGui::Text(s.c_str());
+			ImGui::Text("%s", s.c_str());
 		}
 		if (wx > w) ImGui::SameLine();
 	}
@@ -477,7 +483,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddLabel(string text)
 	{
-		ImGui::TextWrapped(text.c_str());
+		ImGui::TextWrapped("%s", text.c_str());
 	}
 
 	//---
@@ -486,7 +492,7 @@ namespace ofxImGuiSurfing
 	// Push left from right border
 	// Adds x spacing to right align widgets! 
 	// i.e. 
-	// by passing the excected width of the widget 
+	// by passing the expected width of the widget 
 	// you are moving the next widget position 
 	// to the right window border.
 	// Example: 
@@ -535,6 +541,7 @@ namespace ofxImGuiSurfing
 		ImGui::Dummy(ImVec2{ width, 0 });
 		ImGui::SameLine();
 	}
+
 	////--------------------------------------------------------------
 	//inline void AddSpacingX(float x = 100)
 	//{
@@ -626,7 +633,7 @@ namespace ofxImGuiSurfing
 			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
 			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
@@ -681,7 +688,7 @@ namespace ofxImGuiSurfing
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float v = ofxSurfingHelpers::getFadeBlink();
+			float v = getFadeBlink();
 			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
@@ -779,14 +786,14 @@ namespace ofxImGuiSurfing
 	// Draws a point on the ImGui cursor position 
 	// for debugging when designing widgets
 	// 
-	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//#define IMGUI_SUGAR__TEST_POINT \
 	//	{ \
 	//		ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
 	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \
 	//	} \
 	//
-	//#define IMGUI_SUGAR__TEST_POINT \ 
+	//#define IMGUI_SUGAR__TEST_POINT \
 	//	ImDrawList* draw_list = ImGui::GetWindowDrawList(); \
 	//		const ImVec2 pdebug = ImGui::GetCursorScreenPos(); \
 	//		draw_list->AddCircleFilled(ImVec2(pdebug.x, pdebug.y), 2, IM_COL32(255, 0, 255, 255)); \

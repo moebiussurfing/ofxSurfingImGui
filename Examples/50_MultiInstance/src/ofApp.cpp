@@ -25,6 +25,10 @@ void ofApp::setup()
 
 	// This C object will receive and store this local ui into a pointer to populate widgets on there: inside the class draw method.
 	C.setUiPtr(&ui);
+
+	// Advanced
+	std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
+	C.setDrawWidgetsFunction(myFunctionDraw);
 }
 
 //--------------------------------------------------------------
@@ -49,6 +53,7 @@ void ofApp::draw()
 			// (Or independent if do not shares the ui.)
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
+			//ui.AddAdvancedToggle();
 			ui.AddSpacingBigSeparated();
 
 			//--
@@ -69,12 +74,12 @@ void ofApp::draw()
 
 			//--
 
-			ui.AddLabel("These are exposed or public ofParams from the classes objects but populated here");
+			ui.AddLabel("These are exposed \nor public ofParams \nfrom the classes objects \nbut populated here");
 			// This approach is an alternative approach: 
 			// instead of drawing the widgets inside each class object, 
 			// and having to pass by reference the ui from here / the parent ofApp 
 			// or requiring instantiating another new ui inside each object.
-			
+
 			// A folder / tree populating widgets styled as default. 
 			if (ui.BeginTree("ofParams")) {
 
@@ -105,26 +110,29 @@ void ofApp::draw()
 				ui.EndWindow();
 			}
 			*/
-			
-			ui.AddSpacingBigSeparated();
 
-			//--
+			if (ui.isMaximized()) {
 
-			// This is an ofParameterGroup.
-			// Contained ofParams are populated 
-			// as their default widgets styles
-			// (but we could queue custom styles for each param too 
-			// that will be applied when populating the group widgets)
-			// Note that these ofParams are local in ofApp.
-			ui.AddGroup(params);
+				ui.AddSpacingBigSeparated();
 
-			//--
+				//--
 
-			// This is a ofParam widget but customized instead of using the default styled
-			ui.Add(amount, OFX_IM_VSLIDER);
+				// This is an ofParameterGroup.
+				// Contained ofParams are populated 
+				// as their default widgets styles
+				// (but we could queue custom styles for each param too 
+				// that will be applied when populating the group widgets)
+				// Note that these ofParams are local in ofApp.
+				ui.AddGroup(params);
 
-			// This is a ofParam widget but customized instead of using the default styled
-			ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+				//--
+
+				// This is a ofParam widget but customized instead of using the default styled
+				ui.Add(amount, OFX_IM_VSLIDER);
+
+				// This is a ofParam widget but customized instead of using the default styled
+				ui.Add(bPrevious, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			}
 
 			//--
 
@@ -145,14 +153,14 @@ void ofApp::draw()
 
 	// This two objects will call Begin/End internally
 	// so, they will go outside the above used Begin/End.
-	
-	B.draw(); 
+
+	B.draw();
 	// this one has his own ofxSurfingImGui ui instance! 
 	// So it´s not linked to the local ofApp ui. 
 	// (some internal settings are neither shared 
 	// and also will have a separated bin/data folder for some persistent stored settings.)
-	
-	C.draw(); 
+
+	C.draw();
 	// this one shares the ofxSurfingImGui ui instance from ofApp! 
 	// Note that it has been passed by reference on ofApp::setup.
 }

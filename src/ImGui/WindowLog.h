@@ -12,6 +12,8 @@
 
 		TODO:
 
+		add set public shape size method
+
 		add feature to allow addLog without any explicit tag, but a custom color.
 			this is a big upgrade of how it's implemented the engine now.
 			could be an "UNKNOWN" tag and storing the color..
@@ -41,7 +43,10 @@
 
 #include "ofMain.h"
 
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+#include "imgui_internal.h"
 #include "ofxImGui.h"
+
 #include "imgui_stdlib.h"
 
 //TODO: 
@@ -167,13 +172,24 @@ namespace ofxImGuiSurfing
 
 		void Add(std::string msg, ofLogLevel logLevel)
 		{
-			if (logLevel == OF_LOG_VERBOSE) Add(msg, "VERBOSE");
-			else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");
-			else if (logLevel == OF_LOG_WARNING) Add(msg, "WARNING");
-			else if (logLevel == OF_LOG_ERROR || logLevel == OF_LOG_FATAL_ERROR) Add(msg, "ERROR");
+			if (logLevel == OF_LOG_VERBOSE && logLevelUi <= OF_LOG_VERBOSE) Add(msg, "VERBOSE");
+			else if (logLevel == OF_LOG_NOTICE && logLevelUi <= OF_LOG_NOTICE) Add(msg, "NOTICE");
+			else if (logLevel == OF_LOG_WARNING && logLevelUi <= OF_LOG_WARNING) Add(msg, "WARNING");
+			else if (logLevel == OF_LOG_ERROR && logLevelUi <= OF_LOG_ERROR) Add(msg, "ERROR");
+			else if (logLevel == OF_LOG_FATAL_ERROR && logLevelUi <= OF_LOG_FATAL_ERROR) Add(msg, "ERROR");//TODO: add fatal error
 			else
 			{
-				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString(logLevel) << " Unknown";
+				ofLogWarning("ofxSurfingImGui:SurfingLog") << "ofLogLevel " << ofToString((short)logLevel) << " Unknown";
+			}
+
+			//TODO:
+			static bool bLogToOF = true;
+			if (bLogToOF) {
+				if (logLevel == OF_LOG_VERBOSE) ofLogVerbose() << msg;
+				else if (logLevel == OF_LOG_NOTICE) ofLogNotice() << msg;
+				else if (logLevel == OF_LOG_WARNING) ofLogWarning() << msg;
+				else if (logLevel == OF_LOG_ERROR) ofLogError() << msg;
+				else if (logLevel == OF_LOG_FATAL_ERROR) ofLogFatalError() << msg;
 			}
 		};
 
@@ -266,11 +282,13 @@ namespace ofxImGuiSurfing
 			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
-			// Reduce y spacing
-			if(bMinimize) ofxImGuiSurfing::AddSpacingY(-8);
-			//if(bMinimize) ofxImGuiSurfing::AddSpacingY(-13);
-
 			ofxImGuiSurfing::AddSpacing();
+
+			// Reduce y spacing
+			if (bMinimize) {
+				if (0) ofxImGuiSurfing::AddSpacingY(-8);
+				else ofxImGuiSurfing::Separator();
+			}
 
 			//--
 
@@ -353,7 +371,7 @@ namespace ofxImGuiSurfing
 					{
 						ofxImGuiSurfing::SameLineFit(160, bDebug);
 						string s = ofToString(amountLinesCurr);
-						ImGui::Text(s.c_str());
+						ImGui::Text("%s", s.c_str());
 						s = "Amount of \nbuffered lines:\n" + s;
 						ofxImGuiSurfing::AddTooltip2(s);
 					}
@@ -508,6 +526,9 @@ namespace ofxImGuiSurfing
 		ofParameter<int> amountLinesLimitedBuffered{ "Amount", 20, 1, 200 };
 		//TODO: workaround: public for disable log on parent classes
 
+		//TODOL clamp
+		void setFontSize(int i) { indexSizeFont = i; }
+
 	private:
 
 		ofParameter<bool> bOptions{ "OPTIONS", false };
@@ -515,7 +536,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bPause{ "PAUSE" , false };
 		ofParameter<bool> bTight{ "Tight" , true };
 		ofParameter<bool> bOneLine{ "OneLine" , true };
-		ofParameter<bool> bSeparators{ "Separators" , false};
+		ofParameter<bool> bSeparators{ "Separators" , false };
 		ofParameter<bool> bAutoFit{ "AutoFit" , true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
@@ -524,7 +545,7 @@ namespace ofxImGuiSurfing
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
-		ofParameter<bool> bMinimize{ " ", false };//
+		ofParameter<bool> bMinimize{ " ", true };
 
 		int amountLinesCurr = 0;
 		bool bDoneStartup = false;
@@ -686,6 +707,11 @@ namespace ofxImGuiSurfing
 
 			return s;
 		};
+
+		ofLogLevel logLevelUi = OF_LOG_VERBOSE;
+
+	public:
+		void setLogLevel(ofLogLevel logLevel) { this->logLevelUi = logLevel; }
 
 	public:
 
@@ -963,7 +989,7 @@ namespace ofxImGuiSurfing
 
 			if (path == "") path = ofToDataPath("", true);
 			path += "\\logs";//add subfolder
-			ofxSurfingHelpers::CheckFolder(path);//create folder if required
+			CheckFolder(path);//create folder if required
 
 			string timeFormat = "%Y-%m-%d";//+date
 			timeFormat += "___%H-%M-%S";//+time
@@ -1039,7 +1065,7 @@ namespace ofxImGuiSurfing
 			if (bTight) ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 
 			if (bOneLine) ImGui::TextUnformatted(item);
-			else ImGui::TextWrapped(item);
+			else ImGui::TextWrapped("%s", item);
 
 			if (bTight) ImGui::PopStyleVar();
 		};
@@ -1066,7 +1092,15 @@ namespace ofxImGuiSurfing
 		// API: workflow during draw to switch between font styles
 
 	public:
-
+		void setCustomFonts(vector<ImFont*> f, vector<string> names)
+		{
+			setCustomFontsNames(names);
+			setCustomFonts(f);
+		};
+		void setCustomFontsNames(vector<string> names)
+		{
+			namesCustomFonts = names;
+		};
 		void setCustomFonts(vector<ImFont*> f)
 		{
 			customFonts = f;
@@ -1077,18 +1111,6 @@ namespace ofxImGuiSurfing
 			}
 
 			indexSizeFont.setMax(customFonts.size() - 1);
-
-			//TODO: 
-			// WARNING! 
-			// these names could be copied to GuiManager too!
-			// take care if both sizes fonts/names changed! 
-			// this is hardcoded now!
-			// Font sizes
-			namesCustomFonts.clear();
-			namesCustomFonts.push_back("DEFAULT");
-			namesCustomFonts.push_back("BIG");
-			namesCustomFonts.push_back("HUGE");
-			namesCustomFonts.push_back("HUGE_XXL");
 		};
 
 	private:

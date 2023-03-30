@@ -63,6 +63,17 @@ void ofApp::draw()
 			}
 
 			ui.AddSpacingBigSeparated();
+			
+			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
+			s = "Will enable:\n\n";
+			s += "1. Bigger font\n";
+			s += "   (on above HELP text)\n";
+			s += "2. Blink text\n";
+			s += "3. Show/hide bottom widgets\n";
+			s += "4. When Enabled is false, \nSpeed will be deactivated";
+			ui.AddTooltip(s);
+
+			ui.AddSpacingBigSeparated();
 
 			// two different presentations depending if minimized or not
 			if (ui.isMinimized()) // minimized
@@ -72,15 +83,15 @@ void ofApp::draw()
 				ui.AddSpacingDouble();
 
 				// make font bigger
-				ui.PushFont(OFX_IM_FONT_BIG);
+				if(bEnable) ui.PushFont(OFX_IM_FONT_BIG);
 				ui.AddTooltipHelp(s);
-				ui.PopFont();
+				if (bEnable) ui.PopFont();
 			}
 			else // not minimized aka maximized
 			{
 				// make it uppercase and add an extra space (true, true)
-				if (bEnable) ui.AddLabelHuge("Hello World 2", true, true); 
-				else ui.AddLabelBig("Hello World 2", true, true); 
+				if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true); 
+				else ui.AddLabelBig("00_HelloWorld2", true, true);
 
 				ui.AddSpacingDouble();
 				
@@ -95,15 +106,20 @@ void ofApp::draw()
 				if (bEnable) ui.EndBlinkText();
 
 				ui.AddSpacingBigSeparated();
-				ui.Add(speed, OFX_IM_HSLIDER);
 
-				ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
-				s = "Will enable:\n\n";
-				s += "1. Bigger font\n";
-				s += "   (on above HELP text)\n";
-				s += "2. Blink text\n";
-				s += "3. Show/hide bottom widgets";
-				ui.AddTooltip(s);
+				if (!bEnable) {
+					ui.PushInactive();
+					ui.Add(speed, OFX_IM_HSLIDER);
+					ui.PopInactive();
+					s = "Widget is deactivated\nwhen Enabled is false\nSo can not be touched.";
+					ui.AddLabel(s);
+
+				}
+				else {
+					ui.Add(speed, OFX_IM_HSLIDER);
+					s = "Widget is activated\nwhen Enabled\nSo it can be touched.";
+					ui.AddTooltip(s);
+				}
 
 				if (bEnable)
 				{

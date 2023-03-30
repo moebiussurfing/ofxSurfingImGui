@@ -16,7 +16,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 	// ofApp / core callbacks
 
-	//TODO: 
+	//TODO:
 	// Fix exit exceptions on RF..
 	int minValue = std::numeric_limits<int>::min();
 	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
@@ -26,6 +26,7 @@ SurfingGuiManager::SurfingGuiManager()
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
 	// Auto call draw. Only to draw help boxes / OF native info. ?
+	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	//----
@@ -51,9 +52,15 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
 	params_Advanced.add(bDebugMetrics);
+
+#ifdef OFX_USE_NOTIFIER
+	params_Advanced.add(notifier.bGui);
+#endif
+
 	params_Advanced.add(bLog);
 	params_Advanced.add(bLogKeys);
 	params_Advanced.add(log.params);
+	params_Advanced.add(bNotifier);
 	params_Advanced.add(bReset);//TODO:
 	params_Advanced.add(bReset_Window);//TODO:
 	params_Advanced.add(bLockMove);//TODO:
@@ -70,7 +77,7 @@ SurfingGuiManager::SurfingGuiManager()
 	//--
 
 	//TODO: For functions not implemented yet.
-	
+
 	// Exclude from settings
 	//bAdvanced.setSerializable(false);
 	//bExtra.setSerializable(false);
@@ -81,7 +88,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//--
 
-	////TODO: BUG? 
+	////TODO: BUG?
 	//// it seems than requires to be false when using multi-context/instances
 	//// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
 	//bAutoDraw = false;
@@ -91,24 +98,33 @@ SurfingGuiManager::SurfingGuiManager()
 SurfingGuiManager::~SurfingGuiManager() {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Destructor!";
 
-	if (!bDoneExit) 
+	if (!bDoneExit)
 	{
 		exit();
 
-		ofLogWarning("ofxSurfingImGui") << "Forced exit() in destructor!";
-		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet...";
+		ofLogWarning("ofxSurfingImGui") << "exit() was not called yet as expected.";
+		ofLogWarning("ofxSurfingImGui") << "Now forcing exit() here in destructor!";
 	}
-	else 
+	else
 	{
-		ofLogNotice("ofxSurfingImGui") << "Succesfully omitted calling exit() in destructor. It was already done!";
+		ofLogWarning("ofxSurfingImGui") << "exit() was already called before as expected.";
+		ofLogWarning("ofxSurfingImGui") << "It was already done!";
+		ofLogWarning("ofxSurfingImGui") << "So we successfully omitted calling exit() herre in destructor.";
 	}
+
+	//TODO:
+	//// Delete pointers
+	//delete customFont;
+	//for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
+
+	ofRemoveListener(ofEvents().exit, this, &SurfingGuiManager::exit);
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::exit(ofEventArgs& e)
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
-	ofLogNotice("ofxSurfingImGui") << "Calling exit() by ofEvents().exit with maximum priority!";
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " > exit(ofEventArgs& e)";
+	ofLogNotice("ofxSurfingImGui") << "Called by ofEvents().exit with maximum priority! Now calling exit().";
 	ofLogNotice("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
 
 	exit();
@@ -118,11 +134,12 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 void SurfingGuiManager::exit()
 {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
+	//return;//TODO: fixing crash
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
+	ofRemoveListener(ofEvents().update, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
 	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
-	//ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
@@ -138,7 +155,7 @@ void SurfingGuiManager::exit()
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
-	if (bDoneSetup) 
+	if (bDoneSetup)
 	{
 		ofLogWarning(__FUNCTION__) << "Setup was already done. Skipping this call!";
 	}
@@ -210,8 +227,18 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 }
 
 //--------------------------------------------------------------
+void SurfingGuiManager::setup() // We will use the most common mode, to avoid to have to require any argument.
+{
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+	setup(IM_GUI_MODE_INSTANTIATED);
+}
+
+//--------------------------------------------------------------
 void SurfingGuiManager::setupDocking()
 {
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
 	setAutoSaveSettings(true);
@@ -225,10 +252,16 @@ void SurfingGuiManager::setupDocking()
 //--------------------------------------------------------------
 void SurfingGuiManager::setupInitiate()
 {
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
 	// For using internal instantiated GUI.
 	// Called by all modes except when using the external scope modes aka not instantiated.
 	// In that case we will only use the widgets helpers into a parent/external ImGui context!
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) {
+
+		ofLogWarning("ofxSurfingImGui") << "Aborted setupIntitiate() bc surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED";
+		return;
+	}
 
 	//--
 
@@ -247,14 +280,14 @@ void SurfingGuiManager::setupInitiate()
 
 	//TODO:
 	// When using docking/presets mode
-	// we enable special windows by default
+	// we force enable special windows by default
 	if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 		// Add LINK to extra params
 		// that allows that each presets could have his own link state enabled or disabled.
-		// to allow linking or floating windows. 
+		// to allow linking or floating windows.
 		this->addExtraParamToLayoutPresets(bLinked);
 	}
 
@@ -275,9 +308,9 @@ void SurfingGuiManager::setupInitiate()
 		path_ImLayouts = path_Global + "Presets/";
 
 		// Create folders if required
-		ofxSurfingHelpers::CheckFolder(path_Global);
+		CheckFolder(path_Global);
 
-		if (bUseLayoutPresetsManager) ofxSurfingHelpers::CheckFolder(path_ImLayouts);
+		if (bUseLayoutPresetsManager) CheckFolder(path_ImLayouts);
 
 		//--
 
@@ -291,6 +324,7 @@ void SurfingGuiManager::setupInitiate()
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGui::Gui& _gui) { //TODO: should be tested. For using external instantiated ImGui
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -304,6 +338,8 @@ void SurfingGuiManager::setup(ofxImGui::Gui& _gui) { //TODO: should be tested. F
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGuiFonts()
 {
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
 	std::string _fontName;
 	float _fontSizeParam;
 
@@ -346,6 +382,18 @@ void SurfingGuiManager::setupImGuiFonts()
 
 		// Font huge xxl
 		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge xxl font too
+
+		//TODO: 
+		// WARNING! 
+		// these names could be copied to GuiManager too!
+		// take care if both sizes fonts/names changed! 
+		// this is hardcoded now!
+		// Font sizes
+		namesCustomFonts.clear();
+		namesCustomFonts.push_back("DEFAULT");
+		namesCustomFonts.push_back("BIG");
+		namesCustomFonts.push_back("HUGE");
+		namesCustomFonts.push_back("HUGE_XXL");
 
 		//--
 
@@ -404,15 +452,17 @@ void SurfingGuiManager::setupImGuiFonts()
 	}
 	*/
 
-	// If we don't found any of the font, 
+	// If we don't found any of the font,
 	// we will let ImGui to use his default bundled font,
-	// The label sizes widgets, and the 3 font types will not be working, 
+	// The label sizes widgets, and the 3 font types will not be working,
 	// all styles will be the same.
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGui()
 {
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//--
@@ -455,6 +505,16 @@ void SurfingGuiManager::setupImGui()
 //--------------------------------------------------------------
 void SurfingGuiManager::startup()
 {
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+	//--
+
+	//TODO:
+	//workflow
+	// enable organizer by default.
+	// no need to call manually.
+	setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+
 	//--
 
 	// Finally the last initialization process step
@@ -513,32 +573,47 @@ void SurfingGuiManager::startup()
 
 	//--
 
+	// Log
 	// pass fonts to allow styles switching
-	log.setCustomFonts(customFonts);
+	log.setCustomFonts(customFonts, namesCustomFonts);
+	//log.setCustomFontsNames(namesCustomFonts);
 	//log.bGui.makeReferenceTo(bLog);
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+
+	notifier.setPath(path_Global);
+	notifier.setup();
+	//notifier.setDuration(4000);
+
+	//notifier.setIndexFont(0);
+	//notifier.setIndexFont(1);
+	//notifier.setIndexFont(2);
+	//notifier.setIndexFont(3);
+
+#endif
 
 	//--
 
 	// Two Help Boxes
 	{
-		// Help Text Box internal
+		// A. Help Text Box internal
 
-		//bHelpInternal.makeReferenceTo(boxHelpInternal.bGui);
-		boxHelpInternal.bGui.makeReferenceTo(bHelpInternal);
-		//boxHelpInternal.setName(bHelpInternal.getName());
-		boxHelpInternal.setPath(path_Global + "HelpBox_Internal/");
-		boxHelpInternal.setup();
+		helpInternal.setCustomFonts(customFonts);
+		//helpInternal.setName(bHelpInternal.getName());
+		helpInternal.bGui.makeReferenceTo(bHelpInternal);
+		helpInternal.setTitle(bHelpInternal.getName());
 
-		buildHelpInfo();
+		doBuildHelpInfo();
 
 		//--
 
-		// Help Text Box app
+		// B. Help Text Box app
 
-		boxHelpApp.bGui.makeReferenceTo(bHelp);
-		//boxHelpApp.setName(bHelp.getName());
-		boxHelpApp.setPath(path_Global + "HelpBox_App/");
-		boxHelpApp.setup();
+		helpApp.setCustomFonts(customFonts);
+		//helpApp.setName(bHelp.getName());
+		helpApp.bGui.makeReferenceTo(bHelp);
+		helpApp.setTitle(bHelp.getName());
 
 		//--
 
@@ -557,17 +632,27 @@ void SurfingGuiManager::startup()
 	// Load some internal settings
 	bool bNoSettingsFound = !(loadAppSettings());
 
-	// Will return false if settings file do not exist. 
+	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning!
 	if (bNoSettingsFound)
 	{
-		setShowAllPanels(false);//none
+		ofLogWarning("ofxSurfingImGui") << "No file settings found!";
+		ofLogWarning("ofxSurfingImGui") << "Probably the app is opening for the the first time.";
+		ofLogWarning("ofxSurfingImGui") << "We will reset the windows layout to avoid overlap of windows.";
 
+		// hide all special windows, if they are queued.
+		setShowAllPanels(false);
+
+		// forced default params
 		bHelpInternal = true;
 		bMinimize = false;
 
-		boxHelpApp.setPosition(400, 10);
-		boxHelpInternal.setPosition(800, 10);
+		//// help
+		//helpApp.setPosition(400, 10);
+		//helpInternal.setPosition(800, 10);
+
+		// workflow
+		bDoForceStartupResetLayout = true;
 	}
 
 	//--
@@ -582,85 +667,98 @@ void SurfingGuiManager::startup()
 // Help (Internal)
 
 //--------------------------------------------------------------
-void SurfingGuiManager::buildHelpInfo()
+void SurfingGuiManager::doBuildHelpInfo()
 {
-	ofLogNotice("ofxSurfingImGui:buildHelpInfo()");
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
 
 	// we recreate the help info during runtime when some variable changed
 
 	string l1 = "-----------------------------------\n";//divider
 	string l2 = "\n" + l1 + "\n";//spaciated divider
-	string l3 = "";//left indent
-	//string l3 = "  ";//left indent
+	//left indent
+	//string l3 = "  ";
+	string l3 = "";
+	string l4 = "     ";//spacing 1st column
+
+	//--
 
 	helpInfo = "";
-	helpInfo += "HELP INTERNAL \n\n";
+
+	//if(!helpInternal.bHeader) helpInfo += "HELP INTERNAL \n\n";
 
 	//helpInfo += "Gui Manager \n\n";
 	//helpInfo += "Double click to EDIT/LOCK \n\n";
 	//helpInfo += l;
 	//helpInfo += "\n";
 
-	helpInfo += "LAYOUTS PRESETS ENGINE \n";
-
-	helpInfo += "\n";
-	//helpInfo += l2;
+	//TODO: check mode
+	//if (0) {
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) {
+		helpInfo += "LAYOUTS PRESETS ENGINE \n";
+		helpInfo += "\n";
+		//helpInfo += l2;
+	}
 
 	helpInfo += l3 + "KEY COMMANDS \n";
 	helpInfo += "\n";
 
 	string st = "  ";
 
-	if (bMinimize)
-		helpInfo += "`           Minimize      " + st + " ON  \n";
-	else
-		helpInfo += "`           Minimize      " + st + " OFF \n";
-
-	if (!bMinimize)
+	//if (!bMinimize)
 	{
-		if (bHelp)
-			helpInfo += "H           Help App      " + st + " ON  \n";
+		if (bKeys)
+			helpInfo += " " + l4 + "Keys          " + st + " ON  \n";
 		else
-			helpInfo += "H           Help App      " + st + " OFF \n";
+			helpInfo += " " + l4 + "Keys          " + st + " OFF \n";
 
-		if (bHelpInternal)
-			helpInfo += "I           Help Internal " + st + " ON  \n";
+		if (bMinimize)
+			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " ON  \n";
 		else
-			helpInfo += "I           Help Internal " + st + " OFF \n";
-
-		if (bLog)
-			helpInfo += "L           Log Window    " + st + " ON  \n";
-		else
-			helpInfo += "L           Log Window    " + st + " OFF \n";
-
-		if (bExtra)
-			helpInfo += "E           Extra         " + st + " ON  \n";
-		else
-			helpInfo += "E           Extra         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " OFF \n";
 
 		if (bDebug)
-			helpInfo += "D           Debug         " + st + " ON  \n";
+			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " ON  \n";
 		else
-			helpInfo += "D           Debug         " + st + " OFF \n";
+			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " OFF \n";
 
-		helpInfo += "\n";
-		helpInfo += "DoubleClick to Edit/Lock \n";
-		helpInfo += "LeftClick + RightClick to Close \n";
+		if (bExtra)
+			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " OFF \n";
 
+		if (bLog)
+			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
+
+		if (bHelp)
+			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
+		else
+			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " OFF \n";
+
+		if (bHelpInternal)
+			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
+		else
+			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
+
+
+		//helpInfo += "\n";
 		//helpInfo += l2;
 	}
-	else helpInfo += "\n";
+	//else helpInfo += "\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) {
 		if (bDockingLayoutPresetsEngine)
 		{
 			helpInfo += l3 + "PRESETS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "F1 F2 F3 F4 \n";
 			helpInfo += "\n";
 
 			helpInfo += l3 + "SECTIONS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "F5          LAYOUTS \n";
 			helpInfo += "F6          PANELS \n";
 			if (!bMinimize) helpInfo += "F7          MANAGER \n";
@@ -668,10 +766,12 @@ void SurfingGuiManager::buildHelpInfo()
 
 			helpInfo += l3 + "PANELS \n";
 			//helpInfo += "\n";
+
 			helpInfo += "Ctrl+ \n";
 			helpInfo += "F1 .. F8    Panel # \n";
 			helpInfo += "A           All  \n";
 			helpInfo += "N           None \n";
+
 			if (bSolo)
 				helpInfo += "S           Solo          " + st + " ON  \n";
 			else
@@ -685,6 +785,7 @@ void SurfingGuiManager::buildHelpInfo()
 
 				helpInfo += l3 + "HOW TO \n";
 				//helpInfo += "\n";
+
 				helpInfo += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
 				//helpInfo += "\n";
 				helpInfo += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
@@ -698,6 +799,7 @@ void SurfingGuiManager::buildHelpInfo()
 
 				helpInfo += l3 + "MORE TIPS \n";
 				//helpInfo += "\n";
+
 				helpInfo += "- Disable the Minimize toggle \nto show more controls. \n";
 				//helpInfo += "\n";
 				helpInfo += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
@@ -713,7 +815,7 @@ void SurfingGuiManager::buildHelpInfo()
 		}
 	}
 
-	boxHelpInternal.setText(helpInfo);
+	helpInternal.setText(helpInfo);
 }
 
 //----
@@ -745,10 +847,10 @@ void SurfingGuiManager::clearFonts()
 	io.Fonts->Clear();
 }
 
-// API user: 
+// API user:
 // workflow during setup not in draw.
 
-//TODO: could return an int with the current index. 
+//TODO: could return an int with the current index.
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
 bool SurfingGuiManager::pushFont(std::string path, int size)
@@ -758,7 +860,7 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 #endif
 
 	//TODO:
-	// It could be a vector with several customFont 
+	// It could be a vector with several customFont
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
@@ -896,7 +998,7 @@ void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResu
 
 	std::string path = openFileResult.getPath();
 
-	ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Name:" << openFileResult.getName();
+	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " Name:" << openFileResult.getName();
 	ofLogNotice("ofxSurfingImGui") << " Path:" << path;
 
 	ofFile file(path);
@@ -926,17 +1028,22 @@ void SurfingGuiManager::openFontFileDialog(int size)
 	// Check if the user picked a file
 	if (openFileResult.bSuccess) {
 
-		ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << (" User selected a file");
+		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << (" User selected a file");
 
 		// We have a file, check it and process it
 		processOpenFileSelection(openFileResult, size);
 	}
 	else {
-		ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << (" User hit cancel");
+		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << (" User hit cancel");
 	}
 }
 
 //----
+
+//--------------------------------------------------------------
+void SurfingGuiManager::update(ofEventArgs& args) {
+	update();
+}
 
 //--------------------------------------------------------------
 void SurfingGuiManager::update() { // -> Not being used by default
@@ -944,36 +1051,26 @@ void SurfingGuiManager::update() { // -> Not being used by default
 	//{
 	//	appLayoutIndex = appLayoutIndex;
 	//}
+
+	// Force call Startup
+	//if ((ofGetFrameNum() <= 1) && (!bDoneStartup || !bDoneSetup)
+	if (!bDoneSetup || !bDoneStartup)
+	{
+		setupStartupForced();
+	}
 }
 
 //--------------------------------------------------------------
-//void SurfingGuiManager::draw() // -> Not being used by default
-void SurfingGuiManager::draw(ofEventArgs& args) // -> Auto called on each frame
+void SurfingGuiManager::draw()
 {
 	//TODO:
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
+}
 
-	//--
-
-	// Draw Help boxes
-
-	// Internal
-	if (bUseHelpInfoInternal) boxHelpInternal.draw();
-	//boxHelpInternal.draw();
-	//if (bHelpInternal)
-	//{
-	//	if (bUseHelpInfoInternal) boxHelpInternal.draw();
-	//}
-
-	// App
-	if (bUseHelpInfoApp) boxHelpApp.draw();
-	//boxHelpApp.draw();
-	//if (bHelp)
-	//{
-	//	if (bUseHelpInfoApp) boxHelpApp.draw();
-	//}
-
-	//((ofApp*)ofGetAppPtr())->valueKnob8.get();
+//--------------------------------------------------------------
+void SurfingGuiManager::draw(ofEventArgs& args) // -> Auto called on each frame
+{
+	draw();
 }
 
 //--------------------------------------------------------------
@@ -983,7 +1080,7 @@ void SurfingGuiManager::updateLayout() {
 
 	if (ini_to_load)
 	{
-		ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " LOAD! " << ini_to_load;
+		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " LOAD! " << ini_to_load;
 
 		loadLayoutImGuiIni(ini_to_load);
 
@@ -992,7 +1089,7 @@ void SurfingGuiManager::updateLayout() {
 
 	if (ini_to_save)
 	{
-		ofLogNotice("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " SAVE! " << ini_to_save;
+		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " SAVE! " << ini_to_save;
 
 		if (ini_to_save != "-1")
 		{
@@ -1134,7 +1231,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 		//--
 
-		// Window Panels 
+		// Window Panels
 
 		if (ImGui::TreeNode("PANELS"))
 		{
@@ -1222,15 +1319,15 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 
 			// a. Define the ofWindow as a docking space
 
-			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0)); // Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0)); // Fixes imgui to expected behaviour. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 			//ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);
 			//ImGui::PopStyleColor();
 
 			//-
 
-			// b. Lockable settings 
+			// b. Lockable settings
 
-			// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+			// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 			//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 			//ImGuiDockNodeFlags flagsDock;
 			//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -1285,8 +1382,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 					float hh = availableSpace.GetSize().y;
 					rectangle_Central_MAX = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
 
-					bool bDebug = bDrawView2.get();
-					if (bDebug)
+					bool bDebug_ = bDrawView2.get();
+					if (bDebug_)
 					{
 						int _wl = 2;
 						int pad = 10;
@@ -1298,8 +1395,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 						ofColor cl = ofColor::white;
 						//ofColor cl = ofColor::orange;
 
-						//int g = 255 * ofxSurfingHelpers::Bounce(0.5);
-						int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+						//int g = 255 * Bounce(0.5);
+						int a = 255.f * ofMap(Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 						ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 						//ofColor c = ofColor(g, a);
 						ofSetColor(c);
@@ -1355,9 +1452,9 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 
 		//----
 
-		//// b. Lockable settings 
+		//// b. Lockable settings
 
-		//// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+		//// Fixes imgui to expected behavior. Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 		////ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 		//ImGuiDockNodeFlags flagsDock;
 		//flagsDock = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -1394,7 +1491,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 	{
 		ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
 		if (centralNode)
-			//if (centralNode && centralNode->IsEmpty()) 
+			//if (centralNode && centralNode->IsEmpty())
 		{
 			ImRect availableSpace = centralNode->Rect();
 			//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
@@ -1407,7 +1504,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 
 			// create rectangle
 			rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, availableSpace.GetWidth(), availableSpace.GetHeight());
-			float v = ofxSurfingHelpers::Bounce(1);
+			float v = Bounce(1);
 			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
 		}
 	}
@@ -1416,7 +1513,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 		auto view = ofGetCurrentViewport();
 		auto viewCenter = view.getCenter();
 		rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
-		float v = ofxSurfingHelpers::Bounce(1);
+		float v = Bounce(1);
 		rectangle_Central.setSize(view.getWidth() * v, view.getHeight() * v);
 	}
 
@@ -1426,7 +1523,7 @@ void SurfingGuiManager::drawViewport_oFNative() {
 		ofSetLineWidth(4);
 		ofColor cl = ofColor::white;
 		//ofColor cl = ofColor::yellow;
-		int a = 255.f * ofMap(ofxSurfingHelpers::Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
+		int a = 255.f * ofMap(Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
 		ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 		ofSetColor(c);
 		ofFill();
@@ -1441,23 +1538,25 @@ void SurfingGuiManager::drawViewport_oFNative() {
 #endif
 
 //--------------------------------------------------------------
-void SurfingGuiManager::startupFirstFrame()
+void SurfingGuiManager::setupStartupForced()
 {
+	ofLogWarning(__FUNCTION__);
+
 	if (!bDoneSetup)
 	{
-		ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__) << (" Setup was not done!");
-		ofLogWarning("ofxSurfingImGui") << (" Force a default Setup() call!");
+		ofLogWarning("ofxSurfingImGui") << "Setup() was not called/done!";
+		ofLogWarning("ofxSurfingImGui") << "Force a default Setup() call!";
 
 		setup();
 	}
 
-	// Force call startup(). 
+	// Force call startup().
 	// Maybe user forgets to do it or to speed up the API setup in some scenarios.
 	// i.e. when not using special windows or layout engine
 	if (!bDoneStartup)
 	{
-		ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__) << (" Startup() was not called after initiation process.");
-		ofLogWarning("ofxSurfingImGui") << (" Auto force call Startup()!");
+		ofLogWarning("ofxSurfingImGui") << "Startup() was not called after initiation process.";
+		ofLogWarning("ofxSurfingImGui") << "Auto force call Startup()!";
 
 		startup();
 	}
@@ -1472,17 +1571,17 @@ void SurfingGuiManager::startupFirstFrame()
 //----
 
 // Global ImGui being/end like ofxImGui
-// 
+//
 // All the ImGui Stuff goes in between here,
 // The RAW ImGui widgets and the API / Engine handled stuff too!
-// 
+//
 //--------------------------------------------------------------
 void SurfingGuiManager::Begin()
 {
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
-		ofLogError("ofxSurfingImGui") << " " << (__FUNCTION__) << "\n" <<
+		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" <<
 			("Initialization was not done properly. \nCheck the examples / documentation.");
 
 		return;
@@ -1490,11 +1589,13 @@ void SurfingGuiManager::Begin()
 
 	//--
 
-	// Force call Startup
-	if (ofGetFrameNum() <= 1 || !bDoneStartup || !bDoneSetup)
-	{
-		startupFirstFrame();
-	}
+	//TODO:
+	//// Force call Startup
+	//if (ofGetFrameNum() <= 1) 
+	//	if (!bDoneStartup || !bDoneSetup)
+	//{
+	//	setupStartupForced();
+	//}
 
 	//--
 
@@ -1504,7 +1605,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Reset unique names
-	// Here it handles the queued ofParams names 
+	// Here it handles the queued ofParams names
 	// to avoid colliding by using push/pop id's tags.
 	resetUniqueNames();
 
@@ -1575,15 +1676,17 @@ void SurfingGuiManager::Begin()
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::End()
-{
-	// Check that it's property initialized!
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
+void SurfingGuiManager::drawWindowsExtraManager() {
 
-	//--
+	// Auto handles drawing of extra windows. Not required to draw manually!
 
-	// auto handles drawing. not need to draw manually!
+	// Log
 	DrawWindowLogIfEnabled();
+
+	// Notifier
+#ifdef OFX_USE_NOTIFIER
+	DrawNotifierIfEnabled();
+#endif
 
 	//--
 
@@ -1593,32 +1696,60 @@ void SurfingGuiManager::End()
 
 	//--
 
-	if (customFont != nullptr) ImGui::PopFont();
+	// Draw Help windows
 
-	// Mouse lockers helpers
-	// Here we check if mouse is over gui to disable other external stuff
-	// e.g. easyCam draggable moving, text input boxes, key commands...
+	// Internal
+	if (bUseHelpInfoInternal) {
+		if (helpInternal.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
+		helpInternal.draw();
+	}
 
-	bMouseOverGui = false;
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
-	bMouseOverGui |= ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+	// App
+	if (bUseHelpInfoApp) {
+		if (helpApp.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
+		helpApp.draw();
+	}
+}
 
-	ImGuiIO& io = ImGui::GetIO();
-	bOverInputText = io.WantTextInput;
-
-	//// Debug
-	//{
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	ImGui::Text("io.WantCaptureMouse: %d", io.WantCaptureMouse);
-	//	ImGui::Text("io.WantCaptureMouseUnlessPopupClose: %d", io.WantCaptureMouseUnlessPopupClose);
-	//	ImGui::Text("io.WantCaptureKeyboard: %d", io.WantCaptureKeyboard);
-	//	ImGui::Text("io.WantTextInput: %d", io.WantTextInput);
-	//	ImGui::Text("io.WantSetMousePos: %d", io.WantSetMousePos);
-	//	ImGui::Text("io.NavActive: %d, io.NavVisible: %d", io.NavActive, io.NavVisible);
-	//}
+//--------------------------------------------------------------
+void SurfingGuiManager::End()
+{
+	// Check that it's property initialized!
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
 	//--
+
+	//TODO:
+	//workflow
+	// if there's no settings files, it means that the app it's opened by first time,
+	// then probably the windows will be overlapped..
+	if (ofGetFrameNum() > 1)
+		if (!bDisableStartupReset && bDoForceStartupResetLayout && !bDoneDoForceStartupResetLayout)
+		{
+			doResetLayout();
+			bDoneDoForceStartupResetLayout = true;
+		}
+
+	//--
+
+	drawWindowsExtraManager();
+
+	//--
+
+	// Font
+
+	//TODO: could set the default font instead of Pop..
+	// bc that will be prophylactic if pushed too many fonts by error!
+	if (customFont != nullptr) ImGui::PopFont();
+
+	//--
+
+	// Mouse and Keyboard
+	doCheckOverGui();
+
+	//--
+
+	// ImGui End
 
 	//TODO:
 	// Sometimes we could use an ofxImGui external or from a parent scope.
@@ -1702,7 +1833,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p)
 	if (!p.get()) return false; // p is used as the "visible toggle"
 
 	if (p.getName() == "") {
-		ofLogWarning("ofxSurfingImGui") << "\n" << (__FUNCTION__);
+		ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 		ofLogWarning("ofxSurfingImGui") << "Current bool parameter have NO NAME!";
 		ofLogWarning("ofxSurfingImGui") << "Take care and set a name to it.";
 		p.setName("__NONAME__");
@@ -1769,7 +1900,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 	return b;
 }
 
-// This is the main BeginWindow. 
+// This is the main BeginWindow.
 // All above methods will call this one!
 
 ////--------------------------------------------------------------
@@ -1782,10 +1913,10 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 {
 	ImGuiCond cond = ImGuiCond_None;
 
-	//TODO: 
+	//TODO:
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
-	//TODO: 
+	//TODO:
 	//if (bReset_Window) {
 	//	bReset_Window = false;
 	//	resetWindowImGui(false, true);
@@ -1794,8 +1925,8 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 	//--
 
 	// Reset unique names
-	// This is to handle the widgets ID to avoid repeat an used name, 
-	// avoiding colliding between them 
+	// This is to handle the widgets ID to avoid repeat an used name,
+	// avoiding colliding between them
 	// when params are re used on the same window/scope.
 
 	resetUniqueNames();
@@ -1820,7 +1951,7 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 	//	return false;
 	//}
 
-	// When we are instantiating ImGui externally, 
+	// When we are instantiating ImGui externally,
 	// not inside this addon,
 	// we don't handle the font and theme.
 	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
@@ -1851,7 +1982,7 @@ bool SurfingGuiManager::BeginWindowSpecial(string name)
 	}
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Special Window with name '" << name << "' not found!";
+		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << " Special Window with name '" << name << "' not found!";
 		return false;
 	}
 }
@@ -1868,14 +1999,14 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	// Skip if there's no queued special windows
 	if (index > windows.size() - 1 || index == -1)
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Out of range index for queued windows, " << index;
+		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << " Out of range index for queued windows, " << index;
 		return false;
 	}
 
 	//--
 
 	//TODO:
-	// Skip window if hidden 
+	// Skip window if hidden
 	// (bGui = false)
 	if (!windows[index].bGui.get())
 		return false;
@@ -1896,7 +2027,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 		// Run the linking engine when this is enabled
 		if (windowsOrganizer.bLinked)
 		{
-			//TODO: 
+			//TODO:
 			// make refresh faster
 			// can be moved to global begin() to reduce calls ?
 			// maybe is better like that bc it's called many times.. ?
@@ -1915,7 +2046,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	// Auto resize
 
 	// global
-	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize; 
+	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 
 	if (windows[index].bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 	// independent for each window
@@ -1953,10 +2084,10 @@ bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
 	}
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "\n" << (__FUNCTION__) << " Special Window toggle not found! " << _bGui.getName();
+		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << " Special Window toggle not found! " << _bGui.getName();
 
 		//TODO:
-		// detect if there is no special window with that name, 
+		// detect if there is no special window with that name,
 		// and then call a normal window to avoid missing drawing.
 		// being prophylactic.
 		//return BeginWindow(_bGui);
@@ -2083,7 +2214,7 @@ void SurfingGuiManager::beginDocking()
 
 	ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
 	// Fixes imgui to expected behaviour, having a transparent central node in passthru mode.
-	// Alternative: Otherwise add in ImGui::DockSpace() [±line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
+	// Alternative: Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
 	//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
 
 	//dockingFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode; // Uncomment to always keep an empty "central node" (a visible oF space)
@@ -2133,9 +2264,9 @@ void SurfingGuiManager::BeginDocking()
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
 	// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
+	// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
 	// all active windows docked into it will lose their parent and become undocked.
-	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
+	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::Begin("DockSpace", nullptr, window_flags);
@@ -2176,14 +2307,14 @@ void SurfingGuiManager::EndDocking()
 
 	if (bMenu) drawMenuDocked();
 
-	//-
+	//--
 
 	//ImGuiIO& io = ImGui::GetIO();
 	//if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	//{
 	//}
 
-	 // End the parent window that contains the Dockspace:
+	// End the parent window that contains the Dockspace:
 	ImGui::End(); // ?
 }
 
@@ -2220,10 +2351,11 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	// Extra params that will be included into each preset.
 	// Then can be different and memorized in different states too,
-	// like the common panels. 
+	// like the common panels.
 
 	params_LayoutsExtra.add(bMenu);
 	params_LayoutsExtra.add(bLog);
+	params_LayoutsExtra.add(bNotifier);
 	//TODO: should be removed if handled by preset engine..
 
 
@@ -2393,7 +2525,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 bool SurfingGuiManager::loadAppSettings()
 {
 	bool b = false;
-	if (bAutoSaveSettings) b = ofxSurfingHelpers::loadGroup(params_AppSettings, path_AppSettings, true);
+	if (bAutoSaveSettings) b = loadGroup(params_AppSettings, path_AppSettings, true);
 
 	return b;
 
@@ -2410,11 +2542,11 @@ void SurfingGuiManager::saveAppSettings()
 		//TODO:
 		// Double check again that folder exist.
 		// This is already made on setup or when a custom setName is made.
-		ofxSurfingHelpers::CheckFolder(path_Global);
+		CheckFolder(path_Global);
 		// Could use:
-		//ofFilePath::getEnclosingDirectory(…)
+		//ofFilePath::getEnclosingDirectory(O)
 
-		ofxSurfingHelpers::saveGroup(params_AppSettings, path_AppSettings);
+		saveGroup(params_AppSettings, path_AppSettings);
 		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
 	}
 	else {
@@ -2663,7 +2795,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 
 		if (!bMinimize_Presets)
 		{
-			// Extra Params 
+			// Extra Params
 
 			// when is minimized or manager window hidden
 			if (bMinimize_Presets || !bGui_LayoutsManager)
@@ -2799,54 +2931,62 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Help internal
 	else if (name == bHelpInternal.getName() && bHelpInternal)
 	{
-		buildHelpInfo();//recreate info
+		doBuildHelpInfo();//recreate info
 		return;
 	}
 
 	// Help App / global. To be handled externally
 	else if (name == bHelp.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Debug
 	else if (name == bDebug.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Extra
 	else if (name == bExtra.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Log
 	else if (name == bLog.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Solo
 	else if (name == bSolo.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
+		return;
+	}
+
+	// Keys
+	else if (name == bKeys.getName())
+	{
+		doBuildHelpInfo();
 		return;
 	}
 
 	// Minimize
 	else if (name == bMinimize.getName())
 	{
-		buildHelpInfo();
+		doBuildHelpInfo();
 		return;
 	}
+
 	//else if (name == bMinimize_Presets.getName())
 	//{
-	//	buildHelpInfo();
+	//	doBuildHelpInfo();
 	//}
 
 	//----
@@ -2855,7 +2995,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Skip below callbacks
 	// when not using the Layout Presets Engine!
 	// to improve the performance a bit
-	// by skipping the not required callbacks. 
+	// by skipping the not required callbacks.
 	if (surfingImGuiMode != ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 		if (!bDockingLayoutPresetsEngine) return;
 
@@ -2871,7 +3011,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	//--
 
-	// Reset 
+	// Reset
 	// This toggle/flag is "sent" to the parent scope (ofApp), to resets something in our apps.
 	// Example: to resets the layout.
 	// That pointer must be created externally!
@@ -2916,7 +3056,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	{
 		//appLayoutIndex = ofClamp(appLayoutIndex.get(), appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
-		//if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/) 
+		//if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/)
 
 		if (appLayoutIndex != appLayoutIndex_PRE)
 		{
@@ -3126,13 +3266,13 @@ void SurfingGuiManager::loadLayoutImGuiIni(std::string path)
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutPresetGroup(std::string path)
 {
-	ofxSurfingHelpers::saveGroup(params_Layouts, path_ImLayouts + path + ".json");
+	saveGroup(params_Layouts, path_ImLayouts + path + ".json");
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutPresetGroup(std::string path)
 {
-	ofxSurfingHelpers::loadGroup(params_Layouts, path_ImLayouts + path + ".json");
+	loadGroup(params_Layouts, path_ImLayouts + path + ".json");
 }
 
 //----
@@ -3484,19 +3624,19 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		bMinimize = !bMinimize;
 	}
 
-	// Extra 
+	// Extra
 	else if (key == 'E' && !mod_CONTROL)
 	{
 		bExtra = !bExtra;
 	}
 
-	// Debug 
+	// Debug
 	else if (key == 'D' && !mod_CONTROL)
 	{
 		bDebug = !bDebug;
 	}
 
-	// Log 
+	// Log
 	else if (key == 'L' && !mod_CONTROL)
 	{
 		bLog = !bLog;
@@ -3586,7 +3726,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			setShowAllPanels(false);
 		}
 
-		//// Unlock Dock 
+		//// Unlock Dock
 		//else if (key == 'l')
 		//{
 		//	bModeLock1 = !bModeLock1;
@@ -3800,6 +3940,17 @@ void SurfingGuiManager::drawMenu()
 	}
 }
 
+//--
+
+//--------------------------------------------------------------
+void SurfingGuiManager::doResetLayout()
+{
+	ofLogNotice("ofxSurfingImGui") << "Reset layout of windows.";
+
+	windowsOrganizer.doAlignWindowsReset();
+
+	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
+}
 
 //----
 
@@ -3846,7 +3997,7 @@ void SurfingGuiManager::drawSpecialWindowsPanel()
 
 //--
 
-// Special behaviour to control windows
+// Special behavior to control windows
 
 //// Free layout
 //else if (name == bModeFree.getName())

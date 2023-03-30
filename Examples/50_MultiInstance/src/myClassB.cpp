@@ -37,7 +37,7 @@ void myClassB::draw()
 			ui.AddAutoResizeToggle();
 			ui.AddSpacingBigSeparated();
 
-			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			if (ui.isMaximized()) ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 			ui.Add(speed, OFX_IM_KNOB_DOTKNOB, 2, true);
 			ui.Add(separation, OFX_IM_KNOB_DOTKNOB, 2);
 

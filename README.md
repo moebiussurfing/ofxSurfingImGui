@@ -1,52 +1,66 @@
 <br>
 
 <h1>
-
+  
 ofxSurfingImGui.  
-A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
-for **openFrameworks** projects.  
-
+A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
+for [openFrameworks](https://openframeworks.cc/) projects.  
+  
 </h1>
 
-<br>
-<br>
+<h3>
+  
+(An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).)    
+  
+</h3>
 
-## WORK IN PROGRESS!
+<br><br>
 
-<br>
-<br>
+### WORK IN PROGRESS!
 
-( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
-
-<br>
+<br><br>
 
 # FEATURES
 
-- Easy **setup**.
-- **Multiple instances** around your classes and **ofxAddons**.
-- **ofParameter helpers**:
-  - Many RAW **DearImGui widgets** ported.
+- **Simple Setup**:
+  - Simplified user **workflow**.
+  - Many useful **Internal states** and persistent settings:
+    - Minimize, debug, extra, advanced, auto resize...
+    - Log, Notifier and windows visibility and distribution. 
+- **Multiple instances**:
+  - Many windows around your classes and **ofxAddons**.
+  - All together without colliding.
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
   - Added custom useful widgets.
-- Useful **API methods** and **snippets**: 
-  - Help on **windows** and **widgets**.
-  - **Speed-Up** responsive layout.
-  - Simplify **workflow**.
-  - Internal params and persistent settings.
-- 4 active **font sizes**.
+- Useful **API methods** and **Snippets**: 
+  - Help on populate **Windows** and **Widgets**.
+  - **Speed-Up** responsive **Layout Helpers**.
+- Four active **Font Sizes** for labels and paragraphs.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
-  - Right-click:
-    - To reset to param center.
-    - _+Ctrl_ to reset to min.
-    - _+Alt_ to reset to max.
-- **Themes** and editor.
-- Windows organizer, aligner and linker.
-- **Log System** with custom tags.
-- **Notifier System**. ( WIP )
+  - Right-Click:
+    - To Reset to param Center.
+    - _+Ctrl_ to Reset to Min.
+    - _+Alt_ to Reset to Max.
+- **Windows Organizer**:
+    - Aligner, cascade and Group/Linker.
+- **Log System**:
+    - With custom tags.
+- **Notifier System**:
+    - With custom layout and styles.
+- **Text Editor**: 
+    - Language marks.
+    - Font sizes, color themes.
+    - Clipboard access and **undo/redo** history.
+- **Image Inspector**:
+    - With pixel color picker.
+- **Themes**:
+    - With styles **Editor** and serializers ( WIP ).
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
-
+ 
 <br>
 
 <details>
@@ -57,18 +71,18 @@ for **openFrameworks** projects.
 - Vertical and Horizontal Sliders.
 - Range Sliders.
 - Styled Knobs.
-- Tree folders.
-- Inactive, hidden or locked styles.
-- Floating tooltip, labels and values.
+- Tree and indented folders.
+- Floating tooltips, labels and values.
 - Dropdown / Combo index selector and names.
 - Matrix buttons to an index selector.
-- Bundled widgets like arrows linked to int params browsing.
+- Bundled widgets like arrows linked to int params for browsing.
 - DearWidgets.
 - Gradient Color Designer.
 - Progress bars and waiting spinners.
 - Files Browser.
 - Curve Editors.
-- Bubbles Notifier System.
+- Log and Notifier System.
+- Text Editor, for live coding or text content.
 - Profile Plotters.
 - ...
   
@@ -82,9 +96,7 @@ for **openFrameworks** projects.
  
 <br>
   
-## EXAMPLE: HelloWorld
-
-<br>
+## EXAMPLE: 00_HelloWorld
 
 ![](/Examples/00_HelloWorld/Capture.PNG)  
 
@@ -117,7 +129,7 @@ void ofApp::draw()
         {
             /* Put widgets here */
 
-            ui.AddLabelBig("HELLO WORLD");
+            ui.AddLabelBig("00_HelloWorld");
             ui.AddSpacing();
             ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
             ui.Add(speed, OFX_IM_HSLIDER);
@@ -137,21 +149,21 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/)  
-  - THE **AWESOME** ~~[@Daandelange](https://github.com/Daandelange)'s **FORK**~~.
-    - NEW TEMPORARY BRANCH: [ofxImGui](https://github.com/moebiussurfing/ofxImGui)  
-  - You **MUST USE THIS ONE**! 
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop): Dear ImGui v1.89.4 / BackEnd:  
+  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
+  - You **MUST use this one**! 
 
-* [Assets.zip](assets.zip):  
-Located in the add-on root path. Mainly font file(s) to put into each project `OF_APP/bin/data/`.  
+## DATA FILES
+
+* **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
+* [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <br>
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
 
-The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located (then `/data` can also be empty), it will work too, but using the default bundled font from **ImGui**.  
+The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
 
@@ -159,13 +171,13 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
   
   - Multi context / instances: 
     
     - Several windows from different add-ons without colliding.  
   
-  - Easy to update to future **NEW ImGui** versions.  
+  - Easy to update to future **NEW ImGui** releases.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
     
@@ -175,30 +187,37 @@ The font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If tha
 <br>
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
+  
+<br>
 
+( _**New WIP examples**, testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
+  
 <br>
 
 ## CURRENT SYSTEMS
 
-- **Windows 10** / **VS 2022** / 
-    * GitHub [oF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [oF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** / [Intel] / [oF 0.11.2](https://openframeworks.cc/download/). 
+- **Windows 10** / **VS 2022**
+    * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
+    * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). (**Intel**)  
+    * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
-
 <br>
 
 # AUTHOR
 
-An add-on by **moebiusSurfing**.  
+An addon by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2023*  
 
 ## THANKS
 
-_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange)  
-for **HIS AWESOME ofxImGui FORK**._  
-_Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing._  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK** and some **macOS** fixes._  
+
+_Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
+
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+
 ## LICENSE
 
 **MIT License**

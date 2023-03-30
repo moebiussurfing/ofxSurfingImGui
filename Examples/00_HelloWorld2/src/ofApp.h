@@ -6,16 +6,16 @@
     ABOUT THE API:
 
     - Spacing and separators.
-    - Commontly useful minimizer toggle.
-    - Tooltips for widgets.
+    - Commonly useful minimizer toggle.
+    - Tool-tips for widgets.
     - The Log Window.
     - Mouse over gui.
     - Note persistence of previous sessions for some settings.
     - Text labels.
-    - Some keycommands examples.
+    - Some key-commands examples.
     - Make blink widgets.
     - Make font bigger on widgets.
-
+    - Set a widget inactive.
 
 */
 

@@ -1,0 +1,8 @@
+CPP stands for "C++", which is a high-level programming language developed by Bjarne Stroustrup in the early 1980s. C++ is an extension of the C programming language and is designed to provide object-oriented programming (OOP) features, as well as generic programming capabilities.
+C++ is a compiled language, which means that code written in C++ needs to be translated into machine-readable instructions by a compiler before it can be executed by a computer. C++ is widely used in a variety of applications, including operating systems, game development, scientific computing, and financial software.
+Some of the key features of C++ include:
+Object-oriented programming: C++ supports encapsulation, inheritance, and polymorphism, which are the main pillars of OOP.
+Templates: C++ provides templates, which allow you to write generic code that can be used with different data types.
+Memory management: C++ provides low-level memory management capabilities, which allow you to control memory allocation and deallocation.
+Standard library: C++ comes with a large standard library that provides a wide range of functionality, including data structures, input/output operations, and algorithms.
+Overall, C++ is a powerful programming language that offers a lot of flexibility and control to developers. However, it can also be challenging to learn and use effectively, especially for beginners.

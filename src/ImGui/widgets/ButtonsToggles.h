@@ -8,13 +8,16 @@
 
 //------------------------------
 
-#include "ofxImGui.h"
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
+#include "ofxImGui.h"
 
 #include "ImGui/LayoutHelpers.h"
 #include "ImGui/widgets/GuiConstants.h"
 //#include "ImGui/utils/ofxSurfing_Timers.h"
-#include "ofxSurfingHelpers.h"
+
+#include "surfingHelpers.h"
+
 
 ////#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
 //
@@ -43,7 +46,7 @@ namespace ofxImGuiSurfing
 		// Blink
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -58,7 +61,7 @@ namespace ofxImGuiSurfing
 			//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, borderLineWidth);
 		}
 
-		ImGui::TextWrapped(text.c_str());
+		ImGui::TextWrapped("%s", text.c_str());
 
 		//if (border)
 		{
@@ -167,7 +170,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -309,7 +312,7 @@ namespace ofxImGuiSurfing
 		// Blink
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -430,7 +433,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -588,7 +591,7 @@ namespace ofxImGuiSurfing
 
 			if (blinkValue == -1)
 			{
-				blinkValue = ofxSurfingHelpers::getFadeBlink();
+				blinkValue = getFadeBlink();
 			}
 			float a;
 			if (b) a = blinkValue;
@@ -1029,7 +1032,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
@@ -1100,7 +1103,7 @@ namespace ofxImGuiSurfing
 
 		if (bBlink)
 		{
-			float blinkValue = ofxSurfingHelpers::getFadeBlink();
+			float blinkValue = getFadeBlink();
 			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);

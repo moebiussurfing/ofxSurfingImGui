@@ -14,14 +14,18 @@
 
 //----
 
+#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+#include "imgui_internal.h"
 #include "ofxImGui.h"
+
 //#include "ofHelpers.h"
 //#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
 
-#include "ofxSurfingHelpers.h"
+#include "surfingHelpers.h"
 
-#include "ofxInteractiveRect.h"
-//#include "ofxSurfingBox.h"
+
+//#include "ofxInteractiveRect.h"
+////#include "ofxSurfingBox.h"
 
 namespace ofxImGuiSurfing
 {
@@ -95,8 +99,8 @@ namespace ofxImGuiSurfing
 	{
 		string str1 = "Size " + ofToString(ImGui::GetWindowSize().x, 0) + "," + ofToString(ImGui::GetWindowSize().y, 0);
 		string str2 = "Pos  " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
-		ImGui::Text(str2.c_str());
-		ImGui::Text(str1.c_str());
+		ImGui::Text("%s", str2.c_str());
+		ImGui::Text("%s", str1.c_str());
 	}
 
 	//--------------------------------------------------------------
@@ -375,7 +379,7 @@ public:
 
 	ofParameter<ofColor> colorBg{ "Bg", ofColor(0), ofColor(0), ofColor(255) };
 
-	ofxInteractiveRect rectDraggable = { "rectDraggable" };
+	//ofxInteractiveRect rectDraggable = { "rectDraggable" };
 
 	ofFbo fboPreview;
 
@@ -429,8 +433,8 @@ public:
 		params.add(scaleModeIndex);
 		params.add(bInDocked);
 		params.add(colorBg);
-		params.add(rectDraggable.getParameterRectangle());
-		params.add(rectDraggable.bEditMode);
+		//params.add(rectDraggable.getParameterRectangle());
+		//params.add(rectDraggable.bEditMode);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingPreview::Changed_Params); // setup()
 
@@ -466,9 +470,9 @@ public:
 
 		// Draggable viewport rectangle
 
-		rectDraggable.bEditMode.setName("Edit Viewport");
-		rectDraggable.setTransparent();
-		rectDraggable.setAutoSave(true);
+		//rectDraggable.bEditMode.setName("Edit Viewport");
+		//rectDraggable.setTransparent();
+		//rectDraggable.setAutoSave(true);
 
 		//-
 
@@ -477,23 +481,23 @@ public:
 		//ofxSurfingHelpers::loadGroup(params);
 	};
 
-	void updateRectDraggable(ofRectangle r)
-	{
-		rectDraggable.setX(r.getX());
-		rectDraggable.setY(r.getY());
-		rectDraggable.setWidth(r.getWidth());
-		rectDraggable.setHeight(r.getHeight());
-	};
+	//void updateRectDraggable(ofRectangle r)
+	//{
+	//	//rectDraggable.setX(r.getX());
+	//	//rectDraggable.setY(r.getY());
+	//	//rectDraggable.setWidth(r.getWidth());
+	//	//rectDraggable.setHeight(r.getHeight());
+	//};
 
-	void draw_Rectangle()//TODO:remove
-	{
-		rectDraggable.draw();
-	};
+	//void draw_Rectangle()//TODO:remove
+	//{
+	//	//rectDraggable.draw();
+	//};
 
-	ofRectangle getRectangle() const {
-		ofRectangle r = rectDraggable;//cast
-		return r;
-	}
+	//ofRectangle getRectangle() const {
+	//	ofRectangle r = rectDraggable;//cast
+	//	return r;
+	//}
 
 	void begin()
 	{
