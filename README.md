@@ -10,7 +10,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <h3>
   
-(An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).)    
+( An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop). )    
   
 </h3>
 
@@ -181,11 +181,8 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
   <p>
 
 - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
-  
   - Multi context / instances: 
-    
     - Several windows from different add-ons without colliding.  
-  
   - Easy to update to future **NEW ImGui** releases.  
     Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
     And will be probably merged into the master branch.  
@@ -213,9 +210,7 @@ An addon by **moebiusSurfing**.
 ## THANKS
 
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK** and some **macOS** fixes._  
-
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
-
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 
 ## LICENSE
