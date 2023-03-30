@@ -4,7 +4,7 @@
   
 ofxSurfingImGui.  
 A [DearImGui](https://github.com/ocornut/imgui) **Toolkit**  
-for **openFrameworks** projects.  
+for [openFrameworks](https://openframeworks.cc/) projects.  
   
 </h1>
 
