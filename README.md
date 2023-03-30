@@ -66,6 +66,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 <details>
   <summary>WIDGETS LIST</summary>
   <p>    
+    
 - Big Toggles and Buttons.
 - Vertical and Horizontal Sliders.
 - Range Sliders.
@@ -100,6 +101,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <details>
   <summary>CODE</summary>
+  
 #### ofApp.h
 
 ```.cpp
@@ -164,6 +166,7 @@ void ofApp::draw()
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>
+  
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
 </details>
