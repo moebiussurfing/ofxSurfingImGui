@@ -19,7 +19,7 @@
 //
 //	ofxSurfingGui ui;
 //	ofParameter<bool> bGui{ "Show", true };
-//	ofParameter<bool> bImg2{ "Img2", 1 };
+//	ofParameter<bool> bDrawImg2{ "Img2", 1 };
 //
 //	ofFbo fbo;
 //	ofPixels pixels;

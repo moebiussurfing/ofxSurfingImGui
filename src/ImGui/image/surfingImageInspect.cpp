@@ -138,7 +138,7 @@
 //				ui.AddSpacingBigSeparated();
 //
 //				ui.AddSpacing();
-//				ui.Add(bImg2, OFX_IM_TOGGLE_ROUNDED);
+//				ui.Add(bDrawImg2, OFX_IM_TOGGLE_ROUNDED);
 //
 //				ui.AddDebugToggle();
 //				ui.AddSpacing();
@@ -292,7 +292,7 @@
 //
 //		//--
 //
-//		if (ui.BeginWindow(bImg2, ImGuiWindowFlags_AlwaysAutoResize))
+//		if (ui.BeginWindow(bDrawImg2, ImGuiWindowFlags_AlwaysAutoResize))
 //		{
 //			ui.Add(index);
 //			ui.AddLabelBig(path);
