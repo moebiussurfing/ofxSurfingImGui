@@ -18,37 +18,64 @@ using namespace std;
 // namespace ofxSurfingHelpers
 namespace ofxImGuiSurfing
 {
-	// Monitors helpers
+	// Monitors Helpers
 
 	// WARRNING! For my personal setup!
 	// I have three FHD monitors: 
 	// Left monitor is portrait. 
 	// Central and Right monitor are landscape.
 	//--------------------------------------------------------------
-	inline void SurfSetMyMonitor(int layout = 0)
+	inline void SurfSetMyMonitor(int layout = 0, bool bStandardFrameRate = true)
 	{
-		ofLogWarning("ofxSurfingImGui") << "SurfSetMyMonitor " << layout;
+		if (bStandardFrameRate) {
+			ofSetFrameRate(60);
+			ofSetVerticalSync(false);
+		}
 
-		int h = 38; // window bar height on WIN_32
+		// window bar height on WIN_32.
+		int h = 38;
 		int offset = 12;
 		int hw = h - offset;
-		if (layout == 0) { // left portrait
+		if (layout == 0)
+		{
+			// move app window to the left monitor (from main) as portrait
 			ofSetWindowPosition(-1080, h);
 			ofSetWindowShape(1080, 1920 - hw);
 		}
-		else if (layout == 1) { // landscape right
+		else if (layout == 1)
+		{
+			// move app window  to the right monitor (from main) as landscape 
 			ofSetWindowPosition(1920, h);
 			ofSetWindowShape(1920, 1080 - hw);
 		}
-		else if (layout == 2) { // landscape left
+		else if (layout == 2)
+		{
+			// move app window  to the left monitor (from main) as landscape
 			ofSetWindowPosition(-1920, h);
 			ofSetWindowShape(1920, 1080 - hw);
 		}
 	}
 
+	// Images drawing
+
+	//--------------------------------------------------------------
+	inline void SurfDrawImageFullScreenFit(ofFloatImage& imageFloat, ofScaleMode scaleMode = OF_SCALEMODE_FIT)
+	{
+		ofRectangle rr(0, 0, imageFloat.getWidth(), imageFloat.getHeight());
+		rr.scaleTo(ofGetCurrentViewport(), scaleMode);
+		imageFloat.draw(rr.x, rr.y, rr.width, rr.height);
+	}
+	//--------------------------------------------------------------
+	inline void SurfDrawImageFullScreenFit(ofImage& image, ofScaleMode scaleMode = OF_SCALEMODE_FIT)
+	{
+		ofRectangle rr(0, 0, image.getWidth(), image.getHeight());
+		rr.scaleTo(ofGetCurrentViewport(), scaleMode);
+		image.draw(rr.x, rr.y, rr.width, rr.height);
+	}
+
 	//----
 
-	// Serializers
+	// ofParams Serializers
 
 	//----
 

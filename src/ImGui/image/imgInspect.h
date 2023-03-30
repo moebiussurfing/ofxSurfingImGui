@@ -2,16 +2,9 @@
 
 	A modified version by @moebiusSurfing
 
-	TODO:
-
-	- make an OF class helper:
-		store zooms, easy get color,
-	- Picked color seems is not being the one from the center pixel
-	- Zoom image is y flipped
-
 	Added 24 bits format.
-	Added exposed public:
-	bool bDebug, int* zoomSize_, int* zoomRectangleWidth_, ofColor* c
+	Added exposed public: bool bDebug, int* zoomSize_, int* zoomRectangleWidth_, ofColor* c
+	..etc
 
 */
 
@@ -84,58 +77,6 @@ namespace ImageInspect
 		return a;
 	}
 
-	// get picked color
-	inline ofColor getColor(const int width,
-		const int height,
-		const unsigned char* const bits,
-		ImVec2 mouseUVCoord_,
-		ImVec2 displayedTextureSize,
-		bool b24bits = false,//default is 32bit
-		ofColor* c = nullptr)
-	{
-		// clamp
-		ImClamp(mouseUVCoord_, ImVec2{ 0,0 }, ImVec2{ 1,1 });
-		ImVec2 mouseUVCoord = mouseUVCoord_;
-
-		const int x = ImClamp(int(mouseUVCoord.x * width), 0, width);
-		const int y = ImClamp(int(mouseUVCoord.y * height), 0, height);
-
-		size_t i = y * width + x;
-
-		// clamp index
-		size_t sz = width * height;
-		static bool b = 1;
-		if (b) {
-			i = MIN(i, sz - 1);
-			i = MAX(i, 0);
-		}
-
-		// color
-		//uint32_t texel = ((uint32_t*)bits)[i];
-		uint32_t texel;
-
-		if (b24bits) // 24 bits
-		{
-			const uint8_t* pixel = bits + i * 3;
-			texel = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0];
-			const ImVec4 ct = ImColor(texel);
-			texel = GetColorU32(ImVec4(ct.x, ct.y, ct.z, 1.f));//add alpha
-		}
-		else // 32 bits
-		{
-			texel = ((uint32_t*)bits)[i];
-		}
-
-		ImVec4 ct = ImColor(texel);
-
-		if (c != nullptr)
-		{
-			c->set(ct);
-		}
-
-		return ofColor(ct);
-	}
-
 	//--
 
 	// draw inspector and pick the central color
@@ -169,13 +110,14 @@ namespace ImageInspect
 		const ImVec2 quadSize(quadWidth, quadWidth);
 
 		int npx = zoomRectangleWidth / quadWidth;
-		int pixCenterRect = ((npx * npx) / 2) + 1;
+		int pixCenterRect = ((npx * npx) / 2) + 0;
 		int pixCenter;
 		static ImColor colorCenter;
 
 		//--
 
-		if (bDebug) {
+		if (bDebug)
+		{
 			ImVec2 size_min{ zoomRectangleWidth + 150, -1 };
 			ImVec2 size_max{ 1000,1000 };
 			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
@@ -205,8 +147,8 @@ namespace ImageInspect
 					const ImRect pickRc(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 
 					// bg box
-					ImU32 c = 0xFF000000;
-					//ImU32 c = ImColor(0, 255, 0, 255);//0xFF000000
+					//ImU32 c = 0xFF000000;
+					ImU32 c = ImColor(0, 0, 255, 255);//0xFF000000
 					draw_list->AddRectFilled(pickRc.Min, pickRc.Max, c);
 
 					// draw each big pixel
@@ -243,16 +185,24 @@ namespace ImageInspect
 								texel = ((uint32_t*)bits)[i];
 							}
 
-							// draw each big pixel as a rectangle
+							// Draw each big pixel as a rectangle
 
-							ImVec2 pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
-							//y flipped
-
-							//mirror y. that breaks the get color?
-							//ImVec2 pos = ImVec2(pickRc.Min.x, pickRc.Max.y) + ImVec2(float(x + zoomSize), float(-y - zoomSize)) * quadSize;
+							ImVec2 pos;
+							bool bflip = 1;
+							if (bflip)
+							{
+								// mirror y 
+								pos = ImVec2(pickRc.Min.x, pickRc.Max.y) + ImVec2(float(x + zoomSize), -1 + float(-y - zoomSize)) * quadSize;
+							}
+							else
+							{
+								// y flipped
+								pos = pickRc.Min + ImVec2(float(x + zoomSize), float(y + zoomSize)) * quadSize;
+							}
 
 							draw_list->AddRectFilled(pos, pos + quadSize, texel);
 
+							// Get this pixel! is the center one. the same over mouse pointer.
 							if (count == pixCenterRect) {
 								//pixCenter = count;
 								colorCenter = ImColor(texel);
@@ -428,12 +378,68 @@ namespace ImageInspect
 			}
 		}
 		ImGui::EndTooltip();
-	}
+	};
+
+	//--
+
+	// Get picked color by mouse pointer.
+	// (not the center of the zoom rectangle)
+	inline ofColor getColor(const int width,
+		const int height,
+		const unsigned char* const bits,
+		ImVec2 mouseUVCoord_,
+		ImVec2 displayedTextureSize,
+		bool b24bits = false,//default is 32bit
+		ofColor* c = nullptr)
+	{
+		// clamp
+		ImClamp(mouseUVCoord_, ImVec2{ 0,0 }, ImVec2{ 1,1 });
+		ImVec2 mouseUVCoord = mouseUVCoord_;
+
+		const int x = ImClamp(int(mouseUVCoord.x * width), 0, width);
+		const int y = ImClamp(int(mouseUVCoord.y * height), 0, height);
+
+		size_t i = y * width + x;
+
+		// clamp index
+		size_t sz = width * height;
+		static bool b = 1;
+		if (b) {
+			i = MIN(i, sz - 1);
+			i = MAX(i, 0);
+		}
+
+		// color
+		//uint32_t texel = ((uint32_t*)bits)[i];
+		uint32_t texel;
+
+		if (b24bits) // 24 bits
+		{
+			const uint8_t* pixel = bits + i * 3;
+			texel = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0];
+			const ImVec4 ct = ImColor(texel);
+			texel = GetColorU32(ImVec4(ct.x, ct.y, ct.z, 1.f));//add alpha
+		}
+		else // 32 bits
+		{
+			texel = ((uint32_t*)bits)[i];
+		}
+
+		ImVec4 ct = ImColor(texel);
+
+		if (c != nullptr)
+		{
+			c->set(ct);
+		}
+
+		return ofColor(ct);
+	};
+
 } // namespace ImageInspect
 
 //--
 
-// Extra widgets
+//TODO: Extra widgets
 
 namespace ImageInspect
 {

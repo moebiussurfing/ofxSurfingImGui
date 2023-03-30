@@ -1,9 +1,8 @@
 #pragma once
 #include "ofMain.h"
 
-#include "imgInspect.h"
 #include "ofxSurfingImGui.h"
-#include "ofxSurfingHelpers.h"
+#include "imgInspect.h"
 
 class SurfImageInspect
 {
@@ -26,7 +25,7 @@ public:
 	ofParameter<ofColor> colorPtr{ "ColorPicked", ofColor(128, 128) };
 
 private:
-	ofParameter<bool> bGui_Image{ "Window Image", true };
+	ofParameter<bool> bGui_Image{ "Window Image", false };
 	ofParameter<bool> bDebugAdvanced{ "DebugAdvanced", false };
 	ofParameter<bool> bEnableInspector{ "Inspector",true };
 	ofParameter<bool> bEnablePicker{ "Picker",false };
@@ -61,7 +60,7 @@ public:
 		params.add(zoomSize);
 		params.add(zoomRectangleWidth);
 
-		ofxSurfingHelpers::load(params);
+		ofxImGuiSurfing::load(params);
 	};
 
 	void loadTexture(string path_)
@@ -182,9 +181,7 @@ public:
 					ui->AddDebugToggle();
 					if (bDebug) ui->Add(bDebugAdvanced, OFX_IM_TOGGLE_ROUNDED_MINI);
 					ui->AddSpacing();
-
 					ui->AddAutoResizeToggle();
-
 					ui->AddSpacingSeparated();
 				}
 
@@ -248,14 +245,14 @@ public:
 						{
 							ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, b24bits, bDebug, bDebugAdvanced, &c);
 						}
-						if (bEnablePicker && bMouseLeft)
+						if (bMouseLeft && bEnablePicker && !bEnableInspector)
 						{
 							c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, b24bits, &c);
 							ofLogNotice("SurfImageInspect") << "Click color: " << c;
 							colorPtr.set(c);
 						}
 
-						if (bEnableInspector && bMouseLeft)
+						if (bMouseLeft && bEnableInspector)//has priority
 						{
 							ofLogNotice("SurfImageInspect") << "Click color: " << c;
 							colorPtr.set(c);
@@ -269,14 +266,18 @@ public:
 
 					//--
 
+					ui->AddSpacing();
+					ui->AddSpacing();
+					ui->Add(bEnableInspector, OFX_IM_TOGGLE_BIG, 2, true);
+					bool b = bEnableInspector && bEnablePicker;
+					if (b) ui->PushInactive();
+					ui->Add(bEnablePicker, OFX_IM_TOGGLE_BIG, 2);
+					if (b) ui->PopInactive();
+
+					ui->AddSpacing();
+
 					if (ui->isMaximized())
 					{
-						ui->AddSpacing();
-						ui->AddSpacing();
-						ui->Add(bEnableInspector, OFX_IM_TOGGLE_BIG, 2, true);
-						ui->Add(bEnablePicker, OFX_IM_TOGGLE_BIG, 2);
-						ui->AddSpacing();
-
 						//--
 
 						if (bEnableInspector)
@@ -290,7 +291,7 @@ public:
 							}
 							ImGui::SameLine();
 							if (ImGui::Button("Small")) {
-								zoomSize = 40;
+								zoomSize = 30;
 								zoomRectangleWidth = 100;
 							}
 							ImGui::SameLine();
@@ -310,7 +311,6 @@ public:
 								zoomRectangleWidth = 1000;
 							}
 						}
-
 
 						//--
 
@@ -410,6 +410,6 @@ public:
 
 private:
 	void exit() {
-		ofxSurfingHelpers::save(params);
+		ofxImGuiSurfing::save(params);
 	};
 };
