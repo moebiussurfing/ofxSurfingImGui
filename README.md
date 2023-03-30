@@ -19,7 +19,7 @@ for **openFrameworks** projects.
 
 - Simple **setup**.
 - **Multiple instances**:
-  - around your classes and **ofxAddons**.
+  - Many ui´s around your classes and **ofxAddons**.
   - all together without colliding and integrated.
 - **ofParameter Helpers**:
   - Many RAW **DearImGui widgets** adapted.
@@ -38,19 +38,21 @@ for **openFrameworks** projects.
     - _+Ctrl_ to Reset to Min.
     - _+Alt_ to Reset to Max.
 - **Windows Organizer**:
-    - aligner, cascade and group/linker.
+    - Aligner, cascade and Group/Linker.
 - **Log System**:
-    - with custom tags.
+    - With custom tags.
 - **Notifier System**:
-    - with custom layout and styles.
+    - With custom layout and styles.
 - **Text Editor**: 
-    - with language marks, font sizes, color themes, clipboard access and undo/redo history.
+    - Language marks
+    - Font sizes, color themes
+    - Clipboard access and undo/redo history.
 - **Image Inspector**:
-    - with pixel color picker.
+    - With pixel color picker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
 - **Themes**:
-    - with **Editor** and serializers ( WIP ).
+    - With styles **Editor** and serializers ( WIP ).
  
 <br>
 
