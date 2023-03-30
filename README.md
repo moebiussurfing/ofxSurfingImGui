@@ -8,8 +8,6 @@ for **openFrameworks** projects.
 
 </h1>
 
-<br>
-
 ### WORK IN PROGRESS!
 
 <br>
