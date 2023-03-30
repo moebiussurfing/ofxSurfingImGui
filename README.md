@@ -9,15 +9,10 @@ for **openFrameworks** projects.
 </h1>
 
 <br>
+
+### WORK IN PROGRESS!
+
 <br>
-
-## WORK IN PROGRESS!
-
-<br>
-<br>
-
-( _Some **new examples**, testing or new incoming widgets, and complementary docs are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
-
 <br>
 
 # FEATURES
@@ -86,6 +81,10 @@ for **openFrameworks** projects.
 <br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
+
+<br>
+
+( _**New WIP examples**, sandbox testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
  
 <br>
   
@@ -148,9 +147,10 @@ void ofApp::draw()
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**! 
 
-* **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
+## DATA FILES
 
-* [assets.zip](assets.zip): (Optional) Located in the add-on root path. More font files from the same family. To put into each project `OF_APP/bin/data/`.  
+* **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
+* [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <br>
 
@@ -181,7 +181,8 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 <br>
 
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
-
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
+  
 <br>
 
 ## CURRENT SYSTEMS
@@ -192,12 +193,11 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 - **macOS 12.5 Monterey** / **Xcode 14.2** / **Intel** / [OF 0.11.2](https://openframeworks.cc/download/).  
     * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
-
 <br>
 
 # AUTHOR
 
-An add-on by **moebiusSurfing**.  
+An addon by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2023*  
 
 ## THANKS
