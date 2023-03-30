@@ -44,8 +44,8 @@ for **openFrameworks** projects.
 - **Notifier System**:
     - With custom layout and styles.
 - **Text Editor**: 
-    - Language marks
-    - Font sizes, color themes
+    - Language marks.
+    - Font sizes, color themes.
     - Clipboard access and undo/redo history.
 - **Image Inspector**:
     - With pixel color picker.
