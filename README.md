@@ -81,10 +81,6 @@ for **openFrameworks** projects.
 <br>
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
-
-<br>
-
-( _**New WIP examples**, sandbox testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
  
 <br>
   
@@ -185,12 +181,16 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
   
 <br>
 
+( _**New WIP examples**, testing and new incoming widgets are **now moved** to [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) as a **Testing Sandbox**._ )  
+  
+<br>
+
 ## CURRENT SYSTEMS
 
-- **Windows 10** / **VS 2022** / 
+- **Windows 10** / **VS 2022**
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** / **Intel** / [OF 0.11.2](https://openframeworks.cc/download/).  
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). (**Intel**)  
     * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
    
 <br>
