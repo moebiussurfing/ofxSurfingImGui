@@ -26,7 +26,9 @@ for **openFrameworks** projects.
   - Help on **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
   - Simplifies user **workflow**.
-  - Many useful **Internal params** and persistent settings.
+  - Many useful **Internal states** and persistent settings:
+    - Minimize, debug, extra, advanced, auto resize...
+    - Log, Notifier, windows distribution. 
 - Four active **Font Sizes** for labels and paragraphs.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
