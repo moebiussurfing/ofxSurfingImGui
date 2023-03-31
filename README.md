@@ -113,13 +113,13 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 class ofApp : public ofBaseApp
 {
 public:
-  void draw(); 
-  ofxSurfingGui ui;
+    void draw(); 
+    ofxSurfingGui ui;
 
-  ofParameter<bool> bGui{ "Show", true };
-  fParameter<bool> bEnable{ "Enable", true };
-  ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-  ofParameterGroup params{ "MyGroup", bEnable, speed };
+    ofParameter<bool> bGui{ "Show", true };
+    fParameter<bool> bEnable{ "Enable", true };
+    ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+    ofParameterGroup params{ "MyGroup", bEnable, speed };
 }
 ```
 
@@ -128,25 +128,25 @@ public:
 ```.cpp
 void ofApp::draw() 
 {
-  ui.Begin();
-  {
-    /* Put windows here */
-
-    if (ui.BeginWindow(bGui))
+    ui.Begin();
     {
-      /* Put widgets here */
+      /* Put windows here */
 
-      ui.AddLabelBig("00_HelloWorld");
-      ui.AddSpacing();
-      ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-      ui.Add(speed, OFX_IM_HSLIDER);
-      ui.AddSpacingSeparated();
-      ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+      if (ui.BeginWindow(bGui))
+      {
+          /* Put widgets here */
 
-      ui.EndWindow();
+          ui.AddLabelBig("00_HelloWorld");
+          ui.AddSpacing();
+          ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+          ui.Add(speed, OFX_IM_HSLIDER);
+          ui.AddSpacingSeparated();
+          ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+
+          ui.EndWindow();
+      }
     }
-  }
-  ui.End();
+    ui.End();
 }
 ```
 
