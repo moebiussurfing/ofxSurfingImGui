@@ -8,6 +8,8 @@
 
 	image is file loaded twice, could be passed referenced.
 
+	could hide mouse cursor when inspecting enabled.
+
 */
 
 //-
