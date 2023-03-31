@@ -113,41 +113,41 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 class ofApp : public ofBaseApp
 {
 public:
-    void draw();
-    
-    ofxSurfingGui ui;
+	void draw();
 
-    ofParameter<bool> bGui{ "Show", true };
-    fParameter<bool> bEnable{ "Enable", true };
-    ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-    ofParameterGroup params{ "MyGroup", bEnable, speed };
+	ofxSurfingGui ui;
+
+	ofParameter<bool> bGui{ "Show", true };
+	ofParameter<bool> bEnable{ "Enable", true };
+	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+	ofParameterGroup params{ "MyGroup", bEnable, speed };
 };
 ```
 
 #### ofApp.cpp
 
 ```.cpp
-void ofApp::draw() 
+void ofApp::draw()
 {
-    ui.Begin();
-    {
-        /* Put windows here */
+	ui.Begin();
+	{
+		/* Put windows here */
 
-        if (ui.BeginWindow(bGui))
-        {
-            /* Put widgets here */
+		if (ui.BeginWindow(bGui))
+		{
+			/* Put widgets here */
 
-            ui.AddLabelBig("00_HelloWorld");
-            ui.AddSpacing();
-            ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-            ui.Add(speed, OFX_IM_HSLIDER);
-            ui.AddSpacingSeparated();
-            ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+			ui.AddLabelBig("00_HelloWorld");
+			ui.AddSpacing();
+			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(speed, OFX_IM_HSLIDER);
+			ui.AddSpacingSeparated();
+			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
-            ui.EndWindow();
-        }
-    }
-    ui.End();
+			ui.EndWindow();
+		}
+	}
+	ui.End();
 }
 ```
 
@@ -180,8 +180,10 @@ void ofApp::draw()
 
 ### DATA FILES
 
-* **JetBrainsMono-Bold.ttf**: The font file for the default theme. To put into `/bin/data/assets/fonts/`.  
-* [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
+* **JetBrainsMono-Bold.ttf**: The font file for the default theme.
+  - To put into `/bin/data/assets/fonts/`.  
+* [assets.zip](assets.zip): Optional
+  - More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>  
