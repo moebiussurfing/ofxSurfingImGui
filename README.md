@@ -154,8 +154,8 @@ void ofApp::draw()
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) / _**New WIP examples** and new incoming widgets: a **Testing Sandbox**._
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
-* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation): 3rd party modules/widgets that could be integrated.
-* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery): Inspiration gallery of user's apps.
+* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation) / 3rd party modules/widgets that could be integrated.
+* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery) / Inspiration gallery from user's apps.
 
 </details>
 
