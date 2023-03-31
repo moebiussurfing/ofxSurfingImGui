@@ -14,7 +14,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   
 </h3>
 
-<br><br>
+<br>
 
 #### WORK IN PROGRESS!
 
@@ -93,9 +93,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
  
-<br>
-  
-## EXAMPLE: 00_HelloWorld
+# EXAMPLE: 00_HelloWorld
 
 ![](/Examples/00_HelloWorld/Capture.PNG)  
 
@@ -151,11 +149,12 @@ void ofApp::draw()
   - You **MUST use this one**! 
 
 <details>
-  <summary>OTHER</summary>
+  <summary>OTHER</summary>  
   
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra) / _**New WIP examples** and new incoming widgets: a **Testing Sandbox**._
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp) / _Not required. Only for some examples._
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers) / _Not required. Only for some examples._
+* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation).
 
 </details>
 
@@ -165,7 +164,7 @@ void ofApp::draw()
 * [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <details>
-  <summary>NOTE ABOUT THE FONTS</summary>
+  <summary>NOTE ABOUT THE FONTS</summary>  
   
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
 
@@ -185,13 +184,14 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
  </p>
 </details>
 
+
 ## CURRENT SYSTEMS
 
 - **Windows 10** / **VS 2022**
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). (**Intel**)  
-    * Not tested on **M1/M2 Apple Silicon** yet. (Testers are welcome!).
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). ( **Intel** )  
+    * Not tested on **M1/M2 Apple Silicon** yet. ( Testers are welcome! ).
    
 # AUTHOR
 
@@ -200,7 +200,7 @@ An addon by **moebiusSurfing**.
 
 ## THANKS
 
-_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK** and some **macOS** fixes._  
+_**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 
