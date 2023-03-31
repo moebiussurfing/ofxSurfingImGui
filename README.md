@@ -148,15 +148,15 @@ void ofApp::draw()
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
-  - Dear ImGui v1.89.4 / BackEnd.
+  - Dear **ImGui v1.89.4** / OF BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
   - You **MUST use this one**!
 
 <details>
-  <summary>OTHER</summary>  
+  <summary>RELATED LINKS</summary>  
   
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
-  - _**New WIP examples** and new incoming widgets: a **Testing Sandbox**._
+  - _**New WIP examples** and new incoming widgets on a **Testing Sandbox**._
 * [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
   - 3rd party modules/widgets that could be integrated.
 * [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
@@ -170,7 +170,7 @@ void ofApp::draw()
 
 ### DATA FILES
 
-* **JetBrainsMono-Bold.ttf**: The font file for the default theme.  
+* **JetBrainsMono-Bold.ttf**: The font file for the default theme. (`bin/data/assets/fonts/´)  
 * [assets.zip](assets.zip): (Optional) More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <details>
