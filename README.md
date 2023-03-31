@@ -180,9 +180,11 @@ void ofApp::draw()
 
 ### DATA FILES
 
-* **JetBrainsMono-Bold.ttf**: The font file for the default theme.
+* **JetBrainsMono-Bold.ttf**:
+  - The font file for the default theme.
   - To put into `/bin/data/assets/fonts/`.  
-* [assets.zip](assets.zip): Optional
+* [assets.zip](assets.zip):
+  - Optional.
   - More font files from the same family. To put into each project `OF_APP/bin/data/`.  
 
 <details>
