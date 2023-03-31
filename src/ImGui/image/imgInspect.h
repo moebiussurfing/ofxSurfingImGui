@@ -6,6 +6,14 @@
 	Added exposed public: bool bDebug, int* zoomSize_, int* zoomRectangleWidth_, ofColor* c
 	..etc
 
+
+	TODO
+
+	Change center of zoom rectangle to by aligned with mouse pointer!
+	BUG: For some zoom/size combinations,
+	mouse can go to image borders...
+	must use picker instead inspector.
+
 */
 
 
@@ -281,19 +289,22 @@ namespace ImageInspect
 					if (bDebug) {
 						//ImGui::Text(" ");
 
-						// uv	
-						ImGui::Text("U,V:    %1.2f,%1.2f", mouseUVCoord.x, mouseUVCoord.y);
+						if (bDebugAdvanced)
+						{
+							// uv	
+							ImGui::Text("U,V:    %1.2f,%1.2f", mouseUVCoord.x, mouseUVCoord.y);
 
-						// coord
-						ImGui::Text("x,y:    %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
+							// coord
+							ImGui::Text("x,y:    %d,%d", int(mouseUVCoord.x * width), int(mouseUVCoord.y * height));
 
-						// size
-						ImGui::Text("w,h:    %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
+							// size
+							ImGui::Text("w,h:    %d,%d", int(displayedTextureSize.x), int(displayedTextureSize.y));
 
-						ImGui::Separator();
+							ImGui::Separator();
+						}
 
 						// rgb
-						ImGui::Text("R,G,B:  %d,%d,%d", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
+						ImGui::Text("r,g,b:  %d,%d,%d", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
 
 						// alpha
 						ImGui::Text("alpha:  %d", INT(color.w * 255.f));

@@ -6,6 +6,8 @@
 	mouse can go to image borders... 
 	must use picker instead inspector.
 
+	image is file loaded twice, could be passed referenced.
+
 */
 
 //-
@@ -97,40 +99,22 @@ public:
 			return;
 		}
 
-		/*
-		ofLogNotice("SurfImageInspect") << "loadTexture()";
-		if (_image.isAllocated()) {
-			bLoaded = true;
-		}
-
-		if (bLoaded) {
-			image = _image;
-			ofLogNotice("SurfImageInspect") << "Image received.";
-		}
-		else
-		{
-			ofLogError("SurfImageInspect") << "Image not received.";
-			return;
-		}
-		*/
-
 		//-
+
+		ofLoadImage(texture, path);
+
+		texture.readToPixels(pixels);
+
+		// pre load on ui
+		if (ui != nullptr) textureID = ui->getGuiPtr()->loadTexture(texture, path);
+
+		//--
 
 		/*
 		// push
 		bool b = ofGetUsingArbTex();
 		ofDisableArbTex();
-		*/
 
-		ofLoadImage(texture, path);
-
-		//TODO:
-		//if (bLoaded)
-		{
-			texture.readToPixels(pixels);
-		}
-
-		/*
 		float w = texture.getWidth();
 		float h = texture.getHeight();
 		fbo.allocate(w, h);
@@ -153,11 +137,6 @@ public:
 		texture.draw(0, 0);
 		fbo.end();
 		*/
-
-		//--
-
-		// pre load on ui
-		if (ui != nullptr) textureID = ui->getGuiPtr()->loadTexture(texture, path);
 	};
 
 	void drawImGui(bool bWindowed = true)
@@ -497,6 +476,8 @@ public:
 		bOver = ImGui::IsItemHovered();
 		bool bMouseLeft = io.MouseClicked[0];
 		bool bMouseRight = io.MouseClicked[1];
+		float mouseWheel = io.MouseWheel;
+		//cout << mouseWheel << endl;
 		bool bShift = io.KeyShift;
 
 		ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
@@ -522,6 +503,8 @@ public:
 			{
 				ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, bIs24bits, bDebug, bDebugAdvanced, &c);
 			}
+
+			// Pick colord
 			if (bMouseLeft && bEnablePicker && !bEnableInspector)
 			{
 				c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, bIs24bits, &c);
@@ -529,15 +512,30 @@ public:
 				colorPtr.set(c);
 			}
 
+			// Pick inspect color
 			if (bMouseLeft && bEnableInspector)//has priority
 			{
 				ofLogNotice("SurfImageInspect") << "Click color: " << c;
 				colorPtr.set(c);
 			}
 
+			// Enable inspector
 			if (bMouseRight)
 			{
 				bEnableInspector = !bEnableInspector;
+			}
+
+			// Wheel zoom
+			int step = 5;
+			if (bEnableInspector) {
+				if (mouseWheel == -1) {
+					zoomSize -= step;
+					zoomSize = ofClamp(zoomSize, zoomSize.getMin(), zoomSize.getMax());
+				}
+				else if (mouseWheel == 1) {
+					zoomSize += step;
+					zoomSize = ofClamp(zoomSize, zoomSize.getMin(), zoomSize.getMax());
+				}
 			}
 		}
 

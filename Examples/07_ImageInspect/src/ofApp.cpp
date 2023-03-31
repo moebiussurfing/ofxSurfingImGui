@@ -64,9 +64,9 @@ void ofApp::draw()
 
 	if (bDrawImg && imageFloat.isAllocated())
 	{
-		// maintains ratio and expand
 		ofRectangle rr(0, 0, imageFloat.getWidth(), imageFloat.getHeight());
 		rr.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+		rr.translateX(ofGetWidth() - rr.getBottomRight().x);
 		imageFloat.draw(rr.x, rr.y, rr.width, rr.height);
 	}
 
@@ -91,8 +91,9 @@ void ofApp::drawImGui()
 			if (bLoaded)
 			{
 				ui.Add(bDrawImg, OFX_IM_TOGGLE_ROUNDED);
-				ui.AddSpacingBigSeparated();
 
+				ui.AddSpacingBigSeparated();
+				
 				ui.Add(imageInspect.bGui, OFX_IM_TOGGLE_ROUNDED);
 				ui.Add(color, OFX_IM_COLOR_BOX_FULL_WIDTH_BIG);
 			}
