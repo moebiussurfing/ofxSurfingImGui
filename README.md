@@ -14,11 +14,9 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   
 </h3>
 
-<br>
-
 #### WORK IN PROGRESS!
 
-<br><br>
+<br>
 
 ## FEATURES
 
