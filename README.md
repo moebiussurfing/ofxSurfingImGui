@@ -210,4 +210,4 @@ _All source snippets and widgets from other authors are linked into header files
 
 ## LICENSE
 
-**MIT LICENSE**
+[**MIT LICENSE**](https://github.com/moebiussurfing/ofxSurfingImGui/blob/master/LICENSE)
