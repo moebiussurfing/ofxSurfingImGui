@@ -49,7 +49,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 - **Notifier System**:
     - With custom layout and styles.
 - **Text Editor**: 
-    - Language marks.
+    - Language marks with custom marked keyworks.
     - Font sizes, color themes.
     - Clipboard access and **undo/redo** history.
 - **Image Inspector**:
