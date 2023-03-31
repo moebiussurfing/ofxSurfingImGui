@@ -113,14 +113,15 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 class ofApp : public ofBaseApp
 {
 public:
-    void draw(); 
+    void draw();
+    
     ofxSurfingGui ui;
 
     ofParameter<bool> bGui{ "Show", true };
     fParameter<bool> bEnable{ "Enable", true };
     ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
     ofParameterGroup params{ "MyGroup", bEnable, speed };
-}
+};
 ```
 
 #### ofApp.cpp
