@@ -1,8 +1,25 @@
+/*
+
+	TODO
+
+	BUG: For some zoom/size combinations, 
+	mouse can go to image borders... 
+	must use picker instead inspector.
+
+*/
+
+//-
+
 #pragma once
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "imgInspect.h"
+
+#include "imgInspect.h" 
+// Original author: @CedricGuillemet 
+// https://github.com/CedricGuillemet/imgInspect
+
+//--
 
 class SurfImageInspect
 {
@@ -22,13 +39,13 @@ private:
 
 public:
 	ofParameter<bool> bGui{ "ImageInspect", true };
+	ofParameter<bool> bGui_Image{ "Window Image", false };
 	ofParameter<ofColor> colorPtr{ "ColorPicked", ofColor(128, 128) };
 
 private:
-	ofParameter<bool> bGui_Image{ "Window Image", false };
 	ofParameter<bool> bDebugAdvanced{ "DebugAdvanced", false };
-	ofParameter<bool> bEnableInspector{ "Inspector",true };
-	ofParameter<bool> bEnablePicker{ "Picker",false };
+	ofParameter<bool> bEnableInspector{ "Inspector", false };
+	ofParameter<bool> bEnablePicker{ "Picker", true };
 	ofParameter<int> zoomSize{ "ZoomOut", 40, 1, 50 };
 	ofParameter<int> zoomRectangleWidth{ "BoxSize", 100, 50, 1000 };
 	ofParameterGroup params{ "Image Inspector" };
@@ -80,7 +97,6 @@ public:
 			return;
 		}
 
-
 		/*
 		ofLogNotice("SurfImageInspect") << "loadTexture()";
 		if (_image.isAllocated()) {
@@ -107,6 +123,12 @@ public:
 		*/
 
 		ofLoadImage(texture, path);
+
+		//TODO:
+		//if (bLoaded)
+		{
+			texture.readToPixels(pixels);
+		}
 
 		/*
 		float w = texture.getWidth();
@@ -141,8 +163,9 @@ public:
 	void drawImGui(bool bWindowed = true)
 	{
 		if (ui == nullptr) return;
-		if (!bGui) return;
+		//if (!bGui) return;
 
+		if (bGui)
 		{
 			// Locks moving window when mouse over image.	
 			static bool bOver = false;
@@ -185,13 +208,14 @@ public:
 					ui->AddSpacingSeparated();
 				}
 
-				// Raw data
-				if (bLoaded)
-				{
-					texture.readToPixels(pixels);
-				}
+				////TODO: do only when necessary!
+				//// Raw data
+				//if (bLoaded)
+				//{
+				//	texture.readToPixels(pixels);
+				//}
 
-				const unsigned char* data = pixels.getData();
+				//const unsigned char* data = pixels.getData();
 				auto nBits = pixels.getBitsPerPixel();
 
 				//--
@@ -202,77 +226,95 @@ public:
 				{
 					ui->AddSpacing();
 
-					//// 1. Fbo
-					//if (ImGui::ImageButton(
-					//	(ImTextureID)(uintptr_t)fbo.getTexture(0).getTextureData().textureID,
-					//	ImVec2(wDisplay)))
-					//{
-					//	ofLogNotice("SurfImageInspect") << "Image clicked";
-					//}
-
-					// 2. Texture
-					ImGui::Image((ImTextureID)(uintptr_t)textureID, ImVec2(wDisplay, hDisplay));
-
 					//--
 
-					// Catch from previous widget
-					ImGuiIO& io = ImGui::GetIO();
-					bOver = ImGui::IsItemHovered();
-					bool bMouseLeft = io.MouseClicked[0];
-					bool bMouseRight = io.MouseClicked[1];
-					bool bShift = io.KeyShift;
+					// Image widget
+					ImVec2 szDisplay(wDisplay, hDisplay);
+					ImVec2 szSrc(wSrc, hSrc);
+					drawImGuiImgeWidget(szDisplay, szSrc, bOver, bDebug);
 
-					ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
-					ImVec2 mouseUVCoord_ = (io.MousePos - rc.Min) / rc.GetSize();
-					//mouseUVCoord_.y = 1.f - mouseUVCoord_.y; // flip y
-
-					// clamp mouse
-					ImVec2 mouseUVCoord = ImVec2(ofClamp(mouseUVCoord_.x, 0, 1), ofClamp(mouseUVCoord_.y, 0, 1));
-
-					// clamp display zone
-					ImVec2 displayedTextureSize_ = ImVec2(wDisplay, hDisplay);
-					ImVec2 displayedTextureSize = ImVec2(ofClamp(displayedTextureSize_.x, 0, wSrc), ofClamp(displayedTextureSize_.y, 0, hSrc));
-
-					//--
-
-					bool b24bits = (nBits == 24);
-
-					//--
-
-					if (bOver)
+					// Image widget
+					/*
 					{
-						if (bEnableInspector)
+						ImGui::BeginGroup();
+
+						//// 1. Fbo
+						//if (ImGui::ImageButton(
+						//	(ImTextureID)(uintptr_t)fbo.getTexture(0).getTextureData().textureID,
+						//	ImVec2(wDisplay)))
+						//{
+						//	ofLogNotice("SurfImageInspect") << "Image clicked";
+						//}
+
+						// 2. Texture
+						ImGui::Image((ImTextureID)(uintptr_t)textureID, ImVec2(wDisplay, hDisplay));
+
+						//--
+
+						// Catch from previous widget
+						ImGuiIO& io = ImGui::GetIO();
+						bOver = ImGui::IsItemHovered();
+						bool bMouseLeft = io.MouseClicked[0];
+						bool bMouseRight = io.MouseClicked[1];
+						bool bShift = io.KeyShift;
+
+						ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+						ImVec2 mouseUVCoord_ = (io.MousePos - rc.Min) / rc.GetSize();
+						//mouseUVCoord_.y = 1.f - mouseUVCoord_.y; // flip y
+
+						// clamp mouse
+						ImVec2 mouseUVCoord = ImVec2(ofClamp(mouseUVCoord_.x, 0, 1), ofClamp(mouseUVCoord_.y, 0, 1));
+
+						// clamp display zone
+						ImVec2 displayedTextureSize_ = ImVec2(wDisplay, hDisplay);
+						ImVec2 displayedTextureSize = ImVec2(ofClamp(displayedTextureSize_.x, 0, wSrc), ofClamp(displayedTextureSize_.y, 0, hSrc));
+
+						//--
+
+						bool bIs24bits = (nBits == 24);
+
+						//--
+
+						if (bOver)
 						{
-							ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, b24bits, bDebug, bDebugAdvanced, &c);
-						}
-						if (bMouseLeft && bEnablePicker && !bEnableInspector)
-						{
-							c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, b24bits, &c);
-							ofLogNotice("SurfImageInspect") << "Click color: " << c;
-							colorPtr.set(c);
+							if (bEnableInspector)
+							{
+								ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, bIs24bits, bDebug, bDebugAdvanced, &c);
+							}
+							if (bMouseLeft && bEnablePicker && !bEnableInspector)
+							{
+								c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, bIs24bits, &c);
+								ofLogNotice("SurfImageInspect") << "Click color: " << c;
+								colorPtr.set(c);
+							}
+
+							if (bMouseLeft && bEnableInspector)//has priority
+							{
+								ofLogNotice("SurfImageInspect") << "Click color: " << c;
+								colorPtr.set(c);
+							}
+
+							if (bMouseRight)
+							{
+								bEnableInspector = !bEnableInspector;
+							}
 						}
 
-						if (bMouseLeft && bEnableInspector)//has priority
-						{
-							ofLogNotice("SurfImageInspect") << "Click color: " << c;
-							colorPtr.set(c);
-						}
+						//--
 
-						if (bMouseRight)
-						{
-							bEnableInspector = !bEnableInspector;
-						}
+						ui->AddSpacing();
+						ui->AddSpacing();
+						ui->Add(bEnableInspector, OFX_IM_TOGGLE_BIG, 2, true);
+						bool b = bEnableInspector && bEnablePicker;
+						if (b) ui->PushInactive();
+						ui->Add(bEnablePicker, OFX_IM_TOGGLE_BIG, 2);
+						if (b) ui->PopInactive();
+
+						ImGui::EndGroup();
 					}
+					*/
 
 					//--
-
-					ui->AddSpacing();
-					ui->AddSpacing();
-					ui->Add(bEnableInspector, OFX_IM_TOGGLE_BIG, 2, true);
-					bool b = bEnableInspector && bEnablePicker;
-					if (b) ui->PushInactive();
-					ui->Add(bEnablePicker, OFX_IM_TOGGLE_BIG, 2);
-					if (b) ui->PopInactive();
 
 					ui->AddSpacing();
 
@@ -291,13 +333,13 @@ public:
 							}
 							ImGui::SameLine();
 							if (ImGui::Button("Small")) {
-								zoomSize = 30;
+								zoomSize = 15;
 								zoomRectangleWidth = 100;
 							}
 							ImGui::SameLine();
 							if (ImGui::Button("Medium")) {
-								zoomSize = 5;
-								zoomRectangleWidth = 160;
+								zoomSize = 20;
+								zoomRectangleWidth = 200;
 							}
 							if (ofxImGuiSurfing::getWindowWidthAvail() > 120)
 								ImGui::SameLine();
@@ -412,4 +454,105 @@ private:
 	void exit() {
 		ofxImGuiSurfing::save(params);
 	};
+
+public:
+
+	//--
+
+	bool isImageLoaded() { return bLoaded; }
+
+	// Image widget
+	void drawImGuiImgeWidget(ImVec2 szDisplay, ImVec2 szSrc, bool& bOver, bool bDebug)
+	{
+		if (!bLoaded) return;
+		if (!pixels.isAllocated()) return;
+
+		float wDisplay = szDisplay.x;
+		float hDisplay = szDisplay.y;
+		float wSrc = szSrc.x;
+		float hSrc = szSrc.y;
+
+		const unsigned char* data = pixels.getData();
+		auto nBits = pixels.getBitsPerPixel();
+
+		//--
+
+		ImGui::BeginGroup();
+
+		//// 1. Fbo
+		//if (ImGui::ImageButton(
+		//	(ImTextureID)(uintptr_t)fbo.getTexture(0).getTextureData().textureID,
+		//	ImVec2(wDisplay)))
+		//{
+		//	ofLogNotice("SurfImageInspect") << "Image clicked";
+		//}
+
+		// 2. Texture
+		ImGui::Image((ImTextureID)(uintptr_t)textureID, szDisplay);
+
+		//--
+
+		// Catch from previous widget
+		ImGuiIO& io = ImGui::GetIO();
+		bOver = ImGui::IsItemHovered();
+		bool bMouseLeft = io.MouseClicked[0];
+		bool bMouseRight = io.MouseClicked[1];
+		bool bShift = io.KeyShift;
+
+		ImRect rc = ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+		ImVec2 mouseUVCoord_ = (io.MousePos - rc.Min) / rc.GetSize();
+		//mouseUVCoord_.y = 1.f - mouseUVCoord_.y; // flip y
+
+		// clamp mouse
+		ImVec2 mouseUVCoord = ImVec2(ofClamp(mouseUVCoord_.x, 0, 1), ofClamp(mouseUVCoord_.y, 0, 1));
+
+		// clamp display zone
+		ImVec2 displayedTextureSize_ = ImVec2(wDisplay, hDisplay);
+		ImVec2 displayedTextureSize = ImVec2(ofClamp(displayedTextureSize_.x, 0, wSrc), ofClamp(displayedTextureSize_.y, 0, hSrc));
+
+		//--
+
+		bool bIs24bits = (nBits == 24);
+
+		//--
+
+		if (bOver)
+		{
+			if (bEnableInspector)
+			{
+				ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, bIs24bits, bDebug, bDebugAdvanced, &c);
+			}
+			if (bMouseLeft && bEnablePicker && !bEnableInspector)
+			{
+				c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, bIs24bits, &c);
+				ofLogNotice("SurfImageInspect") << "Click color: " << c;
+				colorPtr.set(c);
+			}
+
+			if (bMouseLeft && bEnableInspector)//has priority
+			{
+				ofLogNotice("SurfImageInspect") << "Click color: " << c;
+				colorPtr.set(c);
+			}
+
+			if (bMouseRight)
+			{
+				bEnableInspector = !bEnableInspector;
+			}
+		}
+
+		//--
+
+		bool bs = 0;
+		ui->AddSpacing();
+		ui->AddSpacing();
+		ui->Add(bEnableInspector, bs ? OFX_IM_TOGGLE_BIG : OFX_IM_TOGGLE_MEDIUM, 2, true);
+
+		bool b = bEnableInspector && bEnablePicker;
+		if (b) ui->PushInactive();
+		ui->Add(bEnablePicker, bs ? OFX_IM_TOGGLE_BIG : OFX_IM_TOGGLE_MEDIUM, 2);
+		if (b) ui->PopInactive();
+
+		ImGui::EndGroup();
+	}
 };

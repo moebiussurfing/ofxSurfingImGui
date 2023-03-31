@@ -48,6 +48,5 @@ public:
 	//--
 
 	SurfImageInspect imageInspect;
-
 	ofParameter<ofColor> color{ "Color", ofColor(128, 128) };
 };
