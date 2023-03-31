@@ -72,6 +72,23 @@ namespace ofxImGuiSurfing
 		rr.scaleTo(ofGetCurrentViewport(), scaleMode);
 		image.draw(rr.x, rr.y, rr.width, rr.height);
 	}
+	//--------------------------------------------------------------
+	inline void SurfDrawImageAtBottom(ofImage& image, bool bLine=true)
+	{
+		ofPushStyle();
+
+		ofRectangle r{ 0,0, image.getWidth(),image.getHeight() };
+		r.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+		r.translateY(ofGetHeight() - r.getBottomLeft().y);
+		ofSetColor(255, 255);
+		image.draw(r.x, r.y, r.getWidth(), r.getHeight());
+		if (bLine) {
+			ofSetColor(0, 200);
+			ofSetLineWidth(3);
+			ofDrawLine(r.getTopLeft(), r.getTopRight());
+		}
+		ofPopStyle();
+	}
 
 	//----
 
