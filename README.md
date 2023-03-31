@@ -92,7 +92,9 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 ## EXAMPLES
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
- 
+
+<br>
+
 ### EXAMPLE: 00_HelloWorld
 
 ![](/Examples/00_HelloWorld/Capture.PNG)  
@@ -103,15 +105,22 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 #### ofApp.h
 
 ```.cpp
+#pragma once
+#include "ofMain.h"
+
 #include "ofxSurfingImGui.h"
 
-void draw(); 
-ofxSurfingGui ui;
-ofParameter<bool> bGui{ "Show", true };
+class ofApp : public ofBaseApp
+{
+public:
+  void draw(); 
+  ofxSurfingGui ui;
 
-ofParameter<bool> bEnable{ "Enable", true };
-ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-ofParameterGroup params{ "MyGroup", bEnable, speed };
+  ofParameter<bool> bGui{ "Show", true };
+  fParameter<bool> bEnable{ "Enable", true };
+  ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+  ofParameterGroup params{ "MyGroup", bEnable, speed };
+}
 ```
 
 #### ofApp.cpp
@@ -119,25 +128,25 @@ ofParameterGroup params{ "MyGroup", bEnable, speed };
 ```.cpp
 void ofApp::draw() 
 {
-    ui.Begin();
+  ui.Begin();
+  {
+    /* Put windows here */
+
+    if (ui.BeginWindow(bGui))
     {
-        /* Put windows here */
+      /* Put widgets here */
 
-        if (ui.BeginWindow(bGui))
-        {
-            /* Put widgets here */
+      ui.AddLabelBig("00_HelloWorld");
+      ui.AddSpacing();
+      ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+      ui.Add(speed, OFX_IM_HSLIDER);
+      ui.AddSpacingSeparated();
+      ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
-            ui.AddLabelBig("00_HelloWorld");
-            ui.AddSpacing();
-            ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-            ui.Add(speed, OFX_IM_HSLIDER);
-            ui.AddSpacingSeparated();
-            ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
-
-            ui.EndWindow();
-        }
+      ui.EndWindow();
     }
-    ui.End();
+  }
+  ui.End();
 }
 ```
 
