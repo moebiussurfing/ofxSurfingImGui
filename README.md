@@ -93,7 +93,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 [EXAMPLES SCREENSHOTS](/Examples/README.md)  
  
-# EXAMPLE: 00_HelloWorld
+### EXAMPLE: 00_HelloWorld
 
 ![](/Examples/00_HelloWorld/Capture.PNG)  
 
@@ -147,9 +147,10 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop): Dear ImGui v1.89.4 / BackEnd:  
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
+  - Dear ImGui v1.89.4 / BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**! 
+  - You **MUST use this one**!
 
 <details>
   <summary>OTHER</summary>  
