@@ -137,8 +137,10 @@ void ofApp::draw()
     ui.End();
 }
 ```
-<br>
+
 </details>
+
+<br>
 
 ## DEPENDENCIES
 
@@ -184,6 +186,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 </details>
 
 <br>
+
 ## CURRENT SYSTEMS
 
 - **Windows 10** / **VS 2022**
@@ -191,7 +194,9 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). ( **Intel** )  
     * Not tested on **M1/M2 Apple Silicon** yet. ( Testers are welcome! ).
+
 <br>
+
 # AUTHOR
 
 An addon by **moebiusSurfing**.  
