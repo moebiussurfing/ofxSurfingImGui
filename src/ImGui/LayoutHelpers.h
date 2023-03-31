@@ -227,7 +227,7 @@ namespace ofxImGuiSurfing
 
 	// NEW API:
 	//--------------------------------------------------------------
-	inline void SameLineIfAvailForWidth(float w = 140)//TODO; not checking each widget..
+	inline void SameLineIfAvailForWidth(float w = 200)//TODO; not checking each widget..
 	{
 		if (ImGui::GetContentRegionAvail().x > w) ImGui::SameLine();
 	}

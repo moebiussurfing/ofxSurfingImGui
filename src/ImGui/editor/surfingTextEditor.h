@@ -13,11 +13,11 @@
 
 #include "ofMain.h"
 
-//#include "imgui.h"
-//#include "ofHelpers.h"
 #include "ofxSurfingImGui.h"
-
 #include "TextEditor.h"
+
+#include <functional>
+using callback_t = std::function<void()>;
 
 //--
 
@@ -233,6 +233,12 @@ public:
 	*/
 
 	//--------------------------------------------------------------
+	void clearText() {
+		textRaw = "";
+		setText(textRaw);
+	}
+
+	//--------------------------------------------------------------
 	void loadText(string path) {
 
 		pathEditing = path;
@@ -291,6 +297,7 @@ public:
 			if (lineWidth != i) {
 				i = lineWidth;
 
+				textRaw = this->getText();//get the edited on runtime 
 				this->setText(textRaw);
 			}
 
@@ -432,6 +439,24 @@ public:
 		}
 	}
 
+	//--
+
+	//TODO; advanced feature to help integrate the text editor / prompt
+	// in other modules. 
+	// ie: insert a QUERY button to pass the text to some API / method.
+
+private:
+	callback_t functionDraw = nullptr;
+	//std::function<void()> functionDraw = nullptr;
+
+public:
+	//--------------------------------------------------------------
+	void setDrawWidgetsFunction(callback_t f = nullptr) {
+		functionDraw = f;
+	};
+
+	//--
+
 	//--------------------------------------------------------------
 	void drawImGuiInternal() {
 
@@ -472,23 +497,29 @@ public:
 				ImGui::PopItemWidth();
 			}
 
-			//font size
-			if (customFonts.size() != 0)
-			{
-				//make smaller if window is big
-				float w = ofxImGuiSurfing::getWidgetsWidth();
-				if (w > 500) {
-					ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
-					ImGui::BeginColumns("#cols", 2, fc);
-					ImGui::SetColumnWidth(1, w / 2);
-					ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
-					ImGui::Columns(1);
-				}
-				else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
-			}
+			drawImGuiWidgetsFonts();
 		}
 
 		ImGui::Spacing();
+	}
+
+	//--------------------------------------------------------------
+	void drawImGuiWidgetsFonts() {
+
+		//font size
+		if (customFonts.size() != 0)
+		{
+			//make smaller if window is big
+			float w = ofxImGuiSurfing::getWidgetsWidth();
+			if (w > 500) {
+				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+				ImGui::BeginColumns("#cols", 2, fc);
+				ImGui::SetColumnWidth(1, w / 2);
+				ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+				ImGui::Columns(1);
+			}
+			else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+		}
 	}
 
 	//--------------------------------------------------------------
@@ -575,6 +606,14 @@ public:
 					editor.GetLanguageDefinitionName());
 			}
 
+			//--
+
+			// Insert external widgets if already settled!
+			if (functionDraw != nullptr) functionDraw();
+
+			//--
+
+			// Main Text
 			//ImGui::Spacing();
 			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
 			{

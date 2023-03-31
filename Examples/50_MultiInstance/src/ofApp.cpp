@@ -27,7 +27,8 @@ void ofApp::setup()
 	C.setUiPtr(&ui);
 
 	// Advanced
-	std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
+	callback_t myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
+	//std::function<void()> myFunctionDraw = std::bind(&ofApp::drawWidgets, this);
 	C.setDrawWidgetsFunction(myFunctionDraw);
 }
 
