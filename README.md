@@ -166,15 +166,15 @@ void ofApp::draw()
   <summary>RELATED LINKS</summary>  
   
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
-  - _**New WIP examples** and new incoming widgets on a **Testing Sandbox**._
+  - _A **Testing Sandbox** with **New WIP examples** and new incoming widgets._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+  - _Not required. Only for some examples._
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
+  - _Not required. Only for some examples._
 * [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
   - 3rd party modules/widgets that could be integrated.
 * [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
   - Inspiration gallery from user's apps.
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
-  - _Not required. Only for some examples._
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-  - _Not required. Only for some examples._
   
 </details>
 
@@ -227,6 +227,7 @@ An addon by **moebiusSurfing**.
 
 ## THANKS
 
+_Thanks [Omar Ocornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
