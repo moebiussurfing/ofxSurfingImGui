@@ -11,6 +11,9 @@
 
 #include "ofMain.h"
 
+#define OFX_USE_DEBUGGER
+#define OFX_USE_NOTIFIER
+
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
@@ -31,9 +34,12 @@
 //#include "ImGui/WindowFbo.h"
 //#include "ImGui/WindowLog.h"
 
-#define OFX_USE_NOTIFIER
 #ifdef OFX_USE_NOTIFIER
 #include "ImGui/notifiers/surfingNotifier.h"
+#endif
+
+#ifdef OFX_USE_DEBUGGER
+#include "surfingDebugger.h"
 #endif
 
 //--
@@ -127,6 +133,11 @@ class SurfingGuiManager
 public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
+
+#ifdef OFX_USE_DEBUGGER
+private:
+	SurfingDebugger debugger;
+#endif
 
 	//----
 
@@ -1630,7 +1641,7 @@ public:
 	ofParameter<bool> bHelp{ "Help App", false };
 	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bDebug{ "Debug", false };
-	ofParameter<bool> bDebugMetrics{ "Metrics", false };
+	ofParameter<bool> bDebugDebugger{ "Debugger", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 	ofParameter<bool> bReset{ "Reset", false };
@@ -2417,7 +2428,7 @@ private:
 							//drawSpecialWindowsPanel();
 							//ImGui::Separator();
 
-							Add(bDebugMetrics, OFX_IM_TOGGLE_ROUNDED_MINI);
+							Add(bDebugDebugger, OFX_IM_TOGGLE_ROUNDED_MINI);
 							this->AddSpacing();
 							Add(bOverInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);

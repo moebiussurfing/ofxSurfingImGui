@@ -12,6 +12,20 @@
 
 //----
 
+// BUGS:
+/*
+
+	Fix int H sliders
+	Fix knobs, int knobs etc
+
+	Strings params inside paramGroups are not rendered ?
+
+	It seems than special windows engine
+		puts all toggles to false by default ?
+		should store state to simply handling that maually/externally
+
+*/
+
 // TODO:
 /*
 
@@ -90,19 +104,6 @@
 		ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
 		Probably a better fix/workaround is to rename each common windows on each gui manager instance
 		or the pad between windows setting. we could pass pointers to all instances.
-
-*/
-
-// BUGS:
-/*
-
-	Fix knobs, int knobs etc
-
-	Strings params inside paramGroups are not rendered ?
-
-	It seems than special windows engine
-		puts all toggles to false by default ?
-		should store state to simply handling that maually/externally
 
 */
 
