@@ -31,6 +31,9 @@
 ![](07_ImageInspect/Capture.PNG)  
 ![](07_ImageInspect/Capture2.PNG)  
 
+## 08_Debugger
+![](08_Debugger/Capture.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
