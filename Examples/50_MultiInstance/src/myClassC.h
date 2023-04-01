@@ -4,6 +4,7 @@
 
 #include "ofxSurfingImGui.h"
 
+// Required for the advanced feature
 #include <functional>
 using callback_t = std::function<void()>;
 
@@ -16,9 +17,6 @@ public:
 
 	void setup();
 	void draw();
-	void setDrawWidgetsFunction(callback_t f = nullptr) {
-		functionDraw = f;
-	};
 
 	ofxSurfingGui* ui = nullptr;
 
@@ -32,5 +30,14 @@ public:
 
 	ofParameter<bool> bGui{ "myClassC", true };
 
-	std::function<void()> functionDraw = nullptr;
+	//--
+
+	// Pointer to store a function
+	callback_t functionDraw = nullptr;
+	//std::function<void()> functionDraw = nullptr;
+
+	// Set external widgets to be inserted!
+	void setDrawWidgetsFunction(callback_t f = nullptr) {
+		functionDraw = f;
+	};
 };

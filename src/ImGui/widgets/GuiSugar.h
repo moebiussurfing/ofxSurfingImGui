@@ -82,13 +82,16 @@ namespace ofxImGuiSurfing
 
 	// For OFX_IM_STEPPER
 
+#define STEP_FACTOR_WINDOW_IS_SMALL .67f // now using this. we centralized all types together (int/float)
+
 #define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
 //#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
 
+//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
 //#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-// To allow see 3 decimals seen well, 
-// but requires preferably shorter label name.
+#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f 
+// To allow see 3 visible decimals, 
+// but requires preferably a short label name.
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT); }
@@ -96,8 +99,16 @@ namespace ofxImGuiSurfing
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
 
+	/*
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT); }
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_POP \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
+	*/
+
+#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }

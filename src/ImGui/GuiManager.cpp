@@ -51,7 +51,12 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
-	params_Advanced.add(bDebugMetrics);
+	params_Advanced.add(bDebugDebugger);
+
+#ifdef OFX_USE_DEBUGGER
+	debugger.bGui.makeReferenceTo(bDebugDebugger);
+	params_Advanced.add(debugger.params);
+#endif
 
 #ifdef OFX_USE_NOTIFIER
 	params_Advanced.add(notifier.bGui);
@@ -1672,7 +1677,9 @@ void SurfingGuiManager::Begin()
 
 	if (bGui_Aligners) drawWindowAlignHelpers();
 
-	if (bDebugMetrics) ImGui::ShowMetricsWindow();
+#ifndef OFX_USE_DEBUGGER
+	if (bDebugDebugger) ImGui::ShowMetricsWindow();
+#endif
 }
 
 //--------------------------------------------------------------
@@ -1709,6 +1716,11 @@ void SurfingGuiManager::drawWindowsExtraManager() {
 		if (helpApp.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		helpApp.draw();
 	}
+
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) debugger.draw();
+	//if (bDebugDebugger) debugger.draw(this);
+#endif
 }
 
 //--------------------------------------------------------------

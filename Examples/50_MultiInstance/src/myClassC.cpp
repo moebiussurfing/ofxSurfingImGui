@@ -50,7 +50,9 @@ void myClassC::draw()
 			ui->AddSpacing();
 			ui->AddLabel("C.setDrawWidgetsFunction(myFunctionDraw);");
 
+			// Insert external widgets if already settled!
 			if (functionDraw != nullptr) functionDraw();
+
 			ui->EndWindow();
 		}
 	}

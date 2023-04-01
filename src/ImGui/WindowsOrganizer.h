@@ -1222,7 +1222,8 @@ namespace ofxImGuiSurfing
 						ImGui::PushItemWidth(getPanelWidth() * 0.5f);
 						{
 							ofxImGuiSurfing::AddParameter(bHeaders);
-							ofxImGuiSurfing::AddStepperInt(pad);
+							ofxImGuiSurfing::AddStepper(pad);
+							//ofxImGuiSurfing::AddStepperInt(pad);
 
 							ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
 							if (bAlignShapes) {

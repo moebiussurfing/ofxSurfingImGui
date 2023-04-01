@@ -57,7 +57,7 @@ namespace ofxImGuiSurfing
 	}
 
 	// Images drawing
-
+	/*
 	//--------------------------------------------------------------
 	inline void SurfDrawImageFullScreenFit(ofFloatImage& imageFloat, ofScaleMode scaleMode = OF_SCALEMODE_FIT)
 	{
@@ -72,6 +72,24 @@ namespace ofxImGuiSurfing
 		rr.scaleTo(ofGetCurrentViewport(), scaleMode);
 		image.draw(rr.x, rr.y, rr.width, rr.height);
 	}
+	//--------------------------------------------------------------
+	inline void SurfDrawImageAtBottom(ofImage& image, bool bLine=true)
+	{
+		ofPushStyle();
+
+		ofRectangle r{ 0,0, image.getWidth(),image.getHeight() };
+		r.scaleTo(ofGetCurrentViewport(), OF_SCALEMODE_FIT);
+		r.translateY(ofGetHeight() - r.getBottomLeft().y);
+		ofSetColor(255, 255);
+		image.draw(r.x, r.y, r.getWidth(), r.getHeight());
+		if (bLine) {
+			ofSetColor(0, 200);
+			ofSetLineWidth(3);
+			ofDrawLine(r.getTopLeft(), r.getTopRight());
+		}
+		ofPopStyle();
+	}
+	*/
 
 	//----
 
@@ -227,6 +245,7 @@ namespace ofxImGuiSurfing
 	// Animator functions taken from
 	// https://github.com/tcoppex/ofxFontSampler/blob/main/example/src/ofApp.cpp
 
+	//The purpose of this anonymous namespace is to provide an internal implementation detail that should not be exposed outside the ofxImGuiSurfing namespace
 	namespace
 	{
 		/* Return a linear value in range [0,1] every delay (in seconds). */
@@ -240,19 +259,20 @@ namespace ofxImGuiSurfing
 			return 0.5f * (1.0 + glm::sin(Tick(delay) * glm::two_pi<float>()));
 		}
 
-		/* Noise function used by the gradient scaling. */
-		float Noise(const ofPoint& vertex = ofPoint(1, -1)) {
-			//return /*24.0f **/ ofNoise(0.005f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.0002f);
+		///* Noise function used by the gradient scaling. */
+		//float Noise(const ofPoint& vertex = ofPoint(1, -1)) {
+		//	//return /*24.0f **/ ofNoise(0.005f*vertex + 0.5f*ofGetElapsedTimeMillis()*0.0002f);
 
-			return ofNoise(0.05f * vertex + 0.5f * ofGetElapsedTimeMillis() * 0.002f);
-		}
+		//	return ofNoise(0.05f * vertex + 0.5f * ofGetElapsedTimeMillis() * 0.002f);
+		//}
 
-		static constexpr int32_t kCharsetSize = 26;
+		//static constexpr int32_t kCharsetSize = 26;
 
 	}  // namespace
 
 	//--
 
+	/*
 	inline float NextGaussian(const float center, const float standard_dev)
 	{
 		std::random_device rd;
@@ -267,6 +287,7 @@ namespace ofxImGuiSurfing
 		std::uniform_real_distribution<float> distribution(lower, upper);
 		return distribution(mt);
 	}
+	*/
 
 	//-
 
@@ -338,6 +359,7 @@ namespace ofxImGuiSurfing
 	//----
 
 	// Simple Smooth
+
 	/*
 
 	Example use:
