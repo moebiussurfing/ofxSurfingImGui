@@ -1735,7 +1735,8 @@ namespace ofxImGuiSurfing
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
-						bReturn |= ofxImGuiSurfing::AddStepperFloat(p);
+						bReturn |= ofxImGuiSurfing::AddStepper(p);
+						//bReturn |= ofxImGuiSurfing::AddStepperFloat(p);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1750,7 +1751,10 @@ namespace ofxImGuiSurfing
 					case OFX_IM_STEPPER:
 					{
 						//ImGui::PushItemWidth(100);
-						bReturn = AddStepperFloat(p);
+						// 
+						//bReturn = AddStepperFloat(p);
+						bReturn = AddStepper(p, false);
+
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2196,7 +2200,10 @@ namespace ofxImGuiSurfing
 					case OFX_IM_STEPPER:
 					{
 						//ImGui::PushItemWidth(100);
-						bReturn = AddStepperInt(p);
+						
+						bReturn = AddStepper(p, false);
+						//bReturn = AddStepperInt(p);
+
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2221,6 +2228,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_STEPPER_NO_LABEL:
 					{
 						bReturn = AddStepper(p, true);
+
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);

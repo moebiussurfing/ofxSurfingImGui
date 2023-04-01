@@ -2765,7 +2765,8 @@ public:
 
 			if (!bMinimize) {
 				AddSpacing();
-				ofxImGuiSurfing::AddStepperInt(windowsOrganizer.pad);
+				ofxImGuiSurfing::AddStepper(windowsOrganizer.pad);
+				//ofxImGuiSurfing::AddStepperInt(windowsOrganizer.pad);
 			}
 
 			EndWindow();

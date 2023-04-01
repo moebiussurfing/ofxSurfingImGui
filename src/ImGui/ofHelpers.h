@@ -822,6 +822,8 @@ namespace ofxImGuiSurfing
 	//bool AddStepper(ofParameter<int>& p, int step = -1, int stepFast = -1);
 	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
 
+	//TODO: move and centralize to main function instead!
+	/*
 	//--------------------------------------------------------------
 	inline bool AddStepperInt(ofParameter<int>& p, bool bNoLabel = false)
 	{
@@ -899,6 +901,7 @@ namespace ofxImGuiSurfing
 
 		return bReturn;
 	}
+	*/
 
 	//--
 
@@ -939,7 +942,8 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(n.c_str());
 
 		if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		else IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
+		else IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		//else IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
 
 		if (isFloat) {
 			if (ImGui::InputFloat(label.c_str(), (float*)&tmpRef, step, stepFast))
@@ -962,7 +966,8 @@ namespace ofxImGuiSurfing
 		}
 
 		if (bNoLabel) ImGui::PopItemWidth();
-		else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
+		else IMGUI_SUGAR__STEPPER_WIDTH_POP;
+		//else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
 
 		ImGui::PopID();
 
