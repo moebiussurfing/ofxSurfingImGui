@@ -30,9 +30,11 @@
 /*
 
 	IDEAS
-		- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
-		- add debug info pos,sz for each window.
-		- add isFirsTimeStartup() to allow force default settings.
+	- context menu / right mouse click
+		expose auto resize/minimize/etc
+		add debug info pos,sz for each window.
+	- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
+	- add isFirsTimeStartup() to allow force default settings.
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.

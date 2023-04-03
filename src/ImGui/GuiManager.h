@@ -135,7 +135,7 @@ public:
 	~SurfingGuiManager();
 
 #ifdef OFX_USE_DEBUGGER
-private:
+//private:
 	SurfingDebugger debugger;
 #endif
 

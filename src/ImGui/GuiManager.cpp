@@ -51,8 +51,8 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
-	params_Advanced.add(bDebugDebugger);
 
+	params_Advanced.add(bDebugDebugger);
 #ifdef OFX_USE_DEBUGGER
 	debugger.bGui.makeReferenceTo(bDebugDebugger);
 	params_Advanced.add(debugger.params);
@@ -631,6 +631,8 @@ void SurfingGuiManager::startup()
 
 	//--
 
+	// Load App Session Settings
+
 	// When opening for first time,
 	// we set some default settings.
 
@@ -1063,6 +1065,10 @@ void SurfingGuiManager::update() { // -> Not being used by default
 	{
 		setupStartupForced();
 	}
+
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) debugger.update();
+#endif
 }
 
 //--------------------------------------------------------------
