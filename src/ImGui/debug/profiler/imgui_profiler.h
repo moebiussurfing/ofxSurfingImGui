@@ -60,8 +60,8 @@ namespace ImGuiEx {
 			float a = 0.7;
 			size_t i = 0;
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orange, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::turquoise, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::fuchsia, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orange, a);

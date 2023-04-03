@@ -1,3 +1,16 @@
+/*
+
+	TODO
+
+	Profiler: we setup 4 cpu and 4 gpu tasks by default.
+	not passed tasks are showed too...we should hide.
+	But for now, we can initiate amount of measures on startup:
+	T_CPU_SETUP(4);
+	T_GPU_SETUP(3);
+
+
+*/
+
 
 #pragma once
 #include "ofMain.h"
@@ -80,7 +93,7 @@ private:
 		frameTimeMetric.mKnownMaxValue = 0.10f;
 
 		//-
-		
+
 		// FrameRate
 		frameRateMetric.mDescription = "FrameRate";
 		frameRateMetric.mUnits = "fps";
@@ -90,7 +103,7 @@ private:
 		frameRateMetric.mColor[1] = c2.g;
 		frameRateMetric.mColor[2] = c2.b;
 		frameTimeMetric.mColor[3] = c2.a;
-		
+
 		//custom
 		frameRateMetric.mFlags = MetricsGuiMetric::KNOWN_MAX_VALUE;
 		frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
@@ -135,8 +148,10 @@ private:
 
 		//--
 
-		// Profiler
-		setupProfileTasks(3, 3);//customize max tasks. to improve aesthetics..
+		// Profiler (cpu/gpu)
+		//customize max tasks. to improve aesthetics..
+		setupProfileTasks(4, 4);
+		//setupProfileTasks(3, 3);
 		//setupProfileTasks();
 	};
 
@@ -331,46 +346,6 @@ public:
 
 	//--
 
-	// Demo
-
-	void updateDemoProfiler()
-	{
-		ImGuiEx::ProfilerTask* ptCpu_ = new ImGuiEx::ProfilerTask[PROFILER_DEMO_NUM_PASSES_CPU];
-
-		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_CPU; i++)
-		{
-			ptCpu_[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
-			ptCpu_[i].startTime = ofGetElapsedTimef();
-			ptCpu_[i].name = "cpuTask" + ofToString(i);
-
-			int t = ofRandom(9);
-			ofSleepMillis(t);
-
-			ptCpu_[i].endTime = ofGetElapsedTimef();
-		}
-
-		profiler.cpuGraph.LoadFrameData(ptCpu_, PROFILER_DEMO_NUM_PASSES_CPU);
-	};
-
-	void drawDemoProfiler()
-	{
-		ImGuiEx::ProfilerTask* ptGpu_ = new ImGuiEx::ProfilerTask[PROFILER_DEMO_NUM_PASSES_GPU];
-
-		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_GPU; i++)
-		{
-			ptGpu_[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(i % 16)];
-			ptGpu_[i].startTime = ofGetElapsedTimef();
-			ptGpu_[i].name = "gpuTask" + ofToString(i);
-
-			int t = ofRandom(i * 2);
-			ofSleepMillis(t);
-
-			ptGpu_[i].endTime = ofGetElapsedTimef();
-		}
-
-		profiler.gpuGraph.LoadFrameData(ptGpu_, PROFILER_DEMO_NUM_PASSES_GPU);
-	};
-
 	void drawProfiler()
 	{
 		//updateProfileTasksGpu();
@@ -419,6 +394,17 @@ public:
 		ptGpu[i].endTime = ofGetElapsedTimef();
 	};
 
+public:
+	void setupProfileTasksCpu(size_t numCpuTasks)
+	{
+		PROFILER_DEMO_NUM_PASSES_CPU = numCpuTasks;
+		setupProfileTasks();
+	};
+	void setupProfileTasksGpu(size_t numGpuTasks)
+	{
+		PROFILER_DEMO_NUM_PASSES_GPU = numGpuTasks;
+		setupProfileTasks();
+	};
 private:
 	void setupProfileTasks(size_t numCpuTasks, size_t numGpuTasks)
 	{
@@ -443,10 +429,65 @@ public:
 		profiler.gpuGraph.LoadFrameData(ptGpu, PROFILER_DEMO_NUM_PASSES_GPU);
 	};
 
-	// macros
-#define T_CPU_START(x,n)	ui.debugger.startProfilerTaskCpu(x, n);{
-#define T_CPU_END(x) }		ui.debugger.endProfilerTaskCpu(x);
+	//--
 
-#define T_GPU_START(x,n)	ui.debugger.startProfilerTaskGpu(x, n);{
-#define T_GPU_END(x) }		ui.debugger.endProfilerTaskGpu(x);
+	// Macros
+
+	// call on setup to define how much measurements we want to use
+#define T_CPU_SETUP(x)		ui.debugger.setupProfileTasksCpu(x);
+#define T_GPU_SETUP(x)		ui.debugger.setupProfileTasksGpu(x);
+
+#define T_CPU_START(x,n)	ui.debugger.startProfilerTaskCpu(x, n);
+#define T_CPU_END(x)		ui.debugger.endProfilerTaskCpu(x);
+
+#define T_GPU_START(x,n)	ui.debugger.startProfilerTaskGpu(x, n);
+#define T_GPU_END(x) 		ui.debugger.endProfilerTaskGpu(x);
+
+//private:
+//	bool bDoneUpdateProfileTasksCpu = false;
+//	bool bDoneUpdateProfileTasksGpu = false;
+
+//--
+
+public:
+
+	// Demo
+
+	void updateDemoProfiler()
+	{
+		ImGuiEx::ProfilerTask* ptCpu_ = new ImGuiEx::ProfilerTask[PROFILER_DEMO_NUM_PASSES_CPU];
+
+		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_CPU; i++)
+		{
+			ptCpu_[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+			ptCpu_[i].startTime = ofGetElapsedTimef();
+			ptCpu_[i].name = "cpuTask" + ofToString(i);
+
+			int t = ofRandom(9);
+			ofSleepMillis(t);
+
+			ptCpu_[i].endTime = ofGetElapsedTimef();
+		}
+
+		profiler.cpuGraph.LoadFrameData(ptCpu_, PROFILER_DEMO_NUM_PASSES_CPU);
+	};
+
+	void drawDemoProfiler()
+	{
+		ImGuiEx::ProfilerTask* ptGpu_ = new ImGuiEx::ProfilerTask[PROFILER_DEMO_NUM_PASSES_GPU];
+
+		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_GPU; i++)
+		{
+			ptGpu_[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(i % 16)];
+			ptGpu_[i].startTime = ofGetElapsedTimef();
+			ptGpu_[i].name = "gpuTask" + ofToString(i);
+
+			int t = ofRandom(i * 2);
+			ofSleepMillis(t);
+
+			ptGpu_[i].endTime = ofGetElapsedTimef();
+		}
+
+		profiler.gpuGraph.LoadFrameData(ptGpu_, PROFILER_DEMO_NUM_PASSES_GPU);
+	};
 };

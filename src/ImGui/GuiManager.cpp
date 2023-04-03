@@ -1067,7 +1067,10 @@ void SurfingGuiManager::update() { // -> Not being used by default
 	}
 
 #ifdef OFX_USE_DEBUGGER
-	if (bDebugDebugger) debugger.update();
+	if (bDebugDebugger) {
+		debugger.updateProfileTasksCpu();
+		debugger.update();
+	}
 #endif
 }
 
@@ -1076,6 +1079,11 @@ void SurfingGuiManager::draw()
 {
 	//TODO:
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
+
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) debugger.updateProfileTasksGpu();//call after draw
+#endif
+
 }
 
 //--------------------------------------------------------------
