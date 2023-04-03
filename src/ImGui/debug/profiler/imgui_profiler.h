@@ -77,10 +77,10 @@ namespace ImGuiEx {
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::black, a);
 
-			for (size_t i = 0; i < 17; i++)
-			{
-				cout << ofToString(ofColor(colors[i])) << endl;
-			}
+			//for (size_t i = 0; i < 17; i++)
+			//{
+			//	cout << ofToString(ofColor(colors[i])) << endl;
+			//}
 
 			//colors[0] = RGBA_LE(0x1abc9cffu);
 			//colors[1] = RGBA_LE(0xbdc3c7ffu);
@@ -286,6 +286,7 @@ namespace ImGuiEx {
 				glm::vec2 markerRightRectMax = markerRightRectMin + glm::vec2(markerRightRectWidth, -markerRightRectHeight);
 				//RenderTaskMarker(drawList, markerLeftRectMin, markerLeftRectMax, markerRightRectMin, markerRightRectMax, task.color);
 
+				// more alpha
 				ImVec4 c0 = ImGui::ColorConvertU32ToFloat4(task.color);
 				ImU32 c = ImGui::ColorConvertFloat4ToU32(ImVec4(c0.x, c0.y, c0.z, 0.1));
 				RenderTaskMarker(drawList, markerLeftRectMin, markerLeftRectMax, markerRightRectMin, markerRightRectMax, c);
@@ -299,12 +300,15 @@ namespace ImGuiEx {
 				//TODO:
 				//timeText.precision(3);
 				//timeText.precision(2);
-				timeText.precision(0);//ms without decimals
+				timeText.precision(1);
+				//timeText.precision(0);//ms without decimals
 
 				timeText << std::fixed << std::string("[") << (taskTimeMs * 1000.0f);
 
 				Text(drawList, markerRightRectMax + textMargin, textColor, timeText.str().c_str());
-				Text(drawList, markerRightRectMax + textMargin + glm::vec2(nameOffset, 0.0f), textColor, (std::string("ms] ") + task.name).c_str());
+
+				float moreOffset = 4;
+				Text(drawList, markerRightRectMax + textMargin + glm::vec2(nameOffset + moreOffset, 0.0f), textColor, (std::string("ms] ") + task.name).c_str());
 			}
 
 		}

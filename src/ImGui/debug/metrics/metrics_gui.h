@@ -1,6 +1,8 @@
 #ifndef METRICS_GUI_H
 #define METRICS_GUI_H
 
+// Original code from:
+// https://github.com/GameTechDev/MetricsGui
 
 /*
 Copyright 2017 Intel Corporation
@@ -23,6 +25,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#define SURFING_REMOVE_DECIMAL_LABELS
 
 #include <stdint.h>
 #include <string>

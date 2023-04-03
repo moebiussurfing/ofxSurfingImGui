@@ -108,7 +108,13 @@ int CreateQuantityLabel(
     //     4.123YYY       => " 4.123"       (6) => "4.12"
     //     0.123YYY       => " 0.123"       (6) => ".123"
     char numberString[256];
+    
+#ifdef SURFING_REMOVE_DECIMAL_LABELS
+    int n = snprintf(numberString, 256, " %.0lf", value);
+#else
     int n = snprintf(numberString, 256, " %.3lf", value);
+#endif // SURFING_REMOVE_DECIMAL_LABELS
+    
     auto valueS = &numberString[1];
 
     if (n >= 8) {

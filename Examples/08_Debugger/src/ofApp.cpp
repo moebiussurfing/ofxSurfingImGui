@@ -33,7 +33,10 @@ void ofApp::update()
 			{
 				power = ofMap(n, th, 1, 0, 1, true);
 				m = ofMap(n, th, 1, 0, maxDelay, true);
-				m += maxDelay / 2;
+				m += (maxDelay / 2);
+				m += power * (maxDelay / 2);
+				//m = power * m;
+
 			}
 			else  m = maxDelay / 2;
 			t = m;

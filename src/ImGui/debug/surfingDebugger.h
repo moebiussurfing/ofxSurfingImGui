@@ -2,15 +2,22 @@
 #pragma once
 #include "ofMain.h"
 
+#define SURFING_MAX_FRAME_RATE 60.f
+
 //#define DEBUG_INTERNAL_METRICS // to enable debug params
 #define ENABLE_LIST_PLOT
+
+//--
+
+#include "imgui.h"
+
+// Original code from:
+// https://github.com/GameTechDev/MetricsGui
+#include "metrics_gui.h"
 
 #ifdef DEBUG_INTERNAL_METRICS
 #include "surfingMetrics.h"
 #endif
-
-#include "imgui.h"
-#include "metrics_gui.h"
 
 // Original code from @Raikiri: 
 // https://github.com/Raikiri/LegitProfiler
@@ -33,7 +40,7 @@ public:
 	ofParameter<bool> bGui_Profiler{ "Profiler", 1 };
 	ofParameter<bool> bProfilerDemo{ "ProfilerDemo", false };
 	ofParameter<bool> bDebugMetrics{ "Debug Metrics", false };
-	ofParameterGroup params{ "SurfDebugger" };//to avoid repeat names
+	ofParameterGroup params{ "Debugger Settings" };//to avoid repeat names
 
 public:
 	SurfingDebugger() {
@@ -57,6 +64,7 @@ private:
 
 		//-
 
+		// FrameTime
 		frameTimeMetric.mDescription = "FrameTime";
 		frameTimeMetric.mUnits = "s";
 		frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
@@ -66,30 +74,47 @@ private:
 		frameTimeMetric.mColor[2] = c1.b;
 		frameTimeMetric.mColor[3] = c1.a;
 
+		//custom
+		frameTimeMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;
+		frameTimeMetric.mKnownMinValue = 0.001f;
+		frameTimeMetric.mKnownMaxValue = 0.10f;
+
+		//-
+		
+		// FrameRate
 		frameRateMetric.mDescription = "FrameRate";
 		frameRateMetric.mUnits = "fps";
-		frameRateMetric.mFlags = MetricsGuiMetric::NONE;
+		//frameRateMetric.mFlags = MetricsGuiMetric::NONE;
 		frameRateMetric.mSelected = 1;
 		frameRateMetric.mColor[0] = c2.r;
 		frameRateMetric.mColor[1] = c2.g;
 		frameRateMetric.mColor[2] = c2.b;
 		frameTimeMetric.mColor[3] = c2.a;
+		
+		//custom
+		frameRateMetric.mFlags = MetricsGuiMetric::KNOWN_MAX_VALUE;
+		frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
+		frameRateMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE;
+		frameRateMetric.mKnownMinValue = 0.f;
 
 		//-
 
+		frameTimePlot.mShowAverage = 1;
+		frameTimePlot.mShowLegendAverage = 1;
 		frameTimePlot.mBarGraph = 0;
-		frameTimePlot.mShowAverage = 0;
-		frameTimePlot.mShowLegendAverage = 0;
-		frameTimePlot.mShowLegendColor = true;
-		frameTimePlot.mShowInlineGraphs = true;
+		frameTimePlot.mShowLegendColor = 0;
+		frameTimePlot.mShowInlineGraphs = 0;
 		frameTimePlot.mShowOnlyIfSelected = 0;
 
-		frameRatePlot.mBarGraph = 0;
 		frameRatePlot.mShowAverage = 0;
 		frameRatePlot.mShowLegendAverage = 0;
-		frameRatePlot.mShowLegendColor = true;
+		frameRatePlot.mBarGraph = 0;
+		frameRatePlot.mShowLegendColor = 0;
 		frameRatePlot.mShowInlineGraphs = true;
 		frameRatePlot.mShowOnlyIfSelected = 0;
+
+		//frameRatePlot.mMaxValue = 60;
+		//frameRatePlot.mMinValue = 0;
 
 		//-
 
