@@ -39,7 +39,7 @@ docs/tagfile.xml
 [Bb]uild/
 [Oo]bj/
 *.o
-[Dd]ebug*/
+# [Dd]ebug*/
 [Rr]elease*/
 *.mode*
 *.app/
