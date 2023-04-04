@@ -103,6 +103,11 @@ namespace ofxImGuiSurfing
 		}
 	}
 
+	//--------------------------------------------------------------
+	static void AddTooltipHelp(const string s) {
+		AddTooltipHelp(s.c_str());
+	}
+
 	//--
 
 	//--------------------------------------------------------------
