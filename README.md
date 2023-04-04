@@ -1,4 +1,4 @@
-<br>
+lo<br>
 
 <h1>
   
@@ -230,7 +230,7 @@ An addon by **moebiusSurfing**.
 
 ## THANKS
 
-_Thanks [Omar Ocornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
+_Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
