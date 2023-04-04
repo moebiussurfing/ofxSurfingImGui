@@ -48,6 +48,9 @@ for [openFrameworks](https://openframeworks.cc/) projects.
     - With custom tags.
 - **Notifier System**:
     - With custom layout and styles.
+- **Debugger System**:
+    - Metrics: frame rate and frame time.
+    - Profiler: Cpu and Gpu measurements.
 - **Text Editor**: 
     - Language marks with custom marked keyworks.
     - Font sizes, color themes.
