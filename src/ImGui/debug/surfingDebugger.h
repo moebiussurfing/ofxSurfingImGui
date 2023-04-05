@@ -2,6 +2,9 @@
 
 	TODO
 
+make mini panel with simple widgets.
+frame and time bars and tasks lists.
+
 	Profiler: we setup 4 cpu and 4 gpu tasks by default.
 	not passed tasks are showed too...we should hide.
 	But for now, we can initiate amount of measures on startup:
