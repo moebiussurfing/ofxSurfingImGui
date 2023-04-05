@@ -55,6 +55,9 @@ for [openFrameworks](https://openframeworks.cc/) projects.
     - Language marks with custom marked keyworks.
     - Font sizes, color themes.
     - Clipboard access and **undo/redo** history.
+- **Console System**: ( WIP )
+    - Basic console/terminal module.
+    - Call methods/commands by typing into the console.
 - **Image Inspector**:
     - With pixel color picker.
 - **Themes**:
