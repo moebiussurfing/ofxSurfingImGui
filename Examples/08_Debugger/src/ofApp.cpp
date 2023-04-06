@@ -14,6 +14,7 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+	// Set title with fps
 	{
 		float v = ofMap(ofGetFrameRate(), 0, 60, 0, 1, true);
 		string s = ofToString(ofGetFrameRate(), 0) + " fps";
@@ -125,7 +126,8 @@ void ofApp::drawGui()
 	if (b4) T_GPU_START(2, "IMGUI");
 	ui.Begin();
 	{
-		if (ui.BeginWindow("ofApp")) {
+		if (ui.BeginWindow("ofApp")) 
+		{
 			ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE);
 			ui.AddSpacingBigSeparated();
 

@@ -1735,8 +1735,8 @@ void SurfingGuiManager::drawWindowsExtraManager() {
 	}
 
 #ifdef OFX_USE_DEBUGGER
-	if (bDebugDebugger) debugger.draw();
-	//if (bDebugDebugger) debugger.draw(this);
+	if (bDebugDebugger) debugger.drawImGui();
+	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
 #endif
 }
 

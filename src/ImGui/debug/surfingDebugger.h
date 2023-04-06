@@ -2,15 +2,14 @@
 
 	TODO
 
-make mini panel with simple widgets.
-frame and time bars and tasks lists.
+	PROFILER
+	could be separated to another class
 
-	Profiler: we setup 4 cpu and 4 gpu tasks by default.
+	By default we setup 4 cpu and 4 gpu tasks by default.
 	not passed tasks are showed too...we should hide.
 	But for now, we can initiate amount of measures on startup:
 	T_CPU_SETUP(4);
 	T_GPU_SETUP(3);
-
 
 */
 
@@ -47,15 +46,17 @@ class SurfingDebugger
 {
 public:
 	ofParameter<bool> bGui{ "Debugger", true };
+	ofParameter<bool> bGui_Mini{ "Mini", true };
+	ofParameter<bool> bGui_Metrics{ "Metrics", true };
+	ofParameter<bool> bGui_Profiler{ "Profiler", 1 };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
 	ofParameter<bool> bList{ "List", 1 };
 	ofParameter<bool> bFrameRate{ "FrameRate", true };
 	ofParameter<bool> bFrameTime{ "FrameTime", false };
 	ofParameter<bool> bGraphs{ "Graphs", 1 };
-	ofParameter<bool> bGui_Metrics{ "Metrics", true };
-	ofParameter<bool> bGui_Profiler{ "Profiler", 1 };
 	ofParameter<bool> bProfilerDemo{ "ProfilerDemo", false };
 	ofParameter<bool> bDebugMetrics{ "Debug Metrics", false };
+	ofParameter<bool> bMinimized{ "bMinimized",false };
 	ofParameterGroup params{ "Debugger Settings" };//to avoid repeat names
 
 public:
@@ -72,25 +73,28 @@ private:
 		params.add(bAutoResize);
 		params.add(bGui_Metrics);
 		params.add(bGui_Profiler);
+		params.add(bGui_Mini);
 		params.add(bFrameRate);
 		params.add(bFrameTime);
 		params.add(bGraphs);
 		params.add(bList);
 		params.add(bDebugMetrics);
+		params.add(bMinimized);
 
 		//-
 
 		// FrameTime
 		frameTimeMetric.mDescription = "FrameTime";
 		frameTimeMetric.mUnits = "s";
-		frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
-		frameTimeMetric.mSelected = 1;
+		//frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
+		frameTimeMetric.mSelected = 0;
 		frameTimeMetric.mColor[0] = c1.r;
 		frameTimeMetric.mColor[1] = c1.g;
 		frameTimeMetric.mColor[2] = c1.b;
 		frameTimeMetric.mColor[3] = c1.a;
 
 		//custom
+		frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
 		frameTimeMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;
 		frameTimeMetric.mKnownMinValue = 0.001f;
 		frameTimeMetric.mKnownMaxValue = 0.10f;
@@ -101,22 +105,23 @@ private:
 		frameRateMetric.mDescription = "FrameRate";
 		frameRateMetric.mUnits = "fps";
 		//frameRateMetric.mFlags = MetricsGuiMetric::NONE;
-		frameRateMetric.mSelected = 1;
+		frameRateMetric.mSelected = 0;
 		frameRateMetric.mColor[0] = c2.r;
 		frameRateMetric.mColor[1] = c2.g;
 		frameRateMetric.mColor[2] = c2.b;
-		frameTimeMetric.mColor[3] = c2.a;
+		frameRateMetric.mColor[3] = c2.a;
 
 		//custom
 		frameRateMetric.mFlags = MetricsGuiMetric::KNOWN_MAX_VALUE;
-		frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
 		frameRateMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE;
+		frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
 		frameRateMetric.mKnownMinValue = 0.f;
 
 		//-
 
-		frameTimePlot.mShowAverage = 1;
-		frameTimePlot.mShowLegendAverage = 1;
+		frameTimePlot.mShowAverage = 0;
+		frameTimePlot.mShowLegendAverage = 0;
+		//frameTimePlot.mShowLegendAverage = 1;//avg label is weird/wrong..
 		frameTimePlot.mBarGraph = 0;
 		frameTimePlot.mShowLegendColor = 0;
 		frameTimePlot.mShowInlineGraphs = 0;
@@ -132,14 +137,14 @@ private:
 		//frameRatePlot.mMaxValue = 60;
 		//frameRatePlot.mMinValue = 0;
 
-		//-
+		//--
 
 		frameRatePlot.AddMetric(&frameRateMetric);
 		frameTimePlot.AddMetric(&frameTimeMetric);
 
 		frameTimePlot.LinkLegends(&frameRatePlot);
 
-		//-
+		//--
 
 #ifdef ENABLE_LIST_PLOT
 		listPlot.AddMetric(&frameRateMetric);
@@ -202,19 +207,18 @@ public:
 
 		frameRateMetric.AddNewValue(ofGetFrameRate());
 
-		float v = ((float)ofGetLastFrameTime());
-		//float v = (int)((float)ofGetLastFrameTime());
+		//float v = ((float)ofGetLastFrameTime());
+		//float v = (1.f / ofGetFrameRate());
+		float v = 1.f / (float)(ImGui::GetIO().Framerate);
 		frameTimeMetric.AddNewValue(v);
-		//frameTimeMetric.AddNewValue(1.f / ImGui::GetIO().Framerate);
-		//frameTimeMetric.AddNewValue(1.f / ofGetFrameRate());
 
-		//-
+		//--
 
 		frameTimePlot.UpdateAxes();
 		frameRatePlot.UpdateAxes();
 
 #ifdef ENABLE_LIST_PLOT
-		if (bList) listPlot.UpdateAxes();
+		if (bList || bGui_Mini) listPlot.UpdateAxes();
 #endif
 
 		//--
@@ -232,124 +236,192 @@ public:
 	};
 
 public:
-	//void draw(SurfingGuiManager *ui) {
-	//void draw(SurfingGuiManager *ui = nullptr) {
-	//void draw(ofxSurfingImGui *ui = nullptr) {
-	//void draw(ofxSurfingImGui ui) {
-	void draw() {
+	//TODO; passing ui?
+	//void draw(SurfingGuiManager *ui)
+	//void draw(SurfingGuiManager *ui = nullptr)
+	//void draw(ofxSurfingImGui *ui = nullptr)
+	//void draw(ofxSurfingImGui ui)
 
+	void drawImGui()
+	{
 		if (!bGui) return;
 
-		//update();
+		if (!(bMinimized && bGui_Mini))
+		{
 
 #ifdef DEBUG_INTERNAL_METRICS
-		metrics.draw();
+			metrics.draw();
 #endif
-		static bool p_open = true;
+			static bool p_open = true;
 
-		float pd = 8;
-		ImVec2 sz(500, 150);
-		ImVec2 pos(ofGetWidth() - sz.x - pd, pd);
-		ImGuiCond cond = ImGuiCond_FirstUseEver;
-		if (p_open)
-		{
-			ImGui::SetNextWindowPos(pos, cond);
-			ImGui::SetNextWindowSize(sz, cond);
-		}
-
-		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
-
-		if (bGraphs) {
-			ImVec2 szMin(300, 190);
-			ImVec2 szMax(1000, 1000);
-			ImGui::SetNextWindowSizeConstraints(szMin, szMax);
-		}
-
-		//p_open = bOpen;
-		bool bOpen = ImGui::Begin("Debugger", &p_open, flags);
-		//bool bOpen = ImGui::Begin("Debugger");
-
-		//bool bOpen = true;
-		//if (ui != nullptr) bOpen = ui->BeginWindow(bGui);
-		//else bOpen = ImGui::Begin("Debugger");
-
-		if (bOpen)
-		{
-			bool b = true;
-
-			//if (ui != nullptr) {
-			//	b = ui->isMaximized();
-			//}
-
-			if (b)
+			float pd = 8;
+			ImVec2 sz(500, 150);
+			ImVec2 pos(ofGetWidth() - sz.x - pd, pd);
+			ImGuiCond cond = ImGuiCond_FirstUseEver;
+			if (p_open)
 			{
-				float w = 70;
-				ImVec2 sz(w, ofxImGuiSurfing::getWidgetsHeightUnit());
-
-				ofxImGuiSurfing::AddBigToggle(bGui_Metrics, sz);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddBigToggle(bGui_Profiler, sz);
-				ImGui::SameLine();
-				ofxImGuiSurfing::AddParameter(bAutoResize);
-				//ofxImGuiSurfing::AddParameter(bProfilerDemo);
-				//ImGui::Checkbox("Controls", &profiler.bShowControls);
-				//ofxImGuiSurfing::AddParameter(bDebugMetrics);
-
-				if (bGui_Metrics) {
-					//ImGui::SameLine();
-					ofxImGuiSurfing::AddBigToggle(bList, sz);
-					ImGui::SameLine();
-					ofxImGuiSurfing::AddBigToggle(bGraphs, sz);
-					if (bGraphs) {
-						ImGui::SameLine();
-						ofxImGuiSurfing::AddParameter(bFrameRate);
-						ImGui::SameLine();
-						ofxImGuiSurfing::AddParameter(bFrameTime);
-					}
-					//ImGui::SameLine();
-				}
+				ImGui::SetNextWindowPos(pos, cond);
+				ImGui::SetNextWindowSize(sz, cond);
 			}
 
-			//--
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+			if (bGraphs) {
+				ImVec2 szMin(300, 190);
+				ImVec2 szMax(1000, 1000);
+				ImGui::SetNextWindowSizeConstraints(szMin, szMax);
+			}
+
+			//p_open = bOpen;
+			bool bOpen = ImGui::Begin("Debugger", &p_open, flags);
+			//bool bOpen = ImGui::Begin("Debugger");
+
+			//bool bOpen = true;
+			//if (ui != nullptr) bOpen = ui->BeginWindow(bGui);
+			//else bOpen = ImGui::Begin("Debugger");
+
+			if (bOpen)
+			{
+				bool b = true;
+
+				//if (ui != nullptr) {
+				//	b = ui->isMaximized();
+				//}
+
+				if (b)
+				{
+					float w = 70;
+					ImVec2 sz(w, ofxImGuiSurfing::getWidgetsHeightUnit());
+
+					ofxImGuiSurfing::AddBigToggle(bGui_Metrics, sz);
+					ImGui::SameLine();
+					ofxImGuiSurfing::AddBigToggle(bGui_Profiler, sz);
+					ImGui::SameLine();
+					ofxImGuiSurfing::AddBigToggle(bGui_Mini, sz);
+					ImGui::SameLine();
+					ofxImGuiSurfing::AddParameter(bAutoResize);
+
+					//ofxImGuiSurfing::AddParameter(bProfilerDemo);
+					//ImGui::Checkbox("Controls", &profiler.bShowControls);
+					//ofxImGuiSurfing::AddParameter(bDebugMetrics);
+
+					if (bGui_Metrics) {
+						//ImGui::SameLine();
+						ofxImGuiSurfing::AddBigToggle(bList, sz);
+						ImGui::SameLine();
+						ofxImGuiSurfing::AddBigToggle(bGraphs, sz);
+						if (bGraphs) {
+							ImGui::SameLine();
+							ofxImGuiSurfing::AddParameter(bFrameRate);
+							ImGui::SameLine();
+							ofxImGuiSurfing::AddParameter(bFrameTime);
+						}
+						//ImGui::SameLine();
+					}
+				}
+
+				//--
 
 #ifdef ENABLE_LIST_PLOT
-			if (bList)
-			{
-				listPlot.DrawList();
-				//listPlot.DrawHistory();
-			}
+				if (bList)
+				{
+					listPlot.DrawList();
+					//listPlot.DrawHistory();
+				}
 #endif
 
-			//--
+				//--
 
-			if (bGraphs)
-			{
-				if (bFrameRate) frameRatePlot.DrawHistory();
-				if (bFrameTime) frameTimePlot.DrawHistory();
+				if (bGraphs)
+				{
+					if (bFrameRate) frameRatePlot.DrawHistory();
+					if (bFrameTime) frameTimePlot.DrawHistory();
+				}
+
 			}
 
 			//--
 
 			ImGui::End();
 
-			//if (ui != nullptr) ui->EndWindow();
-			//else ImGui::End();
-		}
+			if (bDebugMetrics) ImGui::ShowMetricsWindow();
 
-		if (bDebugMetrics) ImGui::ShowMetricsWindow();
+			//--
+
+			if (bGui_Profiler)
+			{
+				drawImGuiProfiler();
+			}
+		}
 
 		//--
 
-		if (bGui_Profiler)
+		if (bGui_Mini)
 		{
-			drawProfiler();
+			drawImGuiMini();
 		}
 	};
 
 	//--
 
-	void drawProfiler()
+	void drawImGuiMini()
+	{
+		static bool p_open = true;
+		if (p_open != bGui_Mini) p_open = bGui_Mini;
+
+		ImVec2 sz(260, 150);
+		float pd = 8;
+		ImVec2 pos(ofGetWidth() / 2 - sz.x / 2, ofGetHeight() / 2 - sz.y / 2);
+		ImGuiCond cond = ImGuiCond_FirstUseEver;
+		if (p_open)
+		{
+			ImGui::SetNextWindowPos(pos, cond);
+			ImGui::SetNextWindowSize(sz, cond);
+
+			ImVec2 szMin(300, 155);
+			ImVec2 szMax(350, 300);
+			ImGui::SetNextWindowSizeConstraints(szMin, szMax);
+		}
+
+		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+		if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+		//flags += ImGuiWindowFlags_AlwaysAutoResize;
+
+		bool bOpen = ImGui::Begin("Debugger Mini", &p_open, flags);
+		if (bOpen)
+		{
+			// super mini toggle
+			// on top-right, mini, no label
+			{
+				//move up
+				ImVec2 diff{ 0, -5 };
+				auto pf = ImGui::GetCursorPos();
+				auto pt = pf + diff;
+				ImGui::SetCursorPos(pt);
+				//set size
+				const float hu = ImGui::GetFrameHeight();
+				const float ht = 0.8f * hu;
+				const float w = 1.55f * ht;
+				//move right
+				float wwidget = ImGui::GetContentRegionAvail().x - w;
+				ImGui::Dummy(ImVec2{ wwidget,0 });
+				ImGui::SameLine();
+				ofxImGuiSurfing::AddToggleRoundedButton(bMinimized, ht, true, true);
+			}
+
+			listPlot.DrawList();
+			ImGui::Spacing();
+			ImGui::Separator();
+			profiler.RenderMini();
+
+		}
+		ImGui::End();
+
+		if (bGui_Mini != p_open) bGui_Mini = p_open;
+	}
+
+	void drawImGuiProfiler()
 	{
 		//updateProfileTasksGpu();
 
@@ -371,7 +443,9 @@ public:
 	ImGuiEx::ProfilerTask* ptCpu;
 	void startProfilerTaskCpu(int i, string name)
 	{
-		ptCpu[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+		ptCpu[i].color = profiler.cpuGraph.colors[i];
+		//ptCpu[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+
 		ptCpu[i].startTime = ofGetElapsedTimef();
 		ptCpu[i].name = name + "_" + ofToString(i);
 		//ptCpu[i].name = "CPU " + name + "_" + ofToString(i);
@@ -382,11 +456,15 @@ public:
 		ptCpu[i].endTime = ofGetElapsedTimef();
 	};
 
+	//--
+
 	// Gpu
 	ImGuiEx::ProfilerTask* ptGpu;
 	void startProfilerTaskGpu(int i, string name)
 	{
-		ptGpu[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+		ptGpu[i].color = profiler.gpuGraph.colors[i];
+		//ptGpu[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+
 		ptGpu[i].startTime = ofGetElapsedTimef();
 		ptGpu[i].name = name + "_" + ofToString(i);
 		//ptGpu[i].name = "GPU " + name + "_" + ofToString(i);
@@ -396,6 +474,8 @@ public:
 	{
 		ptGpu[i].endTime = ofGetElapsedTimef();
 	};
+
+	//--
 
 public:
 	void setupProfileTasksCpu(size_t numCpuTasks)
@@ -462,7 +542,9 @@ public:
 
 		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_CPU; i++)
 		{
-			ptCpu_[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+			ptCpu_[i].color = profiler.cpuGraph.colors[i];
+			//ptCpu_[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
+
 			ptCpu_[i].startTime = ofGetElapsedTimef();
 			ptCpu_[i].name = "cpuTask" + ofToString(i);
 
@@ -481,7 +563,9 @@ public:
 
 		for (size_t i = 0; i < PROFILER_DEMO_NUM_PASSES_GPU; i++)
 		{
-			ptGpu_[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(i % 16)];
+			ptGpu_[i].color = profiler.gpuGraph.colors[i];
+			//ptGpu_[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(i % 16)];
+
 			ptGpu_[i].startTime = ofGetElapsedTimef();
 			ptGpu_[i].name = "gpuTask" + ofToString(i);
 

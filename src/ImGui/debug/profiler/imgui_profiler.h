@@ -59,23 +59,23 @@ namespace ImGuiEx {
 
 			float a = 0.7;
 			size_t i = 0;
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);//0
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::lightPink, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::deepSkyBlue, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::greenYellow, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::cyan, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::lightYellow, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orangeRed, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::darkorange, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::fuchsia, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orange, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::turquoise, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orange, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::turquoise, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orange, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::turquoise, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::black, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orangeRed, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orangeRed, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::black, a);//16
 
 			//for (size_t i = 0; i < 17; i++)
 			//{
@@ -230,7 +230,8 @@ namespace ImGuiEx {
 			}
 		}
 
-		void RenderLegend(ImDrawList* drawList, glm::vec2 legendPos, glm::vec2 legendSize, size_t frameIndexOffset)
+	public:
+		void RenderLegend(ImDrawList* drawList, glm::vec2 legendPos, glm::vec2 legendSize, size_t frameIndexOffset, bool bDecoration = true)
 		{
 			float markerLeftRectMargin = 3.0 * scalefactor;
 			float markerLeftRectWidth = 5.0f * scalefactor;
@@ -282,36 +283,46 @@ namespace ImGuiEx {
 				markerLeftRectMax.y -= taskEndHeight;
 
 				// marker poly
+
 				glm::vec2 markerRightRectMin = legendPos + glm::vec2(markerLeftRectMargin + markerLeftRectWidth + markerMidWidth, legendSize.y - markerRigthRectMargin - (markerRightRectHeight + markerRightRectSpacing) * stat.onScreenIndex);
+
 				glm::vec2 markerRightRectMax = markerRightRectMin + glm::vec2(markerRightRectWidth, -markerRightRectHeight);
 				//RenderTaskMarker(drawList, markerLeftRectMin, markerLeftRectMax, markerRightRectMin, markerRightRectMax, task.color);
 
-				// more alpha
-				ImVec4 c0 = ImGui::ColorConvertU32ToFloat4(task.color);
-				ImU32 c = ImGui::ColorConvertFloat4ToU32(ImVec4(c0.x, c0.y, c0.z, 0.1));
-				RenderTaskMarker(drawList, markerLeftRectMin, markerLeftRectMax, markerRightRectMin, markerRightRectMax, c);
+				if (bDecoration)
+				{
+					// more alpha
+					ImVec4 c0 = ImGui::ColorConvertU32ToFloat4(task.color);
+					ImU32 c = ImGui::ColorConvertFloat4ToU32(ImVec4(c0.x, c0.y, c0.z, 0.1));
+					RenderTaskMarker(drawList, markerLeftRectMin, markerLeftRectMax, markerRightRectMin, markerRightRectMax, c);
+				}
 
 				uint32_t textColor = task.color;
 
 				float taskTimeMs = float(task.endTime - task.startTime);
 				std::ostringstream timeText;
 
-				// label text
+				// label text ms
 				//TODO:
 				//timeText.precision(3);
 				//timeText.precision(2);
-				timeText.precision(1);
-				//timeText.precision(0);//ms without decimals
+				timeText.precision(1);//one decimal
+				//timeText.precision(0);//no decimals
 
 				timeText << std::fixed << std::string("[") << (taskTimeMs * 1000.0f);
 
-				Text(drawList, markerRightRectMax + textMargin, textColor, timeText.str().c_str());
+				glm::vec2 o = markerRightRectMin - glm::vec2(markerMidWidth + 9, markerRightRectHeight + 9);//to remove decoration
+
+				if (bDecoration) Text(drawList, markerRightRectMax + textMargin, textColor, timeText.str().c_str());
+				else Text(drawList, o, textColor, timeText.str().c_str());
 
 				float moreOffset = 4;
-				Text(drawList, markerRightRectMax + textMargin + glm::vec2(nameOffset + moreOffset, 0.0f), textColor, (std::string("ms] ") + task.name).c_str());
+				if (bDecoration) Text(drawList, markerRightRectMax + textMargin + glm::vec2(nameOffset + moreOffset, 0.0f), textColor, (std::string("ms] ") + task.name).c_str());
+				else Text(drawList, o + glm::vec2(nameOffset + moreOffset, 0.0f), textColor, (std::string("ms] ") + task.name).c_str());
 			}
 
 		}
+	private:
 
 		static void Rect(ImDrawList* drawList, glm::vec2 minPoint, glm::vec2 maxPoint, uint32_t col, bool filled = true)
 		{
@@ -380,9 +391,34 @@ namespace ImGuiEx {
 			avgFrameTime = 1.0f;
 			isRetina = false;
 			scaleFactor = 1.0f;
-		}
+		};
 
-		void setIsRetina(bool ir) { isRetina = ir; if (ir) scaleFactor = 2.0f; cpuGraph.setIsRetina(ir); gpuGraph.setIsRetina(ir); }
+		void setIsRetina(bool ir) { isRetina = ir; if (ir) scaleFactor = 2.0f; cpuGraph.setIsRetina(ir); gpuGraph.setIsRetina(ir); };
+
+		void RenderMini()
+		{
+			ImGui::Spacing();
+
+			ImDrawList* drawList = ImGui::GetWindowDrawList();
+			glm::vec2 p;
+
+			ImGui::Columns(2, NULL, false);
+
+			//float w = 0.6  * ImGui::GetContentRegionAvail().x;
+			//ImGui::SetColumnWidth(1, w);
+
+			ImGui::Text("GPU");
+			p = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+			gpuGraph.RenderLegend(drawList, p, glm::vec2(50, 50), 0, false);//workaround for legendSize
+
+			ImGui::NextColumn();
+
+			ImGui::Text("CPU");
+			p = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
+			cpuGraph.RenderLegend(drawList, p, glm::vec2(50, 50), 0, false);//workaround for legendSize
+
+			ImGui::Columns(1);
+		};
 
 		void Render(bool* active)
 		{
@@ -413,7 +449,7 @@ namespace ImGuiEx {
 			//title << std::fixed << "\uf085  Profiler [Rendering at " << 1.0f / avgFrameTime << "fps\t" << avgFrameTime * 1000.0f << "ms]###ProfilerWindow";
 
 			title.precision(2);
-			title << "Profiler  " << 1.0f / avgFrameTime << " fps | " << avgFrameTime * 1000.0f << " ms###ProfilerWindow";
+			title << "Debugger Profiler  " << 1.0f / avgFrameTime << " fps | " << avgFrameTime * 1000.0f << " ms###ProfilerWindow";
 
 			ImGui::Begin(title.str().c_str(), active, ImGuiWindowFlags_NoScrollbar);
 			ImVec2 canvasSize = ImGui::GetContentRegionAvail();
@@ -475,7 +511,7 @@ namespace ImGuiEx {
 			cpuGraph.frameSpacing = frameSpacing;
 
 			ImGui::End();
-		}
+		};
 
 		bool stopProfiling;
 		int frameOffset;
