@@ -107,7 +107,7 @@ class surfingConsole : public console<dataCustom*>
 public:
 	surfingConsole(bool redir = false) : console(redir)
 	{
-		std::cout << "> surfingConsole()" << " redirect:" << redir << endl;
+		std::cout << "> surfingConsole()" << " redirect: " << redir << endl;
 
 		addCommands();
 	};
@@ -121,7 +121,7 @@ public:
 		BIND(clear);
 		BIND(printArgs);
 
-		std::cout << "> addCommands:" << endl;
+		std::cout << "> addCommands: " << endl;
 		help_();
 	};
 
@@ -184,9 +184,9 @@ private:
 
 		std::cout << "> help" << endl;
 		std::cout << "  data" << endl;
-		std::cout << "  data->frameNum:" << data->frameNum << endl;
-		std::cout << "  data->lastCommand:" << data->lastCommand << endl;
-		std::cout << "  data->color:" << data->color << endl;
+		std::cout << "  data->frameNum: " << data->frameNum << endl;
+		std::cout << "  data->lastCommand: " << data->lastCommand << endl;
+		std::cout << "  data->color: " << data->color << endl;
 		std::cout << endl;
 
 		help_();
@@ -207,7 +207,7 @@ private:
 	{
 		data->lastCommand = "just printArgs";
 
-		std::cout << "  args:" << args << endl;
+		std::cout << "  args: " << args << endl;
 		std::cout << endl;
 
 		setScroll();
@@ -218,7 +218,7 @@ private:
 		data->color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
 		data->lastCommand = "randomized color";
 		
-		std::cout << "  data->color:" << data->color << endl;
+		std::cout << "  data->color: " << data->color << endl;
 		std::cout << endl;
 
 		setScroll();
@@ -237,7 +237,7 @@ private:
 		data->color = c;
 		data->lastCommand = "color settled";
 
-		std::cout << "  data->color:" << data->color << endl;
+		std::cout << "  data->color: " << data->color << endl;
 		std::cout << endl;
 
 		setScroll();

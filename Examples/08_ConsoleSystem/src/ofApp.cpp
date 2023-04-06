@@ -33,8 +33,10 @@ void ofApp::draw()
 	ui.Begin();
 	{
 		// Theme
-		if (0) {
-			static bool b = 0;
+		static bool bTheme = false;
+		static bool b = 0;
+		if (bTheme) {
+			bTheme = 0;
 			if (!b) {
 				b = 1;
 				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
@@ -43,6 +45,13 @@ void ofApp::draw()
 
 		if (ui.BeginWindow(bGui))
 		{
+			if (!b) {
+				if (ui.AddButton("Theme")) {
+					bTheme = true;
+				}
+				ui.AddSpacingSeparated();
+			}
+
 			ui.AddLabelBig("dataCustom");
 			ui.AddLabel("frameNum:\n" + ofToString(data->frameNum));
 			ui.AddLabel("lastCommand:\n" + ofToString(data->lastCommand));
