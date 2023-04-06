@@ -584,6 +584,9 @@ void SurfingGuiManager::startup()
 	//log.setCustomFontsNames(namesCustomFonts);
 	//log.bGui.makeReferenceTo(bLog);
 
+	//TODO: trying to redirect all logs to the imgui log window.
+	//log.setRedirectConsole();
+
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
 

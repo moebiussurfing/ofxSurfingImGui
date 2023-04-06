@@ -58,7 +58,9 @@ namespace ofxImGuiSurfing
 	//io.Fonts->AddFontFromFileTTF(&ofToDataPath(_path)[0], _size);
 	//}	
 
+
 	//-------
+
 
 	// Themes
 
@@ -68,7 +70,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeImStyle()
 	{
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeImStyle";
 
 		// ms style from ImThemes
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -162,7 +164,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeMoebiusSurfingV2() // Must be called after the ofxImGui setup()!
 	{
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingV2";
 
 		ImGuiStyle* style = &ImGui::GetStyle();
 
@@ -278,7 +280,7 @@ namespace ofxImGuiSurfing
 		ImGui_ThemeMoebiusSurfingV2();//-> To bypass. Legacy api..
 		return;
 
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfing";
 
 		//-
 
@@ -377,9 +379,81 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline void ImGui_ThemeMoebiusSurfingBlue()
+	{
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingBlue";
+
+		ImGuiStyle* style = &ImGui::GetStyle();
+
+		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
+
+		style->WindowPadding = ImVec2(8, 8);
+		style->FramePadding = ImVec2(4, 2);
+		style->ItemSpacing = ImVec2(6, 4);
+		style->ItemInnerSpacing = ImVec2(6, 4);
+		style->IndentSpacing = 25.0f;
+		style->ScrollbarSize = 18.0f;
+		style->GrabMinSize = 14.0f;
+		style->GrabRounding = 3.0f;
+		style->WindowBorderSize = 0.0f;
+		style->ChildBorderSize = 1.0f;
+		style->PopupBorderSize = 1.0f;
+		style->FrameBorderSize = 0.0f;
+		style->WindowRounding = 4.0f;
+		style->ChildRounding = 4.0f;
+		style->FrameRounding = 4.0f;
+		style->PopupRounding = 2.0f;
+		style->ScrollbarRounding = 3.0f;
+		style->GrabRounding = 2.0f;
+
+		style->FramePadding = ImVec2(8, 6);
+
+		style->Colors[ImGuiCol_TitleBg] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
+		style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.13f, 0.13f, 0.13f, 1.00f);
+		style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
+
+		style->Colors[ImGuiCol_Border] = ImVec4(0.13f, 0.13f, 0.13f, 1.00f);
+
+		style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+		style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+
+		style->Colors[ImGuiCol_Button] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+		style->Colors[ImGuiCol_ButtonActive] = ImColor(0, 100, 200, 255);
+		style->Colors[ImGuiCol_ButtonHovered] = ImColor(0, 140, 230, 255);
+
+		style->Colors[ImGuiCol_CheckMark] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+
+		style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
+
+		style->Colors[ImGuiCol_ChildBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
+
+		style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.33f, 0.33f, 0.33f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+
+		style->Colors[ImGuiCol_Separator] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
+		style->Colors[ImGuiCol_SeparatorActive] = ImVec4(0.24f, 0.40f, 0.95f, 1.00f);
+		style->Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.24f, 0.52f, 0.88f, 1.00f);
+
+		style->Colors[ImGuiCol_FrameBg] = ImVec4(0.24f, 0.23f, 0.23f, 1.00f);
+		style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.56f, 0.56f, 0.58f, 0.50f);
+
+		style->Colors[ImGuiCol_Header] = ImVec4(0.24f, 0.23f, 0.23f, 1.00f);
+		style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+		style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 0.50f);
+
+		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.24f, 0.52f, 0.88f, 0.35f);
+		style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.24f, 0.52f, 0.88f, 0.50f);
+		style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.24f, 0.52f, 0.88f, 0.67f);
+		style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.24f, 0.52f, 0.88f, 0.95f);
+		style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.24f, 0.52f, 0.88f, 1.00f);
+	}
+
+	//--------------------------------------------------------------
 	inline void ImGui_ThemeModernDark()
 	{
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeModernDark";
 
 		auto& style = ImGui::GetStyle();
 
@@ -631,6 +705,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeGrey()
 	{
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeGrey";
+
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4* colors = style->Colors;
 
@@ -704,7 +780,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeOlekristensen()
 	{
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeOlekristensen";
 
 		//ImGuiIO& io = ImGui::GetIO();
 		//io.Fonts->Clear();
@@ -772,7 +848,6 @@ namespace ofxImGuiSurfing
 		style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 	}
 
-
 	//----
 
 	// Taken from xemu from mborgerson 
@@ -781,6 +856,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_Xemu()
 	{
+		ofLogNotice("ofxSurfingImGui") << "ImGui_Xemu";
+
 		//g_font_mgr.Rebuild();
 
 		ImGui::StyleColorsDark();
@@ -841,7 +918,6 @@ namespace ofxImGuiSurfing
 		//g_base_style = s;
 	}
 
-
 	//----
 
 	// Taken from Yave by gan74
@@ -862,6 +938,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeYave()
 	{
+		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeYave";
+
 		auto& style = ImGui::GetStyle();
 		ImVec4* colors = style.Colors;
 

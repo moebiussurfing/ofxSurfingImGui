@@ -10,9 +10,15 @@
 #include "imgui.h"
 
 template <typename T>
-class console {
+class console
+{
 private:
-	bool scrollToBottom = false;
+	bool bScrollToBottom = false;
+	bool bPressedEnter = false;
+
+public:
+	void setScroll() { bScrollToBottom = true; }
+
 public:
 	console(bool redir = false) {
 		if (redir) {
@@ -30,6 +36,8 @@ public:
 	};
 
 	void show(T data) {
+
+		// Redirect std::cout
 		if (_oldStdout) {
 			std::string text("");
 			std::getline(_stdout, text);
@@ -41,42 +49,107 @@ public:
 			}
 			_stdout.clear();
 		}
+
+		// Get text input
 		if (_terminalBuffer.size() > _terminalSizeLimit) {
 			_terminalBuffer = _terminalBuffer.substr(_terminalBuffer.size() - _terminalSizeLimit, _terminalSizeLimit);
 			int todel = _terminalBuffer.find('\n') + 1;
 			_terminalBuffer = _terminalBuffer.substr(todel, _terminalBuffer.size() - todel);
 		}
 
-		ImGui::Begin("Debug terminal", nullptr, 0);
+		//--
+
+
+		ImGui::Begin("Debug Console", nullptr, 0);
+
+		float windowWidth = ImGui::GetWindowWidth();
+		float windowHeight = ImGui::GetWindowHeight();
+		float w0 = ofxImGuiSurfing::getWidgetsWidth(1);
+		float spx = ofxImGuiSurfing::getWidgetsSpacingX();
+		float spy = ofxImGuiSurfing::getWidgetsSpacingY();
+
+		int wbutton = 200;
+		int hInput = ofxImGuiSurfing::getWidgetsHeightUnit();
+
+		float wchild = windowWidth - 2 * spx - 5;
+		float hchild = windowHeight - 2 * spy - hInput - spy - 47;
+
+		ImGui::BeginChild("Console", ImVec2(wchild, hchild), true);
 
 		ImGui::Text(_terminalBuffer.c_str());
 
-		//bool pressedEnter = ImGui::InputText("", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
-
-		bool pressedEnter = ImGui::InputText("Input", &_textEntryBuffer.front(), _textEntryBuffer.size()-1, ImGuiInputTextFlags_EnterReturnsTrue);
-
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		//bool pressedEnter = ImGui::InputText("##input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImGuiInputTextFlags_EnterReturnsTrue);
-		//ImGui::PopItemWidth();
-
-		if (scrollToBottom) {
+		if (bScrollToBottom) {
 			ImGui::SetKeyboardFocusHere(-1);
-
-			//ImGui::SetScrollHere();//error
-			ImGui::SetScrollHereY();//?
-
-			scrollToBottom = false;
+			ImGui::SetScrollHereY(1);
+			bScrollToBottom = false;
 		}
-		if (pressedEnter) {
+		if (bPressedEnter) {
 			processCommand(data);
-			scrollToBottom = true;
+			bScrollToBottom = true;
 		}
+
+		ImGui::EndChild();
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		//--
+
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
+		flags += ImGuiInputTextFlags_EnterReturnsTrue;
+		flags += ImGuiInputTextFlags_AllowTabInput;
+
+
+		//ImGui::InputTextMultiline("##Input", searchTermChar, IM_ARRAYSIZE(searchTermChar), ImVec2(windowWidth - 127.0f, -1), ImGuiInputTextFlags_AllowTabInput);
+		//inputText = searchTermChar;
+
+		//bool bPressedEnter = ImGui::InputTextMultiline("##Input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImVec2(windowWidth - 127.0f, -1), flags);
+
+		ImGui::PushItemWidth(w0);
+		bPressedEnter = ImGui::InputText("##Input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, flags);
+		ImGui::PopItemWidth();
+
+
+		/*
+		ImGui::Text(_terminalBuffer.c_str());
+
+		bool bPressedEnter = ImGui::InputText("Input", &_textEntryBuffer.front(), _textEntryBuffer.size() - 1, ImGuiInputTextFlags_EnterReturnsTrue);
+		*/
+
+
+		//ImGui::SameLine(windowWidth - wbutton);
+
+		//static bool waiting = false;
+
+		//if (waiting)
+		//{
+		//	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		//}
+
+		/*
+		if (ImGui::Button("Submit", ImVec2(-1, -1)) && !waiting)
+		{
+			//if (apiKey != "")
+			//{
+			//	std::thread t(SendRequest);
+			//	t.detach();
+			//}
+			//else
+			//{
+			//	logEditor.InsertText("[-] Please ensure that you fill out the API field, as it appears to be empty or incomplete\n");
+			//}
+		}
+		*/
+
+		//ImGui::PopStyleVar();
 
 		ImGui::End();
 	};
 
 protected:
 	std::unordered_map<std::string, std::function<void(std::stringstream args, T data)>> _commandList;
+
 private:
 	std::array<char, 240> _textEntryBuffer;
 	std::streambuf* _oldStdout = nullptr;
@@ -139,7 +212,7 @@ public:
 			cmd->second(std::stringstream(command.substr(command.find(' ') + 1, command.size() - command.find(' ') - 1)), data);
 		}
 
-		data->someString = "addLineCommnand";
+		//data->lastCommand= "addLineCommnand";
 	};
 };
 

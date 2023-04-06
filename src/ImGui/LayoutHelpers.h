@@ -548,6 +548,37 @@ namespace ofxImGuiSurfing
 	//	AddSpacingPad(x);
 	//}
 	
+	//--
+
+	// A header with a centered text
+	/*
+	EXAMPLE
+
+	int w = 250;
+	int h = 150;
+	ImGui::Spacing();
+	ImGui::BeginChild("Options", ImVec2(w, h), true);
+	ofxImGuiSurfing::AddHeader("Options");
+	ImGui::Spacing();
+	ImGui::PushItemWidth((120.0f));
+	static int maxTokens = 5;
+	ImGui::InputInt("Max Tokens", &maxTokens);
+	static float presencePenalty = 5;
+	ImGui::InputFloat("Presence Penalty", &presencePenalty);
+	static bool echo = false;
+	ImGui::Checkbox("Enable Echo", &echo);
+	ImGui::EndChild();
+	*/
+	//--------------------------------------------------------------
+	inline void AddHeader(const char* text)
+	{
+		auto windowWidth = ImGui::GetWindowSize().x;
+		ImGui::SetCursorPosX((windowWidth - ImGui::CalcTextSize(text).x) * 0.5f);
+		ImGui::Text(text);
+		ImGui::Spacing();
+		ImGui::Separator();
+	}
+
 	//----
 
 	// Constraints Helpers

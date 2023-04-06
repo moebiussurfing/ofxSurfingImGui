@@ -56,14 +56,15 @@ namespace ofxImGuiSurfing
 	// A bundle of controls
 	// for a single param
 
-	////TODO: move to ofHelpers.h (#1049) 
+	////TODO: Cant be moved to ofHelpers.h bc using this!
+	//
 	////--------------------------------------------------------------
 	//template<typename ParameterType>
 	//bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
 	//{
 	//	ofxImGuiSurfing::AddComboBundle(p, bMinimized);
 	//}
-
+	/*
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
@@ -140,6 +141,7 @@ namespace ofxImGuiSurfing
 
 		return bReturn;
 	}
+	*/
 
 	//----
 

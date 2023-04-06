@@ -8,7 +8,7 @@
 	TODO
 
 	improve workflow:
-		remove some cout stuff. 
+		remove some cout stuff.
 		more console feel
 	split text input box. submit button.
 	add params to show/integrate in our ofApp's.
@@ -37,7 +37,7 @@ https://github.com/rmxbalanque/imgui-console (C++17)
 *
 * myCustomConsole.hpp
 *
-* 	
+*
 	//Header only C++ ImGui console,
 	//with support for stdout redirection into itself.
 
@@ -80,11 +80,17 @@ https://github.com/rmxbalanque/imgui-console (C++17)
 
 //--
 
+// This struct could be into a header filer from your app.
+// Use it here as example for the Examples/08_ConsoleSystem.
+// frameNum will be updated in ofApp on update.
+// color will be settled thought the console commands
+// then lastCommand will be named with some test, as what command is called.
+
 struct dataCustom
 {
 	ofColor color{ 0,0,0,0 };
-	int someVar = 0;
-	string someString = "";
+	int frameNum = 0;
+	string lastCommand = "";
 };
 
 //--
@@ -101,7 +107,7 @@ class surfingConsole : public console<dataCustom*>
 public:
 	surfingConsole(bool redir = false) : console(redir)
 	{
-		std::cout << "> surfingConsole()" << " redir:" << redir << endl;
+		std::cout << "> surfingConsole()" << " redirect:" << redir << endl;
 
 		addCommands();
 	};
@@ -110,7 +116,7 @@ public:
 	{
 		BIND(myCommand);
 		BIND(help);
-		BIND(colorToggle);
+		BIND(colorRandom);
 		BIND(setColor);
 		BIND(clear);
 		BIND(printArgs);
@@ -122,10 +128,10 @@ public:
 private:
 	void myCommand(std::stringstream args, dataCustom* data)
 	{
+		//doWhatev(data);
+
 		std::cout << "> myCommand" << endl;
 		std::cout << endl;
-
-		//doWhatev(data);
 
 		if (args.tellg() != -1) {
 			std::string argument;
@@ -153,61 +159,69 @@ private:
 			*/
 
 			if (argument == "reset") {
-				data->someVar = 12345;
-				data->someString = "just reseted by myCommand";
+				data->lastCommand = "Just reseted by myCommand";
 				data->color = ofColor::yellow;
 			}
 			else if (argument == "default") {
-				data->someVar = -1;
-				data->someString = "just defaulted by myCommand";
+				data->lastCommand = "Just defaulted by myCommand";
 				data->color = ofColor::black;
 			}
 			else {
-				data->someVar = -1;
-				data->someString = "unknown argument for by myCommand";
-				addLine(data->someString);
-			}
+				data->frameNum = -1;
+				data->lastCommand = "Unknown argument for myCommand";
 
-			//std::cout << "> data" << endl;
-			//std::cout << "data->someVar:" << data->someVar << endl;
-			//std::cout << "data->someString:" << data->someString << endl;
-			//std::cout << "data->color:" << data->color << endl;
+				addLine(data->lastCommand);
+			}
 		}
+
+		setScroll();
 	};
 
 private:
 	void help(std::stringstream args, dataCustom* data)
 	{
+		data->lastCommand = "just called help";
+
 		std::cout << "> help" << endl;
-		std::cout << "> data" << endl;
-		std::cout << "data->someVar:" << data->someVar << endl;
-		std::cout << "data->someString:" << data->someString << endl;
-		std::cout << "data->color:" << data->color << endl;
+		std::cout << "  data" << endl;
+		std::cout << "  data->frameNum:" << data->frameNum << endl;
+		std::cout << "  data->lastCommand:" << data->lastCommand << endl;
+		std::cout << "  data->color:" << data->color << endl;
 		std::cout << endl;
 
 		help_();
+
+		setScroll();
 	};
 
 	void clear(std::stringstream args, dataCustom* data)
 	{
 		clearLines(data);
 
-		data->someString = "just clear";
+		data->lastCommand = "just clear";
+
+		setScroll();
 	};
 
 	void printArgs(std::stringstream args, dataCustom* data)
 	{
-		std::cout << "args:" << args << endl;
+		data->lastCommand = "just printArgs";
+
+		std::cout << "  args:" << args << endl;
 		std::cout << endl;
+
+		setScroll();
 	};
 
-	void colorToggle(std::stringstream args, dataCustom* data)
+	void colorRandom(std::stringstream args, dataCustom* data)
 	{
 		data->color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255), 255);
-		std::cout << "data->color:" << data->color << endl;
+		data->lastCommand = "randomized color";
+		
+		std::cout << "  data->color:" << data->color << endl;
 		std::cout << endl;
 
-		data->someString = "randomized color";
+		setScroll();
 	};
 
 	void setColor(std::stringstream args, dataCustom* data)
@@ -219,12 +233,14 @@ private:
 		if (s == "red") c = ofColor(ofColor::red);
 		else if (s == "green") c = ofColor(ofColor::green);
 		else if (s == "blue") c = ofColor(ofColor::blue);
+
 		data->color = c;
+		data->lastCommand = "color settled";
 
-		data->someString = "color settled";
-
-		std::cout << "data->color:" << data->color << endl;
+		std::cout << "  data->color:" << data->color << endl;
 		std::cout << endl;
+
+		setScroll();
 	};
 
 public:
@@ -232,17 +248,21 @@ public:
 	{
 		std::cout << "> help" << endl;
 		std::cout << endl;
-		std::cout << "myCommand   \t (reset or default)" << std::endl;
-		std::cout << "help        \t (list commands)" << std::endl;
-		std::cout << "colorToggle \t (random color)" << std::endl;
-		std::cout << "setColor    \t (blue, green or red)" << std::endl;
-		std::cout << "printArgs   \t (print passed args)" << std::endl;
-		std::cout << "clear       \t (clear console)" << std::endl;
+		std::cout << "  help        :  list commands" << std::endl;
+		std::cout << "  myCommand   :  + arg: reset or default" << std::endl;
+		std::cout << "  setColor    :  + arg: blue, green or red" << std::endl;
+		std::cout << "  colorRandom :  random color" << std::endl;
+		std::cout << "  printArgs   :  print passed args" << std::endl;
+		std::cout << "  clear       :  clear console" << std::endl;
 		std::cout << endl;
+
+		setScroll();
 	};
 
 	void clear_()
 	{
 		clearLines(NULL);
+
+		setScroll();
 	};
 };

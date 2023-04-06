@@ -5,8 +5,8 @@
 // OVERVIEW:
 /*
 
-	This is the main header for that toolkit/ofxAddon.
-	The only one you need to include into your ofApp/Class!
+	This is the main header for this ImGui Toolkit/ofxAddon for OF.
+	It's the only one that you strictly need to include into your ofApp/Class!
 
 */
 
@@ -30,6 +30,7 @@
 /*
 
 	IDEAS
+	- add layout with child/header similar to menus.
 	- context menu / right mouse click
 		expose auto resize/minimize/etc
 		add debug info pos,sz for each window.

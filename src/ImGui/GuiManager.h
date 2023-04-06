@@ -20,15 +20,14 @@
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
+#include "surfingHelpers.h"
+#include "HelpWidget.h"
+#include "Combos.h"
 
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
 
 #include "ofxSurfing_ImGui_ThemesEditor.h"
-#include "Combos.h"
-
-#include "surfingHelpers.h"
-#include "HelpWidget.h"
 
 //TODO: move here! now breaks!
 //#include "ImGui/WindowFbo.h"
@@ -1820,6 +1819,11 @@ public:
 public:
 	//--------------------------------------------------------------
 	void setLogLevel(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
+	
+	//--------------------------------------------------------------
+	void setLogRedirectConsole(bool b = true) {
+		log.setRedirectConsole(b);
+	}
 
 	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
@@ -4101,11 +4105,92 @@ public:
 
 	// A bundle of different widgets 
 	// but for a single ofParam: int or float. 
-
+	/*
 	template<typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false) {
 		return ofxImGuiSurfing::AddComboBundle(p, bMinimized);
 	}
+	*/
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
+	{
+		string name = p.getName();
+
+		bool bReturn = false;
+
+		const auto& t = typeid(ParameterType);
+		const bool isFloat = (t == typeid(float));
+		const bool isInt = (t == typeid(int));
+
+		if (!isFloat && !isInt) {
+			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
+			return false;
+		}
+
+		// label
+		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
+		else this->AddLabelBig(p.getName(), true, true);
+
+		// stepper
+		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
+		//bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
+
+		// slider
+		bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
+
+		// arrows
+		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
+		{
+			float step = 0;
+			if (isInt) step = 1;
+			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
+
+			if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
+			{
+				p -= step;
+				p = ofClamp(p, p.getMin(), p.getMax());
+				bReturn += true;
+			}
+			ImGui::SameLine();
+			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
+			{
+				p += step;
+				p = ofClamp(p, p.getMin(), p.getMax());
+				bReturn += true;
+			}
+		}
+		ImGui::PopButtonRepeat();
+
+		if (!bMinimized)
+		{
+			// knob
+			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
+			float w = this->getWidgetsWidth(1);
+			ImGuiKnobFlags flags = 0;
+			flags += ImGuiKnobFlags_NoInput;
+			flags += ImGuiKnobFlags_NoTitle;
+			flags += ImGuiKnobFlags_ValueTooltip;//not works
+			//flags += ImGuiKnobFlags_DragHorizontal;
+			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
+
+			// mouse
+			if (this->bMouseWheel) {
+				ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
+				ofxImGuiSurfing::GetMouseWheel();
+				ofxImGuiSurfing::AddMouseClickRightReset(p);
+			}
+
+			// tooltip
+			this->AddTooltip(p, true, false);
+		}
+
+		return bReturn;
+	}
+
+	//--
+
+	// Combos
 
 	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false) {
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);

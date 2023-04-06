@@ -9,7 +9,7 @@ void ofApp::setup()
 
 	setupImGui();
 
-	ofxSurfingHelpers::loadGroup(params);
+	ofxImGuiSurfing::loadGroup(params);
 }
 
 //--------------------------------------------------------------
@@ -31,7 +31,9 @@ void ofApp::setupParams()
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
-	ui.setEnablebMouseCursorFromImGui(false);
+	// Optional:
+	//ui.setEnablebMouseCursorFromImGui(false);
+
 	ui.setup();
 
 	// Add custom tags to logger
@@ -41,16 +43,31 @@ void ofApp::setupImGui()
 		SurfingLog::tagData tagMIDI{ "MIDI", ofColor::orange };
 		ui.AddLogTag(tagMIDI);
 	}
+
+	// Optional:
+	// This feature will redirect all std::coud logs to the ui log window.
+	ui.setLogRedirectConsole();
+}
+
+//--------------------------------------------------------------
+void ofApp::update()
+{
+	string s = "FPS " + ofToString(ofGetFrameRate(), 0);
+	ofSetWindowTitle(s);
+
+	if (ofGetFrameNum() % (4 * 60) == 0) {
+		string ss = "std::cout << frame #" + ofToString(ofGetFrameNum(), 0);
+		cout << ss << endl; // Redirect std:cout to ui window log.
+		//ofLogNotice() << ss; // could redirect ofLog too..
+	}
+
+	updateLog();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ofSetWindowTitle("FPS " + ofToString(ofGetFrameRate(), 0));
-
 	drawImGui();
-
-	updateLog();
 }
 
 //--------------------------------------------------------------
@@ -95,7 +112,7 @@ void ofApp::drawImGui()
 				{
 					ui.Indent();
 
-					ui.Add(ui.bDebugMetrics, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+					ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
 
 					//make all smaller heights
 					ImGuiStyle* style = &ImGui::GetStyle();
@@ -105,7 +122,7 @@ void ofApp::drawImGui()
 					sp2 = ImVec2{ 0, 0 };
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp);
 					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
-	
+
 					ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
 					ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
@@ -278,5 +295,5 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofRemoveListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
-	ofxSurfingHelpers::saveGroup(params);
+	ofxImGuiSurfing::saveGroup(params);
 }

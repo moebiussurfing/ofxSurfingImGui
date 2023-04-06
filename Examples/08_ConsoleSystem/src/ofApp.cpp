@@ -10,10 +10,11 @@ void ofApp::exit()
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	//instantiate data
 	data = new dataCustom();
 	data->color = ofColor::fuchsia;
-	data->someString = "hello";
-	data->someVar = -1;
+	data->lastCommand = "hello";
+	data->frameNum = -1;
 }
 
 //--------------------------------------------------------------
@@ -21,21 +22,30 @@ void ofApp::draw()
 {
 	ofClear(data->color);
 
-	//update data
-	data->someVar = ofGetFrameNum();
+	//update a var of the data
+	data->frameNum = ofGetFrameNum();
 
-	string title = ofToString(data->someVar);
+	string title = ofToString(data->frameNum);
 	ofSetWindowTitle(title);
 
 	string s;
 
 	ui.Begin();
 	{
+		// Theme
+		if (0) {
+			static bool b = 0;
+			if (!b) {
+				b = 1;
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
+			}
+		}
+
 		if (ui.BeginWindow(bGui))
 		{
 			ui.AddLabelBig("dataCustom");
-			ui.AddLabel("someVar:\n" + ofToString(data->someVar));
-			ui.AddLabel("someString:\n" + ofToString(data->someString));
+			ui.AddLabel("frameNum:\n" + ofToString(data->frameNum));
+			ui.AddLabel("lastCommand:\n" + ofToString(data->lastCommand));
 			ui.AddLabel("color:\n" + ofToString(data->color));
 			ui.AddSpacingSeparated();
 
@@ -44,14 +54,14 @@ void ofApp::draw()
 				addToLog(s);
 
 				c.help_();
-				data->someString = "added help";
+				data->lastCommand = "added help";
 			}
 			if (ui.AddButton("CLEAR")) {
 				s = "CLEAR";
 				addToLog(s);
-				
+
 				c.clear_();
-				data->someString = "added clear";
+				data->lastCommand = "added clear";
 			}
 			ui.AddSpacingSeparated();
 
@@ -65,8 +75,8 @@ void ofApp::draw()
 				s = "setColor blue";
 				c.addLineCommnand(s, data);
 			}
-			if (ui.AddButton("colorToggle")) {
-				s = "colorToggle";
+			if (ui.AddButton("colorRandom", OFX_IM_BUTTON)) {
+				s = "colorRandom";
 				c.addLineCommnand(s, data);
 			}
 
@@ -76,7 +86,6 @@ void ofApp::draw()
 		//--
 
 		c.show(data);
-
 	}
 	ui.End();
 }
@@ -84,7 +93,23 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	//if (key == ' ') bGui = !bGui;
+	string s;
+	if (key == '1') {
+		s = "setColor red";
+		c.addLineCommnand(s, data);
+	}
+	else if (key == '2') {
+		s = "setColor blue";
+		c.addLineCommnand(s, data);
+	}
+	else if (key == '3') {
+		s = "colorRandom";
+		c.addLineCommnand(s, data);
+	}
+	else if (key == '4') {
+		c.help_();
+		data->lastCommand = "added help";
+	}
 }
 
 //--------------------------------------------------------------

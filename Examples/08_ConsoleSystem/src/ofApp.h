@@ -15,8 +15,9 @@ public:
 	void exit();
 
 	ofxSurfingGui ui;
-	ofParameter<bool> bGui{ "surfingConsole", true };
+	ofParameter<bool> bGui{ "Test Console", true };
 
+	// A custom data struct for testing.
 	dataCustom* data = NULL;
 
 	surfingConsole c = { 1 };
