@@ -26,7 +26,8 @@ SurfingGuiManager::SurfingGuiManager()
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
 	// Auto call draw. Only to draw help boxes / OF native info. ?
-	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
+	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_AFTER_APP);
+	//ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	//----
@@ -1071,7 +1072,7 @@ void SurfingGuiManager::update() { // -> Not being used by default
 
 #ifdef OFX_USE_DEBUGGER
 	if (bDebugDebugger) {
-		debugger.updateProfileTasksCpu();
+		debugger.updateProfileTasksCpu();//call after (before) main ofApp update 
 		debugger.update();
 	}
 #endif
@@ -1084,9 +1085,8 @@ void SurfingGuiManager::draw()
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
 
 #ifdef OFX_USE_DEBUGGER
-	if (bDebugDebugger) debugger.updateProfileTasksGpu();//call after draw
+	if (bDebugDebugger) debugger.updateProfileTasksGpu();//call after main ofApp draw
 #endif
-
 }
 
 //--------------------------------------------------------------

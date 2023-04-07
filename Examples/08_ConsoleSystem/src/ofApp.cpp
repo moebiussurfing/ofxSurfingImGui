@@ -59,14 +59,14 @@ void ofApp::draw()
 			ui.AddSpacingSeparated();
 
 			if (ui.AddButton("HELP")) {
-				s = "HELP";
+				s = "[ HELP ]";
 				addToLog(s);
 
 				c.help_();
 				data->lastCommand = "added help";
 			}
 			if (ui.AddButton("CLEAR")) {
-				s = "CLEAR";
+				s = "[ CLEAR ]";
 				addToLog(s);
 
 				c.clear_();

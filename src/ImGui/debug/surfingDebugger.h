@@ -13,6 +13,30 @@
 
 */
 
+//--
+
+// Macros
+
+// call on setup to define how much measurements we want to use
+#define T_CPU_SETUP(x) ui.debugger.setupProfileTasksCpu(x);
+#define T_GPU_SETUP(x) ui.debugger.setupProfileTasksGpu(x);
+
+#define T_CPU_START(x,n) ui.debugger.startProfilerTaskCpu(x, n);
+#define T_CPU_END(x) ui.debugger.endProfilerTaskCpu(x);
+
+#define T_GPU_START(x,n) ui.debugger.startProfilerTaskGpu(x, n);
+#define T_GPU_END(x) ui.debugger.endProfilerTaskGpu(x);
+
+// Alternative to be used when ui declared as a pointer!
+#define T_CPU_SETUP_PTR(x) ui->debugger.setupProfileTasksCpu(x);
+#define T_GPU_SETUP_PTR(x) ui->debugger.setupProfileTasksGpu(x);
+
+#define T_CPU_START_PTR(x,n) ui->debugger.startProfilerTaskCpu(x, n);
+#define T_CPU_END_PTR(x) ui->debugger.endProfilerTaskCpu(x);
+
+#define T_GPU_START_PTR(x,n) ui->debugger.startProfilerTaskGpu(x, n);
+#define T_GPU_END_PTR(x) ui->debugger.endProfilerTaskGpu(x);
+
 
 #pragma once
 #include "ofMain.h"
@@ -31,7 +55,7 @@
 #include "metrics_gui.h"
 
 #ifdef DEBUG_INTERNAL_METRICS
-#include "surfingMetrics.h"
+#include "surfingMetricsDemo.h"
 #endif
 
 // Original code from @Raikiri: 
@@ -68,7 +92,8 @@ private:
 	void setup()
 	{
 		ofFloatColor c1 = ofColor(ofColor::turquoise, 255);
-		ofFloatColor c2 = ofColor(ofColor::orange, 255);
+		ofFloatColor c2 = ofColor(ofColor::yellow, 255);
+		//ofFloatColor c2 = ofColor(ofColor::orange, 255);
 
 		params.add(bAutoResize);
 		params.add(bGui_Metrics);
@@ -119,9 +144,11 @@ private:
 
 		//-
 
-		frameTimePlot.mShowAverage = 0;
-		frameTimePlot.mShowLegendAverage = 0;
-		//frameTimePlot.mShowLegendAverage = 1;//avg label is weird/wrong..
+		//frameTimePlot.mShowAverage = 0;
+		//frameTimePlot.mShowLegendAverage = 0;
+		frameTimePlot.mShowAverage = 1;
+		frameTimePlot.mShowLegendAverage = 1;
+		//avg label is weird/wrong sometimes.. depends of how we measure the last frame time
 		frameTimePlot.mBarGraph = 0;
 		frameTimePlot.mShowLegendColor = 0;
 		frameTimePlot.mShowInlineGraphs = 0;
@@ -180,9 +207,9 @@ private:
 	//--
 
 private:
-	//Debug settings
+	// Debug settings
 #ifdef DEBUG_INTERNAL_METRICS
-	surfingMetrics metrics;
+	SurfingMetricsDemo metrics;
 #endif
 
 	MetricsGuiMetric frameTimeMetric;
@@ -207,9 +234,9 @@ public:
 
 		frameRateMetric.AddNewValue(ofGetFrameRate());
 
-		//float v = ((float)ofGetLastFrameTime());
+		float v = ((float)ofGetLastFrameTime());
 		//float v = (1.f / ofGetFrameRate());
-		float v = 1.f / (float)(ImGui::GetIO().Framerate);
+		//float v = 1.f / (float)(ImGui::GetIO().Framerate);
 		frameTimeMetric.AddNewValue(v);
 
 		//--
@@ -370,7 +397,7 @@ public:
 		static bool p_open = true;
 		if (p_open != bGui_Mini) p_open = bGui_Mini;
 
-		ImVec2 sz(260, 150);
+		ImVec2 sz(300, 170);
 		float pd = 8;
 		ImVec2 pos(ofGetWidth() / 2 - sz.x / 2, ofGetHeight() / 2 - sz.y / 2);
 		ImGuiCond cond = ImGuiCond_FirstUseEver;
@@ -379,7 +406,7 @@ public:
 			ImGui::SetNextWindowPos(pos, cond);
 			ImGui::SetNextWindowSize(sz, cond);
 
-			ImVec2 szMin(300, 155);
+			ImVec2 szMin(sz);
 			ImVec2 szMax(350, 300);
 			ImGui::SetNextWindowSizeConstraints(szMin, szMax);
 		}
@@ -411,8 +438,10 @@ public:
 			}
 
 			listPlot.DrawList();
+
 			ImGui::Spacing();
 			ImGui::Separator();
+
 			profiler.RenderMini();
 
 		}
@@ -420,6 +449,8 @@ public:
 
 		if (bGui_Mini != p_open) bGui_Mini = p_open;
 	}
+
+	//--
 
 	void drawImGuiProfiler()
 	{
@@ -447,7 +478,8 @@ public:
 		//ptCpu[i].color = profiler.cpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
 
 		ptCpu[i].startTime = ofGetElapsedTimef();
-		ptCpu[i].name = name + "_" + ofToString(i);
+		//name += "_" + ofToString(i);
+		ptCpu[i].name = name;
 		//ptCpu[i].name = "CPU " + name + "_" + ofToString(i);
 		//ptCpu[i].name = "cpuTask" + ofToString(i);
 	};
@@ -466,7 +498,8 @@ public:
 		//ptGpu[i].color = profiler.gpuGraph.colors[static_cast<unsigned int>(8 + i % 8)];
 
 		ptGpu[i].startTime = ofGetElapsedTimef();
-		ptGpu[i].name = name + "_" + ofToString(i);
+		//name += "_" + ofToString(i);
+		ptGpu[i].name = name;
 		//ptGpu[i].name = "GPU " + name + "_" + ofToString(i);
 		//ptGpu[i].name = "gpuTask" + ofToString(i);
 	};
@@ -512,25 +545,11 @@ public:
 		profiler.gpuGraph.LoadFrameData(ptGpu, PROFILER_DEMO_NUM_PASSES_GPU);
 	};
 
+	//private:
+	//	bool bDoneUpdateProfileTasksCpu = false;
+	//	bool bDoneUpdateProfileTasksGpu = false;
+
 	//--
-
-	// Macros
-
-	// call on setup to define how much measurements we want to use
-#define T_CPU_SETUP(x)		ui.debugger.setupProfileTasksCpu(x);
-#define T_GPU_SETUP(x)		ui.debugger.setupProfileTasksGpu(x);
-
-#define T_CPU_START(x,n)	ui.debugger.startProfilerTaskCpu(x, n);
-#define T_CPU_END(x)		ui.debugger.endProfilerTaskCpu(x);
-
-#define T_GPU_START(x,n)	ui.debugger.startProfilerTaskGpu(x, n);
-#define T_GPU_END(x) 		ui.debugger.endProfilerTaskGpu(x);
-
-//private:
-//	bool bDoneUpdateProfileTasksCpu = false;
-//	bool bDoneUpdateProfileTasksGpu = false;
-
-//--
 
 public:
 

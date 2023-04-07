@@ -158,7 +158,7 @@ private:
 	std::deque<std::string> _commandHistory;
 	std::string _terminalBuffer;
 
-	const unsigned _maxHistoryLines = 100;
+	const unsigned _maxHistoryLines = 200;
 	const unsigned _terminalSizeLimit = 1000;
 
 

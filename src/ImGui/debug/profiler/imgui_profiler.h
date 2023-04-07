@@ -4,6 +4,8 @@
 
 #pragma once
 
+//#define DEBUG_PROFILER // -> show extra controls and debug
+
 #include <glm/glm.hpp>
 #include <array>
 #include <sstream>
@@ -15,10 +17,10 @@
 
 #define RGBA_LE(col) (((col & 0xff000000) >> (3 * 8)) + ((col & 0x00ff0000) >> (1 * 8)) + ((col & 0x0000ff00) << (1 * 8)) + ((col & 0x000000ff) << (3 * 8)))
 
-
 //ImU32 c = ImGui::ColorConvertFloat4ToU32(ofFloatColor(ofColor::turquoise, a));
 //ImU32 c = U32_FROM_OF_COLOR_NAME(ofColor::turquoise, a);
 #define U32_FROM_OF_COLOR_NAME(name, a) ImGui::ColorConvertFloat4ToU32(ofFloatColor(name, a))
+
 
 namespace ImGuiEx {
 
@@ -49,7 +51,9 @@ namespace ImGuiEx {
 			frames.resize(framesCount);
 			for (auto& frame : frames)
 				frame.tasks.reserve(100);
-			frameWidth = 3;
+
+			frameWidth = 1;
+			//frameWidth = 3;
 			frameSpacing = 1;
 
 			isRetina = false;
@@ -384,8 +388,11 @@ namespace ImGuiEx {
 		{
 			stopProfiling = false;
 			frameOffset = 0;
-			frameWidth = 3;
+
+			frameWidth = 1;
+			//frameWidth = 3;
 			frameSpacing = 1;
+
 			prevFpsFrameTime = std::chrono::system_clock::now();
 			fpsFramesCount = 0;
 			avgFrameTime = 1.0f;
@@ -409,13 +416,17 @@ namespace ImGuiEx {
 
 			ImGui::Text("GPU");
 			p = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
-			gpuGraph.RenderLegend(drawList, p, glm::vec2(50, 50), 0, false);//workaround for legendSize
+			//workaround for legendSize..
+			p -= glm::vec2(0, 85);
+			gpuGraph.RenderLegend(drawList, p, glm::vec2(50, 150), 0, false);
 
 			ImGui::NextColumn();
 
 			ImGui::Text("CPU");
 			p = glm::vec2(ImGui::GetCursorScreenPos().x, ImGui::GetCursorScreenPos().y);
-			cpuGraph.RenderLegend(drawList, p, glm::vec2(50, 50), 0, false);//workaround for legendSize
+			//workaround for legendSize..
+			p -= glm::vec2(0, 85);
+			cpuGraph.RenderLegend(drawList, p, glm::vec2(50, 150), 0, false);
 
 			ImGui::Columns(1);
 		};
@@ -448,8 +459,10 @@ namespace ImGuiEx {
 			//title.precision(2);
 			//title << std::fixed << "\uf085  Profiler [Rendering at " << 1.0f / avgFrameTime << "fps\t" << avgFrameTime * 1000.0f << "ms]###ProfilerWindow";
 
+			stringstream ss;
+			//ss << "  " << 1.0f / avgFrameTime << " fps | " << avgFrameTime * 1000.0f << " ms";
 			title.precision(2);
-			title << "Debugger Profiler  " << 1.0f / avgFrameTime << " fps | " << avgFrameTime * 1000.0f << " ms###ProfilerWindow";
+			title << "Debugger Profiler ###ProfilerWindow";
 
 			ImGui::Begin(title.str().c_str(), active, ImGuiWindowFlags_NoScrollbar);
 			ImVec2 canvasSize = ImGui::GetContentRegionAvail();
@@ -489,6 +502,7 @@ namespace ImGuiEx {
 
 			//--
 
+#ifdef DEBUG_PROFILER
 			//TODO:
 			//static bool bShowControls = false;
 			ImGui::Checkbox("Controls", &bShowControls);
@@ -509,6 +523,7 @@ namespace ImGuiEx {
 			gpuGraph.frameSpacing = frameSpacing;
 			cpuGraph.frameWidth = frameWidth;
 			cpuGraph.frameSpacing = frameSpacing;
+#endif
 
 			ImGui::End();
 		};

@@ -489,7 +489,7 @@ public:
 			if (bBreakLines) {
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ImGui::PushItemWidth(90);
-				ofxImGuiSurfing::AddStepperInt(lineWidth, true);
+				ofxImGuiSurfing::AddStepper(lineWidth, true);
 				ImGui::PopItemWidth();
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ImGui::PushItemWidth(70);

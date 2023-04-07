@@ -168,10 +168,10 @@ private:
 
 private:
 	void update(); // To manual update.
-	void update(ofEventArgs& args);
+	void update(ofEventArgs& args); // subscribed after app
 
 	void draw(); // To manual draw.
-	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes.
+	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes. subscribed after app
 
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void keyReleased(ofKeyEventArgs& eventArgs);
