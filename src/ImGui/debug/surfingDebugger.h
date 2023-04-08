@@ -2,7 +2,11 @@
 
 	TODO
 
+
 	PROFILER
+
+	fix border rect
+	fix labels list
 	could be separated to another class
 
 	By default we setup 4 cpu and 4 gpu tasks by default.
@@ -10,6 +14,9 @@
 	But for now, we can initiate amount of measures on startup:
 	T_CPU_SETUP(4);
 	T_GPU_SETUP(3);
+
+	improve API. instantiate an object. to make auto update.
+	avoid to name or number/id on start
 
 */
 
@@ -37,6 +44,7 @@
 #define T_GPU_START_PTR(x,n) ui->debugger.startProfilerTaskGpu(x, n);
 #define T_GPU_END_PTR(x) ui->debugger.endProfilerTaskGpu(x);
 
+//--
 
 #pragma once
 #include "ofMain.h"
@@ -83,6 +91,8 @@ public:
 	ofParameter<bool> bMinimized{ "bMinimized",false };
 	ofParameterGroup params{ "Debugger Settings" };//to avoid repeat names
 
+	//--
+
 public:
 	SurfingDebugger() {
 		setup();
@@ -91,8 +101,9 @@ public:
 private:
 	void setup()
 	{
-		ofFloatColor c1 = ofColor(ofColor::turquoise, 255);
-		ofFloatColor c2 = ofColor(ofColor::yellow, 255);
+		ofFloatColor c1 = ofColor(ofColor::turquoise, 150);
+		ofFloatColor c2 = ofColor(ofColor::yellow, 150);
+		//ofFloatColor c2 = ofColor(210, 170);
 		//ofFloatColor c2 = ofColor(ofColor::orange, 255);
 
 		params.add(bAutoResize);
@@ -120,42 +131,48 @@ private:
 
 		//custom
 		frameTimeMetric.mFlags = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
-		frameTimeMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;
-		frameTimeMetric.mKnownMinValue = 0.001f;
-		frameTimeMetric.mKnownMaxValue = 0.10f;
+		//frameTimeMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;
+		//frameTimeMetric.mKnownMinValue = 0.001f;
+		//frameTimeMetric.mKnownMaxValue = 0.10f;
 
 		//-
 
 		// FrameRate
 		frameRateMetric.mDescription = "FrameRate";
 		frameRateMetric.mUnits = "fps";
-		//frameRateMetric.mFlags = MetricsGuiMetric::NONE;
 		frameRateMetric.mSelected = 0;
 		frameRateMetric.mColor[0] = c2.r;
 		frameRateMetric.mColor[1] = c2.g;
 		frameRateMetric.mColor[2] = c2.b;
 		frameRateMetric.mColor[3] = c2.a;
 
-		//custom
-		frameRateMetric.mFlags = MetricsGuiMetric::KNOWN_MAX_VALUE;
-		frameRateMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE;
-		frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
-		frameRateMetric.mKnownMinValue = 0.f;
+			frameTimePlot.mShowAverage = 1;
+			frameTimePlot.mShowLegendAverage = 1;
 
 		//-
 
-		//frameTimePlot.mShowAverage = 0;
-		//frameTimePlot.mShowLegendAverage = 0;
-		frameTimePlot.mShowAverage = 1;
-		frameTimePlot.mShowLegendAverage = 1;
-		//avg label is weird/wrong sometimes.. depends of how we measure the last frame time
+		static bool _bAvg = 0;
+		if (_bAvg) {
+			frameTimePlot.mShowAverage = 0;
+			frameTimePlot.mShowLegendAverage = 0;
+		}
+		else {
+			frameRateMetric.mFlags = MetricsGuiMetric::NONE;
+			//avg label is weird/wrong sometimes.. depends of how we measure the last frame time
+			// 
+			//custom
+			frameRateMetric.mFlags = MetricsGuiMetric::KNOWN_MAX_VALUE;
+			frameRateMetric.mFlags |= MetricsGuiMetric::KNOWN_MIN_VALUE;
+			frameRateMetric.mKnownMaxValue = SURFING_MAX_FRAME_RATE;
+			frameRateMetric.mKnownMinValue = 0.f;
+		}
 		frameTimePlot.mBarGraph = 0;
 		frameTimePlot.mShowLegendColor = 0;
 		frameTimePlot.mShowInlineGraphs = 0;
 		frameTimePlot.mShowOnlyIfSelected = 0;
 
-		frameRatePlot.mShowAverage = 0;
-		frameRatePlot.mShowLegendAverage = 0;
+		frameRatePlot.mShowAverage = _bAvg;
+		frameRatePlot.mShowLegendAverage = _bAvg;
 		frameRatePlot.mBarGraph = 0;
 		frameRatePlot.mShowLegendColor = 0;
 		frameRatePlot.mShowInlineGraphs = true;

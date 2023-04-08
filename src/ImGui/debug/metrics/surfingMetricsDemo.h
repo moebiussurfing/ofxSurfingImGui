@@ -20,11 +20,11 @@
 #include "imgui.h"
 #include "metrics_gui.h"
 
-class surfingMetrics {
+class SurfingMetricsDemo {
 
 public:
-	surfingMetrics() { setup(); };
-	~surfingMetrics() {};
+	SurfingMetricsDemo() { setup(); };
+	~SurfingMetricsDemo() {};
 
 	MetricsGuiMetric frameTimeMetric;
 	MetricsGuiMetric sineMetric;

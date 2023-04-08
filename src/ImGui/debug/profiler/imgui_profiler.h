@@ -66,11 +66,11 @@ namespace ImGuiEx {
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);//0
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::lightPink, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::deepSkyBlue, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::greenYellow, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::green, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::cyan, a);
-			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::lightYellow, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::orangeRed, a);
+			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::greenYellow, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::yellow, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::darkorange, a);
 			colors[i++] = U32_FROM_OF_COLOR_NAME(ofColor::fuchsia, a);
