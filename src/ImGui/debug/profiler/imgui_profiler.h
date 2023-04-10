@@ -451,7 +451,8 @@ namespace ImGuiEx {
 			ImVec2 szMax(1000, 1000);
 			ImGui::SetNextWindowSizeConstraints(szMin, szMax);
 
-			ImGui::SetNextWindowSize(ImVec2(640 * scaleFactor, 640 * scaleFactor), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize(ImVec2(320 * scaleFactor, 240 * scaleFactor), ImGuiCond_FirstUseEver);
+			//ImGui::SetNextWindowSize(ImVec2(640 * scaleFactor, 640 * scaleFactor), ImGuiCond_FirstUseEver);
 
 			std::stringstream title;
 
