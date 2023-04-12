@@ -27,7 +27,7 @@
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
 
-#include "ofxSurfing_ImGui_ThemesEditor.h"
+#include "SurfingThemesHelpers.h"
 
 //TODO: move here! now breaks!
 //#include "ImGui/WindowFbo.h"

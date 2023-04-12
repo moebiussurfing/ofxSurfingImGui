@@ -36,6 +36,10 @@
 ## 08_Debugger
 ![](08_Debugger/Capture.PNG)  
 
+## 09_ThemeEditor
+![](09_ThemeEditor/Capture.PNG)  
+![](09_ThemeEditor/Capture2.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
