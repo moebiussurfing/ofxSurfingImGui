@@ -38,7 +38,7 @@ private:
 	//void setBool(bool b);
 	//bool getBool();
 
-	//string path_Params_AppSettings = "SurfingGradient_AppSettings.xml";
+	//string path = "SurfingGradient_AppSettings.xml";
 	//ofParameterGroup params_AppSettings;
 	//ofParameter<bool> bKeys;
 

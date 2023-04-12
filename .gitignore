@@ -39,7 +39,7 @@ docs/tagfile.xml
 [Bb]uild/
 [Oo]bj/
 *.o
-[Dd]ebug*/
+# [Dd]ebug*/
 [Rr]elease*/
 *.mode*
 *.app/
@@ -228,7 +228,7 @@ Desktop.ini
 mono_crash.*
 
 # Build results
-[Dd]ebug/
+# [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/

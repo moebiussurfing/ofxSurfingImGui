@@ -26,7 +26,8 @@ SurfingGuiManager::SurfingGuiManager()
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
 	// Auto call draw. Only to draw help boxes / OF native info. ?
-	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
+	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_AFTER_APP);
+	//ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	//----
@@ -51,8 +52,8 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
-	params_Advanced.add(bDebugDebugger);
 
+	params_Advanced.add(bDebugDebugger);
 #ifdef OFX_USE_DEBUGGER
 	debugger.bGui.makeReferenceTo(bDebugDebugger);
 	params_Advanced.add(debugger.params);
@@ -584,6 +585,9 @@ void SurfingGuiManager::startup()
 	//log.setCustomFontsNames(namesCustomFonts);
 	//log.bGui.makeReferenceTo(bLog);
 
+	//TODO: trying to redirect all logs to the imgui log window.
+	//log.setRedirectConsole();
+
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
 
@@ -630,6 +634,8 @@ void SurfingGuiManager::startup()
 	// Startup
 
 	//--
+
+	// Load App Session Settings
 
 	// When opening for first time,
 	// we set some default settings.
@@ -1063,6 +1069,13 @@ void SurfingGuiManager::update() { // -> Not being used by default
 	{
 		setupStartupForced();
 	}
+
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) {
+		debugger.updateProfileTasksCpu();//call after (before) main ofApp update 
+		debugger.update();
+	}
+#endif
 }
 
 //--------------------------------------------------------------
@@ -1070,6 +1083,10 @@ void SurfingGuiManager::draw()
 {
 	//TODO:
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
+
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) debugger.updateProfileTasksGpu();//call after main ofApp draw
+#endif
 }
 
 //--------------------------------------------------------------
@@ -1718,8 +1735,8 @@ void SurfingGuiManager::drawWindowsExtraManager() {
 	}
 
 #ifdef OFX_USE_DEBUGGER
-	if (bDebugDebugger) debugger.draw();
-	//if (bDebugDebugger) debugger.draw(this);
+	if (bDebugDebugger) debugger.drawImGui();
+	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
 #endif
 }
 

@@ -206,10 +206,32 @@ namespace ofxImGuiSurfing
 		{
 			if (!_bGui) return;
 
+			//--
+
+			if (bRedirect) {
+				if (_oldStdout) {
+					std::string text("");
+					std::getline(_stdout, text);
+					while (text != "")
+					{
+						string s = text + "\n";
+						this->Add(s);
+
+						//_terminalBuffer += text + '\n';
+
+						text = "";
+						std::getline(_stdout, text);
+					}
+					_stdout.clear();
+				}
+			}
+
+			//--
+
 			startupOnce();
 
 			// minimal window width
-			float wWindowMin = 100;
+			float wWindowMin = 200;
 			float hWindowMin;
 			float wWidgets = 110;//width for next widgets
 
@@ -240,14 +262,14 @@ namespace ofxImGuiSurfing
 				// app window
 				float w = ofGetWidth();
 				float h = ofGetHeight();
-				ImGui::SetNextWindowPos(ImVec2(w - wWindowMin - 10, 20), cond);
-				ImGui::SetNextWindowSize(ImVec2(wWindowMin, h - 100), cond);
+				ImGui::SetNextWindowPos(ImVec2(w - wWindowMin - 25, 25), cond);
+				ImGui::SetNextWindowSize(ImVec2(wWindowMin, 2 * hWindowMin), cond);
+				//ImGui::SetNextWindowSize(ImVec2(wWindowMin, h - 100), cond);
 
 				// constraints
 				ImVec2 size_min = ImVec2(wWindowMin, hWindowMin);
 				ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
-
 			}
 
 			//----
@@ -286,8 +308,8 @@ namespace ofxImGuiSurfing
 
 			// Reduce y spacing
 			if (bMinimize) {
-				if (0) ofxImGuiSurfing::AddSpacingY(-8);
-				else ofxImGuiSurfing::Separator();
+				if (1) ofxImGuiSurfing::AddSpacingY(-8);//empty reduced space
+				else ofxImGuiSurfing::Separator();//draw a lin
 			}
 
 			//--
@@ -712,6 +734,21 @@ namespace ofxImGuiSurfing
 
 	public:
 		void setLogLevel(ofLogLevel logLevel) { this->logLevelUi = logLevel; }
+
+		// This feature will redirect all std::coud logs to the ui log window.
+		// TODO: could redirect ofLog too..
+		void setRedirectConsole(bool b = true) {
+			bRedirect = b;
+
+			if (bRedirect) {
+				_oldStdout = std::cout.rdbuf();
+				std::cout.rdbuf(_stdout.rdbuf());
+			}
+		}
+	private:
+		bool bRedirect = false;
+		std::streambuf* _oldStdout = nullptr;
+		std::stringstream _stdout;
 
 	public:
 

@@ -67,7 +67,7 @@ namespace ofxImGuiSurfing
 
 	// Int. cloned from float.
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1", string format = OFX_IM_FORMAT_SLIDERS)
+	inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1", string format = OFX_IM_FORMAT_SLIDERS_INT)
 	{
 		if (w == -1) w = ImGui::GetContentRegionAvail().x;//full width
 		if (h == -1) h = getWidgetsHeightUnit();//one unit height
@@ -112,7 +112,7 @@ namespace ofxImGuiSurfing
 		return AddBigSlider(parameter, sz.x, sz.y, format);
 	}
 	//--------------------------------------------------------------
-	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
+	inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz, string format = OFX_IM_FORMAT_SLIDERS_INT)// button but using a bool not void param
 		//inline bool AddBigSlider(ofParameter<int>& parameter, ImVec2 sz = ImVec2(-1.f, -1.f), string format = OFX_IM_FORMAT_SLIDERS)// button but using a bool not void param
 	{
 		return AddBigSlider(parameter, sz.x, sz.y, format);
@@ -348,7 +348,7 @@ namespace ofxImGuiSurfing
 
 			string format;
 			if (bNoNumber) format = "";
-			else format = OFX_IM_FORMAT_SLIDERS;
+			else format = OFX_IM_FORMAT_SLIDERS_INT;
 
 			bChanged = AddBigSlider(parameter, sz.x, sz.y, name, format.c_str());
 		}

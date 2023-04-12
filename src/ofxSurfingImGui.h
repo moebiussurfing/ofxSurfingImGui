@@ -5,8 +5,8 @@
 // OVERVIEW:
 /*
 
-	This is the main header for that toolkit/ofxAddon.
-	The only one you need to include into your ofApp/Class!
+	This is the main header for this ImGui Toolkit/ofxAddon for OF.
+	It's the only one that you strictly need to include into your ofApp/Class!
 
 */
 
@@ -30,9 +30,12 @@
 /*
 
 	IDEAS
-		- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
-		- add debug info pos,sz for each window.
-		- add isFirsTimeStartup() to allow force default settings.
+	- add layout with child/header similar to menus.
+	- context menu / right mouse click
+		expose auto resize/minimize/etc
+		add debug info pos,sz for each window.
+	- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
+	- add isFirsTimeStartup() to allow force default settings.
 
 	STYLE
 	+ check toggles color theme. correlate with slider grab.
