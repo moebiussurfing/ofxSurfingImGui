@@ -134,7 +134,7 @@ public:
 	~SurfingGuiManager();
 
 #ifdef OFX_USE_DEBUGGER
-//private:
+	//private:
 	SurfingDebugger debugger;
 #endif
 
@@ -1238,6 +1238,41 @@ public:
 
 	//--
 
+	//--------------------------------------------------------------
+	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, string label = "##child", bool border = true, ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None)
+	{
+		return ImGui::BeginChild(label.c_str(), size_arg, border, extra_flags);
+	}
+
+	//TODO:
+	/*
+	//--------------------------------------------------------------
+	bool BeginChildEx(string label)
+	{
+		this->refreshLayout();
+
+		string t = "##CHILD" + label;
+		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
+		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
+
+		ImGui::BeginMenuBar();
+		ImGui::Text("%s", label.c_str());
+		ImGui::EndMenuBar();
+
+		ImGui::NewLine();
+
+		return ret;
+	}
+	*/ 
+
+	//--------------------------------------------------------------
+	void EndChild()
+	{
+		ImGui::EndChild();
+	}
+
+	//----
+
 	// Columns
 
 	//--------------------------------------------------------------
@@ -1310,30 +1345,6 @@ public:
 		bool enabled = true;
 
 		return MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
-	}
-
-	//--
-
-	//TODO:
-	//--------------------------------------------------------------
-	bool BeginChild(string label)
-	{
-		this->refreshLayout();
-
-		string t = "##CHILD" + label;
-		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
-		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
-		ImGui::BeginMenuBar();
-		ImGui::Text("%s", label.c_str());
-		ImGui::EndMenuBar();
-
-		ImGui::NewLine();
-		return ret;
-	}
-	//--------------------------------------------------------------
-	void EndChild()
-	{
-		ImGui::EndChild();
 	}
 
 	//---
@@ -1819,7 +1830,7 @@ public:
 public:
 	//--------------------------------------------------------------
 	void setLogLevel(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
-	
+
 	//--------------------------------------------------------------
 	void setLogRedirectConsole(bool b = true) {
 		log.setRedirectConsole(b);

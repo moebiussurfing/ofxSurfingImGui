@@ -12,8 +12,11 @@ using namespace std;
 
 */
 
+#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+namespace ofxSurfingHelpers = ofxImGuiSurfing;
+#endif
+
 //#define ofxSurfingHelpers ofxImGuiSurfing
-//using ofxSurfingHelpers = ofxImGuiSurfing;
 
 // namespace ofxSurfingHelpers
 namespace ofxImGuiSurfing
@@ -25,7 +28,7 @@ namespace ofxImGuiSurfing
 	// Left monitor is portrait. 
 	// Central and Right monitor are landscape.
 	//--------------------------------------------------------------
-	inline void SurfSetMyMonitor(int layout = 0, bool bStandardFrameRate = true)
+	inline void setMonitorsLayout(int layout = 0, bool bStandardFrameRate = true)
 	{
 		if (bStandardFrameRate) {
 			ofSetFrameRate(60);
@@ -54,7 +57,7 @@ namespace ofxImGuiSurfing
 			ofSetWindowPosition(-1920, h);
 			ofSetWindowShape(1920, 1080 - hw);
 		}
-	}
+	};
 
 	// Images drawing
 	/*
@@ -103,13 +106,13 @@ namespace ofxImGuiSurfing
 		if (path == "")
 		{
 			path = g.getName() + "_Settings.json"; // a default filename
-			ofLogWarning("ofxSurfingImGui") << "loadGroup " << "Path is empty! Using a default instead!";
+			ofLogWarning("ofxSurfingHelpers") << "loadGroup " << "Path is empty! Using a default instead!";
 		}
 
 		if (debug)
 		{
-			ofLogNotice("ofxSurfingImGui") << "loadGroup `" << g.getName() << "` to `" << path << "`";
-			ofLogNotice("ofxSurfingImGui") << "ofParameters: \n\n  " << g.toString();
+			ofLogNotice("ofxSurfingHelpers") << "loadGroup `" << g.getName() << "` to `" << path << "`";
+			ofLogNotice("ofxSurfingHelpers") << "ofParameters: \n\n  " << g.toString();
 		}
 
 		ofJson settings;
@@ -125,43 +128,43 @@ namespace ofxImGuiSurfing
 		// Returns false if no file preset yet.
 		ofFile f;
 		bool b = f.doesFileExist(path);
-		if (b) ofLogNotice("ofxSurfingImGui") << "loadGroup: `" << g.getName() << "` at `" << path << "`";
-		else ofLogError("ofxSurfingImGui") << "Error loading: `" << g.getName() << "` at `" << path << "` Not found!";
+		if (b) ofLogNotice("ofxSurfingHelpers") << "loadGroup: `" << g.getName() << "` at `" << path << "`";
+		else ofLogError("ofxSurfingHelpers") << "Error loading: `" << g.getName() << "` at `" << path << "` Not found!";
 
 		return b; // Returns true if it's ok
-	}
+	};
 
 	//--------------------------------------------------------------
 	inline bool saveGroup(ofParameterGroup& g, string path = "", bool debug = true)
 	{
 		if (path == "") {
 			path = g.getName() + "_Settings.json";
-			ofLogWarning("ofxSurfingImGui") << "saveGroup " << "Path is empty! Using a default instead!";
+			ofLogWarning("ofxSurfingHelpers") << "saveGroup " << "Path is empty! Using a default instead!";
 		}
 
 		if (debug) {
-			ofLogNotice("ofxSurfingImGui") << g.getName() << " to `" << path << "`";
-			ofLogNotice("ofxSurfingImGui") << "ofParameters: \n\n  " << g.toString();
+			ofLogNotice("ofxSurfingHelpers") << g.getName() << " to `" << path << "`";
+			ofLogNotice("ofxSurfingHelpers") << "ofParameters: \n\n  " << g.toString();
 		}
 
 		// Create folder if folder do not exist!
 		// From now, will not rerquire to call manually:
-		//ofxSurfingImGui::CheckFolder(path);
+		//ofxSurfingHelpers::CheckFolder(path);
 
 		if (!ofDirectory::doesDirectoryExist(ofFilePath::getEnclosingDirectory(path))) {
 			ofFilePath::createEnclosingDirectory(path);
-			ofLogWarning("ofxSurfingImGui") << "Created enclosing folder for: " << path;
+			ofLogWarning("ofxSurfingHelpers") << "Created enclosing folder for: " << path;
 		}
 
 		ofJson settings;
 		ofSerialize(settings, g);
 		bool b = ofSavePrettyJson(path, settings);
 
-		if (b) ofLogVerbose("ofxSurfingImGui") << "Save: `" << g.getName() << "` at " << path;
-		else ofLogError("ofxSurfingImGui") << "Error saving: `" << g.getName() << "` at " << path;
+		if (b) ofLogVerbose("ofxSurfingHelpers") << "Save: `" << g.getName() << "` at " << path;
+		else ofLogError("ofxSurfingHelpers") << "Error saving: `" << g.getName() << "` at " << path;
 
 		return b;
-	}
+	};
 
 	//----
 
@@ -171,13 +174,13 @@ namespace ofxImGuiSurfing
 	inline bool load(ofParameterGroup& g)
 	{
 		return loadGroup(g);
-	}
+	};
 
 	//--------------------------------------------------------------
 	inline bool save(ofParameterGroup& g)
 	{
 		return saveGroup(g);
-	}
+	};
 
 	//--
 
@@ -191,7 +194,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void CheckFolder(string _path)
 	{
-		//ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << _path;
+		//ofLogNotice("ofxSurfingHelpers")<<(__FUNCTION__) << _path;
 
 		//TODO: A clean alternative..
 		/*
@@ -206,7 +209,7 @@ namespace ofxImGuiSurfing
 		//// Workaround to avoid error when folders are folder/subfolder
 		//auto _fullPath = ofSplitString(_path, "/");
 		//for (int i = 0; i < _fullPath.size(); i++) {
-		//	ofLogNotice("ofxSurfingImGui")<<(__FUNCTION__) << ofToString(i) << " " << _fullPath[i];
+		//	ofLogNotice("ofxSurfingHelpers")<<(__FUNCTION__) << ofToString(i) << " " << _fullPath[i];
 		//}
 
 		// /bin/data/
@@ -215,7 +218,7 @@ namespace ofxImGuiSurfing
 		// Check if folder path exist
 		if (!dataDirectory.isDirectory())
 		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "FOLDER NOT FOUND! TRYING TO CREATE...";
+			ofLogError("ofxSurfingHelpers") << (__FUNCTION__) << "FOLDER NOT FOUND! TRYING TO CREATE...";
 
 			// Try to create folder
 			bool b = dataDirectory.createDirectory(ofToDataPath(_path, true), false, true);
@@ -223,16 +226,14 @@ namespace ofxImGuiSurfing
 			// Added enable recursive to allow create nested subfolders if required
 
 			// Debug if creation has been succeded
-			if (b) ofLogNotice("ofxSurfingImGui") << "CREATED '" << _path << "' SUCCESSFULLY!";
-			else ofLogError("ofxSurfingImGui") << "UNABLE TO CREATE '" << _path << "' FOLDER!";
+			if (b) ofLogNotice("ofxSurfingHelpers") << "CREATED '" << _path << "' SUCCESSFULLY!";
+			else ofLogError("ofxSurfingHelpers") << "UNABLE TO CREATE '" << _path << "' FOLDER!";
 		}
 		else
 		{
-			ofLogVerbose("ofxSurfingImGui") << _path << " Found!";// nothing to do
+			ofLogVerbose("ofxSurfingHelpers") << _path << " Found!";// nothing to do
 		}
-	}
-
-
+	};
 
 	//----
 
@@ -245,7 +246,7 @@ namespace ofxImGuiSurfing
 	// Animator functions taken from
 	// https://github.com/tcoppex/ofxFontSampler/blob/main/example/src/ofApp.cpp
 
-	//The purpose of this anonymous namespace is to provide an internal implementation detail that should not be exposed outside the ofxImGuiSurfing namespace
+	// The purpose of this anonymous namespace is to provide an internal implementation detail that should not be exposed outside the ofxImGuiSurfing namespace
 	namespace
 	{
 		/* Return a linear value in range [0,1] every delay (in seconds). */
@@ -301,7 +302,6 @@ namespace ofxImGuiSurfing
 		return a;
 	}
 };
-
 
 //namespace ofxSurfingHelpers
 namespace ofxImGuiSurfing
