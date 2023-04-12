@@ -39,29 +39,31 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
   - Right-Click:
-    - To Reset to param Center.
-    - _+Ctrl_ to Reset to Min.
-    - _+Alt_ to Reset to Max.
+    - To Reset to param **Center**.
+    - _+Ctrl_ to Reset to **Min**.
+    - _+Alt_ to Reset to **Max**.
 - **Windows Organizer**:
     - Aligner, cascade and Group/Linker.
 - **Log System**:
-    - With custom tags.
+    - With custom **tags**.
 - **Notifier System**:
-    - With custom layout and styles.
+    - With **custom** layout and styles.
 - **Debugger System**:
     - Metrics: frame rate and frame time.
     - Profiler: Cpu and Gpu measurements.
 - **Text Editor**: 
-    - Language marks with custom marked keyworks.
+    - Language marks with custom marked **keyworks**.
     - Font sizes, color themes.
-    - Clipboard access and **undo/redo** history.
+    - **Clipboard** access and **undo/redo** history.
 - **Console System**: ( WIP )
-    - Basic console/terminal module.
-    - Call methods/commands by typing into the console.
+    - Basic console/**terminal** module.
+    - Call methods/**commands** by typing into the console.
 - **Image Inspector**:
     - With pixel color picker.
-- **Themes**:
-    - With styles **Editor** and serializers. ( WIP )
+- **Themes Editor**:  ( WIP )
+    - With **20 bundled themes**.
+    - File serializers.
+    - **Demo Window** and **Tester Widgets**.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
