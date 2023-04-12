@@ -12,10 +12,11 @@
 
 	TODO
 
+	store in data/files and list files and make a picker.
+		currently saving into bin/imgui_styles.ini
 	add make new ImGui_ThemeMoebiusSurfingV3
 		dark theme with more 3d styled look.
 		pressed toggle = darker.
-	store in data/files and list files and make a picker.
 	add apply by sections: sizes and layout and/or colors
 	define a global color and some main colors.
 		link colors between particular settings.
