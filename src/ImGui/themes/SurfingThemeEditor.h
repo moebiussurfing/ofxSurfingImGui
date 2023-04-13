@@ -68,6 +68,13 @@ public:
 
 	SurfingThemeEditor()
 	{
+		////ofParameter<bool> ofxImGuiSurfing::SurfingThemes::bEnableColors_;
+		////ofxImGuiSurfing::SurfingThemes::bEnableColors_
+		////ofxImGuiSurfing::SurfingThemes::bEnableColors.set("Colors", true);
+		////ofxImGuiSurfing::SurfingThemes::bEnableLayout.set("Layout", true);
+		//bEnableColors.makeReferenceTo(ofxImGuiSurfing::SurfingThemes::bEnableColors);
+		//bEnableLayout.makeReferenceTo(ofxImGuiSurfing::SurfingThemes::bEnableLayout);
+
 		bGui_Editor.set("Surfing Style Editor", false);
 		bGui_ThemeSelector.set("Theme Selector", false);
 		bGui_Demo.set("Dear ImGui Demo", false);
@@ -83,8 +90,8 @@ public:
 
 		//ofParameter<bool> ofxImGuiSurfing::SurfingThemes::bEnableColors{ "b",0 };
 
-		ofxImGuiSurfing::SurfingThemes::bEnableColors.makeReferenceTo(bEnableColors);
-		ofxImGuiSurfing::SurfingThemes::bEnableLayout.makeReferenceTo(bEnableLayout);
+		//ofxImGuiSurfing::SurfingThemes::bEnableColors.makeReferenceTo(bEnableColors);
+		//ofxImGuiSurfing::SurfingThemes::bEnableLayout.makeReferenceTo(bEnableLayout);
 	};
 
 	~SurfingThemeEditor()
@@ -194,6 +201,9 @@ private:
 		ofxImGuiSurfing::SameLine();
 		ofxImGuiSurfing::AddParameter(bEnableLayout);
 
+		ofxImGuiSurfing::SurfingThemes::bEnableColors = bEnableColors;
+		ofxImGuiSurfing::SurfingThemes::bEnableLayout = bEnableLayout;
+
 		ofxImGuiSurfing::AddSpacingBigSeparated();
 
 		ImGui::ShowStyleEditor(&style);
@@ -211,20 +221,40 @@ public:
 	{
 		if (ui == nullptr) return;
 
-		if (ui->BeginWindow(bGui_ThemeSelector))
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+		if (1) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
+		if (ui->BeginWindow(bGui_ThemeSelector, window_flags))
 		{
 			ofxImGuiSurfing::drawThemeSelector(NULL);
 
 			ui->AddSpacingBigSeparated();
 
-			ImVec2 sz1(ImGui::GetContentRegionAvail().x, 1.5 * ImGui::GetFrameHeight());
+			size_t n = 4;
+			float w = ui->getWidgetsWidth(n);
+			float h = 1.5 * ImGui::GetFrameHeight();
+			ImVec2 sz1(w, h);
 
-			if (ui->AddButton("Reset", sz1))
+			ui->AddLabelBig("Resets");
+			if (ui->AddButton("R1", sz1))
 			{
-				//ImGui::StyleColorsLight();
-
 				ofxImGui::DefaultTheme* defaultTheme = new ofxImGui::DefaultTheme();
 				ui->getGuiPtr()->setTheme((ofxImGui::BaseTheme*)defaultTheme);
+			}
+			ui->SameLine();
+			if (ui->AddButton("R2", sz1))
+			{
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+			}
+			ui->SameLine();
+			if (ui->AddButton("R3", sz1))
+			{
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
+			}
+			ui->SameLine();
+			if (ui->AddButton("R4", sz1))
+			{
+				ImGui::StyleColorsLight();
 			}
 
 			ui->EndWindow();

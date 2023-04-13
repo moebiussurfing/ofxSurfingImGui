@@ -67,6 +67,7 @@ namespace ofxImGuiSurfing
 
 		// Browse
 
+		ImGui::PushButtonRepeat(true);
 		if (ImGui::Button("<", sz2)) {
 			i--;
 			i = ofClamp(i, 0, values.size() - 1);
@@ -82,6 +83,7 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
+		ImGui::PopButtonRepeat();
 
 		// Combo
 
@@ -139,6 +141,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void drawThemeSelector(ImGuiStyle* ref)
 	{
+		//TODO: not working?
+		 
 		// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
 		// (without a reference style pointer, we will use one compared locally as a reference)
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -151,6 +155,8 @@ namespace ofxImGuiSurfing
 		if (ref == NULL) ref = &ref_saved_style;
 
 		if (ofxImGuiSurfing::drawWidgetsThemeSelector("Colors##Selector")) ref_saved_style = style;
+		
+		ImGui::Separator();
 
 		ImGui::ShowFontSelector("Fonts##Selector");
 	}
