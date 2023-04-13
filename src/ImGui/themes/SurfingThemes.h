@@ -20,8 +20,18 @@ using namespace ImGui;
 
 namespace ofxImGuiSurfing
 {
-	static ofParameter<bool> bEnableColors;
-	static ofParameter<bool> bEnableLayout;
+	//TODO: how to link params..
+	namespace SurfingThemes
+	{
+		static ofParameter<bool> bEnableColors;
+		static ofParameter<bool> bEnableLayout;
+		//ofParameter<bool> bEnableColors;
+		//ofParameter<bool> bEnableLayout;
+		//extern ofParameter<bool> bEnableColors;
+		//extern ofParameter<bool> bEnableLayout;
+	}
+
+	using namespace SurfingThemes;
 
 	//----
 
@@ -950,6 +960,7 @@ namespace ofxImGuiSurfing
 		if (bEnableColors)
 		{
 			ImGui::StyleColorsDark(style);//Reset to base/dark theme
+
 			colors[ImGuiCol_Text] = ImVec4(0.00f, 0.82f, 1.00f, 1.00f);
 			colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.36f, 0.63f, 1.00f);
 			colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.04f, 0.12f, 1.00f);
@@ -2237,7 +2248,7 @@ namespace ofxImGuiSurfing
 		//----
 	}
 
-	// By @Trippasch 
+	// Taken from @Trippasch 
 	// https://github.com/Trippasch
 	// https://github.com/ocornut/imgui/issues/707#issuecomment-1372640066
 	//--------------------------------------------------------------
@@ -2327,16 +2338,16 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-	// By @Maksasj 
+	// Taken from @Maksasj 
 	// https://github.com/Maksasj
-	// Taken from https://github.com/ocornut/imgui/issues/707#issuecomment-1494706165
+	// https://github.com/ocornut/imgui/issues/707#issuecomment-1494706165
 	//--------------------------------------------------------------
 	static void ImGui_ThemeMaksasj()
 	{
 		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMaksasj";
 
 		ImGuiStyle& style = ImGui::GetStyle();
-			
+
 		if (bEnableColors)
 		{
 			style.Colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.90f, 0.90f);

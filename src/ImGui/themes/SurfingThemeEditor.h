@@ -66,7 +66,8 @@ public:
 
 	ofParameterGroup params;
 
-	SurfingThemeEditor() {
+	SurfingThemeEditor()
+	{
 		bGui_Editor.set("Surfing Style Editor", false);
 		bGui_ThemeSelector.set("Theme Selector", false);
 		bGui_Demo.set("Dear ImGui Demo", false);
@@ -80,11 +81,14 @@ public:
 		params.add(bEnableColors);
 		params.add(bEnableLayout);
 
-		ofxImGuiSurfing::bEnableColors.makeReferenceTo(bEnableColors);
-		ofxImGuiSurfing::bEnableLayout.makeReferenceTo(bEnableLayout);
+		//ofParameter<bool> ofxImGuiSurfing::SurfingThemes::bEnableColors{ "b",0 };
+
+		ofxImGuiSurfing::SurfingThemes::bEnableColors.makeReferenceTo(bEnableColors);
+		ofxImGuiSurfing::SurfingThemes::bEnableLayout.makeReferenceTo(bEnableLayout);
 	};
 
-	~SurfingThemeEditor() {
+	~SurfingThemeEditor()
+	{
 	};
 
 private:
@@ -156,7 +160,7 @@ private:
 
 		ImGui::Begin("Surfing Style Editor");
 
-		ImVec2 sz(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 1 * ImGui::GetFrameHeight());
+		ImVec2 sz(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 1.5 * ImGui::GetFrameHeight());
 
 		string filename = "imgui_styles.ini";
 		string path = ofToDataPath(filename);
@@ -191,7 +195,7 @@ private:
 		ofxImGuiSurfing::AddParameter(bEnableLayout);
 
 		ofxImGuiSurfing::AddSpacingBigSeparated();
-		
+
 		ImGui::ShowStyleEditor(&style);
 
 		ImGui::End();

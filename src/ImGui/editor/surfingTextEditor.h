@@ -63,7 +63,7 @@ namespace ofxImGuiSurfing
 class SurfingTextEditor
 {
 public:
-	SurfingTextEditor() {};
+	SurfingTextEditor() { };
 	~SurfingTextEditor() { exit(); };
 
 	ofParameterGroup params{ "SurfingTextEditor" };
@@ -85,7 +85,7 @@ public:
 
 		//lang.mKeywords.insert("CPP");
 		//lang.mTokenRegexStrings.push_back(std::make_pair<string, TextEditor::PaletteIndex>("CPP", TextEditor::PaletteIndex::Identifier));
-	}
+	};
 
 private:
 	void buildFontNames() {
@@ -160,7 +160,7 @@ public:
 	void setup(string name) {
 		setName(name);
 		setup();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void exit() {
@@ -168,7 +168,7 @@ public:
 
 		string p = params.getName() + "_" + name + ".json";
 		ofxImGuiSurfing::saveGroup(params, p);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setup() {
@@ -189,7 +189,7 @@ public:
 
 		string p = params.getName() + "_" + name + ".json";
 		ofxImGuiSurfing::loadGroup(params, p);
-	}
+	};
 
 	//--
 
@@ -201,7 +201,7 @@ public:
 	//--------------------------------------------------------------
 	string getText() const { // get editor text 
 		return editor.GetText();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setTextBreakLines(string s, int widthInChars) {
@@ -209,7 +209,7 @@ public:
 
 		string ss = ofxImGuiSurfing::splitInLines(s, widthInChars);
 		editor.SetText(ss);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setText(string s) {
@@ -219,7 +219,7 @@ public:
 		else editor.SetText(s);
 
 		//pathEditing = "-1";
-	}
+	};
 
 	/*
 	//--------------------------------------------------------------
@@ -230,14 +230,14 @@ public:
 		else editor.SetText(s);
 
 		if (bResetPathSave) pathEditing = "-1";
-	}
+	};
 	*/
 
 	//--------------------------------------------------------------
 	void clearText() {
 		textRaw = "";
 		setText(textRaw);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void loadText(string path) {
@@ -264,7 +264,7 @@ public:
 		else {
 			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
 		}
-	}
+	};
 
 	void Changed_Params(ofAbstractParameter& e)
 	{
@@ -323,7 +323,7 @@ public:
 
 			return;
 		}
-	}
+	};
 
 	//--
 
@@ -438,7 +438,7 @@ public:
 			}
 			ImGui::EndMenuBar();
 		}
-	}
+	};
 
 	//--
 
@@ -502,7 +502,7 @@ public:
 		}
 
 		ImGui::Spacing();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void drawImGuiWidgetsFonts() {
@@ -521,7 +521,7 @@ public:
 			}
 			else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
 		}
-	}
+	};
 
 	//--------------------------------------------------------------
 	void draw() {
@@ -637,7 +637,7 @@ public:
 		//--
 
 		//editor.ImGuiDebugPanel("DebugPanel");
-	}
+	};
 
 	//--
 
@@ -671,7 +671,7 @@ public:
 
 		fb.close();
 		return true;
-	}
+	};
 };
 
 
