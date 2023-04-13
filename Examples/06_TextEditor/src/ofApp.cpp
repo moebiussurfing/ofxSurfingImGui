@@ -5,7 +5,7 @@ void ofApp::setup()
 {
 	ofSetFrameRate(60);
 
-	ofxImGuiSurfing::SurfSetMyMonitor(1);
+	ofxImGuiSurfing::setMonitorsLayout(1);
 
 	ui.setup();
 

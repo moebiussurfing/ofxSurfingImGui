@@ -62,7 +62,7 @@ void ofApp::drawWindowMain()
 		static bool bExpand = true;
 		ui.AddToggle("Expand", bExpand, OFX_IM_TOGGLE_ROUNDED_MINI);
 		if (bExpand) {
-			ui.AddLabelBig("SurfingThemeEditor");
+			ui.AddLabelBig("Surfing\nThemeEditor");
 			ui.Add(e.bGui_ThemeSelector, OFX_IM_TOGGLE);
 			ui.Add(e.bGui_Editor, OFX_IM_TOGGLE);
 			ui.Add(e.bGui_Demo, OFX_IM_TOGGLE);

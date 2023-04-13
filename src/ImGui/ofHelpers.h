@@ -911,7 +911,7 @@ namespace ofxImGuiSurfing
 	// to populate one single variable!
 	//--------------------------------------------------------------
 	template<typename ParameterType>
-	bool AddStepper(ofParameter<ParameterType>& p, bool bNoLabel = false)
+	bool AddStepper(ofParameter<ParameterType>& p, bool bNoLabel = false, bool bRaw = true)
 	{
 		bool bReturn = false;
 		string name = p.getName();
@@ -920,9 +920,10 @@ namespace ofxImGuiSurfing
 		const auto& t = typeid(ParameterType);
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
-		if (!isFloat && !isInt) {
-			ofLogWarning("ofxSurfingImGui") <<
-				"Stepper: ofParam type named " + name + " is not a Float or an Int";
+		
+		if (!isFloat && !isInt) 
+		{
+			ofLogWarning("ofxSurfingImGui") << "Stepper: ofParam type named " + name + " is not a Float or an Int";
 			return false;
 		}
 
@@ -930,7 +931,8 @@ namespace ofxImGuiSurfing
 		const ImU32 u32_one = 1;
 		static bool inputs_step = true;
 
-		//TODO: adde above relative/absolute wf
+		//TODO: added above relative/absolute workflow
+		
 		// Float
 		float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
@@ -941,11 +943,14 @@ namespace ofxImGuiSurfing
 
 		ImGui::PushID(n.c_str());
 
-		if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-		else IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-		//else IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
+		if (!bRaw)
+		{
+			if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+			else IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+		}
 
-		if (isFloat) {
+		if (isFloat)
+		{
 			if (ImGui::InputFloat(label.c_str(), (float*)&tmpRef, step, stepFast))
 			{
 				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
@@ -953,21 +958,25 @@ namespace ofxImGuiSurfing
 				bReturn = true;
 			}
 		}
-		else {
-			if (isInt) {
-				if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32,
-					(int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
-				{
-					tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-					p.set(tmpRef);
-					bReturn = true;
-				}
+		else if (isInt)
+		{
+			if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32, (int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
+			{
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
+				p.set(tmpRef);
+				bReturn = true;
 			}
 		}
+		else
+		{
+			ofLogWarning("ofxSurfingImGui") << "Stepper: Unknown type for " + name + " param";
+		}
 
-		if (bNoLabel) ImGui::PopItemWidth();
-		else IMGUI_SUGAR__STEPPER_WIDTH_POP;
-		//else IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
+		if (!bRaw)
+		{
+			if (bNoLabel) ImGui::PopItemWidth();
+			else IMGUI_SUGAR__STEPPER_WIDTH_POP;
+		}
 
 		ImGui::PopID();
 

@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-#include "SurfingThemeEditor.h"
+#include "surfingThemeEditor.h"
 
 #define TEST_CUSTOM_FONTS 0
 

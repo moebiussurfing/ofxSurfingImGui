@@ -11,6 +11,8 @@
 #include <regex>
 #include "imgui.h"
 
+//#include "ImGuiDebugPanel.cpp"
+
 class IMGUI_API TextEditor
 {
 public:
@@ -338,8 +340,9 @@ public:
 
 	static bool IsGlyphWordChar(const Glyph& aGlyph);
 
-	void ImGuiDebugPanel(const std::string& panelName = "Debug");
-	void UnitTests();
+	//void ImGuiDebugPanel(const std::string& panelName = "Debug");
+	//void UnitTests();
+
 private:
 	typedef std::vector<std::pair<std::regex, PaletteIndex>> RegexList;
 

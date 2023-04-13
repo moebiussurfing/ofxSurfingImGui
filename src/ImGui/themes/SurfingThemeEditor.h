@@ -40,19 +40,18 @@
 
 #include "ofMain.h"
 
-//#include "imgui.h"
-//#include "ofxSurfingImGui.h"
+#include "ofxSurfingImGui.h"
 
-#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
-#include "imgui_internal.h"
-#include "ofxImGui.h"
-#include "BaseTheme.h"
+//#define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
+//#include "imgui_internal.h"
+//#include "ofxImGui.h"
+//#include "BaseTheme.h"
 
 // Theme serializer
 // Taken from: https://github.com/pegvin/ImGooeyStyles
 #include "imgui_styles.h"
 
-#include "SurfingThemesHelpers.h"
+#include "surfingThemesHelpers.h"
 
 //--
 
@@ -62,17 +61,27 @@ public:
 	ofParameter<bool> bGui_Editor;
 	ofParameter<bool> bGui_ThemeSelector;
 	ofParameter<bool> bGui_Demo;
+	ofParameter<bool> bEnableColors;
+	ofParameter<bool> bEnableLayout;
+
 	ofParameterGroup params;
 
 	SurfingThemeEditor() {
 		bGui_Editor.set("Surfing Style Editor", false);
 		bGui_ThemeSelector.set("Theme Selector", false);
 		bGui_Demo.set("Dear ImGui Demo", false);
+		bEnableColors.set("Colors", true);
+		bEnableLayout.set("Layout", true);
 
 		params.setName("SurfingThemeEditor");
 		params.add(bGui_Editor);
 		params.add(bGui_Demo);
 		params.add(bGui_ThemeSelector);
+		params.add(bEnableColors);
+		params.add(bEnableLayout);
+
+		ofxImGuiSurfing::bEnableColors.makeReferenceTo(bEnableColors);
+		ofxImGuiSurfing::bEnableLayout.makeReferenceTo(bEnableLayout);
 	};
 
 	~SurfingThemeEditor() {
@@ -147,21 +156,42 @@ private:
 
 		ImGui::Begin("Surfing Style Editor");
 
-		ImVec2 sz(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 2 * ImGui::GetFrameHeight());
+		ImVec2 sz(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 1 * ImGui::GetFrameHeight());
 
-		if (ImGui::Button("Load Configuration", sz)) {
-			ImGui::LoadStyleFrom("imgui_styles.ini");
-			ofLogNotice("ofxSurfingImGui") << "Loaded Config From imgui_styles.ini...";
+		string filename = "imgui_styles.ini";
+		string path = ofToDataPath(filename);
+		string filenameTEMP = "imgui_styles_TEMP.ini";
+		string pathTEMP = ofToDataPath(filenameTEMP);
+
+		if (ImGui::Button("Load", sz)) {
+			ImGui::LoadStyleFrom(path.c_str());
+			ofLogNotice("ofxSurfingImGui") << "Loaded Config from imgui_styles.ini...";
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Save Configuration", sz)) {
-			ImGui::SaveStylesTo("imgui_styles.ini");
-			ofLogNotice("ofxSurfingImGui") << "Saved Config To imgui_styles.ini...";
+		if (ImGui::Button("Save", sz)) {
+			ImGui::SaveStylesTo(path.c_str());
+			ofLogNotice("ofxSurfingImGui") << "Saved Config to imgui_styles.ini...";
 		}
 		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
 
+		if (ImGui::Button("Recall", sz)) {
+			ImGui::LoadStyleFrom(pathTEMP.c_str());
+			ofLogNotice("ofxSurfingImGui") << "Recall Config";
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Store", sz)) {
+			ImGui::SaveStylesTo(pathTEMP.c_str());
+			ofLogNotice("ofxSurfingImGui") << "Store Config";
+		}
+
+		ofxImGuiSurfing::AddSpacingBigSeparated();
+
+		ofxImGuiSurfing::AddParameter(bEnableColors);
+		ofxImGuiSurfing::SameLine();
+		ofxImGuiSurfing::AddParameter(bEnableLayout);
+
+		ofxImGuiSurfing::AddSpacingBigSeparated();
+		
 		ImGui::ShowStyleEditor(&style);
 
 		ImGui::End();
@@ -183,8 +213,10 @@ public:
 
 			ui->AddSpacingBigSeparated();
 
-			ImVec2 sz1(ImGui::GetContentRegionAvail().x, 1 * ImGui::GetFrameHeight());
-			if (ui->AddButton("Reset", sz1)) {
+			ImVec2 sz1(ImGui::GetContentRegionAvail().x, 1.5 * ImGui::GetFrameHeight());
+
+			if (ui->AddButton("Reset", sz1))
+			{
 				//ImGui::StyleColorsLight();
 
 				ofxImGui::DefaultTheme* defaultTheme = new ofxImGui::DefaultTheme();
