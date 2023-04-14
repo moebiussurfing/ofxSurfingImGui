@@ -17,19 +17,14 @@
 	add make new ImGui_ThemeMoebiusSurfingV3
 		dark theme with more 3d styled look.
 		pressed toggle = darker.
-	add apply by sections: sizes and layout and/or colors
 	define a global color and some main colors.
 		link colors between particular settings.
 		but darker or lighter. add helpers.
 		ex: mark what color must be linked.
 			each one has his own alpha.
-	add reset theme and A/B compare.
+	add a full reset theme before load.
 	undo history or snapshot points
 		using ofParams and an addon for presets.
-
-	OTHER LINKS
-	https://github.com/Patitotective/ImThemes
-	https://github.com/Patitotective/ImStyle
 
 */
 
@@ -261,7 +256,27 @@ public:
 
 			//--
 
-			ui->AddLabelBig("Browser");
+			ui->AddLabelBig("Manager", true);
+
+			//TODO: 
+			// add text input
+			// add list files in a path / open dialog
+			// pick theme files on runtime
+			// ex: day/night
+
+			if (ImGui::Button("Load", sz)) {
+				ImGui::LoadStyleFrom(path.c_str());
+				ofLogNotice("ofxSurfingImGui") << "Loaded Config from imgui_styles.ini...";
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Save", sz)) {
+				ImGui::SaveStylesTo(path.c_str());
+				ofLogNotice("ofxSurfingImGui") << "Saved Config to imgui_styles.ini...";
+			}
+
+			ofxImGuiSurfing::AddSpacingBigSeparated();
+
+			ui->AddLabelBig("Browser", true);
 
 			// arrows, theme combo, fonts combo
 			ofxImGuiSurfing::drawThemeSelector(NULL);
@@ -283,18 +298,7 @@ public:
 
 			ofxImGuiSurfing::AddSpacingBigSeparated();
 
-			//if (ImGui::Button("Load", sz)) {
-			//	ImGui::LoadStyleFrom(path.c_str());
-			//	ofLogNotice("ofxSurfingImGui") << "Loaded Config from imgui_styles.ini...";
-			//}
-			//ImGui::SameLine();
-			//if (ImGui::Button("Save", sz)) {
-			//	ImGui::SaveStylesTo(path.c_str());
-			//	ofLogNotice("ofxSurfingImGui") << "Saved Config to imgui_styles.ini...";
-			//}
-			//ImGui::Spacing();
-
-			ui->AddLabelBig("Compare");
+			ui->AddLabelBig("Compare", true);
 			s = ofToString(bKeyCtrl ? "" : "Press Control to Save");
 			ui->AddTooltip(s);
 
@@ -323,7 +327,7 @@ public:
 			float h = 1.5 * ImGui::GetFrameHeight();
 			ImVec2 sz1(w, h);
 
-			ui->AddLabelBig("Resets");
+			ui->AddLabelBig("Resets", true);
 			if (ui->AddButton("R1", sz1))
 			{
 				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
