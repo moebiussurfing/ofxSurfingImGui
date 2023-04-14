@@ -258,21 +258,21 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
 ImVec2 size_min = ImVec2(220, -1); \
-ImVec2 size_max = ImVec2(400, -1); \
+ImVec2 size_max = ImVec2(310, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
 { \
 ImVec2 size_min = ImVec2(150, -1); \
-ImVec2 size_max = ImVec2(250, -1); \
+ImVec2 size_max = ImVec2(200, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
 { \
 ImVec2 size_min = ImVec2(100, -1); \
-ImVec2 size_max = ImVec2(100, -1); \
+ImVec2 size_max = ImVec2(150, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

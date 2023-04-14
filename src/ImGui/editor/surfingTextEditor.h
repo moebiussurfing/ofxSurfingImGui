@@ -15,6 +15,7 @@
 
 #include "ofxSurfingImGui.h"
 #include "TextEditor.h"
+//#include "ImGuiDebugPanel.cpp"
 
 #include <functional>
 using callback_t = std::function<void()>;
@@ -62,14 +63,14 @@ namespace ofxImGuiSurfing
 class SurfingTextEditor
 {
 public:
-	SurfingTextEditor() {};
+	SurfingTextEditor() { };
 	~SurfingTextEditor() { exit(); };
 
 	ofParameterGroup params{ "SurfingTextEditor" };
 	ofParameter<bool> bGui{ "TextEditor", true };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bShowInfo{ "Info", false };
-	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bLangStyled{ "LangStyled", false };
 	ofParameter<bool> bMenus{ "Menus", false };
 	ofParameter<int> fontIndex{ "Font", 0, 0, 3 };
 	ofParameter<int> themeIndex{ "Theme", 0, 0, 3 };
@@ -84,7 +85,7 @@ public:
 
 		//lang.mKeywords.insert("CPP");
 		//lang.mTokenRegexStrings.push_back(std::make_pair<string, TextEditor::PaletteIndex>("CPP", TextEditor::PaletteIndex::Identifier));
-	}
+	};
 
 private:
 	void buildFontNames() {
@@ -159,7 +160,7 @@ public:
 	void setup(string name) {
 		setName(name);
 		setup();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void exit() {
@@ -167,13 +168,13 @@ public:
 
 		string p = params.getName() + "_" + name + ".json";
 		ofxImGuiSurfing::saveGroup(params, p);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setup() {
 		params.add(bGui);
 		params.add(bExtra);
-		params.add(bAdvanced);
+		params.add(bLangStyled);
 		params.add(bMenus);
 		params.add(bShowInfo);
 		params.add(fontIndex);
@@ -188,7 +189,7 @@ public:
 
 		string p = params.getName() + "_" + name + ".json";
 		ofxImGuiSurfing::loadGroup(params, p);
-	}
+	};
 
 	//--
 
@@ -198,9 +199,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	string getText() const {//get editor text 
+	string getText() const { // get editor text 
 		return editor.GetText();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setTextBreakLines(string s, int widthInChars) {
@@ -208,7 +209,7 @@ public:
 
 		string ss = ofxImGuiSurfing::splitInLines(s, widthInChars);
 		editor.SetText(ss);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void setText(string s) {
@@ -218,7 +219,7 @@ public:
 		else editor.SetText(s);
 
 		//pathEditing = "-1";
-	}
+	};
 
 	/*
 	//--------------------------------------------------------------
@@ -229,14 +230,14 @@ public:
 		else editor.SetText(s);
 
 		if (bResetPathSave) pathEditing = "-1";
-	}
+	};
 	*/
 
 	//--------------------------------------------------------------
 	void clearText() {
 		textRaw = "";
 		setText(textRaw);
-	}
+	};
 
 	//--------------------------------------------------------------
 	void loadText(string path) {
@@ -263,7 +264,7 @@ public:
 		else {
 			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
 		}
-	}
+	};
 
 	void Changed_Params(ofAbstractParameter& e)
 	{
@@ -297,7 +298,7 @@ public:
 			if (lineWidth != i) {
 				i = lineWidth;
 
-				textRaw = this->getText();//get the edited on runtime 
+				textRaw = this->getTextRaw();//get the edited on runtime 
 				this->setText(textRaw);
 			}
 
@@ -322,7 +323,7 @@ public:
 
 			return;
 		}
-	}
+	};
 
 	//--
 
@@ -402,7 +403,7 @@ public:
 			if (ImGui::BeginMenu("View"))
 			{
 				ofxImGuiSurfing::MenuItemToggle(bExtra);
-				ofxImGuiSurfing::MenuItemToggle(bAdvanced);
+				ofxImGuiSurfing::MenuItemToggle(bLangStyled);
 				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
 
 				ImGui::EndMenu();
@@ -437,7 +438,7 @@ public:
 			}
 			ImGui::EndMenuBar();
 		}
-	}
+	};
 
 	//--
 
@@ -480,18 +481,18 @@ public:
 				ofxImGuiSurfing::AddCheckBox(bNumberLines);
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
 			}
-			ofxImGuiSurfing::AddCheckBox(bAdvanced);
+			ofxImGuiSurfing::AddCheckBox(bLangStyled);
 
 			//ofxImGuiSurfing::SameLineIfAvailForWidth();
 			//ofxImGuiSurfing::AddSeparatorVertical();
 			//ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bBreakLines);
 			if (bBreakLines) {
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
+				ofxImGuiSurfing::SameLine();
 				ImGui::PushItemWidth(90);
 				ofxImGuiSurfing::AddStepper(lineWidth, true);
 				ImGui::PopItemWidth();
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
+				ofxImGuiSurfing::SameLine();
 				ImGui::PushItemWidth(70);
 				ofxImGuiSurfing::AddParameter(lineWidth);
 				ImGui::PopItemWidth();
@@ -501,7 +502,7 @@ public:
 		}
 
 		ImGui::Spacing();
-	}
+	};
 
 	//--------------------------------------------------------------
 	void drawImGuiWidgetsFonts() {
@@ -520,7 +521,7 @@ public:
 			}
 			else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
 		}
-	}
+	};
 
 	//--------------------------------------------------------------
 	void draw() {
@@ -547,14 +548,14 @@ public:
 
 		//----
 
-		static bool bAdvanced_ = !bAdvanced.get();
-		if (bAdvanced_ != bAdvanced.get())
+		static bool bLangStyled_ = !bLangStyled.get();
+		if (bLangStyled_ != bLangStyled.get())
 		{
-			bAdvanced_ = bAdvanced.get();
+			bLangStyled_ = bLangStyled.get();
 
-			editor.SetShowWhitespaces(bAdvanced.get());
-			editor.SetShowShortTabGlyphs(bAdvanced.get());
-			editor.SetColorizerEnable(bAdvanced.get());
+			editor.SetShowWhitespaces(bLangStyled.get());
+			editor.SetShowShortTabGlyphs(bLangStyled.get());
+			editor.SetColorizerEnable(bLangStyled.get());
 		}
 
 		//--
@@ -589,8 +590,9 @@ public:
 				}
 				if (bName)
 				{
+					pathEditingFileName = ofFilePath::getFileName(pathEditing);
+
 					if (0) {
-						pathEditingFileName = ofFilePath::getFileName(pathEditing);
 						auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
 						ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
 					}
@@ -631,7 +633,11 @@ public:
 		}
 
 		ImGui::End();
-	}
+
+		//--
+
+		//editor.ImGuiDebugPanel("DebugPanel");
+	};
 
 	//--
 
@@ -665,7 +671,7 @@ public:
 
 		fb.close();
 		return true;
-	}
+	};
 };
 
 

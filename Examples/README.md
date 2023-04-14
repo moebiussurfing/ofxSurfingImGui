@@ -39,6 +39,7 @@
 ## 09_ThemeEditor
 ![](09_ThemeEditor/Capture.PNG)  
 ![](09_ThemeEditor/Capture2.PNG)  
+![](09_ThemeEditor/Capture3.PNG)  
 
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  

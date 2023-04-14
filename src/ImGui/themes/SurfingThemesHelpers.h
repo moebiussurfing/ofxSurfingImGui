@@ -8,10 +8,11 @@
 
 #include "Combos.h"
 
-#include "SurfingThemes.h"
+#include "surfingThemes.h"
 
 using namespace ImGui;
-//------------------------------
+
+//---
 
 namespace ofxImGuiSurfing
 {
@@ -25,19 +26,20 @@ namespace ofxImGuiSurfing
 
 		//TODO: should be static..
 		std::vector<std::string> values;
+
 		values.clear();
 		values.push_back("Dark");
 		values.push_back("Light");
 		values.push_back("Classic");
 		values.push_back("moebiusSurfingV2");
 		values.push_back("moebiusSurfing");
-		values.push_back("ModernDark");
+		values.push_back("moebiusSurfing Blue");
 		values.push_back("Grey");
 		values.push_back("Sequentity");
 		values.push_back("Olekristensen");
 		values.push_back("FlatDryWineGreen");
 		values.push_back("T3");
-		values.push_back("moebiusSurfing Blue");
+		values.push_back("ModernDark");
 		values.push_back("Blender");
 		values.push_back("Cyberpunk");
 		values.push_back("Nord");
@@ -51,15 +53,27 @@ namespace ofxImGuiSurfing
 		values.push_back("Darcula");
 		values.push_back("Xemu");
 		values.push_back("Yave");
+		values.push_back("ImStyle");
+		values.push_back("AiekickGreenBlue");
+		values.push_back("AiekickRedDark");
+		values.push_back("DraculaStyle");
+		values.push_back("Maksasj");
 
 		bool b1 = false;
 		bool b2 = false;
 
 		ImVec2 sz1(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight());
-		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x, 2 * ImGui::GetFrameHeight());
+		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 2.f * ImGui::GetFrameHeight());
 
-		// browse
-		if (ImGui::Button("<", sz2)) {
+		//--
+
+		bool bL = ImGui::IsKeyPressed(ImGuiKey_LeftArrow);
+		bool bR = ImGui::IsKeyPressed(ImGuiKey_RightArrow);
+
+		// Browse
+
+		ImGui::PushButtonRepeat(true);
+		if (ImGui::Button("<", sz2) || bL) {
 			i--;
 			i = ofClamp(i, 0, values.size() - 1);
 			style_idx = i;
@@ -67,19 +81,25 @@ namespace ofxImGuiSurfing
 			b1 = true;
 		}
 		ImGui::SameLine();
-		if (ImGui::Button(">", sz2)) {
+		if (ImGui::Button(">", sz2) || bR) {
 			i++;
 			i = ofClamp(i, 0, values.size() - 1);
 			style_idx = i;
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
+		ImGui::PopButtonRepeat();
+		ImGui::Spacing();
+
+		//--
 
 		// Combo
 
-		float w = 60;
+		string name = "Theme";
+		float w = ImGui::CalcTextSize(name.c_str()).x + /*ImGui::GetStyle().WindowPadding.x +*/ ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().ItemInnerSpacing.x;
+
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w);
-		b2 = (ofxImGuiSurfing::VectorCombo("Theme", &i, values, 1));
+		b2 = (ofxImGuiSurfing::VectorCombo(name.c_str(), &i, values, 1));
 		ImGui::PopItemWidth();
 
 		if (b1 || b2)
@@ -95,13 +115,13 @@ namespace ofxImGuiSurfing
 			case 2: ImGui::StyleColorsClassic(); break;
 			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); break;
 			case 4: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
-			case 5: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
+			case 5: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue(); break;
 			case 6: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
 			case 7: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;
 			case 8: ofxImGuiSurfing::ImGui_ThemeOlekristensen(); break;
 			case 9: ofxImGuiSurfing::ImGui_ThemeFlatDryWineGreen(); break;
 			case 10: ofxImGuiSurfing::ImGui_ThemeT3(); break;
-			case 11: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue(); break;
+			case 11: ofxImGuiSurfing::ImGui_ThemeModernDark(); break;
 			case 12: ofxImGuiSurfing::ImGui_ThemeBlender(); break;
 			case 13: ofxImGuiSurfing::ImGui_ThemeCyberpunk(); break;
 			case 14: ofxImGuiSurfing::ImGui_ThemeNord(); break;
@@ -115,6 +135,11 @@ namespace ofxImGuiSurfing
 			case 22: ofxImGuiSurfing::ImGui_ThemeDarcula(); break;
 			case 23: ofxImGuiSurfing::ImGui_ThemeXemu(); break;
 			case 24: ofxImGuiSurfing::ImGui_ThemeYave(); break;
+			case 25: ofxImGuiSurfing::ImGui_ThemeImStyle(); break;
+			case 26: ofxImGuiSurfing::ImGui_ThemeAiekickGreenBlue(); break;
+			case 27: ofxImGuiSurfing::ImGui_ThemeAiekickRedDark(); break;
+			case 28: ofxImGuiSurfing::ImGui_ThemeDraculaStyle(); break;
+			case 29: ofxImGuiSurfing::ImGui_ThemeMaksasj(); break;
 			}
 			return true;
 		}
@@ -124,22 +149,28 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void drawThemeSelector(ImGuiStyle* ref)
 	{
-
+		//TODO: not working?
 		// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
 		// (without a reference style pointer, we will use one compared locally as a reference)
 		ImGuiStyle& style = ImGui::GetStyle();
 		static ImGuiStyle ref_saved_style;
 
+		//TODO: not working?
 		// Default to using internal storage as reference
 		static bool init = true;
 		if (init && ref == NULL) ref_saved_style = style;
 		init = false;
 		if (ref == NULL) ref = &ref_saved_style;
 
+		// arrows and combo themes list
 		if (ofxImGuiSurfing::drawWidgetsThemeSelector("Colors##Selector")) ref_saved_style = style;
 
-		ImGui::ShowFontSelector("Fonts##Selector");
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
 
+		ImGui::ShowFontSelector("Fonts##Selector");
 	}
 
 	//----
@@ -238,4 +269,4 @@ namespace ofxImGuiSurfing
 	}
 	*/
 
-};//namespace
+}; // namespace

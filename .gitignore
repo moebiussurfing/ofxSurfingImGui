@@ -566,3 +566,4 @@ examples/3_Layout_TypesEngine/bin/imgui.ini
 examples/1_Widgets/bin/imgui.ini
 *.xcconfig
 *.plist
+Examples/09_ThemeEditor/enc_temp_folder/b2a934c1d5c411f191ab9e828e95b6/surfingThemes.h
