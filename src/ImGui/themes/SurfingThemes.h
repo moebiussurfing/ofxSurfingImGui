@@ -72,21 +72,18 @@ namespace ofxImGuiSurfing
 
 		if (bEnableLayout)
 		{
-			style.WindowPadding = ImVec2(11.10000038146973f, 6.199999809265137f);
-			style.WindowRounding = 12.10000038146973f;
+			style.WindowPadding = ImVec2(11.0f, 6.2f);
+			style.WindowRounding = 12.f;
 			style.WindowBorderSize = 1.0f;
-			style.WindowMinSize = ImVec2(20.0f, 4.400000095367432f);
+			style.WindowMinSize = ImVec2(20.0f, 4.40);
 			style.WindowTitleAlign = ImVec2(0.0f, 0.5f);
 			style.WindowMenuButtonPosition = ImGuiDir_Left;
 			style.ChildRounding = 0.0f;
 			style.ChildBorderSize = 1.0f;
 			style.PopupRounding = 0.0f;
 			style.PopupBorderSize = 1.0f;
-			style.FramePadding = ImVec2(20.0f, 20.0f);
-			style.FrameRounding = 19.39999961853027f;
+			style.FrameRounding = 19.34;
 			style.FrameBorderSize = 0.0f;
-			style.ItemSpacing = ImVec2(20.0f, 4.0f);
-			style.ItemInnerSpacing = ImVec2(20.0f, 4.0f);
 			style.CellPadding = ImVec2(4.0f, 2.0f);
 			style.IndentSpacing = 21.0f;
 			style.ColumnsMinSpacing = 8.0f;
@@ -98,8 +95,11 @@ namespace ofxImGuiSurfing
 			style.TabBorderSize = 1.0f;
 			style.TabMinWidthForCloseButton = 20.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
-			style.ButtonTextAlign = ImVec2(0.4000000059604645f, 0.5f);
-			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
+			//style.FramePadding = ImVec2(20.0f, 20.0f);
+			//style.ItemSpacing = ImVec2(20.0f, 4.0f);
+			//style.ItemInnerSpacing = ImVec2(20.0f, 4.0f);
+			//style.ButtonTextAlign = ImVec2(0.4000000059604645f, 0.5f);
+			//style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
 		}
 
 		if (bEnableColors)
@@ -2206,9 +2206,10 @@ namespace ofxImGuiSurfing
 		if (bEnableColors)
 		{
 			ImVec4* colors = ImGui::GetStyle().Colors;
+
 			colors[ImGuiCol_Text] = ImVec4(0.75f, 0.75f, 0.75f, 1.00f);
 			colors[ImGuiCol_TextDisabled] = ImVec4(0.35f, 0.35f, 0.35f, 1.00f);
-			colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.94f);
+			colors[ImGuiCol_WindowBg] = ImVec4(33 / 255.f, 33 / 255.f, 33 / 255.f, 0.94f);
 			colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 			colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
 			colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);

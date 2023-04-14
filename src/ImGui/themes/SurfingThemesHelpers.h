@@ -63,12 +63,17 @@ namespace ofxImGuiSurfing
 		bool b2 = false;
 
 		ImVec2 sz1(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight());
-		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x, 1.5 * ImGui::GetFrameHeight());
+		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 2.f * ImGui::GetFrameHeight());
+
+		//--
+
+		bool bL = ImGui::IsKeyPressed(ImGuiKey_LeftArrow);
+		bool bR = ImGui::IsKeyPressed(ImGuiKey_RightArrow);
 
 		// Browse
 
 		ImGui::PushButtonRepeat(true);
-		if (ImGui::Button("<", sz2)) {
+		if (ImGui::Button("<", sz2) || bL) {
 			i--;
 			i = ofClamp(i, 0, values.size() - 1);
 			style_idx = i;
@@ -76,7 +81,7 @@ namespace ofxImGuiSurfing
 			b1 = true;
 		}
 		ImGui::SameLine();
-		if (ImGui::Button(">", sz2)) {
+		if (ImGui::Button(">", sz2) || bR) {
 			i++;
 			i = ofClamp(i, 0, values.size() - 1);
 			style_idx = i;
@@ -84,11 +89,14 @@ namespace ofxImGuiSurfing
 			b1 = true;
 		}
 		ImGui::PopButtonRepeat();
+		ImGui::Spacing();
+
+		//--
 
 		// Combo
 
 		string name = "Theme";
-		float w = ImGui::CalcTextSize(name.c_str()).x + /*ImGui::GetStyle().WindowPadding.x +*/ ImGui::GetStyle().ItemSpacing.x+ ImGui::GetStyle().ItemInnerSpacing.x;
+		float w = ImGui::CalcTextSize(name.c_str()).x + /*ImGui::GetStyle().WindowPadding.x +*/ ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().ItemInnerSpacing.x;
 
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w);
 		b2 = (ofxImGuiSurfing::VectorCombo(name.c_str(), &i, values, 1));
@@ -142,21 +150,25 @@ namespace ofxImGuiSurfing
 	inline void drawThemeSelector(ImGuiStyle* ref)
 	{
 		//TODO: not working?
-		 
 		// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
 		// (without a reference style pointer, we will use one compared locally as a reference)
 		ImGuiStyle& style = ImGui::GetStyle();
 		static ImGuiStyle ref_saved_style;
 
+		//TODO: not working?
 		// Default to using internal storage as reference
 		static bool init = true;
 		if (init && ref == NULL) ref_saved_style = style;
 		init = false;
 		if (ref == NULL) ref = &ref_saved_style;
 
+		// arrows and combo themes list
 		if (ofxImGuiSurfing::drawWidgetsThemeSelector("Colors##Selector")) ref_saved_style = style;
-		
+
+		ImGui::Spacing();
 		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
 
 		ImGui::ShowFontSelector("Fonts##Selector");
 	}
