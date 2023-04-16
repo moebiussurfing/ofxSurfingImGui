@@ -1,9 +1,32 @@
 #pragma once
 
+/*
+
+	This class populates buttons for a list of files on a directory.
+	An index param will be acting as the file picker.
+	Can be used to load files for ini themes or whatever.
+
+	EXAMPLE
+
+	.h
+	ofxSurfingGui ui;
+	SurfingThemeEditor e;
+
+	.cpp
+	e.setPathGlobal(ui.getPath());
+	e.setUiPtr(&ui);
+	e.setup();
+
+*/
+
+//--
+
 #include "ofMain.h"
 
 #include "surfingHelpers.h"
 #include "ofHelpers.h"
+
+	//--
 
 class SurfingFiles
 {
@@ -58,6 +81,12 @@ private:
 	bool bReady = false;
 
 public:
+	void setPathDirectory(string path)
+	{
+		pathFiles = ofToDataPath(path);
+		refreshFiles();
+	};
+
 	string getName(int i) const {
 		if (dir.size() == 0) return string("");
 		i = ofClamp(i, index.getMin(), index.getMax());
@@ -99,9 +128,40 @@ public:
 		return ss;
 	};
 
-	void setPathDirectory(string path)
-	{
-		pathFiles = ofToDataPath(path);
+	void deleteThemeFile() {
+		int i = index;
+		string p = dir[i].getAbsolutePath();
+		ofLogNotice("ofxSurfingImGui:SurfingFiles") << "Delete file " << p;
+
+		ofFile f(p);
+		f.remove();
+
 		refreshFiles();
 	};
+
+	int getIndexForName(string name) const {
+		int _index = -1;
+		for (size_t i = 0; i < dir.size(); i++)
+		{
+			string n = dir[i].getBaseName();
+			if (n == name) _index = i;
+		}
+		return _index;
+	};
+
+	/*
+	void copyThemeFile() {
+		int i = index;
+		string p = dir[i].getAbsolutePath();
+		string p2 = dir[i].getBaseName() + ofToString("_.") + ext;
+		string pCopy = ofToDataPath(p2);
+		//string pCopy = ofToDataPath(dir[i].getBaseName() + "_" + ext);
+		ofLogNotice("ofxSurfingImGui:SurfingFiles") << "Copy file to " << pCopy;
+
+		ofFile f(p);
+		f.copyTo(pCopy);
+
+		refreshFiles();
+	};
+	*/
 };
