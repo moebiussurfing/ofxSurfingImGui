@@ -28,6 +28,19 @@
 	to be rendered with different styles:
 	https://github.com/Daandelange/ofxImGui/issues/6#issuecomment-832174921
 
+
+	// imgui logarithmic
+	//--------------------------------------------------------------
+	bool ofxImGui::AddSlider(ofParameter<float>& parameter, const char* format, bool logarithmic)
+	{
+		auto tmpRef = parameter.get();
+		if (ImGui::SliderFloat(GetUniqueName(parameter), (float*)&tmpRef, parameter.getMin(), parameter.getMax(), format, logarithmic? ImGuiSliderFlags_Logarithmic : ImGuiSliderFlags_None))
+		{
+			parameter.set(tmpRef);
+			return true;
+		}
+		return false;
+	}
 */
 
 

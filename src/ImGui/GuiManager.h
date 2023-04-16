@@ -818,13 +818,13 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddLinkUrlButton(string label, string url, bool bBlink = false)
+	void AddLinkUrlButton(std::string label, std::string url, bool bBlink = false)
 	{
 		ofxImGuiSurfing::AddLinkUrlButton(label.c_str(), url.c_str(), 1.0f, bBlink);
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelLinkURL(string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT, bool bBlink = true)
+	void AddLabelLinkURL(std::string label, std::string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT, bool bBlink = true)
 	{
 		switch (fontType)
 		{
@@ -903,7 +903,7 @@ public:
 	//--------------------------------------------------------------
 	void AddTooltip(ofAbstractParameter& p, bool bEnabled = true)
 	{
-		string s = p.getName();
+		std::string s = p.getName();
 		s += "\n";
 
 		//TODO: add other types
@@ -1203,9 +1203,9 @@ public:
 	// Tree / Folders Helpers
 
 	//TODO: could improve by doing open state handled by imgui.ini. Now is forced.
-	//bool BeginTree(string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	//bool BeginTree(std::string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	//--------------------------------------------------------------
-	bool BeginTree(string label)
+	bool BeginTree(std::string label)
 	{
 		bool bIndented = true;
 		bool b = (ofxImGuiSurfing::BeginTree(label));
@@ -1217,7 +1217,7 @@ public:
 		return b;
 	}
 	//--------------------------------------------------------------
-	bool BeginTree(string label, bool open /*= false*/, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	bool BeginTree(std::string label, bool open /*= false*/, bool bIndented = true, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
 		if (b) {
@@ -1239,7 +1239,7 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, string label = "##child", bool border = true, ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None)
+	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, std::string label = "##child", bool border = true, ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None)
 	{
 		return ImGui::BeginChild(label.c_str(), size_arg, border, extra_flags);
 	}
@@ -1247,11 +1247,11 @@ public:
 	//TODO:
 	/*
 	//--------------------------------------------------------------
-	bool BeginChildEx(string label)
+	bool BeginChildEx(std::string label)
 	{
 		this->refreshLayout();
 
-		string t = "##CHILD" + label;
+		std::string t = "##CHILD" + label;
 		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
 		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -1276,7 +1276,7 @@ public:
 	// Columns
 
 	//--------------------------------------------------------------
-	void BeginColumns(int amount, string labelID, bool border = false)
+	void BeginColumns(int amount, std::string labelID, bool border = false)
 	{
 		ImGui::Columns(amount, labelID.c_str(), border);
 	}
@@ -1296,7 +1296,7 @@ public:
 	// Menu
 
 	//--------------------------------------------------------------
-	bool BeginMenu(const string label, bool enabled = true)
+	bool BeginMenu(const std::string label, bool enabled = true)
 	{
 		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
 		if (b) this->refreshLayout();
@@ -1309,7 +1309,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItem(const string label, ofParameter<bool>& b, bool enabled = true)
+	bool MenuItem(const std::string label, ofParameter<bool>& b, bool enabled = true)
 	{
 		bool selected = b.get();
 		const char* shortcut = NULL;
@@ -1320,7 +1320,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItem(ofParameter<bool>& b, bool enabled = true)
 	{
-		string label = b.getName();
+		std::string label = b.getName();
 		bool selected = b.get();
 		const char* shortcut = NULL;
 
@@ -1329,7 +1329,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
 	{
-		string label = pb.getName();
+		std::string label = pb.getName();
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1338,7 +1338,7 @@ public:
 		return b;
 	}
 	//--------------------------------------------------------------
-	bool MenuItemButton(const string label)
+	bool MenuItemButton(const std::string label)
 	{
 		const char* shortcut = NULL;
 		bool selected = false;
@@ -1514,18 +1514,18 @@ private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
 	bool bIgnoreNextPopFont = false;
-	vector<string> namesCustomFonts;
+	vector<std::string> namesCustomFonts;
 
 public:
 
 	vector<ImFont*> getFontsPtr() { return customFonts; }//Warning: setup() must be called before!
-	vector<string> getFontsNames() { return namesCustomFonts; }//Warning: setup() must be called before!
+	vector<std::string> getFontsNames() { return namesCustomFonts; }//Warning: setup() must be called before!
 
 	int getNumFonts() { return customFonts.size(); }
 
 	//--------------------------------------------------------------
-	string getFontName(int index) {
-		string s = "UNKNOWN";
+	std::string getFontName(int index) {
+		std::string s = "UNKNOWN";
 
 		if (index < customFonts.size())
 		{
@@ -1843,21 +1843,21 @@ public:
 		log.AddTag(tag);
 	};
 	//--------------------------------------------------------------
-	void AddLogTag(string name, ofColor color)
+	void AddLogTag(std::string name, ofColor color)
 	{
 		this->AddLogTag(SurfingLog::tagData{ name,color });
 	};
 	//--------------------------------------------------------------
 	void AddLogTag(ofColor color)//not using any tag. to remove left spacing
 	{
-		string name = "";
+		std::string name = "";
 		AddLogTag(name, color);
 	};
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
 	//--------------------------------------------------------------
-	void AddToLog(string text, string nameTag)
+	void AddToLog(std::string text, std::string nameTag)
 	{
 		// Log
 		log.Add(text, nameTag);
@@ -1873,18 +1873,18 @@ public:
 	// Must exist or been added previously.
 	// if there's no passed tag we will use no tag and default text color.
 	//--------------------------------------------------------------
-	void AddToLog(string text, int tag/* = -1*/)
+	void AddToLog(std::string text, int tag/* = -1*/)
 	{
 		log.Add(text, tag);
 	};
 	//--------------------------------------------------------------
-	void AddToLog(string text)//TODO:adding empty tag...
+	void AddToLog(std::string text)//TODO:adding empty tag...
 	{
 		//log.Add(text, "");
 		log.Add(text, OF_LOG_NOTICE);
 	};
 	//--------------------------------------------------------------
-	void AddToLog(string text, ofLogLevel logLevel)
+	void AddToLog(std::string text, ofLogLevel logLevel)
 	{
 		log.Add(text, logLevel);
 	};
@@ -1910,23 +1910,23 @@ public:
 		notifier.doClear();
 	};
 	//--------------------------------------------------------------
-	void AddToNotifier(string text, string nameTag)
+	void AddToNotifier(std::string text, std::string nameTag)
 	{
 		notifier.Add(text, nameTag);
 	};
 	//--------------------------------------------------------------
-	void AddToNotifier(string text)//TODO:adding empty tag...
+	void AddToNotifier(std::string text)//TODO:adding empty tag...
 	{
 		notifier.Add(text, "");
 	};
 	//--------------------------------------------------------------
-	void AddToNotifier(string text, ofLogLevel logLevel)
+	void AddToNotifier(std::string text, ofLogLevel logLevel)
 	{
 		notifier.Add(text, logLevel);
 	};
 	//TODO: add tag system..
 	////--------------------------------------------------------------
-	//void AddToNotifier(string text, int tag/* = -1*/)
+	//void AddToNotifier(std::string text, int tag/* = -1*/)
 	//{
 	//	notifier.Add(text, tag);
 	//};
@@ -1986,7 +1986,7 @@ public:
 
 		if (!bNoLabel) // label
 		{
-			string n = b.getName();
+			std::string n = b.getName();
 			auto sz = ImGui::CalcTextSize(n.c_str());
 			w = w + sz.x;
 			w += this->getWidgetsSpacingX();
@@ -2570,9 +2570,13 @@ private:
 	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
 
-	//----
-
 public:
+	//--------------------------------------------------------------
+	std::string getPath() const {
+		return path_Global;
+	}
+
+	//----
 
 	// Some tweaked settings modes
 
@@ -2738,7 +2742,7 @@ public:
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
 	// to get the index of an special window passing the toggle
 
-	int getWindowSpecialIndexForName(string name);
+	int getWindowSpecialIndexForName(std::string name);
 	// to be used if you forgot or don't know the index
 
 	// Check if that param toggle is previously added as an special window
@@ -3058,7 +3062,7 @@ public:
 	// layoutType = 3 : top up //TODO:
 	//TODO: add vec2 offset...
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
+	void setNextWindowAfterWindowNamed(std::string nameAnchorWindow /*= "-1"*/, int layoutType = 0, ImGuiCond cond = ImGuiCond_Always)
 	{
 		//// Default for unnamed is queued after last window on screen..
 		//if (nameAnchorWindow == "-1") {
@@ -3134,7 +3138,7 @@ public:
 
 	// Get the name of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
-	string getWindowSpecialLast() const {
+	std::string getWindowSpecialLast() const {
 		return windowsOrganizer.getWindowSpecialLast();
 	}
 
@@ -3745,7 +3749,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setHelpInfoApp(string text) {
+	void setHelpInfoApp(std::string text) {
 		if (!bUseHelpInfoApp) setEnableHelpInfoApp();//force
 		helpInfoApp = text;
 		helpApp.setText(helpInfoApp);
@@ -3753,7 +3757,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setHelpInfoInternal(string text) {
+	void setHelpInfoInternal(std::string text) {
 		helpInfo = text;
 		helpInternal.setText(helpInfo);
 		bUseHelpInfoInternal = true;
@@ -3775,18 +3779,18 @@ public:
 	// Button and toggle to be used faster, without param.
 
 	/*
-	bool AddButton(string label, ImVec2 sz) {
+	bool AddButton(std::string label, ImVec2 sz) {
 		return ofxImGuiSurfing::AddButton(label, sz);
 	}
-	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return ofxImGuiSurfing::AddButton(label, type, amtPerRow, bSameLine, spacing);
 	}
-	bool AddToggle(string label, bool& bState, ImVec2 sz)
+	bool AddToggle(std::string label, bool& bState, ImVec2 sz)
 	{
 		return ofxImGuiSurfing::AddToggle(label, bState, sz);
 	}
-	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddToggle(std::string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return ofxImGuiSurfing::AddToggle(label, bState, type, amtPerRow, bSameLine, spacing);
 	}
@@ -3799,7 +3803,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
-	inline bool AddButton(string label, ImVec2 sz)
+	inline bool AddButton(std::string label, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -3812,7 +3816,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		//fixes
 
@@ -3963,7 +3967,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 	// A toggle passing a name and a boolean to show and get the boolean state.
 	//--------------------------------------------------------------
-	inline bool AddToggle(string label, bool& bState, ImVec2 sz)
+	inline bool AddToggle(std::string label, bool& bState, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -3977,7 +3981,7 @@ public:
 	}
 
 	////--------------------------------------------------------------
-	//bool AddToggle(string label, bool& bState)
+	//bool AddToggle(std::string label, bool& bState)
 	//{
 	//	int w = ofxImGuiSurfing::getWidgetsWidth(1);
 	//	int h = ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -3990,7 +3994,7 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddToggle(std::string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
 
@@ -4126,7 +4130,7 @@ public:
 	template<typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
 	{
-		string name = p.getName();
+		std::string name = p.getName();
 
 		bool bReturn = false;
 

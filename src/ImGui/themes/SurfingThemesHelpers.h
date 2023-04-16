@@ -16,75 +16,112 @@ using namespace ImGui;
 
 namespace ofxImGuiSurfing
 {
+	static int indexTheme = -1;
+	static int amountThemes = 0;
+	static bool bUpdate = false;
+
 	//----
+
+	//inline void resetTheme() {
+	//	ImGui::GetStyle() = ImGuiStyle();
+	//};
+
+	static void setIndexTheme(int i) {
+		indexTheme = i;
+		bUpdate = true;
+	}
 
 	//--------------------------------------------------------------
 	inline bool drawWidgetsThemeSelector(const char* label)
 	{
-		static int style_idx = -1;
-		int i = style_idx;
+		int i = indexTheme;
 
 		//TODO: should be static..
-		std::vector<std::string> values;
+		static std::vector<std::string> names;
 
-		values.clear();
-		values.push_back("Dark");
-		values.push_back("Light");
-		values.push_back("Classic");
-		values.push_back("moebiusSurfingV2");
-		values.push_back("moebiusSurfing");
-		values.push_back("moebiusSurfing Blue");
-		values.push_back("Grey");
-		values.push_back("Sequentity");
-		values.push_back("Olekristensen");
-		values.push_back("FlatDryWineGreen");
-		values.push_back("T3");
-		values.push_back("ModernDark");
-		values.push_back("Blender");
-		values.push_back("Cyberpunk");
-		values.push_back("Nord");
-		values.push_back("Unreal");
-		values.push_back("VisualStudioRounded");
-		values.push_back("VisualStudio");
-		values.push_back("Photoshop");
-		values.push_back("MaterialFlat");
-		values.push_back("Enemymouse");
-		values.push_back("DeepDark");
-		values.push_back("Darcula");
-		values.push_back("Xemu");
-		values.push_back("Yave");
-		values.push_back("ImStyle");
-		values.push_back("AiekickGreenBlue");
-		values.push_back("AiekickRedDark");
-		values.push_back("DraculaStyle");
-		values.push_back("Maksasj");
+		static bool bDone = 0;
+		if (!bDone) {
+			bDone = 1;
+			names.clear();
+			names.push_back("Dark");
+			names.push_back("Light");
+			names.push_back("Classic");
+			names.push_back("moebiusSurfingV2");
+			names.push_back("moebiusSurfing");
+			names.push_back("moebiusSurfing Blue");
+			names.push_back("Grey");
+			names.push_back("Sequentity");
+			names.push_back("Olekristensen");
+			names.push_back("FlatDryWineGreen");
+			names.push_back("T3");
+			names.push_back("ModernDark");
+			names.push_back("Blender");
+			names.push_back("Cyberpunk");
+			names.push_back("Nord");
+			names.push_back("Unreal");
+			names.push_back("VisualStudioRounded");
+			names.push_back("VisualStudio");
+			names.push_back("Photoshop");
+			names.push_back("MaterialFlat");
+			names.push_back("Enemymouse");
+			names.push_back("DeepDark");
+			names.push_back("Darcula");
+			names.push_back("Xemu");
+			names.push_back("Yave");
+			names.push_back("ImStyle");
+			names.push_back("AiekickGreenBlue");
+			names.push_back("AiekickRedDark");
+			names.push_back("DraculaStyle");
+			names.push_back("Maksasj");
+			names.push_back("SimongeilfusCinder");
+			names.push_back("ThemeAdobeSpectrum");
+
+			amountThemes = names.size();
+		}
 
 		bool b1 = false;
 		bool b2 = false;
 
 		ImVec2 sz1(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight());
-		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 2.f * ImGui::GetFrameHeight());
+		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x / 2, 1.5f * ImGui::GetFrameHeight());
 
 		//--
 
+		// Keys
+
 		bool bL = ImGui::IsKeyPressed(ImGuiKey_LeftArrow);
 		bool bR = ImGui::IsKeyPressed(ImGuiKey_RightArrow);
+
+		//--
+
+		// Combo
+
+		b2 = (ofxImGuiSurfing::VectorCombo(&i, names));
+
+		//string name = "Hardcoded Themes";
+		//float w = ImGui::CalcTextSize(name.c_str()).x + /*ImGui::GetStyle().WindowPadding.x +*/ ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().ItemInnerSpacing.x;
+
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w);
+		//b2 = (ofxImGuiSurfing::VectorCombo(name.c_str(), &i, names, 1));
+		//ImGui::PopItemWidth();
+
+		//--
 
 		// Browse
 
 		ImGui::PushButtonRepeat(true);
 		if (ImGui::Button("<", sz2) || bL) {
 			i--;
-			i = ofClamp(i, 0, values.size() - 1);
-			style_idx = i;
+			i = ofClamp(i, 0, names.size() - 1);
+			indexTheme = i;
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
 		ImGui::SameLine();
 		if (ImGui::Button(">", sz2) || bR) {
 			i++;
-			i = ofClamp(i, 0, values.size() - 1);
-			style_idx = i;
+			i = ofClamp(i, 0, names.size() - 1);
+			indexTheme = i;
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
@@ -93,26 +130,23 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// Combo
-
-		string name = "Theme";
-		float w = ImGui::CalcTextSize(name.c_str()).x + /*ImGui::GetStyle().WindowPadding.x +*/ ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().ItemInnerSpacing.x;
-
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w);
-		b2 = (ofxImGuiSurfing::VectorCombo(name.c_str(), &i, values, 1));
-		ImGui::PopItemWidth();
-
-		if (b1 || b2)
+		if (b1 || b2 || bUpdate)
 		{
-			i = ofClamp(i, 0, values.size() - 1);//avoid crashes
-			style_idx = i;
+			//TODO; workaround
+			if (bUpdate) {
+				i = indexTheme;
+				bUpdate = false;
+			}
+
+			i = ofClamp(i, 0, names.size() - 1);//avoid crashes
+			indexTheme = i;
 			ofLogNotice("ofxSurfingImGui") << "Combo: " << i;
 
-			switch (style_idx)
+			switch (indexTheme)
 			{
-			case 0: ImGui::StyleColorsDark(); break;
-			case 1: ImGui::StyleColorsLight(); break;
-			case 2: ImGui::StyleColorsClassic(); break;
+			case 0: resetTheme(); ImGui::StyleColorsDark(); break;
+			case 1: resetTheme(); ImGui::StyleColorsLight(); break;
+			case 2: resetTheme(); ImGui::StyleColorsClassic(); break;
 			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); break;
 			case 4: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
 			case 5: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue(); break;
@@ -140,6 +174,8 @@ namespace ofxImGuiSurfing
 			case 27: ofxImGuiSurfing::ImGui_ThemeAiekickRedDark(); break;
 			case 28: ofxImGuiSurfing::ImGui_ThemeDraculaStyle(); break;
 			case 29: ofxImGuiSurfing::ImGui_ThemeMaksasj(); break;
+			case 30: ofxImGuiSurfing::ImGui_ThemeSimongeilfusCinder(); break;
+			case 31: ofxImGuiSurfing::ImGui_ThemeAdobeSpectrum(); break;
 			}
 			return true;
 		}
@@ -164,6 +200,17 @@ namespace ofxImGuiSurfing
 
 		// arrows and combo themes list
 		if (ofxImGuiSurfing::drawWidgetsThemeSelector("Colors##Selector")) ref_saved_style = style;
+
+		if (ImGui::Button("Reload##BROWSER")) {
+			//reload current
+			bUpdate = true;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Random")) {
+			//reload a random index
+			indexTheme = ofRandom(0, amountThemes);
+			bUpdate = true;
+		}
 
 		ImGui::Spacing();
 		ImGui::Separator();

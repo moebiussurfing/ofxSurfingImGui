@@ -49,6 +49,18 @@ namespace ofxImGuiSurfing
 		return b;
 	};
 
+	//--------------------------------------------------------------
+	static bool VectorCombo(int* currIndex, std::vector<std::string>& values)
+	{
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+
+		bool b = ImGui::Combo("##COMBO", currIndex, vector_getter, static_cast<void*>(&values), values.size());
+
+		ImGui::PopItemWidth();
+
+		return b;
+	};
+
 	//----
 
 	// More Widgets
@@ -438,6 +450,34 @@ namespace ofxImGuiSurfing
 		return iReturn;
 	}
 
+	// Dual arrows for common use to browse an index to be inside directly into the int parameter
+	//--------------------------------------------------------------
+	inline void AddIndexArrows(ofParameter<int> paramIndex, ImVec2 sz = ImVec2(-1, -1), bool cycled = false) {
+		if (sz.x == -1 || sz.y == -1) {
+			sz = ImVec2(ofxImGuiSurfing::getWidgetsWidth(2), ofxImGuiSurfing::getWidgetsHeightUnit());
+		}
+
+		if (AddButton("<", sz)) {
+			if (cycled) {
+				if (paramIndex == paramIndex.getMin()) paramIndex = paramIndex.getMax();
+				paramIndex--;
+			}
+			else {
+				if (paramIndex > paramIndex.getMin()) paramIndex--;
+			}
+		};
+		SameLine();
+		if (AddButton(">", sz)) {
+			if (cycled) {
+				if (paramIndex == paramIndex.getMax()) paramIndex = paramIndex.getMin();
+				paramIndex++;
+			}
+			else {
+				if (paramIndex < paramIndex.getMax()) paramIndex++;
+			}
+		};
+	}
+
 	//--
 
 	// Dual arrows for common use to browse an index to be inside directly into the int parameter
@@ -475,13 +515,12 @@ namespace ofxImGuiSurfing
 
 	// Lists and drop down enum / lists
 
-
 	/*
 	//TODO:
 	inline bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false);
 
 	//TODO:
-	// Combo list. 
+	// Combo list.
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------
@@ -508,6 +547,8 @@ namespace ofxImGuiSurfing
 	};
 	*/
 
+	//--
+	
 	//--------------------------------------------------------------
 	inline bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 	{

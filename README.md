@@ -61,9 +61,10 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 - **Image Inspector**:
     - With pixel color picker.
 - **Themes Editor**:  ( WIP )
-    - With **20 bundled themes**.
-    - File serializers.
-    - **Demo Window** and **Tester Widgets**.
+    - **20+ bundled themes** compilation. 
+    - Hardcoded and `ini` files.
+    - File serializers, A-B compare, sizes and/or colors.
+    - **Manager**, **Demo Window** and **Tester Widgets**.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  

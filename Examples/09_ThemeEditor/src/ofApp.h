@@ -10,9 +10,9 @@ class ofApp : public ofBaseApp
 public:
 	void setup();
 	void draw();
-	void exit();
-
+	void keyPressed(int key);
+	
 	ofxSurfingGui ui;
-	ofParameter<bool> bGui;
+
 	SurfingThemeEditor e;
 };
