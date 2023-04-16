@@ -3608,7 +3608,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice("ofxSurfingImGui") << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
 
 	// Modifiers
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
@@ -3786,7 +3786,7 @@ void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << (char)key << " [" << key << "]";
+	ofLogNotice("ofxSurfingImGui") << "keyReleased: " << (char)key;
 
 	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
 	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);

@@ -13,6 +13,6 @@ public:
 	void exit();
 
 	ofxSurfingGui ui;
-	ofParameter<bool> bGui;
+
 	SurfingThemeEditor e;
 };

@@ -13,21 +13,20 @@
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
-#include "imconfig.h"
-
 #include "surfingHelpers.h"
-//#include "surfingTimers.h"
 
-#include "GuiConstants.h"
+#include "ofHelpers.h"
+
+//#include "GuiConstants.h"
 #include "imgui_plot.h"
-
-#include "ofHelpers.h" // For AddImage()
-
 #include "Sliders.h"
 // to enable sliders for the big vertical floating slider. 
+
 //#include "WidgetsManager.h"//TODO: to enable mouse..
 
 //----
+
+// Taken code and/or inspiration from:
 
 // Some interesting widgets candidates 
 // to be added to the add-on.
@@ -392,25 +391,23 @@ namespace ofxImGuiSurfing
 	// buttons selector for files on a folder:
 	// creates a button for each file showing each file names
 	//--------------------------------------------------------------
-	static bool AddFilesPicker(const std::string& path, std::string& selected, ofParameter<int>& _index, const std::vector<std::string>& ext = {}) {
+	static bool AddFilesPicker(const std::string& path, std::string& _selected, ofParameter<int>& _index, const std::vector<std::string>& ext = {}) {
 		bool ret = false;
 
 		float w = ImGui::GetContentRegionAvail().x;
 		float h = ImGui::GetFontSize() * 2;
 
-		int i = -1;
+		static int i = -1;
 
 		if (ofFile(path).isDirectory()) {
 
 			ImGuiTreeNodeFlags flagst;
 			flagst = ImGuiTreeNodeFlags_None;
-			//flagst |= ImGuiTreeNodeFlags_DefaultOpen;
-			//flagst |= ImGuiTreeNodeFlags_Framed;
+			flagst |= ImGuiTreeNodeFlags_DefaultOpen;
+			flagst |= ImGuiTreeNodeFlags_Framed;
 
 			string _labelf = "Files";
-			//string _labelf = ofFilePath::getBaseName(path).c_str();
 
-			//if (TreeNode(ofFilePath::getBaseName(path).c_str()))
 			if (ImGui::TreeNodeEx(_labelf.c_str(), flagst))
 			{
 				ofDirectory dir;
@@ -420,18 +417,26 @@ namespace ofxImGuiSurfing
 						dir.allowExt(e);
 					}
 				}
-				dir.listDir(path);
 
-				//int i = 0;
-				//for (auto &f : dir) {
-				//	string _n = ofToString(i);
-				//	ret |= AddFilesPicker(_n.c_str(), selected, ext);
-				//	i++;
-				//}
+				static std::size_t n = 0;
+				static std::size_t n_ = -1;
+				n = dir.listDir(path);
+				if (n != n_) {
+					n_ = n;
+					_index.setMin(0);
+					_index.setMax(n - 1);
+				}
 
 				for (auto& f : dir)
 				{
-					ret |= AddFilesPicker(f.path(), selected, _index, ext);
+					i++;
+					bool b = (i == _index.get());
+					ofxImGuiSurfing::BeginBlinkFrame(b);
+
+					bool bp = AddFilesPicker(f.path(), _selected, _index, ext);
+					ret |= bp;
+
+					ofxImGuiSurfing::EndBlinkFrame(b);
 				}
 
 				ImGui::TreePop();
@@ -439,14 +444,14 @@ namespace ofxImGuiSurfing
 		}
 		else // a file
 		{
-			i++;
+
 			if (ImGui::Button(ofFilePath::getFileName(path).c_str(), ImVec2(w, h))) {
 
-				selected = path;
+				_selected = path;
 				ret = true;
 
-				////TODO: index not reflected
-				//if (i != -1) _index = i;
+				//TODO: index not reflected
+				if (i != -1) _index = ofClamp(i, _index.getMin(), _index.getMax());
 			}
 		}
 		return ret;
@@ -1061,7 +1066,7 @@ namespace ofxImGuiSurfing
 		//        GetColorU32(ImGuiCol_Text), label);
 		//}
 
-        ImGui::SetCursorScreenPos(rect_end);
+		ImGui::SetCursorScreenPos(rect_end);
 
 	};
 	//--------------------------------------------------------------
@@ -1823,7 +1828,7 @@ public:
 		ImGui::Text("%s", text.c_str());
 		center = ImRotationCenter();
 		//ImRotateEnd(0.0005f * ImGui::GetTickCount(), center);
-        ImRotateEnd(0.0005f * ofGetLastFrameTime(), center);
+		ImRotateEnd(0.0005f * ofGetLastFrameTime(), center);
 
 		// icon 
 		//ImRotateStart(); ImGui::SameLine();

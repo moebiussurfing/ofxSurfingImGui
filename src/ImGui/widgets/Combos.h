@@ -49,6 +49,18 @@ namespace ofxImGuiSurfing
 		return b;
 	};
 
+	//--------------------------------------------------------------
+	static bool VectorCombo(int* currIndex, std::vector<std::string>& values)
+	{
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+
+		bool b = ImGui::Combo("##COMBO", currIndex, vector_getter, static_cast<void*>(&values), values.size());
+		
+		ImGui::PopItemWidth();
+
+		return b;
+	};
+
 	//----
 
 	// More Widgets
@@ -481,7 +493,7 @@ namespace ofxImGuiSurfing
 	inline bool VectorCombo2(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool braw = false);
 
 	//TODO:
-	// Combo list. 
+	// Combo list.
 	// Selector index directly with an int ofParam
 	// without name label
 	//--------------------------------------------------------------

@@ -4,14 +4,15 @@
 	WIP
 
 	This is a helper to:
-	- Edit/test your own themes.
+	- Edit/test themes.
 	- Save themes to allow loading on your apps.
+	TODO:
 	- Loading font files to check and tweak styles.
 	- Add fonts tester.
 
-
 	TODO
 
+	share path with ui
 	store in data/files and list files and make a picker.
 		currently saving into bin/imgui_styles.ini
 	add make new ImGui_ThemeMoebiusSurfingV3
@@ -22,9 +23,14 @@
 		but darker or lighter. add helpers.
 		ex: mark what color must be linked.
 			each one has his own alpha.
-	add a full reset theme before load.
+		//https://github.com/ocornut/imgui/issues/438
+		SetupStyleFromHue() / ofxImGui::DefaultTheme
 	undo history or snapshot points
 		using ofParams and an addon for presets.
+
+	add list files in a path / open dialog
+		pick theme files on runtime
+		ex: day/night
 
 */
 
@@ -42,12 +48,24 @@
 #include "imgui_styles.h"
 
 #include "surfingThemesHelpers.h"
+#include "surfingFiles.h"
+
+
+/*
+	// We can force load one of the bundled Themes:
+	// Must be called after setup()
+	// to overwrite the default loaded theme:
+	//ImGui::StyleColorsLight();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
+*/
 
 //--
 
 class SurfingThemeEditor
 {
 public:
+	ofParameterGroup params;
+
 	ofParameter<bool> bGui;
 	ofParameter<bool> bGui_StyleEditor;
 	ofParameter<bool> bGui_ThemeManager;
@@ -55,20 +73,39 @@ public:
 	ofParameter<bool> bGui_DemoWidgets;
 	ofParameter<bool> bEnableColors;
 	ofParameter<bool> bEnableLayout;
-
-	ofParameterGroup params;
+	ofParameter<bool> bClickerCombo;
+	ofParameter<string> nameTheme;
+	ofParameter<int> indexTheme;
 
 	SurfingThemeEditor()
 	{
 		ofAddListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
+		ofAddListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
 
-		bGui.set("Surfing Theme Editor", true);
+		//setup();
+	};
+
+	~SurfingThemeEditor()
+	{
+		ofRemoveListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
+		ofRemoveListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
+		ofRemoveListener(params.parameterChangedE(), this, &SurfingThemeEditor::Changed);
+
+		//exit();
+	};
+
+	void setup()
+	{
+		bGui.set("Theme Editor", true);
 		bGui_StyleEditor.set("Style Editor", false);
 		bGui_ThemeManager.set("Theme Manager", false);
 		bGui_DemoWidgets.set("Demo Widgets", false);
 		bGui_DemoImGui.set("Dear ImGui Demo", false);
 		bEnableColors.set("Colors", true);
 		bEnableLayout.set("Layout", true);
+		bClickerCombo.set("ClickerCombo", true);
+		nameTheme.set("ThemeName", "");
+		indexTheme.set("Theme", 0, 0, 0);
 
 		params.setName("SurfingThemeEditor");
 		params.add(bGui);
@@ -78,17 +115,106 @@ public:
 		params.add(bGui_DemoImGui);
 		params.add(bEnableColors);
 		params.add(bEnableLayout);
+		params.add(nameTheme);
+		params.add(indexTheme);
+		params.add(bClickerCombo);
+
+		//ofxImGuiSurfing::setIndexTheme(5);
+		////ofxImGuiSurfing::indexTheme = 5;
+
+		setPathGlobal(pathGlobal);
+
+		ofxSurfingHelpers::loadGroup(params, pathGlobal + params.getName() + ".json");
+
+		pathThemes = pathGlobal + subPathThemes;
+		ofxSurfingHelpers::CheckFolder(pathThemes);
+
+		pathCompares = pathThemes + subPathCompare;
+		ofxSurfingHelpers::CheckFolder(pathCompares);
+
+		filename = nameTheme.get();
+		pathTheme = pathThemes + filename;
+
+		files.setPathDirectory(pathThemes);
+
+		//files.index.makeReferenceTo(indexTheme);
+		indexTheme.makeReferenceTo(files.index);
+
+		ofAddListener(params.parameterChangedE(), this, &SurfingThemeEditor::Changed);
 	};
 
-	~SurfingThemeEditor()
-	{
-		ofRemoveListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
+public:
+	void setPathGlobal(string path) {//call before setup
+		pathGlobal = path;
+		ofxSurfingHelpers::CheckFolder(pathGlobal);
+
+		pathThemes = pathGlobal + subPathThemes;
+		pathCompares = pathThemes + subPathCompare;
+
+		ofxSurfingHelpers::CheckFolder(pathThemes);
+		ofxSurfingHelpers::CheckFolder(pathCompares);
 	};
 
 private:
+	string pathGlobal = "ThemeEditor/";
+
+	string pathTheme = "";
+	string pathThemes = "";
+	string subPathThemes = "themes/";
+	string pathCompares = "";
+	string subPathCompare = "compare/";
+	string filename = ""; //"imgui_styles.ini"
+
+	SurfingFiles files;
+
+	void Changed(ofAbstractParameter& e) {
+		std::string name = e.getName();
+		ofLogNotice("ofxSurfingImGui:SurfingThemeEditor") << "Changed: " << name << ": " << e;
+
+		if (0) {}
+
+		else if (name == indexTheme.getName())
+		{
+			if (files.getSize() == 0) return;
+
+			nameTheme = files.getName(indexTheme);
+
+			filename = nameTheme.get() + ".ini";
+			pathThemes = pathGlobal + subPathThemes;
+			pathTheme = pathThemes + filename;
+
+			return;
+		}
+
+		else if (name == nameTheme.getName())
+		{
+			if (nameTheme.get() == "") return;
+
+			filename = nameTheme.get() + ".ini";
+			pathThemes = pathGlobal + subPathThemes;
+			pathTheme = pathThemes + filename;
+
+			return;
+		}
+	};
+
+	void resetTheme() {
+		ImGui::GetStyle() = ImGuiStyle();
+	};
+
+	void loadThemeHardcoded(int index) {
+		ofxImGuiSurfing::setIndexTheme(index);
+	};
+
+private:
+	void exit(ofEventArgs& args) { exit(); };
+	void exit() {
+		ofxSurfingHelpers::saveGroup(params, pathGlobal + params.getName() + ".json");
+	};
+
 	void keyPressed(ofKeyEventArgs& eventArgs) {
 		const int& key = eventArgs.key;
-		ofLogNotice("ofxSurfingImGui") << (char)key << " [" << key << "]";
+		ofLogVerbose("ofxSurfingImGui:SurfingThemeEditor") << "Key: " << (char)key;
 
 		// Modifiers
 		bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
@@ -122,6 +248,8 @@ public:
 		static ofParameter<float> v2{ "Value2", 0, -1, 1 };
 		static ofParameter<int> n1{ "Number1", 4, 0, 8 };
 		static ofParameter<int> n2{ "Number2", 0, -10, 10 };
+		static int n3 = 0;
+		static float v3 = 0;
 		static bool b1 = 1;
 		static bool b2 = false;
 		static ofParameter<int> i{ "Index",2,0,3 };
@@ -133,8 +261,8 @@ public:
 		ui.AddLabelHuge("Theme Tester", true);
 		ui.AddSpacingSeparated();
 		ui.AddLabelBig("Surfing API");
-		if (ui.AddButton("Button", sz1)) {}
-		if (ui.AddToggle("Toggle", b1, sz1)) {}
+		ui.AddButton("Button", sz1);
+		ui.AddToggle("Toggle", b1, sz1);
 		ui.Add(v1, OFX_IM_HSLIDER);
 		ui.Add(v1, OFX_IM_KNOB_DOTKNOB, 2, true);
 		ui.Add(v2, OFX_IM_KNOB_TICKKNOB, 2);
@@ -142,13 +270,15 @@ public:
 		ui.AddCombo(i, fileNames);
 		ui.Add(i, OFX_IM_STEPPER);
 		ui.AddSpacingSeparated();
-		ui.AddLabelBig("ImGui RAW");
 		ofxImGuiSurfing::AddMatrixClicker(n1);
 		ui.Add(n1);
 		ui.Add(n2);
-		if (ImGui::Button("Button1")) {};
+		ui.AddLabelBig("ImGui RAW");
+		ImGui::SliderInt("Number3", &n3, 0, 5);
+		ImGui::SliderFloat("Value3", &v3, -1, 1);
+		ImGui::Button("Button1");
 		ui.SameLine();
-		if (ImGui::Button("Button2")) {};
+		ImGui::Button("Button2");
 		ImGui::Checkbox("Toggle1", &b1);
 		ImGui::Checkbox("Toggle2", &b2);
 	};
@@ -167,6 +297,7 @@ public:
 		if (ui->BeginWindow(bGui_DemoWidgets))
 		{
 			drawDemoSurfingWidgets(*ui);
+
 			ui->EndWindow();
 		}
 	};
@@ -201,13 +332,39 @@ public:
 		//--
 
 		if (bGui_ThemeManager) drawThemeManager();
-		if (bGui_StyleEditor) drawEditor();
+		if (bGui_StyleEditor) drawStyleEditor();
 		if (bGui_DemoWidgets) drawDemoSurfingWidgets();
 		if (bGui_DemoImGui) drawDemoImGui();
 	};
 
+	//--
+
+	void saveThemeFile(string path) {
+		//ofLogNotice("ofxSurfingImGui") << "filename: " << filename;
+		string p = ofToDataPath(path);
+		ImGui::SaveStylesTo(p.c_str());
+		ofLogNotice("ofxSurfingImGui") << "Save config to " << path;
+
+		files.refreshFiles();
+	};
+
+	void loadThemeFile(string path) {
+		//ofLogNotice("ofxSurfingImGui") << "filename: " << filename;
+		ofLogNotice("ofxSurfingImGui") << "Load config from " << path;
+		string p = ofToDataPath(path);
+		ImGui::LoadStyleFrom(p.c_str());
+	};
+
+	void reloadThemeFile() {
+		ofLogNotice("ofxSurfingImGui") << "Reload config from " << pathTheme;
+		string p = ofToDataPath(pathTheme);
+		ImGui::LoadStyleFrom(p.c_str());
+	};
+
+	//--
+
 private:
-	void drawEditor()
+	void drawStyleEditor()
 	{
 		if (!bGui_StyleEditor) return;
 
@@ -241,13 +398,10 @@ public:
 		{
 			string s = "";
 
-			string filename = "imgui_styles.ini";
-			string path = ofToDataPath(filename);
-
-			string filenameA = "imgui_styles_A.ini";
+			string filenameA = pathCompares + "imgui_styles_A.ini";
 			string pathA = ofToDataPath(filenameA);
 
-			string filenameB = "imgui_styles_B.ini";
+			string filenameB = pathCompares + "imgui_styles_B.ini";
 			string pathB = ofToDataPath(filenameB);
 
 			bool bKeyCtrl = ImGui::GetIO().KeyCtrl;
@@ -256,29 +410,42 @@ public:
 
 			//--
 
-			ui->AddLabelBig("Manager", true);
+			ui->AddLabelBig("Files Manager", true);
 
 			//TODO: 
 			// add text input
-			// add list files in a path / open dialog
-			// pick theme files on runtime
-			// ex: day/night
+			ui->Add(nameTheme, OFX_IM_TEXT_INPUT);
 
 			if (ImGui::Button("Load", sz)) {
-				ImGui::LoadStyleFrom(path.c_str());
-				ofLogNotice("ofxSurfingImGui") << "Loaded Config from imgui_styles.ini...";
+				loadThemeFile(pathTheme);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Save", sz)) {
-				ImGui::SaveStylesTo(path.c_str());
-				ofLogNotice("ofxSurfingImGui") << "Saved Config to imgui_styles.ini...";
+				saveThemeFile(pathTheme);
 			}
 
-			ofxImGuiSurfing::AddSpacingBigSeparated();
+			if (ImGui::Button("Reload##THEME")) {
+				reloadThemeFile();
+			}
 
-			ui->AddLabelBig("Browser", true);
+			ui->AddSpacing();
 
-			// arrows, theme combo, fonts combo
+			ui->Add(indexTheme, OFX_IM_HSLIDER_SMALL);
+
+			ui->AddSpacing();
+			ofxImGuiSurfing::AddToggleRoundedButtonNamed(bClickerCombo, "Clicker", "List");
+			ui->AddSpacing();
+
+			if (bClickerCombo) files.draw();
+			else ui->AddCombo(indexTheme, files.getNames());
+
+			ui->AddSpacingBigSeparated();
+
+			//--
+
+			ui->AddLabelBig("Hardcoded Themes", true);
+
+			// arrows, hardcoded themes combo, fonts combo
 			ofxImGuiSurfing::drawThemeSelector(NULL);
 
 			ui->AddSpacingBigSeparated();
@@ -319,35 +486,66 @@ public:
 			}
 			s = ofToString(bKeyCtrl ? "Save B" : "Load B");
 			ui->AddTooltip(s);
-
+			ui->AddTooltipHelp("Press Control to Save");
 			ofxImGuiSurfing::AddSpacingBigSeparated();
 
-			size_t n = 4;
+			size_t n = 6;
 			float w = ui->getWidgetsWidth(n);
 			float h = 1.5 * ImGui::GetFrameHeight();
 			ImVec2 sz1(w, h);
 
 			ui->AddLabelBig("Resets", true);
+
 			if (ui->AddButton("R1", sz1))
 			{
-				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+				resetTheme();
 			}
+			s = "Default ImGuiStyle";
+			ui->AddTooltip(s);
 			ui->SameLine();
+
 			if (ui->AddButton("R2", sz1))
 			{
+				resetTheme();
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+				//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
+			}
+			s = "ImGui_ThemeMoebiusSurfingV2";
+			ui->AddTooltip(s);
+			ui->SameLine();
+
+			if (ui->AddButton("R3", sz1))
+			{
+				resetTheme();
 				ofxImGui::DefaultTheme* defaultTheme = new ofxImGui::DefaultTheme();
 				ui->getGuiPtr()->setTheme((ofxImGui::BaseTheme*)defaultTheme);
 			}
+			s = "ofxImGui::DefaultTheme";
+			ui->AddTooltip(s);
 			ui->SameLine();
-			if (ui->AddButton("R3", sz1))
-			{
-				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
-			}
-			ui->SameLine();
+
 			if (ui->AddButton("R4", sz1))
+			{
+				ImGui::StyleColorsDark();
+			}
+			s = "StyleColorsDark";
+			ui->AddTooltip(s);
+			ui->SameLine();
+
+			if (ui->AddButton("R5", sz1))
 			{
 				ImGui::StyleColorsLight();
 			}
+			s = "StyleColorsLight";
+			ui->AddTooltip(s);
+			ui->SameLine();
+
+			if (ui->AddButton("R6", sz1))
+			{
+				ImGui::StyleColorsClassic();
+			}
+			s = "StyleColorsClassic";
+			ui->AddTooltip(s);
 
 			ui->EndWindow();
 		}
@@ -546,10 +744,10 @@ public:
 				if (bStyleFonts) ui.popStyleFont();
 
 				ui.EndWindow();
-}
+			}
 		}
 		ImGui::PopStyleVar();
-	}
+}
 #endif
 
 #if(TEST_CUSTOM_FONTS==1) 

@@ -1011,6 +1011,25 @@ namespace ofxImGuiSurfing
 
 		return bReturn;
 	}
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& p,  std::string nameTrue, std::string nameFalse)
+	{
+		ImVec2 bb = ImVec2(-1, -1);
+		bool bReturn = false;
+		auto tmpRef = p.get();
+		std::string name;
+
+		if (tmpRef) name = nameTrue;
+		else name = nameFalse;
+
+		if (ToggleRoundedButton(name.c_str(), (bool*)&tmpRef, bb))
+		{
+			p.set(tmpRef);
+			bReturn = true;
+		}
+
+		return bReturn;
+	}
 
 	//----
 

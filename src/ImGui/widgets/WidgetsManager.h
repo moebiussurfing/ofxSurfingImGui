@@ -1157,69 +1157,12 @@ namespace ofxImGuiSurfing
 					break;
 
 					//TODO: size not implemented here?
-					//maybe can be accesses by the imgui pointer?
+					//maybe can be accesses by the imgui/fonts pointer?
 					case OFX_IM_TEXT_BIG:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::TextWrapped("%s", tmpRef.c_str());
 						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
-					}
-					break;
-
-					case OFX_IM_TEXT_INPUT_NAMED://TODO:
-					{
-						{
-							int _w = getWidgetsWidth() * 0.9f;
-							string s = tmpRef.c_str();
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
-							}
-							ImGui::PopItemWidth();
-						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
-					}
-					break;
-
-					case OFX_IM_TEXT_INPUT://TODO:
-					{
-						{
-							int _w = getWidgetsWidth() * 0.9f;
-							string s = tmpRef.c_str();
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
-							}
-							ImGui::PopItemWidth();
-						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
-					}
-					break;
-
-					case OFX_IM_TEXT_INPUT_NO_NAME://TODO:
-					{
-						{
-							string s = tmpRef.c_str();
-							int _w = getWidgetsWidth() * 1.f;
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
-							}
-							ImGui::PopItemWidth();
-						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
 					}
 					break;
 
@@ -1238,6 +1181,74 @@ namespace ofxImGuiSurfing
 					//	//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 					//}
 					//break;
+
+					//--
+
+					//TODO: could return true only when hit return or ok.
+					//TODO: could be a new bundle widget?
+
+					case OFX_IM_TEXT_INPUT_NAMED:
+					{
+						{
+							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
+							//int _w = getWidgetsWidth() * 0.9f;
+
+							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bReturn = ImGui::InputText("##NAME", &s);
+								if (bReturn) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+					}
+					break;
+
+					case OFX_IM_TEXT_INPUT://TODO:
+					{
+						{
+							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
+							//int _w = getWidgetsWidth() * 0.9f;
+
+							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bReturn = ImGui::InputText("##NAME", &s);
+								if (bReturn) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+					}
+					break;
+
+					case OFX_IM_TEXT_INPUT_NO_NAME://TODO:
+					{
+						{
+							//int _w = getWidgetsWidth() * 1.f;
+							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
+
+							string s = tmpRef.c_str();
+							ImGui::PushItemWidth(_w);
+							{
+								bReturn = ImGui::InputText("##NAME", &s);
+								if (bReturn) {
+									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+									p.set(s);
+								}
+							}
+							ImGui::PopItemWidth();
+						}
+						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+					}
+					break;
 
 					}
 				}

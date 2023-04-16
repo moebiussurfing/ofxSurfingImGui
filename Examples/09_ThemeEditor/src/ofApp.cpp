@@ -6,15 +6,16 @@ void ofApp::setup()
 	ofxSurfingHelpers::setMonitorsLayout(1);
 
 	ui.setup();
+
+	//--
+
+	e.setPathGlobal(ui.getPath());
 	e.setUiPtr(&ui);
+	e.setup();
 
-	// We can force load one of the bundled Themes:
-	// Must be called after setup() 
-	// to overwrite the default loaded theme:
-	ImGui::StyleColorsLight();
+	//TODO: not working
 	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
-
-	ofxSurfingHelpers::load(e.params);
+	//e.loadThemeHardcoded(5);
 }
 
 //--------------------------------------------------------------
@@ -30,5 +31,4 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-	ofxSurfingHelpers::save(e.params);
 }
