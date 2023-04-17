@@ -1,5 +1,8 @@
 #pragma once
 
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+
+
 #include "ofMain.h"
 
 #include <random>
@@ -12,9 +15,9 @@ using namespace std;
 
 */
 
-#ifndef OF_APP_DEFINED_ofxSurfingHelpers
-namespace ofxSurfingHelpers = ofxImGuiSurfing;
-#endif
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+//namespace ofxSurfingHelpers = ofxImGuiSurfing;
+//#endif
 
 //#define ofxSurfingHelpers ofxImGuiSurfing
 
@@ -380,3 +383,6 @@ namespace ofxImGuiSurfing
 		ofxKuValueSmooth(value, target, smooth);
 	}
 }
+
+
+//#endif

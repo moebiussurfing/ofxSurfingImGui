@@ -22,7 +22,7 @@ void ofApp::draw()
 		// There is a toggle to alternate Night/Day themes.
 		// This toggle is available always, 
 		// and it will work only if the default files are on bin/data/..
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MEDIUM;
 		if (ui.BeginWindow("ofApp"))
 		{
 			ui.Add(e.bGui, OFX_IM_TOGGLE_ROUNDED);

@@ -48,10 +48,10 @@
 // ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
 // Night
-#define THEME_NAME_NIGHT "moebiusSurfingV2.ini"
+#define THEME_NAME_NIGHT "moebiusSurfing.ini"
 
 // Day
-#define THEME_NAME_DAY "AiekickRedDark.ini"
+#define THEME_NAME_DAY "moebiusSurfingDay.ini"
 
 //----
 

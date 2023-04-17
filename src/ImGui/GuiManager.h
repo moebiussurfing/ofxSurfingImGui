@@ -1666,7 +1666,7 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };//for natural direction
-	ofParameter<bool> bThemeAlternative{ "Theme", false };
+	ofParameter<bool> bThemeUiAlt{ "Theme UI", false };
 
 	ofParameter<bool> bLog{ "LOG", false };//show log window
 	ofParameter<bool> bNotifier{ "NOTIFIER", true };//show notifier

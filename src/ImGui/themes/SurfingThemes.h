@@ -23,8 +23,8 @@ namespace ofxImGuiSurfing
 	// To link with the window.
 	namespace SurfingThemes
 	{
-		static bool bEnableColors = false;//to bypass or load colors
-		static bool bEnableLayout = false;//to bypass or load layout sizes
+		static bool bEnableColors = true;//to bypass or load colors
+		static bool bEnableLayout = true;//to bypass or load layout sizes
 	}
 
 	using namespace SurfingThemes;

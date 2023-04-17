@@ -52,7 +52,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
-	params_Advanced.add(bThemeAlternative);
+	params_Advanced.add(bThemeUiAlt);
 
 	params_Advanced.add(bDebugDebugger);
 #ifdef OFX_USE_DEBUGGER
@@ -541,7 +541,7 @@ void SurfingGuiManager::setupImGuiTheme()
 	//	bLoaded = ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(pDay);
 
 	string name;
-	if (bThemeAlternative) name = pDay;
+	if (bThemeUiAlt) name = pDay;
 	else name = pNight;
 	string pathThemes = path_Global + "themes/";
 	//string pathThemes = "Gui/themes/";
@@ -3066,7 +3066,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	}
 
 	// Theme
-	else if (name == bThemeAlternative.getName())
+	else if (name == bThemeUiAlt.getName())
 	{
 		setupImGuiTheme();
 		return;
