@@ -1,13 +1,18 @@
 
-#pragma once
+//#pragma once
 
+#ifndef OFX_SURFING_IM_GUI_H
+#define OFX_SURFING_IM_GUI_H
 
 /*
 
-	This class has widgets size useful Constants
+	This is the main class that instantiates ofxImGui.
+	So ImGui context "is here".
+	Handles the API workflow too, 
+	helping populating windows and widgets.
+	Handles some internal params too, like minimize, auto resize... or extra booleans.
 
 */
-
 
 #include "ofMain.h"
 
@@ -21,12 +26,14 @@
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
 #include "surfingHelpers.h"
-#include "HelpWidget.h"
+#include "HelpTextWidget.h"
 #include "Combos.h"
 
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
 
+//#include "SurfingThemeEditor.h"//TODO: breaks bc recursive including?
+#include "imgui_styles.h"
 #include "surfingThemesHelpers.h"
 
 //TODO: move here! now breaks!
@@ -757,10 +764,10 @@ public:
 	{
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->pushStyleFont(0); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->pushStyleFont(1); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->pushStyleFont(2); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->pushStyleFont(3); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
 		}
 
 		std::string t = bUppercase ? ofToUpper(label) : label;
@@ -770,10 +777,10 @@ public:
 
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
 		}
 	}
 	//--------------------------------------------------------------
@@ -828,20 +835,20 @@ public:
 	{
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->pushStyleFont(0); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->pushStyleFont(1); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->pushStyleFont(2); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->pushStyleFont(3); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
 		}
 
 		ofxImGuiSurfing::AddLabelLinkURL(label.c_str(), url.c_str(), bBlink);
 
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
 		}
 
 		if (ImGui::IsItemHovered())
@@ -1114,6 +1121,8 @@ private:
 	// Prepare some different font files and sizes 
 	// to use on labels or any widgets.
 	void setupImGuiFonts();
+
+	void setupImGuiTheme();
 
 	//--
 
@@ -1657,6 +1666,7 @@ public:
 	ofParameter<bool> bReset{ "Reset", false };
 	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
 	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };//for natural direction
+	ofParameter<bool> bThemeAlternative{ "Theme", false };
 
 	ofParameter<bool> bLog{ "LOG", false };//show log window
 	ofParameter<bool> bNotifier{ "NOTIFIER", true };//show notifier
@@ -1666,10 +1676,11 @@ public:
 	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
+	//TODO:
 	ofParameter<bool> bLockMove{ "Lock Move", false };//TODO:
 	ofParameter<bool> bReset_Window{ "Reset Window", false };//TODO:
 	ofParameter<bool> bNoScroll{ "No Scroll", false };//TODO:
-	ofParameter<bool> bLandscape{ "Orientation", false };
+	ofParameter<bool> bLandscape{ "Orientation", false };//TODO:
 	//TODO: could add a trigger to flip orientation
 
 	ofParameter<bool> bLinkGlobal{ "Link Global", true };//TODO:
@@ -1682,7 +1693,7 @@ public:
 	//--
 
 	ofParameterGroup params_Advanced{ "Advanced Settings" };
-	// These params are saved as settings when exit and loaded when reopen the App. 
+	// These params are saved as settings when exit and loaded when reopen the app. 
 
 private:
 
@@ -3724,11 +3735,11 @@ private:
 
 	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
-	HelpWidget helpInternal;
+	HelpTextWidget helpInternal;
 
 	// Help App: How to use our App 
 	std::string helpInfoApp = "";
-	HelpWidget helpApp;
+	HelpTextWidget helpApp;
 
 	// main help disablers
 	bool bUseHelpInfoInternal = false;
@@ -4246,3 +4257,6 @@ public:
 
 	//----
 };
+
+
+#endif

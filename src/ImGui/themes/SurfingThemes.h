@@ -23,15 +23,15 @@ namespace ofxImGuiSurfing
 	// To link with the window.
 	namespace SurfingThemes
 	{
-		static bool bEnableColors = false;
-		static bool bEnableLayout = false;
+		static bool bEnableColors = false;//to bypass or load colors
+		static bool bEnableLayout = false;//to bypass or load layout sizes
 	}
 
 	using namespace SurfingThemes;
 
 	//----
 
-	// Helpers
+	// Color Helpers
 
 #define none ofFloatColor(0,0,0)
 
@@ -58,6 +58,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO: grouped colors snippet
 	//https://github.com/GraphicsProgramming/dear-imgui-styles/tree/main
 	/*
 			if( bStyleDark_ )
@@ -97,6 +98,7 @@ namespace ofxImGuiSurfing
 
 	//--
 	
+	//TODO: grouped colors snippet
 	/*
 	//https://github.com/ocornut/imgui/issues/438
 	void SetupStyleFromHue()
@@ -191,6 +193,8 @@ namespace ofxImGuiSurfing
 	static void resetTheme() {
 		ImGui::GetStyle() = ImGuiStyle();
 	};
+
+	//----
 
 	// Themes
 

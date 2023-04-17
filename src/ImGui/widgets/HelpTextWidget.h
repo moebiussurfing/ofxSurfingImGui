@@ -2,14 +2,14 @@
 
 #include "ofMain.h"
 
-class HelpWidget
+class HelpTextWidget
 {
 public:
-	HelpWidget() {};
-	~HelpWidget() {};
+	HelpTextWidget() {};
+	~HelpTextWidget() {};
 
 private:
-	std::string text = "HelpWidget\nEmpty content";
+	std::string text = "HelpTextWidget\nEmpty content";
 	std::string title = "myHelpWidget";
 
 	bool bBg = true;
@@ -21,11 +21,11 @@ private:
 public:
 	void setEnableHeader(bool b) { bHeader = b; }
 
-	ofParameter<bool> bGui{ "HelpWidget", true };
+	ofParameter<bool> bGui{ "HelpTextWidget", true };
 
 	void setTitle(string _title, bool bCapitalize = true)
 	{
-		ofLogVerbose("ofxSurfingImGui:HelpWidget") << "setTitle:" << _title;
+		ofLogVerbose("ofxSurfingImGui:HelpTextWidget") << "setTitle:" << _title;
 		title = _title;
 
 		if (bCapitalize) title = ofToUpper(title);
@@ -33,7 +33,7 @@ public:
 
 	void setText(string _text)
 	{
-		ofLogVerbose("ofxSurfingImGui:HelpWidget") << "SetText:" << _text;
+		ofLogVerbose("ofxSurfingImGui:HelpTextWidget") << "SetText:" << _text;
 		text = _text;
 	}
 
@@ -133,7 +133,7 @@ public:
 		customFonts = f;
 
 		if (customFonts.size() == 0) {
-			ofLogError("ofxSurfingImGui:HelpWidget") << "It looks that not any extra font styles are added!";
+			ofLogError("ofxSurfingImGui:HelpTextWidget") << "It looks that not any extra font styles are added!";
 		}
 	};
 };

@@ -26,7 +26,7 @@
 #include "surfingHelpers.h"
 #include "ofHelpers.h"
 
-	//--
+//--
 
 class SurfingFiles
 {
