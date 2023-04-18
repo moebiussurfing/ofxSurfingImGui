@@ -32,6 +32,8 @@ namespace ofxImGuiSurfing
 	//----
 
 	// Helpers
+	
+	// https://github.com/borg/ofxColourTheory
 
 #define none ofFloatColor(0,0,0)
 
