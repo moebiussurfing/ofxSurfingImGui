@@ -212,6 +212,14 @@ public:
 	};
 
 	//--------------------------------------------------------------
+	void addText(string s) {
+		textRaw += s;
+
+		if (bBreakLines) setTextBreakLines(textRaw, lineWidth);//split lines
+		else editor.SetText(textRaw);
+	};
+
+	//--------------------------------------------------------------
 	void setText(string s) {
 		textRaw = s;
 
