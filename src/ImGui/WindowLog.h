@@ -288,6 +288,7 @@ namespace ofxImGuiSurfing
 
 			// Some useful sizes
 			float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
+			float _wu = 1.15f * _hu;
 			float _hb = _hu * 1.5f;
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
@@ -299,17 +300,57 @@ namespace ofxImGuiSurfing
 			float ht = 0.8f * _hu;
 			float wt = 1.15f * ht;
 
+			if (bMinimize)
+			{
+				// Right align or left if 0.
+				if (0) {
+					float _ww3 = ofxImGuiSurfing::getWidgetButtomToggleWidth(bPause, true);
+					_ww3 += ofxImGuiSurfing::getWidgetButtomToggleWidth("CLEAR", true);
+
+					// make the space of both buttons from the right window border
+					ofxImGuiSurfing::AddSpacingRightAlign(_ww3);
+
+					ofxImGuiSurfing::AddSpacingX(-_wu); // mini toggle
+					float _sp3 = ImGui::GetStyle().ItemSpacing.x;
+					_sp3 += ImGui::GetStyle().WindowPadding.x;
+					ofxImGuiSurfing::AddSpacingX(-_sp3); // item spacing
+				}
+
+				float _hh = _hu * 1.0f;
+				float _ww1 = ofxImGuiSurfing::getWidgetButtomToggleWidth(bPause);
+				float _ww2 = ofxImGuiSurfing::getWidgetButtomToggleWidth("CLEAR");
+
+				//float _spy = ImGui::GetStyle().ItemSpacing.y;
+				//ofxImGuiSurfing::AddSpacingY(-_spy);
+
+				// Pause
+				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_ww1, _hh), true, true);
+				ImGui::SameLine();
+
+				// Clear
+				if (ImGui::Button("CLEAR", ImVec2(_ww2, _hh))) Clear();
+				ImGui::SameLine();
+
+				//ofxImGuiSurfing::AddSpacingY(_spy);
+			}
+
+			//--
+
+			// Minimize XS toggle
+
 			// Align right
-			ofxImGuiSurfing::AddSpacingRightAlign(1.15f * _hu);//mini
-			//ofxImGuiSurfing::AddSpacingRightAlign(wt);//minixs
+			ofxImGuiSurfing::AddSpacingRightAlign(_wu); // mini
+			//ofxImGuiSurfing::AddSpacingRightAlign(wt); // mini xs
+
 			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
 
 			ofxImGuiSurfing::AddSpacing();
 
 			// Reduce y spacing
 			if (bMinimize) {
-				if (1) ofxImGuiSurfing::AddSpacingY(-8);//empty reduced space
-				else ofxImGuiSurfing::Separator();//draw a lin
+				if (1) ofxImGuiSurfing::AddSpacingY(-5);//empty reduced space
+				//if (1) ofxImGuiSurfing::AddSpacingY(-8);//empty reduced space
+				else ofxImGuiSurfing::Separator();//draw a line
 			}
 
 			//--
@@ -524,7 +565,13 @@ namespace ofxImGuiSurfing
 
 			// Log Messages
 
+			//ImVec4 c = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
+			ImVec4 c(0, 0, 0, 0);
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, c);
+
 			drawLogMessages();
+
+			ImGui::PopStyleColor();
 
 			//--
 

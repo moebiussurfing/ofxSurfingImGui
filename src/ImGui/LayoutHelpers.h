@@ -22,7 +22,7 @@
 #include "GuiConstants.h"
 
 #include "surfingHelpers.h"
- 
+
 //------------------
 
 // Layout Helpers
@@ -489,7 +489,8 @@ namespace ofxImGuiSurfing
 	//---
 
 	// Right Align Helpers
-	// Push left from right border
+
+	// Push left from the right border window.
 	// Adds x spacing to right align widgets! 
 	// i.e. 
 	// by passing the expected width of the widget 
@@ -542,12 +543,32 @@ namespace ofxImGuiSurfing
 		ImGui::SameLine();
 	}
 
+	// Pass a name to get the expected default button size by considering the text label.
+	//--------------------------------------------------------------
+	inline float getWidgetButtomToggleWidth(string name, bool bExtraPad = false)
+	{
+		const char* text = name.c_str();
+		ImGuiStyle& style = ImGui::GetStyle();
+		float sp1 = style.ItemInnerSpacing.x;
+		float sp2 = style.ItemSpacing.x;
+		float space = ImGui::CalcTextSize(text).x + 2 * sp1;
+		if (bExtraPad) space += sp2;
+		return space;
+	}
+	// Pass a bool param to get the expected default button size by considering the text label.
+	//--------------------------------------------------------------
+	inline float getWidgetButtomToggleWidth(ofParameter<bool>& b, bool bExtraPad = false)
+	{
+		string name = b.getName();
+		return getWidgetButtomToggleWidth(name);
+	}
+
 	////--------------------------------------------------------------
 	//inline void AddSpacingX(float x = 100)
 	//{
 	//	AddSpacingPad(x);
 	//}
-	
+
 	//--
 
 	// A header with a centered text

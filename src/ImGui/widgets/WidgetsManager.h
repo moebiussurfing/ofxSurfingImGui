@@ -1645,6 +1645,8 @@ namespace ofxImGuiSurfing
 
 					//----
 
+					// Float
+
 					//TODO:
 					// Adding NEW style knobs, 
 					// taken from Simon Altschuler https://github.com/altschuler/imgui-knobs
@@ -2137,13 +2139,15 @@ namespace ofxImGuiSurfing
 
 					//----
 
+					// Int
+
 					//TODO:
 					// Adding NEW style knobs, 
 					// taken from Simon Altschuler https://github.com/altschuler/imgui-knobs
 
 					case OFX_IM_KNOB_TICKKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2152,7 +2156,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_DOTKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2161,7 +2165,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2170,7 +2174,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERONLYKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2179,7 +2183,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERDOTKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2188,7 +2192,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_STEPPEDKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2197,7 +2201,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_SPACEKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS, flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS_INT, flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
