@@ -303,7 +303,8 @@ namespace ofxImGuiSurfing
 			if (bMinimize)
 			{
 				// Right align or left if 0.
-				if (0) {
+				if (0)
+				{
 					float _ww3 = ofxImGuiSurfing::getWidgetButtomToggleWidth(bPause, true);
 					_ww3 += ofxImGuiSurfing::getWidgetButtomToggleWidth("CLEAR", true);
 
@@ -337,19 +338,13 @@ namespace ofxImGuiSurfing
 			//--
 
 			// Minimize XS toggle
-
-			// Align right
-			ofxImGuiSurfing::AddSpacingRightAlign(_wu); // mini
-			//ofxImGuiSurfing::AddSpacingRightAlign(wt); // mini xs
-
-			ofxImGuiSurfing::AddToggleRoundedButton(bMinimize, ht, true);
+			AddToggleRoundedMiniXsRightAligned(bMinimize);
 
 			ofxImGuiSurfing::AddSpacing();
 
 			// Reduce y spacing
 			if (bMinimize) {
 				if (1) ofxImGuiSurfing::AddSpacingY(-5);//empty reduced space
-				//if (1) ofxImGuiSurfing::AddSpacingY(-8);//empty reduced space
 				else ofxImGuiSurfing::Separator();//draw a line
 			}
 
@@ -614,7 +609,7 @@ namespace ofxImGuiSurfing
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
 		vector<string> namesTagsFiler;
-		ofParameter<bool> bMinimize{ " ", true };
+		ofParameter<bool> bMinimize{ "MinimizeLog", true };
 
 		int amountLinesCurr = 0;
 		bool bDoneStartup = false;

@@ -963,6 +963,33 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedMiniXs(ofParameter<bool>& p, bool bNoLabel = true)
+	{
+		bool bNoBorder = false;
+		float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
+		float _ht = 0.8f * _hu;
+
+		ImVec2 bb = ImVec2(1.15f * _ht, 1.15f * (2 / 3.f) * _ht);
+
+		return AddToggleRoundedButton(p, bb, bNoBorder, bNoLabel);
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddToggleRoundedMiniXsRightAligned(ofParameter<bool>& p, bool bNoLabel = true)
+	{
+		//bool bNoBorder = false;
+		float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
+		float _wu = 1.15f * _hu;
+		//float _ht = 0.8f * _hu;
+		ofxImGuiSurfing::AddSpacingRightAlign(_wu);
+
+		//ImVec2 bb = ImVec2(1.15f * _ht, 1.15f * (2 / 3.f) * _ht);
+		//return AddToggleRoundedButton(p, bb, bNoBorder, bNoLabel);
+
+		return AddToggleRoundedMiniXs(p, bNoLabel);
+	}
+
 	// API short name
 	//--------------------------------------------------------------
 	inline bool AddToggleRounded(ofParameter<bool>& p, ImVec2 bb = ImVec2(-1, -1))
@@ -1012,7 +1039,7 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 	//--------------------------------------------------------------
-	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& p,  std::string nameTrue, std::string nameFalse)
+	inline bool AddToggleRoundedButtonNamed(ofParameter<bool>& p, std::string nameTrue, std::string nameFalse)
 	{
 		ImVec2 bb = ImVec2(-1, -1);
 		bool bReturn = false;
@@ -1340,7 +1367,7 @@ namespace ofxImGuiSurfing
 
 		IMGUI_TEST_ENGINE_ITEM_INFO(id, label, g.LastItemData.StatusFlags);
 		return pressed;
-			}
+	}
 
 	//--
-		};
+};
