@@ -553,13 +553,13 @@ public:
 			ofxImGuiSurfing::AddCheckBox(bBreakLines);
 			if (bBreakLines) {
 				ofxImGuiSurfing::SameLine();
+				ImGui::PushItemWidth(50);
+				ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
+				ImGui::PopItemWidth();
 				ImGui::PushItemWidth(86);
 				ofxImGuiSurfing::AddStepper(amountCharsLineWidth, true);
 				ImGui::PopItemWidth();
 				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(50);
-				ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
-				ImGui::PopItemWidth();
 
 				ofxImGuiSurfing::SameLineIfAvailForWidth(600);
 				if (ImGui::Button("Fit")) {
