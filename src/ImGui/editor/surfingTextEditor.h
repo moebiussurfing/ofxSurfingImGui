@@ -68,7 +68,7 @@ public:
 
 	ofParameterGroup params{ "SurfingTextEditor" };
 	ofParameter<bool> bGui{ "TextEditor", true };
-	ofParameter<bool> bExtra{ "Extra", false };
+	//ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bShowInfo{ "Info", false };
 	ofParameter<bool> bLangStyled{ "LangStyled", false };
 	ofParameter<bool> bMenus{ "Menus", false };
@@ -77,8 +77,12 @@ public:
 	ofParameter<bool> bPath{ "Path" , false };
 	ofParameter<bool> bName{ "Name" , false };
 	ofParameter<bool> bBreakLines{ "BreakLines" , true };
-	ofParameter<int> lineWidth{ "LineWidth", 30, 10, 120 };//in chars
+	ofParameter<int> amountCharsLineWidth{ "nChars", 30, 10, 100 };//in chars
 	ofParameter<bool> bNumberLines{ "NumberLines", false };
+	ofParameter<bool> bMinimize{ "Minimize", false };
+	ofParameter<bool> bFitWidth{ "FitW" ,false };
+	ofParameter<bool> bFitHeight{ "FitH" ,false };
+	ofParameter<bool> bAutoFit{ "AutoFit" ,false };
 
 	void addKeyword(string keyword) {//call on setup
 		keywords.push_back(keyword);
@@ -88,6 +92,10 @@ public:
 	};
 
 private:
+
+	float charWidth = 0;
+	float charHeight = 0;
+
 	void buildFontNames() {
 		if (bs.size() != 0) bs.clear();
 		for (size_t i = 0; i < customFonts.size(); i++) {
@@ -163,6 +171,19 @@ public:
 	};
 
 	//--------------------------------------------------------------
+	void keyPressed(int key) {
+
+		//TODO: add args to allow modifier key (ctrl key)
+		//add bKey toggle
+		//add isOverEditor to bypass
+
+		if (key == '`') bMinimize = !bMinimize;
+		if (key == 'f') bFitWidth = bFitHeight = true;
+		if (key == 'w') bFitWidth = true;
+		if (key == 'h') bFitHeight = true;
+	};
+
+	//--------------------------------------------------------------
 	void exit() {
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // exit()
 
@@ -171,9 +192,13 @@ public:
 	};
 
 	//--------------------------------------------------------------
-	void setup() {
+	void setup()
+	{
+		bFitWidth.setSerializable(false);
+		bFitHeight.setSerializable(false);
+
 		params.add(bGui);
-		params.add(bExtra);
+		//params.add(bExtra);
 		params.add(bLangStyled);
 		params.add(bMenus);
 		params.add(bShowInfo);
@@ -181,9 +206,13 @@ public:
 		params.add(themeIndex);
 		params.add(bPath);
 		params.add(bName);
-		params.add(lineWidth);
+		params.add(amountCharsLineWidth);
 		params.add(bBreakLines);
 		params.add(bNumberLines);
+		params.add(bMinimize);
+		params.add(bFitWidth);
+		params.add(bFitHeight);
+		//params.add(bAutoFit);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
@@ -192,6 +221,9 @@ public:
 	};
 
 	//--
+
+	ImVec2 szWindow = ImVec2(0, 0);
+	bool bIsWindowResizing = false;
 
 	//--------------------------------------------------------------
 	string getTextRaw() const {
@@ -215,7 +247,7 @@ public:
 	void addText(string s) {
 		textRaw += s;
 
-		if (bBreakLines) setTextBreakLines(textRaw, lineWidth);//split lines
+		if (bBreakLines) setTextBreakLines(textRaw, amountCharsLineWidth);//split lines
 		else editor.SetText(textRaw);
 	};
 
@@ -223,7 +255,7 @@ public:
 	void setText(string s) {
 		textRaw = s;
 
-		if (bBreakLines) setTextBreakLines(s, lineWidth);//split lines
+		if (bBreakLines) setTextBreakLines(s, amountCharsLineWidth);//split lines
 		else editor.SetText(s);
 
 		//pathEditing = "-1";
@@ -277,7 +309,7 @@ public:
 	void Changed_Params(ofAbstractParameter& e)
 	{
 		string name = e.getName();
-		ofLogNotice() << __FUNCTION__ << name << " : " << e;
+		ofLogNotice() << __FUNCTION__ << " : " << name << " : " << e;
 
 		if (name == themeIndex.getName())
 		{
@@ -297,17 +329,27 @@ public:
 				bs[j] = (fontIndex.get() == j);
 			}
 
+			//if (bAutoFit) 
+			{
+				if (!bFitWidth) bFitWidth = true;
+			}
+
 			return;
 		}
 
-		if (name == lineWidth.getName())
+		if (name == amountCharsLineWidth.getName())
 		{
 			static int i = -1;
-			if (lineWidth != i) {
-				i = lineWidth;
+			if (amountCharsLineWidth != i) {
+				i = amountCharsLineWidth;
 
 				textRaw = this->getTextRaw();//get the edited on runtime 
 				this->setText(textRaw);
+			}
+
+			//if (bAutoFit) 
+			{
+				if (!bFitWidth) bFitWidth = true;
 			}
 
 			return;
@@ -353,6 +395,7 @@ public:
 					//string path = ofToDataPath("text2.txt", true);
 					//textEditor.loadText(path);
 				}
+				ofxImGuiSurfing::AddTooltip("Not implemented");
 
 				//if (pathEditing != "-1")
 				{
@@ -367,6 +410,8 @@ public:
 						// save text....
 						TextToFile(ofFilePath::getAbsolutePath(pathEditing), ssTextToSave, false);
 					}
+
+					//TODO: make dialog to confirm ok or cancel.
 				}
 
 				//if (ImGui::MenuItem("Clear"))
@@ -410,9 +455,13 @@ public:
 
 			if (ImGui::BeginMenu("View"))
 			{
-				ofxImGuiSurfing::MenuItemToggle(bExtra);
+				//ofxImGuiSurfing::MenuItemToggle(bExtra);
 				ofxImGuiSurfing::MenuItemToggle(bLangStyled);
 				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
+				ofxImGuiSurfing::MenuItemToggle(bFitWidth);
+				ofxImGuiSurfing::MenuItemToggle(bFitHeight);
+				//ofxImGuiSurfing::MenuItemToggle(bAutoFit);
+				ofxImGuiSurfing::MenuItemToggle(bMenus);
 
 				ImGui::EndMenu();
 			}
@@ -467,43 +516,66 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void drawImGuiInternal() {
+	void drawImGuiInternalControls() {
 
-		if (!bMenus) ofxImGuiSurfing::AddParameter(bExtra);
+		ofxImGuiSurfing::AddToggleRoundedMiniXsRightAligned(bMinimize);
+		ofxImGuiSurfing::AddSpacing();
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
 
-		if (bExtra)
+		if (bMinimize) return;
+
+		//if (!bMenus || (bExtra && bMenus) || (!bExtra && bMenus)) ofxImGuiSurfing::AddSpacingY(-h);
+		ofxImGuiSurfing::AddSpacingY(-h);
+
+		//--
+
+		//ofxImGuiSurfing::AddParameter(bExtra);
+		//if (bExtra)
 		{
 			//ofxImGuiSurfing::AddGroup(params);
 
-			if (!bMenus) ofxImGuiSurfing::SameLineIfAvailForWidth();
-
 			ofxImGuiSurfing::AddCheckBox(bMenus);
-			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			//ofxImGuiSurfing::SameLineIfAvailForWidth();
+
 			ofxImGuiSurfing::AddCheckBox(bShowInfo);
-			ofxImGuiSurfing::SameLineIfAvailForWidth();
+
 			if (bShowInfo) {
+				ofxImGuiSurfing::SameLine();
 				ofxImGuiSurfing::AddCheckBox(bName);
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ofxImGuiSurfing::AddCheckBox(bPath);
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
 				ofxImGuiSurfing::AddCheckBox(bNumberLines);
 				ofxImGuiSurfing::SameLineIfAvailForWidth();
+				ofxImGuiSurfing::AddCheckBox(bLangStyled);
 			}
-			ofxImGuiSurfing::AddCheckBox(bLangStyled);
 
-			//ofxImGuiSurfing::SameLineIfAvailForWidth();
-			//ofxImGuiSurfing::AddSeparatorVertical();
-			//ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bBreakLines);
 			if (bBreakLines) {
 				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(90);
-				ofxImGuiSurfing::AddStepper(lineWidth, true);
+				ImGui::PushItemWidth(86);
+				ofxImGuiSurfing::AddStepper(amountCharsLineWidth, true);
 				ImGui::PopItemWidth();
 				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(70);
-				ofxImGuiSurfing::AddParameter(lineWidth);
+				ImGui::PushItemWidth(50);
+				ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
 				ImGui::PopItemWidth();
+
+				ofxImGuiSurfing::SameLineIfAvailForWidth(600);
+				if (ImGui::Button("Fit")) {
+					bFitWidth = true;
+					bFitHeight = true;
+				}
+				ofxImGuiSurfing::SameLine();
+				if (ImGui::Button("FitW")) {
+					bFitWidth = true;
+				}
+				ofxImGuiSurfing::SameLine();
+				if (ImGui::Button("FitH")) {
+					bFitHeight = true;
+				}
+				//ofxImGuiSurfing::SameLine();
+				//ofxImGuiSurfing::AddCheckBox(bAutoFit);
 			}
 
 			drawImGuiWidgetsFonts();
@@ -511,6 +583,96 @@ public:
 
 		ImGui::Spacing();
 	};
+
+	//--------------------------------------------------------------
+	void drawImGuiWindowContent()
+	{
+		auto cpos = editor.GetCursorPosition();
+
+		// Menus
+		if (!bMinimize)
+		{
+			if (bMenus) drawImGuiMenus();
+		}
+
+		// Controls
+		drawImGuiInternalControls();
+
+		// Info
+		if (!bMinimize)
+		{
+			if (bShowInfo)
+			{
+				if (bPath)
+				{
+					ImGui::Text(pathEditing.c_str());
+				}
+
+				if (bName)
+				{
+					pathEditingFileName = ofFilePath::getFileName(pathEditing);
+
+					//right align
+					//if (0) {
+					//	auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
+					//	ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
+					//}
+
+					ImGui::Text(pathEditingFileName.c_str());
+				}
+
+				ImGui::Text("%4d/%-4d %4d lines | %s | %s",
+					cpos.mLine + 1,
+					cpos.mColumn + 1,
+					editor.GetTotalLines(),
+					editor.IsOverwrite() ? "Ovr" : "Ins",
+					editor.GetLanguageDefinitionName());
+			}
+		}
+
+		// Editor
+		drawImGuiEditor();
+
+		ImGui::Spacing();
+	}
+
+	//--------------------------------------------------------------
+	void drawImGuiEditor() {
+
+		// Insert external widgets 
+		// if it's already settled!
+		if (functionDraw != nullptr) functionDraw();
+
+		//--
+
+		// Editor Main Text
+
+		//ImGui::Spacing();
+		if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
+		{
+			// Draw Text content
+			//editor.Render(name.c_str());
+
+			bool aParentIsFocused = false;
+			const ImVec2& aSize = ImVec2();
+			bool aBorder = 0;
+
+			editor.Render(name.c_str(), aParentIsFocused, aSize, aBorder);
+
+			//--			
+
+			//TODO:
+			//if (bBreakLines) 
+			{
+				//customFonts[fontIndex]
+				ImFont* font = ImGui::GetFont();
+				auto bb = font->CalcTextSizeA(font->FontSize, FLT_MAX, 0, "x");
+				charWidth = bb.x;
+				charHeight = bb.y;
+			}
+		}
+		if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PopFont();
+	}
 
 	//--------------------------------------------------------------
 	void drawImGuiWidgetsFonts() {
@@ -531,9 +693,38 @@ public:
 		}
 	};
 
+	// Legacy. Deprecated
 	//--------------------------------------------------------------
 	void draw() {
+		drawImGui();
+	};
+
+	//--------------------------------------------------------------
+	void drawImGui() {
 		if (!bGui) return;
+
+		//TODO:
+		/*
+		if (bAutoFit)
+			if (bIsWindowResizing && ofGetFrameNum() > 0) {
+
+				ImGuiStyle& style = ImGui::GetStyle();
+
+				szWindow = ImGui::GetWindowSize();
+
+				//available space for chars
+				float w = szWindow.x;
+				w -= 2 * style.ItemSpacing.x;
+				w -= 2 * style.WindowPadding.x;
+				w -= style.ScrollbarSize;
+				w -= 5;
+				if (bNumberLines) w -= 4 * charWidth;
+
+				amountCharsLineWidth = w / charWidth;
+
+				bFitWidth = true;
+			}
+		*/
 
 		// initialize
 		if (!bIntitiated)
@@ -568,78 +759,102 @@ public:
 
 		//--
 
-		auto cpos = editor.GetCursorPosition();
+		//auto cpos = editor.GetCursorPosition();
 
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		f += ImGuiWindowFlags_HorizontalScrollbar;
-		if (bMenus) f += ImGuiWindowFlags_MenuBar;
+		if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
 		//fix 
 		//if (!bMenus && !bExtra)bExtra = 1;
 
 		//ImGui::Begin(name.c_str(), nullptr, f);
 
-		auto& p = bGui;
+		ofParameter<bool>& p = bGui;
 		bool tmp = p.get();
-		if (tmp) ImGui::SetWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
-		ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
-		if (p.get() != tmp) p.set(tmp);
 
-		{
-			if (bMenus) drawImGuiMenus();
+		static float w = 600.f;
+		static float h = -1;
 
-			drawImGuiInternal();
-
-			if (bShowInfo)
-			{
-				if (bPath)
-				{
-					ImGui::Text(pathEditing.c_str());
-				}
-				if (bName)
-				{
-					pathEditingFileName = ofFilePath::getFileName(pathEditing);
-
-					if (0) {
-						auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
-						ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
-					}
-
-					ImGui::Text(pathEditingFileName.c_str());
-				}
-
-				ImGui::Text("%4d/%-4d %4d lines | %s | %s",
-					cpos.mLine + 1,
-					cpos.mColumn + 1,
-					editor.GetTotalLines(),
-					editor.IsOverwrite() ? "Ovr" : "Ins",
-					editor.GetLanguageDefinitionName());
-			}
-
-			//--
-
-			// Insert external widgets if already settled!
-			if (functionDraw != nullptr) functionDraw();
-
-			//--
-
-			// Main Text
-			//ImGui::Spacing();
-			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
-			{
-				// Draw Text content
-				//editor.Render(name.c_str());
-
-				bool aParentIsFocused = false;
-				const ImVec2& aSize = ImVec2();
-				bool aBorder = 0;
-
-				editor.Render(name.c_str(), aParentIsFocused, aSize, aBorder);
-			}
-			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PopFont();
-			ImGui::Spacing();
+		if (tmp && !bFitWidth) {
+			h = 400.f;
+			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 		}
 
+		if (ofGetFrameNum() > 0)//window must be updated on the first frame!
+		{
+			if (tmp && (bFitWidth || bFitHeight))
+			{
+				h = -1;
+
+				if (bFitHeight) {
+					bFitHeight = false;
+
+					h = charHeight;
+					h += editor.GetTotalLines() * charHeight;
+
+					//add spacing
+					ImGuiStyle& style = ImGui::GetStyle();
+					h += 2 * style.ItemSpacing.y;
+					h += 2 * style.WindowPadding.y;
+					h += ofxImGuiSurfing::getWidgetsHeightUnit();//offset
+
+					if (bMenus && !bMinimize) h += 2 * charHeight;
+				}
+
+				if (bFitWidth) {
+					bFitWidth = false;
+
+					//if (bBreakLines) 
+					{
+						//calculate chars width
+						w = amountCharsLineWidth * charWidth;
+
+						//add spacing
+						ImGuiStyle& style = ImGui::GetStyle();
+						w += 2 * style.ItemSpacing.x;
+						w += 2 * style.WindowPadding.x;
+						w += style.ScrollbarSize;
+						w += 5;
+
+						if (bNumberLines) w += 4 * charWidth;
+					}
+				}
+
+				ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_Always);
+			}
+		}
+
+		//--
+
+		ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
+		{
+			if (p.get() != tmp) p.set(tmp);
+
+			drawImGuiWindowContent();
+
+			//--
+
+			h = ImGui::GetWindowHeight();
+
+			//if (bAutoFit) 
+			{
+				static ImVec2 szWindow_(-1, -1);
+				szWindow = ImGui::GetWindowSize();
+				if (szWindow.x != szWindow_.x || szWindow.y != szWindow_.y)//changed
+				{
+					szWindow_ = szWindow;
+
+					//if (!bFitWidth) bFitWidth = true;
+
+					bIsWindowResizing = true;
+				}
+				else
+				{
+					bIsWindowResizing = false;
+				}
+			}
+		}
 		ImGui::End();
 
 		//--
@@ -680,6 +895,8 @@ public:
 		fb.close();
 		return true;
 	};
+
+
 };
 
 

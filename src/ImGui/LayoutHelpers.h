@@ -466,7 +466,7 @@ namespace ofxImGuiSurfing
 		AddSpacingBig();
 		AddSpacingBig();
 	}
-
+	/*
 	//--------------------------------------------------------------
 	inline void AddSpaceY(int spacingy = 2)
 	{
@@ -477,6 +477,7 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Dummy(ImVec2((float)spacingx, 0.0f)); // spacing
 	}
+	*/
 
 	// Default font size 
 	// has here we don't have the GuiManger power...

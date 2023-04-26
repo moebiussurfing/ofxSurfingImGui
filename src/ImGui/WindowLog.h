@@ -323,15 +323,15 @@ namespace ofxImGuiSurfing
 
 				//float _spy = ImGui::GetStyle().ItemSpacing.y;
 				//ofxImGuiSurfing::AddSpacingY(-_spy);
+				{
+					// Pause
+					ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_ww1, _hh), true, true);
+					ImGui::SameLine();
 
-				// Pause
-				ofxImGuiSurfing::AddBigToggle(bPause, ImVec2(_ww1, _hh), true, true);
-				ImGui::SameLine();
-
-				// Clear
-				if (ImGui::Button("CLEAR", ImVec2(_ww2, _hh))) Clear();
-				ImGui::SameLine();
-
+					// Clear
+					if (ImGui::Button("CLEAR", ImVec2(_ww2, _hh))) Clear();
+					ImGui::SameLine();
+				}
 				//ofxImGuiSurfing::AddSpacingY(_spy);
 			}
 

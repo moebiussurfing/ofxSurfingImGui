@@ -38,7 +38,8 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
+	//TODO:
+	#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
 	// Comment this line to use a workaround 
 	// to weird ImGui auto resize layouting on sliders widgets...
 

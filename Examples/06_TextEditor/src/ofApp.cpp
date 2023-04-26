@@ -5,7 +5,7 @@ void ofApp::setup()
 {
 	ofSetFrameRate(60);
 
-	ofxImGuiSurfing::setMonitorsLayout(1);
+	ofxImGuiSurfing::setMonitorsLayout(1, true, true);
 
 	ui.setup();
 
@@ -14,7 +14,7 @@ void ofApp::setup()
 
 	//textEditor.loadText(ofToDataPath("SurfingTextEditor_Settings.json", true));
 	//load("SurfingTextEditor_Settings.json");
-	load("files/text1.txt");
+	load("files/text2.txt");
 
 	// custom keywords
 	textEditor.addKeyword("CPP");
@@ -25,6 +25,7 @@ void ofApp::setup()
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	//ofClear(textEditor.bIsWindowResizing ? 128 : 64);
 
 	ui.Begin();
 	{
@@ -44,6 +45,8 @@ void ofApp::keyPressed(int key)
 	if (ui.isOverInputText()) return; // skip when editing
 
 	ofLogNotice(__FUNCTION__) << key;
+
+	textEditor.keyPressed(key);
 
 	switch (key)
 	{
