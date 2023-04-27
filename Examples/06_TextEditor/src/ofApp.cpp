@@ -34,7 +34,7 @@ void ofApp::draw() {
 			ui.EndWindow();
 		}
 
-		textEditor.draw();
+		textEditor.drawImGui();
 	}
 	ui.End();
 }

@@ -11,6 +11,17 @@
 
 */
 
+
+/*
+
+TODO
+
+add openDialog to load text
+
+
+*/
+
+
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
@@ -329,10 +340,7 @@ public:
 				bs[j] = (fontIndex.get() == j);
 			}
 
-			//if (bAutoFit) 
-			{
-				if (!bFitWidth) bFitWidth = true;
-			}
+			bFitWidth = true;
 
 			return;
 		}
@@ -347,10 +355,7 @@ public:
 				this->setText(textRaw);
 			}
 
-			//if (bAutoFit) 
-			{
-				if (!bFitWidth) bFitWidth = true;
-			}
+			bFitWidth = true;
 
 			return;
 		}
@@ -370,6 +375,8 @@ public:
 		if (name == bNumberLines.getName())
 		{
 			editor.bShowLineNumbers = bNumberLines;
+
+			bFitWidth = true;
 
 			return;
 		}
@@ -456,10 +463,10 @@ public:
 			if (ImGui::BeginMenu("View"))
 			{
 				//ofxImGuiSurfing::MenuItemToggle(bExtra);
-				ofxImGuiSurfing::MenuItemToggle(bLangStyled);
+				//ofxImGuiSurfing::MenuItemToggle(bLangStyled);
 				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
-				ofxImGuiSurfing::MenuItemToggle(bFitWidth);
-				ofxImGuiSurfing::MenuItemToggle(bFitHeight);
+				//ofxImGuiSurfing::MenuItemToggle(bFitWidth);
+				//ofxImGuiSurfing::MenuItemToggle(bFitHeight);
 				//ofxImGuiSurfing::MenuItemToggle(bAutoFit);
 				ofxImGuiSurfing::MenuItemToggle(bMenus);
 
@@ -520,66 +527,69 @@ public:
 
 		ofxImGuiSurfing::AddToggleRoundedMiniXsRightAligned(bMinimize);
 		ofxImGuiSurfing::AddSpacing();
-		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
-
 		if (bMinimize) return;
 
-		//if (!bMenus || (bExtra && bMenus) || (!bExtra && bMenus)) ofxImGuiSurfing::AddSpacingY(-h);
+		float w = 0;
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+		ImVec2 bb;
+
 		ofxImGuiSurfing::AddSpacingY(-h);
 
 		//--
 
-		//ofxImGuiSurfing::AddParameter(bExtra);
-		//if (bExtra)
-		{
-			//ofxImGuiSurfing::AddGroup(params);
+		//if(bShowInfo) ofxImGuiSurfing::AddSpacing();
 
-			ofxImGuiSurfing::AddCheckBox(bMenus);
-			//ofxImGuiSurfing::SameLineIfAvailForWidth();
+		ofxImGuiSurfing::AddSmallToggle(bMenus);
+		//ofxImGuiSurfing::SameLine();
 
-			ofxImGuiSurfing::AddCheckBox(bShowInfo);
+		ofxImGuiSurfing::AddSmallToggle(bShowInfo);
 
-			if (bShowInfo) {
-				ofxImGuiSurfing::SameLine();
-				ofxImGuiSurfing::AddCheckBox(bName);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-				ofxImGuiSurfing::AddCheckBox(bPath);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-				ofxImGuiSurfing::AddCheckBox(bNumberLines);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-				ofxImGuiSurfing::AddCheckBox(bLangStyled);
+		if (bShowInfo) {
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			ofxImGuiSurfing::AddCheckBox(bName);
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			ofxImGuiSurfing::AddCheckBox(bPath);
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			ofxImGuiSurfing::AddCheckBox(bNumberLines);
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			ofxImGuiSurfing::AddCheckBox(bLangStyled);
+		}
+		else ofxImGuiSurfing::SameLine();
+
+		ofxImGuiSurfing::AddSmallToggle(bBreakLines);
+		static bool bResp1 = false;
+
+		if (bBreakLines) {
+			if (bResp1) ofxImGuiSurfing::SameLine();
+			//ofxImGuiSurfing::SameLine();
+			ImGui::PushItemWidth(86);
+			ofxImGuiSurfing::AddStepperButtons(amountCharsLineWidth);
+			ImGui::PopItemWidth();
+			ofxImGuiSurfing::SameLine();
+			ImGui::PushItemWidth(50);
+			ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
+			ImGui::PopItemWidth();
+
+			ofxImGuiSurfing::SameLineIfAvailForWidth(600);
+			if (ImGui::Button("Fit")) {
+				bFitWidth = true;
+				bFitHeight = true;
 			}
-
-			ofxImGuiSurfing::AddCheckBox(bBreakLines);
-			if (bBreakLines) {
-				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(50);
-				ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
-				ImGui::PopItemWidth();
-				ImGui::PushItemWidth(86);
-				ofxImGuiSurfing::AddStepper(amountCharsLineWidth, true);
-				ImGui::PopItemWidth();
-				ofxImGuiSurfing::SameLine();
-
-				ofxImGuiSurfing::SameLineIfAvailForWidth(600);
-				if (ImGui::Button("Fit")) {
-					bFitWidth = true;
-					bFitHeight = true;
-				}
-				ofxImGuiSurfing::SameLine();
-				if (ImGui::Button("FitW")) {
-					bFitWidth = true;
-				}
-				ofxImGuiSurfing::SameLine();
-				if (ImGui::Button("FitH")) {
-					bFitHeight = true;
-				}
-				//ofxImGuiSurfing::SameLine();
-				//ofxImGuiSurfing::AddCheckBox(bAutoFit);
+			ofxImGuiSurfing::SameLine();
+			if (ImGui::Button("FitW")) {
+				bFitWidth = true;
 			}
+			ofxImGuiSurfing::SameLine();
+			if (ImGui::Button("FitH")) {
+				bFitHeight = true;
+			}
+			//ofxImGuiSurfing::SameLine();
+			//ofxImGuiSurfing::AddCheckBox(bAutoFit);
 
 			drawImGuiWidgetsFonts();
 		}
+
+		bResp1 = (ImGui::GetContentRegionAvail().x > 250);
 
 		ImGui::Spacing();
 	};
@@ -693,11 +703,11 @@ public:
 		}
 	};
 
-	// Legacy. Deprecated
-	//--------------------------------------------------------------
-	void draw() {
-		drawImGui();
-	};
+	//// Legacy. Deprecated
+	////--------------------------------------------------------------
+	//void draw() {
+	//	drawImGui();
+	//};
 
 	//--------------------------------------------------------------
 	void drawImGui() {
@@ -827,7 +837,15 @@ public:
 
 		//--
 
-		ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
+		if (tmp)
+		{
+			ImVec2 size_min = ImVec2(200, 200);
+			ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
+			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+		}
+
+		bool b = ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
+		if (b)
 		{
 			if (p.get() != tmp) p.set(tmp);
 
@@ -837,6 +855,7 @@ public:
 
 			h = ImGui::GetWindowHeight();
 
+			//TODO:
 			//if (bAutoFit) 
 			{
 				static ImVec2 szWindow_(-1, -1);

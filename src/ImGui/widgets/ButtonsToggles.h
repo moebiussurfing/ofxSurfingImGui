@@ -562,6 +562,14 @@ namespace ofxImGuiSurfing
 	inline bool AddToggle(ofParameter<bool>& p, ImVec2 bb, bool border = false, bool bBlink = false) {
 		return AddToggle(p, bb.x, bb.y, border, bBlink);
 	}
+	//--------------------------------------------------------------
+	inline bool AddSmallToggle(ofParameter<bool>& p) {
+		bool border = false;
+		bool bBlink = false;
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+		float w = ofxImGuiSurfing::getWidgetButtomToggleWidth(p);//calc text
+		return ofxImGuiSurfing::AddToggle(p, ImVec2(w, h));
+	}
 
 	//--
 

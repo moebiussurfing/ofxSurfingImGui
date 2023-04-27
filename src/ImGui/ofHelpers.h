@@ -996,6 +996,79 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	bool AddStepperButtons(ofParameter<ParameterType>& p)
+	{
+		bool bReturn = false;
+		string name = p.getName();
+		auto tmpRef = p.get();
+
+		const auto& t = typeid(ParameterType);
+		bool isFloat = (t == typeid(float));
+		bool isInt = (t == typeid(int));
+		
+		float spx = 2;
+
+		// Int
+		const ImU32 u32_one = 1;
+		//static bool inputs_step = true;
+
+		// Float
+		float res = 100.f;
+		float step = (p.getMax() - p.getMin()) / res;
+		//float stepFast = 100.f * step;
+
+		string n = "##STEPPERBUTTONS" + name;
+
+		ImGui::PushID(n.c_str());
+
+		if (isFloat)
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spx, 0));
+			if (ImGui::Button("-")) {
+				tmpRef -= step;
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				p.set(tmpRef);
+				bReturn = true;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("+")) {
+				tmpRef += step;
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				p.set(tmpRef);
+				bReturn = true;
+			}
+			ImGui::PopStyleVar();
+		}
+		else if (isInt)
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spx, 0));
+			if (ImGui::Button("-")) {
+				tmpRef -= u32_one;
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				p.set(tmpRef);
+				bReturn = true;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("+")) {
+				tmpRef += u32_one;
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				p.set(tmpRef);
+				bReturn = true;
+			}
+			ImGui::PopStyleVar();
+		}
+		else
+		{
+			ofLogWarning("ofxSurfingImGui") << "StepperButtons: Unknown type for " + name + " param";
+		}
+
+		ImGui::PopID();
+
+		return bReturn;
+	}
+
 	//----
 
 	// These are mainly the original ofxImGui methods:
