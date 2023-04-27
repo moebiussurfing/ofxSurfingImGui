@@ -9,7 +9,6 @@ WIP
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
-
 #include "SurfingTextEditor.h"
 
 class ofApp : public ofBaseApp {

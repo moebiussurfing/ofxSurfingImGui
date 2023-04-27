@@ -36,8 +36,6 @@ using callback_t = std::function<void()>;
 //TODO: break lines for text formatting
 //https://stackoverflow.com/questions/6891652/formatting-a-string-into-multiple-lines-of-a-specific-length-in-c-c
 
-//#include <iostream>
-//#include <string>
 namespace ofxImGuiSurfing
 {
 	inline string splitInLines(string source, std::size_t width, string whitespace = " \t\r")
@@ -69,6 +67,7 @@ namespace ofxImGuiSurfing
 	*/
 }
 
+//----
 
 //--------------------------------------------------------------
 class SurfingTextEditor
@@ -79,7 +78,6 @@ public:
 
 	ofParameterGroup params{ "SurfingTextEditor" };
 	ofParameter<bool> bGui{ "TextEditor", true };
-	//ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bShowInfo{ "Info", false };
 	ofParameter<bool> bLangStyled{ "LangStyled", false };
 	ofParameter<bool> bMenus{ "Menus", false };
@@ -91,11 +89,14 @@ public:
 	ofParameter<int> amountCharsLineWidth{ "nChars", 30, 10, 100 };//in chars
 	ofParameter<bool> bNumberLines{ "NumberLines", false };
 	ofParameter<bool> bMinimize{ "Minimize", false };
+	ofParameter<bool> bFit{ "Fit" ,false };
 	ofParameter<bool> bFitWidth{ "FitW" ,false };
 	ofParameter<bool> bFitHeight{ "FitH" ,false };
 	ofParameter<bool> bAutoFit{ "AutoFit" ,false };
+	//ofParameter<bool> bExtra{ "Extra", false };
 
-	void addKeyword(string keyword) {//call on setup
+	//call on setup
+	void addKeyword(string keyword) {
 		keywords.push_back(keyword);
 
 		//lang.mKeywords.insert("CPP");
@@ -147,7 +148,6 @@ private:
 	string pathEditingFileName;
 
 private:
-
 	vector<ImFont*> customFonts;
 	vector<string> namesCustomFonts;
 
@@ -169,7 +169,6 @@ private:
 	//--
 
 public:
-
 	void setName(string n) {
 		name = n;
 		bGui.setName(n);
@@ -189,7 +188,7 @@ public:
 		//add isOverEditor to bypass
 
 		if (key == '`') bMinimize = !bMinimize;
-		if (key == 'f') bFitWidth = bFitHeight = true;
+		if (key == 'f') bFit = true;
 		if (key == 'w') bFitWidth = true;
 		if (key == 'h') bFitHeight = true;
 	};
@@ -205,11 +204,11 @@ public:
 	//--------------------------------------------------------------
 	void setup()
 	{
+		bFit.setSerializable(false);
 		bFitWidth.setSerializable(false);
 		bFitHeight.setSerializable(false);
 
 		params.add(bGui);
-		//params.add(bExtra);
 		params.add(bLangStyled);
 		params.add(bMenus);
 		params.add(bShowInfo);
@@ -221,8 +220,10 @@ public:
 		params.add(bBreakLines);
 		params.add(bNumberLines);
 		params.add(bMinimize);
+		params.add(bFit);
 		params.add(bFitWidth);
 		params.add(bFitHeight);
+		//params.add(bExtra);
 		//params.add(bAutoFit);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
@@ -317,10 +318,12 @@ public:
 		}
 	};
 
+	//--
+
 	void Changed_Params(ofAbstractParameter& e)
 	{
 		string name = e.getName();
-		ofLogNotice() << __FUNCTION__ << " : " << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor:Changed_Params") << " : " << name << " : " << e;
 
 		if (name == themeIndex.getName())
 		{
@@ -331,6 +334,7 @@ public:
 			case 2: editor.SetPalette(TextEditor::GetRetroBluePalette()); break;
 			case 3: editor.SetPalette(TextEditor::GetMarianaPalette()); break;
 			}
+
 			return;
 		}
 
@@ -340,7 +344,8 @@ public:
 				bs[j] = (fontIndex.get() == j);
 			}
 
-			bFitWidth = true;
+			//workflow
+			bFit = true;
 
 			return;
 		}
@@ -355,7 +360,8 @@ public:
 				this->setText(textRaw);
 			}
 
-			bFitWidth = true;
+			//workflow
+			bFit = true;
 
 			return;
 		}
@@ -376,7 +382,26 @@ public:
 		{
 			editor.bShowLineNumbers = bNumberLines;
 
-			bFitWidth = true;
+			//workflow
+			bFit = true;
+
+			return;
+		}
+
+		if (name == bMinimize.getName())
+		{
+			//workflow
+			bFit = true;
+
+			return;
+		}
+
+		if (name == bFit.getName())
+		{
+			if (bFit) {
+				bFit = false;
+				bFitWidth = bFitHeight = true;
+			}
 
 			return;
 		}
@@ -398,11 +423,9 @@ public:
 
 				if (ImGui::MenuItem("Load"))
 				{
-					////TODO: open dialog
-					//string path = ofToDataPath("text2.txt", true);
-					//textEditor.loadText(path);
+					doOpenFileDialog();
 				}
-				ofxImGuiSurfing::AddTooltip("Not implemented");
+				//ofxImGuiSurfing::AddTooltip("Not implemented");
 
 				//if (pathEditing != "-1")
 				{
@@ -420,6 +443,7 @@ public:
 
 					//TODO: make dialog to confirm ok or cancel.
 				}
+				//TODO; add save as.
 
 				//if (ImGui::MenuItem("Clear"))
 				//{
@@ -462,12 +486,8 @@ public:
 
 			if (ImGui::BeginMenu("View"))
 			{
-				//ofxImGuiSurfing::MenuItemToggle(bExtra);
-				//ofxImGuiSurfing::MenuItemToggle(bLangStyled);
+				ofxImGuiSurfing::MenuItemToggle(bFit);
 				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
-				//ofxImGuiSurfing::MenuItemToggle(bFitWidth);
-				//ofxImGuiSurfing::MenuItemToggle(bFitHeight);
-				//ofxImGuiSurfing::MenuItemToggle(bAutoFit);
 				ofxImGuiSurfing::MenuItemToggle(bMenus);
 
 				ImGui::EndMenu();
@@ -527,6 +547,7 @@ public:
 
 		ofxImGuiSurfing::AddToggleRoundedMiniXsRightAligned(bMinimize);
 		ofxImGuiSurfing::AddSpacing();
+
 		if (bMinimize) return;
 
 		float w = 0;
@@ -537,14 +558,12 @@ public:
 
 		//--
 
-		//if(bShowInfo) ofxImGuiSurfing::AddSpacing();
-
 		ofxImGuiSurfing::AddSmallToggle(bMenus);
-		//ofxImGuiSurfing::SameLine();
 
 		ofxImGuiSurfing::AddSmallToggle(bShowInfo);
 
-		if (bShowInfo) {
+		if (bShowInfo)
+		{
 			ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bName);
 			ofxImGuiSurfing::SameLineIfAvailForWidth();
@@ -557,23 +576,25 @@ public:
 		else ofxImGuiSurfing::SameLine();
 
 		ofxImGuiSurfing::AddSmallToggle(bBreakLines);
+
 		static bool bResp1 = false;
 
-		if (bBreakLines) {
+		if (bBreakLines)
+		{
 			if (bResp1) ofxImGuiSurfing::SameLine();
-			//ofxImGuiSurfing::SameLine();
+
 			ImGui::PushItemWidth(86);
 			ofxImGuiSurfing::AddStepperButtons(amountCharsLineWidth);
 			ImGui::PopItemWidth();
 			ofxImGuiSurfing::SameLine();
+
 			ImGui::PushItemWidth(50);
 			ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
 			ImGui::PopItemWidth();
 
 			ofxImGuiSurfing::SameLineIfAvailForWidth(600);
 			if (ImGui::Button("Fit")) {
-				bFitWidth = true;
-				bFitHeight = true;
+				bFit = true;
 			}
 			ofxImGuiSurfing::SameLine();
 			if (ImGui::Button("FitW")) {
@@ -583,6 +604,7 @@ public:
 			if (ImGui::Button("FitH")) {
 				bFitHeight = true;
 			}
+
 			//ofxImGuiSurfing::SameLine();
 			//ofxImGuiSurfing::AddCheckBox(bAutoFit);
 
@@ -622,7 +644,7 @@ public:
 				{
 					pathEditingFileName = ofFilePath::getFileName(pathEditing);
 
-					//right align
+					//Right align
 					//if (0) {
 					//	auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
 					//	ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
@@ -635,7 +657,7 @@ public:
 					cpos.mLine + 1,
 					cpos.mColumn + 1,
 					editor.GetTotalLines(),
-					editor.IsOverwrite() ? "Ovr" : "Ins",
+					editor.IsOverwrite() ? "OVR" : "INS",
 					editor.GetLanguageDefinitionName());
 			}
 		}
@@ -703,45 +725,43 @@ public:
 		}
 	};
 
-	//// Legacy. Deprecated
-	////--------------------------------------------------------------
-	//void draw() {
-	//	drawImGui();
-	//};
-
 	//--------------------------------------------------------------
-	void drawImGui() {
-		if (!bGui) return;
-
-		//TODO:
+	void drawImGui()
+	{
 		/*
-		if (bAutoFit)
-			if (bIsWindowResizing && ofGetFrameNum() > 0) {
+		static bool bDone = 0;
+		if (!bDone)
+		{
+			bDone = 1;
 
-				ImGuiStyle& style = ImGui::GetStyle();
+			ImGuiWindowFlags f = ImGuiWindowFlags_None;
+			//f += ImGuiWindowFlags_HorizontalScrollbar;
+			//if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
-				szWindow = ImGui::GetWindowSize();
+			static float w = 600.f;
+			static float h = -1;
 
-				//available space for chars
-				float w = szWindow.x;
-				w -= 2 * style.ItemSpacing.x;
-				w -= 2 * style.WindowPadding.x;
-				w -= style.ScrollbarSize;
-				w -= 5;
-				if (bNumberLines) w -= 4 * charWidth;
+			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 
-				amountCharsLineWidth = w / charWidth;
-
-				bFitWidth = true;
-			}
+			ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui.get(), f);
+			ImGui::End();
+		}
 		*/
 
-		// initialize
+		//--
+
+		if (!bGui) return;
+
+		//----
+
+		// Initialize
+
 		if (!bIntitiated)
 		{
 			bIntitiated = true;
 
-			//TODO: customizable
+			//TODO: 
+			// Customizable
 			// Language
 			lang = TextEditor::LanguageDefinition::C();
 			//lang = TextEditor::LanguageDefinition::Json();
@@ -757,6 +777,8 @@ public:
 
 		//----
 
+		// Code style
+
 		static bool bLangStyled_ = !bLangStyled.get();
 		if (bLangStyled_ != bLangStyled.get())
 		{
@@ -769,27 +791,22 @@ public:
 
 		//--
 
-		//auto cpos = editor.GetCursorPosition();
+		bool tmp = bGui.get();
 
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		f += ImGuiWindowFlags_HorizontalScrollbar;
 		if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
-		//fix 
-		//if (!bMenus && !bExtra)bExtra = 1;
-
-		//ImGui::Begin(name.c_str(), nullptr, f);
-
-		ofParameter<bool>& p = bGui;
-		bool tmp = p.get();
-
 		static float w = 600.f;
 		static float h = -1;
 
-		if (tmp && !bFitWidth) {
-			h = 400.f;
+		///*
+		if (tmp && (!bFitWidth && !bFitHeight))
+		{
+			//h = 400.f;
 			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 		}
+		//*/
 
 		if (ofGetFrameNum() > 0)//window must be updated on the first frame!
 		{
@@ -844,41 +861,44 @@ public:
 			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 		}
 
-		bool b = ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
-		if (b)
-		{
-			if (p.get() != tmp) p.set(tmp);
+		//--
 
-			drawImGuiWindowContent();
-
-			//--
-
-			h = ImGui::GetWindowHeight();
-
-			//TODO:
-			//if (bAutoFit) 
+		if (bGui) {
+			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, f);
+			if (b)
 			{
-				static ImVec2 szWindow_(-1, -1);
-				szWindow = ImGui::GetWindowSize();
-				if (szWindow.x != szWindow_.x || szWindow.y != szWindow_.y)//changed
-				{
-					szWindow_ = szWindow;
+				if (bGui.get() != tmp) bGui.set(tmp);
 
-					//if (!bFitWidth) bFitWidth = true;
+				drawImGuiWindowContent();
 
-					bIsWindowResizing = true;
-				}
-				else
+				//--
+
+				//TODO:
+				h = ImGui::GetWindowHeight();
+
+				//TODO:
+				// Window resized
 				{
-					bIsWindowResizing = false;
+					static ImVec2 szWindow_(-1, -1);
+					szWindow = ImGui::GetWindowSize();
+					if (szWindow.x != szWindow_.x || szWindow.y != szWindow_.y)//changed
+					{
+						szWindow_ = szWindow;
+						bIsWindowResizing = true;
+					}
+					else
+					{
+						bIsWindowResizing = false;
+					}
 				}
 			}
+			ImGui::End();
 		}
-		ImGui::End();
 
 		//--
 
-		//editor.ImGuiDebugPanel("DebugPanel");
+		////TODO: Internal debug
+		//editor.ImGuiDebugPanel("Debug Editor");
 	};
 
 	//--
@@ -915,11 +935,57 @@ public:
 		return true;
 	};
 
+	//--------------------------------------------------------------
+	void doOpenFileDialog()
+	{
+		// Open the Open File Dialog
+		ofFileDialogResult openFileResult = ofSystemLoadDialog("Select a file.");
 
+		// Check if the user opened a file
+		if (openFileResult.bSuccess) {
+
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User selected a file";
+
+			//We have a file, check it and process it
+			processOpenFile(openFileResult);
+		}
+		else {
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User hit cancel";
+		}
+	};
+
+	//--------------------------------------------------------------
+	void processOpenFile(ofFileDialogResult openFileResult) {
+
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Name: " + openFileResult.getName();
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Path: " + openFileResult.getPath();
+
+		string path = openFileResult.getPath();
+		ofFile file(openFileResult.getPath());
+
+		if (file.exists())
+		{
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "The file exists - now checking the type via file extension.";
+			string fileExtension = ofToUpper(file.getExtension());
+
+			// We only want 
+			//if (fileExtension == "TXT")
+			{
+				loadText(path);
+			}
+		}
+		else {
+			ofLogError("ofxSurfingImGui::surfingTextEditor") << "Not valid file found.";
+		}
+	};
+
+	void ImGuiDebugPanel(const std::string& panelName)
+	{
+		editor.ImGuiDebugPanel(panelName);
+	}
 };
 
-
-//--
+//----
 
 //TODO:
 //load content:
