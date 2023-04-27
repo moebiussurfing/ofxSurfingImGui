@@ -117,6 +117,9 @@ private:
 			//bs.push_back(pb);
 		}
 	};
+
+	bool bDoneStarted = false;
+
 public:
 	void setCustomFonts(vector<ImFont*> f, vector<string> names)
 	{
@@ -187,6 +190,7 @@ public:
 		//add bKey toggle
 		//add isOverEditor to bypass
 
+		if (key == 'g') bGui = !bGui;
 		if (key == '`') bMinimize = !bMinimize;
 		if (key == 'f') bFit = true;
 		if (key == 'w') bFitWidth = true;
@@ -405,6 +409,14 @@ public:
 
 			return;
 		}
+
+		////TODO: this is a workaround to fix that window size is broken when starts hidden...
+		//if (name == bGui.getName() && bGui)
+		//{
+		//	//workflow
+		//	bFit = true;
+		//	return;
+		//}
 	};
 
 	//--
@@ -728,29 +740,25 @@ public:
 	//--------------------------------------------------------------
 	void drawImGui()
 	{
-		/*
-		static bool bDone = 0;
-		if (!bDone)
-		{
-			bDone = 1;
-
-			ImGuiWindowFlags f = ImGuiWindowFlags_None;
-			//f += ImGuiWindowFlags_HorizontalScrollbar;
-			//if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
-
-			static float w = 600.f;
-			static float h = -1;
-
-			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
-
-			ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui.get(), f);
-			ImGui::End();
-		}
-		*/
+		//windows size
+		static float w = 600.f;
+		static float h = -1;
 
 		//--
 
 		if (!bGui) return;
+
+		////TODO: workaround fixing
+		//if (!bDoneStarted) {
+		//	ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui.get());
+		//	h = ImGui::GetWindowHeight();
+		//	ImGui::End();
+		//}
+
+		if (!bDoneStarted && ofGetFrameNum() > 0)//window must be updated on the first frame!
+		{
+			bDoneStarted = 1;
+		}
 
 		//----
 
@@ -761,8 +769,8 @@ public:
 			bIntitiated = true;
 
 			//TODO: 
-			// Customizable
-			// Language
+			// Language customizable
+
 			lang = TextEditor::LanguageDefinition::C();
 			//lang = TextEditor::LanguageDefinition::Json();
 			//lang = TextEditor::LanguageDefinition::Lua();
@@ -777,7 +785,7 @@ public:
 
 		//----
 
-		// Code style
+		// Code style update
 
 		static bool bLangStyled_ = !bLangStyled.get();
 		if (bLangStyled_ != bLangStyled.get())
@@ -797,22 +805,17 @@ public:
 		f += ImGuiWindowFlags_HorizontalScrollbar;
 		if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
-		static float w = 600.f;
-		static float h = -1;
-
-		///*
 		if (tmp && (!bFitWidth && !bFitHeight))
 		{
-			//h = 400.f;
 			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 		}
-		//*/
 
-		if (ofGetFrameNum() > 0)//window must be updated on the first frame!
+		if(0)
+		if (bDoneStarted)
 		{
 			if (tmp && (bFitWidth || bFitHeight))
 			{
-				h = -1;
+				//h = -1;
 
 				if (bFitHeight) {
 					bFitHeight = false;
@@ -863,8 +866,10 @@ public:
 
 		//--
 
-		if (bGui) {
+		if (bGui)
+		{
 			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, f);
+
 			if (b)
 			{
 				if (bGui.get() != tmp) bGui.set(tmp);
@@ -892,6 +897,7 @@ public:
 					}
 				}
 			}
+
 			ImGui::End();
 		}
 
@@ -979,45 +985,9 @@ public:
 		}
 	};
 
+	//--------------------------------------------------------------
 	void ImGuiDebugPanel(const std::string& panelName)
 	{
 		editor.ImGuiDebugPanel(panelName);
-	}
+	};
 };
-
-//----
-
-//TODO:
-//load content:
-//problems on char / string types... 
-
-//string _name = "text.txt";
-//ofLog()<<"(&ofToDataPath(_name)[0]):" << ofToString((&ofToDataPath(_name)[0]));
-
-//string inputPath = ofFilePath::getAbsolutePath("input");
-//ofStringReplace(inputPath, "/", "\\");
-
-//fileToEdit = (&_name.c_str());
-
-//TODO:
-//this works on macOS
-//fileToEdit = (&ofToDataPath(_name)[0]);
-
-//-
-
-////if (0)
-//{
-//	fileToEdit = (char*)(ofFilePath::getAbsolutePath("text1.txt").c_str());
-//	ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
-//	//std::ifstream t("text.txt");
-//	std::ifstream t(fileToEdit);
-//	if (t.good())
-//	{
-//		string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-//		editor.SetText(str);
-//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
-//	}
-//	else {
-//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
-//	}
-//}	
