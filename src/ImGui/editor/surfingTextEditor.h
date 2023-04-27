@@ -748,12 +748,13 @@ public:
 
 		if (!bGui) return;
 
-		////TODO: workaround fixing
-		//if (!bDoneStarted) {
-		//	ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui.get());
-		//	h = ImGui::GetWindowHeight();
-		//	ImGui::End();
-		//}
+		//TODO:
+		//workaround fix for startup wrong window size when bGui is disabled!
+		if (!bDoneStarted) {
+			bFit = false;
+			bFitWidth = false;
+			bFitHeight = false;
+		}
 
 		if (!bDoneStarted && ofGetFrameNum() > 0)//window must be updated on the first frame!
 		{
@@ -770,10 +771,11 @@ public:
 
 			//TODO: 
 			// Language customizable
-
-			lang = TextEditor::LanguageDefinition::C();
-			//lang = TextEditor::LanguageDefinition::Json();
-			//lang = TextEditor::LanguageDefinition::Lua();
+			{
+				lang = TextEditor::LanguageDefinition::Json();
+				//lang = TextEditor::LanguageDefinition::C();
+				//lang = TextEditor::LanguageDefinition::Lua();
+			}
 
 			// Custom tags
 			for (auto& k : keywords) {
@@ -799,24 +801,19 @@ public:
 
 		//--
 
-		bool tmp = bGui.get();
-
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		f += ImGuiWindowFlags_HorizontalScrollbar;
 		if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
-		if (tmp && (!bFitWidth && !bFitHeight))
+		if (bGui && (!bFitWidth && !bFitHeight))
 		{
 			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 		}
 
-		if(0)
 		if (bDoneStarted)
 		{
-			if (tmp && (bFitWidth || bFitHeight))
+			if (bFitWidth || bFitHeight)
 			{
-				//h = -1;
-
 				if (bFitHeight) {
 					bFitHeight = false;
 
@@ -857,9 +854,9 @@ public:
 
 		//--
 
-		if (tmp)
+		if (bGui)
 		{
-			ImVec2 size_min = ImVec2(200, 200);
+			ImVec2 size_min = ImVec2(100, 100);
 			ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 		}
@@ -868,11 +865,12 @@ public:
 
 		if (bGui)
 		{
-			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, f);
+			bool bGui_ = bGui;
+			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui_, f);
 
 			if (b)
 			{
-				if (bGui.get() != tmp) bGui.set(tmp);
+				if (bGui.get() != bGui_) bGui.set(bGui_);
 
 				drawImGuiWindowContent();
 
@@ -881,7 +879,7 @@ public:
 				//TODO:
 				h = ImGui::GetWindowHeight();
 
-				//TODO:
+				//TODO: not used yet..
 				// Window resized
 				{
 					static ImVec2 szWindow_(-1, -1);
@@ -900,11 +898,6 @@ public:
 
 			ImGui::End();
 		}
-
-		//--
-
-		////TODO: Internal debug
-		//editor.ImGuiDebugPanel("Debug Editor");
 	};
 
 	//--
@@ -985,6 +978,11 @@ public:
 		}
 	};
 
+	//--
+
+	////TODO: Internal debug.
+	// to debug undo history. buggy.
+	//editor.ImGuiDebugPanel("Debug Editor");
 	//--------------------------------------------------------------
 	void ImGuiDebugPanel(const std::string& panelName)
 	{
