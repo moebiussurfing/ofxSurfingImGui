@@ -1,7 +1,8 @@
 #pragma once
 
-//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+#ifndef OF_APP_DEFINED_ofxSurfingHelpers
 
+//----
 
 #include "ofMain.h"
 
@@ -9,20 +10,7 @@
 #include <iostream>
 using namespace std;
 
-/*
-
-	TODO:
-
-*/
-
-//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
-//namespace ofxSurfingHelpers = ofxImGuiSurfing;
-//#endif
-
-//#define ofxSurfingHelpers ofxImGuiSurfing
-
-// namespace ofxSurfingHelpers
-namespace ofxImGuiSurfing
+namespace ofxSurfingHelpers
 {
 	// Monitors helpers
 
@@ -276,10 +264,9 @@ namespace ofxImGuiSurfing
 
 	//----
 
-} // namespace  
+}; // namespace  
 
-//namespace ofxSurfingHelpers
-namespace ofxImGuiSurfing
+namespace ofxSurfingHelpers
 {
 	//------------------------------------------------------------------------------
 	// Animator functions taken from
@@ -342,8 +329,7 @@ namespace ofxImGuiSurfing
 	}
 };
 
-//namespace ofxSurfingHelpers
-namespace ofxImGuiSurfing
+namespace ofxSurfingHelpers
 {
 	// Logarithmic functions
 	// Recommended for Audio gain 
@@ -418,7 +404,8 @@ namespace ofxImGuiSurfing
 		float smooth = (target < value) ? smooth0 : smooth1;
 		ofxKuValueSmooth(value, target, smooth);
 	}
-}
+};
 
+//----
 
-//#endif
+#endif // OF_APP_DEFINED_ofxSurfingHelpers

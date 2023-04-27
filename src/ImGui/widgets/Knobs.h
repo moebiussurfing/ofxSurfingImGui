@@ -267,13 +267,15 @@ inline bool ofxImGuiSurfing::AddKnob(ofParameter<int>& parameter, bool bTrail, f
 	float w = (width * RATIO_DIM) / 2;//TODO: fix tweak
 	//float w = (width - ImGui::GetStyle().FramePadding.x) / 2;//TODO: fix tweak
 
-	float tmpRef = parameter.get();
-	float min = parameter.getMin();
-	float max = parameter.getMax();
+	//TODO: workaround to use int's as float's..
+	float tmpRef = (float)parameter.get();
+	float min = (float)parameter.getMin();
+	float max = (float)parameter.getMax();
+
 	string n = parameter.getName();
 	bool b;
 	if (bTrail) b = ImGui::KnobNeedleTrail2(n.c_str(), &tmpRef, parameter.getMin(), parameter.getMax(), parameter.getMin());
-	else b = ImGui::Knob(n.c_str(), &tmpRef, min, max, w, "%d");
+	else b = ImGui::Knob(n.c_str(), &tmpRef, min, max, w, "%.0f");
 	if (b)
 	{
 		parameter.set((int)tmpRef);

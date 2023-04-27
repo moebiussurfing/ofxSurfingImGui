@@ -28,6 +28,8 @@
 
 using namespace ofxImGuiSurfing;
 
+using namespace ofxSurfingHelpers;
+
 //----
 
 namespace ofxImGuiSurfing

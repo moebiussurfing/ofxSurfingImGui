@@ -97,7 +97,7 @@ namespace ofxImGuiSurfing
 	*/
 
 	//--
-	
+
 	//TODO: grouped colors snippet
 	/*
 	//https://github.com/ocornut/imgui/issues/438
@@ -2940,6 +2940,8 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-
+	static void ImGui_ThemeDearImGuiDark() { resetTheme(); ImGui::StyleColorsDark(); };
+	static void ImGui_ThemeDearImGuiLight() { resetTheme(); ImGui::StyleColorsLight(); };
+	static void ImGui_ThemeDearImGuiClassic() { resetTheme(); ImGui::StyleColorsClassic(); };
 
 }; // namespace

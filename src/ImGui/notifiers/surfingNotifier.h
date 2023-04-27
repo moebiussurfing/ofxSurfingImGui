@@ -3,7 +3,6 @@
 
 #include "imgui_tricks.hpp"
 
-
 #include "surfingHelpers.h"
 
 class SurfingNotifier

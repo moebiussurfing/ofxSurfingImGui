@@ -8,7 +8,7 @@
 
 	This is the main class that instantiates ofxImGui.
 	So ImGui context "is here".
-	Handles the API workflow too, 
+	Handles the API workflow too,
 	helping populating windows and widgets.
 	Handles some internal params too, like minimize, auto resize... or extra booleans.
 
@@ -32,7 +32,9 @@
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
 
-//#include "SurfingThemeEditor.h"//TODO: breaks bc recursive including?
+//#include "SurfingThemeEditor.h"
+//TODO: breaks bc recursive including?
+
 #include "imgui_styles.h"
 #include "surfingThemesHelpers.h"
 
@@ -1272,7 +1274,7 @@ public:
 
 		return ret;
 	}
-	*/ 
+	*/
 
 	//--------------------------------------------------------------
 	void EndChild()
@@ -1415,7 +1417,9 @@ public:
 private:
 
 	bool bViewport = false;
-	bool bDockingModeCentered = false; //TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
+
+	bool bDockingModeCentered = false;
+	//TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
 
 	bool bRestoreIniSettings = true; // allow handling of .ini settings.
 	bool bMouseCursorFromImGui = true; // true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
@@ -1819,6 +1823,21 @@ public:
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled() {
 		if (bLog) log.drawImGui(bLog);
+	};
+
+	//--------------------------------------------------------------
+	void DrawWindgetsTheme() {
+		//bool bToggled = true
+		//if (bToggled)
+		//	this->Add(bThemeUiAlt);
+
+		this->AddLabelBig("Theme");
+		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, "Day", "Night");
+
+		//string s;
+		//if (!bThemeUiAlt) s = THEME_NAME_NIGHT;
+		//else s = THEME_NAME_DAY;
+		//this->AddLabel(s);
 	};
 
 #ifdef OFX_USE_NOTIFIER

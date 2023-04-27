@@ -526,7 +526,7 @@ void SurfingGuiManager::setupImGuiTheme()
 
 	//// A. Hardcoded
 	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
-	
+
 	//TODO:
 	// B. Loading a file
 	string pNight = THEME_NAME_NIGHT;
@@ -553,7 +553,10 @@ void SurfingGuiManager::setupImGuiTheme()
 	bLoaded = f.doesFileExist(p);
 
 	// If theme files are not found, then it will load a hardcoded theme!
-	if (!bLoaded) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+	if (!bLoaded) {
+		if (!bThemeUiAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();//dark
+		else ofxImGuiSurfing::ImGui_ThemeDearImGuiLight();//light
+	}
 }
 
 //--------------------------------------------------------------
@@ -1738,7 +1741,7 @@ void SurfingGuiManager::Begin()
 			// Special windows toggles
 			if (bGui_SpecialWindows) drawWindowSpecialWindows();
 		}
-		}
+	}
 
 	//----
 
@@ -1749,7 +1752,7 @@ void SurfingGuiManager::Begin()
 #ifndef OFX_USE_DEBUGGER
 	if (bDebugDebugger) ImGui::ShowMetricsWindow();
 #endif
-	}
+}
 
 //--------------------------------------------------------------
 void SurfingGuiManager::drawWindowsExtraManager() {
