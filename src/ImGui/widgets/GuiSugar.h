@@ -41,7 +41,7 @@ namespace ofxImGuiSurfing
 
 	//TODO: WIP:
 	//	
-	// this is required to be commented bc if not,
+	// This is required to be commented bc if not,
 	// all nested sliders inside groups, 
 	// or into resized windows, could be too big,
 	// and then being bigger than the window right border!
@@ -51,6 +51,8 @@ namespace ofxImGuiSurfing
 	// to weird ImGui auto resize layouting on sliders widgets...
 
 	//--
+
+	// This adjust the width of mainly sliders.
 
 #ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
 
