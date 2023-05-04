@@ -27,8 +27,7 @@
 
 
 using namespace ofxImGuiSurfing;
-
-using namespace ofxSurfingHelpers;
+//using namespace ofxSurfingHelpers;
 
 //----
 

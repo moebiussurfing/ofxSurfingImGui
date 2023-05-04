@@ -22,7 +22,7 @@
 #include "GuiConstants.h"
 
 #include "surfingHelpers.h"
-using namespace ofxSurfingHelpers;
+//using namespace ofxSurfingHelpers;
 
 //------------------
 

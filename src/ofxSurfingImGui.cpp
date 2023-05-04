@@ -6,11 +6,9 @@
 /*
 
 	BUGS:
-
+	
+	Fix special windows width affecting auto resize and default sliders.
 	Fix int H sliders
-	Fix knobs, int knobs etc
-
-	Strings params inside paramGroups are not rendered ?
 
 	It seems than special windows engine
 		puts all toggles to false by default ?

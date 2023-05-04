@@ -3067,7 +3067,7 @@ namespace ofxImGuiSurfing
 							{
 								//TODO: WIP:
 								//Add(*pString, OFX_IM_DEFAULT);
-								////AddParameter(*pString);
+								AddParameter(*pString);
 							}
 							continue;
 						}

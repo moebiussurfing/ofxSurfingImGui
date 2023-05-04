@@ -78,7 +78,7 @@ public:
 
 		if (bBlink) {
 			ImVec4 tc = ImGui::GetStyleColorVec4(ImGuiCol_Text);
-			float ta = ofxSurfingHelpers::getFadeBlink();
+			float ta = ofxImGuiSurfing::getFadeBlink();
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(tc.x, tc.y, tc.z, tc.w * ta));
 		}
 

@@ -231,6 +231,7 @@ namespace ofxImGuiSurfing
 			if (bExpanded || !bfoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 				ImGui::Dummy(ImVec2(0, 1));
 				//ImGui::Spacing();
 				bchanged += ImGui::SliderFloat(((p.getName() + " X").c_str()), &tmp.x, p.getMin().x, p.getMax().x);
@@ -243,12 +244,15 @@ namespace ofxImGuiSurfing
 				p.set(tmp);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 				if (bfoldered && bExpanded) ImGui::TreePop();
+				
 				return true;
 			}
-			if (bExpanded || !bfoldered)
-				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bExpanded || !bfoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			if (bfoldered && bExpanded) ImGui::TreePop();
+			
 			return false;
 		}
 	}
@@ -340,6 +344,7 @@ namespace ofxImGuiSurfing
 			if (bExpanded || !bfoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 				//ImGui::Spacing();
 				ImGui::Dummy(ImVec2(0, 1));
 				bchanged += ImGui::SliderFloat(((p.getName() + " X").c_str()), &tmp.x, p.getMin().x, p.getMax().x);
@@ -354,12 +359,14 @@ namespace ofxImGuiSurfing
 				p.set(tmp);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 				if (bfoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
-			if (bExpanded || !bfoldered)
-				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bExpanded || !bfoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			if (bfoldered && bExpanded) ImGui::TreePop();
+
 			return false;
 		}
 	}
@@ -374,15 +381,18 @@ namespace ofxImGuiSurfing
 		auto tmp = p.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::SliderFloat2((p.getName().c_str()), tmp.getPtr(), p.getMin().x, p.getMax().x))
 		{
 			p.set(tmp);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -390,6 +400,7 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<ofVec3f>& p)
 	{
 		auto tmp = p.get();
+
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 		if (ImGui::SliderFloat3((p.getName().c_str()), tmp.getPtr(), p.getMin().x, p.getMax().x))
@@ -397,10 +408,12 @@ namespace ofxImGuiSurfing
 			p.set(tmp);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -410,15 +423,18 @@ namespace ofxImGuiSurfing
 		auto tmp = p.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::SliderFloat4((p.getName().c_str()), tmp.getPtr(), p.getMin().x, p.getMax().x))
 		{
 			p.set(tmp);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -434,6 +450,7 @@ namespace ofxImGuiSurfing
 		float h = tmp.getHeight();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		result |= ImGui::SliderFloat(((p.getName() + " x").c_str()), &x, p.getMin().x, p.getMax().x);
 		result |= ImGui::SliderFloat(((p.getName() + " y").c_str()), &y, p.getMin().y, p.getMax().y);
 		result |= ImGui::SliderFloat(((p.getName() + " w").c_str()), &w, p.getMin().width, p.getMax().width);
@@ -442,6 +459,7 @@ namespace ofxImGuiSurfing
 		if (result) p.set(ofRectangle(x, y, w, h));
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return result;
 	}
 
@@ -773,15 +791,18 @@ namespace ofxImGuiSurfing
 		auto tmp = p.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::SliderFloat((p.getName().c_str()), (float*)&tmp, p.getMin(), p.getMax(), format, power))
 		{
 			p.set(tmp);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -792,17 +813,21 @@ namespace ofxImGuiSurfing
 		auto tmpMax = pMax.get();
 
 		auto uniqueName = name.c_str();
+
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::DragIntRange2(uniqueName, &tmpMin, &tmpMax, speed, pMin.getMin(), pMax.getMax()))
 		{
 			pMin.set(tmpMin);
 			pMax.set(tmpMax);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -813,16 +838,19 @@ namespace ofxImGuiSurfing
 		auto tmpMax = pMax.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::DragFloatRange2(name.c_str(), &tmpMin, &tmpMax, speed, pMin.getMin(), pMax.getMax()))
 		{
 			pMin.set(tmpMin);
 			pMax.set(tmpMax);
 
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -836,6 +864,7 @@ namespace ofxImGuiSurfing
 		auto tmpMax = pMax.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpMin.x, &tmpMax.x, speed, pMin.getMin().x, pMax.getMax().x))
 		{
 			result |= true;
@@ -850,10 +879,13 @@ namespace ofxImGuiSurfing
 		{
 			pMin.set(tmpMin);
 			pMax.set(tmpMax);
+
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -865,6 +897,7 @@ namespace ofxImGuiSurfing
 		auto tmpMax = pMax.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpMin.x, &tmpMax.x, speed, pMin.getMin().x, pMax.getMax().x))
 		{
 			result |= true;
@@ -884,10 +917,14 @@ namespace ofxImGuiSurfing
 		{
 			pMin.set(tmpMin);
 			pMax.set(tmpMax);
+
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
+
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 
@@ -899,6 +936,7 @@ namespace ofxImGuiSurfing
 		auto tmpMax = pMax.get();
 
 		IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
 		if (ImGui::DragFloatRange2((name + " X").c_str(), &tmpMin.x, &tmpMax.x, speed, pMin.getMin().x, pMax.getMax().x))
 		{
 			result |= true;
@@ -923,10 +961,13 @@ namespace ofxImGuiSurfing
 		{
 			pMin.set(tmpMin);
 			pMax.set(tmpMax);
+
 			IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 			return true;
 		}
 		IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
 		return false;
 	}
 

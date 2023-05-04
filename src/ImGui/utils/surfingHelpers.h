@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
 
 //----
 
@@ -10,16 +10,17 @@
 #include <iostream>
 using namespace std;
 
-namespace ofxSurfingHelpers
+//namespace ofxSurfingHelpers//TODO:
+namespace ofxImGuiSurfing
 {
 	// Monitors helpers
 
-// WARNING! For my personal setup!
-// I have three FHD monitors: 
-// Left monitor is portrait. 
-// Central and Right monitor are landscape.
-	
-//--------------------------------------------------------------
+	// WARNING! For my personal setup!
+	// I have three FHD monitors: 
+	// Left monitor is portrait. 
+	// Central and Right monitor are landscape.
+
+	//--------------------------------------------------------------
 	inline void setMonitorsLayout(int pos, bool bPortrait, bool bStandardFrameRate)
 	{
 		// main monitor, and in fact all the monitors, 
@@ -264,10 +265,6 @@ namespace ofxSurfingHelpers
 
 	//----
 
-}; // namespace  
-
-namespace ofxSurfingHelpers
-{
 	//------------------------------------------------------------------------------
 	// Animator functions taken from
 	// https://github.com/tcoppex/ofxFontSampler/blob/main/example/src/ofApp.cpp
@@ -327,10 +324,9 @@ namespace ofxSurfingHelpers
 
 		return a;
 	}
-};
 
-namespace ofxSurfingHelpers
-{
+	//----
+
 	// Logarithmic functions
 	// Recommended for Audio gain 
 	// or some frequency variables. 
@@ -408,4 +404,4 @@ namespace ofxSurfingHelpers
 
 //----
 
-#endif // OF_APP_DEFINED_ofxSurfingHelpers
+//#endif // OF_APP_DEFINED_ofxSurfingHelpers

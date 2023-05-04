@@ -4,7 +4,7 @@
 #include "GuiConstants.h"
 
 /*
- 
+
 	This class has widgets sugar
 
 */
@@ -18,6 +18,7 @@ namespace ofxImGuiSurfing
 	// SUGAR SNIPPETS
 
 	//----
+
 
 	// 1.
 
@@ -38,8 +39,14 @@ namespace ofxImGuiSurfing
 
 	//--
 
-	//TODO:
-	#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
+	//TODO: WIP:
+	//	
+	// this is required to be commented bc if not,
+	// all nested sliders inside groups, 
+	// or into resized windows, could be too big,
+	// and then being bigger than the window right border!
+	// 
+	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
 	// Comment this line to use a workaround 
 	// to weird ImGui auto resize layouting on sliders widgets...
 
@@ -47,22 +54,36 @@ namespace ofxImGuiSurfing
 
 #ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
 
+	//--
+
 	// A. Relative to panel width
-	// less than threshold will make half window width
+	// less than threshold will make a ratio (half) window width
 
 #define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
+	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7f); \
+	}
 
 #define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
+	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
+	ImGui::PopItemWidth(); \
+	}
+
+//--
+
+//	// B: Using max minus the label
+//	#define IMGUI_LABELS_WIDTH_DEFAULT 75
+//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
+//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - IMGUI_LABELS_WIDTH_DEFAULT);
+//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
+//	ImGui::PopItemWidth();
 
 #endif
 
 	//--
 
-	//// B. Using an absolute size
+	//// C. Using an absolute size
 
-	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
 	//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
 	//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH ImGui::PopItemWidth();
 
@@ -70,14 +91,16 @@ namespace ofxImGuiSurfing
 
 #ifdef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
 
-	// C. To bypass and do nothing.
+	// D. To bypass and do nothing.
 
 #define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ;
 #define IMGUI_SUGAR__WIDGETS_POP_WIDTH ;
 
 #endif
 
-	//--
+
+	//----
+
 
 	// 2.
 
@@ -258,8 +281,8 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
-ImVec2 size_min = ImVec2(220, -1); \
-ImVec2 size_max = ImVec2(310, -1); \
+ImVec2 size_min = ImVec2(210, -1); \
+ImVec2 size_max = ImVec2(300, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 

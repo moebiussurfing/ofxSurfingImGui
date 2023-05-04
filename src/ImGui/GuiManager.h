@@ -2623,7 +2623,7 @@ public:
 
 		// split possible instances on different folders
 		path_Global = nameLabel + "/Gui/";
-		CheckFolder(path_Global);
+		ofxImGuiSurfing::CheckFolder(path_Global);
 		// Useful toggles for internal Windows
 
 		windowsOrganizer.setPathGlobal(path_Global);
