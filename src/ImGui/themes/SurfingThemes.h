@@ -23,8 +23,8 @@ namespace ofxImGuiSurfing
 	// To link with the window.
 	namespace SurfingThemes
 	{
-		static bool bEnableColors = false;
-		static bool bEnableLayout = false;
+		static bool bEnableColors = true;//to bypass or load colors
+		static bool bEnableLayout = true;//to bypass or load layout sizes
 	}
 
 	using namespace SurfingThemes;
@@ -34,8 +34,9 @@ namespace ofxImGuiSurfing
 	// Helpers
 	
 	// https://github.com/borg/ofxColourTheory
+	// Color Helpers
 
-#define none ofFloatColor(0,0,0)
+#define FLOAT_COLOR_BLACK ofFloatColor(0,0,0)
 
 	static ofFloatColor grey(int g, float a = 1.f) {
 		ofColor c = ofColor(g, g, g, a * 255);
@@ -60,6 +61,7 @@ namespace ofxImGuiSurfing
 
 	//--
 
+	//TODO: grouped colors snippet
 	//https://github.com/GraphicsProgramming/dear-imgui-styles/tree/main
 	/*
 			if( bStyleDark_ )
@@ -98,7 +100,8 @@ namespace ofxImGuiSurfing
 	*/
 
 	//--
-	
+
+	//TODO: grouped colors snippet
 	/*
 	//https://github.com/ocornut/imgui/issues/438
 	void SetupStyleFromHue()
@@ -193,6 +196,8 @@ namespace ofxImGuiSurfing
 	static void resetTheme() {
 		ImGui::GetStyle() = ImGuiStyle();
 	};
+
+	//----
 
 	// Themes
 
@@ -922,12 +927,12 @@ namespace ofxImGuiSurfing
 
 		if (bEnableColors)
 		{
-			colors[ImGuiCol_ChildBg] = none;
-			colors[ImGuiCol_BorderShadow] = none;
-			colors[ImGuiCol_FrameBgActive] = none;
-			colors[ImGuiCol_Tab] = none;
-			colors[ImGuiCol_TabUnfocused] = none;
-			colors[ImGuiCol_DockingEmptyBg] = none;
+			colors[ImGuiCol_ChildBg] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_BorderShadow] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_FrameBgActive] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_Tab] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_TabUnfocused] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_DockingEmptyBg] = FLOAT_COLOR_BLACK;
 
 			colors[ImGuiCol_Text] = grey(180);
 			colors[ImGuiCol_TextDisabled] = grey(90);
@@ -2938,6 +2943,8 @@ namespace ofxImGuiSurfing
 		}
 	}
 
-
+	static void ImGui_ThemeDearImGuiDark() { resetTheme(); ImGui::StyleColorsDark(); };
+	static void ImGui_ThemeDearImGuiLight() { resetTheme(); ImGui::StyleColorsLight(); };
+	static void ImGui_ThemeDearImGuiClassic() { resetTheme(); ImGui::StyleColorsClassic(); };
 
 }; // namespace

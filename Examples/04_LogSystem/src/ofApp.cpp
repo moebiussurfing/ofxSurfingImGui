@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//ofSetWindowPosition(-1920, 25);
+	setMonitorsLayout(-1, true, true);
 
 	setupParams();
 
@@ -45,7 +45,7 @@ void ofApp::setupImGui()
 	}
 
 	// Optional:
-	// This feature will redirect all std::coud logs to the ui log window.
+	// This feature will redirect all std::cout logs to the ui log window.
 	ui.setLogRedirectConsole();
 }
 
@@ -75,9 +75,10 @@ void ofApp::drawImGui()
 {
 	ui.Begin();
 
+	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+	
 	if (ui.BeginWindow("ofApp"))
 	{
-
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 		bool b = !ui.bMinimize; // is maximized alias
 
@@ -102,6 +103,7 @@ void ofApp::drawImGui()
 			ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
 
 			ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL);
+			//ui.Add(amountPauses, OFX_IM_KNOB_DOTKNOB, 2);
 			ui.AddTooltip("Density of \npause moments");
 			ui.AddTooltip(amountPauses, true, false);
 

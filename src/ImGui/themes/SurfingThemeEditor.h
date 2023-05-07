@@ -17,10 +17,10 @@
 	add make new ImGui_ThemeMoebiusSurfingV3
 		dark theme with more 3d styled look.
 		pressed toggle = darker.
-	define a global accent color 
+	define a global accent color
 		and some main colors.
 		link colors between particular settings.
-		but darker or lighter / transparent. 
+		but darker or lighter / transparent.
 		ex: mark what color must be linked.
 			each one has his own alpha.
 		//https://github.com/ocornut/imgui/issues/438
@@ -39,13 +39,14 @@
 
 #include "ofxSurfingImGui.h"
 
+namespace ofxSurfingHelpers = ofxImGuiSurfing;//fix for removing ofxSurfingHelpers dependency
+
 // ImGui Theme serializer
 // Taken from: https://github.com/pegvin/ImGooeyStyles
 #include "imgui_styles.h"
 
 #include "surfingThemesHelpers.h"
 #include "surfingFiles.h"
-
 
 /*
 	// We can force load one of the bundled Themes:
@@ -57,6 +58,7 @@
 
 //----
 
+#if(1)
 // Standalone 
 /*
 EXAMPLE
@@ -68,24 +70,39 @@ namespace ofxImGuiSurfing
 	{
 		static string pathThemes = "";
 
-		inline void loadThemeFileByName(string name) {
+		enum THEME_STYLE
+		{
+			THEME_NIGHT = 0,
+			THEME_DAY
+		};
+
+		static THEME_STYLE themeStyle = THEME_NIGHT;
+
+		inline bool loadThemeFileByName(string name) {
 			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << name;
 			string pathTheme = pathThemes + name;
 			string p = ofToDataPath(pathTheme);
 			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
+
+			ofFile f;
+			return f.doesFileExist(p);
 		};
 
-		inline void loadThemeFile(string path, bool bAbsolute = false) {
+		inline bool loadThemeFile(string path, bool bAbsolute = false) {
 			ofLogNotice("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
 			string p;
 			if (bAbsolute) p = path;
 			else p = ofToDataPath(path);
 			ofLogNotice("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
+
+			ofFile f;
+			return f.doesFileExist(p);
 		};
 	}
 }
+#endif
 
 //--
 
@@ -107,13 +124,13 @@ public:
 
 	SurfingThemeEditor()
 	{
-		ofAddListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
+		//ofAddListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
 		ofAddListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
 	};
 
 	~SurfingThemeEditor()
 	{
-		ofRemoveListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
+		//ofRemoveListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
 		ofRemoveListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingThemeEditor::Changed);
 	};
@@ -228,7 +245,7 @@ private:
 	};
 
 	void loadThemeHardcoded(int index) {
-		ofxImGuiSurfing::setIndexTheme(index);
+		ofxImGuiSurfing::setIndexThemeHardcoded(index);
 	};
 
 private:
@@ -239,6 +256,7 @@ private:
 	};
 
 	void keyPressed(ofKeyEventArgs& eventArgs) {
+		/*
 		const int& key = eventArgs.key;
 		ofLogVerbose("ofxSurfingImGui:SurfingThemeEditor") << "Key: " << (char)key;
 
@@ -257,8 +275,10 @@ private:
 		else if (key == OF_KEY_RIGHT)
 		{
 		}
+		*/
 	};
 
+	//ofxSurfingImGui* ui = nullptr;
 	SurfingGuiManager* ui = nullptr;
 
 public:
@@ -270,6 +290,8 @@ public:
 
 	void drawDemoSurfingWidgets(SurfingGuiManager& ui)
 	{
+		//if (ui == nullptr) return;
+
 		static ofParameter<float> v1{ "Value1", 0.5, 0, 1 };
 		static ofParameter<float> v2{ "Value2", 0, -1, 1 };
 		static ofParameter<int> n1{ "Number1", 4, 0, 8 };
@@ -330,8 +352,12 @@ public:
 	void draw()
 	{
 		if (!bGui) return;
+		if (ui == nullptr) return;
 
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		ImVec2 size_min = ImVec2(150, -1);
+		ImVec2 size_max = ImVec2(-1, -1);
+		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 
 		if (ui->BeginWindow(bGui))
 		{
@@ -435,6 +461,7 @@ private:
 	void drawStyleEditor()
 	{
 		if (!bGui_StyleEditor) return;
+		if (ui == nullptr) return;
 
 		if (ui->BeginWindow(bGui_StyleEditor)) {
 
@@ -448,6 +475,7 @@ private:
 
 	void drawDemoImGui()
 	{
+		if (ui == nullptr) return;
 		ImGui::ShowDemoWindow(NULL);
 	};
 
@@ -522,7 +550,7 @@ public:
 			ui->AddLabelBig("Hardcoded Themes", true);
 
 			// arrows, hardcoded themes combo, fonts combo
-			ofxImGuiSurfing::drawThemeSelector(NULL);
+			ofxImGuiSurfing::drawThemeHardcodedSelector(NULL);
 
 			ui->AddSpacingBigSeparated();
 

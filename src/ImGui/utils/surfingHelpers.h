@@ -1,32 +1,60 @@
 #pragma once
 
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
+
+//----
+
 #include "ofMain.h"
 
 #include <random>
 #include <iostream>
 using namespace std;
 
-/*
-
-	TODO:
-
-*/
-
-#ifndef OF_APP_DEFINED_ofxSurfingHelpers
-namespace ofxSurfingHelpers = ofxImGuiSurfing;
-#endif
-
-//#define ofxSurfingHelpers ofxImGuiSurfing
-
-// namespace ofxSurfingHelpers
+//namespace ofxSurfingHelpers//TODO:
 namespace ofxImGuiSurfing
 {
-	// Monitors Helpers
+	// Monitors helpers
 
-	// WARRNING! For my personal setup!
+	// WARNING! For my personal setup!
 	// I have three FHD monitors: 
 	// Left monitor is portrait. 
 	// Central and Right monitor are landscape.
+
+	//--------------------------------------------------------------
+	inline void setMonitorsLayout(int pos, bool bPortrait, bool bStandardFrameRate)
+	{
+		// main monitor, and in fact all the monitors, 
+		// are expected as FHD 1920x1080.
+		// in my case my main monitor is landscape and central
+		// and the left and right monitors are portrait.
+		// you can modify for your own layout!
+
+		if (bStandardFrameRate) {
+			ofSetFrameRate(60);
+			ofSetVerticalSync(false);
+		}
+
+		int x, y, w, h;
+
+		// window bar height on WIN_32.
+		int yOffset = 38;
+		int hOffset = 12;
+
+		x = y = 0;
+		y = yOffset;
+
+		w = bPortrait ? 1080 : 1920;
+		h = bPortrait ? 1920 : 1080;
+		h -= hOffset;
+
+		if (pos == -1) x = bPortrait ? -1080 : -1920;
+		else if (pos == 1) x = 1920;
+
+		ofSetWindowPosition(x, y);
+		ofSetWindowShape(w, h);
+	};
+
+	// Legacy
 	//--------------------------------------------------------------
 	inline void setMonitorsLayout(int layout = 0, bool bStandardFrameRate = true)
 	{
@@ -237,11 +265,6 @@ namespace ofxImGuiSurfing
 
 	//----
 
-} // namespace  
-
-//namespace ofxSurfingHelpers
-namespace ofxImGuiSurfing
-{
 	//------------------------------------------------------------------------------
 	// Animator functions taken from
 	// https://github.com/tcoppex/ofxFontSampler/blob/main/example/src/ofApp.cpp
@@ -301,11 +324,9 @@ namespace ofxImGuiSurfing
 
 		return a;
 	}
-};
 
-//namespace ofxSurfingHelpers
-namespace ofxImGuiSurfing
-{
+	//----
+
 	// Logarithmic functions
 	// Recommended for Audio gain 
 	// or some frequency variables. 
@@ -379,4 +400,8 @@ namespace ofxImGuiSurfing
 		float smooth = (target < value) ? smooth0 : smooth1;
 		ofxKuValueSmooth(value, target, smooth);
 	}
-}
+};
+
+//----
+
+//#endif // OF_APP_DEFINED_ofxSurfingHelpers

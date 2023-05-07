@@ -3,8 +3,10 @@
 
 
 /*
- 
-	This class has widgets size useful Constants
+
+	This class has useful constants:
+	widgets sizes, default themes, fonts, ...etc.
+	To be used around many classes.
 
 */
 
@@ -22,7 +24,7 @@
 
 #define PADDING_COMBO 0 // to fix some weird label forcing oversize window
 
-//--
+//----
 
 // Will be applied as minimum 
 // and standard window shape
@@ -35,33 +37,21 @@
 #define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
 #define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
-//--
+//----
 
-// DEPRECATED
-/*
-// Some absolute sizes are deprecated! 
-// Now we use sizes relatives to the ImGui theme
-#define BUTTON_BIG_HEIGHT 50 
-#define BUTTON_COLOR_SIZE 40
-#define BUTTON_SLIM_HEIGHT2 20
+// Default Themes files
 
-#define WIDGET_SLIDER_HEIGHT 20
-#define WIDGET_COLOR_STRIP_COLOR_HEIGHT 15
-#define WIDGETS_HEIGHT 50 // will be applied to buttons/toggles heights
+// Files must be in the default place:
+// ofxSurfingImGui\Examples\09_ThemeEditor\bin\data\Gui\themes\
+// Note that "/Gui/" is the default global path, but could be changed. (setName() or setPath())
+// When files are not located there, then will load a hardcoded default theme: 
+// ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
-#define WIDGET_LABEL_WIDTH 120
+// Night
+#define THEME_NAME_NIGHT "moebiusSurfing.ini"
 
-//TODO:
-#define WIDGET_PARAM_PADDING 0 
-// text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 40 
-// // text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-//#define WIDGET_PARAM_PADDING 120 
-// text padding: will be applied to the ofParams sliders. 110 must be the max labels width of params names
-
-#define PADDING_PANELS 2 // space between some widgets or panels
-#define PADDING_WIDGETS 2 // space between some widgets or panels
-*/
+// Day
+#define THEME_NAME_DAY "moebiusSurfingDay.ini"
 
 //----
 
@@ -81,6 +71,8 @@
 #define OFX_IM_FONT_DEFAULT_FILE FONT_DEFAULT_FILE 
 //#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
+//--
+
 // Other Candidates
 
 //#define FONT_DEFAULT_SIZE 14
@@ -95,9 +87,10 @@
 //#define FONT_DEFAULT_SIZE 14
 //#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
 
-//--
+//----
 
 // Ratio Sizes between sizes of a widget type. 
+
 //TODO:
 // fix for HSLIDERS.. 
 // should be used by toggles and buttons too!
@@ -117,7 +110,8 @@
 #define OFX_IM_FORMAT_WIDGETS_INT "%d"
 #define OFX_IM_FORMAT_KNOBS_INT "%d"
 #define OFX_IM_FORMAT_SLIDERS_INT "%d"
-//--
+
+//----
 
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
 // Constraint some window minimal shape sizes.
@@ -136,14 +130,10 @@
 #define IM_FONT_HUGE 2
 #define IM_FONT_HUGE_XXL 3
 
-//--
+//----
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
-//#define BLINK_MIN 0.2f 
-//#define BLINK_MAX 0.5f 
-//#define BLINK_MIN 0.5f 
-//#define BLINK_MAX 1.0f 
 #define BLINK_MIN 0.2f 
 #define BLINK_MAX 0.8f 
 
@@ -151,13 +141,13 @@
 
 #define VERTICAL_AMOUNT_UNITS 5.0f 
 
-//--
+//----
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 
-//----
+//------
 
 namespace ofxImGuiSurfing
 {
@@ -190,7 +180,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_INACTIVE, // Draws the widget. but makes it inactive. disables mouse control.
 		OFX_IM_SPACING, // Make it invisible, preserve a custom (one standard line) spacing.
 
-		//TODO: could be an extra arg to allow different appearance for inactive types..
+		//TODO: could be added an extra argument 
+		// to allow different appearance for inactive types..
 
 		//--
 
@@ -348,7 +339,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		OFX_IM_COMBO_MULTI,
-		
+
 		//TODO: 
 		// multiple controls for fine tweak:
 		//slider + drag + stepper
@@ -509,9 +500,12 @@ namespace ofxImGuiSurfing
 
 	//---------------
 
-	// SUGAR SNIPPETS
 
 	//----
+
+	// SUGAR SNIPPETS
+
+	//--
 
 	// 1.
 
@@ -599,7 +593,6 @@ namespace ofxImGuiSurfing
 	//--
 
 #define TEXT_LABEL_TO_RESIZE "0123456789"
-//#define TEXT_LABEL_TO_RESIZE "----------" 
 
 	//TODO:
 	// This is a 10 chars string that we will use as default label width, to name widgets.
@@ -645,46 +638,6 @@ namespace ofxImGuiSurfing
 
 // Adds Constraints Window Shapes (width and height)
 
-// Width and height
-
-//TODO: should DEPRECATE these ratio constants a make absolute sizes.
-// LEGACY
-//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
-//{ \
-//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, PANEL_WIDGETS_HEIGHT_MIN); \
-//ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
-//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-//} \
-//
-//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
-//{ \
-//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, PANEL_WIDGETS_HEIGHT_MIN); \
-//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, PANEL_WIDGETS_HEIGHT_MIN * 8.f); \
-//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-//} \
-//
-//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
-//{ \
-//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
-//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, PANEL_WIDGETS_HEIGHT_MIN * 5.f); \
-//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-//} \
-//
-//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
-//{ \
-//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, PANEL_WIDGETS_HEIGHT_MIN); \
-//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
-//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-//} \
-//
-//#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MINI \
-//{ \
-//ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MIN * 0.75f ); \
-//ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MIN); \
-//ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-//} \
-
-
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
 { \
 ImVec2 size_min = ImVec2(500, 500); \
@@ -729,7 +682,7 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 //--
 
-// Constraint for width only ?
+// Constraint for width only
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL \
 { \

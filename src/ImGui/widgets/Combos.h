@@ -35,7 +35,6 @@ namespace ofxImGuiSurfing
 			else ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		}
 
-
 		if (values.empty())
 		{
 			if (!bRaw) ImGui::PopItemWidth();
@@ -52,11 +51,11 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static bool VectorCombo(int* currIndex, std::vector<std::string>& values)
 	{
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 
 		bool b = ImGui::Combo("##COMBO", currIndex, vector_getter, static_cast<void*>(&values), values.size());
 
-		ImGui::PopItemWidth();
+		//ImGui::PopItemWidth();
 
 		return b;
 	};

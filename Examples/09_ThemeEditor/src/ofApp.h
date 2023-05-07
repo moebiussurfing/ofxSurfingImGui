@@ -14,5 +14,7 @@ public:
 	
 	ofxSurfingGui ui;
 
+	// The theme editor must be instantiated.
+	// It will be required to edit the default themes.
 	SurfingThemeEditor e;
 };

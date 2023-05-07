@@ -1,40 +1,103 @@
 #pragma once
 
+/*
+
+	Helpers mainly for hardcoded themes.
+
+*/
+
 #include "ofMain.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
+using namespace ImGui;
+
+//--
+
 #include "Combos.h"
 
 #include "surfingThemes.h"
 
-using namespace ImGui;
+//----
+
+#if(0)
+// ImGui Theme serializer
+// Taken from: https://github.com/pegvin/ImGooeyStyles
+#include "imgui_styles.h"
+//#include "imgui_styles.cpp"
+
+// Standalone 
+/*
+EXAMPLE
+ofxImGuiSurfing::SurfingThemes::loadThemeFileByName("t22222.ini");
+*/
+namespace ofxImGuiSurfing
+{
+	namespace SurfingThemes
+	{
+		static string pathThemes = "";
+
+		enum THEME_STYLE
+		{
+			THEME_NIGHT = 0,
+			THEME_DAY
+		};
+
+		static THEME_STYLE themeStyle = THEME_NIGHT;
+
+		inline bool loadThemeFileByName(string name) {
+			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << name;
+			string pathTheme = pathThemes + name;
+			string p = ofToDataPath(pathTheme);
+			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
+			ImGui::LoadStyleFrom(p.c_str());
+
+			ofFile f;
+			return f.doesFileExist(p);
+		};
+
+		inline bool loadThemeFile(string path, bool bAbsolute = false) {
+			ofLogNotice("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
+			string p;
+			if (bAbsolute) p = path;
+			else p = ofToDataPath(path);
+			ofLogNotice("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
+			ImGui::LoadStyleFrom(p.c_str());
+
+			ofFile f;
+			return f.doesFileExist(p);
+		};
+	}
+}
+#endif
 
 //---
 
 namespace ofxImGuiSurfing
 {
-	static int indexTheme = -1;
+	static int indexThemeHardcoded = -1;
 	static int amountThemes = 0;
 	static bool bUpdate = false;
 
 	//----
 
+	//--------------------------------------------------------------
 	//inline void resetTheme() {
 	//	ImGui::GetStyle() = ImGuiStyle();
 	//};
 
-	static void setIndexTheme(int i) {
-		indexTheme = i;
+	//--------------------------------------------------------------
+	static void setIndexThemeHardcoded(int i) {
+		indexThemeHardcoded = i;
 		bUpdate = true;
 	}
 
 	//--------------------------------------------------------------
-	inline bool drawWidgetsThemeSelector(const char* label)
+	inline bool drawWidgetsThemeHardcodedSelector(const char* label)
 	{
-		int i = indexTheme;
+		int i = indexThemeHardcoded;
 
 		//TODO: should be static..
 		static std::vector<std::string> names;
@@ -113,7 +176,7 @@ namespace ofxImGuiSurfing
 		if (ImGui::Button("<", sz2) || bL) {
 			i--;
 			i = ofClamp(i, 0, names.size() - 1);
-			indexTheme = i;
+			indexThemeHardcoded = i;
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
@@ -121,7 +184,7 @@ namespace ofxImGuiSurfing
 		if (ImGui::Button(">", sz2) || bR) {
 			i++;
 			i = ofClamp(i, 0, names.size() - 1);
-			indexTheme = i;
+			indexThemeHardcoded = i;
 			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
@@ -134,15 +197,15 @@ namespace ofxImGuiSurfing
 		{
 			//TODO; workaround
 			if (bUpdate) {
-				i = indexTheme;
+				i = indexThemeHardcoded;
 				bUpdate = false;
 			}
 
 			i = ofClamp(i, 0, names.size() - 1);//avoid crashes
-			indexTheme = i;
+			indexThemeHardcoded = i;
 			ofLogNotice("ofxSurfingImGui") << "Combo: " << i;
 
-			switch (indexTheme)
+			switch (indexThemeHardcoded)
 			{
 			case 0: resetTheme(); ImGui::StyleColorsDark(); break;
 			case 1: resetTheme(); ImGui::StyleColorsLight(); break;
@@ -183,7 +246,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void drawThemeSelector(ImGuiStyle* ref)
+	inline void drawThemeHardcodedSelector(ImGuiStyle* ref)
 	{
 		//TODO: not working?
 		// You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
@@ -199,7 +262,7 @@ namespace ofxImGuiSurfing
 		if (ref == NULL) ref = &ref_saved_style;
 
 		// arrows and combo themes list
-		if (ofxImGuiSurfing::drawWidgetsThemeSelector("Colors##Selector")) ref_saved_style = style;
+		if (ofxImGuiSurfing::drawWidgetsThemeHardcodedSelector("Colors##Selector")) ref_saved_style = style;
 
 		if (ImGui::Button("Reload##BROWSER")) {
 			//reload current
@@ -208,7 +271,7 @@ namespace ofxImGuiSurfing
 		ImGui::SameLine();
 		if (ImGui::Button("Random")) {
 			//reload a random index
-			indexTheme = ofRandom(0, amountThemes);
+			indexThemeHardcoded = ofRandom(0, amountThemes);
 			bUpdate = true;
 		}
 

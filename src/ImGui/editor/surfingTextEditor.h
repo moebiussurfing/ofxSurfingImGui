@@ -11,6 +11,17 @@
 
 */
 
+
+/*
+
+TODO
+
+add openDialog to load text
+
+
+*/
+
+
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
@@ -25,8 +36,6 @@ using callback_t = std::function<void()>;
 //TODO: break lines for text formatting
 //https://stackoverflow.com/questions/6891652/formatting-a-string-into-multiple-lines-of-a-specific-length-in-c-c
 
-//#include <iostream>
-//#include <string>
 namespace ofxImGuiSurfing
 {
 	inline string splitInLines(string source, std::size_t width, string whitespace = " \t\r")
@@ -58,6 +67,7 @@ namespace ofxImGuiSurfing
 	*/
 }
 
+//----
 
 //--------------------------------------------------------------
 class SurfingTextEditor
@@ -68,7 +78,6 @@ public:
 
 	ofParameterGroup params{ "SurfingTextEditor" };
 	ofParameter<bool> bGui{ "TextEditor", true };
-	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bShowInfo{ "Info", false };
 	ofParameter<bool> bLangStyled{ "LangStyled", false };
 	ofParameter<bool> bMenus{ "Menus", false };
@@ -77,10 +86,17 @@ public:
 	ofParameter<bool> bPath{ "Path" , false };
 	ofParameter<bool> bName{ "Name" , false };
 	ofParameter<bool> bBreakLines{ "BreakLines" , true };
-	ofParameter<int> lineWidth{ "LineWidth", 30, 10, 120 };//in chars
+	ofParameter<int> amountCharsLineWidth{ "nChars", 30, 10, 100 };//in chars
 	ofParameter<bool> bNumberLines{ "NumberLines", false };
+	ofParameter<bool> bMinimize{ "Minimize", false };
+	ofParameter<bool> bFit{ "Fit" ,false };
+	ofParameter<bool> bFitWidth{ "FitW" ,false };
+	ofParameter<bool> bFitHeight{ "FitH" ,false };
+	ofParameter<bool> bAutoFit{ "AutoFit" ,false };
+	//ofParameter<bool> bExtra{ "Extra", false };
 
-	void addKeyword(string keyword) {//call on setup
+	//call on setup
+	void addKeyword(string keyword) {
 		keywords.push_back(keyword);
 
 		//lang.mKeywords.insert("CPP");
@@ -88,6 +104,10 @@ public:
 	};
 
 private:
+
+	float charWidth = 0;
+	float charHeight = 0;
+
 	void buildFontNames() {
 		if (bs.size() != 0) bs.clear();
 		for (size_t i = 0; i < customFonts.size(); i++) {
@@ -97,6 +117,9 @@ private:
 			//bs.push_back(pb);
 		}
 	};
+
+	bool bDoneStarted = false;
+
 public:
 	void setCustomFonts(vector<ImFont*> f, vector<string> names)
 	{
@@ -128,7 +151,6 @@ private:
 	string pathEditingFileName;
 
 private:
-
 	vector<ImFont*> customFonts;
 	vector<string> namesCustomFonts;
 
@@ -150,7 +172,6 @@ private:
 	//--
 
 public:
-
 	void setName(string n) {
 		name = n;
 		bGui.setName(n);
@@ -163,6 +184,20 @@ public:
 	};
 
 	//--------------------------------------------------------------
+	void keyPressed(int key) {
+
+		//TODO: add args to allow modifier key (ctrl key)
+		//add bKey toggle
+		//add isOverEditor to bypass
+
+		if (key == 'g') bGui = !bGui;
+		if (key == '`') bMinimize = !bMinimize;
+		if (key == 'f') bFit = true;
+		if (key == 'w') bFitWidth = true;
+		if (key == 'h') bFitHeight = true;
+	};
+
+	//--------------------------------------------------------------
 	void exit() {
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // exit()
 
@@ -171,9 +206,13 @@ public:
 	};
 
 	//--------------------------------------------------------------
-	void setup() {
+	void setup()
+	{
+		bFit.setSerializable(false);
+		bFitWidth.setSerializable(false);
+		bFitHeight.setSerializable(false);
+
 		params.add(bGui);
-		params.add(bExtra);
 		params.add(bLangStyled);
 		params.add(bMenus);
 		params.add(bShowInfo);
@@ -181,9 +220,15 @@ public:
 		params.add(themeIndex);
 		params.add(bPath);
 		params.add(bName);
-		params.add(lineWidth);
+		params.add(amountCharsLineWidth);
 		params.add(bBreakLines);
 		params.add(bNumberLines);
+		params.add(bMinimize);
+		params.add(bFit);
+		params.add(bFitWidth);
+		params.add(bFitHeight);
+		//params.add(bExtra);
+		//params.add(bAutoFit);
 
 		ofAddListener(params.parameterChangedE(), this, &SurfingTextEditor::Changed_Params); // setup()
 
@@ -192,6 +237,9 @@ public:
 	};
 
 	//--
+
+	ImVec2 szWindow = ImVec2(0, 0);
+	bool bIsWindowResizing = false;
 
 	//--------------------------------------------------------------
 	string getTextRaw() const {
@@ -212,10 +260,18 @@ public:
 	};
 
 	//--------------------------------------------------------------
+	void addText(string s) {
+		textRaw += s;
+
+		if (bBreakLines) setTextBreakLines(textRaw, amountCharsLineWidth);//split lines
+		else editor.SetText(textRaw);
+	};
+
+	//--------------------------------------------------------------
 	void setText(string s) {
 		textRaw = s;
 
-		if (bBreakLines) setTextBreakLines(s, lineWidth);//split lines
+		if (bBreakLines) setTextBreakLines(s, amountCharsLineWidth);//split lines
 		else editor.SetText(s);
 
 		//pathEditing = "-1";
@@ -266,10 +322,12 @@ public:
 		}
 	};
 
+	//--
+
 	void Changed_Params(ofAbstractParameter& e)
 	{
 		string name = e.getName();
-		ofLogNotice() << __FUNCTION__ << name << " : " << e;
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor:Changed_Params") << " : " << name << " : " << e;
 
 		if (name == themeIndex.getName())
 		{
@@ -280,6 +338,7 @@ public:
 			case 2: editor.SetPalette(TextEditor::GetRetroBluePalette()); break;
 			case 3: editor.SetPalette(TextEditor::GetMarianaPalette()); break;
 			}
+
 			return;
 		}
 
@@ -289,18 +348,24 @@ public:
 				bs[j] = (fontIndex.get() == j);
 			}
 
+			//workflow
+			bFit = true;
+
 			return;
 		}
 
-		if (name == lineWidth.getName())
+		if (name == amountCharsLineWidth.getName())
 		{
 			static int i = -1;
-			if (lineWidth != i) {
-				i = lineWidth;
+			if (amountCharsLineWidth != i) {
+				i = amountCharsLineWidth;
 
 				textRaw = this->getTextRaw();//get the edited on runtime 
 				this->setText(textRaw);
 			}
+
+			//workflow
+			bFit = true;
 
 			return;
 		}
@@ -321,8 +386,37 @@ public:
 		{
 			editor.bShowLineNumbers = bNumberLines;
 
+			//workflow
+			bFit = true;
+
 			return;
 		}
+
+		if (name == bMinimize.getName())
+		{
+			//workflow
+			bFit = true;
+
+			return;
+		}
+
+		if (name == bFit.getName())
+		{
+			if (bFit) {
+				bFit = false;
+				bFitWidth = bFitHeight = true;
+			}
+
+			return;
+		}
+
+		////TODO: this is a workaround to fix that window size is broken when starts hidden...
+		//if (name == bGui.getName() && bGui)
+		//{
+		//	//workflow
+		//	bFit = true;
+		//	return;
+		//}
 	};
 
 	//--
@@ -341,10 +435,9 @@ public:
 
 				if (ImGui::MenuItem("Load"))
 				{
-					////TODO: open dialog
-					//string path = ofToDataPath("text2.txt", true);
-					//textEditor.loadText(path);
+					doOpenFileDialog();
 				}
+				//ofxImGuiSurfing::AddTooltip("Not implemented");
 
 				//if (pathEditing != "-1")
 				{
@@ -359,7 +452,10 @@ public:
 						// save text....
 						TextToFile(ofFilePath::getAbsolutePath(pathEditing), ssTextToSave, false);
 					}
+
+					//TODO: make dialog to confirm ok or cancel.
 				}
+				//TODO; add save as.
 
 				//if (ImGui::MenuItem("Clear"))
 				//{
@@ -402,9 +498,9 @@ public:
 
 			if (ImGui::BeginMenu("View"))
 			{
-				ofxImGuiSurfing::MenuItemToggle(bExtra);
-				ofxImGuiSurfing::MenuItemToggle(bLangStyled);
+				ofxImGuiSurfing::MenuItemToggle(bFit);
 				ofxImGuiSurfing::MenuItemToggle(bShowInfo);
+				ofxImGuiSurfing::MenuItemToggle(bMenus);
 
 				ImGui::EndMenu();
 			}
@@ -459,50 +555,168 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void drawImGuiInternal() {
+	void drawImGuiInternalControls() {
 
-		if (!bMenus) ofxImGuiSurfing::AddParameter(bExtra);
+		ofxImGuiSurfing::AddToggleRoundedMiniXsRightAligned(bMinimize);
+		ofxImGuiSurfing::AddSpacing();
 
-		if (bExtra)
+		if (bMinimize) return;
+
+		float w = 0;
+		float h = ofxImGuiSurfing::getWidgetsHeightUnit();
+		ImVec2 bb;
+
+		ofxImGuiSurfing::AddSpacingY(-h);
+
+		//--
+
+		ofxImGuiSurfing::AddSmallToggle(bMenus);
+
+		ofxImGuiSurfing::AddSmallToggle(bShowInfo);
+
+		if (bShowInfo)
 		{
-			//ofxImGuiSurfing::AddGroup(params);
-
-			if (!bMenus) ofxImGuiSurfing::SameLineIfAvailForWidth();
-
-			ofxImGuiSurfing::AddCheckBox(bMenus);
 			ofxImGuiSurfing::SameLineIfAvailForWidth();
-			ofxImGuiSurfing::AddCheckBox(bShowInfo);
+			ofxImGuiSurfing::AddCheckBox(bName);
 			ofxImGuiSurfing::SameLineIfAvailForWidth();
-			if (bShowInfo) {
-				ofxImGuiSurfing::AddCheckBox(bName);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-				ofxImGuiSurfing::AddCheckBox(bPath);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-				ofxImGuiSurfing::AddCheckBox(bNumberLines);
-				ofxImGuiSurfing::SameLineIfAvailForWidth();
-			}
+			ofxImGuiSurfing::AddCheckBox(bPath);
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
+			ofxImGuiSurfing::AddCheckBox(bNumberLines);
+			ofxImGuiSurfing::SameLineIfAvailForWidth();
 			ofxImGuiSurfing::AddCheckBox(bLangStyled);
+		}
+		else ofxImGuiSurfing::SameLine();
 
-			//ofxImGuiSurfing::SameLineIfAvailForWidth();
-			//ofxImGuiSurfing::AddSeparatorVertical();
-			//ofxImGuiSurfing::SameLineIfAvailForWidth();
-			ofxImGuiSurfing::AddCheckBox(bBreakLines);
-			if (bBreakLines) {
-				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(90);
-				ofxImGuiSurfing::AddStepper(lineWidth, true);
-				ImGui::PopItemWidth();
-				ofxImGuiSurfing::SameLine();
-				ImGui::PushItemWidth(70);
-				ofxImGuiSurfing::AddParameter(lineWidth);
-				ImGui::PopItemWidth();
+		ofxImGuiSurfing::AddSmallToggle(bBreakLines);
+
+		static bool bResp1 = false;
+
+		if (bBreakLines)
+		{
+			if (bResp1) ofxImGuiSurfing::SameLine();
+
+			ImGui::PushItemWidth(86);
+			ofxImGuiSurfing::AddStepperButtons(amountCharsLineWidth);
+			ImGui::PopItemWidth();
+			ofxImGuiSurfing::SameLine();
+
+			ImGui::PushItemWidth(50);
+			ofxImGuiSurfing::AddParameter(amountCharsLineWidth);
+			ImGui::PopItemWidth();
+
+			ofxImGuiSurfing::SameLineIfAvailForWidth(600);
+			if (ImGui::Button("Fit")) {
+				bFit = true;
 			}
+			ofxImGuiSurfing::SameLine();
+			if (ImGui::Button("FitW")) {
+				bFitWidth = true;
+			}
+			ofxImGuiSurfing::SameLine();
+			if (ImGui::Button("FitH")) {
+				bFitHeight = true;
+			}
+
+			//ofxImGuiSurfing::SameLine();
+			//ofxImGuiSurfing::AddCheckBox(bAutoFit);
 
 			drawImGuiWidgetsFonts();
 		}
 
+		bResp1 = (ImGui::GetContentRegionAvail().x > 250);
+
 		ImGui::Spacing();
 	};
+
+	//--------------------------------------------------------------
+	void drawImGuiWindowContent()
+	{
+		auto cpos = editor.GetCursorPosition();
+
+		// Menus
+		if (!bMinimize)
+		{
+			if (bMenus) drawImGuiMenus();
+		}
+
+		// Controls
+		drawImGuiInternalControls();
+
+		// Info
+		if (!bMinimize)
+		{
+			if (bShowInfo)
+			{
+				if (bPath)
+				{
+					ImGui::Text(pathEditing.c_str());
+				}
+
+				if (bName)
+				{
+					pathEditingFileName = ofFilePath::getFileName(pathEditing);
+
+					//Right align
+					//if (0) {
+					//	auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
+					//	ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
+					//}
+
+					ImGui::Text(pathEditingFileName.c_str());
+				}
+
+				ImGui::Text("%4d/%-4d %4d lines | %s | %s",
+					cpos.mLine + 1,
+					cpos.mColumn + 1,
+					editor.GetTotalLines(),
+					editor.IsOverwrite() ? "OVR" : "INS",
+					editor.GetLanguageDefinitionName());
+			}
+		}
+
+		// Editor
+		drawImGuiEditor();
+
+		ImGui::Spacing();
+	}
+
+	//--------------------------------------------------------------
+	void drawImGuiEditor() {
+
+		// Insert external widgets 
+		// if it's already settled!
+		if (functionDraw != nullptr) functionDraw();
+
+		//--
+
+		// Editor Main Text
+
+		//ImGui::Spacing();
+		if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
+		{
+			// Draw Text content
+			//editor.Render(name.c_str());
+
+			bool aParentIsFocused = false;
+			const ImVec2& aSize = ImVec2();
+			bool aBorder = 0;
+
+			editor.Render(name.c_str(), aParentIsFocused, aSize, aBorder);
+
+			//--			
+
+			//TODO:
+			//if (bBreakLines) 
+			{
+				//customFonts[fontIndex]
+				ImFont* font = ImGui::GetFont();
+				auto bb = font->CalcTextSizeA(font->FontSize, FLT_MAX, 0, "x");
+				charWidth = bb.x;
+				charHeight = bb.y;
+			}
+		}
+		if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PopFont();
+	}
 
 	//--------------------------------------------------------------
 	void drawImGuiWidgetsFonts() {
@@ -524,19 +738,44 @@ public:
 	};
 
 	//--------------------------------------------------------------
-	void draw() {
+	void drawImGui()
+	{
+		//windows size
+		static float w = 600.f;
+		static float h = -1;
+
+		//--
+
 		if (!bGui) return;
 
-		// initialize
+		//TODO:
+		//workaround fix for startup wrong window size when bGui is disabled!
+		if (!bDoneStarted) {
+			bFit = false;
+			bFitWidth = false;
+			bFitHeight = false;
+		}
+
+		if (!bDoneStarted && ofGetFrameNum() > 0)//window must be updated on the first frame!
+		{
+			bDoneStarted = 1;
+		}
+
+		//----
+
+		// Initialize
+
 		if (!bIntitiated)
 		{
 			bIntitiated = true;
 
-			//TODO: customizable
-			// Language
-			lang = TextEditor::LanguageDefinition::C();
-			//lang = TextEditor::LanguageDefinition::Json();
-			//lang = TextEditor::LanguageDefinition::Lua();
+			//TODO: 
+			// Language customizable
+			{
+				lang = TextEditor::LanguageDefinition::Json();
+				//lang = TextEditor::LanguageDefinition::C();
+				//lang = TextEditor::LanguageDefinition::Lua();
+			}
 
 			// Custom tags
 			for (auto& k : keywords) {
@@ -547,6 +786,8 @@ public:
 		}
 
 		//----
+
+		// Code style update
 
 		static bool bLangStyled_ = !bLangStyled.get();
 		if (bLangStyled_ != bLangStyled.get())
@@ -560,83 +801,103 @@ public:
 
 		//--
 
-		auto cpos = editor.GetCursorPosition();
-
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		f += ImGuiWindowFlags_HorizontalScrollbar;
-		if (bMenus) f += ImGuiWindowFlags_MenuBar;
+		if (bMenus && !bMinimize) f += ImGuiWindowFlags_MenuBar;
 
-		//fix 
-		//if (!bMenus && !bExtra)bExtra = 1;
-
-		//ImGui::Begin(name.c_str(), nullptr, f);
-
-		auto& p = bGui;
-		bool tmp = p.get();
-		if (tmp) ImGui::SetWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
-		ImGui::Begin(p.getName().c_str(), (bool*)&tmp, f);
-		if (p.get() != tmp) p.set(tmp);
-
+		if (bGui && (!bFitWidth && !bFitHeight))
 		{
-			if (bMenus) drawImGuiMenus();
-
-			drawImGuiInternal();
-
-			if (bShowInfo)
-			{
-				if (bPath)
-				{
-					ImGui::Text(pathEditing.c_str());
-				}
-				if (bName)
-				{
-					pathEditingFileName = ofFilePath::getFileName(pathEditing);
-
-					if (0) {
-						auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
-						ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
-					}
-
-					ImGui::Text(pathEditingFileName.c_str());
-				}
-
-				ImGui::Text("%4d/%-4d %4d lines | %s | %s",
-					cpos.mLine + 1,
-					cpos.mColumn + 1,
-					editor.GetTotalLines(),
-					editor.IsOverwrite() ? "Ovr" : "Ins",
-					editor.GetLanguageDefinitionName());
-			}
-
-			//--
-
-			// Insert external widgets if already settled!
-			if (functionDraw != nullptr) functionDraw();
-
-			//--
-
-			// Main Text
-			//ImGui::Spacing();
-			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PushFont(customFonts[fontIndex]);
-			{
-				// Draw Text content
-				//editor.Render(name.c_str());
-
-				bool aParentIsFocused = false;
-				const ImVec2& aSize = ImVec2();
-				bool aBorder = 0;
-
-				editor.Render(name.c_str(), aParentIsFocused, aSize, aBorder);
-			}
-			if (fontIndex < customFonts.size() && customFonts[fontIndex] != nullptr) ImGui::PopFont();
-			ImGui::Spacing();
+			ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_FirstUseEver);
 		}
 
-		ImGui::End();
+		if (bDoneStarted)
+		{
+			if (bFitWidth || bFitHeight)
+			{
+				if (bFitHeight) {
+					bFitHeight = false;
+
+					h = charHeight;
+					h += editor.GetTotalLines() * charHeight;
+
+					//add spacing
+					ImGuiStyle& style = ImGui::GetStyle();
+					h += 2 * style.ItemSpacing.y;
+					h += 2 * style.WindowPadding.y;
+					h += ofxImGuiSurfing::getWidgetsHeightUnit();//offset
+
+					if (bMenus && !bMinimize) h += 2 * charHeight;
+				}
+
+				if (bFitWidth) {
+					bFitWidth = false;
+
+					//if (bBreakLines) 
+					{
+						//calculate chars width
+						w = amountCharsLineWidth * charWidth;
+
+						//add spacing
+						ImGuiStyle& style = ImGui::GetStyle();
+						w += 2 * style.ItemSpacing.x;
+						w += 2 * style.WindowPadding.x;
+						w += style.ScrollbarSize;
+						w += 5;
+
+						if (bNumberLines) w += 4 * charWidth;
+					}
+				}
+
+				ImGui::SetNextWindowSize(ImVec2{ w, h }, ImGuiCond_Always);
+			}
+		}
 
 		//--
 
-		//editor.ImGuiDebugPanel("DebugPanel");
+		if (bGui)
+		{
+			ImVec2 size_min = ImVec2(100, 100);
+			ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
+			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+		}
+
+		//--
+
+		if (bGui)
+		{
+			bool bGui_ = bGui;
+			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&bGui_, f);
+
+			if (b)
+			{
+				if (bGui.get() != bGui_) bGui.set(bGui_);
+
+				drawImGuiWindowContent();
+
+				//--
+
+				//TODO:
+				h = ImGui::GetWindowHeight();
+
+				//TODO: not used yet..
+				// Window resized
+				{
+					static ImVec2 szWindow_(-1, -1);
+					szWindow = ImGui::GetWindowSize();
+					if (szWindow.x != szWindow_.x || szWindow.y != szWindow_.y)//changed
+					{
+						szWindow_ = szWindow;
+						bIsWindowResizing = true;
+					}
+					else
+					{
+						bIsWindowResizing = false;
+					}
+				}
+			}
+
+			ImGui::End();
+		}
 	};
 
 	//--
@@ -672,42 +933,59 @@ public:
 		fb.close();
 		return true;
 	};
+
+	//--------------------------------------------------------------
+	void doOpenFileDialog()
+	{
+		// Open the Open File Dialog
+		ofFileDialogResult openFileResult = ofSystemLoadDialog("Select a file.");
+
+		// Check if the user opened a file
+		if (openFileResult.bSuccess) {
+
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User selected a file";
+
+			//We have a file, check it and process it
+			processOpenFile(openFileResult);
+		}
+		else {
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User hit cancel";
+		}
+	};
+
+	//--------------------------------------------------------------
+	void processOpenFile(ofFileDialogResult openFileResult) {
+
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Name: " + openFileResult.getName();
+		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Path: " + openFileResult.getPath();
+
+		string path = openFileResult.getPath();
+		ofFile file(openFileResult.getPath());
+
+		if (file.exists())
+		{
+			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "The file exists - now checking the type via file extension.";
+			string fileExtension = ofToUpper(file.getExtension());
+
+			// We only want 
+			//if (fileExtension == "TXT")
+			{
+				loadText(path);
+			}
+		}
+		else {
+			ofLogError("ofxSurfingImGui::surfingTextEditor") << "Not valid file found.";
+		}
+	};
+
+	//--
+
+	////TODO: Internal debug.
+	// to debug undo history. buggy.
+	//editor.ImGuiDebugPanel("Debug Editor");
+	//--------------------------------------------------------------
+	void ImGuiDebugPanel(const std::string& panelName)
+	{
+		editor.ImGuiDebugPanel(panelName);
+	};
 };
-
-
-//--
-
-//TODO:
-//load content:
-//problems on char / string types... 
-
-//string _name = "text.txt";
-//ofLog()<<"(&ofToDataPath(_name)[0]):" << ofToString((&ofToDataPath(_name)[0]));
-
-//string inputPath = ofFilePath::getAbsolutePath("input");
-//ofStringReplace(inputPath, "/", "\\");
-
-//fileToEdit = (&_name.c_str());
-
-//TODO:
-//this works on macOS
-//fileToEdit = (&ofToDataPath(_name)[0]);
-
-//-
-
-////if (0)
-//{
-//	fileToEdit = (char*)(ofFilePath::getAbsolutePath("text1.txt").c_str());
-//	ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
-//	//std::ifstream t("text.txt");
-//	std::ifstream t(fileToEdit);
-//	if (t.good())
-//	{
-//		string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-//		editor.SetText(str);
-//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
-//	}
-//	else {
-//		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
-//	}
-//}	

@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofxSurfingHelpers::setMonitorsLayout(1);
+	ofxSurfingHelpers::setMonitorsLayout(1, true, true);
 
 	ui.setup();
 
@@ -12,10 +12,6 @@ void ofApp::setup()
 	e.setPathGlobal(ui.getPath());
 	e.setUiPtr(&ui);
 	e.setup();
-
-	//TODO: not working
-	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
-	//e.loadThemeHardcoded(5);
 }
 
 //--------------------------------------------------------------
@@ -23,6 +19,29 @@ void ofApp::draw()
 {
 	ui.Begin();
 	{
+		// There is a toggle to alternate Night/Day themes.
+		// This toggle is available always, 
+		// and it will work only if the default files are on bin/data/..
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MEDIUM;
+		if (ui.BeginWindow("ofApp"))
+		{
+			ui.Add(e.bGui, OFX_IM_TOGGLE_ROUNDED);
+			ui.AddSpacingSeparated();
+
+			ui.AddLabelBig("Theme");
+			ofxImGuiSurfing::AddToggleRoundedButtonNamed(ui.bThemeUiAlt, "Day", "Night");
+
+			string s;
+			if (!ui.bThemeUiAlt) s = THEME_NAME_NIGHT;
+			else s = THEME_NAME_DAY;
+			ui.AddLabel(s);
+
+			ui.EndWindow();
+		}
+
+		//--
+
+		// The editor windows
 		e.draw();
 	}
 	ui.End();
@@ -30,11 +49,11 @@ void ofApp::draw()
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-	ofLogNotice() << "Key: " << (char)key;
+	ofLogNotice() << "keyPressed: " << (char)key;
 
-	//Here we can see how to load the created themes into your app.
-	//Do not requires to instantiate the editor in every app to use the themes.
-	//We will see different approaches.
+	// Here we can see how to load the created themes into your app.
+	// Do not requires to instantiate the editor in every app to use the themes.
+	// We will see different approaches.
 
 	if (0) {}
 

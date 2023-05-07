@@ -52,6 +52,7 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
+	params_Advanced.add(bThemeUiAlt);
 
 	params_Advanced.add(bDebugDebugger);
 #ifdef OFX_USE_DEBUGGER
@@ -467,7 +468,7 @@ void SurfingGuiManager::setupImGuiFonts()
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGui()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui:setupImGui");
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -502,16 +503,70 @@ void SurfingGuiManager::setupImGui()
 
 	//--
 
-	// Theme
+	//TODO:
+	//setupImGuiTheme();
+}
 
+//--------------------------------------------------------------
+void SurfingGuiManager::setupImGuiTheme()
+{
+	ofLogNotice("ofxSurfingImGui:setupImGuiTheme");
+
+	//--
+
+//	// Fonts
+//#ifdef OFX_IMGUI_USE_FONTS
+//	setupImGuiFonts();
+//#endif
+
+	//--
+
+	// Theme
 	// Colors and widgets/spacing sizes
-	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+
+	//// A. Hardcoded
+	//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+
+	//TODO:
+	// B. Loading a file
+	string pNight = THEME_NAME_NIGHT;
+	string pDay = THEME_NAME_DAY;
+	bool bLoaded = false;
+
+	//TODO: Why do not works?
+	// fails when including "SurfingThemeEditor.h" into GuiManager.h.
+	//if (ofxImGuiSurfing::SurfingThemes::themeStyle == THEME_NIGHT)
+	//	bLoaded = ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(pNight);
+	//else if (ofxImGuiSurfing::SurfingThemes::themeStyle == THEME_DAY)
+	//	bLoaded = ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(pDay);
+
+	string name;
+	if (bThemeUiAlt) name = pDay;
+	else name = pNight;
+	string pathThemes = path_Global + "themes/";
+	//string pathThemes = "Gui/themes/";
+	string pathTheme = pathThemes + name;
+	string p = ofToDataPath(pathTheme);
+	ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
+	ImGui::LoadStyleFrom(p.c_str());
+	ofFile f;
+	bLoaded = f.doesFileExist(p);
+
+	// If theme files are not found, then it will load a hardcoded theme!
+	if (!bLoaded) {
+		if (!bThemeUiAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();//dark
+		else ofxImGuiSurfing::ImGui_ThemeDearImGuiLight();//light
+	}
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::startup()
 {
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+	//--
+
+	setupImGuiTheme();
 
 	//--
 
@@ -962,7 +1017,7 @@ void SurfingGuiManager::pushStyleFont(int index)
 	{
 		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
-}
+	}
 //--------------------------------------------------------------
 void SurfingGuiManager::popStyleFont()
 {
@@ -3010,6 +3065,13 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	else if (name == bMinimize.getName())
 	{
 		doBuildHelpInfo();
+		return;
+	}
+
+	// Theme
+	else if (name == bThemeUiAlt.getName())
+	{
+		setupImGuiTheme();
 		return;
 	}
 

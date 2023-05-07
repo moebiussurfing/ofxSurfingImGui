@@ -94,7 +94,9 @@ void ofApp::draw_MainWindow() {
 		
 		ui.AddLabelBig("> Hello from ofApp");
 		ui.AddSpacingSeparated();
-		ui.AddMinimizerToggle(true);
+		ui.AddMinimizerToggle();
+		ui.AddAutoResizeToggle();
+		ui.AddSpacingSeparated();
 
 
 		// Optional: 

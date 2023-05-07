@@ -3,8 +3,8 @@
 
 #include "imgui_tricks.hpp"
 
-
 #include "surfingHelpers.h"
+//using namespace ofxImGuiSurfing;
 
 class SurfingNotifier
 {
@@ -46,7 +46,7 @@ public:
 		buildTagsDefault();
 		ImTricks::NotifyManager::doReset();
 
-		loadGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+		ofxImGuiSurfing::loadGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
 
 		bDoneSetup = true;
 	};
@@ -58,7 +58,7 @@ private:
 	};
 	void exit() 
 	{
-		saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+		ofxImGuiSurfing::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
 	};
 
 public:
