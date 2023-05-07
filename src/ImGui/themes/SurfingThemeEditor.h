@@ -39,6 +39,8 @@
 
 #include "ofxSurfingImGui.h"
 
+namespace ofxSurfingHelpers = ofxImGuiSurfing;//fix for removing ofxSurfingHelpers dependency
+
 // ImGui Theme serializer
 // Taken from: https://github.com/pegvin/ImGooeyStyles
 #include "imgui_styles.h"

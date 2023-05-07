@@ -33,7 +33,7 @@ namespace ofxImGuiSurfing
 
 	// Color Helpers
 
-#define none ofFloatColor(0,0,0)
+#define FLOAT_COLOR_BLACK ofFloatColor(0,0,0)
 
 	static ofFloatColor grey(int g, float a = 1.f) {
 		ofColor c = ofColor(g, g, g, a * 255);
@@ -924,12 +924,12 @@ namespace ofxImGuiSurfing
 
 		if (bEnableColors)
 		{
-			colors[ImGuiCol_ChildBg] = none;
-			colors[ImGuiCol_BorderShadow] = none;
-			colors[ImGuiCol_FrameBgActive] = none;
-			colors[ImGuiCol_Tab] = none;
-			colors[ImGuiCol_TabUnfocused] = none;
-			colors[ImGuiCol_DockingEmptyBg] = none;
+			colors[ImGuiCol_ChildBg] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_BorderShadow] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_FrameBgActive] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_Tab] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_TabUnfocused] = FLOAT_COLOR_BLACK;
+			colors[ImGuiCol_DockingEmptyBg] = FLOAT_COLOR_BLACK;
 
 			colors[ImGuiCol_Text] = grey(180);
 			colors[ImGuiCol_TextDisabled] = grey(90);
