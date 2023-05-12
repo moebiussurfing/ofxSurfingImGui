@@ -1007,6 +1007,27 @@ public:
 		ofxImGuiSurfing::AddSpacingHugeSeparated();
 	}
 
+	//--------------------------------------------------------------
+	void AddSpacingX(float x)
+	{
+		ofxImGuiSurfing::AddSpacingX(x);
+	}
+	//--------------------------------------------------------------
+	void AddSpacingY(float y)
+	{
+		ofxImGuiSurfing::AddSpacingY(y);
+	}
+	//--------------------------------------------------------------
+	void AddSpacingOffset(ImVec2 diff)
+	{
+		ofxImGuiSurfing::AddSpacingOffset(diff);
+	}
+	//--------------------------------------------------------------
+	void AddSpacingRightAlign(float width = 100)
+	{
+		ofxImGuiSurfing::AddSpacingRightAlign(width);
+	}
+
 	//--
 
 	// Button Repeats
@@ -1375,7 +1396,8 @@ public:
 		ofxImGuiSurfing::EndBlinkFrame(bBlink);
 	}
 
-	// Will make darker the contained text on widgets between begin/end
+	// Will make darker the contained text on widgets between begin/end.
+	// Useful to look widget as it was disabled.
 	//--------------------------------------------------------------
 	inline void BeginDarkenText(bool bEnable = true)
 	{
@@ -1396,6 +1418,18 @@ public:
 	inline void EndBlinkText(bool bBlink = true)
 	{
 		ofxImGuiSurfing::EndBlinkText(bBlink);
+	}
+
+	// For text disabled or text inputs.
+	//--------------------------------------------------------------
+	inline void BeginBlinkTextDisabled(bool bBlink = true)
+	{
+		ofxImGuiSurfing::BeginBlinkTextDisabled(bBlink);
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkTextDisabled(bool bBlink = true)
+	{
+		ofxImGuiSurfing::EndBlinkTextDisabled(bBlink);
 	}
 
 	// Border Highlight without blinking

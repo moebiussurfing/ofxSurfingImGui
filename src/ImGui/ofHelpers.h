@@ -93,7 +93,8 @@ namespace ofxImGuiSurfing
 		return bReturn;
 	}
 
-	// Adds mouse wheel control to the last previous param widget (templated float/int)
+	// Adds mouse wheel control to the last previous param widget (templated float/int).
+	// Put after populate widget!
 	//--------------------------------------------------------------
 	template<typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& ap, bool bFlip = false)
@@ -389,6 +390,20 @@ namespace ofxImGuiSurfing
 					p = !p;
 				}
 			}
+		}
+	}
+
+	// Put after populate a widget!
+	//--------------------------------------------------------------
+	template<typename ParameterType>
+	inline void AddMouse(ofParameter<ParameterType>& ap, bool bFlip = false)
+	{
+		ofxImGuiSurfing::AddMouseWheel(ap);
+
+		// No bool
+		if (typeid(ParameterType) != typeid(bool)) 
+		{
+			ofxImGuiSurfing::AddMouseClickRightReset(ap);
 		}
 	}
 
@@ -933,8 +948,8 @@ namespace ofxImGuiSurfing
 		const auto& t = typeid(ParameterType);
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
-		
-		if (!isFloat && !isInt) 
+
+		if (!isFloat && !isInt)
 		{
 			ofLogWarning("ofxSurfingImGui") << "Stepper: ofParam type named " + name + " is not a Float or an Int";
 			return false;
@@ -945,7 +960,7 @@ namespace ofxImGuiSurfing
 		static bool inputs_step = true;
 
 		//TODO: added above relative/absolute workflow
-		
+
 		// Float
 		float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
@@ -1007,7 +1022,7 @@ namespace ofxImGuiSurfing
 		const auto& t = typeid(ParameterType);
 		bool isFloat = (t == typeid(float));
 		bool isInt = (t == typeid(int));
-		
+
 		float spx = 2;
 
 		// Int
