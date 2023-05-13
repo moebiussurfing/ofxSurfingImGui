@@ -34,8 +34,8 @@ void ofApp::setup()
     // we can use the public
     // ofParameter<string> bigTextInput.textInput
     // Using his listener!
-    callback_t myFunctionCallback = std::bind(&ofApp::doCallbackAttend, this);
-    //std::function<void()> myFunctionCallback = std::bind(&ofApp::doCallbackAttend, this);
+    callback_t myFunctionCallback = std::bind(&ofApp::doAttendCallback, this);
+    //std::function<void()> myFunctionCallback = std::bind(&ofApp::doAttendCallback, this);
     bigTextInput.setFunctionCallbackSubmit(myFunctionCallback);
 #else
     // There's another ofParam based callback approach
@@ -43,16 +43,21 @@ void ofApp::setup()
     // A. Listener to the internal ofParam:
     e = bigTextInput.textInput.newListener([this](string& s)
     {
-        doCallbackAttend();
+        doAttendCallback();
     });
+
     // B. Using a local ofParameter<string> and makeReferenceTo.
     // and then to create a listener to him:
     // ptext.makeReferenceTo(bigTextInput.textInput);
+    //e = ptext.newListener([this](string& s)
+    //{
+    //    doAttendCallback();
+    //});
 #endif
 }
 
 //--------------------------------------------------------------
-void ofApp::doCallbackAttend()
+void ofApp::doAttendCallback()
 {
     text = bigTextInput.getText();
     ofLogNotice(__FUNCTION__) << text;

@@ -29,13 +29,13 @@ public:
 
     BigTextInput bigTextInput;
 
-    void doCallbackAttend();
+    void doAttendCallback();
 #ifndef def USE_ADVANCED_CALLBACK
     ofEventListener e;
 #endif
 
-    string text = "";
-    // ofParameter<string> ptext{"myText", ""};
+    string text = ""; // A.
+    // ofParameter<string> ptext{"myText", ""}; // B.
 
     float v = 0;
 };
