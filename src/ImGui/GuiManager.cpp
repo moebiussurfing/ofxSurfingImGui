@@ -643,6 +643,8 @@ void SurfingGuiManager::startup()
 	//TODO: trying to redirect all logs to the imgui log window.
 	//log.setRedirectConsole();
 
+	//--
+
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
 
