@@ -100,6 +100,7 @@ private:
 
     string strHint = "Prompt";
     string strLabel = "TextInput";
+    string strSubmit= "Submit";
 
 private:
     //settings file
@@ -128,6 +129,7 @@ public:
 public:
     void setHint(string s) { strHint = s; };
     void setLabel(string s) { strLabel = s; };
+    void setSubmit(string s) { strSubmit = s; };
 
     //--
 
@@ -180,8 +182,8 @@ private:
         params.add(szFont);
         params.add(padBubbleX, padBubbleY);
         params.add(padTextX);
-        params.add(padSubmitBut);
         params.add(padTextY);
+        params.add(padSubmitBut);
         params.add(typeInput);
         params.add(typeInputName);
         params.add(bLabel);
@@ -597,7 +599,7 @@ private:
                 {
                     if (bSmallerSizeTextButton)ui.PushFont(SurfingFontTypes(MAX(0, szFont.get()-1)));
 
-                    string s = "Send";
+                    string s = strSubmit;
                     float pad = 40;
                     ImVec2 szButton(pad + ImGui::CalcTextSize(s.c_str()).x, ui.getWidgetsHeightUnit());
                     //TODO: layout

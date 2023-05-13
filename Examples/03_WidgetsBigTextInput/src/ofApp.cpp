@@ -17,6 +17,8 @@ void ofApp::setup()
     // bigTextInput.setName("Prompt");
     // Change the hint text:
     // bigTextInput.setHint("Type search");
+    // Change the submit button text:
+     //bigTextInput.setSubmit("Send");
 
     ui.setDisableStartupResetLayout();
     //small trick to disable auto layout
