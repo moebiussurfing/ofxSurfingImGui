@@ -34,9 +34,8 @@ void ofApp::setup()
     // we can use the public
     // ofParameter<string> bigTextInput.textInput
     // Using his listener!
-    callback_t myFunctionCallback = std::bind(&ofApp::doAttendCallback, this);
-    //std::function<void()> myFunctionCallback = std::bind(&ofApp::doAttendCallback, this);
-    bigTextInput.setFunctionCallbackSubmit(myFunctionCallback);
+    callback_t myFunctionCallbackSubmit = std::bind(&ofApp::doAttendCallback, this);
+    bigTextInput.setFunctionCallbackSubmit(myFunctionCallbackSubmit);
 #else
     // There's another ofParam based callback approach
 
@@ -59,9 +58,11 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::doAttendCallback()
 {
+    // will be called when submitted text changed!
     text = bigTextInput.getText();
     ofLogNotice(__FUNCTION__) << text;
     ui.AddToLog("ofApp -> TextInput: " + text, OF_LOG_NOTICE);
+    ofSetWindowTitle(text);
 
     v = 1;
 }
@@ -75,8 +76,6 @@ void ofApp::draw()
         if (v > 0) v -= 0.05f;
         else v = 0;
         ofClear(bgmin + (255 - bgmin) * v);
-        // if (v == 0) ofClear(ofColor::yellow);
-        // else ofClear(bgmin + (255 - bgmin) * v);
     }
 
     //--
@@ -102,8 +101,8 @@ void ofApp::drawImGui()
                 //--
 
                 // TextInput
-                ui.Add(bigTextInput.bGui, OFX_IM_TOGGLE_ROUNDED);
-                ui.Add(bigTextInput.bGui_Config, OFX_IM_TOGGLE_ROUNDED);
+                ui.Add(bigTextInput.bGui, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+                ui.Add(bigTextInput.bGui_Config, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
             }
 
             ui.EndWindow();

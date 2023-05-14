@@ -8,7 +8,7 @@
 
 */
 
-// #define USE_ADVANCED_CALLBACK
+ #define USE_ADVANCED_CALLBACK
 
 #pragma once
 #include "ofMain.h"
