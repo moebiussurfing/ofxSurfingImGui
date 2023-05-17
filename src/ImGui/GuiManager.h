@@ -1589,24 +1589,24 @@ public:
     // Force autodraw
     // LEGACY
     //--------------------------------------------------------------
-    void setImGuiAutodraw(bool b) { bAutoDraw = b; }
+    void setImGuiAutodraw(bool b=1) { bAutoDraw = b; }
     // Must be called before setup! default is false. For ImGui multi-instance.
 
-    void setImGuiAutoResize(bool b) { bAutoResize = b; }
+    void setImGuiAutoResize(bool b=1) { bAutoResize = b; }
     // Must be called before setup! default is false. For ImGui multi-instance.
 
     //--
 
-    void setImGuiViewPort(bool b) { bViewport = b; }
+    void setImGuiViewPort(bool b=1) { bViewport = b; }
     // Must be called before setup! 
 
-    void setImGuiDocking(bool b) { setDocking(b); }
+    void setImGuiDocking(bool b=1) { setDocking(b); }
     // Must call before setup
 
-    void setImGuiDockingModeCentered(bool b) { bDockingModeCentered = b; }
+    void setImGuiDockingModeCentered(bool b=1) { bDockingModeCentered = b; }
     // Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 
-    void setImGuiDockingShift(bool b) { ImGui::GetIO().ConfigDockingWithShift = b; }
+    void setImGuiDockingShift(bool b=1) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
     //--
 
@@ -1614,7 +1614,7 @@ public:
     // Force shared context
 
     //--------------------------------------------------------------
-    void setImGuiSharedMode(bool b)
+    void setImGuiSharedMode(bool b=1)
     {
         //gui.setSharedMode(b); // Not anymore, fully automatic now
     }

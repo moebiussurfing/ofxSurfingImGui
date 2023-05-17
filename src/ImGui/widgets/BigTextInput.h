@@ -12,6 +12,20 @@
  *
  */
 
+/*
+
+	TODO
+
+	+ add text color
+	+ fix submit responsive workflow
+	+ allow set number lines and fix responsive
+		improve multi-line size
+	+ make submit button zone as a second column
+	+ add reload last text
+	+ add browse history
+
+*/
+
  //--
 
 #pragma once
@@ -61,14 +75,15 @@ public:
 		paramsMain.add(colorBubble);
 		paramsMain.add(windowY);
 		paramsMain.add(windowPadX);
+		paramsMain.add(sizeBubbleX);
+		paramsMain.add( sizeBubbleY);
+		paramsMain.add(rounded);
+		paramsMain.add(bLabel);
 		paramsMain.add(typeInput);
 		paramsMain.add(typeInputName);
 		paramsMain.add(sizeFont);
-		paramsMain.add(sizeBubbleX, sizeBubbleY);
-		paramsMain.add(rounded);
 		paramsMain.add(padTextX);
 		paramsMain.add(padTextY);
-		paramsMain.add(bLabel);
 		params.add(paramsMain);
 
 		paramsSubmit.add(padSubmitX);
@@ -88,7 +103,9 @@ public:
 		params.add(paramsBorder);
 
 		g.add(params);
-
+		// params goes to ui
+		// g do not goes to ui. just for serialize settings.
+		 
 		//--
 
 		eTypeInput = typeInput.newListener([this](int& v)
@@ -178,8 +195,8 @@ private:
 	ofParameter<float> windowPadX{ "WindowPadX", 0, 0, 1 };
 	ofEventListener eWindowPadX;
 	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
-	ofParameter<float> sizeBubbleX{ "SizeX", 0.f, 0, 1 };
-	ofParameter<float> sizeBubbleY{ "SizeY", 0.f, 0, 1 };
+	ofParameter<float> sizeBubbleX{ "SizeX", 1.f, 0, 1 };
+	ofParameter<float> sizeBubbleY{ "SizeY", 1.f, 0, 1 };
 	ofParameter<float> padTextX{ "PadTextX", 0.f, 0, 1 };
 	ofParameter<float> padSubmitX{ "PadSubmitX", 1.f, 0, 1 };
 	ofParameter<float> padTextY{ "PadTextY", 0.f, -1, 1 };
@@ -242,6 +259,7 @@ public:
 	void setHint(string s) { strHint = s; };
 	void setLabel(string s) { strLabel = s; };
 	void setSubmit(string s) { strSubmit = s; };
+	void setText(string s) { text = s; };
 
 	//--
 
@@ -268,6 +286,8 @@ private:
 		// Trigs callback to parent / ofApp
 		if (functionCallbackSubmit != nullptr) functionCallbackSubmit();
 	}
+	
+	string text = "";
 
 	//--
 
@@ -347,6 +367,13 @@ private:
 
 		if (ui.BeginWindow(bGui_Config))
 		{
+			ui.Add(bGui, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+			ui.AddMinimizerToggle();
+			ui.AddSpacing();
+
+			ui.Add(bDebug, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.AddSpacingBigSeparated();
+
 			if (ui.isMaximized())
 			{
 				ui.AddLabelBig("Window");
@@ -363,12 +390,9 @@ private:
 			}
 			ui.AddSpacingBigSeparated();
 
-			ui.Add(bGui, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-			ui.AddSpacing();
 			ui.AddGroup(params);
 			ui.AddSpacing();
 
-			ui.Add(bDebug, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 			if (ui.isMaximized() && bDebug)
 			{
 				ImGui::Checkbox("Integrate", &bIntegrate);
@@ -457,7 +481,7 @@ private:
 
 			if (!bGui_Headers) AddHeaderHeight();
 
-			static string text = "";
+			//static string text = "";
 			const char* label = strLabel.c_str();
 			const char* hint = strHint.c_str();
 			ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
@@ -506,8 +530,8 @@ private:
 
 				// Bubble Draw
 
-				float pxBubble = sizeBubbleX * (w * 0.25f);
-				float pyBubble = sizeBubbleY * (h * 0.25f);
+				float pxBubble = (1-sizeBubbleX) * (w * 0.25f);
+				float pyBubble = (1-sizeBubbleY) * (h * 0.25f);
 
 				x = p.x + pxBubble;
 				y = p.y + pyBubble;
@@ -515,8 +539,8 @@ private:
 				w -= 2 * pxBubble;
 				h -= 2 * pyBubble;
 
-				w -= 2 * sizeBubbleX;
-				h -= 2 * sizeBubbleY;
+				w -= 2 * (1-sizeBubbleX);
+				h -= 2 * (1-sizeBubbleY);
 
 				// Bubble bounding box rectangle
 				ImRect rBB(x, y, w, h);
@@ -764,13 +788,13 @@ private:
 		windowPadX = 0.2;
 		
 		//colorBubble = ofColor(32, 255);
-		colorShadow = ofColor(32, 64);
 		//colorBorder = ofColor(0, 0);
+		colorShadow = ofColor(32, 64);
 
 		typeInput = 1; //hint
 		sizeFont = 2;
 		rounded = .5;
-		sizeBubbleX = sizeBubbleY = 0;
+		sizeBubbleX = sizeBubbleY = 1;
 
 		bDebug = 0;
 		bBlink = 0;

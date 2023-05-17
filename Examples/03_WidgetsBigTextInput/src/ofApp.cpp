@@ -8,10 +8,12 @@ void ofApp::setup()
 
     //--
 
+    //ui.setImGuiViewPort();
     ui.setup();
 
     // Optional customizations
-    // Custom path for multinstances
+    // Custom path for multi-instances 
+    // avoid "collide folders".
     // or to organize bin/data
     // bigTextInput.setPathGlobal("Gpt");
     // bigTextInput.setName("Prompt");
