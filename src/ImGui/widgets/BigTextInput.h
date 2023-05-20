@@ -172,6 +172,8 @@ public:
 	ofParameter<bool> bGui_Config{ "Config TextInput", false }; //show config
 	ofParameter<bool> bDebug{ "Debug", false }; //debug/edit mode
 
+	ofColor getColor() const { return colorBubble.get(); }
+
 private:
 	ofParameterGroup params{ "TextInputBubble" };
 	ofParameter<bool> bGui_Global{ "BigTextInput", true }; //TODO:
@@ -194,7 +196,9 @@ private:
 	ofEventListener eWindowY;
 	ofParameter<float> windowPadX{ "WindowPadX", 0, 0, 1 };
 	ofEventListener eWindowPadX;
+
 	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
+	
 	ofParameter<float> sizeBubbleX{ "SizeX", 1.f, 0, 1 };
 	ofParameter<float> sizeBubbleY{ "SizeY", 1.f, 0, 1 };
 	ofParameter<float> padTextX{ "PadTextX", 0.f, 0, 1 };
@@ -330,7 +334,7 @@ private:
 	void windowResized(ofResizeEventArgs& resize)
 	{
 		doFlagResetWindow();
-		ofLogNotice("ofxSurfingImGui::windowResized") << resize.width << "," << resize.height;
+		ofLogVerbose("ofxSurfingImGui::BigTextInput::windowResized") << resize.width << "," << resize.height;
 	}
 
 public:

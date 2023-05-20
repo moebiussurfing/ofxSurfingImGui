@@ -298,4 +298,7 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 void ofApp::exit() {
 	ofRemoveListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
 	ofxImGuiSurfing::saveGroup(params);
+
+	//TODO:
+	//ui.ExportLogToFile();
 }

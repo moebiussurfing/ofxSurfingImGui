@@ -12,6 +12,8 @@
 
 		TODO:
 
+		add constant log to file mode!
+
 		add set public shape size method
 
 		add feature to allow addLog without any explicit tag, but a custom color.
@@ -777,7 +779,7 @@ namespace ofxImGuiSurfing
 	public:
 		void setLogLevel(ofLogLevel logLevel) { this->logLevelUi = logLevel; }
 
-		// This feature will redirect all std::coud logs to the ui log window.
+		// This feature will redirect all std::cout logs to the ui log window.
 		// TODO: could redirect ofLog too..
 		void setRedirectConsole(bool b = true) {
 			bRedirect = b;
@@ -1060,6 +1062,9 @@ namespace ofxImGuiSurfing
 
 		//---
 
+	public:
+
+		//TODO: could be problematic if required to be called out of ImGui begin/end
 		// Save log file to disk
 		// pass path folder. the name will be auto settled by timestamp
 		void exportLogToFile(string path = "")

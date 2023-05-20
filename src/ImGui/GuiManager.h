@@ -1996,6 +1996,13 @@ public:
     };
 
     //--------------------------------------------------------------
+    void ExportLogToFile()
+    {
+        // Log
+        log.exportLogToFile();
+    };
+
+    //--------------------------------------------------------------
     void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
     {
         log.clearDefaultTags();
