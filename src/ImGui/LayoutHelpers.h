@@ -545,6 +545,24 @@ namespace ofxImGuiSurfing
 		ImGui::SameLine();
 	}
 
+	//--------------------------------------------------------------
+	inline void AddHeaderHeight()
+	{
+		float ho = 0;
+		ho += 2 * ImGui::GetStyle().WindowBorderSize;
+		ho += ImGui::GetWindowHeight() - ImGui::GetContentRegionAvail().y;//header height
+		ofxImGuiSurfing::AddSpacingY(ho);
+	}
+
+	//--------------------------------------------------------------
+	inline void RemoveHeaderHeight()
+	{
+		float ho = 0;
+		ho += 2 * ImGui::GetStyle().WindowBorderSize;
+		ho += ImGui::GetWindowHeight() - ImGui::GetContentRegionAvail().y;//header height
+		ofxImGuiSurfing::AddSpacingY(-ho);
+	}
+
 	// Pass a name to get the expected default button size by considering the text label.
 	//--------------------------------------------------------------
 	inline float getWidgetButtomToggleWidth(string name, bool bExtraPad = false)
@@ -751,6 +769,33 @@ namespace ofxImGuiSurfing
 	}
 	//--------------------------------------------------------------
 	inline void EndBlinkText(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			ImGui::PopStyleColor();
+		}
+	}
+
+	//--------------------------------------------------------------
+	inline void BeginBlinkTextDisabled(bool bBlink = true)
+	{
+		if (bBlink)
+		{
+			float a = 1.f;
+			//float a = 0.5f;
+			ImGuiStyle* style = &ImGui::GetStyle();
+			const ImVec4 c_ = style->Colors[ImGuiCol_TextDisabled];
+			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			float v = getFadeBlink();
+			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
+
+			ImGui::PushStyleColor(ImGuiCol_TextDisabled, c);
+		}
+	}
+	//--------------------------------------------------------------
+	inline void EndBlinkTextDisabled(bool bBlink = true)
 	{
 		if (bBlink)
 		{
