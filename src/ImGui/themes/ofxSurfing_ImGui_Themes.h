@@ -847,7 +847,7 @@ namespace ofxImGuiSurfing
 	// Taken from Yave by gan74
 	// Source: https://github.com/gan74/Yave
 
-#define none ofFloatColor(0,0,0)
+//#define none ofFloatColor(0,0,0)
 
 	static ofFloatColor grey(int g, float a = 1.f) {
 		ofColor c = ofColor(g, g, g, a * 255);
@@ -879,12 +879,12 @@ namespace ofxImGuiSurfing
 		//    colors[i] = rgb(255, 0, 0);
 		//}
 
-		colors[ImGuiCol_ChildBg] = none;
-		colors[ImGuiCol_BorderShadow] = none;
-		colors[ImGuiCol_FrameBgActive] = none;
-		colors[ImGuiCol_Tab] = none;
-		colors[ImGuiCol_TabUnfocused] = none;
-		colors[ImGuiCol_DockingEmptyBg] = none;
+		colors[ImGuiCol_ChildBg] = ofFloatColor(0, 0, 0);
+		colors[ImGuiCol_BorderShadow] = ofFloatColor(0, 0, 0);
+		colors[ImGuiCol_FrameBgActive] = ofFloatColor(0, 0, 0);
+		colors[ImGuiCol_Tab] = ofFloatColor(0, 0, 0);
+		colors[ImGuiCol_TabUnfocused] = ofFloatColor(0, 0, 0);
+		colors[ImGuiCol_DockingEmptyBg] = ofFloatColor(0, 0, 0);
 
 		colors[ImGuiCol_Text] = grey(180);
 		colors[ImGuiCol_TextDisabled] = grey(90);
