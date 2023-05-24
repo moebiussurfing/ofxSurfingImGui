@@ -982,10 +982,10 @@ public:
 
 	////TODO: Internal debug.
 	// to debug undo history. buggy.
-	//editor.ImGuiDebugPanel("Debug Editor");
+	//editor.drawImGuiDebugPanel("Debug Editor");
 	//--------------------------------------------------------------
-	void ImGuiDebugPanel(const std::string& panelName)
+	void drawImGuiDebugPanel(const std::string& panelName)
 	{
-		editor.ImGuiDebugPanel(panelName);
+		editor.drawImGuiDebugPanel(panelName);
 	};
 };

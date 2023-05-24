@@ -43,6 +43,11 @@ void ofApp::draw()
 			}
 		}
 
+		if (bGui) {
+			ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize(ImVec2(250, 500), ImGuiCond_FirstUseEver);
+		}
+
 		if (ui.BeginWindow(bGui))
 		{
 			if (!b) {
@@ -72,6 +77,10 @@ void ofApp::draw()
 				c.clear_();
 				data->lastCommand = "added clear";
 			}
+			ui.AddSpacingSeparated();
+
+			ui.Add(c._terminalSizeLimit);
+			ui.Add(c._maxHistoryLines);
 			ui.AddSpacingSeparated();
 
 			ui.AddLabelBig("Post Commands");

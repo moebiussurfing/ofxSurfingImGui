@@ -59,6 +59,10 @@ public:
 
 		//--
 
+		{
+			ImGui::SetNextWindowPos(ImVec2(400, 20), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+		}
 
 		ImGui::Begin("Debug Console", nullptr, 0);
 
@@ -158,10 +162,13 @@ private:
 	std::deque<std::string> _commandHistory;
 	std::string _terminalBuffer;
 
-	const unsigned _maxHistoryLines = 200;
-	const unsigned _terminalSizeLimit = 1000;
+	//const unsigned _maxHistoryLines = 200;
+	//const unsigned _terminalSizeLimit = 1000;
+public:
+	ofParameter<int> _terminalSizeLimit{ "Buffer Size", 2000, 100, 10000 };
+	ofParameter<int> _maxHistoryLines{ "Undo History", 200, 10, 1000 };
 
-
+private:
 	void processCommand(T data) {
 		std::string command(_textEntryBuffer.data());
 		std::fill(_textEntryBuffer.begin(), _textEntryBuffer.end(), '\0');
