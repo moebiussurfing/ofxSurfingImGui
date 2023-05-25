@@ -264,6 +264,10 @@ public:
 	void setLabel(string s) { strLabel = s; };
 	void setSubmit(string s) { strSubmit = s; };
 	void setText(string s) { text = s; };
+	void setFocus() { bFlagGoFocus = 1; };
+	
+private:
+	bool bFlagGoFocus = 0;
 
 	//--
 
@@ -271,15 +275,21 @@ public:
 private:
 	// Pointer to store a function
 	callback_t functionCallbackSubmit = nullptr;
+	callback_t functionCallbackClear = nullptr;
 
 public:
-	// To get the text when notified.
-	string getText() const { return textInput.get(); }
-
 	void setFunctionCallbackSubmit(callback_t f = nullptr)
 	{
 		functionCallbackSubmit = f;
 	}
+
+	void setFunctionCallbackClear(callback_t f = nullptr)
+	{
+		functionCallbackClear = f;
+	}
+
+	// To get the text when notified.
+	string getText() const { return textInput.get(); }
 
 private:
 	void doSubmit(string s)
@@ -511,6 +521,25 @@ private:
 			//	return 0;
 			//};
 
+			/*
+			// In the TextEditCallback function, set the scrollToBottom flag when new text is added
+			static int TextEditCallback(ImGuiInputTextCallbackData* data) {
+				if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory) {
+					// Handle command history here
+				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackCompletion) {
+					// Handle auto-completion here
+				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
+					// Resize buffer here if needed
+				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
+					// Filter characters here if needed
+				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackEdit) {
+					// Set the scrollToBottom flag when new text is added
+					scrollToBottom = data->HasSelection() || data->BufTextLen != data->BufSize;
+				}
+				return 0;
+			}
+			*/
+
 			//--
 
 			void* user_data = NULL;
@@ -637,6 +666,13 @@ private:
 						ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
 					}
 
+					// Focus to be ready to type
+					if (bFlagGoFocus == 1) {
+						bFlagGoFocus = 0; 
+						ImGui::SetKeyboardFocusHere(0); // Move keyboard focus to the InputTextWithHint widget
+						ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
+					}
+					
 					if (typeInput == 0)
 					{
 						// A
@@ -734,6 +770,7 @@ private:
 				yy -= ImGui::GetStyle().ItemInnerSpacing.y;
 				ImGui::SetCursorPosY(yy);
 
+#if(0)
 				string s1 = strSubmit+"##SUBMIT2";//avoid collide
 				string s2 = "Clear";
 				if (bUpper) {
@@ -755,6 +792,23 @@ private:
 					text = "";
 					doSubmit(text);
 				}
+#else
+				string s2 = "Clear";
+				if (bUpper) {
+					s2 = ofToUpper(s2);
+				}
+
+				// clear
+				if (ImGui::Button(s2.c_str()))
+				{
+					if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
+					text = "";
+					doSubmit(text);
+
+					// Trigs callback to parent / ofApp
+					if (functionCallbackClear != nullptr) functionCallbackClear();
+				}
+#endif
 			}
 
 			// Get Enter key as submit button
