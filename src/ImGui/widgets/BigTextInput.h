@@ -12,19 +12,19 @@
  *
  */
 
-/*
+ /*
 
-	TODO
+	 TODO
 
-	+ add text color
-	+ fix submit responsive workflow
-	+ allow set number lines and fix responsive
-		improve multi-line size
-	+ make submit button zone as a second column
-	+ add reload last text
-	+ add browse history
+	 + add text color
+	 + fix submit responsive workflow
+	 + allow set number lines and fix responsive
+		 improve multi-line size
+	 + make submit button zone as a second column
+	 + add reload last text
+	 + add browse history
 
-*/
+ */
 
  //--
 
@@ -76,7 +76,7 @@ public:
 		paramsMain.add(windowY);
 		paramsMain.add(windowPadX);
 		paramsMain.add(sizeBubbleX);
-		paramsMain.add( sizeBubbleY);
+		paramsMain.add(sizeBubbleY);
 		paramsMain.add(rounded);
 		paramsMain.add(bLabel);
 		paramsMain.add(typeInput);
@@ -105,7 +105,7 @@ public:
 		g.add(params);
 		// params goes to ui
 		// g do not goes to ui. just for serialize settings.
-		 
+
 		//--
 
 		eTypeInput = typeInput.newListener([this](int& v)
@@ -198,7 +198,7 @@ private:
 	ofEventListener eWindowPadX;
 
 	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
-	
+
 	ofParameter<float> sizeBubbleX{ "SizeX", 1.f, 0, 1 };
 	ofParameter<float> sizeBubbleY{ "SizeY", 1.f, 0, 1 };
 	ofParameter<float> padTextX{ "PadTextX", 0.f, 0, 1 };
@@ -265,7 +265,7 @@ public:
 	void setSubmit(string s) { strSubmit = s; };
 	void setText(string s) { text = s; };
 	void setFocus() { bFlagGoFocus = 1; };
-	
+
 private:
 	bool bFlagGoFocus = 0;
 
@@ -300,7 +300,7 @@ private:
 		// Trigs callback to parent / ofApp
 		if (functionCallbackSubmit != nullptr) functionCallbackSubmit();
 	}
-	
+
 	string text = "";
 
 	//--
@@ -437,19 +437,6 @@ private:
 
 			ui.AddSpacing();
 
-			//TODO: params
-			/*
-			ui.AddSpacingBigSeparated();
-			ui.Add(textA, OFX_IM_TEXT_INPUT);
-			ui.AddSpacingBigSeparated();
-
-			ui.Add(textB, OFX_IM_TEXT_INPUT_NAMED);
-			ui.AddSpacingBigSeparated();
-
-			ui.Add(textC, OFX_IM_TEXT_INPUT_NO_NAME);
-			ui.AddSpacingBigSeparated();
-			*/
-
 			ui.EndWindow();
 		}
 	}
@@ -495,14 +482,12 @@ private:
 
 			if (!bGui_Headers) AddHeaderHeight();
 
-			//static string text = "";
 			const char* label = strLabel.c_str();
 			const char* hint = strHint.c_str();
-			ImGuiInputTextFlags flags = ImGuiInputTextFlags_None;
 
 			//--
 
-			ImGuiInputTextCallback callback = NULL;
+			//ImGuiInputTextCallback callback = NULL;
 
 			//TODO:
 			//std::function<int(ImGuiInputTextCallbackData*)> callback =
@@ -563,8 +548,8 @@ private:
 
 				// Bubble Draw
 
-				float pxBubble = (1-sizeBubbleX) * (w * 0.25f);
-				float pyBubble = (1-sizeBubbleY) * (h * 0.25f);
+				float pxBubble = (1 - sizeBubbleX) * (w * 0.25f);
+				float pyBubble = (1 - sizeBubbleY) * (h * 0.25f);
 
 				x = p.x + pxBubble;
 				y = p.y + pyBubble;
@@ -572,8 +557,8 @@ private:
 				w -= 2 * pxBubble;
 				h -= 2 * pyBubble;
 
-				w -= 2 * (1-sizeBubbleX);
-				h -= 2 * (1-sizeBubbleY);
+				w -= 2 * (1 - sizeBubbleX);
+				h -= 2 * (1 - sizeBubbleY);
 
 				// Bubble bounding box rectangle
 				ImRect rBB(x, y, w, h);
@@ -656,6 +641,10 @@ private:
 
 				bool _bBlink = bBlink && (text == "");
 
+				ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
+				_flags |= ImGuiInputTextFlags_CallbackCharFilter;
+				//_flags |= ImGuiInputTextFlags_CallbackResize;
+
 				PushItemWidth(_wTextBB);
 				{
 					if (_bBlink) ui.BeginBlinkTextDisabled();
@@ -668,20 +657,42 @@ private:
 
 					// Focus to be ready to type
 					if (bFlagGoFocus == 1) {
-						bFlagGoFocus = 0; 
+						bFlagGoFocus = 0;
 						ImGui::SetKeyboardFocusHere(0); // Move keyboard focus to the InputTextWithHint widget
 						ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
 					}
-					
+
+					//TODO:
+					// trying to make first char uppercase...
+					//string text = "";
+					auto callback = [](ImGuiInputTextCallbackData* data) {
+						//if (text.size() == 1) {
+						//	std::cout << "callback" << std::endl;
+						//}
+
+						//if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
+						//	// Only capitalize the first character if the buffer is empty
+						//	if (data->BufTextLen == 0) {
+						//		if (data->Buf && data->Buf[0]) {
+						//			data->Buf[0] = toupper(data->Buf[0]);
+						//			data->BufDirty = true;
+						//			std::cout << "callback" << std::endl;
+						//		}
+						//	}
+						//}
+
+						return 0;
+					};
+
 					if (typeInput == 0)
 					{
 						// A
-						isChanged = ImGui::InputText(label, &text, flags, callback, user_data);
+						isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
 					}
 					else if (typeInput == 1)
 					{
 						// B
-						isChanged = ImGui::InputTextWithHint(label, hint, &text, flags, callback, user_data);
+						isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, callback, user_data);
 					}
 					else if (typeInput == 2)
 					{
@@ -695,8 +706,6 @@ private:
 
 						ui.AddSpacingY(-_hTextBB * 0.25);
 						ImVec2 _sz = ImVec2(_wTextBB, _hTextBB);
-						ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
-						//_flags |= ImGuiInputTextFlags_CallbackResize;
 						isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
 					}
 
@@ -764,14 +773,14 @@ private:
 				ImGui::SetCursorPosX(xx);
 
 				yy = ImGui::GetCursorPosY();
-				
+
 				//TODO: fix when one button disabled
 				yy += ImGui::GetStyle().WindowPadding.y;
 				yy -= ImGui::GetStyle().ItemInnerSpacing.y;
 				ImGui::SetCursorPosY(yy);
 
 #if(0)
-				string s1 = strSubmit+"##SUBMIT2";//avoid collide
+				string s1 = strSubmit + "##SUBMIT2";//avoid collide
 				string s2 = "Clear";
 				if (bUpper) {
 					s1 = ofToUpper(s1);
@@ -791,7 +800,7 @@ private:
 					if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
 					text = "";
 					doSubmit(text);
-				}
+			}
 #else
 				string s2 = "Clear";
 				if (bUpper) {
@@ -809,7 +818,7 @@ private:
 					if (functionCallbackClear != nullptr) functionCallbackClear();
 				}
 #endif
-			}
+		}
 
 			// Get Enter key as submit button
 			bool b = ImGui::GetIO().WantTextInput;
@@ -828,8 +837,8 @@ private:
 				isChanged = 0;
 				if (bDebug) ui.AddToLog("BigTextInput -> " + text, OF_LOG_VERBOSE);
 			}
-		}
 	}
+}
 
 	//--
 
@@ -844,7 +853,7 @@ private:
 	{
 		windowY = 0.9;
 		windowPadX = 0.2;
-		
+
 		//colorBubble = ofColor(32, 255);
 		//colorBorder = ofColor(0, 0);
 		colorShadow = ofColor(32, 64);
