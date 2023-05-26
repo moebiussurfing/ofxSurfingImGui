@@ -1479,9 +1479,9 @@ public:
     }
 
     //--------------------------------------------------------------
-    inline void BeginBlinkText(bool bBlink = true)
+    inline void BeginBlinkText(bool bBlink = true, bool bSoft = false)
     {
-        ofxImGuiSurfing::BeginBlinkText(bBlink);
+        ofxImGuiSurfing::BeginBlinkText(bBlink, bSoft);
     }
 
     //--------------------------------------------------------------
@@ -1676,6 +1676,10 @@ public:
     //NEW
     void PushFont(SurfingFontTypes style);
     void PopFont();
+    
+    ofParameter<int> fontIndex{ "Font", 0, 0, 3 };
+    void DrawWidgetsFonts(ofParameter<int> &index);//use external index
+    void DrawWidgetsFonts();//use internal index
 
     //----
 
@@ -2096,6 +2100,7 @@ public:
     };
     bool isMinimized() const { return bMinimize.get(); }
     bool isMaximized() const { return !bMinimize.get(); }
+    bool isGameMode() const { return bGui_GameMode.get(); }
 
     // legacy
     void AddMinimizerToggle(bool bSeparated = false)

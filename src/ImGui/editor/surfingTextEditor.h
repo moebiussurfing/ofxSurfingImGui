@@ -735,7 +735,7 @@ public:
 			}
 			else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
 		}
-	};
+	}
 
 	//--------------------------------------------------------------
 	void drawImGui()

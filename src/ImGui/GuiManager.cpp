@@ -388,7 +388,7 @@ void SurfingGuiManager::setupImGuiFonts()
 		pushFont(_path + _fontName, _fontSizeParam * 2.5f); // queue huge font too
 
 		// Font huge xxl
-		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge xxl font too
+		pushFont(_path + _fontName, _fontSizeParam * 3.5f); // queue huge xxl font too
 
 		//TODO: 
 		// WARNING! 
@@ -1058,6 +1058,41 @@ void SurfingGuiManager::PopFont() {
 	this->popStyleFont();
 }
 
+// SAme that AddComboFontsSelector(ofParameter<int>& index) does..
+//--------------------------------------------------------------
+void SurfingGuiManager::DrawWidgetsFonts() {
+
+	if (customFonts.size() != 0)
+	{
+		//make smaller if the window is big
+		float w = ofxImGuiSurfing::getWidgetsWidth();
+		if (w > 500) {
+			ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+			ImGui::BeginColumns("#cols", 2, fc);
+			ImGui::SetColumnWidth(1, w / 2);
+			ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+			ImGui::Columns(1);
+		}
+		else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+	}
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::DrawWidgetsFonts(ofParameter<int>& index) {
+
+	if (customFonts.size() != 0)
+	{
+		//make smaller if the window is big
+		float w = ofxImGuiSurfing::getWidgetsWidth();
+		if (w > 500) {
+			ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+			ImGui::BeginColumns("#cols", 2, fc);
+			ImGui::SetColumnWidth(1, w / 2);
+			ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+			ImGui::Columns(1);
+		}
+		else ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+	}
+}
 
 //--
 

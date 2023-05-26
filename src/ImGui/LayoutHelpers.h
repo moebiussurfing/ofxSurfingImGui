@@ -758,18 +758,26 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void BeginBlinkText(bool bBlink = true)
+	inline void BeginBlinkText(bool bBlink = true, bool bSoft = false)
 	{
 		if (bBlink)
 		{
 			float a = 1.f;
-			//float a = 0.5f;
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float v = getFadeBlink();
-			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			float v = 0;
+			if (!bSoft) {
+				v = getFadeBlink();
+				a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			}
+
+			else {//soft
+				v = getFadeBlink(0.80, 1.0, 0.2);
+				a = ofClamp(v, 0.8, 1.f);
+			}
+
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_Text, c);

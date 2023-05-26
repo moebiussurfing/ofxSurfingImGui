@@ -471,7 +471,7 @@ private:
 
 		// Constraints
 		//ImVec2 size_min = ImVec2(700, bButtonsLeft ? 150 : 100);
-		ImVec2 size_min = ImVec2(700, 180);
+		ImVec2 size_min = ImVec2(700, 200);//allow spin height
 		ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 
@@ -780,7 +780,7 @@ private:
 
 				// Spinner
 				float xo = 0;
-				float yo = 4;
+				float yo = 6;
 				xo += (szBt.x / 2);
 				xo -= 14;
 				ImGui::SetCursorPosX(_xx + xo);
@@ -808,12 +808,13 @@ private:
 				// Back cursor to text bb
 				float x_ = padTextX * (w * 0.25f);
 				x_ += ImGui::GetStyle().ItemInnerSpacing.x;
+				float y_ = ImGui::GetStyle().ItemInnerSpacing.y;
 
 				ImGui::SetCursorPosX(xxBb + x_);
-				ImGui::SetCursorPosY(yyBb);
+				ImGui::SetCursorPosY(yyBb + y_);
 
-				float padx = 1.5 * ui.getFontSize();
-				float pady = 0.7 * ui.getFontSize();
+				float padx = 1.25 * ui.getFontSize();
+				float pady = 0.5 * ui.getFontSize();
 
 				if (!bButtonRight)
 				{
@@ -844,7 +845,7 @@ private:
 				}
 				else
 				{
-					/// only clear
+					// Only clear
 					string s2 = "Clear";
 
 					// Size

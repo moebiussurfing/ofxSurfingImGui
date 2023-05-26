@@ -136,6 +136,8 @@
 
 #define BLINK_MIN 0.2f 
 #define BLINK_MAX 0.8f 
+//#define BLINK_MIN 0.4f 
+//#define BLINK_MAX 1.0f 
 
 #define FACTOR_DARKEN 0.2f 
 
@@ -159,7 +161,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_FONT_DEFAULT = 0,
 		OFX_IM_FONT_BIG,
 		OFX_IM_FONT_HUGE,
-		OFX_IM_FONT_HUGE_XXL,
+		OFX_IM_FONT_HUGE_XXL, // 3
 
 		OFX_IM_FONT_AMOUNT
 	};
