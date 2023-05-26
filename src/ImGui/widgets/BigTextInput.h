@@ -33,6 +33,7 @@
 
 #include "ofxSurfingImGui.h"
 #include "imgui_stdlib.h"
+#include "imspinner.h"
 
  // Required for custom callback when submit button pressed
 #include <functional>
@@ -163,16 +164,18 @@ public:
 	}
 
 public:
-	ofParameter<string> textInput{ "Text", "" }; //last submit text
-	//could be used as receiver/destination of the input text widget
-	//and also the event listener toi be used as callback
-	//to be notified and to receive/get the submitted text.
+	ofParameter<string> textInput{ "Text", "" }; // last submit text
+	// could be used as receiver/destination of the input text widget
+	// and also the event listener toi be used as callback
+	// to be notified and to receive/get the submitted text.
 
-	ofParameter<bool> bGui{ "TextInput", true }; //show widget
-	ofParameter<bool> bGui_Config{ "Config TextInput", false }; //show config
-	ofParameter<bool> bDebug{ "Debug", false }; //debug/edit mode
+	ofParameter<bool> bGui{ "TextInput", true }; // show widget
+	ofParameter<bool> bGui_Config{ "Config TextInput", false }; // show config
+	ofParameter<bool> bDebug{ "Debug", false }; // debug/edit mode
+	ofParameter<bool> bGui_LockMove{ "Lock", false };
 
 	ofColor getColor() const { return colorBubble.get(); }
+	ofParameter<bool> bWaiting{ "Waiting", 0 }; // to be commanded from parent scope!
 
 private:
 	ofParameterGroup params{ "TextInputBubble" };
@@ -187,7 +190,6 @@ private:
 	ofParameter<bool> bGui_Headers{ "Headers", true };
 	ofParameter<bool> bGui_Bg{ "Bg", true };
 	ofParameter<bool> bGui_ResizePin{ "Resizer", true };
-	ofParameter<bool> bGui_LockMove{ "Lock", false };
 
 	ofParameter<bool> bLabel{ "Label", false }; //TODO:
 	ofParameter<int> sizeFont{ "FontSize", 0, 0, 3 };
@@ -744,7 +746,7 @@ private:
 					ImGui::SetCursorPosX(_xx);
 					ImGui::SetCursorPosY(_yy);
 
-					//add transparency
+					// add transparency
 					ImVec4 c = ImGui::GetStyle().Colors[ImGuiCol_Text];
 					ImVec4 _c = ImVec4(c.x, c.y, c.z, c.w * 0.7);
 					ImGui::PushStyleColor(ImGuiCol_Text, _c);
@@ -758,6 +760,8 @@ private:
 					ImGui::PopStyleColor();
 
 					if (bSmallerSizeTextButton) ui.popStyleFont();
+
+					ImSpinner::Spinner(bWaiting, 0);
 				}
 			}
 			ui.popStyleFont();
