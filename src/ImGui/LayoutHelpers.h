@@ -226,6 +226,14 @@ namespace ofxImGuiSurfing
 		return ImGui::GetContentRegionAvail().y;
 	}
 
+	//--------------------------------------------------------------
+	inline float getFontSize()
+	{
+		ImGuiContext& g = *GImGui;
+		ImFont* font = g.Font;
+		return g.FontSize;
+	}
+
 	// NEW API:
 	//--------------------------------------------------------------
 	inline void SameLineIfAvailForWidth(float w = 200)//TODO; not checking each widget..

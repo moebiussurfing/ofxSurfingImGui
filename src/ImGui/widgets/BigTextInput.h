@@ -33,7 +33,8 @@
 
 #include "ofxSurfingImGui.h"
 #include "imgui_stdlib.h"
-#include "imspinner.h"
+#include "Spinners2.h"
+//#include "imspinner.h"
 
  // Required for custom callback when submit button pressed
 #include <functional>
@@ -89,8 +90,8 @@ public:
 
 		paramsSubmit.add(padSubmitX);
 		paramsSubmit.add(bSmallerSizeTextButton);
-		paramsSubmit.add(bButton);
-		paramsSubmit.add(bButtons);
+		paramsSubmit.add(bButtonRight);
+		paramsSubmit.add(bButtonsLeft);
 		params.add(paramsSubmit);
 
 		paramsShadow.add(bShadow);
@@ -143,15 +144,15 @@ public:
 				doFlagResetWindow();
 			});
 
-		//eButton = bButton.newListener([this](bool& b)
+		//eButton = bButtonRight.newListener([this](bool& b)
 		//	{
-		//		if (bButton) bButtons = 0;
-		//		else if (!bButtons) bButtons = 1;
+		//		if (bButtonRight) bButtonsLeft = 0;
+		//		else if (!bButtonsLeft) bButtonsLeft = 1;
 		//	});
-		//eButtons = bButtons.newListener([this](bool& b)
+		//eButtons = bButtonsLeft.newListener([this](bool& b)
 		//	{
-		//		if (bButtons) bButton = 0;
-		//		else if (!bButton) bButton = 1;
+		//		if (bButtonsLeft) bButtonRight = 0;
+		//		else if (!bButtonRight) bButtonRight = 1;
 		//	});
 
 		//default 
@@ -176,6 +177,7 @@ public:
 
 	ofColor getColor() const { return colorBubble.get(); }
 	ofParameter<bool> bWaiting{ "Waiting", 0 }; // to be commanded from parent scope!
+	int typeWaiting = 0;
 
 private:
 	ofParameterGroup params{ "TextInputBubble" };
@@ -223,8 +225,8 @@ private:
 
 	ofParameterGroup paramsSubmit{ "SubmitButton" };
 	ofParameter<bool> bSmallerSizeTextButton{ "SmallerText", true };
-	ofParameter<bool> bButtons{ "2 Buttons", false };
-	ofParameter<bool> bButton{ "1 Button", true };
+	ofParameter<bool> bButtonsLeft{ "Left Buttons", false };
+	ofParameter<bool> bButtonRight{ "Right Button", true };
 
 	bool bBlink = 1; //hint text bubble blink when empty
 	bool bIntegrate = 1; //put the internal input text transparent
@@ -468,7 +470,8 @@ private:
 		if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
 		// Constraints
-		ImVec2 size_min = ImVec2(700, bButtons ? 150 : 100);
+		//ImVec2 size_min = ImVec2(700, bButtonsLeft ? 150 : 100);
+		ImVec2 size_min = ImVec2(700, 180);
 		ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
 		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 
@@ -535,294 +538,335 @@ private:
 			float xx, yy;
 			float _wTextBB;
 			float _padSubmitX;
+			float xxBb, yyBb;
 
 			w = ImGui::GetContentRegionAvail().x;
 			h = ImGui::GetContentRegionAvail().y;
 
 			ui.PushFont(SurfingFontTypes(sizeFont.get()));
+
+			ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			//ImDrawFlags flags = ImDrawFlags_None;
+
+			//--
+
+			// Bubble Draw
+
+			float pxBubble = (1 - sizeBubbleX) * (w * 0.25f);
+			float pyBubble = (1 - sizeBubbleY) * (h * 0.25f);
+
+			x = p.x + pxBubble;
+			y = p.y + pyBubble;
+
+			w -= 2 * pxBubble;
+			h -= 2 * pyBubble;
+
+			w -= 2 * (1 - sizeBubbleX);
+			h -= 2 * (1 - sizeBubbleY);
+
+			// Bubble bounding box rectangle
+			ImRect rBB(x, y, w, h);
+
+			float round = rounded * (h / 2);
+
+			// Shadow
+			if (bShadow)
 			{
-				ImDrawList* draw_list = ImGui::GetWindowDrawList();
+				ImU32 col2 = ImGui::GetColorU32(colorShadow.get());
+				float _diffMax = h * 0.2;
+				ImVec2 _diff = positionshadow * ImVec2(_diffMax, _diffMax);
+				draw_list->AddRectFilled(rBB.Min + _diff, rBB.Min + _diff + rBB.Max, col2, round);
+			}
 
-				ImVec2 p = ImGui::GetCursorScreenPos();
-				ImDrawFlags flags = ImDrawFlags_None;
+			// Bubble
+			{
+				ImU32 col = ImGui::GetColorU32(colorBubble.get());
+				draw_list->AddRectFilled(rBB.Min, rBB.Min + rBB.Max, col, round);
+			}
 
-				//--
+			// Border
+			if (bBorder)
+			{
+				ImU32 col2 = ImGui::GetColorU32(colorBorder.get());
+				draw_list->AddRect(rBB.Min, rBB.Min + rBB.Max, col2, round, ImDrawFlags_None, thicknessBorder);
+			}
 
-				// Bubble Draw
+			// Spacing for ImGui::TextInput widget
+			float _hTextBB = ui.getWidgetsHeightUnit(); //one line
 
-				float pxBubble = (1 - sizeBubbleX) * (w * 0.25f);
-				float pyBubble = (1 - sizeBubbleY) * (h * 0.25f);
+			// Offset to center in the bubble
+			xx = ImGui::GetCursorPosX();
+			yy = ImGui::GetCursorPosY();
 
-				x = p.x + pxBubble;
-				y = p.y + pyBubble;
+			xx += padTextX * (w * 0.25f);
+			//xx += _offsetx;
+			xx += pxBubble;
 
-				w -= 2 * pxBubble;
-				h -= 2 * pyBubble;
+			float hl = ui.getWidgetsHeightUnit();
+			yy += h / 2;
+			yy += padTextY * (h * 0.25f);
+			yy += pyBubble;
 
-				w -= 2 * (1 - sizeBubbleX);
-				h -= 2 * (1 - sizeBubbleY);
+			yy -= hl / 2;
 
-				// Bubble bounding box rectangle
-				ImRect rBB(x, y, w, h);
+			////TODO:
+			//if (bDebug) {
+			//	ImRect r2(10, 10, 50, 50);
+			//	//ImRect r2(xx, yy, _ww, _hh);
+			//	draw_list->AddRect(r2.Min, r2.Min + r2.Max, IM_COL32(255, 0, 0, 255), 0);
+			//}
 
-				float round = rounded * (h / 2);
+			//float _offsetx = scalex * (w / 2);
+			//float _ww = w - 2 * _offsetx;
 
-				// Shadow
-				if (bShadow)
+			//TODO:
+			_wTextBB = w;
+			_wTextBB -= padTextX * (w * 0.25f);
+
+			_padSubmitX = ofMap(padSubmitX, 1, 0, 0, w * 0.25);
+			_wTextBB -= _padSubmitX;
+			//_wBb -= pxBubble/2;
+
+			//--
+
+			ImGui::SetCursorPosX(xx);
+			ImGui::SetCursorPosY(yy);
+
+			//--
+
+			// Text Input
+
+			if (bLabel) {
+			}
+			else
+			{
+				label = "##label";//remove
+			}
+
+			bool _bBlink = bBlink && (text == "");
+
+			ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
+			_flags |= ImGuiInputTextFlags_CallbackCharFilter;
+			//_flags |= ImGuiInputTextFlags_CallbackResize;
+
+			PushItemWidth(_wTextBB);
+			{
+				if (_bBlink) ui.BeginBlinkTextDisabled();
+				if (bIntegrate)
 				{
-					ImU32 col2 = ImGui::GetColorU32(colorShadow.get());
-					float _diffMax = h * 0.2;
-					ImVec2 _diff = positionshadow * ImVec2(_diffMax, _diffMax);
-					draw_list->AddRectFilled(rBB.Min + _diff, rBB.Min + _diff + rBB.Max, col2, round);
+					ImVec4 c = ImVec4(0, 0, 0, 0); //transparent
+					ImGui::PushStyleColor(ImGuiCol_Border, c);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
 				}
 
-				// Bubble
-				{
-					ImU32 col = ImGui::GetColorU32(colorBubble.get());
-					draw_list->AddRectFilled(rBB.Min, rBB.Min + rBB.Max, col, round);
+				// Focus to be ready to type
+				if (bFlagGoFocus == 1) {
+					bFlagGoFocus = 0;
+					ImGui::SetKeyboardFocusHere(0); // Move keyboard focus to the InputTextWithHint widget
+					ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
 				}
-
-				// Border
-				if (bBorder)
-				{
-					ImU32 col2 = ImGui::GetColorU32(colorBorder.get());
-					draw_list->AddRect(rBB.Min, rBB.Min + rBB.Max, col2, round, ImDrawFlags_None, thicknessBorder);
-				}
-
-				// spacing for Imgui::TextInput widget
-				float _hTextBB = ui.getWidgetsHeightUnit(); //one line
-
-				// offset to center in the bubble
-				xx = ImGui::GetCursorPosX();
-				yy = ImGui::GetCursorPosY();
-
-				xx += padTextX * (w * 0.25f);
-				//xx += _offsetx;
-				xx += pxBubble;
-
-				float hl = ui.getWidgetsHeightUnit();
-				yy += h / 2;
-				yy += padTextY * (h * 0.25f);
-				yy += pyBubble;
-
-				yy -= hl / 2;
-
-				////TODO:
-				//if (bDebug) {
-				//	ImRect r2(10, 10, 50, 50);
-				//	//ImRect r2(xx, yy, _ww, _hh);
-				//	draw_list->AddRect(r2.Min, r2.Min + r2.Max, IM_COL32(255, 0, 0, 255), 0);
-				//}
-
-				//float _offsetx = scalex * (w / 2);
-				//float _ww = w - 2 * _offsetx;
 
 				//TODO:
-				_wTextBB = w;
-				_wTextBB -= padTextX * (w * 0.25f);
+				// trying to make first char uppercase...
+				//string text = "";
+				auto callback = [](ImGuiInputTextCallbackData* data) {
+					//if (text.size() == 1) {
+					//	std::cout << "callback" << std::endl;
+					//}
 
-				_padSubmitX = ofMap(padSubmitX, 1, 0, 0, w * 0.25);
-				_wTextBB -= _padSubmitX;
-				//_wBb -= pxBubble/2;
+					//if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
+					//	// Only capitalize the first character if the buffer is empty
+					//	if (data->BufTextLen == 0) {
+					//		if (data->Buf && data->Buf[0]) {
+					//			data->Buf[0] = toupper(data->Buf[0]);
+					//			data->BufDirty = true;
+					//			std::cout << "callback" << std::endl;
+					//		}
+					//	}
+					//}
 
-				//--
+					return 0;
+				};
 
-				ImGui::SetCursorPosX(xx);
-				ImGui::SetCursorPosY(yy);
-
-				//--
-
-				// Text input
-
-				if (bLabel) {
-				}
-				else
+				if (typeInput == 0)
 				{
-					label = "##label";//remove
+					// A
+					isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
+				}
+				else if (typeInput == 1)
+				{
+					// B
+					isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, callback, user_data);
+				}
+				else if (typeInput == 2)
+				{
+					// C
+					_hTextBB = 2 * ui.getWidgetsHeightUnit(); //two lines
+					//// int nlines = ofMap(rBB.GetHeight(), 0, ui.getWidgetsHeightUnit())
+					// int nlines = rBB.GetHeight() / ui.getWidgetsHeightUnit();
+					// nlines = MAX(1, nlines + 1);
+					// _hTextBB = nlines * ui.getWidgetsHeightUnit(); //n lines
+					// cout << "nlines:" << nlines << endl;
+
+					ui.AddSpacingY(-_hTextBB * 0.25);
+					ImVec2 _sz = ImVec2(_wTextBB, _hTextBB);
+					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
 				}
 
-				bool _bBlink = bBlink && (text == "");
+				if (bIntegrate) ImGui::PopStyleColor(2);
+				if (_bBlink) ui.EndBlinkTextDisabled();
+			}
+			PopItemWidth();
 
-				ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
-				_flags |= ImGuiInputTextFlags_CallbackCharFilter;
-				//_flags |= ImGuiInputTextFlags_CallbackResize;
+			ui.popStyleFont();
 
-				PushItemWidth(_wTextBB);
+			// Store position after text input bb
+			//IMGUI_SUGAR__DEBUG_POINT(ofColor::red);
+			xxBb = ImGui::GetCursorPosX();
+			yyBb = ImGui::GetCursorPosY();
+
+			//--
+
+			// Submit Button
+
+			//if (bButtonRight)
+			{
+				ui.PushFont(SurfingFontTypes(sizeFont.get()));
+
+				if (bSmallerSizeTextButton) ui.PushFont(SurfingFontTypes(MAX(0, sizeFont.get() - 1)));
+
+				string s = strSubmit;
+				if (bUpper) { s = ofToUpper(s); }
+
+				// size
+				float padx = 1.5 * ui.getFontSize();
+				float pady = 0.7 * ui.getFontSize();
+				ImVec2 szBt(padx + ImGui::CalcTextSize(s.c_str()).x, pady + ui.getWidgetsHeightUnit());
+
+				//TODO: layout
+				float _xx = xx + _wTextBB + 0.2 * szBt.x;
+				float _yy = yy;
+				if (typeInput == 2)
 				{
-					if (_bBlink) ui.BeginBlinkTextDisabled();
-					if (bIntegrate)
-					{
-						ImVec4 c = ImVec4(0, 0, 0, 0); //transparent
-						ImGui::PushStyleColor(ImGuiCol_Border, c);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
-					}
-
-					// Focus to be ready to type
-					if (bFlagGoFocus == 1) {
-						bFlagGoFocus = 0;
-						ImGui::SetKeyboardFocusHere(0); // Move keyboard focus to the InputTextWithHint widget
-						ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
-					}
-
-					//TODO:
-					// trying to make first char uppercase...
-					//string text = "";
-					auto callback = [](ImGuiInputTextCallbackData* data) {
-						//if (text.size() == 1) {
-						//	std::cout << "callback" << std::endl;
-						//}
-
-						//if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
-						//	// Only capitalize the first character if the buffer is empty
-						//	if (data->BufTextLen == 0) {
-						//		if (data->Buf && data->Buf[0]) {
-						//			data->Buf[0] = toupper(data->Buf[0]);
-						//			data->BufDirty = true;
-						//			std::cout << "callback" << std::endl;
-						//		}
-						//	}
-						//}
-
-						return 0;
-					};
-
-					if (typeInput == 0)
-					{
-						// A
-						isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
-					}
-					else if (typeInput == 1)
-					{
-						// B
-						isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, callback, user_data);
-					}
-					else if (typeInput == 2)
-					{
-						// C
-						_hTextBB = 2 * ui.getWidgetsHeightUnit(); //two lines
-						//// int nlines = ofMap(rBB.GetHeight(), 0, ui.getWidgetsHeightUnit())
-						// int nlines = rBB.GetHeight() / ui.getWidgetsHeightUnit();
-						// nlines = MAX(1, nlines + 1);
-						// _hTextBB = nlines * ui.getWidgetsHeightUnit(); //n lines
-						// cout << "nlines:" << nlines << endl;
-
-						ui.AddSpacingY(-_hTextBB * 0.25);
-						ImVec2 _sz = ImVec2(_wTextBB, _hTextBB);
-						isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
-					}
-
-					if (bIntegrate) ImGui::PopStyleColor(2);
-					if (_bBlink) ui.EndBlinkTextDisabled();
+					_yy -= hl / 2;
 				}
-				PopItemWidth();
+				_yy += _hTextBB / 2;
+				_yy -= szBt.y / 2;
 
-				//--
+				ImGui::SetCursorPosX(_xx);
+				ImGui::SetCursorPosY(_yy);
 
-				// Submit Button
+				// Submit
 
-				if (bButton)
+				if (bButtonRight)
 				{
-					if (bSmallerSizeTextButton)ui.PushFont(SurfingFontTypes(MAX(0, sizeFont.get() - 1)));
-
-					string s = strSubmit;
-					if (bUpper) {
-						s = ofToUpper(s);
-					}
-
-					// size
-					float pad = 40;
-					ImVec2 szButton(pad + ImGui::CalcTextSize(s.c_str()).x, ui.getWidgetsHeightUnit());
-					//TODO: layout
-
-					float _xx = xx + _wTextBB + 0.2 * szButton.x;
-					float _yy = yy;
-					if (typeInput == 2)
-					{
-						_yy -= hl / 2;
-					}
-					_yy += _hTextBB / 2;
-					_yy -= szButton.y / 2;
-
-					ImGui::SetCursorPosX(_xx);
-					ImGui::SetCursorPosY(_yy);
-
 					// add transparency
 					ImVec4 c = ImGui::GetStyle().Colors[ImGuiCol_Text];
 					ImVec4 _c = ImVec4(c.x, c.y, c.z, c.w * 0.7);
 					ImGui::PushStyleColor(ImGuiCol_Text, _c);
-
-					if (ImGui::Button(s.c_str(), szButton))
+					if (ImGui::Button(s.c_str(), szBt))
 					{
 						doSubmit(text);
 						text = "";
 					}
-
 					ImGui::PopStyleColor();
-
-					if (bSmallerSizeTextButton) ui.popStyleFont();
-
-					ImSpinner::Spinner(bWaiting, 0);
 				}
+
+				if (bSmallerSizeTextButton) ui.popStyleFont();
+
+				//ImGui::SameLine();
+
+				// Spinner
+				float xo = 0;
+				float yo = 4;
+				xo += (szBt.x / 2);
+				xo -= 14;
+				ImGui::SetCursorPosX(_xx + xo);
+				if (!bButtonRight) ImGui::SetCursorPosY(_yy + yo);
+
+				ImSpinner::Spinner(bWaiting, typeWaiting);
+
+				ui.popStyleFont();
 			}
-			ui.popStyleFont();
+			//else {
+			//	// Spinner
+			//	//float xo = 0;
+			//	//xo += (szBt.x / 2);
+			//	//xo -= 14;
+			//	//ImGui::SetCursorPosX(_xx + xo);
+			//	ImSpinner::Spinner(bWaiting, typeWaiting);
+			//}
 
 			//--
 
-			// Submit and Clear buttons
+			// Clear and Submit buttons
 
-			if (bButtons)
+			if (bButtonsLeft)
 			{
-				xx += ImGui::GetStyle().ItemInnerSpacing.x;
+				// Back cursor to text bb
+				float x_ = padTextX * (w * 0.25f);
+				x_ += ImGui::GetStyle().ItemInnerSpacing.x;
 
-				ImGui::SetCursorPosX(xx);
+				ImGui::SetCursorPosX(xxBb + x_);
+				ImGui::SetCursorPosY(yyBb);
 
-				yy = ImGui::GetCursorPosY();
+				float padx = 1.5 * ui.getFontSize();
+				float pady = 0.7 * ui.getFontSize();
 
-				//TODO: fix when one button disabled
-				yy += ImGui::GetStyle().WindowPadding.y;
-				yy -= ImGui::GetStyle().ItemInnerSpacing.y;
-				ImGui::SetCursorPosY(yy);
-
-#if(0)
-				string s1 = strSubmit + "##SUBMIT2";//avoid collide
-				string s2 = "Clear";
-				if (bUpper) {
-					s1 = ofToUpper(s1);
-					s2 = ofToUpper(s2);
-				}
-
-				// submit
-				if (ImGui::Button(s1.c_str()))
+				if (!bButtonRight)
 				{
-					doSubmit(text);
-				}
-				ImGui::SameLine();
+					string s1 = strSubmit + "##SUBMIT2";//avoid collide
+					string s2 = "Clear";
+					if (bUpper) {
+						s1 = ofToUpper(s1);
+						s2 = ofToUpper(s2);
+					}
 
-				// clear
-				if (ImGui::Button(s2.c_str()))
+					// Submit
+					ImVec2 sz1(padx + ImGui::CalcTextSize(strSubmit.c_str()).x, pady + ui.getWidgetsHeightUnit());
+					if (ImGui::Button(s1.c_str(), sz1))
+					{
+						doSubmit(text);
+						text = "";
+					}
+					ImGui::SameLine();
+
+					// Clear
+					ImVec2 sz2(padx + ImGui::CalcTextSize(s2.c_str()).x, pady + ui.getWidgetsHeightUnit());
+					if (ImGui::Button(s2.c_str(), sz2))
+					{
+						if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
+						text = "";
+						doSubmit(text);
+					}
+				}
+				else
 				{
-					if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
-					text = "";
-					doSubmit(text);
+					/// only clear
+					string s2 = "Clear";
+
+					// Size
+					ImVec2 szBt(padx + ImGui::CalcTextSize(s2.c_str()).x, pady + ui.getWidgetsHeightUnit());
+
+					if (bUpper) { s2 = ofToUpper(s2); }
+
+					// Clear
+
+					if (ImGui::Button(s2.c_str(), szBt))
+					{
+						if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
+						text = "";
+
+						// workflow
+						//doSubmit(text);
+
+						// Trigs callback to parent / ofApp
+						if (functionCallbackClear != nullptr) functionCallbackClear();
+					}
+				}
 			}
-#else
-				string s2 = "Clear";
-				if (bUpper) {
-					s2 = ofToUpper(s2);
-				}
-
-				// clear
-				if (ImGui::Button(s2.c_str()))
-				{
-					if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);
-					text = "";
-					doSubmit(text);
-
-					// Trigs callback to parent / ofApp
-					if (functionCallbackClear != nullptr) functionCallbackClear();
-				}
-#endif
-		}
 
 			// Get Enter key as submit button
 			bool b = ImGui::GetIO().WantTextInput;
@@ -841,8 +885,8 @@ private:
 				isChanged = 0;
 				if (bDebug) ui.AddToLog("BigTextInput -> " + text, OF_LOG_VERBOSE);
 			}
+		}
 	}
-}
 
 	//--
 
@@ -872,8 +916,8 @@ private:
 		bLabel = 0;
 
 		padSubmitX = 0.2;
-		bButton = 1;
-		bButtons = 0;
+		bButtonRight = 1;
+		bButtonsLeft = 0;
 		bSmallerSizeTextButton = 1;
 		padTextX = 0.3;
 

@@ -3395,6 +3395,12 @@ public:
         return ofxImGuiSurfing::getWidgetsHeight();
     }
 
+    //--------------------------------------------------------------
+    float getFontSize()
+    {
+        return ofxImGuiSurfing::getFontSize();
+    }
+
     // LEGACY
     //--------------------------------------------------------------
     float getWidgetsHeightUnit()
