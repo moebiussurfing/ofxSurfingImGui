@@ -48,6 +48,20 @@ public:
 	//ofParameter<string> textB{ "TextB","" };
 	//ofParameter<string> textC{ "TextC","" };
 
+
+	static int CapitalizeFirst(ImGuiInputTextCallbackData* data)
+	{
+		if (data->EventFlag & ImGuiInputTextFlags_CallbackEdit)
+		{
+			if (data->BufTextLen == 1 && (data->Buf[0] >= 'a' || data->Buf[0] <= 'z'))
+			{
+				data->Buf[0] = (char)toupper((char)data->Buf[0]);
+				data->BufDirty = true;
+			}
+		}
+		return 0;
+	}
+
 public:
 	BigTextInput()
 	{
@@ -659,7 +673,8 @@ private:
 			bool _bBlink = bBlink && (text == "");
 
 			ImGuiInputTextFlags _flags = ImGuiInputTextFlags_None;
-			_flags |= ImGuiInputTextFlags_CallbackCharFilter;
+			_flags |= ImGuiInputTextFlags_CallbackEdit;
+			//_flags |= ImGuiInputTextFlags_CallbackCharFilter;
 			//_flags |= ImGuiInputTextFlags_CallbackResize;
 
 			PushItemWidth(_wTextBB);
@@ -705,12 +720,13 @@ private:
 				if (typeInput == 0)
 				{
 					// A
-					isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
+					isChanged = ImGui::InputText(label, &text, _flags, CapitalizeFirst);
+					//isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
 				}
 				else if (typeInput == 1)
 				{
 					// B
-					isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, callback, user_data);
+					isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, CapitalizeFirst);
 				}
 				else if (typeInput == 2)
 				{
@@ -724,7 +740,7 @@ private:
 
 					ui.AddSpacingY(-_hTextBB * 0.25);
 					ImVec2 _sz = ImVec2(_wTextBB, _hTextBB);
-					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
+					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, CapitalizeFirst);
 				}
 
 				ImGui::PopStyleColor();
@@ -739,6 +755,8 @@ private:
 			//IMGUI_SUGAR__DEBUG_POINT(ofColor::red);
 			xxBb = ImGui::GetCursorPosX();
 			yyBb = ImGui::GetCursorPosY();
+
+			static bool bPosMiniButRight = 0;//pos left or right
 
 			//--
 
@@ -791,13 +809,15 @@ private:
 
 				//ImGui::SameLine();
 
+				// Below Submit button
 				// Insert external widgets if already settled!
-				if (functionDraw != nullptr) {
-					ImGui::SetCursorPosX(_xx + szBt.x - 22);
-					ui.AddSpacingY(10);
-					functionDraw();
-				}
-#if(0)
+				if (bPosMiniButRight)
+					if (functionDraw != nullptr) {
+						ImGui::SetCursorPosX(_xx + szBt.x - 22);
+						ui.AddSpacingY(10);
+						functionDraw();
+					}
+#if(1)
 				// Spinner
 				float xo = 0;
 				float yo = 6;
@@ -892,8 +912,15 @@ private:
 						if (functionCallbackClear != nullptr) functionCallbackClear();
 					}
 
-					//// Insert external widgets if already settled!
-					//if (functionDraw != nullptr) functionDraw();
+					// Left position 
+					if (!bPosMiniButRight) {
+						// Insert external widgets if already settled!
+						if (functionDraw != nullptr) {
+							ImVec2 inspc = ImGui::GetStyle().ItemInnerSpacing;
+							ImGui::SetCursorPosX(xx + inspc.x);
+							functionDraw();
+						}
+					}
 				}
 			}
 
@@ -1012,5 +1039,12 @@ private:
 
 		ImGui::SetNextWindowSize(ImVec2(ww, hh), flagsCond);
 		ImGui::SetNextWindowPos(ImVec2(xx, yy), flagsCond);
+
+		rWindow = ofRectangle(xx, yy, ww, hh);
 	}
+
+	ofRectangle rWindow;
+
+public:
+	ofRectangle getWindowRectangle() { return rWindow; }
 };
