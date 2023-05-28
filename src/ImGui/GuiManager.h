@@ -1678,7 +1678,7 @@ public:
     void PopFont();
     
     ofParameter<int> fontIndex{ "Font", 0, 0, 3 };
-    void DrawWidgetsFonts(ofParameter<int> &index);//use external index
+    void DrawWidgetsFonts(ofParameter<int> &index, bool bWithArrows = true);//use external index
     void DrawWidgetsFonts();//use internal index
 
     //----

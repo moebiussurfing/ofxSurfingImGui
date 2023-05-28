@@ -1077,20 +1077,25 @@ void SurfingGuiManager::DrawWidgetsFonts() {
 	}
 }
 //--------------------------------------------------------------
-void SurfingGuiManager::DrawWidgetsFonts(ofParameter<int>& index) {
+void SurfingGuiManager::DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows) {
 
 	if (customFonts.size() != 0)
 	{
 		//make smaller if the window is big
 		float w = ofxImGuiSurfing::getWidgetsWidth();
-		if (w > 500) {
-			ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
-			ImGui::BeginColumns("#cols", 2, fc);
-			ImGui::SetColumnWidth(1, w / 2);
-			ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
-			ImGui::Columns(1);
+		if (bWithArrows) {
+			if (w > 500) {
+				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+				ImGui::BeginColumns("#cols", 2, fc);
+				ImGui::SetColumnWidth(1, w / 2);
+				ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+				ImGui::Columns(1);
+			}
+			else ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 		}
-		else ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+		else {
+				ofxImGuiSurfing::AddCombo(index, namesCustomFonts);
+		}
 	}
 }
 

@@ -179,6 +179,9 @@ public:
 	ofParameter<bool> bWaiting{ "Waiting", 0 }; // to be commanded from parent scope!
 	int typeWaiting = 0;
 
+	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
+	ofParameter<ofColor> colorTxt{ "ColTxt", ofColor::grey, ofColor(), ofColor() };
+
 private:
 	ofParameterGroup params{ "TextInputBubble" };
 	ofParameter<bool> bGui_Global{ "BigTextInput", true }; //TODO:
@@ -200,8 +203,6 @@ private:
 	ofEventListener eWindowY;
 	ofParameter<float> windowPadX{ "WindowPadX", 0, 0, 1 };
 	ofEventListener eWindowPadX;
-
-	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
 
 	ofParameter<float> sizeBubbleX{ "SizeX", 1.f, 0, 1 };
 	ofParameter<float> sizeBubbleY{ "SizeY", 1.f, 0, 1 };
@@ -292,6 +293,16 @@ public:
 		functionCallbackClear = f;
 	}
 
+
+private:
+	// Set external widgets to be inserted!
+	callback_t functionDraw = nullptr;
+public:
+	void setDrawWidgetsFunction(callback_t f = nullptr) {
+		functionDraw = f;
+	};
+
+public:
 	// To get the text when notified.
 	string getText() const { return textInput.get(); }
 
@@ -660,6 +671,7 @@ private:
 					ImGui::PushStyleColor(ImGuiCol_Border, c);
 					ImGui::PushStyleColor(ImGuiCol_FrameBg, c);
 				}
+				ImGui::PushStyleColor(ImGuiCol_Text, colorTxt.get());
 
 				// Focus to be ready to type
 				if (bFlagGoFocus == 1) {
@@ -715,6 +727,7 @@ private:
 					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback, user_data);
 				}
 
+				ImGui::PopStyleColor();
 				if (bIntegrate) ImGui::PopStyleColor(2);
 				if (_bBlink) ui.EndBlinkTextDisabled();
 			}
@@ -778,6 +791,13 @@ private:
 
 				//ImGui::SameLine();
 
+				// Insert external widgets if already settled!
+				if (functionDraw != nullptr) {
+					ImGui::SetCursorPosX(_xx + szBt.x - 22);
+					ui.AddSpacingY(10);
+					functionDraw();
+				}
+#if(0)
 				// Spinner
 				float xo = 0;
 				float yo = 6;
@@ -787,6 +807,7 @@ private:
 				if (!bButtonRight) ImGui::SetCursorPosY(_yy + yo);
 
 				ImSpinner::Spinner(bWaiting, typeWaiting);
+#endif
 
 				ui.popStyleFont();
 			}
@@ -848,6 +869,10 @@ private:
 					// Only clear
 					string s2 = "Clear";
 
+					ImVec2 inspc = ImGui::GetStyle().ItemInnerSpacing;
+					padx = 0.f * ui.getFontSize() + 2 * inspc.x;
+					pady = 0.f * ui.getFontSize();
+
 					// Size
 					ImVec2 szBt(padx + ImGui::CalcTextSize(s2.c_str()).x, pady + ui.getWidgetsHeightUnit());
 
@@ -866,6 +891,9 @@ private:
 						// Trigs callback to parent / ofApp
 						if (functionCallbackClear != nullptr) functionCallbackClear();
 					}
+
+					//// Insert external widgets if already settled!
+					//if (functionDraw != nullptr) functionDraw();
 				}
 			}
 

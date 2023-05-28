@@ -774,8 +774,10 @@ namespace ofxImGuiSurfing
 			}
 
 			else {//soft
-				v = getFadeBlink(0.80, 1.0, 0.2);
-				a = ofClamp(v, 0.8, 1.f);
+				//v = getFadeBlink(1.0, 0.5, 0.15);
+				v = getFadeBlink(0.f, 0.2f, 0.2);
+				v = 1 - v;
+				a = ofClamp(v, 0.85, 1.f);
 			}
 
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
