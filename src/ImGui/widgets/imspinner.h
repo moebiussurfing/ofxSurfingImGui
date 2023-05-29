@@ -2,7 +2,7 @@
 #define _IMSPINNER_H_
 
 // Tiny additions by @moebiusSurfing
-//#define IMSPINNER_DEMO
+#define IMSPINNER_DEMO
 
 /*
  * The MIT License (MIT)

@@ -9,7 +9,11 @@ namespace ImSpinner
 	//TODO: draw some selected widgets from the demo
 	inline void Spinner(bool bOn, int n)
 	{
-		static float velocity = 1.f;
+		float velocity = 1.f;
+		//static float velocity = 1.f;
+
+		static float nextdot = 0, nextdot2;
+		nextdot -= 0.07f;
 
 		// Make empty space when hidden
 		if (!bOn)
@@ -41,9 +45,6 @@ namespace ImSpinner
 
 		switch (n)
 		{
-			//case /*28*/ 0: ImSpinner::SpinnerPulsar("SpinnerPulsar",
-			//	R(16), T(2), C(white), S(1) * velocity); break;
-
 		case /*4*/ 0: ImSpinner::Spinner<e_st_ang>("SpinnerAng270",
 			Radius{ R(16) }, Thickness{ T(2) }, Color{ C(white) }, BgColor{ CB(ImColor(255, 255, 255, 128)) }, Speed{ S(6) * velocity }, Angle{ A(0.75f * PI_2) }); break;
 
@@ -74,7 +75,24 @@ namespace ImSpinner
 		case /*131*/ 9: ImSpinner::SpinnerSolarScaleBalls("SpinnerSolarScaleBalls",
 			R(16), T(1.3f), C(red), S(1) * velocity, DT(36)); break;
 
+		case /*$(46) */10: ImSpinner::SpinnerGooeyBalls("SpinnerGooeyBalls",
+			R(16), C(white), S(2.f) * velocity); break;
+
+		case /*$(47)*/ 11: ImSpinner::SpinnerRotateGooeyBalls("SpinnerRotateGooeyBalls2",
+			R(16), T(5), C(white), S(6.f) * velocity, 2); break;
+
+		case /*$(3)*/ 12: ImSpinner::Spinner<e_st_ang>("SpinnerAngNoBg",
+			Radius{ R(16) }, Thickness{ T(2) }, Color{ C(white) }, BgColor{ CB(ImColor(255, 255, 255, 0)) }, Speed{ S(6) * velocity }, Angle{ A(IM_PI) }); break;
+
+		case /*$(2)*/ 13: ImSpinner::Spinner<e_st_dots>("SpinnerDots",
+			Radius{ R(16) }, Thickness{ T(4) }, Color{ C(white) }, FloatPtr{ &nextdot }, Speed{ S(1) * velocity }, Dots{ DT(12) }, MinThickness{ -1.f }); break;
+
+		case /*$(24)*/ 14: ImSpinner::SpinnerIncScaleDots("SpinnerIncScaleDots",
+			R(16), T(4), C(white), S(6.6f) * velocity, 6); break;
+
 		}
 	}
 
+	static int amountSpinners = 15;
+	// = ImSpinner::amountSpinners;
 }

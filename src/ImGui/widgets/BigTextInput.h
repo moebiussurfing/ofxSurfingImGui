@@ -43,26 +43,6 @@ using callback_t = std::function<void()>;
 class BigTextInput
 {
 public:
-	//TODO: improve API for ofParam strings
-	//ofParameter<string> textA{ "TextA","" };
-	//ofParameter<string> textB{ "TextB","" };
-	//ofParameter<string> textC{ "TextC","" };
-
-
-	static int CapitalizeFirst(ImGuiInputTextCallbackData* data)
-	{
-		if (data->EventFlag & ImGuiInputTextFlags_CallbackEdit)
-		{
-			if (data->BufTextLen == 1 && (data->Buf[0] >= 'a' || data->Buf[0] <= 'z'))
-			{
-				data->Buf[0] = (char)toupper((char)data->Buf[0]);
-				data->BufDirty = true;
-			}
-		}
-		return 0;
-	}
-
-public:
 	BigTextInput()
 	{
 		ofAddListener(ofEvents().update, this, &BigTextInput::update);
@@ -177,6 +157,8 @@ public:
 
 		bDoneSetup = 1;
 	}
+
+	bool bOverTextInput = 0;
 
 public:
 	ofParameter<string> textInput{ "Text", "" }; // last submit text
@@ -295,8 +277,14 @@ private:
 	// Pointer to store a function
 	callback_t functionCallbackSubmit = nullptr;
 	callback_t functionCallbackClear = nullptr;
+	callback_t functionCallbackKeys = nullptr;
+	callback_t functionDrawImGuiContext = nullptr;
 
 public:
+	void setDrawWidgetsFunctionContext(callback_t f = nullptr)
+	{
+		functionDrawImGuiContext = f;
+	}
 	void setFunctionCallbackSubmit(callback_t f = nullptr)
 	{
 		functionCallbackSubmit = f;
@@ -307,6 +295,29 @@ public:
 		functionCallbackClear = f;
 	}
 
+	void setFunctionCallbackKeys(callback_t f = nullptr)
+	{
+		functionCallbackKeys = f;
+	}
+	//TODO:
+	// trying to notify to the parent scope that a key is pressed (to trig sounds) 
+	// WIP do not works.
+	/*
+	int callback(ImGuiInputTextCallbackData* data)
+	{
+		if (data->EventFlag & ImGuiInputTextFlags_CallbackEdit)
+		{
+			if (functionCallbackKeys != nullptr) functionCallbackKeys();
+
+			if (data->BufTextLen == 1 && (data->Buf[0] >= 'a' || data->Buf[0] <= 'z'))
+			{
+				data->Buf[0] = (char)toupper((char)data->Buf[0]);
+				data->BufDirty = true;
+			}
+		}
+		return 0;
+	}
+	*/
 
 private:
 	// Set external widgets to be inserted!
@@ -372,6 +383,13 @@ private:
 
 	void windowResized(ofResizeEventArgs& resize)
 	{
+		static float _w = -1;
+		static float _h = -1;
+		bool b = 0;
+		if (_w != resize.width) { _w = resize.width; b = 1; }
+		if (_h != resize.height) { _h = resize.height; b = 1; }
+		if (!b) return; // skip if not changed
+
 		doFlagResetWindow();
 		ofLogVerbose("ofxSurfingImGui::BigTextInput::windowResized") << resize.width << "," << resize.height;
 	}
@@ -517,46 +535,6 @@ private:
 
 			//--
 
-			//ImGuiInputTextCallback callback = NULL;
-
-			//TODO:
-			//std::function<int(ImGuiInputTextCallbackData*)> callback =
-			//	[this](ImGuiInputTextCallbackData* data) -> int {
-			//	ui.AddToLog(text, OF_LOG_WARNING);
-			//	text = "";
-			//	return 0;
-			//};
-
-			//TODO:
-			//ImGuiInputTextCallback callback = [this](ImGuiInputTextCallbackData* data) -> int {
-			//	if (data->EventFlag == ImGuiInputTextFlags_EnterReturnsTrue) {
-			//		ui.AddToLog(text, OF_LOG_WARNING);
-			//		text = "";
-			//	}
-			//	return 0;
-			//};
-
-			/*
-			// In the TextEditCallback function, set the scrollToBottom flag when new text is added
-			static int TextEditCallback(ImGuiInputTextCallbackData* data) {
-				if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory) {
-					// Handle command history here
-				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackCompletion) {
-					// Handle auto-completion here
-				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackResize) {
-					// Resize buffer here if needed
-				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
-					// Filter characters here if needed
-				} else if (data->EventFlag == ImGuiInputTextFlags_CallbackEdit) {
-					// Set the scrollToBottom flag when new text is added
-					scrollToBottom = data->HasSelection() || data->BufTextLen != data->BufSize;
-				}
-				return 0;
-			}
-			*/
-
-			//--
-
 			void* user_data = NULL;
 			static bool isChanged = false;
 
@@ -609,6 +587,13 @@ private:
 			{
 				ImU32 col = ImGui::GetColorU32(colorBubble.get());
 				draw_list->AddRectFilled(rBB.Min, rBB.Min + rBB.Max, col, round);
+
+				if (functionDrawImGuiContext != nullptr) {
+					ImVec2 p_ = ImGui::GetCursorScreenPos();
+					ImGui::InvisibleButton("MyInvisibleButton", ImVec2(w, h));
+					ImGui::SetCursorPos(p_);
+					functionDrawImGuiContext();
+				}
 			}
 
 			// Border
@@ -695,38 +680,32 @@ private:
 					ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
 				}
 
-				//TODO:
-				// trying to make first char uppercase...
-				//string text = "";
-				auto callback = [](ImGuiInputTextCallbackData* data) {
-					//if (text.size() == 1) {
-					//	std::cout << "callback" << std::endl;
-					//}
+				///*
+				auto callback = [](ImGuiInputTextCallbackData* data) -> int
+				{
+					if (data->EventFlag & ImGuiInputTextFlags_CallbackEdit)
+					{
+						//if (functionCallbackKeys != nullptr) functionCallbackKeys();//TODO:
 
-					//if (data->EventFlag == ImGuiInputTextFlags_CallbackCharFilter) {
-					//	// Only capitalize the first character if the buffer is empty
-					//	if (data->BufTextLen == 0) {
-					//		if (data->Buf && data->Buf[0]) {
-					//			data->Buf[0] = toupper(data->Buf[0]);
-					//			data->BufDirty = true;
-					//			std::cout << "callback" << std::endl;
-					//		}
-					//	}
-					//}
-
+						if (data->BufTextLen == 1 && (data->Buf[0] >= 'a' || data->Buf[0] <= 'z')) {
+							data->Buf[0] = (char)toupper((char)data->Buf[0]);
+							data->BufDirty = true;
+						}
+					}
 					return 0;
 				};
+				//*/
 
 				if (typeInput == 0)
 				{
 					// A
-					isChanged = ImGui::InputText(label, &text, _flags, CapitalizeFirst);
+					isChanged = ImGui::InputText(label, &text, _flags, callback);
 					//isChanged = ImGui::InputText(label, &text, _flags, callback, user_data);
 				}
 				else if (typeInput == 1)
 				{
 					// B
-					isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, CapitalizeFirst);
+					isChanged = ImGui::InputTextWithHint(label, hint, &text, _flags, callback);
 				}
 				else if (typeInput == 2)
 				{
@@ -740,8 +719,10 @@ private:
 
 					ui.AddSpacingY(-_hTextBB * 0.25);
 					ImVec2 _sz = ImVec2(_wTextBB, _hTextBB);
-					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, CapitalizeFirst);
+					isChanged = ImGui::InputTextMultiline(label, &text, _sz, _flags, callback);
 				}
+
+				bOverTextInput = ImGui::IsItemHovered();
 
 				ImGui::PopStyleColor();
 				if (bIntegrate) ImGui::PopStyleColor(2);
@@ -820,12 +801,12 @@ private:
 #if(1)
 				// Spinner
 				float xo = 0;
-				float yo = 6;
+				float yo = 10;
 				xo += (szBt.x / 2);
 				xo -= 14;
 				ImGui::SetCursorPosX(_xx + xo);
 				if (!bButtonRight) ImGui::SetCursorPosY(_yy + yo);
-
+				else ui.AddSpacingY(4);
 				ImSpinner::Spinner(bWaiting, typeWaiting);
 #endif
 
@@ -917,7 +898,7 @@ private:
 						// Insert external widgets if already settled!
 						if (functionDraw != nullptr) {
 							ImVec2 inspc = ImGui::GetStyle().ItemInnerSpacing;
-							ImGui::SetCursorPosX(xx + inspc.x);
+							ImGui::SetCursorPosX(xx + inspc.x + 3);
 							functionDraw();
 						}
 					}
@@ -1047,4 +1028,8 @@ private:
 
 public:
 	ofRectangle getWindowRectangle() { return rWindow; }
+
+	bool isOverInputText() {
+		return bOverTextInput;
+	}
 };
