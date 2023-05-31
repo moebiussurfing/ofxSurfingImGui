@@ -1752,7 +1752,7 @@ public:
 		return bOverInputText;
 	}
 
-	// Clicks helpers
+	// Clicks helpers. Must call between begin/end render.
 	//--------------------------------------------------------------
 	bool isMouseOverAppWindowRightClicked() const
 	{

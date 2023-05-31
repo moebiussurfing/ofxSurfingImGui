@@ -332,6 +332,10 @@ public:
 	// To get the text when notified.
 	string getText() const { return textInput.get(); }
 
+	void doEnterKey() {
+		doSubmit(textInput);
+	}
+
 private:
 	void doSubmit(string s)
 	{
@@ -909,8 +913,11 @@ private:
 				}
 			}
 
+			//--
+
 			// Get Enter key as submit button
-			bool b = ImGui::GetIO().WantTextInput;
+			//bool b = ImGui::GetIO().WantTextInput; // only when focused on text input
+			bool b = 1;
 			if (b && ImGui::IsKeyPressed(ImGuiKey_Enter))
 			{
 				doSubmit(text);

@@ -775,7 +775,7 @@ namespace ofxImGuiSurfing
 
 			else
 			{//soft
-				a = getFadeBlink(0.8, 1, 0.3f);
+				a = getFadeBlink(0.77, 1, 0.2f);
 			}
 			//{//soft
 			//	v = getFadeBlink();
