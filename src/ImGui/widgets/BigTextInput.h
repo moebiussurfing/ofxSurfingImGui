@@ -69,6 +69,7 @@ public:
 		g.add(bDebug);
 
 		paramsMain.add(colorBubble);
+		paramsMain.add(colorTxt);
 		paramsMain.add(windowY);
 		paramsMain.add(windowPadX);
 		paramsMain.add(sizeBubbleX);
@@ -222,7 +223,7 @@ private:
 
 	ofParameterGroup paramsSubmit{ "SubmitButton" };
 	ofParameter<bool> bSmallerSizeTextButton{ "SmallerText", true };
-	ofParameter<bool> bButtonsLeft{ "Left Buttons", false };
+	ofParameter<bool> bButtonsLeft{ "Left Buttons", true };
 	ofParameter<bool> bButtonRight{ "Right Button", true };
 
 	bool bBlink = 1; //hint text bubble blink when empty
@@ -278,12 +279,12 @@ private:
 	callback_t functionCallbackSubmit = nullptr;
 	callback_t functionCallbackClear = nullptr;
 	callback_t functionCallbackKeys = nullptr;
-	callback_t functionDrawImGuiContext = nullptr;
+	callback_t functionDrawImGuiContextMenu = nullptr;
 
 public:
-	void setDrawWidgetsFunctionContext(callback_t f = nullptr)
+	void setDrawWidgetsFunctionContextMenu(callback_t f = nullptr)
 	{
-		functionDrawImGuiContext = f;
+		functionDrawImGuiContextMenu = f;
 	}
 	void setFunctionCallbackSubmit(callback_t f = nullptr)
 	{
@@ -588,11 +589,13 @@ private:
 				ImU32 col = ImGui::GetColorU32(colorBubble.get());
 				draw_list->AddRectFilled(rBB.Min, rBB.Min + rBB.Max, col, round);
 
-				if (functionDrawImGuiContext != nullptr) {
+				//TODO:
+				// draw a floating context menu with some widgets
+				if (functionDrawImGuiContextMenu != nullptr) {
 					ImVec2 p_ = ImGui::GetCursorScreenPos();
 					ImGui::InvisibleButton("MyInvisibleButton", ImVec2(w, h));
 					ImGui::SetCursorPos(p_);
-					functionDrawImGuiContext();
+					functionDrawImGuiContextMenu();
 				}
 			}
 
@@ -681,6 +684,7 @@ private:
 				}
 
 				///*
+				//TODO: can be passed functionCallbackKeys
 				auto callback = [](ImGuiInputTextCallbackData* data) -> int
 				{
 					if (data->EventFlag & ImGuiInputTextFlags_CallbackEdit)
@@ -954,15 +958,15 @@ private:
 
 		padSubmitX = 0.2;
 		bButtonRight = 1;
-		bButtonsLeft = 0;
+		bButtonsLeft = 1;
 		bSmallerSizeTextButton = 1;
 		padTextX = 0.3;
 
 		bShadow = true;
 		positionshadow = glm::vec2(0.f, 0.25);
 
-		bBorder = 0;
-		thicknessBorder = 4;
+		bBorder = 1;
+		thicknessBorder = 1.5f;
 	}
 
 	void doFlagResetWindow() { bFlagResetWindow = 1; }
