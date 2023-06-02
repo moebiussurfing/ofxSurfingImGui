@@ -103,6 +103,12 @@ public:
 		// params goes to ui
 		// g do not goes to ui. just for serialize settings.
 
+		// Presets
+		paramsPreset.add(paramsMain);
+		paramsPreset.add(paramsSubmit);
+		paramsPreset.add(paramsShadow);
+		paramsPreset.add(paramsBorder);
+		
 		//--
 
 		eTypeInput = typeInput.newListener([this](int& v)
@@ -179,6 +185,11 @@ public:
 	ofParameter<ofColor> colorBubble{ "ColBg", ofColor::grey, ofColor(), ofColor() };
 	ofParameter<ofColor> colorTxt{ "ColTxt", ofColor::grey, ofColor(), ofColor() };
 
+	ofParameterGroup paramsPreset{ "BigTextInput" };
+	ofParameter<float> windowY{ "WindowY", 0, 0, 1 };
+	ofParameter<float> windowPadX{ "WindowPadX", 0, 0, 1 };
+	ofParameter<float> rounded{ "Rounded", 0, 0, 1 };
+	
 private:
 	ofParameterGroup params{ "TextInputBubble" };
 	ofParameter<bool> bGui_Global{ "BigTextInput", true }; //TODO:
@@ -195,10 +206,7 @@ private:
 
 	ofParameter<bool> bLabel{ "Label", false }; //TODO:
 	ofParameter<int> sizeFont{ "FontSize", 0, 0, 3 };
-	ofParameter<float> rounded{ "Rounded", 0, 0, 1 };
-	ofParameter<float> windowY{ "WindowY", 0, 0, 1 };
 	ofEventListener eWindowY;
-	ofParameter<float> windowPadX{ "WindowPadX", 0, 0, 1 };
 	ofEventListener eWindowPadX;
 
 	ofParameter<float> sizeBubbleX{ "SizeX", 1.f, 0, 1 };
@@ -395,8 +403,8 @@ private:
 		if (_h != resize.height) { _h = resize.height; b = 1; }
 		if (!b) return; // skip if not changed
 
-		doFlagResetWindow();
 		ofLogVerbose("ofxSurfingImGui::BigTextInput::windowResized") << resize.width << "," << resize.height;
+		doFlagResetWindow();
 	}
 
 public:
@@ -680,6 +688,12 @@ private:
 				}
 				ImGui::PushStyleColor(ImGuiCol_Text, colorTxt.get());
 
+				//hint prompt 
+				float a = getFadeBlink();
+				ImVec4 cd = ImVec4(colorTxt.get().r/255.f, colorTxt.get().g/255.f, colorTxt.get().b/255.f, a);
+				//transparent
+				ImGui::PushStyleColor(ImGuiCol_TextDisabled, cd);
+
 				// Focus to be ready to type
 				if (bFlagGoFocus == 1) {
 					bFlagGoFocus = 0;
@@ -732,6 +746,7 @@ private:
 
 				bOverTextInput = ImGui::IsItemHovered();
 
+				ImGui::PopStyleColor();
 				ImGui::PopStyleColor();
 				if (bIntegrate) ImGui::PopStyleColor(2);
 				if (_bBlink) ui.EndBlinkTextDisabled();
