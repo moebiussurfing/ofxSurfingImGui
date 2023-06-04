@@ -1181,6 +1181,22 @@ public:
 		//}
 	}
 
+	// Sorting z-order windows:
+	//--------------------------------------------------------------
+	void setWindowFocused(string windowName)
+	{// Bring Window to the top of the z-order if it's not already in the front
+		if (!ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
+		{
+			ImGui::SetWindowFocus(windowName.c_str());
+			// ImGui::SetWindowFocus(nullptr);//un focus
+		}
+	}
+	//--------------------------------------------------------------
+	void setWindowFocused(ofParameter<bool> &p)
+	{
+		setWindowFocused(p.getName());
+	}
+
 private:
 	// Instantiation
 
