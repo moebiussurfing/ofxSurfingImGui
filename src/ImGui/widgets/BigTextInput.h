@@ -191,7 +191,7 @@ public:
     ofParameter<ofColor> colorTxt{"ColTxt", ofColor::grey, ofColor(), ofColor()};
 
     ofParameterGroup paramsPreset{"BigTextInput"};
-    ofParameter<bool> bBottomTextInput{"Bottom", false};
+    ofParameter<bool> bBottomTextInput{"Bottom", false}; //flip y direction
     ofParameter<float> windowY{"WindowY", 0, 0, 1};
     ofParameter<float> windowPadX{"WindowPadX", 0, 0, 1};
     ofParameter<float> rounded{"Rounded", 0, 0, 1};
@@ -725,7 +725,8 @@ private:
                     ImGui::SetItemDefaultFocus(); // Set the focus to the first item in the widget
                 }
 
-                ///*
+                // Capitalize first char
+#if 0
                 //TODO: can be passed functionCallbackKeys
                 auto callback = [](ImGuiInputTextCallbackData* data) -> int
                 {
@@ -741,7 +742,9 @@ private:
                     }
                     return 0;
                 };
-                //*/
+#else
+                ImGuiInputTextCallback callback = NULL;
+#endif
 
                 if (typeInput == 0)
                 {
@@ -982,6 +985,7 @@ private:
 
     //--
 
+public:
     // Reset
     void doResetAll()
     {
@@ -991,8 +995,10 @@ private:
 
     void doResetConfig()
     {
-        bBottomTextInput = 0;
-        windowY = 0.9;
+        bBottomTextInput = 0; //flip
+        windowY = 0.02; //top
+        // windowY = 0.9;//bottom
+
         windowPadX = 0.2;
 
         //colorBubble = ofColor(32, 255);
@@ -1023,6 +1029,7 @@ private:
 
     void doFlagResetWindow() { bFlagResetWindow = 1; }
 
+private:
     void doResetWindow()
     {
         //TODO:

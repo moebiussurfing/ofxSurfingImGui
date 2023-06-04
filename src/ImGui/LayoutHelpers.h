@@ -475,6 +475,7 @@ namespace ofxImGuiSurfing
 		AddSpacingBig();
 		AddSpacingBig();
 	}
+
 	/*
 	//--------------------------------------------------------------
 	inline void AddSpaceY(int spacingy = 2)
