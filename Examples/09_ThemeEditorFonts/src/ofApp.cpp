@@ -37,7 +37,8 @@ void ofApp::draw()
 		if (ui.BeginWindow("ofApp"))
 		{
 			ui.Add(e.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
-			string s = "Note that these widgets are not affected by the selected index font!";
+			string s = "Note that these widgets are not affected by the selected index font! ";
+			s += "\nui.AddLabel() methods will use the default fonts too.";
 			ui.AddLabel(s);
 			ui.AddSpacingBigSeparated();
 

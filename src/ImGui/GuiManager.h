@@ -820,7 +820,9 @@ public:
 	{
 		std::string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
+		pushStyleFont(0);
 		ImGui::TextWrapped("%s", t.c_str());
+		popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
 

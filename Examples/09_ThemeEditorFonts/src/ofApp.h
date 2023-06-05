@@ -2,6 +2,9 @@
 
 /*
 
+	DEFAULT/BIG/HUGE/HUGE_XXL 
+	are the labels for the default loaded fonts.
+
 	This example show how to load some fonts
 	to test how they work under the UI.
 	The you should hard-code to force default fonts
