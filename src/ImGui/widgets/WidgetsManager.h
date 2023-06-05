@@ -1084,6 +1084,13 @@ namespace ofxImGuiSurfing
 						//--
 
 						// Rounded Toggles
+						//TODO:
+					case OFX_IM_TOGGLE_ROUNDED_MINI_XS:
+						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(0.8f * _hh, 0.8f * (2 / 3.f) * _hh), 1,1);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						break;
 
 					case OFX_IM_TOGGLE_ROUNDED_MINI:
 					case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY

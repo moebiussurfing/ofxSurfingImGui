@@ -340,7 +340,7 @@ public:
 
 	static bool IsGlyphWordChar(const Glyph& aGlyph);
 
-	//void ImGuiDebugPanel(const std::string& panelName = "Debug");
+	//void drawImGuiDebugPanel(const std::string& panelName = "Debug");
 	//void UnitTests();
 
 private:
@@ -499,7 +499,7 @@ private:
 	//--
 
 public:
-	inline void ImGuiDebugPanel(const std::string& panelName)
+	inline void drawImGuiDebugPanel(const std::string& panelName)
 	{
 		ImGui::Begin(panelName.c_str());
 

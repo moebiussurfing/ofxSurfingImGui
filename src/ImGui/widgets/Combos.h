@@ -178,8 +178,6 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
-		//ImGui::Spacing();
-
 		ImGui::PopID();
 
 		return b;

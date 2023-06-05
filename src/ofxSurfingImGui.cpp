@@ -21,6 +21,8 @@
 	TODO:
 
 	IDEAS
+
+	- Make drop-down struct? index + names
 	- add layout with child/header similar to menus.
 	- context menu / right mouse click
 		expose auto resize/minimize/etc

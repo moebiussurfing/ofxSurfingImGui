@@ -226,6 +226,14 @@ namespace ofxImGuiSurfing
 		return ImGui::GetContentRegionAvail().y;
 	}
 
+	//--------------------------------------------------------------
+	inline float getFontSize()
+	{
+		ImGuiContext& g = *GImGui;
+		ImFont* font = g.Font;
+		return g.FontSize;
+	}
+
 	// NEW API:
 	//--------------------------------------------------------------
 	inline void SameLineIfAvailForWidth(float w = 200)//TODO; not checking each widget..
@@ -467,6 +475,7 @@ namespace ofxImGuiSurfing
 		AddSpacingBig();
 		AddSpacingBig();
 	}
+
 	/*
 	//--------------------------------------------------------------
 	inline void AddSpaceY(int spacingy = 2)
@@ -750,18 +759,36 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline void BeginBlinkText(bool bBlink = true)
+	inline void BeginBlinkText(bool bBlink = true, bool bSoft = false)
 	{
 		if (bBlink)
 		{
 			float a = 1.f;
-			//float a = 0.5f;
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
-			float v = getFadeBlink();
-			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			float v = 0;
+			if (!bSoft) {
+				v = getFadeBlink();
+				a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			}
+
+			else
+			{//soft
+				a = getFadeBlink(0.77, 1, 0.2f);
+			}
+			//{//soft
+			//	v = getFadeBlink();
+			//	a = ofClamp(v, 0.6, 1);
+			//}
+			//{//soft
+			//	//v = getFadeBlink(1.0, 0.5, 0.15);
+			//	v = getFadeBlink(0.f, 0.2f, 0.2);
+			//	v = 1 - v;
+			//	a = ofClamp(v, 0.85, 1.f);
+			//}
+
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_Text, c);

@@ -112,9 +112,9 @@ public:
 	ofParameterGroup params;
 
 	ofParameter<bool> bGui;
-	ofParameter<bool> bGui_StyleEditor;
+	ofParameter<bool> bGui_DearImGuiStyleEditor;
 	ofParameter<bool> bGui_ThemeManager;
-	ofParameter<bool> bGui_DemoImGui;
+	ofParameter<bool> bGui_DearImGuiDemo;
 	ofParameter<bool> bGui_DemoWidgets;
 	ofParameter<bool> bEnableColors;
 	ofParameter<bool> bEnableLayout;
@@ -138,10 +138,11 @@ public:
 	void setup()
 	{
 		bGui.set("Theme Editor", true);
-		bGui_StyleEditor.set("Style Editor", false);
 		bGui_ThemeManager.set("Theme Manager", false);
 		bGui_DemoWidgets.set("Demo Widgets", false);
-		bGui_DemoImGui.set("Dear ImGui Demo", false);
+		bGui_DearImGuiStyleEditor.set("DearImGui Style Editor", false);
+		bGui_DearImGuiDemo.set("DearImGui Demo", false);
+
 		bEnableColors.set("Colors", true);
 		bEnableLayout.set("Layout", true);
 		bClickerCombo.set("ClickerCombo", true);
@@ -153,10 +154,10 @@ public:
 
 		params.setName("SurfingThemeEditor");
 		params.add(bGui);
-		params.add(bGui_StyleEditor);
+		params.add(bGui_DearImGuiStyleEditor);
 		params.add(bGui_ThemeManager);
 		params.add(bGui_DemoWidgets);
-		params.add(bGui_DemoImGui);
+		params.add(bGui_DearImGuiDemo);
 		params.add(bEnableColors);
 		params.add(bEnableLayout);
 		params.add(nameTheme);
@@ -300,8 +301,8 @@ public:
 		static float v3 = 0;
 		static bool b1 = 1;
 		static bool b2 = false;
-		static ofParameter<int> i{ "Index",2,0,3 };
-		static std::vector<std::string> fileNames{ "ZERO", "ONE","TWO","THREE" };
+		static ofParameter<int> i{ "Index", 2, 0, 3 };
+		static std::vector<std::string> fileNames{ "ZERO", "ONE", "TWO", "THREE" };
 
 		ImVec2 sz1(ImGui::GetContentRegionAvail().x, 2 * ImGui::GetFrameHeight());
 		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x, 2 * ImGui::GetFrameHeight());
@@ -321,14 +322,21 @@ public:
 		ofxImGuiSurfing::AddMatrixClicker(n1);
 		ui.Add(n1);
 		ui.Add(n2);
+
 		ui.AddLabelBig("ImGui RAW");
+		// using cpp types instead of ofPara,s
+		ImGui::PushItemWidth(sz1.x);
 		ImGui::SliderInt("Number3", &n3, 0, 5);
 		ImGui::SliderFloat("Value3", &v3, -1, 1);
+		ImGui::PopItemWidth();
+		
 		ImGui::Button("Button1");
 		ui.SameLine();
 		ImGui::Button("Button2");
 		ImGui::Checkbox("Toggle1", &b1);
 		ImGui::Checkbox("Toggle2", &b2);
+
+		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
 	};
 
 	void drawDemoSurfingWidgets()
@@ -343,6 +351,8 @@ public:
 
 		if (ui->BeginWindow(bGui_DemoWidgets))
 		{
+			//ui->refreshLayout();//TODO:
+
 			drawDemoSurfingWidgets(*ui);
 
 			ui->EndWindow();
@@ -351,7 +361,7 @@ public:
 
 	void draw()
 	{
-		if (!bGui) return;
+		if (!bGui) return; // "Theme Editor"
 		if (ui == nullptr) return;
 
 		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
@@ -368,10 +378,10 @@ public:
 				ui->AddLabelBig("Surfing\nThemeEditor");
 				ui->AddSpacing();
 				ui->Add(bGui_ThemeManager, OFX_IM_TOGGLE_ROUNDED);
-				ui->Add(bGui_StyleEditor, OFX_IM_TOGGLE_ROUNDED);
-				ui->AddSpacingSeparated();
 				ui->Add(bGui_DemoWidgets, OFX_IM_TOGGLE_ROUNDED);
-				ui->Add(bGui_DemoImGui, OFX_IM_TOGGLE_ROUNDED);
+				ui->AddSpacingSeparated();
+				ui->Add(bGui_DearImGuiStyleEditor, OFX_IM_TOGGLE_ROUNDED);
+				ui->Add(bGui_DearImGuiDemo, OFX_IM_TOGGLE_ROUNDED);
 				ui->AddSpacingSeparated();
 				ui->Add(ui->bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
 			}
@@ -383,9 +393,9 @@ public:
 		//--
 
 		if (bGui_ThemeManager) drawThemeManager();
-		if (bGui_StyleEditor) drawStyleEditor();
+		if (bGui_DearImGuiStyleEditor) drawStyleEditor();
 		if (bGui_DemoWidgets) drawDemoSurfingWidgets();
-		if (bGui_DemoImGui) drawDemoImGui();
+		if (bGui_DearImGuiDemo) drawDemoImGui();
 	};
 
 	//--
@@ -460,10 +470,10 @@ public:
 private:
 	void drawStyleEditor()
 	{
-		if (!bGui_StyleEditor) return;
+		if (!bGui_DearImGuiStyleEditor) return;
 		if (ui == nullptr) return;
 
-		if (ui->BeginWindow(bGui_StyleEditor)) {
+		if (ui->BeginWindow(bGui_DearImGuiStyleEditor)) {
 
 			ImGuiStyle& style = ImGui::GetStyle();
 
@@ -533,6 +543,9 @@ public:
 			ui->AddSpacing();
 
 			ui->Add(indexTheme, OFX_IM_HSLIDER_SMALL);
+			s = "Loading files from:\n";
+			s += pathThemes;
+			ui->AddTooltipHelp(s);
 			ImVec2 sz2 = ImVec2(ofxImGuiSurfing::getWidgetsWidth(2), 1.5 * ofxImGuiSurfing::getWidgetsHeightUnit());
 			ofxImGuiSurfing::AddIndexArrows(indexTheme, sz2);
 
@@ -590,7 +603,11 @@ public:
 			}
 			s = ofToString(bKeyCtrl ? "Save B" : "Load B");
 			ui->AddTooltip(s);
-			ui->AddTooltipHelp("Press Control to Save");
+			s = "Press Control to Save,\n\n";
+			s += "Loading files from:\n";
+			s += "path A: " + filenameA + "\n";
+			s += "path B: " + filenameB + "\n";
+			ui->AddTooltipHelp(s);
 			ofxImGuiSurfing::AddSpacingBigSeparated();
 
 			size_t n = 6;

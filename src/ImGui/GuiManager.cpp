@@ -350,12 +350,15 @@ void SurfingGuiManager::setupImGuiFonts()
 	std::string _fontName;
 	float _fontSizeParam;
 
-	// WARNING: will not crash or notify you if the font files are not present!
+	// WARNING: 
+	// Could not crash or notify you 
+	// if the font files are not present!
 	_fontName = FONT_DEFAULT_FILE;
 	_fontSizeParam = FONT_DEFAULT_SIZE;
 
-	std::string _path = "assets/fonts/";
-	// assets folder
+	// Assets folder
+	//std::string _path = "assets/fonts/";
+	std::string _path = FONT_DEFAULT_FONTS;
 
 	// To check if default font file exists
 	ofFile fileToRead(_path + _fontName);
@@ -376,93 +379,38 @@ void SurfingGuiManager::setupImGuiFonts()
 	bool b2 = fileToRead2.exists();
 	if (b2)
 	{
-		//gui.begin();
+		namesCustomFonts.clear();
+		string _label;
 
 		// Font default
-		pushFont(_path + _fontName, _fontSizeParam); // queue default font too
+		_label = "DEFAULT";
+		pushFont(_path + _fontName, _fontSizeParam, _label); // queue default font too
 
 		// Font big
-		pushFont(_path + _fontName, _fontSizeParam * 1.5f); // queue big font too
+		_label = "BIG";
+		pushFont(_path + _fontName, _fontSizeParam * 1.5f, _label); // queue big font too
 
 		// Font huge
-		pushFont(_path + _fontName, _fontSizeParam * 2.5f); // queue huge font too
+		_label = "HUGE";
+		pushFont(_path + _fontName, _fontSizeParam * 2.5f, _label); // queue huge font too
 
 		// Font huge xxl
-		pushFont(_path + _fontName, _fontSizeParam * 5.f); // queue huge xxl font too
-
-		//TODO: 
-		// WARNING! 
-		// these names could be copied to GuiManager too!
-		// take care if both sizes fonts/names changed! 
-		// this is hardcoded now!
-		// Font sizes
-		namesCustomFonts.clear();
-		namesCustomFonts.push_back("DEFAULT");
-		namesCustomFonts.push_back("BIG");
-		namesCustomFonts.push_back("HUGE");
-		namesCustomFonts.push_back("HUGE_XXL");
+		_label = "HUGE_XXL";
+		pushFont(_path + _fontName, _fontSizeParam * 3.5f, _label); // queue huge xxl font too
 
 		//--
 
 		// Set default
-		addFont(_path + _fontName, _fontSizeParam);
-
-		//gui.end();
+		//addFont(_path + _fontName, _fontSizeParam);
 	}
 
-	// Legacy not found neither,
+	// Legacy not found neither
 	else
 	{
-		ofLogError("ofxSurfingImGui:setupImGuiFonts") << " Expected file fonts not found!";
+		ofLogError("ofxSurfingImGui") << "setupImGuiFonts() Expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "ImGui will use his own bundled default font.";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
-
-	/*
-	//TODO:
-	// Our last attempt is to try the a default bundled oF font
-	else
-	{
-		//ofTrueTypeFont::lo
-		//		//TODO: how to get the absolute path of OF_TTF_MONO?
-		//		//string path = std::filesystem::absolute(OF_TTF_MONO).string();
-		//		string path = winFontPathByName(OF_TTF_MONO.string());
-		//
-		//////#elif defined(TARGET_WIN32)
-		////if (fontname == OF_TTF_SANS) {
-		////	fontname = "Arial";
-		////}
-		////else if (fontname == OF_TTF_SERIF) {
-		////	fontname = "Times New Roman";
-		////}
-		////else if (fontname == OF_TTF_MONO) {
-		////	fontname = "Courier New";
-		////}
-		////filename = winFontPathByName(fontname.string());
-		//////#endif
-
-		_fontSizeParam = FONT_DEFAULT_SIZE_LEGACY;
-
-		// Font default
-		pushFont(path, _fontSizeParam); // queue default font too
-
-		// Font big
-		pushFont(path, _fontSizeParam * 1.5f); // queue big font too
-
-		// Font huge
-		pushFont(path, _fontSizeParam * 2.5f); // queue huge font too
-
-		//--
-
-		// Set default
-		addFont(path, _fontSizeParam);
-	}
-	*/
-
-	// If we don't found any of the font,
-	// we will let ImGui to use his default bundled font,
-	// The label sizes widgets, and the 3 font types will not be working,
-	// all styles will be the same.
 }
 
 //--------------------------------------------------------------
@@ -497,27 +445,13 @@ void SurfingGuiManager::setupImGui()
 	//--
 
 	// Fonts
-#ifdef OFX_IMGUI_USE_FONTS
 	setupImGuiFonts();
-#endif
-
-	//--
-
-	//TODO:
-	//setupImGuiTheme();
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGuiTheme()
 {
 	ofLogNotice("ofxSurfingImGui:setupImGuiTheme");
-
-	//--
-
-//	// Fonts
-//#ifdef OFX_IMGUI_USE_FONTS
-//	setupImGuiFonts();
-//#endif
 
 	//--
 
@@ -913,6 +847,9 @@ void SurfingGuiManager::clearFonts()
 
 	auto& io = ImGui::GetIO();
 	io.Fonts->Clear();
+
+	fontIndex.setMax(0);
+	namesCustomFonts.clear();
 }
 
 // API user:
@@ -921,28 +858,26 @@ void SurfingGuiManager::clearFonts()
 //TODO: could return an int with the current index.
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
-bool SurfingGuiManager::pushFont(std::string path, int size)
+bool SurfingGuiManager::pushFont(std::string path, float size, string label)
 {
-#ifndef OFX_IMGUI_USE_FONTS
-	return false;
-#endif
-
 	//TODO:
 	// It could be a vector with several customFont
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
-	ofLogNotice("ofxSurfingImGui:pushFont") << " " << path << " : " << size;
+	ofLogNotice("ofxSurfingImGui") << "pushFont: " << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
 
+	// Check if file exists
 	ofFile fileToRead(path);
-	// a file that exists
 	bool b = fileToRead.exists();
 
 	if (b)
 	{
+		if (label == "") label = fileToRead.getBaseName();
+
 		ImFont* _customFont = nullptr;
 		if (guiPtr != nullptr)
 		{
@@ -958,11 +893,17 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 			customFonts.push_back(_customFont);
 			customFont = _customFont;
 			currFont = customFonts.size() - 1;
+
+			namesCustomFonts.push_back(label);
+			fontIndex.setMax(namesCustomFonts.size() - 1);
+			//fontIndex.setMax(ImGui::GetIO().Fonts->Fonts.Size - 1);
 		}
+
+		ofLogNotice("ofxSurfingImGui") << "pushFont() path: " << path << " size: " << size;
 	}
 	else
 	{
-		ofLogError("ofxSurfingImGui:pushFont") << " FILE FONT " << path << " NOT FOUND!";
+		ofLogError("ofxSurfingImGui") << "pushFont() File font " << path << " not found!";
 	}
 
 	if (customFont != nullptr) io.FontDefault = customFont;
@@ -970,46 +911,66 @@ bool SurfingGuiManager::pushFont(std::string path, int size)
 	return b;
 }
 
-// API user: workflow during setup not in draw.
+//// API user: workflow during setup not in draw. Not during runtime neither by the coder!
+////--------------------------------------------------------------
+//bool SurfingGuiManager::addFont(std::string path, float size)
+//{
+//	//TODO:
+//	// should be a vector with several customFont to allow hot reloading..
+//	// if not, last added font will be used
+//
+//	auto& io = ImGui::GetIO();
+//	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
+//
+//	ofFile fileToRead(path); // a file that exists
+//	bool b = fileToRead.exists();
+//	if (b)
+//	{
+//		if (guiPtr != nullptr) customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
+//		else customFont = gui.addFont(path, size, nullptr, normalCharRanges);
+//
+//		ofLogNotice("ofxSurfingImGui") << "addFont: " << path << " size: " << size;
+//	}
+//	else ofLogError("ofxSurfingImGui") << "Font not found: " << path;
+//
+//	if (customFont != nullptr) io.FontDefault = customFont;
+//
+//	return b;
+//}
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::addFont(std::string path, int size)
+bool SurfingGuiManager::pushFontsFromFolder(std::string path, float size = 12.f)
 {
-#ifndef OFX_IMGUI_USE_FONTS
-	return false;
-#endif
+	// Load dragged images folder
+	ofLogNotice("ofxSurfingImGui") << "addFonts from: " << path << " size: " << size;
 
-	//TODO:
-	// should be a vector with several customFont to allow hot reloading..
-	// if not, last added font will be used
+	ofDirectory dir;
+	dir.listDir(path);
+	dir.allowExt("ttf");
+	dir.allowExt("TTF");
+	dir.allowExt("otf");//otf works?
+	dir.allowExt("OTF");
+	dir.sort();
 
-	auto& io = ImGui::GetIO();
-	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
-
-	ofFile fileToRead(path); // a file that exists
-	bool b = fileToRead.exists();
-	if (b)
-	{
-		if (guiPtr != nullptr) customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
-		else customFont = gui.addFont(path, size, nullptr, normalCharRanges);
+	if (dir.size() == 0) {
+		ofLogError("ofxSurfingImGui") << "Font not found.";
+		return false;
 	}
 
-	if (customFont != nullptr) io.FontDefault = customFont;
-
-	return b;
+	for (int i = 0; i < dir.size(); i++) {
+		string label = dir[i].getBaseName();
+		bool b = pushFont(dir[i].getAbsolutePath(), size, label);
+	}
 }
 
 //--
 
-// API: workflow during draw to switch between font styles
+// API: workflow during draw to switch between font styles when populating widgets. 
+// (Not for adding new fonts to imgui!)
 
 //--------------------------------------------------------------
 void SurfingGuiManager::pushStyleFont(int index)
 {
-#ifndef OFX_IMGUI_USE_FONTS
-	return;
-#endif
-
 	if (index < customFonts.size())
 	{
 		if (customFonts[index] != nullptr)
@@ -1019,14 +980,10 @@ void SurfingGuiManager::pushStyleFont(int index)
 	{
 		bIgnoreNextPopFont = true; // workaround to avoid crashes
 	}
-	}
+}
 //--------------------------------------------------------------
 void SurfingGuiManager::popStyleFont()
 {
-#ifndef OFX_IMGUI_USE_FONTS
-	return;
-#endif
-
 	//TODO: will crash if not pushed..
 	//workaround to avoid crashes
 	if (bIgnoreNextPopFont)
@@ -1039,28 +996,123 @@ void SurfingGuiManager::popStyleFont()
 	ImGui::PopFont();
 }
 
-// NEW API: this is the preferred or recommended method!
+// NEW API: This is the preferred or recommended method!
 //--------------------------------------------------------------
 void SurfingGuiManager::PushFont(SurfingFontTypes style) {
-#ifndef OFX_IMGUI_USE_FONTS
-	return;
-#endif
-
 	int index = SurfingFontTypes(style);
+	index = ofClamp(index, 0, ImGui::GetIO().Fonts->Fonts.Size - 1);
 	this->pushStyleFont(index);
 }
 //--------------------------------------------------------------
 void SurfingGuiManager::PopFont() {
-#ifndef OFX_IMGUI_USE_FONTS
-	return;
-#endif
-
 	this->popStyleFont();
 }
 
+// NEW API: We use the available internal fontIndex to simplify the API workflow.
+//--------------------------------------------------------------
+void SurfingGuiManager::PushFontByIndex() {
+	fontIndex = ofClamp(fontIndex, 0, this->getAmountFonts() - 1);
+	this->PushFont(SurfingFontTypes(fontIndex.get()));
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::PopFontByIndex() {
+	this->PopFont();
+}
+//--------------------------------------------------------------
+int SurfingGuiManager::getNumFonts() {
+	return customFonts.size();
+}
+//--------------------------------------------------------------
+int SurfingGuiManager::getAmountFonts() {
+	return customFonts.size();
+}
+
+//--------------------------------------------------------------
+std::string SurfingGuiManager::getFontName(int index)
+{
+	std::string s = "UNKNOWN";
+
+	if (index < customFonts.size())
+	{
+		if (customFonts[index] != nullptr)
+			s = (customFonts[index]->ConfigData->Name);
+		return s;
+	}
+
+	return s;
+}
 
 //--
 
+// Same that AddComboFontsSelector(ofParameter<int>& index) does..
+//--------------------------------------------------------------
+void SurfingGuiManager::DrawWidgetsFonts() {
+
+	if (customFonts.size() != 0)
+	{
+		//make smaller if the window is big
+		float w = ofxImGuiSurfing::getWidgetsWidth();
+		if (w > 500) {
+			ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+			ImGui::BeginColumns("#cols", 2, fc);
+			ImGui::SetColumnWidth(1, w / 2);
+			ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+			ImGui::Columns(1);
+		}
+		else ofxImGuiSurfing::AddComboButtonDualLefted(fontIndex, namesCustomFonts);
+	}
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows) {
+
+	if (customFonts.size() != 0)
+	{
+		//make smaller if the window is big
+		float w = ofxImGuiSurfing::getWidgetsWidth();
+		if (bWithArrows) {
+			if (w > 500) {
+				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
+				ImGui::BeginColumns("#cols", 2, fc);
+				ImGui::SetColumnWidth(1, w / 2);
+				ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+				ImGui::Columns(1);
+			}
+			else ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+		}
+		else {
+			ofxImGuiSurfing::AddCombo(index, namesCustomFonts);
+		}
+	}
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::DrawWidgetsFontsMini() {
+
+	if (customFonts.size() != 0)
+	{
+		ofxImGuiSurfing::AddCombo(fontIndex, namesCustomFonts);
+	}
+}
+
+//--------------------------------------------------------------
+string SurfingGuiManager::getFontIndexName() {
+
+	return getFontName(fontIndex.get());
+}
+
+//--------------------------------------------------------------
+int SurfingGuiManager::getFontIndex() {
+
+	return fontIndex.get();
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::setFontIndex(int index) {
+
+	fontIndex = index;
+}
+
+//--
+
+/*
 //--------------------------------------------------------------
 void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResult, int size = 10) {
 
@@ -1077,16 +1129,18 @@ void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResu
 		std::string fileExtension = ofToUpper(file.getExtension());
 
 		// We only want ttf/otf
-		if (fileExtension == "TTF" || fileExtension == "OTF") {
+		if (fileExtension == "TTF" || fileExtension == "ttf" || fileExtension == "OTF" || fileExtension == "otf")
+		{
+			ofLogNotice("ofxSurfingImGui") << "TTF or OTF found!";
 
-			ofLogNotice("ofxSurfingImGui") << (" TTF or OTF found!");
-
-			pushFont(path, size);
+				pushFont(path, size);
 		}
-		else ofLogError("ofxSurfingImGui") << "\n" << ("TTF or OTF not found!");
+		else ofLogError("ofxSurfingImGui") << "TTF or OTF not found!";
 	}
 }
+*/
 
+/*
 //--------------------------------------------------------------
 void SurfingGuiManager::openFontFileDialog(int size)
 {
@@ -1105,6 +1159,7 @@ void SurfingGuiManager::openFontFileDialog(int size)
 		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << (" User hit cancel");
 	}
 }
+*/
 
 //----
 

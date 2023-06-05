@@ -401,7 +401,7 @@ namespace ofxImGuiSurfing
 		ofxImGuiSurfing::AddMouseWheel(ap);
 
 		// No bool
-		if (typeid(ParameterType) != typeid(bool)) 
+		if (typeid(ParameterType) != typeid(bool))
 		{
 			ofxImGuiSurfing::AddMouseClickRightReset(ap);
 		}
@@ -645,7 +645,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddTooltip(std::string text, bool bEnabled = true)
 	{
-		if (!bEnabled) return;
+		if (!bEnabled || text.size() == 0) return;
 
 		//TODO:
 		// delayed. not work ?

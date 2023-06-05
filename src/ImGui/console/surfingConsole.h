@@ -10,12 +10,14 @@
 	improve workflow:
 		remove some cout stuff.
 		more console feel
+	fix cycle when buffer filled..
 	split text input box. submit button.
 	add params to show/integrate in our ofApp's.
 	up arrow to browser previous history
 	some helpers to add custom commands.
 	separate dataCustom.
 	get the typed text.
+	add conversation (gpt) mode: two colors
 
 */
 
