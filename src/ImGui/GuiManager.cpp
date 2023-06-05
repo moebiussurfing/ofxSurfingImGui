@@ -906,6 +906,7 @@ bool SurfingGuiManager::pushFont(std::string path, float size, string label)
 		ofLogError("ofxSurfingImGui") << "pushFont() File font " << path << " not found!";
 	}
 
+	//TODO: should skip exceptions if files not found!
 	if (customFont != nullptr) io.FontDefault = customFont;
 
 	return b;
@@ -957,10 +958,13 @@ bool SurfingGuiManager::pushFontsFromFolder(std::string path, float size = 12.f)
 		return false;
 	}
 
+	bool b = true;
 	for (int i = 0; i < dir.size(); i++) {
 		string label = dir[i].getBaseName();
-		bool b = pushFont(dir[i].getAbsolutePath(), size, label);
+		b = b && pushFont(dir[i].getAbsolutePath(), size, label);
 	}
+
+	return b;
 }
 
 //--

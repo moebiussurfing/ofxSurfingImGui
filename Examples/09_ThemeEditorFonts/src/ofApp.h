@@ -19,6 +19,8 @@
 	from GuiConstants.h
 
 	Add ImGui window/global scale control.
+	
+	Should skip exceptions if pushFonts files not found!
 
 */
 
