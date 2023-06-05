@@ -8,10 +8,14 @@
 	and customize your ui/theme.
 
 	TODO:
+
 	Add a JSON file or integrate picked fonts list and sizes
 	into the .ini theme file,
-	to overwrite deafult FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+	to overwrite default 
+	FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 	from GuiConstants.h
+
+	Add ImGui window/global scale control.
 
 */
 
