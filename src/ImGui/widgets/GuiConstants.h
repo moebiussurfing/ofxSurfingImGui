@@ -57,19 +57,31 @@
 
 // Default Font
 
+//TODO: could think about include fonts in themes or to create a JSON to allow customization.
+
 // Notice that if not any font file is located, will work as ImGui default,
 // So you don't need to put any files on bin/data to compile right!
+
+
+#define FONT_DEFAULT_FONTS "assets/fonts/"
 
 // LEGACY Font
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
 #define FONT_DEFAULT_SIZE_LEGACY 11
 
-// New font LEGACY
+// New font
 #define FONT_DEFAULT_SIZE 14
 #define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
 #define OFX_IM_FONT_DEFAULT_FILE FONT_DEFAULT_FILE 
 //#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+
+//// DEPRECATED
+//// Font sizes
+//#define IM_FONT_DEFAULT 0
+//#define IM_FONT_BIG 1
+//#define IM_FONT_HUGE 2
+//#define IM_FONT_HUGE_XXL 3
 
 //--
 
@@ -116,28 +128,22 @@
 #define OFX_IMGUI_CONSTRAIT_WINDOW_SHAPE 
 // Constraint some window minimal shape sizes.
 
-#define DEFAULT_AMOUNT_PRESETS 4 // Layout Presets Engine
+// Layout Presets Engine
+#define DEFAULT_AMOUNT_PRESETS 4 
 
 //TODO:
 // Testing central view-port
 //#define FIXING_DOCKING		// Need to fix yet
 #define FIXING_DRAW_VIEWPORT	// To debug free space
 
-// DEPRECATED
-// Font sizes
-#define IM_FONT_DEFAULT 0
-#define IM_FONT_BIG 1
-#define IM_FONT_HUGE 2
-#define IM_FONT_HUGE_XXL 3
-
 //----
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
 #define BLINK_MIN 0.2f 
-#define BLINK_MAX 0.8f 
+//#define BLINK_MAX 0.8f 
 //#define BLINK_MIN 0.4f 
-//#define BLINK_MAX 1.0f 
+#define BLINK_MAX 1.0f 
 
 #define FACTOR_DARKEN 0.2f 
 

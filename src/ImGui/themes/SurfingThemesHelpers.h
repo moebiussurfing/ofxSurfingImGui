@@ -276,11 +276,12 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::Spacing();
-		ImGui::Separator();
-		ImGui::Spacing();
-		ImGui::Spacing();
 
-		ImGui::ShowFontSelector("Fonts##Selector");
+		//ImGui::Separator();
+		//ImGui::Spacing();
+		//ImGui::Spacing();
+		//TODO:
+		//ImGui::ShowFontSelector("Fonts##Selector");
 	}
 
 	//----
