@@ -63,17 +63,17 @@
 // So you don't need to put any files on bin/data to compile right!
 
 
-#define FONT_DEFAULT_FONTS "assets/fonts/"
+#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/"
 
-// LEGACY Font
+// LEGACY font
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
 #define FONT_DEFAULT_SIZE_LEGACY 11
 
 // New font
-#define FONT_DEFAULT_SIZE 14
-#define FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+#define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
+#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
-#define OFX_IM_FONT_DEFAULT_FILE FONT_DEFAULT_FILE 
+//#define OFX_IM_FONT_DEFAULT_FILE OFX_IM_FONT_DEFAULT_FILE 
 //#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
 //// DEPRECATED
@@ -87,17 +87,17 @@
 
 // Other Candidates
 
-//#define FONT_DEFAULT_SIZE 14
-//#define FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
+//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
+//#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
 
-//#define FONT_DEFAULT_SIZE 13
-//#define FONT_DEFAULT_FILE "PrgmtB.ttf"
+//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 13
+//#define OFX_IM_FONT_DEFAULT_FILE "PrgmtB.ttf"
 
-//#define FONT_DEFAULT_SIZE 13
-//#define FONT_DEFAULT_FILE "PrgmtR.ttf"
+//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 13
+//#define OFX_IM_FONT_DEFAULT_FILE "PrgmtR.ttf"
 
-//#define FONT_DEFAULT_SIZE 14
-//#define FONT_DEFAULT_FILE "Ruda-Bold.ttf"
+//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
+//#define OFX_IM_FONT_DEFAULT_FILE "Ruda-Bold.ttf"
 
 //----
 

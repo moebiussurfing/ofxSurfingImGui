@@ -85,9 +85,9 @@ public:
         params.add(paramsMain);
 
         paramsSubmit.add(padSubmitX);
-        paramsSubmit.add(bSmallerSizeTextButton);
-        paramsSubmit.add(bButtonRight);
         paramsSubmit.add(bButtonsLeft);
+        paramsSubmit.add(bButtonRight);
+        paramsSubmit.add(bSmallerSizeTextButton);
         params.add(paramsSubmit);
 
         paramsShadow.add(bShadow);
@@ -781,7 +781,7 @@ private:
             }
             PopItemWidth();
 
-            ui.popStyleFont();
+            ui.PopFontStyle();
 
             // Store position after text input bb
             //IMGUI_SUGAR__DEBUG_POINT(ofColor::red);
@@ -837,7 +837,7 @@ private:
                     ImGui::PopStyleColor();
                 }
 
-                if (bSmallerSizeTextButton) ui.popStyleFont();
+                if (bSmallerSizeTextButton) ui.PopFontStyle();
 
                 //ImGui::SameLine();
 
@@ -862,7 +862,7 @@ private:
                 ImSpinner::Spinner(bWaiting, typeWaiting);
 #endif
 
-                ui.popStyleFont();
+                ui.PopFontStyle();
             }
             //else {
             //	// Spinner
@@ -924,8 +924,12 @@ private:
                     string s2 = "Clear";
 
                     ImVec2 inspc = ImGui::GetStyle().ItemInnerSpacing;
-                    padx = 0.f * ui.getFontSize() + 2 * inspc.x;
-                    pady = 0.f * ui.getFontSize();
+                    padx = 1.25 * ui.getFontSize() + 2 * inspc.x;
+                    // padx = 1.25 * ui.getFontSize();
+                    // padx = 0.f * ui.getFontSize() + 2 * inspc.x;
+                    // pady = 0.f * ui.getFontSize();
+                    // pady = 2 * inspc.y;
+                    pady = inspc.y;
 
                     // Size
                     ImVec2 szBt(padx + ImGui::CalcTextSize(s2.c_str()).x, pady + ui.getWidgetsHeightUnit());
@@ -933,7 +937,6 @@ private:
                     if (bUpper) { s2 = ofToUpper(s2); }
 
                     // Clear
-
                     if (ImGui::Button(s2.c_str(), szBt))
                     {
                         if (bDebug) ui.AddToLog("BigTextInput -> Clear", OF_LOG_ERROR);

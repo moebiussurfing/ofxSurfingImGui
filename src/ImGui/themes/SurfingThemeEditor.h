@@ -122,18 +122,25 @@ public:
 	ofParameter<string> nameTheme;
 	ofParameter<int> indexTheme;
 
+	bool bWindowWidth = 0;
+	bool bWindowScale = 0;
+	bool bWindowConstraints = 1;
+	ofParameter<float> windowWidth{ "Window Width", 200, 100, 1000 };
+	ofParameter<float> windowScale{ "Window Scale", 1., 0.25f, 5.f };
+	ofParameter<float> globalScale{ "Global Scale", 1., 0.25f, 5.f };
+
 	SurfingThemeEditor()
 	{
 		//ofAddListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
 		ofAddListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
-	};
+	}
 
 	~SurfingThemeEditor()
 	{
 		//ofRemoveListener(ofEvents().keyPressed, this, &SurfingThemeEditor::keyPressed);
 		ofRemoveListener(ofEvents().exit, this, &SurfingThemeEditor::exit);
 		ofRemoveListener(params.parameterChangedE(), this, &SurfingThemeEditor::Changed);
-	};
+	}
 
 	void setup()
 	{
@@ -163,6 +170,8 @@ public:
 		params.add(nameTheme);
 		params.add(indexTheme);
 		params.add(bClickerCombo);
+		params.add(windowScale);
+		params.add(globalScale);
 
 		setPathGlobal(pathGlobal);
 
@@ -182,7 +191,7 @@ public:
 		ofAddListener(params.parameterChangedE(), this, &SurfingThemeEditor::Changed);
 
 		ofxSurfingHelpers::loadGroup(params, pathGlobal + params.getName() + ".json");
-	};
+	}
 
 public:
 	void setPathGlobal(string path) {//call before setup
@@ -194,7 +203,7 @@ public:
 
 		ofxSurfingHelpers::CheckFolder(pathThemes);
 		ofxSurfingHelpers::CheckFolder(pathCompares);
-	};
+	}
 
 private:
 	string pathGlobal = "ThemeEditor/";
@@ -239,22 +248,22 @@ private:
 
 			return;
 		}
-	};
+	}
 
 	void resetTheme() {
 		ImGui::GetStyle() = ImGuiStyle();
-	};
+	}
 
 	void loadThemeHardcoded(int index) {
 		ofxImGuiSurfing::setIndexThemeHardcoded(index);
-	};
+	}
 
 private:
 	void exit(ofEventArgs& args) { exit(); };
 
 	void exit() {
 		ofxSurfingHelpers::saveGroup(params, pathGlobal + params.getName() + ".json");
-	};
+	}
 
 	void keyPressed(ofKeyEventArgs& eventArgs) {
 		/*
@@ -277,7 +286,7 @@ private:
 		{
 		}
 		*/
-	};
+	}
 
 	//ofxSurfingImGui* ui = nullptr;
 	SurfingGuiManager* ui = nullptr;
@@ -285,13 +294,30 @@ private:
 public:
 	void setUiPtr(ofxSurfingGui* _ui) {
 		ui = _ui;
-	};
+	}
 
 	//--
 
+public:
 	void drawDemoSurfingWidgets(SurfingGuiManager& ui)
 	{
 		//if (ui == nullptr) return;
+
+		if (ImGui::Button("Reset")) {
+			bWindowWidth = 0;
+			bWindowScale = 0;
+			bWindowConstraints = 1;
+			windowWidth = 200;
+			windowScale = 1;
+			globalScale = 1;
+		}
+		ImGui::Checkbox("WindowScale", &bWindowScale);
+		if (bWindowScale) ui.Add(windowScale, OFX_IM_STEPPER);
+		ImGui::Checkbox("WindowConstraints", &bWindowConstraints);
+		ImGui::Checkbox("WindowWidth", &bWindowWidth);
+		if (bWindowWidth) ui.Add(windowWidth, OFX_IM_HSLIDER_MINI);
+		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui.AddSpacingBigSeparated();
 
 		static ofParameter<float> v1{ "Value1", 0.5, 0, 1 };
 		static ofParameter<float> v2{ "Value2", 0, -1, 1 };
@@ -299,19 +325,21 @@ public:
 		static ofParameter<int> n2{ "Number2", 0, -10, 10 };
 		static int n3 = 0;
 		static float v3 = 0;
-		static bool b1 = 1;
-		static bool b2 = false;
 		static ofParameter<int> i{ "Index", 2, 0, 3 };
 		static std::vector<std::string> fileNames{ "ZERO", "ONE", "TWO", "THREE" };
+		static bool bt = 0;
 
 		ImVec2 sz1(ImGui::GetContentRegionAvail().x, 2 * ImGui::GetFrameHeight());
 		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x, 2 * ImGui::GetFrameHeight());
 
+		ui.AddLabelHugeXXL(bGui_DemoWidgets.getName());
+
 		ui.AddLabelHuge("Theme Tester", true);
 		ui.AddSpacingSeparated();
+
 		ui.AddLabelBig("Surfing API");
 		ui.AddButton("Button", sz1);
-		ui.AddToggle("Toggle", b1, sz1);
+		ui.AddToggle("Toggle", bt, sz1);
 		ui.Add(v1, OFX_IM_HSLIDER);
 		ui.Add(v1, OFX_IM_KNOB_DOTKNOB, 2, true);
 		ui.Add(v2, OFX_IM_KNOB_TICKKNOB, 2);
@@ -323,41 +351,44 @@ public:
 		ui.Add(n1);
 		ui.Add(n2);
 
+		// using cpp types instead of ofParameter's
 		ui.AddLabelBig("ImGui RAW");
-		// using cpp types instead of ofPara,s
 		ImGui::PushItemWidth(sz1.x);
 		ImGui::SliderInt("Number3", &n3, 0, 5);
 		ImGui::SliderFloat("Value3", &v3, -1, 1);
 		ImGui::PopItemWidth();
-		
+
 		ImGui::Button("Button1");
 		ui.SameLine();
 		ImGui::Button("Button2");
-		ImGui::Checkbox("Toggle1", &b1);
-		ImGui::Checkbox("Toggle2", &b2);
-
-		ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
-	};
+	}
 
 	void drawDemoSurfingWidgets()
 	{
 		if (ui == nullptr) return;
-
 		if (!bGui_DemoWidgets) return;
 
-		ImVec2 size_min = ImVec2(150, -1);
-		ImVec2 size_max = ImVec2(200, -1);
-		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+		if (bWindowConstraints) {
+			ImVec2 size_min = ImVec2(250, -1);
+			ImVec2 size_max = ImVec2(300, -1);
+			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+		}
+
+		if (bWindowWidth) {
+			ImVec2 size = ImVec2(windowWidth, -1);
+			ImGui::SetNextWindowSize(size, ImGuiCond_Always);
+		}
 
 		if (ui->BeginWindow(bGui_DemoWidgets))
 		{
-			//ui->refreshLayout();//TODO:
+			if (bWindowScale) ImGui::SetWindowFontScale(windowScale.get());
+			else ImGui::SetWindowFontScale(1);
 
 			drawDemoSurfingWidgets(*ui);
 
 			ui->EndWindow();
 		}
-	};
+	}
 
 	void draw()
 	{
@@ -392,11 +423,11 @@ public:
 
 		//--
 
+		if (bGui_DemoWidgets) drawDemoSurfingWidgets();
 		if (bGui_ThemeManager) drawThemeManager();
 		if (bGui_DearImGuiStyleEditor) drawStyleEditor();
-		if (bGui_DemoWidgets) drawDemoSurfingWidgets();
 		if (bGui_DearImGuiDemo) drawDemoImGui();
-	};
+	}
 
 	//--
 
@@ -422,19 +453,19 @@ public:
 		string p = ofToDataPath(pathTheme);
 		ofLogNotice("ofxSurfingImGui") << "Load from " << p;
 		ImGui::LoadStyleFrom(p.c_str());
-	};
+	}
 
 	void loadThemeFile(string path) {
 		ofLogNotice("ofxSurfingImGui") << "Load from " << path;
 		string p = ofToDataPath(path);
 		ImGui::LoadStyleFrom(p.c_str());
-	};
+	}
 
 	void reloadThemeFile() {
 		ofLogNotice("ofxSurfingImGui") << "Reload from " << pathTheme;
 		string p = ofToDataPath(pathTheme);
 		ImGui::LoadStyleFrom(p.c_str());
-	};
+	}
 
 	void deleteThemeFile() {
 		ofLogNotice("ofxSurfingImGui") << "Delete from " << pathTheme;
@@ -445,7 +476,7 @@ public:
 		////set current
 		//ofFile f(pathTheme);
 		//indexTheme = files.getIndexForName(f.getBaseName());
-	};
+	}
 
 	void copyThemeFile() {
 		ofLogNotice("ofxSurfingImGui") << "Copy from " << pathTheme;
@@ -463,7 +494,7 @@ public:
 		indexTheme++;
 
 		//files.copyThemeFile();
-	};
+	}
 
 	//--
 
@@ -481,13 +512,13 @@ private:
 
 			ui->EndWindow();
 		}
-	};
+	}
 
 	void drawDemoImGui()
 	{
 		if (ui == nullptr) return;
 		ImGui::ShowDemoWindow(NULL);
-	};
+	}
 
 public:
 	void drawThemeManager()
@@ -670,7 +701,7 @@ public:
 
 			ui->EndWindow();
 		}
-	};
+	}
 
 	//--
 
@@ -728,7 +759,7 @@ public:
 //
 //		//TODO:
 //		//// default
-//		//ui.addFont(_path + _fontName, FONT_DEFAULT_SIZE);
+//		//ui.addFont(_path + _fontName, OFX_IM_FONT_DEFAULT_SIZE_MIN);
 //
 //		int amt = ui.getNumFonts();
 //		fontSize.set("Font Size", 10, 6, 30);
