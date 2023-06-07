@@ -78,7 +78,7 @@ void ofApp::draw()
 	ui.Begin();
 	{
 		drawImGuiMain();
-		drawImGuiDemo(); 
+		drawImGuiDemo();
 		drawImGuiTest();
 	}
 	ui.End();
@@ -107,7 +107,7 @@ void ofApp::drawImGuiTest()
 		ui.AddSpacingBigSeparated();
 
 		i = 2;
-		i = ofClamp(i , 0, ui.getAmountFonts() - 1);
+		i = ofClamp(i, 0, ui.getAmountFonts() - 1);
 		ui.PushFontStyle(i);
 		s = "Hello world";
 		ImGui::Text(s.c_str());
@@ -117,7 +117,7 @@ void ofApp::drawImGuiTest()
 		ui.AddSpacingBigSeparated();
 
 		i = 4;
-		i = ofClamp(i , 0, ui.getAmountFonts() - 1);
+		i = ofClamp(i, 0, ui.getAmountFonts() - 1);
 		ui.PushFontStyle(i);
 		s = "Hello world";
 		ImGui::Text(s.c_str());
@@ -206,45 +206,58 @@ void ofApp::drawImGuiMain()
 
 #ifdef CUSTOM_FONTS
 		ui.AddSpacingBigSeparated();
+
+		// Useful snippet to copy/pasto to your code!
 		s = "PRELOADED FONTS";
 		ui.AddLabelBig(s);
 		s = "FONT " + ofToString(ui.getFontIndex()) + "/" + ofToString(ui.getAmountFonts() - 1);
 		ui.AddLabel(s);
 		ui.AddSpacing();
+		// We browse and select the custom index font:
 		ui.DrawWidgetsFonts();
-		ui.AddSpacing();
-		ui.PushFontByIndex();
+
+		// Move this to drawing part in your code: 
 		{
-			string t = (ui.getFontIndexName());
-			ImGui::TextWrapped("%s", t.c_str());
+			ui.AddSpacing();
+			ui.PushFontByIndex();
+			{
+				// Here we will draw text with the customized font!
+				string t = (ui.getFontIndexName());
+				ImGui::TextWrapped("%s", t.c_str());
+			}
+			ui.PopFontByIndex();
 		}
-		ui.PopFontByIndex();
 		ui.AddSpacingBigSeparated();
 
 		//--
 
 		// Clear and reload folder font files
-		if (ui.AddButton("Load Fonts", OFX_IM_BUTTON_BIG)) {
-			bLoadFolder = 1; // flag to execute out of the ImGui render
+		{
+			if (ui.AddButton("Load Fonts", OFX_IM_BUTTON_BIG)) {
+				bLoadFolder = 1; // flag to execute out of the ImGui render
+			}
+			s = "Clear pre loaded fonts and \nload all font files from the folder: \n/assets/fonts2/";
+			s += "\nSize will be applied from sizeFont variable.";
+			ui.AddTooltip(s);
 		}
-		s = "Clear pre loaded fonts and \nload all font files from the folder: \n/assets/fonts2/";
-		s += "\nSize will be applied from sizeFont variable.";
-		ui.AddTooltip(s);
+
 		ui.AddSpacingBigSeparated();
 
 		// Re build the styles 
 		// for a new default font
-		ui.AddTooltip("Font size for DEFAULT style. \nThe other will be scaled bigger.");
-		if (ui.AddButton("Build Default and styles", OFX_IM_BUTTON_BIG)) {
-			bBuild = 1; // flag to execute out of the ImGui render
+		{
+			ui.AddTooltip("Font size for DEFAULT style. \nThe other will be scaled bigger.");
+			if (ui.AddButton("Build Default and styles", OFX_IM_BUTTON_BIG)) {
+				bBuild = 1; // flag to execute out of the ImGui render
+			}
+			s = "Picked font will generate the \nDEFAULT, BIG, HUGE AND HUGE_XXL styles.";
+			s += "\nWill use as default font the picked font: \n\n" + ui.getFontIndexName();
+			ui.AddTooltip(s);
+			ui.Add(sizeFont, OFX_IM_STEPPER);
+			s = "Browse the pre added fonts and pick the new default font. ";
+			s += "\nRe build the styles for the new default font.";
+			ui.AddLabel(s);
 		}
-		s = "Picked font will generate the \nDEFAULT, BIG, HUGE AND HUGE_XXL styles.";
-		s += "\nWill use as default font the picked font: \n\n" + ui.getFontIndexName();
-		ui.AddTooltip(s);
-		ui.Add(sizeFont, OFX_IM_STEPPER);
-		s = "Browse the pre added fonts and pick the new default font. ";
-		s += "\nRe build the styles for the new default font.";
-		ui.AddLabel(s);
 #endif
 
 		ui.EndWindow();

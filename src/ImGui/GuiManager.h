@@ -1266,11 +1266,11 @@ public:
     // then generating the four styles: default, big, huge and huge_XXL.
     void BuildFonts(string pathFonts, string nameFont, float sizeFont);
     void BuildFontStyles(string pathFont, float sizeFont);
-    // Call after setup(). Kind of an alias of BuildFontStyles().
+    // Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
     void setDefaultFont(string pathFont, float sizeFont)
     {
         BuildFontStyles(pathFont, sizeFont);
-    };
+    }
 
     //----
 
@@ -1720,7 +1720,7 @@ public:
     //TODO: required? bc pushFont workflow..
     //bool addFont(std::string path, float size);
     // Load all the fonts from the passed folder
-    bool pushFontsFromFolder(std::string path, float size);
+    bool pushFontsFromFolder(std::string path, float size = 12.f);
 
     bool pushFont(std::string path, float size, string label = "");
 

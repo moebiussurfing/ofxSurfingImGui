@@ -12,6 +12,8 @@
 
 		TODO:
 
+		remove logLevel. just the colors.
+
 		add constant log to file mode!
 
 		add set public shape size method

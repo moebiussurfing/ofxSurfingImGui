@@ -52,7 +52,9 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bHelp);
 	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
+
 	params_Advanced.add(bThemeUiAlt);
+	params_Advanced.add(fontIndex);
 
 	params_Advanced.add(bDebugDebugger);
 #ifdef OFX_USE_DEBUGGER
@@ -984,7 +986,7 @@ bool SurfingGuiManager::pushFont(std::string path, float size, string label)
 //}
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::pushFontsFromFolder(std::string path, float size = 12.f)
+bool SurfingGuiManager::pushFontsFromFolder(std::string path, float size)
 {
 	// Load dragged images folder
 	ofLogNotice("ofxSurfingImGui") << "addFonts from: " << path << " size: " << size;
@@ -1074,7 +1076,8 @@ void SurfingGuiManager::PopFont() {
 // NEW API: We use the available internal fontIndex to simplify the API workflow.
 //--------------------------------------------------------------
 void SurfingGuiManager::PushFontByIndex() {
-	fontIndex = ofClamp(fontIndex, 0, this->getAmountFonts() - 1);
+	fontIndex.setWithoutEventNotifications(ofClamp(fontIndex, 0, this->getAmountFonts() - 1));
+	//fontIndex = ofClamp(fontIndex, 0, this->getAmountFonts() - 1);
 	this->PushFont(SurfingFontTypes(fontIndex.get()));
 }
 //--------------------------------------------------------------
@@ -1184,7 +1187,8 @@ int SurfingGuiManager::getFontIndex() {
 //--------------------------------------------------------------
 void SurfingGuiManager::setFontIndex(int index) {
 
-	fontIndex = index;
+	fontIndex.setWithoutEventNotifications(ofClamp(index, 0, this->getAmountFonts() - 1));
+	//fontIndex = index;
 }
 
 //--
