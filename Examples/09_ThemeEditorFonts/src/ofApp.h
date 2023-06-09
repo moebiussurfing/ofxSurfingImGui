@@ -13,25 +13,9 @@
 	These four styles are from the same ttf file,
 	but in different sizes.
 
-	Currently, a theme will load only one ttf file.
-	But other fonts can be added on runtime,
-	and to be used in different ImGui context places.
-
-*/
-
-/*
-
-	TODO:
-
-	Add a JSON file or integrate picked fonts list and sizes
-	into the .ini theme file,
-	to overwrite default
-	FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
-	from GuiConstants.h
-
-	Add ImGui window/global scale control.
-
-	Should skip exceptions if pushFonts files not found!
+	So, currently, a theme will load only one ttf file.
+	But other extra fonts can be added on runtime,
+	and can be used in different ImGui windows/places.
 
 */
 
@@ -39,25 +23,18 @@
 
 #include "ofxSurfingImGui.h"
 #include "surfingThemeEditor.h"
-
-#define CUSTOM_FONTS // Comment to allow the default mode without custom fonts
+#include "SurfingFonts.h"
 
 class ofApp : public ofBaseApp
 {
 public:
-	void setup();
-	void update();
-	void draw();
-	void keyPressed(int key);
+    void setup();
+    void update();
+    void draw();
+    void keyPressed(int key);
 
-	ofxSurfingGui ui;
-	void drawImGuiMain();
-	void drawImGuiDemo();
-	void drawImGuiTest();
+    ofxSurfingGui ui;
 
-	SurfingThemeEditor e;
-
-	ofParameter<int> sizeFont{ "sizeFont", 12, 5, 50 };
-	bool bBuild = 0;
-	bool bLoadFolder = 0;
+    SurfingThemeEditor e;
+    SurfingFonts f;
 };

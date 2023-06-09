@@ -1253,9 +1253,9 @@ private:
 
     // Prepare some different font files and sizes 
     // to use on labels or any widgets.
-    void setupImGuiFonts();
+    void setupFontDefault();
     //TODO:pathFont is the path for all fonts..
-    void setupImGuiFonts(string pathFonts, string nameFont, float sizeFont);
+    void setupFontDefault(string pathFonts, string nameFont, float sizeFont);
 
     void setupImGuiTheme();
 
@@ -1265,11 +1265,12 @@ public:
     // Rebuild default styles by loading a default font 
     // then generating the four styles: default, big, huge and huge_XXL.
     void BuildFonts(string pathFonts, string nameFont, float sizeFont);
-    void BuildFontStyles(string pathFont, float sizeFont);
+    void BuildStylesFromFont(string pathFont, float sizeFont);
+
     // Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
     void setDefaultFont(string pathFont, float sizeFont)
     {
-        BuildFontStyles(pathFont, sizeFont);
+        BuildStylesFromFont(pathFont, sizeFont);
     }
 
     //----
@@ -1709,18 +1710,19 @@ public:
     vector<ImFont*> getFontsPtr() { return customFonts; } //Warning: setup() must be called before!
     vector<std::string> getFontsNames() { return namesCustomFonts; } //Warning: setup() must be called before!
 
+    void clearFonts();
     int getNumFonts();
     int getAmountFonts();
     std::string getFontName(int index);
     std::string getFontPath(int index);
     std::string getFontIndexPath();
-
-    void clearFonts();
+    void doLoadPreviousFont();
+    void doLoadNextFont();
 
     //TODO: required? bc pushFont workflow..
     //bool addFont(std::string path, float size);
     // Load all the fonts from the passed folder
-    bool pushFontsFromFolder(std::string path, float size = 12.f);
+    bool LoadFontsFromFolder(std::string path, float size = 12.f, bool bMultisize = false);
 
     bool pushFont(std::string path, float size, string label = "");
 
@@ -1730,14 +1732,12 @@ private:
     //void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
     //void openFontFileDialog(int size = 10); //opens file dialog window to pick a font file, passing the desired size.
 
+    //TODO: clean duplicated push/pop
+
 public:
     // New API
     void PushFontStyle(int index);
     void PopFontStyle();
-
-public:
-    void setDefaultFontIndex(int index);
-    void setDefaultFont();
 
 private:
     // LEGACY
@@ -1752,10 +1752,16 @@ public:
     void PushFont(SurfingFontTypes style);
     void PopFont();
 
+public:
+    void setDefaultFontIndex(int index);
+    void setDefaultFont();
+
     ofParameter<int> fontIndex{"Font", 0, 0, 3}; // by default we use 4 font sizes/types
     void DrawWidgetsFonts(); // uses internal index
     void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
     void DrawWidgetsFontsMini(); // only combo. uses internal index
+
+    void DrawImGuiTextWithFontStyle(string text, int index, bool bShowName = 1);
 
     string getFontIndexName();
     int getFontIndex();

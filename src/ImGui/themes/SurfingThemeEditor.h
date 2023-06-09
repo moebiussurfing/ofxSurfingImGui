@@ -299,7 +299,7 @@ public:
 	//--
 
 public:
-	void drawDemoSurfingWidgets(SurfingGuiManager& ui)
+	void drawDemoWidgets(SurfingGuiManager& ui)
 	{
 		//if (ui == nullptr) return;
 
@@ -333,11 +333,10 @@ public:
 		ImVec2 sz2(ImGui::GetContentRegionAvail().x / 2 - ImGui::GetStyle().ItemSpacing.x, 2 * ImGui::GetFrameHeight());
 
 		ui.AddLabelHugeXXL(bGui_DemoWidgets.getName());
-
 		ui.AddLabelHuge("Theme Tester", true);
 		ui.AddSpacingSeparated();
-
 		ui.AddLabelBig("Surfing API");
+
 		ui.AddButton("Button", sz1);
 		ui.AddToggle("Toggle", bt, sz1);
 		ui.Add(v1, OFX_IM_HSLIDER);
@@ -363,7 +362,7 @@ public:
 		ImGui::Button("Button2");
 	}
 
-	void drawDemoSurfingWidgets()
+	void drawDemoWidgets()
 	{
 		if (ui == nullptr) return;
 		if (!bGui_DemoWidgets) return;
@@ -384,7 +383,7 @@ public:
 			if (bWindowScale) ImGui::SetWindowFontScale(windowScale.get());
 			else ImGui::SetWindowFontScale(1);
 
-			drawDemoSurfingWidgets(*ui);
+			drawDemoWidgets(*ui);
 
 			ui->EndWindow();
 		}
@@ -423,7 +422,7 @@ public:
 
 		//--
 
-		if (bGui_DemoWidgets) drawDemoSurfingWidgets();
+		if (bGui_DemoWidgets) drawDemoWidgets();
 		if (bGui_ThemeManager) drawThemeManager();
 		if (bGui_DearImGuiStyleEditor) drawStyleEditor();
 		if (bGui_DearImGuiDemo) drawDemoImGui();
