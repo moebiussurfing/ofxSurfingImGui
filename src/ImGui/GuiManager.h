@@ -1271,6 +1271,7 @@ public:
 	void BuildStylesFromFont(string pathFont, float sizeFont);
 
 	// Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
+	// The default style will use the passed size, the other three will be up scaled!
 	void setDefaultFont(string pathFont, float sizeFont)
 	{
 		BuildStylesFromFont(pathFont, sizeFont);

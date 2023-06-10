@@ -918,6 +918,7 @@ void SurfingGuiManager::clearFonts()
 	auto& io = ImGui::GetIO();
 	io.Fonts->Clear();
 
+	//fontIndex.set(-1);
 	fontIndex.setMax(-1);
 	namesCustomFonts.clear();
 	pathsCustomFonts.clear();

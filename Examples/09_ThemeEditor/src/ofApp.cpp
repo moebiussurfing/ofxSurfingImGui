@@ -7,6 +7,15 @@ void ofApp::setup()
 
 	ui.setup();
 
+	// Customize default font
+	bool bCustomFont = 0;
+	if (bCustomFont) {
+		string path = "assets/fonts/telegrama_render.otf";
+		//string path = "assets\\fonts\\OpenSans-Light.ttf";
+		float size = 14;
+		ui.setDefaultFont(ofToDataPath(path), size);
+	}
+
 	//--
 
 	e.setPathGlobal(ui.getPath());
