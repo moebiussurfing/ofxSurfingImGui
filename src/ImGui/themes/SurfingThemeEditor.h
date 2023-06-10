@@ -125,9 +125,9 @@ public:
 	bool bWindowWidth = 0;
 	bool bWindowScale = 0;
 	bool bWindowConstraints = 1;
-	ofParameter<float> windowWidth{ "Window Width", 200, 100, 1000 };
-	ofParameter<float> windowScale{ "Window Scale", 1., 0.25f, 5.f };
-	ofParameter<float> globalScale{ "Global Scale", 1., 0.25f, 5.f };
+	ofParameter<float> windowWidth{ "Window Width", 200, 200, 400 };
+	ofParameter<float> windowScale{ "Window Scale", 0.f, -1.f, 1.f };
+	ofParameter<float> globalScale{ "Global Scale", 0.f, -1.f, 1.f };
 
 	SurfingThemeEditor()
 	{
@@ -308,11 +308,19 @@ public:
 			bWindowScale = 0;
 			bWindowConstraints = 1;
 			windowWidth = 200;
-			windowScale = 1;
-			globalScale = 1;
+			windowScale = 0;
+			globalScale = 0;
 		}
 		ImGui::Checkbox("WindowScale", &bWindowScale);
-		if (bWindowScale) ui.Add(windowScale, OFX_IM_STEPPER);
+		if (bWindowScale) {
+			if (ImGui::Button("R")) {
+				windowScale = 0;
+			}
+			ui.SameLine();
+			ui.Add(windowScale, OFX_IM_STEPPER);
+			ui.Add(windowScale, OFX_IM_HSLIDER_MINI_NO_LABELS);
+		}
+
 		ImGui::Checkbox("WindowConstraints", &bWindowConstraints);
 		ImGui::Checkbox("WindowWidth", &bWindowWidth);
 		if (bWindowWidth) ui.Add(windowWidth, OFX_IM_HSLIDER_MINI);
@@ -368,8 +376,8 @@ public:
 		if (!bGui_DemoWidgets) return;
 
 		if (bWindowConstraints) {
-			ImVec2 size_min = ImVec2(250, -1);
-			ImVec2 size_max = ImVec2(300, -1);
+			ImVec2 size_min = ImVec2(windowWidth.getMin(), -1);
+			ImVec2 size_max = ImVec2(windowWidth.getMax(), -1);
 			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 		}
 
@@ -380,7 +388,11 @@ public:
 
 		if (ui->BeginWindow(bGui_DemoWidgets))
 		{
-			if (bWindowScale) ImGui::SetWindowFontScale(windowScale.get());
+			if (bWindowScale) {
+				float v = 1.f;
+				if (windowScale.get() != 0.f) v = ofMap(windowScale, -1, 1, 0.4f, 4.f, true);
+				ImGui::SetWindowFontScale(v);
+			}
 			else ImGui::SetWindowFontScale(1);
 
 			drawDemoWidgets(*ui);

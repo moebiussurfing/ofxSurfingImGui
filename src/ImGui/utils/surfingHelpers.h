@@ -176,7 +176,7 @@ namespace ofxImGuiSurfing
 		}
 
 		// Create folder if folder do not exist!
-		// From now, will not rerquire to call manually:
+		// From now, will not require to call manually:
 		//ofxSurfingHelpers::CheckFolder(path);
 
 		if (!ofDirectory::doesDirectoryExist(ofFilePath::getEnclosingDirectory(path))) {
