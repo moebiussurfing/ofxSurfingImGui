@@ -419,7 +419,7 @@ private:
 		// Re Build the styles 
 		// for a new default font
 		{
-			s = "Browse the pre added fonts and pick the new default font. ";
+			s = "Browse the pre added fonts and pick the new default font. \n";
 			s += "Then click Build and the styles for the new default font will be populated.\n";
 			s += "The sizeFont variable will be used for the Default style and scaled big to the others!\n";
 			ui->AddLabel(s);
