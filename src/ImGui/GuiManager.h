@@ -1272,10 +1272,17 @@ public:
 
 	// Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
 	// The default style will use the passed size, the other three will be up scaled!
-	void setDefaultFont(string pathFont, float sizeFont)
+	void pushFontForDefaultStyles(string pathFont, float sizeFont)
 	{
 		BuildStylesFromFont(pathFont, sizeFont);
 	}
+
+	//TODO:
+	//// Add an extra mono-spaced font
+	//size = 15;
+	//file = "NotoSansMono-Medium.ttf";
+	////file = "NotoSansMono-Regular.ttf";
+	//ui->pushFont(ofToDataPath(path + file), size);
 
 	//----
 

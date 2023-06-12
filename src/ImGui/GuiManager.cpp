@@ -554,7 +554,7 @@ void SurfingGuiManager::setupImGuiTheme()
 	// If theme files are not found, then it will load a hardcoded theme!
 	if (!bLoaded)
 	{
-		if (!bThemeUiAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); //dark
+		if (!bThemeUiAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors); //dark
 		else ofxImGuiSurfing::ImGui_ThemeDearImGuiLight(); //light
 	}
 }
