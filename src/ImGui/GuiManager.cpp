@@ -1956,7 +1956,7 @@ void SurfingGuiManager::Begin()
 	//TODO:
 	// Fix
 	//if (!bDockingLayoutPresetsEngine)
-	//if (bMenu) drawMenu();
+	//if (bGui_Menu) drawMenu();
 
 	//----
 
@@ -2534,6 +2534,19 @@ void SurfingGuiManager::EndWindow()
 	ImGui::End();
 }
 
+//--------------------------------------------------------------
+bool SurfingGuiManager::BeginWindowAnyType(ofParameter<bool>& p) {
+	bool b;
+	if (this->isThereSpecialWindowFor(p)) b = this->BeginWindowSpecial(p);
+	else b = this->BeginWindow(p);
+	return b;
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::EndWindowAnyType(ofParameter<bool>& p) {
+	if (this->isThereSpecialWindowFor(p)) this->EndWindowSpecial();
+	else this->EndWindow();
+}
+
 //--
 
 // Docking Helpers
@@ -2570,7 +2583,7 @@ void SurfingGuiManager::BeginDocking()
 	// because it would be confusing to have two docking targets within each others.
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-	if (bMenu) window_flags |= ImGuiWindowFlags_MenuBar;
+	if (bGui_Menu) window_flags |= ImGuiWindowFlags_MenuBar;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 
@@ -2638,7 +2651,7 @@ void SurfingGuiManager::EndDocking()
 	return;
 #endif
 
-	if (bMenu) drawMenuDocked();
+	if (bGui_Menu) drawMenuDocked();
 
 	//--
 
@@ -2686,14 +2699,14 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	// Then can be different and memorized in different states too,
 	// like the common panels.
 
-	params_LayoutsExtra.add(bMenu);
+	params_LayoutsExtra.add(bGui_Menu);
 	params_LayoutsExtra.add(bLog);
 	params_LayoutsExtra.add(bNotifier);
 	//TODO: should be removed if handled by preset engine..
 
 
 	//params_LayoutsExtraInternal.clear();
-	//params_LayoutsExtraInternal.add(bMenu);
+	//params_LayoutsExtraInternal.add(bGui_Menu);
 	//params_LayoutsExtraInternal.add(bLog);
 	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
 

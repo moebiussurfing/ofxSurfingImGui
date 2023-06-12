@@ -235,8 +235,8 @@ namespace ofxImGuiSurfing
 		// Special Windows toggle
 		ofParameter<bool> bGui_SpecialWindows{ "SPECIAL WINDOWS", false };
 
-		// Extra global toggle to hide / show all the queued windows.
-		ofParameter<bool> bGui_Global{ "GLOBAL", true };
+		// Extra global toggle to hide / show all the queued special windows.
+		ofParameter<bool> bGui_Global{ "Global", true };
 
 		//--
 
@@ -637,10 +637,12 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
+					string n = ofToString(window->Name);
+
 					// skip: don't align the Organizer or Aligners Windows!
-					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
-					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
-					if (bGui_SpecialWindows.getName() == ofToString(window->Name)) continue;
+					if (bGui_Aligners.getName() == n) continue;
+					if (bGui_Organizer.getName() == n) continue;
+					if (bGui_SpecialWindows.getName() == n) continue;
 
 					myWin w;
 					w.ImWin = window;

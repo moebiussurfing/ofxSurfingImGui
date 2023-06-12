@@ -1361,6 +1361,10 @@ public:
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
 
+	// Useful when we can decide afterwards which type to use for a window.
+	bool BeginWindowAnyType(ofParameter<bool>& p);
+	void EndWindowAnyType(ofParameter<bool>& p);
+
 	//--
 
 	// 2. ENDs a Window
@@ -2590,7 +2594,7 @@ private:
 			this->Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
 			// Menu
-			Add(bMenu, OFX_IM_TOGGLE_ROUNDED);
+			Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED);
 
 			// Log
 			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
@@ -2733,7 +2737,7 @@ private:
 						//Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//// Menu
-						//Add(bMenu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+						//Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//--
 
@@ -2909,7 +2913,10 @@ public:
 
 		//--
 
-		// too long names..
+		//TODO: should be static to share same windows between all the ofxImGui instances
+		// Avoid multiple windows with same name with multi instnces..
+
+		// Too long names..
 		/*
 		// Customize common windows duplicated on when using multiple instances.
 		// that's to avoid overlapping contents when ImGui windows have the same name!
@@ -2917,10 +2924,18 @@ public:
 		bGui_Organizer.setName(nameLabel + " ORGANIZER");
 		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
 		*/
-		// use first letter only
+
+#if 0
+		// Use first letter only
 		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
 		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
 		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
+#endif
+
+		//TODO: short names but could spread many windows when multi instances
+		bGui_Aligners.setName("ALIGNERS");
+		bGui_Organizer.setName("ORGANIZER");
+		bGui_SpecialWindows.setName("SPECIALW");
 
 		//--
 
@@ -2935,6 +2950,10 @@ public:
 
 		// Link both link toggles, local and the one inside the organizer object
 		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
+		//TODO: expose more params
+		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
+		windowsOrganizer.bGui_Global.makeReferenceTo(bGui_Global);
+		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
 
 		//--
 
@@ -3971,9 +3990,13 @@ public:
 	//-
 
 public:
-	ofParameter<bool> bMenu{ "Menu", false };
+	ofParameter<bool> bGui_Menu{ "Menu", false };
 
-	ofParameter<bool> bLinked{"Link Windows", true}; //align windows engine. liked to the internal aligner.
+	ofParameter<bool> bLinked{"Link Windows", true}; // Align windows engine. liked to the internal aligner.
+	//TODO: more to link with internal WindowsOrganizer
+	ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
+	ofParameter<bool> bGui_Global{ "Global", true };
+	ofParameter<bool> bAlignWindowsReset{ "Reset", false };
 
 private:
 	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };
@@ -3986,7 +4009,7 @@ private:
 
 	ofParameter<bool> bDockingLayoutPresetsEngine{"Dock Engine", false};
 
-	ofParameter<bool> bSolo{"Solo", false};
+	ofParameter<bool> bSolo{"Solo", false};//TODO: for presets layouts engine
 
 	//-
 
@@ -4012,6 +4035,8 @@ private:
 	// Learn to use lambda functions
 	// To callback reset
 	// Subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+	// #include <functional>
+	//std::function<void()> doCallback = nullptr
 
 private:
 	bool* bResetPtr = nullptr;
@@ -4031,7 +4056,7 @@ public:
 		setShowAllPanels(b);
 
 		//bModeLockControls = b;
-		bMenu = b;
+		bGui_Menu = b;
 
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresetsSelector = b;

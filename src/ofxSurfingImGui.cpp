@@ -7,12 +7,14 @@
 
 	BUGS:
 	
+	Fix organizer reset/cacade works bad when menu enabled
+
 	Fix special windows width affecting auto resize and default sliders.
 	Fix int H sliders
 
 	It seems than special windows engine
 		puts all toggles to false by default ?
-		should store state to simply handling that maually/externally
+		should store state to simply handling that manually/externally
 
 */
 
@@ -21,6 +23,9 @@
 	TODO:
 
 	IDEAS
+
+	- Add extra font 4th monospace. to be used for console or in some gui zones.
+		could store if the new pushFont is monospace, then store the monospaced indexes
 
 	- Make drop-down struct? index + names
 	- add layout with child/header similar to menus.
@@ -39,7 +44,7 @@
 	+ fix param colors.
 	+ fix param string not drawn.
 	+ remake theme loader using void * functions.
-	+ add tooltip with paragrag/ wrapped.
+	+ add tooltip with paragraph/ wrapped.
 
 	API UPDATE v3
 	/ ofParams helpers.

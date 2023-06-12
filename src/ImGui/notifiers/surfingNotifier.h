@@ -58,7 +58,9 @@ private:
 	};
 	void exit() 
 	{
-		ofxImGuiSurfing::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+		//TODO:
+		//disable to test RF crash
+		//ofxImGuiSurfing::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
 	};
 
 public:
