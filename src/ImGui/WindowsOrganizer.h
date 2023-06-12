@@ -245,19 +245,19 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
 		ofParameter<bool> bAlignWindowsY{ "AlignY", false };
 		ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
-		ofParameter<bool> bAlignWindowsReset{ "Reset",false };
+		ofParameter<bool> bAlignWindowsReset{ "Reset", false };
 
-		ofParameter<bool> bLinked{ "LINK",  true };
+		ofParameter<bool> bLinked{ "LINK", true };
 		ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
-		ofParameter<bool> bAlignShapes{ "Align Shapes",  true };
-		ofParameter<bool> bAlignShapesX{ "ShapesX",  true };
-		ofParameter<bool> bAlignShapesY{ "ShapesY",  false };
+		ofParameter<bool> bAlignShapes{ "Align Shapes", true };
+		ofParameter<bool> bAlignShapesX{ "ShapesX", true };
+		ofParameter<bool> bAlignShapesY{ "ShapesY", false };
 		ofParameter<bool> bHeaders{ "Headers", true };
 		ofParameter<int> pad{ "Pad", 0, 0, 25 };
 
 		//TODO:
 		ofParameter<glm::vec2> position_Anchor{ "Position Anchor",
-			glm::vec2(10,10), glm::vec2(0,0), glm::vec2(1920,1080) };
+			glm::vec2(10, 10), glm::vec2(0, 0), glm::vec2(1920, 1080) };
 
 		//--
 
@@ -638,6 +638,12 @@ namespace ofxImGuiSurfing
 				if (window->WasActive)
 				{
 					string n = ofToString(window->Name);
+
+					//TODO:
+					// fails some windows?
+					// skip "non named" windows. usually menus.
+					const std::string prefix = "##";
+					if (n.substr(0, prefix.size()) == prefix) continue;
 
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_Aligners.getName() == n) continue;
