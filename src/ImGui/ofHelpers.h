@@ -962,7 +962,8 @@ namespace ofxImGuiSurfing
 		//TODO: added above relative/absolute workflow
 
 		// Float
-		float res = 100.f;
+		float res = 10000.f;
+		//float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
 		float stepFast = 100.f * step;
 
@@ -1030,7 +1031,8 @@ namespace ofxImGuiSurfing
 		//static bool inputs_step = true;
 
 		// Float
-		float res = 100.f;
+		float res = 1000.f;
+		//float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
 		//float stepFast = 100.f * step;
 
