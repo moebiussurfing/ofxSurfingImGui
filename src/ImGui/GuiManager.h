@@ -1361,7 +1361,7 @@ public:
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
 
-	// Useful when we can decide afterwards which type to use for a window.
+	// Useful when we can decide afterwards which type to use for a window: special or not.
 	bool BeginWindowAnyType(ofParameter<bool>& p);
 	void EndWindowAnyType(ofParameter<bool>& p);
 
