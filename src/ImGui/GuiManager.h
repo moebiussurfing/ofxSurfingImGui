@@ -865,6 +865,15 @@ public:
 		if (bSpacing) this->AddSpacing();
 	}
 
+	//--------------------------------------------------------------
+	ImVec2 CalcTextSize(const std::string s, int indexFont)
+	{
+		pushStyleFont(indexFont);
+		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
+		popStyleFont();
+		return sz;
+	}
+
 	//--
 
 	//--------------------------------------------------------------
@@ -1116,9 +1125,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingRightAlign(float width = 100)
+	void AddSpacingToRightAlign(float width = 100)
 	{
-		ofxImGuiSurfing::AddSpacingRightAlign(width);
+		ofxImGuiSurfing::AddSpacingToRightAlign(width);
 	}
 
 	//--
@@ -1170,7 +1179,8 @@ public:
 	//--------------------------------------------------------------
 	void Separator()
 	{
-		ImGui::Separator();
+		//ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
 
 	// Make widgets a bit smaller.
@@ -1456,6 +1466,7 @@ public:
 	//--------------------------------------------------------------
 	void BeginColumns(int amount, std::string labelID, bool border = false)
 	{
+		//this->refreshLayout();
 		ImGui::Columns(amount, labelID.c_str(), border);
 		this->refreshLayout();
 	}
@@ -1472,6 +1483,14 @@ public:
 	{
 		ImGui::Columns(amountDefault);
 		this->refreshLayout();
+	}
+
+	//--------------------------------------------------------------
+	void setColumnWidth(int indexColumn, float wNormalized) {
+		//refreshLayout();
+		float w = _ui.getWindowWidthAvail();
+		//float w = ofxImGuiSurfing::getWindowWidthAvail();
+		ImGui::SetColumnWidth(indexColumn, w * wNormalized);
 	}
 
 	//--
@@ -1603,6 +1622,18 @@ public:
 	inline void EndBorderFrame()
 	{
 		ofxImGuiSurfing::EndBorderFrame();
+	}
+
+	// Disable spacing between item 
+	//--------------------------------------------------------------
+	inline void BeginDisableItemSpacing()
+	{
+		ofxImGuiSurfing::BeginDisableItemSpacing();
+	}
+	//--------------------------------------------------------------
+	inline void EndDisableItemSpacing()
+	{
+		ofxImGuiSurfing::EndDisableItemSpacing();
 	}
 
 	//----
@@ -2045,6 +2076,12 @@ public:
 	{
 		if (bLog) log.drawImGui(bLog);
 	}
+	
+	////TODO:
+	////--------------------------------------------------------------
+	//SurfingLog getLogPtr() {
+	//	return &this->log;
+	//}
 
 	//--------------------------------------------------------------
 	void AddThemeToggle()
@@ -2280,7 +2317,7 @@ public:
 		// Right aligned
 
 		//this->AddSpacing();
-		ofxImGuiSurfing::AddSpacingRightAlign(w);
+		ofxImGuiSurfing::AddSpacingToRightAlign(w);
 
 		//remove label
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true, bNoLabel);
@@ -3581,6 +3618,12 @@ public:
 		return ImGui::GetStyle().ItemSpacing.y;
 	}
 
+	//--------------------------------------------------------------
+	float getWidgetHeightVerticalSlider()
+	{
+		float h = this->getWidgetsHeightUnit() * VERTICAL_AMOUNT_UNITS;
+		return h;
+	}
 
 	//--------------------------------------------------------------
 	float getWindowSpacingX()

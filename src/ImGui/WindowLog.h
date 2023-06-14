@@ -90,7 +90,7 @@ namespace ofxImGuiSurfing
 			// to fix overwrite filter enable on startup
 			//indexTagFilter.setSerializable(false);
 
-			params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bMinimize);
+			params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bHideTags, bMinimize);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
 		};
@@ -145,19 +145,23 @@ namespace ofxImGuiSurfing
 				//s += strSpacer2;//not required bc alignment adds some starting spaces
 			}
 
-			// not passed any tag
-			if (itag == -1)
+			//TODO:
+			//if (!bHideTags)
 			{
-				s += strEmptyTag;
-				s += strSpacer;
-			}
-			// a tag has been passed
-			else
-			{
-				if (itag < tags.size())
+				// not passed any tag
+				if (itag == -1)
 				{
-					s += tags[itag].name;
+					s += strEmptyTag;
 					s += strSpacer;
+				}
+				// a tag has been passed
+				else
+				{
+					if (itag < tags.size())
+					{
+						s += tags[itag].name;
+						s += strSpacer;
+					}
 				}
 			}
 
@@ -313,7 +317,7 @@ namespace ofxImGuiSurfing
 					_ww3 += ofxImGuiSurfing::getWidgetButtomToggleWidth("CLEAR", true);
 
 					// make the space of both buttons from the right window border
-					ofxImGuiSurfing::AddSpacingRightAlign(_ww3);
+					ofxImGuiSurfing::AddSpacingToRightAlign(_ww3);
 
 					ofxImGuiSurfing::AddSpacingX(-_wu); // mini toggle
 					float _sp3 = ImGui::GetStyle().ItemSpacing.x;
@@ -477,6 +481,9 @@ namespace ofxImGuiSurfing
 					s = (bOneLine ? "Forces only one line per message.\nAvoids wrapping format." : "Allows multi-line wrapping \nto window width.");
 					ofxImGuiSurfing::AddTooltip2(s);
 
+					ofxImGuiSurfing::SameLineFit(45, bDebug);
+					ofxImGuiSurfing::AddCheckBox(bHideTags);
+
 					ofxImGuiSurfing::AddCheckBox(bSeparators);
 					s = "Add separator line between messages.";
 					ofxImGuiSurfing::AddTooltip2(s);
@@ -600,13 +607,14 @@ namespace ofxImGuiSurfing
 	private:
 
 		ofParameter<bool> bOptions{ "OPTIONS", false };
-		ofParameter<bool> bLimitedBuffered{ "Limited" , true };
-		ofParameter<bool> bPause{ "PAUSE" , false };
-		ofParameter<bool> bTight{ "Tight" , true };
-		ofParameter<bool> bOneLine{ "OneLine" , true };
-		ofParameter<bool> bSeparators{ "Separators" , false };
-		ofParameter<bool> bAutoFit{ "AutoFit" , true };
-		ofParameter<bool> bAutoScroll{ "AutoScroll" , true };
+		ofParameter<bool> bLimitedBuffered{ "Limited", true };
+		ofParameter<bool> bPause{ "PAUSE", false };
+		ofParameter<bool> bTight{ "Tight", true };
+		ofParameter<bool> bHideTags{ "HideTags", 1};
+		ofParameter<bool> bOneLine{ "OneLine", 0 };
+		ofParameter<bool> bSeparators{ "Separators", false };
+		ofParameter<bool> bAutoFit{ "AutoFit", true };
+		ofParameter<bool> bAutoScroll{ "AutoScroll", true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
 		ofParameter<int> indexSizeFont{ "Font", 0, 0, 0 };
 		ofParameter<bool> bFilter{ "FILTER", false };

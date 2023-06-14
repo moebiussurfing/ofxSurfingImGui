@@ -659,7 +659,7 @@ public:
 					//Right align
 					//if (0) {
 					//	auto sz = ImGui::CalcTextSize(pathEditingFileName.c_str());
-					//	ofxImGuiSurfing::AddSpacingRightAlign(sz.x);
+					//	ofxImGuiSurfing::AddSpacingToRightAlign(sz.x);
 					//}
 
 					ImGui::Text(pathEditingFileName.c_str());

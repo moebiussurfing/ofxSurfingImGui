@@ -463,6 +463,11 @@ namespace ofxImGuiSurfing
 			}
 		}
 
+		//-----------------------------------------------------------------
+		float getWindowWidthAvail() {
+			return getWidgetWidthOnRowPerAmount(1);
+		}
+
 		//----
 
 		// Render now a parameter with a related ImGui widget with a custom style.

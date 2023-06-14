@@ -409,13 +409,13 @@ namespace ofxImGuiSurfing
 	inline void AddSeparator()
 	{
 		ImGui::Spacing();
-		ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
 	//--------------------------------------------------------------
 	inline void AddSeparated()
 	{
 		ImGui::Spacing();
-		ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
 
 	//--------------------------------------------------------------
@@ -444,7 +444,7 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::Spacing();
 		ImGui::Spacing();
-		ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 		ImGui::Spacing();
 		ImGui::Spacing();
 	}
@@ -453,7 +453,7 @@ namespace ofxImGuiSurfing
 	inline void AddSpacingSeparated()
 	{
 		ImGui::Spacing();
-		ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 		ImGui::Spacing();
 	}
 
@@ -509,9 +509,9 @@ namespace ofxImGuiSurfing
 	// to the right window border.
 	// Example: 
 	// align right minus 21px
-	// AddSpacingRightAlign(21);
+	// AddSpacingToRightAlign(21);
 	//--------------------------------------------------------------
-	inline void AddSpacingRightAlign(float width = 100)
+	inline void AddSpacingToRightAlign(float width = 100)
 	{
 		float pad = ImGui::GetStyle().WindowPadding.x;
 		//float pad = ImGui::GetStyle().ItemSpacing.x;
@@ -626,7 +626,7 @@ namespace ofxImGuiSurfing
 		ImGui::SetCursorPosX((windowWidth - ImGui::CalcTextSize(text).x) * 0.5f);
 		ImGui::Text(text);
 		ImGui::Spacing();
-		ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
 
 	//----
@@ -848,6 +848,18 @@ namespace ofxImGuiSurfing
 	{
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar(1);
+	}
+
+	// Disable spacing between item 
+	//--------------------------------------------------------------
+	inline void BeginDisableItemSpacing()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+	}
+	//--------------------------------------------------------------
+	inline void EndDisableItemSpacing()
+	{
+		ImGui::PopStyleVar();
 	}
 
 	//----
