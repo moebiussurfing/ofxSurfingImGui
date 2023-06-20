@@ -127,7 +127,7 @@ public:
 	bool bWindowConstraints = 1;
 	ofParameter<float> windowWidth{ "Window Width", 200, 200, 400 };
 	ofParameter<float> windowScale{ "Window Scale", 0.f, -1.f, 1.f };
-	ofParameter<float> globalScale{ "Global Scale", 0.f, -1.f, 1.f };
+	ofParameter<float> scaleGlobal{ "Global Scale", 0.f, -1.f, 1.f };
 
 	SurfingThemeEditor()
 	{
@@ -171,7 +171,7 @@ public:
 		params.add(indexTheme);
 		params.add(bClickerCombo);
 		params.add(windowScale);
-		params.add(globalScale);
+		params.add(scaleGlobal);
 
 		setPathGlobal(pathGlobal);
 
@@ -309,7 +309,7 @@ public:
 			bWindowConstraints = 1;
 			windowWidth = 200;
 			windowScale = 0;
-			globalScale = 0;
+			scaleGlobal = 0;
 		}
 		ImGui::Checkbox("WindowScale", &bWindowScale);
 		if (bWindowScale) {

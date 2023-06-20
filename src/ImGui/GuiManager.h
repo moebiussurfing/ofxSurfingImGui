@@ -1611,6 +1611,18 @@ public:
 		ofxImGuiSurfing::EndBlinkTextDisabled(bBlink);
 	}
 
+	// Change text color
+//--------------------------------------------------------------
+	inline void PushColorText(ofColor color)
+	{
+		ofxImGuiSurfing::PushColorText(color);
+	}
+	//--------------------------------------------------------------
+	inline void PopColorText()
+	{
+		ofxImGuiSurfing::PopColorText();
+	}
+
 	// Border Highlight without blinking
 	//--------------------------------------------------------------
 	inline void BeginBorderFrame()

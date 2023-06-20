@@ -862,6 +862,18 @@ namespace ofxImGuiSurfing
 		ImGui::PopStyleVar();
 	}
 
+	// Change text color
+	//--------------------------------------------------------------
+	inline void PushColorText(ofColor color)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(ofFloatColor(color)));
+	}
+	//--------------------------------------------------------------
+	inline void PopColorText()
+	{
+		ImGui::PopStyleColor();
+	}
+
 	//----
 
 	// Make widgets a bit smaller.

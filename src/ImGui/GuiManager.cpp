@@ -2012,10 +2012,17 @@ void SurfingGuiManager::drawWindowsExtraManager()
 
 	//--
 
+	// Profiler
+#ifdef OFX_USE_DEBUGGER
+	if (bDebugDebugger) debugger.drawImGui();
+	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
+#endif
+
+	//--
+
 #ifdef FIXING_DRAW_VIEWPORT
 	if (bDrawView1) drawViewport_oFNative();
 #endif
-
 	//--
 
 	// Draw Help windows
@@ -2033,11 +2040,6 @@ void SurfingGuiManager::drawWindowsExtraManager()
 		if (helpApp.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		helpApp.draw();
 	}
-
-#ifdef OFX_USE_DEBUGGER
-	if (bDebugDebugger) debugger.drawImGui();
-	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
-#endif
 }
 
 //--------------------------------------------------------------
