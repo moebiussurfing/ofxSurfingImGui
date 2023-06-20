@@ -3003,6 +3003,7 @@ public:
 		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
 		windowsOrganizer.bGui_Global.makeReferenceTo(bGui_Global);
 		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
+		windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
 
 		//--
 
@@ -4052,6 +4053,7 @@ public:
 	ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
 	ofParameter<bool> bGui_Global{ "Global", true };
 	ofParameter<bool> bAlignWindowsReset{ "Reset", false };
+	ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
 
 private:
 	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };

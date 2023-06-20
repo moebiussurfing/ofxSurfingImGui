@@ -145,6 +145,17 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
+					string n = ofToString(window->Name);
+
+					//TODO:
+					// fails some windows?
+					// skip "non named" windows. usually menus.
+					const std::string prefix = "##";
+					if (n.substr(0, prefix.size()) == prefix) continue;
+
+					// skip log window (hardcoded name..)
+					if ("LOG" == ofToString(window->Name)) continue;
+
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
 					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
@@ -191,6 +202,17 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
+					string n = ofToString(window->Name);
+
+					//TODO:
+					// fails some windows?
+					// skip "non named" windows. usually menus.
+					const std::string prefix = "##";
+					if (n.substr(0, prefix.size()) == prefix) continue;
+
+					// skip log window (hardcoded name..)
+					if ("LOG" == ofToString(window->Name)) continue;
+
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
 					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
@@ -645,6 +667,9 @@ namespace ofxImGuiSurfing
 					const std::string prefix = "##";
 					if (n.substr(0, prefix.size()) == prefix) continue;
 
+					// skip log window (hardcoded name..)
+					if ("LOG" == ofToString(window->Name)) continue;
+
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_Aligners.getName() == n) continue;
 					if (bGui_Organizer.getName() == n) continue;
@@ -732,6 +757,17 @@ namespace ofxImGuiSurfing
 			{
 				if (window->WasActive)
 				{
+					string n = ofToString(window->Name);
+				
+					//TODO:
+					// fails some windows?
+					// skip "non named" windows. usually menus.
+					const std::string prefix = "##";
+					if (n.substr(0, prefix.size()) == prefix) continue;
+					
+					// skip log window (hardcoded name..)
+					if ("LOG" == ofToString(window->Name)) continue;
+
 					// skip: don't align the Organizer or Aligners Windows!
 					if (bGui_Aligners.getName() == ofToString(window->Name)) continue;
 					if (bGui_Organizer.getName() == ofToString(window->Name)) continue;
