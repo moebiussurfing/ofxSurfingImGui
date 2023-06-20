@@ -1545,6 +1545,18 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse, bool enabled = true)
+	{
+		std::string label = pb.get() ? nameTrue : nameFalse;
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
 	bool MenuItemButton(const std::string label)
 	{
 		const char* shortcut = NULL;
@@ -2088,7 +2100,7 @@ public:
 	{
 		if (bLog) log.drawImGui(bLog);
 	}
-	
+
 	////TODO:
 	////--------------------------------------------------------------
 	//SurfingLog getLogPtr() {

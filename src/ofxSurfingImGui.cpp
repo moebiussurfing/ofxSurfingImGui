@@ -7,10 +7,10 @@
 
 	BUGS:
 	
-	Fix organizer reset/cacade works bad when menu enabled
+	Add organizer reset/cascade orientation. Now is horizontal only.
 
 	Fix special windows width affecting auto resize and default sliders.
-	Fix int H sliders
+	Fix int H sliders?
 
 	It seems than special windows engine
 		puts all toggles to false by default ?
@@ -24,7 +24,7 @@
 
 	IDEAS
 
-	- Add extra font 4th monospace. to be used for console or in some gui zones.
+	- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
 		could store if the new pushFont is monospace, then store the monospaced indexes
 
 	- Make drop-down struct? index + names
