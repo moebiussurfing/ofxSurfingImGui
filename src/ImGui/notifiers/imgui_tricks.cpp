@@ -103,7 +103,7 @@ namespace ImTricks {
 		
 		// These init value will be overwritten by calling setup()!
 		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
-		ofParameter<int> duration{ "Duration", 3000, 300, 10000 };
+		ofParameter<int> duration{ "Duration", 5000, 300, 10000 };
 		ofParameter<int> padx{ "Pad x", 20, -50, 100 };//pad to right x border 
 		ofParameter<int> pady{ "Pad y", 20, -50, 100 };//pad to bottom y border 
 		ofParameter<int> padxInner{ "Inner Pad x", 15, 0, 100 };//text in
