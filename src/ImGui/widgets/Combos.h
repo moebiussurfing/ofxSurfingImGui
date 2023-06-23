@@ -182,6 +182,26 @@ namespace ofxImGuiSurfing
 
 		return b;
 	}
+	//--------------------------------------------------------------
+	inline bool AddCombo(ofParameter<size_t> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	{
+		if (fileNames.empty()) return false;
+
+		string t = "##" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+		bool b = (VectorCombo("", &i, fileNames, bRaw));
+		if (b) {
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+
+		ImGui::PopID();
+
+		return b;
+	}
 
 	// Selector index directly with an int ofParam
 	// without name label and a button to browse next element. Processed inside this combo.

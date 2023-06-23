@@ -4680,6 +4680,11 @@ public:
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
+	bool AddCombo(ofParameter<size_t> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	{
+		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
+	}
+
 	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames)
 	{
 		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);

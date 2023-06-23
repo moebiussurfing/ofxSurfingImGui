@@ -49,7 +49,7 @@ namespace ofxImGuiSurfing
 	public:
 
 		ofParameter<bool> bMouseWheel{ "Mouse Wheel", false };
-		ofParameter<bool> bMouseWheelFlip{ "Flip Wheel" , false };
+		ofParameter<bool> bMouseWheelFlip{ "Flip Wheel", false };
 
 		//--
 
@@ -1092,7 +1092,7 @@ namespace ofxImGuiSurfing
 						//TODO:
 					case OFX_IM_TOGGLE_ROUNDED_MINI_XS:
 						if (isVoid) ofLogWarning("ofxSurfingImGui") << "Void param requires to be populated using as a button, not a toggle!";
-						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(0.8f * _hh, 0.8f * (2 / 3.f) * _hh), 1,1);
+						bReturn = ofxImGuiSurfing::AddToggleRoundedButton(p, ImVec2(0.8f * _hh, 0.8f * (2 / 3.f) * _hh), 1, 1);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						break;
@@ -1159,7 +1159,6 @@ namespace ofxImGuiSurfing
 				{
 					switch (type)
 					{
-					case OFX_IM_DEFAULT:
 					case OFX_IM_TEXT_DISPLAY:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
@@ -1170,7 +1169,7 @@ namespace ofxImGuiSurfing
 
 					//TODO: size not implemented here?
 					//maybe can be accesses by the imgui/fonts pointer?
-					case OFX_IM_TEXT_BIG:
+					case OFX_IM_TEXT_DISPLAY_WRAPPED:
 					{
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 						ImGui::TextWrapped("%s", tmpRef.c_str());
@@ -1199,66 +1198,50 @@ namespace ofxImGuiSurfing
 					//TODO: could return true only when hit return or ok.
 					//TODO: could be a new bundle widget?
 
+					case OFX_IM_DEFAULT:
 					case OFX_IM_TEXT_INPUT_NAMED:
 					{
-						{
-							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
-							//int _w = getWidgetsWidth() * 0.9f;
-
-							string s = tmpRef.c_str();
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
-							}
-							ImGui::PopItemWidth();
+						string s = tmpRef.c_str();
+						string n = ap.getName() + "##NAME";
+						bReturn = ImGui::InputText(n.c_str(), &s);
+						if (bReturn) {
+							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+							p.set(s);
 						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
 					}
 					break;
 
-					case OFX_IM_TEXT_INPUT://TODO:
+					case OFX_IM_TEXT_INPUT://default has no label
 					{
-						{
-							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
-							//int _w = getWidgetsWidth() * 0.9f;
+						float _w = ofxImGuiSurfing::getWidgetsWidth(1);
 
-							string s = tmpRef.c_str();
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
+						string s = tmpRef.c_str();
+						ImGui::PushItemWidth(_w);
+						{
+							bReturn = ImGui::InputText("##NAME", &s);
+							if (bReturn) {
+								ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+								p.set(s);
 							}
-							ImGui::PopItemWidth();
 						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+						ImGui::PopItemWidth();
 					}
 					break;
 
 					case OFX_IM_TEXT_INPUT_NO_NAME://TODO:
 					{
-						{
-							//int _w = getWidgetsWidth() * 1.f;
-							int _w = ofxImGuiSurfing::getWidgetsWidth(1);
+						float _w = ofxImGuiSurfing::getWidgetsWidth(1);
 
-							string s = tmpRef.c_str();
-							ImGui::PushItemWidth(_w);
-							{
-								bReturn = ImGui::InputText("##NAME", &s);
-								if (bReturn) {
-									ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
-									p.set(s);
-								}
+						string s = tmpRef.c_str();
+						ImGui::PushItemWidth(_w);
+						{
+							bReturn = ImGui::InputText("##NAME", &s);
+							if (bReturn) {
+								ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+								p.set(s);
 							}
-							ImGui::PopItemWidth();
 						}
-						////ofxImGuiSurfing::AddParameter(p);//cant be included?
+						ImGui::PopItemWidth();
 					}
 					break;
 
@@ -1362,14 +1345,14 @@ namespace ofxImGuiSurfing
 					break;
 
 					//-
-					 
+
 					//TODO; fix workaround
 					// _hh * 2 to make it as higher as big toggles..
-					
+
 					case OFX_IM_HSLIDER:
 					{
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww , _h * OFX_IM_WIDGETS_RATIO_DEFAULT), false, false));
+						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_DEFAULT), false, false));
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -2227,7 +2210,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_STEPPER:
 					{
 						//ImGui::PushItemWidth(100);
-						
+
 						bReturn = AddStepper(p, false, false);
 						//bReturn = AddStepperInt(p);
 
@@ -2726,9 +2709,9 @@ namespace ofxImGuiSurfing
 					// This will not be the Group from the 0'th/root/parent level.
 					//--------------------------------------------------------------
 
-                    // macOS fix
+					// macOS fix
 					//auto& pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
-                    auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
+					auto pGroup = std::dynamic_pointer_cast<ofParameterGroup>(p);
 
 					// Will detect nested groups recursively
 					if (pGroup)
@@ -2965,11 +2948,11 @@ namespace ofxImGuiSurfing
 						//--
 
 						// Float
-                        
-                        // macOS fix
-                        auto pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
-                        //auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
-                        if (pFloat)
+
+						// macOS fix
+						auto pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
+						//auto& pFloat = std::dynamic_pointer_cast<ofParameter<float>>(p);
+						if (pFloat)
 						{
 							auto c = getStyle(*pFloat);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -2991,11 +2974,11 @@ namespace ofxImGuiSurfing
 
 						// Int
 
-                        // macOS fix
-                        //auto& pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
-                        auto pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
-                        
-                        if (pInt)
+						// macOS fix
+						//auto& pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
+						auto pInt = std::dynamic_pointer_cast<ofParameter<int>>(p);
+
+						if (pInt)
 						{
 							auto c = getStyle(*pInt);
 							if (c.name != "-1")
@@ -3015,10 +2998,10 @@ namespace ofxImGuiSurfing
 
 						// Bool
 
-                        // macOS fix
-                        //auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
-                        auto pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
-                        if (pBool)
+						// macOS fix
+						//auto& pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
+						auto pBool = std::dynamic_pointer_cast<ofParameter<bool>>(p);
+						if (pBool)
 						{
 							//TODO:
 							if (bSkipNoSerializable)
@@ -3044,10 +3027,10 @@ namespace ofxImGuiSurfing
 
 						// Void
 
-                        // macOS fix
-                        //auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
-                        auto pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
-                        if (pVoid)
+						// macOS fix
+						//auto& pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
+						auto pVoid = std::dynamic_pointer_cast<ofParameter<void>>(p);
+						if (pVoid)
 						{
 							auto c = getStyle(*pVoid);
 							if (c.name != "-1")
@@ -3064,11 +3047,11 @@ namespace ofxImGuiSurfing
 						//--
 
 						// String
-                        
-                        // macOS fix
-                        //auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
-                        auto pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
-                        if (pString)
+
+						// macOS fix
+						//auto& pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
+						auto pString = std::dynamic_pointer_cast<ofParameter<std::string>>(p);
+						if (pString)
 						{
 							auto c = getStyle(*pString);
 							if (c.name != "-1")
@@ -3088,10 +3071,10 @@ namespace ofxImGuiSurfing
 
 						// Float color
 
-                        // macOS fix
-                        //auto& pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
-                        auto pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
-                        if (pFloatColor)
+						// macOS fix
+						//auto& pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
+						auto pFloatColor = std::dynamic_pointer_cast<ofParameter<ofFloatColor>>(p);
+						if (pFloatColor)
 						{
 							auto c = getStyle(*pFloatColor);
 							// if the parameter widget is not added explicitly, will populate it as the default appearance
@@ -3114,10 +3097,10 @@ namespace ofxImGuiSurfing
 
 						// Color
 
-                        // macOS fix
-                        //auto& pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
-                        auto pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
-                        if (pColor)
+						// macOS fix
+						//auto& pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
+						auto pColor = std::dynamic_pointer_cast<ofParameter<ofColor>>(p);
+						if (pColor)
 						{
 							auto c = getStyle(*pColor);
 

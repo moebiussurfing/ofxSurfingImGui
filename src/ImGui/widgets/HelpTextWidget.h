@@ -18,6 +18,10 @@ private:
 	bool bHeader = false;
 	bool bBlink = 0;
 
+	bool bMouseLeft = false;
+	bool bMouseRight = false;
+	bool bMouseDrag = false;
+
 public:
 	void setEnableHeader(bool b) { bHeader = b; }
 
@@ -45,6 +49,11 @@ public:
 
 	void draw()
 	{
+		if (bMouseLeft && bMouseRight) {
+			bMouseLeft = bMouseRight = bMouseDrag = false;
+			bGui = false;
+		}
+
 		if (!bGui) return;
 
 		float r = 3; // window rounded 
@@ -63,12 +72,18 @@ public:
 
 		// bg color
 		//ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_FrameBgHovered);
+
 		ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive);
 
+		////alpha
+		//float a = 0.8f;
+		//cbg = ImVec4(cbg.x, cbg.y, cbg.z, cbg.w * a);
+
+		// no alpha
+		//float abg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive).w;
+
 		// alpha
-		//float abg = 0.9;
-		float abg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive).w;
-		//float abg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg).w;
+		float abg = 0.85;
 
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(cbg.x, cbg.y, cbg.z, abg));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ p,p });
@@ -112,6 +127,28 @@ public:
 				else ImGui::TextWrapped(s.c_str());
 			}
 
+			//--
+
+			// Left + right mouse closes window
+			//if()
+			//{
+			//	bMouseDrag = true;
+			//}
+
+			if (!bMouseLeft) if (ImGui::IsMouseClicked(0)) {
+				bMouseLeft = true;
+				if(!bMouseRight) bMouseDrag = true;
+			}
+			if (bMouseLeft) if (ImGui::IsMouseReleased(0)) bMouseLeft = false;
+
+			if (!bMouseRight) if (ImGui::IsMouseClicked(1)) bMouseRight = true;
+			if (bMouseRight) if (ImGui::IsMouseReleased(1)) bMouseRight = false;
+
+			//string s = "";
+			//(bMouseLeft ? s = "x" : s = "-");
+			//s += " ";
+			//(bMouseRight ? s += "x" : s += "-");
+			//ImGui::Text(s.c_str());
 		}
 		ImGui::End();
 		if (bGui.get() != tmp) bGui.set(tmp);
