@@ -49,7 +49,7 @@ namespace ofxImGuiSurfing
 
             //TODO:
             style->TabRounding = 2; // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
-            style->TabBorderSize = 1.4f; // Thickness of border around tabs.
+            style->TabBorderSize = 1.f; // Thickness of border around tabs.
             style->TabMinWidthForCloseButton = 0; // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
             // style->Tab
 
@@ -146,7 +146,10 @@ namespace ofxImGuiSurfing
             colors[ImGuiCol_TableBorderLight] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
             colors[ImGuiCol_TableRowBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.00f);
             colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.20f, 0.22f, 0.27f, 0.06f);
-
+            // //TODO:
+            // colors[ImGuiCol_TableRowBg] = ImVec4(0.20f, 0.22f, 0.27f, 0.50f);
+            // colors[ImGuiCol_TableRowBgAlt] = ImVec4(0.20f, 0.22f, 0.27f, 0.50f);
+            
             colors[ImGuiCol_DragDropTarget] = ImVec4(0.50f, 0.50f, 0.50f, 0.90f);
 
             colors[ImGuiCol_NavHighlight] = ImVec4(0.79f, 0.79f, 0.79f, 1.00f);

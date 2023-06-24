@@ -649,7 +649,7 @@ namespace ofxImGuiSurfing
     }
 
     //--
-
+    
     //--------------------------------------------------------------
     inline void AddTooltip(std::string text, bool bEnabled = true)
     {
@@ -668,6 +668,16 @@ namespace ofxImGuiSurfing
             ImGui::PopTextWrapPos();
             ImGui::EndTooltip();
         }
+    }
+
+    //--------------------------------------------------------------
+    inline void AddTooltipBlink(std::string text, bool bBlink=true, bool bEnabled = true)
+    {
+        if (!bEnabled || text.size() == 0) return;
+        
+        if (bBlink)BeginBlinkText();
+        AddTooltip(text);
+        if (bBlink) EndBlinkText();
     }
 
     //--
