@@ -1710,7 +1710,16 @@ private:
     //TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
 
     bool bRestoreIniSettings = true; // allow handling of .ini settings.
-    bool bMouseCursorFromImGui = true; // true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
+    
+#ifdef SURFING_IMGUI__USE_IMGUI_MOUSE
+    bool bMouseCursorFromImGui = 1;
+#else
+    bool bMouseCursorFromImGui = 0;
+#endif
+
+    // true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
+    // note that some Windows capturers requires to force disable this 
+    // if you want to see mouse or other overlays!
 
 public:
     // Must be called before setup!

@@ -112,8 +112,8 @@ namespace ofxImGuiSurfing
 #define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
 	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
 
-	#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
+	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
+	#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
 //#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f
 	// To allow see 3 visible decimals, 
 	// but requires preferably a short label name.
