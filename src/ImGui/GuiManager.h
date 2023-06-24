@@ -63,7 +63,6 @@ using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
 //using namespace ofxSurfingHelpers;
 
-
 //----
 
 //TODO:
