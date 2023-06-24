@@ -209,6 +209,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_XXL, // 3
 		OFX_IM_BUTTON_BIG_XXXL, // 4
 
+		//--
+
 		// Border
 
 		OFX_IM_BUTTON_SMALL_BORDER,
@@ -217,6 +219,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_BORDER,
 		OFX_IM_BUTTON_BIG_XXL_BORDER,
 		OFX_IM_BUTTON_BIG_XXXL_BORDER,
+
+		//--
 
 		// Border Blink 
 
@@ -242,6 +246,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_XXL,
 		OFX_IM_TOGGLE_BIG_XXXL,
 
+		//--
+
 		// Border
 
 		OFX_IM_TOGGLE_SMALL_BORDER,
@@ -250,6 +256,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER,
+
+		//--
 
 		// Border Blink 
 
@@ -271,6 +279,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
 
+		//--
+
 		// LEGACY. Now we removed 'button' word
 		OFX_IM_TOGGLE_BUTTON_ROUNDED, // same size than small.
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI_XS,//TODO:
@@ -283,7 +293,7 @@ namespace ofxImGuiSurfing
 
 		// FLOAT / INT Styles
 
-		OFX_IM_SLIDER, // ofxImGui standard
+		OFX_IM_SLIDER, // uses the (ofxImGui) standard
 
 		// Big Sliders
 
@@ -305,6 +315,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_MINI_NO_NAME,
 		OFX_IM_HSLIDER_MINI_NO_LABELS,
 		OFX_IM_HSLIDER_MINI_NO_NUMBER,
+
+		//--
 
 		// Vertical
 
@@ -376,14 +388,15 @@ namespace ofxImGuiSurfing
 
 		// Strings
 
-		OFX_IM_TEXT_INPUT,//TODO:
-		OFX_IM_TEXT_INPUT_NO_NAME,//TODO:
-		OFX_IM_TEXT_INPUT_NAMED,//TODO:
+		OFX_IM_TEXT_INPUT,
+		OFX_IM_TEXT_INPUT_NO_NAME,
+		OFX_IM_TEXT_INPUT_NAMED,
+		OFX_IM_TEXT_INPUT_NAMED_PADDED,
 
 		OFX_IM_TEXT_DISPLAY,
-		OFX_IM_TEXT_DISPLAY_WRAPPED,//TODO:
-		OFX_IM_TEXT_LONG,//TODO: paragraph size
-		//TODO: add labels
+		OFX_IM_TEXT_DISPLAY_WRAPPED,
+		OFX_IM_TEXT_LONG,
+
 		//OFX_IM_LABEL,//big font not accessible here..
 		//OFX_IM_LABEL_BIG,
 

@@ -956,6 +956,13 @@ public:
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
+	// // To be used on combos
+	// //--------------------------------------------------------------
+	// void AddTooltip(ofParameter<int>& pindex,std::vector<std::string> fileNames)
+	// {
+	// 	ofxImGuiSurfing::AddTooltip(pindex, fileNames);
+	// }
+
 	//TODO: 
 	// To insert into ofParam widgets
 	// Showing the name and value.
@@ -3969,6 +3976,8 @@ public:
 
 	//--------------------------------------------------------------
 	void startup();
+
+	void resetUISettings();
 
 	//-
 
