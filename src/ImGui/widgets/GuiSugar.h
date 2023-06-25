@@ -275,4 +275,6 @@ ImVec2 size_max = ImVec2(100, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
+#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT ofGetHeight()-ImGui::GetTextLineHeightWithSpacing()
+	
 };

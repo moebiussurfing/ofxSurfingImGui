@@ -1318,29 +1318,25 @@ public:
 	// Must be called after adding the default (maybe modern) font!
 	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
 
-	//--
-
-public:
+	//----
+	
+private:
 	// Rebuild default styles by loading a default font 
 	// then generating the four styles: default, big, huge and huge_XXL.
-	void BuildFonts(string pathFonts, string nameFont, float sizeFont);
-	void BuildStylesFromFont(string pathFont, float sizeFont);
+	void setupFonts(string pathFonts, string nameFont, float sizeFont);
+	
+	void setupFontForDefaultStylesInternal(string pathFont, float sizeFont);
 
-	// Call after (all imgui related) setup()'s 
+public:
+	// Call after (all imgui related) setup()'s, 
 	// but before pushing extra fonts. 
-	// The default style will use the passed size, the other three will be up scaled!
+	// The default style will use the passed size,
+	// the other three styles will be up scaled!
 	// It's an alias of BuildFontStyles().
 	void setupFontForDefaultStyles(string pathFont, float sizeFont)
 	{
-		BuildStylesFromFont(pathFont, sizeFont);
+		setupFontForDefaultStylesInternal(pathFont, sizeFont);
 	}
-
-	//TODO:
-	//// Add an extra mono-spaced font
-	//size = 15;
-	//file = "NotoSansMono-Medium.ttf";
-	////file = "NotoSansMono-Regular.ttf";
-	//ui->addFontStyle(ofToDataPath(path + file), size);
 
 	//----
 
@@ -2179,7 +2175,7 @@ public:
 	void setLogName(std::string name)
 	{
 		log.setName(name);
-	};
+	}
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled()
@@ -2252,18 +2248,18 @@ public:
 	void AddLogTag(SurfingLog::tagData tag)
 	{
 		log.AddTag(tag);
-	};
+	}
 	//--------------------------------------------------------------
 	void AddLogTag(std::string name, ofColor color)
 	{
 		this->AddLogTag(SurfingLog::tagData{name, color});
-	};
+	}
 	//--------------------------------------------------------------
 	void AddLogTag(ofColor color) //not using any tag. to remove left spacing
 	{
 		std::string name = "";
 		AddLogTag(name, color);
-	};
+	}
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
@@ -2272,20 +2268,20 @@ public:
 	{
 		// Log
 		log.Add(text, nameTag);
-	};
+	}
 
 	//--------------------------------------------------------------
 	void ExportLogToFile()
 	{
 		// Log
 		log.exportLogToFile();
-	};
+	}
 
 	//--------------------------------------------------------------
 	void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
 	{
 		log.clearDefaultTags();
-	};
+	}
 
 	// Print message to log window passing the message and the tag index. 
 	// Must exist or been added previously.
@@ -2294,23 +2290,23 @@ public:
 	void AddToLog(std::string text, int tag/* = -1*/)
 	{
 		log.Add(text, tag);
-	};
+	}
 	//--------------------------------------------------------------
 	void AddToLog(std::string text) //TODO:adding empty tag...
 	{
 		//log.Add(text, "");
 		log.Add(text, OF_LOG_NOTICE);
-	};
+	}
 	//--------------------------------------------------------------
 	void AddToLog(std::string text, ofLogLevel logLevel)
 	{
 		log.Add(text, logLevel);
-	};
+	}
 	//--------------------------------------------------------------
 	void ClearLog()
 	{
 		log.Clear();
-	};
+	}
 
 	//----
 
@@ -2320,33 +2316,33 @@ public:
 	void doResetNotifier()
 	{
 		notifier.doReset();
-	};
+	}
 	//--------------------------------------------------------------
 	void doClearNotifier()
 	{
 		notifier.doClear();
-	};
+	}
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text, std::string nameTag)
 	{
 		notifier.Add(text, nameTag);
-	};
+	}
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text) //TODO:adding empty tag...
 	{
 		notifier.Add(text, "");
-	};
+	}
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text, ofLogLevel logLevel)
 	{
 		notifier.Add(text, logLevel);
-	};
+	}
 	//TODO: add tag system..
 	////--------------------------------------------------------------
 	//void AddToNotifier(std::string text, int tag/* = -1*/)
 	//{
 	//	notifier.Add(text, tag);
-	//};
+	//}
 #endif
 
 	//----
@@ -4250,6 +4246,10 @@ public:
 	}
 
 	//--
+	
+public:
+	HelpTextWidget helpInternal;
+	HelpTextWidget helpApp;
 
 private:
 	//TODO: replace help boxes 
@@ -4262,11 +4262,9 @@ private:
 
 	// Help Internal: How to use the add-on itself
 	std::string helpInfo = "";
-	HelpTextWidget helpInternal;
 
 	// Help App: How to use our App 
 	std::string helpInfoApp = "";
-	HelpTextWidget helpApp;
 
 	// main help disablers
 	bool bUseHelpInfoInternal = false;
