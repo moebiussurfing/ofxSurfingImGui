@@ -81,6 +81,10 @@
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
+// Monospaced font
+#define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
+#define OFX_IM_FONT_DEFAULT_MONO_FILE "JetBrainsMono-Bold.ttf"
+
 //#define OFX_IM_FONT_DEFAULT_FILE OFX_IM_FONT_DEFAULT_FILE 
 //#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
@@ -122,10 +126,14 @@
 // Window scrolling size on some windows/groups
 #define HEIGHT_SCROLL_GROUP 400
 
+//TODO: make it active 
 // Knobs format to 3 decimals
 #define OFX_IM_FORMAT_WIDGETS "%.1f"
-#define OFX_IM_FORMAT_KNOBS "%.2f"
-#define OFX_IM_FORMAT_SLIDERS "%.2f"
+//#define OFX_IM_FORMAT_KNOBS "%.2f"
+//#define OFX_IM_FORMAT_SLIDERS "%.2f"
+#define OFX_IM_FORMAT_KNOBS "%.3f"
+#define OFX_IM_FORMAT_SLIDERS "%.3f"
+
 //TODO:
 #define OFX_IM_FORMAT_WIDGETS_INT "%d"
 #define OFX_IM_FORMAT_KNOBS_INT "%d"
@@ -153,6 +161,7 @@
 
 #define FACTOR_DARKEN 0.2f 
 
+//TODO: use another approach?
 #define VERTICAL_AMOUNT_UNITS 5.0f 
 
 //----
@@ -174,6 +183,12 @@ namespace ofxImGuiSurfing
 		OFX_IM_FONT_BIG,
 		OFX_IM_FONT_HUGE,
 		OFX_IM_FONT_HUGE_XXL, // 3
+
+		//TODO:
+		OFX_IM_FONT_DEFAULT_MONO,
+		OFX_IM_FONT_BIG_MONO,
+		OFX_IM_FONT_HUGE_MONO,
+		OFX_IM_FONT_HUGE_XXL_MONO,
 
 		OFX_IM_FONT_AMOUNT
 	};
@@ -208,12 +223,12 @@ namespace ofxImGuiSurfing
 		// Button
 
 		//OFX_IM_BUTTON_MINI, // 1 = default. too small to place text well.
-		OFX_IM_BUTTON_SMALL, // 1 = default
-		OFX_IM_BUTTON, // 1.25
-		OFX_IM_BUTTON_MEDIUM, // 1.5
-		OFX_IM_BUTTON_BIG, // 2
-		OFX_IM_BUTTON_BIG_XXL, // 3
-		OFX_IM_BUTTON_BIG_XXXL, // 4
+		OFX_IM_BUTTON_SMALL, // 1 = default ratio
+		OFX_IM_BUTTON, // 1.25 ratio
+		OFX_IM_BUTTON_MEDIUM, // 1.5 ratio
+		OFX_IM_BUTTON_BIG, // 2 ratio
+		OFX_IM_BUTTON_BIG_XXL, // 3 ratio
+		OFX_IM_BUTTON_BIG_XXXL, // 4 ratio
 
 		//--
 
@@ -364,31 +379,11 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		OFX_IM_COMBO_MULTI,
 
 		//TODO: 
-		// multiple controls for fine tweak:
-		//slider + drag + stepper
-		/*
-		// A bundle of controls
+		// multiple controls for fine tweak
 		// for a single param
-		ui.AddLabelBig(lineWidth.getName());
-		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
-		{
-			if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
-			{
-				lineWidth -= 0.1f;
-				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-			}
-			ImGui::SameLine();
-			if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
-			{
-				lineWidth += 0.1f;
-				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-			}
-		}
-		ImGui::PopButtonRepeat();
-		*/
+		OFX_IM_COMBO_MULTI,
 
 		//--
 
@@ -397,14 +392,15 @@ namespace ofxImGuiSurfing
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_INPUT_NO_NAME,
 		OFX_IM_TEXT_INPUT_NAMED,
-		OFX_IM_TEXT_INPUT_NAMED_PADDED,
+		OFX_IM_TEXT_INPUT_NAMED_PADDED,//to align with other clipped widgets like stepper
+
+		//TODO: get from bigTextInput widget
+		//would be better to add it on v3 API with arguments as imgui does (bitwise shift).
+		OFX_IM_TEXT_INPUT_HINT,
 
 		OFX_IM_TEXT_DISPLAY,
 		OFX_IM_TEXT_DISPLAY_WRAPPED,
-		OFX_IM_TEXT_LONG,
-
-		OFX_IM_TEXT_HINT,//TODO: get from bigTextInput widget
-		//would be better to add it on v3 API with arguments as imgui does (bitwise shift).
+		OFX_IM_TEXT_DISAPLAY_LONG,//to be used as long paragraph text blocks
 
 		//OFX_IM_LABEL,//big font not accessible here..
 		//OFX_IM_LABEL_BIG,
@@ -531,9 +527,9 @@ namespace ofxImGuiSurfing
 	//---------------
 
 
-
 	//TODO: remove
 
+	/*
 
 	//----
 
@@ -759,5 +755,6 @@ namespace ofxImGuiSurfing
 //ImVec2 size_max = ImVec2(100, -1); \
 //ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 //} \
+	*/
 
 };

@@ -670,7 +670,7 @@ public:
 			if (ui->AddButton("R2", sz1))
 			{
 				resetTheme();
-				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors);
 				//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
 			}
 			s = "ImGui_ThemeMoebiusSurfingV2";
