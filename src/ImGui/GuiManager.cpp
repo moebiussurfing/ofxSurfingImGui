@@ -768,7 +768,6 @@ void SurfingGuiManager::startup()
 
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
-
 	notifier.setPath(path_Global);
 	notifier.setup();
 	//notifier.setDuration(4000);
@@ -777,7 +776,6 @@ void SurfingGuiManager::startup()
 	//notifier.setIndexFont(1);
 	//notifier.setIndexFont(2);
 	//notifier.setIndexFont(3);
-
 #endif
 
 	//--
@@ -786,10 +784,10 @@ void SurfingGuiManager::startup()
 	{
 		// A. Help Text Box internal
 
-		helpInternal.setCustomFonts(customFonts);
 		//helpInternal.setName(bHelpInternal.getName());
 		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		helpInternal.setTitle(bHelpInternal.getName());
+		helpInternal.setCustomFonts(customFonts);
 		helpInternal.setFontMonospacedDefined();
 
 		doBuildHelpInfo();
@@ -798,10 +796,10 @@ void SurfingGuiManager::startup()
 
 		// B. Help Text Box app
 
-		helpApp.setCustomFonts(customFonts);
 		//helpApp.setName(bHelp.getName());
 		helpApp.bGui.makeReferenceTo(bHelp);
 		helpApp.setTitle(bHelp.getName());
+		helpApp.setCustomFonts(customFonts);
 		helpApp.setFontMonospacedDefined();
 		
 		//--

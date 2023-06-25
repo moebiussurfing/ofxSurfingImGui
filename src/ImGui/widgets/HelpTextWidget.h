@@ -7,11 +7,11 @@ class HelpTextWidget
 public:
     HelpTextWidget()
     {
-    };
+    }
 
     ~HelpTextWidget()
     {
-    };
+    }
 
 private:
     std::string text = "HelpTextWidget\nEmpty content";
@@ -54,6 +54,8 @@ public:
 
     void draw()
     {
+        fontIndex=4;
+        
         if (bMouseLeft && bMouseRight)
         {
             bMouseLeft = bMouseRight = bMouseDrag = false;
@@ -113,9 +115,9 @@ public:
                 string s = title;
                 //string s = title + sp;
 
-                if (fontIndex < customFonts.size())
+                if (fontIndex.get() < customFonts.size())
                 {
-                    ImGui::PushFont(customFonts[MAX(fontIndex + 1, customFonts.size()-1)]);
+                    ImGui::PushFont(customFonts[MAX(fontIndex.get() + 1, customFonts.size()-1)]);
                     ImGui::TextWrapped(s.c_str());
                     ImGui::PopFont();
                 }
@@ -129,9 +131,9 @@ public:
                 string s = sp + text;
                 //string s = text;
 
-                if (fontIndex < customFonts.size())
+                if (fontIndex.get() < customFonts.size())
                 {
-                    ImGui::PushFont(customFonts[fontIndex]);
+                    ImGui::PushFont(customFonts[fontIndex.get()]);
                     ImGui::TextWrapped(s.c_str());
                     ImGui::PopFont();
                 }
@@ -194,7 +196,7 @@ public:
     {
         bDefinedMonospacedFonts = b;
         fontIndex.setMax(customFonts.size() - 1);
-        if (fontIndex < 4) fontIndex += 4; //set relative mono-spaced by default
+        if (fontIndex.get() < 4) fontIndex = fontIndex + 4; //set relative mono-spaced by default
     }
 
 private:
