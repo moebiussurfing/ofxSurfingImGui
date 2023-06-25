@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	setMonitorsLayout(-1, true, true);
+	setMonitorsLayout(-1, false, true);
 
 	setupParams();
 
@@ -35,6 +35,28 @@ void ofApp::setupImGui()
 	//ui.setEnablebMouseCursorFromImGui(false);
 
 	ui.setup();
+
+	//--
+
+	// Customize default fonts
+	// that's will the use of mono-spaced font on useful parts of the ui,
+	// as could be the Log window and the Help Text Box too!
+#if 1 // Set to 0 to disable or 1 to enable!
+	// Force replace:
+	// A modern font (non mono-space as the default font
+	string p = "assets/fonts/Montserrat-Regular.ttf";
+	float sz = OFX_IM_FONT_DEFAULT_SIZE_MIN;
+	ui.setupFontForDefaultStyles(p, sz);
+
+	// The default mono-spaced font
+	//p = "assets/fonts/overpass-mono-bold.otf";
+	//p = "assets/fonts/JetBrainsMono-Bold.ttf";
+	p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
+	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
+	ui.setupFontForDefaultStylesMonospaced(p, sz);
+#endif
+
+	//--
 
 	// Add custom tags to logger
 	{
@@ -76,7 +98,7 @@ void ofApp::drawImGui()
 	ui.Begin();
 
 	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
-	
+
 	if (ui.BeginWindow("ofApp"))
 	{
 		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);

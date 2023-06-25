@@ -54,7 +54,7 @@
 #include "imgui_stdlib.h"
 
 //TODO: 
-// Some widget fails..
+// Some widget fails.. recursive includes
 // so we can't not use some methods... 
 // like pushing font styles...
 //#include "ofxSurfingImGui.h"
@@ -90,10 +90,10 @@ namespace ofxImGuiSurfing
 			// to fix overwrite filter enable on startup
 			//indexTagFilter.setSerializable(false);
 
-			params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, indexSizeFont, indexTagFilter, bHideTags, bMinimize);
+			params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered, bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, fontIndex, indexTagFilter, bHideTags, bMinimize);
 
 			ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
-		};
+		}
 
 		~SurfingLog()
 		{
@@ -101,7 +101,7 @@ namespace ofxImGuiSurfing
 			this->clearBuffered();
 
 			ofRemoveListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
-		};
+		}
 
 		//----
 
@@ -124,7 +124,7 @@ namespace ofxImGuiSurfing
 			// print as default
 			ofLogWarning("ofxSurfingImGui:SurfingLog") << "The tag " << nameTag << " do not exist. We will use the default tag.";
 			Add(msg);
-		};
+		}
 
 		// all the other "add methods" will pass through this main method...
 		void Add(std::string msg, int itag = -1)
@@ -176,7 +176,7 @@ namespace ofxImGuiSurfing
 			else {
 				addBuffered(s);
 			}
-		};
+		}
 
 		void Add(std::string msg, ofLogLevel logLevel)
 		{
@@ -199,7 +199,7 @@ namespace ofxImGuiSurfing
 				else if (logLevel == OF_LOG_ERROR) ofLogError() << msg;
 				else if (logLevel == OF_LOG_FATAL_ERROR) ofLogFatalError() << msg;
 			}
-		};
+		}
 
 		//----
 
@@ -208,7 +208,7 @@ namespace ofxImGuiSurfing
 		void drawImGui()
 		{
 			drawImGui(bGui);
-		};
+		}
 
 		void drawImGui(ofParameter<bool>& _bGui)
 		{
@@ -523,7 +523,7 @@ namespace ofxImGuiSurfing
 					}
 
 					ofxImGuiSurfing::SameLineFit(480, bDebug);
-					this->AddComboAux(indexSizeFont, namesCustomFonts, wWidgets);
+					this->AddComboAux(fontIndex, namesCustomFonts, wWidgets);
 					//ofxImGuiSurfing::DebugContentRegionAvailX();
 
 					//--
@@ -582,12 +582,12 @@ namespace ofxImGuiSurfing
 			//--
 
 			ImGui::End();
-		};
+		}
 
 		void setName(std::string name)
 		{
 			bGui.setName(name);
-		};
+		}
 
 		//--
 
@@ -596,15 +596,25 @@ namespace ofxImGuiSurfing
 		ofParameter<bool>bGui{ "LOG", true };
 
 		ofParameterGroup params{ "Log Settings" };
-		//settings are handled by the parent class. will be serialized on exit and loaded on start.
+		// settings are handled by the parent class. 
+		// will be serialized on exit and loaded on start.
 
 		ofParameter<int> amountLinesLimitedBuffered{ "Amount", 20, 1, 200 };
 		//TODO: workaround: public for disable log on parent classes
 
 		//TODOL clamp
-		void setFontSize(int i) { indexSizeFont = i; }
+		void setFontSize(int i) { fontIndex = i; }
+
+		void setFontMonospacedDefined(bool b = true) {
+			bDefinedMonospacedFonts = b;
+
+			fontIndex.setMax(customFonts.size() - 1);
+
+			if (fontIndex < 4) fontIndex += 4;//set relative mono-spaced by default
+		}
 
 	private:
+		bool bDefinedMonospacedFonts = false;
 
 		ofParameter<bool> bOptions{ "OPTIONS", false };
 		ofParameter<bool> bLimitedBuffered{ "Limited", true };
@@ -616,7 +626,7 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAutoFit{ "AutoFit", true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll", true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
-		ofParameter<int> indexSizeFont{ "Font", 0, 0, 0 };
+		ofParameter<int> fontIndex{ "Font", 0, 0, 0 };
 		ofParameter<bool> bFilter{ "FILTER", false };
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };
@@ -648,9 +658,11 @@ namespace ofxImGuiSurfing
 
 			//bFilter = bFilter;
 
+			if (bDefinedMonospacedFonts) if (fontIndex < 4) fontIndex = 4;//set first mono-spaced by default
+
 			bDoneStartup = true;
 			ofLogNotice("ofxSurfingImGui:SurfingLog") << "Startup done";
-		};
+		}
 
 	private:
 
@@ -705,7 +717,7 @@ namespace ofxImGuiSurfing
 				}
 				return;
 			}
-		};
+		}
 
 		//----
 
@@ -726,7 +738,7 @@ namespace ofxImGuiSurfing
 			namesTagsFiler.push_back(strAlign("NONE"));
 
 			maxTagLengthSession = 0;
-		};
+		}
 
 	private:
 
@@ -754,11 +766,11 @@ namespace ofxImGuiSurfing
 			// But can be removed befor adding new custom tags using 
 			// the clearDefaultTags() method.
 
-			AddTag({ "INFO", ofColor::white });
-			AddTag({ "VERBOSE", ofColor::white });
-			AddTag({ "NOTICE", ofColor::green });
-			AddTag({ "WARNING", ofColor::yellow });
-			AddTag({ "ERROR", ofColor::red });
+			this->AddTag({ "INFO", ofColor::white });
+			this->AddTag({ "VERBOSE", ofColor::white });
+			this->AddTag({ "NOTICE", ofColor::green });
+			this->AddTag({ "WARNING", ofColor::yellow });
+			this->AddTag({ "ERROR", ofColor::red });
 		}
 
 		string strEmptyTag = "";
@@ -782,7 +794,7 @@ namespace ofxImGuiSurfing
 			//s += " ";//end spacing
 
 			return s;
-		};
+		}
 
 		ofLogLevel logLevelUi = OF_LOG_VERBOSE;
 
@@ -843,7 +855,7 @@ namespace ofxImGuiSurfing
 			// filter
 			indexTagFilter.setMax(tags.size());
 			namesTagsFiler.push_back(tag.name);
-		};
+		}
 
 		//--
 
@@ -851,7 +863,7 @@ namespace ofxImGuiSurfing
 			this->clearUnlimited();
 			this->clearBuffered();
 			//this->ClearFilter();
-		};
+		}
 
 	private:
 
@@ -863,9 +875,8 @@ namespace ofxImGuiSurfing
 				bufferBufferedLimited.pop_front();
 			}
 
-			if (bAutoScroll)
-				this->scroll_to_bottom = true;
-		};
+			if (bAutoScroll) this->scroll_to_bottom = true;
+		}
 
 		void addUnlimited(string msg, ...)
 		{
@@ -879,15 +890,14 @@ namespace ofxImGuiSurfing
 			va_end(args);
 			bufferUnlimited.push_back(strdup(buf));
 
-			if (bAutoScroll)
-				this->scroll_to_bottom = true;
-		};
+			if (bAutoScroll) this->scroll_to_bottom = true;
+		}
 
 		void clearUnlimited() {
 			for (int i = 0; i < bufferUnlimited.Size; i++)
 				free(bufferUnlimited[i]);
 			bufferUnlimited.clear();
-		};
+		}
 
 		void drawUnlimited() {
 			float p = 0;//padding
@@ -896,7 +906,7 @@ namespace ofxImGuiSurfing
 			bool bBorder = true;//used?
 
 			drawUnlimited("Logger", ImGui::GetCursorPos(), { w - p, h - p }, bBorder);
-		};
+		}
 
 		void drawUnlimited(const char* str_id, const ImVec2 pos, const ImVec2 size, const bool border)
 		{
@@ -941,8 +951,7 @@ namespace ofxImGuiSurfing
 						}
 					}
 
-					if (has_color)
-						ImGui::PushStyleColor(ImGuiCol_Text, color);
+					if (has_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
 
 					//--
 
@@ -951,21 +960,19 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					if (has_color)
-						ImGui::PopStyleColor();
+					if (has_color) ImGui::PopStyleColor();
 				}
 
 				//--
 
 				if (bAutoScroll)
 				{
-					if (this->scroll_to_bottom)
-						ImGui::SetScrollHereY(1.0f);
+					if (this->scroll_to_bottom) ImGui::SetScrollHereY(1.0f);
 					this->scroll_to_bottom = false;
 				}
 			}
 			ImGui::EndChild();
-		};
+		}
 
 		void drawBufferedLimited()
 		{
@@ -1019,8 +1026,7 @@ namespace ofxImGuiSurfing
 						}
 					}
 
-					if (has_color)
-						ImGui::PushStyleColor(ImGuiCol_Text, color);
+					if (has_color) ImGui::PushStyleColor(ImGuiCol_Text, color);
 
 					//--
 
@@ -1029,21 +1035,19 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					if (has_color)
-						ImGui::PopStyleColor();
+					if (has_color) ImGui::PopStyleColor();
 				}
 
 				//--
 
 				if (bAutoScroll)
 				{
-					if (this->scroll_to_bottom)
-						ImGui::SetScrollHereY(1.0f);
+					if (this->scroll_to_bottom) ImGui::SetScrollHereY(1.0f);
 					this->scroll_to_bottom = false;
 				}
 			}
 			ImGui::EndChild();
-		};
+		}
 
 	private:
 
@@ -1056,7 +1060,7 @@ namespace ofxImGuiSurfing
 			void* buf = malloc(len);
 			IM_ASSERT(buf);
 			return (char*)memcpy(buf, (const void*)s, len);
-		};
+		}
 
 		//--
 
@@ -1142,7 +1146,7 @@ namespace ofxImGuiSurfing
 			//std::ofstream out(s.c_str());
 			//out << text;
 			//out.close();
-		};
+		}
 
 		//--
 
@@ -1162,12 +1166,11 @@ namespace ofxImGuiSurfing
 			else ImGui::TextWrapped("%s", item);
 
 			if (bTight) ImGui::PopStyleVar();
-		};
+		}
 
 		void drawLogMessages()
 		{
-			//TODO: font styled
-			pushStyleFont(indexSizeFont.get());
+			pushStyleFont(fontIndex.get());
 			{
 				if (!bLimitedBuffered)
 				{
@@ -1179,7 +1182,7 @@ namespace ofxImGuiSurfing
 				}
 			}
 			popStyleFont();
-		};
+		}
 
 		//----
 
@@ -1190,11 +1193,11 @@ namespace ofxImGuiSurfing
 		{
 			setCustomFontsNames(names);
 			setCustomFonts(f);
-		};
+		}
 		void setCustomFontsNames(vector<string> names)
 		{
 			namesCustomFonts = names;
-		};
+		}
 		void setCustomFonts(vector<ImFont*> f)
 		{
 			customFonts = f;
@@ -1204,8 +1207,8 @@ namespace ofxImGuiSurfing
 
 			}
 
-			indexSizeFont.setMax(customFonts.size() - 1);
-		};
+			fontIndex.setMax(customFonts.size() - 1);
+		}
 
 	private:
 
@@ -1216,20 +1219,26 @@ namespace ofxImGuiSurfing
 
 		void pushStyleFont(int index)
 		{
-			if (index < customFonts.size())
+			int i;
+#if 1
+			i = index;
+#else//TODO: limit to mono-spaced
+			if (!bDefinedMonospacedFonts) i = index;
+			else i = index + 4;
+#endif
+			if (i < customFonts.size())
 			{
-				if (customFonts[index] != nullptr)
-					ImGui::PushFont(customFonts[index]);
+				if (customFonts[i] != nullptr) ImGui::PushFont(customFonts[i]);
 			}
 			else
 			{
 				bIgnoreNextPopFont = true; // workaround to avoid crashes
 			}
-		};
+		}
 
 		void popStyleFont()
 		{
-			//TODO: will crash if not pushed..
+			//TODO: will crash if not previously pushed..
 			//workaround to avoid crashes
 			if (bIgnoreNextPopFont)
 			{
@@ -1239,7 +1248,7 @@ namespace ofxImGuiSurfing
 			}
 
 			ImGui::PopFont();
-		};
+		}
 
 		//--
 
@@ -1291,7 +1300,7 @@ namespace ofxImGuiSurfing
 			ImGui::PopItemWidth();
 
 			return bReturn;
-		};
+		}
 
 	};//class
 

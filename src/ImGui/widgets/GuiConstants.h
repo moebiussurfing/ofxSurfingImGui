@@ -47,7 +47,7 @@
 
 //----
 
-// Default Themes files
+// Default Themes file-based
 
 // Files must be in the default place:
 // ofxSurfingImGui\Examples\09_ThemeEditor\bin\data\Gui\themes\
@@ -55,10 +55,10 @@
 // When files are not located there, then will load a hardcoded default theme: 
 // ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
-// Night
+// Night Theme
 #define THEME_NAME_NIGHT "moebiusSurfing.ini"
 
-// Day
+// Day Theme
 #define THEME_NAME_DAY "moebiusSurfingDay.ini"
 
 //----
@@ -71,7 +71,7 @@
 // So you don't need to put any files on bin/data to compile right!
 
 
-#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/"
+#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" // main container for all the font files!
 
 // LEGACY font
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
@@ -81,7 +81,7 @@
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
-// Monospaced font
+// Default mono-spaced font
 #define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_MONO_FILE "JetBrainsMono-Bold.ttf"
 

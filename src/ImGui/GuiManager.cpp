@@ -476,13 +476,13 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospaced(string pathFont, flo
 	pathFontMono = pathFont;
 	sizeFontMono = sizeFont;
 
-	bSetupFontForDefaultStylesMonospaced = 1;
+	bSetupFontForDefaultStylesMonospacedInternal = 1;
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::setupFontDefaultMonospaced(string pathFont, float sizeFont)
+void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "setupFontDefaultMonospaced()" << pathFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesMonospacedInternal()" << pathFont << ", " << sizeFont;
 
 	// We create four different sizes but for the same font type/file
 
@@ -537,14 +537,19 @@ void SurfingGuiManager::setupFontDefaultMonospaced(string pathFont, float sizeFo
 
 		bDefinedMonospacedFonts = true;
 
+		// Prepare Log
+		log.setCustomFonts(customFonts, namesCustomFonts);
+		log.setFontMonospacedDefined();
+
 		//now we have 8 fonts to browse by the index!
-		fontIndex.setMax(7);
+		//fontIndex.setMax(7);
+		fontIndex.setMax(customFonts.size() - 1);
 	}
 
 	// Legacy not found neither
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "setupFontDefaultMonospaced() Seems that expected file fonts not found!";
+		ofLogError("ofxSurfingImGui") << "setupFontForDefaultStylesMonospacedInternal() Seems that expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
 }
@@ -756,6 +761,8 @@ void SurfingGuiManager::startup()
 
 	//TODO: trying to redirect all logs to the imgui log window.
 	//log.setRedirectConsole();
+
+	//log.setFontMonospacedDefined();
 
 	//--
 
@@ -1197,8 +1204,7 @@ void SurfingGuiManager::pushStyleFont(int index)
 {
 	if (index < customFonts.size())
 	{
-		if (customFonts[index] != nullptr)
-			ImGui::PushFont(customFonts[index]);
+		if (customFonts[index] != nullptr) ImGui::PushFont(customFonts[index]);
 	}
 	else
 	{
@@ -1506,10 +1512,10 @@ void SurfingGuiManager::update()
 #endif
 
 	// Build monospaced fonts flag
-	if (bSetupFontForDefaultStylesMonospaced) {
-		bSetupFontForDefaultStylesMonospaced = 0;
+	if (bSetupFontForDefaultStylesMonospacedInternal) {
+		bSetupFontForDefaultStylesMonospacedInternal = 0;
 
-		setupFontDefaultMonospaced(pathFontMono, sizeFontMono);
+		setupFontForDefaultStylesMonospacedInternal(pathFontMono, sizeFontMono);
 	}
 }
 
@@ -2224,7 +2230,7 @@ void SurfingGuiManager::End()
 	// Mouse and Keyboard
 	doCheckOverGui();
 
-	//--
+	//----
 
 	// ImGui End
 

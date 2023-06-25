@@ -1306,12 +1306,14 @@ public:
 	void clearFontsMonospaced() {
 		fontsMonospacedIndexes.clear();
 		bDefinedMonospacedFonts = false;
+
+		log.setFontMonospacedDefined(false);
 	}
 
 private:
 	// will create all the standard sizes starting as default for the passed sizeFont
-	void setupFontDefaultMonospaced(string pathFont, float sizeFont);
-	bool bSetupFontForDefaultStylesMonospaced = 0;//flag to apply out of imgui NewFrame 
+	void setupFontForDefaultStylesMonospacedInternal(string pathFont, float sizeFont);
+	bool bSetupFontForDefaultStylesMonospacedInternal = 0;//flag to apply out of imgui NewFrame 
 public:
 	// Must be called after adding the default (maybe modern) font!
 	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
