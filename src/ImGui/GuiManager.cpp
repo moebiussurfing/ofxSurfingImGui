@@ -396,6 +396,12 @@ void SurfingGuiManager::BuildFonts(string pathFonts, string nameFont, float size
 	setupFontDefault(pathFonts, nameFont, sizeFont);
 }
 
+////--------------------------------------------------------------
+//void SurfingGuiManager::setupFontDefault(string pathFont, float sizeFont)
+//{
+//	ofLogNotice("ofxSurfingImGui") << "setupFontDefault()" << pathFons << ", " << sizeFont;
+//}
+
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, float sizeFont)
 {
@@ -433,24 +439,24 @@ void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, floa
 
 		// Font default
 		_label = "DEFAULT";
-		pushFont(pathFonts + nameFont, sizeFont * fontsRatioDefault, _label); // queue default font too
+		addFontStyle(pathFonts + nameFont, sizeFont * fontsRatioDefault, _label); // queue default font too
 
 		// Font big
 		_label = "BIG";
-		pushFont(pathFonts + nameFont, sizeFont * fontsRatioBig, _label); // queue big font too
+		addFontStyle(pathFonts + nameFont, sizeFont * fontsRatioBig, _label); // queue big font too
 
 		// Font huge
 		_label = "HUGE";
-		pushFont(pathFonts + nameFont, sizeFont * fontsRatioHuge, _label); // queue huge font too
+		addFontStyle(pathFonts + nameFont, sizeFont * fontsRatioHuge, _label); // queue huge font too
 
 		// Font huge xxl
 		_label = "HUGE_XXL";
-		pushFont(pathFonts + nameFont, sizeFont * fontsRatioHugeXXL, _label); // queue huge xxl font too
+		addFontStyle(pathFonts + nameFont, sizeFont * fontsRatioHugeXXL, _label); // queue huge xxl font too
 
 		//--
 
-		// Set default
-		//addFont(pathFonts + nameFont, _sizeFont);
+		// Clears mono-spaced too
+		clearFontsMonospaced();
 	}
 
 	// Legacy not found neither
@@ -463,20 +469,20 @@ void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, floa
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::doSetupFontMonoWithStyles(string pathFont, float sizeFont)
+void SurfingGuiManager::setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "doSetupFontMonoWithStyles()" << pathFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesMonospaced()" << pathFont << ", " << sizeFont;
 
 	pathFontMono = pathFont;
 	sizeFontMono = sizeFont;
 
-	bDoSetupFontMonoWithStyles = 1;
+	bSetupFontForDefaultStylesMonospaced = 1;
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::setupFontMonoWithStyles(string pathFont, float sizeFont)
+void SurfingGuiManager::setupFontDefaultMonospaced(string pathFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "setupFontMonoWithStyles()" << pathFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupFontDefaultMonospaced()" << pathFont << ", " << sizeFont;
 
 	// We create four different sizes but for the same font type/file
 
@@ -499,37 +505,37 @@ void SurfingGuiManager::setupFontMonoWithStyles(string pathFont, float sizeFont)
 	bool b2 = fileToRead2.exists();
 	if (b2)
 	{
-		fontsMonoIndexes.clear();
+		clearFontsMonospaced();
 
 		string _label;
 
 		// Font default
 		_label = "DEFAULT_MONO";
-		pushFont(pathFont, sizeFont * fontsRatioDefault, _label); // queue default font too
+		addFontStyle(pathFont, sizeFont * fontsRatioDefault, _label); // queue default font too
 		// Store the font index 
-		fontsMonoIndexes.push_back(customFonts.size() - 1);
+		fontsMonospacedIndexes.push_back(customFonts.size() - 1);
 
 		// Font big
 		_label = "BIG_MONO";
-		pushFont(pathFont, sizeFont * fontsRatioBig, _label); // queue big font too
+		addFontStyle(pathFont, sizeFont * fontsRatioBig, _label); // queue big font too
 		// Store the font index 
-		fontsMonoIndexes.push_back(customFonts.size() - 1);
+		fontsMonospacedIndexes.push_back(customFonts.size() - 1);
 
 		// Font huge
 		_label = "HUGE_MONO";
-		pushFont(pathFont, sizeFont * fontsRatioHuge, _label); // queue huge font too
+		addFontStyle(pathFont, sizeFont * fontsRatioHuge, _label); // queue huge font too
 		// Store the font index 
-		fontsMonoIndexes.push_back(customFonts.size() - 1);
+		fontsMonospacedIndexes.push_back(customFonts.size() - 1);
 
 		// Font huge xxl
 		_label = "HUGE_XXL_MONO";
-		pushFont(pathFont, sizeFont * fontsRatioHugeXXL, _label); // queue huge xxl font too
+		addFontStyle(pathFont, sizeFont * fontsRatioHugeXXL, _label); // queue huge xxl font too
 		// Store the font index 
-		fontsMonoIndexes.push_back(customFonts.size() - 1);
+		fontsMonospacedIndexes.push_back(customFonts.size() - 1);
 
 		//--
 
-		bDefinedMonoFonts = true;
+		bDefinedMonospacedFonts = true;
 
 		//now we have 8 fonts to browse by the index!
 		fontIndex.setMax(7);
@@ -538,7 +544,7 @@ void SurfingGuiManager::setupFontMonoWithStyles(string pathFont, float sizeFont)
 	// Legacy not found neither
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "setupFontMonoWithStyles() Seems that expected file fonts not found!";
+		ofLogError("ofxSurfingImGui") << "setupFontDefaultMonospaced() Seems that expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
 }
@@ -1038,14 +1044,14 @@ void SurfingGuiManager::clearFonts()
 //TODO: could return an int with the current index.
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
-bool SurfingGuiManager::pushFont(std::string path, float size, string label)
+bool SurfingGuiManager::addFontStyle(std::string path, float size, string label)
 {
 	//TODO:
 	// It could be a vector with several customFont
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
-	//ofLogNotice("ofxSurfingImGui") << "pushFont: " << path << " : " << size;
+	//ofLogNotice("ofxSurfingImGui") << "addFontStyle: " << path << " : " << size;
 
 	auto& io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
@@ -1084,11 +1090,11 @@ bool SurfingGuiManager::pushFont(std::string path, float size, string label)
 			pathsCustomFonts.push_back(path);
 		}
 
-		ofLogNotice("ofxSurfingImGui") << "pushFont() File path: " << path << " size: " << size;
+		ofLogNotice("ofxSurfingImGui") << "addFontStyle() File path: " << path << " size: " << size;
 	}
 	else
 	{
-		ofLogError("ofxSurfingImGui") << "pushFont() File path: " << path << " not found!";
+		ofLogError("ofxSurfingImGui") << "addFontStyle() File path: " << path << " not found!";
 	}
 
 	//TODO: should skip exceptions if files not found!
@@ -1148,20 +1154,20 @@ bool SurfingGuiManager::LoadFontsFromFolder(std::string path, float size, bool b
 	for (int i = 0; i < dir.size(); i++)
 	{
 		string label = dir[i].getBaseName();
-		if (!bMultisize) b = b && pushFont(dir[i].getAbsolutePath(), size, label);
+		if (!bMultisize) b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 		else // multi size
 		{
 			// size -1
 			label = dir[i].getBaseName() + ", " + ofToString(size - 1) + "px";
-			b = b && pushFont(dir[i].getAbsolutePath(), size - 1, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size - 1, label);
 
 			// size 
 			label = dir[i].getBaseName() + ", " + ofToString(size) + "px";
-			b = b && pushFont(dir[i].getAbsolutePath(), size, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 
 			// size +1 
 			label = dir[i].getBaseName() + ", " + ofToString(size + 1) + "px";
-			b = b && pushFont(dir[i].getAbsolutePath(), size + 1, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size + 1, label);
 		}
 	}
 
@@ -1441,7 +1447,7 @@ void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResu
 		{
 			ofLogNotice("ofxSurfingImGui") << "TTF or OTF found!";
 
-				pushFont(path, size);
+				addFontStyle(path, size);
 		}
 		else ofLogError("ofxSurfingImGui") << "TTF or OTF not found!";
 	}
@@ -1500,10 +1506,10 @@ void SurfingGuiManager::update()
 #endif
 
 	// Build monospaced fonts flag
-	if (bDoSetupFontMonoWithStyles) {
-		bDoSetupFontMonoWithStyles = 0;
+	if (bSetupFontForDefaultStylesMonospaced) {
+		bSetupFontForDefaultStylesMonospaced = 0;
 
-		setupFontMonoWithStyles(pathFontMono, sizeFontMono);
+		setupFontDefaultMonospaced(pathFontMono, sizeFontMono);
 	}
 }
 

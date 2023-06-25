@@ -40,4 +40,6 @@ public:
     SurfingFonts f;
 
 	void drawMyDemoWindow();
+	bool bUseFontMonospaced=0;
+	bool bUseFontIndex=0;
 };

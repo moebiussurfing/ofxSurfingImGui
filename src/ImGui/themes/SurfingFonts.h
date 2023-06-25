@@ -248,50 +248,23 @@ private:
 			if (ui->isFontsMonospacedDefined()) {
 				ui->AddSpacingBig();
 
-				s = "MONOSPACED STYLES";
+				s = "DEFAULT STYLES MONOSPACED";
 
 				if (ui->BeginTree(s))
 				{
 					ui->AddSpacingBig();
 
-					for (size_t i_ = 0; i_ < ui->fontsMonoIndexes.size(); i_++)
+					for (size_t i_ = 0; i_ < ui->fontsMonospacedIndexes.size(); i_++)
 					{
-						int i = ui->fontsMonoIndexes[i_];
+						int i = ui->fontsMonospacedIndexes[i_];
 
 						s = ui->getFontLabel(i);
 
 						if ((i == ui->getFontIndex())) ui->BeginBlinkText();
 						ui->DrawImGuiTextWithFontStyle(s, i);
 						if ((i == ui->getFontIndex())) ui->EndBlinkText();
-						ui->AddSpacingBigSeparated();
 
-
-						//s = "DEFAULT";
-						//i = 0;
-						//if ((i == ui->getFontIndex())) ui->BeginBlinkText();
-						//ui->DrawImGuiTextWithFontStyle(s, i);
-						//if ((i == ui->getFontIndex())) ui->EndBlinkText();
-						//ui->AddSpacingBigSeparated();
-
-						//s = "BIG";
-						//i = 1;
-						//if ((i == ui->getFontIndex())) ui->BeginBlinkText();
-						//ui->DrawImGuiTextWithFontStyle(s, i);
-						//if ((i == ui->getFontIndex())) ui->EndBlinkText();
-						//ui->AddSpacingBigSeparated();
-
-						//s = "HUGE";
-						//i = 2;
-						//if ((i == ui->getFontIndex())) ui->BeginBlinkText();
-						//ui->DrawImGuiTextWithFontStyle(s, i);
-						//if ((i == ui->getFontIndex())) ui->EndBlinkText();
-						//ui->AddSpacingBigSeparated();
-
-						//s = "HUGE_XXL";
-						//i = 3;
-						//if ((i == ui->getFontIndex())) ui->BeginBlinkText();
-						//ui->DrawImGuiTextWithFontStyle(s, i);
-						//if ((i == ui->getFontIndex())) ui->EndBlinkText();
+						if (i_ < ui->fontsMonospacedIndexes.size() - 1) ui->AddSpacingBigSeparated();
 					}
 
 					ui->EndTree();
@@ -304,7 +277,6 @@ private:
 			{
 				ui->AddSpacingBig();
 
-				//s = "EXTRA FONTS\n";
 				s = "ALL FONTS\n";
 
 				if (ui->BeginTree(s))
@@ -464,9 +436,12 @@ private:
 
 		ui->AddSpacingBig();
 
+		//--
+
+		// Load folder fonts
 		// Clear and reload folder font files
 		{
-			if (ui->AddButton("Load Folder Fonts", OFX_IM_BUTTON_BIG))
+			if (ui->AddButton("Load folder fonts", OFX_IM_BUTTON_BIG))
 			{
 				bLoadFontsFromFolder = 1; // flag to execute out of the ImGui render
 			}
@@ -484,18 +459,21 @@ private:
 
 		ui->AddSpacingBig();
 
-		// Re Build the styles 
-		// for a new default font
-		{
-			s = "Browse the pre added fonts and pick the new default font. \n";
-			s += "Then click Build and the styles for the new default font will be populated.\n";
-			s += "The sizeFont variable will be used for the Default style and scaled big to the others!\n";
-			ui->AddLabel(s);
+		//--
 
+		s = "Browse the pre added fonts and pick the new default font. \n";
+		s += "Then click Build and the styles for the new default font will be populated.\n";
+		s += "The sizeFont variable will be used for the Default style and scaled big to the others!\n";
+		ui->AddLabel(s);
+
+		// Build the styles 
+		// for a new picked default font
+		{
 			if (ui->AddButton("Build Default Styles", OFX_IM_BUTTON_BIG))
 			{
 				bBuildDefaultFontWithStyles = 1; // flag to execute out of the ImGui render
 			}
+
 			s = "The above picked font: \n\n";
 			s += ui->getFontIndexName() + "\n";
 			s += "(Using sizeFont " + ofToString(sizeFont.get(), 0) + "px)\n\n";
@@ -503,6 +481,8 @@ private:
 			s += "DEFAULT, BIG, HUGE and HUGE_XXL.\n";
 			ui->AddTooltip(s);
 		}
+
+		//--
 
 		// Mono spaced font
 
@@ -514,16 +494,16 @@ private:
 			{
 				string pathFont_ = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
 				float sizeFont_ = float(OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN);
-				if (ui->AddButton("Build Default mono-spaced fonts", OFX_IM_BUTTON_BIG))
+				if (ui->AddButton("Build mono-spaced Font Styles Default", OFX_IM_BUTTON_BIG))
 				{
-					ui->doSetupFontMonoWithStyles(pathFont_, sizeFont_);
+					ui->setupFontForDefaultStylesMonospaced(pathFont_, sizeFont_);
 				}
-				s = "Add default mono-spaced font \nand sizeFont as a mono-spaced font bundle:\n";
-				s += "The font: \n\n";
+				s = "Add default mono-spaced font \nand sizeFont as a font bundle:\n";
+				s += "\nFile font: \n";
 				s += pathFont_ + "\n";
-				s += "(Using sizeFont " + ofToString(sizeFont.get(), 0) + "px)\n\n";
-				s += "to be used in parallel with the default one\n";
-				s += "Then creates the four styles too.\n";
+				s += "With sizeFont " + ofToString(sizeFont.get(), 0) + "px\n\n";
+				s += "To be used in parallel with the default (modern) one\n";
+				s += "Then creates the four styles too:\n";
 				s += "DEFAULT_MONO, BIG_MONO, HUGE_MONO and HUGE_XXL_MONO.";
 				ui->AddTooltip(s);
 			}
@@ -532,22 +512,24 @@ private:
 			{
 				string pathFont_ = ui->getFontIndexPath();
 				float sizeFont_ = ui->getFontIndexSize();
-				if (ui->AddButton("Build mono-spaced fonts", OFX_IM_BUTTON_BIG))
+				if (ui->AddButton("Build mono-spaced Font Styles Alternative", OFX_IM_BUTTON_BIG))
 				{
-					ui->doSetupFontMonoWithStyles(pathFont_, sizeFont_);
+					ui->setupFontForDefaultStylesMonospaced(pathFont_, sizeFont_);
 				}
-				s = "Add selected font and sizeFont \nas a mono-spaced font bundle:\n";
-				s += "The above picked font: \n\n";
+				s = "Add selected mono-spaced font \nand sizeFont as a font bundle:\n";
+				s += "\nThe index Font: \n";
 				s += pathFont_ + "\n";
-				s += "(Using sizeFont " + ofToString(sizeFont_, 0) + "px)\n\n";
-				s += "to be used in parallel with the default one\n";
-				s += "Then creates the four styles too.\n";
+				s += "With sizeFont " + ofToString(sizeFont_, 0) + "px\n\n";
+				s += "To be used in parallel with the default (modern) one\n";
+				s += "Then creates the four styles too:\n";
 				s += "DEFAULT_MONO, BIG_MONO, HUGE_MONO and HUGE_XXL_MONO.";
 				ui->AddTooltip(s);
 			}
 		}
 
 		ui->AddSpacingBig();
+
+		//--
 
 		// Clear
 
@@ -560,6 +542,8 @@ private:
 		ui->AddTooltip(s);
 
 		ui->AddSpacingBig();
+
+		//--
 
 		// Help
 
@@ -715,12 +699,12 @@ public:
 		p = "/assets/fonts2/Inter-Black.ttf";
 		size = 13;
 		label = "Inter-Black_" + ofToString(size);
-		ui->pushFont(p, size, label);
+		ui->addFontStyle(p, size, label);
 
 		// 3. Load another single font
 		p = "/assets/fonts2/Inter-Black.ttf";
 		size = 17;
 		label = "Inter-Black_" + ofToString(size);
-		ui->pushFont(p, size, label);
+		ui->addFontStyle(p, size, label);
 	}
 };

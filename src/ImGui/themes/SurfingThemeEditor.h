@@ -749,22 +749,22 @@ public:
 //		// Font #0
 //		_fontName = "AnonymousPro-Regular.ttf";
 //		_fontSize = 12;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #1
 //		_fontName = "OpenSans-Regular.ttf";
 //		_fontSize = 14;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #2
 //		_fontName = "overpass-mono-bold.otf";
 //		_fontSize = 16;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #3
 //		_fontName = "JetBrainsMonoNL-ExtraBold.ttf";
 //		_fontSize = 18;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		//--
 //

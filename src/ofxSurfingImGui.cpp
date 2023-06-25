@@ -25,7 +25,7 @@
 	IDEAS
 
 	- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
-		could store if the new pushFont is monospace, then store the monospaced indexes
+		could store if the new addFontStyle is monospace, then store the monospaced indexes
 
 	- Make drop-down struct? index + names
 	- add layout with child/header similar to menus.
@@ -713,17 +713,17 @@
 		_fontSize = 11;
 		_fontName = "overpass-mono-bold.otf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 0
+		ui.addFontStyle(_path, _fontSize);//index 0
 
 		_fontSize = 14;
 		_fontName = "RecMonoLinear-Bold-1.082.ttf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 1
+		ui.addFontStyle(_path, _fontSize);//index 1
 
 		_fontSize = 17;
 		_fontName = "RecMonoLinear-Regular-1.082.ttf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 2
+		ui.addFontStyle(_path, _fontSize);//index 2
 
 		ui.addFont(_path, _fontSize);
 		ui.setDefaultFontIndex(2);

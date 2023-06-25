@@ -7,6 +7,8 @@ void ofApp::setup()
 
 	ui.setup();
 
+	//--
+
 	// Font Helpers
 	f.setUiPtr(&ui);
 	f.setup();
@@ -17,6 +19,22 @@ void ofApp::setup()
 	e.setPathGlobal(ui.getPath());
 	e.setUiPtr(&ui);
 	e.setup();
+
+	//--
+
+	// Customize default fonts
+#if 0
+	// Force replace:
+	// The default font
+	// The default mono-spaced font
+	string p = "assets/fonts2/Inter-Black.ttf";
+	float sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
+	ui.setupFontForDefaultStyles(p, sz);
+
+	p = "assets/fonts2/overpass-mono-bold.otf";
+	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
+	ui.setupFontForDefaultStylesMonospaced(p, sz);
+#endif
 }
 
 //--------------------------------------------------------------
@@ -76,16 +94,31 @@ void ofApp::draw()
 
 	//--
 
-	// The Editor Windows
-	// Apply picked as font style
-	ui.PushFontByIndex();
+	// Demo Window
+
+	if (!ui.isFontsMonospacedDefined())
 	{
+		// Apply picked selected index as font style
+		ui.PushFontByIndex();
+		{
+			drawMyDemoWindow();
 
-		drawMyDemoWindow();
-
-		e.draw();
+			e.draw();
+		}
+		ui.PopFontByIndex();
 	}
-	ui.PopFontByIndex();
+	else {
+		// Apply custom font style
+
+		if (bUseFontMonospaced) ui.PushFontStyle(4);//default mono-spaced
+		else ui.PushFontByIndex();
+		{
+			drawMyDemoWindow();
+
+			e.draw();
+		}
+		ui.PopFontStyle();
+	}
 
 	ui.End();
 }
@@ -112,6 +145,18 @@ void ofApp::drawMyDemoWindow() {
 	ImGui::Begin("MyDemoWindow");
 
 	ImGui::TextWrapped("NOTE: ON THIS WINDOW WE ARE USING THE SELECTED FONT FOR ALL THE WIDGETS!");
+
+	if (ui.isFontsMonospacedDefined()) {
+		ImGui::Spacing();
+		if (ImGui::Checkbox("Font Monospaced", &bUseFontMonospaced)) {
+			if (bUseFontMonospaced)bUseFontIndex = 0;
+		};
+		if (ImGui::Checkbox("Font Index", &bUseFontIndex)) {
+			if (bUseFontIndex) bUseFontMonospaced = 0;
+		};
+
+		if (!bUseFontIndex && !bUseFontMonospaced)bUseFontIndex = 1;
+	}
 
 	ImGui::Spacing();
 	ImGui::Spacing();
@@ -140,6 +185,34 @@ void ofApp::drawMyDemoWindow() {
 	static float rangeStart = 25.0f;
 	static float rangeEnd = 75.0f;
 	ImGui::DragFloatRange2("Float Range", &rangeStart, &rangeEnd, 0.1f, 0.0f, 100.0f, "Min: %.1f", "Max: %.1f");
+
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+	ImGui::Spacing();
+
+	// Help
+	string s = "";
+	string sp = "\t"; //column spacer
+	s += "H    " + sp + "HIDE SELECTED\n";
+	s += "S    " + sp + "SHOW ALL\n";
+	s += "\n";
+	s += "F1   " + sp + "HELP WINDOW\n";
+	s += "F2   " + sp + "SETTINGS WINDOW\n";
+	s += "`    " + sp + "MINIMIZE\n";
+	s += "\n";
+	s += "WINDOWS\n";
+	s += "\n";
+	s += "1    " + sp + "CAMERAS\n";
+	s += "2    " + sp + "OUTPUT\n";
+	s += "3    " + sp + "SYNC\n";
+	s += "4    " + sp + "TRACKER DATA\n";
+	s += "5    " + sp + "TRACKER INPUTS\n";
+	s += "6    " + sp + "DATA\n";
+	s += "\n";
+	s += "0    " + sp + "GLOBAL\n";
+	ImGui::TextWrapped(s.c_str());
 
 	ImGui::Spacing();
 	ImGui::Spacing();

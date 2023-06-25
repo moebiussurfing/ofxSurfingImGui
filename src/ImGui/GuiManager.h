@@ -1281,13 +1281,14 @@ public:
 
 private:
 	//TODO:pathFont is the path for all fonts..
+	//void setupFontDefault(string pathFont, float sizeFont);//TODO: better API args..
 	void setupFontDefault(string pathFonts, string nameFont, float sizeFont);
 
 	void setupImGuiTheme();
 
 	//--
 
-	// Monospaced fonts
+	// mono-spaced fonts
 	const float fontsRatioDefault = 1.0f;
 	const float fontsRatioBig = 1.5f;
 	const float fontsRatioHuge = 2.5f;
@@ -1295,20 +1296,25 @@ private:
 
 	string pathFontMono = OFX_IM_FONT_DEFAULT_PATH_FONTS + (string)OFX_IM_FONT_DEFAULT_MONO_FILE;
 	float sizeFontMono = float(OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN);
-	bool bDefinedMonoFonts = false;
+	bool bDefinedMonospacedFonts = false;
 
 public:
-	vector<int> fontsMonoIndexes; // queue the positions of the four mono fonts
+	vector<int> fontsMonospacedIndexes; // queue the positions of the four mono fonts
 	bool isFontsMonospacedDefined() {
-		return bDefinedMonoFonts;
+		return bDefinedMonospacedFonts;
+	}
+	void clearFontsMonospaced() {
+		fontsMonospacedIndexes.clear();
+		bDefinedMonospacedFonts = false;
 	}
 
 private:
 	// will create all the standard sizes starting as default for the passed sizeFont
-	void setupFontMonoWithStyles(string pathFont, float sizeFont);
-	bool bDoSetupFontMonoWithStyles = 0;//flag to apply out of imgui NewFrame 
+	void setupFontDefaultMonospaced(string pathFont, float sizeFont);
+	bool bSetupFontForDefaultStylesMonospaced = 0;//flag to apply out of imgui NewFrame 
 public:
-	void doSetupFontMonoWithStyles(string pathFont, float sizeFont);
+	// Must be called after adding the default (maybe modern) font!
+	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
 
 	//--
 
@@ -1318,9 +1324,11 @@ public:
 	void BuildFonts(string pathFonts, string nameFont, float sizeFont);
 	void BuildStylesFromFont(string pathFont, float sizeFont);
 
-	// Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
+	// Call after (all imgui related) setup()'s 
+	// but before pushing extra fonts. 
 	// The default style will use the passed size, the other three will be up scaled!
-	void pushFontForDefaultStyles(string pathFont, float sizeFont)
+	// It's an alias of BuildFontStyles().
+	void setupFontForDefaultStyles(string pathFont, float sizeFont)
 	{
 		BuildStylesFromFont(pathFont, sizeFont);
 	}
@@ -1330,7 +1338,7 @@ public:
 	//size = 15;
 	//file = "NotoSansMono-Medium.ttf";
 	////file = "NotoSansMono-Regular.ttf";
-	//ui->pushFont(ofToDataPath(path + file), size);
+	//ui->addFontStyle(ofToDataPath(path + file), size);
 
 	//----
 
@@ -1866,12 +1874,12 @@ public:
 	void doLoadPreviousFont();
 	void doLoadNextFont();
 
-	//TODO: required? bc pushFont workflow..
+	//TODO: required? bc addFontStyle workflow..
 	//bool addFont(std::string path, float size);
 	// Load all the fonts from the passed folder
 	bool LoadFontsFromFolder(std::string path, float size = 12.f, bool bMultisize = false);
 
-	bool pushFont(std::string path, float size, string label = "");
+	bool addFontStyle(std::string path, float size, string label = "");
 
 private:
 	int currFont = 0;
@@ -1894,8 +1902,8 @@ private:
 	void pushStyleFont(int index);
 	void popStyleFont();
 
-public:
-	//NEW
+private:
+	// LEGACY
 	void PushFont(SurfingFontTypes style);
 	void PopFont();
 
