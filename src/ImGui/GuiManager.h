@@ -1759,8 +1759,8 @@ private:
 
 public:
 	// Must be called before setup!
-	void setEnableRestoreIniSettings(bool b) { bRestoreIniSettings = b; }
-	void setEnablebMouseCursorFromImGui(bool b) { bMouseCursorFromImGui = b; }
+	void setEnablebMouseCursorFromImGui(bool b=1) { bMouseCursorFromImGui = b; }
+	void setEnableRestoreIniSettings(bool b=1) { bRestoreIniSettings = b; }
 
 private:
 	//TODO: 

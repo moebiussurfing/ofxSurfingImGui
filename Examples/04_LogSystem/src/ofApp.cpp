@@ -15,7 +15,7 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::setupParams()
 {
-	params.setName("G");
+	params.setName("ofApp");
 	params.add(speed.set("Speed", 0.5f, 0, 1));
 	params.add(amountPauses.set("Pauses", 50, 0, 100));
 	params.add(bAnimate1.set("Animate 1", true));
@@ -34,6 +34,7 @@ void ofApp::setupImGui()
 	// Optional:
 	//ui.setEnablebMouseCursorFromImGui(false);
 
+	ui.setEnablebMouseCursorFromImGui(false);
 	ui.setup();
 
 	//--
@@ -44,15 +45,15 @@ void ofApp::setupImGui()
 #if 1 // Set to 0 to disable or 1 to enable!
 	// Force replace:
 	// A modern font (non mono-space as the default font
-	string p = "assets/fonts/Montserrat-Regular.ttf";
 	float sz = OFX_IM_FONT_DEFAULT_SIZE_MIN;
+	string p = "assets/fonts/Montserrat-Regular.ttf";
 	ui.setupFontForDefaultStyles(p, sz);
 
 	// The default mono-spaced font
+	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
 	//p = "assets/fonts/overpass-mono-bold.otf";
 	//p = "assets/fonts/JetBrainsMono-Bold.ttf";
 	p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
-	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
 	ui.setupFontForDefaultStylesMonospaced(p, sz);
 #endif
 
@@ -171,14 +172,26 @@ void ofApp::drawImGui()
 			ui.AddTooltip("Animate Separation parameter.");
 		}
 
+		ui.AddSpacingBigSeparated();
+
+		//--
+
+		if (ui.BeginTree("This is a combo widget", false)) 
+		{
+			// Width (combo bundle)
+			// A bundle of controls
+			// for a single param
+			ui.AddComboBundle(lineWidth, ui.bMinimize);
+				ui.EndTree();
+		}
+
 		//--
 
 		ui.AddSpacingBigSeparated();
-		// A bundle of controls
-		// for a single param
-		ui.AddComboBundle(lineWidth, ui.bMinimize);
 
-		//--
+			if (ui.AddButton("Reset UI Settings")) ui.resetUISettings();
+		ui.AddHelpToggle();
+		ui.AddHelpInternalToggle();
 
 		ui.EndWindow();
 	}

@@ -14,7 +14,7 @@
 //----
 
 
-//#define SURFING_IMGUI__USE_IMGUI_MOUSE//instead of the OF/GLFW. 
+#define SURFING_IMGUI__USE_IMGUI_MOUSE//instead of the OF/GLFW. 
 //Required disabled to allow overlay on windows capturer app.
 
 
