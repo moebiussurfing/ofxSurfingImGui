@@ -2153,10 +2153,10 @@ public:
 	//"ERROR"
 	// but you can add more custom tags too.
 
-private:
+//private:
 	//TODO:
 	// could be public 
-	//public:
+public:
 
 	// Window Log
 	SurfingLog log;

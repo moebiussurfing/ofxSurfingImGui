@@ -614,6 +614,8 @@ namespace ofxImGuiSurfing
 			if (fontIndex < 4) fontIndex += 4;//set relative mono-spaced by default
 		}
 
+		ofParameter<int> fontIndex{ "Font", 0, 0, 0 };
+
 	private:
 		bool bDefinedMonospacedFonts = false;
 
@@ -627,7 +629,6 @@ namespace ofxImGuiSurfing
 		ofParameter<bool> bAutoFit{ "AutoFit", true };
 		ofParameter<bool> bAutoScroll{ "AutoScroll", true };
 		ofParameter<bool> bTimeStamp{ "TimeStamps", false };
-		ofParameter<int> fontIndex{ "Font", 0, 0, 0 };
 		ofParameter<bool> bFilter{ "FILTER", false };
 		ofParameter<string> strFilterKeyword{ "Keyword", "" };
 		ofParameter<int> indexTagFilter{ "Tag", 0, 0, 0 };

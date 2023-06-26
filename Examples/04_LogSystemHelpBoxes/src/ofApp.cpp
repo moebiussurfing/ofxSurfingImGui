@@ -31,6 +31,11 @@ void ofApp::setupParams()
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
+	// Optional:
+	//ui.setEnablebMouseCursorFromImGui(false);
+
+	//--
+
 	ui.setup();
 
 	//--
@@ -39,10 +44,12 @@ void ofApp::setupImGui()
 
 	//--
 
-	// Optional:
-#ifdef CUSTOMIZE_FONTS
 	setupFonts();
-#endif
+
+	//--
+
+	// Help Text Boxes
+	setupHelp();
 }
 
 //--------------------------------------------------------------
@@ -63,7 +70,6 @@ void ofApp::setupLog()
 	ui.setLogRedirectConsole();
 }
 
-#ifdef CUSTOMIZE_FONTS
 //--------------------------------------------------------------
 void ofApp::setupFonts()
 {
@@ -95,16 +101,36 @@ void ofApp::setupFonts()
 	// that's for the use of mono-spaced font on useful parts of the ui,
 	// as could be the Log window and the Help Text Box too!
 	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
-	
 	//p = "assets/fonts/overpass-mono-bold.otf";
-	p = "assets/fonts/NotoSansMono-Medium.ttf";
-	//p = "assets/fonts/JetBrainsMono-Bold.ttf";//same that OFX_IM_FONT_DEFAULT_MONO_FILE
-	//p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
-
+	//p = "assets/fonts/JetBrainsMono-Bold.ttf";
+	p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
 	ui.setupFontForDefaultStylesMonospaced(p, sz);
 #endif
 }
+
+//--------------------------------------------------------------
+void ofApp::setupHelp()
+{
+	string s;
+
+	//ui.setEnableHelpApp();//is auto enabled when settled
+	s = "Hello help text box\n";
+	s += string(
+		"The mono-spaced fonts are very useful to avoid unaligned text rows. "
+		"For example on some parts of this UI addon, "
+		"as could be the Log Window and the Help Text Box Windows too!");
+	ui.setHelpAppText(s);
+
+	// Internal help 
+	// By default includes the addon main keystrokes!
+#if 1
+	ui.setEnableHelpInternal();
+#else
+	// Can be modified. 
+	//s = "Hello this is internal help but overwritten\n";
+	//ui.setHelpInternalText(s);//is auto enabled when settled
 #endif
+}
 
 //--------------------------------------------------------------
 void ofApp::update()
@@ -115,7 +141,7 @@ void ofApp::update()
 	if (ofGetFrameNum() % (4 * 60) == 0) {
 		string ss = "std::cout << frame #" + ofToString(ofGetFrameNum(), 0);
 		cout << ss << " | " << __FUNCTION__ << endl; // Redirect std:cout to ui window log.
-		//ofLogNotice() << ss; //TODO: Could redirect ofLog too..
+		//ofLogNotice() << ss; // could redirect ofLog too..
 	}
 
 	updateLog();
@@ -223,12 +249,29 @@ void ofApp::drawImGui()
 
 			//--
 
-#ifdef CUSTOMIZE_FONTS
-			ui.AddLabelHuge("Console Font");
+			if (ui.AddButton("Reset UI Settings")) ui.resetUISettings();
+			ui.AddSpacingBigSeparated();
+
+			//--
+
+			// Help boxes and font sizes
+			ui.AddLabelBig("Help Text Boxes");
 			ui.AddSpacing();
-			ui.DrawWidgetsFonts(ui.log.fontIndex);
-			ui.Add(ui.log.fontIndex);
-#endif
+
+			// Help App
+			ui.AddHelpToggle();
+			if (ui.bHelp) {
+				ui.drawHelpWidgetsFont();
+				ui.Add(ui.helpApp.fontIndex);
+				ui.AddSpacing();
+			}
+
+			// Help Internal
+			ui.AddHelpInternalToggle();
+			if (ui.bHelpInternal) {
+				ui.drawHelpInternalWidgetsFont();
+				ui.Add(ui.helpInternal.fontIndex);
+			}
 
 			ui.EndWindow();
 		}

@@ -12,11 +12,6 @@
 //--
 
 
-#define CUSTOMIZE_FONTS 
-// Uncomment to replace default font. 
-// Will add a modern font and another one mono-spaced
-
-
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
@@ -47,6 +42,8 @@ public:
 	void setupImGui();
 	void drawImGui();
 	void setupLog();
+	void setupFonts();
+	void setupHelp();
 
 	// Generates random variations to animate variables.
 	// Log messages to test the Log window.
@@ -55,8 +52,4 @@ public:
 	ofParameter<float> progress1{ "Progress 1", 0 , 0, 1 };
 	ofParameter<float> progress2{ "Progress 2", 0 , 0, 1 };
 	ofParameter<float> progress3{ "Progress 3", 0 , 0, 1 };
-
-#ifdef CUSTOMIZE_FONTS
-	void setupFonts();
-#endif
 };
