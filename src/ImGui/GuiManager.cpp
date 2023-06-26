@@ -363,7 +363,7 @@ void SurfingGuiManager::doLoadNextFont()
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::BuildStylesFromFont(string pathFont, float sizeFont)
+void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float sizeFont)
 {
 	ofLogNotice("ofxSurfingImGui") << "BuildFontStyles()" << pathFont << ", " << sizeFont;
 
@@ -389,7 +389,7 @@ void SurfingGuiManager::BuildStylesFromFont(string pathFont, float sizeFont)
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::BuildFonts(string pathFonts, string nameFont, float sizeFont)
+void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float sizeFont)
 {
 	ofLogNotice("ofxSurfingImGui") << "setupImGuiFonts()" << pathFonts << ", " << nameFont << ", " << sizeFont;
 	clearFonts();
@@ -768,7 +768,6 @@ void SurfingGuiManager::startup()
 
 	// Notifier
 #ifdef OFX_USE_NOTIFIER
-
 	notifier.setPath(path_Global);
 	notifier.setup();
 	//notifier.setDuration(4000);
@@ -777,7 +776,6 @@ void SurfingGuiManager::startup()
 	//notifier.setIndexFont(1);
 	//notifier.setIndexFont(2);
 	//notifier.setIndexFont(3);
-
 #endif
 
 	//--
@@ -786,10 +784,11 @@ void SurfingGuiManager::startup()
 	{
 		// A. Help Text Box internal
 
-		helpInternal.setCustomFonts(customFonts);
 		//helpInternal.setName(bHelpInternal.getName());
 		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		helpInternal.setTitle(bHelpInternal.getName());
+		helpInternal.setCustomFonts(customFonts);
+		helpInternal.setFontMonospacedDefined();
 
 		doBuildHelpInfo();
 
@@ -797,11 +796,12 @@ void SurfingGuiManager::startup()
 
 		// B. Help Text Box app
 
-		helpApp.setCustomFonts(customFonts);
 		//helpApp.setName(bHelp.getName());
 		helpApp.bGui.makeReferenceTo(bHelp);
 		helpApp.setTitle(bHelp.getName());
-
+		helpApp.setCustomFonts(customFonts);
+		helpApp.setFontMonospacedDefined();
+		
 		//--
 
 		//setEnableHelpInfoInternal(true);
@@ -864,11 +864,11 @@ void SurfingGuiManager::doBuildHelpInfo()
 	// we recreate the help info during runtime when some variable changed
 
 	string l1 = "-----------------------------------\n"; //divider
-	string l2 = "\n" + l1 + "\n"; //spaciated divider
+	string l2 = "\n" + l1 + "\n"; // spaciated divider
 	//left indent
 	//string l3 = "  ";
 	string l3 = "";
-	string l4 = "     "; //spacing 1st column
+	string l4 = "     "; // spacing 1st column
 
 	//--
 
@@ -2175,6 +2175,7 @@ void SurfingGuiManager::drawWindowsExtraManager()
 #ifdef FIXING_DRAW_VIEWPORT
 	if (bDrawView1) drawViewport_oFNative();
 #endif
+	
 	//--
 
 	// Draw Help windows
