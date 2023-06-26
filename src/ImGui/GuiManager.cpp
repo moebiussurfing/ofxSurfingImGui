@@ -551,6 +551,9 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 		log.setCustomFonts(customFonts, namesCustomFonts);
 		log.setFontMonospacedDefined();
 
+		// force
+		log.setFontIndex(OFX_IM_FONT_BIG_MONO);
+		
 		//--
 
 		//TODO:
@@ -769,15 +772,14 @@ void SurfingGuiManager::startup()
 	//--
 
 	// Log
-	// pass fonts to allow styles switching
-	log.setCustomFonts(customFonts, namesCustomFonts);
-	//log.setCustomFontsNames(namesCustomFonts);
+
 	//log.bGui.makeReferenceTo(bLog);
 
 	//TODO: trying to redirect all logs to the imgui log window.
 	//log.setRedirectConsole();
 
-	//log.setFontMonospacedDefined();
+	// pass fonts to allow styles switching
+	log.setCustomFonts(customFonts, namesCustomFonts);
 
 	//--
 

@@ -799,8 +799,8 @@ namespace ofxImGuiSurfing
 			y = myWins[0].pos.y + diffy;
 #else
             // Force to left corner position
-            x = 10;
-            y = 10;
+            x = 100;
+            y = 100;
 #endif
             
             for (int i = 1; i < myWins.size(); i++)
