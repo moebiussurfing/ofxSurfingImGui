@@ -1308,6 +1308,9 @@ public:
 		bDefinedMonospacedFonts = false;
 
 		log.setFontMonospacedDefined(false);
+
+		//helpApp.setFontMonospacedDefined(false);
+		//helpInternal.setFontMonospacedDefined(false);
 	}
 
 private:
@@ -1319,12 +1322,12 @@ public:
 	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
 
 	//----
-	
+
 private:
 	// Rebuild default styles by loading a default font 
 	// then generating the four styles: default, big, huge and huge_XXL.
 	void setupFonts(string pathFonts, string nameFont, float sizeFont);
-	
+
 	void setupFontForDefaultStylesInternal(string pathFont, float sizeFont);
 
 public:
@@ -1755,8 +1758,8 @@ private:
 
 public:
 	// Must be called before setup!
-	void setEnablebMouseCursorFromImGui(bool b=1) { bMouseCursorFromImGui = b; }
-	void setEnableRestoreIniSettings(bool b=1) { bRestoreIniSettings = b; }
+	void setEnablebMouseCursorFromImGui(bool b = 1) { bMouseCursorFromImGui = b; }
+	void setEnableRestoreIniSettings(bool b = 1) { bRestoreIniSettings = b; }
 
 private:
 	//TODO: 
@@ -1911,8 +1914,9 @@ public:
 
 	ofParameter<int> fontIndex{"Font", 0, 0, 3}; // by default we use 4 font sizes/types
 	void DrawWidgetsFonts(); // uses internal index
-	void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
 	void DrawWidgetsFontsMini(); // only combo. uses internal index
+
+	void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
 
 	void DrawImGuiTextWithFontStyle(string text, int index, bool bShowName = 1);
 
@@ -2057,7 +2061,7 @@ public:
 	// These params are saved as settings when exit and loaded when reopen the app. 
 
 private:
-	void doBuildHelpInfo(); //create or freshed the help info for the drawing help box
+	void doBuildHelpInfo(bool bSlient = 1); //create or freshed the help info for the drawing help box
 
 	//--
 
@@ -2554,21 +2558,24 @@ public:
 
 	//--
 
-	//--------------------------------------------------------------
-	bool AddHelp(bool bSeparated = false)
-	{
-		AddHelpToggle(bSeparated);
-		return bHelp.get();
-	}
+	// Alias
+	////--------------------------------------------------------------
+	//bool AddHelp(bool bSeparated = false)
+	//{
+	//	AddHelpToggle(bSeparated);
+	//	return bHelp.get();
+	//}
 
 	void AddHelpToggle(bool bSeparated = false)
 	{
+		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false)
 	{
+		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
@@ -2577,21 +2584,24 @@ public:
 	bool isHelpEnabled() const { return bHelp.get(); }
 	bool isHelpDisabled() const { return !bHelp.get(); }
 
-	//--------------------------------------------------------------
-	bool AddHelpInternal(bool bSeparated = false)
-	{
-		AddHelpInternalToggle(bSeparated);
-		return bHelpInternal.get();
-	}
+	// Alias
+	////--------------------------------------------------------------
+	//bool AddHelpInternal(bool bSeparated = false)
+	//{
+	//	AddHelpInternalToggle(bSeparated);
+	//	return bHelpInternal.get();
+	//}
 
 	void AddHelpInternalToggle(bool bSeparated = false)
 	{
+		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false)
 	{
+		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
@@ -2730,7 +2740,7 @@ private:
 
 			// Help App
 			this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
-			//if (bUseHelpInfoApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			//if (bUseHelpApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
 			//hide if it's not settled by the user from ofApp!
 
 			// Help Internal
@@ -4063,7 +4073,7 @@ private:
 
 	//public:
 
-	void setupStartupForced();
+	void setupStartupForced();//will be called on first frame/update() call!
 	void setupDocking(); //TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
@@ -4246,7 +4256,7 @@ public:
 	}
 
 	//--
-	
+
 public:
 	HelpTextWidget helpInternal;
 	HelpTextWidget helpApp;
@@ -4261,50 +4271,88 @@ private:
 	// Can be initialized from outer scope.
 
 	// Help Internal: How to use the add-on itself
-	std::string helpInfo = "";
+	std::string helpInternalText = "";
 
 	// Help App: How to use our App 
-	std::string helpInfoApp = "";
+	std::string helpAppText = "";
 
 	// main help disablers
-	bool bUseHelpInfoInternal = false;
-	bool bUseHelpInfoApp = false;
+	bool bUseHelpInternal = false;
+	bool bUseHelpApp = false;
 
 	//--
 
 public:
 	//--------------------------------------------------------------
-	void setEnableHelpInfoInternal(bool b = true)
+	void setEnableHelpInternal(bool b = true)
 	{
-		bUseHelpInfoInternal = b;
+		bUseHelpInternal = b;
+
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+		helpInternal.setCustomFontsPtr(&customFonts, &namesCustomFonts);
+#else
+		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
+#endif
 	}
 
 	//--------------------------------------------------------------
-	void setEnableHelpInfoApp(bool b = true)
+	void setEnableHelpApp(bool b = true)
 	{
-		bUseHelpInfoApp = b;
+		bUseHelpApp = b;
+		
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+		helpApp.setCustomFontsPtr(&customFonts, &namesCustomFonts);
+#else
+		helpApp.setCustomFonts(customFonts, namesCustomFonts);
+#endif
+
+		//helpApp.setFontMonospacedDefined();
+	}
+
+	// If we are using mono-spaced fonts, 
+	// it must be called after be have been added the mono-spaced fonts.
+	// 
+	//--------------------------------------------------------------
+	void setHelpAppText(std::string text)
+	{
+		//if (!bUseHelpApp) setEnableHelpApp();
+		setEnableHelpApp(); //force
+		helpAppText = text;
+		helpApp.setText(helpAppText);
+		bUseHelpApp = true;
 	}
 
 	//--------------------------------------------------------------
-	void setHelpInfoApp(std::string text)
+	void setHelpInternalText(std::string text)
 	{
-		if (!bUseHelpInfoApp) setEnableHelpInfoApp(); //force
-		helpInfoApp = text;
-		helpApp.setText(helpInfoApp);
-		bUseHelpInfoApp = true;
-	}
-
-	//--------------------------------------------------------------
-	void setHelpInfoInternal(std::string text)
-	{
-		helpInfo = text;
-		helpInternal.setText(helpInfo);
-		bUseHelpInfoInternal = true;
+		//if (!bUseHelpInternal) setEnableHelpInternal();
+		setEnableHelpInternal(); //force
+		helpInternalText = text;
+		helpInternal.setText(helpInternalText);
+		bUseHelpInternal = true;
 	}
 
 	// Useful in some rare scenarios to populate or hide the enabler toggle
-	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
-	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
+	bool isHelpInternalEnable() { return bUseHelpInternal; }
+	bool isHelpAppEnable() { return bUseHelpInternal; }
+
+	// Widgets to select font
+	//--------------------------------------------------------------
+	void drawHelpWidgetsFont() {
+		if (!helpApp.bGui) return;
+		string s = helpApp.bGui.getName() + "##DRAWHELPWIDGETSFONT";
+		ImGui::PushID(s.c_str());
+		this->DrawWidgetsFonts(helpApp.fontIndex);
+		ImGui::PopID();
+	}
+	//--------------------------------------------------------------
+	void drawHelpInternalWidgetsFont() {
+		if (!helpInternal.bGui) return;
+		string s = helpInternal.bGui.getName() + "##DRAWHELPINTERNALWIDGETSFONT";
+		ImGui::PushID(s.c_str());
+		this->DrawWidgetsFonts(helpInternal.fontIndex);
+		ImGui::PopID();
+	}
 
 	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };

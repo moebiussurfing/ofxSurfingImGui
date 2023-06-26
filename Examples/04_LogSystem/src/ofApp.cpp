@@ -34,35 +34,33 @@ void ofApp::setupImGui()
 	// Optional:
 	//ui.setEnablebMouseCursorFromImGui(false);
 
-	ui.setEnablebMouseCursorFromImGui(false);
+	//--
+
 	ui.setup();
 
 	//--
 
-	// Customize default fonts
-	// that's will the use of mono-spaced font on useful parts of the ui,
-	// as could be the Log window and the Help Text Box too!
-#if 1 // Set to 0 to disable or 1 to enable!
-	// Force replace:
-	// A modern font (non mono-space as the default font
-	float sz = OFX_IM_FONT_DEFAULT_SIZE_MIN;
-	string p = "assets/fonts/Montserrat-Regular.ttf";
-	ui.setupFontForDefaultStyles(p, sz);
-
-	// The default mono-spaced font
-	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
-	//p = "assets/fonts/overpass-mono-bold.otf";
-	//p = "assets/fonts/JetBrainsMono-Bold.ttf";
-	p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
-	ui.setupFontForDefaultStylesMonospaced(p, sz);
-#endif
+	setupLog();
 
 	//--
 
+	setupFonts();
+
+	//--
+
+	// Help Text Boxes
+	setupHelp();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupLog()
+{
+	// Optional:
 	// Add custom tags to logger
 	{
 		SurfingLog::tagData tagOSC{ "OSC", ofColor::turquoise };
 		ui.AddLogTag(tagOSC);
+
 		SurfingLog::tagData tagMIDI{ "MIDI", ofColor::orange };
 		ui.AddLogTag(tagMIDI);
 	}
@@ -73,6 +71,68 @@ void ofApp::setupImGui()
 }
 
 //--------------------------------------------------------------
+void ofApp::setupFonts()
+{
+	// Customize default fonts
+
+	float sz;
+	string p;
+
+#if 1 
+	// Set to 0 to disable or 1 to enable!
+	// 
+	// Customize Default font (that is mono-spaced by default)
+	// by another moder font:
+	// 
+	// Force replace:
+	// A modern font (non mono-space as the default font)
+	sz = OFX_IM_FONT_DEFAULT_SIZE_MIN;
+	p = "assets/fonts/Montserrat-Regular.ttf";
+	ui.setupFontForDefaultStyles(p, sz);
+#endif
+
+#if 1
+	// Set to 0 to disable or 1 to enable!
+	// 
+	// Note that if the above code replaces the default font for a modern/non mono-spaced font,
+	// we will see that text lines on the Log Window and Help Text Boxes will be unaligned!
+	// 
+	// The default mono-spaced font
+	// that's for the use of mono-spaced font on useful parts of the ui,
+	// as could be the Log window and the Help Text Box too!
+	sz = OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN;
+	//p = "assets/fonts/overpass-mono-bold.otf";
+	//p = "assets/fonts/JetBrainsMono-Bold.ttf";
+	p = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
+	ui.setupFontForDefaultStylesMonospaced(p, sz);
+#endif
+}
+
+//--------------------------------------------------------------
+void ofApp::setupHelp()
+{
+	string s;
+
+	//ui.setEnableHelpApp();//is auto enabled when settled
+	s = "Hello help text box\n";
+	s += string(
+		"The mono-spaced fonts are very useful to avoid unaligned text rows. "
+		"For example on some parts of this UI addon, "
+		"as could be the Log Window and the Help Text Box Windows too!");
+	ui.setHelpAppText(s);
+
+	// Internal help 
+	// By default includes the addon main keystrokes!
+#if 1
+	ui.setEnableHelpInternal();
+#else
+	// Can be modified. 
+	//s = "Hello this is internal help but overwritten\n";
+	//ui.setHelpInternalText(s);//is auto enabled when settled
+#endif
+}
+
+//--------------------------------------------------------------
 void ofApp::update()
 {
 	string s = "FPS " + ofToString(ofGetFrameRate(), 0);
@@ -80,7 +140,7 @@ void ofApp::update()
 
 	if (ofGetFrameNum() % (4 * 60) == 0) {
 		string ss = "std::cout << frame #" + ofToString(ofGetFrameNum(), 0);
-		cout << ss << endl; // Redirect std:cout to ui window log.
+		cout << ss << " | " << __FUNCTION__ << endl; // Redirect std:cout to ui window log.
 		//ofLogNotice() << ss; // could redirect ofLog too..
 	}
 
@@ -97,105 +157,125 @@ void ofApp::draw()
 void ofApp::drawImGui()
 {
 	ui.Begin();
-
-	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
-
-	if (ui.BeginWindow("ofApp"))
 	{
-		ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-		bool b = !ui.bMinimize; // is maximized alias
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
-		ui.AddSpacingBigSeparated();
+		if (ui.BeginWindow("ofApp"))
+		{
+			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
+			bool b = !ui.bMinimize; // is maximized alias
 
-		/*if (b) */ui.AddLabelHuge("LOG SYSTEM");
-		ui.AddSpacing();
-		ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
-		if (b) if (ui.bLog) {
-			ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
-		}
-		ui.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-		if (b) ui.AddLabelHuge("ANIMATE");
-		if (b) ui.AddSpacing();
-		ui.Add(bAnimate1, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
-		ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
-		ui.AddSpacing();
-		if (bAnimate1) {
-			if (b) ui.AddLabelBig("MODIFIERS");
-			ui.Add(speed, OFX_IM_HSLIDER_SMALL);
-			ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
+			/*if (b) */ui.AddLabelHuge("LOG SYSTEM");
+			ui.AddSpacing();
+			ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_XXL_BORDER);
+			if (b) if (ui.bLog) {
+				ui.Add(ui.bLogKeys, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+			}
+			ui.AddSpacingBigSeparated();
 
-			ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL);
-			//ui.Add(amountPauses, OFX_IM_KNOB_DOTKNOB, 2);
-			ui.AddTooltip("Density of \npause moments");
-			ui.AddTooltip(amountPauses, true, false);
+			if (b) ui.AddLabelHuge("ANIMATE");
+			if (b) ui.AddSpacing();
+			ui.Add(bAnimate1, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+			ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
+			ui.AddSpacing();
+			if (bAnimate1) {
+				if (b) ui.AddLabelBig("MODIFIERS");
+				ui.Add(speed, OFX_IM_HSLIDER_SMALL);
+				ui.AddTooltip("Sets the speed \nof Animation \nto feed the Log");
 
-			if (b) {
-				ui.AddSpacingBig();
-				ui.Add(ui.bDebug, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
-				if (ui.bDebug)
-				{
-					ui.Indent();
+				ui.Add(amountPauses, OFX_IM_HSLIDER_SMALL);
+				//ui.Add(amountPauses, OFX_IM_KNOB_DOTKNOB, 2);
+				ui.AddTooltip("Density of \npause moments");
+				ui.AddTooltip(amountPauses, true, false);
 
-					ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+				if (b) {
+					ui.AddSpacingBig();
+					ui.Add(ui.bDebug, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+					if (ui.bDebug)
+					{
+						ui.Indent();
 
-					//make all smaller heights
-					ImGuiStyle* style = &ImGui::GetStyle();
-					ImVec2 sp = style->ItemSpacing;
-					ImVec2 sp2 = style->FramePadding;
-					sp = ImVec2{ sp.x, 1.f };
-					sp2 = ImVec2{ 0, 0 };
-					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp);
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
+						ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
 
-					ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
-					ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
-					ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
-					ui.Add(progress3, OFX_IM_PROGRESS_BAR_NO_TEXT);
+						//make all smaller heights
+						ImGuiStyle* style = &ImGui::GetStyle();
+						ImVec2 sp = style->ItemSpacing;
+						ImVec2 sp2 = style->FramePadding;
+						sp = ImVec2{ sp.x, 1.f };
+						sp2 = ImVec2{ 0, 0 };
+						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, sp);
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sp2);
 
-					ImGui::PopStyleVar();
-					ImGui::PopStyleVar();
+						ui.Add(progress0, OFX_IM_PROGRESS_BAR_NO_TEXT);
+						ui.Add(progress1, OFX_IM_PROGRESS_BAR_NO_TEXT);
+						ui.Add(progress2, OFX_IM_PROGRESS_BAR_NO_TEXT);
+						ui.Add(progress3, OFX_IM_PROGRESS_BAR_NO_TEXT);
 
-					ui.Unindent();
+						ImGui::PopStyleVar();
+						ImGui::PopStyleVar();
+
+						ui.Unindent();
+					}
 				}
 			}
-		}
 
-		//--
+			//--
 
-		ui.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-		ui.Add(bAnimate2, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
-		//if (bAnimate2)
-		{
-			ui.Add(separation, OFX_IM_HSLIDER_SMALL);
-			ui.AddTooltip("Animate Separation parameter.");
-		}
+			ui.Add(bAnimate2, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
+			if (bAnimate2)
+			{
+				ui.Add(separation, OFX_IM_HSLIDER_SMALL);
+				ui.AddTooltip("Animate Separation parameter.");
+			}
 
-		ui.AddSpacingBigSeparated();
+			ui.AddSpacingBigSeparated();
 
-		//--
+			//--
 
-		if (ui.BeginTree("This is a combo widget", false)) 
-		{
-			// Width (combo bundle)
-			// A bundle of controls
-			// for a single param
-			ui.AddComboBundle(lineWidth, ui.bMinimize);
+			if (ui.BeginTree("A combo widget", false))
+			{
+				// Width (combo bundle)
+				// A bundle of controls
+				// for a single param
+				ui.AddComboBundle(lineWidth, ui.bMinimize);
 				ui.EndTree();
-		}
+			}
 
-		//--
+			ui.AddSpacingBigSeparated();
 
-		ui.AddSpacingBigSeparated();
+			//--
 
 			if (ui.AddButton("Reset UI Settings")) ui.resetUISettings();
-		ui.AddHelpToggle();
-		ui.AddHelpInternalToggle();
+			ui.AddSpacingBigSeparated();
 
-		ui.EndWindow();
+			//--
+
+			// Help boxes and font sizes
+			ui.AddLabelBig("Help Text Boxes");
+			ui.AddSpacing();
+
+			// Help App
+			ui.AddHelpToggle();
+			if (ui.bHelp) {
+				ui.drawHelpWidgetsFont();
+				ui.Add(ui.helpApp.fontIndex);
+				ui.AddSpacing();
+			}
+
+			// Help Internal
+			ui.AddHelpInternalToggle();
+			if (ui.bHelpInternal) {
+				ui.drawHelpInternalWidgetsFont();
+				ui.Add(ui.helpInternal.fontIndex);
+			}
+
+			ui.EndWindow();
+		}
 	}
-
 	ui.End();
 }
 
@@ -209,7 +289,7 @@ void ofApp::updateLog()
 	if (f % 120 == 0)
 	{
 		static int counter = 0;
-		string s = "PING \t\t\t\t\t #" + ofToString(counter++);
+		string s = "PING  \t  #" + ofToString(counter++);
 		ui.AddToLog(s); // Raw without tag. 2nd argument empty
 	}
 
@@ -304,14 +384,17 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 		ui.AddToLog(name, "OSC");
 		return;
 	}
+
 	//if (name == amountPauses.getName()) {
 	//	ui.AddToLog(name + ": " + ofToString(e), "OSC");
 	//	return;
 	//}
+	// 
 	//if (name == speed.getName()) {
 	//	ui.AddToLog(name + ": " + ofToString(e), "OSC");
 	//	return;
 	//}
+
 	if (name == lineWidth.getName()) {
 		ui.AddToLog(name + ": " + ofToString(e), "OSC");
 		return;
@@ -330,8 +413,16 @@ void ofApp::Changed_Params(ofAbstractParameter& e)
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() {
+void ofApp::keyPressed(int key)
+{
+	cout << "this is 'std::cout' message: " << key << " | " << __FUNCTION__ << endl;
+}
+
+//--------------------------------------------------------------
+void ofApp::exit()
+{
 	ofRemoveListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
+
 	ofxImGuiSurfing::saveGroup(params);
 
 	//TODO:

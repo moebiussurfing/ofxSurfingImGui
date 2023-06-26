@@ -14,8 +14,12 @@
 //----
 
 
-#define SURFING_IMGUI__USE_IMGUI_MOUSE//instead of the OF/GLFW. 
+// MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
+
+#define SURFING_IMGUI__USE_IMGUI_MOUSE // Instead of the OF/GLFW. 
 //Required disabled to allow overlay on windows capturer app.
+
+//#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
 
 //----
@@ -172,7 +176,8 @@ namespace ofxImGuiSurfing
 	// NOTE:
 	// Now, these sizes are usually related to height! 
 	// Because widgets widths are handled by the API args!
-	// TODO: IDEA: remake width management notation to use of percents.
+	// TODO: IDEA: Remake width management notation to use of percents.
+	// TODO: IDEA: Add blink on hover styles
 
 	//--------------------------------------------------------------
 	enum SurfingGuiTypes

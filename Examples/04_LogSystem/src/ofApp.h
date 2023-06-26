@@ -24,8 +24,7 @@ public:
 	void update();
 	void draw();
 	void exit();
-
-	void setupParams();
+	void keyPressed(int key);
 
 	ofParameter<bool> bAnimate1;
 	ofParameter<bool> bAnimate2;
@@ -35,13 +34,16 @@ public:
 	ofParameter<float> separation;
 	ofParameter<float> speed;
 	ofParameter<int> amountPauses;
-
 	ofParameterGroup params;
+	void setupParams();
 	void Changed_Params(ofAbstractParameter& e);
 
 	ofxSurfingGui ui;
 	void setupImGui();
 	void drawImGui();
+	void setupLog();
+	void setupFonts();
+	void setupHelp();
 
 	// Generates random variations to animate variables.
 	// Log messages to test the Log window.

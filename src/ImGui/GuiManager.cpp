@@ -48,9 +48,13 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bKeys);
 	params_Advanced.add(bMouseWheel);
 	params_Advanced.add(bMouseWheelFlip);
-	params_Advanced.add(bHelp);
-	params_Advanced.add(bHelpInternal);
 	params_Advanced.add(bDebug);
+
+	ofParameterGroup gHelpInternal{ "G_HelpInternal",bHelpInternal, helpInternal.fontIndex };
+	params_Advanced.add(gHelpInternal);
+
+	ofParameterGroup gHelpApp{ "G_HelpApp",bHelp, helpApp.fontIndex };
+	params_Advanced.add(gHelpApp);
 
 	params_Advanced.add(bThemeUiAlt);
 	params_Advanced.add(fontIndex);
@@ -68,7 +72,9 @@ SurfingGuiManager::SurfingGuiManager()
 	params_Advanced.add(bLog);
 	params_Advanced.add(bLogKeys);
 	params_Advanced.add(log.params);
+
 	params_Advanced.add(bNotifier);
+
 	params_Advanced.add(bReset); //TODO:
 	params_Advanced.add(bReset_Window); //TODO:
 	params_Advanced.add(bLockMove); //TODO:
@@ -537,13 +543,20 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 
 		bDefinedMonospacedFonts = true;
 
+		//now we have 8 fonts to browse by the index!
+		//fontIndex.setMax(7);
+		fontIndex.setMax(customFonts.size() - 1);
+
 		// Prepare Log
 		log.setCustomFonts(customFonts, namesCustomFonts);
 		log.setFontMonospacedDefined();
 
-		//now we have 8 fonts to browse by the index!
-		//fontIndex.setMax(7);
-		fontIndex.setMax(customFonts.size() - 1);
+		//--
+
+		//TODO:
+		// Help
+		if (bUseHelpApp) setEnableHelpApp();
+		if (bUseHelpInternal) setEnableHelpInternal();
 	}
 
 	// Legacy not found neither
@@ -669,12 +682,14 @@ void SurfingGuiManager::resetUISettings()
 	filesystem::path path = ofToDataPath("../imgui.ini");
 	bool b = file.removeFile(path, true);
 	string s = b ? "Removed imgui.ini" : "imgui.ini not found!";
+	s += " : " + ofToString(path);
 	this->AddToLog(s, OF_LOG_WARNING);
 
 	ofDirectory directory;
 	directory.open(path_Global);
 	bool b2 = directory.remove(true);
 	string s2 = b2 ? "Removed settings folder." : "Settings folder not found!";
+	s2 += " : " + path_Global;
 	this->AddToLog(s2, OF_LOG_WARNING);
 }
 
@@ -784,27 +799,17 @@ void SurfingGuiManager::startup()
 	{
 		// A. Help Text Box internal
 
-		//helpInternal.setName(bHelpInternal.getName());
 		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		helpInternal.setTitle(bHelpInternal.getName());
-		helpInternal.setCustomFonts(customFonts);
-		helpInternal.setFontMonospacedDefined();
 
-		doBuildHelpInfo();
+		doBuildHelpInfo(false);
 
 		//--
 
 		// B. Help Text Box app
 
-		//helpApp.setName(bHelp.getName());
 		helpApp.bGui.makeReferenceTo(bHelp);
 		helpApp.setTitle(bHelp.getName());
-		helpApp.setCustomFonts(customFonts);
-		helpApp.setFontMonospacedDefined();
-		
-		//--
-
-		//setEnableHelpInfoInternal(true);
 	}
 
 	//----
@@ -845,6 +850,12 @@ void SurfingGuiManager::startup()
 		bDoForceStartupResetLayout = true;
 	}
 
+	////--
+
+	//// Help
+	//setEnableHelpApp();
+	//setEnableHelpInternal();
+
 	//--
 
 	bDoneStartup = true;
@@ -857,14 +868,17 @@ void SurfingGuiManager::startup()
 // Help (Internal)
 
 //--------------------------------------------------------------
-void SurfingGuiManager::doBuildHelpInfo()
+void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	if (bSilent) ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__);
+	else ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+
+	//--
 
 	// we recreate the help info during runtime when some variable changed
 
 	string l1 = "-----------------------------------\n"; //divider
-	string l2 = "\n" + l1 + "\n"; // spaciated divider
+	string l2 = "\n" + l1 + "\n"; // spaced divider
 	//left indent
 	//string l3 = "  ";
 	string l3 = "";
@@ -872,143 +886,143 @@ void SurfingGuiManager::doBuildHelpInfo()
 
 	//--
 
-	helpInfo = "";
+	helpInternalText = "";
 
-	//if(!helpInternal.bHeader) helpInfo += "HELP INTERNAL \n\n";
+	//if(!helpInternal.bHeader) helpInternalText += "HELP INTERNAL \n\n";
 
-	//helpInfo += "Gui Manager \n\n";
-	//helpInfo += "Double click to EDIT/LOCK \n\n";
-	//helpInfo += l;
-	//helpInfo += "\n";
+	//helpInternalText += "Gui Manager \n\n";
+	//helpInternalText += "Double click to EDIT/LOCK \n\n";
+	//helpInternalText += l;
+	//helpInternalText += "\n";
 
 	//TODO: check mode
 	//if (0) {
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
-		helpInfo += "LAYOUTS PRESETS ENGINE \n";
-		helpInfo += "\n";
-		//helpInfo += l2;
+		helpInternalText += "LAYOUTS PRESETS ENGINE \n";
+		helpInternalText += "\n";
+		//helpInternalText += l2;
 	}
 
-	helpInfo += l3 + "KEY COMMANDS \n";
-	helpInfo += "\n";
+	helpInternalText += l3 + "KEY COMMANDS \n";
+	helpInternalText += "\n";
 
 	string st = "  ";
 
 	//if (!bMinimize)
 	{
 		if (bKeys)
-			helpInfo += " " + l4 + "Keys          " + st + " ON  \n";
+			helpInternalText += " " + l4 + "Keys          " + st + " ON  \n";
 		else
-			helpInfo += " " + l4 + "Keys          " + st + " OFF \n";
+			helpInternalText += " " + l4 + "Keys          " + st + " OFF \n";
 
 		if (bMinimize)
-			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " ON  \n";
+			helpInternalText += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " OFF \n";
+			helpInternalText += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " OFF \n";
 
 		if (bDebug)
-			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " ON  \n";
+			helpInternalText += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " OFF \n";
+			helpInternalText += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " OFF \n";
 
 		if (bExtra)
-			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " ON  \n";
+			helpInternalText += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " OFF \n";
+			helpInternalText += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " OFF \n";
 
 		if (bLog)
-			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
+			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
+			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
 
 		if (bHelp)
-			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
+			helpInternalText += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
 		else
-			helpInfo += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " OFF \n";
+			helpInternalText += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " OFF \n";
 
 		if (bHelpInternal)
-			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
+			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
 		else
-			helpInfo += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
+			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
 
 
-		//helpInfo += "\n";
-		//helpInfo += l2;
+		//helpInternalText += "\n";
+		//helpInternalText += l2;
 	}
-	//else helpInfo += "\n";
+	//else helpInternalText += "\n";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		if (bDockingLayoutPresetsEngine)
 		{
-			helpInfo += l3 + "PRESETS \n";
-			//helpInfo += "\n";
+			helpInternalText += l3 + "PRESETS \n";
+			//helpInternalText += "\n";
 
-			helpInfo += "F1 F2 F3 F4 \n";
-			helpInfo += "\n";
+			helpInternalText += "F1 F2 F3 F4 \n";
+			helpInternalText += "\n";
 
-			helpInfo += l3 + "SECTIONS \n";
-			//helpInfo += "\n";
+			helpInternalText += l3 + "SECTIONS \n";
+			//helpInternalText += "\n";
 
-			helpInfo += "F5          LAYOUTS \n";
-			helpInfo += "F6          PANELS \n";
-			if (!bMinimize) helpInfo += "F7          MANAGER \n";
-			helpInfo += "\n";
+			helpInternalText += "F5          LAYOUTS \n";
+			helpInternalText += "F6          PANELS \n";
+			if (!bMinimize) helpInternalText += "F7          MANAGER \n";
+			helpInternalText += "\n";
 
-			helpInfo += l3 + "PANELS \n";
-			//helpInfo += "\n";
+			helpInternalText += l3 + "PANELS \n";
+			//helpInternalText += "\n";
 
-			helpInfo += "Ctrl+ \n";
-			helpInfo += "F1 .. F8    Panel # \n";
-			helpInfo += "A           All  \n";
-			helpInfo += "N           None \n";
+			helpInternalText += "Ctrl+ \n";
+			helpInternalText += "F1 .. F8    Panel # \n";
+			helpInternalText += "A           All  \n";
+			helpInternalText += "N           None \n";
 
 			if (bSolo)
-				helpInfo += "S           Solo          " + st + " ON  \n";
+				helpInternalText += "S           Solo          " + st + " ON  \n";
 			else
-				helpInfo += "S           Solo          " + st + " OFF \n";
+				helpInternalText += "S           Solo          " + st + " OFF \n";
 
 			//--
 
 			if (!bMinimize)
 			{
-				helpInfo += l2;
+				helpInternalText += l2;
 
-				helpInfo += l3 + "HOW TO \n";
-				//helpInfo += "\n";
+				helpInternalText += l3 + "HOW TO \n";
+				//helpInternalText += "\n";
 
-				helpInfo += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
-				//helpInfo += "\n";
-				helpInfo += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
-				//helpInfo += "\n";
-				helpInfo += "3. Layout the PANELS around \nthe App view port \n";
-				//helpInfo += "\n";
-				helpInfo += "4. Pick another PRESET \n";
+				helpInternalText += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
+				//helpInternalText += "\n";
+				helpInternalText += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
+				//helpInternalText += "\n";
+				helpInternalText += "3. Layout the PANELS around \nthe App view port \n";
+				//helpInternalText += "\n";
+				helpInternalText += "4. Pick another PRESET \n";
 
-				helpInfo += "\n";
-				//helpInfo += l2;
+				helpInternalText += "\n";
+				//helpInternalText += l2;
 
-				helpInfo += l3 + "MORE TIPS \n";
-				//helpInfo += "\n";
+				helpInternalText += l3 + "MORE TIPS \n";
+				//helpInternalText += "\n";
 
-				helpInfo += "- Disable the Minimize toggle \nto show more controls. \n";
-				//helpInfo += "\n";
-				helpInfo += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
-				//helpInfo += "\n";
-				helpInfo += "- Each PRESET can be defined \nas a particular App Mode \nor an activated section. \n";
-				//helpInfo += "\n";
-				helpInfo += "- When no PRESET is enabled \nall PANELS will be hidden. \n";
-				//helpInfo += "\n";
-				helpInfo +=
+				helpInternalText += "- Disable the Minimize toggle \nto show more controls. \n";
+				//helpInternalText += "\n";
+				helpInternalText += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
+				//helpInternalText += "\n";
+				helpInternalText += "- Each PRESET can be defined \nas a particular App Mode \nor an activated section. \n";
+				//helpInternalText += "\n";
+				helpInternalText += "- When no PRESET is enabled \nall PANELS will be hidden. \n";
+				//helpInternalText += "\n";
+				helpInternalText +=
 					"- On Docking Mode, \npress Shift when dragging \na window \nto lock to some viewport zone. \n";
 
-				//helpInfo += "\n";
+				//helpInternalText += "\n";
 			}
 		}
 	}
 
-	helpInternal.setText(helpInfo);
+	helpInternal.setText(helpInternalText, bSilent);
 }
 
 //----
@@ -1251,6 +1265,7 @@ void SurfingGuiManager::PushFontByIndex()
 {
 	fontIndex.setWithoutEventNotifications(ofClamp(fontIndex, 0, this->getAmountFonts() - 1));
 	//fontIndex = ofClamp(fontIndex, 0, this->getAmountFonts() - 1);
+
 	this->PushFont(SurfingFontTypes(fontIndex.get()));
 }
 
@@ -1503,6 +1518,14 @@ void SurfingGuiManager::update()
 		setupStartupForced();
 	}
 
+	// Build mono-spaced fonts flag
+	if (bSetupFontForDefaultStylesMonospacedInternal) {
+		bSetupFontForDefaultStylesMonospacedInternal = 0;
+
+		setupFontForDefaultStylesMonospacedInternal(pathFontMono, sizeFontMono);
+	}
+
+	// Debug profiler
 #ifdef OFX_USE_DEBUGGER
 	if (bDebugDebugger)
 	{
@@ -1510,13 +1533,6 @@ void SurfingGuiManager::update()
 		debugger.update();
 	}
 #endif
-
-	// Build monospaced fonts flag
-	if (bSetupFontForDefaultStylesMonospacedInternal) {
-		bSetupFontForDefaultStylesMonospacedInternal = 0;
-
-		setupFontForDefaultStylesMonospacedInternal(pathFontMono, sizeFontMono);
-	}
 }
 
 //--------------------------------------------------------------
@@ -2175,22 +2191,20 @@ void SurfingGuiManager::drawWindowsExtraManager()
 #ifdef FIXING_DRAW_VIEWPORT
 	if (bDrawView1) drawViewport_oFNative();
 #endif
-	
+
 	//--
 
 	// Draw Help windows
 
 	// Internal
-	if (bUseHelpInfoInternal)
+	if (bUseHelpInternal)
 	{
-		if (helpInternal.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		helpInternal.draw();
 	}
 
 	// App
-	if (bUseHelpInfoApp)
+	if (bUseHelpApp)
 	{
-		if (helpApp.bGui) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 		helpApp.draw();
 	}
 }

@@ -610,6 +610,7 @@ namespace ofxImGuiSurfing
 
 			fontIndex.setMax(customFonts.size() - 1);
 
+			//workflow. pick the mono-spaced
 			if (fontIndex < 4) fontIndex += 4;//set relative mono-spaced by default
 		}
 
@@ -1259,6 +1260,7 @@ namespace ofxImGuiSurfing
 		{
 			if (parameter.get() < 0) return false;
 			if (labels.size() == 0) return false;
+			if (parameter > labels.size() - 1) parameter = labels.size() - 1;
 
 			//const ImVec2 sz = ImGui::CalcTextSize(parameter.getName().c_str());
 			//ImGui::PushItemWidth(sz.x);

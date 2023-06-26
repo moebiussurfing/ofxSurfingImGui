@@ -7,12 +7,14 @@
 
 	BUGS:
 	
-	Add organizer reset/cascade orientation. Now is horizontal only.
+	- Remove mouse wheel tool-tip when fine-tuning/ctrl enabled!
 
-	Fix special windows width affecting auto resize and default sliders.
-	Fix int H sliders?
+	- Add organizer reset/cascade orientation. Now is horizontal only.
 
-	It seems than special windows engine
+	- Fix special windows width affecting auto resize and default sliders.
+	- Fix int H sliders?
+
+	- It seems than special windows engine
 		puts all toggles to false by default ?
 		should store state to simply handling that manually/externally
 
@@ -23,6 +25,8 @@
 	TODO:
 
 	IDEAS
+
+	- Fix stepper step too small sometimes, then requires more clicks to increment one decimal.
 
 	- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
 		could store if the new addFontStyle is monospace, then store the monospaced indexes
