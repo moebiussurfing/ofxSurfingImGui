@@ -1255,7 +1255,7 @@ void SurfingGuiManager::pushStyleFont(int index)
     {
         ofLogWarning("ofxSurfingImGui") << "SurfingGuiManager::pushStyleFont: index font out of range";
 
-        bIgnoreNextPopFont = true; // workaround to avoid crashes
+        bIgnoreNextPopFont = true; // workaround flag last call to avoid crashes
     }
 }
 

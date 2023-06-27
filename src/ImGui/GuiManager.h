@@ -830,6 +830,28 @@ public:
         popStyleFont();
         if (bSpacing) this->AddSpacing();
     }
+    
+    //--------------------------------------------------------------
+    void AddLabelStyled(const std::string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
+    {
+        std::string t = bUppercase ? ofToUpper(label) : label;
+        if (bSpacing) this->AddSpacing();
+        
+        pushStyleFont(int(style));
+        ImGui::TextWrapped("%s", t.c_str());
+        popStyleFont();
+        
+        if (bSpacing) this->AddSpacing();
+    }
+    
+    //--------------------------------------------------------------
+    void AddLabelNoStyled(const std::string label, bool bUppercase = false, bool bSpacing = false)
+    {
+        std::string t = bUppercase ? ofToUpper(label) : label;
+        if (bSpacing) this->AddSpacing();
+        ImGui::TextWrapped("%s", t.c_str());
+        if (bSpacing) this->AddSpacing();
+    }
 
     //--------------------------------------------------------------
     void AddLabelBig(const std::string label, bool bUppercase = false, bool bSpacing = false)
