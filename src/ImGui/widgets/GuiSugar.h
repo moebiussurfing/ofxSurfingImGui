@@ -183,6 +183,9 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	// Max window size depending on the window app and menu bar height.
+	#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT ofGetHeight()-ImGui::GetTextLineHeightWithSpacing()
+
 	// 3.
 
 // Adds Constraints Window Shapes (width and height)
@@ -197,13 +200,13 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
 { \
 ImVec2 size_min = ImVec2(550, 500); \
-ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
+ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
 { \
-ImVec2 size_min = ImVec2(400, 400); \
+ImVec2 size_min = ImVec2(375, 375); \
 ImVec2 size_max = ImVec2(600, 600); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
@@ -217,8 +220,8 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
 { \
-ImVec2 size_min = ImVec2(220, 220); \
-ImVec2 size_max = ImVec2(400, 400); \
+ImVec2 size_min = ImVec2(230, 230); \
+ImVec2 size_max = ImVec2(375, 375); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
@@ -250,13 +253,13 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL \
 { \
 ImVec2 size_min = ImVec2(550, -1); \
-ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
+ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
 { \
-ImVec2 size_min = ImVec2(400, -1); \
+ImVec2 size_min = ImVec2(375, -1); \
 ImVec2 size_max = ImVec2(600, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
@@ -270,8 +273,8 @@ ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
-ImVec2 size_min = ImVec2(220, -1); \
-ImVec2 size_max = ImVec2(400, -1); \
+ImVec2 size_min = ImVec2(230, -1); \
+ImVec2 size_max = ImVec2(375, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
@@ -289,6 +292,58 @@ ImVec2 size_max = ImVec2(100, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
-#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT ofGetHeight()-ImGui::GetTextLineHeightWithSpacing()
+
+//--
+
+// Constraint for width only but locked resize (MAX = MIN)
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(750, -1); \
+ImVec2 size_max = ImVec2(750, ofGetHeight()); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(550, -1); \
+ImVec2 size_max = ImVec2(550, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(375, -1); \
+ImVec2 size_max = ImVec2(375, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(300, -1); \
+ImVec2 size_max = ImVec2(300, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(230, -1); \
+ImVec2 size_max = ImVec2(230, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(150, -1); \
+ImVec2 size_max = ImVec2(150, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(100, -1); \
+ImVec2 size_max = ImVec2(100, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
 	
 };

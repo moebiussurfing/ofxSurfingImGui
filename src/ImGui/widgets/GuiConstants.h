@@ -406,6 +406,7 @@ namespace ofxImGuiSurfing
 		// for glm::vec2 vec3 vec4
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED,
+		//TODO: add more types
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
 

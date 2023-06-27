@@ -110,7 +110,8 @@ public:
 		//float abg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive).w;
 
 		// alpha bg
-		float abg = 0.84;//less opacity than window bg color style,
+		float abg = 0.88;//less opacity than window bg color style,
+		// float abg = 0.84;//less opacity than window bg color style,
 
 		// Push
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(cbg.x, cbg.y, cbg.z, abg));
