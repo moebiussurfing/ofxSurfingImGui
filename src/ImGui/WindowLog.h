@@ -648,7 +648,7 @@ namespace ofxImGuiSurfing
         bool bDefinedMonospacedFonts = false;
 
         ofParameter<bool> bOptions{"OPTIONS", false};
-        ofParameter<bool> bLimitedBuffered{"Limited", true};
+        ofParameter<bool> bLimitedBuffered{"Limited", false};
         ofParameter<bool> bPause{"PAUSE", false};
         ofParameter<bool> bTight{"Tight", true};
         ofParameter<bool> bHideTags{"HideTags", 1};
