@@ -139,7 +139,7 @@ void ofApp::update()
 	ofSetWindowTitle(s);
 
 	if (ofGetFrameNum() % (4 * 60) == 0) {
-		string ss = "std::cout << frame #" + ofToString(ofGetFrameNum(), 0);
+		string ss = "std::cout   << frame #" + ofToString(ofGetFrameNum(), 0);
 		cout << ss << " | " << __FUNCTION__ << endl; // Redirect std:cout to ui window log.
 		//ofLogNotice() << ss; // could redirect ofLog too..
 	}
@@ -289,7 +289,7 @@ void ofApp::updateLog()
 	if (f % 120 == 0)
 	{
 		static int counter = 0;
-		string s = "PING  \t  #" + ofToString(counter++);
+		string s = "PING  \t          #" + ofToString(counter++);
 		ui.AddToLog(s); // Raw without tag. 2nd argument empty
 	}
 
@@ -321,7 +321,7 @@ void ofApp::updateLog()
 		int d = ofMap(speed.get(), 0, 1, 120, 8);
 		progress1 = ofMap(f % d, 0, d, 0, 1, true);
 		if (f % d == 0)
-			ui.AddToLog(ofToString(separation) + " <------ " + separation.getName(), "NOTICE"); // default with no color bc no tag
+			ui.AddToLog(ofToString(separation) + " <---------- " + separation.getName(), "NOTICE"); // default with no color bc no tag
 	}
 
 	// Auto populate random log messages.
