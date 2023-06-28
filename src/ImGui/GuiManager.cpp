@@ -56,7 +56,7 @@ SurfingGuiManager::SurfingGuiManager()
 	ofParameterGroup gHelpApp{ "G_HelpApp", bHelp, helpApp.fontIndex };
 	params_Advanced.add(gHelpApp);
 
-	params_Advanced.add(bThemeUiAlt);
+	params_Advanced.add(bThemeUIAlt);
 	params_Advanced.add(fontIndex);
 
 	params_Advanced.add(bDebugDebugger);
@@ -653,7 +653,7 @@ void SurfingGuiManager::setupImGuiTheme()
 	//	bLoaded = ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(pDay);
 
 	string name;
-	if (bThemeUiAlt) name = pDay;
+	if (bThemeUIAlt) name = pDay;
 	else name = pNight;
 	string pathThemes = path_Global + "themes/";
 	//string pathThemes = "Gui/themes/";
@@ -667,7 +667,7 @@ void SurfingGuiManager::setupImGuiTheme()
 	// If theme files are not found, then it will load a hardcoded theme!
 	if (!bLoaded)
 	{
-		if (!bThemeUiAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors); //dark
+		if (!bThemeUIAlt) ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors); //dark
 		else ofxImGuiSurfing::ImGui_ThemeDearImGuiLight(); //light
 	}
 }
@@ -3582,7 +3582,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	}
 
 	// Theme
-	else if (name == bThemeUiAlt.getName())
+	else if (name == bThemeUIAlt.getName())
 	{
 		setupImGuiTheme();
 		return;
@@ -4229,6 +4229,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	//TODO:
 	// Keystroke Log helpers.
 	// should copy to surfingImGui
+
 	/*static*/
 	auto logKey = [this, key](const std::string& msg = "")
 	{
@@ -4236,6 +4237,10 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		// ofLogLevel l = OF_LOG_WARNING;
 
 		string s = ofToString("Key ") + ofToString(char(key));
+
+		//TODO: filter not "known" chars
+		//include only a to z and numbers
+		if (!isalnum(char(key))) return;
 
 		if (msg == "")
 		{
@@ -4246,6 +4251,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		}
 		this->AddToLog(s, l);
 	};
+
 	/*static*/
 	auto logKeyText = [this](const std::string& msg = "")
 	{
@@ -4254,25 +4260,31 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 		this->AddToLog(msg, l);
 	};
+
 	/*static*/
 	auto logKeyParam = [this, key](const ofParameter<bool>& p, const std::string& msg = "")
 	{
 		ofLogLevel l = OF_LOG_VERBOSE;
 		// ofLogLevel l = OF_LOG_WARNING;
-		
+
 		string s;
 
 		if (msg == "")
 		{
-			string sKey = ofToString("Key " + ofToString(char(key)));
-			s = sKey + " - " + p.getName();
+			string sKey = "";
+			if (isalnum(char(key))) {
+				sKey = ofToString("Key " + ofToString(char(key)));
+				s = sKey + " - " + p.getName();
+			}
+			else s = p.getName();
 			s += "  | " + string(p.get() ? "ON " : "OFF");
 
 		}
 		else
 		{
-			string sKey = ofToString("Key ") + msg;
-			 s = sKey + " - " + p.getName();
+			string sKey;
+			sKey = ofToString("Key ") + msg;
+			s = sKey + " - " + p.getName();
 			s += "  | " + string(p.get() ? "ON " : "OFF");
 
 		}
@@ -4381,12 +4393,12 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		{
 			switch (key)
 			{
-			case OF_KEY_F1: 
+			case OF_KEY_F1:
 				doSpecialWindowToggleVisible(0);
 				logKeyParam(getWindowSpecialGuiToggle(0), "Ctrl + F1");
 				break;
 
-			case OF_KEY_F2: 
+			case OF_KEY_F2:
 				doSpecialWindowToggleVisible(1);
 				logKeyParam(getWindowSpecialGuiToggle(1), "Ctrl + F2");
 				break;
@@ -4401,22 +4413,22 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 				logKeyParam(getWindowSpecialGuiToggle(3), "Ctrl + F4");
 				break;
 
-			case OF_KEY_F5: 
+			case OF_KEY_F5:
 				doSpecialWindowToggleVisible(4);
 				logKeyParam(getWindowSpecialGuiToggle(4), "Ctrl + F5");
 				break;
 
-			case OF_KEY_F6: 
+			case OF_KEY_F6:
 				doSpecialWindowToggleVisible(5);
 				logKeyParam(getWindowSpecialGuiToggle(5), "Ctrl + F6");
 				break;
 
-			case OF_KEY_F7: 
+			case OF_KEY_F7:
 				doSpecialWindowToggleVisible(6);
 				logKeyParam(getWindowSpecialGuiToggle(6), "Ctrl + F7");
 				break;
 
-			case OF_KEY_F8: 
+			case OF_KEY_F8:
 				doSpecialWindowToggleVisible(7);
 				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl + F8");
 				break;

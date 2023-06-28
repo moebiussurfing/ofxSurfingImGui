@@ -49,13 +49,36 @@ void ofApp::drawGui()
 		static bool windowOpen = true;
 		if (windowOpen) {
 			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
-			flags += ImGuiWindowFlags_AlwaysAutoResize;
+			if(ui.bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+
 			if (ImGui::Begin("Test Quaternions", &windowOpen, flags))
 			{
+				string s;
+
 				ui.AddLabelBig("Quaternion");
-				ui.AddLabel("ofParameter<glm::quat> curRot{\"QuatRot\", \nglm::quat(0, 1, 0, 0), \nglm::quat(-1, -1, -1, -1), \nglm::quat(1, 1, 1, 1)};");
-				ui.AddSpacingBig();
+				s = "ofParameter<glm::quat> \n\t"
+					"curRot{\"QuatRot\", \n\t"
+					"glm::quat(0, 1, 0, 0), \n\t"
+					"glm::quat(-1, -1, -1, -1), \n\t"
+					"glm::quat(1, 1, 1, 1)};";
+				ui.AddLabelBig(s);
+				ui.AddSpacingBigSeparated();
+
+				s = "ui.Add(curRot);";
+				ui.AddLabelBig(s);
 				ui.Add(curRot);
+				ui.AddSpacingBigSeparated();
+
+				s = "ui.Add(curRot, \n\tOFX_IM_MULTIDIM"
+					"\n\t_SPLIT_SLIDERS);";
+				ui.AddLabelBig(s);
+				ui.Add(curRot, OFX_IM_MULTIDIM_SPLIT_SLIDERS);
+				ui.AddSpacingBigSeparated();
+
+				s = "ui.Add(curRot, \n\tOFX_IM_MULTIDIM"
+					"\n\t_SPLIT_SLIDERS\n\t_FOLDERED);";
+				ui.AddLabelBig(s);
+				ui.Add(curRot, OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED);
 			}
 			ImGui::End();
 		}

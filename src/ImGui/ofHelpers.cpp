@@ -246,13 +246,13 @@ namespace ofxImGuiSurfing
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
 				if (bFoldered && bExpanded) ImGui::TreePop();
-				
+
 				return true;
 			}
 			if (bExpanded || !bFoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
 			if (bFoldered && bExpanded) ImGui::TreePop();
-			
+
 			return false;
 		}
 	}
@@ -317,6 +317,8 @@ namespace ofxImGuiSurfing
 	{
 		auto tmp = p.get();
 
+		const bool bShowName = 0;
+
 		if (!bSplit) {
 			if (ImGui::SliderFloat4((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
 			{
@@ -336,21 +338,37 @@ namespace ofxImGuiSurfing
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(p.getName().c_str(), _flagt));
 			}
-			//else bExpanded = true;
 
-			//TODO: BUG:
 			bool bChanged = false;
-			//if (bExpanded)
 			if (bExpanded || !bFoldered)
 			{
+				if (!bShowName && !bFoldered) {
+					ImGui::Spacing();
+					string s = p.getName();
+					ImGui::Text(s.c_str());
+				}
+
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 				//ImGui::Spacing();
 				ImGui::Dummy(ImVec2(0, 1));
-				bChanged += ImGui::SliderFloat(((p.getName() + " x").c_str()), &tmp.x, p.getMin().x, p.getMax().x);
-				bChanged += ImGui::SliderFloat(((p.getName() + " y").c_str()), &tmp.y, p.getMin().y, p.getMax().y);
-				bChanged += ImGui::SliderFloat(((p.getName() + " z").c_str()), &tmp.z, p.getMin().z, p.getMax().z);
-				bChanged += ImGui::SliderFloat(((p.getName() + " w").c_str()), &tmp.w, p.getMin().w, p.getMax().w);
+
+				string sx, sy, sz, sw;
+				sx = "x";
+				sy = "y";
+				sz = "z";
+				sw = "w";
+				if (bShowName) {
+					sx = p.getName() + " " + sx;
+					sy = p.getName() + " " + sy;
+					sz = p.getName() + " " + sz;
+					sw = p.getName() + " " + sw;
+				}
+				bChanged += ImGui::SliderFloat(sx.c_str(), &tmp.x, p.getMin().x, p.getMax().x);
+				//AddMouseWheel(p);
+				bChanged += ImGui::SliderFloat(sy.c_str(), &tmp.y, p.getMin().y, p.getMax().y);
+				bChanged += ImGui::SliderFloat(sz.c_str(), &tmp.z, p.getMin().z, p.getMax().z);
+				bChanged += ImGui::SliderFloat(sw.c_str(), &tmp.w, p.getMin().w, p.getMax().w);
 				ImGui::Dummy(ImVec2(0, 1));
 			}
 
@@ -375,8 +393,11 @@ namespace ofxImGuiSurfing
 	bool AddParameter(ofParameter<glm::quat>& p, bool bSplit, bool bFoldered)
 	{
 		//TODO: copied from vec4..
+		//should be templed to avoid duplicated code.
 
 		auto tmp = p.get();
+
+		const bool bShowName = 0;
 
 		if (!bSplit) {
 			if (ImGui::SliderFloat4((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
@@ -397,21 +418,37 @@ namespace ofxImGuiSurfing
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(p.getName().c_str(), _flagt));
 			}
-			//else bExpanded = true;
 
-			//TODO: BUG:
 			bool bChanged = false;
-			//if (bExpanded)
 			if (bExpanded || !bFoldered)
 			{
+				if (!bShowName && !bFoldered) {
+					ImGui::Spacing();
+					string s = p.getName();
+					ImGui::Text(s.c_str());
+				}
+
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 				//ImGui::Spacing();
 				ImGui::Dummy(ImVec2(0, 1));
-				bChanged += ImGui::SliderFloat(((p.getName() + " x").c_str()), &tmp.x, p.getMin().x, p.getMax().x);
-				bChanged += ImGui::SliderFloat(((p.getName() + " y").c_str()), &tmp.y, p.getMin().y, p.getMax().y);
-				bChanged += ImGui::SliderFloat(((p.getName() + " z").c_str()), &tmp.z, p.getMin().z, p.getMax().z);
-				bChanged += ImGui::SliderFloat(((p.getName() + " w").c_str()), &tmp.w, p.getMin().w, p.getMax().w);
+
+				string sx, sy, sz, sw;
+				sx = "x";
+				sy = "y";
+				sz = "z";
+				sw = "w";
+				if (bShowName) {
+					sx = p.getName() + " " + sx;
+					sy = p.getName() + " " + sy;
+					sz = p.getName() + " " + sz;
+					sw = p.getName() + " " + sw;
+				}
+				bChanged += ImGui::SliderFloat(sx.c_str(), &tmp.x, p.getMin().x, p.getMax().x);
+				//AddMouseWheel(p);
+				bChanged += ImGui::SliderFloat(sy.c_str(), &tmp.y, p.getMin().y, p.getMax().y);
+				bChanged += ImGui::SliderFloat(sz.c_str(), &tmp.z, p.getMin().z, p.getMax().z);
+				bChanged += ImGui::SliderFloat(sw.c_str(), &tmp.w, p.getMin().w, p.getMax().w);
 				ImGui::Dummy(ImVec2(0, 1));
 			}
 

@@ -939,7 +939,7 @@ namespace ofxImGuiSurfing
             float p = 0; //padding
             float w = ofxImGuiSurfing::getWidgetsWidth(1);
             float h = ofxImGuiSurfing::getWindowHeightFree();
-            bool bBorder = true; //used?
+            bool bBorder = 0; //used?
 
             drawUnlimited("Logger", ImGui::GetCursorPos(), {w - p, h - p}, bBorder);
         }
@@ -1010,7 +1010,7 @@ namespace ofxImGuiSurfing
             ImGui::EndChild();
         }
 
-        void drawBufferedLimited()
+        void drawLimitedBuffered()
         {
             ImGui::BeginChild("LoggerBuffered");
             {
@@ -1211,7 +1211,7 @@ namespace ofxImGuiSurfing
                 }
                 else
                 {
-                    drawBufferedLimited();
+                    drawLimitedBuffered();
                 }
             }
             popStyleFont();

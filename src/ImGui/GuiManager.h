@@ -2056,7 +2056,7 @@ public:
     ofParameter<bool> bMouseWheelFlip{"Flip Wheel", false}; //for natural direction
     bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
 
-    ofParameter<bool> bThemeUiAlt{"Theme UI", false};
+    ofParameter<bool> bThemeUIAlt{"Theme UI", false};
 
     ofParameter<bool> bLog{"LOG", false}; //show log window
     ofParameter<bool> bNotifier{"NOTIFIER", true}; //show notifier
@@ -2220,7 +2220,7 @@ public:
     //--------------------------------------------------------------
     void AddThemeToggle()
     {
-        ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, "Day", "Night");
+        ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
     }
 
     //--------------------------------------------------------------
@@ -2228,17 +2228,17 @@ public:
     {
         //bool bToggled = true
         //if (bToggled)
-        //	this->Add(bThemeUiAlt);
+        //	this->Add(bThemeUIAlt);
 
         string s = "Theme";
         s = ofToUpper(s);
         if (bLabel) this->AddLabelBig(s);
 
-        ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, "Day", "Night");
-        //ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, THEME_NAME_DAY, THEME_NAME_NIGHT);
+        ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
+        //ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, THEME_NAME_DAY, THEME_NAME_NIGHT);
 
         //string s;
-        //if (!bThemeUiAlt) s = THEME_NAME_NIGHT;
+        //if (!bThemeUIAlt) s = THEME_NAME_NIGHT;
         //else s = THEME_NAME_DAY;
         //this->AddLabel(s);
     }

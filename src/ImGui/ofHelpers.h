@@ -239,7 +239,7 @@ namespace ofxImGuiSurfing
 
 						//TODO:
 						// Must be fixed bc each dim slider could work independently...
-
+						// Problems came bc the components are not a param...
 						else if (bIsMultiDim)
 						{
 							/*
