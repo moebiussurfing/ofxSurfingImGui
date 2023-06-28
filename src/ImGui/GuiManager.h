@@ -2054,7 +2054,7 @@ public:
 
     ofParameter<bool> bMouseWheel{"Mouse Wheel", true};
     ofParameter<bool> bMouseWheelFlip{"Flip Wheel", false}; //for natural direction
-    bool bDisableOnButtons = true; //TODO:
+    bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
 
     ofParameter<bool> bThemeUiAlt{"Theme UI", false};
 
@@ -3869,6 +3869,9 @@ public:
     //--------------------------------------------------------------
     ofParameter<bool>& getWindowSpecialVisible(int index) // return bool parameter visible toggle
     {
+        //TODO: could this be problematic?
+        // bc we are not storing the param neither returning a reference?
+
         if (index > windows.size() - 1 || index == -1)
         {
             ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued windows, " <<
@@ -4106,7 +4109,13 @@ public:
     //--------------------------------------------------------------
     void startup();
 
+    //-
+
+    // Reset Settings
+    void DrawWidgetsResetUI();
     void resetUISettings();
+private:
+    bool bResetUIProgramed = false;
 
     //-
 
@@ -4472,32 +4481,32 @@ public:
         case OFX_IM_DEFAULT:
         case OFX_IM_BUTTON_SMALL:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_MEDIUM:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXL:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXXL:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         //--
@@ -4508,32 +4517,32 @@ public:
 
         case OFX_IM_BUTTON_SMALL_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_MEDIUM_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXL_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXXL_BORDER:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         //--
@@ -4542,32 +4551,32 @@ public:
 
         case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
             bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true, true);
-            if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+            if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
             break;
 
         default:
@@ -4610,7 +4619,7 @@ public:
         float _h = sz.y;
 
         bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-        if (bMouseWheel && !bDisableOnButtons) ofxImGuiSurfing::AddMouseWheel(bState);
+        if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) ofxImGuiSurfing::AddMouseWheel(bState);
 
         return bReturn;
     }
@@ -4643,11 +4652,20 @@ public:
 
         switch (type)
         {
+        case OFX_IM_CHECKBOX:
+            bReturn = ImGui::Checkbox(label.c_str(), &bState);
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
+            break;
+
         case OFX_IM_DEFAULT:
         case OFX_IM_BUTTON_SMALL:
         case OFX_IM_TOGGLE_SMALL:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4657,7 +4675,7 @@ public:
         case OFX_IM_BUTTON:
         case OFX_IM_TOGGLE:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4667,7 +4685,7 @@ public:
         case OFX_IM_BUTTON_MEDIUM:
         case OFX_IM_TOGGLE_MEDIUM:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4677,7 +4695,7 @@ public:
         case OFX_IM_BUTTON_BIG:
         case OFX_IM_TOGGLE_BIG:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4687,7 +4705,7 @@ public:
         case OFX_IM_BUTTON_BIG_XXL:
         case OFX_IM_TOGGLE_BIG_XXL:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4697,7 +4715,7 @@ public:
         case OFX_IM_BUTTON_BIG_XXXL:
         case OFX_IM_TOGGLE_BIG_XXXL:
             bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
-            if (!bDisableOnButtons)
+            if (!bDisableMouseWheelOnButtonsToggles)
             {
                 if (bMouseWheel) AddMouseWheel(bState);
                 if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -4712,37 +4730,52 @@ public:
         case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
             bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
                                                               ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
-            if (bMouseWheel) AddMouseWheel(bState);
-            if (bMouseWheel) bReturn |= GetMouseWheel();
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
             break;
 
         case OFX_IM_TOGGLE_ROUNDED_SMALL:
         case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
             bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
                                                               ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
-            if (bMouseWheel) AddMouseWheel(bState);
-            if (bMouseWheel) bReturn |= GetMouseWheel();
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
             break;
 
         case OFX_IM_TOGGLE_ROUNDED:
         case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
             bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState);
-            if (bMouseWheel) AddMouseWheel(bState);
-            if (bMouseWheel) bReturn |= GetMouseWheel();
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
             break;
 
         case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
         case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
             bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-            if (bMouseWheel) AddMouseWheel(bState);
-            if (bMouseWheel) bReturn |= GetMouseWheel();
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
             break;
 
         case OFX_IM_TOGGLE_ROUNDED_BIG:
         case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
             bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
-            if (bMouseWheel) AddMouseWheel(bState);
-            if (bMouseWheel) bReturn |= GetMouseWheel();
+            if (!bDisableMouseWheelOnButtonsToggles)
+            {
+                if (bMouseWheel) AddMouseWheel(bState);
+                if (bMouseWheel) bReturn |= GetMouseWheel();
+            }
             break;
 
         //--

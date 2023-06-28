@@ -641,6 +641,7 @@ namespace ofxImGuiSurfing
             const bool isMultiDimVec2 = ptype == typeid(ofParameter<glm::vec2>).name();
             const bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
             const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
+            const bool isMultiDimQuat = ptype == typeid(ofParameter<glm::quat>).name();
             const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
 
             ///*
@@ -2694,6 +2695,37 @@ namespace ofxImGuiSurfing
                 uniqueName.pop();
 
                 bDone = true; // VEC4
+            }
+
+            else if (isMultiDimQuat)
+            {
+                uniqueName.push();
+                {
+                    ofParameter<glm::quat> p = ap.cast<glm::quat>();
+
+                    switch (type)
+                    {
+                    case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+                        {
+                            bReturn = ofxImGuiSurfing::AddParameter(p, true);
+                        }
+                        break;
+
+                    case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+                        {
+                            bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+                            //if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+                        }
+                        break;
+
+                    default:
+                        bReturn = ofxImGuiSurfing::AddParameter(p);
+                        break;
+                    }
+                }
+                uniqueName.pop();
+
+                bDone = true; // QUAT
             }
 
             //--

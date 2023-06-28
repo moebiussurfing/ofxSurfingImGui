@@ -11,8 +11,8 @@ void ofApp::setup()
 	listener = speed.newListener([this](float& v) {
 		ofLogNotice() << v;
 
-	string s = speed.getName() + ": " + ofToString(speed.get(), 1);
-	ui.AddToLog(s, myTag1);
+		string s = speed.getName() + ": " + ofToString(speed.get(), 1);
+		ui.AddToLog(s, myTag1);
 		});
 
 }
@@ -30,6 +30,14 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	drawGui();
+
+	drawScene();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGui()
+{
 	if (!bGui) return;
 	// Not mandatory, but
 	// this will allow to hide the Log Window too. 
@@ -37,10 +45,31 @@ void ofApp::draw()
 
 	ui.Begin();
 	{
+		// This is a raw ImGui window
+		static bool windowOpen = true;
+		if (windowOpen) {
+			ImGuiWindowFlags flags = ImGuiWindowFlags_None;
+			flags += ImGuiWindowFlags_AlwaysAutoResize;
+			if (ImGui::Begin("Test Quaternions", &windowOpen, flags))
+			{
+				ui.AddLabelBig("Quaternion");
+				ui.AddLabel("ofParameter<glm::quat> curRot{\"QuatRot\", \nglm::quat(0, 1, 0, 0), \nglm::quat(-1, -1, -1, -1), \nglm::quat(1, 1, 1, 1)};");
+				ui.AddSpacingBig();
+				ui.Add(curRot);
+			}
+			ImGui::End();
+		}
+
+		//--
+
 		// Close the Window by pressing the top right X.
 		// This state is handled internally by bGui bool param!
 		// Press space to toggle bGui and show it again.
 
+		static bool bConstraint = 0;
+		if (bGui && bConstraint) {
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+		}
 		if (ui.BeginWindow(bGui))
 		{
 			string s = "HELP\n\n";
@@ -60,10 +89,13 @@ void ofApp::draw()
 				s2 += "Press ` to toggle the Minimizer state.\n";
 				s2 += "Press L to toggle the Log Window visible.";
 				ui.AddTooltip(s2); // a tooltip will be pinned to the previous widget!
+
+				ui.AddAutoResizeToggle();
+				ui.AddToggle("Constraints", bConstraint, OFX_IM_CHECKBOX);
 			}
 
 			ui.AddSpacingBigSeparated();
-			
+
 			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
 			s = "Will enable:\n\n";
 			s += "1. Bigger font\n";
@@ -83,26 +115,26 @@ void ofApp::draw()
 				ui.AddSpacingDouble();
 
 				// make font bigger
-				if(bEnable) ui.PushFont(OFX_IM_FONT_BIG);
+				if (bEnable) ui.PushFontStyle(OFX_IM_FONT_BIG);
 				ui.AddTooltipHelp(s);
-				if (bEnable) ui.PopFont();
+				if (bEnable) ui.PopFontStyle();
 			}
 			else // not minimized aka maximized
 			{
 				// make it uppercase and add an extra space (true, true)
-				if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true); 
+				if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true);
 				else ui.AddLabelBig("00_HelloWorld2", true, true);
 
 				ui.AddSpacingDouble();
-				
+
 				// make it blink
 				if (bEnable) ui.BeginBlinkText();
 				// make font bigger
-				if (bEnable) ui.PushFont(OFX_IM_FONT_BIG);
+				if (bEnable) ui.PushFontStyle(OFX_IM_FONT_BIG);
 
 				ui.AddLabel(s);
-				
-				if (bEnable) ui.PopFont();
+
+				if (bEnable) ui.PopFontStyle();
 				if (bEnable) ui.EndBlinkText();
 
 				ui.AddSpacingBigSeparated();
@@ -138,6 +170,12 @@ void ofApp::draw()
 						ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed); // collapsed on startup
 					}
 				}
+
+				//--
+
+				ui.AddSpacingBigSeparated();
+				ui.DrawWidgetsResetUI();//populate ResetUI button directly.
+				//ui.resetUISettings();//exposed method.
 			}
 
 			ui.EndWindow();
@@ -160,6 +198,8 @@ void ofApp::mousePressed(int x, int y, int button)
 {
 	if (ui.isMouseOverGui()) return; // don't log if we are touching the ui
 
+	lastMouse = glm::vec2(x, y);
+
 	string sb = "";
 	if (button == 0) sb = "LEFT";
 	else if (button == 2) sb = "RIGHT";
@@ -173,9 +213,29 @@ void ofApp::mouseDragged(int x, int y, int button)
 {
 	if (ui.isMouseOverGui()) return; // don't log if we are touching the ui
 
+	glm::vec2 mouse(x, y);
+	glm::quat yRot = glm::angleAxis(ofDegToRad(x - lastMouse.x) * dampen, glm::vec3(0, 1, 0));
+	glm::quat xRot = glm::angleAxis(ofDegToRad(y - lastMouse.y) * dampen, glm::vec3(-1, 0, 0));
+	curRot.set(xRot * yRot * curRot.get());
+	lastMouse = mouse;
+
 	string s = "Mouse Drag  " + ofToString(x) + "," + ofToString(y);
 
 	ui.AddToLog(s, "VERBOSE");
+}
+
+//--------------------------------------------------------------
+void ofApp::drawScene() {
+	ofPushStyle();
+	ofSetColor(ofColor::white, 16);
+	ofNoFill();
+	ofPushMatrix();
+	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2, 40);
+	auto axis = glm::axis(curRot.get());
+	ofRotateDeg(ofRadToDeg(glm::angle(curRot.get())), axis.x, axis.y, axis.z);
+	ofDrawSphere(0, 0, 0, 200);
+	ofPopMatrix();
+	ofPopStyle();
 }
 
 //--------------------------------------------------------------

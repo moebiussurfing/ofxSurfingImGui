@@ -821,17 +821,18 @@ namespace ofxImGuiSurfing
 	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddParameter(ofParameter<glm::ivec2>& p, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec3>& p, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec4>& p, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec2>& p, bool bFoldered = false);
+	bool AddParameter(ofParameter<glm::ivec3>& p, bool bFoldered = false);
+	bool AddParameter(ofParameter<glm::ivec4>& p, bool bFoldered = false);
 
 	//TODO:
-	bool AddParameter(ofParameter<glm::vec2>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec2>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec3>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec3>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec4>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec4>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::quat>& p, bool bSplit = false, bool bFoldered = false);
 #endif
 
 	//TODO:
