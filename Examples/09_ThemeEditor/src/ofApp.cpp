@@ -13,7 +13,7 @@ void ofApp::setup()
 		string path = "assets/fonts/telegrama_render.otf";
 		//string path = "assets\\fonts\\OpenSans-Light.ttf";
 		float size = 14;
-		ui.setDefaultFont(ofToDataPath(path), size);
+		ui.setupFontForDefaultStyles(ofToDataPath(path), size);
 	}
 
 	//--

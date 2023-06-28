@@ -598,7 +598,7 @@ public:
 
 		// B. Get the path of the selected font by the UI index.
 		p = ui->getFontIndexPath();
-		ui->setupFontForDefaultStylesInternal(p, sizeFont);
+		ui->setupFontForDefaultStyles(p, sizeFont);
 
 		//workflow
 		// reload folder
@@ -616,7 +616,7 @@ public:
 
 		sizeFont = size;
 
-		ui->setupFontForDefaultStylesInternal(path, sizeFont);
+		ui->setupFontForDefaultStyles(path, sizeFont);
 
 		////workflow
 		//// reload folder
