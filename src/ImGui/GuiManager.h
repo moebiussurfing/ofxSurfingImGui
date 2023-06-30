@@ -2366,7 +2366,8 @@ public:
     //--------------------------------------------------------------
     void AddToNotifier(std::string text) //TODO:adding empty tag...
     {
-        notifier.Add(text, "");
+        notifier.Add(text, OF_LOG_NOTICE);
+        //notifier.Add(text, "");
     }
 
     //--------------------------------------------------------------
@@ -4163,7 +4164,7 @@ private:
     void drawLayoutsLayoutPresets();
     void drawLayoutsPanels();
     void drawLayoutPresetsEngine();
-    void drawViewport_oFNative();
+    void drawViewport_OF_Native();
 
     //TODO:
     //// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.

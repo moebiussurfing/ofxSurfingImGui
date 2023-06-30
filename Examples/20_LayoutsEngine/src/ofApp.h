@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 
 /*
@@ -19,8 +19,22 @@ class ofApp : public ofBaseApp
 public:
 
 	void setup();
-	void draw();
 
+	void draw();
+	
+	void drawWindow0();
+	void drawWindow1();
+	void drawWindow2();
+	void drawWindow3();
+	void drawWindow4();
+
+	// another approach using toggle params
+	//ofParameter<bool> bGui_Main{"Main", false};
+	//ofParameter<bool> bGui_Audio{"Audio", false};
+	//ofParameter<bool> bGui_Video1{"Video1", false};
+	//ofParameter<bool> bGui_Video2{"Video2", false};
+	//ofParameter<bool> bGui_ExpertMain{"Expert", false};
+	 
 	//--
 
 	// Scene Parameters
@@ -71,4 +85,6 @@ public:
 	void setupScene();
 	void udpateScene(); // -> Generates random variations to animate variables.
 	void updateLog(); // -> Generates random messages to test the Log window.
+
+	void AddToLogAndNotifier(std::string text);
 };

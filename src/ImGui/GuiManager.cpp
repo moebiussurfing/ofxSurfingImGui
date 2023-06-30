@@ -2023,7 +2023,7 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 
 #ifdef FIXING_DRAW_VIEWPORT
 //--------------------------------------------------------------
-void SurfingGuiManager::drawViewport_oFNative()
+void SurfingGuiManager::drawViewport_OF_Native()
 {
 	//TODO: debug viewport. freew space for OF drawing
 
@@ -2176,7 +2176,7 @@ void SurfingGuiManager::Begin()
 
 	//--
 
-	// Fonts
+	// Font
 
 	if (customFont != nullptr) ImGui::PushFont(customFont);
 
@@ -2254,7 +2254,7 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	//--
 
 #ifdef FIXING_DRAW_VIEWPORT
-	if (bDrawView1) drawViewport_oFNative();
+	if (bDrawView1) drawViewport_OF_Native();
 #endif
 
 	//--
@@ -3272,7 +3272,9 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	//--
 
 	// Window
-
+	if (bGui_LayoutsPresetsSelector) {
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+	}
 	if (BeginWindow(bGui_LayoutsPresetsSelector, flags_wPr))
 	{
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
