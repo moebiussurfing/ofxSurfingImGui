@@ -1259,7 +1259,8 @@ namespace ofxImGuiSurfing
 
             else if (isString)
             {
-                ofParameter<std::string> p = ap.cast<std::string>();
+                //TODO:
+                //ofParameter<std::string>p = ap.cast<std::string>();
                 ofParameter<std::string>& p = ap.cast<std::string>();
 
                 auto& tmpRef = p.get();
