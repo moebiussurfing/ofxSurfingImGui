@@ -1366,7 +1366,9 @@ public:
         setupFontForDefaultStylesInternal(pathFont, sizeFont);
     }
 
+
     //----
+
 
 public:
     // Helpers to share the same Gui instance
@@ -2339,6 +2341,13 @@ public:
     void ClearLog()
     {
         log.Clear();
+    }
+
+    //--------------------------------------------------------------
+    void AddToLogAndNotifier(std::string text, ofLogLevel logLevel)
+    {
+        log.Add(text, logLevel);
+        notifier.Add(text, logLevel);
     }
 
     //----

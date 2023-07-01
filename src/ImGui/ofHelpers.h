@@ -1325,7 +1325,9 @@ namespace ofxImGuiSurfing
 
 	//----
 
+
 	// Image and Textures helpers
+	// copied from ofxImgui / ImHelpers.h
 	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{

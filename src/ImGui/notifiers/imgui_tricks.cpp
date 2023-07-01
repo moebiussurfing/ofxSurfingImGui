@@ -112,14 +112,26 @@ namespace ImTricks {
 		ofParameter<bool> bUseColorMark{ "Color Mark", true };
 		ofParameter<bool> bRightColorMark{ "CM Right", false };
 		ofParameter<float> mkRounded{ "CM Round", 1.f, 0, 100 };//rounded left mark
-		ofParameter<int> mkWidth{ "CM Width",5, 1, 200 };//width colored left mark
+		ofParameter<int> mkWidth{ "CM Width", 5, 1, 200 };//width colored left mark
 		ofParameter<int> mkPad{ "CM Pad", 0, 0, 200 };//padding left mark
-		ofParameter<bool> bAlignRight{ "Align Right",true };
+		ofParameter<bool> bAlignRight{ "Align Right", true };
 		ofParameter<bool> bUseTagColor{ "Tag Color", true };
 		ofParameter<bool> bBg{ "Bg", true };
 
 		ofParameterGroup params{ "surfingNotifier", bGui, indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
 #endif
+		void doSetMini() {
+			indexFont = 0;
+			padx = 2;
+			pady = 2;
+			padxInner = 2;
+			padyInner = 2;
+			ySpacing = 2;
+			round = 2.f;
+			mkRounded = 1.f;
+			mkWidth = 2;
+			mkPad = 0;
+		}
 
 		void doReset()
 		{

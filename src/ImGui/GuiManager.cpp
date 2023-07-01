@@ -2178,11 +2178,14 @@ void SurfingGuiManager::Begin()
 
 	// Font
 
-	if (customFont != nullptr) ImGui::PushFont(customFont);
-
 	// Reset font to default.
-	// this clear all the push/pop queue.
+	// this clears all the push/pop queue.
+#if 1
 	setDefaultFont();
+	if (customFont != nullptr) ImGui::PushFont(customFont);
+#else
+	this->pushStyleFont(OFX_IM_FONT_DEFAULT);
+#endif
 
 	//--
 
@@ -2303,7 +2306,11 @@ void SurfingGuiManager::End()
 
 	//TODO: could set the default font instead of Pop..
 	// bc that will be prophylactic if pushed too many fonts by error!
+#if 1
 	if (customFont != nullptr) ImGui::PopFont();
+#else
+	this->popStyleFont();
+#endif
 
 	//--
 
@@ -2322,8 +2329,8 @@ void SurfingGuiManager::End()
 
 	//--
 
-	//TODO: should add a new variable like bDrawInfront to draw back/foreground...
-	//TODO: maybe it's an ofxImGui feature..
+	//TODO: Should add a new variable like bDrawInfront to draw back/foreground...
+	//TODO: Maybe it's an ofxImGui feature..
 	if (!bAutoDraw) gui.draw();
 }
 

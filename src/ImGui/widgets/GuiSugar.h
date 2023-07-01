@@ -113,7 +113,7 @@ namespace ofxImGuiSurfing
 	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
 
 	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-	#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
+#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
 //#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f
 	// To allow see 3 visible decimals, 
 	// but requires preferably a short label name.
@@ -184,11 +184,22 @@ namespace ofxImGuiSurfing
 	//----
 
 	// Max window size depending on the window app and menu bar height.
-	#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT ofGetHeight()-ImGui::GetTextLineHeightWithSpacing()
+#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT (ofGetHeight()- 2 * ImGui::GetTextLineHeightWithSpacing())
+#define IMGUI_SUGAR__WINDOW_FIT_APP_WIDTH (ofGetWidth()- 2 * ImGui::GetTextLineHeightWithSpacing())
 
-	// 3.
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_DEFAULT \
+{ \
+ImVec2 size_min = ImVec2(200, 200); \
+ImVec2 size_max = ImVec2(IMGUI_SUGAR__WINDOW_FIT_APP_WIDTH, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+//--
+
+// 3.
 
 // Adds Constraints Window Shapes (width and height)
+
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MAX \
 { \
@@ -345,5 +356,5 @@ ImVec2 size_min = ImVec2(100, -1); \
 ImVec2 size_max = ImVec2(100, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
-	
+
 };

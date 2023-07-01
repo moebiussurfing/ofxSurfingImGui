@@ -78,8 +78,12 @@ public:
 		ImTricks::NotifyManager::indexFont = index;
 	};
 
-	void setDuration(int duration) {
+	void setDuration(int duration) {//bubble duration in milliseconds
 		ImTricks::NotifyManager::duration = duration;
+	};
+
+	void setMini() {
+		ImTricks::NotifyManager::doSetMini();
 	};
 
 private:

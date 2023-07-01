@@ -14,10 +14,9 @@
 
 /*
 
-TODO
+	TODO
 
-add openDialog to load text
-
+	add openDialog to load text
 
 */
 
@@ -856,9 +855,10 @@ public:
 
 		if (bGui)
 		{
-			ImVec2 size_min = ImVec2(100, 100);
-			ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
-			ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+			//ImVec2 size_min = ImVec2(100, 100);
+			//ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
+			//ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTS_DEFAULT;
 		}
 
 		//--

@@ -124,6 +124,7 @@ namespace ImTricks {
 		extern void drawImGuiControls();
 		extern void doClear();
 		extern void doReset();
+		extern void doSetMini();
 
 #ifndef USE_IM_GUI_TRICKS_PARAMS
 		extern int indexFont;
