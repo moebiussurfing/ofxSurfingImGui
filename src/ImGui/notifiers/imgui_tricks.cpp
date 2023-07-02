@@ -255,6 +255,12 @@ namespace ImTricks {
 			ImGuiWindowFlags flags = ImGuiWindowFlags_AlwaysAutoResize;
 
 			bool tmp = bGui.get();
+			//if (tmp) {//fails
+			//	ImVec2 size_min = ImVec2(250, -1);
+			//	ImVec2 size_max = ImVec2(250, -1);
+			//	ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+			//}
+
 			bool b = ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, flags);
 			if (bGui.get() != tmp) bGui.set(tmp);
 

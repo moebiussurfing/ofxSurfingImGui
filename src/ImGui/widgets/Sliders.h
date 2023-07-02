@@ -34,7 +34,7 @@ namespace ofxImGuiSurfing
         if (w == -1) w = ImGui::GetContentRegionAvail().x; // full width
         if (h == -1) h = getWidgetsHeightUnit(); // one unit height
 
-        ImGuiSliderFlags flag = ImGuiSliderFlags_Logarithmic;
+        //ImGuiSliderFlags flag = ImGuiSliderFlags_Logarithmic;
 
         bool bChanged = false;
         auto tmpRef = parameter.get();
@@ -53,7 +53,7 @@ namespace ofxImGuiSurfing
         //TODO: make space for label..
         //if (name != "") sz.x = sz.x - 100;
 
-        string n = "##BIGSLIDER" + name + ofToString(1);
+        string n = "##BIGSLIDER" + name;
         ImGui::PushID(n.c_str());
         {
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(w, h)); //TODO: doesn't uses the width..
@@ -74,7 +74,8 @@ namespace ofxImGuiSurfing
         return bChanged;
     }
 
-    // Int. cloned from float.
+    // Int. Cloned from float.
+    // TODO: should make templed with float..
     //--------------------------------------------------------------
     inline bool AddBigSlider(ofParameter<int>& parameter, float w = -1, float h = -1, string name = "-1",
                              string format = OFX_IM_FORMAT_SLIDERS_INT)

@@ -3139,9 +3139,12 @@ public:
 		// split possible instances on different folders
 		path_Root = nameLabel + "/";
 		path_Global = nameLabel + "/Gui/";
-		ofxImGuiSurfing::CheckFolder(path_Global);
-		// Useful toggles for internal Windows
 
+#if 0
+		ofxImGuiSurfing::CheckFolder(path_Global);
+#endif
+
+		// Useful toggles for internal Windows
 		windowsOrganizer.setPathGlobal(path_Global);
 
 		//--

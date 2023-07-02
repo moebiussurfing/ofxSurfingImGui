@@ -371,10 +371,11 @@ void SurfingGuiManager::setupInitiate()
 		// Layout Presets
 		path_ImLayouts = path_Global + "Presets/";
 
+#if 0
 		// Create folders if required
 		CheckFolder(path_Global);
-
 		if (bUseLayoutPresetsManager) CheckFolder(path_ImLayouts);
+#endif
 
 		//--
 

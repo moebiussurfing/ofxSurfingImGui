@@ -330,8 +330,9 @@ namespace ofxImGuiSurfing
             ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << path;
 
             path_Global = path;
+#if 0
             CheckFolder(path_Global);
-
+#endif
             path_Settings = path_Global + nameLabel + "_UI_Organizer" + ".json";
         }
 
