@@ -53,6 +53,7 @@ namespace ofxImGuiSurfing
             int minValue = std::numeric_limits<int>::min();
             ofAddListener(ofEvents().exit, this, &WindowsOrganizer::exit, minValue);
 #endif
+            
             //--
 
             // Exclude
@@ -93,7 +94,7 @@ namespace ofxImGuiSurfing
         //--------------------------------------------------------------
         void exit(ofEventArgs& e)
         {
-            ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
+            ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
 
             exit();
         }
@@ -105,23 +106,30 @@ namespace ofxImGuiSurfing
             ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
+            saveSettings();
+#endif
+
+            bDoneExit = true;
+        }
+        
+    public:
+        //--------------------------------------------------------------
+        void saveSettings()
+        {
             if (bInitialized)
             {
-                ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Saving settings";
+                ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "saveSettings()";
 
                 // Save
                 saveGroup(params_AppSettings, path_Settings);
             }
             else
             {
-                ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Skipped Saving settings";
+                ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "saveSettings() Skipped Saving settings";
                 ofLogWarning("ofxSurfingImGui") << "bInitialized was unexpectedly false!";
             }
-#endif
-
-            bDoneExit = true;
         }
-
+        
         //--
 
     public:
