@@ -70,17 +70,9 @@ namespace ofxImGuiSurfing
         {
             ImVec4* colors = ImGui::GetStyle().Colors;
 
-            // Original
-            //colors[ImGuiCol_Text] = ImVec4(0.76f, 0.76f, 0.76f, 0.94f);
-            //colors[ImGuiCol_TextDisabled] = ImVec4(0.63f, 0.63f, 0.63f, 1.00f);
-
-            // RF more white
             colors[ImGuiCol_Text] = ImVec4(0.92f, 0.92f, 0.92f, 0.94f);
-            //colors[ImGuiCol_Text] = ImVec4(0.84f, 0.84f, 0.84f, 0.94f);
-            //colors[ImGuiCol_Text] = ImVec4(0.79f, 0.79f, 0.79f, 0.94f);
             colors[ImGuiCol_TextDisabled] = ImVec4(0.69f, 0.69f, 0.69f, 1.00f);
-
-            colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.35f);
+            colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.7f);
 
             colors[ImGuiCol_WindowBg] = ImVec4(0.19f, 0.19f, 0.19f, 0.96f);
 

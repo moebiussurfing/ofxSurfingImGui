@@ -8,8 +8,9 @@
 	- Spacing and separators.
 	- Commonly useful minimizer toggle.
 	- Tool-tips for widgets.
-	- The Log Window.
-	- Mouse over gui.
+	- The Log and Notifier Windows.
+	- Custom Log tags.
+	- Mouse over gui getter.
 	- Note persistence of previous sessions for some settings.
 	- Text labels.
 	- Some key-commands examples.
@@ -32,7 +33,6 @@
 class ofApp : public ofBaseApp
 {
 public:
-
 	void setup();
 	void update();
 	void draw();
@@ -41,20 +41,26 @@ public:
 	void mouseDragged(int x, int y, int button);
 	void exit();
 
-	void drawGui();
 	ofxSurfingGui ui;
-	ofParameter<bool> bGui{ "Show", true };
+	void drawGui();
+
+	void drawGuiMain();
+	ofParameter<bool> bGui{ "ofApp", true };
 	ofParameter<bool> bEnable{ "Enable", true };
 	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 	ofEventListener listener;
 	ofParameterGroup params{ "MyGroup", bEnable, speed };
 
+	// Custom Log tags
 	string myTag1 = "HELLO WORLD";
-	string myTag2 = "MOUSE";
+	string myTag2 = "MOUSE CLICK";
 
 	// Taken from openFrameworks\examples\3d\quaternionArcballExample
-	ofParameter<glm::quat> curRot{"QuatRot", glm::quat(0, 1, 0, 0), glm::quat(-1, -1, -1, -1), glm::quat(1, 1, 1, 1)};
-	glm::vec2 lastMouse;
+	void drawSceneQuat();
+	void drawGuiQuat();
+	bool bGui_Quat = false;
 	float dampen = .4f;
-	void drawScene();
+	glm::vec2 lastMouse;
+	ofParameter<glm::quat> curRot{"QuatRot", glm::quat(0, 1, 0, 0), 
+		glm::quat(-1, -1, -1, -1), glm::quat(1, 1, 1, 1)};
 };

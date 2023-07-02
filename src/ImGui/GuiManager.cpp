@@ -14,11 +14,12 @@ SurfingGuiManager::SurfingGuiManager()
 	//----
 
 	// ofApp / core callbacks
-
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 	//TODO:
 	// Fix exit exceptions on RF..
 	int minValue = std::numeric_limits<int>::min();
 	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
+#endif
 
 	//--
 
@@ -27,6 +28,7 @@ SurfingGuiManager::SurfingGuiManager()
 	// Auto call draw. Only to draw help boxes / OF native info. ?
 	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_AFTER_APP);
 	//ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_BEFORE_APP);
+
 	ofAddListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_AFTER_APP);
 
 	//----
@@ -38,67 +40,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//--
 
-	// These params are handled into file settings!
-	params_Advanced.add(bAutoResize);
-	params_Advanced.add(bExtra);
-	params_Advanced.add(bMinimize);
-	params_Advanced.add(bAdvanced);
-	params_Advanced.add(bGui_GameMode);
-	params_Advanced.add(bSolo_GameMode);
-	params_Advanced.add(bKeys);
-	params_Advanced.add(bMouseWheel);
-	params_Advanced.add(bMouseWheelFlip);
-	params_Advanced.add(bDebug);
-
-	ofParameterGroup gHelpInternal{ "G_HelpInternal", bHelpInternal, helpInternal.fontIndex };
-	params_Advanced.add(gHelpInternal);
-
-	ofParameterGroup gHelpApp{ "G_HelpApp", bHelp, helpApp.fontIndex };
-	params_Advanced.add(gHelpApp);
-
-	params_Advanced.add(bThemeUIAlt);
-	params_Advanced.add(fontIndex);
-
-	params_Advanced.add(bDebugDebugger);
-#ifdef OFX_USE_DEBUGGER
-	debugger.bGui.makeReferenceTo(bDebugDebugger);
-	params_Advanced.add(debugger.params);
-#endif
-
-#ifdef OFX_USE_NOTIFIER
-	params_Advanced.add(notifier.bGui);
-#endif
-
-	params_Advanced.add(bLog);
-	params_Advanced.add(bLogKeys);
-	params_Advanced.add(log.params);
-
-	params_Advanced.add(bNotifier);
-
-	params_Advanced.add(bReset); //TODO:
-	params_Advanced.add(bReset_Window); //TODO:
-	params_Advanced.add(bLockMove); //TODO:
-	params_Advanced.add(bNoScroll); //TODO:
-
-	params_Advanced.add(bSolo); //used on layout presets engine
-	//params_Advanced.add(bMinimize_Presets);//need to rename
-
-	//params_Advanced.add(bLinkGlobal);
-	//params_Advanced.add(bLinked);
-	//params_Advanced.add(windowsOrganizer.pad);
-	//params_Advanced.add(bLandscape);//TODO:
-
-	//--
-
-	//TODO: For functions not implemented yet.
-
-	// Exclude from settings
-	//bAdvanced.setSerializable(false);
-	//bExtra.setSerializable(false);
-	bLockMove.setSerializable(false);
-	bNoScroll.setSerializable(false);
-	bReset.setSerializable(false);
-	bReset_Window.setSerializable(false);
+	setupParams();
 
 	//--
 
@@ -111,8 +53,11 @@ SurfingGuiManager::SurfingGuiManager()
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Destructor!";
+	ofLogNotice("ofxSurfingImGui") << "Destructor!";
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
+	// Force saving but would expect to be already called 
+	// by a listener if it's defined SURFING_IMGUI__CREATE_EXIT_LISTENER 
 	if (!bDoneExit)
 	{
 		exit();
@@ -126,15 +71,19 @@ SurfingGuiManager::~SurfingGuiManager()
 		ofLogWarning("ofxSurfingImGui") << "It was already done!";
 		ofLogWarning("ofxSurfingImGui") << "So we successfully omitted calling exit() herre in destructor.";
 	}
+#endif
+
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
+	ofRemoveListener(ofEvents().exit, this, &SurfingGuiManager::exit);
+#endif
 
 	//TODO:
-	//// Delete pointers
+	// Delete font pointers
 	//delete customFont;
-	//for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];
-
-	ofRemoveListener(ofEvents().exit, this, &SurfingGuiManager::exit);
+	//for (size_t i = 0; i < customFonts.size(); i++) delete customFonts[i];//crash
 }
 
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 //--------------------------------------------------------------
 void SurfingGuiManager::exit(ofEventArgs& e)
 {
@@ -144,12 +93,14 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 
 	exit();
 }
+#endif
 
 //--------------------------------------------------------------
 void SurfingGuiManager::exit()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
-	//return;//TODO: fixing crash
+	if (bDoneExit) return;
+
+	ofLogNotice("ofxSurfingImGui") << "exit()";
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 
@@ -160,8 +111,10 @@ void SurfingGuiManager::exit()
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
-	ofLogNotice("ofxSurfingImGui") << "Listener has been removed. Now we are going to save the session settings.";
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
+	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
 	saveSettings();
+#endif
 
 	bDoneExit = true;
 }
@@ -169,11 +122,107 @@ void SurfingGuiManager::exit()
 //--
 
 //--------------------------------------------------------------
+void SurfingGuiManager::setupParams() {
+	ofLogNotice("ofxSurfingImGui") << "setupParams()";
+
+	// All these below params are handled into file settings!
+
+	params_Internal.add(bAutoResize);
+	params_Internal.add(bExtra);
+	params_Internal.add(bMinimize);
+	params_Internal.add(bAdvanced);
+	params_Internal.add(bGui_GameMode);
+	params_Internal.add(bSolo_GameMode);
+	params_Internal.add(bKeys);
+	params_Internal.add(bDebug);
+
+	params_InternalConfig.add(bMouseWheel);
+	params_InternalConfig.add(bMouseWheelFlip);
+	params_InternalConfig.add(bThemeUIAlt);
+	params_InternalConfig.add(fontIndex);
+	params_Internal.add(params_InternalConfig);
+
+	params_Advanced.add(params_Internal);
+
+	//--
+
+	// Help
+
+	params_HelpInternal.add(bHelpInternal, helpInternal.fontIndex);
+	params_HelpApp.add(bHelp, helpApp.fontIndex);
+	params_Help.add(params_HelpInternal);
+	params_Help.add(params_HelpApp);
+	params_Modules.add(params_Help);
+
+	//--
+
+	// Modules
+
+	// Log
+
+	params_ModulesWindows.add(bLog);
+	params_ModulesWindows.add(bLogKeys);
+	params_Modules.add(log.params);
+
+	// Notifier
+
+	params_ModulesWindows.add(bNotifier);
+#ifdef SURFING_IMGUI__USE_NOTIFIER
+	params_ModulesWindows.add(notifier.bGui_Editor);
+#ifndef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
+	params_Modules.add(notifier.params);
+#endif
+#endif
+
+	// Profiler Debugger
+
+	params_ModulesWindows.add(bDebugDebugger);
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
+	debugger.bGui.makeReferenceTo(bDebugDebugger);
+	params_Modules.add(debugger.params);
+#endif
+
+	params_ModulesWindows.add(params_Modules);
+
+	params_Advanced.add(params_ModulesWindows);
+	
+	//--
+		
+	// Windows
+
+	//TODO:
+	params_Windows.add(bReset); 
+	params_Windows.add(bReset_Window);
+	params_Windows.add(bLockMove);
+	params_Windows.add(bNoScroll);
+
+	params_Windows.add(bSolo); //used on layout presets engine
+	//params_Windows.add(bMinimize_Presets);//need to rename
+
+	//params_Windows.add(bLinkGlobal);
+	//params_Windows.add(bLinked);
+	//params_Windows.add(windowsOrganizer.pad);
+	//params_Windows.add(bLandscape);//TODO:
+	params_Advanced.add(params_Windows);
+
+	//--
+
+	//TODO: For functions not implemented yet.
+
+	// Exclude from settings
+	bLockMove.setSerializable(false);
+	bNoScroll.setSerializable(false);
+	bReset.setSerializable(false);
+	bReset_Window.setSerializable(false);
+}
+
+//--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 {
 	if (bDoneSetup)
 	{
-		ofLogWarning(__FUNCTION__) << "Setup was already done. Skipping this call!";
+		ofLogWarning("ofxSurfingImGui") << "setup(ofxImGuiSurfing::SurfingGuiMode mode)";
+		ofLogWarning("ofxSurfingImGui") << "Setup was already done. Skipping this call!";
 	}
 
 	surfingImGuiMode = mode;
@@ -243,7 +292,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 //--------------------------------------------------------------
 void SurfingGuiManager::setup() // We will use the most common mode, to avoid to have to require any argument.
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui") << "setup()";
 
 	setup(IM_GUI_MODE_INSTANTIATED);
 }
@@ -251,7 +300,7 @@ void SurfingGuiManager::setup() // We will use the most common mode, to avoid to
 //--------------------------------------------------------------
 void SurfingGuiManager::setupDocking()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui") << "setupDocking()";
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
@@ -266,7 +315,7 @@ void SurfingGuiManager::setupDocking()
 //--------------------------------------------------------------
 void SurfingGuiManager::setupInitiate()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui") << "setupInitiate()";
 
 	// For using internal instantiated GUI.
 	// Called by all modes except when using the external scope modes aka not instantiated.
@@ -371,13 +420,13 @@ void SurfingGuiManager::doLoadNextFont()
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "BuildFontStyles()" << pathFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesInternal: " << pathFont << ", " << sizeFont;
 
 	ofFile f;
 	bool b = f.open(pathFont);
 	if (!b)
 	{
-		ofLogError("ofxSurfingImGui") << "BuildFontStyles() File not found! " << pathFont;
+		ofLogError("ofxSurfingImGui") << "setupFontForDefaultStylesInternal: File not found! " << pathFont;
 		return;
 	}
 
@@ -391,7 +440,7 @@ void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float
 	else
 	{
 		fontIndex = -1;
-		ofLogError("ofxSurfingImGui") << "It seems that fonts are not loaded properly!";
+		ofLogError("ofxSurfingImGui") << "setupFontForDefaultStylesInternal: It seems that fonts are not loaded properly!";
 	}
 }
 
@@ -830,7 +879,7 @@ void SurfingGuiManager::startup()
 	//{
 	//}
 
-	//--
+	//----
 
 	// Log
 
@@ -845,18 +894,15 @@ void SurfingGuiManager::startup()
 	//--
 
 	// Notifier
-#ifdef OFX_USE_NOTIFIER
-	notifier.setPath(path_Global);
-	notifier.setup();
-	//notifier.setDuration(4000);
 
-	//notifier.setIndexFont(0);
-	//notifier.setIndexFont(1);
-	//notifier.setIndexFont(2);
-	//notifier.setIndexFont(3);
+#ifdef SURFING_IMGUI__USE_NOTIFIER
+#ifdef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
+	notifier.setPath(path_Global);
+#endif
+	notifier.setup();
 #endif
 
-	//--
+	//----
 
 	// Two Help Boxes
 	{
@@ -1591,7 +1637,7 @@ void SurfingGuiManager::update()
 	}
 
 	// Debug profiler
-#ifdef OFX_USE_DEBUGGER
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger)
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
@@ -1606,7 +1652,7 @@ void SurfingGuiManager::draw()
 	//TODO:
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
 
-#ifdef OFX_USE_DEBUGGER
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger) debugger.updateProfileTasksGpu(); //call after main ofApp draw
 #endif
 }
@@ -2228,7 +2274,7 @@ void SurfingGuiManager::Begin()
 
 	if (bGui_Aligners) drawWindowAlignHelpers();
 
-#ifndef OFX_USE_DEBUGGER
+#ifndef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger) ImGui::ShowMetricsWindow();
 #endif
 }
@@ -2242,14 +2288,14 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	DrawWindowLogIfEnabled();
 
 	// Notifier
-#ifdef OFX_USE_NOTIFIER
+#ifdef SURFING_IMGUI__USE_NOTIFIER
 	DrawNotifierIfEnabled();
 #endif
 
 	//--
 
 	// Profiler
-#ifdef OFX_USE_DEBUGGER
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger) debugger.drawImGui();
 	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
 #endif
@@ -3128,17 +3174,13 @@ bool SurfingGuiManager::loadSettings()
 //--------------------------------------------------------------
 void SurfingGuiManager::saveSettings()
 {
+	if (bResetUIProgramed) return;
+	//respect not saving settings on exit. then next startup will have default settings
+
 	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
 
 	if (bAutoSaveSettings)
 	{
-		//TODO:
-		// Double check again that folder exist.
-		// This is already made on setup or when a custom setName is made.
-		CheckFolder(path_Global);
-		// Could use:
-		//ofFilePath::getEnclosingDirectory(O)
-
 		saveGroup(params_AppSettings, path_AppSettings);
 		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
 	}

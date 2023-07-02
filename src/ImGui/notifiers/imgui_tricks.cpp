@@ -1,7 +1,10 @@
 #include "imgui_tricks.hpp"
 
 namespace ImTricks {
-
+	
+	//TODO:
+	// anim
+#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 	namespace Animations {
 
 		int FastLerpInt(const char* identifier, bool state, int min, int max, int speed) {
@@ -66,6 +69,7 @@ namespace ImTricks {
 			return ImGui::ColorConvertFloat4ToU32(lerp);
 		}
 	}
+#endif
 
 	//----
 
@@ -99,7 +103,7 @@ namespace ImTricks {
 		bool bUseTagColor = true;
 		bool bBg = true;
 #else
-		ofParameter<bool> bGui{ "Debug Notifier", false };
+		ofParameter<bool> bGui{ "Notifier", false };
 		// These init value will be overwritten by calling setup()!
 		ofParameter<int> duration{ "Duration", SURFING_IMGUI_NOTIFIER_DEFAULT_DURATION, 300, 10000 };
 		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
@@ -118,14 +122,17 @@ namespace ImTricks {
 		ofParameter<bool> bUseTagColor{ "Tag Color", true };
 		ofParameter<bool> bBg{ "Bg", true };
 
-		ofParameterGroup params{ "surfingNotifier", bGui, indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
+		ofParameterGroup params{ "Module Notifier", bGui, indexFont, duration, padx,pady,padxInner, padyInner, ySpacing, round, bUseColorMark, mkRounded , mkWidth, mkPad, bAlignRight, bRightColorMark, bUseTagColor, bBg };
 #endif
+
+		ImVec2 bbox = ImVec2(500, 100);
+
 		void doSetMini() {
 			indexFont = 0;
 			padx = 2;
 			pady = 2;
-			padxInner = 2;
-			padyInner = 2;
+			padxInner = 6;
+			padyInner = 4;
 			ySpacing = 2;
 			round = 2.f;
 			mkRounded = 1.f;
@@ -157,7 +164,91 @@ namespace ImTricks {
 			doClear();
 		}
 
-		void drawImGuiControls()
+#ifndef USE_IM_GUI_TRICKS_LAMBDA
+		// Draw lambda function:
+		//TODO: Must be moved out of here and non lambda!  
+		void DrawNotify(ImDrawList* draw, ImVec2 NotifyPos, NotifyStruct notify)
+		{
+			ImVec2 szText = ImGui::CalcTextSize(notify.message.c_str());
+
+			bbox = szText + ImVec2(padxInner + padxInner, padyInner + padyInner);
+
+			if (bbox.x > widthMax_) widthMax_ = bbox.x;
+
+			ImVec2 NotifyPos_;
+
+			//TODO: right align text
+			if (bAlignRight)
+			{
+				offsetx = szText.x;
+				NotifyPos_ = NotifyPos - ImVec2(offsetx + padxInner + padxInner, 0); // Offset
+			}
+			else
+			{
+				offsetx = 0;
+				NotifyPos_ = NotifyPos; // No offset
+			}
+
+			ImVec2 NotifyEndPos = NotifyPos_ + bbox;
+
+			//1. bbox bg
+			if (bBg) {
+				draw->AddRectFilled(NotifyPos_, NotifyEndPos,
+					ImGui::GetColorU32(ImGuiCol_PopupBg),
+					((round == 0) ? ImGui::GetStyle().PopupRounding : round));
+			}
+
+			ImColor colorState;
+			switch (notify.state)
+			{
+			case ImTrickNotify_Verbose: colorState = ImColor(ofColor::white); break;
+			case ImTrickNotify_Notice: colorState = ImColor(ofColor::green); break;
+			case ImTrickNotify_Warning: colorState = ImColor(ofColor::yellow); break;
+			case ImTrickNotify_Error: colorState = ImColor(ofColor::red); break;
+			case ImTrickNotify_Info: default: colorState = ImColor(ofColor::white); break;
+			}
+
+			// 2. Text
+			const auto TextPos = NotifyPos_ + ImVec2(padxInner, padyInner);
+
+			//3. bbox left colored mark
+			if (bUseColorMark)
+			{
+				if (!bRightColorMark)
+					draw->AddRectFilled(ImVec2(NotifyPos_.x - mkWidth - mkPad, NotifyPos_.y),
+						ImVec2(NotifyPos_.x - mkPad, NotifyPos_.y + bbox.y), colorState, mkRounded);
+				else
+					draw->AddRectFilled(ImVec2(NotifyEndPos.x + mkPad, NotifyPos_.y),
+						ImVec2(NotifyEndPos.x + mkPad + mkWidth, NotifyPos_.y + bbox.y), colorState, mkRounded);
+			}
+
+			ImU32 c;
+			if (bUseTagColor) c = ImGui::GetColorU32(ImVec4(colorState));
+			else c = ImGui::GetColorU32(ImGuiCol_Text);
+
+			draw->AddText(TextPos, c, notify.message.c_str());
+
+			if (bbox.x > widthMax_) widthMax_ = bbox.x;
+
+			// Spacing up!
+#ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+			NotifyPos.y -= bbox.y;
+			NotifyPos.y -= ySpacing;
+#else
+			//TODO:
+			// anim
+			bool state = 1;
+			float min = 0;
+			float max = bbox.y + ySpacing;
+			float speed = 0.05;
+			//float speed = (1000 / 60.f) * 400;
+			float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
+			NotifyPos.y -= offsety_;
+#endif
+		}
+#endif
+
+		void drawImGuiEditorControls()
 		{
 			if (!bGui) return;
 
@@ -215,6 +306,13 @@ namespace ImTricks {
 #endif
 				if (ImGui::Button("Reset")) { doReset(); }
 				ImGui::SameLine();
+				if (ImGui::Button("Mini")) doSetMini();
+
+				// settings are handled externally
+				//if (ImGui::Button("Save")) doSave();
+				//ImGui::SameLine();
+				//if (ImGui::Button("Load")) doLoad();
+
 				if (ImGui::Button("Clear")) doClear();
 
 				ImGui::Spacing();
@@ -227,20 +325,18 @@ namespace ImTricks {
 
 			if (b) ImGui::End();
 			//ImGui::End();
-		};
-
-		ImVec2 bbox = ImVec2(500, 100);
+		}
 
 		void AddNotify(std::string message, NotifyState state)
 		{
 			uint64_t t = GetTickCount64();//TODO: WIN_32 only!
 			notifies.push_back({ message, state, t + duration });//store end time
-		};
+		}
 
 		void doClear() {
 			notifies.clear();
 			widthMax_ = wmaxDef;//reset
-		};
+		}
 
 		void HandleNotifies(ImDrawList* draw, std::vector<ImFont*>* fonts)
 		{
@@ -264,21 +360,19 @@ namespace ImTricks {
 			////NotifyPos.y -= pady;
 
 			// Spacing up!
-			if (1) {
-				NotifyPos.y -= ySpacing;
-			}
-			else {
-				//TODO:
-				// anim
-				bool state = 1;
-				float min = 0;
-				float max = ySpacing;
-				float speed = 0.05;
-				//float speed = (1000 / 60.f) * 400;
-				float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
-				NotifyPos.y -= offsety_;
-			}
-
+#ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+			NotifyPos.y -= ySpacing;
+#else 
+			//TODO:
+			// anim
+			bool state = 1;
+			float min = 0;
+			float max = ySpacing;
+			float speed = 0.05;
+			//float speed = (1000 / 60.f) * 400;
+			float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
+			NotifyPos.y -= offsety_;
+#endif
 
 			//--
 
@@ -300,8 +394,9 @@ namespace ImTricks {
 
 			//--
 
+#ifdef USE_IM_GUI_TRICKS_LAMBDA
 			// Draw lambda function:
-
+			//TODO: Must be moved out of here and non lambda!  
 			auto DrawNotify = [=, &draw, &NotifyPos](NotifyStruct notify)
 			{
 				ImVec2 szText = ImGui::CalcTextSize(notify.message.c_str());
@@ -366,22 +461,22 @@ namespace ImTricks {
 				if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
 				// Spacing up!
-				if (1) {
-					NotifyPos.y -= bbox.y;
-					NotifyPos.y -= ySpacing;
-				}
-				else {
-					//TODO:
-					// anim
-					bool state = 1;
-					float min = 0;
-					float max = bbox.y + ySpacing;
-					float speed = 0.05;
-					//float speed = (1000 / 60.f) * 400;
-					float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
-					NotifyPos.y -= offsety_;
-				}
+#ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+				NotifyPos.y -= bbox.y;
+				NotifyPos.y -= ySpacing;
+#else 
+				//TODO:
+				// anim
+				bool state = 1;
+				float min = 0;
+				float max = bbox.y + ySpacing;
+				float speed = 0.05;
+				//float speed = (1000 / 60.f) * 400;
+				float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
+				NotifyPos.y -= offsety_;
+#endif
 			};
+#endif
 
 			//--
 
@@ -395,7 +490,12 @@ namespace ImTricks {
 					continue;
 				}
 
+#ifdef USE_IM_GUI_TRICKS_LAMBDA
 				DrawNotify(n);
+#else
+				DrawNotify(draw, NotifyPos, n);
+#endif
+
 			}
 
 			//--
@@ -409,9 +509,10 @@ namespace ImTricks {
 			notifies.erase(std::remove_if(notifies.begin(), notifies.end(),
 				[t](const NotifyStruct& n) { return t > n.time; }),
 				notifies.end());
-		};
+		}
 	}
 
+	/*
 	namespace Widgets {
 		void ColorEdit3(const char* label, ImColor& color, ImGuiColorEditFlags flags) {
 			static float col[3] = { color.Value.x, color.Value.y, color.Value.z };
@@ -427,5 +528,6 @@ namespace ImTricks {
 				color = ImColor(col[0], col[1], col[2], col[3]);
 		}
 	}
+	*/
 
 }

@@ -16,11 +16,21 @@
 
 // MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
 
-#define SURFING_IMGUI__USE_IMGUI_MOUSE // Instead of the OF/GLFW. 
-//Required disabled to allow overlay on windows capturer app.
+#define SURFING_IMGUI__USE_IMGUI_MOUSE 
+// Mouse handled by ImGui Instead of the OF/GLFW. 
+// Includes much mouse behaviors from imgui, as resize, waiting, text input etc
+// Required disabled to allow overlay on windows capturer app.
+
+#define SURFING_IMGUI__USE_PROFILE_DEBUGGER
+#define SURFING_IMGUI__USE_NOTIFIER
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
+//TODO: Fixing exceptions hen closing ofApp.
+//#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable enable auto save on exit.
+
+//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE // if undefined settings will be bundled into main settings.
 
 //----
 
@@ -496,6 +506,7 @@ namespace ofxImGuiSurfing
 		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
 		else if (i == 6) _groupInfo = "OFX_IM_GROUP_HIDDEN";
 		//else if (i == 7) _groupInfo = "OFX_IM_GROUP_WINDOWED";
+
 		else _groupInfo = "OFX_IM_GROUP UNKNOWN";
 
 		return _groupInfo;

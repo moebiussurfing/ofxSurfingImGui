@@ -38,10 +38,10 @@ void ofApp::draw()
 			ui.AddSpacingSeparated();
 
 			ui.AddLabelBig("Theme");
-			ofxImGuiSurfing::AddToggleRoundedButtonNamed(ui.bThemeUiAlt, "Day", "Night");
+			ofxImGuiSurfing::AddToggleRoundedButtonNamed(ui.bThemeUIAlt, "Day", "Night");
 
 			string s;
-			if (!ui.bThemeUiAlt) s = THEME_NAME_NIGHT;
+			if (!ui.bThemeUIAlt) s = THEME_NAME_NIGHT;
 			else s = THEME_NAME_DAY;
 			ui.AddLabel(s);
 

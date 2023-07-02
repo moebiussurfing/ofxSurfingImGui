@@ -612,7 +612,7 @@ namespace ofxImGuiSurfing
     public:
         ofParameter<bool> bGui{"LOG", true};
 
-        ofParameterGroup params{"Log Settings"};
+        ofParameterGroup params{"Module Log"};
         // settings are handled by the parent class. 
         // will be serialized on exit and loaded on start.
 
