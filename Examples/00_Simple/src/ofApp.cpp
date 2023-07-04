@@ -63,7 +63,7 @@ void ofApp::setup()
 	// Set app Help text.
 	//ui.setEnableHelpInfoApp();// Optional. is auto forced below.
 	string s = "Examples/00_Simple\n\n";
-	s = "	This example shows learning to:\n\n";
+	s = "This example shows how to:\n\n";
 	s += "- Populate many ofParameters.\n";
 	s += "- Populate an ofParamterGroup.\n";
 	s += "- Use exponential helpers for sliders.\n";
@@ -122,7 +122,7 @@ void ofApp::draw()
 				ui.AddSpacingBigSeparated();
 
 				s = "DrawWidgetsFonts is a combo of widgets that handles a font index selector\n";
-				s += "That can be used in all other zones of the UI:\n";
+				s += "That can be used in all other zones of the UI:\n\n";
 				s += "ui.PushFontByIndex();\n";
 				s += "//draw fonts styled\n";
 				s += "ui.PopFontByIndex();\n";
