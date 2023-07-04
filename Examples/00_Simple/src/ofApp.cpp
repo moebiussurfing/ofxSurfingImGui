@@ -41,10 +41,10 @@ void ofApp::setup()
 	listener = vIn.newListener([this](float& v) {
 
 		vOut1 = ofxImGuiSurfing::reversedExponentialFunction(vIn * 10.f);
-	vOut2 = ofxImGuiSurfing::exponentialFunction(vIn) / 10.f;
-	vOut3 = ofxImGuiSurfing::squaredFunction(vIn);
+		vOut2 = ofxImGuiSurfing::exponentialFunction(vIn) / 10.f;
+		vOut3 = ofxImGuiSurfing::squaredFunction(vIn);
 
-	ofLogNotice() << v << " -> " << vOut1.get() << " : " << vOut2.get();
+		ofLogNotice() << v << " -> " << vOut1.get() << " : " << vOut2.get();
 		});
 
 	vIn = vIn; // refresh callback
@@ -59,7 +59,7 @@ void ofApp::setup()
 	// Optional help
 
 	// enable internal help about how the addon works
-	ui.setEnableHelpInfoInternal();
+	ui.setEnableHelpInternal();
 
 	// Set app help text.
 	//ui.setEnableHelpInfoApp();//auto forced
@@ -71,7 +71,7 @@ void ofApp::setup()
 	s += "- Populate common internal bool toggles:\n";
 	s += "  minimize, auto resize, help windows.\n";
 	s += "- Set and show internal and app help windows.\n";
-	ui.setHelpInfoApp(s);
+	ui.setHelpAppText(s);
 }
 
 //--------------------------------------------------------------
@@ -81,13 +81,20 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
+
+			ui.AddSpacingBigSeparated();
+
 			ui.AddMinimizerToggle();
 			ui.AddAutoResizeToggle();
 			ui.AddKeysToggle();
-			ui.AddSpacing();
-			ui.AddHelpToggle();
+			ui.AddSpacingBigSeparated();
+			
 			ui.AddHelpInternalToggle();
+			ui.AddHelpToggle();
+			ui.DrawHelpWidgetsFont();
+			ui.AddSpacingBigSeparated();
 
+			ui.DrawWidgetsGlobalScale();
 			ui.AddSpacingBigSeparated();
 
 			//--
@@ -102,13 +109,31 @@ void ofApp::draw()
 				// This is an ofParameterGroup
 				// contained params are populated 
 				// as their default widgets styles
+				ui.PushGlobalScale(2.0);
 				ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+				ui.PopGlobalScale();
 
 				// This is a separator line 
 				ui.AddSpacingBigSeparated();
 
-				// This is a big param widget
-				ui.Add(amount2, OFX_IM_VSLIDER);
+				{
+					// There's is an internal font index selector.
+					ui.DrawWidgetsFonts();
+
+					// To be used around all the context 
+					// by calling push/pop to draw not styled text.
+					ui.PushFontByIndex();
+					{
+						// This is a big param widget
+						ui.Add(bEnable2, OFX_IM_CHECKBOX);
+						string s = "For instance, we and our partners may store cookies and other similar technologies to access personal data, including page visits and your IP address. We use this information about you, your devices and your online interactions with us to provide.";
+						ui.AddLabelNoStyled(s);
+						ImGui::Text("Hello RAW imgui text");
+						ui.Add(amount2);
+						ui.Add(amount2, OFX_IM_VSLIDER);
+					}
+					ui.PopFontByIndex();
+				}
 			}
 			else
 			{
@@ -147,7 +172,7 @@ void ofApp::draw()
 			{
 				float sz = ImGui::CalcTextSize(">").x;
 				float w = ui.getWidgetsWidth();
-				ofxImGuiSurfing::AddSpacingRightAlign(sz + w / 2);
+				ofxImGuiSurfing::AddSpacingToRightAlign(sz + w / 2);
 				ui.AddLabelBig(">");
 			}
 
@@ -172,4 +197,11 @@ void ofApp::draw()
 void ofApp::keyPressed(int key)
 {
 	if (key == 'g') bGui = !bGui;
+}
+
+//--------------------------------------------------------------
+void ofApp::exit()
+{
+	ui.save();
+	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
 }

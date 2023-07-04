@@ -140,6 +140,8 @@ void SurfingGuiManager::setupParams() {
 	params_InternalConfig.add(bMouseWheelFlip);
 	params_InternalConfig.add(bThemeUIAlt);
 	params_InternalConfig.add(fontIndex);
+	params_InternalConfig.add(globalScale);
+	params_InternalConfig.add(bGlobalScaleWheel);
 	params_Internal.add(params_InternalConfig);
 
 	params_Advanced.add(params_Internal);
@@ -2220,6 +2222,17 @@ void SurfingGuiManager::Begin()
 	// Sometimes we could use an ofxImGui external or from a parent scope..
 	if (guiPtr != nullptr) guiPtr->begin();
 	else gui.begin();
+
+	//--
+
+	// Global Scale
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.FontGlobalScale = globalScale;
+	//io.scale= globalScale;
+	
+	// Global scale by Ctrl + mouse wheel:
+	if(bGlobalScaleWheel) io.FontAllowUserScaling = true;
 
 	//--
 

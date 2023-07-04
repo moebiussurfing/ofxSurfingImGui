@@ -2,17 +2,19 @@
 
 /*
 
-This example shows learning to:
+	This example shows learning to:
 
-- Populate many ofParameters.
-- Populate an ofParamterGroup.
-- Use exponential helpers for sliders.
-- Populate common internal bool toggles:
-	minimize, auto resize, help windows.
-- Set and show internal and app help windows.
-
+	- Populate many ofParameters.
+	- Populate an ofParamterGroup.
+	- Use exponential helpers for sliders.
+	- Populate common internal bool toggles:
+		minimize, auto resize, help windows.
+	- Set and show internal and app Help Windows.
+	- Global Scale widgets.
 
 */
+
+//--
 
 #include "ofMain.h"
 
@@ -25,6 +27,7 @@ public:
 	void setup();
 	void draw();
 	void keyPressed(int key);
+	void exit();
 
 	ofParameterGroup params;
 	ofParameter<bool> bEnable1;

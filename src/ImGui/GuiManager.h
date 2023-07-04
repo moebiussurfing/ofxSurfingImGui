@@ -1879,6 +1879,21 @@ public:
 
 	//----
 
+	// Global scale
+	// this will not work as is global. we set the global scale in the Begin() method.
+	void PushGlobalScale(float scale) {
+		ImGuiIO& io = ImGui::GetIO();
+		globalScalePre = io.FontGlobalScale;
+		io.DisplayFramebufferScale = ImVec2(scale, scale);
+	}
+	void PopGlobalScale() {
+		ImGuiIO& io = ImGui::GetIO();
+		//io.FontGlobalScale = globalScalePre;
+		io.DisplayFramebufferScale = ImVec2(globalScalePre, globalScalePre);
+	}
+
+	//----
+
 	// Fonts Runtime Management 
 
 private:
@@ -1955,6 +1970,22 @@ public:
 
 	void PushFontByIndex(); // activates font style picked from the internal index
 	void PopFontByIndex();
+
+	void DrawWidgetsGlobalScale() {
+		string s;
+		this->Add(this->globalScale);
+		s = "Global Scale is applied to all the UI context.";
+		this->AddTooltip(s);
+		if (this->AddButtonRaw("Reset")) {
+			this->globalScale = 1;
+		}
+		s = "Set Global Scale to unit.";
+		this->AddTooltip(s);
+		this->SameLine();
+		this->Add(this->bGlobalScaleWheel);
+		s = "Ctrl + Mouse Wheel: \nScales the active window.";
+		this->AddTooltip(s);
+	}
 
 	//----
 
@@ -2046,6 +2077,9 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bMinimize{"Minimize", true};
 	ofParameter<bool> bAutoResize{"Auto Resize", true};
+	ofParameter<bool> bGlobalScaleWheel{"Wheel Global Scale", false};
+	ofParameter<float> globalScale{"GlobalScale", 1, 0.25, 4};
+	float globalScalePre = 1;
 	ofParameter<bool> bKeys{"Keys", true};
 	ofParameter<bool> bLogKeys{"Log Keys", false};
 	ofParameter<bool> bHelp{"Help App", false};
@@ -2088,16 +2122,16 @@ public:
 
 	ofParameterGroup params_Advanced{ "Advanced Settings" };
 	// These params are saved as settings when exit and loaded when reopen the app. 
-	
+
 	ofParameterGroup params_Internal{ "Internal" };
 	ofParameterGroup params_InternalConfig{ "InternalConfig" };
-	ofParameterGroup params_Modules{ "Modules"};
-	ofParameterGroup params_ModulesWindows{ "ModulesWindows"};
-	ofParameterGroup params_Help{ "Module Help"};
-	ofParameterGroup params_HelpInternal{ "Help Internal"};
-	ofParameterGroup params_HelpApp{ "Help App"};
+	ofParameterGroup params_Modules{ "Modules" };
+	ofParameterGroup params_ModulesWindows{ "ModulesWindows" };
+	ofParameterGroup params_Help{ "Module Help" };
+	ofParameterGroup params_HelpInternal{ "Help Internal" };
+	ofParameterGroup params_HelpApp{ "Help App" };
 
-	ofParameterGroup params_Windows{ "Windows"};
+	ofParameterGroup params_Windows{ "Windows" };
 
 private:
 	void doBuildHelpInfo(bool bSlient = 1); //create or freshed the help info for the drawing help box
@@ -2921,6 +2955,12 @@ private:
 
 						// Auto resize
 						Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+						this->AddSpacing();
+
+						// Global Scale
+						this->Add(globalScale);
+						this->Add(bGlobalScaleWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+						this->AddSpacing();
 
 						// MouseWheel
 						this->Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
@@ -2929,6 +2969,7 @@ private:
 
 						////TODO:
 						//// Lock
+						//this->AddSpacing();
 						//Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 						//TODO:
@@ -4034,7 +4075,9 @@ private:
 	// Then we can reset to some default variables and layout positions of our windows.
 	bool loadSettings();
 public:
+	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
 	void saveSettings();
+	void save() { saveSettings(); }//alias
 
 	//----
 
@@ -4429,7 +4472,7 @@ public:
 
 	// Widgets to select font
 	//--------------------------------------------------------------
-	void drawHelpWidgetsFont()
+	void DrawHelpWidgetsFont()
 	{
 		if (!helpApp.bGui) return;
 		string s = helpApp.bGui.getName() + "##DRAWHELPWIDGETSFONT";
@@ -4439,7 +4482,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void drawHelpInternalWidgetsFont()
+	void DrawHelpInternalWidgetsFont()
 	{
 		if (!helpInternal.bGui) return;
 		string s = helpInternal.bGui.getName() + "##DRAWHELPINTERNALWIDGETSFONT";
@@ -4495,6 +4538,12 @@ public:
 		bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
 
 		return bReturn;
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddButtonRaw(std::string label)
+	{
+		return ImGui::Button(label.c_str());
 	}
 
 	//--------------------------------------------------------------
