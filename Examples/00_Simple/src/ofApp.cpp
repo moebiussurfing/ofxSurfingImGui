@@ -51,26 +51,27 @@ void ofApp::setup()
 
 	//--
 
-	// Can be omitted in many scenarios..
-	//ui.setup();
+	ui.setup();
 
 	//--
 
-	// Optional help
+	// Optional Help
 
 	// enable internal help about how the addon works
 	ui.setEnableHelpInternal();
 
-	// Set app help text.
-	//ui.setEnableHelpInfoApp();//auto forced
-	string s = "Examples/00_Simple \n\n";
-	s += "This example shows learning to:\n\n";
+	// Set app Help text.
+	//ui.setEnableHelpInfoApp();// Optional. is auto forced below.
+	string s = "Examples/00_Simple\n\n";
+	s = "	This example shows learning to:\n\n";
 	s += "- Populate many ofParameters.\n";
 	s += "- Populate an ofParamterGroup.\n";
 	s += "- Use exponential helpers for sliders.\n";
-	s += "- Populate common internal bool toggles:\n";
+	s += "- Populate common internal bool toggles : \n";
 	s += "  minimize, auto resize, help windows.\n";
-	s += "- Set and show internal and app help windows.\n";
+	s += "- Set and show internal and app Help Windows.\n";
+	s += "- Easy Push / Pop Font style using an available internal index.\n";
+	s += "- Global Scale widgets.\n";
 	ui.setHelpAppText(s);
 }
 
@@ -81,6 +82,7 @@ void ofApp::draw()
 	{
 		if (ui.BeginWindow(bGui))
 		{
+			string s;
 
 			ui.AddSpacingBigSeparated();
 
@@ -88,10 +90,13 @@ void ofApp::draw()
 			ui.AddAutoResizeToggle();
 			ui.AddKeysToggle();
 			ui.AddSpacingBigSeparated();
-			
+
 			ui.AddHelpInternalToggle();
+
 			ui.AddHelpToggle();
+			ui.AddSpacing();
 			ui.DrawHelpWidgetsFont();
+
 			ui.AddSpacingBigSeparated();
 
 			ui.DrawWidgetsGlobalScale();
@@ -116,6 +121,13 @@ void ofApp::draw()
 				// This is a separator line 
 				ui.AddSpacingBigSeparated();
 
+				s = "DrawWidgetsFonts is a combo of widgets that handles a font index selector\n";
+				s += "That can be used in all other zones of the UI:\n";
+				s += "ui.PushFontByIndex();\n";
+				s += "//draw fonts styled\n";
+				s += "ui.PopFontByIndex();\n";
+				ui.AddLabel(s);
+				ui.AddSpacing();
 				{
 					// There's is an internal font index selector.
 					ui.DrawWidgetsFonts();
@@ -126,13 +138,17 @@ void ofApp::draw()
 					{
 						// This is a big param widget
 						ui.Add(bEnable2, OFX_IM_CHECKBOX);
-						string s = "For instance, we and our partners may store cookies and other similar technologies to access personal data, including page visits and your IP address. We use this information about you, your devices and your online interactions with us to provide.";
-						ui.AddLabelNoStyled(s);
-						ImGui::Text("Hello RAW imgui text");
+						if (bEnable2) {
+							s = "For instance, we and our partners may store cookies and other similar technologies to access personal data, including page visits and your IP address. We use this information about you, your devices and your online interactions with us to provide.";
+							ui.AddLabelNoStyled(s);
+							ImGui::Text("Hello RAW imgui text");
+						}
 						ui.Add(amount2);
-						ui.Add(amount2, OFX_IM_VSLIDER);
 					}
 					ui.PopFontByIndex();
+					ui.AddSeparated();
+
+					ui.Add(amount2, OFX_IM_HSLIDER_MINI);
 				}
 			}
 			else
@@ -151,39 +167,50 @@ void ofApp::draw()
 			//--
 
 			// Linear to logarithmic
-			ui.AddLabelBig("LINEAR TO LOGARITHMIC");
-			ui.Add(vIn, OFX_IM_HSLIDER);
-			ui.AddTooltip("linear");
-
-			ui.AddSpacingBig();
-
-			//--
-
-			// Some useful methods to help a bit on align
-
-			//// Align right
-			//{
-			//	float sz = ImGui::CalcTextSize(">").x;
-			//	ofxImGuiSurfing::AddSpacingRightAlign(sz);
-			//	ui.AddLabelBig(">");
-			//}
-
-			// Align center
+			if (ui.BeginTree("LINEAR TO LOGARITHMIC"))
 			{
-				float sz = ImGui::CalcTextSize(">").x;
-				float w = ui.getWidgetsWidth();
-				ofxImGuiSurfing::AddSpacingToRightAlign(sz + w / 2);
+				ui.Add(vIn, OFX_IM_HSLIDER);
+				ui.AddTooltip("linear");
+
+				ui.AddSpacingBig();
+
+				//--
+
+				// Some useful methods to help a bit on align
+
+				if (vIn > 0 && vIn < 0.1)
+				{
+					// Align left Default 
+				}
+				else if (vIn > 0.1 && vIn < 0.5)
+				{
+					// Align center
+					{
+						float sz = ImGui::CalcTextSize(">").x;
+						float w = ui.getWidgetsWidth();
+						ofxImGuiSurfing::AddSpacingToRightAlign(sz + w / 2);
+					}
+				}
+				else if (vIn < 1) {
+					// Align right
+					{
+						float sz = ImGui::CalcTextSize(">").x;
+						ofxImGuiSurfing::AddSpacingToRightAlign(sz);
+					}
+				}
 				ui.AddLabelBig(">");
+
+				ui.AddSpacingBig();
+
+				ui.Add(vOut1, OFX_IM_HSLIDER_MINI);
+				ui.AddTooltip("reversedExponential");
+				ui.Add(vOut2, OFX_IM_HSLIDER_MINI);
+				ui.AddTooltip("exponential");
+				ui.Add(vOut3, OFX_IM_HSLIDER_MINI);
+				ui.AddTooltip("squared");
+
+				ui.EndTree();
 			}
-
-			ui.AddSpacingBig();
-
-			ui.Add(vOut1, OFX_IM_HSLIDER_MINI);
-			ui.AddTooltip("reversedExponential");
-			ui.Add(vOut2, OFX_IM_HSLIDER_MINI);
-			ui.AddTooltip("exponential");
-			ui.Add(vOut3, OFX_IM_HSLIDER_MINI);
-			ui.AddTooltip("squared");
 
 			//--
 

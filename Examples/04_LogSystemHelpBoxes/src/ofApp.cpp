@@ -261,7 +261,7 @@ void ofApp::drawImGui()
 			// Help App
 			ui.AddHelpToggle();
 			if (ui.bHelp) {
-				ui.drawHelpWidgetsFont();
+				ui.DrawHelpWidgetsFont();
 				ui.Add(ui.helpApp.fontIndex);
 				ui.AddSpacing();
 			}
@@ -269,7 +269,7 @@ void ofApp::drawImGui()
 			// Help Internal
 			ui.AddHelpInternalToggle();
 			if (ui.bHelpInternal) {
-				ui.drawHelpInternalWidgetsFont();
+				ui.DrawHelpInternalWidgetsFont();
 				ui.Add(ui.helpInternal.fontIndex);
 			}
 

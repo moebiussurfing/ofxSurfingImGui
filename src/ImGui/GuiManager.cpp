@@ -2232,7 +2232,7 @@ void SurfingGuiManager::Begin()
 	//io.scale= globalScale;
 	
 	// Global scale by Ctrl + mouse wheel:
-	if(bGlobalScaleWheel) io.FontAllowUserScaling = true;
+	io.FontAllowUserScaling = bGlobalScaleWheel;
 
 	//--
 

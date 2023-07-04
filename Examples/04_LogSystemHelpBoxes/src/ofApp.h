@@ -5,6 +5,7 @@
 /*
 
 	This example shows how to use the logging system.
+	and Help Boxes for internal and App.
 
 */
 

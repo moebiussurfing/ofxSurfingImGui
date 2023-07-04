@@ -4496,6 +4496,7 @@ private:
 	//--
 
 public:
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
 	void setEnableHelpInternal(bool b = true)
 	{
@@ -4508,6 +4509,7 @@ public:
 #endif
 	}
 
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
 	void setEnableHelpApp(bool b = true)
 	{
@@ -4522,9 +4524,9 @@ public:
 		//helpApp.setFontMonospacedDefined();
 	}
 
+	// Must be called after ui.setup();
 	// If we are using mono-spaced fonts, 
 	// it must be called after be have been added the mono-spaced fonts.
-	// 
 	//--------------------------------------------------------------
 	void setHelpAppText(std::string text)
 	{
@@ -4534,7 +4536,7 @@ public:
 		helpApp.setText(helpAppText);
 		bUseHelpApp = true;
 	}
-
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
 	void setHelpInternalText(std::string text)
 	{
