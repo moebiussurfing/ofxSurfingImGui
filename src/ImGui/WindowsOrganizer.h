@@ -47,11 +47,13 @@ namespace ofxImGuiSurfing
             ofAddListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
             ofAddListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
             //TODO: 
             // Fix exit exceptions on RF..
             int minValue = std::numeric_limits<int>::min();
             ofAddListener(ofEvents().exit, this, &WindowsOrganizer::exit, minValue);
-
+#endif
+            
             //--
 
             // Exclude
@@ -69,6 +71,7 @@ namespace ofxImGuiSurfing
             ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
             ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
             if (!bDoneExit)
             {
                 exit();
@@ -81,39 +84,52 @@ namespace ofxImGuiSurfing
                 ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) <<
                     "Succesfully omitted calling exit() in destructor. It was already done!";
             }
+#endif
         }
 
     private:
         bool bDoneExit = false;
+
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
         //--------------------------------------------------------------
         void exit(ofEventArgs& e)
         {
-            ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "(ofEventArgs& e)";
+            ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
 
             exit();
         }
+#endif
 
         //--------------------------------------------------------------
         void exit()
         {
             ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit()";
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
+            saveSettings();
+#endif
+
+            bDoneExit = true;
+        }
+        
+    public:
+        //--------------------------------------------------------------
+        void saveSettings()
+        {
             if (bInitialized)
             {
-                ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Saving settings";
+                ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "saveSettings()";
 
                 // Save
                 saveGroup(params_AppSettings, path_Settings);
             }
             else
             {
-                ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "Skipped Saving settings";
+                ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "saveSettings() Skipped Saving settings";
                 ofLogWarning("ofxSurfingImGui") << "bInitialized was unexpectedly false!";
             }
-
-            bDoneExit = true;
         }
-
+        
         //--
 
     public:
@@ -803,7 +819,7 @@ namespace ofxImGuiSurfing
             x = 100;
             y = 100;
 #endif
-            
+
             for (int i = 1; i < myWins.size(); i++)
             {
                 // skip

@@ -3203,6 +3203,8 @@ void SurfingGuiManager::saveSettings()
 		ofLogWarning("ofxSurfingImGui") << "By passed saveAppSettings()";
 		ofLogWarning("ofxSurfingImGui") << "bAutoSaveSettings was disabled!";
 	}
+
+	windowsOrganizer.saveSettings();
 }
 
 //--------------------------------------------------------------

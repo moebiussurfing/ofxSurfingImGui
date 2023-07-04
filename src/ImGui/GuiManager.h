@@ -825,7 +825,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabel(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(0);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -836,7 +845,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelStyled(const std::string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 
 		pushStyleFont(int(style));
@@ -849,7 +867,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelNoStyled(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
@@ -858,7 +885,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelBig(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -869,7 +905,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHuge(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -880,7 +925,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHugeXXL(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(3);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -1666,6 +1720,30 @@ public:
 
 		return MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
 	}
+
+	//--------------------------------------------------------------
+	bool MenuItemButtonBlinking(const std::string label, bool bEnable = true)
+	{
+		if (bEnable) this->BeginBlinkText();
+		const char* shortcut = NULL;
+		bool selected = false;
+		bool enabled = true;
+		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+		if (bEnable) this->EndBlinkText();
+		return b;
+	}
+
+	////--------------------------------------------------------------
+	//bool MenuItemButtonBlinkingIfHover(const std::string label)
+	//{
+	//	this->BeginBlinkText();
+	//	const char* shortcut = NULL;
+	//	bool selected = false;
+	//	bool enabled = true;
+	//	bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+	//	this->EndBlinkText();
+	//	return b;
+	//}
 
 	//---
 
@@ -4292,7 +4370,8 @@ public:
 	ofParameter<bool> bLinked{"Link Windows", true}; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
 	ofParameter<bool> bOrientation{"Orientation", false}; // false=horizontal. true=vertical
-	ofParameter<bool> bGui_Global{"Show Global", true}; // to force hide all windows or to show if visible
+	ofParameter<bool> bGui_Global{"Show Windows", true}; // to force hide all windows or to show if visible
+	//ofParameter<bool> bGui_Global{"Show Global", true}; // to force hide all windows or to show if visible
 	ofParameter<bool> bAlignWindowsReset{"Reset", false};
 	ofParameter<bool> bAlignWindowsCascade{"Cascade", false};
 

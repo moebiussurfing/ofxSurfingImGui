@@ -23,6 +23,7 @@
 
 #define SURFING_IMGUI__USE_PROFILE_DEBUGGER
 #define SURFING_IMGUI__USE_NOTIFIER
+#define SURFING_IMGUI_NOTIFIER_DEFAULT_DURATION 3000
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
@@ -302,7 +303,7 @@ namespace ofxImGuiSurfing
 		// FLOAT / INT Styles
 
 		OFX_IM_SLIDER, // uses the (ofxImGui) standard
-
+		OFX_IM_SLIDER_NO_LABEL,//TODO:
 		// Big Sliders
 
 		// Horizontal
@@ -340,6 +341,7 @@ namespace ofxImGuiSurfing
 		OFX_IM_STEPPER,
 		OFX_IM_STEPPER_NO_LABEL,
 		OFX_IM_DRAG,
+		OFX_IM_DRAG_NO_LABEL,
 
 		//--
 
