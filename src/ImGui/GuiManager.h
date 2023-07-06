@@ -943,12 +943,26 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	ImVec2 CalcTextSize(const std::string s)
+	{
+		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
+		return sz;
+	}
+
+	//--------------------------------------------------------------
 	ImVec2 CalcTextSize(const std::string s, int indexFont)
 	{
 		pushStyleFont(indexFont);
 		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
 		popStyleFont();
 		return sz;
+	}
+
+	float CalcWidgetWidth(const std::string s) {
+		float sp = this->CalcTextSize(s.c_str(), 0).x;
+		//sp += this->getWidgetsSpacingX();
+		sp += this->getWindowSpacingX();
+		return sp;
 	}
 
 	//--
