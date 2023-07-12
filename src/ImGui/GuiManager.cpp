@@ -3668,9 +3668,10 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	else if (name == globalScale.getName())
 	{
 		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
-		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 2;
-		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 3;
-		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 4;
+		else if (globalScale.get() == 1.25f) scaleGlobalGroup.indexScaleGlobal = 2;
+		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 3;
+		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 4;
+		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 5;
 		else scaleGlobalGroup.indexScaleGlobal = 0;
 		return;
 	}

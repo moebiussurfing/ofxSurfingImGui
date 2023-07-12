@@ -1868,7 +1868,7 @@ private:
 
 	bool bRestoreIniSettings = true; // allow handling of .ini settings.
 
-#ifdef SURFING_IMGUI__USE_IMGUI_MOUSE
+#ifdef SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW
 	bool bMouseCursorFromImGui = 1;
 #else
 	bool bMouseCursorFromImGui = 0;
@@ -1957,33 +1957,6 @@ public:
 
 	void setImGuiDockingShift(bool b = 1) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
-	//--
-
-public:
-	// Force shared context
-
-	//LEGACY
-	// DEPRECATED
-	////--------------------------------------------------------------
-	//void setImGuiSharedMode(bool b = 1)
-	//{
-	//    //gui.setSharedMode(b); // Not anymore, fully automatic now
-	//}
-
-	//----
-
-	//// Global scale
-	//// this will not work as is global. we set the global scale in the Begin() method.
-	//void PushGlobalScale(float scale) {
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	globalScalePre = io.FontGlobalScale;
-	//	io.DisplayFramebufferScale = ImVec2(scale, scale);
-	//}
-	//void PopGlobalScale() {
-	//	ImGuiIO& io = ImGui::GetIO();
-	//	//io.FontGlobalScale = globalScalePre;
-	//	io.DisplayFramebufferScale = ImVec2(globalScalePre, globalScalePre);
-	//}
 
 	//----
 
@@ -2064,21 +2037,22 @@ public:
 	void PushFontByIndex(); // activates font style picked from the internal index
 	void PopFontByIndex();
 
-	//--
+	//----
 
 	// Scale Global
 
 private:
 	struct ScaleGlobalGroup {
-		vector<string> names{"NONE", "100%", "150%", "175%", "200%"};
+		vector<string> names{"NONE", "100%", "125%", "150%", "175%", "200%"};
 		ofParameter<int> indexScaleGlobal {"Global Scale", 0, 0, names.size() - 1};
 		float getScale() {
 			switch (indexScaleGlobal.get()) {
 			case 0: return -1.0f; break;
 			case 1: return 1.0f; break;
-			case 2: return 1.5f; break;
-			case 3: return 1.75f; break;
-			case 4: return 2.0f; break;
+			case 2: return 1.25f; break;
+			case 3: return 1.5f; break;
+			case 4: return 1.75f; break;
+			case 5: return 2.0f; break;
 			default: return 1.0f; break;
 			}
 		}
@@ -2091,11 +2065,12 @@ public:
 
 		float w = 60;
 		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
-		//else w = MAX(this->getWidgetsWidth(1), 60);
+		else if (scaleGlobalGroup.indexScaleGlobal == 0) w = 60 * 1.f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 1) w = 60 * 1.f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.25f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 5) w = 60 * 2.f;
 
 		ImGui::PushItemWidth(w);
 		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
@@ -2121,10 +2096,10 @@ public:
 		float w = 60;
 		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
 		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
-		//else w = MAX(this->getWidgetsWidth(1), 60);
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.25f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 5) w = 60 * 2.f;
 
 		ImGui::PushItemWidth(w);
 		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
@@ -2138,7 +2113,9 @@ public:
 
 		// responsive
 		if ((this->getWindowWidth() > 200) &&
-			(scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1)) {
+			(scaleGlobalGroup.indexScaleGlobal == 0 ||
+				scaleGlobalGroup.indexScaleGlobal == 1 ||
+				scaleGlobalGroup.indexScaleGlobal == 2)) {
 			ImGui::SameLine();
 		}
 
@@ -2166,7 +2143,7 @@ public:
 		}
 		s = "Set Global Scale to unit.";
 		this->AddTooltip(s);
-		
+
 		//if (this->getWindowWidth() > 150) this->SameLine();
 
 		this->Add(this->bGlobalScaleWheel);
@@ -4624,7 +4601,7 @@ public:
 #else
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
-	}
+}
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------

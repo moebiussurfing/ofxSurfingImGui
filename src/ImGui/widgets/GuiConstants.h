@@ -16,22 +16,28 @@
 
 // MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
 
-#define SURFING_IMGUI__USE_IMGUI_MOUSE 
+#define SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW 
 // Mouse handled by ImGui Instead of the OF/GLFW. 
 // Includes much mouse behaviors from imgui, as resize, waiting, text input etc
 // Required disabled to allow overlay on windows capturer app.
 
-//#define SURFING_IMGUI__USE_PROFILE_DEBUGGER
+//#define SURFING_IMGUI__USE_PROFILE_DEBUGGER // comment to exclude some classes
+
 #define SURFING_IMGUI__USE_NOTIFIER
 #define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 5000
+//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE // if undefined settings will be bundled into main settings.
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
-//TODO: Fixing exceptions hen closing ofApp.
+//TODO: Fixing exceptions when closing ofApp.
+//TODO: We can disable automatic saving on exit.
+//TODO: Then we should save manually.
+//TODO: Implement approach to autosave when settings params change.
 //#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
 //#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable auto save on exit.
 
-//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE // if undefined settings will be bundled into main settings.
+
+#define SURFING_IMGUI__USE_NOTIFIER
 
 //----
 
