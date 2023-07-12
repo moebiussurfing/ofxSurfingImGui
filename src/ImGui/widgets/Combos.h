@@ -167,7 +167,27 @@ namespace ofxImGuiSurfing
 	{
 		if (fileNames.empty()) return false;
 
-		string t = "##" + pIndex.getName();
+		string t = "##COMBO" + pIndex.getName();
+		ImGui::PushID(t.c_str());
+
+		int i = pIndex.get();
+		bool b = (VectorCombo("", &i, fileNames, bRaw));
+		if (b) {
+			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
+			pIndex.set(i);
+			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+		}
+
+		ImGui::PopID();
+
+		return b;
+	}
+	//--------------------------------------------------------------
+	inline bool AddCombo(ofParameter<size_t> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	{
+		if (fileNames.empty()) return false;
+
+		string t = "##COMBO" + pIndex.getName();
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
@@ -192,7 +212,7 @@ namespace ofxImGuiSurfing
 
 		if (fileNames.empty()) return false;
 
-		string t = "##" + pIndex.getName();
+		string t = "##COMBO" + pIndex.getName();
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
@@ -232,7 +252,7 @@ namespace ofxImGuiSurfing
 	{
 		if (fileNames.empty()) return false;
 
-		string t = "##" + pIndex.getName();
+		string t = "##COMBO" + pIndex.getName();
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
@@ -302,7 +322,7 @@ namespace ofxImGuiSurfing
 		// 70% of the width is for the names and 30% for both arrows
 		// 1 - div (0.3) will be the proportion used by the arrows.
 
-		string t = "##" + pIndex.getName();
+		string t = "##COMBO" + pIndex.getName();
 		bool b = false;
 
 		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
@@ -372,7 +392,7 @@ namespace ofxImGuiSurfing
 		// 70% of the width is for the names and 30% for both arrows
 		// 1 - div (0.3) will be the proportion used by the arrows.
 
-		string t = "##" + pIndex.getName();
+		string t = "##COMBO" + pIndex.getName();
 		bool b = false;
 
 		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
@@ -436,6 +456,7 @@ namespace ofxImGuiSurfing
 	// returns -1 to push-left or 1 to push-right pressed!
 	//--------------------------------------------------------------
 	inline int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
+		ImGui::PushID("##COMBO");
 		int iReturn = 0;
 		if (AddButton("<", style, 2)) {
 			iReturn = -1;
@@ -444,12 +465,14 @@ namespace ofxImGuiSurfing
 		if (AddButton(">", style, 2)) {
 			iReturn = 1;
 		};
+		ImGui::PopID();
 		return iReturn;
 	}
 
 	// Dual arrows for common use to browse an index to be inside directly into the int parameter
 	//--------------------------------------------------------------
 	inline void AddIndexArrows(ofParameter<int> paramIndex, ImVec2 sz = ImVec2(-1, -1), bool cycled = false) {
+		ImGui::PushID("##COMBO");
 		if (sz.x == -1 || sz.y == -1) {
 			sz = ImVec2(ofxImGuiSurfing::getWidgetsWidth(2), ofxImGuiSurfing::getWidgetsHeightUnit());
 		}
@@ -473,6 +496,7 @@ namespace ofxImGuiSurfing
 				if (paramIndex < paramIndex.getMax()) paramIndex++;
 			}
 		};
+		ImGui::PopID();
 	}
 
 	//--
@@ -480,6 +504,7 @@ namespace ofxImGuiSurfing
 	// Dual arrows for common use to browse an index to be inside directly into the int parameter
 	//--------------------------------------------------------------
 	inline void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
+		ImGui::PushID("##COMBO");
 
 		//bool bchanged = false;//can be ignored
 		if (AddButton("<", style, 2)) {
@@ -503,7 +528,9 @@ namespace ofxImGuiSurfing
 				if (paramIndex < paramIndex.getMax()) paramIndex++;
 			}
 		};
+
 		//return bchanged;
+		ImGui::PopID();
 	}
 
 	//---

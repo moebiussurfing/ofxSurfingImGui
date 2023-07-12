@@ -147,7 +147,7 @@ namespace ofxImGuiSurfing
 	// Should remake all multi dim sliders templated and/or from scratch..
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec2<int>>& p, bool bfoldered)
+	bool AddParameter(ofParameter<glm::tvec2<int>>& p, bool bFoldered)
 	{
 		auto tmp = p.get();
 
@@ -162,7 +162,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec3<int>>& p, bool bfoldered)
+	bool AddParameter(ofParameter<glm::tvec3<int>>& p, bool bFoldered)
 	{
 		auto tmp = p.get();
 
@@ -177,7 +177,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::tvec4<int>>& p, bool bfoldered)
+	bool AddParameter(ofParameter<glm::tvec4<int>>& p, bool bFoldered)
 	{
 		auto tmp = p.get();
 
@@ -194,11 +194,11 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec2>& p, bool bsplit, bool bfoldered)
+	bool AddParameter(ofParameter<glm::vec2>& p, bool bSplit, bool bFoldered)
 	{
 		auto tmp = p.get();
 
-		if (!bsplit) {
+		if (!bSplit) {
 			if (ImGui::SliderFloat2((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
 			{
 				p.set(tmp);
@@ -215,7 +215,7 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bExpanded = false;
-			if (bfoldered)
+			if (bFoldered)
 			{
 				static bool bOpen = false;
 				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
@@ -224,11 +224,11 @@ namespace ofxImGuiSurfing
 			}
 			//else bExpanded = true;
 
-			//if (bfoldered && bExpanded) ImGui::TreePop();
+			//if (bFoldered && bExpanded) ImGui::TreePop();
 
 			bool bchanged = false;
 			//if (bExpanded)
-			if (bExpanded || !bfoldered)
+			if (bExpanded || !bFoldered)
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
@@ -245,24 +245,24 @@ namespace ofxImGuiSurfing
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
-				if (bfoldered && bExpanded) ImGui::TreePop();
-				
+				if (bFoldered && bExpanded) ImGui::TreePop();
+
 				return true;
 			}
-			if (bExpanded || !bfoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bExpanded || !bFoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
-			if (bfoldered && bExpanded) ImGui::TreePop();
-			
+			if (bFoldered && bExpanded) ImGui::TreePop();
+
 			return false;
 		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec3>& p, bool bsplit, bool bfoldered)
+	bool AddParameter(ofParameter<glm::vec3>& p, bool bSplit, bool bFoldered)
 	{
 		auto tmp = p.get();
 
-		if (!bsplit)
+		if (!bSplit)
 		{
 			if (ImGui::SliderFloat3((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
 			{
@@ -275,7 +275,7 @@ namespace ofxImGuiSurfing
 		else // splitted
 		{
 			bool bExpanded = false;
-			if (bfoldered)
+			if (bFoldered)
 			{
 				static bool bOpen = false;
 				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
@@ -287,7 +287,7 @@ namespace ofxImGuiSurfing
 			bool bchanged = false;
 
 			//if (bExpanded)
-			if (bExpanded || !bfoldered)//bsplit= true
+			if (bExpanded || !bFoldered)//bSplit= true
 			{
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 				ImGui::Dummy(ImVec2(0, 1));
@@ -302,22 +302,24 @@ namespace ofxImGuiSurfing
 				p.set(tmp);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
-				if (bfoldered && bExpanded) ImGui::TreePop();
+				if (bFoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
-			if (bExpanded || !bfoldered)
+			if (bExpanded || !bFoldered)
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
-			if (bfoldered && bExpanded) ImGui::TreePop();
+			if (bFoldered && bExpanded) ImGui::TreePop();
 			return false;
 		}
 	}
 
 	//--------------------------------------------------------------
-	bool AddParameter(ofParameter<glm::vec4>& p, bool bsplit, bool bfoldered)
+	bool AddParameter(ofParameter<glm::vec4>& p, bool bSplit, bool bFoldered)
 	{
 		auto tmp = p.get();
 
-		if (!bsplit) {
+		const bool bShowName = 0;
+
+		if (!bSplit) {
 			if (ImGui::SliderFloat4((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
 			{
 				p.set(tmp);
@@ -329,43 +331,139 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bool bExpanded = false;
-			if (bfoldered)
+			if (bFoldered)
 			{
 				static bool bOpen = false;
 				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
 				_flagt |= ImGuiTreeNodeFlags_Framed;
 				bExpanded = (ImGui::TreeNodeEx(p.getName().c_str(), _flagt));
 			}
-			//else bExpanded = true;
 
-			//TODO: BUG:
-			bool bchanged = false;
-			//if (bExpanded)
-			if (bExpanded || !bfoldered)
+			bool bChanged = false;
+			if (bExpanded || !bFoldered)
 			{
+				if (!bShowName && !bFoldered) {
+					ImGui::Spacing();
+					string s = p.getName();
+					ImGui::Text(s.c_str());
+				}
+
 				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
 
 				//ImGui::Spacing();
 				ImGui::Dummy(ImVec2(0, 1));
-				bchanged += ImGui::SliderFloat(((p.getName() + " X").c_str()), &tmp.x, p.getMin().x, p.getMax().x);
-				bchanged += ImGui::SliderFloat(((p.getName() + " Y").c_str()), &tmp.y, p.getMin().y, p.getMax().y);
-				bchanged += ImGui::SliderFloat(((p.getName() + " Z").c_str()), &tmp.z, p.getMin().z, p.getMax().z);
-				bchanged += ImGui::SliderFloat(((p.getName() + " W").c_str()), &tmp.w, p.getMin().w, p.getMax().w);
+
+				string sx, sy, sz, sw;
+				sx = "x";
+				sy = "y";
+				sz = "z";
+				sw = "w";
+				if (bShowName) {
+					sx = p.getName() + " " + sx;
+					sy = p.getName() + " " + sy;
+					sz = p.getName() + " " + sz;
+					sw = p.getName() + " " + sw;
+				}
+				bChanged += ImGui::SliderFloat(sx.c_str(), &tmp.x, p.getMin().x, p.getMax().x);
+				//AddMouseWheel(p);
+				bChanged += ImGui::SliderFloat(sy.c_str(), &tmp.y, p.getMin().y, p.getMax().y);
+				bChanged += ImGui::SliderFloat(sz.c_str(), &tmp.z, p.getMin().z, p.getMax().z);
+				bChanged += ImGui::SliderFloat(sw.c_str(), &tmp.w, p.getMin().w, p.getMax().w);
 				ImGui::Dummy(ImVec2(0, 1));
 			}
 
-			if (bchanged)
+			if (bChanged)
 			{
 				p.set(tmp);
 
 				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
-				if (bfoldered && bExpanded) ImGui::TreePop();
+				if (bFoldered && bExpanded) ImGui::TreePop();
 				return true;
 			}
-			if (bExpanded || !bfoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+			if (bExpanded || !bFoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
-			if (bfoldered && bExpanded) ImGui::TreePop();
+			if (bFoldered && bExpanded) ImGui::TreePop();
+
+			return false;
+		}
+	}
+
+	//--------------------------------------------------------------
+	bool AddParameter(ofParameter<glm::quat>& p, bool bSplit, bool bFoldered)
+	{
+		//TODO: copied from vec4..
+		//should be templed to avoid duplicated code.
+
+		auto tmp = p.get();
+
+		const bool bShowName = 0;
+
+		if (!bSplit) {
+			if (ImGui::SliderFloat4((p.getName().c_str()), glm::value_ptr(tmp), p.getMin().x, p.getMax().x))
+			{
+				p.set(tmp);
+
+				return true;
+			}
+			return false;
+		}
+		else
+		{
+			bool bExpanded = false;
+			if (bFoldered)
+			{
+				static bool bOpen = false;
+				ImGuiTreeNodeFlags _flagt = (bOpen ? ImGuiTreeNodeFlags_DefaultOpen : ImGuiTreeNodeFlags_None);
+				_flagt |= ImGuiTreeNodeFlags_Framed;
+				bExpanded = (ImGui::TreeNodeEx(p.getName().c_str(), _flagt));
+			}
+
+			bool bChanged = false;
+			if (bExpanded || !bFoldered)
+			{
+				if (!bShowName && !bFoldered) {
+					ImGui::Spacing();
+					string s = p.getName();
+					ImGui::Text(s.c_str());
+				}
+
+				IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
+
+				//ImGui::Spacing();
+				ImGui::Dummy(ImVec2(0, 1));
+
+				string sx, sy, sz, sw;
+				sx = "x";
+				sy = "y";
+				sz = "z";
+				sw = "w";
+				if (bShowName) {
+					sx = p.getName() + " " + sx;
+					sy = p.getName() + " " + sy;
+					sz = p.getName() + " " + sz;
+					sw = p.getName() + " " + sw;
+				}
+				bChanged += ImGui::SliderFloat(sx.c_str(), &tmp.x, p.getMin().x, p.getMax().x);
+				//AddMouseWheel(p);
+				bChanged += ImGui::SliderFloat(sy.c_str(), &tmp.y, p.getMin().y, p.getMax().y);
+				bChanged += ImGui::SliderFloat(sz.c_str(), &tmp.z, p.getMin().z, p.getMax().z);
+				bChanged += ImGui::SliderFloat(sw.c_str(), &tmp.w, p.getMin().w, p.getMax().w);
+				ImGui::Dummy(ImVec2(0, 1));
+			}
+
+			if (bChanged)
+			{
+				p.set(tmp);
+
+				IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
+				if (bFoldered && bExpanded) ImGui::TreePop();
+				return true;
+			}
+			if (bExpanded || !bFoldered) IMGUI_SUGAR__WIDGETS_POP_WIDTH;
+
+			if (bFoldered && bExpanded) ImGui::TreePop();
 
 			return false;
 		}

@@ -89,7 +89,7 @@ public:
 	ofParameter<bool> bProfilerDemo{ "ProfilerDemo", false };
 	ofParameter<bool> bDebugMetrics{ "Debug Metrics", false };
 	ofParameter<bool> bMinimized{ "bMinimized",false };
-	ofParameterGroup params{ "Debugger Settings" };//to avoid repeat names
+	ofParameterGroup params{ "Module Debugger" };//to avoid repeat names
 
 	//--
 

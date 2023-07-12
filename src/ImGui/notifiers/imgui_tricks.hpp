@@ -1,7 +1,11 @@
 #pragma once
 
+//#define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 8000
+
 #define USE_IM_GUI_TRICKS_PARAMS 
 #define USE_IM_GUI_TRICKS_PRESETS
+
+#define USE_IM_GUI_TRICKS_LAMBDA//TODO: could improve performance making this function non lambda?
 
 //#define USE_IM_GUI_TRICKS_PARAMS 
 // -> define in your project (ie: ofApp.h) before including ofxSufringImGui
@@ -50,6 +54,8 @@ namespace std
 #include "ofHelpers.h" // for OF
 #endif
 
+//#define SURFING_IMGUI__USE_NOTIFIER_ANIMS
+
 enum NotifyState : int {
 	ImTrickNotify_Info = 0,
 	ImTrickNotify_Verbose = 1,
@@ -60,6 +66,7 @@ enum NotifyState : int {
 
 namespace ImTricks {
 
+#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 	/*
 	// The Animations namespace contains everything you need to easily create animations in your ImGui menus.
 	*/
@@ -86,7 +93,7 @@ namespace ImTricks {
 		*/
 		extern ImColor FastColorLerp(ImColor start, ImColor end, float stage);
 	}
-
+#endif
 
 	/*
 	// The NotifyManager namespace contains everything you need to easily create notifications in your interface.
@@ -119,9 +126,10 @@ namespace ImTricks {
 		*/
 		extern void HandleNotifies(ImDrawList* draw = ImGui::GetForegroundDrawList(), std::vector<ImFont*> *fonts = nullptr);
 
-		extern void drawImGuiControls();
+		extern void drawImGuiEditorControls();
 		extern void doClear();
 		extern void doReset();
+		extern void doSetMini();
 
 #ifndef USE_IM_GUI_TRICKS_PARAMS
 		extern int indexFont;
@@ -134,12 +142,10 @@ namespace ImTricks {
 #endif
 	}
 
-
+	/*
 	namespace Widgets {
-
-		// I don't understand why ocornut didn't add ImColor support to ColorEdit.
 		extern void ColorEdit3(const char* label, ImColor& color, ImGuiColorEditFlags flags = NULL);
 		extern void ColorEdit4(const char* label, ImColor& color, ImGuiColorEditFlags flags = NULL);
-
 	}
+	*/
 }

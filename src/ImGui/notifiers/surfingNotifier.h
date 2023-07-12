@@ -1,44 +1,55 @@
 #pragma once
 #include "ofMain.h"
 
+#include "GuiConstants.h"
+
 #include "imgui_tricks.hpp"
 
 #include "surfingHelpers.h"
 //using namespace ofxImGuiSurfing;
+
+//--
 
 class SurfingNotifier
 {
 public:
 	SurfingNotifier()
 	{
-		//setup();
-
+#ifdef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 		//TODO:
 		// Fix exit exceptions on RF..
 		int minValue = std::numeric_limits<int>::min();
 		ofAddListener(ofEvents().exit, this, &SurfingNotifier::exit, minValue);
-		
-		bGui.makeReferenceTo(ImTricks::NotifyManager::bGui);
-	};
+#endif
+#endif
+		ImTricks::NotifyManager::bGui.makeReferenceTo(bGui_Editor);
+
+		//TODO:
+		params = ImTricks::NotifyManager::params;
+	}
 
 	~SurfingNotifier()
 	{
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 		ofRemoveListener(ofEvents().exit, this, &SurfingNotifier::exit);
-		//exit();
-	};
+#endif
+	}
 
-public:
-	void setPath(string path) {
-		path_Global = path;
-	};
-
-	ofParameter<bool> bGui{ "Debug Notifier", false };
-
+#ifdef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
 private:
 	std::string path_Global = "";
 	std::string name_Settings = "SurfingGui_Notifier_Settings.json";
 
-	bool bDoneSetup = false;
+public:
+	void setPath(string path) {
+		path_Global = path;
+	}
+#endif
+
+public:
+	ofParameter<bool> bGui_Editor{ "Notifier Editor", false };
+	ofParameterGroup params;
 
 public:
 	void setup()
@@ -46,20 +57,33 @@ public:
 		buildTagsDefault();
 		ImTricks::NotifyManager::doReset();
 
+#ifdef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
 		ofxImGuiSurfing::loadGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+#endif
 
 		bDoneSetup = true;
-	};
+	}
 
 private:
+	bool bDoneSetup = false;
+
+#ifdef SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE
+private:
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 	void exit(ofEventArgs& e)
 	{
 		exit();
-	};
+	}
+#endif
+
+public:
 	void exit() 
 	{
-		ofxImGuiSurfing::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
-	};
+		//TODO:
+		//disable to test RF crash
+		//ofxImGuiSurfing::saveGroup(ImTricks::NotifyManager::params, path_Global + name_Settings);
+	}
+#endif
 
 public:
 	void draw(bool bDebug_ = false, vector<ImFont*>* fonts = nullptr)
@@ -68,17 +92,21 @@ public:
 
 		ImTricks::NotifyManager::HandleNotifies(ImGui::GetForegroundDrawList(), fonts);
 
-		if (bDebug_) ImTricks::NotifyManager::drawImGuiControls();
-	};
+		if (bDebug_) ImTricks::NotifyManager::drawImGuiEditorControls();
+	}
 
 	void setIndexFont(int index) {
 		index = ofClamp(index, 0, 3);//clamp hardcoded
 		ImTricks::NotifyManager::indexFont = index;
-	};
+	}
 
-	void setDuration(int duration) {
+	void setDuration(int duration) {//bubble duration in milliseconds
 		ImTricks::NotifyManager::duration = duration;
-	};
+	}
+
+	void setMini() {
+		ImTricks::NotifyManager::doSetMini();
+	}
 
 private:
 	struct tagData
@@ -99,11 +127,11 @@ private:
 		AddTag({ "WARNING", ofColor::yellow });
 		AddTag({ "ERROR", ofColor::red });
 		AddTag({ "FATAL_ERROR", ofColor::red });
-	};
+	}
 
 public:
-	void doReset() { ImTricks::NotifyManager::doReset(); };
-	void doClear() { ImTricks::NotifyManager::doClear(); };
+	void doReset() { ImTricks::NotifyManager::doReset(); }
+	void doClear() { ImTricks::NotifyManager::doClear(); }
 
 	//TODO: allow customize
 	void AddTag(tagData tag)
@@ -112,13 +140,13 @@ public:
 			<< "name: " << tag.name << ":" << tag.color;
 
 		tags.push_back(tag);
-	};
+	}
 
 	void Add(string text, string nameTag)
 	{
 		NotifyState s;
 
-		ofLogWarning("ofxSurfingImGui:SurfingNotifier::Add") << "tag: " << nameTag;
+		ofLogWarning("ofxSurfingImGui:SurfingNotifier::Add") << "text: " << nameTag<< " tag: " << nameTag;
 
 		if (nameTag == string("INFO")) s = ImTrickNotify_Info;
 		else if (nameTag == string("VERBOSE")) s = ImTrickNotify_Verbose;
@@ -129,7 +157,7 @@ public:
 		else s = ImTrickNotify_Info;
 
 		ImTricks::NotifyManager::AddNotify(text, s);
-	};
+	}
 
 	void Add(std::string msg, ofLogLevel logLevel)
 	{
@@ -144,10 +172,6 @@ public:
 			ofLogWarning("ofxSurfingImGui:SurfingNotifier") << "ofLogLevel " << ofToString((short)logLevel) << " Unknown";
 			Add(msg, "UNKNOWN");//will post as info
 		}
-	};
-
-private:
-
-
+	}
 
 };

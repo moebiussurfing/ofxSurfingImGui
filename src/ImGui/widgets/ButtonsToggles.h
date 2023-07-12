@@ -990,7 +990,7 @@ namespace ofxImGuiSurfing
 		float _hu = ofxImGuiSurfing::getWidgetsHeightUnit();
 		float _wu = 1.15f * _hu;
 		//float _ht = 0.8f * _hu;
-		ofxImGuiSurfing::AddSpacingRightAlign(_wu);
+		ofxImGuiSurfing::AddSpacingToRightAlign(_wu);
 
 		//ImVec2 bb = ImVec2(1.15f * _ht, 1.15f * (2 / 3.f) * _ht);
 		//return AddToggleRoundedButton(p, bb, bNoBorder, bNoLabel);

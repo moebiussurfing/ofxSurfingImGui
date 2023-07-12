@@ -7,16 +7,13 @@
 class ofApp : public ofBaseApp
 {
 public:
-    
-    void draw();
-    void keyPressed(int key);
+	void draw();
+	void keyPressed(int key);
 
-    ofxSurfingGui ui;
+	ofxSurfingGui ui;
+	ofParameter<bool> bGui{ "ofApp", true };
 
-    ofParameter<bool> bGui{ "Show", true };
-
-    ofParameter<bool> bEnable{ "Enable", true };
-    ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-    ofParameterGroup params{ "MyGroup", bEnable, speed };
-
+	ofParameter<bool> bEnable{ "Enable", true };
+	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+	ofParameterGroup params{ "MyParamGroup", bEnable, speed };
 };

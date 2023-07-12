@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "GuiConstants.h"
@@ -71,14 +70,14 @@ namespace ofxImGuiSurfing
 	ImGui::PopItemWidth(); \
 	}
 
-//--
+	//--
 
-//	// B: Using max minus the label
-//	#define IMGUI_LABELS_WIDTH_DEFAULT 75
-//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
-//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - IMGUI_LABELS_WIDTH_DEFAULT);
-//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
-//	ImGui::PopItemWidth();
+	//	// B: Using max minus the label
+	//	#define IMGUI_LABELS_WIDTH_DEFAULT 75
+	//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
+    //	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - IMGUI_LABELS_WIDTH_DEFAULT);
+	//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
+    //	ImGui::PopItemWidth();
 
 #endif
 
@@ -111,13 +110,13 @@ namespace ofxImGuiSurfing
 #define STEP_FACTOR_WINDOW_IS_SMALL .67f // now using this. we centralized all types together (int/float)
 
 #define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
+	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
 
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f 
-// To allow see 3 visible decimals, 
-// but requires preferably a short label name.
+	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
+#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
+//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f
+	// To allow see 3 visible decimals, 
+	// but requires preferably a short label name.
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
 	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT); }
@@ -142,21 +141,21 @@ namespace ofxImGuiSurfing
 	//--
 
 #define TEXT_LABEL_TO_RESIZE "0123456789"
-//#define TEXT_LABEL_TO_RESIZE "----------" 
+	//#define TEXT_LABEL_TO_RESIZE "----------" 
 
 	//TODO:
 	// This is a 10 chars string that we will use as default label width, to name widgets.
 	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
 	// that could be weird because each slider will have a different width.
 	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	 
+     
 	//TODO:
 	// Fix auto resize loop grow...
 	// Using an standard text size for the widgets 
 	//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	//	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	//	const float gap = 40; \
-	//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
+    //	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+    //	const float gap = 40; \
+    //	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
 	//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
 
 	//----
@@ -165,104 +164,196 @@ namespace ofxImGuiSurfing
 
 	// Adds mouse wheel control to the last/previous ofParam widget (float/int) rendered.
 
-//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
+	//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
 #define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2); // param, flip
 
-//--
+	//--
 
-//// macOS fix
-//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
+	//// macOS fix
+	//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
 
-//--
+	//--
 
-// Amount of steps per widgets. will calculate range between max/min.
+	// Amount of steps per widgets. will calculate range between max/min.
 #define MOUSE_WHEEL_STEPS 100.f
 
-// How more fine is when CTRL pressed 
+	// How more fine is when CTRL pressed 
 #define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 0.20f
-//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
+	//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
 
-//----
+	//----
+
+	// Max window size depending on the window app and menu bar height.
+#define IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT (ofGetHeight()- 2 * ImGui::GetTextLineHeightWithSpacing())
+#define IMGUI_SUGAR__WINDOW_FIT_APP_WIDTH (ofGetWidth()- 2 * ImGui::GetTextLineHeightWithSpacing())
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_DEFAULT \
+{ \
+ImVec2 size_min = ImVec2(200, 200); \
+ImVec2 size_max = ImVec2(IMGUI_SUGAR__WINDOW_FIT_APP_WIDTH, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+//--
 
 // 3.
 
-//TODO: should DEPRECATE these ratio constants a make absolute sizes.
-
 // Adds Constraints Window Shapes (width and height)
 
-// Width and height
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MAX \
+{ \
+ImVec2 size_min = ImVec2(750, 600); \
+ImVec2 size_max = ImVec2(ofGetWidth(), ofGetHeight()); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
+ImVec2 size_min = ImVec2(550, 500); \
+ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 2.f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 4.f, PANEL_WIDGETS_HEIGHT_MIN * 8.f); \
+ImVec2 size_min = ImVec2(375, 375); \
+ImVec2 size_max = ImVec2(600, 600); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MEDIUM \
+{ \
+ImVec2 size_min = ImVec2(300, 300); \
+ImVec2 size_max = ImVec2(500, 500); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.7f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 1.f, PANEL_WIDGETS_HEIGHT_MIN * 5.f); \
+ImVec2 size_min = ImVec2(230, 230); \
+ImVec2 size_max = ImVec2(375, 375); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.45f, PANEL_WIDGETS_HEIGHT_MIN); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.8f, PANEL_WIDGETS_HEIGHT_MIN * 2.f); \
+ImVec2 size_min = ImVec2(150, 150); \
+ImVec2 size_max = ImVec2(250, 250); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MINI \
 { \
-ImVec2 size_min = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.3f, PANEL_WIDGETS_HEIGHT_MIN * 0.75f ); \
-ImVec2 size_max = ImVec2(PANEL_WIDGETS_WIDTH_MIN * 0.6f, PANEL_WIDGETS_HEIGHT_MIN); \
+ImVec2 size_min = ImVec2(100, 100); \
+ImVec2 size_max = ImVec2(100, 100); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 //--
 
-// Width only
+// Constraint for width only
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX \
+{ \
+ImVec2 size_min = ImVec2(750, -1); \
+ImVec2 size_max = ImVec2(ofGetWidth(), ofGetHeight()); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL \
+{ \
+ImVec2 size_min = ImVec2(550, -1); \
+ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
 { \
-ImVec2 size_min = ImVec2(400, -1); \
-ImVec2 size_max = ImVec2(600, FLT_MAX); \
+ImVec2 size_min = ImVec2(375, -1); \
+ImVec2 size_max = ImVec2(600, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM \
 { \
 ImVec2 size_min = ImVec2(300, -1); \
-ImVec2 size_max = ImVec2(500, FLT_MAX); \
+ImVec2 size_max = ImVec2(500, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
 { \
-ImVec2 size_min = ImVec2(210, 1); \
-ImVec2 size_max = ImVec2(300, FLT_MAX); \
+ImVec2 size_min = ImVec2(230, -1); \
+ImVec2 size_max = ImVec2(375, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
 { \
 ImVec2 size_min = ImVec2(150, -1); \
-ImVec2 size_max = ImVec2(200, FLT_MAX); \
+ImVec2 size_max = ImVec2(250, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
 #define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
 { \
 ImVec2 size_min = ImVec2(100, -1); \
-ImVec2 size_max = ImVec2(150, FLT_MAX); \
+ImVec2 size_max = ImVec2(100, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+
+//--
+
+// Constraint for width only but locked resize (MAX = MIN)
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(750, -1); \
+ImVec2 size_max = ImVec2(750, ofGetHeight()); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(550, -1); \
+ImVec2 size_max = ImVec2(550, IMGUI_SUGAR__WINDOW_FIT_APP_HEIGHT); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(375, -1); \
+ImVec2 size_max = ImVec2(375, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(300, -1); \
+ImVec2 size_max = ImVec2(300, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(230, -1); \
+ImVec2 size_max = ImVec2(230, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(150, -1); \
+ImVec2 size_max = ImVec2(150, -1); \
+ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
+} \
+
+#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI_LOCKED_RESIZE \
+{ \
+ImVec2 size_min = ImVec2(100, -1); \
+ImVec2 size_max = ImVec2(100, -1); \
 ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
 } \
 
