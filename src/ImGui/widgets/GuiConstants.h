@@ -21,9 +21,9 @@
 // Includes much mouse behaviors from imgui, as resize, waiting, text input etc
 // Required disabled to allow overlay on windows capturer app.
 
-#define SURFING_IMGUI__USE_PROFILE_DEBUGGER
+//#define SURFING_IMGUI__USE_PROFILE_DEBUGGER
 #define SURFING_IMGUI__USE_NOTIFIER
-#define SURFING_IMGUI_NOTIFIER_DEFAULT_DURATION 5000
+#define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 5000
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
@@ -49,16 +49,16 @@
 
 //----
 
-// Will be applied as minimum 
-// and standard window shape
-#define PANEL_WIDGETS_WIDTH 250
-#define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 200
-#define PANEL_WIDGETS_HEIGHT_MIN 100
-
-// LEGACY
-#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
-#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
+//// Will be applied as minimum 
+//// and standard window shape
+//#define PANEL_WIDGETS_WIDTH 250
+//#define PANEL_WIDGETS_HEIGHT 100
+//#define PANEL_WIDGETS_WIDTH_MIN 200
+//#define PANEL_WIDGETS_HEIGHT_MIN 100
+//
+//// LEGACY
+//#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
+//#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
 //----
 
@@ -107,10 +107,10 @@
 //TODO:
 // fix for HSLIDERS.. 
 // should be used by toggles and buttons too!
-#define OFX_IM_WIDGETS_RATIO_DEFAULT 0.7f
-#define OFX_IM_WIDGETS_RATIO_BIG 1.5f
+#define OFX_IM_WIDGETS_RATIO_BIG 1.50f
+#define OFX_IM_WIDGETS_RATIO_DEFAULT 0.70f
+#define OFX_IM_WIDGETS_RATIO_SMALL 0.40f
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
-#define OFX_IM_WIDGETS_RATIO_SMALL 0.4f
 
 // Window scrolling size on some windows/groups
 #define HEIGHT_SCROLL_GROUP 400
@@ -340,6 +340,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_STEPPER_NO_LABEL,
+		OFX_IM_STEPPER_RAW,
+		OFX_IM_STEPPER_RAW_NO_LABEL,
 		OFX_IM_DRAG,
 		OFX_IM_DRAG_NO_LABEL,
 

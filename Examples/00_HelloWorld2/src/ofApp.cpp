@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	//ui.setEnablebMouseCursorFromImGui(false);
+	ui.setup();
+
 	// Add to custom tags to log system
 	ui.AddLogTag(myTag1, ofColor::turquoise);
 	ui.AddLogTag(myTag2, ofColor::orange);
@@ -84,6 +87,9 @@ void ofApp::drawGuiMain()
 		ui.AddNotifierToggleEditor();
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
+
+		// Global Scale
+		ui.DrawWidgetsGlobalScale();
 
 		// Maximized mode
 		//if (!ui.isMinimized()) 
@@ -200,6 +206,8 @@ void ofApp::drawGuiMain()
 			ui.AddSpacingBigSeparated();
 			ui.AddToggle("Quat", bGui_Quat);
 		}
+
+		ui.drawImGuiSettingsWidgets();
 
 		ui.EndWindow();
 	}

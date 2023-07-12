@@ -958,6 +958,7 @@ public:
 		return sz;
 	}
 
+	// Applied mainly to buttons
 	float CalcWidgetWidth(const std::string s) {
 		float sp = this->CalcTextSize(s.c_str(), 0).x;
 		//sp += this->getWidgetsSpacingX();
@@ -1971,18 +1972,18 @@ public:
 
 	//----
 
-	// Global scale
-	// this will not work as is global. we set the global scale in the Begin() method.
-	void PushGlobalScale(float scale) {
-		ImGuiIO& io = ImGui::GetIO();
-		globalScalePre = io.FontGlobalScale;
-		io.DisplayFramebufferScale = ImVec2(scale, scale);
-	}
-	void PopGlobalScale() {
-		ImGuiIO& io = ImGui::GetIO();
-		//io.FontGlobalScale = globalScalePre;
-		io.DisplayFramebufferScale = ImVec2(globalScalePre, globalScalePre);
-	}
+	//// Global scale
+	//// this will not work as is global. we set the global scale in the Begin() method.
+	//void PushGlobalScale(float scale) {
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	globalScalePre = io.FontGlobalScale;
+	//	io.DisplayFramebufferScale = ImVec2(scale, scale);
+	//}
+	//void PopGlobalScale() {
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	//io.FontGlobalScale = globalScalePre;
+	//	io.DisplayFramebufferScale = ImVec2(globalScalePre, globalScalePre);
+	//}
 
 	//----
 
@@ -2063,20 +2064,64 @@ public:
 	void PushFontByIndex(); // activates font style picked from the internal index
 	void PopFontByIndex();
 
+	//--
+
+	// Scale Global
+private:
+	struct ScaleGlobalGroup {
+		vector<string> names{"NONE", "100%", "150%", "175%", "200%"};
+		ofParameter<int> indexScaleGlobal {"Global Scale", 0, 0, names.size() - 1};
+		float getScale() {
+			switch (indexScaleGlobal.get()) {
+			case 0: return -1.0f; break;
+			case 1: return 1.0f; break;
+			case 2: return 1.5f; break;
+			case 3: return 1.75f; break;
+			case 4: return 2.0f; break;
+			default: return 1.0f; break;
+			}
+		}
+	};
+	ScaleGlobalGroup scaleGlobalGroup;
+public:
 	void DrawWidgetsGlobalScale() {
+		this->AddSpacingBigSeparated();
+		
 		string s;
-		this->Add(this->globalScale);
+		float w1 = this->getWidgetsWidth(5);
+		ImGui::PushItemWidth(w1);
+		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
+			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
+				this->globalScale = scaleGlobalGroup.getScale();
+			}
+			else {
+			}
+		};
+		ImGui::PopItemWidth();
+
+		ImGui::SameLine();
+
+		float w2 = ImGui::GetContentRegionAvail().x + getWidgetsSpacingX();
+		ImGui::PushItemWidth(w2);
+		if (this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL)) {
+		
+		};
+		ImGui::PopItemWidth();
 		s = "Global Scale is applied to all the UI context.";
 		this->AddTooltip(s);
+		
 		if (this->AddButtonRaw("Reset")) {
 			this->globalScale = 1;
 		}
 		s = "Set Global Scale to unit.";
 		this->AddTooltip(s);
-		this->SameLine();
+		//this->SameLine();
+
 		this->Add(this->bGlobalScaleWheel);
 		s = "Ctrl + Mouse Wheel: \nScales the active window.";
 		this->AddTooltip(s);
+		
+		this->AddSpacingBigSeparated();
 	}
 
 	//----
@@ -2170,8 +2215,8 @@ public:
 	ofParameter<bool> bMinimize{"Minimize", true};
 	ofParameter<bool> bAutoResize{"Auto Resize", true};
 	ofParameter<bool> bGlobalScaleWheel{"Wheel Global Scale", false};
-	ofParameter<float> globalScale{"GlobalScale", 1, 0.25, 4};
-	float globalScalePre = 1;
+	ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
+	//float globalScalePre = 1;
 	ofParameter<bool> bKeys{"Keys", true};
 	ofParameter<bool> bLogKeys{"Log Keys", false};
 	ofParameter<bool> bHelp{"Help App", false};
@@ -5135,6 +5180,40 @@ public:
 	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
 
 	//----
+
+
+	void drawImGuiSettingsWidgets();
+	int active_tab = 0;
+
+	// ImGui Helper
+	//------------------------------------------------------------------------------------------
+	inline bool BeginTabItem(const string& tabName)
+	{
+		static float a = 0.3f;
+		static ImVec4 c1 = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+		static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
+		static string currentTab = "";
+		bool isCurrent = currentTab == tabName;
+
+		if (!isCurrent) {
+			ImGui::PushStyleColor(ImGuiCol_Text, c2);
+			//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,ImVec2(0.0f, 30.f));
+		}
+
+		bool sTab = ImGui::BeginTabItem(tabName.c_str());
+
+		if (!isCurrent) {
+			//ImGui::PopStyleVar();
+			ImGui::PopStyleColor();
+		}
+
+		if (sTab)
+		{
+			currentTab = tabName;
+		}
+		return sTab;
+	}
+
 };
 
 

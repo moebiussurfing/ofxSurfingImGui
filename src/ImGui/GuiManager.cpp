@@ -664,6 +664,8 @@ void SurfingGuiManager::setupImGui()
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
+	if(bMouseCursorFromImGui) ofHideCursor();
+
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
 
@@ -3724,6 +3726,18 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	//--
 
+	// Global Scale
+	else if (name == globalScale.getName())
+	{
+		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
+		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 2;
+		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 3;
+		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 4;
+		else scaleGlobalGroup.indexScaleGlobal = 0;
+	}
+	
+	//--
+
 	// Layout preset index
 
 	else if (name == appLayoutIndex.getName())
@@ -4790,6 +4804,44 @@ void SurfingGuiManager::doResetLayout()
 	windowsOrganizer.doAlignWindowsReset();
 
 	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
+}
+
+
+
+
+//------------------------------------------------------------------------------------------
+void SurfingGuiManager::drawImGuiSettingsWidgets()
+{
+	ImGui::BeginTabBar("Settings");
+	{
+		if (BeginTabItem("Stage Manager"))
+		{
+			ImGui::Text("hello");
+			ImGui::Text("hello");
+
+			ImGui::EndTabItem();
+			active_tab = 0;
+		}
+
+		if (BeginTabItem("Network Adapter"))
+		{
+			ImGui::Text("hello");
+			ImGui::Text("hello");
+
+			ImGui::EndTabItem();
+			active_tab = 1;
+		}
+
+		if (BeginTabItem("License"))
+		{
+			ImGui::Text("hello");
+			ImGui::Text("hello");
+
+			ImGui::EndTabItem();
+			active_tab = 2;
+		}
+	}
+	ImGui::EndTabBar();
 }
 
 //----

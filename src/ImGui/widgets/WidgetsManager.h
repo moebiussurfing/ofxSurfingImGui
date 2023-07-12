@@ -1433,16 +1433,16 @@ namespace ofxImGuiSurfing
 						string n = "##" + p.getName();
 						bReturn = false;
 
-						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x); 
+						ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 						//IMGUI_SUGAR__WIDGETS_PUSH_WIDTH;
-						
+
 						if (ImGui::SliderFloat(n.c_str(), (float*)&tmpRef, p.getMin(), p.getMax()))
 						{
 							p.set(tmpRef);
 							bReturn = true;
 						}
-						
-						ImGui::PopItemWidth(); 
+
+						ImGui::PopItemWidth();
 						//IMGUI_SUGAR__WIDGETS_POP_WIDTH;
 
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1859,8 +1859,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_TICKKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS,
-							flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww, OFX_IM_FORMAT_KNOBS,flags);
 						if (bMouseWheel)
 							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -1870,8 +1869,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_DOTKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS,
-							flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww, OFX_IM_FORMAT_KNOBS,flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1880,8 +1878,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS,
-							flags);
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww, OFX_IM_FORMAT_KNOBS,flags);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
@@ -1890,10 +1887,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERONLYKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww,
-							OFX_IM_FORMAT_KNOBS, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww,OFX_IM_FORMAT_KNOBS, flags);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -1901,10 +1896,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_WIPERDOTKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww,
-							OFX_IM_FORMAT_KNOBS, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww,OFX_IM_FORMAT_KNOBS, flags);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -1913,10 +1906,8 @@ namespace ofxImGuiSurfing
 					case OFX_IM_KNOB_STEPPEDKNOB:
 					{
 						const int steps = abs(p.getMax() - p.getMin());
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww,
-							OFX_IM_FORMAT_KNOBS, flags, steps);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww,OFX_IM_FORMAT_KNOBS, flags, steps);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -1924,10 +1915,8 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_SPACEKNOB:
 					{
-						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS,
-							flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww, OFX_IM_FORMAT_KNOBS,flags);
+						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -1951,29 +1940,25 @@ namespace ofxImGuiSurfing
 						float pad = ImGui::GetStyle().FramePadding.x;
 
 						bReturn |= (ofxImGuiSurfing::AddDragFloatSlider(p));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 
 						bReturn |= ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww * 0.25f - pad, _ww * 0.75f), true,
 							true);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						ImGui::SameLine();
 
 						bReturn |= (ofxImGuiSurfing::AddKnob(p, false, _ww * 0.75f));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 
 						bReturn |= ofxImGuiSurfing::AddStepper(p, true, false);
 						//bReturn |= ofxImGuiSurfing::AddStepperFloat(p);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -1981,42 +1966,38 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// Stepper (float)
+					// Stepper (Float)
 
 					case OFX_IM_STEPPER:
 					{
-						//ImGui::PushItemWidth(100);
-						// 
-						//bReturn = AddStepperFloat(p);
 						bReturn = AddStepper(p, false, false);
 
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
-						//ImGui::PopItemWidth();
-
-						//const float step = 0.001f;
-						//const float stepFast = 0.1f;
-						//auto tmpRef = p.get();
-						//bReturn = false;
-						//IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-						//if (ImGui::InputFloat(p.getName().c_str(), (float *)&tmpRef, step, stepFast))
-						//{
-						//	tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-						//	p.set(tmpRef);
-						//	bReturn = true;
-						//}
-						//IMGUI_SUGAR__STEPPER_WIDTH_POP;
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 					}
 					break;
-
 					case OFX_IM_STEPPER_NO_LABEL:
 					{
 						bReturn = AddStepper(p, true, false);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+					}
+					break;
+
+					case OFX_IM_STEPPER_RAW:
+					{
+						bReturn = AddStepper(p, false, true);
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+					}
+					break;
+					case OFX_IM_STEPPER_RAW_NO_LABEL:
+					{
+						bReturn = AddStepper(p, true, true);
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2067,8 +2048,7 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2085,8 +2065,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI),
 							false, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2097,8 +2076,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true,
 							true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2109,8 +2087,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI), true,
 							false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2121,8 +2098,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_MINI),
 							false, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2137,8 +2113,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_DEFAULT),
 							false, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2161,8 +2136,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_DEFAULT),
 							true, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 					}
 					break;
 
@@ -2171,8 +2145,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_DEFAULT),
 							false, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2185,8 +2158,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL),
 							false, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2197,8 +2169,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL),
 							true, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2221,8 +2192,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, _h * OFX_IM_WIDGETS_RATIO_SMALL),
 							false, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2235,8 +2205,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false,
 							false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2247,8 +2216,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true,
 							true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2259,8 +2227,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), true,
 							false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2271,8 +2238,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddHSlider(p, ImVec2(_ww, OFX_IM_WIDGETS_RATIO_BIG * _h), false,
 							true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2288,8 +2254,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
 							false, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2301,8 +2266,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
 							true, false));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2314,8 +2278,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
 							false, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2327,8 +2290,7 @@ namespace ofxImGuiSurfing
 						//std::string name = p.getName();
 						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
 							true, true));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2368,8 +2330,7 @@ namespace ofxImGuiSurfing
 							bReturn = true;
 						}
 						IMGUI_SUGAR__WIDGETS_POP_WIDTH;
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2387,8 +2348,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_KNOB:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, false, _ww));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 					}
 					break;
@@ -2396,8 +2356,7 @@ namespace ofxImGuiSurfing
 					case OFX_IM_KNOB_TRAIL:
 					{
 						bReturn = (ofxImGuiSurfing::AddKnob(p, true, _ww));
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2415,8 +2374,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_TICKKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2426,8 +2384,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2437,8 +2394,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2448,8 +2404,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERONLYKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2459,8 +2414,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_WIPERDOTKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2470,8 +2424,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2481,8 +2434,7 @@ namespace ofxImGuiSurfing
 					{
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_SPACEKNOB, _ww,
 							OFX_IM_FORMAT_KNOBS_INT, flags);
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
@@ -2494,39 +2446,34 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_STEPPER:
 					{
-						//ImGui::PushItemWidth(100);
-
 						bReturn = AddStepper(p, false, false);
-						//bReturn = AddStepperInt(p);
 
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
-						if (bMouseWheel) if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
-						//ImGui::PopItemWidth();
-
-						//const int step = 1;
-						//const int stepFast = 5;
-						//auto tmpRef = p.get();
-						//bReturn = false;
-						//IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-						//if (ImGui::InputInt(p.getName().c_str(), (int *)&tmpRef, step, stepFast))
-						//{
-						//	tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
-						//	p.set(tmpRef);
-						//	bReturn = true;
-						//}
-						//IMGUI_SUGAR__STEPPER_WIDTH_POP;
-						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}
 					break;
-
 					case OFX_IM_STEPPER_NO_LABEL:
 					{
 						bReturn = AddStepper(p, true, false);
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+					}
+					break;
 
-						if (bMouseWheel)
-							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					case OFX_IM_STEPPER_RAW:
+					{
+						bReturn = AddStepper(p, false, true);
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+						if (bMouseWheel) bReturn |= GetMouseWheel();
+						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
+					}
+					break;
+					case OFX_IM_STEPPER_RAW_NO_LABEL:
+					{
+						bReturn = AddStepper(p, true, true);
+						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
 						if (bMouseWheel) bReturn |= AddMouseClickRightReset(p);
 					}

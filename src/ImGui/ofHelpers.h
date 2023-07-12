@@ -910,94 +910,6 @@ namespace ofxImGuiSurfing
 
 	// Stepper widgets
 	// (with +/- buttons to increment/decrement)
-
-	//bool AddStepper(ofParameter<int>& p, int step = -1, int stepFast = -1);
-	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
-
-	//TODO: move and centralize to main function instead!
-	/*
-	//--------------------------------------------------------------
-	inline bool AddStepperInt(ofParameter<int>& p, bool bNoLabel = false)
-	{
-		bool bChanged = false;
-		auto tmpRefi = p.get();
-		const ImU32 u32_one = 1;
-		static bool inputs_step = true;
-
-		string name = bNoLabel ? "" : p.getName();
-		string n = "##STEPPERint" + name;// +ofToString(1);
-
-		ImGui::PushID(n.c_str());
-
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-
-		if (ImGui::InputScalar(name.c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
-		{
-			tmpRefi = ofClamp(tmpRefi, p.getMin(), p.getMax());
-			p.set(tmpRefi);
-
-			bChanged = true;
-		}
-
-		IMGUI_SUGAR__STEPPER_WIDTH_POP;
-
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
-	//--------------------------------------------------------------
-	inline bool AddStepperFloat(ofParameter<float>& p)
-	{
-		//TODO: vs absolute
-		bool bRelative = 0;
-
-		float res;
-		float step;
-		float stepFast;
-
-		if (bRelative) {
-			res = 100.f;
-			step = (p.getMax() - p.getMin()) / res;
-		}
-		else
-		{
-			step = 0.001f;
-			//res = 1000.f;
-			//step = (p.getMax() - p.getMin()) / res;
-		}
-		stepFast = 100.f * step;
-
-		//--
-
-		auto tmpRef = p.get();
-		bool bReturn = false;
-
-		string name = p.getName();
-		string n = "##STEPPERfloat" + name;
-
-		ImGui::PushID(n.c_str());
-
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
-
-		if (ImGui::InputFloat(name.c_str(), (float*)&tmpRef, step, stepFast))
-		{
-			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
-			p.set(tmpRef);
-			bReturn = true;
-		}
-
-		IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
-
-		ImGui::PopID();
-
-		return bReturn;
-	}
-	*/
-
-	//--
-
-	// Stepper alternative
 	// To be used to not draw the label. 
 	// Useful to use on combo of widgets 
 	// to populate one single variable!
@@ -1020,17 +932,26 @@ namespace ofxImGuiSurfing
 		}
 
 		// Int
-		const ImU32 u32_one = 1;
+		const ImU32 stepInt = 1;
 		static bool inputs_step = true;
 
 		//TODO: added above relative/absolute workflow
 
 		// Float
-		float res = 10000.f;
-		//float res = 100.f;
-		float step = (p.getMax() - p.getMin()) / res;
-		float stepFast = 100.f * step;
-
+		float step, stepFast;
+#if 0
+		float res;
+		//step related to param range min/max
+		res = 1000.f;
+		//res = 10000.f;
+		//res = 100.f;
+		step = (p.getMax() - p.getMin()) / res;
+		stepFast = 100.f * step;
+#else
+		//TODO:
+		step = 0.001f;
+		stepFast = 0.01f;
+#endif
 		string n = "##STEPPER" + name;
 		string label = ofToString(bNoLabel ? "" : name);
 
@@ -1039,8 +960,7 @@ namespace ofxImGuiSurfing
 		if (!bRaw)
 		{
 			if (bNoLabel) ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-			else
-				IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
+			else IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
 		}
 
 		if (isFloat)
@@ -1054,7 +974,7 @@ namespace ofxImGuiSurfing
 		}
 		else if (isInt)
 		{
-			if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32, (int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL,
+			if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32, (int*)&tmpRef, inputs_step ? &stepInt : NULL, NULL,
 				"%d"))
 			{
 				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
@@ -1070,8 +990,7 @@ namespace ofxImGuiSurfing
 		if (!bRaw)
 		{
 			if (bNoLabel) ImGui::PopItemWidth();
-			else
-				IMGUI_SUGAR__STEPPER_WIDTH_POP;
+			else IMGUI_SUGAR__STEPPER_WIDTH_POP;
 		}
 
 		ImGui::PopID();
@@ -1781,7 +1700,7 @@ namespace Animations {
 
 
 /*
-namespace ofxImGuiSurfing 
+namespace ofxImGuiSurfing
 {
 	void ColorEdit3(const char* label, ImColor& color, ImGuiColorEditFlags flags) {
 		static float col[3] = { color.Value.x, color.Value.y, color.Value.z };

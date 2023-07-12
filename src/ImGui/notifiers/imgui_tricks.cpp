@@ -105,7 +105,7 @@ namespace ImTricks {
 #else
 		ofParameter<bool> bGui{ "Notifier", false };
 		// These init value will be overwritten by calling setup()!
-		ofParameter<int> duration{ "Duration", SURFING_IMGUI_NOTIFIER_DEFAULT_DURATION, 300, 10000 };
+		ofParameter<int> duration{ "Duration", SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION, 300, 10000 };
 		ofParameter<int> indexFont{ "Font", 1, 0, 3 };
 		ofParameter<int> padx{ "Pad x", 20, -50, 100 };//pad to right x border 
 		ofParameter<int> pady{ "Pad y", 20, -50, 100 };//pad to bottom y border 
@@ -146,7 +146,7 @@ namespace ImTricks {
 
 			indexFont = 1;
 
-			duration = SURFING_IMGUI_NOTIFIER_DEFAULT_DURATION;
+			duration = SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION;
 			padx = 5;//pad to right x border 
 			pady = 0;//pad to bottom y border 
 			padxInner = 40;//text in
