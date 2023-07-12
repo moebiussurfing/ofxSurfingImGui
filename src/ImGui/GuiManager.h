@@ -4601,7 +4601,7 @@ public:
 #else
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
-}
+	}
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
@@ -5236,23 +5236,40 @@ public:
 		static string currentTab = "";
 		bool isCurrent = currentTab == tabName;
 
-		if (!isCurrent) {
+		bool bSz = 0;
+		if (bSz) {
+			static ImVec2 sz1(30, 30);
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sz1);
+
+			static ImVec2 sz2(0, 0);
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, sz2);
+		}
+
+		if (!isCurrent)
+		{
 			ImGui::PushStyleColor(ImGuiCol_Text, c2);
-			//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,ImVec2(0.0f, 30.f));
+			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
+
 		}
 
-		bool sTab = ImGui::BeginTabItem(tabName.c_str());
+		bool bOpen = ImGui::BeginTabItem(tabName.c_str());
 
-		if (!isCurrent) {
-			//ImGui::PopStyleVar();
+		if (!isCurrent)
+		{
 			ImGui::PopStyleColor();
+			//ImGui::PopStyleColor();
 		}
 
-		if (sTab)
+		if (bSz) {
+			ImGui::PopStyleVar();//sz1
+			ImGui::PopStyleVar();//sz2
+		}
+
+		if (bOpen)
 		{
 			currentTab = tabName;
 		}
-		return sTab;
+		return bOpen;
 	}
 
 };

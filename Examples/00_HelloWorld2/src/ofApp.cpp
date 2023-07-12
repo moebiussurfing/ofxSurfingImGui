@@ -218,10 +218,12 @@ void ofApp::drawGuiMain()
 
 		//--
 
-		ui.AddSpacingBigSeparated();
+		if (ui.isMaximized()) {
+			ui.AddSpacingBigSeparated();
 
-		ui.DrawWidgetsResetUI();//populate ResetUI button directly.
-		//ui.resetUISettings();//exposed method.
+			ui.DrawWidgetsResetUI();//populate ResetUI button directly.
+			//ui.resetUISettings();//exposed method.
+		}
 
 		ui.EndWindow();
 	}
