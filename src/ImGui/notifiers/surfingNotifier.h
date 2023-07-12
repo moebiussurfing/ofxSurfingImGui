@@ -146,7 +146,7 @@ public:
 	{
 		NotifyState s;
 
-		ofLogWarning("ofxSurfingImGui:SurfingNotifier::Add") << "tag: " << nameTag;
+		ofLogWarning("ofxSurfingImGui:SurfingNotifier::Add") << "text: " << nameTag<< " tag: " << nameTag;
 
 		if (nameTag == string("INFO")) s = ImTrickNotify_Info;
 		else if (nameTag == string("VERBOSE")) s = ImTrickNotify_Verbose;

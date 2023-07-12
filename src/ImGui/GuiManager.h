@@ -2107,7 +2107,7 @@ public:
 		}
 		ImGui::PopItemWidth();
 		string s = "Global Scale";
-		s += "\n" + scaleGlobalGroup.getName();
+		//s += "\n" + scaleGlobalGroup.getName();
 		this->AddTooltip(s);
 	}
 
@@ -2142,15 +2142,6 @@ public:
 			ImGui::SameLine();
 		}
 
-		//ImGui::CalcTextSize
-		//AddSpacingToRightAlign(sp);
-		//float w = this->getWidgetsWidth(2);
-
-		//float pad = 0;
-		//pad += ImGui::GetStyle().WindowPadding.x;
-		//pad += getWidgetsSpacingX();
-		//float w2 = ImGui::GetContentRegionAvail().x - pad;
-
 		float w3;
 		if (this->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
 		else w3 = 200;
@@ -2165,13 +2156,18 @@ public:
 		s += "Press Ctrl +/- to 0.01 increments.\n";
 		this->AddTooltip(s);
 
+		if (this->Add(this->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS))
+		{
+
+		}
+
 		if (this->AddButtonRawMini("Reset")) {
 			this->globalScale = 1;
 		}
 		s = "Set Global Scale to unit.";
 		this->AddTooltip(s);
 		
-		if (this->getWindowWidth() > 150) this->SameLine();
+		//if (this->getWindowWidth() > 150) this->SameLine();
 
 		this->Add(this->bGlobalScaleWheel);
 		s = "Ctrl + Mouse Wheel: \nScales the active window.";
