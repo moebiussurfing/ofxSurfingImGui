@@ -15,9 +15,6 @@
 
 #include "ofMain.h"
 
-#define OFX_USE_DEBUGGER
-#define OFX_USE_NOTIFIER
-
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
 #include "imgui_internal.h"
 #include "ofxImGui.h"
@@ -41,11 +38,11 @@
 //#include "ImGui/WindowFbo.h"
 //#include "ImGui/WindowLog.h"
 
-#ifdef OFX_USE_NOTIFIER
+#ifdef SURFING_IMGUI__USE_NOTIFIER
 #include "ImGui/notifiers/surfingNotifier.h"
 #endif
 
-#ifdef OFX_USE_DEBUGGER
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 #include "surfingDebugger.h"
 #endif
 
@@ -62,7 +59,6 @@
 using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
 //using namespace ofxSurfingHelpers;
-
 
 //----
 
@@ -140,8 +136,8 @@ public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
 
-#ifdef OFX_USE_DEBUGGER
-	//private:
+#ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
+public:
 	SurfingDebugger debugger;
 #endif
 
@@ -150,6 +146,8 @@ public:
 public:
 	void setup(); // We will use the most common mode, to avoid to have to require any argument.
 	void setup(ofxImGuiSurfing::SurfingGuiMode mode); // Allows fully personalize the manager features. 
+
+	void setupParams();
 
 private:
 	// MODE A: 
@@ -166,8 +164,11 @@ public:
 	//----
 
 private:
-	void exit();
+#ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 	void exit(ofEventArgs& e);
+#endif
+	void exit();
+
 private:
 	bool bDoneExit = false;
 
@@ -197,8 +198,8 @@ private:
 	bool bDoForceStartupResetLayout = false; // will align the windows horizontally
 	bool bDoneDoForceStartupResetLayout = false;
 public:
-	void doResetLayout(); //must be called between Begin/End
-	void setDisableStartupResetLayout(bool b = 1) { bDisableStartupReset = b; } //disables auto reset layout!
+	void doResetLayout(); // must be called between Begin/End
+	void setDisableStartupResetLayout(bool b = 1) { bDisableStartupReset = b; } // disables auto reset layout!
 
 	//----
 
@@ -824,7 +825,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabel(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(0);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -833,9 +843,58 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	void AddLabelStyled(const std::string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
+	{
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
+		if (bSpacing) this->AddSpacing();
+
+		pushStyleFont(int(style));
+		ImGui::TextWrapped("%s", t.c_str());
+		popStyleFont();
+
+		if (bSpacing) this->AddSpacing();
+	}
+
+	//--------------------------------------------------------------
+	void AddLabelNoStyled(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	{
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
+		if (bSpacing) this->AddSpacing();
+		ImGui::TextWrapped("%s", t.c_str());
+		if (bSpacing) this->AddSpacing();
+	}
+
+	//--------------------------------------------------------------
 	void AddLabelBig(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -846,7 +905,16 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHuge(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -857,12 +925,45 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHugeXXL(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		//TODO: remove after '##'
+		string n = label;
+		bool bHasID = ofIsStringInString(n, "##");
+		if (bHasID)
+		{
+			auto ss = ofSplitString(n, "##", true, true);
+			n = ss[0];
+		}
+
+		std::string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(3);
 		ImGui::TextWrapped("%s", t.c_str());
 		popStyleFont();
 		if (bSpacing) this->AddSpacing();
+	}
+
+	//--------------------------------------------------------------
+	ImVec2 CalcTextSize(const std::string s)
+	{
+		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
+		return sz;
+	}
+
+	//--------------------------------------------------------------
+	ImVec2 CalcTextSize(const std::string s, int indexFont)
+	{
+		pushStyleFont(indexFont);
+		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
+		popStyleFont();
+		return sz;
+	}
+
+	// Applied mainly to buttons
+	float CalcWidgetWidth(const std::string s) {
+		float sp = this->CalcTextSize(s.c_str(), 0).x;
+		//sp += this->getWidgetsSpacingX();
+		sp += this->getWindowSpacingX();
+		return sp;
 	}
 
 	//--
@@ -946,6 +1047,19 @@ public:
 	{
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
+
+	//--------------------------------------------------------------
+	void AddTooltipBlink(std::string text, bool bBlink = true, bool bEnabled = true)
+	{
+		ofxImGuiSurfing::AddTooltipBlink(text, bBlink, bEnabled);
+	}
+
+	// // To be used on combos
+	// //--------------------------------------------------------------
+	// void AddTooltip(ofParameter<int>& pindex,std::vector<std::string> fileNames)
+	// {
+	// 	ofxImGuiSurfing::AddTooltip(pindex, fileNames);
+	// }
 
 	//TODO: 
 	// To insert into ofParam widgets
@@ -1116,9 +1230,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingRightAlign(float width = 100)
+	void AddSpacingToRightAlign(float width = 100)
 	{
-		ofxImGuiSurfing::AddSpacingRightAlign(width);
+		ofxImGuiSurfing::AddSpacingToRightAlign(width);
 	}
 
 	//--
@@ -1170,7 +1284,8 @@ public:
 	//--------------------------------------------------------------
 	void Separator()
 	{
-		ImGui::Separator();
+		//ImGui::Separator();
+		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
 
 	// Make widgets a bit smaller.
@@ -1256,28 +1371,75 @@ public:
 	// to use on labels or any widgets.
 	// (currently is only one ttf file with four styles!)
 	void setupFontDefault();
+
 private:
 	//TODO:pathFont is the path for all fonts..
+	//void setupFontDefault(string pathFont, float sizeFont);//TODO: better API args..
 	void setupFontDefault(string pathFonts, string nameFont, float sizeFont);
 
 	void setupImGuiTheme();
 
 	//--
 
-public:
-	// Rebuild default styles by loading a default font 
-	// then generating the four styles: default, big, huge and huge_XXL.
-	void BuildFonts(string pathFonts, string nameFont, float sizeFont);
-	void BuildStylesFromFont(string pathFont, float sizeFont);
+	// mono-spaced fonts
+	const float fontsRatioDefault = 1.0f;
+	const float fontsRatioBig = 1.5f;
+	const float fontsRatioHuge = 2.5f;
+	const float fontsRatioHugeXXL = 3.5f;
 
-	// Call after setup() but before pushing extra fonts. It's an alias of BuildFontStyles().
-	// The default style will use the passed size, the other three will be up scaled!
-	void setDefaultFont(string pathFont, float sizeFont)
+	string pathFontMono = OFX_IM_FONT_DEFAULT_PATH_FONTS + (string)OFX_IM_FONT_DEFAULT_MONO_FILE;
+	float sizeFontMono = float(OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN);
+	bool bDefinedMonospacedFonts = false;
+
+public:
+	vector<int> fontsMonospacedIndexes; // queue the positions of the four mono fonts
+	bool isFontsMonospacedDefined()
 	{
-		BuildStylesFromFont(pathFont, sizeFont);
+		return bDefinedMonospacedFonts;
 	}
 
+	void clearFontsMonospaced()
+	{
+		fontsMonospacedIndexes.clear();
+		bDefinedMonospacedFonts = false;
+
+		log.setFontMonospacedDefined(false);
+
+		//helpApp.setFontMonospacedDefined(false);
+		//helpInternal.setFontMonospacedDefined(false);
+	}
+
+private:
+	// will create all the standard sizes starting as default for the passed sizeFont
+	void setupFontForDefaultStylesMonospacedInternal(string pathFont, float sizeFont);
+	bool bSetupFontForDefaultStylesMonospacedInternal = 0; //flag to apply out of imgui NewFrame 
+public:
+	// Must be called after adding the default (maybe modern) font!
+	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
+
 	//----
+
+private:
+	// Rebuild default styles by loading a default font 
+	// then generating the four styles: default, big, huge and huge_XXL.
+	void setupFonts(string pathFonts, string nameFont, float sizeFont);
+
+	void setupFontForDefaultStylesInternal(string pathFont, float sizeFont);
+
+public:
+	// Call after (all imgui related) setup()'s, 
+	// but before pushing extra fonts. 
+	// The default style will use the passed size,
+	// the other three styles will be up scaled!
+	// It's an alias of BuildFontStyles().
+	void setupFontForDefaultStyles(string pathFont, float sizeFont)
+	{
+		setupFontForDefaultStylesInternal(pathFont, sizeFont);
+	}
+
+
+	//----
+
 
 public:
 	// Helpers to share the same Gui instance
@@ -1353,6 +1515,10 @@ public:
 	bool BeginWindow(char* name = "Window");
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
+
+	// Useful when we can decide afterwards which type to use for a window: special or not.
+	bool BeginWindowAnyType(ofParameter<bool>& p);
+	void EndWindowAnyType(ofParameter<bool>& p);
 
 	//--
 
@@ -1445,6 +1611,7 @@ public:
 	//--------------------------------------------------------------
 	void BeginColumns(int amount, std::string labelID, bool border = false)
 	{
+		//this->refreshLayout();
 		ImGui::Columns(amount, labelID.c_str(), border);
 		this->refreshLayout();
 	}
@@ -1461,6 +1628,15 @@ public:
 	{
 		ImGui::Columns(amountDefault);
 		this->refreshLayout();
+	}
+
+	//--------------------------------------------------------------
+	void setColumnWidth(int indexColumn, float wNormalized)
+	{
+		//refreshLayout();
+		float w = _ui.getWindowWidthAvail();
+		//float w = ofxImGuiSurfing::getWindowWidthAvail();
+		ImGui::SetColumnWidth(indexColumn, w * wNormalized);
 	}
 
 	//--
@@ -1515,6 +1691,42 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse, bool enabled = true)
+	{
+		std::string label = pb.get() ? nameTrue : nameFalse;
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItemToggleNamed(ofParameter<bool>& pb, string name, bool enabled = true)
+	{
+		std::string label = name;
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItemToggleNamedAppend(ofParameter<bool>& pb, string suffix, bool enabled = true)
+	{
+		std::string label = pb.getName() + suffix;
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
 	bool MenuItemButton(const std::string label)
 	{
 		const char* shortcut = NULL;
@@ -1523,6 +1735,30 @@ public:
 
 		return MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
 	}
+
+	//--------------------------------------------------------------
+	bool MenuItemButtonBlinking(const std::string label, bool bEnable = true)
+	{
+		if (bEnable) this->BeginBlinkText();
+		const char* shortcut = NULL;
+		bool selected = false;
+		bool enabled = true;
+		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+		if (bEnable) this->EndBlinkText();
+		return b;
+	}
+
+	////--------------------------------------------------------------
+	//bool MenuItemButtonBlinkingIfHover(const std::string label)
+	//{
+	//	this->BeginBlinkText();
+	//	const char* shortcut = NULL;
+	//	bool selected = false;
+	//	bool enabled = true;
+	//	bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+	//	this->EndBlinkText();
+	//	return b;
+	//}
 
 	//---
 
@@ -1581,6 +1817,19 @@ public:
 		ofxImGuiSurfing::EndBlinkTextDisabled(bBlink);
 	}
 
+	// Change text color
+	//--------------------------------------------------------------
+	inline void PushColorText(ofColor color)
+	{
+		ofxImGuiSurfing::PushColorText(color);
+	}
+
+	//--------------------------------------------------------------
+	inline void PopColorText()
+	{
+		ofxImGuiSurfing::PopColorText();
+	}
+
 	// Border Highlight without blinking
 	//--------------------------------------------------------------
 	inline void BeginBorderFrame()
@@ -1594,6 +1843,19 @@ public:
 		ofxImGuiSurfing::EndBorderFrame();
 	}
 
+	// Disable spacing between item 
+	//--------------------------------------------------------------
+	inline void BeginDisableItemSpacing()
+	{
+		ofxImGuiSurfing::BeginDisableItemSpacing();
+	}
+
+	//--------------------------------------------------------------
+	inline void EndDisableItemSpacing()
+	{
+		ofxImGuiSurfing::EndDisableItemSpacing();
+	}
+
 	//----
 
 	// The ImGui instance options
@@ -1605,12 +1867,21 @@ private:
 	//TODO: enables full screen ImGuiDockNodeFlags_PassthruCentralNode
 
 	bool bRestoreIniSettings = true; // allow handling of .ini settings.
-	bool bMouseCursorFromImGui = true; // true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
+
+#ifdef SURFING_IMGUI__USE_IMGUI_MOUSE
+	bool bMouseCursorFromImGui = 1;
+#else
+	bool bMouseCursorFromImGui = 0;
+#endif
+
+	// true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
+	// note that some Windows capturers requires to force disable this 
+	// if you want to see mouse or other overlays!
 
 public:
 	// Must be called before setup!
-	void setEnableRestoreIniSettings(bool b) { bRestoreIniSettings = b; }
-	void setEnablebMouseCursorFromImGui(bool b) { bMouseCursorFromImGui = b; }
+	void setEnablebMouseCursorFromImGui(bool b = 1) { bMouseCursorFromImGui = b; }
+	void setEnableRestoreIniSettings(bool b = 1) { bRestoreIniSettings = b; }
 
 private:
 	//TODO: 
@@ -1701,6 +1972,21 @@ public:
 
 	//----
 
+	//// Global scale
+	//// this will not work as is global. we set the global scale in the Begin() method.
+	//void PushGlobalScale(float scale) {
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	globalScalePre = io.FontGlobalScale;
+	//	io.DisplayFramebufferScale = ImVec2(scale, scale);
+	//}
+	//void PopGlobalScale() {
+	//	ImGuiIO& io = ImGui::GetIO();
+	//	//io.FontGlobalScale = globalScalePre;
+	//	io.DisplayFramebufferScale = ImVec2(globalScalePre, globalScalePre);
+	//}
+
+	//----
+
 	// Fonts Runtime Management 
 
 private:
@@ -1717,19 +2003,21 @@ public:
 	void clearFonts();
 	int getNumFonts();
 	int getAmountFonts();
+	std::string getFontLabel(int index);
 	std::string getFontName(int index);
-	int getFontIndexSize(int index);
-	std::string getFontPath(int index);
-	std::string getFontIndexPath();
+	float getFontSizeForIndex(int index);
+	std::string getFontPath(int index); //get the path of the selected index font
+	std::string getFontIndexPath(); //duplicated? //get the path of the selected index font
+	float getFontIndexSize(); //get the size of the selected index font
 	void doLoadPreviousFont();
 	void doLoadNextFont();
 
-	//TODO: required? bc pushFont workflow..
+	//TODO: required? bc addFontStyle workflow..
 	//bool addFont(std::string path, float size);
 	// Load all the fonts from the passed folder
 	bool LoadFontsFromFolder(std::string path, float size = 12.f, bool bMultisize = false);
 
-	bool pushFont(std::string path, float size, string label = "");
+	bool addFontStyle(std::string path, float size, string label = "");
 
 private:
 	int currFont = 0;
@@ -1752,8 +2040,8 @@ private:
 	void pushStyleFont(int index);
 	void popStyleFont();
 
-public:
-	//NEW
+private:
+	// LEGACY
 	void PushFont(SurfingFontTypes style);
 	void PopFont();
 
@@ -1763,8 +2051,9 @@ public:
 
 	ofParameter<int> fontIndex{"Font", 0, 0, 3}; // by default we use 4 font sizes/types
 	void DrawWidgetsFonts(); // uses internal index
-	void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
 	void DrawWidgetsFontsMini(); // only combo. uses internal index
+
+	void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
 
 	void DrawImGuiTextWithFontStyle(string text, int index, bool bShowName = 1);
 
@@ -1774,6 +2063,118 @@ public:
 
 	void PushFontByIndex(); // activates font style picked from the internal index
 	void PopFontByIndex();
+
+	//--
+
+	// Scale Global
+
+private:
+	struct ScaleGlobalGroup {
+		vector<string> names{"NONE", "100%", "150%", "175%", "200%"};
+		ofParameter<int> indexScaleGlobal {"Global Scale", 0, 0, names.size() - 1};
+		float getScale() {
+			switch (indexScaleGlobal.get()) {
+			case 0: return -1.0f; break;
+			case 1: return 1.0f; break;
+			case 2: return 1.5f; break;
+			case 3: return 1.75f; break;
+			case 4: return 2.0f; break;
+			default: return 1.0f; break;
+			}
+		}
+		string getName() { return names[indexScaleGlobal]; }
+	};
+	ScaleGlobalGroup scaleGlobalGroup;
+public:
+	void DrawWidgetsGlobalScaleMini() {
+		this->AddSpacing();
+
+		float w = 60;
+		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
+		//else w = MAX(this->getWidgetsWidth(1), 60);
+
+		ImGui::PushItemWidth(w);
+		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
+			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
+				this->globalScale = scaleGlobalGroup.getScale();
+			}
+			else {
+			}
+		}
+		ImGui::PopItemWidth();
+		string s = "Global Scale";
+		//s += "\n" + scaleGlobalGroup.getName();
+		this->AddTooltip(s);
+	}
+
+	void DrawWidgetsGlobalScale() {
+		this->AddSpacingBigSeparated();
+		string s;
+		s = "Global Scale";
+		this->AddLabelBig(s);
+		this->AddSpacing();
+
+		float w = 60;
+		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
+		//else w = MAX(this->getWidgetsWidth(1), 60);
+
+		ImGui::PushItemWidth(w);
+		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
+			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
+				this->globalScale = scaleGlobalGroup.getScale();
+			}
+			else {
+			}
+		}
+		ImGui::PopItemWidth();
+
+		// responsive
+		if ((this->getWindowWidth() > 200) &&
+			(scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1)) {
+			ImGui::SameLine();
+		}
+
+		float w3;
+		if (this->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
+		else w3 = 200;
+		ImGui::PushItemWidth(w3);
+		if (this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL))
+		{
+
+		}
+		ImGui::PopItemWidth();
+		s = "Global Scale is applied\n";
+		s += "to all the UI context.\n";
+		s += "Press Ctrl +/- to 0.01 increments.\n";
+		this->AddTooltip(s);
+
+		if (this->Add(this->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS))
+		{
+
+		}
+
+		if (this->AddButtonRawMini("Reset")) {
+			this->globalScale = 1;
+		}
+		s = "Set Global Scale to unit.";
+		this->AddTooltip(s);
+		
+		//if (this->getWindowWidth() > 150) this->SameLine();
+
+		this->Add(this->bGlobalScaleWheel);
+		s = "Ctrl + Mouse Wheel: \nScales the active window.";
+		this->AddTooltip(s);
+
+		this->AddSpacingBigSeparated();
+	}
 
 	//----
 
@@ -1865,6 +2266,9 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bMinimize{"Minimize", true};
 	ofParameter<bool> bAutoResize{"Auto Resize", true};
+	ofParameter<bool> bGlobalScaleWheel{"Wheel Global Scale", false};
+	ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
+	//float globalScalePre = 1;
 	ofParameter<bool> bKeys{"Keys", true};
 	ofParameter<bool> bLogKeys{"Log Keys", false};
 	ofParameter<bool> bHelp{"Help App", false};
@@ -1877,9 +2281,9 @@ public:
 
 	ofParameter<bool> bMouseWheel{"Mouse Wheel", true};
 	ofParameter<bool> bMouseWheelFlip{"Flip Wheel", false}; //for natural direction
-	bool bDisableOnButtons = true;//TODO:
+	bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
 
-	ofParameter<bool> bThemeUiAlt{"Theme UI", false};
+	ofParameter<bool> bThemeUIAlt{"Theme UI", false};
 
 	ofParameter<bool> bLog{"LOG", false}; //show log window
 	ofParameter<bool> bNotifier{"NOTIFIER", true}; //show notifier
@@ -1908,8 +2312,18 @@ public:
 	ofParameterGroup params_Advanced{ "Advanced Settings" };
 	// These params are saved as settings when exit and loaded when reopen the app. 
 
+	ofParameterGroup params_Internal{ "Internal" };
+	ofParameterGroup params_InternalConfig{ "InternalConfig" };
+	ofParameterGroup params_Modules{ "Modules" };
+	ofParameterGroup params_ModulesWindows{ "ModulesWindows" };
+	ofParameterGroup params_Help{ "Module Help" };
+	ofParameterGroup params_HelpInternal{ "Help Internal" };
+	ofParameterGroup params_HelpApp{ "Help App" };
+
+	ofParameterGroup params_Windows{ "Windows" };
+
 private:
-	void doBuildHelpInfo(); //create or freshed the help info for the drawing help box
+	void doBuildHelpInfo(bool bSlient = 1); //create or freshed the help info for the drawing help box
 
 	//--
 
@@ -2001,15 +2415,12 @@ public:
 	//"ERROR"
 	// but you can add more custom tags too.
 
-private:
-	//TODO:
-	// could be public 
-	//public:
-
+public:
 	// Window Log
 	SurfingLog log;
 
-#ifdef OFX_USE_NOTIFIER
+#ifdef SURFING_IMGUI__USE_NOTIFIER
+public:
 	// Notifier with floating boxes
 	SurfingNotifier notifier;
 #endif
@@ -2027,7 +2438,7 @@ public:
 	void setLogName(std::string name)
 	{
 		log.setName(name);
-	};
+	}
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled()
@@ -2035,10 +2446,16 @@ public:
 		if (bLog) log.drawImGui(bLog);
 	}
 
+	////TODO:
+	////--------------------------------------------------------------
+	//SurfingLog getLogPtr() {
+	//	return &this->log;
+	//}
+
 	//--------------------------------------------------------------
 	void AddThemeToggle()
 	{
-		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, "Day", "Night");
+		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
 	}
 
 	//--------------------------------------------------------------
@@ -2046,27 +2463,27 @@ public:
 	{
 		//bool bToggled = true
 		//if (bToggled)
-		//	this->Add(bThemeUiAlt);
+		//	this->Add(bThemeUIAlt);
 
 		string s = "Theme";
 		s = ofToUpper(s);
 		if (bLabel) this->AddLabelBig(s);
 
-		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, "Day", "Night");
-		//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUiAlt, THEME_NAME_DAY, THEME_NAME_NIGHT);
+		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
+		//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, THEME_NAME_DAY, THEME_NAME_NIGHT);
 
 		//string s;
-		//if (!bThemeUiAlt) s = THEME_NAME_NIGHT;
+		//if (!bThemeUIAlt) s = THEME_NAME_NIGHT;
 		//else s = THEME_NAME_DAY;
 		//this->AddLabel(s);
 	}
 
-#ifdef OFX_USE_NOTIFIER
+#ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
 	void DrawNotifierIfEnabled()
 	{
-		if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
-		//if (bNotifier) notifier.draw(bDebug.get());
+		if (bNotifier) notifier.draw(true, &customFonts);
+		//if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
 	}
 #endif
 
@@ -2094,18 +2511,20 @@ public:
 	void AddLogTag(SurfingLog::tagData tag)
 	{
 		log.AddTag(tag);
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddLogTag(std::string name, ofColor color)
 	{
 		this->AddLogTag(SurfingLog::tagData{name, color});
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddLogTag(ofColor color) //not using any tag. to remove left spacing
 	{
 		std::string name = "";
 		AddLogTag(name, color);
-	};
+	}
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
@@ -2114,20 +2533,20 @@ public:
 	{
 		// Log
 		log.Add(text, nameTag);
-	};
+	}
 
 	//--------------------------------------------------------------
 	void ExportLogToFile()
 	{
 		// Log
 		log.exportLogToFile();
-	};
+	}
 
 	//--------------------------------------------------------------
 	void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
 	{
 		log.clearDefaultTags();
-	};
+	}
 
 	// Print message to log window passing the message and the tag index. 
 	// Must exist or been added previously.
@@ -2136,59 +2555,81 @@ public:
 	void AddToLog(std::string text, int tag/* = -1*/)
 	{
 		log.Add(text, tag);
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddToLog(std::string text) //TODO:adding empty tag...
 	{
 		//log.Add(text, "");
 		log.Add(text, OF_LOG_NOTICE);
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddToLog(std::string text, ofLogLevel logLevel)
 	{
 		log.Add(text, logLevel);
-	};
+	}
+
 	//--------------------------------------------------------------
 	void ClearLog()
 	{
 		log.Clear();
-	};
+	}
+
+	//--------------------------------------------------------------
+	void AddToLogAndNotifier(std::string text, ofLogLevel logLevel)
+	{
+		log.Add(text, logLevel);
+		notifier.Add(text, logLevel);
+	}
+
+	//--------------------------------------------------------------
+	void AddToLogAndNotifier(std::string text, std::string nameTag)
+	{
+		log.Add(text, nameTag);
+		notifier.Add(text, nameTag);
+	}
 
 	//----
 
 public:
-#ifdef OFX_USE_NOTIFIER
+#ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
 	void doResetNotifier()
 	{
 		notifier.doReset();
-	};
+	}
+
 	//--------------------------------------------------------------
 	void doClearNotifier()
 	{
 		notifier.doClear();
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text, std::string nameTag)
 	{
 		notifier.Add(text, nameTag);
-	};
+	}
+
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text) //TODO:adding empty tag...
 	{
-		notifier.Add(text, "");
-	};
+		notifier.Add(text, OF_LOG_NOTICE);
+	}
+
 	//--------------------------------------------------------------
 	void AddToNotifier(std::string text, ofLogLevel logLevel)
 	{
 		notifier.Add(text, logLevel);
-	};
+	}
+
 	//TODO: add tag system..
 	////--------------------------------------------------------------
 	//void AddToNotifier(std::string text, int tag/* = -1*/)
 	//{
 	//	notifier.Add(text, tag);
-	//};
+	//}
 #endif
 
 	//----
@@ -2269,7 +2710,7 @@ public:
 		// Right aligned
 
 		//this->AddSpacing();
-		ofxImGuiSurfing::AddSpacingRightAlign(w);
+		ofxImGuiSurfing::AddSpacingToRightAlign(w);
 
 		//remove label
 		ofxImGuiSurfing::AddToggleRoundedButton(b, ht, true, bNoLabel);
@@ -2330,7 +2771,7 @@ public:
 
 	//--
 
-	//#ifdef OFX_USE_NOTIFIER
+	//#ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
 	bool AddNotifier(bool bSeparated = false)
 	{
@@ -2342,6 +2783,16 @@ public:
 	{
 		this->Add(this->bNotifier, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
+	}
+
+	void AddNotifierToggleEditor(bool bSeparated = false)
+	{
+		if (!bNotifier || !bDebug) return;
+
+		this->Indent();
+		this->Add(this->notifier.bGui_Editor, OFX_IM_TOGGLE_ROUNDED_MINI);
+		if (bSeparated)this->AddSpacingSeparated();
+		this->Unindent();
 	}
 
 	void AddNotifierToggle(SurfingGuiTypes style, bool bSeparated = false)
@@ -2400,21 +2851,24 @@ public:
 
 	//--
 
-	//--------------------------------------------------------------
-	bool AddHelp(bool bSeparated = false)
-	{
-		AddHelpToggle(bSeparated);
-		return bHelp.get();
-	}
+	// Alias
+	////--------------------------------------------------------------
+	//bool AddHelp(bool bSeparated = false)
+	//{
+	//	AddHelpToggle(bSeparated);
+	//	return bHelp.get();
+	//}
 
 	void AddHelpToggle(bool bSeparated = false)
 	{
+		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false)
 	{
+		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
@@ -2423,21 +2877,24 @@ public:
 	bool isHelpEnabled() const { return bHelp.get(); }
 	bool isHelpDisabled() const { return !bHelp.get(); }
 
-	//--------------------------------------------------------------
-	bool AddHelpInternal(bool bSeparated = false)
-	{
-		AddHelpInternalToggle(bSeparated);
-		return bHelpInternal.get();
-	}
+	// Alias
+	////--------------------------------------------------------------
+	//bool AddHelpInternal(bool bSeparated = false)
+	//{
+	//	AddHelpInternalToggle(bSeparated);
+	//	return bHelpInternal.get();
+	//}
 
 	void AddHelpInternalToggle(bool bSeparated = false)
 	{
+		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
 	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false)
 	{
+		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, style);
 		if (bSeparated)this->AddSpacingSeparated();
 	}
@@ -2576,14 +3033,14 @@ private:
 
 			// Help App
 			this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
-			//if (bUseHelpInfoApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
+			//if (bUseHelpApp) this->Add(bHelp, OFX_IM_TOGGLE_ROUNDED);
 			//hide if it's not settled by the user from ofApp!
 
 			// Help Internal
 			this->Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
 			// Menu
-			Add(bMenu, OFX_IM_TOGGLE_ROUNDED);
+			Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED);
 
 			// Log
 			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
@@ -2687,6 +3144,12 @@ private:
 
 						// Auto resize
 						Add(bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+						this->AddSpacing();
+
+						// Global Scale
+						this->Add(globalScale);
+						this->Add(bGlobalScaleWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
+						this->AddSpacing();
 
 						// MouseWheel
 						this->Add(bMouseWheel, OFX_IM_TOGGLE_ROUNDED_MINI);
@@ -2695,6 +3158,7 @@ private:
 
 						////TODO:
 						//// Lock
+						//this->AddSpacing();
 						//Add(bLockMove, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 						//TODO:
@@ -2726,7 +3190,7 @@ private:
 						//Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//// Menu
-						//Add(bMenu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+						//Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//--
 
@@ -2856,6 +3320,7 @@ private:
 
 private:
 	// File Settings
+	std::string path_Root = "";
 	std::string path_Global;
 	std::string path_ImLayouts;
 	std::string path_AppSettings;
@@ -2868,10 +3333,18 @@ private:
 
 public:
 	//--------------------------------------------------------------
+	std::string getPathRoot() const
+	{
+		if (path_Root == "") return path_Global;
+		else return path_Root;
+	}
+
+	//--------------------------------------------------------------
 	std::string getPathGlobal() const
 	{
 		return path_Global;
 	}
+
 	//--------------------------------------------------------------
 	std::string getPath() const
 	{
@@ -2894,15 +3367,22 @@ public:
 		windowsOrganizer.setName(nameLabel);
 
 		// split possible instances on different folders
+		path_Root = nameLabel + "/";
 		path_Global = nameLabel + "/Gui/";
-		ofxImGuiSurfing::CheckFolder(path_Global);
-		// Useful toggles for internal Windows
 
+#if 0
+		ofxImGuiSurfing::CheckFolder(path_Global);
+#endif
+
+		// Useful toggles for internal Windows
 		windowsOrganizer.setPathGlobal(path_Global);
 
 		//--
 
-		// too long names..
+		//TODO: should be static to share same windows between all the ofxImGui instances
+		// Avoid multiple windows with same name with multi instnces..
+
+		// Too long names..
 		/*
 		// Customize common windows duplicated on when using multiple instances.
 		// that's to avoid overlapping contents when ImGui windows have the same name!
@@ -2910,10 +3390,18 @@ public:
 		bGui_Organizer.setName(nameLabel + " ORGANIZER");
 		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
 		*/
-		// use first letter only
+
+#if 0
+		// Use first letter only
 		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
 		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
 		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
+#endif
+
+		//TODO: short names but could spread many windows when multi instances
+		bGui_Aligners.setName("ALIGNERS");
+		bGui_Organizer.setName("ORGANIZER");
+		bGui_SpecialWindows.setName("SPECIALW");
 
 		//--
 
@@ -2928,6 +3416,11 @@ public:
 
 		// Link both link toggles, local and the one inside the organizer object
 		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
+		//TODO: expose more params
+		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
+		windowsOrganizer.bGui_Global.makeReferenceTo(bGui_Global);
+		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
+		windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
 
 		//--
 
@@ -3519,6 +4012,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	float getWindowWidth()
+	{
+		return ImGui::GetContentRegionAvail().x;
+	}
+
+	//--------------------------------------------------------------
 	float getWidgetsWidth(int amnt = 1)
 	{
 		return ofxImGuiSurfing::getWidgetsWidth(amnt);
@@ -3555,6 +4054,12 @@ public:
 		return ImGui::GetStyle().ItemSpacing.y;
 	}
 
+	//--------------------------------------------------------------
+	float getWidgetHeightVerticalSlider()
+	{
+		float h = this->getWidgetsHeightUnit() * VERTICAL_AMOUNT_UNITS;
+		return h;
+	}
 
 	//--------------------------------------------------------------
 	float getWindowSpacingX()
@@ -3639,6 +4144,9 @@ public:
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowSpecialVisible(int index) // return bool parameter visible toggle
 	{
+		//TODO: could this be problematic?
+		// bc we are not storing the param neither returning a reference?
+
 		if (index > windows.size() - 1 || index == -1)
 		{
 			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued windows, " <<
@@ -3760,9 +4268,11 @@ private:
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning
 	// Then we can reset to some default variables and layout positions of our windows.
-
-	bool loadAppSettings();
-	void saveAppSettings();
+	bool loadSettings();
+public:
+	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
+	void saveSettings();
+	void save() { saveSettings(); }//alias
 
 	//----
 
@@ -3804,8 +4314,8 @@ private:
 	std::string ini_to_load_Str;
 	std::string ini_to_save_Str;
 
-	void loadAppLayout(int mode);
-	void saveAppLayout(int mode);
+	void loadLayout(int mode);
+	void saveLayout(int mode);
 
 	void saveLayoutPreset(std::string path); //-> both group params and ImGui ini files
 	void loadLayoutPreset(std::string path);
@@ -3878,13 +4388,21 @@ public:
 
 	//-
 
+	// Reset Settings
+	void DrawWidgetsResetUI();
+	void resetUISettings();
+private:
+	bool bResetUIProgramed = false;
+
+	//-
+
 private:
 	bool bDoneStartup = false;
 	bool bDoneSetup = false;
 
 	//public:
 
-	void setupStartupForced();
+	void setupStartupForced(); //will be called on first frame/update() call!
 	void setupDocking(); //TODO: rename as presets + docking...
 
 	//--------------------------------------------------------------
@@ -3922,7 +4440,7 @@ private:
 	void drawLayoutsLayoutPresets();
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
-	void drawViewport_oFNative();
+	void drawViewport_OF_Native();
 
 	//TODO:
 	//// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.
@@ -3964,9 +4482,15 @@ public:
 	//-
 
 public:
-	ofParameter<bool> bMenu{ "Menu", false };
+	ofParameter<bool> bGui_Menu{ "Menu", false };
 
-	ofParameter<bool> bLinked{"Link Windows", true}; //align windows engine. liked to the internal aligner.
+	ofParameter<bool> bLinked{"Link Windows", true}; // Align windows engine. liked to the internal aligner.
+	//TODO: more to link with internal WindowsOrganizer
+	ofParameter<bool> bOrientation{"Orientation", false}; // false=horizontal. true=vertical
+	ofParameter<bool> bGui_Global{"Show Windows", true}; // to force hide all windows or to show if visible
+	//ofParameter<bool> bGui_Global{"Show Global", true}; // to force hide all windows or to show if visible
+	ofParameter<bool> bAlignWindowsReset{"Reset", false};
+	ofParameter<bool> bAlignWindowsCascade{"Cascade", false};
 
 private:
 	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };
@@ -3979,7 +4503,7 @@ private:
 
 	ofParameter<bool> bDockingLayoutPresetsEngine{"Dock Engine", false};
 
-	ofParameter<bool> bSolo{"Solo", false};
+	ofParameter<bool> bSolo{"Solo", false}; //TODO: for presets layouts engine
 
 	//-
 
@@ -4005,6 +4529,8 @@ private:
 	// Learn to use lambda functions
 	// To callback reset
 	// Subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+	// #include <functional>
+	//std::function<void()> doCallback = nullptr
 
 private:
 	bool* bResetPtr = nullptr;
@@ -4024,7 +4550,7 @@ public:
 		setShowAllPanels(b);
 
 		//bModeLockControls = b;
-		bMenu = b;
+		bGui_Menu = b;
 
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresetsSelector = b;
@@ -4061,6 +4587,10 @@ public:
 
 	//--
 
+public:
+	HelpTextWidget helpInternal;
+	HelpTextWidget helpApp;
+
 private:
 	//TODO: replace help boxes 
 	// with new ImGui classes
@@ -4071,52 +4601,93 @@ private:
 	// Can be initialized from outer scope.
 
 	// Help Internal: How to use the add-on itself
-	std::string helpInfo = "";
-	HelpTextWidget helpInternal;
+	std::string helpInternalText = "";
 
 	// Help App: How to use our App 
-	std::string helpInfoApp = "";
-	HelpTextWidget helpApp;
+	std::string helpAppText = "";
 
 	// main help disablers
-	bool bUseHelpInfoInternal = false;
-	bool bUseHelpInfoApp = false;
+	bool bUseHelpInternal = false;
+	bool bUseHelpApp = false;
 
 	//--
 
 public:
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setEnableHelpInfoInternal(bool b = true)
+	void setEnableHelpInternal(bool b = true)
 	{
-		bUseHelpInfoInternal = b;
+		bUseHelpInternal = b;
+
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+		helpInternal.setCustomFontsPtr(&customFonts, &namesCustomFonts);
+#else
+		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
+#endif
 	}
 
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setEnableHelpInfoApp(bool b = true)
+	void setEnableHelpApp(bool b = true)
 	{
-		bUseHelpInfoApp = b;
+		bUseHelpApp = b;
+
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+		helpApp.setCustomFontsPtr(&customFonts, &namesCustomFonts);
+#else
+		helpApp.setCustomFonts(customFonts, namesCustomFonts);
+#endif
+
+		//helpApp.setFontMonospacedDefined();
 	}
 
+	// Must be called after ui.setup();
+	// If we are using mono-spaced fonts, 
+	// it must be called after be have been added the mono-spaced fonts.
 	//--------------------------------------------------------------
-	void setHelpInfoApp(std::string text)
+	void setHelpAppText(std::string text)
 	{
-		if (!bUseHelpInfoApp) setEnableHelpInfoApp(); //force
-		helpInfoApp = text;
-		helpApp.setText(helpInfoApp);
-		bUseHelpInfoApp = true;
+		//if (!bUseHelpApp) setEnableHelpApp();
+		setEnableHelpApp(); //force
+		helpAppText = text;
+		helpApp.setText(helpAppText);
+		bUseHelpApp = true;
 	}
-
+	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setHelpInfoInternal(std::string text)
+	void setHelpInternalText(std::string text)
 	{
-		helpInfo = text;
-		helpInternal.setText(helpInfo);
-		bUseHelpInfoInternal = true;
+		//if (!bUseHelpInternal) setEnableHelpInternal();
+		setEnableHelpInternal(); //force
+		helpInternalText = text;
+		helpInternal.setText(helpInternalText);
+		bUseHelpInternal = true;
 	}
 
 	// Useful in some rare scenarios to populate or hide the enabler toggle
-	bool isHelpInternalEnable() { return bUseHelpInfoInternal; }
-	bool isHelpAppEnable() { return bUseHelpInfoInternal; }
+	bool isHelpInternalEnable() { return bUseHelpInternal; }
+	bool isHelpAppEnable() { return bUseHelpInternal; }
+
+	// Widgets to select font
+	//--------------------------------------------------------------
+	void DrawHelpWidgetsFont()
+	{
+		if (!helpApp.bGui) return;
+		string s = helpApp.bGui.getName() + "##DRAWHELPWIDGETSFONT";
+		ImGui::PushID(s.c_str());
+		this->DrawWidgetsFonts(helpApp.fontIndex);
+		ImGui::PopID();
+	}
+
+	//--------------------------------------------------------------
+	void DrawHelpInternalWidgetsFont()
+	{
+		if (!helpInternal.bGui) return;
+		string s = helpInternal.bGui.getName() + "##DRAWHELPINTERNALWIDGETSFONT";
+		ImGui::PushID(s.c_str());
+		this->DrawWidgetsFonts(helpInternal.fontIndex);
+		ImGui::PopID();
+	}
 
 	//--------------------------------------------------------------
 	void SameLine() { ImGui::SameLine(); };
@@ -4168,7 +4739,20 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddButtonRawMini(std::string label)
+	{
+		return ImGui::Button(label.c_str());
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddButtonRaw(std::string label, ImVec2 sz)
+	{
+		return ImGui::Button(label.c_str(), sz);
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1)
 	{
 		// fixes
 
@@ -4189,32 +4773,32 @@ public:
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 			//--
@@ -4225,32 +4809,32 @@ public:
 
 		case OFX_IM_BUTTON_SMALL_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 			//--
@@ -4259,32 +4843,32 @@ public:
 
 		case OFX_IM_BUTTON_SMALL_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.25f, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_MEDIUM_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 1.5f, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 2, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXL_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 3, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_BUTTON_BIG_XXXL_BORDER_BLINK:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h * 4, true, true);
-			if (bMouseWheel && !bDisableOnButtons) bReturn |= GetMouseWheel();
+			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
 		default:
@@ -4327,7 +4911,7 @@ public:
 		float _h = sz.y;
 
 		bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-		if (bMouseWheel && !bDisableOnButtons) ofxImGuiSurfing::AddMouseWheel(bState);
+		if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) ofxImGuiSurfing::AddMouseWheel(bState);
 
 		return bReturn;
 	}
@@ -4360,11 +4944,21 @@ public:
 
 		switch (type)
 		{
+		case OFX_IM_CHECKBOX:
+			bReturn = ImGui::Checkbox(label.c_str(), &bState);
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
+			break;
+
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 		case OFX_IM_TOGGLE_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4373,7 +4967,8 @@ public:
 		case OFX_IM_BUTTON:
 		case OFX_IM_TOGGLE:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4382,7 +4977,8 @@ public:
 		case OFX_IM_BUTTON_MEDIUM:
 		case OFX_IM_TOGGLE_MEDIUM:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4391,7 +4987,8 @@ public:
 		case OFX_IM_BUTTON_BIG:
 		case OFX_IM_TOGGLE_BIG:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4400,7 +4997,8 @@ public:
 		case OFX_IM_BUTTON_BIG_XXL:
 		case OFX_IM_TOGGLE_BIG_XXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4409,7 +5007,8 @@ public:
 		case OFX_IM_BUTTON_BIG_XXXL:
 		case OFX_IM_TOGGLE_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
-			if (!bDisableOnButtons) {
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -4423,37 +5022,52 @@ public:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
 				ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
-			if (bMouseWheel) AddMouseWheel(bState);
-			if (bMouseWheel) bReturn |= GetMouseWheel();
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
 			break;
 
 		case OFX_IM_TOGGLE_ROUNDED_SMALL:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
 				ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
-			if (bMouseWheel) AddMouseWheel(bState);
-			if (bMouseWheel) bReturn |= GetMouseWheel();
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
 			break;
 
 		case OFX_IM_TOGGLE_ROUNDED:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState);
-			if (bMouseWheel) AddMouseWheel(bState);
-			if (bMouseWheel) bReturn |= GetMouseWheel();
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
 			break;
 
 		case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-			if (bMouseWheel) AddMouseWheel(bState);
-			if (bMouseWheel) bReturn |= GetMouseWheel();
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
 			break;
 
 		case OFX_IM_TOGGLE_ROUNDED_BIG:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
-			if (bMouseWheel) AddMouseWheel(bState);
-			if (bMouseWheel) bReturn |= GetMouseWheel();
+			if (!bDisableMouseWheelOnButtonsToggles)
+			{
+				if (bMouseWheel) AddMouseWheel(bState);
+				if (bMouseWheel) bReturn |= GetMouseWheel();
+			}
 			break;
 
 			//--
@@ -4579,6 +5193,11 @@ public:
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
+	bool AddCombo(ofParameter<size_t> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	{
+		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
+	}
+
 	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames)
 	{
 		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
@@ -4625,6 +5244,40 @@ public:
 	//ui.setSettingsFilename("3_DockingLayoutPresetsEngine"); 
 
 	//----
+
+
+	void DrawWidgetsExampleTabs();
+	int active_tab = 0;
+
+	// ImGui Helper
+	//------------------------------------------------------------------------------------------
+	inline bool BeginTabItem(const string& tabName)
+	{
+		static float a = 0.3f;
+		static ImVec4 c1 = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+		static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
+		static string currentTab = "";
+		bool isCurrent = currentTab == tabName;
+
+		if (!isCurrent) {
+			ImGui::PushStyleColor(ImGuiCol_Text, c2);
+			//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,ImVec2(0.0f, 30.f));
+		}
+
+		bool sTab = ImGui::BeginTabItem(tabName.c_str());
+
+		if (!isCurrent) {
+			//ImGui::PopStyleVar();
+			ImGui::PopStyleColor();
+		}
+
+		if (sTab)
+		{
+			currentTab = tabName;
+		}
+		return sTab;
+	}
+
 };
 
 

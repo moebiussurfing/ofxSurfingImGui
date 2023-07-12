@@ -18,7 +18,7 @@ using namespace ImGui;
 
 #include "Combos.h"
 
-#include "surfingThemes.h"
+#include "SurfingThemes.h"
 
 //----
 
@@ -210,8 +210,8 @@ namespace ofxImGuiSurfing
 			case 0: resetTheme(); ImGui::StyleColorsDark(); break;
 			case 1: resetTheme(); ImGui::StyleColorsLight(); break;
 			case 2: resetTheme(); ImGui::StyleColorsClassic(); break;
-			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(); break;
-			case 4: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(); break;
+			case 3: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors); break;
+			case 4: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2(bEnableLayout, bEnableColors); break;
 			case 5: ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue(); break;
 			case 6: ofxImGuiSurfing::ImGui_ThemeGrey(); break;
 			case 7: ofxImGuiSurfing::ImGui_ThemeSequentity(); break;

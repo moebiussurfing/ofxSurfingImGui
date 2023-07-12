@@ -1,4 +1,3 @@
-
 #pragma once
 
 /*
@@ -96,16 +95,20 @@ namespace ofxImGuiSurfing
 	// Adds mouse wheel control to the last previous param widget (templated float/int).
 	// Put after populate widget!
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& ap, bool bFlip = false)
 	{
+		//#define SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID 
+		// Disable to avoid that mouse wheel dragging scroll windows,
+		// trigs button by error!
+
 		//TODO: 
 		// Workaround
 		// Allow customization
 		// Forced to default behavior/resolution stepping.
 		float resolution = -1;
 
-		bool bIsUnknown = false;
+		//bool bIsUnknown = false;
 		bool bIsVoid = false;
 		bool bIsbool = false;
 		bool bIsInt = false;
@@ -127,6 +130,8 @@ namespace ofxImGuiSurfing
 		{
 			bIsInt = true;
 		}
+
+#ifdef SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID
 		else if (info == typeid(bool)) // Bool
 		{
 			bIsbool = true;
@@ -135,6 +140,16 @@ namespace ofxImGuiSurfing
 		{
 			bIsVoid = true;
 		}
+#else 
+		else if (info == typeid(bool)) // Bool
+		{
+			return;
+		}
+		else if (info == typeid(void)) // Void
+		{
+			return;
+		}
+#endif
 
 		//TODO:
 		else if (info == typeid(ofDefaultVec2))
@@ -153,10 +168,12 @@ namespace ofxImGuiSurfing
 			bIsDim4 = true;
 		}
 
+		//TODO: add quaternion
+
 		// Unknown Types
 		else
 		{
-			bIsUnknown = true;
+			//bIsUnknown = true;
 			ofLogWarning("ofxSurfingImGui") << "Could not add mouse wheel to " << ap.getName();
 
 			return;
@@ -171,9 +188,12 @@ namespace ofxImGuiSurfing
 			// Show floating value
 			if (bCtrl || bAlt)
 			{
-				if (bIsbool) sTooltip = dynamic_cast<ofParameter<bool>&>(ap).get() ? "TRUE" : "FALSE";
-				else if (bIsInt) sTooltip = ofToString(dynamic_cast<ofParameter<int>&>(ap).get());
+				if (bIsInt) sTooltip = ofToString(dynamic_cast<ofParameter<int>&>(ap).get());
 				else if (bIsFloat) sTooltip = ofToString(dynamic_cast<ofParameter<float>&>(ap).get(), 2);
+
+#ifdef SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID
+				else if (bIsbool) sTooltip = dynamic_cast<ofParameter<bool>&>(ap).get() ? "TRUE" : "FALSE";
+#endif
 			}
 
 			ImGui::SetItemUsingMouseWheel();
@@ -215,11 +235,11 @@ namespace ofxImGuiSurfing
 
 						//--
 
+						// Multidim
+
 						//TODO:
 						// Must be fixed bc each dim slider could work independently...
-
-						// MULTIDIM
-
+						// Problems came bc the components are not a param...
 						else if (bIsMultiDim)
 						{
 							/*
@@ -280,7 +300,8 @@ namespace ofxImGuiSurfing
 								}
 								else
 								{
-									// step resolution to guaranties that 100 steps walks the full range!
+									// Step resolution to guaranties 
+									// that 100 steps walks the full range!
 									float _resolution = _range / MOUSE_WHEEL_STEPS;
 									resolution = MAX(1, _resolution);
 
@@ -304,7 +325,7 @@ namespace ofxImGuiSurfing
 
 							int step = wheel * _step;
 
-							// make minim one unit
+							// Make minim one unit
 
 							//if (step < 0) {
 							//	step = MIN(-1, step);
@@ -313,13 +334,13 @@ namespace ofxImGuiSurfing
 							//	step = MAX(1, step);
 							//}
 
-							//// negative
+							//// Negative
 							//if (step < 0 && step > -1) step = MIN(- 1, step);
 							//
-							//// positive
+							//// Positive
 							//else if (step > 0 && step < 1) MAX(1, step);
 
-							// mouse wheel flipped
+							// Mouse wheel flipped
 							if (bFlip) p -= step;
 							else p += step;
 
@@ -340,7 +361,9 @@ namespace ofxImGuiSurfing
 								resolution = (p.getMax() - p.getMin()) / MOUSE_WHEEL_STEPS;
 							}
 
-							float step = wheel * (!bCtrl ? resolution : resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+							float step = wheel * (!bCtrl
+								? resolution
+								: resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
 
 							if (bFlip) p -= step;
 							else p += step;
@@ -350,6 +373,10 @@ namespace ofxImGuiSurfing
 					}
 				}
 
+				//--
+#if 0
+				// Add overlay when fine-tunning
+				// Fine-tunning enabled
 				if (bCtrl || bAlt)
 				{
 					if (sTooltip != "-1")
@@ -357,13 +384,18 @@ namespace ofxImGuiSurfing
 						if (ImGui::IsItemHovered())
 						{
 							ImGui::BeginTooltip();
-							//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
 							ImGui::Text("%s", sTooltip.c_str());
-							//ImGui::PopTextWrapPos();
 							ImGui::EndTooltip();
+
+							//ImGui::BeginTooltip();
+							//ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+							//ImGui::Text("%s", sTooltip.c_str());
+							//ImGui::PopTextWrapPos();
+							//ImGui::EndTooltip();
 						}
 					}
 				}
+#endif
 			}
 		}
 	}
@@ -395,7 +427,7 @@ namespace ofxImGuiSurfing
 
 	// Put after populate a widget!
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	inline void AddMouse(ofParameter<ParameterType>& ap, bool bFlip = false)
 	{
 		ofxImGuiSurfing::AddMouseWheel(ap);
@@ -449,7 +481,7 @@ namespace ofxImGuiSurfing
 
 	// Reset params when Alt+Click called
 
-	template<typename ParameterType>
+	template <typename ParameterType>
 	inline bool AddMouseClickRightReset(ofParameter<ParameterType>& ap, bool bToMinByDefault = false)
 	{
 		// Behavior:
@@ -484,7 +516,9 @@ namespace ofxImGuiSurfing
 
 		const auto& info = typeid(ParameterType);
 
-		if (0) {}
+		if (0)
+		{
+		}
 
 		else if (info == typeid(float)) // Float
 		{
@@ -515,14 +549,17 @@ namespace ofxImGuiSurfing
 		else
 		{
 			bIsUnknown = true;
-			ofLogWarning("ofxSurfingImGui") << "AddMouseClickRightReset : Could not add mouse wheel to " << ap.getName();
+			ofLogWarning("ofxSurfingImGui") << "AddMouseClickRightReset : Could not add mouse wheel to " << ap.
+				getName();
 
 			return false;
 		}
 
 		//--
 
-		if (0) {}
+		if (0)
+		{
+		}
 
 		//--
 
@@ -610,7 +647,8 @@ namespace ofxImGuiSurfing
 			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
 			else if (bModAlt) p.set(p.getMax());
-			else {
+			else
+			{
 				int center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
 				p = (int)ofClamp(center, p.getMin(), p.getMax()); // clamp
 			}
@@ -629,7 +667,8 @@ namespace ofxImGuiSurfing
 			if ((!bModCtrl && !bModAlt) && bToMinByDefault) p.set(p.getMin());
 			else if (bModCtrl) p.set(p.getMin());
 			else if (bModAlt) p.set(p.getMax());
-			else {
+			else
+			{
 				float center = p.getMin() + ((p.getMax() - p.getMin()) / 2.f);
 				p = ofClamp(center, p.getMin(), p.getMax()); // clamp
 			}
@@ -662,11 +701,21 @@ namespace ofxImGuiSurfing
 		}
 	}
 
+	//--------------------------------------------------------------
+	inline void AddTooltipBlink(std::string text, bool bBlink = true, bool bEnabled = true)
+	{
+		if (!bEnabled || text.size() == 0) return;
+
+		if (bBlink)BeginBlinkText();
+		AddTooltip(text);
+		if (bBlink) EndBlinkText();
+	}
+
 	//--
 
 	// Pass the param and will auto populate a tooltip with the param name and value.
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	void AddTooltip(ofParameter<ParameterType>& ap, bool bEnabled = true, bool bNoName = false)
 	{
 		bool bReturn = false;
@@ -687,12 +736,23 @@ namespace ofxImGuiSurfing
 
 		string s = "";
 		if (!bNoName) s += ap.getName() + "\n";
-		if (isFloat) s += ofToString(ap.get(), 3);//improve format
+		if (isFloat) s += ofToString(ap.get(), 3); //improve format
 		else if (isInt) s += ofToString(ap.get());
 		else if (isBool) s += ofToString((ap.get() ? "TRUE" : "FALSE"));
 
 		AddTooltip(s);
 	}
+
+	// //--------------------------------------------------------------
+	// void AddTooltip(ofParameter<int>& pindex, std::vector<std::string> fileNames)
+	// {
+	//     string s = "";
+	//     if (pindex.get() < fileNames.size())
+	//     {
+	//         s = fileNames[pindex.get()];
+	//     }
+	//     AddTooltip(s);
+	// }
 
 	//--
 
@@ -761,17 +821,18 @@ namespace ofxImGuiSurfing
 	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddParameter(ofParameter<glm::ivec2>& p, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec3>& p, bool bfoldered = false);
-	bool AddParameter(ofParameter<glm::ivec4>& p, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::ivec2>& p, bool bFoldered = false);
+	bool AddParameter(ofParameter<glm::ivec3>& p, bool bFoldered = false);
+	bool AddParameter(ofParameter<glm::ivec4>& p, bool bFoldered = false);
 
 	//TODO:
-	bool AddParameter(ofParameter<glm::vec2>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec2>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec3>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec3>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
-	bool AddParameter(ofParameter<glm::vec4>& p, bool bsplit = false, bool bfoldered = false);
+	bool AddParameter(ofParameter<glm::vec4>& p, bool bSplit = false, bool bFoldered = false);
 	// split each arg to big sliders. make a folder container.
+	bool AddParameter(ofParameter<glm::quat>& p, bool bSplit = false, bool bFoldered = false);
 #endif
 
 	//TODO:
@@ -792,12 +853,12 @@ namespace ofxImGuiSurfing
 
 	bool AddParameter(ofParameter<void>& p, float width = 0);
 
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& p, std::string format = "%.3f");
 
 	//--
 
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddText(ofParameter<ParameterType>& p, bool label = true);
 
 	bool AddRadio(ofParameter<int>& p, std::vector<std::string> labels, int columns = 1);
@@ -812,9 +873,12 @@ namespace ofxImGuiSurfing
 	bool AddRange(const std::string& name, ofParameter<float>& pMin, ofParameter<float>& pMax, float speed = 0.01f);
 
 #if OF_VERSION_MINOR >= 10
-	bool AddRange(const std::string& name, ofParameter<glm::vec2>& pMin, ofParameter<glm::vec2>& pMax, float speed = 0.01f);
-	bool AddRange(const std::string& name, ofParameter<glm::vec3>& pMin, ofParameter<glm::vec3>& pMax, float speed = 0.01f);
-	bool AddRange(const std::string& name, ofParameter<glm::vec4>& pMin, ofParameter<glm::vec4>& pMax, float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec2>& pMin, ofParameter<glm::vec2>& pMax,
+		float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec3>& pMin, ofParameter<glm::vec3>& pMax,
+		float speed = 0.01f);
+	bool AddRange(const std::string& name, ofParameter<glm::vec4>& pMin, ofParameter<glm::vec4>& pMax,
+		float speed = 0.01f);
 #endif
 
 #if OF_VERSION_MINOR >= 10
@@ -831,7 +895,7 @@ namespace ofxImGuiSurfing
 	bool AddValues(const std::string& name, std::vector<ofVec3f>& values, float minValue = 0, float maxValue = 0);
 	bool AddValues(const std::string& name, std::vector<ofVec4f>& values, float minValue = 0, float maxValue = 0);
 
-	template<typename DataType>
+	template <typename DataType>
 	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue);
 
 	void AddImage(const ofBaseHasTexture& hasTexture, const ofVec2f& size);
@@ -846,99 +910,11 @@ namespace ofxImGuiSurfing
 
 	// Stepper widgets
 	// (with +/- buttons to increment/decrement)
-
-	//bool AddStepper(ofParameter<int>& p, int step = -1, int stepFast = -1);
-	//bool AddStepper(ofParameter<float>& p, float step = -1, float stepFast = -1);
-
-	//TODO: move and centralize to main function instead!
-	/*
-	//--------------------------------------------------------------
-	inline bool AddStepperInt(ofParameter<int>& p, bool bNoLabel = false)
-	{
-		bool bChanged = false;
-		auto tmpRefi = p.get();
-		const ImU32 u32_one = 1;
-		static bool inputs_step = true;
-
-		string name = bNoLabel ? "" : p.getName();
-		string n = "##STEPPERint" + name;// +ofToString(1);
-
-		ImGui::PushID(n.c_str());
-
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH;
-
-		if (ImGui::InputScalar(name.c_str(), ImGuiDataType_S32, (int*)&tmpRefi, inputs_step ? &u32_one : NULL, NULL, "%d"))
-		{
-			tmpRefi = ofClamp(tmpRefi, p.getMin(), p.getMax());
-			p.set(tmpRefi);
-
-			bChanged = true;
-		}
-
-		IMGUI_SUGAR__STEPPER_WIDTH_POP;
-
-		ImGui::PopID();
-
-		return bChanged;
-	}
-
-	//--------------------------------------------------------------
-	inline bool AddStepperFloat(ofParameter<float>& p)
-	{
-		//TODO: vs absolute
-		bool bRelative = 0;
-
-		float res;
-		float step;
-		float stepFast;
-
-		if (bRelative) {
-			res = 100.f;
-			step = (p.getMax() - p.getMin()) / res;
-		}
-		else
-		{
-			step = 0.001f;
-			//res = 1000.f;
-			//step = (p.getMax() - p.getMin()) / res;
-		}
-		stepFast = 100.f * step;
-
-		//--
-
-		auto tmpRef = p.get();
-		bool bReturn = false;
-
-		string name = p.getName();
-		string n = "##STEPPERfloat" + name;
-
-		ImGui::PushID(n.c_str());
-
-		IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT;
-
-		if (ImGui::InputFloat(name.c_str(), (float*)&tmpRef, step, stepFast))
-		{
-			tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
-			p.set(tmpRef);
-			bReturn = true;
-		}
-
-		IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT;
-
-		ImGui::PopID();
-
-		return bReturn;
-	}
-	*/
-
-	//--
-
-	// Stepper alternative
 	// To be used to not draw the label. 
 	// Useful to use on combo of widgets 
 	// to populate one single variable!
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddStepper(ofParameter<ParameterType>& p, bool bNoLabel = false, bool bRaw = true)
 	{
 		bool bReturn = false;
@@ -956,16 +932,26 @@ namespace ofxImGuiSurfing
 		}
 
 		// Int
-		const ImU32 u32_one = 1;
+		const ImU32 stepInt = 1;
 		static bool inputs_step = true;
 
 		//TODO: added above relative/absolute workflow
 
 		// Float
-		float res = 100.f;
-		float step = (p.getMax() - p.getMin()) / res;
-		float stepFast = 100.f * step;
-
+		float step, stepFast;
+#if 0
+		float res;
+		//step related to param range min/max
+		res = 1000.f;
+		//res = 10000.f;
+		//res = 100.f;
+		step = (p.getMax() - p.getMin()) / res;
+		stepFast = 100.f * step;
+#else
+		//TODO:
+		step = 0.001f;
+		stepFast = 0.01f;
+#endif
 		string n = "##STEPPER" + name;
 		string label = ofToString(bNoLabel ? "" : name);
 
@@ -981,14 +967,15 @@ namespace ofxImGuiSurfing
 		{
 			if (ImGui::InputFloat(label.c_str(), (float*)&tmpRef, step, stepFast))
 			{
-				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax()); //clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
 		}
 		else if (isInt)
 		{
-			if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32, (int*)&tmpRef, inputs_step ? &u32_one : NULL, NULL, "%d"))
+			if (ImGui::InputScalar(label.c_str(), ImGuiDataType_S32, (int*)&tmpRef, inputs_step ? &stepInt : NULL, NULL,
+				"%d"))
 			{
 				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());
 				p.set(tmpRef);
@@ -1012,7 +999,7 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddStepperButtons(ofParameter<ParameterType>& p)
 	{
 		bool bReturn = false;
@@ -1030,7 +1017,8 @@ namespace ofxImGuiSurfing
 		//static bool inputs_step = true;
 
 		// Float
-		float res = 100.f;
+		float res = 1000.f;
+		//float res = 100.f;
 		float step = (p.getMax() - p.getMin()) / res;
 		//float stepFast = 100.f * step;
 
@@ -1041,16 +1029,18 @@ namespace ofxImGuiSurfing
 		if (isFloat)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spx, 0));
-			if (ImGui::Button("-")) {
+			if (ImGui::Button("-"))
+			{
 				tmpRef -= step;
-				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax()); //clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("+")) {
+			if (ImGui::Button("+"))
+			{
 				tmpRef += step;
-				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax()); //clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
@@ -1059,16 +1049,18 @@ namespace ofxImGuiSurfing
 		else if (isInt)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spx, 0));
-			if (ImGui::Button("-")) {
+			if (ImGui::Button("-"))
+			{
 				tmpRef -= u32_one;
-				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax()); //clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("+")) {
+			if (ImGui::Button("+"))
+			{
 				tmpRef += u32_one;
-				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax());//clamp
+				tmpRef = ofClamp(tmpRef, p.getMin(), p.getMax()); //clamp
 				p.set(tmpRef);
 				bReturn = true;
 			}
@@ -1090,7 +1082,7 @@ namespace ofxImGuiSurfing
 	// Clean of my API stuff / styles,
 	// and with the default styles.
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddParameter(ofParameter<ParameterType>& p, std::string format)
 	{
 		auto tmpRef = p.get();
@@ -1160,7 +1152,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	template<typename ParameterType>
+	template <typename ParameterType>
 	bool AddText(ofParameter<ParameterType>& p, bool label)
 	{
 		if (label)
@@ -1211,7 +1203,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//--------------------------------------------------------------
-	template<typename DataType>
+	template <typename DataType>
 	bool AddValues(const std::string& name, std::vector<DataType>& values, DataType minValue, DataType maxValue)
 	{
 		auto result = false;
@@ -1231,7 +1223,6 @@ namespace ofxImGuiSurfing
 			}
 			else if (info == typeid(bool))
 			{
-
 				result |= ImGui::Checkbox(GetUniqueName2(iname), *values[i]);
 			}
 			else
@@ -1253,17 +1244,21 @@ namespace ofxImGuiSurfing
 
 	//----
 
+
 	// Image and Textures helpers
+	// copied from ofxImgui / ImHelpers.h
 	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofTexture& texture)
 	{
 		return (ImTextureID)(uintptr_t)texture.texData.textureID;
 	}
+
 	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(const ofBaseHasTexture& hasTexture)
 	{
 		return GetImTextureID2(hasTexture.getTexture());
 	}
+
 	//--------------------------------------------------------------
 	static ImTextureID GetImTextureID2(GLuint glID)
 	{
@@ -1274,7 +1269,7 @@ namespace ofxImGuiSurfing
 
 	//TODO:
 	//public://added inline 
-	static bool bMouseWheel = true;//this was originally an internal from guiManager
+	static bool bMouseWheel = true; //this was originally an internal from guiManager
 
 	// Helpers to populate non ofParams,
 	// Raw CPP types instead an maintain global styles.
@@ -1294,7 +1289,8 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1)
 	{
 		//fixes
 
@@ -1308,11 +1304,10 @@ namespace ofxImGuiSurfing
 		// we get the sizes from the canvas layout!
 		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);//TODO: BUG:
 		//TODO: BUG: here we don't have access to manager!
-		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
+		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow); //fix
 
 		switch (type)
 		{
-
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
@@ -1414,7 +1409,8 @@ namespace ofxImGuiSurfing
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
-		default: {
+		default:
+		{
 			ofLogWarning(__FUNCTION__) << "Could not create passed style for that widget button!";
 			ofLogWarning(__FUNCTION__) << "Widget is ignored and not drawn!";
 			break;
@@ -1472,19 +1468,19 @@ namespace ofxImGuiSurfing
 	//}
 
 	//--------------------------------------------------------------
-	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
 
 		// Widget width
 		// We get the sizes from the canvas layout!
-		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
+		float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow); //fix
 		//float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow);
 		float _h = getWidgetsHeightUnit();
 
 		switch (type)
 		{
-
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 		case OFX_IM_TOGGLE_SMALL:
@@ -1534,14 +1530,16 @@ namespace ofxImGuiSurfing
 
 		case OFX_IM_TOGGLE_ROUNDED_MINI:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
-			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
+				ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
 
 		case OFX_IM_TOGGLE_ROUNDED_SMALL:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
-			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
+			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
+				ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
 			if (bMouseWheel) AddMouseWheel(bState);
 			if (bMouseWheel) bReturn |= GetMouseWheel();
 			break;
@@ -1573,7 +1571,6 @@ namespace ofxImGuiSurfing
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__);
 			ofLogWarning("ofxSurfingImGui") << "Could not create passed style for that Toggle widget!";
 			break;
-
 		}
 
 		//----
@@ -1604,6 +1601,119 @@ namespace ofxImGuiSurfing
 
 		return b;
 	}
-
-
 } // namespace ofxImGuiSurfing
+
+
+#if 0
+	/*
+	// The Animations namespace contains everything you need to easily create animations in your ImGui menus.
+	*/
+namespace Animations {
+
+	/*
+	// Usage:
+	// int trickInt = ImTricks::Animations::FastLerpInt("trickInt", enable_animation, 0, 255, 15);
+	// draw->AddRectFilled(p, p + ImVec2(30, 30), ImColor(255, 255, 255, trickInt));
+	*/
+	extern int FastLerpInt(const char* identifier, bool state, int min, int max, int speed);
+
+	/*
+	// Usage:
+	// float trickFloat = ImTricks::Animations::FastLerpInt("trickFloat", enable_animation, 0.f, 1.f, 0.05f);
+	// draw->AddRectFilled(p, p + ImVec2(30, 30), ImColor(1.f, 1.f, 1.f, trickFloat));
+	*/
+	extern float FastLerpFloat(const char* identifier, bool state, float min, float max, float speed);
+
+	/*
+	// Usage:
+	//	float trickFloat = ImTricks::Animations::FastLerpFloat("header", check, 0.f, 1.f, 0.05f);
+	//	draw->AddRectFilled(p, p + ImVec2(513, 30), ImTricks::Animations::FastColorLerp(ImColor(255, 0, 0), ImColor(0, 255, 0), trickFloat));
+	*/
+	extern ImColor FastColorLerp(ImColor start, ImColor end, float stage);
+}
+
+namespace Animations {
+
+	int FastLerpInt(const char* identifier, bool state, int min, int max, int speed) {
+
+		static std::map<const char*, int> valuesMapInt;
+		auto value = valuesMapInt.find(identifier);
+
+		if (value == valuesMapInt.end()) {
+			valuesMapInt.insert({ identifier,  0 });
+			value = valuesMapInt.find(identifier);
+		}
+
+		const float frameRateSpeed = speed * (1.f - ImGui::GetIO().DeltaTime);
+
+		if (state) {
+			if (value->second < max)
+				value->second += frameRateSpeed;
+		}
+		else {
+			if (value->second > min)
+				value->second -= frameRateSpeed;
+		}
+
+		value->second = std::clamp(value->second, min, max);
+
+		return value->second;
+	}
+
+	float FastLerpFloat(const char* identifier, bool state, float min, float max, float speed) {
+
+		static std::map<const char*, float> valuesMapFloat;
+		auto value = valuesMapFloat.find(identifier);
+
+		if (value == valuesMapFloat.end()) {
+			valuesMapFloat.insert({ identifier, 0.f });
+			value = valuesMapFloat.find(identifier);
+		}
+
+		const float frameRateSpeed = speed * (1.f - ImGui::GetIO().DeltaTime);
+
+		if (state) {
+			if (value->second < max)
+				value->second += frameRateSpeed;
+		}
+		else {
+			if (value->second > min)
+				value->second -= frameRateSpeed;
+		}
+
+		value->second = std::clamp(value->second, min, max);
+
+		return value->second;
+	}
+
+	ImColor FastColorLerp(ImColor start, ImColor end, float stage)
+	{
+		ImVec4 lerp = ImLerp(
+			ImVec4(start.Value.x, start.Value.y, start.Value.z, start.Value.w),
+			ImVec4(end.Value.x, end.Value.y, end.Value.z, end.Value.w),
+			stage);
+
+		return ImGui::ColorConvertFloat4ToU32(lerp);
+	}
+}
+#endif
+
+
+/*
+namespace ofxImGuiSurfing
+{
+	void ColorEdit3(const char* label, ImColor& color, ImGuiColorEditFlags flags) {
+		static float col[3] = { color.Value.x, color.Value.y, color.Value.z };
+
+		if (ImGui::ColorEdit3(label, col, flags))
+			color = ImColor(col[0], col[1], col[2]);
+	}
+
+	void ColorEdit4(const char* label, ImColor& color, ImGuiColorEditFlags flags) {
+		static float col[4] = { color.Value.x, color.Value.y, color.Value.z , color.Value.w };
+
+		if (ImGui::ColorEdit4(label, col, flags))
+			color = ImColor(col[0], col[1], col[2], col[3]);
+	}
+}
+*/

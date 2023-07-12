@@ -22,6 +22,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+
 #include "surfingThemeEditor.h"
 #include "SurfingFonts.h"
 
@@ -37,4 +38,8 @@ public:
 
     SurfingThemeEditor e;
     SurfingFonts f;
+
+	void drawMyDemoWindow();
+	bool bUseFontMonospaced=0;
+	bool bUseFontIndex=0;
 };

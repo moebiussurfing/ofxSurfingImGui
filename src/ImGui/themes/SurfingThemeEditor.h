@@ -127,7 +127,7 @@ public:
 	bool bWindowConstraints = 1;
 	ofParameter<float> windowWidth{ "Window Width", 200, 200, 400 };
 	ofParameter<float> windowScale{ "Window Scale", 0.f, -1.f, 1.f };
-	ofParameter<float> globalScale{ "Global Scale", 0.f, -1.f, 1.f };
+	ofParameter<float> scaleGlobal{ "Global Scale", 0.f, -1.f, 1.f };
 
 	SurfingThemeEditor()
 	{
@@ -171,7 +171,7 @@ public:
 		params.add(indexTheme);
 		params.add(bClickerCombo);
 		params.add(windowScale);
-		params.add(globalScale);
+		params.add(scaleGlobal);
 
 		setPathGlobal(pathGlobal);
 
@@ -309,7 +309,7 @@ public:
 			bWindowConstraints = 1;
 			windowWidth = 200;
 			windowScale = 0;
-			globalScale = 0;
+			scaleGlobal = 0;
 		}
 		ImGui::Checkbox("WindowScale", &bWindowScale);
 		if (bWindowScale) {
@@ -670,7 +670,7 @@ public:
 			if (ui->AddButton("R2", sz1))
 			{
 				resetTheme();
-				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
+				ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors);
 				//ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingBlue();
 			}
 			s = "ImGui_ThemeMoebiusSurfingV2";
@@ -749,22 +749,22 @@ public:
 //		// Font #0
 //		_fontName = "AnonymousPro-Regular.ttf";
 //		_fontSize = 12;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #1
 //		_fontName = "OpenSans-Regular.ttf";
 //		_fontSize = 14;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #2
 //		_fontName = "overpass-mono-bold.otf";
 //		_fontSize = 16;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		// Font #3
 //		_fontName = "JetBrainsMonoNL-ExtraBold.ttf";
 //		_fontSize = 18;
-//		ui.pushFont(_path + _fontName, _fontSize);
+//		ui.addFontStyle(_path + _fontName, _fontSize);
 //
 //		//--
 //

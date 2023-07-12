@@ -1,10 +1,11 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::setup() {
 
-	//ofSetFrameRate(60);
-	//ofSetWindowPosition(-1920, 25);
+	// Windows position and size
+	ofSetFrameRate(60);
+	ofSetWindowPosition(-1920, 25);
 
 	//----
 
@@ -23,7 +24,7 @@ void ofApp::setup() {
 	setupImGuiStyles();
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::setupImGui()
 {
 	// Layout Presets Engine 
@@ -51,7 +52,7 @@ void ofApp::setupImGui()
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
 
-	ui.addWindowSpecial("Main");	// index 0
+	ui.addWindowSpecial("Main");	// remember index 0
 	ui.addWindowSpecial("Audio");	// index 1
 	ui.addWindowSpecial("Video1");	// index 2
 	ui.addWindowSpecial("Video2");	// index 3
@@ -77,7 +78,7 @@ Learn to use the
 
 LAYOUT PRESETS ENGINE
 
-----------------------------------------------
+------------------------------------------
 
 1. OVERVIEW
 
@@ -88,7 +89,7 @@ and other settings.
 Powered with 4 Layout Presets and
 an improved user Workflow. 
 
-----------------------------------------------
+------------------------------------------
 
 2. FEATURES
 
@@ -110,7 +111,7 @@ Then we will organize that different modes,
 sections or behaviors of our App,
 by customizing that Presets for each scenario.
 
-----------------------------------------------
+------------------------------------------
 
 3. WIDGETS
 
@@ -127,10 +128,10 @@ to learn more about this topic.
 
 )";
 
-	ui.setHelpInfoApp(s);
+	ui.setHelpAppText(s);
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::draw()
 {
 	//----
@@ -163,7 +164,7 @@ void ofApp::draw()
 	udpateScene();
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::drawImGuiDocking()
 {
 	//TODO: this cant be removed for the moment...
@@ -177,16 +178,43 @@ void ofApp::drawImGuiDocking()
 	ui.EndDocking();
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::drawImGui()
 {
 	// -> These are our helpers 
 	// to render windows using the power of the "Layout Presets Engine".
 
+	drawWindow0();
+
+	//----
+
+	drawWindow1();
+
+	//----
+	
+	drawWindow2();
+
+	//----
+	
+	drawWindow3();
+
+	//----
+
+	drawWindow4();
+}
+
+//----------------------------------------------------------
+void ofApp::drawWindow0()
+{
 	int index;
 
 	index = 0;
 	{
+		// Take care not forcing position, sizes or constraints if the window is not being drawn.
+		// If not, this properities will be applied to the ohter next window drawn!
+		if (ui.getWindowSpecialVisibleState(index)) {
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		}
 		if (ui.BeginWindowSpecial(index))
 		{
 			// Some useful sizes to help layouting in some scenarios.
@@ -198,28 +226,35 @@ void ofApp::drawImGui()
 
 			// if ui.bHelp enabled, activates help tooltips on this window!
 
-			ui.AddLabelBig("myWindow_0", false);
-			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
-			ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
-			ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ui.AddTooltip("Activate sep1 animation", ui.bHelp);
-			ui.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"), ui.bHelp);
+			string s = "myWindow_0";
+			ui.AddLabelBig(s, false, true);
+
+			ui.AddMinimizerToggle();
+			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			ui.AddTooltipBlink("Help enables some Tooltips \nand the Help Box on this Window!");
+			ui.AddAutoResizeToggle();
+			ui.DrawWidgetsResetUI();
+
+			ui.AddSpacingBigSeparated();
 			ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_BORDER);
+			ui.Add(ui.bNotifier, OFX_IM_TOGGLE_BIG_BORDER);
 			ui.AddTooltip("Show Log Window", ui.bHelp);
 
 			ui.AddSpacingBigSeparated();
 
-			ui.Add(speed, OFX_IM_HSLIDER_BIG);
+			ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+			s = "This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE");
+			s += "\nEnables some params animation!";
+
+			ui.AddTooltip(s, ui.bHelp);
+			ui.Add(speed, OFX_IM_HSLIDER_MINI);
 			ui.AddTooltip("Speed controls the auto populated Log window speed", ui.bHelp);
 			ui.Add(amount, OFX_IM_HSLIDER);
 			ui.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE", ui.bHelp);
-
 			ui.AddSpacingBigSeparated();
 
 			ImGui::PushButtonRepeat(true); // -> pushing for repeats trigs
 			{
-				ui.refreshLayout();
-
 				if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
 				{
 					bPrevious = false;
@@ -230,7 +265,11 @@ void ofApp::drawImGui()
 
 				ImGui::SameLine();
 
-				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h2))
+				// This is a more raw mode, without using the full API
+				// but a layout helper function.
+				//if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h2))
+				// This is using the API power:
+				if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
 				{
 					bNext = false;
 					lineWidth += 0.1f;
@@ -242,18 +281,14 @@ void ofApp::drawImGui()
 
 			ui.AddSpacingBigSeparated();
 
-			ui.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
-			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
-			ui.Add(lineWidth); // default style
-			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
-			ui.Add(lineWidth, OFX_IM_STEPPER);
-			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
-			ui.Add(lineWidth, OFX_IM_KNOB);
-			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 
-			ui.AddSpacingBigSeparated();
+			if (ui.isMaximized())
+			{
+				ui.AddComboBundle(lineWidth);
+				ui.AddSpacingBigSeparated();
+			}
 
-			ui.Add(separation, OFX_IM_HSLIDER_BIG); // default style
+			ui.Add(separation, OFX_IM_HSLIDER_SMALL_NO_NUMBER); // default style
 			ui.AddTooltip(ofToString(separation, ui.bHelp));
 
 			//--
@@ -261,14 +296,18 @@ void ofApp::drawImGui()
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 1;
+//----------------------------------------------------------
+void ofApp::drawWindow1()
+{
+	int index = 1;
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
-			ui.AddLabelBig("myWindow_1", false);
+			string s = "myWindow_1";
+			ui.AddLabelBig(s, false, true);
+
 			ui.AddGroup(params1);
 
 			//--
@@ -276,13 +315,18 @@ void ofApp::drawImGui()
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 2;
+//----------------------------------------------------------
+void ofApp::drawWindow2()
+{
+	int index = 2;
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
+			string s = "myWindow_2";
+			ui.AddLabelBig(s, false, true);
+
 			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
 			ui.AddSpacingBigSeparated();
@@ -338,13 +382,20 @@ It has survived not only five centuries, but also the leap into electronic types
 			ui.EndWindowSpecial();
 		}
 	}
-
-	//----
-
-	index = 3;
+}
+//----------------------------------------------------------
+void ofApp::drawWindow3()
+{
+	int index = 3;
 	{
+		if (ui.getWindowSpecialVisibleState(index)) {
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		}
 		if (ui.BeginWindowSpecial(index))
 		{
+			string s = "myWindow_3";
+			ui.AddLabelBig(s, false, true);
+
 			ui.AddLabelBig("Hello, down!", false, true);
 			ui.AddLabelBig("Hello, down!", true, true);
 			ui.AddLabelBig("Hello, down!", false, true);
@@ -359,15 +410,23 @@ It has survived not only five centuries, but also the leap into electronic types
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 4;
+//----------------------------------------------------------
+void ofApp::drawWindow4()
+{
+	int index = 4;
 	// ->This method can get the state (if it's open) of the special window.
 	// if (ui.getWindowSpecialVisible(index))
 	{
+		if (ui.getWindowSpecialVisibleState(index)) {
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		}
 		if (ui.BeginWindowSpecial(index))
 		{
+			string s = "myWindow_4";
+			ui.AddLabelBig(s, false, true);
+
 			ui.AddLabel("Hello, left!", false, true);
 			ui.AddLabelBig("Hello, left!");
 			ui.AddLabelBig("Hello, left!", false);
@@ -383,7 +442,7 @@ It has survived not only five centuries, but also the leap into electronic types
 	}
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::setupImGuiStyles()
 {
 	ui.clearStyles();
@@ -422,11 +481,11 @@ void ofApp::setupImGuiStyles()
 // A common Scene with ofParameters
 // just for this testing purposes.
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::setupScene()
 {
 	params1.setName("paramsGroup1");
-	params1.add(speed.set("speed1", 0.5f, 0, 1));
+	params1.add(speed.set("speed", 0.5f, 0, 1));
 	params1.add(bPrevious.set("<", false));
 	params1.add(bNext.set(">", false));
 	params1.add(bEnable.set("Enable", true));
@@ -434,24 +493,24 @@ void ofApp::setupScene()
 	params1.add(bMode2.set("bMode2", true));
 	params1.add(bMode3.set("bMode3", false));
 	params1.add(bMode4.set("bMode4", false));
-	params1.add(lineWidth.set("width1", 0.5f, 0, 1));
-	params1.add(separation.set("sep1", 50, 1, 100));
-	params1.add(shapeType.set("shape1", 0, -50, 50));
-	params1.add(size.set("size1", 100, 0, 100));
-	params1.add(amount.set("amount1", 10, 0, 25));
+	params1.add(lineWidth.set("width", 0.5f, 0, 1));
+	params1.add(separation.set("separation", 50, 1, 100));
+	params1.add(shapeType.set("shapeType", 0, -50, 50));
+	params1.add(size.set("size", 100, 0, 100));
+	params1.add(amount.set("amount", 10, 0, 25));
 
 	params2.setName("paramsGroup2");
-	params2.add(shapeType2.set("shape2", 0, -50, 50));
+	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
 	params2.add(size2.set("size2", 100, 0, 100));
-	params2.add(amount2.set("amnt2", 10, 0, 25));
+	params2.add(amount2.set("amount2", 10, 0, 25));
 
 	params3.setName("paramsGroup3");
-	params3.add(lineWidth3.set("width3", 0.5f, 0, 1));
-	params3.add(separation3.set("sep3", 50, 1, 100));
+	params3.add(lineWidth3.set("lineWidth3", 0.5f, 0, 1));
+	params3.add(separation3.set("separation3", 50, 1, 100));
 	params3.add(speed3.set("speed3", 0.5, 0, 1));
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::udpateScene()
 {
 	// Animate some vars
@@ -468,7 +527,7 @@ void ofApp::udpateScene()
 	updateLog();
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------
 void ofApp::updateLog()
 {
 	// Make pauses
@@ -489,10 +548,17 @@ void ofApp::updateLog()
 
 		std::string ss = ofToString(ofGetFrameNum());
 		float _rnd = ofRandom(1);
-		if (_rnd < 0.2) ui.AddToLog(ss);
-		else if (_rnd < 0.4) ui.AddToLog(ofToString(_rnd));
-		else if (_rnd < 0.6) ui.AddToLog(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
-		else if (_rnd < 0.8) ui.AddToLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
-		else ui.AddToLog(ofGetTimestampString());
+		if (_rnd < 0.2) AddToLogAndNotifier(ss);
+		else if (_rnd < 0.4) AddToLogAndNotifier(ofToString(_rnd));
+		else if (_rnd < 0.6) AddToLogAndNotifier(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
+		else if (_rnd < 0.8) AddToLogAndNotifier(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
+		else AddToLogAndNotifier(ofGetTimestampString());
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::AddToLogAndNotifier(std::string text) //TODO:adding empty tag...
+{
+	ui.AddToLog(text);
+	ui.AddToNotifier(text);
 }

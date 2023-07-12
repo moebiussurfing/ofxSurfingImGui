@@ -7,12 +7,16 @@
 
 	BUGS:
 	
-	Fix special windows width affecting auto resize and default sliders.
-	Fix int H sliders
+	- Remove mouse wheel tool-tip when fine-tuning/ctrl enabled!
 
-	It seems than special windows engine
+	- Add organizer reset/cascade orientation. Now is horizontal only.
+
+	- Fix special windows width affecting auto resize and default sliders.
+	- Fix int H sliders?
+
+	- It seems than special windows engine
 		puts all toggles to false by default ?
-		should store state to simply handling that maually/externally
+		should store state to simply handling that manually/externally
 
 */
 
@@ -21,6 +25,11 @@
 	TODO:
 
 	IDEAS
+
+	- Fix stepper step too small sometimes, then requires more clicks to increment one decimal.
+
+	- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
+		could store if the new addFontStyle is monospace, then store the monospaced indexes
 
 	- Make drop-down struct? index + names
 	- add layout with child/header similar to menus.
@@ -39,7 +48,7 @@
 	+ fix param colors.
 	+ fix param string not drawn.
 	+ remake theme loader using void * functions.
-	+ add tooltip with paragrag/ wrapped.
+	+ add tooltip with paragraph/ wrapped.
 
 	API UPDATE v3
 	/ ofParams helpers.
@@ -708,17 +717,17 @@
 		_fontSize = 11;
 		_fontName = "overpass-mono-bold.otf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 0
+		ui.addFontStyle(_path, _fontSize);//index 0
 
 		_fontSize = 14;
 		_fontName = "RecMonoLinear-Bold-1.082.ttf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 1
+		ui.addFontStyle(_path, _fontSize);//index 1
 
 		_fontSize = 17;
 		_fontName = "RecMonoLinear-Regular-1.082.ttf";
 		_path = "assets/fonts/" + _fontName;
-		ui.pushFont(_path, _fontSize);//index 2
+		ui.addFontStyle(_path, _fontSize);//index 2
 
 		ui.addFont(_path, _fontSize);
 		ui.setDefaultFontIndex(2);

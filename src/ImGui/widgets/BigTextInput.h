@@ -580,7 +580,7 @@ private:
             w = ImGui::GetContentRegionAvail().x;
             h = ImGui::GetContentRegionAvail().y;
 
-            ui.PushFont(SurfingFontTypes(sizeFont.get()));
+            ui.PushFontStyle(SurfingFontTypes(sizeFont.get()));
 
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
@@ -796,9 +796,9 @@ private:
 
             //if (bButtonRight)
             {
-                ui.PushFont(SurfingFontTypes(sizeFont.get()));
+                ui.PushFontStyle(SurfingFontTypes(sizeFont.get()));
 
-                if (bSmallerSizeTextButton) ui.PushFont(SurfingFontTypes(MAX(0, sizeFont.get() - 1)));
+                if (bSmallerSizeTextButton) ui.PushFontStyle(SurfingFontTypes(MAX(0, sizeFont.get() - 1)));
 
                 string s = strSubmit;
                 if (bUpper) { s = ofToUpper(s); }

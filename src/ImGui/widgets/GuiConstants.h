@@ -13,6 +13,29 @@
 
 //----
 
+
+// MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
+
+#define SURFING_IMGUI__USE_IMGUI_MOUSE 
+// Mouse handled by ImGui Instead of the OF/GLFW. 
+// Includes much mouse behaviors from imgui, as resize, waiting, text input etc
+// Required disabled to allow overlay on windows capturer app.
+
+//#define SURFING_IMGUI__USE_PROFILE_DEBUGGER
+#define SURFING_IMGUI__USE_NOTIFIER
+#define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 5000
+
+//#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
+
+//TODO: Fixing exceptions hen closing ofApp.
+//#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable auto save on exit.
+
+//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE // if undefined settings will be bundled into main settings.
+
+//----
+
+
 // To fix weird behaviors 
 // when too big or too small resized windows
 
@@ -26,20 +49,20 @@
 
 //----
 
-// Will be applied as minimum 
-// and standard window shape
-#define PANEL_WIDGETS_WIDTH 250
-#define PANEL_WIDGETS_HEIGHT 100
-#define PANEL_WIDGETS_WIDTH_MIN 200
-#define PANEL_WIDGETS_HEIGHT_MIN 100
-
-// LEGACY
-#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
-#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
+//// Will be applied as minimum 
+//// and standard window shape
+//#define PANEL_WIDGETS_WIDTH 250
+//#define PANEL_WIDGETS_HEIGHT 100
+//#define PANEL_WIDGETS_WIDTH_MIN 200
+//#define PANEL_WIDGETS_HEIGHT_MIN 100
+//
+//// LEGACY
+//#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
+//#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
 //----
 
-// Default Themes files
+// Default Themes file-based
 
 // Files must be in the default place:
 // ofxSurfingImGui\Examples\09_ThemeEditor\bin\data\Gui\themes\
@@ -47,10 +70,10 @@
 // When files are not located there, then will load a hardcoded default theme: 
 // ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
-// Night
+// Night Theme
 #define THEME_NAME_NIGHT "moebiusSurfing.ini"
 
-// Day
+// Day Theme
 #define THEME_NAME_DAY "moebiusSurfingDay.ini"
 
 //----
@@ -63,7 +86,7 @@
 // So you don't need to put any files on bin/data to compile right!
 
 
-#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/"
+#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" // main container for all the font files!
 
 // LEGACY font
 #define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
@@ -73,31 +96,9 @@
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
-//#define OFX_IM_FONT_DEFAULT_FILE OFX_IM_FONT_DEFAULT_FILE 
-//#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
-
-//// DEPRECATED
-//// Font sizes
-//#define IM_FONT_DEFAULT 0
-//#define IM_FONT_BIG 1
-//#define IM_FONT_HUGE 2
-//#define IM_FONT_HUGE_XXL 3
-
-//--
-
-// Other Candidates
-
-//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
-//#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Medium.ttf"
-
-//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 13
-//#define OFX_IM_FONT_DEFAULT_FILE "PrgmtB.ttf"
-
-//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 13
-//#define OFX_IM_FONT_DEFAULT_FILE "PrgmtR.ttf"
-
-//#define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
-//#define OFX_IM_FONT_DEFAULT_FILE "Ruda-Bold.ttf"
+// Default mono-spaced font
+#define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
+#define OFX_IM_FONT_DEFAULT_MONO_FILE "JetBrainsMono-Bold.ttf"
 
 //----
 
@@ -106,18 +107,22 @@
 //TODO:
 // fix for HSLIDERS.. 
 // should be used by toggles and buttons too!
-#define OFX_IM_WIDGETS_RATIO_DEFAULT 0.7f
-#define OFX_IM_WIDGETS_RATIO_BIG 1.5f
+#define OFX_IM_WIDGETS_RATIO_BIG 1.50f
+#define OFX_IM_WIDGETS_RATIO_DEFAULT 0.70f
+#define OFX_IM_WIDGETS_RATIO_SMALL 0.40f
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
-#define OFX_IM_WIDGETS_RATIO_SMALL 0.4f
 
 // Window scrolling size on some windows/groups
 #define HEIGHT_SCROLL_GROUP 400
 
+//TODO: make it active 
 // Knobs format to 3 decimals
 #define OFX_IM_FORMAT_WIDGETS "%.1f"
-#define OFX_IM_FORMAT_KNOBS "%.2f"
-#define OFX_IM_FORMAT_SLIDERS "%.2f"
+//#define OFX_IM_FORMAT_KNOBS "%.2f"
+//#define OFX_IM_FORMAT_SLIDERS "%.2f"
+#define OFX_IM_FORMAT_KNOBS "%.3f"
+#define OFX_IM_FORMAT_SLIDERS "%.3f"
+
 //TODO:
 #define OFX_IM_FORMAT_WIDGETS_INT "%d"
 #define OFX_IM_FORMAT_KNOBS_INT "%d"
@@ -141,12 +146,11 @@
 #define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
 #define BLINK_MIN 0.2f 
-//#define BLINK_MAX 0.8f 
-//#define BLINK_MIN 0.4f 
 #define BLINK_MAX 1.0f 
 
 #define FACTOR_DARKEN 0.2f 
 
+//TODO: use another approach?
 #define VERTICAL_AMOUNT_UNITS 5.0f 
 
 //----
@@ -169,6 +173,12 @@ namespace ofxImGuiSurfing
 		OFX_IM_FONT_HUGE,
 		OFX_IM_FONT_HUGE_XXL, // 3
 
+		//TODO:
+		OFX_IM_FONT_DEFAULT_MONO,
+		OFX_IM_FONT_BIG_MONO,
+		OFX_IM_FONT_HUGE_MONO,
+		OFX_IM_FONT_HUGE_XXL_MONO,
+
 		OFX_IM_FONT_AMOUNT
 	};
 
@@ -177,7 +187,8 @@ namespace ofxImGuiSurfing
 	// NOTE:
 	// Now, these sizes are usually related to height! 
 	// Because widgets widths are handled by the API args!
-	// TODO: IDEA: remake width management notation to use of percents.
+	// TODO: IDEA: Remake width management notation to use of percents.
+	// TODO: IDEA: Add blink on hover styles
 
 	//--------------------------------------------------------------
 	enum SurfingGuiTypes
@@ -187,9 +198,6 @@ namespace ofxImGuiSurfing
 		OFX_IM_DISABLED, // Make it invisible, preserve the void spacing. it's a common height but could differs..
 		OFX_IM_INACTIVE, // Draws the widget. but makes it inactive. disables mouse control.
 		OFX_IM_SPACING, // Make it invisible, preserve a custom (one standard line) spacing.
-
-		//TODO: could be added an extra argument 
-		// to allow different appearance for inactive types..
 
 		//--
 
@@ -202,12 +210,14 @@ namespace ofxImGuiSurfing
 		// Button
 
 		//OFX_IM_BUTTON_MINI, // 1 = default. too small to place text well.
-		OFX_IM_BUTTON_SMALL, // 1 = default
-		OFX_IM_BUTTON, // 1.25
-		OFX_IM_BUTTON_MEDIUM, // 1.5
-		OFX_IM_BUTTON_BIG, // 2
-		OFX_IM_BUTTON_BIG_XXL, // 3
-		OFX_IM_BUTTON_BIG_XXXL, // 4
+		OFX_IM_BUTTON_SMALL, // 1 = default ratio
+		OFX_IM_BUTTON, // 1.25 ratio
+		OFX_IM_BUTTON_MEDIUM, // 1.5 ratio
+		OFX_IM_BUTTON_BIG, // 2 ratio
+		OFX_IM_BUTTON_BIG_XXL, // 3 ratio
+		OFX_IM_BUTTON_BIG_XXXL, // 4 ratio
+
+		//--
 
 		// Border
 
@@ -217,6 +227,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_BUTTON_BIG_BORDER,
 		OFX_IM_BUTTON_BIG_XXL_BORDER,
 		OFX_IM_BUTTON_BIG_XXXL_BORDER,
+
+		//--
 
 		// Border Blink 
 
@@ -234,6 +246,7 @@ namespace ofxImGuiSurfing
 		// Toggle
 
 		OFX_IM_CHECKBOX, // ofxImGui standard
+
 		OFX_IM_TOGGLE,
 		//OFX_IM_TOGGLE_MINI,
 		OFX_IM_TOGGLE_SMALL,
@@ -241,6 +254,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG,
 		OFX_IM_TOGGLE_BIG_XXL,
 		OFX_IM_TOGGLE_BIG_XXXL,
+
+		//--
 
 		// Border
 
@@ -250,6 +265,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_BIG_BORDER,
 		OFX_IM_TOGGLE_BIG_XXL_BORDER,
 		OFX_IM_TOGGLE_BIG_XXXL_BORDER,
+
+		//--
 
 		// Border Blink 
 
@@ -271,6 +288,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_TOGGLE_ROUNDED_MEDIUM,
 		OFX_IM_TOGGLE_ROUNDED_BIG,
 
+		//--
+
 		// LEGACY. Now we removed 'button' word
 		OFX_IM_TOGGLE_BUTTON_ROUNDED, // same size than small.
 		OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI_XS,//TODO:
@@ -283,8 +302,8 @@ namespace ofxImGuiSurfing
 
 		// FLOAT / INT Styles
 
-		OFX_IM_SLIDER, // ofxImGui standard
-
+		OFX_IM_SLIDER, // uses the (ofxImGui) standard
+		OFX_IM_SLIDER_NO_LABEL,//TODO:
 		// Big Sliders
 
 		// Horizontal
@@ -306,6 +325,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_HSLIDER_MINI_NO_LABELS,
 		OFX_IM_HSLIDER_MINI_NO_NUMBER,
 
+		//--
+
 		// Vertical
 
 		OFX_IM_VSLIDER,
@@ -319,7 +340,10 @@ namespace ofxImGuiSurfing
 		OFX_IM_PROGRESS_BAR_NO_TEXT,
 		OFX_IM_STEPPER,
 		OFX_IM_STEPPER_NO_LABEL,
+		OFX_IM_STEPPER_RAW,
+		OFX_IM_STEPPER_RAW_NO_LABEL,
 		OFX_IM_DRAG,
+		OFX_IM_DRAG_NO_LABEL,
 
 		//--
 
@@ -346,44 +370,29 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		OFX_IM_COMBO_MULTI,
 
 		//TODO: 
-		// multiple controls for fine tweak:
-		//slider + drag + stepper
-		/*
-		// A bundle of controls
+		// multiple controls for fine tweak
 		// for a single param
-		ui.AddLabelBig(lineWidth.getName());
-		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
-		{
-			if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
-			{
-				lineWidth -= 0.1f;
-				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-			}
-			ImGui::SameLine();
-			if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
-			{
-				lineWidth += 0.1f;
-				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-			}
-		}
-		ImGui::PopButtonRepeat();
-		*/
+		OFX_IM_COMBO_MULTI,
 
 		//--
 
 		// Strings
 
-		OFX_IM_TEXT_INPUT,//TODO:
-		OFX_IM_TEXT_INPUT_NO_NAME,//TODO:
-		OFX_IM_TEXT_INPUT_NAMED,//TODO:
+		OFX_IM_TEXT_INPUT,
+		OFX_IM_TEXT_INPUT_NO_NAME,
+		OFX_IM_TEXT_INPUT_NAMED,
+		OFX_IM_TEXT_INPUT_NAMED_PADDED,//to align with other clipped widgets like stepper
+
+		//TODO: get from bigTextInput widget
+		//would be better to add it on v3 API with arguments as imgui does (bitwise shift).
+		OFX_IM_TEXT_INPUT_HINT,
 
 		OFX_IM_TEXT_DISPLAY,
-		OFX_IM_TEXT_BIG,//TODO:
-		OFX_IM_TEXT_LONG,//TODO: paragraph size
-		//TODO: add labels
+		OFX_IM_TEXT_DISPLAY_WRAPPED,
+		OFX_IM_TEXT_DISAPLAY_LONG,//to be used as long paragraph text blocks
+
 		//OFX_IM_LABEL,//big font not accessible here..
 		//OFX_IM_LABEL_BIG,
 
@@ -405,12 +414,13 @@ namespace ofxImGuiSurfing
 
 		//--
 
-		// Multi dim 
+		// Multi dimension 
 
 		//TODO: 
 		// for glm::vec2 vec3 vec4
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS,
 		OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED,
+		//TODO: add more types
 		//OFX_IM_MULTIDIM_SPLIT_STEPPERS,//TODO:
 		//OFX_IM_MULTIDIM_SPLIT_DRAGS,
 
@@ -500,238 +510,12 @@ namespace ofxImGuiSurfing
 		else if (i == 5) _groupInfo = "OFX_IM_GROUP_HIDDEN_HEADER";
 		else if (i == 6) _groupInfo = "OFX_IM_GROUP_HIDDEN";
 		//else if (i == 7) _groupInfo = "OFX_IM_GROUP_WINDOWED";
+
 		else _groupInfo = "OFX_IM_GROUP UNKNOWN";
 
 		return _groupInfo;
 	}
 
-
 	//---------------
-
-
-	//----
-
-	// SUGAR SNIPPETS
-
-	//--
-
-	// 1.
-
-	// BUG:
-	// Annoying behavior: 
-	// sometimes the sliders are bigger bc the text long or something,
-	// Then all the window panels is being resized bigger 
-	// if auto resize is enabled!
-
-	// workaround
-
-	//TODO: 
-	// A nice idea could be to get the longer param label name width 
-	// and use this max width to apply to our layouting engine...
-
-	// Some macro sugar to help fix how sliders force auto resize the panel widths.
-	// It's a 'rare behavior' that I am trying to correct doing this.
-
-	//--
-
-	//#define DEFAULT_LAYOUT_SLIDERS_BEHAVIOR 
-	// Comment this line to use a workaround 
-	// to weird ImGui auto resize layouting on sliders widgets...
-
-	//--
-
-#ifndef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
-
-	// A. Relative to panel width
-	// less than threshold will make half window width
-
-#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x / 2.f); }
-
-#define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
-
-#endif
-
-	//--
-
-	//// B. Using an absolute size
-
-	//#define IMGUI_LABELS_WIDTH_DEFAULT 95
-	//#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ImGui::PushItemWidth(-IMGUI_LABELS_WIDTH_DEFAULT);
-	//#define IMGUI_SUGAR__WIDGETS_POP_WIDTH ImGui::PopItemWidth();
-
-	//--
-
-#ifdef DEFAULT_LAYOUT_SLIDERS_BEHAVIOR
-
-	// C. To bypass and do nothing.
-
-#define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH ;
-#define IMGUI_SUGAR__WIDGETS_POP_WIDTH ;
-
-#endif
-
-	//--
-
-	// 2.
-
-	// For OFX_IM_STEPPER
-
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
-
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-// To allow see 3 decimals seen well, 
-// but requires preferably shorter label name.
-
-#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT); }
-
-#define IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
-
-#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT); }
-
-#define IMGUI_SUGAR__STEPPER_WIDTH_POP \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
-
-	//--
-
-#define TEXT_LABEL_TO_RESIZE "0123456789"
-
-	//TODO:
-	// This is a 10 chars string that we will use as default label width, to name widgets.
-	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
-	// that could be weird because each slider will have a different width.
-	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	 
-	//TODO:
-	// Fix auto resize loop grow...
-	// Using an standard text size for the widgets 
-	//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	//	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
-	//	const float gap = 40; \
-	//	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
-	//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
-
-	//----
-
-	// 3.
-
-	// Adds mouse wheel control to the last/previous ofParam widget (float/int) rendered.
-
-//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
-#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2); // param, flip
-
-//--
-
-//// macOS fix
-//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
-
-//--
-
-// Amount of steps per widgets. will calculate range between max/min.
-#define MOUSE_WHEEL_STEPS 100.f
-
-// How more fine is when CTRL pressed 
-#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 0.20f
-//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
-
-//----
-
-// 3.
-
-// Adds Constraints Window Shapes (width and height)
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_FULL \
-{ \
-ImVec2 size_min = ImVec2(500, 500); \
-ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_BIG \
-{ \
-ImVec2 size_min = ImVec2(400, 400); \
-ImVec2 size_max = ImVec2(600, 600); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MEDIUM \
-{ \
-ImVec2 size_min = ImVec2(300, 300); \
-ImVec2 size_max = ImVec2(500, 500); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS \
-{ \
-ImVec2 size_min = ImVec2(220, 220); \
-ImVec2 size_max = ImVec2(400, 400); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL \
-{ \
-ImVec2 size_min = ImVec2(150, 150); \
-ImVec2 size_max = ImVec2(250, 250); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MINI \
-{ \
-ImVec2 size_min = ImVec2(100, 100); \
-ImVec2 size_max = ImVec2(100, 100); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-//--
-
-// Constraint for width only
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL \
-{ \
-ImVec2 size_min = ImVec2(500, -1); \
-ImVec2 size_max = ImVec2(ofGetWidth() * 0.9f, ofGetHeight() * 0.9f); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG \
-{ \
-ImVec2 size_min = ImVec2(400, -1); \
-ImVec2 size_max = ImVec2(600, -1); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM \
-{ \
-ImVec2 size_min = ImVec2(300, -1); \
-ImVec2 size_max = ImVec2(500, -1); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW \
-{ \
-ImVec2 size_min = ImVec2(220, -1); \
-ImVec2 size_max = ImVec2(400, -1); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL \
-{ \
-ImVec2 size_min = ImVec2(150, -1); \
-ImVec2 size_max = ImVec2(250, -1); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
-
-#define IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI \
-{ \
-ImVec2 size_min = ImVec2(100, -1); \
-ImVec2 size_max = ImVec2(100, -1); \
-ImGui::SetNextWindowSizeConstraints(size_min, size_max); \
-} \
 
 };

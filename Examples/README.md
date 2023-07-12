@@ -24,6 +24,9 @@
 ## 04_LogSystem
 ![](04_LogSystem/Capture.PNG)  
 
+## 04_LogSystemHelpBoxes
+![](04_LogSystemHelpBoxes/Capture.PNG)  
+
 ## 05_NotifierSystem
 ![](05_NotifierSystem/Capture.PNG)  
 
@@ -44,6 +47,12 @@
 ![](09_ThemeEditor/Capture2.PNG)  
 ![](09_ThemeEditor/Capture3.PNG)  
 
+## 09_ThemeEditorFonts
+![](09_ThemeEditorFonts/Capture.PNG)  
+
+## 09_ThemeEditorFull
+![](09_ThemeEditorFull/Capture.PNG)  
+
 ## 10_SpecialWindows
 ![](10_SpecialWindows/Capture.PNG)  
 
@@ -55,6 +64,9 @@
 
 ## 30_LayoutsEngineDocking
 ![](30_LayoutsEngineDocking/Capture.PNG)  
+
+## 50_MultiInstance
+![](50_MultiInstance/Capture.PNG)  
 
 <br>
 

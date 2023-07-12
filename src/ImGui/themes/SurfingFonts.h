@@ -103,7 +103,7 @@ public:
 
 		ofxImGuiSurfing::saveGroup(params, pathSettingsHelpers);
 
-		sizeFontDefault = ui->getFontIndexSize(0);
+		sizeFontDefault = ui->getFontSizeForIndex(0);
 		pathFontDefault = ui->getFontPath(0);
 		ofxImGuiSurfing::saveGroup(paramsDefaultFont, pathSettingsDefaultFont);
 	}
@@ -192,7 +192,7 @@ private:
 
 	void drawImGuiDebugTestFonts()
 	{
-		if (bGui_DebugTestFonts) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
+		if (bGui_DebugTestFonts && ui->bAutoResize) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM;
 
 		if (ui->BeginWindow(bGui_DebugTestFonts))
 		{
@@ -203,10 +203,14 @@ private:
 
 			// text
 			string s;
+
 			s = "DEFAULT STYLES";
+
 			if (ui->BeginTree(s))
 			{
 				ui->AddSpacingBig();
+
+				// will blink if it's selected
 
 				s = "DEFAULT";
 				i = 0;
@@ -240,48 +244,83 @@ private:
 
 			//--
 
-			if (ui->getAmountFonts() > 4)
-			{
+			// Monospaced
+			if (ui->isFontsMonospacedDefined()) {
 				ui->AddSpacingBig();
 
-				s = "EXTRA FONTS\n";
+				s = "DEFAULT STYLES MONOSPACED";
+
 				if (ui->BeginTree(s))
 				{
 					ui->AddSpacingBig();
 
-					// s = "Hello world";
-					int i0 = 4;
-					for (int i = i0; i < ui->getAmountFonts(); i++)
+					for (size_t i_ = 0; i_ < ui->fontsMonospacedIndexes.size(); i_++)
 					{
-						s = ui->getFontName(i);
-						//ui->DrawImGuiTextWithFontStyle(s, i, false);
+						int i = ui->fontsMonospacedIndexes[i_];
 
-						i = ofClamp(i, 0, ui->getAmountFonts() - 1);
-						ui->PushFontStyle(i);
-						bool b = (i == ui->getFontIndex());
-						if (ui->AddButton(s, b ? OFX_IM_BUTTON_BIG_BORDER_BLINK : OFX_IM_BUTTON_BIG))
-						{
-							ui->setFontIndex(i);
+						s = ui->getFontLabel(i);
 
-							//workflow
-							if (bAutoBuild) {
-								bBuildDefaultFontWithStyles = 1;
+						if ((i == ui->getFontIndex())) ui->BeginBlinkText();
+						ui->DrawImGuiTextWithFontStyle(s, i);
+						if ((i == ui->getFontIndex())) ui->EndBlinkText();
 
-								sizeFont = ui->getFontIndexSize(i);
-								//string p = ui->getFontIndexPath();
-								//ui->BuildStylesFromFont(p, sizeFont);
-
-								//ui->LoadFontsFromFolder(pathFolderExtraFonts, sizeFont, bMultisize);
-							}
-						}
-						ui->PopFontStyle();
-
-						//if (i < ui->getAmountFonts() - 1) ui->AddSpacingBigSeparated();
+						if (i_ < ui->fontsMonospacedIndexes.size() - 1) ui->AddSpacingBigSeparated();
 					}
 
 					ui->EndTree();
 				}
 			}
+
+			//--
+
+			if (ui->getAmountFonts() > 4)
+			{
+				ui->AddSpacingBig();
+
+				s = "ALL FONTS\n";
+
+				if (ui->BeginTree(s))
+				{
+					ui->AddSpacingBig();
+
+					//int i0 = 4;//extra
+					int i0 = 0;//all
+
+					for (int i = i0; i < ui->getAmountFonts(); i++)
+					{
+						//i = ofClamp(i, 0, ui->getAmountFonts() - 1);
+
+						s = "#" + ofToString((i < 10) ? "0" : "") + ofToString(i) + " - ";
+						s += ui->getFontName(i);
+						//ui->DrawImGuiTextWithFontStyle(s, i, false);
+
+						bool b = (i == ui->getFontIndex());
+
+						ui->BeginBlinkText(b);
+						{
+							ui->PushFontStyle(i);
+							{
+								if (ui->AddButton(s, b ? OFX_IM_BUTTON_BIG_BORDER_BLINK : OFX_IM_BUTTON_BIG))
+								{
+									ui->setFontIndex(i);
+
+									//workflow
+									if (bAutoBuild) {
+										bBuildDefaultFontWithStyles = 1;
+
+										sizeFont = ui->getFontSizeForIndex(i);
+									}
+								}
+							}
+							ui->PopFontStyle();
+						}
+						ui->EndBlinkText(b);
+					}
+
+					ui->EndTree();
+				}
+			}
+
 			ui->EndWindow();
 		}
 	}
@@ -397,9 +436,12 @@ private:
 
 		ui->AddSpacingBig();
 
+		//--
+
+		// Load folder fonts
 		// Clear and reload folder font files
 		{
-			if (ui->AddButton("Load Folder Fonts", OFX_IM_BUTTON_BIG))
+			if (ui->AddButton("Load folder fonts", OFX_IM_BUTTON_BIG))
 			{
 				bLoadFontsFromFolder = 1; // flag to execute out of the ImGui render
 			}
@@ -410,33 +452,86 @@ private:
 			ui->AddTooltip(s);
 
 			ui->Add(bMultisize);
-			s = "Allows adding three different sizes to each added font, \nto allow explore your best fit for your app.";
+			s = "Allows adding three different sizes (sz-1, sz, sz+1)\n";
+			s += "to each added font, to allow explore \nyour best fit for your app.";
 			ui->AddTooltip(s);
 		}
 
 		ui->AddSpacingBig();
 
-		// Re Build the styles 
-		// for a new default font
-		{
-			s = "Browse the pre added fonts and pick the new default font. \n";
-			s += "Then click Build and the styles for the new default font will be populated.\n";
-			s += "The sizeFont variable will be used for the Default style and scaled big to the others!\n";
-			ui->AddLabel(s);
+		//--
 
+		s = "Browse the pre added fonts and pick the new default font. \n";
+		s += "Then click Build and the styles for the new default font will be populated.\n";
+		s += "The sizeFont variable will be used for the Default style and scaled big to the others!\n";
+		ui->AddLabel(s);
+
+		// Build the styles 
+		// for a new picked default font
+		{
 			if (ui->AddButton("Build Default Styles", OFX_IM_BUTTON_BIG))
 			{
 				bBuildDefaultFontWithStyles = 1; // flag to execute out of the ImGui render
 			}
+
 			s = "The above picked font: \n\n";
 			s += ui->getFontIndexName() + "\n";
 			s += "(Using sizeFont " + ofToString(sizeFont.get(), 0) + "px)\n\n";
 			s += "Will be loaded as Default \nand will generate the four styles:\n";
-			s += "DEFAULT, BIG, HUGE and HUGE_XXL\n";
+			s += "DEFAULT, BIG, HUGE and HUGE_XXL.\n";
 			ui->AddTooltip(s);
 		}
 
+		//--
+
+		// Mono spaced font
+
+		//if (ui->isFontsMonospacedDefined())
+		{
+			ui->AddSpacingBig();
+
+			// For Default mono spaced font
+			{
+				string pathFont_ = OFX_IM_FONT_DEFAULT_PATH_FONTS + string(OFX_IM_FONT_DEFAULT_MONO_FILE);
+				float sizeFont_ = float(OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN);
+				if (ui->AddButton("Build mono-spaced Font Styles Default", OFX_IM_BUTTON_BIG))
+				{
+					ui->setupFontForDefaultStylesMonospaced(pathFont_, sizeFont_);
+				}
+				s = "Add default mono-spaced font \nand sizeFont as a font bundle:\n";
+				s += "\nFile font: \n";
+				s += pathFont_ + "\n";
+				s += "With sizeFont " + ofToString(sizeFont.get(), 0) + "px\n\n";
+				s += "To be used in parallel with the default (modern) one\n";
+				s += "Then creates the four styles too:\n";
+				s += "DEFAULT_MONO, BIG_MONO, HUGE_MONO and HUGE_XXL_MONO.";
+				ui->AddTooltip(s);
+			}
+
+			// For the font file from index selected font
+			{
+				string pathFont_ = ui->getFontIndexPath();
+				float sizeFont_ = ui->getFontIndexSize();
+				if (ui->AddButton("Build mono-spaced Font Styles Alternative", OFX_IM_BUTTON_BIG))
+				{
+					ui->setupFontForDefaultStylesMonospaced(pathFont_, sizeFont_);
+				}
+				s = "Add selected mono-spaced font \nand sizeFont as a font bundle:\n";
+				s += "\nThe index Font: \n";
+				s += pathFont_ + "\n";
+				s += "With sizeFont " + ofToString(sizeFont_, 0) + "px\n\n";
+				s += "To be used in parallel with the default (modern) one\n";
+				s += "Then creates the four styles too:\n";
+				s += "DEFAULT_MONO, BIG_MONO, HUGE_MONO and HUGE_XXL_MONO.";
+				ui->AddTooltip(s);
+			}
+		}
+
 		ui->AddSpacingBig();
+
+		//--
+
+		// Clear
 
 		if (ui->AddButton("Clear Fonts", OFX_IM_BUTTON_BIG))
 		{
@@ -447,6 +542,10 @@ private:
 		ui->AddTooltip(s);
 
 		ui->AddSpacingBig();
+
+		//--
+
+		// Help
 
 		if (ui->BeginTree("HELP"))
 		{
@@ -475,7 +574,7 @@ private:
 				bPreLoadSomeFonts = 1; // flag to execute out of the ImGui render
 			}
 			s = "This is a method EXAMPLE \nto see of how to handle many fonts around. \nLook into doPreloadSomeFonts()\n";
-			s += "Will add a hard-coded path folder with many fonts with the size of 12px \nand two other files manually with 13px and 17px.";
+			s += "Will add a hard-coded path folder \nwith many fonts with the size of 12px \nand two other files manually with 13px and 17px.";
 			ui->AddTooltip(s);
 		}
 	}
@@ -499,7 +598,7 @@ public:
 
 		// B. Get the path of the selected font by the UI index.
 		p = ui->getFontIndexPath();
-		ui->BuildStylesFromFont(p, sizeFont);
+		ui->setupFontForDefaultStyles(p, sizeFont);
 
 		//workflow
 		// reload folder
@@ -517,7 +616,7 @@ public:
 
 		sizeFont = size;
 
-		ui->BuildStylesFromFont(path, sizeFont);
+		ui->setupFontForDefaultStyles(path, sizeFont);
 
 		////workflow
 		//// reload folder
@@ -600,12 +699,12 @@ public:
 		p = "/assets/fonts2/Inter-Black.ttf";
 		size = 13;
 		label = "Inter-Black_" + ofToString(size);
-		ui->pushFont(p, size, label);
+		ui->addFontStyle(p, size, label);
 
 		// 3. Load another single font
 		p = "/assets/fonts2/Inter-Black.ttf";
 		size = 17;
 		label = "Inter-Black_" + ofToString(size);
-		ui->pushFont(p, size, label);
+		ui->addFontStyle(p, size, label);
 	}
 };
