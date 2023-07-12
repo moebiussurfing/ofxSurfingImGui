@@ -578,10 +578,16 @@ namespace ofxImGuiSurfing
 	{
 		const char* text = name.c_str();
 		ImGuiStyle& style = ImGui::GetStyle();
+
 		float sp1 = style.ItemInnerSpacing.x;
-		float sp2 = style.ItemSpacing.x;
-		float space = ImGui::CalcTextSize(text).x + 2 * sp1;
+		float sp2 = style.ItemSpacing.x;//not strictly related to theme.
+
+		float space = ImGui::CalcTextSize(text).x;
+		space += sp1;
+		space += sp1;
+		space += sp1;//a custom extra
 		if (bExtraPad) space += sp2;
+
 		return space;
 	}
 	// Pass a bool param to get the expected default button size by considering the text label.

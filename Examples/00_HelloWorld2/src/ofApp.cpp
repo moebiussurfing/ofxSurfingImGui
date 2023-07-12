@@ -89,7 +89,7 @@ void ofApp::drawGuiMain()
 		ui.AddMinimizerToggle();
 
 		// Global Scale
-		if(ui.isMaximized()) ui.DrawWidgetsGlobalScale();
+		if (ui.isMaximized()) ui.DrawWidgetsGlobalScale();
 		else ui.DrawWidgetsGlobalScaleMini();
 
 		// Maximized mode
@@ -158,47 +158,47 @@ void ofApp::drawGuiMain()
 
 				if (bEnable) ui.PopFontStyle();
 				if (bEnable) ui.EndBlinkText();
-			}
 
-			ui.AddSpacingBigSeparated();
+				ui.AddSpacingBigSeparated();
 
-			if (!bEnable) {
-				ui.PushInactive();
-				ui.Add(speed, OFX_IM_HSLIDER);
-				ui.PopInactive();
-				s = "Widget is deactivated\nwhen Enabled is false\nSo can not be touched.";
-				ui.AddLabel(s);
+				if (!bEnable) {
+					ui.PushInactive();
+					ui.Add(speed, OFX_IM_HSLIDER);
+					ui.PopInactive();
+					s = "Widget is deactivated\nwhen Enabled is false\nSo can not be touched.";
+					ui.AddLabel(s);
 
-			}
-			else {
-				ui.Add(speed, OFX_IM_HSLIDER);
-				s = "Widget is activated\nwhen Enabled\nSo it can be touched.";
-				ui.AddTooltip(s);
-			}
+				}
+				else {
+					ui.Add(speed, OFX_IM_HSLIDER);
+					s = "Widget is activated\nwhen Enabled\nSo it can be touched.";
+					ui.AddTooltip(s);
+				}
 
-			// Raw imgui 
-			float speed_ = speed;
-			if (ImGui::SliderFloat("Speed", &speed_, 0, 1)) {
-				speed = speed_;
-			}
+				// Raw imgui 
+				float speed_ = speed;
+				if (ImGui::SliderFloat("Speed", &speed_, 0, 1)) {
+					speed = speed_;
+				}
 
-			//--
+				//--
 
-			if (bEnable)
-			{
-				ui.AddSpacing();
-				ui.AddSpacingSeparated();
-				ui.AddSpacingDouble();
-
-				// A right aligned extra minimizer
-				// but using a local bool param.
-				// not that is not stored into settings file,
-				// but other internal toggles it does!
-				static ofParameter<bool> bMin{ "##2", true };
-				ui.AddMinimizerXsToggle(bMin);
-				if (!bMin)
+				if (bEnable)
 				{
-					ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed); // collapsed on startup
+					ui.AddSpacing();
+					ui.AddSpacingSeparated();
+					ui.AddSpacingDouble();
+
+					// A right aligned extra minimizer
+					// but using a local bool param.
+					// not that is not stored into settings file,
+					// but other internal toggles it does!
+					static ofParameter<bool> bMin{ "##2", true };
+					ui.AddMinimizerXsToggle(bMin);
+					if (!bMin)
+					{
+						ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed); // collapsed on startup
+					}
 				}
 			}
 

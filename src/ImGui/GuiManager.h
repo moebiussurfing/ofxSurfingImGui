@@ -2118,8 +2118,15 @@ public:
 		this->AddLabelBig(s);
 		this->AddSpacing();
 
-		float w1 = MAX(this->getWidgetsWidth(4), 60);
-		ImGui::PushItemWidth(w1);
+		float w = 60;
+		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
+		//else w = MAX(this->getWidgetsWidth(1), 60);
+
+		ImGui::PushItemWidth(w);
 		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
 			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
 				this->globalScale = scaleGlobalGroup.getScale();
@@ -2163,8 +2170,8 @@ public:
 		}
 		s = "Set Global Scale to unit.";
 		this->AddTooltip(s);
-
-		this->SameLine();
+		
+		if (this->getWindowWidth() > 150) this->SameLine();
 
 		this->Add(this->bGlobalScaleWheel);
 		s = "Ctrl + Mouse Wheel: \nScales the active window.";
