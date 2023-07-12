@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//ui.setEnablebMouseCursorFromImGui(false);
+	ui.setEnablebMouseCursorFromImGui(false);
 	ui.setup();
 
 	// Add to custom tags to log system
