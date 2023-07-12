@@ -67,35 +67,9 @@ for [openFrameworks](https://openframeworks.cc/) projects.
     - **Manager**, **Demo Window** and **Tester Widgets**.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
+- Global Scale.
+
  
-<br>
-
-<details>
-  <summary>WIDGETS LIST</summary>
-  <p>    
-    
-- Big Toggles and Buttons.
-- Vertical and Horizontal Sliders.
-- Range Sliders.
-- Styled Knobs.
-- Tree and indented folders.
-- Floating tooltips, labels and values.
-- Dropdown / Combo index selector and names.
-- Matrix buttons to an index selector.
-- Bundled widgets like arrows linked to int params for browsing.
-- DearWidgets.
-- Gradient Color Designer.
-- Progress bars and waiting spinners.
-- Files Browser.
-- Curve Editors.
-- Log and Notifier System.
-- Text Editor, for live coding or text content.
-- Profile Plotters.
-- ...
-  
-  </p>
-  </details>
-
 <br>
 
 ## EXAMPLES
