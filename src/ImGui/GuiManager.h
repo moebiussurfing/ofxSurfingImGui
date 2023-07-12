@@ -2067,6 +2067,7 @@ public:
 	//--
 
 	// Scale Global
+
 private:
 	struct ScaleGlobalGroup {
 		vector<string> names{"NONE", "100%", "150%", "175%", "200%"};
@@ -2081,14 +2082,43 @@ private:
 			default: return 1.0f; break;
 			}
 		}
+		string getName() { return names[indexScaleGlobal]; }
 	};
 	ScaleGlobalGroup scaleGlobalGroup;
 public:
+	void DrawWidgetsGlobalScaleMini() {
+		this->AddSpacing();
+
+		float w = 60;
+		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
+		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.5f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.75f;
+		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 2.f;
+		//else w = MAX(this->getWidgetsWidth(1), 60);
+
+		ImGui::PushItemWidth(w);
+		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
+			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
+				this->globalScale = scaleGlobalGroup.getScale();
+			}
+			else {
+			}
+		}
+		ImGui::PopItemWidth();
+		string s = "Global Scale";
+		s += "\n" + scaleGlobalGroup.getName();
+		this->AddTooltip(s);
+	}
+
 	void DrawWidgetsGlobalScale() {
 		this->AddSpacingBigSeparated();
-		
 		string s;
-		float w1 = this->getWidgetsWidth(5);
+		s = "Global Scale";
+		this->AddLabelBig(s);
+		this->AddSpacing();
+
+		float w1 = MAX(this->getWidgetsWidth(4), 60);
 		ImGui::PushItemWidth(w1);
 		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
 			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
@@ -2096,31 +2126,50 @@ public:
 			}
 			else {
 			}
-		};
+		}
 		ImGui::PopItemWidth();
 
-		ImGui::SameLine();
+		// responsive
+		if ((this->getWindowWidth() > 200) &&
+			(scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1)) {
+			ImGui::SameLine();
+		}
 
-		float w2 = ImGui::GetContentRegionAvail().x + getWidgetsSpacingX();
-		ImGui::PushItemWidth(w2);
-		if (this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL)) {
-		
-		};
+		//ImGui::CalcTextSize
+		//AddSpacingToRightAlign(sp);
+		//float w = this->getWidgetsWidth(2);
+
+		//float pad = 0;
+		//pad += ImGui::GetStyle().WindowPadding.x;
+		//pad += getWidgetsSpacingX();
+		//float w2 = ImGui::GetContentRegionAvail().x - pad;
+
+		float w3;
+		if (this->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
+		else w3 = 200;
+		ImGui::PushItemWidth(w3);
+		if (this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL))
+		{
+
+		}
 		ImGui::PopItemWidth();
-		s = "Global Scale is applied to all the UI context.";
+		s = "Global Scale is applied\n";
+		s += "to all the UI context.\n";
+		s += "Press Ctrl +/- to 0.01 increments.\n";
 		this->AddTooltip(s);
-		
-		if (this->AddButtonRaw("Reset")) {
+
+		if (this->AddButtonRawMini("Reset")) {
 			this->globalScale = 1;
 		}
 		s = "Set Global Scale to unit.";
 		this->AddTooltip(s);
-		//this->SameLine();
+
+		this->SameLine();
 
 		this->Add(this->bGlobalScaleWheel);
 		s = "Ctrl + Mouse Wheel: \nScales the active window.";
 		this->AddTooltip(s);
-		
+
 		this->AddSpacingBigSeparated();
 	}
 
@@ -3960,6 +4009,12 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	float getWindowWidth()
+	{
+		return ImGui::GetContentRegionAvail().x;
+	}
+
+	//--------------------------------------------------------------
 	float getWidgetsWidth(int amnt = 1)
 	{
 		return ofxImGuiSurfing::getWidgetsWidth(amnt);
@@ -4681,9 +4736,15 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButtonRaw(std::string label)
+	inline bool AddButtonRawMini(std::string label)
 	{
 		return ImGui::Button(label.c_str());
+	}
+
+	//--------------------------------------------------------------
+	inline bool AddButtonRaw(std::string label, ImVec2 sz)
+	{
+		return ImGui::Button(label.c_str(), sz);
 	}
 
 	//--------------------------------------------------------------
@@ -5182,7 +5243,7 @@ public:
 	//----
 
 
-	void drawImGuiSettingsWidgets();
+	void DrawWidgetsExampleTabs();
 	int active_tab = 0;
 
 	// ImGui Helper

@@ -89,7 +89,8 @@ void ofApp::drawGuiMain()
 		ui.AddMinimizerToggle();
 
 		// Global Scale
-		ui.DrawWidgetsGlobalScale();
+		if(ui.isMaximized()) ui.DrawWidgetsGlobalScale();
+		else ui.DrawWidgetsGlobalScaleMini();
 
 		// Maximized mode
 		//if (!ui.isMinimized()) 
@@ -106,12 +107,14 @@ void ofApp::drawGuiMain()
 
 			ui.AddSpacingSeparated();
 			ui.AddAutoResizeToggle();
+			ui.AddSpacing();
 			ui.AddToggle("Constraints", bConstraint, OFX_IM_CHECKBOX);
 		}
 
 		ui.AddSpacingBigSeparated();
 
 		ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK); // blinks when true
+
 		s = "Will enable:\n\n";
 		s += "1. Bigger font\n";
 		s += "   (on above HELP text)\n";
@@ -136,21 +139,26 @@ void ofApp::drawGuiMain()
 		}
 		else // Not minimized aka maximized
 		{
-			// make it uppercase and add an extra space (true, true)
-			if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true);
-			else ui.AddLabelBig("00_HelloWorld2", true, true);
+			static ofParameter<bool> bMin{ "##1", true };
+			ui.AddMinimizerXsToggle(bMin);
+			if (!bMin)
+			{
+				// make it uppercase and add an extra space (true, true)
+				if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true);
+				else ui.AddLabelBig("00_HelloWorld2", true, true);
 
-			ui.AddSpacingDouble();
+				ui.AddSpacingDouble();
 
-			// make it blink
-			if (bEnable) ui.BeginBlinkText();
-			// make font bigger
-			if (bEnable) ui.PushFontStyle(OFX_IM_FONT_BIG);
+				// make it blink
+				if (bEnable) ui.BeginBlinkText();
+				// make font bigger
+				if (bEnable) ui.PushFontStyle(OFX_IM_FONT_BIG);
 
-			ui.AddLabel(s);
+				ui.AddLabel(s);
 
-			if (bEnable) ui.PopFontStyle();
-			if (bEnable) ui.EndBlinkText();
+				if (bEnable) ui.PopFontStyle();
+				if (bEnable) ui.EndBlinkText();
+			}
 
 			ui.AddSpacingBigSeparated();
 
@@ -186,7 +194,7 @@ void ofApp::drawGuiMain()
 				// but using a local bool param.
 				// not that is not stored into settings file,
 				// but other internal toggles it does!
-				static ofParameter<bool> bMin{ "", true };
+				static ofParameter<bool> bMin{ "##2", true };
 				ui.AddMinimizerXsToggle(bMin);
 				if (!bMin)
 				{
@@ -207,7 +215,9 @@ void ofApp::drawGuiMain()
 			ui.AddToggle("Quat", bGui_Quat);
 		}
 
-		ui.drawImGuiSettingsWidgets();
+		ui.AddSpacingBigSeparated();
+
+		ui.DrawWidgetsExampleTabs();
 
 		ui.EndWindow();
 	}

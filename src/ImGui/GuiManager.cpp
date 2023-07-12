@@ -3662,7 +3662,22 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	//	doBuildHelpInfo();
 	//}
 
+	//--
+
+	// Global Scale
+	else if (name == globalScale.getName())
+	{
+		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
+		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 2;
+		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 3;
+		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 4;
+		else scaleGlobalGroup.indexScaleGlobal = 0;
+		return;
+	}
+
+
 	//----
+
 
 	//TODO:
 	// Skip below callbacks
@@ -3724,18 +3739,6 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		return;
 	}
 
-	//--
-
-	// Global Scale
-	else if (name == globalScale.getName())
-	{
-		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
-		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 2;
-		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 3;
-		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 4;
-		else scaleGlobalGroup.indexScaleGlobal = 0;
-	}
-	
 	//--
 
 	// Layout preset index
@@ -4810,14 +4813,15 @@ void SurfingGuiManager::doResetLayout()
 
 
 //------------------------------------------------------------------------------------------
-void SurfingGuiManager::drawImGuiSettingsWidgets()
+void SurfingGuiManager::DrawWidgetsExampleTabs()
 {
 	ImGui::BeginTabBar("Settings");
 	{
 		if (BeginTabItem("Stage Manager"))
 		{
-			ImGui::Text("hello");
-			ImGui::Text("hello");
+			ImGui::Text("hello0");
+			ImGui::Text("Stage Manager");
+			ImGui::Text("hello0");
 
 			ImGui::EndTabItem();
 			active_tab = 0;
@@ -4825,8 +4829,9 @@ void SurfingGuiManager::drawImGuiSettingsWidgets()
 
 		if (BeginTabItem("Network Adapter"))
 		{
-			ImGui::Text("hello");
-			ImGui::Text("hello");
+			ImGui::Text("hello1");
+			ImGui::Text("Network Adapter");
+			ImGui::Text("hello1");
 
 			ImGui::EndTabItem();
 			active_tab = 1;
@@ -4834,8 +4839,9 @@ void SurfingGuiManager::drawImGuiSettingsWidgets()
 
 		if (BeginTabItem("License"))
 		{
-			ImGui::Text("hello");
-			ImGui::Text("hello");
+			ImGui::Text("hello2");
+			ImGui::Text("License");
+			ImGui::Text("hello2");
 
 			ImGui::EndTabItem();
 			active_tab = 2;
