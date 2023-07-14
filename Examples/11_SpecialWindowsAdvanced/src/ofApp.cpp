@@ -74,6 +74,8 @@ void ofApp::setup_ImGui()
 	// Recommended to set a name when using multiple instances of the Gui Manager!
 	//ui.setName("ofApp");
 
+	ui.setEnableHelpInternal(true);
+
 	//--
 
 	// Setup, and Startup is auto called when addWindowsSpecial is called!
@@ -119,7 +121,7 @@ void ofApp::setup_ImGui()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	buildHelpInfo();//its better to call it once or when info update is required.
+	//buildHelpInfo();//its better to call it once or when info update is required.
 
 	if (!bGui) return;
 
@@ -165,6 +167,17 @@ void ofApp::draw_MainWindow() {
 	if (ui.BeginWindow(bGui))
 	{
 		ui.AddLabelBig("Main Window", true, true);
+
+		ui.AddMinimizerToggle();
+		if (ui.isMaximized()) {
+			ui.AddKeysToggle();
+			ui.AddHelpInternalToggle();
+			ui.AddHelpToggle();
+			ui.AddLogToggle();
+			ui.AddNotifierToggle();
+		}
+
+		ui.AddSpacingBigSeparated();
 
 		// Optional: 
 		// Some internal useful common toggles are exposed:
@@ -308,13 +321,15 @@ void ofApp::draw_SurfingWidgets_3()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_4()
 {
-	//if (!bGui_4) return;
-	//ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_FirstUseEver);
+	//TODO: fix
+	if (!bGui_4) return;
+	ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_Appearing);
 
 	if (ui.BeginWindowSpecial(bGui_4))
 	{
 		ui.AddLabelBig("> Special \nWindow 4");
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
+		ui.Add(bEnable1, OFX_IM_BUTTON_BIG);
 
 		//ui.EndWindowSpecial(bGui_4);
 		ui.EndWindowSpecial();
@@ -324,13 +339,15 @@ void ofApp::draw_SurfingWidgets_4()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_5()
 {
-	//if (!bGui_5) return;
-	//ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_FirstUseEver);
+	//TODO: fix
+	if (!bGui_5) return;
+	ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_Appearing);
 
 	if (ui.BeginWindowSpecial(bGui_5))
 	{
 		ui.AddLabelBig("> Special \nWindow 5");
-		ui.Add(amount2, OFX_IM_KNOB);
+		ui.Add(amount2, OFX_IM_KNOB_WIPERDOTKNOB);
+		ui.Add(bEnable2, OFX_IM_BUTTON_BIG);
 
 		//ui.EndWindowSpecial(bGui_5);
 		ui.EndWindowSpecial();
@@ -377,24 +394,27 @@ void ofApp::buildHelpInfo()
 	helpInfo += "11_SpecialWindowsAdvanced \n\n";
 	helpInfo += "\n";
 	helpInfo += "KEY COMMANDS \n\n";
-	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
+	helpInfo += "g      GUI ";
 
+	/*
+	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
 	if (bGui)
 	{
 		helpInfo += "\n\n";
-		helpInfo += "0      SHOW WINDOWS " + ofToString(ui.getGuiToggleGlobalState() ? "ON" : "OFF") + "\n";
+		helpInfo += "0      SHOW WINDOWS " + ofToString(ui.getShowWindowsGlobal() ? "ON" : "OFF") + "\n";
 
-		if (ui.getGuiToggleGlobalState())
+		if (ui.getShowWindowsGlobal())
 		{
 			helpInfo += "\n";
-			helpInfo += "1      WINDOW 1 " + ofToString(ui.getWindowSpecialVisibleState(0) ? "ON" : "OFF") + "\n";
-			helpInfo += "2      WINDOW 2 " + ofToString(ui.getWindowSpecialVisibleState(1) ? "ON" : "OFF") + "\n";
-			helpInfo += "3      WINDOW 3 " + ofToString(ui.getWindowSpecialVisibleState(2) ? "ON" : "OFF") + "\n";
-			helpInfo += "4      WINDOW 4 " + ofToString(ui.getWindowSpecialVisibleState(3) ? "ON" : "OFF") + "\n";
-			helpInfo += "5      WINDOW 5 " + ofToString(ui.getWindowSpecialVisibleState(4) ? "ON" : "OFF") + "\n";
-			helpInfo += "6      WINDOW 6 " + ofToString(ui.getWindowSpecialVisibleState(5) ? "ON" : "OFF") + "\n";
+			helpInfo += "1      WINDOW 1 " + ofToString(ui.getIsWindowSpecialVisible(0) ? "ON" : "OFF") + "\n";
+			helpInfo += "2      WINDOW 2 " + ofToString(ui.getIsWindowSpecialVisible(1) ? "ON" : "OFF") + "\n";
+			helpInfo += "3      WINDOW 3 " + ofToString(ui.getIsWindowSpecialVisible(2) ? "ON" : "OFF") + "\n";
+			helpInfo += "4      WINDOW 4 " + ofToString(ui.getIsWindowSpecialVisible(3) ? "ON" : "OFF") + "\n";
+			helpInfo += "5      WINDOW 5 " + ofToString(ui.getIsWindowSpecialVisible(4) ? "ON" : "OFF") + "\n";
+			helpInfo += "6      WINDOW 6 " + ofToString(ui.getIsWindowSpecialVisible(5) ? "ON" : "OFF") + "\n";
 		}
 	}
+	*/
 
 	// We can use an internal Help Manager on the Gui Manager
 	// Enabler toggle will be auto integrated in the common panels.

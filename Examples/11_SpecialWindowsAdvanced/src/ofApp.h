@@ -13,10 +13,20 @@
 
 */
 
-//TODO: move keyboard commands to the addon
-//TODO: fix last two windows width made streach..
+/*
+    TODO: 
+
+    change key callbacks lambdas to RF from Roy.
+        keys for pannels 0 global, 1-9
+    fix last two windows width made stretch..
+    move keyboard commands to the addon
+    fix multi instance class
+
+*/
+
 
 //--
+
 
 //#define OF_APP_USE_CLASS
 

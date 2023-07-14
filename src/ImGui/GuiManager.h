@@ -3783,7 +3783,8 @@ public:
 
 	//--
 
-private:
+public:
+//private:
 	// DEPRECATED
 	// Exposed helpers to external GUIs / scope.
 
@@ -3811,6 +3812,11 @@ private:
 	ofParameter<bool>& getGuiToggleAligner()
 	{
 		return bGui_Aligners;
+	}
+	//--------------------------------------------------------------
+	bool getShowWindowsGlobal()
+	{
+		return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	}
 
 	//----
@@ -4108,7 +4114,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool getWindowSpecialVisibleState(int index) const // return visible toggle state
+	bool getIsWindowSpecialVisible(int index) const // return visible toggle state
 	{
 		if (windows.size() == 0) return false;
 		else if (index > windows.size() - 1 || index == -1) return false;

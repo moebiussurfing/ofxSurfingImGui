@@ -960,6 +960,7 @@ void SurfingGuiManager::startup()
 
 		helpInternal.bGui.makeReferenceTo(bHelpInternal);
 		helpInternal.setTitle(bHelpInternal.getName());
+		//helpInternal.setEnableHeader();
 
 		doBuildHelpInfo(false);
 
@@ -1096,6 +1097,11 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
 		else
 			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
+
+		if (bNotifier)
+			helpInternalText += string(bNotifier ? "N" : " ") + l4 + "Notifier      " + st + " ON  \n";
+		else
+			helpInternalText += string(bNotifier ? "N" : " ") + l4 + "Notifier      " + st + " OFF \n";
 
 		if (bHelp)
 			helpInternalText += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
@@ -4523,16 +4529,24 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		bLog = !bLog;
 	}
 
+	// Notifier
+	else if (key == 'N' && !mod_CONTROL)
+	{
+		bNotifier = !bNotifier;
+	}
+
 	//--
 
 	// Layout Presets Engine
 	{
-		if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
+		//if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
 
 		//--
 
 		if (!mod_CONTROL) // CTRL not pressed
 		{
+			if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
+
 			switch (key)
 			{
 			case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0];
