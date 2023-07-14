@@ -797,6 +797,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabel(std::string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		switch (fontType)
 		{
 		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0);
@@ -830,6 +839,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabel(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -850,6 +868,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelStyled(const std::string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -872,6 +899,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelNoStyled(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -890,6 +926,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelBig(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -910,6 +955,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHuge(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -930,6 +984,15 @@ public:
 	//--------------------------------------------------------------
 	void AddLabelHugeXXL(const std::string label, bool bUppercase = false, bool bSpacing = false)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			std::string t = bUppercase ? ofToUpper(label) : label;
+			if (bSpacing) this->AddSpacing();
+			ImGui::TextWrapped("%s", t.c_str());
+			if (bSpacing) this->AddSpacing();
+			return;
+		}
+
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
@@ -957,6 +1020,12 @@ public:
 	//--------------------------------------------------------------
 	ImVec2 CalcTextSize(const std::string s, int indexFont)
 	{
+		if (customFonts.size() == 0) {
+			//default font
+			ImVec2 sz0 = ImGui::CalcTextSize(s.c_str());
+			return sz0;
+		}
+
 		pushStyleFont(indexFont);
 		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
 		popStyleFont();
@@ -1970,7 +2039,7 @@ public:
 private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
-	bool bIgnoreNextPopFont = false;
+	bool bFlagIgnoreNextPopStyleFont = false;
 	vector<std::string> namesCustomFonts;
 	vector<std::string> pathsCustomFonts;
 
@@ -2017,7 +2086,6 @@ private:
 	// Take care not pushing a non existing index or it will crash!
 	void pushStyleFont(int index);
 	void popStyleFont();
-
 private:
 	// LEGACY
 	void PushFont(SurfingFontTypes style);
@@ -5222,7 +5290,7 @@ public:
 		return bOpen;
 	}
 
-};
+	};
 
 
 #endif

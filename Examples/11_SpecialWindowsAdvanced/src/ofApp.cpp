@@ -22,11 +22,11 @@ void ofApp::setup()
 
 	// Visible Toggles for all the other windows, 
 	// who are special windows!
+	bGui_1.set("Window 1", true);
 	bGui_2.set("Window 2", true);
 	bGui_3.set("Window 3", true);
 	bGui_4.set("Window 4", true);
 	bGui_5.set("Window 5", true);
-	bGui_6.set("Window 6", true);
 
 	//--
 
@@ -89,16 +89,16 @@ void ofApp::setup_ImGui()
 	//--
 
 	// When adding by name you need to use indexes when drawing the window!
-	ui.addWindowSpecial("Window 1"); // using legacy style by name
+	ui.addWindowSpecial("Window 0"); // using legacy style by name
 
 	// When can add special windows passing the visible toggle by argument.
 	// ofParameter name will be used to name the windows headers too.
 
+	ui.addWindowSpecial(bGui_1);
 	ui.addWindowSpecial(bGui_2);
 	ui.addWindowSpecial(bGui_3);
 	ui.addWindowSpecial(bGui_4);
 	ui.addWindowSpecial(bGui_5);
-	ui.addWindowSpecial(bGui_6);
 
 	//--
 
@@ -127,19 +127,19 @@ void ofApp::draw()
 	{
 		draw_MainWindow();
 
+		draw_SurfingWidgets_0();
 		draw_SurfingWidgets_1();
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
 		draw_SurfingWidgets_4();
 		draw_SurfingWidgets_5();
-		draw_SurfingWidgets_6();
 	}
 	ui.End();
 
 	//--
 
 	// Another ImGui instance / context
-	
+
 
 #ifdef OF_APP_USE_CLASS
 	//if (1)
@@ -183,26 +183,26 @@ void ofApp::draw_MainWindow() {
 
 		// Auto populate all the toggles for all added Special Windows 
 		ui.AddLabelBig("Auto populate all the toggles for all added Special Windows", true, true);
-		ui.drawWidgetsSpecialWindowsToggles();
-
-		ui.AddSpacingBigSeparated();
+		ui.drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
 
 		//-
 
-		ui.AddLabelBig("Another ofxImGuiSurfing instance");
+#ifdef OF_APP_USE_CLASS
+		ui.AddSpacingBigSeparated();
+
+		ui.AddLabelBig("Another ofxImGuiSurfing instance.");
 		ui.AddLabel("We can use many instances of the add-on simultaneously. \
-			Then we can combine multiple classes/add-ons without colliding their ImGui windows.");
+			\nThen we can combine multiple classes/add-ons without colliding their ImGui windows.");
 		ui.AddSpacingBig();
 
-#ifdef OF_APP_USE_CLASS
 		//ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
 		//ui.AddSpacing();
 
 		if (myClassObject.bGui) {
 			ui.Indent();
 			ui.Add(myClassObject.bGui_1);
+			ui.Add(myClassObject.bGui_1);
 			ui.Add(myClassObject.bGui_2);
-			ui.Add(myClassObject.bGui_3);
 			ui.Unindent();
 		}
 #endif
@@ -217,7 +217,7 @@ void ofApp::draw_MainWindow() {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_1()
+void ofApp::draw_SurfingWidgets_0()
 {
 	// NOTICE that 
 	// we need to recall and pass the index of this first window! 
@@ -230,7 +230,7 @@ void ofApp::draw_SurfingWidgets_1()
 
 	if (ui.BeginWindowSpecial(0))
 	{
-		ui.AddLabelBig("> Special \nWindow 1");
+		ui.AddLabelBig("> Special \nWindow 0");
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		ui.AddGroup(params_0);
@@ -242,9 +242,9 @@ void ofApp::draw_SurfingWidgets_1()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_2()
+void ofApp::draw_SurfingWidgets_1()
 {
-	if (!bGui_2) return;
+	//if (!bGui_1) return;
 
 	//// A. we can begin the window passing the index, that we want to remember!
 	//if (ui.BeginWindowSpecial(1)) 
@@ -252,14 +252,33 @@ void ofApp::draw_SurfingWidgets_2()
 	// B. but we can remember the name used on setup too.
 	// it's the same that use the index 1. (as first starts with zero)
 
-	if (ui.BeginWindowSpecial(bGui_2))
+	if (ui.BeginWindowSpecial(bGui_1))
 	{
-		ui.AddLabelBig("> Special \nWindow 2");
+		ui.AddLabelBig("> Special \nWindow 1");
 		ui.AddGroup(params_1);
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
 		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
+
+		//ui.EndWindowSpecial(bGui_1);
+		ui.EndWindowSpecial();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw_SurfingWidgets_2()
+{
+	//if (!bGui_2) return;
+
+	if (ui.BeginWindowSpecial(bGui_2))
+	{
+		ui.AddLabelBig("> Special \nWindow 2");
+		ui.Add(shapeType2, OFX_IM_KNOB_STEPPEDKNOB, 2, true);
+		ui.Add(amount2, OFX_IM_KNOB_SPACEKNOB, 2);
+		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
+		ui.AddSpacingBigSeparated();
+		ui.AddGroup(params_2);
 
 		//ui.EndWindowSpecial(bGui_2);
 		ui.EndWindowSpecial();
@@ -269,16 +288,17 @@ void ofApp::draw_SurfingWidgets_2()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_3()
 {
-	if (!bGui_3) return;
+	//if (!bGui_3) return;
 
 	if (ui.BeginWindowSpecial(bGui_3))
 	{
 		ui.AddLabelBig("> Special \nWindow 3");
-		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
-		ui.Add(amount2, OFX_IM_KNOB, 2);
-		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
-		ui.AddSpacingBigSeparated();
-		ui.AddGroup(params_2);
+		ui.AddGroup(params_3);
+		ui.AddSpacingSeparated();
+		ui.Add(size2, OFX_IM_HSLIDER_BIG);
+		ui.Add(lineWidth3, OFX_IM_HSLIDER);
+		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
+		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
 
 		//ui.EndWindowSpecial(bGui_3);
 		ui.EndWindowSpecial();
@@ -288,17 +308,13 @@ void ofApp::draw_SurfingWidgets_3()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_4()
 {
-	if (!bGui_4) return;
+	//if (!bGui_4) return;
+	//ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_FirstUseEver);
 
 	if (ui.BeginWindowSpecial(bGui_4))
 	{
 		ui.AddLabelBig("> Special \nWindow 4");
-		ui.AddGroup(params_3);
-		ui.AddSpacingSeparated();
-		ui.Add(size2, OFX_IM_HSLIDER_BIG);
-		ui.Add(lineWidth3, OFX_IM_HSLIDER);
-		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
-		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
+		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
 
 		//ui.EndWindowSpecial(bGui_4);
 		ui.EndWindowSpecial();
@@ -308,29 +324,15 @@ void ofApp::draw_SurfingWidgets_4()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_5()
 {
-	if (!bGui_5) return;
+	//if (!bGui_5) return;
+	//ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_FirstUseEver);
 
 	if (ui.BeginWindowSpecial(bGui_5))
 	{
 		ui.AddLabelBig("> Special \nWindow 5");
-		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
-
-		//ui.EndWindowSpecial(bGui_5);
-		ui.EndWindowSpecial();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_6()
-{
-	if (!bGui_6) return;
-
-	if (ui.BeginWindowSpecial(bGui_6))
-	{
-		ui.AddLabelBig("> Special \nWindow 6");
 		ui.Add(amount2, OFX_IM_KNOB);
 
-		//ui.EndWindowSpecial(bGui_6);
+		//ui.EndWindowSpecial(bGui_5);
 		ui.EndWindowSpecial();
 	}
 }
@@ -372,15 +374,15 @@ void ofApp::keyPressed(int key) {
 void ofApp::buildHelpInfo()
 {
 	helpInfo = "";
-	helpInfo += "HELP ofApp \n\n";
-	helpInfo += "13_SpecialWindowsAdvanced \n\n";
+	helpInfo += "11_SpecialWindowsAdvanced \n\n";
+	helpInfo += "\n";
 	helpInfo += "KEY COMMANDS \n\n";
 	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
 
 	if (bGui)
 	{
 		helpInfo += "\n\n";
-		helpInfo += "0      GLOBAL VISIBLE " + ofToString(ui.getGuiToggleGlobalState() ? "ON" : "OFF") + "\n";
+		helpInfo += "0      SHOW WINDOWS " + ofToString(ui.getGuiToggleGlobalState() ? "ON" : "OFF") + "\n";
 
 		if (ui.getGuiToggleGlobalState())
 		{
@@ -393,9 +395,6 @@ void ofApp::buildHelpInfo()
 			helpInfo += "6      WINDOW 6 " + ofToString(ui.getWindowSpecialVisibleState(5) ? "ON" : "OFF") + "\n";
 		}
 	}
-	helpInfo += "\n\n";
-	helpInfo += "DoubleClick to Edit/Lock \n";
-	helpInfo += "LeftClick + RightClick to Close \n";
 
 	// We can use an internal Help Manager on the Gui Manager
 	// Enabler toggle will be auto integrated in the common panels.

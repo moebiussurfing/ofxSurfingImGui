@@ -8,8 +8,8 @@ class MyClass
 public:
 
 	ofParameter<bool> bGui_1;
+	ofParameter<bool> bGui_1;
 	ofParameter<bool> bGui_2;
-	ofParameter<bool> bGui_3;
 
 	ofParameter<bool> b1;
 	ofParameter<bool> b2;
@@ -28,8 +28,8 @@ public:
 		bGui.set("MyClass", true); // all the gui
 
 		bGui_1.set("myClass Window A", true);
-		bGui_2.set("myClass Window B", true);
-		bGui_3.set("myClass Window C", true);
+		bGui_1.set("myClass Window B", true);
+		bGui_2.set("myClass Window C", true);
 
 		b1.set("b1", true);
 		b2.set("b2", true);
@@ -55,8 +55,8 @@ public:
 
 		// queue special windows
 		ui.addWindowSpecial(bGui_1);
-		ui.addWindowSpecial(bGui_2);
-		ui.addWindowSpecial(bGui_3, false);//disables auto resize mode
+		ui.addWindowSpecial(bGui_1);
+		ui.addWindowSpecial(bGui_2, false);//disables auto resize mode
 
 		// Can be omitted in most scenarios
 		ui.startup();
@@ -73,8 +73,8 @@ public:
 		////fix
 		//if (ofGetFrameNum() == 1) {
 		//	bGui_1 = true;
+		//	bGui_1 = true;
 		//	bGui_2 = true;
-		//	bGui_3 = true;
 		//}
 
 		if (!bGui) return;
@@ -122,7 +122,7 @@ public:
 
 			//--
 
-			if (ui.BeginWindowSpecial(bGui_2))
+			if (ui.BeginWindowSpecial(bGui_1))
 			{
 				ui.Add(b2, OFX_IM_TOGGLE_BIG);
 				ui.Add(b3, OFX_IM_TOGGLE_ROUNDED);
@@ -136,13 +136,13 @@ public:
 			//--
 
 			// make some constraints
-			if (bGui_3) 
+			if (bGui_2) 
 			{
 				ImVec2 size_min = ImVec2(100, 300);
 				ImVec2 size_max = ImVec2(1000, 1000);
 				ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 			}
-			if (ui.BeginWindowSpecial(bGui_3))
+			if (ui.BeginWindowSpecial(bGui_2))
 			{
 				ui.AddLabelBig("This a non auto resized window.");
 				ui.AddLabel("Distributed Toggles on a Responsive Layout of one column.");

@@ -1249,7 +1249,7 @@ namespace ofxImGuiSurfing
         vector<ImFont*> customFonts;
         vector<string> namesCustomFonts;
 
-        bool bIgnoreNextPopFont = false;
+        bool bFlagIgnoreNextPopStyleFont = false;
 
         void pushStyleFont(int index)
         {
@@ -1266,7 +1266,7 @@ namespace ofxImGuiSurfing
             }
             else
             {
-                bIgnoreNextPopFont = true; // workaround to avoid crashes
+                bFlagIgnoreNextPopStyleFont = true; // workaround to avoid crashes
             }
         }
 
@@ -1274,9 +1274,9 @@ namespace ofxImGuiSurfing
         {
             //TODO: will crash if not previously pushed..
             //workaround to avoid crashes
-            if (bIgnoreNextPopFont)
+            if (bFlagIgnoreNextPopStyleFont)
             {
-                bIgnoreNextPopFont = false;
+                bFlagIgnoreNextPopStyleFont = false;
 
                 return;
             }

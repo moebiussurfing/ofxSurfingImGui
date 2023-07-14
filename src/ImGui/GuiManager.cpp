@@ -1379,7 +1379,7 @@ void SurfingGuiManager::pushStyleFont(int index)
 	{
 		ofLogWarning("ofxSurfingImGui") << "SurfingGuiManager::pushStyleFont: index font out of range";
 
-		bIgnoreNextPopFont = true; // workaround flag last call to avoid crashes
+		bFlagIgnoreNextPopStyleFont = true; // workaround flag last call to avoid crashes
 	}
 }
 
@@ -1388,9 +1388,9 @@ void SurfingGuiManager::popStyleFont()
 {
 	//TODO: will crash if not pushed..
 	//workaround to avoid crashes
-	if (bIgnoreNextPopFont)
+	if (bFlagIgnoreNextPopStyleFont)
 	{
-		bIgnoreNextPopFont = false;
+		bFlagIgnoreNextPopStyleFont = false;
 
 		return;
 	}
@@ -2268,6 +2268,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Global Scale
+	if (customFonts.size() > 0)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		io.FontGlobalScale = globalScale;
@@ -2283,8 +2284,11 @@ void SurfingGuiManager::Begin()
 
 	// Reset font to default (#0).
 	// this clears all the push/pop queue.
-	setDefaultFont();
-	if (customFont != nullptr) ImGui::PushFont(customFont);
+	if (customFonts.size() > 0)
+	{
+		setDefaultFont();
+		if (customFont != nullptr) ImGui::PushFont(customFont);
+	}
 
 	//--
 
@@ -2405,11 +2409,10 @@ void SurfingGuiManager::End()
 
 	//TODO: could set the default font instead of Pop..
 	// bc that will be prophylactic if pushed too many fonts by error!
-#if 1
-	if (customFont != nullptr) ImGui::PopFont();
-#else
-	this->popStyleFont();
-#endif
+	if (customFonts.size() > 0)
+	{
+		if (customFont != nullptr) ImGui::PopFont();
+	}
 
 	//--
 
@@ -2612,7 +2615,7 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--

@@ -141,6 +141,11 @@ namespace ofxImGuiSurfing
 			bGui_Organizer = false;
 			bGui_Aligners = false;
 			bGui_SpecialWindows = false;
+
+			for (auto& p : windowsPanels)
+			{
+				p.bGui = false;
+			}
 		}
 
 		//--
@@ -1264,7 +1269,7 @@ namespace ofxImGuiSurfing
 			// Windows
 
 			//if (!bMinimized && bSpecialWindowsToo) 
-			if (bSpecialWindowsToo) 
+			if (bSpecialWindowsToo)
 			{
 				if (!bHideWindowsToggles)
 				{
@@ -1292,9 +1297,9 @@ namespace ofxImGuiSurfing
 									p.bGui = false;
 								}
 							}
-						}
 
-						ImGui::Spacing();
+							ImGui::Spacing();
+						}
 
 						//--
 
@@ -1319,6 +1324,8 @@ namespace ofxImGuiSurfing
 							ImGui::Spacing();
 						}
 					}
+
+					if (bGui_ShowWindowsGlobal) ofxImGuiSurfing::AddSpacingSeparated();
 				}
 			}
 
@@ -1326,16 +1333,14 @@ namespace ofxImGuiSurfing
 
 			if (bGui_ShowWindowsGlobal) {
 
-				ofxImGuiSurfing::AddSpacingSeparated();
-
 				// Linked
 				ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true); //blinking
-
-				ofxImGuiSurfing::AddSpacing();
 
 				if (bLinked)
 				{
 					// Orientation
+
+					ofxImGuiSurfing::AddSpacing();
 
 					//string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
 					//float h = 1.25 * ImGui::GetFrameHeight();

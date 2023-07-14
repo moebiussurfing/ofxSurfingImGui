@@ -13,6 +13,11 @@
 
 */
 
+//TODO: move keyboard commands to the addon
+//TODO: fix last two windows width made streach..
+
+//--
+
 //#define OF_APP_USE_CLASS
 
 #include "ofxSurfingImGui.h"
@@ -75,23 +80,23 @@ public:
     void draw_MainWindow();
 	
     // Non Special Window
-    void draw_SurfingWidgets_1(); 
+    void draw_SurfingWidgets_0(); 
     // This window will be handle without using special windows workflow, 
     // passing by name instead of passing the visible toggle param.
 
     // Special Windows
+	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
-	void draw_SurfingWidgets_4();
-    void draw_SurfingWidgets_5();
-	void draw_SurfingWidgets_6();
+    void draw_SurfingWidgets_4();
+	void draw_SurfingWidgets_5();
 
     // Visible toggles for the Special Windows
+    ofParameter<bool> bGui_1;
     ofParameter<bool> bGui_2;
     ofParameter<bool> bGui_3;
     ofParameter<bool> bGui_4;
     ofParameter<bool> bGui_5;
-    ofParameter<bool> bGui_6;
 
     // Help info
     void buildHelpInfo();
