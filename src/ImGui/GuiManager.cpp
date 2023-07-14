@@ -419,7 +419,8 @@ void SurfingGuiManager::setupInitiate()
 		//--
 
 		// Some internal settings
-		path_AppSettings = path_Global + nameLabel + "_UI_" + bGui_LayoutsPanels.getName() + ".json";
+		path_AppSettings = path_Global + nameLabel + "_UI_Internal.json";
+		//path_AppSettings = path_Global + nameLabel + "_UI_" + bGui_LayoutsPanels.getName() + ".json";
 		// this allow multiple add-ons instances with non shared settings.
 
 		params_AppSettings.add(params_Advanced);

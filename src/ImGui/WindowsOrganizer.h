@@ -1259,22 +1259,6 @@ namespace ofxImGuiSurfing
 			float _w1 = getWidgetsWidth(1);
 			float _w2 = getWidgetsWidth(2);
 
-			// Enable
-			ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true); //blinking
-
-			ofxImGuiSurfing::AddSpacing();
-
-			if (bLinked)
-			{
-				// Orientation
-				string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
-				float h = 1.25 * ImGui::GetFrameHeight();
-				float w = h * 1.55f;
-				ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-
-				ImGui::Spacing();
-			}
-
 			//--
 
 			// Windows
@@ -1282,8 +1266,6 @@ namespace ofxImGuiSurfing
 			if (!bMinimized && bSpecialWindowsToo) {
 				if (!bHideWindowsToggles)
 				{
-					ofxImGuiSurfing::AddSpacingSeparated();
-
 					ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
 					//ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
@@ -1317,7 +1299,7 @@ namespace ofxImGuiSurfing
 						// Global Enable 
 						ImGui::Spacing();
 						bool b = bGui_ShowWindowsGlobal;
-						if(!b) ofxImGuiSurfing::BeginBlinkText();
+						if (!b) ofxImGuiSurfing::BeginBlinkText();
 						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
 						if (!b) ofxImGuiSurfing::EndBlinkText();
 						ImGui::Spacing();
@@ -1340,133 +1322,158 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			// Aligners
+			if (bGui_ShowWindowsGlobal) {
 
-			if (bAlignersToo) {
 				ofxImGuiSurfing::AddSpacingSeparated();
 
-				if (ImGui::CollapsingHeader("ALIGNERS"))
+				// Linked
+				ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true); //blinking
+
+				ofxImGuiSurfing::AddSpacing();
+
+				if (bLinked)
 				{
-					drawWidgetsAligners();
+					// Orientation
+
+					//string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
+					//float h = 1.25 * ImGui::GetFrameHeight();
+					//float w = h * 1.55f;
+					////ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
+
+					ofxImGuiSurfing::AddToggleNamed(bOrientation, "VERTICAL", "HORIZONTAL");
+
+					//ImGui::Spacing();
 				}
-			}
 
-			//--
+				//--
 
-			// Settings
+				// Aligners
 
-			if (!bMinimized)
-			{
-				// Controls
-				{
+				if (bAlignersToo) {
 					ofxImGuiSurfing::AddSpacingSeparated();
 
-					ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
-
-					if (ImGui::CollapsingHeader("SETTINGS", _flagw))
+					if (ImGui::CollapsingHeader("ALIGNERS"))
 					{
-						ImGui::PushItemWidth(getPanelWidth() * 0.5f);
-						{
-							ofxImGuiSurfing::AddParameter(bHeaders);
+						drawWidgetsAligners();
+					}
+				}
 
-							bool bNoLabel = false;
-							bool bRaw = 0;
-							ofxImGuiSurfing::AddStepper(pad, bNoLabel, bRaw);
+				//--
 
-							ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
-							if (bAlignShapes)
-							{
-								ImGui::Indent();
-								if (bOrientation) //vertical
-									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
+				// Settings
 
-								if (!bOrientation) //horizontal
-									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
-								ImGui::Unindent();
-							}
-						}
-						ImGui::PopItemWidth();
-
-						//--
-
+				if (!bMinimized)
+				{
+					// Controls
+					{
 						ofxImGuiSurfing::AddSpacingSeparated();
 
-						// Debug
+						ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
-						ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
-						ImGui::Spacing();
-						if (bDebug)
+						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 						{
-							ImGui::Indent();
+							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
+							{
+								ofxImGuiSurfing::AddParameter(bHeaders);
 
+								bool bNoLabel = false;
+								bool bRaw = 0;
+								ofxImGuiSurfing::AddStepper(pad, bNoLabel, bRaw);
+
+								ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
+								if (bAlignShapes)
+								{
+									ImGui::Indent();
+									if (bOrientation) //vertical
+										ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
+
+									if (!bOrientation) //horizontal
+										ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
+									ImGui::Unindent();
+								}
+							}
+							ImGui::PopItemWidth();
+
+							//--
+
+							ofxImGuiSurfing::AddSpacingSeparated();
+
+							// Debug
+
+							ofxImGuiSurfing::AddToggleRoundedButton(bDebug);
 							ImGui::Spacing();
-							ImGui::TextWrapped("SPECIAL WINDOWS \n");
-							ofxImGuiSurfing::AddSpacingSeparated();
-							ImGui::Spacing();
-
-							// Anchor
-							std::string ss4 = "";
-							ss4 += "Anchor \n\n";
-							ss4 += ofToString(position_Anchor.get());
-							if (queueWindowsVisible.size() > 0)
+							if (bDebug)
 							{
-								int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
-								ss4 += "\n";
-								ss4 += "" + ofToString(id);
+								ImGui::Indent();
+
+								ImGui::Spacing();
+								ImGui::TextWrapped("SPECIAL WINDOWS \n");
+								ofxImGuiSurfing::AddSpacingSeparated();
+								ImGui::Spacing();
+
+								// Anchor
+								std::string ss4 = "";
+								ss4 += "Anchor \n\n";
+								ss4 += ofToString(position_Anchor.get());
+								if (queueWindowsVisible.size() > 0)
+								{
+									int id = queueWindowsVisible[0]; // first visible windows acts as anchor!
+									ss4 += "\n";
+									ss4 += "" + ofToString(id);
+								}
+
+								ImGui::TextWrapped("%s", ss4.c_str());
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								// Queue visible
+								std::string ss2 = "Queue Visible \n\n";
+								for (int i = 0; i < queueWindowsVisible.size(); i++)
+								{
+									if (i != 0) ss2 += ", ";
+									ss2 += ofToString(queueWindowsVisible[i]);
+								}
+								ImGui::TextWrapped("%s", ss2.c_str());
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								// All the panels
+								std::string ss1 = "";
+								int i = 0;
+								for (auto& p : windowsPanels)
+								{
+									ss1 += "" + ofToString(i) + "";
+									ss1 += "\n";
+									ss1 += "" + ofToString(p.bGui ? "ON" : "OFF");
+									ss1 += "\n";
+									//ss1 += "id_" + ofToString(p.id) + " ";
+									//ss1 += "pos_" + ofToString(p.indexPos);
+									//ss1 += "\n";
+									ss1 += ofToString(p.getRectangle());
+									ss1 += "\n\n";
+
+									i++;
+								}
+								ImGui::TextWrapped("%s", ss1.c_str());
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								// Windows
+								std::string ss5 = "All Windows \n\n";
+								for (int i = 0; i < windowsPanels.size(); i++)
+								{
+									if (i != 0) ss5 += ", ";
+									ss5 += ofToString(windowsPanels[i].id);
+								}
+								ImGui::TextWrapped("%s", ss5.c_str());
+								ofxImGuiSurfing::AddSpacingSeparated();
+
+								ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
+								ImGui::TextWrapped("%s", ss1.c_str());
+
+								ImGui::Unindent();
 							}
-
-							ImGui::TextWrapped("%s", ss4.c_str());
-							ofxImGuiSurfing::AddSpacingSeparated();
-
-							// Queue visible
-							std::string ss2 = "Queue Visible \n\n";
-							for (int i = 0; i < queueWindowsVisible.size(); i++)
-							{
-								if (i != 0) ss2 += ", ";
-								ss2 += ofToString(queueWindowsVisible[i]);
-							}
-							ImGui::TextWrapped("%s", ss2.c_str());
-							ofxImGuiSurfing::AddSpacingSeparated();
-
-							// All the panels
-							std::string ss1 = "";
-							int i = 0;
-							for (auto& p : windowsPanels)
-							{
-								ss1 += "" + ofToString(i) + "";
-								ss1 += "\n";
-								ss1 += "" + ofToString(p.bGui ? "ON" : "OFF");
-								ss1 += "\n";
-								//ss1 += "id_" + ofToString(p.id) + " ";
-								//ss1 += "pos_" + ofToString(p.indexPos);
-								//ss1 += "\n";
-								ss1 += ofToString(p.getRectangle());
-								ss1 += "\n\n";
-
-								i++;
-							}
-							ImGui::TextWrapped("%s", ss1.c_str());
-							ofxImGuiSurfing::AddSpacingSeparated();
-
-							// Windows
-							std::string ss5 = "All Windows \n\n";
-							for (int i = 0; i < windowsPanels.size(); i++)
-							{
-								if (i != 0) ss5 += ", ";
-								ss5 += ofToString(windowsPanels[i].id);
-							}
-							ImGui::TextWrapped("%s", ss5.c_str());
-							ofxImGuiSurfing::AddSpacingSeparated();
-
-							ss1 = "Callbacks " + ofToString(bDISABLE_CALLBACKS ? "OFF" : "ON");
-							ImGui::TextWrapped("%s", ss1.c_str());
-
-							ImGui::Unindent();
 						}
 					}
 				}
 			}
-
 		}
 
 		//--
