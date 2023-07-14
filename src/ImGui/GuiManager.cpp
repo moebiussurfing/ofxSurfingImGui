@@ -7,7 +7,6 @@ SurfingGuiManager::SurfingGuiManager()
 	// Simplify namespaces!
 	namespace ofxSurfingImGui = ofxImGuiSurfing;
 
-	path_Global = "Gui/";
 	// default path that will be used appended,
 	// or alone if setName(.. is not called!
 
@@ -345,30 +344,23 @@ void SurfingGuiManager::setupInitiate()
 	//----
 
 	//TODO: should be static to share same windows between all the ofxImGui instances
-	// Avoid multiple windows with same name with multi instnces..
-
-	// Too long names..
-	/*
-	// Customize common windows duplicated on when using multiple instances.
-	// that's to avoid overlapping contents when ImGui windows have the same name!
-	bGui_Aligners.setName(nameLabel + " ALIGNERS");
-	bGui_Organizer.setName(nameLabel + " ORGANIZER");
-	bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
-	*/
+	// Avoid multiple windows with same name with multi instances..
 
 #if 0
-	// Use first letter only
+	// Use first letter only to allow multiple instances full independent
 	bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
 	bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
 	bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
-#endif
-
+#else
 	//TODO: short names but could spread many windows when multi instances
 	bGui_Aligners.setName("ALIGNERS");
 	bGui_Organizer.setName("ORGANIZER");
 	bGui_SpecialWindows.setName("SPECIALW");
+#endif
 
 	//--
+
+	// WindowsOrganizer
 
 	// Aligners toggle
 	windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
@@ -389,14 +381,6 @@ void SurfingGuiManager::setupInitiate()
 
 	//--
 
-	////TODO: breaks serialization
-	////TODO: customize log window to allow multiple windows
-	//// with different names for bGui toggles too
-	//bLog.setName(nameLabel);
-	//log.setName(nameLabel);
-
-	//--
-
 	//TODO:
 	// When using docking/presets mode
 	// we force enable special windows by default
@@ -412,7 +396,7 @@ void SurfingGuiManager::setupInitiate()
 
 	//----
 
-	// Main initialization for ImGui object!
+	// Main initialization for ImGui object / context!
 
 	setupImGui();
 
@@ -424,12 +408,12 @@ void SurfingGuiManager::setupInitiate()
 		//path_Global = "Gui/";
 
 		// Layout Presets
-		path_ImLayouts = path_Global + "Presets/";
+		path_LayoutsImGui = path_Global + "Presets/";
 
 #if 0
 		// Create folders if required
 		CheckFolder(path_Global);
-		if (bUseLayoutPresetsManager) CheckFolder(path_ImLayouts);
+		if (bUseLayoutPresetsManager) CheckFolder(path_LayoutsImGui);
 #endif
 
 		//--
@@ -834,17 +818,17 @@ void SurfingGuiManager::resetUISettings()
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
+
+	windowsOrganizer.reset();
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::DrawWidgetsResetUI()
+void SurfingGuiManager::DrawWidgetsResetUI(bool bMenuMode)
 {
 	// Will remove imgui.ini and json settings
 
-	bool bMenu = 0;
-
 	//ui->BeginBlinkText();
-	if (bMenu) {
+	if (bMenuMode) {
 		if (this->MenuItemButton("Reset UI"))
 		{
 			resetUISettings();
@@ -1023,11 +1007,13 @@ void SurfingGuiManager::startup()
 	//setEnableHelpApp();
 	//setEnableHelpInternal();
 
+	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
+
+	refreshGlobalScaleNameComboIndex();
+
 	//--
 
 	bDoneStartup = true;
-
-	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
 }
 
 //----
@@ -2281,13 +2267,14 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Global Scale
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		io.FontGlobalScale = globalScale;
+		//io.scale= globalScale;
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.FontGlobalScale = globalScale;
-	//io.scale= globalScale;
-
-	// Global scale by Ctrl + mouse wheel:
-	io.FontAllowUserScaling = bGlobalScaleWheel;
+		// Global scale by Ctrl + mouse wheel:
+		io.FontAllowUserScaling = bGlobalScaleWheel;
+	}
 
 	//--
 
@@ -3723,12 +3710,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Global Scale
 	else if (name == globalScale.getName())
 	{
-		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
-		else if (globalScale.get() == 1.25f) scaleGlobalGroup.indexScaleGlobal = 2;
-		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 3;
-		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 4;
-		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 5;
-		else scaleGlobalGroup.indexScaleGlobal = 0;
+		refreshGlobalScaleNameComboIndex();
 		return;
 	}
 
@@ -4003,25 +3985,25 @@ void SurfingGuiManager::loadLayoutPreset(std::string path)
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutImGuiIni(std::string path)
 {
-	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_ImLayouts + path + ".ini", true).c_str());
+	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutImGuiIni(std::string path)
 {
-	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_ImLayouts + path + ".ini", true).c_str());
+	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutPresetGroup(std::string path)
 {
-	saveGroup(params_Layouts, path_ImLayouts + path + ".json");
+	saveGroup(params_Layouts, path_LayoutsImGui + path + ".json");
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutPresetGroup(std::string path)
 {
-	loadGroup(params_Layouts, path_ImLayouts + path + ".json");
+	loadGroup(params_Layouts, path_LayoutsImGui + path + ".json");
 }
 
 //----

@@ -50,10 +50,10 @@ void ofApp::setup_ImGui()
 	bGui.set("ofApp", true);
 
 	// Queue windows
+	ui.addWindowSpecial("myWindow 0");
 	ui.addWindowSpecial("myWindow 1");
 	ui.addWindowSpecial("myWindow 2");
 	ui.addWindowSpecial("myWindow 3");
-	ui.addWindowSpecial("myWindow 4");
 }
 
 //--------------------------------------------------------------
@@ -66,10 +66,10 @@ void ofApp::draw()
 		draw_MainWindow();
 
 		// special windows
+		draw_SurfingWidgets_0();
 		draw_SurfingWidgets_1();
 		draw_SurfingWidgets_2();
 		draw_SurfingWidgets_3();
-		draw_SurfingWidgets_4();
 	}
 	ui.End();
 }
@@ -83,9 +83,17 @@ void ofApp::draw_MainWindow() {
 	{
 		ui.AddLabelBig("> Hello \nfrom ofApp");
 		ui.AddSpacingSeparated();
+
+		// Optional: 
+		// Common internal useful toggles
 		ui.AddMinimizerToggle();
 		ui.AddAutoResizeToggle();
-		ui.AddSpacingSeparated();
+		ui.AddSpacingBigSeparated();
+
+		// Optional: 
+		ui.DrawWidgetsResetUI();
+		ui.DrawWidgetsGlobalScaleMini();
+		ui.AddSpacingBigSeparated();
 
 		// Optional: 
 		// Some internal useful common bool toggles are exposed:
@@ -99,15 +107,33 @@ void ofApp::draw_MainWindow() {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_1()
+void ofApp::draw_SurfingWidgets_0()
 {
 	if (ui.BeginWindowSpecial(0))
 	{
-		ui.AddLabelBig("> Special\nWindow 1");
+		ui.AddLabelBig("> Special\nWindow 0");
 		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
 		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		ui.AddGroup(params_0);
-		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+		if(bEnable0) ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS);// hide labels
+
+		ui.EndWindowSpecial();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw_SurfingWidgets_1()
+{
+	if (ui.BeginWindowSpecial(1))
+	{
+		ui.AddLabelBig("> Special\nWindow 1");
+		ui.AddGroup(params_1);
+		if (bEnable1) {
+			ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
+			ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
+		}
 
 		ui.EndWindowSpecial();
 	}
@@ -116,25 +142,9 @@ void ofApp::draw_SurfingWidgets_1()
 //--------------------------------------------------------------
 void ofApp::draw_SurfingWidgets_2()
 {
-	if (ui.BeginWindowSpecial(1))
-	{
-		ui.AddLabelBig("> Special\nWindow 2");
-		ui.AddGroup(params_1);
-		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		ui.Add(separation1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		ui.Add(shapeType1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
-		ui.Add(size1, OFX_IM_VSLIDER_NO_LABELS, 4);
-
-		ui.EndWindowSpecial();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_3()
-{
 	if (ui.BeginWindowSpecial(2))
 	{
-		ui.AddLabelBig("> Special\nWindow 3");
+		ui.AddLabelBig("> Special\nWindow 2");
 		ui.Add(shapeType2, OFX_IM_KNOB_TICKKNOB, 2, true);
 		ui.Add(amount2, OFX_IM_KNOB_DOTKNOB, 2);
 		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
@@ -146,17 +156,19 @@ void ofApp::draw_SurfingWidgets_3()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_4()
+void ofApp::draw_SurfingWidgets_3()
 {
 	if (ui.BeginWindowSpecial(3))
 	{
-		ui.AddLabelBig("> Special\nWindow 4");
+		ui.AddLabelBig("> Special\nWindow 3");
 		ui.AddGroup(params_3);
-		ui.AddSpacingSeparated();
-		ui.Add(size2, OFX_IM_HSLIDER_BIG);
-		ui.Add(lineWidth3, OFX_IM_HSLIDER);
-		ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
-		ui.Add(separation3, OFX_IM_HSLIDER_MINI);
+		if (bEnable3) {
+			ui.AddSpacingSeparated();
+			ui.Add(size2, OFX_IM_HSLIDER_BIG);
+			ui.Add(lineWidth3, OFX_IM_HSLIDER);
+			ui.Add(speed3, OFX_IM_HSLIDER_SMALL);
+			ui.Add(separation3, OFX_IM_HSLIDER_MINI);
+		}
 
 		ui.EndWindowSpecial();
 	}

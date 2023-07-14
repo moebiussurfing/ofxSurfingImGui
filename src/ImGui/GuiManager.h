@@ -2064,6 +2064,15 @@ private:
 		string getName() { return names[indexScaleGlobal]; }
 	};
 	ScaleGlobalGroup scaleGlobalGroup;
+
+	void refreshGlobalScaleNameComboIndex() {
+		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
+		else if (globalScale.get() == 1.25f) scaleGlobalGroup.indexScaleGlobal = 2;
+		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 3;
+		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 4;
+		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 5;
+		else scaleGlobalGroup.indexScaleGlobal = 0;
+	}
 public:
 	void DrawWidgetsGlobalScaleMini() {
 		this->AddSpacing();
@@ -2090,7 +2099,6 @@ public:
 		//s += "\n" + scaleGlobalGroup.getName();
 		this->AddTooltip(s);
 	}
-
 	void DrawWidgetsGlobalScale() {
 		this->AddSpacingBigSeparated();
 		string s;
@@ -2248,7 +2256,7 @@ public:
 	ofParameter<bool> bGui{ "Show Gui", true };
 	ofParameter<bool> bMinimize{"Minimize", true};
 	ofParameter<bool> bAutoResize{"Auto Resize", true};
-	ofParameter<bool> bGlobalScaleWheel{"Wheel Global Scale", false};
+	ofParameter<bool> bGlobalScaleWheel{"Global Scale Wheel", false};
 	ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
 	//float globalScalePre = 1;
 	ofParameter<bool> bKeys{"Keys", true};
@@ -3303,12 +3311,13 @@ private:
 private:
 	// File Settings
 	std::string path_Root = "";
-	std::string path_Global;
-	std::string path_ImLayouts;
+	std::string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+	std::string path_LayoutsImGui;
 	std::string path_AppSettings;
 	std::string path_LayoutSettings;
 
-	std::string nameLabel = "SurfingGui";
+	//std::string nameLabel = "SurfingGui";
+	std::string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
 
 	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
@@ -3350,67 +3359,11 @@ public:
 
 		// split possible instances on different folders
 		path_Root = nameLabel + "/";
-		path_Global = nameLabel + "/Gui/";
-
-#if 0
-		ofxImGuiSurfing::CheckFolder(path_Global);
-#endif
+		//path_Global = nameLabel + "/Gui/";
+		path_Global = nameLabel + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
 
 		// Useful toggles for internal Windows
 		windowsOrganizer.setPathGlobal(path_Global);
-
-		//--
-
-//		//TODO: should be static to share same windows between all the ofxImGui instances
-//		// Avoid multiple windows with same name with multi instances..
-//
-//		// Too long names..
-//		/*
-//		// Customize common windows duplicated on when using multiple instances.
-//		// that's to avoid overlapping contents when ImGui windows have the same name!
-//		bGui_Aligners.setName(nameLabel + " ALIGNERS");
-//		bGui_Organizer.setName(nameLabel + " ORGANIZER");
-//		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
-//		*/
-//
-//#if 0
-//		// Use first letter only
-//		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
-//		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
-//		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
-//#endif
-//
-//		//TODO: short names but could spread many windows when multi instances
-//		bGui_Aligners.setName("ALIGNERS");
-//		bGui_Organizer.setName("ORGANIZER");
-//		bGui_SpecialWindows.setName("SPECIALW");
-//
-//		//--
-//
-//		// Aligners toggle
-//		windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
-//
-//		// Link Organizer toggle
-//		windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
-//
-//		// Special Windows toggle
-//		windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
-//
-//		// Link both link toggles, local and the one inside the organizer object
-//		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
-//		//TODO: expose more params
-//		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
-//		windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
-//		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
-//		windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
-//
-//		//--
-//
-//		////TODO: breaks serialization
-//		////TODO: customize log window to allow multiple windows
-//		//// with different names for bGui toggles too
-//		//bLog.setName(nameLabel);
-//		//log.setName(nameLabel);
 	}
 
 	//--------------------------------------------------------------
@@ -3422,17 +3375,6 @@ public:
 	//--
 
 private:
-	// Hide to simplify
-
-	////--------------------------------------------------------------
-	//void setSettingsFilename(std::string path) { // must call before setup. To allow multiple instances/windows settings
-	//	nameLabel = path + "_";
-	//}
-
-	//////--------------------------------------------------------------
-	////void setSettingsPathLabel(std::string path) { // must call before setup. To allow multiple instances/windows settings
-	////	nameLabel = "_" + path;
-	////}
 
 	//--------------------------------------------------------------
 	void setAutoSaveSettings(bool b)
@@ -3645,19 +3587,6 @@ public:
 public:
 	int getPad() { return windowsOrganizer.pad; } //used pad between windows
 
-	//public:
-	//
-	//	//TODO: DEPRECATED
-	//	//--------------------------------------------------------------
-	//	void setNameWindowsSpecialsEnableGlobal(std::string name) {
-	//		windowsOrganizer.setNameWindowsSpecialsEnableGlobal(name);
-	//	}
-
-	////--------------------------------------------------------------
-	//void setName(std::string name) {
-	//	windowsOrganizer.setName(name);
-	//}
-
 public:
 	//--------------------------------------------------------------
 	void clearSpecialWindows()
@@ -3777,7 +3706,6 @@ public:
 	//--------------------------------------------------------------
 	void initiateWindowsOrganizer()
 	{
-		//windowsOrganizer.setPathGlobal(path_Global);
 		windowsOrganizer.setupInitiate();
 	}
 
@@ -4202,14 +4130,20 @@ public:
 		}
 
 		// Show Global
-		this->Add(windowsOrganizer.bGui_ShowWindowsGlobal, OFX_IM_TOGGLE_ROUNDED);
+		this->AddSpacing();
+		bool b = bGui_ShowWindowsGlobal;
+		if (!b) ofxImGuiSurfing::BeginBlinkText();
+		ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
+		if (!b) ofxImGuiSurfing::EndBlinkText();
+		this->AddSpacing();
 
 		// All toggles
 		if (windowsOrganizer.bGui_ShowWindowsGlobal)
 		{
 			ImGui::Indent();
 
-			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
+			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE);
+			//drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
 
 			ImGui::Unindent();
 		}
@@ -4384,7 +4318,7 @@ public:
 	//-
 
 	// Reset Settings
-	void DrawWidgetsResetUI();
+	void DrawWidgetsResetUI(bool bMenuMode = 0);
 	void resetUISettings();
 private:
 	bool bResetUIProgramed = false;
@@ -4479,7 +4413,7 @@ public:
 public:
 	ofParameter<bool> bGui_Menu{ "Menu", false };
 
-	ofParameter<bool> bLinked{"Link Windows", true}; // Align windows engine. liked to the internal aligner.
+	ofParameter<bool> bLinked{"Link Windows", false}; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
 	ofParameter<bool> bOrientation{"Orientation", false}; // false=horizontal. true=vertical
 	ofParameter<bool> bGui_ShowWindowsGlobal{"Show Windows", true}; // to force hide all windows or to show if visible

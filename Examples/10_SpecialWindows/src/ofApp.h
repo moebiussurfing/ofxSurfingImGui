@@ -68,8 +68,9 @@ public:
     // Toggle to show visible the window panel
 
     void draw_MainWindow();
+
+	void draw_SurfingWidgets_0();
 	void draw_SurfingWidgets_1();
 	void draw_SurfingWidgets_2();
 	void draw_SurfingWidgets_3();
-	void draw_SurfingWidgets_4();
 };

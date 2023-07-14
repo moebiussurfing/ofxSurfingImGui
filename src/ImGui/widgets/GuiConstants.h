@@ -82,6 +82,11 @@
 // Day Theme
 #define THEME_NAME_DAY "moebiusSurfingDay.ini"
 
+//--
+
+#define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
+#define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
+
 //----
 
 // Default Font
@@ -459,7 +464,7 @@ namespace ofxImGuiSurfing
 	// Group Style
 	//TODO: kind of deprecated? replace by SurfingGuiGroupStyle_Collapsed?
 	//it's used internally in some methods.. make it private?
-	///*
+	
 	//--------------------------------------------------------------
 	enum SurfingGuiTypesGroups
 	{
@@ -476,8 +481,7 @@ namespace ofxImGuiSurfing
 
 		OFX_IM_GROUP_NUM_TYPES
 	};
-	//*/
-
+	
 	//----
 
 	//TODO: 
