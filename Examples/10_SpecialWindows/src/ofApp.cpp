@@ -49,6 +49,11 @@ void ofApp::setup_ImGui()
 {
 	bGui.set("ofApp", true);
 
+	// Optional: 
+	// Customize name to avoid multiple instances collide.
+	// Will create sub folder into bin/data/myOfApp/Gui
+	ui.setName("myOfApp");
+
 	// Queue windows
 	ui.addWindowSpecial("myWindow 0");
 	ui.addWindowSpecial("myWindow 1");

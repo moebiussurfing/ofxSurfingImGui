@@ -3355,14 +3355,12 @@ public:
 		// Notice that each instance will have his own folder path for setting files! 
 		// This name will be used on the folder name too.
 		nameLabel = name;
-		windowsOrganizer.setName(nameLabel);
 
 		// split possible instances on different folders
 		path_Root = nameLabel + "/";
-		//path_Global = nameLabel + "/Gui/";
-		path_Global = nameLabel + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
 
-		// Useful toggles for internal Windows
+		windowsOrganizer.setName(nameLabel);
 		windowsOrganizer.setPathGlobal(path_Global);
 	}
 

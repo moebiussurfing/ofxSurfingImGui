@@ -181,7 +181,7 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// fails some windows?
 					// skip "non named" windows. usually menus.
-					const std::string prefix = "##";
+					const string prefix = "##";
 					if (n.substr(0, prefix.size()) == prefix) continue;
 
 					// skip log window (hardcoded name..)
@@ -238,7 +238,7 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// fails some windows?
 					// skip "non named" windows. usually menus.
-					const std::string prefix = "##";
+					const string prefix = "##";
 					if (n.substr(0, prefix.size()) == prefix) continue;
 
 					// skip log window (hardcoded name..)
@@ -336,23 +336,23 @@ namespace ofxImGuiSurfing
 		float width_max = 0;
 		float height_max = 0;
 
-		std::string path_Settings;
-		std::string pathSuffix = "UI_Organizer.json";
-		std::string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
-		std::string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
+		string path_Settings;
+		string pathSuffix = "UI_Organizer.json";
+		string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+		string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
 
 		bool bInitialized = false;
 		bool bDoneStartupDelayed = false;
 
 	public:
 		//--------------------------------------------------------------
-		void setName(std::string _name)
+		void setName(string _name)
 		{
 			this->nameLabel = _name;
 		}
 
 		//--------------------------------------------------------------
-		void setPathGlobal(std::string path)
+		void setPathGlobal(string path)
 		{
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::sePathGlobal:" << path;
 
@@ -406,7 +406,7 @@ namespace ofxImGuiSurfing
 		{
 			//if (bDISABLE_CALLBACKS) return;
 
-			std::string name = e.getName();
+			string name = e.getName();
 
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Settings: " << name << " : " << e;
 
@@ -474,7 +474,7 @@ namespace ofxImGuiSurfing
 
 			bDISABLE_CALLBACKS = true; // Now is attending here..
 
-			std::string name = e.getName();
+			string name = e.getName();
 
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Enablers: " << name << " : " << e;
 
@@ -688,7 +688,7 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// fails some windows?
 					// skip "non named" windows. usually menus.
-					const std::string prefix = "##";
+					const string prefix = "##";
 					if (n.substr(0, prefix.size()) == prefix) continue;
 
 					// skip log window (hardcoded name..)
@@ -788,7 +788,7 @@ namespace ofxImGuiSurfing
 					//TODO:
 					// fails some windows?
 					// skip "non named" windows. usually menus.
-					const std::string prefix = "##";
+					const string prefix = "##";
 					if (n.substr(0, prefix.size()) == prefix) continue;
 
 					// skip Log window (hardcoded name..)
@@ -1169,7 +1169,7 @@ namespace ofxImGuiSurfing
 
 	public:
 		//--------------------------------------------------------------
-		void setNameWindowsSpecialsEnableGlobal(std::string name)
+		void setNameWindowsSpecialsEnableGlobal(string name)
 		{
 			bGui_ShowWindowsGlobal.setName(name);
 		}
@@ -1263,7 +1263,9 @@ namespace ofxImGuiSurfing
 
 			// Windows
 
-			if (!bMinimized && bSpecialWindowsToo) {
+			//if (!bMinimized && bSpecialWindowsToo) 
+			if (bSpecialWindowsToo) 
+			{
 				if (!bHideWindowsToggles)
 				{
 					ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
@@ -1412,7 +1414,7 @@ namespace ofxImGuiSurfing
 								ImGui::Spacing();
 
 								// Anchor
-								std::string ss4 = "";
+								string ss4 = "";
 								ss4 += "Anchor \n\n";
 								ss4 += ofToString(position_Anchor.get());
 								if (queueWindowsVisible.size() > 0)
@@ -1426,7 +1428,7 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								// Queue visible
-								std::string ss2 = "Queue Visible \n\n";
+								string ss2 = "Queue Visible \n\n";
 								for (int i = 0; i < queueWindowsVisible.size(); i++)
 								{
 									if (i != 0) ss2 += ", ";
@@ -1436,7 +1438,7 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								// All the panels
-								std::string ss1 = "";
+								string ss1 = "";
 								int i = 0;
 								for (auto& p : windowsPanels)
 								{
@@ -1456,7 +1458,7 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								// Windows
-								std::string ss5 = "All Windows \n\n";
+								string ss5 = "All Windows \n\n";
 								for (int i = 0; i < windowsPanels.size(); i++)
 								{
 									if (i != 0) ss5 += ", ";

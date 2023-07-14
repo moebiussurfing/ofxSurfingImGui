@@ -2669,7 +2669,7 @@ bool SurfingGuiManager::BeginWindowSpecial(string name)
 bool SurfingGuiManager::BeginWindowSpecial(int index)
 {
 	//TODO:
-	// workflow
+	// workflow helper
 	_indexLastBegin = index;
 
 	//--
@@ -2677,17 +2677,14 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	// Skip if there's no queued special windows
 	if (index > windows.size() - 1 || index == -1)
 	{
-		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << " Out of range index for queued windows, " << index;
+		ofLogError("ofxSurfingImGui") << "BeginWindowSpecial: Out of range index for queued windows, " << index;
 		return false;
 	}
 
 	//--
 
-	//TODO:
 	// Skip window if hidden
-	// (bGui = false)
-	if (!windows[index].bGui.get())
-		return false;
+	if (!windows[index].bGui.get()) return false;
 
 	//--
 
@@ -2723,11 +2720,14 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 
 	// Auto resize
 
-	// global
-	//if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
-
+#if 1
+	// Globally settled
+	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
+#else
+	// Per window
 	if (windows[index].bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
 	// independent for each window
+#endif
 
 	//--
 
