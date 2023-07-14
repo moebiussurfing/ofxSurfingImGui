@@ -2337,7 +2337,7 @@ void SurfingGuiManager::Begin()
 
 	// 3. Aligners
 
-	if (bGui_Aligners) drawWindowAlignHelpers();
+	if (bGui_Aligners) drawWindowAligners();
 
 #ifndef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger) ImGui::ShowMetricsWindow();

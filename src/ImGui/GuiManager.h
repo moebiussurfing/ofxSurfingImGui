@@ -3554,7 +3554,7 @@ public:
 
 			windowsOrganizer.drawWidgetsOrganizer(bMinimize, !bGui_Aligners, !bGui_SpecialWindows);
 
-			EndWindow();
+			this->EndWindow();
 		}
 	}
 
@@ -3566,7 +3566,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowAlignHelpers()
+	void drawWindowAligners()
 	{
 		if (bGui_Aligners) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
@@ -3575,15 +3575,15 @@ public:
 			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			this->AddSpacingSeparated();
 
-			windowsOrganizer.drawWidgetsAlignHelpers(bMinimize);
+			windowsOrganizer.drawWidgetsAligners(bMinimize);
 
-			if (!bMinimize)
+			if (!bMinimize && !bGui_Organizer)
 			{
 				this->AddSpacing();
 				this->Add(windowsOrganizer.pad, OFX_IM_STEPPER);
 			}
 
-			EndWindow();
+			this->EndWindow();
 		}
 	}
 
@@ -3681,7 +3681,7 @@ public:
 	//ui.addWindowSpecial(..
 	//ui.addWindowSpecial(..
 	//ui.startup();
-	 
+
 	//--------------------------------------------------------------
 	void addWindowSpecial(ofParameter<bool>& _bGui, bool _bAutoResize = true, bool _bMaster = false)
 	{

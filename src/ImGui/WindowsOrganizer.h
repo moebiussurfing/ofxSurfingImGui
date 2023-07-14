@@ -1228,7 +1228,7 @@ namespace ofxImGuiSurfing
 		//----
 
 		//--------------------------------------------------------------
-		void drawWidgetsAlignHelpers(bool bMinimized = false)
+		void drawWidgetsAligners(bool bMinimized = false)
 		{
 			ofxImGuiSurfing::AddSpacing();
 			ofxImGuiSurfing::AddBigButton(bAlignWindowsReset);
@@ -1272,7 +1272,7 @@ namespace ofxImGuiSurfing
 
 				if (ImGui::CollapsingHeader("ALIGNERS"))
 				{
-					drawWidgetsAlignHelpers();
+					drawWidgetsAligners();
 				}
 			}
 

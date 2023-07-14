@@ -81,23 +81,18 @@ void ofApp::draw_MainWindow() {
 	// not an special window nor their features.
 	if (ui.BeginWindow(bGui))
 	{
-		/* Put ImGui widgets here! */
-		
-		ui.AddLabelBig("> Hello from ofApp");
+		ui.AddLabelBig("> Hello \nfrom ofApp");
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
 		ui.AddAutoResizeToggle();
 		ui.AddSpacingSeparated();
 
-
 		// Optional: 
 		// Some internal useful common bool toggles are exposed:
 		// the main window who contains almost all the others.
-		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED); 
-		if (ui.isMaximized()) {
-			ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
-			ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
-		}
+		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED);
+		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
 
 		ui.EndWindow();
 	}
@@ -168,13 +163,13 @@ void ofApp::draw_SurfingWidgets_4()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key) 
+void ofApp::keyPressed(int key)
 {
 	if (key == 'g') bGui = !bGui;
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() 
+void ofApp::exit()
 {
 	ui.save();
 }
