@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetWindowPosition(-1920, 25);
+
 	ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
 
 	// Parameters
@@ -46,17 +48,6 @@ void ofApp::setupParams()
 void ofApp::setup_ImGui()
 {
 	bGui.set("ofApp", true);
-
-	// NOTE:
-	// Setup, and Startup is auto called when addWindowsSpecial is called!
-	// We can omit them to speed up initialization.
-	// FYI
-	// The internal steps are:
-	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-	//ui.setup();
-	//ui.addWindowSpecial(..
-	//ui.addWindowSpecial(..
-	//ui.startup();
 
 	// Queue windows
 	ui.addWindowSpecial("myWindow 1");
@@ -149,8 +140,8 @@ void ofApp::draw_SurfingWidgets_3()
 	if (ui.BeginWindowSpecial(2))
 	{
 		ui.AddLabelBig("> Special\nWindow 3");
-		ui.Add(shapeType2, OFX_IM_KNOB, 2, true);
-		ui.Add(amount2, OFX_IM_KNOB, 2);
+		ui.Add(shapeType2, OFX_IM_KNOB_TICKKNOB, 2, true);
+		ui.Add(amount2, OFX_IM_KNOB_DOTKNOB, 2);
 		ui.Add(size2, OFX_IM_VSLIDER_NO_LABELS);
 		ui.AddSpacingBigSeparated();
 		ui.AddGroup(params_2);
@@ -180,4 +171,10 @@ void ofApp::draw_SurfingWidgets_4()
 void ofApp::keyPressed(int key) 
 {
 	if (key == 'g') bGui = !bGui;
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() 
+{
+	ui.save();
 }

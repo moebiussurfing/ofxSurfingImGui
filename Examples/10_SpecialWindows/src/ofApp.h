@@ -21,13 +21,13 @@
 class ofApp : public ofBaseApp
 {
 public:
-    
     void setup();
     void setupParams();
     void draw();
 	void keyPressed(int key);
+    void exit();
 
-	//-
+	//--
 
     // Parameters
     
@@ -64,7 +64,8 @@ public:
 	ofxSurfingGui ui;
 
 	void setup_ImGui();
-    ofParameter<bool> bGui; // Toggle to show visible the window panel
+    ofParameter<bool> bGui; 
+    // Toggle to show visible the window panel
 
     void draw_MainWindow();
 	void draw_SurfingWidgets_1();

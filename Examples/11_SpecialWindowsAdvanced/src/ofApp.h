@@ -13,9 +13,13 @@
 
 */
 
+//#define OF_APP_USE_CLASS
 
 #include "ofxSurfingImGui.h"
+
+#ifdef OF_APP_USE_CLASS
 #include "myClass.h"
+#endif
 
 class ofApp : public ofBaseApp
 {
@@ -24,6 +28,7 @@ public:
     void setup();
     void setupParams();
     void draw();
+    void exit();
 	void keyPressed(int key);
 
 	//--
@@ -94,6 +99,8 @@ public:
 
     //--
 
+#ifdef OF_APP_USE_CLASS
     // Another ImGui "context" is running inside!
     MyClass myClassObject;
+#endif
 };

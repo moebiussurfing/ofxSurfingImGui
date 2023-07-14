@@ -187,13 +187,13 @@ void SurfingGuiManager::setupParams() {
 	params_ModulesWindows.add(params_Modules);
 
 	params_Advanced.add(params_ModulesWindows);
-	
+
 	//--
-		
+
 	// Windows
 
 	//TODO:
-	params_Windows.add(bReset); 
+	params_Windows.add(bReset);
 	params_Windows.add(bReset_Window);
 	params_Windows.add(bLockMove);
 	params_Windows.add(bNoScroll);
@@ -329,7 +329,7 @@ void SurfingGuiManager::setupInitiate()
 		return;
 	}
 
-	//--
+	//----
 
 	// MouseWheel link
 	_ui.bMouseWheel.makeReferenceTo(bMouseWheel);
@@ -341,6 +341,59 @@ void SurfingGuiManager::setupInitiate()
 	// Minimizes link
 	bMinimize_Presets.makeReferenceTo(bMinimize);
 	//bMinimize_Panels.makeReferenceTo(bMinimize);
+
+	//----
+
+	//TODO: should be static to share same windows between all the ofxImGui instances
+	// Avoid multiple windows with same name with multi instnces..
+
+	// Too long names..
+	/*
+	// Customize common windows duplicated on when using multiple instances.
+	// that's to avoid overlapping contents when ImGui windows have the same name!
+	bGui_Aligners.setName(nameLabel + " ALIGNERS");
+	bGui_Organizer.setName(nameLabel + " ORGANIZER");
+	bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
+	*/
+
+#if 0
+	// Use first letter only
+	bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
+	bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
+	bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
+#endif
+
+	//TODO: short names but could spread many windows when multi instances
+	bGui_Aligners.setName("ALIGNERS");
+	bGui_Organizer.setName("ORGANIZER");
+	bGui_SpecialWindows.setName("SPECIALW");
+
+	//--
+
+	// Aligners toggle
+	windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
+
+	// Link Organizer toggle
+	windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
+
+	// Special Windows toggle
+	windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
+
+	// Link both link toggles, local and the one inside the organizer object
+	windowsOrganizer.bLinked.makeReferenceTo(bLinked);
+	//TODO: expose more params
+	windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
+	windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
+	windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
+	windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
+
+	//--
+
+	////TODO: breaks serialization
+	////TODO: customize log window to allow multiple windows
+	//// with different names for bGui toggles too
+	//bLog.setName(nameLabel);
+	//log.setName(nameLabel);
 
 	//--
 
@@ -357,13 +410,13 @@ void SurfingGuiManager::setupInitiate()
 		this->addExtraParamToLayoutPresets(bLinked);
 	}
 
-	//--
+	//----
 
 	// Main initialization for ImGui object!
 
 	setupImGui();
 
-	//--
+	//----
 
 	// Settings
 	{
@@ -664,7 +717,7 @@ void SurfingGuiManager::setupImGui()
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
-	if(bMouseCursorFromImGui) ofHideCursor();
+	if (bMouseCursorFromImGui) ofHideCursor();
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
@@ -974,7 +1027,7 @@ void SurfingGuiManager::startup()
 
 	bDoneStartup = true;
 
-	//windowsOrganizer.bGui_Global = true;
+	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
 }
 
 //----
@@ -1149,8 +1202,8 @@ void SurfingGuiManager::setDefaultFontIndex(int index)
 {
 	if (customFonts.size() == 0) return;
 
-	currFont = ofClamp(index, 0, customFonts.size() - 1);
-	customFont = customFonts[currFont];
+	indexCurrFont = ofClamp(index, 0, customFonts.size() - 1);
+	customFont = customFonts[indexCurrFont];
 }
 
 //--------------------------------------------------------------
@@ -1217,7 +1270,7 @@ bool SurfingGuiManager::addFontStyle(std::string path, float size, string label)
 		{
 			customFonts.push_back(_customFont);
 			customFont = _customFont;
-			currFont = customFonts.size() - 1;
+			indexCurrFont = customFonts.size() - 1;
 
 			namesCustomFonts.push_back(label);
 			fontIndex.setMax(namesCustomFonts.size() - 1);
@@ -2185,7 +2238,7 @@ void SurfingGuiManager::Begin()
 	// Check that it's property initialized!
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED)
 	{
-		ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" <<
+		ofLogError("ofxSurfingImGui") << "Begin()" << "\n" <<
 			("Initialization was not done properly. \nCheck the examples / documentation.");
 
 		return;
@@ -2232,7 +2285,7 @@ void SurfingGuiManager::Begin()
 	ImGuiIO& io = ImGui::GetIO();
 	io.FontGlobalScale = globalScale;
 	//io.scale= globalScale;
-	
+
 	// Global scale by Ctrl + mouse wheel:
 	io.FontAllowUserScaling = bGlobalScaleWheel;
 
@@ -2240,14 +2293,10 @@ void SurfingGuiManager::Begin()
 
 	// Font
 
-	// Reset font to default.
+	// Reset font to default (#0).
 	// this clears all the push/pop queue.
-#if 1
 	setDefaultFont();
 	if (customFont != nullptr) ImGui::PushFont(customFont);
-#else
-	this->pushStyleFont(OFX_IM_FONT_DEFAULT);
-#endif
 
 	//--
 
@@ -2545,7 +2594,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = NULL,
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
-	ImGuiCond cond = ImGuiCond_None;
+	//ImGuiCond cond = ImGuiCond_None;
 
 	//TODO:
 	//if (bLockMove) window_flags |= ImGuiWindowFlags_NoMove;
@@ -2567,9 +2616,16 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 
 	//--
 
-	// Default constraints
-	//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
-	//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL;
+#if 0 // 0 to let user to control externally
+	if (p_open) {
+		// Default constraints
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_SMALL;
+
+		// Default size
+		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
+	}
+#endif
 
 	//--
 
@@ -2654,7 +2710,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
 		// All can be disabled by the Global toggle
-		if (!windowsOrganizer.bGui_Global.get()) return false;
+		if (!windowsOrganizer.bGui_ShowWindowsGlobal.get()) return false;
 
 		//--
 
@@ -2811,7 +2867,7 @@ void SurfingGuiManager::EndWindowSpecial(int index)
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		if (!windowsOrganizer.bGui_Global.get()) return;
+		if (!windowsOrganizer.bGui_ShowWindowsGlobal.get()) return;
 	}
 
 	//--

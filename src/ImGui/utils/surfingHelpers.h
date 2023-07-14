@@ -10,7 +10,17 @@
 #include <iostream>
 using namespace std;
 
+// This methods are copied from ofxSurfingHelpers.
+// That's to avoid same repeated names collide.
 //namespace ofxSurfingHelpers//TODO:
+/*
+#include "surfingHelpers.h"
+#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
+namespace ofxSurfingHelpers = ofxImGuiSurfing;
+#endif
+*/
+
+
 namespace ofxImGuiSurfing
 {
 	// Monitors helpers

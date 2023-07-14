@@ -69,10 +69,10 @@ void ofApp::setupParams()
 //--------------------------------------------------------------
 void ofApp::setup_ImGui()
 {
-	// Optional >
+	// Optional:
 	// Like it's happening here:
 	// Recommended to set a name when using multiple instances of the Gui Manager!
-	ui.setName("ofApp");
+	//ui.setName("ofApp");
 
 	//--
 
@@ -101,7 +101,8 @@ void ofApp::setup_ImGui()
 	ui.addWindowSpecial(bGui_6);
 
 	//--
-	 
+
+#ifdef OF_APP_USE_CLASS
 	myClassObject.setupImGui();
 
 	//// OPTIONAL
@@ -109,6 +110,10 @@ void ofApp::setup_ImGui()
 	//// to group on the toggles too
 	//// we do not use BeginWindowSpecial/EndWindowSpecial methods.
 	//ui.addWindowSpecial(myClassObject.bGui);
+#endif
+
+
+	//ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -135,6 +140,8 @@ void ofApp::draw()
 
 	// Another ImGui instance / context
 	
+
+#ifdef OF_APP_USE_CLASS
 	//if (1)
 	//{
 	//	//TODO:
@@ -148,7 +155,8 @@ void ofApp::draw()
 	//	//myClassObject.ui.windowsOrganizer.runShapeState(index);
 	//}
 
-	myClassObject.draw();
+	//myClassObject.draw();
+#endif
 }
 
 //--------------------------------------------------------------
@@ -165,6 +173,8 @@ void ofApp::draw_MainWindow() {
 					when using Special Windows mode.");
 		ui.AddSpacing();
 
+		ui.Add(ui.bLinked, OFX_IM_TOGGLE_ROUNDED_SMALL);
+		ui.AddSpacing();
 		ui.Add(ui.bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_SMALL);
 		ui.Add(ui.bGui_Aligners, OFX_IM_TOGGLE_ROUNDED_MINI);
 		ui.Add(ui.bGui_SpecialWindows, OFX_IM_TOGGLE_ROUNDED_MINI);
@@ -184,8 +194,10 @@ void ofApp::draw_MainWindow() {
 			Then we can combine multiple classes/add-ons without colliding their ImGui windows.");
 		ui.AddSpacingBig();
 
-		ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
-		ui.AddSpacing();
+#ifdef OF_APP_USE_CLASS
+		//ui.Add(myClassObject.bGui, OFX_IM_TOGGLE_ROUNDED_BIG);
+		//ui.AddSpacing();
+
 		if (myClassObject.bGui) {
 			ui.Indent();
 			ui.Add(myClassObject.bGui_1);
@@ -193,6 +205,7 @@ void ofApp::draw_MainWindow() {
 			ui.Add(myClassObject.bGui_3);
 			ui.Unindent();
 		}
+#endif
 		ui.AddSpacingSeparated();
 
 		//-
@@ -386,5 +399,10 @@ void ofApp::buildHelpInfo()
 
 	// We can use an internal Help Manager on the Gui Manager
 	// Enabler toggle will be auto integrated in the common panels.
-	ui.setHelpInfoApp(helpInfo);
+	ui.setHelpAppText(helpInfo);
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+	ui.save();
 }

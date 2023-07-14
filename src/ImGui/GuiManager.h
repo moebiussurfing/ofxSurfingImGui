@@ -21,7 +21,12 @@
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
+
 #include "surfingHelpers.h"
+#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
+namespace ofxSurfingHelpers = ofxImGuiSurfing;
+#endif
+
 #include "HelpTextWidget.h"
 #include "Combos.h"
 
@@ -1993,7 +1998,7 @@ public:
 	bool addFontStyle(std::string path, float size, string label = "");
 
 private:
-	int currFont = 0;
+	int indexCurrFont = 0;
 	//TODO: load font on runtime
 	//void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
 	//void openFontFileDialog(int size = 10); //opens file dialog window to pick a font file, passing the desired size.
@@ -3356,56 +3361,56 @@ public:
 
 		//--
 
-		//TODO: should be static to share same windows between all the ofxImGui instances
-		// Avoid multiple windows with same name with multi instnces..
-
-		// Too long names..
-		/*
-		// Customize common windows duplicated on when using multiple instances.
-		// that's to avoid overlapping contents when ImGui windows have the same name!
-		bGui_Aligners.setName(nameLabel + " ALIGNERS");
-		bGui_Organizer.setName(nameLabel + " ORGANIZER");
-		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
-		*/
-
-#if 0
-		// Use first letter only
-		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
-		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
-		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
-#endif
-
-		//TODO: short names but could spread many windows when multi instances
-		bGui_Aligners.setName("ALIGNERS");
-		bGui_Organizer.setName("ORGANIZER");
-		bGui_SpecialWindows.setName("SPECIALW");
-
-		//--
-
-		// Aligners toggle
-		windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
-
-		// Link Organizer toggle
-		windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
-
-		// Special Windows toggle
-		windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
-
-		// Link both link toggles, local and the one inside the organizer object
-		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
-		//TODO: expose more params
-		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
-		windowsOrganizer.bGui_Global.makeReferenceTo(bGui_Global);
-		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
-		windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
-
-		//--
-
-		////TODO: breaks serialization
-		////TODO: customize log window to allow multiple windows
-		//// with different names for bGui toggles too
-		//bLog.setName(nameLabel);
-		//log.setName(nameLabel);
+//		//TODO: should be static to share same windows between all the ofxImGui instances
+//		// Avoid multiple windows with same name with multi instances..
+//
+//		// Too long names..
+//		/*
+//		// Customize common windows duplicated on when using multiple instances.
+//		// that's to avoid overlapping contents when ImGui windows have the same name!
+//		bGui_Aligners.setName(nameLabel + " ALIGNERS");
+//		bGui_Organizer.setName(nameLabel + " ORGANIZER");
+//		bGui_SpecialWindows.setName(nameLabel + " SPECIALW");
+//		*/
+//
+//#if 0
+//		// Use first letter only
+//		bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
+//		bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
+//		bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
+//#endif
+//
+//		//TODO: short names but could spread many windows when multi instances
+//		bGui_Aligners.setName("ALIGNERS");
+//		bGui_Organizer.setName("ORGANIZER");
+//		bGui_SpecialWindows.setName("SPECIALW");
+//
+//		//--
+//
+//		// Aligners toggle
+//		windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
+//
+//		// Link Organizer toggle
+//		windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
+//
+//		// Special Windows toggle
+//		windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
+//
+//		// Link both link toggles, local and the one inside the organizer object
+//		windowsOrganizer.bLinked.makeReferenceTo(bLinked);
+//		//TODO: expose more params
+//		windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
+//		windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
+//		windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
+//		windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
+//
+//		//--
+//
+//		////TODO: breaks serialization
+//		////TODO: customize log window to allow multiple windows
+//		//// with different names for bGui toggles too
+//		//bLog.setName(nameLabel);
+//		//log.setName(nameLabel);
 	}
 
 	//--------------------------------------------------------------
@@ -3540,14 +3545,14 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowOrganizer() // Draws the main panel controller.
 	{
-		if (bGui_Organizer) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		if (bGui_Organizer) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
 		if (BeginWindow(bGui_Organizer))
 		{
-			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			AddSpacingSeparated();
+			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			this->AddSpacingSeparated();
 
-			windowsOrganizer.drawWidgetsOrganizer(bMinimize);
+			windowsOrganizer.drawWidgetsOrganizer(bMinimize, !bGui_Aligners, !bGui_SpecialWindows);
 
 			EndWindow();
 		}
@@ -3563,20 +3568,19 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowAlignHelpers()
 	{
-		if (bGui_Aligners) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		if (bGui_Aligners) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
 		if (BeginWindow(bGui_Aligners))
 		{
-			Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			AddSpacingSeparated();
+			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			this->AddSpacingSeparated();
 
 			windowsOrganizer.drawWidgetsAlignHelpers(bMinimize);
 
 			if (!bMinimize)
 			{
-				AddSpacing();
-				ofxImGuiSurfing::AddStepper(windowsOrganizer.pad);
-				//ofxImGuiSurfing::AddStepperInt(windowsOrganizer.pad);
+				this->AddSpacing();
+				this->Add(windowsOrganizer.pad, OFX_IM_STEPPER);
 			}
 
 			EndWindow();
@@ -3586,12 +3590,12 @@ public:
 	//TODO: DEPRECATED
 	////--------------------------------------------------------------
 	//bool getGuiToggleGlobal() {
-	//	return windowsOrganizer.bGui_Global.get();
+	//	return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	//}
 	//--------------------------------------------------------------
 	bool getGuiToggleGlobalState() const
 	{
-		return windowsOrganizer.bGui_Global.get();
+		return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	}
 
 	//--
@@ -3667,6 +3671,17 @@ public:
 		return specialsWindowsMode;
 	}
 
+	// NOTE:
+	// Setup, and Startup is auto called when addWindowsSpecial is called!
+	// We can omit them to speed up initialization.
+	// FYI
+	// The internal steps are:
+	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	//ui.setup();
+	//ui.addWindowSpecial(..
+	//ui.addWindowSpecial(..
+	//ui.startup();
+	 
 	//--------------------------------------------------------------
 	void addWindowSpecial(ofParameter<bool>& _bGui, bool _bAutoResize = true, bool _bMaster = false)
 	{
@@ -3776,7 +3791,7 @@ private:
 	ofParameter<bool>& getGuiToggleGlobal()
 	{
 		// global toggle to show/hide the all panels
-		return windowsOrganizer.bGui_Global;
+		return windowsOrganizer.bGui_ShowWindowsGlobal;
 	}
 
 	//--------------------------------------------------------------
@@ -4187,10 +4202,10 @@ public:
 		}
 
 		// Show Global
-		this->Add(windowsOrganizer.bGui_Global, OFX_IM_TOGGLE_ROUNDED);
+		this->Add(windowsOrganizer.bGui_ShowWindowsGlobal, OFX_IM_TOGGLE_ROUNDED);
 
 		// All toggles
-		if (windowsOrganizer.bGui_Global)
+		if (windowsOrganizer.bGui_ShowWindowsGlobal)
 		{
 			ImGui::Indent();
 
@@ -4207,6 +4222,9 @@ public:
 	//--------------------------------------------------------------
 	void drawWindowSpecialWindows()
 	{
+		if (bGui_SpecialWindows) {
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
+		}
 		if (BeginWindow(bGui_SpecialWindows))
 		{
 			this->AddLabelBig("Special \nWindows", false);
@@ -4221,7 +4239,7 @@ public:
 	//--------------------------------------------------------------
 	void setWindowSpecialToggleVisibleAllGlobal()
 	{
-		windowsOrganizer.bGui_Global = !windowsOrganizer.bGui_Global;
+		windowsOrganizer.bGui_ShowWindowsGlobal = !windowsOrganizer.bGui_ShowWindowsGlobal;
 	}
 
 	//--------------------------------------------------------------
@@ -4464,8 +4482,8 @@ public:
 	ofParameter<bool> bLinked{"Link Windows", true}; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
 	ofParameter<bool> bOrientation{"Orientation", false}; // false=horizontal. true=vertical
-	ofParameter<bool> bGui_Global{"Show Windows", true}; // to force hide all windows or to show if visible
-	//ofParameter<bool> bGui_Global{"Show Global", true}; // to force hide all windows or to show if visible
+	ofParameter<bool> bGui_ShowWindowsGlobal{"Show Windows", true}; // to force hide all windows or to show if visible
+	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true}; // to force hide all windows or to show if visible
 	ofParameter<bool> bAlignWindowsReset{"Reset", false};
 	ofParameter<bool> bAlignWindowsCascade{"Cascade", false};
 
