@@ -432,7 +432,7 @@ namespace ofxImGuiSurfing
 		// Hidden windows are removed from here!
 		std::vector<int> queueWindowsVisible;
 
-		ofParameterGroup params_WindowsPanels{ "SpecialWindows" };
+		ofParameterGroup params_WindowsPanels{ "Windows" };
 		ofParameterGroup params_AppSettings{ "Organizer" };
 
 		bool bHideWindowsToggles = false; //-> To disable when using the full layout engine. 
@@ -455,7 +455,7 @@ namespace ofxImGuiSurfing
 		//-
 
 	private:
-		ofParameterGroup params_Panels{ "Panels" }; // just to organize on the json file
+		ofParameterGroup params_WindowsInternal{ "WindowsInternal" }; // just to organize on the json file
 		ofParameterGroup params_Callbacks{ "Callbacks" };
 
 	public:
@@ -1070,11 +1070,11 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			params_Panels.add(bGui_ShowWindowsGlobal);
-			params_Panels.add(bGui_Aligners);
-			params_Panels.add(bGui_Organizer);
-			params_Panels.add(bGui_SpecialWindows);
-			params_Controls.add(params_Panels);
+			params_WindowsInternal.add(bGui_ShowWindowsGlobal);
+			params_WindowsInternal.add(bGui_Aligners);
+			params_WindowsInternal.add(bGui_Organizer);
+			params_WindowsInternal.add(bGui_SpecialWindows);
+			params_Controls.add(params_WindowsInternal);
 
 			params_Controls.add(bLinked);
 			params_Controls.add(bOrientation);
@@ -1316,7 +1316,6 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void drawWidgetsAligners(bool bMinimized = false)
 		{
-			ofxImGuiSurfing::AddSpacing();
 			ofxImGuiSurfing::AddBigButton(bAlignWindowsReset);
 			ofxImGuiSurfing::AddSmallButton(bAlignWindowsCascade);
 
@@ -1336,21 +1335,20 @@ namespace ofxImGuiSurfing
 			float _h = getWidgetsHeight();
 			float _w1 = getWidgetsWidth(1);
 			float _w2 = getWidgetsWidth(2);
-			
+
 			// Global Enable 
 			ImGui::Spacing();
 			bool b = !bGui_ShowWindowsGlobal;//blink
 			if (b) ofxImGuiSurfing::BeginBlinkText();
 			ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
 			if (b) ofxImGuiSurfing::EndBlinkText();
-			//ImGui::Spacing();
 
 			if (bGui_ShowWindowsGlobal)
 			{
+				ImGui::Spacing();
+
 				if (!bMinimized)
 				{
-					ImGui::Spacing();
-
 					if (ImGui::Button("All", ImVec2(_w2, _h)))
 					{
 						for (auto& p : windowsPanels)
@@ -1373,15 +1371,11 @@ namespace ofxImGuiSurfing
 				//--
 
 				// Windows
-				ImGui::Indent();
 				for (auto& p : windowsPanels)
 				{
 					ofxImGuiSurfing::AddBigToggle(p.bGui);
 					//ofxImGuiSurfing::AddToggleRoundedButton(p.bGui);
 				}
-				ImGui::Unindent();
-
-				//ImGui::Spacing();
 			}
 		}
 
@@ -1400,12 +1394,18 @@ namespace ofxImGuiSurfing
 			{
 				if (!bHideWindowsToggles)
 				{
-					ImGuiColorEditFlags _flagw = ImGuiWindowFlags_None;
-					//ImGuiColorEditFlags _flagw = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
+					ImGuiColorEditFlags flagt = ImGuiWindowFlags_None;
+					//flagt += ImGuiWindowFlags_None;
+					//ImGuiColorEditFlags flagt = (bDebug ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
-					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
+					static bool p_open = true;
+					if (p_open) flagt += ImGuiTreeNodeFlags_DefaultOpen;
+					flagt += ImGuiTreeNodeFlags_Framed;
+					if (ImGui::TreeNodeEx("WINDOWS", flagt))
+					//if (ImGui::CollapsingHeader("WINDOWS", &p_open, flagt))
 					{
-						drawWidgetsWindows();
+						drawWidgetsWindows(bMinimized);
+						ImGui::TreePop();
 					}
 
 					if (bGui_ShowWindowsGlobal) ofxImGuiSurfing::AddSpacingSeparated();
@@ -1420,20 +1420,12 @@ namespace ofxImGuiSurfing
 
 				ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true); //blinking
 
-				if (bLinked)
+				if (bLinked && !bMinimized)
 				{
-					// Orientation
-
 					ofxImGuiSurfing::AddSpacing();
 
-					//string ss = bOrientation ? "VERTICAL" : "HORIZONTAL";
-					//float h = 1.25 * ImGui::GetFrameHeight();
-					//float w = h * 1.55f;
-					////ofxImGuiSurfing::AddToggleRoundedButton(bOrientation, ss, ImVec2(w, h));
-
+					// Orientation
 					ofxImGuiSurfing::AddToggleNamed(bOrientation, "VERTICAL", "HORIZONTAL");
-
-					//ImGui::Spacing();
 				}
 
 				//--
@@ -1445,6 +1437,7 @@ namespace ofxImGuiSurfing
 
 					if (ImGui::CollapsingHeader("ALIGNERS"))
 					{
+						ofxImGuiSurfing::AddSpacing();
 						drawWidgetsAligners();
 					}
 				}
@@ -1463,31 +1456,29 @@ namespace ofxImGuiSurfing
 
 						if (ImGui::CollapsingHeader("SETTINGS", _flagw))
 						{
-							ImGui::PushItemWidth(getPanelWidth() * 0.5f);
+							ofxImGuiSurfing::AddSpacing();
+
+							ofxImGuiSurfing::AddParameter(bHeaders);
+
+							bool bNoLabel = false;
+							bool bRaw = 0;
+							ofxImGuiSurfing::AddStepper(pad, bNoLabel, bRaw);
+
+							ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
+							if (bAlignShapes)
 							{
-								ofxImGuiSurfing::AddParameter(bHeaders);
+								ImGui::Indent();
+								if (bOrientation) //vertical
+									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
 
-								bool bNoLabel = false;
-								bool bRaw = 0;
-								ofxImGuiSurfing::AddStepper(pad, bNoLabel, bRaw);
-
-								ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapes);
-								if (bAlignShapes)
-								{
-									ImGui::Indent();
-									if (bOrientation) //vertical
-										ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesX);
-
-									if (!bOrientation) //horizontal
-										ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
-									ImGui::Unindent();
-								}
-
-								if (ImGui::Button("Reset##SETTINGS")) {
-									this->resetSettings();
-								}
+								if (!bOrientation) //horizontal
+									ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
+								ImGui::Unindent();
 							}
-							ImGui::PopItemWidth();
+
+							if (ImGui::Button("Reset##SETTINGS")) {
+								this->resetSettings();
+							}
 
 							//--
 
@@ -1502,7 +1493,7 @@ namespace ofxImGuiSurfing
 								ImGui::Indent();
 
 								ImGui::Spacing();
-								ImGui::TextWrapped("SPECIAL WINDOWS \n");
+								ImGui::TextWrapped("WINDOWS \n");
 								ofxImGuiSurfing::AddSpacingSeparated();
 								ImGui::Spacing();
 
@@ -1551,7 +1542,7 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								// Windows
-								string ss5 = "All Windows ON\n\n";
+								string ss5 = "All Windows\n\n";
 								for (int i = 0; i < windowsPanels.size(); i++)
 								{
 									if (i != 0) ss5 += ", ";

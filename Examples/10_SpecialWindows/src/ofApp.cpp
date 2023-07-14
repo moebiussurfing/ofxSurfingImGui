@@ -5,7 +5,7 @@ void ofApp::setup()
 {
 	ofSetWindowPosition(-1920, 25);
 
-	ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
+	//ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
 
 	// Parameters
 	setupParams();
@@ -52,7 +52,7 @@ void ofApp::setup_ImGui()
 	// Optional: 
 	// Customize name to avoid multiple instances collide.
 	// Will create sub folder into bin/data/myOfApp/Gui
-	//ui.setName("myOfApp");
+	ui.setName("myOfApp");
 
 	// Queue windows
 	ui.addWindowSpecial("myWindow 0");
@@ -190,6 +190,6 @@ void ofApp::keyPressed(int key)
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-	// Optional: is saving on each change.
+	// Optional: as is saving on each change.
 	//ui.save();
 }

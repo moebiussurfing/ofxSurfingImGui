@@ -1822,7 +1822,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 	if (bGui_LayoutsManager) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 
-	if (BeginWindow(bGui_LayoutsManager, flagsMng))
+	if (this->BeginWindow(bGui_LayoutsManager, flagsMng))
 	{
 		const int i = 2;
 		rectangles_Windows[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
@@ -3446,7 +3446,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	if (bGui_LayoutsPresetsSelector) {
 		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 	}
-	if (BeginWindow(bGui_LayoutsPresetsSelector, flags_wPr))
+	if (this->BeginWindow(bGui_LayoutsPresetsSelector, flags_wPr))
 	{
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
 		float _w1 = ofxImGuiSurfing::getWidgetsWidth(1);
@@ -4193,7 +4193,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 
 	// Draw window
 
-	if (BeginWindow(bGui_LayoutsPanels, flags_wPanels))
+	if (this->BeginWindow(bGui_LayoutsPanels, flags_wPanels))
 	{
 		const int i = 1;
 		rectangles_Windows[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
@@ -4984,7 +4984,7 @@ void SurfingGuiManager::drawSpecialWindowsPanel()
 
 		//ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 		//if (bAutoResize_Panels) window_flags |= ImGuiWindowFlags_AlwaysAutoResize;
-		//if (BeginWindow("Specials", NULL, window_flags))
+		//if (this->BeginWindow("Specials", NULL, window_flags))
 		{
 			const int NUM_WIDGETS = windows.size(); // expected num widgets
 

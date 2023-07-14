@@ -3571,7 +3571,7 @@ public:
 	{
 		if (bGui_Organizer) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-		if (BeginWindow(bGui_Organizer))
+		if (this->BeginWindow(bGui_Organizer))
 		{
 			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			this->AddSpacingSeparated();
@@ -3595,10 +3595,10 @@ public:
 	{
 		if (bGui_Aligners) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-		if (BeginWindow(bGui_Aligners))
+		if (this->BeginWindow(bGui_Aligners))
 		{
-			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
-			this->AddSpacingSeparated();
+			//this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
+			//this->AddSpacingSeparated();
 
 			windowsOrganizer.drawWidgetsAligners(bMinimize);
 
@@ -4170,55 +4170,8 @@ public:
 	//--------------------------------------------------------------
 	void drawWidgetsSpecialWindows()
 	{
-#if 1 // use the internal from WindowsOrganizer
+		// use the internal from WindowsOrganizer
 		windowsOrganizer.drawWidgetsWindows(bMinimize);
-#else
-
-		float _h = getWidgetsHeight();
-		float _w1 = getWidgetsWidth(1);
-		float _w2 = getWidgetsWidth(2);
-
-		// Show Windows Global
-		bool b = !bGui_ShowWindowsGlobal;//blink
-		if (b) ofxImGuiSurfing::BeginBlinkText();
-		ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
-		if (b) ofxImGuiSurfing::EndBlinkText();
-		this->AddSpacing();
-
-		if (windowsOrganizer.bGui_ShowWindowsGlobal)
-		{
-			if (ImGui::Button("All", ImVec2(_w2, _h)))
-			{
-				for (auto& p : windowsOrganizer.windowsPanels)
-				{
-					p.bGui = true;
-				}
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("None", ImVec2(_w2, _h)))
-			{
-				for (auto& p : windowsOrganizer.windowsPanels)
-				{
-					p.bGui = false;
-				}
-			}
-
-			this->AddSpacing();
-
-			// All toggles
-
-			ImGui::Indent();
-
-			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE);
-			//drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_ROUNDED_SMALL);
-
-			ImGui::Unindent();
-		}
-
-		//// Special Windows Organizer toggle 
-		//this->AddSpacingSeparated();
-		//this->Add(bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
-#endif
 	}
 
 	//--------------------------------------------------------------
@@ -4227,7 +4180,7 @@ public:
 		if (bGui_SpecialWindows) {
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 		}
-		if (BeginWindow(bGui_SpecialWindows))
+		if (this->BeginWindow(bGui_SpecialWindows))
 		{
 			drawWidgetsSpecialWindows();
 

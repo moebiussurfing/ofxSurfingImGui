@@ -74,11 +74,16 @@
 
 //--
 
-// Default settings files
-#define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
-#define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
+// Default settings files are:
 // bin\data\Gui\SurfingGui_UI_Internal.json
 // bin\data\Gui\SurfingGui_UI_Organizer.json
+#define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
+#define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
+// But, to allow multiple instances, it can be customized, before adding special windows and setup() by:
+// ui.setName("myOfApp");
+// \bin\data\myOfApp\Gui\
+//		myOfApp_UI_Internal.json
+//		myOfApp_UI_Organizer.json
 
 //----
 
