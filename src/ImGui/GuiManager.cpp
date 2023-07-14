@@ -38,10 +38,10 @@ SurfingGuiManager::SurfingGuiManager()
 
 	//----
 
-	// App callbacks
+	// Callbacks
 
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
-	ofAddListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+	ofAddListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
 
 	//--
 
@@ -112,13 +112,14 @@ void SurfingGuiManager::exit()
 	ofRemoveListener(ofEvents().update, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
 	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
 
-	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
-	ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+	ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
+
+	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
-	saveSettings();
+	saveSettingsInternal();
 #endif
 
 	bDoneExit = true;
@@ -242,7 +243,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
-		setAutoSaveSettings(true);
+		setEnableFileSettings(true);
 		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
@@ -251,14 +252,14 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
-		setAutoSaveSettings(true);
+		setEnableFileSettings(true);
 		setupDocking();
 		setupInitiate();
 
 		break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
-		setAutoSaveSettings(true);
+		setEnableFileSettings(true);
 		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
@@ -272,13 +273,13 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		//	break;
 
 	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED: //TODO:
-		setAutoSaveSettings(false);
+		setEnableFileSettings(false);
 
 		break;
 
 		// ui.Begin(); it's bypassed internally then can remain uncommented.
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
-		setAutoSaveSettings(false);
+		setEnableFileSettings(false);
 
 		break;
 	}
@@ -311,7 +312,7 @@ void SurfingGuiManager::setupDocking()
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
-	setAutoSaveSettings(true);
+	setEnableFileSettings(true);
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
 	//setImGuiAutodraw(true);
@@ -1672,12 +1673,16 @@ void SurfingGuiManager::update()
 	//	appLayoutIndex = appLayoutIndex;
 	//}
 
+	//--
+
 	// Force call Startup
 	//if ((ofGetFrameNum() <= 1) && (!bDoneStartup || !bDoneSetup)
 	if (!bDoneSetup || !bDoneStartup)
 	{
 		setupStartupForced();
 	}
+
+	//--
 
 	// Build mono-spaced fonts flag
 	if (bSetupFontForDefaultStylesMonospacedInternal)
@@ -1686,6 +1691,8 @@ void SurfingGuiManager::update()
 
 		setupFontForDefaultStylesMonospacedInternal(pathFontMono, sizeFontMono);
 	}
+
+	//--
 
 	// Debug profiler
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
@@ -1698,8 +1705,17 @@ void SurfingGuiManager::update()
 
 	//--
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	if (bFlagSaveSettings) {
+		bFlagSaveSettings = false;
+		saveSettingsInternal();
+	}
+#endif	
+
+	//--
+
 	windowsOrganizer.update();
-}
+	}
 
 //--------------------------------------------------------------
 void SurfingGuiManager::draw()
@@ -2351,8 +2367,12 @@ void SurfingGuiManager::drawWindowsExtraManager()
 {
 	// Auto handles drawing of extra windows. Not required to draw manually!
 
+	//--
+
 	// Log
 	DrawWindowLogIfEnabled();
+
+	//--
 
 	// Notifier
 #ifdef SURFING_IMGUI__USE_NOTIFIER
@@ -2625,7 +2645,7 @@ bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = 
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-}
+	}
 #endif
 
 	//--
@@ -2760,7 +2780,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	//--
 
 	return b;
-}
+	}
 
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
@@ -3225,6 +3245,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	//--
 
+	//TODO:
 	//// Gui - > which panels enabled but overwritten by Layout Presets Engine
 	//params_AppSettings.add(params_WindowsPanels);
 
@@ -3237,32 +3258,50 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 bool SurfingGuiManager::loadSettings()
 {
 	bool b = false;
-	if (bAutoSaveSettings) b = loadGroup(params_AppSettings, path_AppSettings, true);
+	if (bEnableFileSettings) b = loadGroup(params_AppSettings, path_AppSettings, true);
 
 	return b;
 
-	// Will return false if settings file do not exist. That happens when started for first time or after OF_APP/bin cleaning
+	// Will return false if settings file do not exist. 
+	// That happens when started for first time or after OF_APP/bin cleaning
+}
+
+//--------------------------------------------------------------
+void SurfingGuiManager::saveSettingsInternal()
+{
+	if (bResetUIProgramed) return;
+	// Respect not saving settings on exit.
+	// Then next startup will have default settings
+
+	//ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal()";
+
+	if (bEnableFileSettings)
+	{
+		saveGroup(params_AppSettings, path_AppSettings, false);
+		ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal() DONE!";
+	}
+	else
+	{
+		ofLogWarning("ofxSurfingImGui") << "By passed saveSettingsInternal()";
+		ofLogWarning("ofxSurfingImGui") << "bEnableFileSettings was disabled!";
+	}
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::saveSettings()
 {
 	if (bResetUIProgramed) return;
-	//respect not saving settings on exit. then next startup will have default settings
+	// Respect not saving settings on exit.
+	// Then next startup will have default settings
+
+	if (!bEnableFileSettings) return;
 
 	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
+	
+	// Save GuiManager
+	saveSettingsInternal();
 
-	if (bAutoSaveSettings)
-	{
-		saveGroup(params_AppSettings, path_AppSettings);
-		ofLogNotice("ofxSurfingImGui") << "saveAppSettings() DONE!";
-	}
-	else
-	{
-		ofLogWarning("ofxSurfingImGui") << "By passed saveAppSettings()";
-		ofLogWarning("ofxSurfingImGui") << "bAutoSaveSettings was disabled!";
-	}
-
+	// Save WindowsOrganizer
 	windowsOrganizer.saveSettings();
 }
 
@@ -3627,6 +3666,12 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets()
 }
 
 //--------------------------------------------------------------
+void SurfingGuiManager::Changed_WindowsPanels(ofAbstractParameter& e)
+{
+	std::string name = e.getName();
+}
+
+//--------------------------------------------------------------
 void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 {
 	std::string name = e.getName();
@@ -3637,9 +3682,15 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		name != "rect_Manager")
 	{
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui") << "Changed: " << name << ": " << e;
+		ofLogNotice("ofxSurfingImGui") << "Changed_Params: " << name << ": " << e;
 	}
 	if (bskip) return;
+
+	//--
+
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	bFlagSaveSettings = true;
+#endif	
 
 	//--
 
@@ -3731,6 +3782,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	//----
 
+	// Layout Presets Engine
 
 	//TODO:
 	// Skip below callbacks
@@ -3861,7 +3913,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		return;
 	}
 
-	//-
+	//--
 
 	// Presets Selector
 	// exclusive toggles

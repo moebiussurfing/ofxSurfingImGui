@@ -46,12 +46,8 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Constructor";
 
 			ofAddListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
-			ofAddListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
+			ofAddListener(params_Controls.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 			ofAddListener(params_Callbacks.parameterChangedE(), this, &WindowsOrganizer::Changed_Callbacks);
-
-			//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-			//			ofAddListener(ofEvents().update, this, &WindowsOrganizer::update, OF_EVENT_ORDER_AFTER_APP);
-			//#endif
 
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 			//TODO: 
@@ -78,12 +74,8 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Destructor!";
 
 			ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
-			ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
+			ofRemoveListener(params_Controls.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
 			ofRemoveListener(params_Callbacks.parameterChangedE(), this, &WindowsOrganizer::Changed_Callbacks);
-
-			//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-			//			ofRemoveListener(ofEvents().update, this, &WindowsOrganizer::update, OF_EVENT_ORDER_AFTER_APP);
-			//#endif
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 			if (!bDoneExit)
@@ -106,7 +98,7 @@ namespace ofxImGuiSurfing
 	public:
 		// Subscribed after app
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//void update(ofEventArgs& args) 
+		//--------------------------------------------------------------
 		void update()
 		{
 			//ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
@@ -131,9 +123,10 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
 
 			exit();
-	}
+		}
 #endif
 
+	private:
 		//--------------------------------------------------------------
 		void exit()
 		{
@@ -146,14 +139,33 @@ namespace ofxImGuiSurfing
 			bDoneExit = true;
 		}
 
+	private:
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		bool bFlagSaveSettings = 0;
+		bool bFlagSaveSettings = false;
 #endif
+
+	private:
+		bool bEnableFileSettings = true;
 
 	public:
 		//--------------------------------------------------------------
+		void setEnableFileSettings(bool b)
+		{
+			// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
+			bEnableFileSettings = b;
+		}
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//--------------------------------------------------------------
+		void saveSettingsFlag()
+		{
+			bFlagSaveSettings = true;
+		}
+#endif
+		//--------------------------------------------------------------
 		void saveSettings()
 		{
+			if (!bEnableFileSettings) return;
+
 			if (bDoneInitialized)
 			{
 				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings()";
@@ -167,20 +179,37 @@ namespace ofxImGuiSurfing
 				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer::saveSettings() bDoneInitialized was unexpectedly false!";
 			}
 		}
+
+		//--------------------------------------------------------------
+		void resetSettings()
+		{
+			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::resetSettings()";
+
+			bLinked = false;
+			bOrientation = false;
+			bAlignShapes = true;
+			bAlignShapesX = true;
+			bAlignShapesY = false;
+			bHeaders = true;
+			pad = 0;
+		}
+
 		//--------------------------------------------------------------
 		void reset()
 		{
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::reset()";
 
-			//TODO:
 			bGui_Organizer = false;
 			bGui_Aligners = false;
 			bGui_SpecialWindows = false;
 
+			// hide all windows
 			for (auto& p : windowsPanels)
 			{
 				p.bGui = false;
 			}
+
+			resetSettings();
 		}
 
 		//--
@@ -333,6 +362,7 @@ namespace ofxImGuiSurfing
 		//--
 
 	public:
+		//triggers
 		ofParameter<bool> bAlignWindowsX{ "AlignX", false };
 		ofParameter<bool> bAlignWindowsY{"AlignY", false};
 		ofParameter<bool> bAlignWindowsCascade{"Cascade", false};
@@ -348,10 +378,8 @@ namespace ofxImGuiSurfing
 		ofParameter<int> pad{"Pad", 0, 0, 25};
 
 		//TODO:
-		ofParameter<glm::vec2> position_Anchor{
-			"Position Anchor",
-				glm::vec2(10, 10), glm::vec2(0, 0), glm::vec2(1920, 1080)
-		};
+		ofParameter<glm::vec2> position_Anchor{"Position Anchor",
+			glm::vec2(10, 10), glm::vec2(0, 0), glm::vec2(1920, 1080)};
 
 		//--
 
@@ -359,9 +387,10 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		bool isInitiated()
 		{
-			return (windowsPanels.size() > 0);
+			return (windowsPanels.size() > 0 && bDoneInitialized);
 		}
 
+		//private:
 		std::vector<WindowPanel> windowsPanels;
 		// All the added panels. 
 		// Hidden windows are not removed from here! 
@@ -429,13 +458,13 @@ namespace ofxImGuiSurfing
 		ofParameterGroup params_Callbacks{ "Callbacks" };
 
 	public:
-		ofParameterGroup params_Settings{ "Organizer Settings" }; // To use on a external GUI 
+		ofParameterGroup params_Controls{ "Organizer Settings" }; // To use on a external GUI 
 
 	public:
 		//--------------------------------------------------------------
 		ofParameterGroup& getParamsSettings()
 		{
-			return params_Settings;
+			return params_Controls;
 		}
 
 	private:
@@ -664,7 +693,7 @@ namespace ofxImGuiSurfing
 							//TODO:
 							doApplyLinkWindows();
 
-							bForceNext = true;
+							bFlagForceNext = true;
 
 							//--
 
@@ -672,7 +701,7 @@ namespace ofxImGuiSurfing
 
 							return;
 						}
-					}	
+					}
 				}
 			}
 
@@ -1044,19 +1073,19 @@ namespace ofxImGuiSurfing
 			params_Panels.add(bGui_Aligners);
 			params_Panels.add(bGui_Organizer);
 			params_Panels.add(bGui_SpecialWindows);
-			params_Settings.add(params_Panels);
+			params_Controls.add(params_Panels);
 
-			params_Settings.add(bLinked);
-			params_Settings.add(bOrientation);
-			params_Settings.add(bAlignShapes);
-			params_Settings.add(bAlignShapesX);
-			params_Settings.add(bAlignShapesY);
-			params_Settings.add(bHeaders);
-			params_Settings.add(pad);
-			params_Settings.add(position_Anchor);
+			params_Controls.add(bLinked);
+			params_Controls.add(bOrientation);
+			params_Controls.add(bAlignShapes);
+			params_Controls.add(bAlignShapesX);
+			params_Controls.add(bAlignShapesY);
+			params_Controls.add(bHeaders);
+			params_Controls.add(pad);
+			params_Controls.add(position_Anchor);
 
 			// Settings Group
-			params_AppSettings.add(params_Settings);
+			params_AppSettings.add(params_Controls);
 
 			// Each window enabler will be added here..
 			// all of theme has been added during setup
@@ -1144,13 +1173,15 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void loadSettings()
 		{
+			if (!bEnableFileSettings) return;
+
 			loadGroup(params_AppSettings, path_Settings);
 		}
 
 		//--
 
 	private:
-		bool bForceNext = false; // workaround required / to be used when hiding first window!
+		bool bFlagForceNext = false; // workaround required / to be used when hiding first window!
 
 	public:
 		//--------------------------------------------------------------
@@ -1174,9 +1205,9 @@ namespace ofxImGuiSurfing
 
 			// force engine
 			bool bforce = false;
-			if (bForceNext)
+			if (bFlagForceNext)
 			{
-				bForceNext = false;
+				bFlagForceNext = false;
 				bforce = true;
 			}
 
@@ -1439,6 +1470,10 @@ namespace ofxImGuiSurfing
 										ofxImGuiSurfing::AddToggleRoundedButton(bAlignShapesY);
 									ImGui::Unindent();
 								}
+
+								if (ImGui::Button("Reset##SETTINGS")) {
+									this->resetSettings();
+								}
 							}
 							ImGui::PopItemWidth();
 
@@ -1504,7 +1539,7 @@ namespace ofxImGuiSurfing
 								ofxImGuiSurfing::AddSpacingSeparated();
 
 								// Windows
-								string ss5 = "All Windows \n\n";
+								string ss5 = "All Windows ON\n\n";
 								for (int i = 0; i < windowsPanels.size(); i++)
 								{
 									if (i != 0) ss5 += ", ";
@@ -1640,5 +1675,5 @@ namespace ofxImGuiSurfing
 				}
 			}
 		}
-};
+	};
 }

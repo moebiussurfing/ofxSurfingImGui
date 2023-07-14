@@ -57,7 +57,7 @@ public:
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
 
-	//-
+	//--
 
 	// Gui
 

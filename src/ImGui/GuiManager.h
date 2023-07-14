@@ -148,6 +148,11 @@ public:
 		return instanceCount;
 	}
 
+private:
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	bool bFlagSaveSettings = 0;
+#endif
+
 	//----
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
@@ -3383,7 +3388,7 @@ public:
 	//----
 
 private:
-	ofParameter<bool> bAutoSaveSettings{ "Autosave", true };
+	ofParameter<bool> bEnableFileSettings{ "EnableSettings", true };
 
 private:
 	// File Settings
@@ -3449,22 +3454,24 @@ public:
 
 	//--
 
-private:
-
 	//--------------------------------------------------------------
-	void setAutoSaveSettings(bool b)
+	void setEnableFileSettings(bool b)
 	{
 		// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
-		bAutoSaveSettings = b;
+		bEnableFileSettings = b;
+
+		windowsOrganizer.setEnableFileSettings(b);
 	}
 
 
-	//--------------------------------------------------------------
-	void setAutoResize(bool b)
-	{
-		// must call before setup
-		bAutoResize = b;
-	}
+private:
+
+	////--------------------------------------------------------------
+	//void setAutoResize(bool b)
+	//{
+	//	// must call before setup
+	//	bAutoResize = b;
+	//}
 
 	//--------------------------------------------------------------
 	void setDocking(bool b)
@@ -3525,7 +3532,7 @@ public:
 	void EndWindowSpecial()
 	{
 		EndWindowSpecial(-1);
-	};
+	}
 
 	// Notice that preferred usage is 
 	// by passing the bool toggle or the window name, 
@@ -3604,12 +3611,6 @@ public:
 		}
 	}
 
-	////--------------------------------------------------------------
-	//bool getGuiToggleGlobalState() const
-	//{
-	//	return windowsOrganizer.bGui_ShowWindowsGlobal.get();
-	//}
-
 	//--
 
 	//TODO: WIP:
@@ -3620,6 +3621,7 @@ public:
 		// that enables the show/hide for each queued window
 		ofParameter<bool> bGui{"_bGui", true};
 
+		//TODO: per window
 		ofParameter<bool> bAutoResize{"Auto Resize", true};
 
 		////TODO: could be removed...not used yet..
@@ -3692,7 +3694,7 @@ public:
 		// Queue Window
 		windows.push_back(win);
 
-		// Queue Toggle. only for callbacks ?
+		// Queue Toggle. Only for callbacks ?
 		params_WindowsPanels.add(_bGui);
 
 		// Queue Toggle
@@ -4183,10 +4185,10 @@ public:
 
 		// Show Global
 		this->AddSpacing();
-		bool b = bGui_ShowWindowsGlobal;
-		if (!b) ofxImGuiSurfing::BeginBlinkText();
+		bool b = !bGui_ShowWindowsGlobal;//blink
+		if (b) ofxImGuiSurfing::BeginBlinkText();
 		ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
-		if (!b) ofxImGuiSurfing::EndBlinkText();
+		if (b) ofxImGuiSurfing::EndBlinkText();
 		this->AddSpacing();
 
 		// All toggles
@@ -4252,8 +4254,11 @@ private:
 	bool loadSettings();
 public:
 	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
-	void saveSettings();
+	void saveSettings();//save both settings parts: GuiManager and WindowsOrganizer
 	void save() { saveSettings(); }//alias
+
+private:
+	void saveSettingsInternal();
 
 	//----
 
@@ -4324,7 +4329,7 @@ private:
 	void Changed_Params(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
-	//void Changed_WindowsPanels(ofAbstractParameter& e);
+	void Changed_WindowsPanels(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
 	std::string getLayoutName(int mode)
