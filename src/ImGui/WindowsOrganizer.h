@@ -144,16 +144,17 @@ namespace ofxImGuiSurfing
 		bool bFlagSaveSettings = false;
 #endif
 
-	private:
-		bool bEnableFileSettings = true;
-
 	public:
-		//--------------------------------------------------------------
-		void setEnableFileSettings(bool b)
-		{
-			// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
-			bEnableFileSettings = b;
-		}
+		ofParameter<bool> bEnableFileSettings{ "EnableSettings", true };
+		//private:
+			//bool bEnableFileSettings = true;
+			////--------------------------------------------------------------
+			//void setEnableFileSettings(bool b)
+			//{
+			//	// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
+			//	bEnableFileSettings = b;
+			//}
+
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
 		//--------------------------------------------------------------
 		void saveSettingsFlag()
@@ -1330,7 +1331,62 @@ namespace ofxImGuiSurfing
 		}
 
 		//--------------------------------------------------------------
-		void drawWidgetsOrganizer(bool bMinimized = false, bool bAlignersToo = true, bool bSpecialWindowsToo = true)
+		void drawWidgetsWindows(bool bMinimized = false)
+		{
+			float _h = getWidgetsHeight();
+			float _w1 = getWidgetsWidth(1);
+			float _w2 = getWidgetsWidth(2);
+			
+			// Global Enable 
+			ImGui::Spacing();
+			bool b = !bGui_ShowWindowsGlobal;//blink
+			if (b) ofxImGuiSurfing::BeginBlinkText();
+			ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
+			if (b) ofxImGuiSurfing::EndBlinkText();
+			//ImGui::Spacing();
+
+			if (bGui_ShowWindowsGlobal)
+			{
+				if (!bMinimized)
+				{
+					ImGui::Spacing();
+
+					if (ImGui::Button("All", ImVec2(_w2, _h)))
+					{
+						for (auto& p : windowsPanels)
+						{
+							p.bGui = true;
+						}
+					}
+					ImGui::SameLine();
+					if (ImGui::Button("None", ImVec2(_w2, _h)))
+					{
+						for (auto& p : windowsPanels)
+						{
+							p.bGui = false;
+						}
+					}
+
+					ImGui::Spacing();
+				}
+
+				//--
+
+				// Windows
+				ImGui::Indent();
+				for (auto& p : windowsPanels)
+				{
+					ofxImGuiSurfing::AddBigToggle(p.bGui);
+					//ofxImGuiSurfing::AddToggleRoundedButton(p.bGui);
+				}
+				ImGui::Unindent();
+
+				//ImGui::Spacing();
+			}
+		}
+
+		//--------------------------------------------------------------
+		void drawWidgetsOrganizer(bool bMinimized = false)
 		{
 			float _h = getWidgetsHeight();
 			float _w1 = getWidgetsWidth(1);
@@ -1340,8 +1396,7 @@ namespace ofxImGuiSurfing
 
 			// Windows
 
-			//if (!bMinimized && bSpecialWindowsToo) 
-			if (bSpecialWindowsToo)
+			if (!bGui_SpecialWindows)
 			{
 				if (!bHideWindowsToggles)
 				{
@@ -1350,51 +1405,7 @@ namespace ofxImGuiSurfing
 
 					if (ImGui::CollapsingHeader("WINDOWS", _flagw))
 					{
-						if (!bMinimized)
-						{
-							ImGui::Spacing();
-
-							if (ImGui::Button("All", ImVec2(_w2, _h)))
-							{
-								for (auto& p : windowsPanels)
-								{
-									p.bGui = true;
-								}
-							}
-							ImGui::SameLine();
-							if (ImGui::Button("None", ImVec2(_w2, _h)))
-							{
-								for (auto& p : windowsPanels)
-								{
-									p.bGui = false;
-								}
-							}
-
-							ImGui::Spacing();
-						}
-
-						//--
-
-						// Global Enable 
-						ImGui::Spacing();
-						bool b = bGui_ShowWindowsGlobal;
-						if (!b) ofxImGuiSurfing::BeginBlinkText();
-						ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
-						if (!b) ofxImGuiSurfing::EndBlinkText();
-						ImGui::Spacing();
-
-						if (bGui_ShowWindowsGlobal)
-						{
-							ImGui::Indent();
-							for (auto& p : windowsPanels)
-							{
-								ofxImGuiSurfing::AddBigToggle(p.bGui);
-								//ofxImGuiSurfing::AddToggleRoundedButton(p.bGui);
-							}
-							ImGui::Unindent();
-
-							ImGui::Spacing();
-						}
+						drawWidgetsWindows();
 					}
 
 					if (bGui_ShowWindowsGlobal) ofxImGuiSurfing::AddSpacingSeparated();
@@ -1406,6 +1417,7 @@ namespace ofxImGuiSurfing
 			if (bGui_ShowWindowsGlobal) {
 
 				// Linked
+
 				ofxImGuiSurfing::AddBigToggle(bLinked, _w1, 2 * _h, true, true); //blinking
 
 				if (bLinked)
@@ -1428,7 +1440,7 @@ namespace ofxImGuiSurfing
 
 				// Aligners
 
-				if (bAlignersToo) {
+				if (!bGui_Aligners) {
 					ofxImGuiSurfing::AddSpacingSeparated();
 
 					if (ImGui::CollapsingHeader("ALIGNERS"))

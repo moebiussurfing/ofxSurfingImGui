@@ -16,7 +16,7 @@
 
 // MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
 
-#define SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW 
+//#define SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW 
 // Mouse handled by ImGui Instead of the OF/GLFW. 
 // Includes much mouse behaviors from imgui, as resize, waiting, text input etc
 // Required disabled to allow overlay on windows capturer app.
@@ -31,12 +31,12 @@
 
 //--
 
-// Settings managament
+// Settings management
 
-//TODO: Fixing exceptions when closing ofApp.
-//TODO: We can disable automatic saving on exit.
-//TODO: Then we should save manually.
-//TODO: Implement approach to autosave when settings params change.
+// Improved fixing exceptions when closing ofApp.
+// We can disable automatic saving on exit and/or class destructor.
+// Then we should save manually.
+// Also implemented an approach to autosave when settings params change.
 //#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
 //#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable auto save on exit.
 #define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES // to enable auto save on every param change.

@@ -357,12 +357,12 @@ void SurfingGuiManager::setupInitiate()
 	// Use first letter only to allow multiple instances full independent
 	bGui_Aligners.setName("ALIGNERS " + ofToString(nameLabel[0]));
 	bGui_Organizer.setName("ORGANIZER " + ofToString(nameLabel[0]));
-	bGui_SpecialWindows.setName("SPECIALW " + ofToString(nameLabel[0]));
+	bGui_SpecialWindows.setName("WINDOWS " + ofToString(nameLabel[0]));
 #else
 	//TODO: short names but could spread many windows when multi instances
 	bGui_Aligners.setName("ALIGNERS");
 	bGui_Organizer.setName("ORGANIZER");
-	bGui_SpecialWindows.setName("SPECIALW");
+	bGui_SpecialWindows.setName("WINDOWS");
 #endif
 
 	//--
@@ -380,11 +380,13 @@ void SurfingGuiManager::setupInitiate()
 
 	// Link both link toggles, local and the one inside the organizer object
 	windowsOrganizer.bLinked.makeReferenceTo(bLinked);
-	//TODO: expose more params
+	
 	windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
 	windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
 	windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
 	windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
+
+	windowsOrganizer.bEnableFileSettings.makeReferenceTo(bEnableFileSettings);
 
 	//--
 
@@ -678,12 +680,12 @@ void SurfingGuiManager::setupFontDefault()
 	// Could not crash or notify you 
 	// if the font files are not present!
 
-	std::string _nameFont = OFX_IM_FONT_DEFAULT_FILE;
+	string _nameFont = OFX_IM_FONT_DEFAULT_FILE;
 	float _sizeFont = OFX_IM_FONT_DEFAULT_SIZE_MIN;
 
 	// Assets folder
-	//std::string _path = "assets/fonts/";
-	std::string _pathFonts = OFX_IM_FONT_DEFAULT_PATH_FONTS;
+	//string _path = "assets/fonts/";
+	string _pathFonts = OFX_IM_FONT_DEFAULT_PATH_FONTS;
 
 	setupFontDefault(_pathFonts, _nameFont, _sizeFont);
 }
@@ -1233,7 +1235,7 @@ void SurfingGuiManager::clearFonts()
 //TODO: could return an int with the current index.
 // Maybe could be useful to help push / changing default font.
 //--------------------------------------------------------------
-bool SurfingGuiManager::addFontStyle(std::string path, float size, string label)
+bool SurfingGuiManager::addFontStyle(string path, float size, string label)
 {
 	//TODO:
 	// It could be a vector with several customFont
@@ -1294,7 +1296,7 @@ bool SurfingGuiManager::addFontStyle(std::string path, float size, string label)
 
 //// API user: workflow during setup not in draw. Not during runtime neither by the coder!
 ////--------------------------------------------------------------
-//bool SurfingGuiManager::addFont(std::string path, float size)
+//bool SurfingGuiManager::addFont(string path, float size)
 //{
 //	//TODO:
 //	// should be a vector with several customFont to allow hot reloading..
@@ -1320,7 +1322,7 @@ bool SurfingGuiManager::addFontStyle(std::string path, float size, string label)
 //}
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::LoadFontsFromFolder(std::string path, float size, bool bMultisize)
+bool SurfingGuiManager::LoadFontsFromFolder(string path, float size, bool bMultisize)
 {
 	// Load dragged images folder
 	ofLogNotice("ofxSurfingImGui") << "addFonts from: " << path << " size: " << size;
@@ -1456,9 +1458,9 @@ int SurfingGuiManager::getAmountFonts()
 }
 
 //--------------------------------------------------------------
-std::string SurfingGuiManager::getFontPath(int index)
+string SurfingGuiManager::getFontPath(int index)
 {
-	std::string s = "";
+	string s = "";
 	if (index < pathsCustomFonts.size() - 1) s = pathsCustomFonts[index];
 	return s;
 }
@@ -1472,7 +1474,7 @@ float SurfingGuiManager::getFontIndexSize()
 }
 
 //--------------------------------------------------------------
-std::string SurfingGuiManager::getFontIndexPath()
+string SurfingGuiManager::getFontIndexPath()
 {
 	return getFontPath(this->getFontIndex());
 }
@@ -1492,9 +1494,9 @@ float SurfingGuiManager::getFontSizeForIndex(int index)
 }
 
 //--------------------------------------------------------------
-std::string SurfingGuiManager::getFontName(int index)
+string SurfingGuiManager::getFontName(int index)
 {
-	std::string s = "UNKNOWN";
+	string s = "UNKNOWN";
 
 	if (index < customFonts.size())
 	{
@@ -1507,9 +1509,9 @@ std::string SurfingGuiManager::getFontName(int index)
 }
 
 //--------------------------------------------------------------
-std::string SurfingGuiManager::getFontLabel(int index)
+string SurfingGuiManager::getFontLabel(int index)
 {
-	std::string s = "UNKNOWN";
+	string s = "UNKNOWN";
 
 	if (index < namesCustomFonts.size())
 	{
@@ -1619,7 +1621,7 @@ void SurfingGuiManager::setFontIndex(int index)
 //--------------------------------------------------------------
 void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResult, int size = 10) {
 
-	std::string path = openFileResult.getPath();
+	string path = openFileResult.getPath();
 
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " Name:" << openFileResult.getName();
 	ofLogNotice("ofxSurfingImGui") << " Path:" << path;
@@ -1629,7 +1631,7 @@ void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResu
 	if (file.exists())
 	{
 		ofLogNotice("ofxSurfingImGui") << (" The file exists - now checking the type via file extension");
-		std::string fileExtension = ofToUpper(file.getExtension());
+		string fileExtension = ofToUpper(file.getExtension());
 
 		// We only want ttf/otf
 		if (fileExtension == "TTF" || fileExtension == "ttf" || fileExtension == "OTF" || fileExtension == "otf")
@@ -2492,7 +2494,7 @@ bool SurfingGuiManager::BeginWindow(char* name)
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags)
 {
-	std::string n = name;
+	string n = name;
 	bool b = BeginWindow(n, NULL, window_flags);
 
 	return b;
@@ -2501,14 +2503,14 @@ bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags)
 ////--------------------------------------------------------------
 //bool SurfingGuiManager::BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond)
 //{
-//	std::string n = name;
+//	string n = name;
 //	bool b = BeginWindow(n, NULL, window_flags, cond);
 //
 //	return b;
 //}
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::BeginWindow(std::string name)
+bool SurfingGuiManager::BeginWindow(string name)
 {
 	ImGuiWindowFlags fg = ImGuiWindowFlags_None;
 	if (bAutoResize) fg |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -2521,7 +2523,7 @@ bool SurfingGuiManager::BeginWindow(std::string name)
 }
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::BeginWindow(std::string name, bool* p_open)
+bool SurfingGuiManager::BeginWindow(string name, bool* p_open)
 {
 	if (!&p_open) return false;
 
@@ -2568,7 +2570,7 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p)
 }
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::BeginWindow(std::string name, ofParameter<bool>& p)
+bool SurfingGuiManager::BeginWindow(string name, ofParameter<bool>& p)
 {
 	if (!p.get()) return false;
 
@@ -2579,7 +2581,7 @@ bool SurfingGuiManager::BeginWindow(std::string name, ofParameter<bool>& p)
 }
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::BeginWindow(std::string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags)
+bool SurfingGuiManager::BeginWindow(string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags)
 {
 	if (!p.get()) return false;
 
@@ -2613,12 +2615,12 @@ bool SurfingGuiManager::BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags windo
 // All above methods will call this one!
 
 ////--------------------------------------------------------------
-//bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None, ImGuiCond cond)
+//bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL, ImGuiWindowFlags window_flags = ImGuiWindowFlags_None, ImGuiCond cond)
 //{
 //}
 
 //--------------------------------------------------------------
-bool SurfingGuiManager::BeginWindow(std::string name = "Window", bool* p_open = NULL,
+bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None)
 {
 	//ImGuiCond cond = ImGuiCond_None;
@@ -3338,11 +3340,11 @@ void SurfingGuiManager::loadLayout(int _index)
 
 	appLayoutIndex = ofClamp(_index, appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
-	std::string _name = getLayoutName(appLayoutIndex.get());
+	string _name = getLayoutName(appLayoutIndex.get());
 	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << appLayoutIndex << ":" << _name;
 
-	//std::string _label = APP_RELEASE_NAME;
-	std::string _label = "";
+	//string _label = APP_RELEASE_NAME;
+	string _label = "";
 	_label += "App Layout ";
 	_label += " "; // spacing
 
@@ -3599,7 +3601,7 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets()
 				int _id = 0;
 				for (int i = 0; i < bLayoutPresets.size(); i++)
 				{
-					std::string _name = (bLayoutPresets[i].getName());
+					string _name = (bLayoutPresets[i].getName());
 
 					ImGui::Text(_name.c_str());
 					if (!bMin)
@@ -3674,13 +3676,13 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets()
 //--------------------------------------------------------------
 void SurfingGuiManager::Changed_WindowsPanels(ofAbstractParameter& e)
 {
-	std::string name = e.getName();
+	string name = e.getName();
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 {
-	std::string name = e.getName();
+	string name = e.getName();
 
 	bool bskip = true;
 	if (name != "position" &&
@@ -3875,7 +3877,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 				// only once per cycle allowed this way.
 				// force to ensure save bc update chain load and save below
 				//saveAppLayout(AppLayouts(appLayoutIndex_PRE));
-				std::string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
+				string __ini_to_save_Str = getLayoutName(appLayoutIndex_PRE);
 
 				if (__ini_to_save_Str != "-1")
 				{
@@ -4041,39 +4043,39 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 // Layout Preset Loaders / Savers
 
 //--------------------------------------------------------------
-void SurfingGuiManager::saveLayoutPreset(std::string path)
+void SurfingGuiManager::saveLayoutPreset(string path)
 {
 	saveLayoutImGuiIni(path);
 	saveLayoutPresetGroup(path);
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::loadLayoutPreset(std::string path)
+void SurfingGuiManager::loadLayoutPreset(string path)
 {
 	loadLayoutImGuiIni(ini_to_load);
 	loadLayoutPresetGroup(path);
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::saveLayoutImGuiIni(std::string path)
+void SurfingGuiManager::saveLayoutImGuiIni(string path)
 {
 	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::loadLayoutImGuiIni(std::string path)
+void SurfingGuiManager::loadLayoutImGuiIni(string path)
 {
 	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::saveLayoutPresetGroup(std::string path)
+void SurfingGuiManager::saveLayoutPresetGroup(string path)
 {
 	saveGroup(params_Layouts, path_LayoutsImGui + path + ".json");
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::loadLayoutPresetGroup(std::string path)
+void SurfingGuiManager::loadLayoutPresetGroup(string path)
 {
 	loadGroup(params_Layouts, path_LayoutsImGui + path + ".json");
 }
@@ -4081,9 +4083,9 @@ void SurfingGuiManager::loadLayoutPresetGroup(std::string path)
 //----
 
 //--------------------------------------------------------------
-void SurfingGuiManager::createLayoutPreset(std::string namePreset)
+void SurfingGuiManager::createLayoutPreset(string namePreset)
 {
-	std::string n;
+	string n;
 	//int i = bLayoutPresets.size();
 	int i = bLayoutPresets.size() + 1;
 
@@ -4404,7 +4406,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	if (bLogKeys)
 		if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
 		{
-			std::string ss = "KEY " + ofToString((char)key) + "";
+			string ss = "KEY " + ofToString((char)key) + "";
 			log.Add(ss, 3);
 		}
 	*/
@@ -4426,7 +4428,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	// should copy to surfingImGui
 
 	/*static*/
-	auto logKey = [this, key](const std::string& msg = "")
+	auto logKey = [this, key](const string& msg = "")
 	{
 		ofLogLevel l = OF_LOG_VERBOSE;
 		// ofLogLevel l = OF_LOG_WARNING;
@@ -4448,7 +4450,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	};
 
 	/*static*/
-	auto logKeyText = [this](const std::string& msg = "")
+	auto logKeyText = [this](const string& msg = "")
 	{
 		ofLogLevel l = OF_LOG_VERBOSE;
 		// ofLogLevel l = OF_LOG_WARNING;
@@ -4457,7 +4459,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	};
 
 	/*static*/
-	auto logKeyParam = [this, key](const ofParameter<bool>& p, const std::string& msg = "")
+	auto logKeyParam = [this, key](const ofParameter<bool>& p, const string& msg = "")
 	{
 		ofLogLevel l = OF_LOG_VERBOSE;
 		// ofLogLevel l = OF_LOG_WARNING;

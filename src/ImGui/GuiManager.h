@@ -140,7 +140,7 @@ class SurfingGuiManager
 public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
-	
+
 public:
 	//TODO:
 	static int instanceCount;
@@ -300,7 +300,7 @@ public:
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
-	void AddStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
+	void AddStyle(string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
 		int spacing = -1)
 	{
 		_ui.AddStyle(name, type, amtPerRow, bSameLine, spacing);
@@ -315,7 +315,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void UpdateStyle(std::string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
+	void UpdateStyle(string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
 		int spacing = -1)
 	{
 		_ui.UpdateStyle(name, type, amtPerRow, bSameLine, spacing);
@@ -334,7 +334,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
+	void AddStyleGroup(string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
 		_ui.AddStyleGroup(name, type, flags);
@@ -348,7 +348,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(std::string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
+	void UpdateStyleGroup(string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
 	{
 		_ui.UpdateStyleGroup(name, type, flags);
@@ -356,7 +356,7 @@ public:
 
 	//TODO: New API
 	//--------------------------------------------------------------
-	void AddStyleGroup(std::string name, SurfingGuiGroupStyle flags)
+	void AddStyleGroup(string name, SurfingGuiGroupStyle flags)
 	{
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
@@ -447,7 +447,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(std::string name, SurfingGuiGroupStyle flags)
+	void UpdateStyleGroup(string name, SurfingGuiGroupStyle flags)
 	{
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
@@ -809,11 +809,11 @@ public:
 	// Text with optional Uppercasing and Spacing
 
 	//--------------------------------------------------------------
-	void AddLabel(std::string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false)
+	void AddLabel(string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -832,7 +832,7 @@ public:
 			break;
 		}
 
-		std::string t = bUppercase ? ofToUpper(label) : label;
+		string t = bUppercase ? ofToUpper(label) : label;
 		if (bSpacing) this->AddSpacing();
 		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
@@ -851,11 +851,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabel(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	void AddLabel(const string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -871,7 +871,7 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(0);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -880,11 +880,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelStyled(const std::string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
+	void AddLabelStyled(const string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -900,7 +900,7 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 
 		pushStyleFont(int(style));
@@ -911,11 +911,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelNoStyled(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	void AddLabelNoStyled(const string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -931,18 +931,18 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelBig(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	void AddLabelBig(const string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -958,7 +958,7 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(1);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -967,11 +967,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelHuge(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	void AddLabelHuge(const string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -987,7 +987,7 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(2);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -996,11 +996,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelHugeXXL(const std::string label, bool bUppercase = false, bool bSpacing = false)
+	void AddLabelHugeXXL(const string label, bool bUppercase = false, bool bSpacing = false)
 	{
 		if (customFonts.size() == 0) {
 			//default font
-			std::string t = bUppercase ? ofToUpper(label) : label;
+			string t = bUppercase ? ofToUpper(label) : label;
 			if (bSpacing) this->AddSpacing();
 			ImGui::TextWrapped("%s", t.c_str());
 			if (bSpacing) this->AddSpacing();
@@ -1016,7 +1016,7 @@ public:
 			n = ss[0];
 		}
 
-		std::string t = bUppercase ? ofToUpper(n) : n;
+		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 		pushStyleFont(3);
 		ImGui::TextWrapped("%s", t.c_str());
@@ -1025,14 +1025,14 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ImVec2 CalcTextSize(const std::string s)
+	ImVec2 CalcTextSize(const string s)
 	{
 		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
 		return sz;
 	}
 
 	//--------------------------------------------------------------
-	ImVec2 CalcTextSize(const std::string s, int indexFont)
+	ImVec2 CalcTextSize(const string s, int indexFont)
 	{
 		if (customFonts.size() == 0) {
 			//default font
@@ -1047,7 +1047,7 @@ public:
 	}
 
 	// Applied mainly to buttons
-	float CalcWidgetWidth(const std::string s) {
+	float CalcWidgetWidth(const string s) {
 		float sp = this->CalcTextSize(s.c_str(), 0).x;
 		//sp += this->getWidgetsSpacingX();
 		sp += this->getWindowSpacingX();
@@ -1057,13 +1057,13 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddLinkUrlButton(const std::string label, std::string url, bool bBlink = false)
+	void AddLinkUrlButton(const string label, string url, bool bBlink = false)
 	{
 		ofxImGuiSurfing::AddLinkUrlButton(label.c_str(), url.c_str(), 1.0f, bBlink);
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelLinkURL(const std::string label, std::string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT,
+	void AddLabelLinkURL(const string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT,
 		bool bBlink = true)
 	{
 		switch (fontType)
@@ -1107,17 +1107,17 @@ public:
 	//// Simplified Text without Uppercasing not Spacing
 
 	////--------------------------------------------------------------
-	//void AddText(const std::string label)
+	//void AddText(const string label)
 	//{
 	//	AddLabel(label, false, false);
 	//}
 	////--------------------------------------------------------------
-	//void AddTextBig(const std::string label)
+	//void AddTextBig(const string label)
 	//{
 	//	AddLabelBig(label, false, false);
 	//}
 	////--------------------------------------------------------------
-	//void AddTextHuge(const std::string label)
+	//void AddTextHuge(const string label)
 	//{
 	//	AddLabelHuge(label, false, false);
 	//}
@@ -1125,26 +1125,26 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddTooltipHelp(std::string text)
+	void AddTooltipHelp(string text)
 	{
 		ofxImGuiSurfing::AddTooltipHelp(text.c_str());
 	}
 
 	//--------------------------------------------------------------
-	void AddTooltip(std::string text, bool bEnabled = true)
+	void AddTooltip(string text, bool bEnabled = true)
 	{
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
 	//--------------------------------------------------------------
-	void AddTooltipBlink(std::string text, bool bBlink = true, bool bEnabled = true)
+	void AddTooltipBlink(string text, bool bBlink = true, bool bEnabled = true)
 	{
 		ofxImGuiSurfing::AddTooltipBlink(text, bBlink, bEnabled);
 	}
 
 	// // To be used on combos
 	// //--------------------------------------------------------------
-	// void AddTooltip(ofParameter<int>& pindex,std::vector<std::string> fileNames)
+	// void AddTooltip(ofParameter<int>& pindex,std::vector<string> fileNames)
 	// {
 	// 	ofxImGuiSurfing::AddTooltip(pindex, fileNames);
 	// }
@@ -1164,7 +1164,7 @@ public:
 	//--------------------------------------------------------------
 	void AddTooltip(ofAbstractParameter& p, bool bEnabled = true)
 	{
-		std::string s = p.getName();
+		string s = p.getName();
 		s += "\n";
 
 		//TODO: add other types
@@ -1229,7 +1229,7 @@ public:
 
 	// Separator Text
 	//--------------------------------------------------------------
-	void AddSeparatorText(const std::string label, int index = 0, bool bNoline = 1)
+	void AddSeparatorText(const string label, int index = 0, bool bNoline = 1)
 	{
 		ImGui::Spacing();
 
@@ -1244,8 +1244,8 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	// void AddSeparatorText(std::string label, bool bUppercase = false, bool bSpacing = false)
-	void AddSeparatorText(std::string label, int index, bool bNoline, bool bUppercase, bool bSpacing)
+	// void AddSeparatorText(string label, bool bUppercase = false, bool bSpacing = false)
+	void AddSeparatorText(string label, int index, bool bNoline, bool bUppercase, bool bSpacing)
 	{
 		if (bUppercase) label = ofToUpper(label);
 
@@ -1588,18 +1588,18 @@ public:
 	// will use the bool param for show/hide
 	// and the param name for the window name
 
-	bool BeginWindow(std::string name, ofParameter<bool>& p);
+	bool BeginWindow(string name, ofParameter<bool>& p);
 	//  to change the name, and not use the param name.
 
-	bool BeginWindow(std::string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags);
+	bool BeginWindow(string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags);
 
 	bool BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags);
 	// will use the bool param for show/hide and the param name for the window name
 
-	bool BeginWindow(std::string name);
-	bool BeginWindow(std::string name, bool* p_open);
-	bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags);
-	//bool BeginWindow(std::string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
+	bool BeginWindow(string name);
+	bool BeginWindow(string name, bool* p_open);
+	bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags);
+	//bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	bool BeginWindow(char* name = "Window");
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
@@ -1619,9 +1619,9 @@ public:
 	// Tree / Folders Helpers
 
 	//TODO: could improve by doing open state handled by imgui.ini. Now is forced.
-	//bool BeginTree(const std::string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
+	//bool BeginTree(const string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	//--------------------------------------------------------------
-	bool BeginTree(const std::string label)
+	bool BeginTree(const string label)
 	{
 		bool bIndented = true;
 		bool b = (ofxImGuiSurfing::BeginTree(label));
@@ -1635,7 +1635,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool BeginTree(const std::string label, bool open /*= false*/, bool bIndented = true,
+	bool BeginTree(const string label, bool open /*= false*/, bool bIndented = true,
 		ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	{
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
@@ -1659,7 +1659,7 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, std::string label = "##child", bool border = true,
+	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, string label = "##child", bool border = true,
 		ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None)
 	{
 		return ImGui::BeginChild(label.c_str(), size_arg, border, extra_flags);
@@ -1668,11 +1668,11 @@ public:
 	//TODO:
 	/*
 	//--------------------------------------------------------------
-	bool BeginChildEx(std::string label)
+	bool BeginChildEx(string label)
 	{
 		this->refreshLayout();
 
-		std::string t = "##CHILD" + label;
+		string t = "##CHILD" + label;
 		bool ret = ImGui::BeginChild(t.c_str(), ImVec2(), true, ImGuiWindowFlags_MenuBar);
 		//ImGui::BeginChild(t.c_str(), ImVec2(-1,-1), true, ImGuiWindowFlags_MenuBar+ ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -1697,7 +1697,7 @@ public:
 	// Columns
 
 	//--------------------------------------------------------------
-	void BeginColumns(int amount, std::string labelID, bool border = false)
+	void BeginColumns(int amount, string labelID, bool border = false)
 	{
 		//this->refreshLayout();
 		ImGui::Columns(amount, labelID.c_str(), border);
@@ -1732,7 +1732,7 @@ public:
 	// Menu
 
 	//--------------------------------------------------------------
-	bool BeginMenu(const std::string label, bool enabled = true)
+	bool BeginMenu(const string label, bool enabled = true)
 	{
 		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
 		if (b) this->refreshLayout();
@@ -1747,7 +1747,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItem(const std::string label, ofParameter<bool>& b, bool enabled = true)
+	bool MenuItem(const string label, ofParameter<bool>& b, bool enabled = true)
 	{
 		bool selected = b.get();
 		const char* shortcut = NULL;
@@ -1759,7 +1759,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItem(ofParameter<bool>& b, bool enabled = true)
 	{
-		std::string label = b.getName();
+		string label = b.getName();
 		bool selected = b.get();
 		const char* shortcut = NULL;
 
@@ -1769,7 +1769,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
 	{
-		std::string label = pb.getName();
+		string label = pb.getName();
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1781,7 +1781,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse, bool enabled = true)
 	{
-		std::string label = pb.get() ? nameTrue : nameFalse;
+		string label = pb.get() ? nameTrue : nameFalse;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1793,7 +1793,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItemToggleNamed(ofParameter<bool>& pb, string name, bool enabled = true)
 	{
-		std::string label = name;
+		string label = name;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1805,7 +1805,7 @@ public:
 	//--------------------------------------------------------------
 	bool MenuItemToggleNamedAppend(ofParameter<bool>& pb, string suffix, bool enabled = true)
 	{
-		std::string label = pb.getName() + suffix;
+		string label = pb.getName() + suffix;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1815,7 +1815,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemButton(const std::string label)
+	bool MenuItemButton(const string label)
 	{
 		const char* shortcut = NULL;
 		bool selected = false;
@@ -1825,7 +1825,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemButtonBlinking(const std::string label, bool bEnable = true)
+	bool MenuItemButtonBlinking(const string label, bool bEnable = true)
 	{
 		if (bEnable) this->BeginBlinkText();
 		const char* shortcut = NULL;
@@ -1837,7 +1837,7 @@ public:
 	}
 
 	////--------------------------------------------------------------
-	//bool MenuItemButtonBlinkingIfHover(const std::string label)
+	//bool MenuItemButtonBlinkingIfHover(const string label)
 	//{
 	//	this->BeginBlinkText();
 	//	const char* shortcut = NULL;
@@ -2054,31 +2054,31 @@ private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
 	bool bFlagIgnoreNextPopStyleFont = false;
-	vector<std::string> namesCustomFonts;
-	vector<std::string> pathsCustomFonts;
+	vector<string> namesCustomFonts;
+	vector<string> pathsCustomFonts;
 
 public:
 	vector<ImFont*> getFontsPtr() { return customFonts; } //Warning: setup() must be called before!
-	vector<std::string> getFontsNames() { return namesCustomFonts; } //Warning: setup() must be called before!
+	vector<string> getFontsNames() { return namesCustomFonts; } //Warning: setup() must be called before!
 
 	void clearFonts();
 	int getNumFonts();
 	int getAmountFonts();
-	std::string getFontLabel(int index);
-	std::string getFontName(int index);
+	string getFontLabel(int index);
+	string getFontName(int index);
 	float getFontSizeForIndex(int index);
-	std::string getFontPath(int index); //get the path of the selected index font
-	std::string getFontIndexPath(); //duplicated? //get the path of the selected index font
+	string getFontPath(int index); //get the path of the selected index font
+	string getFontIndexPath(); //duplicated? //get the path of the selected index font
 	float getFontIndexSize(); //get the size of the selected index font
 	void doLoadPreviousFont();
 	void doLoadNextFont();
 
 	//TODO: required? bc addFontStyle workflow..
-	//bool addFont(std::string path, float size);
+	//bool addFont(string path, float size);
 	// Load all the fonts from the passed folder
-	bool LoadFontsFromFolder(std::string path, float size = 12.f, bool bMultisize = false);
+	bool LoadFontsFromFolder(string path, float size = 12.f, bool bMultisize = false);
 
-	bool addFontStyle(std::string path, float size, string label = "");
+	bool addFontStyle(string path, float size, string label = "");
 
 private:
 	int indexCurrFont = 0;
@@ -2507,7 +2507,7 @@ public:
 
 	//TODO: need to fix that respect the deserialization..
 	//--------------------------------------------------------------
-	void setLogName(std::string name)
+	void setLogName(string name)
 	{
 		log.setName(name);
 	}
@@ -2586,7 +2586,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLogTag(std::string name, ofColor color)
+	void AddLogTag(string name, ofColor color)
 	{
 		this->AddLogTag(SurfingLog::tagData{name, color});
 	}
@@ -2594,14 +2594,14 @@ public:
 	//--------------------------------------------------------------
 	void AddLogTag(ofColor color) //not using any tag. to remove left spacing
 	{
-		std::string name = "";
+		string name = "";
 		AddLogTag(name, color);
 	}
 
 	// Print message to log window passing the message and the tag name. 
 	// Must exist or been added previously.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, std::string nameTag)
+	void AddToLog(string text, string nameTag)
 	{
 		// Log
 		log.Add(text, nameTag);
@@ -2624,20 +2624,20 @@ public:
 	// Must exist or been added previously.
 	// if there's no passed tag we will use no tag and default text color.
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, int tag/* = -1*/)
+	void AddToLog(string text, int tag/* = -1*/)
 	{
 		log.Add(text, tag);
 	}
 
 	//--------------------------------------------------------------
-	void AddToLog(std::string text) //TODO:adding empty tag...
+	void AddToLog(string text) //TODO:adding empty tag...
 	{
 		//log.Add(text, "");
 		log.Add(text, OF_LOG_NOTICE);
 	}
 
 	//--------------------------------------------------------------
-	void AddToLog(std::string text, ofLogLevel logLevel)
+	void AddToLog(string text, ofLogLevel logLevel)
 	{
 		log.Add(text, logLevel);
 	}
@@ -2649,14 +2649,14 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddToLogAndNotifier(std::string text, ofLogLevel logLevel)
+	void AddToLogAndNotifier(string text, ofLogLevel logLevel)
 	{
 		log.Add(text, logLevel);
 		notifier.Add(text, logLevel);
 	}
 
 	//--------------------------------------------------------------
-	void AddToLogAndNotifier(std::string text, std::string nameTag)
+	void AddToLogAndNotifier(string text, string nameTag)
 	{
 		log.Add(text, nameTag);
 		notifier.Add(text, nameTag);
@@ -2679,26 +2679,26 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddToNotifier(std::string text, std::string nameTag)
+	void AddToNotifier(string text, string nameTag)
 	{
 		notifier.Add(text, nameTag);
 	}
 
 	//--------------------------------------------------------------
-	void AddToNotifier(std::string text) //TODO:adding empty tag...
+	void AddToNotifier(string text) //TODO:adding empty tag...
 	{
 		notifier.Add(text, OF_LOG_NOTICE);
 	}
 
 	//--------------------------------------------------------------
-	void AddToNotifier(std::string text, ofLogLevel logLevel)
+	void AddToNotifier(string text, ofLogLevel logLevel)
 	{
 		notifier.Add(text, logLevel);
 	}
 
 	//TODO: add tag system..
 	////--------------------------------------------------------------
-	//void AddToNotifier(std::string text, int tag/* = -1*/)
+	//void AddToNotifier(string text, int tag/* = -1*/)
 	//{
 	//	notifier.Add(text, tag);
 	//}
@@ -2763,7 +2763,7 @@ public:
 
 		if (!bNoLabel) // label
 		{
-			std::string n = b.getName();
+			string n = b.getName();
 			auto sz = ImGui::CalcTextSize(n.c_str());
 			w = w + sz.x;
 			w += this->getWidgetsSpacingX();
@@ -3296,21 +3296,21 @@ private:
 									this->AddSpacing();
 
 									this->AddLabelBig("Widget", false, true);
-									std::string _hwidget = "Unit Height:\n";
+									string _hwidget = "Unit Height:\n";
 									_hwidget += ofToString(ofxImGuiSurfing::getWidgetsHeightUnit());
 									ImGui::TextWrapped("%s", _hwidget.c_str());
 
-									std::string _wwidget = "Full Width:\n";
+									string _wwidget = "Full Width:\n";
 									_wwidget += ofToString(ofxImGuiSurfing::getWidgetsWidth(1));
 									ImGui::TextWrapped("%s", _wwidget.c_str());
 
 									this->AddSpacing();
 									this->AddLabelBig("Window", false, true);
-									std::string _wpanel = "Inner Width:\n";
+									string _wpanel = "Inner Width:\n";
 									_wpanel += ofToString(ofxImGuiSurfing::getPanelWidth());
 									ImGui::TextWrapped("%s", _wpanel.c_str());
 
-									std::string _wShape = "Shape:\n";
+									string _wShape = "Shape:\n";
 									_wShape += ofToString(ImGui::GetWindowPos().x);
 									_wShape += ", ";
 									_wShape += ofToString(ImGui::GetWindowPos().y);
@@ -3392,34 +3392,34 @@ private:
 
 private:
 	// File Settings
-	std::string path_Root = "";
-	std::string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
-	std::string path_LayoutsImGui;
-	std::string path_AppSettings;
-	std::string path_LayoutSettings;
+	string path_Root = "";
+	string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+	string path_LayoutsImGui;
+	string path_AppSettings;
+	string path_LayoutSettings;
 
-	//std::string nameLabel = "SurfingGui";
-	std::string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
+	//string nameLabel = "SurfingGui";
+	string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
 
 	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
 
 public:
 	//--------------------------------------------------------------
-	std::string getPathRoot() const
+	string getPathRoot() const
 	{
 		if (path_Root == "") return path_Global;
 		else return path_Root;
 	}
 
 	//--------------------------------------------------------------
-	std::string getPathGlobal() const
+	string getPathGlobal() const
 	{
 		return path_Global;
 	}
 
 	//--------------------------------------------------------------
-	std::string getPath() const
+	string getPath() const
 	{
 		return path_Global;
 	}
@@ -3430,7 +3430,7 @@ public:
 
 	// API
 	//--------------------------------------------------------------
-	void setName(std::string name)
+	void setName(string name)
 	{
 		// Must call before setup! 
 		// To allow the correct behavior when multiple instances/windows settings. 
@@ -3460,7 +3460,7 @@ public:
 		// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
 		bEnableFileSettings = b;
 
-		windowsOrganizer.setEnableFileSettings(b);
+		//windowsOrganizer.setEnableFileSettings(b);
 	}
 
 
@@ -3500,7 +3500,7 @@ private:
 	int _indexLastBegin = -1;
 
 	//TODO:
-	//std::string nameWindowSpecialsPanel = "";
+	//string nameWindowSpecialsPanel = "";
 
 	//--
 
@@ -3548,7 +3548,7 @@ public:
 	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
 	// to get the index of an special window passing the toggle
 
-	int getWindowSpecialIndexForName(std::string name);
+	int getWindowSpecialIndexForName(string name);
 	// to be used if you forgot or don't know the index
 
 	// Check if that param toggle is previously added as an special window
@@ -3576,7 +3576,8 @@ public:
 			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			this->AddSpacingSeparated();
 
-			windowsOrganizer.drawWidgetsOrganizer(bMinimize, !bGui_Aligners, !bGui_SpecialWindows);
+			//windowsOrganizer.drawWidgetsOrganizer(bMinimize, !bGui_Aligners, !bGui_SpecialWindows);
+			windowsOrganizer.drawWidgetsOrganizer(bMinimize);
 
 			this->EndWindow();
 		}
@@ -3705,7 +3706,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(std::string name, bool _bAutoResize = true, bool _bPowered = false)
+	void addWindowSpecial(string name, bool _bAutoResize = true, bool _bPowered = false)
 	{
 		// Security Checks
 
@@ -3748,7 +3749,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	std::string getWindowSpecialName(int index)
+	string getWindowSpecialName(int index)
 	{
 		if (index > windows.size() - 1 || index == -1)
 		{
@@ -3771,7 +3772,7 @@ public:
 	//}
 
 	////--------------------------------------------------------------
-	//void addWindow(std::string name, bool bPowered = false) { // LEGACY API
+	//void addWindow(string name, bool bPowered = false) { // LEGACY API
 	//	addWindowSpecial(name, bPowered);
 	//}
 
@@ -3784,11 +3785,11 @@ public:
 	//--
 
 public:
-//private:
-	// DEPRECATED
-	// Exposed helpers to external GUIs / scope.
+	//private:
+		// DEPRECATED
+		// Exposed helpers to external GUIs / scope.
 
-	//--------------------------------------------------------------
+		//--------------------------------------------------------------
 	ofParameter<bool>& getGuiToggleGlobal()
 	{
 		// global toggle to show/hide the all panels
@@ -3870,7 +3871,7 @@ public:
 	// layoutType = 3 : top up //TODO:
 	//TODO: add vec2 offset...
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(std::string nameAnchorWindow /*= "-1"*/, int layoutType = 0,
+	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0,
 		ImGuiCond cond = ImGuiCond_Always)
 	{
 		//// Default for unnamed is queued after last window on screen..
@@ -3947,7 +3948,7 @@ public:
 
 	// Get the name of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
-	std::string getWindowSpecialLast() const
+	string getWindowSpecialLast() const
 	{
 		return windowsOrganizer.getWindowSpecialLast();
 	}
@@ -4169,37 +4170,43 @@ public:
 	//--------------------------------------------------------------
 	void drawWidgetsSpecialWindows()
 	{
+#if 1 // use the internal from WindowsOrganizer
+		windowsOrganizer.drawWidgetsWindows(bMinimize);
+#else
+
 		float _h = getWidgetsHeight();
 		float _w1 = getWidgetsWidth(1);
 		float _w2 = getWidgetsWidth(2);
 
-		if (ImGui::Button("All", ImVec2(_w2, _h)))
-		{
-			for (auto& p : windowsOrganizer.windowsPanels)
-			{
-				p.bGui = true;
-			}
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("None", ImVec2(_w2, _h)))
-		{
-			for (auto& p : windowsOrganizer.windowsPanels)
-			{
-				p.bGui = false;
-			}
-		}
-
-		// Show Global
-		this->AddSpacing();
+		// Show Windows Global
 		bool b = !bGui_ShowWindowsGlobal;//blink
 		if (b) ofxImGuiSurfing::BeginBlinkText();
 		ofxImGuiSurfing::AddToggleRoundedButton(bGui_ShowWindowsGlobal); //medium
 		if (b) ofxImGuiSurfing::EndBlinkText();
 		this->AddSpacing();
 
-		// All toggles
 		if (windowsOrganizer.bGui_ShowWindowsGlobal)
 		{
+			if (ImGui::Button("All", ImVec2(_w2, _h)))
+			{
+				for (auto& p : windowsOrganizer.windowsPanels)
+				{
+					p.bGui = true;
+				}
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("None", ImVec2(_w2, _h)))
+			{
+				for (auto& p : windowsOrganizer.windowsPanels)
+				{
+					p.bGui = false;
+				}
+			}
+
+			this->AddSpacing();
+
+			// All toggles
+
 			ImGui::Indent();
 
 			drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE);
@@ -4211,6 +4218,7 @@ public:
 		//// Special Windows Organizer toggle 
 		//this->AddSpacingSeparated();
 		//this->Add(bGui_Organizer, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+#endif
 	}
 
 	//--------------------------------------------------------------
@@ -4221,9 +4229,6 @@ public:
 		}
 		if (BeginWindow(bGui_SpecialWindows))
 		{
-			this->AddLabelBig("Special \nWindows", false);
-			ImGui::Spacing();
-
 			drawWidgetsSpecialWindows();
 
 			this->EndWindow();
@@ -4303,19 +4308,19 @@ private:
 
 	const char* ini_to_load = NULL;
 	const char* ini_to_save = NULL;
-	std::string ini_to_load_Str;
-	std::string ini_to_save_Str;
+	string ini_to_load_Str;
+	string ini_to_save_Str;
 
 	void loadLayout(int mode);
 	void saveLayout(int mode);
 
-	void saveLayoutPreset(std::string path); //-> both group params and ImGui ini files
-	void loadLayoutPreset(std::string path);
+	void saveLayoutPreset(string path); //-> both group params and ImGui ini files
+	void loadLayoutPreset(string path);
 
-	void saveLayoutImGuiIni(std::string path);
-	void loadLayoutImGuiIni(std::string path);
-	void saveLayoutPresetGroup(std::string path);
-	void loadLayoutPresetGroup(std::string path);
+	void saveLayoutImGuiIni(string path);
+	void loadLayoutImGuiIni(string path);
+	void saveLayoutPresetGroup(string path);
+	void loadLayoutPresetGroup(string path);
 
 	ofParameter<int> appLayoutIndex{"Layout Preset", -1, -1, 0};
 	// index for the selected preset. -1 is none selected, useful too.
@@ -4327,7 +4332,7 @@ private:
 	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
 
 	int numPresetsDefault;
-	void createLayoutPreset(std::string namePreset = "-1");
+	void createLayoutPreset(string namePreset = "-1");
 
 	//-
 
@@ -4338,15 +4343,15 @@ private:
 	void Changed_WindowsPanels(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
-	std::string getLayoutName(int mode)
+	string getLayoutName(int mode)
 	{
-		std::string s = "";
+		string s = "";
 
 		if (mode > bLayoutPresets.size() - 1) return "-1";
 
 		s = bLayoutPresets[mode].getName();
 		//s += ".ini";
-		std::string _path = s;
+		string _path = s;
 		return _path;
 	}
 
@@ -4357,7 +4362,7 @@ public:
 	// that are P1-P2-P3-P4 by default.
 
 	//--------------------------------------------------------------
-	void setPresetsNames(vector<std::string> names)
+	void setPresetsNames(vector<string> names)
 	{
 		if (names.size() != 4)
 		{
@@ -4369,7 +4374,7 @@ public:
 	}
 
 private:
-	vector<std::string> namesPresets;
+	vector<string> namesPresets;
 
 public:
 	//-> Must call manually after adding windows and layout presets
@@ -4459,14 +4464,14 @@ private:
 
 public:
 	//--------------------------------------------------------------
-	void setLabelLayoutPanels(std::string label)
+	void setLabelLayoutPanels(string label)
 	{
 		// Customize the app name for panels window label tittle
 		bGui_LayoutsPanels.setName(label);
 	}
 
 	//--------------------------------------------------------------
-	void setLabelLayoutMainWindow(std::string label)
+	void setLabelLayoutMainWindow(string label)
 	{
 		bGui_LayoutsManager.setName(label);
 	}
@@ -4593,10 +4598,10 @@ private:
 	// Can be initialized from outer scope.
 
 	// Help Internal: How to use the add-on itself
-	std::string helpInternalText = "";
+	string helpInternalText = "";
 
 	// Help App: How to use our App 
-	std::string helpAppText = "";
+	string helpAppText = "";
 
 	// main help disablers
 	bool bUseHelpInternal = false;
@@ -4637,7 +4642,7 @@ public:
 	// If we are using mono-spaced fonts, 
 	// it must be called after be have been added the mono-spaced fonts.
 	//--------------------------------------------------------------
-	void setHelpAppText(std::string text)
+	void setHelpAppText(string text)
 	{
 		//if (!bUseHelpApp) setEnableHelpApp();
 		setEnableHelpApp(); //force
@@ -4647,7 +4652,7 @@ public:
 	}
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setHelpInternalText(std::string text)
+	void setHelpInternalText(string text)
 	{
 		//if (!bUseHelpInternal) setEnableHelpInternal();
 		setEnableHelpInternal(); //force
@@ -4694,18 +4699,18 @@ public:
 	// Button and toggle to be used faster, without param.
 
 	/*
-	bool AddButton(std::string label, ImVec2 sz) {
+	bool AddButton(string label, ImVec2 sz) {
 		return ofxImGuiSurfing::AddButton(label, sz);
 	}
-	bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return ofxImGuiSurfing::AddButton(label, type, amtPerRow, bSameLine, spacing);
 	}
-	bool AddToggle(std::string label, bool& bState, ImVec2 sz)
+	bool AddToggle(string label, bool& bState, ImVec2 sz)
 	{
 		return ofxImGuiSurfing::AddToggle(label, bState, sz);
 	}
-	bool AddToggle(std::string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
+	bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false, int spacing = -1)
 	{
 		return ofxImGuiSurfing::AddToggle(label, bState, type, amtPerRow, bSameLine, spacing);
 	}
@@ -4718,7 +4723,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
-	inline bool AddButton(std::string label, ImVec2 sz)
+	inline bool AddButton(string label, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -4731,19 +4736,19 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButtonRawMini(std::string label)
+	inline bool AddButtonRawMini(string label)
 	{
 		return ImGui::Button(label.c_str());
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButtonRaw(std::string label, ImVec2 sz)
+	inline bool AddButtonRaw(string label, ImVec2 sz)
 	{
 		return ImGui::Button(label.c_str(), sz);
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButton(std::string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
 		bool bSameLine = false, int spacing = -1)
 	{
 		// fixes
@@ -4895,7 +4900,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 	// A toggle passing a name and a boolean to show and get the boolean state.
 	//--------------------------------------------------------------
-	inline bool AddToggle(std::string label, bool& bState, ImVec2 sz)
+	inline bool AddToggle(string label, bool& bState, ImVec2 sz)
 	{
 		bool bReturn = false;
 
@@ -4909,7 +4914,7 @@ public:
 	}
 
 	////--------------------------------------------------------------
-	//bool AddToggle(std::string label, bool& bState)
+	//bool AddToggle(string label, bool& bState)
 	//{
 	//	int w = ofxImGuiSurfing::getWidgetsWidth(1);
 	//	int h = ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -4922,7 +4927,7 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	inline bool AddToggle(std::string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
 		bool bSameLine = false, int spacing = -1)
 	{
 		bool bReturn = false;
@@ -5101,7 +5106,7 @@ public:
 	template <typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
 	{
-		std::string name = p.getName();
+		string name = p.getName();
 
 		bool bReturn = false;
 
@@ -5180,32 +5185,32 @@ public:
 
 	// Combos
 
-	bool AddCombo(ofParameter<int> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	bool AddCombo(ofParameter<int> pIndex, std::vector<string> fileNames, bool bRaw = false)
 	{
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	bool AddCombo(ofParameter<size_t> pIndex, std::vector<std::string> fileNames, bool bRaw = false)
+	bool AddCombo(ofParameter<size_t> pIndex, std::vector<string> fileNames, bool bRaw = false)
 	{
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	bool AddComboButton(ofParameter<int>& pIndex, std::vector<std::string>& fileNames)
+	bool AddComboButton(ofParameter<int>& pIndex, std::vector<string>& fileNames)
 	{
 		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
 	}
 
-	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
+	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDual(pIndex, fileNames, bCycled);
 	}
 
-	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<std::string>& fileNames, bool bCycled = false)
+	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDualLefted(pIndex, fileNames, bCycled);
 	}
 
-	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<std::string>& fileNames,
+	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<string>& fileNames,
 		bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDualCenteredNames(pIndex, fileNames, bCycled);
@@ -5287,7 +5292,7 @@ public:
 		return bOpen;
 	}
 
-	};
+};
 
 
 #endif
