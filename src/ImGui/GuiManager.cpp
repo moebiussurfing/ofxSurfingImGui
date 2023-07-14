@@ -1,8 +1,14 @@
 #include "GuiManager.h"
 
+int SurfingGuiManager::instanceCount = 0;
+
 //--------------------------------------------------------------
 SurfingGuiManager::SurfingGuiManager()
 {
+	//instanceCount++;
+
+	//--
+
 	//TODO:
 	// Simplify namespaces!
 	namespace ofxSurfingImGui = ofxImGuiSurfing;
@@ -35,7 +41,7 @@ SurfingGuiManager::SurfingGuiManager()
 	// App callbacks
 
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
-	ofAddListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+	ofAddListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
 	//--
 
@@ -108,7 +114,7 @@ void SurfingGuiManager::exit()
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
-	ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+	ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
@@ -1689,6 +1695,10 @@ void SurfingGuiManager::update()
 		debugger.update();
 	}
 #endif
+
+	//--
+
+	windowsOrganizer.update();
 }
 
 //--------------------------------------------------------------
@@ -3216,7 +3226,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	//--
 
 	//// Gui - > which panels enabled but overwritten by Layout Presets Engine
-	//params_AppSettings.add(params_bGuiToggles);
+	//params_AppSettings.add(params_WindowsPanels);
 
 	//--
 

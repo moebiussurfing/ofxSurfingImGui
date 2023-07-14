@@ -140,6 +140,15 @@ class SurfingGuiManager
 public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
+	
+public:
+	//TODO:
+	static int instanceCount;
+	static int getInstanceCount() {
+		return instanceCount;
+	}
+
+	//----
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 public:
@@ -3595,16 +3604,11 @@ public:
 		}
 	}
 
-	//TODO: DEPRECATED
 	////--------------------------------------------------------------
-	//bool getGuiToggleGlobal() {
+	//bool getGuiToggleGlobalState() const
+	//{
 	//	return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	//}
-	//--------------------------------------------------------------
-	bool getGuiToggleGlobalState() const
-	{
-		return windowsOrganizer.bGui_ShowWindowsGlobal.get();
-	}
 
 	//--
 
@@ -3689,7 +3693,7 @@ public:
 		windows.push_back(win);
 
 		// Queue Toggle. only for callbacks ?
-		params_bGuiToggles.add(_bGui);
+		params_WindowsPanels.add(_bGui);
 
 		// Queue Toggle
 		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
@@ -3731,7 +3735,7 @@ public:
 		// Queue
 
 		windows.push_back(win);
-		params_bGuiToggles.add(_bGui);
+		params_WindowsPanels.add(_bGui);
 
 		bWindowSpecials.push_back(_bGui);
 
@@ -3962,24 +3966,6 @@ public:
 	{
 		windowsOrganizer.setWindowSpecialFirstPosition(pos);
 	}
-
-	//--
-
-	//// Orientation cascade windows
-	////--------------------------------------------------------------
-	//void setSpecialWindowsOrganizerOrientationHorizontal() {
-	//	windowsOrganizer.bOrientation.set(false);
-	//}
-
-	////--------------------------------------------------------------
-	//void setSpecialWindowsOrganizerOrientationVertical() {
-	//	windowsOrganizer.bOrientation.set(true);
-	//}
-
-	////--------------------------------------------------------------
-	//void setToggleSpecialWindowsOrganizerOrientation() {
-	//	windowsOrganizer.bOrientation.set(!windowsOrganizer.bOrientation.get());
-	//}
 
 	//--	
 
@@ -4338,7 +4324,7 @@ private:
 	void Changed_Params(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
-	//void Changed_Enablers(ofAbstractParameter& e);
+	//void Changed_WindowsPanels(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
 	std::string getLayoutName(int mode)
@@ -4505,7 +4491,7 @@ private:
 private:
 	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
 
-	ofParameterGroup params_bGuiToggles{ "_GuiToggles_" };
+	ofParameterGroup params_WindowsPanels{ "_GuiToggles_" };
 	//TODO:
 	// To store the gui show toggles for each added special window. ?
 	// Only for callbacks!

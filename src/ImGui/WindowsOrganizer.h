@@ -15,6 +15,7 @@
 
 	TODO:
 
+	+ improve disabling stuff (ie: update listener) when special windows are not used.
 	+ make that a window can be master.
 		then always at first position.
 		re sorting to first when appears.
@@ -44,8 +45,13 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Constructor";
 
-			ofAddListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
+			ofAddListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
 			ofAddListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
+			ofAddListener(params_Callbacks.parameterChangedE(), this, &WindowsOrganizer::Changed_Callbacks);
+
+			//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+			//			ofAddListener(ofEvents().update, this, &WindowsOrganizer::update, OF_EVENT_ORDER_AFTER_APP);
+			//#endif
 
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 			//TODO: 
@@ -71,8 +77,13 @@ namespace ofxImGuiSurfing
 		{
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Destructor!";
 
-			ofRemoveListener(params_bGuiToggles.parameterChangedE(), this, &WindowsOrganizer::Changed_Enablers);
+			ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
 			ofRemoveListener(params_Settings.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
+			ofRemoveListener(params_Callbacks.parameterChangedE(), this, &WindowsOrganizer::Changed_Callbacks);
+
+			//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+			//			ofRemoveListener(ofEvents().update, this, &WindowsOrganizer::update, OF_EVENT_ORDER_AFTER_APP);
+			//#endif
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 			if (!bDoneExit)
@@ -90,6 +101,26 @@ namespace ofxImGuiSurfing
 #endif
 		}
 
+		//--
+
+	public:
+		// Subscribed after app
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//void update(ofEventArgs& args) 
+		void update()
+		{
+			//ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			//if (!bDoneStartupDelayed) return;
+
+			if (bFlagSaveSettings) {
+				bFlagSaveSettings = false;
+				saveSettings();
+			}
+		}
+#endif
+
+		//--
+
 	private:
 		bool bDoneExit = false;
 
@@ -100,7 +131,7 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
 
 			exit();
-		}
+	}
 #endif
 
 		//--------------------------------------------------------------
@@ -115,21 +146,25 @@ namespace ofxImGuiSurfing
 			bDoneExit = true;
 		}
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		bool bFlagSaveSettings = 0;
+#endif
+
 	public:
 		//--------------------------------------------------------------
 		void saveSettings()
 		{
-			if (bInitialized)
+			if (bDoneInitialized)
 			{
 				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings()";
 
 				// Save
-				saveGroup(params_AppSettings, path_Settings);
+				saveGroup(params_AppSettings, path_Settings, false);
 			}
 			else
 			{
-				ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << "saveSettings() Skipped Saving settings";
-				ofLogWarning("ofxSurfingImGui") << "bInitialized was unexpectedly false!";
+				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer::saveSettings() Skipped Saving settings";
+				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer::saveSettings() bDoneInitialized was unexpectedly false!";
 			}
 		}
 		//--------------------------------------------------------------
@@ -335,9 +370,6 @@ namespace ofxImGuiSurfing
 	private:
 		bool bDISABLE_CALLBACKS = true;
 
-		//ofParameter<bool> bLockedWidth{ "Lock Width", false };
-		//ofParameter<bool> bLockedHeight{ "Lock Height", true };
-
 		float width_max = 0;
 		float height_max = 0;
 
@@ -346,7 +378,7 @@ namespace ofxImGuiSurfing
 		string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
 		string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
 
-		bool bInitialized = false;
+		bool bDoneInitialized = false;
 		bool bDoneStartupDelayed = false;
 
 	public:
@@ -370,7 +402,7 @@ namespace ofxImGuiSurfing
 		// Hidden windows are removed from here!
 		std::vector<int> queueWindowsVisible;
 
-		ofParameterGroup params_bGuiToggles{ "SpecialWindows" };
+		ofParameterGroup params_WindowsPanels{ "SpecialWindows" };
 		ofParameterGroup params_AppSettings{ "Organizer" };
 
 		bool bHideWindowsToggles = false; //-> To disable when using the full layout engine. 
@@ -394,6 +426,7 @@ namespace ofxImGuiSurfing
 
 	private:
 		ofParameterGroup params_Panels{ "Panels" }; // just to organize on the json file
+		ofParameterGroup params_Callbacks{ "Callbacks" };
 
 	public:
 		ofParameterGroup params_Settings{ "Organizer Settings" }; // To use on a external GUI 
@@ -417,9 +450,12 @@ namespace ofxImGuiSurfing
 
 			//--
 
-			if (0)
-			{
-			}
+			//if (0)
+			//{
+			//}
+			//else if (name == " ")
+			//{
+			//}
 
 			//--
 
@@ -433,9 +469,29 @@ namespace ofxImGuiSurfing
 			//	doApplyLinkWindows();
 			//}
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+			bFlagSaveSettings = true;
+#endif		
+		}
+
+		//--------------------------------------------------------------
+		void Changed_Callbacks(ofAbstractParameter& e)
+		{
+			//if (bDISABLE_CALLBACKS) return;
+
+			string name = e.getName();
+
+			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Callbacks: " << name << " : " << e;
+
 			//--
 
+			if (0)
+			{
+			}
+
 			// Align Windows Helpers
+
+			//--
 
 			else if (name == bAlignWindowsReset.getName() && bAlignWindowsReset)
 			{
@@ -471,7 +527,7 @@ namespace ofxImGuiSurfing
 		//--
 
 		//--------------------------------------------------------------
-		void Changed_Enablers(ofAbstractParameter& e) // each window show toggle changed
+		void Changed_WindowsPanels(ofAbstractParameter& e) // each window show toggle changed
 		{
 			if (windowsPanels.size() == 0) return;
 
@@ -481,7 +537,7 @@ namespace ofxImGuiSurfing
 
 			string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Enablers: " << name << " : " << e;
+			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_WindowsPanels: " << name << " : " << e;
 
 			//--			
 
@@ -502,8 +558,12 @@ namespace ofxImGuiSurfing
 
 					//--
 
-					// Just ENABLED / Add it 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+					bFlagSaveSettings = true;
+#endif			
+					//--
 
+					// Just ENABLED / Add it 
 					if (p.bGui)
 					{
 						if (p.indexPos == -1)
@@ -520,7 +580,6 @@ namespace ofxImGuiSurfing
 							doApplyLinkWindows();
 
 							bDISABLE_CALLBACKS = false;
-
 							return;
 						}
 						else
@@ -542,8 +601,6 @@ namespace ofxImGuiSurfing
 					//--
 
 					// Just DISABLED / Remove it
-
-					//if (!p.bGui)
 					else
 					{
 						if (p.indexPos == -1)
@@ -615,7 +672,7 @@ namespace ofxImGuiSurfing
 
 							return;
 						}
-					}
+					}	
 				}
 			}
 
@@ -933,7 +990,7 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::add() " << e.getName();
 
 			// Queue toggle
-			params_bGuiToggles.add(e);
+			params_WindowsPanels.add(e);
 
 			// Queue window
 			WindowPanel p;
@@ -981,7 +1038,7 @@ namespace ofxImGuiSurfing
 			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::setupInitiate()";
 			ofLogNotice("ofxSurfingImGui") << nameLabel;
 
-			//-
+			//--
 
 			params_Panels.add(bGui_ShowWindowsGlobal);
 			params_Panels.add(bGui_Aligners);
@@ -997,36 +1054,20 @@ namespace ofxImGuiSurfing
 			params_Settings.add(bHeaders);
 			params_Settings.add(pad);
 			params_Settings.add(position_Anchor);
-			params_Settings.add(bAlignWindowsY);
-			params_Settings.add(bAlignWindowsX);
-			params_Settings.add(bAlignWindowsCascade);
-			params_Settings.add(bAlignWindowsReset);
 
 			// Settings Group
 			params_AppSettings.add(params_Settings);
 
-			//--
-
-			////TODO:
-			//// // workflow
-			//// Default state
-			//// Disable all
-			//for (auto& p : params_bGuiToggles)
-			//{
-			//	if (p->type() == typeid(ofParameter<bool>).name())
-			//	{
-			//		ofParameter<bool> pm = p->cast<bool>();
-			//		pm = false;
-			//	}
-			//}
-
-			//--
-
-			// To store session settings
-
 			// Each window enabler will be added here..
 			// all of theme has been added during setup
-			params_AppSettings.add(params_bGuiToggles);
+			params_AppSettings.add(params_WindowsPanels);
+
+			//--
+
+			params_Callbacks.add(bAlignWindowsY);
+			params_Callbacks.add(bAlignWindowsX);
+			params_Callbacks.add(bAlignWindowsCascade);
+			params_Callbacks.add(bAlignWindowsReset);
 
 			//--
 
@@ -1043,12 +1084,12 @@ namespace ofxImGuiSurfing
 
 			bDISABLE_CALLBACKS = false;
 
-			if (windowsPanels.size() != 0) bInitialized = true;
+			if (windowsPanels.size() != 0) bDoneInitialized = true;
 
 			//--
 
 			// Load Settings
-			if (bInitialized) loadSettings();
+			if (bDoneInitialized) loadSettings();
 
 
 			//--
@@ -1074,31 +1115,31 @@ namespace ofxImGuiSurfing
 			if (bLinked) doApplyLinkWindows();
 		}
 
-		//--------------------------------------------------------------
-		void startupDelayed()
-		{
-			// Force some fixes
+		////--------------------------------------------------------------
+		//void startupDelayed()
+		//{
+		//	// Force some fixes
 
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::startupDelayed()";
-			ofLogNotice("ofxSurfingImGui") << nameLabel;
+		//	ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::startupDelayed()";
+		//	ofLogNotice("ofxSurfingImGui") << nameLabel;
 
-			// Load Settings
-			if (bInitialized) loadSettings();
+		//	// Load Settings
+		//	if (bDoneInitialized) loadSettings();
 
-			bDoneStartupDelayed = true;
+		//	bDoneStartupDelayed = true;
 
-			//--
+		//	//--
 
-			//bOrientation = bOrientation;
-			////bLockedWidth = bLockedWidth;
-			////bLockedHeight = bLockedHeight;
+		//	//bOrientation = bOrientation;
+		//	////bLockedWidth = bLockedWidth;
+		//	////bLockedHeight = bLockedHeight;
 
-			//bAlignShapes = bAlignShapes;
-			//bAlignShapesX = bAlignShapesX;
-			//bAlignShapesY = bAlignShapesY;
-			////bAlignShapes_PRE = bAlignShapesX;
-			////bAlignShapesX = !bAlignShapesX;
-		}
+		//	//bAlignShapes = bAlignShapes;
+		//	//bAlignShapesX = bAlignShapesX;
+		//	//bAlignShapesY = bAlignShapesY;
+		//	////bAlignShapes_PRE = bAlignShapesX;
+		//	////bAlignShapesX = !bAlignShapesX;
+		//}
 
 		//--------------------------------------------------------------
 		void loadSettings()
@@ -1599,5 +1640,5 @@ namespace ofxImGuiSurfing
 				}
 			}
 		}
-	};
+};
 }

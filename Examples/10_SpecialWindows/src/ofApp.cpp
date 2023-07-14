@@ -5,7 +5,7 @@ void ofApp::setup()
 {
 	ofSetWindowPosition(-1920, 25);
 
-	ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
+	//ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
 
 	// Parameters
 	setupParams();

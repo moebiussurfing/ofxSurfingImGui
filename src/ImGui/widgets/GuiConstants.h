@@ -29,15 +29,18 @@
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
+//--
+
+// Settings managament
+
 //TODO: Fixing exceptions when closing ofApp.
 //TODO: We can disable automatic saving on exit.
 //TODO: Then we should save manually.
 //TODO: Implement approach to autosave when settings params change.
 //#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
 //#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable auto save on exit.
+#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES // to enable auto save on every param change.
 
-
-#define SURFING_IMGUI__USE_NOTIFIER
 
 //----
 
@@ -52,19 +55,6 @@
 // we will use another layout pattern for some widgets.
 
 #define PADDING_COMBO 0 // to fix some weird label forcing oversize window
-
-//----
-
-//// Will be applied as minimum 
-//// and standard window shape
-//#define PANEL_WIDGETS_WIDTH 250
-//#define PANEL_WIDGETS_HEIGHT 100
-//#define PANEL_WIDGETS_WIDTH_MIN 200
-//#define PANEL_WIDGETS_HEIGHT_MIN 100
-//
-//// LEGACY
-//#define PANEL_WIDTH_MIN PANEL_WIDGETS_WIDTH_MIN 
-//#define PANEL_HEIGHT_MIN PANEL_WIDGETS_HEIGHT_MIN
 
 //----
 
@@ -84,8 +74,11 @@
 
 //--
 
+// Default settings files
 #define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
 #define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
+// bin\data\Gui\SurfingGui_UI_Internal.json
+// bin\data\Gui\SurfingGui_UI_Organizer.json
 
 //----
 
