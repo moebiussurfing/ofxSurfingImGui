@@ -10,7 +10,7 @@ SurfingGuiManager::SurfingGuiManager()
 	//--
 
 	//TODO:
-	// Simplify namespaces!
+	// Simplify namespace's!
 	namespace ofxSurfingImGui = ofxImGuiSurfing;
 
 	// default path that will be used appended,
@@ -131,7 +131,13 @@ void SurfingGuiManager::exit()
 void SurfingGuiManager::setupParams() {
 	ofLogNotice("ofxSurfingImGui") << "setupParams()";
 
-	// All these below params are handled into file settings!
+	// Links
+	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);
+	globalScale.makeReferenceTo(scaleGlobalManager.globalScale);
+
+	//--
+
+	// Most of these below params are handled into file settings!
 
 	params_Internal.add(bAutoResize);
 	params_Internal.add(bExtra);
@@ -165,6 +171,8 @@ void SurfingGuiManager::setupParams() {
 	//--
 
 	// Modules
+
+	//--
 
 	// Log
 
@@ -1019,8 +1027,6 @@ void SurfingGuiManager::startup()
 	//setEnableHelpInternal();
 
 	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
-
-	refreshGlobalScaleNameComboIndex();
 
 	//--
 
@@ -3783,7 +3789,6 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Global Scale
 	else if (name == globalScale.getName())
 	{
-		refreshGlobalScaleNameComboIndex();
 		return;
 	}
 
@@ -4930,6 +4935,8 @@ void SurfingGuiManager::doResetLayout()
 	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
 }
 
+//TODO: Make a class.
+// get Illustrator reference
 //------------------------------------------------------------------------------------------
 void SurfingGuiManager::DrawWidgetsExampleTabs()
 {
@@ -4938,23 +4945,28 @@ void SurfingGuiManager::DrawWidgetsExampleTabs()
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	auto themeFramePadding = style.FramePadding;
-	auto sz = ImVec2(1.75 * themeFramePadding.x, 2.2 * themeFramePadding.y);
+	auto tabFramePadding = ImVec2(1.75 * themeFramePadding.x, 2.2 * themeFramePadding.y);
+	auto themeItemSpacing = style.ItemSpacing;
+	auto tabItemSpacing = ImVec2(0.0 * themeItemSpacing.x, 0.0 * themeItemSpacing.y);
 
 	//this->PushStyleTab();
 
-	style.FramePadding = sz;
+	style.FramePadding = tabFramePadding;
+	style.ItemSpacing = themeItemSpacing;//TODO
 	ImGui::BeginTabBar("##Settings", flags);
 	{
-		style.FramePadding = sz;
+		style.FramePadding = tabFramePadding;
 		if (this->BeginTabItem("StageManager"))
 		{
 			style.FramePadding = themeFramePadding;
+			style.ItemSpacing = themeItemSpacing;
 			this->AddSpacing(2);
 
 			static float v = 0;
 			ImGui::SliderFloat("slider", &v, 0, 1);
 			ImGui::Text("hello0");
 			ImGui::Text("Stage Manager");
+			ImGui::SameLine();
 			ImGui::Button("button");
 			ImGui::Text("hello0");
 
@@ -4963,15 +4975,18 @@ void SurfingGuiManager::DrawWidgetsExampleTabs()
 			this->EndTabItem();
 		}
 
-		style.FramePadding = sz;
+		style.FramePadding = tabFramePadding;
+		style.ItemSpacing = themeItemSpacing;
 		if (this->BeginTabItem("Network"))
 		{
 			style.FramePadding = themeFramePadding;
+			style.ItemSpacing = themeItemSpacing;
 			this->AddSpacing(2);
 
 			ImGui::Text("hello1");
 			static float v = 0;
 			ImGui::SliderFloat("slider", &v, 0, 1);
+			ImGui::SameLine();
 			ImGui::Text("Network Adapter");
 			ImGui::Text("hello1");
 			ImGui::Button("button");
@@ -4981,15 +4996,18 @@ void SurfingGuiManager::DrawWidgetsExampleTabs()
 			this->EndTabItem();
 		}
 
-		style.FramePadding = sz;
+		style.FramePadding = tabFramePadding;
+		style.ItemSpacing = themeItemSpacing;
 		if (this->BeginTabItem("License"))
 		{
 			style.FramePadding = themeFramePadding;
+			style.ItemSpacing = themeItemSpacing;
 			this->AddSpacing(2);
 
 			ImGui::Text("hello2");
 			ImGui::Button("button");
 			ImGui::Text("License");
+			ImGui::SameLine();
 			static float v = 0;
 			ImGui::SliderFloat("slider", &v, 0, 1);
 			ImGui::Text("hello2");
@@ -5003,6 +5021,7 @@ void SurfingGuiManager::DrawWidgetsExampleTabs()
 	//this->PopStyleTab();
 
 	style.FramePadding = themeFramePadding;
+	style.ItemSpacing = themeItemSpacing;
 	ImGui::EndTabBar();
 }
 

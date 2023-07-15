@@ -171,7 +171,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
-		bool b = (VectorCombo("", &i, fileNames, bRaw));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, bRaw));
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
@@ -191,7 +191,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushID(t.c_str());
 
 		int i = pIndex.get();
-		bool b = (VectorCombo("", &i, fileNames, bRaw));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, bRaw));
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
@@ -218,7 +218,7 @@ namespace ofxImGuiSurfing
 		int i = pIndex.get();
 
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7f);
-		bool b = (VectorCombo("", &i, fileNames, true));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
 		if (b)
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
@@ -265,7 +265,7 @@ namespace ofxImGuiSurfing
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
 
-		bool b = (VectorCombo("", &i, fileNames, true));
+		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
 		if (b)
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
@@ -363,7 +363,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
 
-		b = (VectorCombo("", &i, fileNames, true));
+		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
 		if (b)
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
@@ -420,7 +420,7 @@ namespace ofxImGuiSurfing
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - w - __spcx);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
 
-		b = (VectorCombo("", &i, fileNames, true));
+		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
 		if (b)
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes

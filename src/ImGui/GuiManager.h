@@ -2135,61 +2135,85 @@ public:
 
 	//----
 
-	// Scale Global
+	// Scale Global 
+	// technically is the font scale, that affects most widgets, but could break some window sizes layout.
 
 private:
-	struct ScaleGlobalGroup {
-		vector<string> names{"NONE", "100%", "125%", "150%", "175%", "200%"};
-		ofParameter<int> indexScaleGlobal {"Global Scale", 0, 0, names.size() - 1};
-		float getScale() {
-			switch (indexScaleGlobal.get()) {
-			case 0: return -1.0f; break;
-			case 1: return 1.0f; break;
-			case 2: return 1.25f; break;
-			case 3: return 1.5f; break;
-			case 4: return 1.75f; break;
-			case 5: return 2.0f; break;
-			default: return 1.0f; break;
-			}
-		}
-		string getName() { return names[indexScaleGlobal]; }
-	};
-	ScaleGlobalGroup scaleGlobalGroup;
 
-	void refreshGlobalScaleNameComboIndex() {
-		if (globalScale.get() == 1.0f) scaleGlobalGroup.indexScaleGlobal = 1;
-		else if (globalScale.get() == 1.25f) scaleGlobalGroup.indexScaleGlobal = 2;
-		else if (globalScale.get() == 1.50f) scaleGlobalGroup.indexScaleGlobal = 3;
-		else if (globalScale.get() == 1.75f) scaleGlobalGroup.indexScaleGlobal = 4;
-		else if (globalScale.get() == 2.0f) scaleGlobalGroup.indexScaleGlobal = 5;
-		else scaleGlobalGroup.indexScaleGlobal = 0;
-	}
+	class ScaleGlobalManager
+	{
+	public:
+		ScaleGlobalManager() {
+
+			eIndex = index.newListener([this](int& v) {
+				switch (v) {
+				case 0: globalScale = 1.0f; break;
+				case 1: globalScale = 1.25f; break;
+				case 2: globalScale = 1.5f; break;
+				case 3: globalScale = 1.75f; break;
+				case 4: globalScale = 2.0f; break;
+				case 5: break;//custom
+				}
+				});
+
+			eGlobalScale = globalScale.newListener([this](float& v) {
+				if (v == 1.0f) index = 0;
+				else if (v == 1.25f) index = 1;
+				else if (v == 1.50f) index = 2;
+				else if (v == 1.75f) index = 3;
+				else if (v == 2.0f) index = 4;
+				else index = 5;//custom
+				});
+		}
+
+		~ScaleGlobalManager() {
+		}
+
+		ofParameter<float> globalScale{"_GlobalScale", 1, 0.5, 2};
+
+		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
+		ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
+
+		float getScale() { globalScale.get(); }
+
+		string getName() { return names[index]; }
+
+		ofEventListener eIndex;
+		ofEventListener eGlobalScale;
+
+		//TODO: must pass ui or split ScaleGlobalManager to a new .h file.
+		void draw() {
+		}
+
+		//TODO:
+		void drawMini() {
+		}
+	};
+
+	ScaleGlobalManager scaleGlobalManager;
+
 public:
 	void DrawWidgetsGlobalScaleMini() {
 		this->AddSpacing();
 
-		float w = 60;
-		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 0) w = 60 * 1.f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 1) w = 60 * 1.f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.25f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.5f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 1.75f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 5) w = 60 * 2.f;
+		float w_ = 60;
+		float w = w_;
+		if (scaleGlobalManager.index == 0) w = w_ * 1.f;
+		else if (scaleGlobalManager.index == 1) w = w_ * 1.2f;
+		else if (scaleGlobalManager.index == 2) w = w_ * 1.5f;
+		else if (scaleGlobalManager.index == 3) w = w_ * 1.75f;
+		else if (scaleGlobalManager.index == 4) w = w_ * 2.0;
+		else if (scaleGlobalManager.index == 5) w = w_ * 2.f;
 
 		ImGui::PushItemWidth(w);
-		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
-			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
-				this->globalScale = scaleGlobalGroup.getScale();
-			}
-			else {
-			}
-		}
+		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
 		ImGui::PopItemWidth();
+
 		string s = "Global Scale";
-		//s += "\n" + scaleGlobalGroup.getName();
+		//s += "\n" + scaleGlobalManager.getName();
 		this->AddTooltip(s);
 	}
+
 	void DrawWidgetsGlobalScale() {
 		this->AddSpacingBigSeparated();
 		string s;
@@ -2197,29 +2221,24 @@ public:
 		this->AddLabelBig(s);
 		this->AddSpacing();
 
-		float w = 60;
-		if (scaleGlobalGroup.indexScaleGlobal == -1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 0 || scaleGlobalGroup.indexScaleGlobal == 1) w = 60;
-		else if (scaleGlobalGroup.indexScaleGlobal == 2) w = 60 * 1.25f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 3) w = 60 * 1.5f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 4) w = 60 * 1.75f;
-		else if (scaleGlobalGroup.indexScaleGlobal == 5) w = 60 * 2.f;
+		float w_ = 60;
+		float w = w_;
+		if (scaleGlobalManager.index == 0) w = w_ * 1.f;
+		else if (scaleGlobalManager.index == 1) w = w_ * 1.2f;
+		else if (scaleGlobalManager.index == 2) w = w_ * 1.5f;
+		else if (scaleGlobalManager.index == 3) w = w_ * 1.75f;
+		else if (scaleGlobalManager.index == 4) w = w_ * 2.0;
+		else if (scaleGlobalManager.index == 5) w = w_ * 2.f;
 
 		ImGui::PushItemWidth(w);
-		if (this->AddCombo(scaleGlobalGroup.indexScaleGlobal, scaleGlobalGroup.names, true)) {
-			if (scaleGlobalGroup.indexScaleGlobal.get() != 0) {
-				this->globalScale = scaleGlobalGroup.getScale();
-			}
-			else {
-			}
-		}
+		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
 		ImGui::PopItemWidth();
 
 		// responsive
 		if ((this->getWindowWidth() > 200) &&
-			(scaleGlobalGroup.indexScaleGlobal == 0 ||
-				scaleGlobalGroup.indexScaleGlobal == 1 ||
-				scaleGlobalGroup.indexScaleGlobal == 2)) {
+			(scaleGlobalManager.index == 0 ||
+				scaleGlobalManager.index == 1 ||
+				scaleGlobalManager.index == 2)) {
 			ImGui::SameLine();
 		}
 
@@ -2227,20 +2246,15 @@ public:
 		if (this->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
 		else w3 = 200;
 		ImGui::PushItemWidth(w3);
-		if (this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL))
-		{
-
-		}
+		this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
 		ImGui::PopItemWidth();
+
 		s = "Global Scale is applied\n";
 		s += "to all the UI context.\n";
 		s += "Press Ctrl +/- to 0.01 increments.\n";
 		this->AddTooltip(s);
 
-		if (this->Add(this->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS))
-		{
-
-		}
+		this->Add(this->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS);
 
 		if (this->AddButtonRawMini("Reset")) {
 			this->globalScale = 1;
@@ -5198,7 +5212,7 @@ public:
 	//----
 
 	// ImGui Tabs Helpers
-	 
+
 	// NOTES
 
 	// Optional to customize filename for the settings file for multiple instances on the same ofApp.
@@ -5208,7 +5222,7 @@ public:
 
 	//TODO: natively ImGui don not support this. These styles affects contained widgets!
 	// https://github.com/ocornut/imgui/issues/3497
-	
+
 	void DrawWidgetsExampleTabs();
 	int active_tab_DemoExample = 0;
 
