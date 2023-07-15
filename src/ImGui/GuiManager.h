@@ -23,9 +23,12 @@
 #include "LayoutHelpers.h"
 
 #include "surfingHelpers.h"
-#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
-namespace ofxSurfingHelpers = ofxImGuiSurfing;
-#endif
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
+//namespace ofxSurfingHelpers = ofxImGuiSurfing;
+//#endif
+/*
+Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and therefore this name cannot be used as a namespace name (compiling source file src\ofApp.cpp) Scene3dFloor \openFrameworks\addons\ofxSurfingHelpers\src\utils\surfingTimers.h	20
+*/
 
 #include "HelpTextWidget.h"
 #include "Combos.h"
@@ -1289,6 +1292,12 @@ public:
 	void AddSpacingHuge()
 	{
 		ofxImGuiSurfing::AddSpacingHuge();
+	}
+
+	//--------------------------------------------------------------
+	void AddSpacing(size_t amountLines)
+	{
+		ofxImGuiSurfing::AddSpacing(amountLines);
 	}
 
 	//--------------------------------------------------------------
@@ -5188,6 +5197,8 @@ public:
 
 	//----
 
+	// ImGui Tabs Helpers
+	 
 	// NOTES
 
 	// Optional to customize filename for the settings file for multiple instances on the same ofApp.
@@ -5195,47 +5206,56 @@ public:
 
 	//----
 
-
+	//TODO: natively ImGui don not support this. These styles affects contained widgets!
+	// https://github.com/ocornut/imgui/issues/3497
+	
 	void DrawWidgetsExampleTabs();
-	int active_tab = 0;
+	int active_tab_DemoExample = 0;
 
-	// ImGui Helper
 	//------------------------------------------------------------------------------------------
-	inline bool BeginTabItem(const string& tabName)
+	inline void PushStyleTab()
+	{
+		static ImVec2 sz1(30, 30);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sz1);//sz1
+
+		static ImVec2 sz2(0, 0);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, sz2);//sz2
+	}
+	//------------------------------------------------------------------------------------------
+	inline void PopStyleTab()
+	{
+		ImGui::PopStyleVar();//sz1
+		ImGui::PopStyleVar();//sz2
+	}
+	//------------------------------------------------------------------------------------------
+	inline bool BeginTabItem(const string& tabName, bool bStyleSizes = 0)
 	{
 		static float a = 0.3f;
 		static ImVec4 c1 = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 		static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
 		static string currentTab = "";
-		bool isCurrent = currentTab == tabName;
+		bool isActive = currentTab == tabName;
 
-		bool bSz = 0;
-		if (bSz) {
-			static ImVec2 sz1(30, 30);
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, sz1);
-
-			static ImVec2 sz2(0, 0);
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, sz2);
+		if (bStyleSizes) {
+			this->PushStyleTab();
 		}
 
-		if (!isCurrent)
+		if (!isActive)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, c2);
 			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
-
 		}
 
 		bool bOpen = ImGui::BeginTabItem(tabName.c_str());
 
-		if (!isCurrent)
+		if (!isActive)
 		{
 			ImGui::PopStyleColor();
 			//ImGui::PopStyleColor();
 		}
 
-		if (bSz) {
-			ImGui::PopStyleVar();//sz1
-			ImGui::PopStyleVar();//sz2
+		if (bStyleSizes) {
+			this->PopStyleTab();
 		}
 
 		if (bOpen)
@@ -5243,6 +5263,11 @@ public:
 			currentTab = tabName;
 		}
 		return bOpen;
+	}
+	//------------------------------------------------------------------------------------------
+	inline void EndTabItem()
+	{
+		ImGui::EndTabItem();
 	}
 
 };

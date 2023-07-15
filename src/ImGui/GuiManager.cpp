@@ -380,7 +380,7 @@ void SurfingGuiManager::setupInitiate()
 
 	// Link both link toggles, local and the one inside the organizer object
 	windowsOrganizer.bLinked.makeReferenceTo(bLinked);
-	
+
 	windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
 	windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
 	windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
@@ -1723,7 +1723,7 @@ void SurfingGuiManager::update()
 	//--
 
 	windowsOrganizer.update();
-	}
+}
 
 //--------------------------------------------------------------
 void SurfingGuiManager::draw()
@@ -2788,7 +2788,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	//--
 
 	return b;
-	}
+}
 
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
@@ -3305,7 +3305,7 @@ void SurfingGuiManager::saveSettings()
 	if (!bEnableFileSettings) return;
 
 	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
-	
+
 	// Save GuiManager
 	saveSettingsInternal();
 
@@ -4930,44 +4930,79 @@ void SurfingGuiManager::doResetLayout()
 	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
 }
 
-
-
-
 //------------------------------------------------------------------------------------------
 void SurfingGuiManager::DrawWidgetsExampleTabs()
 {
-	ImGui::BeginTabBar("Settings");
+	ImGuiTabBarFlags flags = ImGuiTabBarFlags_None;
+	flags += ImGuiTabBarFlags_NoTooltip;
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	auto themeFramePadding = style.FramePadding;
+	auto sz = ImVec2(1.75 * themeFramePadding.x, 2.2 * themeFramePadding.y);
+
+	//this->PushStyleTab();
+
+	style.FramePadding = sz;
+	ImGui::BeginTabBar("##Settings", flags);
 	{
-		if (BeginTabItem("Stage Manager"))
+		style.FramePadding = sz;
+		if (this->BeginTabItem("StageManager"))
 		{
+			style.FramePadding = themeFramePadding;
+			this->AddSpacing(2);
+
+			static float v = 0;
+			ImGui::SliderFloat("slider", &v, 0, 1);
 			ImGui::Text("hello0");
 			ImGui::Text("Stage Manager");
+			ImGui::Button("button");
 			ImGui::Text("hello0");
 
-			ImGui::EndTabItem();
-			active_tab = 0;
+			active_tab_DemoExample = 0;
+
+			this->EndTabItem();
 		}
 
-		if (BeginTabItem("Network Adapter"))
+		style.FramePadding = sz;
+		if (this->BeginTabItem("Network"))
 		{
+			style.FramePadding = themeFramePadding;
+			this->AddSpacing(2);
+
 			ImGui::Text("hello1");
+			static float v = 0;
+			ImGui::SliderFloat("slider", &v, 0, 1);
 			ImGui::Text("Network Adapter");
 			ImGui::Text("hello1");
+			ImGui::Button("button");
 
-			ImGui::EndTabItem();
-			active_tab = 1;
+			active_tab_DemoExample = 1;
+
+			this->EndTabItem();
 		}
 
-		if (BeginTabItem("License"))
+		style.FramePadding = sz;
+		if (this->BeginTabItem("License"))
 		{
+			style.FramePadding = themeFramePadding;
+			this->AddSpacing(2);
+
 			ImGui::Text("hello2");
+			ImGui::Button("button");
 			ImGui::Text("License");
+			static float v = 0;
+			ImGui::SliderFloat("slider", &v, 0, 1);
 			ImGui::Text("hello2");
 
-			ImGui::EndTabItem();
-			active_tab = 2;
+			active_tab_DemoExample = 2;
+
+			this->EndTabItem();
 		}
 	}
+
+	//this->PopStyleTab();
+
+	style.FramePadding = themeFramePadding;
 	ImGui::EndTabBar();
 }
 

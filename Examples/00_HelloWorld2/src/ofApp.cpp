@@ -3,6 +3,16 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetWindowPosition(-1920, 26);
+
+	//----
+	
+	setupGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupGui()
+{
 	ui.setEnablebMouseCursorFromImGui(false);
 	ui.setup();
 
@@ -21,7 +31,6 @@ void ofApp::setup()
 		string s = speed.getName() + ": " + ofToString(speed.get(), 1);
 		ui.AddToLog(s, myTag1);
 		});
-
 }
 
 //--------------------------------------------------------------
@@ -57,9 +66,10 @@ void ofApp::drawGui()
 
 	ui.Begin();
 	{
-		drawGuiMain();
+		//TODO:
+		if (ui.bGui_Menu) ui.drawMenu();
 
-		//--
+		drawGuiMain();
 
 		drawGuiQuat();
 	}
@@ -89,6 +99,7 @@ void ofApp::drawGuiMain()
 		ui.AddLogToggle();
 		ui.AddNotifierToggle();
 		ui.AddNotifierToggleEditor();
+		ui.Add(ui.bGui_Menu, OFX_IM_TOGGLE_ROUNDED);
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
 

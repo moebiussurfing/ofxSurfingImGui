@@ -467,6 +467,15 @@ namespace ofxImGuiSurfing
 	}
 
 	//--------------------------------------------------------------
+	inline void AddSpacing(size_t amountLines)
+	{
+		for (size_t i = 0; i < amountLines; i++)
+		{
+			AddSpacing();
+		}
+	}
+
+	//--------------------------------------------------------------
 	inline void AddSpacingHugeSeparated()
 	{
 		AddSpacingBig();

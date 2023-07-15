@@ -42,6 +42,7 @@ public:
 	void exit();
 
 	ofxSurfingGui ui;
+	void setupGui();
 	void drawGui();
 
 	void drawGuiMain();
