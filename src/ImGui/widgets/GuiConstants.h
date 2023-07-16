@@ -82,8 +82,8 @@
 // But, to allow multiple instances, it can be customized, before adding special windows and setup() by:
 // ui.setName("myOfApp");
 // \bin\data\myOfApp\Gui\
-//		myOfApp_UI_Internal.json
-//		myOfApp_UI_Organizer.json
+// myOfApp_UI_Internal.json
+// myOfApp_UI_Organizer.json
 
 //----
 

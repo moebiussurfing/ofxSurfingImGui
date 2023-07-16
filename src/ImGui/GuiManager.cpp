@@ -132,7 +132,8 @@ void SurfingGuiManager::setupParams() {
 	ofLogNotice("ofxSurfingImGui") << "setupParams()";
 
 	// Links
-	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);
+
+	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);//breaks ref
 	globalScale.makeReferenceTo(scaleGlobalManager.globalScale);
 
 	//--
@@ -246,33 +247,46 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 	switch (surfingImGuiMode)
 	{
 	case ofxImGuiSurfing::IM_GUI_MODE_UNKNOWN:
-		// nothing to do
-
+		// Nothing to do
 		break;
 
+		//--
+
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
-		setEnableFileSettings(true);
+
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//		setAutosaveSettings(true);
+//#endif
 		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
-
 		break;
+
+		//--
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
-		setEnableFileSettings(true);
+
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//		setAutosaveSettings(true);
+//#endif
 		setupDocking();
 		setupInitiate();
-
 		break;
 
+		//--
+
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
-		setEnableFileSettings(true);
+
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//		setAutosaveSettings(true);
+//#endif
 		//setImGuiAutodraw(true);
 		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
-
 		break;
+
+		//--
 
 		//	//TODO:
 		//case ofxImGuiSurfing::IM_GUI_MODE_SPECIAL_WINDOWS:
@@ -280,15 +294,23 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		//	setup();
 		//	break;
 
-	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED: //TODO:
-		setEnableFileSettings(false);
+		//--
 
+		//TODO: Should remove these below modes?
+
+	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED: //TODO:
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//		setAutosaveSettings(false);
+//#endif
 		break;
+
+		//--
 
 		// ui.Begin(); it's bypassed internally then can remain uncommented.
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
-		setEnableFileSettings(false);
-
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//		setAutosaveSettings(false);
+//#endif
 		break;
 	}
 
@@ -320,7 +342,10 @@ void SurfingGuiManager::setupDocking()
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
-	setEnableFileSettings(true);
+//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+//	setAutosaveSettings(true);
+//#endif
+
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
 	//setImGuiAutodraw(true);
@@ -349,9 +374,6 @@ void SurfingGuiManager::setupInitiate()
 	_ui.bMouseWheel.makeReferenceTo(bMouseWheel);
 	_ui.bMouseWheelFlip.makeReferenceTo(bMouseWheelFlip);
 
-	// MouseWheel link
-	windowsOrganizer.bDebug.makeReferenceTo(bDebug);
-
 	// Minimizes link
 	bMinimize_Presets.makeReferenceTo(bMinimize);
 	//bMinimize_Panels.makeReferenceTo(bMinimize);
@@ -376,25 +398,7 @@ void SurfingGuiManager::setupInitiate()
 	//--
 
 	// WindowsOrganizer
-
-	// Aligners toggle
-	windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
-
-	// Link Organizer toggle
-	windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
-
-	// Special Windows toggle
-	windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
-
-	// Link both link toggles, local and the one inside the organizer object
-	windowsOrganizer.bLinked.makeReferenceTo(bLinked);
-
-	windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
-	windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
-	windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
-	windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
-
-	windowsOrganizer.bEnableFileSettings.makeReferenceTo(bEnableFileSettings);
+	setupInitiateWindowsOrganizer();
 
 	//--
 
@@ -441,7 +445,35 @@ void SurfingGuiManager::setupInitiate()
 		// this allow multiple add-ons instances with non shared settings.
 
 		params_AppSettings.add(params_Advanced);
-	}
+}
+}
+
+//--------------------------------------------------------------
+void SurfingGuiManager::setupInitiateWindowsOrganizer()
+{
+	// MouseWheel link
+	windowsOrganizer.bDebug.makeReferenceTo(bDebug);
+
+	// Aligners toggle
+	windowsOrganizer.bGui_Aligners.makeReferenceTo(bGui_Aligners);
+
+	// Link Organizer toggle
+	windowsOrganizer.bGui_Organizer.makeReferenceTo(bGui_Organizer);
+
+	// Special Windows toggle
+	windowsOrganizer.bGui_SpecialWindows.makeReferenceTo(bGui_SpecialWindows);
+
+	// Link both link toggles, local and the one inside the organizer object
+	windowsOrganizer.bLinked.makeReferenceTo(bLinked);
+
+	windowsOrganizer.bOrientation.makeReferenceTo(bOrientation);
+	windowsOrganizer.bGui_ShowWindowsGlobal.makeReferenceTo(bGui_ShowWindowsGlobal);
+	windowsOrganizer.bAlignWindowsReset.makeReferenceTo(bAlignWindowsReset);
+	windowsOrganizer.bAlignWindowsCascade.makeReferenceTo(bAlignWindowsCascade);
+
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	windowsOrganizer.bAutoSaveSettings.makeReferenceTo(bAutoSaveSettings);
+#endif	
 }
 
 //--------------------------------------------------------------
@@ -2767,6 +2799,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 
 	// Auto resize
 
+	//TODO
 #if 1
 	// Globally settled
 	if (bAutoResize) flags += ImGuiWindowFlags_AlwaysAutoResize;
@@ -2794,7 +2827,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	//--
 
 	return b;
-}
+	}
 
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)
@@ -3271,8 +3304,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 //--------------------------------------------------------------
 bool SurfingGuiManager::loadSettings()
 {
-	bool b = false;
-	if (bEnableFileSettings) b = loadGroup(params_AppSettings, path_AppSettings, true);
+	bool b = loadGroup(params_AppSettings, path_AppSettings, true);
 
 	return b;
 
@@ -3289,16 +3321,8 @@ void SurfingGuiManager::saveSettingsInternal()
 
 	//ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal()";
 
-	if (bEnableFileSettings)
-	{
-		saveGroup(params_AppSettings, path_AppSettings, false);
-		ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal() DONE!";
-	}
-	else
-	{
-		ofLogWarning("ofxSurfingImGui") << "By passed saveSettingsInternal()";
-		ofLogWarning("ofxSurfingImGui") << "bEnableFileSettings was disabled!";
-	}
+	saveGroup(params_AppSettings, path_AppSettings, false);
+	ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal() DONE!";
 }
 
 //--------------------------------------------------------------
@@ -3307,8 +3331,6 @@ void SurfingGuiManager::saveSettings()
 	if (bResetUIProgramed) return;
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
-
-	if (!bEnableFileSettings) return;
 
 	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
 
@@ -3703,7 +3725,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	bFlagSaveSettings = true;
+	saveSettingsFlag();
 #endif	
 
 	//--

@@ -142,31 +142,26 @@ namespace ofxImGuiSurfing
 	private:
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
 		bool bFlagSaveSettings = false;
-#endif
 
 	public:
-		ofParameter<bool> bEnableFileSettings{ "EnableSettings", true };
-		//private:
-			//bool bEnableFileSettings = true;
-			////--------------------------------------------------------------
-			//void setEnableFileSettings(bool b)
-			//{
-			//	// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
-			//	bEnableFileSettings = b;
-			//}
+		ofParameter<bool> bAutoSaveSettings{ "Auto Save", true };
 
-#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	private:
 		//--------------------------------------------------------------
 		void saveSettingsFlag()
 		{
-			bFlagSaveSettings = true;
+			if (bAutoSaveSettings) bFlagSaveSettings = true;
+			else
+			{
+				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer:saveSettingsFlag()";
+				ofLogWarning("ofxSurfingImGui") << "Skipped saveSettingsFlag() bc bAutoSaveSettings was disabled!";
+			}
 		}
 #endif
+	public:
 		//--------------------------------------------------------------
 		void saveSettings()
 		{
-			if (!bEnableFileSettings) return;
-
 			if (bDoneInitialized)
 			{
 				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings()";
@@ -500,7 +495,7 @@ namespace ofxImGuiSurfing
 			//}
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-			bFlagSaveSettings = true;
+			saveSettingsFlag();
 #endif		
 		}
 
@@ -589,7 +584,7 @@ namespace ofxImGuiSurfing
 					//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-					bFlagSaveSettings = true;
+					saveSettingsFlag();
 #endif			
 					//--
 
@@ -1174,8 +1169,6 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void loadSettings()
 		{
-			if (!bEnableFileSettings) return;
-
 			loadGroup(params_AppSettings, path_Settings);
 		}
 
@@ -1402,7 +1395,7 @@ namespace ofxImGuiSurfing
 					if (p_open) flagt += ImGuiTreeNodeFlags_DefaultOpen;
 					flagt += ImGuiTreeNodeFlags_Framed;
 					if (ImGui::TreeNodeEx("WINDOWS", flagt))
-					//if (ImGui::CollapsingHeader("WINDOWS", &p_open, flagt))
+						//if (ImGui::CollapsingHeader("WINDOWS", &p_open, flagt))
 					{
 						drawWidgetsWindows(bMinimized);
 						ImGui::TreePop();

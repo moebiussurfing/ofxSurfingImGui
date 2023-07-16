@@ -151,11 +151,6 @@ public:
 		return instanceCount;
 	}
 
-private:
-#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	bool bFlagSaveSettings = 0;
-#endif
-
 	//----
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
@@ -176,6 +171,7 @@ private:
 	// ofxImGui is instantiated inside the class, 
 	// the we can forgot of declare ofxImGui here (ofApp scope).
 	void setupInitiate();
+	void setupInitiateWindowsOrganizer();
 
 public:
 	// MODE B: 
@@ -3410,8 +3406,23 @@ public:
 
 	//----
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
 private:
-	ofParameter<bool> bEnableFileSettings{ "EnableSettings", true };
+	ofParameter<bool> bAutoSaveSettings{ "Auto Save", true };
+
+	//--------------------------------------------------------------
+	void saveSettingsFlag()
+	{
+		if (bAutoSaveSettings) bFlagSaveSettings = true;
+		else
+		{
+			ofLogWarning("ofxSurfingImGui") << "GuiManager:saveSettingsFlag()";
+			ofLogWarning("ofxSurfingImGui") << "Skipped saveSettingsFlag() bc bAutoSaveSettings was disabled!";
+		}
+	}
+private:
+	bool bFlagSaveSettings = 0;
+#endif	
 
 private:
 	// File Settings
@@ -3477,14 +3488,14 @@ public:
 
 	//--
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+private:
 	//--------------------------------------------------------------
-	void setEnableFileSettings(bool b)
+	void setAutosaveSettings(bool b)
 	{
-		// must call before setup. IMPORTANT: if you are using multiple instances of this add-on, must set only one to true or settings will not be handled correctly!
-		bEnableFileSettings = b;
-
-		//windowsOrganizer.setEnableFileSettings(b);
+		bAutoSaveSettings = b;
 	}
+#endif
 
 
 private:
