@@ -1840,7 +1840,16 @@ public:
 		if (bEnable) this->EndBlinkText();
 		return b;
 	}
-
+	
+	// will not work with many "calls" as is static
+	////--------------------------------------------------------------
+	//bool MenuItemButtonBlinkingIfHover(const string label, bool bEnable = true) 
+	//{
+	//	// Blink if hover
+	//	static bool b = false;
+	//	bool bm = this->MenuItemButtonBlinking("Exit", b);
+	//	b = ImGui::IsItemHovered();
+	//}
 	////--------------------------------------------------------------
 	//bool MenuItemButtonBlinkingIfHover(const string label)
 	//{
@@ -2165,18 +2174,20 @@ private:
 		~ScaleGlobalManager() {
 		}
 
-		ofParameter<float> globalScale{"_GlobalScale", 1, 0.5, 2};
-
+		ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
 		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
 		ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
 
-		float getScale() { globalScale.get(); }
-
+		float getScale() { return globalScale.get(); }
 		string getName() { return names[index]; }
+
+	private:
 
 		ofEventListener eIndex;
 		ofEventListener eGlobalScale;
 
+		/*
+	public:
 		//TODO: must pass ui or split ScaleGlobalManager to a new .h file.
 		void draw() {
 		}
@@ -2184,14 +2195,14 @@ private:
 		//TODO:
 		void drawMini() {
 		}
+		*/
 	};
 
 	ScaleGlobalManager scaleGlobalManager;
 
-public:
-	void DrawWidgetsGlobalScaleMini() {
-		this->AddSpacing();
-
+private:
+	float getWidgetWidthFromIndex() {
+		//TODO; could be improving getting the font size (ImGui::CalcText)..
 		float w_ = 60;
 		float w = w_;
 		if (scaleGlobalManager.index == 0) w = w_ * 1.f;
@@ -2199,7 +2210,20 @@ public:
 		else if (scaleGlobalManager.index == 2) w = w_ * 1.5f;
 		else if (scaleGlobalManager.index == 3) w = w_ * 1.75f;
 		else if (scaleGlobalManager.index == 4) w = w_ * 2.0;
-		else if (scaleGlobalManager.index == 5) w = w_ * 2.f;
+		else if (scaleGlobalManager.index == 5) w = w_ * 2.4f;//custom
+		return w;
+	}
+
+public:
+
+	float getGlobalScale() {
+		return scaleGlobalManager.getScale();
+	}
+
+	void DrawWidgetsGlobalScaleMini() {
+		this->AddSpacing();
+
+		float w = getWidgetWidthFromIndex();
 
 		ImGui::PushItemWidth(w);
 		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
@@ -2208,6 +2232,14 @@ public:
 		string s = "Global Scale";
 		//s += "\n" + scaleGlobalManager.getName();
 		this->AddTooltip(s);
+
+		if (scaleGlobalManager.index == 5) { // custom
+			this->SameLine();
+			float w3 = ImGui::GetContentRegionAvail().x;
+			ImGui::PushItemWidth(w3);
+			this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
+			ImGui::PopItemWidth();
+		}
 	}
 
 	void DrawWidgetsGlobalScale() {
@@ -2217,14 +2249,7 @@ public:
 		this->AddLabelBig(s);
 		this->AddSpacing();
 
-		float w_ = 60;
-		float w = w_;
-		if (scaleGlobalManager.index == 0) w = w_ * 1.f;
-		else if (scaleGlobalManager.index == 1) w = w_ * 1.2f;
-		else if (scaleGlobalManager.index == 2) w = w_ * 1.5f;
-		else if (scaleGlobalManager.index == 3) w = w_ * 1.75f;
-		else if (scaleGlobalManager.index == 4) w = w_ * 2.0;
-		else if (scaleGlobalManager.index == 5) w = w_ * 2.f;
+		float w = getWidgetWidthFromIndex();
 
 		ImGui::PushItemWidth(w);
 		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
@@ -2524,12 +2549,12 @@ public:
 		log.setFontSize(indexFont);
 	}
 
-	//TODO: need to fix that respect the deserialization..
-	//--------------------------------------------------------------
-	void setLogName(string name)
-	{
-		log.setName(name);
-	}
+	////TODO: need to fix that respect the deserialization..
+	////--------------------------------------------------------------
+	//void setLogName(string name)
+	//{
+	//	log.setName(name);
+	//}
 
 	//--------------------------------------------------------------
 	void DrawWindowLogIfEnabled()
@@ -2581,10 +2606,7 @@ public:
 	//--------------------------------------------------------------
 	void DrawWindowLog()
 	{
-		log.drawImGui();
-
-		//static ofParameter<bool>b{ "LOG", true };
-		//log.drawImGui(b);
+		log.drawImGui(bLog);
 	}
 
 public:
@@ -4608,7 +4630,7 @@ public:
 #else
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
-	}
+}
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------

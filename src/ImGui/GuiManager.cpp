@@ -131,6 +131,8 @@ void SurfingGuiManager::exit()
 void SurfingGuiManager::setupParams() {
 	ofLogNotice("ofxSurfingImGui") << "setupParams()";
 
+	//--
+
 	// Links
 
 	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);//breaks ref
@@ -179,7 +181,10 @@ void SurfingGuiManager::setupParams() {
 
 	params_ModulesWindows.add(bLog);
 	params_ModulesWindows.add(bLogKeys);
+
 	params_Modules.add(log.params);
+
+	//--
 
 	// Notifier
 
@@ -190,6 +195,8 @@ void SurfingGuiManager::setupParams() {
 	params_Modules.add(notifier.params);
 #endif
 #endif
+
+	//--
 
 	// Profiler Debugger
 
@@ -254,11 +261,11 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
 
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//		setAutosaveSettings(true);
-//#endif
-		//setImGuiAutodraw(true);
-		// This instantiates and configures ofxImGui inside the class object.
+		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//		setAutosaveSettings(true);
+		//#endif
+				//setImGuiAutodraw(true);
+				// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 		break;
 
@@ -267,9 +274,9 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
 
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//		setAutosaveSettings(true);
-//#endif
+		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//		setAutosaveSettings(true);
+		//#endif
 		setupDocking();
 		setupInitiate();
 		break;
@@ -278,11 +285,11 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//		setAutosaveSettings(true);
-//#endif
-		//setImGuiAutodraw(true);
-		// This instantiates and configures ofxImGui inside the class object.
+		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//		setAutosaveSettings(true);
+		//#endif
+				//setImGuiAutodraw(true);
+				// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 		break;
 
@@ -299,18 +306,18 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		//TODO: Should remove these below modes?
 
 	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED: //TODO:
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//		setAutosaveSettings(false);
-//#endif
+		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//		setAutosaveSettings(false);
+		//#endif
 		break;
 
 		//--
 
 		// ui.Begin(); it's bypassed internally then can remain uncommented.
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//		setAutosaveSettings(false);
-//#endif
+		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+		//		setAutosaveSettings(false);
+		//#endif
 		break;
 	}
 
@@ -342,9 +349,9 @@ void SurfingGuiManager::setupDocking()
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
-//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-//	setAutosaveSettings(true);
-//#endif
+	//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
+	//	setAutosaveSettings(true);
+	//#endif
 
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
@@ -444,8 +451,9 @@ void SurfingGuiManager::setupInitiate()
 		//path_AppSettings = path_Global + nameLabel + "_UI_" + bGui_LayoutsPanels.getName() + ".json";
 		// this allow multiple add-ons instances with non shared settings.
 
+		// Finished prepared settings for persistent / JSON settings
 		params_AppSettings.add(params_Advanced);
-}
+	}
 }
 
 //--------------------------------------------------------------
@@ -683,7 +691,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 
 		bDefinedMonospacedFonts = true;
 
-		//now we have 8 fonts to browse by the index!
+		// Now we have 8 fonts to browse by the index!
 		//fontIndex.setMax(7);
 		fontIndex.setMax(customFonts.size() - 1);
 
@@ -691,7 +699,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 		log.setCustomFonts(customFonts, namesCustomFonts);
 		log.setFontMonospacedDefined();
 
-		// force
+		// Force
 		log.setFontIndex(OFX_IM_FONT_BIG_MONO);
 
 		//--
@@ -975,12 +983,10 @@ void SurfingGuiManager::startup()
 
 	// Log
 
-	//log.bGui.makeReferenceTo(bLog);
-
-	//TODO: trying to redirect all logs to the imgui log window.
+	//TODO: Trying to redirect all logs to the imgui log window.
 	//log.setRedirectConsole();
 
-	// pass fonts to allow styles switching
+	// Pass fonts to allow styles switching
 	log.setCustomFonts(customFonts, namesCustomFonts);
 
 	//--
@@ -1746,7 +1752,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-	}
+}
 #endif
 
 	//--
@@ -2691,7 +2697,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--
@@ -2827,7 +2833,7 @@ bool SurfingGuiManager::BeginWindowSpecial(int index)
 	//--
 
 	return b;
-	}
+}
 
 //--------------------------------------------------------------
 bool SurfingGuiManager::BeginWindowSpecial(ofParameter<bool>& _bGui)

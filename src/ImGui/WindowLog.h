@@ -88,9 +88,22 @@ namespace ofxImGuiSurfing
             // to fix overwrite filter enable on startup
             //indexTagFilter.setSerializable(false);
 
-            params.add(bPause, bTight, bSeparators, bOneLine, bAutoScroll, bLimitedBuffered, amountLinesLimitedBuffered,
-                       bOptions, bAutoFit, bFilter, strFilterKeyword, bTimeStamp, fontIndex, indexTagFilter, bHideTags,
-                       bMinimize);
+            params.add(bPause); 
+            params.add(bTight); 
+            params.add(bSeparators);
+            params.add(bOneLine);
+            params.add(bAutoScroll);
+            params.add(bLimitedBuffered); 
+            params.add(amountLinesLimitedBuffered);
+            params.add(bOptions);
+            params.add(bAutoFit); 
+            params.add(bFilter);
+            params.add(strFilterKeyword); 
+            params.add(bTimeStamp);
+            params.add(fontIndex); 
+            params.add(indexTagFilter);
+            params.add(bHideTags); 
+            params.add(bMinimize);
 
             ofAddListener(params.parameterChangedE(), this, &SurfingLog::Changed_Params);
         }
@@ -210,14 +223,10 @@ namespace ofxImGuiSurfing
         //----
 
     public:
-        void drawImGui()
-        {
-            drawImGui(bGui);
-        }
 
-        void drawImGui(ofParameter<bool>& _bGui)
+        void drawImGui(ofParameter<bool>& bGui)
         {
-            if (!_bGui) return;
+            if (!bGui) return;
 
             //--
 
@@ -266,7 +275,6 @@ namespace ofxImGuiSurfing
 
             //--
 
-            std::string name = _bGui.getName();
             ImGuiWindowFlags flags;
             flags = ImGuiWindowFlags_None;
             flags |= ImGuiWindowFlags_NoScrollbar;
@@ -278,14 +286,14 @@ namespace ofxImGuiSurfing
                 hWindowMin = (bOptions.get() ? 200 : 150); //minimal height
                 ImGuiCond cond = ImGuiCond_FirstUseEver;
 
-                // app window
+                // App window
                 float w = ofGetWidth();
                 float h = ofGetHeight();
                 ImGui::SetNextWindowPos(ImVec2(w - wWindowMin - 25, 25), cond);
                 ImGui::SetNextWindowSize(ImVec2(wWindowMin, 2 * hWindowMin), cond);
                 //ImGui::SetNextWindowSize(ImVec2(wWindowMin, h - 100), cond);
 
-                // constraints
+                // Constraints
                 ImVec2 size_min = ImVec2(wWindowMin, hWindowMin);
                 ImVec2 size_max = ImVec2(FLT_MAX, FLT_MAX);
                 ImGui::SetNextWindowSizeConstraints(size_min, size_max);
@@ -294,9 +302,14 @@ namespace ofxImGuiSurfing
             //----
 
             // Window Begin
+            bool tmp = bGui.get();
 
-            if (!ImGui::Begin(name.c_str(), (bool*)&_bGui.get(), flags))
+            std::string name = bGui.getName();
+            bool b = ImGui::Begin(name.c_str(), (bool*)&tmp, flags);
+           
+            if (!b)
             {
+                if (bGui.get() != tmp) bGui.set(tmp);
                 ImGui::End();
                 return;
             }
@@ -321,7 +334,7 @@ namespace ofxImGuiSurfing
 
             if (bMinimize)
             {
-                // Right align or left if 0.
+                // Right aligned if 1 or left aligned if 0.
                 if (0)
                 {
                     float _ww3 = ofxImGuiSurfing::getWidgetButtomToggleWidth(bPause, true);
@@ -370,6 +383,7 @@ namespace ofxImGuiSurfing
 
             //--
 
+            // Maximized
             if (!bMinimize)
             {
                 // Pause
@@ -424,6 +438,7 @@ namespace ofxImGuiSurfing
 
                 //--
 
+                // Options
                 ofxImGuiSurfing::AddToggleRoundedButton(bOptions, 1.25 * _hu, true);
                 if (bOptions)
                 {
@@ -478,7 +493,7 @@ namespace ofxImGuiSurfing
                     s = "Print timestamps";
                     ofxImGuiSurfing::AddTooltip2(s);
 
-                    //unlimited
+                    // Unlimited
                     if (!bLimitedBuffered)
                     {
                         ofxImGuiSurfing::SameLineFit(180, bDebug);
@@ -508,7 +523,7 @@ namespace ofxImGuiSurfing
 
                     // Modes
 
-                    // limited buffered
+                    // Limited buffered
                     if (bLimitedBuffered)
                     {
                         ofxImGuiSurfing::SameLineFit(180, bDebug);
@@ -598,19 +613,21 @@ namespace ofxImGuiSurfing
             ImGui::PopStyleColor();
 
             //--
+            
+            if (bGui.get() != tmp) bGui.set(tmp);
 
             ImGui::End();
         }
 
-        void setName(std::string name)
-        {
-            bGui.setName(name);
-        }
+        //void setName(std::string name)
+        //{
+        //    bGui.setName(name);
+        //}
 
         //--
 
     public:
-        ofParameter<bool> bGui{"LOG", true};
+        //ofParameter<bool> bGui{"LOG", true};
 
         ofParameterGroup params{"Module Log"};
         // settings are handled by the parent class. 
@@ -667,10 +684,9 @@ namespace ofxImGuiSurfing
         bool bDoneStartup = false;
 
     private:
-        // columns formatting
+        // Columns formatting
         const int maxTagLengthDefault = 8; // first column or tag width. to make tags right aligned.
         int maxTagLengthSession = -1;
-        /*const */
         string strSpacer = "   "; // space between tags column and the second column with the message .
         //const string strSpacer2 = " "; // not required bc alignment adds some starting spaces
 
@@ -1030,7 +1046,7 @@ namespace ofxImGuiSurfing
                 for (auto& m : bufferBufferedLimited)
                 {
                     // macOS bug
-                    //for each (string l in logs)
+                    // for each (string l in logs)
 
                     const char* item = m.c_str();
 
