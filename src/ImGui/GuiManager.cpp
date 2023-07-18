@@ -26,6 +26,12 @@ SurfingGuiManager::SurfingGuiManager()
 	ofAddListener(ofEvents().exit, this, &SurfingGuiManager::exit, minValue);
 #endif
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
+	autoSaveListener = params_AppSettings.parameterChangedE().newListener([&](ofAbstractParameter&) {
+		saveSettings();
+		});
+#endif
+
 	//--
 
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
@@ -833,7 +839,7 @@ void SurfingGuiManager::resetUISettings()
 		ImGuiIO& io = ImGui::GetIO();
 		io.IniFilename = NULL;
 
-		bResetUIProgramed = true;
+		bFlagResetUIProgramed = true;
 		// to hide some gui stuff that will not operate well
 		// since now bc imgui.ini handling is disabled.
 	}
@@ -876,6 +882,8 @@ void SurfingGuiManager::resetUISettings()
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
+
+	globalScale = 1.0f;
 
 	windowsOrganizer.reset();
 }
@@ -2373,7 +2381,7 @@ void SurfingGuiManager::Begin()
 	//TODO:
 	// Fix
 	//if (!bDockingLayoutPresetsEngine)
-	//if (bGui_Menu) drawMenu();
+	//if (bGui_TopMenuBar) drawMenu();
 
 	//----
 
@@ -2422,11 +2430,13 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	//--
 
 	// Log
+
 	DrawWindowLogIfEnabled();
 
 	//--
 
 	// Notifier
+
 #ifdef SURFING_IMGUI__USE_NOTIFIER
 	DrawNotifierIfEnabled();
 #endif
@@ -2434,6 +2444,7 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	//--
 
 	// Profiler
+
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebugger) debugger.drawImGui();
 	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
@@ -2450,12 +2461,14 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	// Draw Help windows
 
 	// Internal
+
 	if (bUseHelpInternal)
 	{
 		helpInternal.draw();
 	}
 
 	// App
+
 	if (bUseHelpApp)
 	{
 		helpApp.draw();
@@ -3019,7 +3032,7 @@ void SurfingGuiManager::BeginDocking()
 	// because it would be confusing to have two docking targets within each others.
 	//ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-	if (bGui_Menu) window_flags |= ImGuiWindowFlags_MenuBar;
+	if (bGui_TopMenuBar) window_flags |= ImGuiWindowFlags_MenuBar;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 
@@ -3087,7 +3100,7 @@ void SurfingGuiManager::EndDocking()
 	return;
 #endif
 
-	if (bGui_Menu) drawMenuDocked();
+	if (bGui_TopMenuBar) drawMenuDocked();
 
 	//--
 
@@ -3135,14 +3148,14 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	// Then can be different and memorized in different states too,
 	// like the common panels.
 
-	params_LayoutsExtra.add(bGui_Menu);
+	params_LayoutsExtra.add(bGui_TopMenuBar);
 	params_LayoutsExtra.add(bLog);
 	params_LayoutsExtra.add(bNotifier);
 	//TODO: should be removed if handled by preset engine..
 
 
 	//params_LayoutsExtraInternal.clear();
-	//params_LayoutsExtraInternal.add(bGui_Menu);
+	//params_LayoutsExtraInternal.add(bGui_TopMenuBar);
 	//params_LayoutsExtraInternal.add(bLog);
 	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
 
@@ -3321,7 +3334,7 @@ bool SurfingGuiManager::loadSettings()
 //--------------------------------------------------------------
 void SurfingGuiManager::saveSettingsInternal()
 {
-	if (bResetUIProgramed) return;
+	if (bFlagResetUIProgramed) return;
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
 
@@ -3334,7 +3347,7 @@ void SurfingGuiManager::saveSettingsInternal()
 //--------------------------------------------------------------
 void SurfingGuiManager::saveSettings()
 {
-	if (bResetUIProgramed) return;
+	if (bFlagResetUIProgramed) return;
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
 
@@ -3344,7 +3357,9 @@ void SurfingGuiManager::saveSettings()
 	saveSettingsInternal();
 
 	// Save WindowsOrganizer
+#ifndef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
 	windowsOrganizer.saveSettings();
+#endif
 }
 
 //--------------------------------------------------------------

@@ -24,7 +24,7 @@ public:
 
 private:
 	std::string text = "HelpTextWidget\nEmpty content";
-	std::string title = "myHelpWidget";
+	std::string title = "myHelpWidget KeyCommands";
 
 	bool bBg = true;
 
@@ -34,9 +34,10 @@ private:
 	bool bMouseLeft = false;
 	bool bMouseRight = false;
 	bool bMouseDrag = false;
+	bool bTitleSettled = false;
 
 public:
-	void setEnableHeader(bool b) { bHeader = b; }
+	void setEnableHeader(bool b = true) { bHeader = b; }
 
 	ofParameter<bool> bGui{"HelpTextWidget", true};
 
@@ -44,8 +45,8 @@ public:
 	{
 		ofLogNotice("ofxSurfingImGui:HelpTextWidget") << "Title: " << _title;
 		title = _title;
-
 		if (bCapitalize) title = ofToUpper(title);
+		bTitleSettled = true;
 	}
 
 	void setText(string _text, bool bSlient = true)
@@ -137,7 +138,7 @@ public:
 		{
 			// 1. Title
 
-			if (!bHeader)
+			if (!bHeader || bTitleSettled)
 			{
 				string s = title;
 				//string s = title + sp;

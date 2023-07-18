@@ -1108,7 +1108,7 @@ private:
 public:
     ofRectangle getWindowRectangle() { return rWindow; }
 
-    bool isOverInputText()
+    bool isMouseOverInputText()
     {
         return bOverTextInput;
     }

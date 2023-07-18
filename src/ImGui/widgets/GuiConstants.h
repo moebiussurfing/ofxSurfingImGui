@@ -36,11 +36,13 @@
 // Improved fixing exceptions when closing ofApp.
 // We can disable automatic saving on exit and/or class destructor.
 // Then we should save manually.
-// Also implemented an approach to autosave when settings params change.
-//#define SURFING_IMGUI__CREATE_EXIT_LISTENER // to enable that ofApp exit will call exit and save settings.
-//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // to enable auto save on exit.
-#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES // to enable auto save on every param change.
-
+// Also implemented an approach to auto save when settings params change.
+//#define SURFING_IMGUI__CREATE_EXIT_LISTENER // To enable that ofApp exit will call exit and save settings.
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // To enable auto save on exit.
+#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES // To enable auto save on every param change.
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER // Made by Roy for RF
+// Code copied from: https://github.com/roymacdonald/RealityField/commit/115858b3cf3eb4baf6161ab06598fee78583fc21
+// but currently disabled as code from @moebiussurfing worked too and has 'max one save per frame'
 
 //----
 
@@ -127,8 +129,6 @@
 //TODO: make it active 
 // Knobs format to 3 decimals
 #define OFX_IM_FORMAT_WIDGETS "%.1f"
-//#define OFX_IM_FORMAT_KNOBS "%.2f"
-//#define OFX_IM_FORMAT_SLIDERS "%.2f"
 #define OFX_IM_FORMAT_KNOBS "%.3f"
 #define OFX_IM_FORMAT_SLIDERS "%.3f"
 
@@ -147,14 +147,16 @@
 
 //TODO:
 // Testing central view-port
-//#define FIXING_DOCKING		// Need to fix yet
-#define FIXING_DRAW_VIEWPORT	// To debug free space
+//#define FIXING_DOCKING // Need to fix yet
+#define FIXING_DRAW_VIEWPORT // To debug free space
 
 //----
 
 #define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
-#define BLINK_MIN 0.2f 
+//#define BLINK_MIN 0.2f 
+//#define BLINK_MAX 1.0f 
+#define BLINK_MIN 0.35f 
 #define BLINK_MAX 1.0f 
 
 #define FACTOR_DARKEN 0.2f 
@@ -180,9 +182,8 @@ namespace ofxImGuiSurfing
 		OFX_IM_FONT_DEFAULT = 0,
 		OFX_IM_FONT_BIG,
 		OFX_IM_FONT_HUGE,
-		OFX_IM_FONT_HUGE_XXL, // 3
+		OFX_IM_FONT_HUGE_XXL,
 
-		//TODO:
 		OFX_IM_FONT_DEFAULT_MONO,
 		OFX_IM_FONT_BIG_MONO,
 		OFX_IM_FONT_HUGE_MONO,

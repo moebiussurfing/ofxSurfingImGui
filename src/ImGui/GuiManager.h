@@ -1784,8 +1784,39 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse, bool enabled = true)
+	bool MenuItemToggleBlinkingIfEnabled(ofParameter<bool>& pb)
 	{
+		bool bBlinking = pb.get();
+		if (bBlinking) this->BeginBlinkText();
+
+		bool enabled = true;
+		string label = pb.getName();
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		if (bBlinking) this->EndBlinkText();
+
+		return b;
+	}
+
+	////--------------------------------------------------------------
+	//bool MenuItemToggleBlinking(const string label, bool bEnable = true)
+	//{
+	//	if (bEnable) this->BeginBlinkText();
+	//	const char* shortcut = NULL;
+	//	bool selected = false;
+	//	bool enabled = true;
+	//	bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+	//	if (bEnable) this->EndBlinkText();
+	//	return b;
+	//}
+
+	//--------------------------------------------------------------
+	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse)
+	{
+		bool enabled = true;
 		string label = pb.get() ? nameTrue : nameFalse;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
@@ -1796,8 +1827,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamed(ofParameter<bool>& pb, string name, bool enabled = true)
+	bool MenuItemToggleNamed(ofParameter<bool>& pb, string name)
 	{
+		bool enabled = true;
 		string label = name;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
@@ -1811,6 +1843,31 @@ public:
 	bool MenuItemToggleNamedAppend(ofParameter<bool>& pb, string suffix, bool enabled = true)
 	{
 		string label = pb.getName() + suffix;
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItemToggleNamedPrepend(ofParameter<bool>& pb, string prefix, bool enabled = true)
+	{
+		string label = prefix + pb.getName();
+		bool selected = pb.get();
+		const char* shortcut = NULL;
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItemToggleNamedPrepend(ofParameter<bool>& pb, string nameTrue, string nameFalse)
+	{
+		bool enabled = true;
+		string label = pb.get() ? nameTrue : nameFalse;
 		bool selected = pb.get();
 		const char* shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
@@ -1840,7 +1897,7 @@ public:
 		if (bEnable) this->EndBlinkText();
 		return b;
 	}
-	
+
 	// will not work with many "calls" as is static
 	////--------------------------------------------------------------
 	//bool MenuItemButtonBlinkingIfHover(const string label, bool bEnable = true) 
@@ -2350,7 +2407,7 @@ public:
 
 	// To disable keyboard when typing into any ui widget.
 	//--------------------------------------------------------------
-	bool isOverInputText() const
+	bool isMouseOverInputText() const
 	{
 		return bOverInputText;
 	}
@@ -2859,7 +2916,7 @@ public:
 		if (bSeparated)this->AddSpacingSeparated();
 	}
 
-	bool isKeys() const { return bKeys.get() && !this->isOverInputText(); }
+	bool isKeys() const { return bKeys.get() && !this->isMouseOverInputText(); }
 
 	//--
 
@@ -3153,7 +3210,7 @@ private:
 			this->Add(bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
 
 			// Menu
-			Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED);
+			Add(bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
 
 			// Log
 			Add(bLog, OFX_IM_TOGGLE_ROUNDED);
@@ -3303,7 +3360,7 @@ private:
 						//Add(bLog, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//// Menu
-						//Add(bGui_Menu, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
+						//Add(bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED_MEDIUM);
 
 						//--
 
@@ -4349,6 +4406,10 @@ private:
 	void Changed_Params(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
+	ofEventListener autoSaveListener;
+#endif
+
 	void Changed_WindowsPanels(ofAbstractParameter& e);
 
 	//--------------------------------------------------------------
@@ -4398,7 +4459,7 @@ public:
 	void DrawWidgetsResetUI(bool bMenuMode = 0);
 	void resetUISettings();
 private:
-	bool bResetUIProgramed = false;
+	bool bFlagResetUIProgramed = false;
 
 	//-
 
@@ -4488,7 +4549,7 @@ public:
 	//-
 
 public:
-	ofParameter<bool> bGui_Menu{ "Menu", false };
+	ofParameter<bool> bGui_TopMenuBar{ "Menu", false };
 
 	ofParameter<bool> bLinked{"Link Windows", false}; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
@@ -4556,7 +4617,7 @@ public:
 		setShowAllPanels(b);
 
 		//bModeLockControls = b;
-		bGui_Menu = b;
+		bGui_TopMenuBar = b;
 
 		bGui_LayoutsPanels = b;
 		bGui_LayoutsPresetsSelector = b;
@@ -4630,7 +4691,7 @@ public:
 #else
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
-}
+	}
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
@@ -4659,6 +4720,25 @@ public:
 		helpApp.setText(helpAppText);
 		bUseHelpApp = true;
 	}
+	//--------------------------------------------------------------
+	void setHelpAppName(string text)
+	{
+		helpApp.bGui.setName(text);
+	}
+	//--------------------------------------------------------------
+	void setHelpAppTitle(string text)
+	{
+		helpApp.setTitle(text);
+		setHelpAppEnableHeader();
+	}
+	//--------------------------------------------------------------
+	void setHelpAppEnableHeader(bool b = true)
+	{
+		helpApp.setEnableHeader(b);
+	}
+
+	//-
+
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
 	void setHelpInternalText(string text)
@@ -4668,6 +4748,27 @@ public:
 		helpInternalText = text;
 		helpInternal.setText(helpInternalText);
 		bUseHelpInternal = true;
+	}
+	//--------------------------------------------------------------
+	void setHelpInternalName(string text)
+	{
+		helpInternal.bGui.setName(text);
+	}
+	//--------------------------------------------------------------
+	void setHelpInternalTitle(string text)
+	{
+		helpInternal.setTitle(text);
+		setHelpInternalEnableHeader();
+	}
+	//--------------------------------------------------------------
+	void setInternalEnableHelpHeader(bool b = true)
+	{
+		helpInternal.setEnableHeader(b);
+	}
+	//--------------------------------------------------------------
+	void setHelpInternalEnableHeader(bool b = true)
+	{
+		helpInternal.setEnableHeader(b);
 	}
 
 	// Useful in some rare scenarios to populate or hide the enabler toggle

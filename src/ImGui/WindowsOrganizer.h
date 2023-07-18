@@ -56,6 +56,12 @@ namespace ofxImGuiSurfing
 			ofAddListener(ofEvents().exit, this, &WindowsOrganizer::exit, minValue);
 #endif
 
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
+			params_AppSettingsListener = params_AppSettings.parameterChangedE().newListener([this](ofAbstractParameter&) {
+				this->saveSettings();
+				});
+#endif
+
 			//--
 
 			// Exclude
@@ -115,6 +121,10 @@ namespace ofxImGuiSurfing
 
 	private:
 		bool bDoneExit = false;
+
+#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
+		ofEventListener params_AppSettingsListener;
+#endif
 
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 		//--------------------------------------------------------------
