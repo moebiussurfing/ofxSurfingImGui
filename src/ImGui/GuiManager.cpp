@@ -701,12 +701,26 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 		//fontIndex.setMax(7);
 		fontIndex.setMax(customFonts.size() - 1);
 
-		// Prepare Log
+		//--
+
+		// Log
+
+		// Prepare
 		log.setCustomFonts(customFonts, namesCustomFonts);
 		log.setFontMonospacedDefined();
-
-		// Force
 		log.setFontIndex(OFX_IM_FONT_BIG_MONO);
+
+		//--
+
+#ifdef SURFING_IMGUI__USE_NOTIFIER
+
+		// Notifier
+
+		// Prepare
+		notifier.setCustomFonts(customFonts, namesCustomFonts);
+		notifier.setFontMonospacedDefined();
+		notifier.setFontIndex(OFX_IM_FONT_BIG_MONO);
+#endif
 
 		//--
 
@@ -719,8 +733,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 	// Legacy not found neither
 	else
 	{
-		ofLogError("ofxSurfingImGui") <<
-			"setupFontForDefaultStylesMonospacedInternal() Seems that expected file fonts not found!";
+		ofLogError("ofxSurfingImGui") << "setupFontForDefaultStylesMonospacedInternal() Seems that expected file fonts not found!";
 		ofLogError("ofxSurfingImGui") << "Some ofxSurfingImGui styles will be omitted.";
 	}
 }

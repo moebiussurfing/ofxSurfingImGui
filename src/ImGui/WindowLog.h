@@ -1243,12 +1243,10 @@ namespace ofxImGuiSurfing
             setCustomFontsNames(names);
             setCustomFonts(f);
         }
-
         void setCustomFontsNames(vector<string> names)
         {
             namesCustomFonts = names;
         }
-
         void setCustomFonts(vector<ImFont*> f)
         {
             customFonts = f;
@@ -1260,10 +1258,11 @@ namespace ofxImGuiSurfing
 
             fontIndex.setMax(customFonts.size() - 1);
         }
-
     private:
         vector<ImFont*> customFonts;
         vector<string> namesCustomFonts;
+
+        //--
 
         bool bFlagIgnoreNextPopStyleFont = false;
 

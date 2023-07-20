@@ -1840,6 +1840,19 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	bool MenuItemToggleWithKeystrokeInfo(ofParameter<bool>& pb, string keyInfo, bool enabled = true)
+	{
+		float w = ImGui::GetContentRegionAvail().x;
+		string label = pb.getName();
+		bool selected = pb.get();
+		const char* shortcut = keyInfo.c_str();
+		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
+		if (b) pb = !pb;
+
+		return b;
+	}
+
+	//--------------------------------------------------------------
 	bool MenuItemToggleNamedAppend(ofParameter<bool>& pb, string suffix, bool enabled = true)
 	{
 		string label = pb.getName() + suffix;
@@ -1891,6 +1904,18 @@ public:
 	{
 		if (bEnable) this->BeginBlinkText();
 		const char* shortcut = NULL;
+		bool selected = false;
+		bool enabled = true;
+		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
+		if (bEnable) this->EndBlinkText();
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool MenuItemButtonBlinkingWithKeystrokeInfo(const string label, string keyInfo, bool bEnable = true)
+	{
+		if (bEnable) this->BeginBlinkText();
+		const char* shortcut = keyInfo.c_str();
 		bool selected = false;
 		bool enabled = true;
 		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
@@ -2655,7 +2680,8 @@ public:
 	//--------------------------------------------------------------
 	void DrawNotifierIfEnabled()
 	{
-		if (bNotifier) notifier.draw(true, &customFonts);
+		if (bNotifier) notifier.draw();
+		//if (bNotifier) notifier.draw(true, &customFonts);
 		//if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
 	}
 #endif

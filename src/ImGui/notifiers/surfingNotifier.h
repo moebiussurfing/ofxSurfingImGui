@@ -77,7 +77,7 @@ private:
 #endif
 
 public:
-	void exit() 
+	void exit()
 	{
 		//TODO:
 		//disable to test RF crash
@@ -86,18 +86,17 @@ public:
 #endif
 
 public:
-	void draw(bool bDebug_ = false, vector<ImFont*>* fonts = nullptr)
+	void draw()
+	{
+		draw(true, &customFonts);
+	}
+	void draw(bool bGuiEditor, vector<ImFont*>* fonts = nullptr)
 	{
 		if (!bDoneSetup) { setup(); }
 
 		ImTricks::NotifyManager::HandleNotifies(ImGui::GetForegroundDrawList(), fonts);
 
-		if (bDebug_) ImTricks::NotifyManager::drawImGuiEditorControls();
-	}
-
-	void setIndexFont(int index) {
-		index = ofClamp(index, 0, 3);//clamp hardcoded
-		ImTricks::NotifyManager::indexFont = index;
+		if (bGuiEditor) ImTricks::NotifyManager::drawImGuiEditorControls();
 	}
 
 	void setDuration(int duration) {//bubble duration in milliseconds
@@ -107,6 +106,51 @@ public:
 	void setMini() {
 		ImTricks::NotifyManager::doSetMini();
 	}
+	void setFontMonospacedDefined(bool b = true)
+	{
+		bDefinedMonospacedFonts = b;
+
+		ImTricks::NotifyManager::indexFont.setMax(customFonts.size() - 1);
+
+		//workflow. pick the mono-spaced
+		// if (fontIndex < 4) fontIndex += 4;//set relative mono-spaced by default
+	}
+
+	//--
+
+public:
+
+	void setFontIndex(int index) {
+		index = ofClamp(index, 0, customFonts.size() - 1);//clamp hardcoded
+		ImTricks::NotifyManager::indexFont = index;
+	}
+
+	void setCustomFonts(vector<ImFont*> f, vector<string> names)
+	{
+		setCustomFontsNames(names);
+		setCustomFonts(f);
+	}
+	void setCustomFontsNames(vector<string> names)
+	{
+		namesCustomFonts = names;
+	}
+	void setCustomFonts(vector<ImFont*> f)
+	{
+		customFonts = f;
+
+		if (customFonts.size() == 0)
+		{
+			ofLogError("ofxSurfingImGui:SurfingLog") << "It looks that not any extra font styles are added!";
+		}
+
+		ImTricks::NotifyManager::indexFont.setMax(customFonts.size() - 1);
+	}
+private:
+	vector<ImFont*> customFonts;
+	vector<string> namesCustomFonts;
+
+private:
+	bool bDefinedMonospacedFonts = false;
 
 private:
 	struct tagData
