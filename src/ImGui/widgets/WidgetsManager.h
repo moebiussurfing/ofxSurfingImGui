@@ -642,6 +642,9 @@ namespace ofxImGuiSurfing
 			const bool isMultiDimVec3 = ptype == typeid(ofParameter<glm::vec3>).name();
 			const bool isMultiDimVec4 = ptype == typeid(ofParameter<glm::vec4>).name();
 			const bool isMultiDimQuat = ptype == typeid(ofParameter<glm::quat>).name();
+			const bool isMultiDimiVec2 = ptype == typeid(ofParameter<glm::ivec2>).name();
+			const bool isMultiDimiVec3 = ptype == typeid(ofParameter<glm::ivec3>).name();
+			const bool isMultiDimiVec4 = ptype == typeid(ofParameter<glm::ivec4>).name();
 			const bool isRectangle = ptype == typeid(ofParameter<ofRectangle>).name();
 
 			///*
@@ -2712,7 +2715,110 @@ namespace ofxImGuiSurfing
 				bDone = true; // QUAT
 			}
 
-			//--
+
+			//--------
+
+			// 2.7 MULTIDIM iVEC2 / iVEC3 / iVEC4
+
+			else if (isMultiDimiVec2)
+			{
+				uniqueName.push();
+				{
+					ofParameter<glm::ivec2> p = ap.cast<glm::ivec2>();
+
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+						//TODO:
+						//-> Should include sugar inside
+						//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					}
+					break;
+
+					//case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					//{
+					//	bReturn = ofxImGuiSurfing::AddParameter(p, true, true);
+					//	//TODO:
+					//	//-> Should include sugar inside
+					//	//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					//}
+					//break;
+
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
+					}
+				}
+				uniqueName.pop();
+
+				bDone = true; // iVEC2
+			}
+
+			else if (isMultiDimiVec3)
+			{
+				uniqueName.push();
+				{
+					ofParameter<glm::ivec3> p = ap.cast<glm::ivec3>();
+
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+					}
+					break;
+
+					//case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					//{
+					//	bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+					//	//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					//}
+					//break;
+
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
+					}
+				}
+				uniqueName.pop();
+
+				bDone = true; // iVEC3
+			}
+
+			else if (isMultiDimiVec4)
+			{
+				uniqueName.push();
+				{
+					ofParameter<glm::ivec4> p = ap.cast<glm::ivec4>();
+
+					switch (type)
+					{
+					case OFX_IM_MULTIDIM_SPLIT_SLIDERS:
+					{
+						bReturn = ofxImGuiSurfing::AddParameter(p, true);
+					}
+					break;
+
+					//case OFX_IM_MULTIDIM_SPLIT_SLIDERS_FOLDERED:
+					//{
+					//	bReturn = ofxImGuiSurfing::AddParameter(p, true, true); //-> Should include sugar inside
+					//	//if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
+					//}
+					//break;
+
+					default:
+						bReturn = ofxImGuiSurfing::AddParameter(p);
+						break;
+					}
+				}
+				uniqueName.pop();
+
+				bDone = true; // iVEC4
+			}
+
+			//----
 
 			else if (isRectangle)
 			{

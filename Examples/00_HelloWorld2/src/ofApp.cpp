@@ -6,7 +6,7 @@ void ofApp::setup()
 	ofSetWindowPosition(-1920, 26);
 
 	//----
-	
+
 	setupGui();
 }
 
@@ -33,6 +33,10 @@ void ofApp::setupGui()
 		});
 
 	ui.setLogLevel(OF_LOG_ERROR);
+
+	//--
+
+	tabs.setUiPtr(&ui);
 }
 
 //--------------------------------------------------------------
@@ -68,12 +72,10 @@ void ofApp::drawGui()
 
 	ui.Begin();
 	{
-		//TODO:
-		//if (ui.bGui_TopMenuBar) ui.drawMenu();
-
 		drawGuiMain();
 
 		drawGuiQuat();
+		drawGuiTabs();
 	}
 	ui.End();
 }
@@ -104,6 +106,7 @@ void ofApp::drawGuiMain()
 		ui.Add(ui.bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
+		ui.AddSpacing();
 
 		// Global Scale
 		if (ui.isMaximized()) ui.DrawWidgetsGlobalScale();
@@ -121,14 +124,16 @@ void ofApp::drawGuiMain()
 			s2 += "Press ` to toggle the Minimizer state.\n";
 			s2 += "Press L to toggle the Log Window visible.";
 			ui.AddTooltip(s2); // a tooltip will be pinned to the previous widget!
-
 			ui.AddSpacingSeparated();
+
 			ui.AddAutoResizeToggle();
 			ui.AddSpacing();
 			ui.AddToggle("Constraints", bConstraint, OFX_IM_CHECKBOX);
 		}
 
 		ui.AddSpacingBigSeparated();
+
+		//--
 
 		static ofParameter<bool> bMin{ "##1", true };
 		ui.AddMinimizerXsToggle(bMin);
@@ -147,7 +152,7 @@ void ofApp::drawGuiMain()
 			ui.AddSpacingBigSeparated();
 
 			// Two different presentations depending if minimized or not
-			if (ui.isMinimized()) // minimized
+			if (ui.isMinimized()) // Minimized
 			{
 				ui.Add(speed, OFX_IM_HSLIDER_SMALL_NO_LABELS); // smaller with no name and no value number
 				ui.AddTooltip(speed, true, false); // tool-tip with name and value
@@ -158,7 +163,7 @@ void ofApp::drawGuiMain()
 				ui.AddTooltipHelp(s);
 				if (bEnable) ui.PopFontStyle();
 			}
-			else // Not minimized aka maximized
+			else // Maximized (aka not minimized)
 			{
 				// make it uppercase and add an extra space (true, true)
 				if (bEnable) ui.AddLabelHuge("00_HelloWorld2", true, true);
@@ -184,7 +189,6 @@ void ofApp::drawGuiMain()
 					ui.PopInactive();
 					s = "Widget is deactivated\nwhen Enabled is false\nSo can not be touched.";
 					ui.AddLabel(s);
-
 				}
 				else {
 					ui.Add(speed, OFX_IM_HSLIDER);
@@ -217,17 +221,15 @@ void ofApp::drawGuiMain()
 						ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed); // collapsed on startup
 					}
 				}
-
-				//--
-
-				ui.AddSpacingBigSeparated();
-				ui.AddToggle("Quat", bGui_Quat);
 			}
 		}
 
+		//--
+
 		ui.AddSpacingBigSeparated();
 
-		ui.DrawWidgetsExampleTabs();
+		ui.AddToggle("Quat", bGui_Quat, OFX_IM_TOGGLE_BIG);
+		ui.Add(bGui_Tabs, OFX_IM_TOGGLE_BIG);
 
 		//--
 
@@ -237,6 +239,65 @@ void ofApp::drawGuiMain()
 			ui.DrawWidgetsResetUI();//populate ResetUI button directly.
 			//ui.resetUISettings();//exposed method.
 		}
+
+		ui.EndWindow();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGuiTabs()
+{
+	if (bGui_Tabs) {
+		ImGui::SetNextWindowSize({ 200,200 }, ImGuiCond_FirstUseEver);
+	}
+	if (ui.BeginWindow(bGui_Tabs))
+	{
+		if(ui.isMaximized()) tabs.drawEditor();
+
+		tabs.BeginTabBar("OF_APP");
+		{
+			if (tabs.BeginTabItem("Tab0"))
+			{
+				ImGui::Text("hello0");
+				static float v0 = 0;
+				ImGui::SliderFloat("slider", &v0, 0, 1);
+				ImGui::Text("hello0");
+				ImGui::Text("Stage Manager");
+				ImGui::SameLine();
+				ImGui::Button("button");
+				ui.AddLabelBig("hello0");
+
+				tabs.EndTabItem(0);
+			}
+
+			if (tabs.BeginTabItem("Tab1"))
+			{
+				ui.AddLabelBig("hello1");
+				static float v1 = 0;
+				ImGui::SliderFloat("slider1", &v1, 0, 1);
+				ImGui::Text("hello1");
+				ImGui::SameLine();
+				ImGui::Text("Network Adapter");
+				ImGui::Text("hello1");
+				ImGui::Button("button");
+
+				tabs.EndTabItem(1);
+			}
+
+			if (tabs.BeginTabItem("Tab2"))
+			{
+				ImGui::Text("hello2");
+				ImGui::Button("button");
+				ImGui::Text("License");
+				ImGui::SameLine();
+				ui.AddLabelBig("hello2");
+				static float v2 = 0;
+				ImGui::SliderFloat("slider2", &v2, 0, 1);
+
+				tabs.EndTabItem(2);
+			}
+		}
+		tabs.EndTabBar();
 
 		ui.EndWindow();
 	}
@@ -325,6 +386,12 @@ void ofApp::mouseDragged(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
+void ofApp::exit()
+{
+	ui.saveSettings(); // manually save the internal settings on exit
+}
+
+//--------------------------------------------------------------
 void ofApp::drawSceneQuat() {
 	ofPushStyle();
 	ofSetColor(ofColor::white, 16);
@@ -336,10 +403,4 @@ void ofApp::drawSceneQuat() {
 	ofDrawSphere(0, 0, 0, 200);
 	ofPopMatrix();
 	ofPopStyle();
-}
-
-//--------------------------------------------------------------
-void ofApp::exit()
-{
-	ui.saveSettings(); // manually save the internal settings on exit
 }
