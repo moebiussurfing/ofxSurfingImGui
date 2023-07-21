@@ -163,7 +163,7 @@ private:
 
 	void buildTagsDefault()
 	{
-		ofLogNotice("ofxSurfingImGui:SurfingNotifier::buildTagsDefault");
+		ofLogNotice("ofxSurfingImGui:SurfingNotifier") << "buildTagsDefault()";
 
 		AddTag({ "INFO", ofColor::white });
 		AddTag({ "VERBOSE", ofColor::white });
@@ -180,8 +180,7 @@ public:
 	//TODO: allow customize
 	void AddTag(tagData tag)
 	{
-		ofLogNotice("ofxSurfingImGui:SurfingNotifier::AddTag")
-			<< "name: " << tag.name << ":" << tag.color;
+		ofLogNotice("ofxSurfingImGui:SurfingNotifier") << "AddTag() name: " << tag.name << ":" << tag.color;
 
 		tags.push_back(tag);
 	}
@@ -190,7 +189,7 @@ public:
 	{
 		NotifyState s;
 
-		ofLogNotice("ofxSurfingImGui:SurfingNotifier::Add()") << "text:" << text << " tag:" << nameTag;
+		ofLogNotice("ofxSurfingImGui:SurfingNotifier") << "Add() text:" << text << " tag:" << nameTag;
 
 		if (nameTag == string("INFO")) s = ImTrickNotify_Info;
 		else if (nameTag == string("VERBOSE")) s = ImTrickNotify_Verbose;
@@ -205,7 +204,7 @@ public:
 
 	void Add(std::string msg, ofLogLevel logLevel)
 	{
-		ofLogNotice("ofxSurfingImGui:SurfingNotifier::Add()") << "logLevel: " << logLevel;
+		ofLogNotice("ofxSurfingImGui:SurfingNotifier") << "Add() logLevel: " << logLevel;
 
 		if (logLevel == OF_LOG_VERBOSE) Add(msg, "VERBOSE");
 		else if (logLevel == OF_LOG_NOTICE) Add(msg, "NOTICE");

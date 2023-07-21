@@ -1773,7 +1773,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-}
+	}
 #endif
 
 	//--
@@ -2393,8 +2393,7 @@ void SurfingGuiManager::Begin()
 
 	//TODO:
 	// Fix
-	//if (!bDockingLayoutPresetsEngine)
-	//if (bGui_TopMenuBar) drawMenu();
+	if (!bDockingLayoutPresetsEngine) if (bGui_TopMenuBar) drawMenu();
 
 	//----
 
@@ -2723,7 +2722,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-}
+	}
 #endif
 
 	//--
@@ -4909,7 +4908,7 @@ void SurfingGuiManager::drawMenuDocked()
 //--------------------------------------------------------------
 void SurfingGuiManager::drawMenu()
 {
-	static bool opt_fullscreen = true;
+	static bool opt_fullscreen = 0;
 	static bool* p_open = NULL;
 	static bool opt_exit = false;
 
@@ -4918,8 +4917,8 @@ void SurfingGuiManager::drawMenu()
 	// Menu bar
 
 	// This is not operative. just for testing menus!
+	ImGui::BeginMainMenuBar();
 
-	if (ImGui::BeginMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
@@ -4937,11 +4936,22 @@ void SurfingGuiManager::drawMenu()
 
 			this->AddSpacingSeparated();
 
-			if (ImGui::MenuItem("Exit", NULL, &opt_exit))
+
+			// Exit. Blink if hover
+			static bool bExitHover = false;
+			bool bExit = this->MenuItemButtonBlinkingWithKeystrokeInfo("Exit", "ESC", bExitHover);
+			bExitHover = ImGui::IsItemHovered();
+			if (bExit)
 			{
 				ofExit();
-				//*opt_exit = false;
 			}
+
+			//if (ImGui::MenuItem("Exit", NULL, &opt_exit))
+			//{
+			//	ofExit();
+			//	//*opt_exit = false;
+			//}
+
 			ImGui::EndMenu();
 		}
 
@@ -4953,6 +4963,7 @@ void SurfingGuiManager::drawMenu()
 			if (ImGui::MenuItem("Paste", NULL))
 			{
 			}
+
 			ImGui::EndMenu();
 		}
 
@@ -4974,9 +4985,10 @@ void SurfingGuiManager::drawMenu()
 
 			ImGui::EndMenu();
 		}
-
-		ImGui::EndMenuBar();
 	}
+	
+	ImGui::EndMainMenuBar();
+
 }
 
 //--

@@ -2694,7 +2694,13 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void setLogLevel(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
+	void setLogLevel(ofLogLevel logLevel) {
+		ofSetLogLevel("ofxSurfingImGui", logLevel);
+		ofSetLogLevel("ofxSurfingImGui:SurfingLog", logLevel);
+		ofSetLogLevel("ofxSurfingImGui:SurfingNotifier", logLevel);
+	}
+	//--------------------------------------------------------------
+	void setLogLevelLog(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
 
 	//--------------------------------------------------------------
 	void setLogRedirectConsole(bool b = true)

@@ -31,6 +31,8 @@ void ofApp::setupGui()
 		string s = speed.getName() + ": " + ofToString(speed.get(), 1);
 		ui.AddToLog(s, myTag1);
 		});
+
+	ui.setLogLevel(OF_LOG_ERROR);
 }
 
 //--------------------------------------------------------------
@@ -67,7 +69,7 @@ void ofApp::drawGui()
 	ui.Begin();
 	{
 		//TODO:
-		if (ui.bGui_Menu) ui.drawMenu();
+		//if (ui.bGui_TopMenuBar) ui.drawMenu();
 
 		drawGuiMain();
 
@@ -99,7 +101,7 @@ void ofApp::drawGuiMain()
 		ui.AddLogToggle();
 		ui.AddNotifierToggle();
 		ui.AddNotifierToggleEditor();
-		ui.Add(ui.bGui_Menu, OFX_IM_TOGGLE_ROUNDED);
+		ui.Add(ui.bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
 
