@@ -140,6 +140,8 @@ void SurfingGuiManager::setupParams() {
 	//--
 
 	// Links
+	
+	scaleGlobalManager.setUiPtr(this);
 
 	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);//breaks ref
 	globalScale.makeReferenceTo(scaleGlobalManager.globalScale);

@@ -622,8 +622,7 @@ public:
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(cFrameBg.x, cFrameBg.y, cFrameBg.z, cFrameBg.w * a));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(cButton.x, cButton.y, cButton.z, cButton.w * a));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(cActive.x, cActive.y, cActive.z, cActive.w * a));
-		ImGui::PushStyleColor(ImGuiCol_SliderGrab,
-			ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
+		ImGui::PushStyleColor(ImGuiCol_SliderGrab, ImVec4(cSliderGrab.x, cSliderGrab.y, cSliderGrab.z, cSliderGrab.w * a));
 		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(cBorder.x, cBorder.y, cBorder.z, cBorder.w * a));
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(cText.x, cText.y, cText.z, cText.w * a));
 
@@ -821,14 +820,10 @@ public:
 
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3);
-			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
 		}
 
 		string t = bUppercase ? ofToUpper(label) : label;
@@ -838,14 +833,10 @@ public:
 
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont();
-			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
 		}
 	}
 
@@ -1067,28 +1058,20 @@ public:
 	{
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2);
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3);
-			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
 		}
 
 		ofxImGuiSurfing::AddLabelLinkURL(label.c_str(), url.c_str(), bBlink);
 
 		switch (fontType)
 		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont();
-			break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont();
-			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
 		}
 
 		if (ImGui::IsItemHovered())
@@ -1604,9 +1587,9 @@ public:
 	bool BeginWindow(string name);
 	bool BeginWindow(string name, bool* p_open);
 	bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags);
-	//bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	bool BeginWindow(char* name = "Window");
 	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
+	//bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
 
 	// Useful when we can decide afterwards which type to use for a window: special or not.
@@ -1923,27 +1906,6 @@ public:
 		return b;
 	}
 
-	// will not work with many "calls" as is static
-	////--------------------------------------------------------------
-	//bool MenuItemButtonBlinkingIfHover(const string label, bool bEnable = true) 
-	//{
-	//	// Blink if hover
-	//	static bool b = false;
-	//	bool bm = this->MenuItemButtonBlinking("Exit", b);
-	//	b = ImGui::IsItemHovered();
-	//}
-	////--------------------------------------------------------------
-	//bool MenuItemButtonBlinkingIfHover(const string label)
-	//{
-	//	this->BeginBlinkText();
-	//	const char* shortcut = NULL;
-	//	bool selected = false;
-	//	bool enabled = true;
-	//	bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
-	//	this->EndBlinkText();
-	//	return b;
-	//}
-
 	//---
 
 	// Blink Helpers
@@ -2154,8 +2116,8 @@ private:
 	vector<string> pathsCustomFonts;
 
 public:
-	vector<ImFont*> getFontsPtr() { return customFonts; } //Warning: setup() must be called before!
-	vector<string> getFontsNames() { return namesCustomFonts; } //Warning: setup() must be called before!
+	vector<ImFont*> getFontsPtr() { return customFonts; } // Warning: setup() must be called before!
+	vector<string> getFontsNames() { return namesCustomFonts; } // Warning: setup() must be called before!
 
 	void clearFonts();
 	int getNumFonts();
@@ -2163,13 +2125,13 @@ public:
 	string getFontLabel(int index);
 	string getFontName(int index);
 	float getFontSizeForIndex(int index);
-	string getFontPath(int index); //get the path of the selected index font
-	string getFontIndexPath(); //duplicated? //get the path of the selected index font
-	float getFontIndexSize(); //get the size of the selected index font
+	string getFontPath(int index); // Get the path of the selected index font
+	string getFontIndexPath(); // Duplicated? //get the path of the selected index font
+	float getFontIndexSize(); // Get the size of the selected index font
 	void doLoadPreviousFont();
 	void doLoadNextFont();
 
-	//TODO: required? bc addFontStyle workflow..
+	//TODO: Required? bc addFontStyle workflow..
 	//bool addFont(string path, float size);
 	// Load all the fonts from the passed folder
 	bool LoadFontsFromFolder(string path, float size = 12.f, bool bMultisize = false);
@@ -2178,7 +2140,7 @@ public:
 
 private:
 	int indexCurrFont = 0;
-	//TODO: load font on runtime
+	//TODO: Load font on runtime
 	//void processOpenFileSelection(ofFileDialogResult openFileResult, int size);
 	//void openFontFileDialog(int size = 10); //opens file dialog window to pick a font file, passing the desired size.
 
@@ -2205,7 +2167,7 @@ public:
 	void setDefaultFontIndex(int index);
 	void setDefaultFont();
 
-	ofParameter<int> fontIndex{"Font", 0, 0, 3}; // by default we use 4 font sizes/types
+	ofParameter<int> fontIndex{"Font", 0, 0, 3}; // By default we use 4 font sizes/types
 	void DrawWidgetsFonts(); // uses internal index
 	void DrawWidgetsFontsMini(); // only combo. uses internal index
 
@@ -2217,13 +2179,15 @@ public:
 	int getFontIndex();
 	void setFontIndex(int index);
 
-	void PushFontByIndex(); // activates font style picked from the internal index
+	void PushFontByIndex(); // Activates font style picked from the internal index
 	void PopFontByIndex();
 
 	//----
 
 	// Scale Global 
-	// technically is the font scale, that affects most widgets, but could break some window sizes layout.
+	// technically is the font scale, 
+	// that affects most widgets, 
+	// but could break some window sizes layout.
 
 private:
 
@@ -2256,6 +2220,15 @@ private:
 		~ScaleGlobalManager() {
 		}
 
+	public:
+		void setUiPtr(SurfingGuiManager* _ui)//only required to use the drawEditor!
+		{
+			ui = _ui;
+		}
+	private:
+		SurfingGuiManager* ui = nullptr;
+
+	public:
 		ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
 		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
 		ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
@@ -2268,16 +2241,86 @@ private:
 		ofEventListener eIndex;
 		ofEventListener eGlobalScale;
 
-		/*
 	public:
-		//TODO: must pass ui or split ScaleGlobalManager to a new .h file.
-		void draw() {
+
+		void DrawWidgetsGlobalScaleMini() {
+			if (ui == nullptr) return;
+
+			ui->AddSpacing();
+
+			float w = ui->getWidgetWidthFromIndex();
+
+			ImGui::PushItemWidth(w);
+			ui->AddCombo(index, names, true);
+			ImGui::PopItemWidth();
+			string s = "Global Scale";
+			//s += "\n" + scaleGlobalManager.getName();
+			ui->AddTooltip(s);
+
+			if (index == 5) { // custom
+				float w3 = ImGui::GetContentRegionAvail().x;
+				if (w3 > 200) {
+					ui->SameLine();
+					w3 = ImGui::GetContentRegionAvail().x;
+				}
+				ImGui::PushItemWidth(w3);
+				ui->Add(ui->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
+				ImGui::PopItemWidth();
+			}
 		}
 
-		//TODO:
-		void drawMini() {
+		void DrawWidgetsGlobalScale() {
+			if (ui == nullptr) return;
+			
+			ui->AddSpacingBigSeparated();
+			string s;
+			s = "Global Scale";
+			ui->AddLabelBig(s);
+			ui->AddSpacing();
+
+			float w = ui->getWidgetWidthFromIndex();
+
+			ImGui::PushItemWidth(w);
+			ui->AddCombo(index, names, true);
+			ImGui::PopItemWidth();
+
+			// responsive
+			if ((ui->getWindowWidth() > 200) &&
+				(index == 0 ||
+					index == 1 ||
+					index == 2)) {
+				ImGui::SameLine();
+			}
+
+			float w3;
+			if (ui->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
+			else w3 = 200;
+			ImGui::PushItemWidth(w3);
+			ui->Add(ui->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
+			ImGui::PopItemWidth();
+
+			s = "Global Scale is applied\n";
+			s += "to all the UI context.\n";
+			s += "Press Ctrl +/- to 0.01 increments.\n";
+			ui->AddTooltip(s);
+
+			ui->Add(ui->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS);
+
+			if (ui->AddButtonRawMini("Reset")) {
+				ui->globalScale = 1;
+			}
+			s = "Set Global Scale to unit.";
+			ui->AddTooltip(s);
+
+			//if (ui->getWindowWidth() > 150) ui->SameLine();
+
+			ui->Add(ui->bGlobalScaleWheel);
+			s = "Ctrl + Mouse Wheel: \nScales the active window.";
+			ui->AddTooltip(s);
+
+			ui->AddSpacingBigSeparated();
 		}
-		*/
+
 	};
 
 	ScaleGlobalManager scaleGlobalManager;
@@ -2297,83 +2340,14 @@ private:
 	}
 
 public:
-
 	float getGlobalScale() {
 		return scaleGlobalManager.getScale();
 	}
-
 	void DrawWidgetsGlobalScaleMini() {
-		this->AddSpacing();
-
-		float w = getWidgetWidthFromIndex();
-
-		ImGui::PushItemWidth(w);
-		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
-		ImGui::PopItemWidth();
-		string s = "Global Scale";
-		//s += "\n" + scaleGlobalManager.getName();
-		this->AddTooltip(s);
-
-		if (scaleGlobalManager.index == 5) { // custom
-			float w3 = ImGui::GetContentRegionAvail().x;
-			if (w3 > 200) {
-				this->SameLine();
-				w3 = ImGui::GetContentRegionAvail().x;
-			}
-			ImGui::PushItemWidth(w3);
-			this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
-			ImGui::PopItemWidth();
-		}
+		scaleGlobalManager.DrawWidgetsGlobalScaleMini();
 	}
-
 	void DrawWidgetsGlobalScale() {
-		this->AddSpacingBigSeparated();
-		string s;
-		s = "Global Scale";
-		this->AddLabelBig(s);
-		this->AddSpacing();
-
-		float w = getWidgetWidthFromIndex();
-
-		ImGui::PushItemWidth(w);
-		this->AddCombo(scaleGlobalManager.index, scaleGlobalManager.names, true);
-		ImGui::PopItemWidth();
-
-		// responsive
-		if ((this->getWindowWidth() > 200) &&
-			(scaleGlobalManager.index == 0 ||
-				scaleGlobalManager.index == 1 ||
-				scaleGlobalManager.index == 2)) {
-			ImGui::SameLine();
-		}
-
-		float w3;
-		if (this->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
-		else w3 = 200;
-		ImGui::PushItemWidth(w3);
-		this->Add(this->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
-		ImGui::PopItemWidth();
-
-		s = "Global Scale is applied\n";
-		s += "to all the UI context.\n";
-		s += "Press Ctrl +/- to 0.01 increments.\n";
-		this->AddTooltip(s);
-
-		this->Add(this->globalScale, OFX_IM_HSLIDER_MINI_NO_LABELS);
-
-		if (this->AddButtonRawMini("Reset")) {
-			this->globalScale = 1;
-		}
-		s = "Set Global Scale to unit.";
-		this->AddTooltip(s);
-
-		//if (this->getWindowWidth() > 150) this->SameLine();
-
-		this->Add(this->bGlobalScaleWheel);
-		s = "Ctrl + Mouse Wheel: \nScales the active window.";
-		this->AddTooltip(s);
-
-		this->AddSpacingBigSeparated();
+		scaleGlobalManager.DrawWidgetsGlobalScale();
 	}
 
 	//----
