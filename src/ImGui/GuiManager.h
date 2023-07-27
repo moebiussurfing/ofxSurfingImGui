@@ -2075,9 +2075,10 @@ public:
 		else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 	}
 
-	//-
+	//--
 
-public:
+//public:
+private:
 	// API 
 	// Some options
 
@@ -2087,22 +2088,23 @@ public:
 	void setImGuiAutodraw(bool b = 1) { bAutoDraw = b; }
 	// Must be called before setup! default is false. For ImGui multi-instance.
 
+	//--------------------------------------------------------------
 	void setImGuiAutoResize(bool b = 1) { bAutoResize = b; }
 	// Must be called before setup! default is false. For ImGui multi-instance.
 
 	//--
 
+public:
 	void setImGuiViewPort(bool b = 1) { bViewport = b; }
 	// Must be called before setup! 
 
 	void setImGuiDocking(bool b = 1) { setDocking(b); }
-	// Must call before setup
+	// Must call before setup! Enables mode to allow floating windows out of the OF app window.
 
 	void setImGuiDockingModeCentered(bool b = 1) { bDockingModeCentered = b; }
 	// Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
 
 	void setImGuiDockingShift(bool b = 1) { ImGui::GetIO().ConfigDockingWithShift = b; }
-
 
 	//----
 
@@ -2229,7 +2231,7 @@ private:
 		SurfingGuiManager* ui = nullptr;
 
 	public:
-		ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
+		ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
 		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
 		ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
 
@@ -2271,7 +2273,7 @@ private:
 
 		void DrawWidgetsGlobalScale() {
 			if (ui == nullptr) return;
-			
+
 			ui->AddSpacingBigSeparated();
 			string s;
 			s = "Global Scale";
@@ -5367,16 +5369,16 @@ public:
 
 	//------------------------------------------------------------------------------------------
 	SurfingTabsManager() {
-		reset();
+		resetDefaults();
 	}
 
 	//------------------------------------------------------------------------------------------
 	~SurfingTabsManager() {
 	}
 
-	// Default settings
+	// Default settings are settled here!
 	//------------------------------------------------------------------------------------------
-	void reset() {
+	void resetDefaults() {
 		customFramePadding = glm::ivec2(20, 10);
 		customItemInnerSpacing = glm::ivec2(3, 10);
 		customItemSpacing = glm::ivec2(0, 10);
@@ -5399,7 +5401,7 @@ public:
 		ui->Add(customTabRounding);
 
 		if (ui->AddButtonRawMini("Reset")) {
-			reset();
+			resetDefaults();
 		}
 		string s = "Settings are hardcoded.\nThese widgets helps to test/customize \nbut must be hardcoded after.";
 		ui->AddTooltip(s);
@@ -5417,23 +5419,25 @@ private:
 	SurfingGuiManager* ui = nullptr;
 
 private:
-
 	int active_tab = 0;
-	string currentTab = "";
+	string current_tab = "";
 
 	// customization
-	ofParameter<glm::ivec2> customFramePadding{"FramePadding", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+public://TODO:
+	ofParameter<glm::ivec2> customFramePadding{ "FramePadding", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
 	ofParameter<glm::ivec2> customItemInnerSpacing{"ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
 	ofParameter<glm::ivec2> customItemSpacing{"ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
 	ofParameter<int> customTabRounding{"TabRounding", 0, 0, 12 };
 
+private:
 	ImVec2 themeFramePadding;
 	ImVec2 themeItemInnerSpacing;
 	ImVec2 themeItemSpacing;
 	int themeTabRounding;
 
-public:
+#define DEBUG_TAB_LINE 0
 
+public:
 	//------------------------------------------------------------------------------------------
 	bool BeginTabBar(string id = "##TABBAR")
 	{
@@ -5480,7 +5484,7 @@ public:
 
 		//--
 
-		bool isActive = (currentTab == tabName);
+		bool isActive = (current_tab == tabName);
 
 		// Customize colors
 		if (!isActive)
@@ -5490,6 +5494,7 @@ public:
 			static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_Text, c2); // text color
+			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
 			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
 		}
 
@@ -5501,9 +5506,19 @@ public:
 			//ImGui::PopStyleColor();
 		}
 
+		if (DEBUG_TAB_LINE == 1) {
+			//TODO: fixing bottom line
+			IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
+			auto p0 = ImGui::GetCursorScreenPos();
+			auto p1 = p0 + ImVec2{0, (float)customItemSpacing.get().y};
+			//auto p1 = p0 + ImVec2{0, ui.getWidgetsHeightUnit()};
+			//p1 = p1 - ImVec2{0, (float)tabs.customItemSpacing.get().y};
+			IMGUI_SUGAR__DEBUG_POINT(ofColor::blue, p1);
+		}
+
 		if (bOpen)
 		{
-			currentTab = tabName;
+			current_tab = tabName;
 
 			// Pop style
 			style.FramePadding = themeFramePadding;

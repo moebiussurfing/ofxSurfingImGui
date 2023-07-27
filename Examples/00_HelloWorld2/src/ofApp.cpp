@@ -252,12 +252,23 @@ void ofApp::drawGuiTabs()
 	}
 	if (ui.BeginWindow(bGui_Tabs))
 	{
-		if(ui.isMaximized()) tabs.drawEditor();
+		if (ui.isMaximized()) tabs.drawEditor();
+
+		//IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
 
 		tabs.BeginTabBar("OF_APP");
 		{
+			////TODO: fixing bottom line
+			//IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
+			//auto p0 = ImGui::GetCursorScreenPos();
+			//auto p1 = p0 + ImVec2{0, (float)tabs.customItemSpacing.get().y};
+			////auto p1 = p0 + ImVec2{0, ui.getWidgetsHeightUnit()};
+			////p1 = p1 - ImVec2{0, (float)tabs.customItemSpacing.get().y};
+			//IMGUI_SUGAR__DEBUG_POINT(ofColor::blue, p1);
+
 			if (tabs.BeginTabItem("Tab0"))
 			{
+
 				ImGui::Text("hello0");
 				static float v0 = 0;
 				ImGui::SliderFloat("slider", &v0, 0, 1);
@@ -270,8 +281,10 @@ void ofApp::drawGuiTabs()
 				tabs.EndTabItem(0);
 			}
 
+			//IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
 			if (tabs.BeginTabItem("Tab1"))
 			{
+
 				ui.AddLabelBig("hello1");
 				static float v1 = 0;
 				ImGui::SliderFloat("slider1", &v1, 0, 1);

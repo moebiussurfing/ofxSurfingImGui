@@ -140,7 +140,7 @@ void SurfingGuiManager::setupParams() {
 	//--
 
 	// Links
-	
+
 	scaleGlobalManager.setUiPtr(this);
 
 	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);//breaks ref
@@ -268,12 +268,8 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		//--
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED:
-
-		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//		setAutosaveSettings(true);
-		//#endif
-				//setImGuiAutodraw(true);
-				// This instantiates and configures ofxImGui inside the class object.
+		//setImGuiAutodraw(true);
+		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 		break;
 
@@ -281,10 +277,6 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
-
-		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//		setAutosaveSettings(true);
-		//#endif
 		setupDocking();
 		setupInitiate();
 		break;
@@ -293,11 +285,8 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_SINGLE:
 
-		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//		setAutosaveSettings(true);
-		//#endif
-				//setImGuiAutodraw(true);
-				// This instantiates and configures ofxImGui inside the class object.
+		//setImGuiAutodraw(true);
+		// This instantiates and configures ofxImGui inside the class object.
 		setupInitiate();
 		break;
 
@@ -313,19 +302,14 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 		//TODO: Should remove these below modes?
 
-	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED: //TODO:
-		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//		setAutosaveSettings(false);
-		//#endif
+		//TODO:
+	case ofxImGuiSurfing::IM_GUI_MODE_REFERENCED:
 		break;
 
 		//--
 
 		// ui.Begin(); it's bypassed internally then can remain uncommented.
 	case ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED:
-		//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-		//		setAutosaveSettings(false);
-		//#endif
 		break;
 	}
 
@@ -356,10 +340,6 @@ void SurfingGuiManager::setupDocking()
 	ofLogNotice("ofxSurfingImGui") << "setupDocking()";
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
-
-	//#ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	//	setAutosaveSettings(true);
-	//#endif
 
 	setImGuiDocking(true);
 	setImGuiDockingModeCentered(true);
@@ -1821,7 +1801,7 @@ void SurfingGuiManager::updateLayout()
 		loadLayoutImGuiIni(ini_to_load);
 
 		ini_to_load = NULL;
-	}
+}
 
 	if (ini_to_save)
 	{
@@ -2479,7 +2459,7 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	if (bUseHelpInternal)
 	{
 		helpInternal.draw();
-	}
+}
 
 	// App
 
@@ -4988,7 +4968,7 @@ void SurfingGuiManager::drawMenu()
 			ImGui::EndMenu();
 		}
 	}
-	
+
 	ImGui::EndMainMenuBar();
 
 }
