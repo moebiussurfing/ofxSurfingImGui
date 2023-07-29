@@ -5416,7 +5416,7 @@ public:
 		customItemInnerSpacing = glm::ivec2(3, 10);
 		customItemSpacing = glm::ivec2(0, 10);
 		//customTabRounding = 5;
-		customTabRounding = ImGui::GetStyle().FrameRounding;//from theme
+		customTabRounding = ImGui::GetStyle().FrameRounding;//get from theme same from buttons
 		customLineThickness = 1;
 		bRawImGui = false;
 	}
