@@ -2511,8 +2511,8 @@ void SurfingGuiManager::End()
 	//--
 	
 	// some helpers
-	ySpacingDiff = 0;
 	xSpacingDiff = 0;
+	ySpacingDiff = 0;
 
 	//----
 

@@ -219,6 +219,11 @@ public:
 	void doResetLayout(); // must be called between Begin/End
 	void setDisableStartupResetLayout(bool b = 1) { bDisableStartupReset = b; } // disables auto reset layout!
 
+private:
+	//protected:
+	float xSpacingDiff = 0;
+	float ySpacingDiff = 0;
+
 	//----
 
 	// Styles API
@@ -1299,33 +1304,47 @@ public:
 		ofxImGuiSurfing::AddSpacingY(y);
 	}
 
-private:
-	float ySpacingDiff = 0;
-	float xSpacingDiff = 0;
-	//float ySpacingDiffLast = 0;
-	//float xSpacingDiffLast = 0;
 public:
+	// Workaround help when using multiple tabs?
+	// TODO: these methods made exceptions in RF..
+	// TODO: now removed from tabs class.
 	//--------------------------------------------------------------
-	void PushSpacingX(float x)
+	void ResetSpacing()
+	{
+		ResetSpacingX();
+		ResetSpacingY();
+	}
+	//--------------------------------------------------------------
+	void ResetSpacingX()
+	{
+		xSpacingDiff = 0;
+	}
+	//--------------------------------------------------------------
+	void ResetSpacingY()
+	{
+		ySpacingDiff = 0;
+	}
+	//--------------------------------------------------------------
+	void PushSpacingX(const float x)
 	{
 		xSpacingDiff = x;
-		AddSpacingY(xSpacingDiff);
+		this->AddSpacingY(xSpacingDiff);
 	}
 	//--------------------------------------------------------------
 	void PopSpacingX()
 	{
-		AddSpacingX(-xSpacingDiff);
+		this->AddSpacingX(-xSpacingDiff);
 	}
 	//--------------------------------------------------------------
-	void PushSpacingY(float y)
+	void PushSpacingY(const float y)
 	{
 		ySpacingDiff = y;
-		AddSpacingY(ySpacingDiff);
+		this->AddSpacingY(ySpacingDiff);
 	}
 	//--------------------------------------------------------------
 	void PopSpacingY()
 	{
-		AddSpacingY(-ySpacingDiff);
+		this->AddSpacingY(-ySpacingDiff);
 	}
 
 public:
@@ -5519,7 +5538,10 @@ public:
 		// Bottom line
 		if (customLineThickness != 0) {
 			float y = ui->getWidgetsHeightUnit();
-			ui->PushSpacingY(y);
+
+			//ui->ResetSpacing();
+			//ui->PushSpacingY(y);
+			ofxImGuiSurfing::AddSpacingY(y);
 
 			float padx = style.WindowPadding.x;
 			auto p1 = ImGui::GetCursorScreenPos();
@@ -5537,7 +5559,8 @@ public:
 			float thickness = customLineThickness;
 			ImGui::GetWindowDrawList()->AddLine(p1, p2, c1, thickness);
 
-			ui->PopSpacingY();
+			//ui->PopSpacingY();
+			ofxImGuiSurfing::AddSpacingY(-y);
 		}
 
 		return ImGui::BeginTabBar(id.c_str(), flags);
@@ -5558,6 +5581,7 @@ public:
 		style.TabRounding = themeTabRounding;
 
 		ImGui::EndTabBar();
+		//ui->ResetSpacing();
 	}
 
 	//------------------------------------------------------------------------------------------
