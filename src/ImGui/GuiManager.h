@@ -1299,6 +1299,36 @@ public:
 		ofxImGuiSurfing::AddSpacingY(y);
 	}
 
+private:
+	float ySpacingDiff = 0;
+	float xSpacingDiff = 0;
+	//float ySpacingDiffLast = 0;
+	//float xSpacingDiffLast = 0;
+public:
+	//--------------------------------------------------------------
+	void PushSpacingX(float x)
+	{
+		xSpacingDiff = x;
+		AddSpacingY(xSpacingDiff);
+	}
+	//--------------------------------------------------------------
+	void PopSpacingX()
+	{
+		AddSpacingX(-xSpacingDiff);
+	}
+	//--------------------------------------------------------------
+	void PushSpacingY(float y)
+	{
+		ySpacingDiff = y;
+		AddSpacingY(ySpacingDiff);
+	}
+	//--------------------------------------------------------------
+	void PopSpacingY()
+	{
+		AddSpacingY(-ySpacingDiff);
+	}
+
+public:
 	//--------------------------------------------------------------
 	void AddSpacingOffset(ImVec2 diff)
 	{
@@ -1310,6 +1340,7 @@ public:
 	{
 		ofxImGuiSurfing::AddSpacingToRightAlign(width);
 	}
+
 
 	//--
 
@@ -5369,7 +5400,9 @@ public:
 
 	//------------------------------------------------------------------------------------------
 	SurfingTabsManager() {
-		resetDefaults();
+		// moved to allow getting the theme style, bc we will call this after ImGui context has been created!
+		// using bDoneSetup flag and called once!
+		//resetDefaults();
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -5382,7 +5415,10 @@ public:
 		customFramePadding = glm::ivec2(20, 10);
 		customItemInnerSpacing = glm::ivec2(3, 10);
 		customItemSpacing = glm::ivec2(0, 10);
-		customTabRounding = 5;
+		//customTabRounding = 5;
+		customTabRounding = ImGui::GetStyle().FrameRounding;//from theme
+		customLineThickness = 1;
+		bRawImGui = false;
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -5393,17 +5429,29 @@ public:
 	//------------------------------------------------------------------------------------------
 	void drawEditor() {
 		if (ui == nullptr) return;
+		if (!bDoneSetup) {
+			resetDefaults();
+			bDoneSetup = true;
+		}
+
+		string s;
 
 		ui->AddLabelBig("Debug Tabs Editor");
-		ui->Add(customFramePadding);
-		ui->Add(customItemInnerSpacing);
-		ui->Add(customItemSpacing);
-		ui->Add(customTabRounding);
+		s = "Active Tab: " + ofToString(active_tab) + " / "+ current_tab;
+		ui->AddLabel(s);
+		ui->Add(bRawImGui);
+		if (!bRawImGui) {
+			ui->Add(customFramePadding);
+			ui->Add(customItemInnerSpacing);
+			ui->Add(customItemSpacing);
+			ui->Add(customTabRounding);
+			ui->Add(customLineThickness);
+		}
 
 		if (ui->AddButtonRawMini("Reset")) {
 			resetDefaults();
 		}
-		string s = "Settings are hardcoded.\nThese widgets helps to test/customize \nbut must be hardcoded after.";
+		s = "Settings are hardcoded.\nThese widgets helps to test/customize, \nbut then must be hardcoded \ninto resetDefaults() after.";
 		ui->AddTooltip(s);
 
 		ui->AddSpacingBigSeparated();
@@ -5417,7 +5465,7 @@ public:
 	}
 private:
 	SurfingGuiManager* ui = nullptr;
-
+	bool bDoneSetup = false;
 private:
 	int active_tab = 0;
 	string current_tab = "";
@@ -5428,6 +5476,8 @@ public://TODO:
 	ofParameter<glm::ivec2> customItemInnerSpacing{"ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
 	ofParameter<glm::ivec2> customItemSpacing{"ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
 	ofParameter<int> customTabRounding{"TabRounding", 0, 0, 12 };
+	ofParameter<int> customLineThickness{"LineThickness", 0, 0, 5 };
+	ofParameter<bool> bRawImGui{"Raw ImGui", false};
 
 private:
 	ImVec2 themeFramePadding;
@@ -5435,13 +5485,23 @@ private:
 	ImVec2 themeItemSpacing;
 	int themeTabRounding;
 
-#define DEBUG_TAB_LINE 0
-
 public:
 	//------------------------------------------------------------------------------------------
 	bool BeginTabBar(string id = "##TABBAR")
 	{
+		if (!bDoneSetup) {
+			resetDefaults();
+			bDoneSetup = true;
+		}
+
 		ImGuiTabBarFlags flags = ImGuiTabBarFlags_None;
+
+		if (bRawImGui) {
+			return ImGui::BeginTabBar(id.c_str(), flags);
+		}
+
+		//--
+
 		flags += ImGuiTabBarFlags_NoTooltip;
 
 		// Store theme style
@@ -5456,11 +5516,39 @@ public:
 		style.ItemSpacing = ImVec2(customItemSpacing.get());
 		style.TabRounding = customTabRounding.get();
 
+		// Bottom line
+		if (customLineThickness != 0) {
+			float y = ui->getWidgetsHeightUnit();
+			ui->PushSpacingY(y);
+
+			float padx = style.WindowPadding.x;
+			auto p1 = ImGui::GetCursorScreenPos();
+			p1 = p1 - ImVec2(padx, 0);
+
+			float w = ui->getWindowWidth();
+			auto p2 = p1;
+			//auto p2 = ImVec2(p1.x + w, p1.y);
+			p2 = p2 + ImVec2(w, 0);
+			p2 = p2 + ImVec2(padx, 0);
+
+			ImVec4 c1_ = ImGui::GetStyleColorVec4(ImGuiCol_Separator);
+			ImU32 c1 = ImGui::ColorConvertFloat4ToU32(c1_);
+
+			float thickness = customLineThickness;
+			ImGui::GetWindowDrawList()->AddLine(p1, p2, c1, thickness);
+
+			ui->PopSpacingY();
+		}
+
 		return ImGui::BeginTabBar(id.c_str(), flags);
 	}
 
 	//------------------------------------------------------------------------------------------
 	void EndTabBar() {
+		if (bRawImGui) {
+			ImGui::EndTabBar();
+			return;
+		}
 
 		// Pop style
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -5475,6 +5563,14 @@ public:
 	//------------------------------------------------------------------------------------------
 	inline bool BeginTabItem(const string& tabName)
 	{
+		if (bRawImGui) {
+			bool bOpen = ImGui::BeginTabItem(tabName.c_str());
+			if (bOpen) current_tab = tabName;
+			return bOpen;
+		}
+
+		//--
+
 		// Push style
 		ImGuiStyle& style = ImGui::GetStyle();
 		style.FramePadding = ImVec2(customFramePadding.get());
@@ -5494,26 +5590,17 @@ public:
 			static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_Text, c2); // text color
-			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
+
+			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2); // tab color
 			//ImGui::PushStyleColor(ImGuiCol_TabActive, c2);
 		}
-
 		bool bOpen = ImGui::BeginTabItem(tabName.c_str());
 
 		if (!isActive)
 		{
 			ImGui::PopStyleColor(); // text color
-			//ImGui::PopStyleColor();
-		}
 
-		if (DEBUG_TAB_LINE == 1) {
-			//TODO: fixing bottom line
-			IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
-			auto p0 = ImGui::GetCursorScreenPos();
-			auto p1 = p0 + ImVec2{0, (float)customItemSpacing.get().y};
-			//auto p1 = p0 + ImVec2{0, ui.getWidgetsHeightUnit()};
-			//p1 = p1 - ImVec2{0, (float)tabs.customItemSpacing.get().y};
-			IMGUI_SUGAR__DEBUG_POINT(ofColor::blue, p1);
+			//ImGui::PopStyleColor(); // tab color
 		}
 
 		if (bOpen)

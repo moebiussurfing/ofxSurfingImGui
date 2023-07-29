@@ -2508,6 +2508,12 @@ void SurfingGuiManager::End()
 	// Mouse and Keyboard
 	doCheckOverGui();
 
+	//--
+	
+	// some helpers
+	ySpacingDiff = 0;
+	xSpacingDiff = 0;
+
 	//----
 
 	// ImGui End
