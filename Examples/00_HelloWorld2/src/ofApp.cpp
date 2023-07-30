@@ -5,6 +5,15 @@ void ofApp::setup()
 {
 	ofSetWindowPosition(-1920, 26);
 
+	names.clear();
+	names.push_back("zero");
+	names.push_back("one");
+	names.push_back("two");
+	names.push_back("three");
+
+	index.setMin(0);
+	index.setMax(names.size() - 1);
+
 	//----
 
 	setupGui();
@@ -74,6 +83,7 @@ void ofApp::drawGui()
 	{
 		drawGuiMain();
 
+		drawGuiCombos();
 		drawGuiQuat();
 		drawGuiTabs();
 	}
@@ -230,6 +240,7 @@ void ofApp::drawGuiMain()
 
 		ui.AddToggle("Quat", bGui_Quat, OFX_IM_TOGGLE_BIG);
 		ui.Add(bGui_Tabs, OFX_IM_TOGGLE_BIG);
+		ui.Add(bGui_Combos, OFX_IM_TOGGLE_BIG);
 
 		//--
 
@@ -332,6 +343,39 @@ void ofApp::drawGuiTabs()
 			}
 		}
 		tabs.EndTabBar();
+
+		ui.EndWindow();
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGuiCombos()
+{
+	if (ui.BeginWindow(bGui_Combos)) {
+
+		// Debug combo
+		ui.Add(index);
+		ui.AddLabelBig("Names");
+		for (size_t i = 0; i < names.size(); i++)
+		{
+			string s = "#" + ofToString(i) + " " + names[i];
+			if (i == index) ui.AddLabelBig(s);
+			else ui.AddLabel(s);
+		}
+		ui.AddSpacing();
+
+		string s = "hello";
+#if 0
+		ui.AddCombo(index, names);
+		ui.AddTooltipHelp(s);
+#else
+		//ui.PushWidth(0.5f); // window percent
+		ImGui::PushItemWidth(60); // pixels
+		ui.AddCombo(index, names, true); // use raw
+		ui.PopWidth();
+		ui.SameLine();
+		ui.AddTooltipHelp(s);
+#endif
 
 		ui.EndWindow();
 	}

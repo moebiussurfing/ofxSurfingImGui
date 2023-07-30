@@ -506,7 +506,7 @@ public:
 				ImageInspect::inspect(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, zoomSize, zoomRectangleWidth, bIs24bits, bDebug, bDebugAdvanced, &c);
 			}
 
-			// Pick colord
+			// Pick color
 			if (bMouseLeft && bEnablePicker && !bEnableInspector)
 			{
 				c = ImageInspect::getColor(wSrc, hSrc, data, mouseUVCoord, displayedTextureSize, bIs24bits, &c);

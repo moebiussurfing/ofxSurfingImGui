@@ -67,4 +67,12 @@ public:
 	void drawGuiTabs();
 	ofParameter<bool> bGui_Tabs{ "Tabs", true }; // using an ofParameter<bool>
 	SurfingTabsManager tabs;
+
+
+	// combo
+	void drawGuiCombos();
+	ofParameter<bool> bGui_Combos{ "Combos", true }; // using an ofParameter<bool>
+	ofParameter<int> index{ "index", 0, 0, 0 };
+	vector<string> names;
+
 };

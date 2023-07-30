@@ -227,19 +227,43 @@ namespace ImageInspect
 
 						const ImVec2 pos = pickRc.Min + ImVec2(float(zoomSize), float(zoomSize)) * quadSize;
 
-						//one color with blink alpha
+						// one color with blink alpha
 						//int a = 255 * getFadeBlink();
 						//ImU32 c;
 						//if (0) c = ImColor(0, 0, 0, a);//black
 						//else c = ImColor(255, 255, 255, a);//white
 						////c = ImColor(255, 0, 0, a);//red
 
-						//alternate b/w
+						// blink alternate b/w
 						int v1 = 0;
 						int v2 = 255;
-						int v = ImLerp(v1, v2, getFadeBlink(0, 1, 0.15f * 1));
-						float a = getFadeBlink(0.2, 0.8, 0.15f * 0.5f);
-						a *= getFadeBlink(0, 0.8, 0.15f * 0.5f);
+
+						float freq = 0.3;
+						//float freq = 0.15;
+						////float freq = (10 / 60.f) * 2;
+						//float freq = 1 / (1 / 60.f);
+						//freq /= 600.f;
+
+						//float freq2r = 0.25f;
+						float freq2r = 0.5f;
+						//float freq2r = 1.f;
+
+						int v = ImLerp(v1, v2, getFadeBlink(0, 1, freq * 1));
+						float a = getFadeBlink(0.2, 0.8, freq * freq2r);
+#if 1
+						a *= getFadeBlink(0, 0.8, freq * freq2r);
+#else
+						//make some pauses
+						int nfrm = 120;
+						int r = ofGetFrameNum() % nfrm;
+						if (r < nfrm / 2.f) {
+							a *= getFadeBlink(0, 0.8, freq * 0.5f);
+						}
+						else {
+							a = 0;
+						}
+#endif
+						a = ofClamp(a, 0, 0.7);
 						ImU32 c = IM_COL32(v, v, v, 255 * a);
 
 						draw_list->AddRect(pos, pos + quadSize, c, 0.f, 15, 2.f);
