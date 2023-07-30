@@ -29,6 +29,7 @@
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
+#include "imgui_tricks.hpp"
 
 class ofApp : public ofBaseApp
 {

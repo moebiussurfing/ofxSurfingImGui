@@ -240,6 +240,27 @@ void ofApp::drawGuiMain()
 			//ui.resetUISettings();//exposed method.
 		}
 
+		//--
+
+		//TODO: 
+		// Testing animations/tween
+		ui.AddSpacingBigSeparated();
+
+		static bool enable_animation = 1;
+		ImGui::Checkbox("Animation", &enable_animation);
+
+		float w = ui.getWidgetsWidth();
+		float h = 30;
+
+		float trickFloat = ImTricks::Animations::FastLerpFloat("trickFloat", enable_animation, 0.f, 1.f, 0.05f);
+		ImColor colorLerped = ImTricks::Animations::FastColorLerp(ImColor(255, 0, 0), ImColor(0, 255, 0), trickFloat);
+
+		ui.AddSpacingY(ui.getWidgetsSpacingY());
+		auto p = ImGui::GetCursorScreenPos();
+		float rounding = 4;
+		ImGui::GetWindowDrawList()->AddRectFilled(p, p + ImVec2(w, h), colorLerped, rounding);
+		ui.AddSpacingY(h);
+
 		ui.EndWindow();
 	}
 }

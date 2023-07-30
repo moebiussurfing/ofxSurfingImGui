@@ -2,9 +2,9 @@
 
 namespace ImTricks {
 	
-	//TODO:
+	//TODO: should test original sample if animations works on there!
 	// anim
-#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+//#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 	namespace Animations {
 
 		int FastLerpInt(const char* identifier, bool state, int min, int max, int speed) {
@@ -69,7 +69,7 @@ namespace ImTricks {
 			return ImGui::ColorConvertFloat4ToU32(lerp);
 		}
 	}
-#endif
+//#endif
 
 	//----
 
@@ -230,11 +230,11 @@ namespace ImTricks {
 
 			if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
-			// Spacing up!
-#ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
-			NotifyPos.y -= bbox.y;
-			NotifyPos.y -= ySpacing;
-#else
+//			// Spacing up!
+//#ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+//			NotifyPos.y -= bbox.y;
+//			NotifyPos.y -= ySpacing;
+//#else
 			//TODO:
 			// anim
 			bool state = 1;
@@ -244,7 +244,7 @@ namespace ImTricks {
 			//float speed = (1000 / 60.f) * 400;
 			float offsety_ = Animations::FastLerpFloat("identifier", state, min, max, speed);
 			NotifyPos.y -= offsety_;
-#endif
+//#endif
 		}
 #endif
 
@@ -365,7 +365,7 @@ namespace ImTricks {
 			//NotifyPos.y -= ySpacing;
 			////NotifyPos.y -= pady;
 
-			// Spacing up!
+//			// Spacing up!
 #ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 			NotifyPos.y -= ySpacing;
 #else 
@@ -466,7 +466,7 @@ namespace ImTricks {
 
 				if (bbox.x > widthMax_) widthMax_ = bbox.x;
 
-				// Spacing up!
+//				// Spacing up!
 #ifndef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 				NotifyPos.y -= bbox.y;
 				NotifyPos.y -= ySpacing;

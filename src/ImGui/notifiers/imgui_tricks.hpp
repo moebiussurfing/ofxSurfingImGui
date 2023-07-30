@@ -66,7 +66,7 @@ enum NotifyState : int {
 
 namespace ImTricks {
 
-#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
+//#ifdef SURFING_IMGUI__USE_NOTIFIER_ANIMS
 	/*
 	// The Animations namespace contains everything you need to easily create animations in your ImGui menus.
 	*/
@@ -93,7 +93,7 @@ namespace ImTricks {
 		*/
 		extern ImColor FastColorLerp(ImColor start, ImColor end, float stage);
 	}
-#endif
+//#endif
 
 	/*
 	// The NotifyManager namespace contains everything you need to easily create notifications in your interface.
