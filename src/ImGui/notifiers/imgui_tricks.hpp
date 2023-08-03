@@ -15,6 +15,7 @@
 
 //TODO:
 // Must be added if < C++17
+#if 0 // fix for Windows 11
 namespace std
 {
 	template<typename T>
@@ -23,7 +24,7 @@ namespace std
 		return value < min ? min : (value > max ? max : value);
 	}
 }
-
+#endif
 
 /*
 * ImGui Tricks v1.02+ (modified by @moebiusSurfing

@@ -20,6 +20,8 @@
 
 */
 
+#define USING_SURFING_DEBUGGER
+
 //--
 
 // Macros
