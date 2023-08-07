@@ -259,10 +259,10 @@ namespace ofxImGuiSurfing
 
 		//ImGui::PushItemWidth(20);//hide name
 		//ImGui::PushItemWidth(30);
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);//small name
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.2f);//small name
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.4f);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.25f);
-		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.6f);
 
 		bool b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
