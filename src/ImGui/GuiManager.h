@@ -1616,6 +1616,11 @@ public:
 	// 2. Main END feed widgets!
 	void End();
 
+	// Alias to psit with ofxImGui instations. 
+	// Makes it easier to replace
+	inline void begin() { this->Begin(); };
+	inline void end() { this->End(); };
+
 	//----
 
 	// Window methods
@@ -2247,6 +2252,7 @@ private:
 	{
 	public:
 		ScaleGlobalManager() {
+			index.setMax(names.size() - 1);
 
 			eIndex = index.newListener([this](int& v) {
 				switch (v) {
@@ -2283,7 +2289,8 @@ private:
 	public:
 		ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
 		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
-		ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
+		ofParameter<int> index {"Global Scale", 0, 0, 0};
+		//ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
 
 		float getScale() { return globalScale.get(); }
 		string getName() { return names[index]; }
@@ -3510,17 +3517,17 @@ private:
 							//--
 
 							//ImGui::Text("Docking");
-							AddToggleRoundedButton(bDebugDocking);
+							ofxImGuiSurfing::AddToggleRoundedButton(bDebugDocking);
 							//TODO:
 							if (bDebugDocking)
 							{
 								ImGui::Indent();
 								{
-									//AddToggleRoundedButton(bUseLayoutPresetsManager);
-									//AddToggleRoundedButton(bDockingLayoutPresetsEngine);
-									ToggleRoundedButton("Dock Center", &bDockingModeCentered);
-									AddToggleRoundedButton(bDrawView1);
-									AddToggleRoundedButton(bDrawView2);
+									//ofxImGuiSurfing::AddToggleRoundedButton(bUseLayoutPresetsManager);
+									//ofxImGuiSurfing::AddToggleRoundedButton(bDockingLayoutPresetsEngine);
+									ofxImGuiSurfing::ToggleRoundedButton("Dock Center", &bDockingModeCentered);
+									ofxImGuiSurfing::AddToggleRoundedButton(bDrawView1);
+									ofxImGuiSurfing::AddToggleRoundedButton(bDrawView2);
 								}
 								ImGui::Unindent();
 							}
