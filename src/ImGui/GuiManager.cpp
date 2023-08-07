@@ -277,7 +277,14 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
 		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
-		setupDocking();
+		setupDockingWithLayoutPresetsEngine();
+		setupInitiate();
+		break;
+
+		//--
+
+	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW:
+		setupDockingRaw();
 		setupInitiate();
 		break;
 
@@ -335,15 +342,24 @@ void SurfingGuiManager::setup() // We will use the most common mode, to avoid to
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::setupDocking()
+void SurfingGuiManager::setupDockingWithLayoutPresetsEngine()
 {
-	ofLogNotice("ofxSurfingImGui") << "setupDocking()";
+	ofLogNotice("ofxSurfingImGui") << "setupDockingWithLayoutPresetsEngine()";
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
-	setImGuiDocking(true);
+	setImGuiDockingWithLayoutPresetsEngine(true);
 	setImGuiDockingModeCentered(true);
-	//setImGuiAutodraw(true);
+}
+
+//--------------------------------------------------------------
+void SurfingGuiManager::setupDockingRaw()
+{
+	ofLogNotice("ofxSurfingImGui") << "setupDockingRaw()";
+
+	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW;
+
+	setImGuiDockingModeCentered(true);
 }
 
 //--
@@ -408,6 +424,11 @@ void SurfingGuiManager::setupInitiate()
 		// that allows that each presets could have his own link state enabled or disabled.
 		// to allow linking or floating windows.
 		this->addExtraParamToLayoutPresets(bLinked);
+	}
+
+	//TODO:
+	if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
+	{
 	}
 
 	//----

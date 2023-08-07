@@ -91,6 +91,9 @@ namespace ofxImGuiSurfing
 		IM_GUI_MODE_INSTANTIATED_DOCKING,
 		// Allows docking between multiple instances.
 
+		IM_GUI_MODE_INSTANTIATED_DOCKING_RAW,
+		// not using layout presets engine
+
 		IM_GUI_MODE_INSTANTIATED_SINGLE,
 		// To include the ImGui context and requiring begin/end 
 		// but a single ImGui instance, no other add-ons.
@@ -2153,7 +2156,7 @@ public:
 	void setImGuiViewPort(bool b = 1) { bViewport = b; }
 	// Must be called before setup! 
 
-	void setImGuiDocking(bool b = 1) { setDocking(b); }
+	void setImGuiDockingWithLayoutPresetsEngine(bool b = 1) { setDockingWithLayoutPresetsEngine(b); }
 	// Must call before setup! Enables mode to allow floating windows out of the OF app window.
 
 	void setImGuiDockingModeCentered(bool b = 1) { bDockingModeCentered = b; }
@@ -3504,6 +3507,8 @@ private:
 					// Docking
 					this->AddSpacing();
 
+					//if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING ||
+					//	surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
 					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 					{
 						this->AddSpacing();
@@ -3654,7 +3659,7 @@ private:
 	//}
 
 	//--------------------------------------------------------------
-	void setDocking(bool b)
+	void setDockingWithLayoutPresetsEngine(bool b)
 	{
 		// must call before setup
 		bDockingLayoutPresetsEngine = b;
@@ -4537,7 +4542,8 @@ private:
 	//public:
 
 	void setupStartupForced(); //will be called on first frame/update() call!
-	void setupDocking(); //TODO: rename as presets + docking...
+	void setupDockingWithLayoutPresetsEngine(); //TODO: rename as presets + docking...
+	void setupDockingRaw();
 
 	//--------------------------------------------------------------
 	void setImGuiLayoutPresets(bool b)

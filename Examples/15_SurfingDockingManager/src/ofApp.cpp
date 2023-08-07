@@ -8,7 +8,7 @@ void ofApp::setup()
 	//--
 
 #ifdef SURF_IM
-	ui.setup();
+	ui.setup(ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
 	ui.startup();
 #endif
 
