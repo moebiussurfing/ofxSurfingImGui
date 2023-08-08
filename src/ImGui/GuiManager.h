@@ -1188,38 +1188,38 @@ public:
 	// kind of shortcuts..
 	// could be simplified using namespace's..
 	//--------------------------------------------------------------
-	void AddSpacingSmall()
+	inline void AddSpacingSmall()
 	{
 		ofxImGuiSurfing::AddSpacingSmall();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingDouble()
+	inline void AddSpacingDouble()
 	{
 		ofxImGuiSurfing::AddSpacingDouble();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacing()
+	inline void AddSpacing()
 	{
 		ofxImGuiSurfing::AddSpacing();
 	}
 
 	//--------------------------------------------------------------
-	void AddSeparated()
+	inline void AddSeparated()
 	{
 		ofxImGuiSurfing::AddSeparator();
 	}
 
 	//--------------------------------------------------------------
-	void AddSeparator() // LEGACY
+	inline void AddSeparator() // LEGACY
 	{
 		AddSeparated();
 	}
 
 	// Separator Text
 	//--------------------------------------------------------------
-	void AddSeparatorText(const string label, int index = 0, bool bNoline = 1)
+	inline void AddSeparatorText(const string label, int index = 0, bool bNoline = 1)
 	{
 		ImGui::Spacing();
 
@@ -1235,7 +1235,7 @@ public:
 
 	//--------------------------------------------------------------
 	// void AddSeparatorText(string label, bool bUppercase = false, bool bSpacing = false)
-	void AddSeparatorText(string label, int index, bool bNoline, bool bUppercase, bool bSpacing)
+	inline void AddSeparatorText(string label, int index, bool bNoline, bool bUppercase, bool bSpacing)
 	{
 		if (bUppercase) label = ofToUpper(label);
 
@@ -1245,50 +1245,50 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddSeparatedVertical(bool bSameLine = true)
+	inline void AddSeparatedVertical(bool bSameLine = true)
 	{
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 		if (bSameLine)this->SameLine();
 	}
 
 	//--------------------------------------------------------------
-	void AddSeparatorVertical(bool bSameLine = true) // LEGACY
+	inline void AddSeparatorVertical(bool bSameLine = true) // LEGACY
 	{
 		AddSeparatedVertical(bSameLine);
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingBig() //triple space
+	inline void AddSpacingBig() //triple space
 	{
 		ofxImGuiSurfing::AddSpacingBig();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingBigSeparated()
+	inline void AddSpacingBigSeparated()
 	{
 		ofxImGuiSurfing::AddSpacingBigSeparated();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingSeparated()
+	inline void AddSpacingSeparated()
 	{
 		ofxImGuiSurfing::AddSpacingSeparated();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingHuge()
+	inline void AddSpacingHuge()
 	{
 		ofxImGuiSurfing::AddSpacingHuge();
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacing(size_t amountLines)
+	inline void AddSpacing(size_t amountLines)
 	{
 		ofxImGuiSurfing::AddSpacing(amountLines);
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingHugeSeparated()
+	inline void AddSpacingHugeSeparated()
 	{
 		ofxImGuiSurfing::AddSpacingHugeSeparated();
 	}
@@ -1296,13 +1296,13 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddSpacingX(float x)
+	inline void AddSpacingX(float x)
 	{
 		ofxImGuiSurfing::AddSpacingX(x);
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingY(float y)
+	inline void AddSpacingY(float y)
 	{
 		ofxImGuiSurfing::AddSpacingY(y);
 	}
@@ -1352,13 +1352,13 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void AddSpacingOffset(ImVec2 diff)
+	inline void AddSpacingOffset(ImVec2 diff)
 	{
 		ofxImGuiSurfing::AddSpacingOffset(diff);
 	}
 
 	//--------------------------------------------------------------
-	void AddSpacingToRightAlign(float width = 100)
+	inline void AddSpacingToRightAlign(float width = 100)
 	{
 		ofxImGuiSurfing::AddSpacingToRightAlign(width);
 	}
@@ -1368,13 +1368,13 @@ public:
 
 	// Button Repeats
 	//--------------------------------------------------------------
-	void PushButtonRepeat(bool b = true)
+	inline void PushButtonRepeat(bool b = true)
 	{
 		ImGui::PushButtonRepeat(b);
 	}
 
 	//--------------------------------------------------------------
-	void PopButtonRepeat()
+	inline void PopButtonRepeat()
 	{
 		ImGui::PopButtonRepeat();
 	}
@@ -1397,21 +1397,21 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void Indent()
+	inline void Indent()
 	{
 		ImGui::Indent();
 		refreshLayout(); //auto calculate widgets common sizes
 	}
 
 	//--------------------------------------------------------------
-	void Unindent()
+	inline void Unindent()
 	{
 		ImGui::Unindent();
 		refreshLayout(); //auto calculate widgets common sizes
 	}
 
 	//--------------------------------------------------------------
-	void Separator()
+	inline void Separator()
 	{
 		//ImGui::Separator();
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
@@ -1420,13 +1420,13 @@ public:
 	// Make widgets a bit smaller.
 	// Useful when sliders make to grow the window automatically.
 	//--------------------------------------------------------------
-	void PushWidth(float prc)
+	inline void PushWidth(float prc)
 	{
 		ofxImGuiSurfing::PushWidth(prc);
 	}
 
 	//--------------------------------------------------------------
-	void PopWidth()
+	inline void PopWidth()
 	{
 		ofxImGuiSurfing::PopWidth();
 	}
@@ -1745,6 +1745,8 @@ public:
 	//--------------------------------------------------------------
 	void BeginColumns(int amount, string labelID, bool border = false)
 	{
+		ImGui::PushID(labelID.c_str());
+
 		//this->refreshLayout();
 		ImGui::Columns(amount, labelID.c_str(), border);
 		this->refreshLayout();
@@ -1762,6 +1764,8 @@ public:
 	{
 		ImGui::Columns(amountDefault);
 		this->refreshLayout();
+
+		ImGui::PopID();
 	}
 
 	//--------------------------------------------------------------
@@ -5421,6 +5425,12 @@ public:
 	inline void AddProgressBar(float prc) {
 		ofxImGuiSurfing::AddProgressBar(prc);
 	}
+
+	inline void AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
+	{
+		ofxImGuiSurfing::AddMatrixClicker(_index, bResponsive, amountBtRow, bDrawBorder, __h, toolTip);
+	}
+
 };
 
 //----

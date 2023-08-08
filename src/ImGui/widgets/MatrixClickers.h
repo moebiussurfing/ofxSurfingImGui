@@ -36,7 +36,7 @@ namespace ofxImGuiSurfing
 		const int _amt = _index.getMax() - _index.getMin() + 1;
 		if (amountBtRow > _amt) amountBtRow = _amt;
 
-		ImGui::Spacing();
+		//ImGui::Spacing();
 
 		/*
 		//TODO:
@@ -192,7 +192,7 @@ namespace ofxImGuiSurfing
 		}
 
 		ImGui::PopID();
-		ImGui::Spacing();
+		//ImGui::Spacing();
 
 		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
