@@ -65,9 +65,6 @@
 ## 30_LayoutsEngineDocking
 ![](30_LayoutsEngineDocking/Capture.PNG)  
 
-## 50_MultiInstance
-![](50_MultiInstance/Capture.PNG)  
-
 <br>
 
 # VIDEOS

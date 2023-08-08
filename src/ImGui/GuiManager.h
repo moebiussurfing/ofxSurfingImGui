@@ -5368,54 +5368,59 @@ public:
 
 	// Combos
 
-	bool AddCombo(ofParameter<int> pIndex, std::vector<string> fileNames, bool bRaw = false)
+	inline bool AddCombo(ofParameter<int> pIndex, std::vector<string> fileNames, bool bRaw = false)
 	{
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	bool AddCombo(ofParameter<size_t> pIndex, std::vector<string> fileNames, bool bRaw = false)
+	inline bool AddCombo(ofParameter<size_t> pIndex, std::vector<string> fileNames, bool bRaw = false)
 	{
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	bool AddComboButton(ofParameter<int>& pIndex, std::vector<string>& fileNames)
+	inline bool AddComboButton(ofParameter<int>& pIndex, std::vector<string>& fileNames)
 	{
 		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
 	}
 
-	bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
+	inline bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDual(pIndex, fileNames, bCycled);
 	}
 
-	bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
+	inline bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDualLefted(pIndex, fileNames, bCycled);
 	}
 
-	bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<string>& fileNames,
+	inline bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<string>& fileNames,
 		bool bCycled = false)
 	{
 		return ofxImGuiSurfing::AddComboButtonDualCenteredNames(pIndex, fileNames, bCycled);
 	}
 
-	int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL)
+	inline int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL)
 	{
 		return ofxImGuiSurfing::AddComboArrows(style);
 	}
 
-	void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false)
+	inline void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false)
 	{
 		return ofxImGuiSurfing::AddComboArrows(paramIndex, style, cycled);
 	}
 
 	//----
 
-	void AddComboFontsSelector(ofParameter<int>& index)
+	inline void AddComboFontsSelector(ofParameter<int>& index)
 	{
 		ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 	}
 
+	//--
+
+	inline void AddProgressBar(float prc) {
+		ofxImGuiSurfing::AddProgressBar(prc);
+	}
 };
 
 //----
@@ -5469,7 +5474,7 @@ public:
 		string s;
 
 		ui->AddLabelBig("Debug Tabs Editor");
-		s = "Active Tab: " + ofToString(active_tab) + " / "+ current_tab;
+		s = "Active Tab: " + ofToString(active_tab) + " / " + current_tab;
 		ui->AddLabel(s);
 		ui->Add(bRawImGui);
 		if (!bRawImGui) {

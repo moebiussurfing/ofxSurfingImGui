@@ -1,3 +1,0 @@
-ofxImGui
-ofxSurfingHelpers
-ofxSurfingImGui

@@ -1270,7 +1270,11 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 //--------------------------------------------------------------
 void SurfingGuiManager::setDefaultFontIndex(int index)
 {
-	if (customFonts.size() == 0) return;
+	if (customFonts.size() == 0) {
+		ofLogError("ofxSurfingImGui") << "customFonts.size() = 0";
+		ofLogNotice("ofxSurfingImGui") << "setDefaultFontIndex: " << index;
+		return;
+	}
 
 	indexCurrFont = ofClamp(index, 0, customFonts.size() - 1);
 	customFont = customFonts[indexCurrFont];
@@ -1782,8 +1786,11 @@ void SurfingGuiManager::update()
 	//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	if (bFlagSaveSettings) {
+	if (bFlagSaveSettings && 0) {
 		bFlagSaveSettings = false;
+
+		ofLogNotice("ofxSurfingImGui") << "update() Attending flag.";
+
 		saveSettingsInternal();
 	}
 #endif	
