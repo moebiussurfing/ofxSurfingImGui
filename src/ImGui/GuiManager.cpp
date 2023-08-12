@@ -866,6 +866,7 @@ void SurfingGuiManager::resetUISettings()
 	// bin/imgui.ini
 	{
 		filesystem::path p = ofToDataPath("../imgui.ini");
+		//filesystem::path p = ofToDataPath("../imgui.ini");
 		ofFile f(p);
 		if (f.exists())
 		{
