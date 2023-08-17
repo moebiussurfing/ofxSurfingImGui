@@ -5,7 +5,13 @@ int SurfingGuiManager::instanceCount = 0;
 //--------------------------------------------------------------
 SurfingGuiManager::SurfingGuiManager()
 {
-	//instanceCount++;
+	//TODO:
+	// instances and master/salve context management
+	ofLogWarning("ofxSurfingImGui") << "Instance: #" << instanceCount;
+	bool b = (this->getGuiPtr()->isMaster());
+	ofLogWarning("ofxSurfingImGui") << "Context:  " << (b ? "MASTER" : "SLAVE");
+	if (instanceCount == 0) bIsMasterInstance = true;
+	instanceCount++;
 
 	//--
 
@@ -141,10 +147,12 @@ void SurfingGuiManager::setupParams() {
 
 	// Links
 
+#ifdef SURFING_IMGUI__USE_GLOBAL_SCALE
 	scaleGlobalManager.setUiPtr(this);
 
 	//scaleGlobalManager.globalScale.makeReferenceTo(globalScale);//breaks ref
 	globalScale.makeReferenceTo(scaleGlobalManager.globalScale);
+#endif
 
 	//--
 
@@ -554,7 +562,8 @@ void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "setupImGuiFonts()" << pathFonts << ", " << nameFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupImGuiFonts() " << pathFonts << ", " << nameFont << ", " << sizeFont;
+
 	clearFonts();
 	setupFontDefault(pathFonts, nameFont, sizeFont);
 }
@@ -568,7 +577,7 @@ void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float size
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, float sizeFont)
 {
-	ofLogNotice("ofxSurfingImGui") << "setupFontDefault()" << pathFonts << ", " << nameFont << ", " << sizeFont;
+	ofLogNotice("ofxSurfingImGui") << "setupFontDefault() " << pathFonts << ", " << nameFont << ", " << sizeFont;
 
 	//TODO: pathFonts + nameFont could be merged..
 
@@ -744,7 +753,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault()
 {
-	ofLogNotice("ofxSurfingImGui:setupImGuiFonts");
+	ofLogNotice("ofxSurfingImGui") << "setupFontDefault()";
 
 	// WARNING: 
 	// Could not crash or notify you 
@@ -763,7 +772,7 @@ void SurfingGuiManager::setupFontDefault()
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGui()
 {
-	ofLogNotice("ofxSurfingImGui:setupImGui");
+	ofLogNotice("ofxSurfingImGui") << "setupImGui()";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -794,13 +803,20 @@ void SurfingGuiManager::setupImGui()
 	//--
 
 	// Fonts
+	//TODO:
+	//if (this->isMasterInstance()) setupFontDefault();
 	setupFontDefault();
+
+	//--
+
+	//setDefaultFont();
+	//if (customFont != nullptr) ImGui::PushFont(customFont);
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGuiTheme()
 {
-	ofLogNotice("ofxSurfingImGui:setupImGuiTheme");
+	ofLogNotice("ofxSurfingImGui") << "setupImGuiTheme()";
 
 	//--
 
@@ -846,7 +862,7 @@ void SurfingGuiManager::setupImGuiTheme()
 //--------------------------------------------------------------
 void SurfingGuiManager::resetUISettings()
 {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogNotice("ofxSurfingImGui") << "resetUISettings()";
 
 	//TODO: should disable ini handling on imgui to disable saving on app exit!
 	//then on the next app startup windows
@@ -867,6 +883,7 @@ void SurfingGuiManager::resetUISettings()
 	{
 		filesystem::path p = ofToDataPath("../imgui.ini");
 		//filesystem::path p = ofToDataPath("../imgui.ini");
+
 		ofFile f(p);
 		if (f.exists())
 		{
@@ -1090,6 +1107,10 @@ void SurfingGuiManager::startup()
 	//setEnableHelpInternal();
 
 	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
+	
+	//--
+
+	setDefaultFont();
 
 	//--
 
@@ -1103,8 +1124,8 @@ void SurfingGuiManager::startup()
 //--------------------------------------------------------------
 void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 {
-	if (bSilent) ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__);
-	else ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	if (bSilent) ofLogVerbose("ofxSurfingImGui") << "doBuildHelpInfo() - silent";
+	else ofLogNotice("ofxSurfingImGui") << "doBuildHelpInfo()";
 
 	//--
 
@@ -1271,9 +1292,10 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 //--------------------------------------------------------------
 void SurfingGuiManager::setDefaultFontIndex(int index)
 {
+	//ofLogNotice("ofxSurfingImGui") << "setDefaultFontIndex(): " << index;
+
 	if (customFonts.size() == 0) {
 		ofLogError("ofxSurfingImGui") << "customFonts.size() = 0";
-		ofLogNotice("ofxSurfingImGui") << "setDefaultFontIndex: " << index;
 		return;
 	}
 
@@ -1284,6 +1306,8 @@ void SurfingGuiManager::setDefaultFontIndex(int index)
 //--------------------------------------------------------------
 void SurfingGuiManager::setDefaultFont() //will apply the first added font file
 {
+	//ofLogNotice("ofxSurfingImGui") << "setDefaultFont()";
+
 	setDefaultFontIndex(0);
 }
 
@@ -1291,6 +1315,8 @@ void SurfingGuiManager::setDefaultFont() //will apply the first added font file
 //--------------------------------------------------------------
 void SurfingGuiManager::clearFonts()
 {
+	ofLogNotice("ofxSurfingImGui") << "clearFonts()";
+
 	customFonts.clear();
 
 	auto& io = ImGui::GetIO();
@@ -1781,7 +1807,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-	}
+}
 #endif
 
 	//--
@@ -1830,7 +1856,7 @@ void SurfingGuiManager::updateLayout()
 		loadLayoutImGuiIni(ini_to_load);
 
 		ini_to_load = NULL;
-}
+	}
 
 	if (ini_to_save)
 	{
@@ -2391,7 +2417,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Font
-
+#ifdef SURFING_DEBUG_FONTS
 	// Reset font to default (#0).
 	// this clears all the push/pop queue.
 	if (customFonts.size() > 0)
@@ -2399,6 +2425,7 @@ void SurfingGuiManager::Begin()
 		setDefaultFont();
 		if (customFont != nullptr) ImGui::PushFont(customFont);
 	}
+#endif
 
 	//--
 
@@ -2488,7 +2515,7 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	if (bUseHelpInternal)
 	{
 		helpInternal.draw();
-}
+	}
 
 	// App
 
@@ -2527,10 +2554,12 @@ void SurfingGuiManager::End()
 
 	//TODO: could set the default font instead of Pop..
 	// bc that will be prophylactic if pushed too many fonts by error!
+#ifdef SURFING_DEBUG_FONTS
 	if (customFonts.size() > 0)
 	{
 		if (customFont != nullptr) ImGui::PopFont();
 	}
+#endif
 
 	//--
 
@@ -2538,7 +2567,7 @@ void SurfingGuiManager::End()
 	doCheckOverGui();
 
 	//--
-	
+
 	// some helpers
 	xSpacingDiff = 0;
 	ySpacingDiff = 0;
@@ -2739,7 +2768,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--
@@ -4506,64 +4535,64 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	/*static*/
 	auto logKey = [this, key](const string& msg = "")
-	{
-		ofLogLevel l = OF_LOG_VERBOSE;
-		// ofLogLevel l = OF_LOG_WARNING;
-
-		string s = ofToString("Key ") + ofToString(char(key));
-
-		//TODO: filter not "known" chars
-		//include only a to z and numbers
-		if (!isalnum(char(key))) return;
-
-		if (msg == "")
 		{
-		}
-		else
-		{
-			s += msg;
-		}
-		this->AddToLog(s, l);
-	};
+			ofLogLevel l = OF_LOG_VERBOSE;
+			// ofLogLevel l = OF_LOG_WARNING;
+
+			string s = ofToString("Key ") + ofToString(char(key));
+
+			//TODO: filter not "known" chars
+			//include only a to z and numbers
+			if (!isalnum(char(key))) return;
+
+			if (msg == "")
+			{
+			}
+			else
+			{
+				s += msg;
+			}
+			this->AddToLog(s, l);
+		};
 
 	/*static*/
 	auto logKeyText = [this](const string& msg = "")
-	{
-		ofLogLevel l = OF_LOG_VERBOSE;
-		// ofLogLevel l = OF_LOG_WARNING;
+		{
+			ofLogLevel l = OF_LOG_VERBOSE;
+			// ofLogLevel l = OF_LOG_WARNING;
 
-		this->AddToLog(msg, l);
-	};
+			this->AddToLog(msg, l);
+		};
 
 	/*static*/
 	auto logKeyParam = [this, key](const ofParameter<bool>& p, const string& msg = "")
-	{
-		ofLogLevel l = OF_LOG_VERBOSE;
-		// ofLogLevel l = OF_LOG_WARNING;
-
-		string s;
-
-		if (msg == "")
 		{
-			string sKey = "";
-			if (isalnum(char(key))) {
-				sKey = ofToString("Key " + ofToString(char(key)));
-				s = sKey + " - " + p.getName();
+			ofLogLevel l = OF_LOG_VERBOSE;
+			// ofLogLevel l = OF_LOG_WARNING;
+
+			string s;
+
+			if (msg == "")
+			{
+				string sKey = "";
+				if (isalnum(char(key))) {
+					sKey = ofToString("Key " + ofToString(char(key)));
+					s = sKey + " - " + p.getName();
+				}
+				else s = p.getName();
+				s += "  | " + string(p.get() ? "ON " : "OFF");
+
 			}
-			else s = p.getName();
-			s += "  | " + string(p.get() ? "ON " : "OFF");
+			else
+			{
+				string sKey;
+				sKey = ofToString("Key ") + msg;
+				s = sKey + " - " + p.getName();
+				s += "  | " + string(p.get() ? "ON " : "OFF");
 
-		}
-		else
-		{
-			string sKey;
-			sKey = ofToString("Key ") + msg;
-			s = sKey + " - " + p.getName();
-			s += "  | " + string(p.get() ? "ON " : "OFF");
-
-		}
-		this->AddToLog(s, l);
-	};
+			}
+			this->AddToLog(s, l);
+		};
 
 	//----
 

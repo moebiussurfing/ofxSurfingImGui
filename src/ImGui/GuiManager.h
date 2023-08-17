@@ -1,7 +1,7 @@
-//#pragma once
+#pragma once
 
-#ifndef OFX_SURFING_IM_GUI_H
-#define OFX_SURFING_IM_GUI_H
+#define SURFING_DEBUG_FONTS//TODO
+
 
 /*
 
@@ -147,11 +147,18 @@ public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
 
-public:
+	//----
+
 	//TODO:
+private:
 	static int instanceCount;
-	static int getInstanceCount() {
+	bool bIsMasterInstance = false;
+public:
+	int getInstanceCount() {
 		return instanceCount;
+	}
+	bool isMasterInstance() {
+		return bIsMasterInstance;
 	}
 
 	//----
@@ -215,9 +222,11 @@ private:
 	//--
 
 private:
-	bool bDisableStartupReset = 1; // workflow: default behavior to not reset align
 	bool bDoForceStartupResetLayout = false; // will align the windows horizontally
 	bool bDoneDoForceStartupResetLayout = false;
+
+private:
+	bool bDisableStartupReset = 1; // workflow: default behavior to not reset align
 public:
 	void doResetLayout(); // must be called between Begin/End
 	void setDisableStartupResetLayout(bool b = 1) { bDisableStartupReset = b; } // disables auto reset layout!
@@ -1510,7 +1519,7 @@ private:
 
 	//--
 
-	// mono-spaced fonts
+	// spaced and mono-spaced fonts
 	const float fontsRatioDefault = 1.0f;
 	const float fontsRatioBig = 1.5f;
 	const float fontsRatioHuge = 2.5f;
@@ -2252,7 +2261,7 @@ public:
 	// technically is the font scale, 
 	// that affects most widgets, 
 	// but could break some window sizes layout.
-
+#ifdef SURFING_IMGUI__USE_GLOBAL_SCALE
 private:
 
 	class ScaleGlobalManager
@@ -2415,6 +2424,7 @@ public:
 	void DrawWidgetsGlobalScale() {
 		scaleGlobalManager.DrawWidgetsGlobalScale();
 	}
+#endif
 
 	//----
 
@@ -5678,5 +5688,3 @@ public:
 	}
 
 };
-
-#endif

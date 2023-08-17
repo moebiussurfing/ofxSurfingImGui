@@ -29,6 +29,8 @@
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
+#define SURFING_IMGUI__USE_GLOBAL_SCALE
+
 //--
 
 // Settings management
