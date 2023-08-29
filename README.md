@@ -10,11 +10,20 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <h3>
   
-( An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop). )    
+An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
   
 </h3>
+<br>
 
-#### WORK IN PROGRESS!
+### WORK IN PROGRESS!
+
+<br>
+
+## OVERVIEW
+- ofParameter helpers.
+- Layout helpers.
+- Common App batteries.
+- Engines/Modules.
 
 <br>
 
@@ -24,7 +33,7 @@ for [openFrameworks](https://openframeworks.cc/) projects.
   - Simplified user **workflow**.
   - Many useful **Internal states** and persistent settings:
     - Minimize, debug, extra, advanced, auto resize...
-    - Log, Notifier and windows visibility and distribution. 
+    - Log, Notifier, and windows visibility and distribution. 
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
