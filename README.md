@@ -15,7 +15,7 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
 </h3>
 <br>
 
-### WORK IN PROGRESS!
+### _WORK IN PROGRESS_!
 
 <br>
 
