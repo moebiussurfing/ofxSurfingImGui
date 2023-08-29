@@ -1,7 +1,5 @@
 #pragma once
 
-#define SURFING_DEBUG_FONTS//TODO
-
 
 /*
 
@@ -880,9 +878,9 @@ public:
 
 		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
-		pushStyleFont(0);
+		this->pushStyleFont(0);
 		ImGui::TextWrapped("%s", t.c_str());
-		popStyleFont();
+		this->popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
 
@@ -910,9 +908,9 @@ public:
 		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
 
-		pushStyleFont(int(style));
+		this->pushStyleFont(int(style));
 		ImGui::TextWrapped("%s", t.c_str());
-		popStyleFont();
+		this->popStyleFont();
 
 		if (bSpacing) this->AddSpacing();
 	}
@@ -967,9 +965,9 @@ public:
 
 		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
-		pushStyleFont(1);
+		this->pushStyleFont(1);
 		ImGui::TextWrapped("%s", t.c_str());
-		popStyleFont();
+		this->popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
 
@@ -996,9 +994,9 @@ public:
 
 		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
-		pushStyleFont(2);
+		this->pushStyleFont(2);
 		ImGui::TextWrapped("%s", t.c_str());
-		popStyleFont();
+		this->popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
 
@@ -1025,9 +1023,9 @@ public:
 
 		string t = bUppercase ? ofToUpper(n) : n;
 		if (bSpacing) this->AddSpacing();
-		pushStyleFont(3);
+		this->pushStyleFont(3);
 		ImGui::TextWrapped("%s", t.c_str());
-		popStyleFont();
+		this->popStyleFont();
 		if (bSpacing) this->AddSpacing();
 	}
 
@@ -1047,9 +1045,9 @@ public:
 			return sz0;
 		}
 
-		pushStyleFont(indexFont);
+		this->pushStyleFont(indexFont);
 		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
-		popStyleFont();
+		this->popStyleFont();
 		return sz;
 	}
 
@@ -1235,9 +1233,9 @@ public:
 		// line transparent
 		if (bNoline) ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.f, 0.f, 0.f, 0.0f));
 
-		pushStyleFont(index);
+		this->pushStyleFont(index);
 		ImGui::SeparatorText(label.c_str());
-		popStyleFont();
+		this->popStyleFont();
 
 		if (bNoline) ImGui::PopStyleColor(); // Pop the custom color
 	}
@@ -2184,7 +2182,7 @@ public:
 private:
 	ImFont* customFont = nullptr;
 	vector<ImFont*> customFonts;
-	bool bFlagIgnoreNextPopStyleFont = false;
+	bool bFlagIgnoreNextPopStyleFont = false;//this flag will be useful when no fonts added by mistake!
 	vector<string> namesCustomFonts;
 	vector<string> pathsCustomFonts;
 
@@ -2240,7 +2238,7 @@ public:
 	void setDefaultFontIndex(int index);
 	void setDefaultFont();
 
-	ofParameter<int> fontIndex{"Font", 0, 0, 3}; // By default we use 4 font sizes/types
+	ofParameter<int> fontIndex{ "Font", 0, 0, 3 }; // By default we use 4 font sizes/types
 	void DrawWidgetsFonts(); // uses internal index
 	void DrawWidgetsFontsMini(); // only combo. uses internal index
 
@@ -2272,21 +2270,21 @@ private:
 
 			eIndex = index.newListener([this](int& v) {
 				switch (v) {
-				case 0: globalScale = 1.0f; break;
+				case 0: globalScale = 1.00f; break;
 				case 1: globalScale = 1.25f; break;
-				case 2: globalScale = 1.5f; break;
+				case 2: globalScale = 1.50f; break;
 				case 3: globalScale = 1.75f; break;
-				case 4: globalScale = 2.0f; break;
+				case 4: globalScale = 2.00f; break;
 				case 5: break;//custom
 				}
 				});
 
 			eGlobalScale = globalScale.newListener([this](float& v) {
-				if (v == 1.0f) index = 0;
+				if (v == 1.00f) index = 0;
 				else if (v == 1.25f) index = 1;
 				else if (v == 1.50f) index = 2;
 				else if (v == 1.75f) index = 3;
-				else if (v == 2.0f) index = 4;
+				else if (v == 2.00f) index = 4;
 				else index = 5;//custom
 				});
 		}
@@ -2304,8 +2302,8 @@ private:
 
 	public:
 		ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
-		vector<string> names{"100%", "125%", "150%", "175%", "200%", "CUSTOM"};
-		ofParameter<int> index {"Global Scale", 0, 0, 0};
+		vector<string> names{ "100%", "125%", "150%", "175%", "200%", "CUSTOM" };
+		ofParameter<int> index{ "Global Scale", 0, 0, 0 };
 		//ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
 
 		float getScale() { return globalScale.get(); }
@@ -2514,48 +2512,48 @@ private:
 
 public:
 	ofParameter<bool> bGui{ "Show Gui", true };
-	ofParameter<bool> bMinimize{"Minimize", true};
-	ofParameter<bool> bAutoResize{"Auto Resize", true};
-	ofParameter<bool> bGlobalScaleWheel{"Global Scale Wheel", false};
-	ofParameter<float> globalScale{"GlobalScale", 1, 0.5, 2};
+	ofParameter<bool> bMinimize{ "Minimize", true };
+	ofParameter<bool> bAutoResize{ "Auto Resize", true };
+	ofParameter<bool> bGlobalScaleWheel{ "Global Scale Wheel", false };
+	ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
 	//float globalScalePre = 1;
-	ofParameter<bool> bKeys{"Keys", true};
-	ofParameter<bool> bLogKeys{"Log Keys", false};
-	ofParameter<bool> bHelp{"Help App", false};
-	ofParameter<bool> bHelpInternal{"Help Internal", false};
-	ofParameter<bool> bDebug{"Debug", false};
-	ofParameter<bool> bDebugDebugger{"Debugger", false};
-	ofParameter<bool> bExtra{"Extra", false};
-	ofParameter<bool> bAdvanced{"Advanced", false};
-	ofParameter<bool> bReset{"Reset", false};
+	ofParameter<bool> bKeys{ "Keys", true };
+	ofParameter<bool> bLogKeys{ "Log Keys", false };
+	ofParameter<bool> bHelp{ "Help App", false };
+	ofParameter<bool> bHelpInternal{ "Help Internal", false };
+	ofParameter<bool> bDebug{ "Debug", false };
+	ofParameter<bool> bDebugDebugger{ "Debugger", false };
+	ofParameter<bool> bExtra{ "Extra", false };
+	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bReset{ "Reset", false };
 
-	ofParameter<bool> bMouseWheel{"Mouse Wheel", true};
-	ofParameter<bool> bMouseWheelFlip{"Flip Wheel", false}; //for natural direction
+	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
+	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel", false }; //for natural direction
 	bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
 
-	ofParameter<bool> bThemeUIAlt{"Theme UI", false};
+	ofParameter<bool> bThemeUIAlt{ "Theme UI", false };
 
-	ofParameter<bool> bLog{"LOG", false}; //show log window
-	ofParameter<bool> bNotifier{"NOTIFIER", true}; //show notifier
+	ofParameter<bool> bLog{ "LOG", false }; //show log window
+	ofParameter<bool> bNotifier{ "NOTIFIER", true }; //show notifier
 
 	//to allow a type of super simple window for final user!
-	ofParameter<bool> bGui_GameMode{"GAME", false};
-	ofParameter<bool> bSolo_GameMode{"GAME SOLO", false};
+	ofParameter<bool> bGui_GameMode{ "GAME", false };
+	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
 	//TODO:
-	ofParameter<bool> bLockMove{"Lock Move", false}; //TODO:
-	ofParameter<bool> bReset_Window{"Reset Window", false}; //TODO:
-	ofParameter<bool> bNoScroll{"No Scroll", false}; //TODO:
-	ofParameter<bool> bLandscape{"Orientation", false}; //TODO:
+	ofParameter<bool> bLockMove{ "Lock Move", false }; //TODO:
+	ofParameter<bool> bReset_Window{ "Reset Window", false }; //TODO:
+	ofParameter<bool> bNoScroll{ "No Scroll", false }; //TODO:
+	ofParameter<bool> bLandscape{ "Orientation", false }; //TODO:
 	//TODO: could add a trigger to flip orientation
 
-	ofParameter<bool> bLinkGlobal{"Link Global", true}; //TODO:
+	ofParameter<bool> bLinkGlobal{ "Link Global", true }; //TODO:
 	//TODO: link windows between contexts/add-ons/ gui instances
 
-	ofParameter<bool> bGui_Organizer{"ORGANIZER", false};
-	ofParameter<bool> bGui_Aligners{"ALIGNERS", false};
-	ofParameter<bool> bGui_SpecialWindows{"SPECIAL WINDOWS", false};
+	ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };
+	ofParameter<bool> bGui_Aligners{ "ALIGNERS", false };
+	ofParameter<bool> bGui_SpecialWindows{ "SPECIAL WINDOWS", false };
 
 	//--
 
@@ -2607,13 +2605,13 @@ private:
 	//--
 
 	// Presets windows
-	ofParameter<bool> bReset_PresetsWindow{"Reset P", false};
-	ofParameter<bool> bAutoResize_PresetsWindows{"Auto Resize P", true};
-	ofParameter<bool> bMinimize_Presets{"Minimize P", true};
+	ofParameter<bool> bReset_PresetsWindow{ "Reset P", false };
+	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize P", true };
+	ofParameter<bool> bMinimize_Presets{ "Minimize P", true };
 
 	// Panels windows
-	ofParameter<bool> bReset_WindowPanels{"Reset", false};
-	ofParameter<bool> bAutoResize_Panels{"Auto Resize", true};
+	ofParameter<bool> bReset_WindowPanels{ "Reset", false };
+	ofParameter<bool> bAutoResize_Panels{ "Auto Resize", true };
 	//ofParameter<bool> bMinimize_Panels{ "Minimize Panels", true };
 
 	ofParameterGroup params_WindowPresets{ "Window Presets" };
@@ -2622,7 +2620,7 @@ private:
 
 public:
 	ofParameter<bool> bOverInputText{ "Input Text", false }; // user is over a text input
-	ofParameter<bool> bMouseOverGui{"Mouse OverGui", false}; // mouse is over gui
+	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
 
 private:
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
@@ -2770,7 +2768,7 @@ public:
 	//--------------------------------------------------------------
 	void AddLogTag(string name, ofColor color)
 	{
-		this->AddLogTag(SurfingLog::tagData{name, color});
+		this->AddLogTag(SurfingLog::tagData{ name, color });
 	}
 
 	//--------------------------------------------------------------
@@ -3819,10 +3817,10 @@ public:
 	{
 		// We queue here the bool params 
 		// that enables the show/hide for each queued window
-		ofParameter<bool> bGui{"_bGui", true};
+		ofParameter<bool> bGui{ "_bGui", true };
 
 		//TODO: per window
-		ofParameter<bool> bAutoResize{"Auto Resize", true};
+		ofParameter<bool> bAutoResize{ "Auto Resize", true };
 
 		////TODO: could be removed...not used yet..
 		//ofParameter<bool> bExtra{ "Extra", false };
@@ -3834,7 +3832,7 @@ public:
 		//TODO:
 		// Only one special window can be flagged as master anchor,
 		// then will be force to be the first window always!
-		ofParameter<bool> bMasterAnchor{"MasterAnchor", false};
+		ofParameter<bool> bMasterAnchor{ "MasterAnchor", false };
 
 		//--------------------------------------------------------------
 		void setMasterAnchor(bool b)
@@ -3927,7 +3925,7 @@ public:
 			setup();
 		}
 
-		ofParameter<bool> _bGui{name, true};
+		ofParameter<bool> _bGui{ name, true };
 
 		SurfingImWindow win;
 		win.bGui.makeReferenceTo(_bGui);
@@ -3978,6 +3976,7 @@ public:
 	//--------------------------------------------------------------
 	void initiateWindowsOrganizer()
 	{
+		ofLogNotice("ofxSurfingImGui") << "initiateWindowsOrganizer()";
 		windowsOrganizer.setupInitiate();
 	}
 
@@ -4474,7 +4473,7 @@ private:
 	void saveLayoutPresetGroup(string path);
 	void loadLayoutPresetGroup(string path);
 
-	ofParameter<int> appLayoutIndex{"Layout Preset", -1, -1, 0};
+	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 };
 	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
@@ -4488,7 +4487,7 @@ private:
 
 	//-
 
-	vector<ofParameter<bool>> bLayoutPresets{"bLayoutPresets"}; // each window show toggles
+	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
 	void Changed_Params(ofAbstractParameter& e);
 	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
 
@@ -4607,9 +4606,9 @@ private:
 	//TODO: 
 	// It's a problem if .ini files are already present... We must ingore loading.
 
-	ofParameter<bool> bDebugDocking{"Debug Docking", false};
+	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
-	ofParameter<bool> bDrawView2{"Draw View 2", false};
+	ofParameter<bool> bDrawView2{ "Draw View 2", false };
 
 	ofRectangle rectangle_Central_MAX;
 	ofRectangle rectangle_Central; // current free space viewport updated when changes
@@ -4638,26 +4637,26 @@ public:
 public:
 	ofParameter<bool> bGui_TopMenuBar{ "Menu", false };
 
-	ofParameter<bool> bLinked{"Link Windows", false}; // Align windows engine. liked to the internal aligner.
+	ofParameter<bool> bLinked{ "Link Windows", false }; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
-	ofParameter<bool> bOrientation{"Orientation", false}; // false=horizontal. true=vertical
-	ofParameter<bool> bGui_ShowWindowsGlobal{"Show Windows", true}; // to force hide all windows or to show if visible
+	ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
+	ofParameter<bool> bGui_ShowWindowsGlobal{ "Show Windows", true }; // to force hide all windows or to show if visible
 	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true}; // to force hide all windows or to show if visible
-	ofParameter<bool> bAlignWindowsReset{"Reset", false};
-	ofParameter<bool> bAlignWindowsCascade{"Cascade", false};
+	ofParameter<bool> bAlignWindowsReset{ "Reset", false };
+	ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
 
 private:
 	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };
-	ofParameter<bool> bGui_LayoutsPresetsSelector{"LAYOUTS", true};
-	ofParameter<bool> bGui_LayoutsManager{"MANAGER", false};
+	ofParameter<bool> bGui_LayoutsPresetsSelector{ "LAYOUTS", true };
+	ofParameter<bool> bGui_LayoutsManager{ "MANAGER", false };
 
-	ofParameter<bool> bAutoSave_Layout{"Auto Save", true};
-	ofParameter<bool> bUseLayoutPresetsManager{"Layout Engine", false};
+	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
+	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false };
 	// Can't be changed on runtime. cant include into settings
 
-	ofParameter<bool> bDockingLayoutPresetsEngine{"Dock Engine", false};
+	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
 
-	ofParameter<bool> bSolo{"Solo", false}; //TODO: for presets layouts engine
+	ofParameter<bool> bSolo{ "Solo", false }; //TODO: for presets layouts engine
 
 	//-
 
@@ -5530,11 +5529,11 @@ private:
 	// customization
 public://TODO:
 	ofParameter<glm::ivec2> customFramePadding{ "FramePadding", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<glm::ivec2> customItemInnerSpacing{"ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<glm::ivec2> customItemSpacing{"ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<int> customTabRounding{"TabRounding", 0, 0, 12 };
-	ofParameter<int> customLineThickness{"LineThickness", 0, 0, 5 };
-	ofParameter<bool> bRawImGui{"Raw ImGui", false};
+	ofParameter<glm::ivec2> customItemInnerSpacing{ "ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+	ofParameter<glm::ivec2> customItemSpacing{ "ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+	ofParameter<int> customTabRounding{ "TabRounding", 0, 0, 12 };
+	ofParameter<int> customLineThickness{ "LineThickness", 0, 0, 5 };
+	ofParameter<bool> bRawImGui{ "Raw ImGui", false };
 
 private:
 	ImVec2 themeFramePadding;

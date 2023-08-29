@@ -13,6 +13,12 @@
 
 //----
 
+// DEBUG
+
+#define SURFING_DEBUG_FONTS//TODO: comment to bypass usage
+
+//--
+
 
 // MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
 
@@ -33,7 +39,7 @@
 
 //--
 
-// Settings management
+// Settings Management
 
 // Improved fixing exceptions when closing ofApp.
 // We can disable automatic saving on exit and/or class destructor.
@@ -49,7 +55,7 @@
 //----
 
 
-// To fix weird behaviors 
+// To fix weird resizing behaviors 
 // when too big or too small resized windows
 
 #define WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL 300 
@@ -508,6 +514,7 @@ namespace ofxImGuiSurfing
 
 	//----
 
+	//TODO: should use another approach top avoid manually name each enum!
 	// Helper to get the styles name for debugging purposes
 	//--------------------------------------------------------------
 	inline static std::string getSurfingGuiTypesGroupsName(int i)

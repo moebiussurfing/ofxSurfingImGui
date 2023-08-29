@@ -263,6 +263,8 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 	{
 		ofLogWarning("ofxSurfingImGui") << "setup(ofxImGuiSurfing::SurfingGuiMode mode)";
 		ofLogWarning("ofxSurfingImGui") << "Setup was already done. Skipping this call!";
+		//TODO
+		return;
 	}
 
 	surfingImGuiMode = mode;
