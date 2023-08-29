@@ -10,11 +10,19 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 <h3>
   
-( An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop). )    
+An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
   
 </h3>
 
 #### WORK IN PROGRESS!
+
+<br>
+
+## OVERVIEW
+- ofParameter helpers.
+- Layout helpers.
+- Common App batteries.
+- Modules.
 
 <br>
 
