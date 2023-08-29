@@ -1321,8 +1321,13 @@ void SurfingGuiManager::clearFonts()
 
 	customFonts.clear();
 
+#if 0
+	//TODO: should avoid clear imgui internal fonts 
+	// to avoid crashing when no font file present!
+	// then imgui will load the default proggy.ttf font!
 	auto& io = ImGui::GetIO();
 	io.Fonts->Clear();
+#endif
 
 	//fontIndex.set(-1);
 	fontIndex.setMax(-1);
@@ -1483,7 +1488,7 @@ void SurfingGuiManager::PopFontStyle()
 	popStyleFont();
 }
 
-//private: deprecated from API
+//TODO: Deprecated from API
 //--------------------------------------------------------------
 void SurfingGuiManager::pushStyleFont(int index)
 {
@@ -2406,6 +2411,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Global Scale
+#ifdef SURFING_IMGUI__USE_GLOBAL_SCALE
 	if (customFonts.size() > 0)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -2415,6 +2421,7 @@ void SurfingGuiManager::Begin()
 		// Global scale by Ctrl + mouse wheel:
 		io.FontAllowUserScaling = bGlobalScaleWheel;
 	}
+#endif
 
 	//--
 

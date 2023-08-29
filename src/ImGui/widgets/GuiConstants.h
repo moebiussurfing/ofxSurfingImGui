@@ -15,7 +15,7 @@
 
 // DEBUG
 
-#define SURFING_DEBUG_FONTS//TODO: comment to bypass usage
+#define SURFING_DEBUG_FONTS//TODO: comment to bypass set default font on Begin
 
 //--
 
