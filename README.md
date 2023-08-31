@@ -16,11 +16,11 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
 
 <br>
 
-<h2>
+<h3>
 <em>
 WORK IN PROGRESS!
 </em>
-</h2>
+</h3>
 
 
 <br>
@@ -116,12 +116,12 @@ class ofApp : public ofBaseApp
 public:
 	void draw();
 
-	ofxSurfingGui ui;
-
-	ofParameter<bool> bGui{ "Show", true };
 	ofParameter<bool> bEnable{ "Enable", true };
 	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
 	ofParameterGroup params{ "MyGroup", bEnable, speed };
+
+	ofParameter<bool> bGui{ "Show", true };	
+  ofxSurfingGui ui;
 };
 ```
 
@@ -133,11 +133,9 @@ void ofApp::draw()
 	ui.Begin();
 	{
 		/* Put windows here */
-
 		if (ui.BeginWindow(bGui))
 		{
 			/* Put widgets here */
-
 			ui.AddLabelBig("00_HelloWorld");
 			ui.AddSpacing();
 			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
@@ -161,13 +159,13 @@ void ofApp::draw()
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear **ImGui v1.89.4** / OF BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**!
+  - You **MUST use this one**. (instead of **ofxImGui** from **@jvcleave**?)!
 
 <details>
   <summary>RELATED LINKS</summary>  
   
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
-  - _A **Testing Sandbox** with **New WIP examples** and new incoming widgets._
+  - _My **Testing Sandbox** with **New WIP examples** and new incoming widgets._
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
   - _Not required. Only for some examples._
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
@@ -175,7 +173,7 @@ void ofApp::draw()
 * [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
   - 3rd party modules/widgets that could be integrated.
 * [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
-  - Inspiration gallery from user's apps.
+  - Inspiration Gallery from user's apps.
   
 </details>
 
@@ -213,7 +211,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 
 ## CURRENT SYSTEMS
 
-- **Windows 10/11** / **VS 2022**
+- **Windows 11** / **VS 2022**
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). ( **Intel** )  
