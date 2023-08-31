@@ -20,20 +20,21 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
 <br>
 
 ## OVERVIEW
-- ofParameter helpers.
-- Layout helpers.
-- Common App batteries.
-- Engines/Modules.
+- ofParameter Widgets.
+- Layout and Style helpers.
+- Bundled batteries for your OF App.
+- Modules.
+- Engines.
 
 <br>
 
 ## FEATURES
-
 - **Simple Setup**:
   - Simplified user **workflow**.
   - Many useful **Internal states** and persistent settings:
     - Minimize, debug, extra, advanced, auto resize...
     - Log, Notifier, and windows visibility and distribution. 
+    - Global Scale.
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
@@ -51,8 +52,8 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
     - To Reset to param **Center**.
     - _+Ctrl_ to Reset to **Min**.
     - _+Alt_ to Reset to **Max**.
-- **Windows Organizer**:
-    - Aligner, cascade and Group/Linker.
+
+## MODULES
 - **Log System**:
     - With custom **tags**.
 - **Notifier System**:
@@ -74,9 +75,12 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
     - Hardcoded and `ini` files.
     - File serializers, A-B compare, sizes and/or colors.
     - **Manager**, **Demo Window** and **Tester Widgets**.
+
+## ENGINES
+- **Windows Organizer**:
+    - Aligner, cascade and Group/Linker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
-- Global Scale.
 
  
 <br>
@@ -204,7 +208,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 
 ## CURRENT SYSTEMS
 
-- **Windows 10** / **VS 2022**
+- **Windows 10/11** / **VS 2022**
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). ( **Intel** )  
