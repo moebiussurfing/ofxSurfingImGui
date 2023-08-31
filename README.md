@@ -14,21 +14,22 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
   
 </h3>
 <br>
-
+<em>
 ### WORK IN PROGRESS!
-
+</em>
 <br>
 
 ## OVERVIEW
 - ofParameter Widgets.
 - Layout and Style helpers.
-- Bundled batteries for your OF App.
 - Modules.
 - Engines.
-
-<br>
+- Bundled batteries for your OF Apps.
 
 ## FEATURES
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
+  - Added custom useful widgets.
 - **Simple Setup**:
   - Simplified user **workflow**.
   - Many useful **Internal states** and persistent settings:
@@ -38,13 +39,11 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
-- **ofParameter Helpers**:
-  - Many RAW **DearImGui widgets** adapted.
-  - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
-- Four active **Font Sizes** for labels and paragraphs.
+- Four active **Font Sizes** for labels, widgets and text paragraphs.
+  - Four optional extra fonts for alternate **mono-spaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
