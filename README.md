@@ -13,10 +13,16 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
   
 </h3>
+
 <br>
+
+<h2>
 <em>
-### WORK IN PROGRESS!
+WORK IN PROGRESS!
 </em>
+</h2>
+
+
 <br>
 
 ## OVERVIEW
