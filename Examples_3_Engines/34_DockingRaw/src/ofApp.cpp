@@ -47,9 +47,9 @@ void ofApp::setupImGui()
 	// 1. Instantiate
 
 	// NOTICE that
-	// To enable the "Layout Presets Engine"
-	// is mandatory to pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument !
-	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
+	// To enable the "raw docking" workflow
+	// is mandatory to pass an argument: 
+	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
 
 	//-
 
@@ -72,35 +72,6 @@ void ofApp::setupImGui()
 
 	//-
 
-	// Optional: before startup
-
-	// Customize the names for the 4 default Layout Presets. 
-	// Default names are P0-P1-P2-P3
-	// Set to 1 to enable an to test it
-	if (1) {
-		vector<std::string> names;
-		names.push_back("Editor");
-		names.push_back("Player");
-		names.push_back("Live");
-		names.push_back("Mini");
-
-		ui.setPresetsNames(names);
-	}
-
-	//-
-
-	// Optional: before startup
-
-	// We can add extra parameters to append include into the Layout Presets.
-	// (Notice that this are params, not extra special windows!)
-	// Set to 1 to enable an to test it
-	if (1) {
-		ui.addExtraParamToLayoutPresets(bGui_Docking);
-		ui.addExtraParamToLayoutPresets(bEnable);
-	}
-
-	//-
-
 	// 3. Startup:
 
 	ui.startup();
@@ -115,8 +86,8 @@ void ofApp::setupImGui()
 	// located on the Advanced section,
 	// But notice that it will call a local method on this scope (ofApp).
 	if (1) {
-		ui.setReset(&bDockingRandom);
-		//ui.setReset(&bDockingReset);
+		ui.setResetPtr(&bDockingRandom);
+		//ui.setResetPtr(&bDockingReset);
 	}
 
 	// Help info
@@ -138,10 +109,8 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::drawImGui()
 {
-	//----
-
 	// Gui Manager with Docking features:
-	// In between here (begin/end) 
+	// In between here (Begin/End) 
 	// we can render ImGui windows and widgets,
 	// and all the docking magic.
 
@@ -149,43 +118,56 @@ void ofApp::drawImGui()
 
 	ui.Begin();
 	{
-		// 1. Docking
+		// 1. Docking magic
 
-		// Here (between beginDocking/endDocking)
-		// but just after begin call, 
-		// we can access all the docking space.
-		// It's required to copy in our projects.
+		// We can access all the docking space
+		// here (between BeginDocking/EndDocking)
+		// but just after the main ui.Begin call. 
+		// This snippet it's required to be copied into our projects.
 
 		ui.BeginDocking();
 		{
-			updateImGuiDockingHelper();
+			updateImGuiDockingHelpers();
 		}
 		ui.EndDocking();
 
-		//--
+		//----
 
-		// 2. A Window
+		// 2.1 An extra window with helpers
 
 		// An extra window with some triggers
 		// for hard-coded layout modifications. 
-		if (bGui_Docking) drawImGuiDockingHelper();
+		if (bGui_DockingHelpers) drawImGuiDockingHelpers();
+
+		//--
+
+		// 2.2 Populate the visible toggles
+
+		// for all the queued especial windows in setup()!
+		if (ui.BeginWindow(bGui))
+		{
+			ui.drawWidgetsSpecialWindows();
+			ui.AddSpacingSeparated();
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
+			ui.EndWindow();
+		}
 
 		//----
 
-		// 3. The (Special Windows) 
+		// 3. The Special Windows 
 
 		// The windows previously queued to the manager on setup(),
 		// that are controlled by the Layout Presets Engine.
 		// Render ImGui Windows and Widgets now!
 		{
-			drawImGuiWindows();
+			drawImGuiSpecialWindows();
 		}
 	}
 	ui.End();
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiWindows()
+void ofApp::drawImGuiSpecialWindows()
 {
 	// -> These are our helpers 
 	// to render windows using the power of the "Layout Presets Engine".
@@ -200,14 +182,14 @@ void ofApp::drawImGuiWindows()
 			// e.g. when using raw ImGui widgets without the full engine.
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
-			float _h2 = 2 * _h; // double height
+			float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
+			float _h2 = 2 * _h1; // double height
 
 			// if ui.bHelp enabled, activates help tooltips on this window!
 
 			ui.AddLabelHuge("Window 0", false);
 
-			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
 			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
 			ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
@@ -258,7 +240,7 @@ void ofApp::drawImGuiWindows()
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 			ui.Add(lineWidth, OFX_IM_STEPPER);
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
-			ui.Add(lineWidth, OFX_IM_KNOB);
+			ui.Add(lineWidth, OFX_IM_KNOB_DOTKNOB);
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 
 			ui.AddSpacingBigSeparated();
@@ -280,7 +262,7 @@ void ofApp::drawImGuiWindows()
 		{
 			ui.AddLabelHuge("Window 1", false);
 
-			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
 			ui.AddGroup(params1);
 
@@ -298,7 +280,7 @@ void ofApp::drawImGuiWindows()
 		{
 			ui.AddLabelHuge("Window 2", false);
 
-			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
 
 			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
 
@@ -364,16 +346,16 @@ It has survived not only five centuries, but also the leap into electronic types
 		{
 			ui.AddLabelHuge("Window 3", false);
 
-			ui.Add(bGui_Docking, OFX_IM_TOGGLE_ROUNDED_BIG);
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
 
-			ui.AddLabelBig("Hello, down!", false, true);
-			ui.AddLabelBig("Hello, down! Hello, down! Hello, down!");
-			ui.AddLabelBig("Hello, down!", false, true);
+			ui.AddLabelHuge("Hello, down Huge!", false, true);
+			ui.AddLabelBig("Hello, down Big!", false, true);
+			ui.AddLabelBig("Hello, down Big! Hello, down! Hello, down!");
 			ui.AddSpacingBigSeparated();
 			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 			ui.AddSpacingBigSeparated();
-			ui.AddLabelBig("Hello, down!", false, true);
-			ui.AddLabelHuge("Hello, down! Hello, down! Hello, down!");
+			ui.AddLabelBig("Hello, down Big!", false, true);
+			ui.AddLabelHuge("Hello, down Huge! Hello, down! Hello, down!");
 
 			//--
 
@@ -385,17 +367,23 @@ It has survived not only five centuries, but also the leap into electronic types
 
 	index = 4;
 	{
+		//TODO: fix sizing bug
+		if (ui.getIsWindowSpecialVisible(index))
+		{
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
+		}
+
 		if (ui.BeginWindowSpecial(index))
 		{
 			ui.AddLabelHuge("Window 4", false);
-			
-			ui.Add(bGui_Docking, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+
+			ui.AddLabelHuge("Hello, left Huge!", true, true);
+			ui.AddLabelHuge("Hello, left Huge!", false, false);
+			ui.AddLabelBig("Hello, left Big!");
 			ui.AddLabel("Hello, left!", false, true);
-			ui.AddLabelBig("Hello, left!");
-			ui.AddLabelBig("Hello, left!", false);
-			ui.AddLabelHuge("Hello, left!", true, true);
-			ui.AddLabelHuge("Hello, left!", false, false);
+			ui.AddLabelBig("Hello, left Big!", false);
 
 			ui.EndWindowSpecial();
 		}
@@ -408,7 +396,7 @@ It has survived not only five centuries, but also the leap into electronic types
 // added to the user session mouse-layouting work.
 
 //--------------------------------------------------------------
-void ofApp::updateImGuiDockingHelper()
+void ofApp::updateImGuiDockingHelpers()
 {
 	// Reset layout once o startup/first frame call
 	{
@@ -419,6 +407,8 @@ void ofApp::updateImGuiDockingHelper()
 			doDockingReset();
 		}
 	}
+
+	//--
 
 	// Reset layout by button GUI
 	if (bDockingReset) {
@@ -436,38 +426,61 @@ void ofApp::updateImGuiDockingHelper()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiDockingHelper()
+void ofApp::drawImGuiDockingHelpers()
 {
-	if (!bGui_Docking) return;
+	if (!bGui_DockingHelpers) return;
 
-	if (ui.BeginWindow(bGui_Docking))
+	string s;
+
+	//TODO: fix sizing bug
+	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
+
+	if (ui.BeginWindow(bGui_DockingHelpers))
 	{
-		ui.AddLabelHuge("ofApp Docking Window", false);
+		ui.AddLabelHuge("myDockingHelpers", false);
 
-		ImGui::TextWrapped("Reset Docking hard-coded Layouts");
 		float _w = ofxImGuiSurfing::getWidgetsWidth();
-		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
+		float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
+
+		//--
 
 		// Reset docking layout
-		if (ImGui::Button("Reset Layout", ImVec2(_w, _h)))
+		if (ImGui::Button("Layout Reset", ImVec2(_w, _h)))
 		{
-			bDockingReset = true; 
-			// flag to call on a precise draw point, inside the draw begin/end context
+			bDockingReset = true;
+			// Flag to call on a precise draw point, 
+			// inside the draw begin/end context
 		}
+		s = "Layout Reset Docking \nto a hard-coded layout.";
+		ui.AddTooltip(s);
+
+		//--
 
 		// Randomize docking layout
-		if (ImGui::Button("Randomize Layout", ImVec2(_w, _h)))
+		if (ImGui::Button("Layout Randomize", ImVec2(_w, _h)))
 		{
-			bDockingRandom = true; 
-			// flag to call on a precise draw point, inside the draw begin/end context
+			bDockingRandom = true;
+			// Flag to call on a precise draw point,
+			// inside the draw begin/end context
 		}
+		s = "Layout Reset Docking \nto a randomized layout.";
+		ui.AddTooltip(s);
 
 		ui.AddSpacingSeparated();
 
-		// Show all Panels
-		if (ImGui::Button("Show All Panels", ImVec2(_w, _h / 2)))
+		//--
+
+		// Show/hide all Special Windows / Panels
+		if (ImGui::Button("All", ImVec2(_w / 2, _h)))
 		{
 			ui.setShowAllPanels(true);
+		}
+
+		ui.SameLine();
+
+		if (ImGui::Button("None", ImVec2(_w / 2, _h)))
+		{
+			ui.setShowAllPanels(false);
 		}
 
 		ui.EndWindow();
@@ -477,6 +490,8 @@ void ofApp::drawImGuiDockingHelper()
 //--------------------------------------------------------------
 void ofApp::doDockingReset()
 {
+	ofLogNotice(__FUNCTION__);
+
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -520,6 +535,8 @@ void ofApp::doDockingReset()
 //--------------------------------------------------------------
 void ofApp::doDockingRandom()
 {
+	ofLogNotice(__FUNCTION__);
+
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
@@ -528,7 +545,7 @@ void ofApp::doDockingRandom()
 	ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
 	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
 
-	// randomized sizes
+	// Randomized sizes
 	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
 	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
 	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
@@ -536,7 +553,7 @@ void ofApp::doDockingRandom()
 
 	int idice = (int)ofRandom(3);
 
-	// we now dock our windows into the docking node we made above
+	// We now dock our windows into the docking node we made above
 	// We can get the window names by the index to rename easy, just in one place when added on setup.
 	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(0).c_str(), (idice == 0) ? dock_id_top : dock_id_down);
 	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(1).c_str(), (idice == 1) ? dock_id_right : dock_id_left);
@@ -588,4 +605,12 @@ void ofApp::updateScene()
 		else if (_rnd < 0.8) ui.AddToLog(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
 		else ui.AddToLog(ofGetTimestampString());
 	}
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key)
+{
+	ofLogNotice(__FUNCTION__) << " " << char(key);
+
+	if (key == 'g')bGui = !bGui;
 }

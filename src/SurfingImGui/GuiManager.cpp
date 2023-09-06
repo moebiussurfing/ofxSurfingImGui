@@ -262,10 +262,13 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 	if (bDoneSetup)
 	{
 		ofLogWarning("ofxSurfingImGui") << "setup(ofxImGuiSurfing::SurfingGuiMode mode)";
-		ofLogWarning("ofxSurfingImGui") << "Setup was already done. Skipping this call!";
+		ofLogWarning("ofxSurfingImGui") << "Setup was already done previously.";
+		ofLogWarning("ofxSurfingImGui") << "Skipping this setup call!";
 		//TODO
 		return;
 	}
+
+	//--
 
 	surfingImGuiMode = mode;
 
@@ -784,20 +787,26 @@ void SurfingGuiManager::setupImGui()
 
 	// Hard coded settings
 
-	if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
+	bool bIsDocked = bDockingLayoutPresetsEngine ||
+		surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW;
+
+	if (bIsDocked) flags += ImGuiConfigFlags_DockingEnable;
+
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
 	// Setup ImGui with the appropriate config flags
 
-	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
-	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	if (guiPtr != nullptr) 
+		guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	else 
+		gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
 	if (bMouseCursorFromImGui) ofHideCursor();
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
 
-	if (bDockingLayoutPresetsEngine) ImGui::GetIO().ConfigDockingWithShift = true;
+	if (bIsDocked) ImGui::GetIO().ConfigDockingWithShift = true;
 
 	// Uncomment below to "force" all ImGui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
@@ -805,7 +814,8 @@ void SurfingGuiManager::setupImGui()
 	//--
 
 	// Fonts
-	//TODO:
+	//TODO: improve not loading more fonts than required:
+	// multiple instances would use the same font files!
 	//if (this->isMasterInstance()) setupFontDefault();
 	setupFontDefault();
 
@@ -962,8 +972,8 @@ void SurfingGuiManager::startup()
 	//--
 
 	//TODO:
-	//workflow
-	// enable organizer by default.
+	// workflow
+	// Force enable organizer by default.
 	// no need to call manually.
 	setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
@@ -1025,6 +1035,8 @@ void SurfingGuiManager::startup()
 
 	//----
 
+	// Modules
+
 	// Log
 
 	//TODO: Trying to redirect all logs to the imgui log window.
@@ -1076,11 +1088,11 @@ void SurfingGuiManager::startup()
 	// we set some default settings.
 
 	// Load some internal settings
-	bool bNoSettingsFound = !(loadSettings());
+	bool bNoFileSettingsFound = !(loadSettings());
 
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning!
-	if (bNoSettingsFound)
+	if (bNoFileSettingsFound)
 	{
 		ofLogWarning("ofxSurfingImGui") << "No file settings found!";
 		ofLogWarning("ofxSurfingImGui") << "Probably the app is opening for the the first time.";
@@ -2793,7 +2805,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-}
+	}
 #endif
 
 	//--
@@ -3119,7 +3131,7 @@ void SurfingGuiManager::BeginDocking()
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-	// fit full viewport
+	// Fit full viewport
 	ImGui::SetNextWindowPos(viewport->Pos);
 	ImGui::SetNextWindowSize(viewport->Size);
 	ImGui::SetNextWindowViewport(viewport->ID);
@@ -3137,7 +3149,9 @@ void SurfingGuiManager::BeginDocking()
 		|= ImGuiWindowFlags_NoBringToFrontOnFocus
 		| ImGuiWindowFlags_NoNavFocus;
 
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+	// When using ImGuiDockNodeFlags_PassthruCentralNode, 
+	// DockSpace() will render our background and handle the pass-thru hole, 
+	// so we ask Begin() to not render a background.
 	if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
 		window_flags |= ImGuiWindowFlags_NoBackground;
 
@@ -3171,8 +3185,10 @@ void SurfingGuiManager::BeginDocking()
 	//----
 
 	// All windows goes here before endDocking()
-
-	drawLayoutsPresetsEngine();
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) 
+	{
+		drawLayoutsPresetsEngine();
+	}
 }
 #endif
 

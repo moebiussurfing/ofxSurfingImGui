@@ -4690,6 +4690,13 @@ private:
 
 public:
 	//--------------------------------------------------------------
+	void setResetPtr(bool* b)
+	{
+		//link to an external / parent scope bool to assing to the internal reset button.
+		bResetPtr = b;
+	}
+	// LEGACY
+	//--------------------------------------------------------------
 	void setReset(bool* b)
 	{
 		//link to an external / parent scope bool to assing to the internal reset button.

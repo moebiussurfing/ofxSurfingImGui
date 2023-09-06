@@ -5,38 +5,20 @@
 
 	TODO
 
-	save panels and presets window position
+	fix handle persistence of bGui special windows states
 
-	make simple example (only one preset)
-	ImTools?
-
-	add flip (landscape/portrait) panels window
 
 */
 
 
 #include "ofxSurfingImGui.h"
 
-#include "ofxWindowApp.h" // -> Not required
-
-/*
-
-	Docking features is a WIP yet!
-	Some view-port zones are not allowed or not memorized correctly.
-	When enabling Linking Mode, presets have a bit weird behavior.
-
-*/
-
-
 class ofApp : public ofBaseApp
 {
-
 public:
-
-	//-
-
 	void setup();
 	void draw();
+	void keyPressed(int key);
 
 	//-
 
@@ -66,35 +48,36 @@ public:
 	ofParameter<float> speed3;
 	ofParameter<int> shapeType3;
 
-	//-
+	//--
 
-	// The Gui Manager
+	// Gui manager
 	ofxSurfingGui ui;
 
 	void setupImGui();
 	void drawImGui();
-	void drawImGuiWindows();
+	void drawImGuiSpecialWindows();
 
-	//-
+	ofParameter<bool> bGui{ "ofApp", true};
+
+	//--
 
 	// Docking Stuff
 
 	// To learning purposes 
 	// but also to be used as template for your projects.
-	void updateImGuiDockingHelper();
-	void drawImGuiDockingHelper();
-	ofParameter<bool> bGui_Docking{ "ofApp Docking", false };
+	void updateImGuiDockingHelpers();
+	void drawImGuiDockingHelpers();
+	ofParameter<bool> bGui_DockingHelpers{ "myDockingHelpers", false };
 
 	// An extra window with some triggers
 	// for hard-coded layout modifications. 
 	void doDockingReset(); // Reset the layout to a hard-coded default layout.
 	void doDockingRandom(); // Random the layout.
+
 	bool bDockingReset = false;
 	bool bDockingRandom = false;
 
-	//-
+	//--
 
 	void updateScene(); // Generates random messages to test the Log window.
-
-	ofxWindowApp windowApp;
 };
