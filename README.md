@@ -224,6 +224,8 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 An addon by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2023*  
 
+<br>
+
 ## THANKS
 
 _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
@@ -233,6 +235,8 @@ _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AW
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+
+<br>
 
 ## LICENSE
 
