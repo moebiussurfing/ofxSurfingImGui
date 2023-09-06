@@ -49,7 +49,7 @@ WORK IN PROGRESS!
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
 - Four active **Font Sizes** for labels, widgets and text paragraphs.
-  - Four optional extra fonts for alternate **mono-spaced** and **non-monospaced**.
+  - Four optional extra fonts for alternate **monospaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
@@ -163,17 +163,16 @@ void ofApp::draw()
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear **ImGui v1.89.4** / OF BackEnd.
-  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**! (Instead of the **ofxImGui** from **@jvcleave**)
+  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s [FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - You **MUST use this one**! (Instead of the [https://github.com/jvcleave/ofxImGui](ofxImGui) from [https://github.com/jvcleave](@jvcleave).
 
 ### DATA ASSET FILES
 
-* **JetBrainsMono-Bold.ttf**:
+* [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf):
   - The font file for the default theme.
-  - To put into `/bin/data/assets/fonts/`.  
-* [data.zip](data.zip):
-  - Optional.
-  - More font files from the same family. To put into each OF project `OF_APP/bin/data/`.  
+  - Put into `/bin/data/assets/fonts/`.  
+* Optional: [data.zip](data.zip):
+  - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>  
