@@ -131,6 +131,9 @@ class ofApp : public ofBaseApp
 #### ofApp.cpp
 
 ```.cpp
+
+#include "ofApp.h"
+
 void ofApp::draw()
 {
   ui.Begin();
