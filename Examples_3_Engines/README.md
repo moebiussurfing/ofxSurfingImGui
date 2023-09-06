@@ -17,10 +17,6 @@
 
 # VIDEOS
 
-<h2>LOG SYSTEM</h2>
-
-[![](https://img.youtube.com/vi/UIvfpRFtEtY/maxresdefault.jpg)](https://youtu.be/UIvfpRFtEtY)
-
 <h2>LAYOUT PRESETS ENGINE & DOCKING ( WIP )</h2>
 
 ![](https://github.com/moebiussurfing/ofxSurfingImGuiExtra/blob/master/readme_media/gif/3_0_Layout_Docking2.gif)  

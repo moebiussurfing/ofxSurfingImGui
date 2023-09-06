@@ -26,3 +26,10 @@
 
 ## 30_ThemeEditorFull
 ![](30_ThemeEditorFull/Capture.PNG)  
+
+
+# VIDEOS
+
+<h2>LOG SYSTEM</h2>
+
+[![](https://img.youtube.com/vi/UIvfpRFtEtY/maxresdefault.jpg)](https://youtu.be/UIvfpRFtEtY)

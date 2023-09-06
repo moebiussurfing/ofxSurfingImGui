@@ -102,8 +102,7 @@ WORK IN PROGRESS!
 
 ### EXAMPLE: 00_HelloWorld
 
-![](/Examples/00_HelloWorld/Capture.PNG)  
-
+![](/Examples/00_HelloWorld/Capture.PNG)
 <details>
   <summary>CODE</summary>
   
