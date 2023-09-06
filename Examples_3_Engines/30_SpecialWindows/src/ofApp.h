@@ -13,6 +13,30 @@
     2. WINDOWS ALIGN ENGINE 
     Helpers to align/cascade/layout all visible windows (except some internal ones).
 
+
+    NOTE:  
+
+    The "Special Windows Organizer" windows. 
+    Speeds Up the creation of windows.  
+    An Internal bool toggle will be auto created for each added Special Window.  
+    Another window called "Organizer" (by default) will be auto drawn!  
+    This happens internally, and we don't need to handle that.  
+    It's a panel who controls all the Special Windows.  
+
+    You only need to queue windows on setup:
+	ui.addWindowSpecial("myWindow 0");
+	ui.addWindowSpecial("myWindow 1");
+	ui.addWindowSpecial("myWindow 2");
+	ui.addWindowSpecial("myWindow 3");
+
+    Features: 
+    - Autocreates toggles and controls for each queued window. 
+    - Show/Hide each queued Special Window. all/none.  
+    - Align windows as vertical or horizontal cascade.
+    - Custom spacing between windows, hide headers or vertical/horizontal mode.
+    - Ready to feed Layout Presets Engine.
+    - Ready to help on Docking workflow.
+
 */
 
 
