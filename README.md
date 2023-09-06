@@ -26,11 +26,11 @@ WORK IN PROGRESS!
 <br>
 
 ## OVERVIEW
+- Bundled batteries for your OF Apps.
 - ofParameter Widgets.
 - Layout and Style helpers.
-- Modules.
-- Engines.
-- Bundled batteries for your OF Apps.
+- Useful Modules/Systems.
+- Workflow Engines.
 
 ## FEATURES
 - **ofParameter Helpers**:
@@ -86,7 +86,6 @@ WORK IN PROGRESS!
     - Aligner, cascade and Group/Linker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
-
  
 <br>
 
@@ -100,7 +99,7 @@ WORK IN PROGRESS!
 
 <br>
 
-### EXAMPLE: 00_HelloWorld
+### EXAMPLE: 01_HelloWorld
 
 ![](/Examples_0_Basic/01_HelloWorld/Capture.PNG)
 <details>
@@ -165,32 +164,16 @@ void ofApp::draw()
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear **ImGui v1.89.4** / OF BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**!. (Instead of the **ofxImGui** from **@jvcleave**)
+  - You **MUST use this one**! (Instead of the **ofxImGui** from **@jvcleave**)
 
-<details>
-  <summary>RELATED LINKS</summary>  
-  
-* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
-  - _My **Testing Sandbox** with **New WIP examples** and new incoming widgets._
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-  - _Not required. Only for some examples._
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
-  - _Not required. Only for some examples._
-* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
-  - 3rd party modules/widgets that could be integrated.
-* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
-  - Inspiration Gallery from user's apps.
-  
-</details>
-
-### DATA FILES
+### DATA ASSET FILES
 
 * **JetBrainsMono-Bold.ttf**:
   - The font file for the default theme.
   - To put into `/bin/data/assets/fonts/`.  
-* [assets.zip](assets.zip):
+* [data.zip](data.zip):
   - Optional.
-  - More font files from the same family. To put into each project `OF_APP/bin/data/`.  
+  - More font files from the same family. To put into each OF project `OF_APP/bin/data/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>  
@@ -211,6 +194,22 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     And will be probably merged into the master branch.  
     
  </p>
+</details>
+
+<details>
+  <summary>RELATED LINKS</summary>  
+  
+* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
+  - _My **Testing Sandbox** with **New WIP examples** and new incoming widgets._
+* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
+  - 3rd party modules/widgets that could be integrated.
+* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
+  - Inspiration Gallery from user's apps.
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
+  - _Not required. Only for some examples._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+  - _Not required. Only for some examples._
+  
 </details>
 
 <br>
