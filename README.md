@@ -161,6 +161,8 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
+### ImGui BACKEND
+
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
   - The **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
@@ -168,8 +170,8 @@ void ofApp::draw()
 
 ### DATA ASSET FILES
 
-* [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
-  - The font file for the default theme.
+* Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
+  - The monospaced font file for the default theme.
   - Put into `/bin/data/assets/fonts/`.  
 * Optional: [data.zip](data.zip)
   - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
