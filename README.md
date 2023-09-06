@@ -4,7 +4,7 @@
   
 ofxSurfingImGui.  
 A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
-for [openFrameworks](https://openframeworks.cc/) projects.  
+for [openFrameworks](https://openframeworks.cc/) app projects.  
   
 </h1>
 
@@ -162,9 +162,9 @@ void ofApp::draw()
 ## DEPENDENCIES
 
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
-  - Dear **ImGui v1.89.4** / OF BackEnd.
-  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s [FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
-  - You **MUST use this one**! Use instead of the [https://github.com/jvcleave/ofxImGui](ofxImGui) from [https://github.com/jvcleave](@jvcleave).
+  - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - The **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - You **MUST use this one**! Use instead of the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui).
 
 ### DATA ASSET FILES
 
@@ -185,12 +185,12 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
   - Multi context / instances: 
-    - Several windows from different add-ons without colliding.  
+    - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
-    Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
-    And will be probably merged into the master branch.  
+    Currently this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
+    And will be probably merged into the master branch someday.  
     
  </p>
 </details>
