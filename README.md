@@ -1,17 +1,13 @@
 <br>
 
 <h1>
-  
 ofxSurfingImGui.  
 A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
 for [openFrameworks](https://openframeworks.cc/) projects.  
-  
 </h1>
 
 <h3>
-  
 An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
-  
 </h3>
 
 <br>
@@ -114,14 +110,14 @@ WORK IN PROGRESS!
 class ofApp : public ofBaseApp
 {
 public:
-	void draw();
+void draw();
 
-	ofParameter<bool> bEnable{ "Enable", true };
-	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-	ofParameterGroup params{ "MyGroup", bEnable, speed };
+ofParameter<bool> bEnable{ "Enable", true };
+ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+ofParameterGroup params{ "MyGroup", bEnable, speed };
 
-	ofParameter<bool> bGui{ "Show", true };	
-  ofxSurfingGui ui;
+ofParameter<bool> bGui{ "Show", true };	
+ofxSurfingGui ui;
 };
 ```
 
@@ -130,23 +126,23 @@ public:
 ```.cpp
 void ofApp::draw()
 {
-	ui.Begin();
-	{
-		/* Put windows here */
-		if (ui.BeginWindow(bGui))
-		{
-			/* Put widgets here */
-			ui.AddLabelBig("00_HelloWorld");
-			ui.AddSpacing();
-			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-			ui.Add(speed, OFX_IM_HSLIDER);
-			ui.AddSpacingSeparated();
-			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+ui.Begin();
+{
+/* Put windows here */
+if (ui.BeginWindow(bGui))
+{
+/* Put widgets here */
+ui.AddLabelBig("00_HelloWorld");
+ui.AddSpacing();
+ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+ui.Add(speed, OFX_IM_HSLIDER);
+ui.AddSpacingSeparated();
+ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
-			ui.EndWindow();
-		}
-	}
-	ui.End();
+ui.EndWindow();
+}
+}
+ui.End();
 }
 ```
 
@@ -227,8 +223,11 @@ An addon by **moebiusSurfing**.
 ## THANKS
 
 _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
+
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
+
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
+
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 
 ## LICENSE
