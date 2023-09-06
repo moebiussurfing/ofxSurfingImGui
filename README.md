@@ -166,8 +166,9 @@ void ofApp::draw()
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
-  - The **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
-  - You **MUST use this one**! Use instead of the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui).
+  - Is the **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - You **MUST use this one**! 
+  - Do not use the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui)!
 
 ### DATA ASSET FILES
 
@@ -175,12 +176,13 @@ void ofApp::draw()
   - The monospaced font file for the default theme.
   - Put into `/bin/data/assets/fonts/`.  
 * Optional: [data.zip](data.zip)
-  - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
+  - More font files (non monospaced alternative) from the same family.
+  - Put into each **OF project** `OF_APP/bin/data/`.  
 
 <details>
-  <summary>NOTE ABOUT THE FONTS</summary>  
+  <summary>ABOUT THE FONTS</summary>  
   
-The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
+The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `/data` can also be completely empty too!) 
 
 </details>
   
