@@ -159,7 +159,7 @@ void ofApp::draw()
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear **ImGui v1.89.4** / OF BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**. (instead of **ofxImGui** from **@jvcleave**?)!
+  - You **MUST use this one**!. (Instead of the **ofxImGui** from **@jvcleave**)
 
 <details>
   <summary>RELATED LINKS</summary>  
