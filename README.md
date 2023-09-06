@@ -26,11 +26,11 @@ WORK IN PROGRESS!
 <br>
 
 ## OVERVIEW
-- Bundled batteries for your OF Apps.
+- Bundled batteries for your full OF Apps.
 - ofParameter Widgets.
-- Layout and Style helpers.
+- Layout and Style Helpers.
 - Useful Modules/Systems.
-- Workflow Engines.
+- Workflow Engines for the final user.
 
 ## FEATURES
 - **ofParameter Helpers**:
@@ -164,14 +164,14 @@ void ofApp::draw()
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
   - Dear **ImGui v1.89.4** / OF BackEnd.
   - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s [FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
-  - You **MUST use this one**! (Instead of the [https://github.com/jvcleave/ofxImGui](ofxImGui) from [https://github.com/jvcleave](@jvcleave).
+  - You **MUST use this one**! Use instead of the [https://github.com/jvcleave/ofxImGui](ofxImGui) from [https://github.com/jvcleave](@jvcleave).
 
 ### DATA ASSET FILES
 
-* [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf):
+* [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
   - The font file for the default theme.
   - Put into `/bin/data/assets/fonts/`.  
-* Optional: [data.zip](data.zip):
+* Optional: [data.zip](data.zip)
   - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
 
 <details>
@@ -201,9 +201,9 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 * [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
   - _My **Testing Sandbox** with **New WIP examples** and new incoming widgets._
 * [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
-  - 3rd party modules/widgets that could be integrated.
+  - 3rd party ImGui modules/widgets that could be integrated.
 * [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
-  - Inspiration Gallery from user's apps.
+  - Inspiration Gallery from ImGui user's apps.
 * [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
   - _Not required. Only for some examples._
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
