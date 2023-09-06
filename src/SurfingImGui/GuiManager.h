@@ -2842,6 +2842,13 @@ public:
 		notifier.Add(text, nameTag);
 	}
 
+	//--------------------------------------------------------------
+	void AddToLogAndNotifier(string text)
+	{
+		log.Add(text);
+		notifier.Add(text);
+	}
+
 	//----
 
 public:
@@ -3905,7 +3912,7 @@ public:
 	//--------------------------------------------------------------
 	void addWindowSpecial(string name, bool _bAutoResize = true, bool _bPowered = false)
 	{
-		// Security Checks
+		// "Sanity" Checks. Special windows organizer mode will be forced when adding special windows.
 
 		// Special windows mode
 		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
@@ -3929,8 +3936,8 @@ public:
 
 		SurfingImWindow win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.bAutoResize = _bAutoResize;
-		win.setMasterAnchor(_bPowered);
+		win.bAutoResize = _bAutoResize;//TODO: not used
+		win.setMasterAnchor(_bPowered);//TODO: not used
 
 		// Queue
 
@@ -4414,10 +4421,11 @@ private:
 	// That happens when started for first time or after OF_APP/bin cleaning
 	// Then we can reset to some default variables and layout positions of our windows.
 	bool loadSettings();
+
 public:
 	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
-	void saveSettings();//save both settings parts: GuiManager and WindowsOrganizer
-	void save() { saveSettings(); }//alias
+	void saveSettings();// Saves all the settings: both settings parts: GuiManager and WindowsOrganizer
+	void save() { this->saveSettings(); }// LEGACY/alias
 
 private:
 	void saveSettingsInternal();
@@ -4477,10 +4485,17 @@ private:
 	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "LayoutsPresets" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsExtra{ "Extra Params" }; // all these params will be stored on each layout preset
-	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; // add-on related params
+	ofParameterGroup params_Layouts{ "LayoutsPresets" }; 
+	// all these params will be stored on each layout preset
+
+	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; 
+	// all these params will be stored on each layout preset
+
+	ofParameterGroup params_LayoutsExtra{ "Extra Params" }; 
+	// all these params will be stored on each layout preset
+
+	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; 
+	// add-on related params
 
 	int numPresetsDefault;
 	void createLayoutPreset(string namePreset = "-1");
@@ -4676,30 +4691,31 @@ private:
 	//ImGuiWindowFlags flagsWindowsLocked2;//used for other control panels
 	//ImGuiWindowFlags flagsWindowsModeFreeStore;//used to unlink main control panels (presets, manager, extra, panels) from presets
 
-	//-
+	//--
 
 	//TODO: 
 	// Learn to use lambda functions
 	// To callback reset
-	// Subscribe an optional reset flagging a bool to true to reset. Uses the gui Reset button on the Presets Extra panel.
+	// Subscribe an optional reset flagging a bool to true to reset. 
+	// Uses the gui Reset button on the Presets Extra panel.
 	// #include <functional>
 	//std::function<void()> doCallback = nullptr
 
 private:
-	bool* bResetPtr = nullptr;
+	bool* bResetPtr = nullptr; // to be used for many functions like for example reseting docking layout.
 
 public:
 	//--------------------------------------------------------------
 	void setResetPtr(bool* b)
 	{
-		//link to an external / parent scope bool to assing to the internal reset button.
+		// link to an external / parent scope bool to assing to the internal reset button.
 		bResetPtr = b;
 	}
 	// LEGACY
 	//--------------------------------------------------------------
 	void setReset(bool* b)
 	{
-		//link to an external / parent scope bool to assing to the internal reset button.
+		// link to an external / parent scope bool to assing to the internal reset button.
 		bResetPtr = b;
 	}
 

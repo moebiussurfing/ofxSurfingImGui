@@ -34,7 +34,7 @@ SurfingGuiManager::SurfingGuiManager()
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
 	autoSaveListener = params_AppSettings.parameterChangedE().newListener([&](ofAbstractParameter&) {
-		saveSettings();
+		this->saveSettings();
 		});
 #endif
 
@@ -115,7 +115,10 @@ void SurfingGuiManager::exit(ofEventArgs& e)
 //--------------------------------------------------------------
 void SurfingGuiManager::exit()
 {
-	if (bDoneExit) return;
+	if (bDoneExit) {
+		ofLogWarning("ofxSurfingImGui") << "Skipped exit() bc it seems done already previously!";
+		return;
+	}
 
 	ofLogNotice("ofxSurfingImGui") << "exit()";
 
@@ -131,7 +134,7 @@ void SurfingGuiManager::exit()
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
-	saveSettingsInternal();
+	this->saveSettingsInternal();
 #endif
 
 	bDoneExit = true;
@@ -796,9 +799,9 @@ void SurfingGuiManager::setupImGui()
 
 	// Setup ImGui with the appropriate config flags
 
-	if (guiPtr != nullptr) 
+	if (guiPtr != nullptr)
 		guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
-	else 
+	else
 		gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
 	if (bMouseCursorFromImGui) ofHideCursor();
@@ -1013,6 +1016,11 @@ void SurfingGuiManager::startup()
 			//// workflow
 			//windowsOrganizer.setHideWindows(true);
 		}
+		else if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
+		{
+			//// workflow
+			//windowsOrganizer.setHideWindows(true);
+		}
 
 		// Docking mode has the GUI toggles in other panels..
 		else
@@ -1045,7 +1053,7 @@ void SurfingGuiManager::startup()
 	// Pass fonts to allow styles switching
 	log.setCustomFonts(customFonts, namesCustomFonts);
 
-	//--
+	//----
 
 	// Notifier
 
@@ -1062,7 +1070,7 @@ void SurfingGuiManager::startup()
 	{
 		// A. Help Text Box internal
 
-		helpInternal.bGui.makeReferenceTo(bHelpInternal);
+		helpInternal.bGui.makeReferenceTo(bHelpInternal);//link
 		helpInternal.setTitle(bHelpInternal.getName());
 		//helpInternal.setEnableHeader();
 
@@ -1072,7 +1080,7 @@ void SurfingGuiManager::startup()
 
 		// B. Help Text Box app
 
-		helpApp.bGui.makeReferenceTo(bHelp);
+		helpApp.bGui.makeReferenceTo(bHelp);//link
 		helpApp.setTitle(bHelp.getName());
 	}
 
@@ -1088,29 +1096,30 @@ void SurfingGuiManager::startup()
 	// we set some default settings.
 
 	// Load some internal settings
-	bool bNoFileSettingsFound = !(loadSettings());
+	bool bNoFileSettingsFound = !(this->loadSettings());
 
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning!
 	if (bNoFileSettingsFound)
 	{
-		ofLogWarning("ofxSurfingImGui") << "No file settings found!";
+		ofLogWarning("ofxSurfingImGui") << "No file settings found! " << path_AppSettings;
 		ofLogWarning("ofxSurfingImGui") << "Probably the app is opening for the the first time.";
 		ofLogWarning("ofxSurfingImGui") << "We will reset the windows layout to avoid overlap of windows.";
 
-		// hide all special windows, if they are queued.
-		setShowAllPanels(false);
+		// 
+		// Hide all the queued special windows (if they are queued).
+		this->setShowAllPanels(false);
 
-		// forced default params
+		// Forced default params
 		bHelpInternal = true;
 		bMinimize = false;
 
-		//// help
+		//// Help
 		//helpApp.setPosition(400, 10);
 		//helpInternal.setPosition(800, 10);
 
 		// workflow
-		// will align the windows horizontally
+		// Will align the windows horizontally
 		bDoForceStartupResetLayout = true;
 	}
 
@@ -1826,18 +1835,19 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-	}
+}
 #endif
 
 	//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	if (bFlagSaveSettings && 0) {
+	if (bFlagSaveSettings) 
+	{
 		bFlagSaveSettings = false;
 
-		ofLogNotice("ofxSurfingImGui") << "update() Attending flag.";
+		ofLogNotice("ofxSurfingImGui") << "update() Attending save flag.";
 
-		saveSettingsInternal();
+		this->saveSettingsInternal();
 	}
 #endif	
 
@@ -2006,12 +2016,12 @@ void SurfingGuiManager::drawLayoutsManager()
 				float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 				if (ImGui::Button("All", ImVec2(_w2, _h / 2)))
 				{
-					setShowAllPanels(true);
+					this->setShowAllPanels(true);
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("None", ImVec2(_w2, _h / 2)))
 				{
-					setShowAllPanels(false);
+					this->setShowAllPanels(false);
 				}
 			}
 			ImGui::PopID();
@@ -2084,24 +2094,29 @@ void SurfingGuiManager::drawLayoutsManager()
 //--------------------------------------------------------------
 void SurfingGuiManager::drawLayoutsPresetsEngine()
 {
-	// Draws all sections except drawLayoutsManager() and drawLayoutsPresetsManualWidgets();
+	// Draws all sections except:
+	// drawLayoutsManager() and drawLayoutsPresetsManualWidgets();
+
+	//--
 
 	//TODO:
 	// How to make all windows dockeable in the same space ?
+
+	// Main Layout Presets clicker
 	if (bGui_LayoutsPresetsSelector)
 	{
-		drawLayoutsLayoutPresets(); // main presets clicker
+		drawLayoutsLayoutPresets(); 
 
 		//if (!bMinimize_Presets) if (bGui_LayoutsPresetsManual) drawLayoutsPresetsManualWidgets();
 	}
 
+	//--
+
+	// Main Panels clicker
 	if (bGui_LayoutsPanels)
 	{
 		drawLayoutsPanels();
 	}
-
-	//// Log
-	//if (appLayoutIndex != -1) DrawWindowLogIfEnabled();
 }
 
 //--------------------------------------------------------------
@@ -2114,7 +2129,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 
 	if (bUseLayoutPresetsManager)
 	{
-		updateLayout(); // to attend save load flags
+		// Attend save/load flags
+		updateLayout(); 
 
 		//----
 
@@ -2805,7 +2821,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--
@@ -3185,7 +3201,7 @@ void SurfingGuiManager::BeginDocking()
 	//----
 
 	// All windows goes here before endDocking()
-	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING) 
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		drawLayoutsPresetsEngine();
 	}
@@ -3239,10 +3255,11 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	//--
 
-	//// 1.2 Add other settings that we want to store into each presets
+	// 1.2 Add other settings that we want to store into each presets
 
 	//-
 
+#if 1
 	// Extra params that will be included into each preset.
 	// Then can be different and memorized in different states too,
 	// like the common panels.
@@ -3252,11 +3269,11 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	params_LayoutsExtra.add(bNotifier);
 	//TODO: should be removed if handled by preset engine..
 
-
 	//params_LayoutsExtraInternal.clear();
 	//params_LayoutsExtraInternal.add(bGui_TopMenuBar);
 	//params_LayoutsExtraInternal.add(bLog);
 	//params_LayoutsExtra.add(params_LayoutsExtraInternal);
+#endif
 
 	//--
 
@@ -3300,7 +3317,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	{
 		if (namesPresets.size() == 0)
 		{
-			//if names are not defined will be setted by default P0-P1-P2-P3
+			// if names are not defined will be setled by default P0-P1-P2-P3
 			createLayoutPreset();
 		}
 		else
@@ -3366,7 +3383,6 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	//rect1_Panels.set(ofRectangle(x + (pad + w), y, w, h));
 	//rect0_Presets.set(ofRectangle(x, y, w, h));
 
-
 	//--
 
 	rectangles_Windows.clear();
@@ -3422,7 +3438,9 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 //--------------------------------------------------------------
 bool SurfingGuiManager::loadSettings()
 {
+	ofLogNotice("ofxSurfingImGui") << "loadSettings()" << " " << path_AppSettings;
 	bool b = loadGroup(params_AppSettings, path_AppSettings, true);
+	if(!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
 
 	return b;
 
@@ -3437,10 +3455,8 @@ void SurfingGuiManager::saveSettingsInternal()
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
 
-	//ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal()";
-
+	ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal()" << " " << path_AppSettings;
 	saveGroup(params_AppSettings, path_AppSettings, false);
-	ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal() DONE!";
 }
 
 //--------------------------------------------------------------
@@ -3453,7 +3469,7 @@ void SurfingGuiManager::saveSettings()
 	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
 
 	// Save GuiManager
-	saveSettingsInternal();
+	this->saveSettingsInternal();
 
 	// Save WindowsOrganizer
 #ifndef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
@@ -3854,7 +3870,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	saveSettingsFlag();
+	this->saveSettingsFlag();
 #endif	
 
 	//--
@@ -4473,7 +4489,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 			if (bSolo) bSolo.set(false);
 
 			bool b = true;
-			setShowAllPanels(b);
+			this->setShowAllPanels(b);
 		}
 
 		ImGui::SameLine();
@@ -4481,7 +4497,7 @@ void SurfingGuiManager::drawLayoutsPanels()
 		if (ImGui::Button("None", ImVec2(_w50, _hWid)))
 		{
 			bool b = false;
-			setShowAllPanels(b);
+			this->setShowAllPanels(b);
 		}
 
 		ofxImGuiSurfing::AddBigToggle(bSolo, _w100, _hWid, true);
@@ -4818,12 +4834,12 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		//// All
 		//if ((key == 'a' && mod_CONTROL) || key == 1)
 		//{
-		//	setShowAllPanels(true);
+		//	this->setShowAllPanels(true);
 		//}
 		// None
 		if ((key == 'n' && mod_CONTROL) || key == 14)
 		{
-			setShowAllPanels(false);
+			this->setShowAllPanels(false);
 			logKeyText("Ctrl + n");
 		}
 
@@ -4929,8 +4945,8 @@ void SurfingGuiManager::drawMenuDocked()
 				}
 			}
 			//this->AddSpacingSeparated();
-			//if (ImGui::MenuItem("All", NULL)) { setShowAllPanels(true); }
-			//if (ImGui::MenuItem("None", NULL)) { setShowAllPanels(false); }
+			//if (ImGui::MenuItem("All", NULL)) { this->setShowAllPanels(true); }
+			//if (ImGui::MenuItem("None", NULL)) { this->setShowAllPanels(false); }
 			ImGui::EndMenu();
 		}
 

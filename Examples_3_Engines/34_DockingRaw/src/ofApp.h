@@ -3,27 +3,29 @@
 
 /*
 
+	This example show a docking mode without the layout presets engine activated.
+
 	TODO
-
-	fix handle persistence of bGui special windows states
-
+	Fix handle persistence of bGui special windows states
 
 */
 
 
 #include "ofxSurfingImGui.h"
 
+//#define SURFING_USE_MANAGER
+
 class ofApp : public ofBaseApp
 {
 public:
 	void setup();
+	void setupParameters();
 	void draw();
 	void keyPressed(int key);
 
-	//-
+	//--
 
 	// Scene Parameters
-
 	ofParameterGroup params1;
 	ofParameter<bool> bEnable;
 	ofParameter<bool> bPrevious;
@@ -57,25 +59,53 @@ public:
 	void drawImGui();
 	void drawImGuiSpecialWindows();
 
-	ofParameter<bool> bGui{ "ofApp", true};
+	ofParameter<bool> bGui{ "ofApp", true };
 
 	//--
 
-	// Docking Stuff
+	// Docking Helpers Stuff
+
+	// Mode/workflow Can be configured:
+	bool bStartupDockingReset = false;
+	// false: the layout will be persistent and auto saved on exit and loaded on setup.
+	// true: the layout will be reseted on each startup.
+
+	ofParameter<bool> bGui_DockingHelpers{ "myDockingHelpers", true };
 
 	// To learning purposes 
 	// but also to be used as template for your projects.
 	void updateImGuiDockingHelpers();
 	void drawImGuiDockingHelpers();
-	ofParameter<bool> bGui_DockingHelpers{ "myDockingHelpers", false };
 
 	// An extra window with some triggers
 	// for hard-coded layout modifications. 
 	void doDockingReset(); // Reset the layout to a hard-coded default layout.
 	void doDockingRandom(); // Random the layout.
 
+	// Flags
 	bool bDockingReset = false;
 	bool bDockingRandom = false;
+
+	//--
+
+	// Manager to Save/Load Layout manually
+#ifdef SURFING_USE_MANAGER
+	string path = "myLayout";
+	bool bFlagLoadLayout = 0;
+	bool bFlagSaveLayout = 0;
+	
+	//--------------------------------------------------------------
+	void saveLayoutImGuiIni()
+	{
+		ImGui::SaveIniSettingsToDisk(ofToDataPath(path + ".ini", true).c_str());
+	}
+
+	//--------------------------------------------------------------
+	void loadLayoutImGuiIni()
+	{
+		ImGui::LoadIniSettingsFromDisk(ofToDataPath(path + ".ini", true).c_str());
+	}
+#endif
 
 	//--
 

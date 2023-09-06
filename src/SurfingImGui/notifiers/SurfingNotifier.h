@@ -202,7 +202,7 @@ public:
 		ImTricks::NotifyManager::AddNotify(text, s);
 	}
 
-	void Add(std::string msg, ofLogLevel logLevel)
+	void Add(std::string msg, ofLogLevel logLevel = OF_LOG_NOTICE)
 	{
 		ofLogNotice("ofxSurfingImGui:SurfingNotifier") << "Add() logLevel: " << logLevel;
 
