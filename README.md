@@ -57,8 +57,13 @@ WORK IN PROGRESS!
     - To Reset to param **Center**.
     - _+Ctrl_ to Reset to **Min**.
     - _+Alt_ to Reset to **Max**.
+- **Themes Editor** example:  ( WIP )
+    - **20+ bundled themes** compilation. 
+    - Hardcoded and `ini` files.
+    - File serializers, A-B compare, sizes and/or colors.
+    - **Manager**, **Demo Window** and **Tester Widgets**.
 
-## MODULES
+## MODULES / SYSTEMS
 - **Log System**:
     - With custom **tags**.
 - **Notifier System**:
@@ -66,20 +71,15 @@ WORK IN PROGRESS!
 - **Debugger System**:
     - Metrics: frame rate and frame time.
     - Profiler: Cpu and Gpu measurements.
-- **Text Editor**: 
+- **Text Editor System**: 
     - Language marks with custom marked **keyworks**.
     - Font sizes, color themes.
     - **Clipboard** access and **undo/redo** history.
 - **Console System**: ( WIP )
     - Basic console/**terminal** module.
     - Call methods/**commands** by typing into the console.
-- **Image Inspector**:
+- **Image Inspector System**:
     - With pixel color picker.
-- **Themes Editor**:  ( WIP )
-    - **20+ bundled themes** compilation. 
-    - Hardcoded and `ini` files.
-    - File serializers, A-B compare, sizes and/or colors.
-    - **Manager**, **Demo Window** and **Tester Widgets**.
 
 ## ENGINES
 - **Windows Organizer**:
