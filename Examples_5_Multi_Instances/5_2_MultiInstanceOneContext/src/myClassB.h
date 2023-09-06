@@ -7,12 +7,11 @@
 class myClassB
 {
 public:
-
 	myClassB();
 	~myClassB();
 
 	void setup();
-	void draw();
+	void drawImGui();
 
 	ofParameterGroup params;
 	ofParameter<float> lineWidth;

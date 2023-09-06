@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
@@ -7,14 +6,13 @@
 class myClassD
 {
 public:
-
 	myClassD();
 	~myClassD();
 
 	void setup();
-	void draw(ofxSurfingGui* _ui);
+	void drawImGui(ofxSurfingGui* ui);
 
-	ofParameterGroup params;
+	ofParameterGroup parametersD;
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;
 	ofParameter<float> speed;

@@ -24,25 +24,21 @@ void myClassB::setUiPtr(ofxSurfingGui* _ui) {
 }
 
 //--------------------------------------------------------------
-void myClassB::draw()
+void myClassB::drawImGui()
 {
 	if (ui == nullptr) return;
 	if (!bGui) return;
 
-	//ui->Begin();
+	if (ui->BeginWindow(bGui))
 	{
-		if (ui->BeginWindow(bGui))
-		{
-			ui->AddMinimizerToggle();
-			ui->AddAutoResizeToggle();
-			ui->AddSpacingBigSeparated();
+		ui->AddMinimizerToggle();
+		ui->AddAutoResizeToggle();
+		ui->AddSpacingBigSeparated();
 
-			if (ui->isMaximized()) ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);
-			ui->Add(speed, OFX_IM_KNOB_DOTKNOB, 2, true);
-			ui->Add(separation, OFX_IM_KNOB_DOTKNOB, 2);
+		if (ui->isMaximized()) ui->AddGroup(params, SurfingGuiGroupStyle_Collapsed);
+		ui->Add(speed, OFX_IM_KNOB_DOTKNOB, 2, true);
+		ui->Add(separation, OFX_IM_KNOB_DOTKNOB, 2);
 
-			ui->EndWindow();
-		}
+		ui->EndWindow();
 	}
-	//ui->End();
 }

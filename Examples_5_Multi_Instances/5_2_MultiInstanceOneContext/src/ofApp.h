@@ -1,10 +1,8 @@
 
 /*
 
-	TODO WIP
-
 	This is a WIP example to explore the workflow and debug how to combine multiple instances of ofxImGui
-	inside an ofxSurfingImGui class who acts as a kind of manager.
+	inside an ofxSurfingImGui class, who acts as a kind of manager.
 
 	Many classes (myClassA-B-C-D) with some instantiated objects (A, B, C, D)
 	will populate widgets for ofParams but using different approaches.
@@ -12,11 +10,12 @@
 	- In this example one single UI instance 
 	will be passed/shared as reference between all the classes objects.
 
+	- ui.Begin/End will be called only once in ofApp!
+
 */
 
 
 #pragma once
-
 #include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
@@ -34,7 +33,7 @@ public:
 	void draw();
 	void keyPressed(int key);
 
-	ofParameterGroup params;
+	ofParameterGroup parameters;
 	ofParameter<bool> bEnable1;
 	ofParameter<bool> bEnable2;
 	ofParameter<bool> bEnable3;
@@ -50,34 +49,24 @@ public:
 	ofParameter<bool> bGui{ "my_ofApp", true };
 
 	// Local ui object that will be shared to some of the instantiated classes
+	// to draw their respective widgets.
 	// will populate local (ofApp) ofParams too.
 	ofxSurfingGui ui;
 
 	//--
 
 	myClassA A;
-	// will draw the window. Do not calls Begin/End inside the class object. (Uses the ofApp Begin/End from the local ImGui instance)
 
 	myClassB B; 
-	// will have his own internal ImGui / ofxSurfingImGui ui instance. (Uses his own Begin/End)
 
 	myClassC C; 
-	// will receive and store this local ui into a pointer to populate widgets on there: inside the class draw method.
 
 	myClassD D; 
-	// will use the local (ofApp) instantiated ofxSurfingGui object.
 
 	//--
 
-	// Advanced
-	void drawWidgets()
-	{
-		//ui.AddSpacingBigSeparated();
-		//ui.AddLabelBig("Hello std::function<void()>");
-		//ui.AddLabel("Where is the drawer?");
-		//static bool b = true;
-		//ImGui::Checkbox("b", &b);
-		//if (b) ImGui::Text("Here it is! \nIt's defined in (parent) ofApp, \nnot myClassC object!");
-		//ui.AddSpacingBig();
-	}
+	// Advanced function
+	// These are populated widget from this root/main scope,
+	// but called inside the class object C.
+	void drawWidgets();
 };

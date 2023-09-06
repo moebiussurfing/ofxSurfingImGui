@@ -12,30 +12,22 @@ myClassA::~myClassA() {
 //--------------------------------------------------------------
 void myClassA::setup()
 {
-	params2.setName("paramsGroupA");
-	params2.add(shapeType2.set("shapeType2", 0, -50, 50));
-	params2.add(size2.set("size2", 100, 0, 100));
-	params2.add(amount2.set("amount2", 10, 0, 25));
-
-	//--
-
-	// Can be omitted in many scenarios..
-	//ui.setup();
+	parametersA.setName("paramsGroupA");
+	parametersA.add(shapeType2.set("shapeType2", 0, -50, 50));
+	parametersA.add(size2.set("size2", 100, 0, 100));
+	parametersA.add(amount2.set("amount2", 10, 0, 25));
 }
 
 //--------------------------------------------------------------
-void myClassA::draw()
+void myClassA::drawImGui(ofxSurfingGui* ui)
 {
+	if (ui == nullptr) return;
 	if (!bGui) return;
 
-	//ui.Begin(); // Note that we could avoid Begin/End bc only drawing this window.
+	if (ui->BeginWindow(bGui))
 	{
-		if (ui.BeginWindow(bGui))
-		{
-			ui.AddGroup(params2);
+		ui->AddGroup(parametersA);
 
-			ui.EndWindow();
-		}
+		ui->EndWindow();
 	}
-	//ui.End();
 }
