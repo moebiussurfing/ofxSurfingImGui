@@ -4,37 +4,52 @@
   
 ofxSurfingImGui.  
 A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
-for [openFrameworks](https://openframeworks.cc/) projects.  
+for [openFrameworks](https://openframeworks.cc/) app projects.  
   
 </h1>
 
 <h3>
   
-( An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop). )    
+An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
   
 </h3>
 
-#### WORK IN PROGRESS!
+<br>
+
+<h3>
+<em>
+WORK IN PROGRESS!
+</em>
+</h3>
+
 
 <br>
 
-## FEATURES
+## OVERVIEW
+- Bundled batteries for your full OF Apps.
+- ofParameter Widgets.
+- Layout and Style Helpers.
+- Useful Modules/Systems.
+- Workflow Engines for the final user.
 
+## FEATURES
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
+  - Added custom useful widgets.
 - **Simple Setup**:
   - Simplified user **workflow**.
   - Many useful **Internal states** and persistent settings:
     - Minimize, debug, extra, advanced, auto resize...
-    - Log, Notifier and windows visibility and distribution. 
+    - Log, Notifier, and windows visibility and distribution. 
+    - Global Scale.
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
-- **ofParameter Helpers**:
-  - Many RAW **DearImGui widgets** adapted.
-  - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
-- Four active **Font Sizes** for labels and paragraphs.
+- Four active **Font Sizes** for labels, widgets and text paragraphs.
+  - Four optional extra fonts for alternate **monospaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
     -  _+Ctrl_ to finetune.
@@ -42,8 +57,13 @@ for [openFrameworks](https://openframeworks.cc/) projects.
     - To Reset to param **Center**.
     - _+Ctrl_ to Reset to **Min**.
     - _+Alt_ to Reset to **Max**.
-- **Windows Organizer**:
-    - Aligner, cascade and Group/Linker.
+- **Themes Editor** example:  ( WIP )
+    - **20+ bundled themes** compilation. 
+    - Hardcoded and `ini` files.
+    - File serializers, A-B compare, sizes and/or colors.
+    - **Manager**, **Demo Window** and **Tester Widgets**.
+
+## MODULES / SYSTEMS
 - **Log System**:
     - With custom **tags**.
 - **Notifier System**:
@@ -51,63 +71,37 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 - **Debugger System**:
     - Metrics: frame rate and frame time.
     - Profiler: Cpu and Gpu measurements.
-- **Text Editor**: 
+- **Text Editor System**: 
     - Language marks with custom marked **keyworks**.
     - Font sizes, color themes.
     - **Clipboard** access and **undo/redo** history.
 - **Console System**: ( WIP )
     - Basic console/**terminal** module.
     - Call methods/**commands** by typing into the console.
-- **Image Inspector**:
+- **Image Inspector System**:
     - With pixel color picker.
-- **Themes Editor**:  ( WIP )
-    - **20+ bundled themes** compilation. 
-    - Hardcoded and `ini` files.
-    - File serializers, A-B compare, sizes and/or colors.
-    - **Manager**, **Demo Window** and **Tester Widgets**.
+
+## ENGINES
+- **Windows Organizer**:
+    - Aligner, cascade and Group/Linker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
 <br>
 
-<details>
-  <summary>WIDGETS LIST</summary>
-  <p>    
-    
-- Big Toggles and Buttons.
-- Vertical and Horizontal Sliders.
-- Range Sliders.
-- Styled Knobs.
-- Tree and indented folders.
-- Floating tooltips, labels and values.
-- Dropdown / Combo index selector and names.
-- Matrix buttons to an index selector.
-- Bundled widgets like arrows linked to int params for browsing.
-- DearWidgets.
-- Gradient Color Designer.
-- Progress bars and waiting spinners.
-- Files Browser.
-- Curve Editors.
-- Log and Notifier System.
-- Text Editor, for live coding or text content.
-- Profile Plotters.
-- ...
-  
-  </p>
-  </details>
+## EXAMPLES SCREENSHOTS
+
+[Examples_0_Basic](/Examples_0_Basic/README.md)  
+[Examples_1_Widgets](/Examples_1_Widgets/README.md)  
+[Examples_2_Modules](/Examples_2_Modules/README.md)  
+[Examples_3_Engines](/Examples_3_Engines/README.md)  
+[Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
 
 <br>
 
-## EXAMPLES
+### EXAMPLE: 01_HelloWorld
 
-[EXAMPLES SCREENSHOTS](/Examples/README.md)  
-
-<br>
-
-### EXAMPLE: 00_HelloWorld
-
-![](/Examples/00_HelloWorld/Capture.PNG)  
-
+![](/Examples_0_Basic/01_HelloWorld/Capture.PNG)
 <details>
   <summary>CODE</summary>
   
@@ -121,42 +115,43 @@ for [openFrameworks](https://openframeworks.cc/) projects.
 
 class ofApp : public ofBaseApp
 {
-public:
-	void draw();
+  public:
+  void draw();
 
-	ofxSurfingGui ui;
+  ofParameter<bool> bEnable{ "Enable", true };
+  ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
+  ofParameterGroup params{ "MyGroup", bEnable, speed };
 
-	ofParameter<bool> bGui{ "Show", true };
-	ofParameter<bool> bEnable{ "Enable", true };
-	ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
-	ofParameterGroup params{ "MyGroup", bEnable, speed };
+  ofParameter<bool> bGui{ "Show", true };	
+  ofxSurfingGui ui;
 };
 ```
 
 #### ofApp.cpp
 
 ```.cpp
+
+#include "ofApp.h"
+
 void ofApp::draw()
 {
-	ui.Begin();
-	{
-		/* Put windows here */
+  ui.Begin();
+  {
+    /* Put windows here */
+    if (ui.BeginWindow(bGui))
+    {
+      /* Put widgets here */
+      ui.AddLabelBig("00_HelloWorld");
+      ui.AddSpacing();
+      ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+      ui.Add(speed, OFX_IM_HSLIDER);
+      ui.AddSpacingSeparated();
+      ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
 
-		if (ui.BeginWindow(bGui))
-		{
-			/* Put widgets here */
-
-			ui.AddLabelBig("00_HelloWorld");
-			ui.AddSpacing();
-			ui.Add(bEnable, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-			ui.Add(speed, OFX_IM_HSLIDER);
-			ui.AddSpacingSeparated();
-			ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
-
-			ui.EndWindow();
-		}
-	}
-	ui.End();
+      ui.EndWindow();
+    }
+  }
+  ui.End();
 }
 ```
 
@@ -166,35 +161,20 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
+### ImGui BACKEND
+
 * [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
-  - Dear **ImGui v1.89.4** / OF BackEnd.
-  - The **AWESOME** [@Daandelange](https://github.com/Daandelange)'s **FORK**.
-  - You **MUST use this one**!
+  - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - The **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - You **MUST use this one**! Use instead of the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui).
 
-<details>
-  <summary>RELATED LINKS</summary>  
-  
-* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
-  - _A **Testing Sandbox** with **New WIP examples** and new incoming widgets._
-* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
-  - _Not required. Only for some examples._
-* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
-  - _Not required. Only for some examples._
-* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
-  - 3rd party modules/widgets that could be integrated.
-* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
-  - Inspiration gallery from user's apps.
-  
-</details>
+### DATA ASSET FILES
 
-### DATA FILES
-
-* **JetBrainsMono-Bold.ttf**:
-  - The font file for the default theme.
-  - To put into `/bin/data/assets/fonts/`.  
-* [assets.zip](assets.zip):
-  - Optional.
-  - More font files from the same family. To put into each project `OF_APP/bin/data/`.  
+* Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
+  - The monospaced font file for the default theme.
+  - Put into `/bin/data/assets/fonts/`.  
+* Optional: [data.zip](data.zip)
+  - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
 
 <details>
   <summary>NOTE ABOUT THE FONTS</summary>  
@@ -207,25 +187,41 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
   <summary>WHY ANOTHER ofxImGui FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [legacy](https://github.com/jvcleave/ofxImGui) **ofxImGui** from [@jvcleave](https://github.com/jvcleave)? 
+- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
   - Multi context / instances: 
-    - Several windows from different add-ons without colliding.  
+    - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
-    Currently this fork is linked to the [develop branch](https://github.com/jvcleave/ofxImGui/tree/develop) on the original **ofxImGui** from **@jvcleave**.  
-    And will be probably merged into the master branch.  
+    Currently this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
+    And will be probably merged into the master branch someday.  
     
  </p>
+</details>
+
+<details>
+  <summary>RELATED LINKS</summary>  
+  
+* [ofxSurfingImGuiExtra](https://github.com/moebiussurfing/ofxSurfingImGuiExtra)
+  - _My **Testing Sandbox** with **New WIP examples** and new incoming widgets._
+* [imgui/wiki/Useful-Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions#image-manipulation)
+  - 3rd party ImGui modules/widgets that could be integrated.
+* [imgui/labels/gallery](https://github.com/ocornut/imgui/labels/gallery)
+  - Inspiration Gallery from ImGui user's apps.
+* [ofxWindowApp](https://github.com/moebiussurfing/ofxWindowApp)
+  - _Not required. Only for some examples._
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)
+  - _Not required. Only for some examples._
+  
 </details>
 
 <br>
 
 ## CURRENT SYSTEMS
 
-- **Windows 10** / **VS 2022**
+- **Windows 11** / **Visual Studio 2022**
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). ( **Intel** )  
-    * Not tested on **M1/M2 Apple Silicon** yet. ( Testers are welcome! ).
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**  
+    * Not tested on **M1/M2 Apple Silicon/iOS** yet. Testers are welcome!.
 
 <br>
 
@@ -234,12 +230,19 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 An addon by **moebiusSurfing**.  
 *( ManuMolina ) 2021-2023*  
 
+<br>
+
 ## THANKS
 
 _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
+
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
+
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
+
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+
+<br>
 
 ## LICENSE
 

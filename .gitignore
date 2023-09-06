@@ -567,3 +567,8 @@ examples/1_Widgets/bin/imgui.ini
 *.xcconfig
 *.plist
 Examples/09_ThemeEditor/enc_temp_folder/b2a934c1d5c411f191ab9e828e95b6/surfingThemes.h
+Examples/04_LogSystem/enc_temp_folder/628c8cdba4723e8cfccf88d5afd294a4/GuiManager.cpp
+Examples/04_LogSystem/enc_temp_folder/72976bd6906e67b031b0df9b468ab6bb/ofApp.cpp
+Examples/04_LogSystem/enc_temp_folder/b1db785570e2c08bbe9c7182f36f9e52/GuiManager.h
+Examples/00_HelloWorld2/enc_temp_folder/2e9971d07872fcc4ec70135f892eaa34/GuiManager.cpp
+src/sync.ffs_db
