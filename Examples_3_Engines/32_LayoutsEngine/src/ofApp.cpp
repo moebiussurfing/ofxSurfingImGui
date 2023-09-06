@@ -4,8 +4,10 @@
 void ofApp::setup() {
 
 	// Windows position and size
+#if 1
 	ofSetFrameRate(60);
 	ofSetWindowPosition(-1920, 25);
+#endif
 
 	//----
 
@@ -52,11 +54,11 @@ void ofApp::setupImGui()
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
 
-	ui.addWindowSpecial("Main");	// remember index 0
-	ui.addWindowSpecial("Audio");	// index 1
-	ui.addWindowSpecial("Video1");	// index 2
-	ui.addWindowSpecial("Video2");	// index 3
-	ui.addWindowSpecial("Expert");	// index 4
+	ui.addWindowSpecial("Main"); // remember index 0
+	ui.addWindowSpecial("Audio"); // index 1
+	ui.addWindowSpecial("Video1"); // index 2
+	ui.addWindowSpecial("Video2"); // index 3
+	ui.addWindowSpecial("Expert"); // index 4
 
 	//-
 
@@ -67,7 +69,8 @@ void ofApp::setupImGui()
 	//-
 
 	// 4. Optional Help Info for your App
-	// Must set after startup	
+	
+	// Must be settled after startup	
 
 	string s = R"(
 
@@ -212,7 +215,7 @@ void ofApp::drawWindow0()
 	{
 		// Take care not forcing position, sizes or constraints if the window is not being drawn.
 		// If not, this properities will be applied to the ohter next window drawn!
-		if (ui.getWindowSpecialVisible(index)) {
+		if (ui.getIsWindowSpecialVisible(index)) {
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 		}
 		if (ui.BeginWindowSpecial(index))
@@ -221,8 +224,8 @@ void ofApp::drawWindow0()
 			// e.g. when using raw ImGui widgets without the full engine.
 			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
 			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			float _h = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
-			float _h2 = 2 * _h; // double height
+			float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
+			float _h2 = 2 * _h1; // double height
 
 			// if ui.bHelp enabled, activates help tooltips on this window!
 
@@ -388,7 +391,7 @@ void ofApp::drawWindow3()
 {
 	int index = 3;
 	{
-		if (ui.getWindowSpecialVisible(index)) {
+		if (ui.getIsWindowSpecialVisible(index)) {
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 		}
 		if (ui.BeginWindowSpecial(index))
@@ -417,9 +420,9 @@ void ofApp::drawWindow4()
 {
 	int index = 4;
 	// ->This method can get the state (if it's open) of the special window.
-	// if (ui.getWindowSpecialVisible(index))
+	// if (ui.getIsWindowSpecialVisible(index))
 	{
-		if (ui.getWindowSpecialVisible(index)) {
+		if (ui.getIsWindowSpecialVisible(index)) {
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
 		}
 		if (ui.BeginWindowSpecial(index))
@@ -428,10 +431,10 @@ void ofApp::drawWindow4()
 			ui.AddLabelBig(s, false, true);
 
 			ui.AddLabel("Hello, left!", false, true);
-			ui.AddLabelBig("Hello, left!");
-			ui.AddLabelBig("Hello, left!", false);
-			ui.AddLabelHuge("Hello, left!", true, true);
-			ui.AddLabelHuge("Hello, left!", false, false);
+			ui.AddLabelBig("Hello, left Big!");
+			ui.AddLabelBig("Hello, left Big!", false);
+			ui.AddLabelHuge("Hello, left Huge!", true, true);
+			ui.AddLabelHuge("Hello, left Huge!", false, false);
 
 			// ->Notice that End method must be called inside of the brackets, 
 			// like the above 1 to 3 windows.
@@ -471,9 +474,9 @@ void ofApp::setupImGuiStyles()
 	ui.AddStyle(amount2, OFX_IM_DRAG);
 
 	// params3
-	ui.AddStyle(lineWidth3, OFX_IM_KNOB, 2, true);
-	ui.AddStyle(separation3, OFX_IM_KNOB, 2, false);
-	ui.AddStyle(speed3, OFX_IM_KNOB);
+	ui.AddStyle(lineWidth3, OFX_IM_KNOB_DOTKNOB, 2, true);
+	ui.AddStyle(separation3, OFX_IM_KNOB_DOTKNOB, 2, false);
+	ui.AddStyle(speed3, OFX_IM_KNOB_DOTKNOB);
 }
 
 //--

@@ -1109,7 +1109,7 @@ void SurfingGuiManager::startup()
 	//setEnableHelpInternal();
 
 	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
-	
+
 	//--
 
 	setDefaultFont();
@@ -1814,7 +1814,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-}
+	}
 #endif
 
 	//--
@@ -1929,7 +1929,13 @@ void SurfingGuiManager::drawLayoutsManager()
 
 	//-
 
-	if (bGui_LayoutsManager) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+	if (bGui_LayoutsManager) {
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		float w = 150;
+		ImVec2 size_min = ImVec2(w, -1);
+		ImVec2 size_max = ImVec2(w, -1);
+		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+	}
 
 	if (this->BeginWindow(bGui_LayoutsManager, flagsMng))
 	{
@@ -1969,6 +1975,7 @@ void SurfingGuiManager::drawLayoutsManager()
 			static bool bOpen = false;
 			ImGuiColorEditFlags _flagw = (bOpen ? ImGuiWindowFlags_NoCollapse : ImGuiWindowFlags_None);
 
+			ImGui::PushID("##PANELS1");
 			if (ImGui::CollapsingHeader("PANELS", _flagw))
 			{
 				this->AddSpacing();
@@ -1995,6 +2002,9 @@ void SurfingGuiManager::drawLayoutsManager()
 					setShowAllPanels(false);
 				}
 			}
+			ImGui::PopID();
+
+			this->AddSpacingSeparated();
 		}
 
 		//--
@@ -2010,10 +2020,13 @@ void SurfingGuiManager::drawLayoutsManager()
 			ImGui::TreePop();
 		}
 
+		this->AddSpacingSeparated();
+
 		//--
 
 		// Window Panels
 
+		ImGui::PushID("##PANELS2");
 		if (ImGui::TreeNode("PANELS"))
 		{
 			this->refreshLayout();
@@ -2026,6 +2039,7 @@ void SurfingGuiManager::drawLayoutsManager()
 
 			ImGui::TreePop();
 		}
+		ImGui::PopID();
 
 		//--
 
@@ -2033,7 +2047,9 @@ void SurfingGuiManager::drawLayoutsManager()
 
 		if (!bMinimize_Presets)
 		{
-			if (!bGui_LayoutsPanels) this->AddSpacingSeparated();
+			//if (!bGui_LayoutsPanels) this->AddSpacingSeparated();
+			this->AddSpacingSeparated();
+
 			this->AddGroup(params_LayoutsExtra);
 		}
 
@@ -3559,9 +3575,16 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	//--
 
 	// Window
+
 	if (bGui_LayoutsPresetsSelector) {
-		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MINI;
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
+		float w = 180;
+		ImVec2 size_min = ImVec2(w, -1);
+		ImVec2 size_max = ImVec2(w, -1);
+		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
 	}
+
 	if (this->BeginWindow(bGui_LayoutsPresetsSelector, flags_wPr))
 	{
 		float _h = 2 * ofxImGuiSurfing::getWidgetsHeightUnit();
@@ -3587,7 +3610,8 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 
 		// Panels
 
-		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h));
+		//ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, (bMinimize_Presets ? _h * 0.75f : _h)); // variable size
+		ofxImGuiSurfing::AddBigToggle(bGui_LayoutsPanels, _w1, _h); // fixed size
 		this->AddTooltip("F6");
 
 		// Manager
@@ -3595,6 +3619,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 		//if (!bMinimize_Presets) ofxImGuiSurfing::AddBigToggle(bGui_LayoutsManager, _w1, (bMinimize_Presets ? _h / 2 : _h));
 		if (!bMinimize_Presets)
 		{
+			this->AddSpacing();
 			this->Add(bGui_LayoutsManager, OFX_IM_TOGGLE_ROUNDED);
 			this->AddTooltip("F7");
 		}
@@ -4937,7 +4962,7 @@ void SurfingGuiManager::drawMenuDocked()
 		if (ImGui::BeginMenu("About"))
 		{
 			ofxImGuiSurfing::AddTooltipHelp(
-				"WARNING\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
+				"WARNING !\n\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
 				"\n\n"
 				"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 				"- Drag from window title bar or their tab to dock/undock." "\n"

@@ -1,16 +1,14 @@
  #pragma once
-
+#include "ofMain.h"
 
 /*
 
-This example shows how to use the
-LAYOUT PRESETS ENGINE
-Activate Help toggle to read the floating help box info.
+	This example shows how to use the
+	LAYOUT PRESETS ENGINE
+	Activate Help toggle to read the floating help box info.
 
 */
 
-
-#include "ofMain.h"
 
 #include "ofxSurfingImGui.h"
 
@@ -28,7 +26,7 @@ public:
 	void drawWindow3();
 	void drawWindow4();
 
-	// another approach using toggle params
+	// Another approach using toggle params instead of just names.
 	//ofParameter<bool> bGui_Main{"Main", false};
 	//ofParameter<bool> bGui_Audio{"Audio", false};
 	//ofParameter<bool> bGui_Video1{"Video1", false};
@@ -74,7 +72,10 @@ public:
 	void setupImGui();
 	void drawImGui();
 
+	//--
+
 	// Optional
+
 	void setupImGuiStyles(); // -> Custom some styles for groups
 	void drawImGuiDocking();
 

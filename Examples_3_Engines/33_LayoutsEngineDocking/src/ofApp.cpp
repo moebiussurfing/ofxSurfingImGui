@@ -121,7 +121,7 @@ void ofApp::setupImGui()
 
 	// Help info
 	string s = "HELP ofApp\n\nThis is an Example to learn \nthe Docking features.\n\nEnjoy!";
-	ui.setHelpInfoApp(s);
+	ui.setHelpAppText(s);
 }
 
 //--------------------------------------------------------------
