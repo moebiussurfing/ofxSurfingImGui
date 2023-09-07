@@ -163,7 +163,7 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-### * ImGui OF BACKEND
+### - ImGui OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
@@ -185,7 +185,7 @@ void ofApp::draw()
  </p>
 </details>
 
-### DATA ASSET FILES
+### - DATA ASSET FILES
 
 * Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
   - The monospaced font file for the default theme.
