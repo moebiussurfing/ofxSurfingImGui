@@ -19,6 +19,7 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
 
 <h3>
 <em>
+  
 WORK IN PROGRESS!
 </em>
 </h3>
