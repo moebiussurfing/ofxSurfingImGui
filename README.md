@@ -33,21 +33,21 @@ WORK IN PROGRESS!
 - Workflow Engines for the final user.
 
 ## FEATURES
-- **ofParameter Helpers**:
-  - Many RAW **DearImGui widgets** adapted.
-  - Added custom useful widgets.
 - **Simple Setup**:
-  - Simplified user **workflow**.
+  - Simplified coder and user **workflow**.
   - Many useful **Internal states** and persistent settings:
     - Minimize, debug, extra, advanced, windows auto resize...
     - Log, Notifier, and windows visibility and distribution. 
     - Global Scale.
-- **Multiple instances**:
-  - Many windows around your classes and **ofxAddons**.
-  - All together without colliding.
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
+  - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
+- **Multiple instances**:
+  - Many windows around your classes and **ofxAddons**.
+  - All together without colliding.
 - Four active **Font Sizes** for labels, widgets, and text paragraphs.
   - Four optional extra fonts for alternate **monospaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
@@ -187,10 +187,10 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 </details>
   
 <details>
-  <summary>WHY ANOTHER ofxImGui FORK?</summary>
+  <summary>WHY ANOTHER BACKEND FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
+- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
   - Multi context/instances: 
     - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
