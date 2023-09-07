@@ -172,7 +172,7 @@ void ofApp::draw()
 
 ### DATA ASSET FILES
 
-* Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
+* Recommended: [JetBrainsMono-Bold.ttf](data/assets/fonts/JetBrainsMono-Bold.ttf)
   - The monospaced font file for the default theme.
   - Put into `/bin/data/assets/fonts/`.  
 * Optional: [data.zip](data.zip)
