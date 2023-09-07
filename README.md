@@ -26,11 +26,11 @@ WORK IN PROGRESS!
 <br>
 
 ## OVERVIEW
-- Bundled batteries for your full OF Apps.
-- ofParameter Widgets.
-- Layout and Style Helpers.
-- Useful Modules/Systems.
-- Workflow Engines for the final user.
+- **Bundled batteries** for your full **Desktop OF Apps**.
+- **ofParameter** Widgets.
+- **Layout** and **Style** Helpers.
+- Useful **Modules**/**Systems**.
+- **Workflow Engines** for the final user.
 
 ## FEATURES
 - **Simple Setup**:
@@ -39,12 +39,12 @@ WORK IN PROGRESS!
     - Minimize, debug, extra, advanced, windows auto resize...
     - Log, Notifier, and windows visibility and distribution. 
     - Global Scale.
-- **ofParameter Helpers**:
-  - Many RAW **DearImGui widgets** adapted.
-  - Added custom useful widgets.
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
+  - Added custom useful widgets.
 - **Multiple instances**:
   - Many windows around your classes and **ofxAddons**.
   - All together without colliding.
