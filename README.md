@@ -161,9 +161,9 @@ void ofApp::draw()
 
 <br>
 
-## DEPENDENCIES
+## REQUERIMENTS
 
-### - ImGui OF BACKEND
+### ImGui OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
@@ -185,7 +185,7 @@ void ofApp::draw()
  </p>
 </details>
 
-### - DATA ASSET FILES
+### DATA ASSET FILES
 
 * Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
   - The monospaced font file for the default theme.
@@ -200,6 +200,8 @@ void ofApp::draw()
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, it will search for a legacy font called **telegrama_render.otf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
 
 </details>
+
+<br>
 
 <details>
   <summary>RELATED LINKS</summary>  
