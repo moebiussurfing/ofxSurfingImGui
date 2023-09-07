@@ -90,7 +90,7 @@ WORK IN PROGRESS!
  
 <br>
 
-## EXAMPLES SCREENSHOTS
+# SCREENSHOTS
 
 - [Examples_0_Basic](/Examples_0_Basic/README.md)  
 - [Examples_1_Widgets](/Examples_1_Widgets/README.md)  
