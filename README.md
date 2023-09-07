@@ -161,7 +161,7 @@ void ofApp::draw()
 
 # REQUERIMENTS
 
-## ImGui OF BACKEND
+## IMGUI OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
