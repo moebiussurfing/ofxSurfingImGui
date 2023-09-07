@@ -3,10 +3,21 @@
 
 /*
 
-	This example show a docking mode without the layout presets engine activated.
+	This example show a docking mode
+	(without the layout presets engine activated)
+
+	- Layout is persistent.
+	- We can reset layout to a default layout.
+	- We can randomize the layout.
+
 
 	TODO
+
 	Fix handle persistence of bGui special windows states
+	Add manual save/load 
+		(we could use the imgui.ini or another file)
+	Get center rectangle to draw a viewport.
+	Make some of these helpers internal to the GuiManger
 
 */
 

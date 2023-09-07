@@ -1,4 +1,4 @@
-#include "GuiManager.h"
+#include "SurfingGuiManager.h"
 
 int SurfingGuiManager::instanceCount = 0;
 
@@ -3111,28 +3111,6 @@ void SurfingGuiManager::EndWindowAnyType(ofParameter<bool>& p)
 
 // Docking Helpers
 
-#ifdef FIXING_DOCKING
-//--------------------------------------------------------------
-void SurfingGuiManager::beginDocking()
-{
-	// Make windows transparent, to demonstrate drawing behind them.
-	//ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(200, 200, 200, 128)); // This styles the docked windows
-
-	ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode; // Make the docking space transparent
-	// Fixes imgui to expected behaviour, having a transparent central node in passthru mode.
-	// Alternative: Otherwise add in ImGui::DockSpace() [~line 14505] : if (flags & ImGuiDockNodeFlags_PassthruCentralNode) window_flags |= ImGuiWindowFlags_NoBackground;
-	//ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(0, 0, 0, 0));
-
-	//dockingFlags |= ImGuiDockNodeFlags_NoDockingInCentralNode; // Uncomment to always keep an empty "central node" (a visible oF space)
-	//dockingFlags |= ImGuiDockNodeFlags_NoTabBar; // Uncomment to disable creating tabs in the main view
-
-	// Define the ofWindow as a docking space
-	ImGuiID dockNodeID = ImGui::DockSpaceOverViewport(NULL, dockingFlags); // Also draws the docked windows
-	//ImGui::PopStyleColor(2);
-}
-#endif
-
-#ifndef FIXING_DOCKING
 //--------------------------------------------------------------
 void SurfingGuiManager::BeginDocking()
 {
@@ -3206,15 +3184,10 @@ void SurfingGuiManager::BeginDocking()
 		drawLayoutsPresetsEngine();
 	}
 }
-#endif
 
 //--------------------------------------------------------------
 void SurfingGuiManager::EndDocking()
 {
-#ifdef FIXING_DOCKING
-	return;
-#endif
-
 	if (bGui_TopMenuBar) drawMenuDocked();
 
 	//--
@@ -3439,7 +3412,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 bool SurfingGuiManager::loadSettings()
 {
 	ofLogNotice("ofxSurfingImGui") << "loadSettings()" << " " << path_AppSettings;
-	bool b = loadGroup(params_AppSettings, path_AppSettings, true);
+	bool b = loadGroup(params_AppSettings, path_AppSettings, false);
 	if(!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
 
 	return b;

@@ -59,7 +59,7 @@
 // like pushing font styles...
 //#include "ofxSurfingImGui.h"
 //#include "ofHelpers.h"
-//#include "GuiManager.h"
+//#include "SurfingGuiManager.h"
 
 // This namespace is required to access some widgets helpers used below.
 // no other classes are included, so I don't know why they are included.

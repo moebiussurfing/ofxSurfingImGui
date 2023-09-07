@@ -20,6 +20,7 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS // access to math operators
 #include "imgui_internal.h"
+
 #include "ofxImGui.h"
 
 //#include "ImHelpers.h" // from ofxImGui
@@ -33,7 +34,7 @@
 // You must include them manually from 
 // OFX_ADDON/_LIBS if you want to use it in your project.
 
-#include "GuiManager.h"
+#include "SurfingGuiManager.h"
 
 //--------------------------------------------------------------
 
@@ -41,7 +42,6 @@
 
 using namespace ofxImGuiSurfing;
 using ofxImGuiSurfing::SurfingFontTypes;
-//using namespace ofxImGuiSurfing;
 
 // Short alias for the main gui manager class.
 // To be used into ofApp.

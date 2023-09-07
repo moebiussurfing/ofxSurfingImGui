@@ -15,7 +15,8 @@
 
 // DEBUG
 
-#define SURFING_DEBUG_FONTS//TODO: comment to bypass set default font on Begin
+#define SURFING_DEBUG_FONTS
+//TODO: comment to bypass set default font on Begin
 
 //--
 
@@ -31,7 +32,8 @@
 
 #define SURFING_IMGUI__USE_NOTIFIER
 #define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 5000
-//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE // if undefined settings will be bundled into main settings.
+//#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE 
+// if undefined settings will be bundled into main settings.
 
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
 
@@ -76,7 +78,7 @@
 // When files are not located there, then will load a hardcoded default theme: 
 // ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
-// Night Theme
+// Night Theme (Default)
 #define THEME_NAME_NIGHT "moebiusSurfing.ini"
 
 // Day Theme
@@ -87,9 +89,13 @@
 // Default settings files are:
 // bin\data\Gui\SurfingGui_UI_Internal.json
 // bin\data\Gui\SurfingGui_UI_Organizer.json
+
 #define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
 #define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
-// But, to allow multiple instances, it can be customized, before adding special windows and setup() by:
+
+// But, to allow multiple instances, it can be customized, 
+// before adding special windows and setup() by:
+// 
 // ui.setName("myOfApp");
 // \bin\data\myOfApp\Gui\
 // myOfApp_UI_Internal.json
@@ -155,7 +161,6 @@
 
 //TODO:
 // Testing central view-port
-//#define FIXING_DOCKING // Need to fix yet
 #define FIXING_DRAW_VIEWPORT // To debug free space
 
 //----
@@ -211,11 +216,20 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	enum SurfingGuiTypes
 	{
-		OFX_IM_DEFAULT = 0, // Default style for each widget. (kind of like ofxImGui does)
-		OFX_IM_HIDDEN, // Omit widget. don't let spacing there.
-		OFX_IM_DISABLED, // Make it invisible, preserve the void spacing. it's a common height but could differs..
-		OFX_IM_INACTIVE, // Draws the widget. but makes it inactive. disables mouse control.
-		OFX_IM_SPACING, // Make it invisible, preserve a custom (one standard line) spacing.
+		OFX_IM_DEFAULT = 0, 
+		// Default style for each widget. (kind of like ofxImGui does)
+
+		OFX_IM_HIDDEN,
+		// Omit widget. don't let spacing there.
+
+		OFX_IM_DISABLED,
+		// Make it invisible, preserve the void spacing. it's a common height but could differs..
+
+		OFX_IM_INACTIVE,
+		// Draws the widget. but makes it inactive. disables mouse control.
+
+		OFX_IM_SPACING,
+		// Make it invisible, preserve a custom (one standard line) spacing.
 
 		//--
 
@@ -398,13 +412,19 @@ namespace ofxImGuiSurfing
 
 		// Strings
 
+		//TODO: add button and fix callback to trig 
+		// when hitting enter or submit button clicked
+	
+
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_INPUT_NO_NAME,
 		OFX_IM_TEXT_INPUT_NAMED,
-		OFX_IM_TEXT_INPUT_NAMED_PADDED,//to align with other clipped widgets like stepper
+		OFX_IM_TEXT_INPUT_NAMED_PADDED, // to align with other clipped widgets like stepper
 
-		//TODO: get from bigTextInput widget
-		//would be better to add it on v3 API with arguments as imgui does (bitwise shift).
+		//TODO: 
+		// Get from bigTextInput widget
+		// would be better to add it on v3 API 
+		// with arguments as imgui does (bitwise shift).
 		OFX_IM_TEXT_INPUT_HINT,
 
 		OFX_IM_TEXT_DISPLAY,
