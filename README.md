@@ -170,6 +170,20 @@ void ofApp::draw()
   - You **MUST use this one**! 
   - Do not use the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui)!
 
+<details>
+  <summary>WHY ANOTHER BACKEND FORK?</summary>
+  <p>
+
+- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
+  - Multi context/instances: 
+    - Several ImGui windows from different addons without colliding.  
+  - Easy to update to future **NEW ImGui** releases.  
+    Currently, this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
+    And will be probably merged into the master branch someday.  
+    
+ </p>
+</details>
+
 ### DATA ASSET FILES
 
 * Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
@@ -184,20 +198,6 @@ void ofApp::draw()
   
 The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, it will search for a legacy font called **telegrama_render.otf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
 
-</details>
-  
-<details>
-  <summary>WHY ANOTHER BACKEND FORK?</summary>
-  <p>
-
-- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
-  - Multi context/instances: 
-    - Several ImGui windows from different addons without colliding.  
-  - Easy to update to future **NEW ImGui** releases.  
-    Currently, this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
-    And will be probably merged into the master branch someday.  
-    
- </p>
 </details>
 
 <details>
