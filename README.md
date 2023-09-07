@@ -26,7 +26,7 @@ WORK IN PROGRESS!
 
 <br>
 
-## OVERVIEW
+# OVERVIEW
 - **Bundled batteries** for your full **Desktop OF Apps**.
 - **ofParameter** Widgets.
 - **Layout** and **Style** Helpers.
@@ -98,10 +98,7 @@ WORK IN PROGRESS!
 - [Examples_3_Engines](/Examples_3_Engines/README.md)  
 - [Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
 
-<br>
-
 ## EXAMPLE: 00_HelloWorld
-
 ![](/Examples_0_Basic/01_HelloWorld/Capture.PNG)
 <details>
   <summary>CODE</summary>
@@ -161,9 +158,9 @@ void ofApp::draw()
 
 <br>
 
-## REQUERIMENTS
+# REQUERIMENTS
 
-### ImGui OF BACKEND
+## ImGui OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
@@ -185,7 +182,7 @@ void ofApp::draw()
  </p>
 </details>
 
-### DATA ASSET FILES
+## DATA ASSET FILES
 
 * Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
   - The monospaced font file for the default theme.
