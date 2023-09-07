@@ -15,7 +15,6 @@ An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop
   
 </h3>
 
-<br>
 
 <h3>
 <em>
@@ -40,7 +39,7 @@ WORK IN PROGRESS!
 - **Simple Setup**:
   - Simplified user **workflow**.
   - Many useful **Internal states** and persistent settings:
-    - Minimize, debug, extra, advanced, auto resize...
+    - Minimize, debug, extra, advanced, windows auto resize...
     - Log, Notifier, and windows visibility and distribution. 
     - Global Scale.
 - **Multiple instances**:
@@ -49,7 +48,7 @@ WORK IN PROGRESS!
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
-- Four active **Font Sizes** for labels, widgets and text paragraphs.
+- Four active **Font Sizes** for labels, widgets, and text paragraphs.
   - Four optional extra fonts for alternate **monospaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
@@ -60,7 +59,7 @@ WORK IN PROGRESS!
     - _+Alt_ to Reset to **Max**.
 - **Themes Editor** example:  ( WIP )
     - **20+ bundled themes** compilation. 
-    - Hardcoded and `ini` files.
+    - Hardcoded and `.ini` files.
     - File serializers, A-B compare, sizes and/or colors.
     - **Manager**, **Demo Window** and **Tester Widgets**.
 
@@ -73,18 +72,18 @@ WORK IN PROGRESS!
     - Metrics: frame rate and frame time.
     - Profiler: Cpu and Gpu measurements.
 - **Text Editor System**: 
-    - Language marks with custom marked **keyworks**.
+    - Language marks with custom marked **keywords**.
     - Font sizes, color themes.
     - **Clipboard** access and **undo/redo** history.
+- **Image Inspector System**:
+    - Zoom with pixel color picker.
 - **Console System**: ( WIP )
     - Basic console/**terminal** module.
     - Call methods/**commands** by typing into the console.
-- **Image Inspector System**:
-    - With pixel color picker.
 
 ## ENGINES
 - **Windows Organizer**:
-    - Aligner, cascade and Group/Linker.
+    - Aligner, cascade, and Group/Linker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
@@ -92,11 +91,11 @@ WORK IN PROGRESS!
 
 ## EXAMPLES SCREENSHOTS
 
-[Examples_0_Basic](/Examples_0_Basic/README.md)  
-[Examples_1_Widgets](/Examples_1_Widgets/README.md)  
-[Examples_2_Modules](/Examples_2_Modules/README.md)  
-[Examples_3_Engines](/Examples_3_Engines/README.md)  
-[Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
+- [Examples_0_Basic](/Examples_0_Basic/README.md)  
+- [Examples_1_Widgets](/Examples_1_Widgets/README.md)  
+- [Examples_2_Modules](/Examples_2_Modules/README.md)  
+- [Examples_3_Engines](/Examples_3_Engines/README.md)  
+- [Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
 
 <br>
 
@@ -163,7 +162,7 @@ void ofApp::draw()
 
 ## DEPENDENCIES
 
-### ImGui BACKEND
+### ImGui OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
   - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
@@ -175,15 +174,15 @@ void ofApp::draw()
 
 * Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
   - The monospaced font file for the default theme.
-  - Put into `/bin/data/assets/fonts/`.  
+  - Put into `OF_APP/bin/data/assets/fonts/`.  
 * Optional: [data.zip](data.zip)
-  - More font files (non monospaced alternative) from the same family.
+  - More font files (non-monospaced alternative) from the same family.
   - Put into each **OF project** `OF_APP/bin/data/`.  
 
 <details>
   <summary>ABOUT THE FONTS</summary>  
   
-The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `/data` can also be completely empty too!) 
+The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, it will search for a legacy font called **telegrama_render.otf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
 
 </details>
   
@@ -192,10 +191,10 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
   <p>
 
 - What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
-  - Multi context / instances: 
+  - Multi context/instances: 
     - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
-    Currently this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
+    Currently, this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
     And will be probably merged into the master branch someday.  
     
  </p>
@@ -226,7 +225,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
     * Not tested on **M1/M2 Apple Silicon/iOS** yet.
-    * Testers are welcome!.
+    * Testers are welcome!
 
 <br>
 
