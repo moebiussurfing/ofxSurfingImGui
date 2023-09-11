@@ -150,6 +150,7 @@ public:
 	//TODO:
 private:
 	static int instanceCount;
+	int instanceNumber;
 	bool bIsMasterInstance = false;
 public:
 	int getInstanceCount() {
@@ -1566,6 +1567,7 @@ public:
 	// Call after (all imgui related) setup()'s, 
 	// but before pushing extra fonts. 
 	// The default style will use the passed size,
+	// 3 other font sizes will be auto created: Default/Big/Huge/HugeXXL
 	// the other three styles will be up scaled!
 	// It's an alias of BuildFontStyles().
 	void setupFontForDefaultStyles(string pathFont, float sizeFont)
@@ -3641,6 +3643,8 @@ public:
 		// Notice that each instance will have his own folder path for setting files! 
 		// This name will be used on the folder name too.
 		nameLabel = name;
+
+		bGui.setName(name);
 
 		// split possible instances on different folders
 		path_Root = nameLabel + "/";

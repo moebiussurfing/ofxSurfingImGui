@@ -18,10 +18,12 @@ public:
 	void setup();
 	void draw();
 
+private:
 	ofxSurfingGui* ui = nullptr;
-
+public:
 	void setUiPtr(ofxSurfingGui* _ui);
 
+public:
 	ofParameterGroup params;
 	ofParameter<float> lineWidth;
 	ofParameter<float> separation;

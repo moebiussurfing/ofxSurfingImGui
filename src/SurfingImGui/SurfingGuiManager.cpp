@@ -11,6 +11,7 @@ SurfingGuiManager::SurfingGuiManager()
 	bool b = (this->getGuiPtr()->isMaster());
 	ofLogWarning("ofxSurfingImGui") << "Context:  " << (b ? "MASTER" : "SLAVE");
 	if (instanceCount == 0) bIsMasterInstance = true;
+	instanceNumber = instanceCount;
 	instanceCount++;
 
 	//--
@@ -35,7 +36,7 @@ SurfingGuiManager::SurfingGuiManager()
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
 	autoSaveListener = params_AppSettings.parameterChangedE().newListener([&](ofAbstractParameter&) {
 		this->saveSettings();
-		});
+});
 #endif
 
 	//--
@@ -70,7 +71,8 @@ SurfingGuiManager::SurfingGuiManager()
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager()
 {
-	ofLogNotice("ofxSurfingImGui") << "Destructor!";
+	ofLogNotice("ofxSurfingImGui") << "Destructor! Instance #" << instanceNumber;
+	ofLogNotice("ofxSurfingImGui") << "Name: " << nameLabel;
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	// Force saving but would expect to be already called 
@@ -87,7 +89,7 @@ SurfingGuiManager::~SurfingGuiManager()
 		ofLogWarning("ofxSurfingImGui") << "exit() was already called before as expected.";
 		ofLogWarning("ofxSurfingImGui") << "It was already done!";
 		ofLogWarning("ofxSurfingImGui") << "So we successfully omitted calling exit() herre in destructor.";
-	}
+}
 #endif
 
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
@@ -576,12 +578,6 @@ void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float size
 	setupFontDefault(pathFonts, nameFont, sizeFont);
 }
 
-////--------------------------------------------------------------
-//void SurfingGuiManager::setupFontDefault(string pathFont, float sizeFont)
-//{
-//	ofLogNotice("ofxSurfingImGui") << "setupFontDefault()" << pathFons << ", " << sizeFont;
-//}
-
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, float sizeFont)
 {
@@ -602,8 +598,8 @@ void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, floa
 
 	if (!b)
 	{
-		nameFont = FONT_DEFAULT_FILE_LEGACY;
-		sizeFont = FONT_DEFAULT_SIZE_LEGACY;
+		nameFont = OFX_IM_FONT_DEFAULT_FILE_LEGACY;
+		sizeFont = OFX_IM_FONT_DEFAULT_SIZE;
 	}
 
 	// Then check if legacy font file exists
@@ -675,8 +671,8 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 
 	if (!b) //not found
 	{
-		pathFont = ofToString(OFX_IM_FONT_DEFAULT_PATH_FONTS) + ofToString(FONT_DEFAULT_FILE_LEGACY);
-		sizeFont = FONT_DEFAULT_SIZE_LEGACY;
+		pathFont = ofToString(OFX_IM_FONT_DEFAULT_PATH_FONTS) + ofToString(OFX_IM_FONT_DEFAULT_FILE_LEGACY);
+		sizeFont = OFX_IM_FONT_DEFAULT_SIZE;
 	}
 
 	// Then check if legacy font file exists
@@ -799,10 +795,8 @@ void SurfingGuiManager::setupImGui()
 
 	// Setup ImGui with the appropriate config flags
 
-	if (guiPtr != nullptr)
-		guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
-	else
-		gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
 	if (bMouseCursorFromImGui) ofHideCursor();
 
@@ -816,7 +810,8 @@ void SurfingGuiManager::setupImGui()
 
 	//--
 
-	// Fonts
+	// Load Fonts
+	
 	//TODO: improve not loading more fonts than required:
 	// multiple instances would use the same font files!
 	//if (this->isMasterInstance()) setupFontDefault();
@@ -824,8 +819,15 @@ void SurfingGuiManager::setupImGui()
 
 	//--
 
-	//setDefaultFont();
-	//if (customFont != nullptr) ImGui::PushFont(customFont);
+	//TODO:
+
+	// Assign a default font 
+	
+	// To be used everywhere when is not defined.
+	// (like when populating widgets without a declared window.)
+
+	ImFont* font = customFonts[0];
+	GetIO().FontDefault = font;
 }
 
 //--------------------------------------------------------------
@@ -1841,7 +1843,7 @@ void SurfingGuiManager::update()
 	//--
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
-	if (bFlagSaveSettings) 
+	if (bFlagSaveSettings)
 	{
 		bFlagSaveSettings = false;
 
@@ -2105,7 +2107,7 @@ void SurfingGuiManager::drawLayoutsPresetsEngine()
 	// Main Layout Presets clicker
 	if (bGui_LayoutsPresetsSelector)
 	{
-		drawLayoutsLayoutPresets(); 
+		drawLayoutsLayoutPresets();
 
 		//if (!bMinimize_Presets) if (bGui_LayoutsPresetsManual) drawLayoutsPresetsManualWidgets();
 	}
@@ -2130,7 +2132,7 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 	if (bUseLayoutPresetsManager)
 	{
 		// Attend save/load flags
-		updateLayout(); 
+		updateLayout();
 
 		//----
 
@@ -3413,7 +3415,7 @@ bool SurfingGuiManager::loadSettings()
 {
 	ofLogNotice("ofxSurfingImGui") << "loadSettings()" << " " << path_AppSettings;
 	bool b = loadGroup(params_AppSettings, path_AppSettings, false);
-	if(!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
+	if (!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
 
 	return b;
 

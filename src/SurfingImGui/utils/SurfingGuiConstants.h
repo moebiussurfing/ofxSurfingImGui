@@ -114,11 +114,12 @@
 #define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" // main container for all the font files!
 
 // LEGACY font
-#define FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
-#define FONT_DEFAULT_SIZE_LEGACY 11
+#define OFX_IM_FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
+#define OFX_IM_FONT_DEFAULT_FILE_LEGACY 11
 
 // New font
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
+#define OFX_IM_FONT_DEFAULT_SIZE OFX_IM_FONT_DEFAULT_SIZE_MIN
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
 
 // Default mono-spaced font
@@ -241,12 +242,12 @@ namespace ofxImGuiSurfing
 
 		// Button
 
-		//OFX_IM_BUTTON_MINI, // 1 = default. too small to place text well.
-		OFX_IM_BUTTON_SMALL, // 1 = default ratio
-		OFX_IM_BUTTON, // 1.25 ratio
-		OFX_IM_BUTTON_MEDIUM, // 1.5 ratio
-		OFX_IM_BUTTON_BIG, // 2 ratio
-		OFX_IM_BUTTON_BIG_XXL, // 3 ratio
+		//OFX_IM_BUTTON_MINI,	// 1 = default. too small to place text well.
+		OFX_IM_BUTTON_SMALL,	// 1 = default ratio
+		OFX_IM_BUTTON,			// 1.25 ratio
+		OFX_IM_BUTTON_MEDIUM,	// 1.5 ratio
+		OFX_IM_BUTTON_BIG,		// 2 ratio
+		OFX_IM_BUTTON_BIG_XXL,	// 3 ratio
 		OFX_IM_BUTTON_BIG_XXXL, // 4 ratio
 
 		//--
