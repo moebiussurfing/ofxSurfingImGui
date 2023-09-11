@@ -108,7 +108,7 @@ public:
 	}
 	void setFontMonospacedDefined(bool b = true)
 	{
-		bDefinedMonospacedFonts = b;
+		bDoneDefinedMonospacedFonts = b;
 
 		ImTricks::NotifyManager::indexFont.setMax(customFonts.size() - 1);
 
@@ -150,7 +150,7 @@ private:
 	vector<string> namesCustomFonts;
 
 private:
-	bool bDefinedMonospacedFonts = false;
+	bool bDoneDefinedMonospacedFonts = false;
 
 private:
 	struct tagData

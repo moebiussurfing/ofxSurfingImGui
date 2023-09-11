@@ -736,7 +736,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 
 		//--
 
-		bDefinedMonospacedFonts = true;
+		bDoneDefinedMonospacedFonts = true;
 
 		// Now we have 8 fonts to browse by the index!
 		//fontIndex.setMax(7);

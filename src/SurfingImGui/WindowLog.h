@@ -651,7 +651,7 @@ namespace ofxImGuiSurfing
 
         void setFontMonospacedDefined(bool b = true)
         {
-            bDefinedMonospacedFonts = b;
+            bDoneDefinedMonospacedFonts = b;
 
             fontIndex.setMax(customFonts.size() - 1);
 
@@ -662,7 +662,7 @@ namespace ofxImGuiSurfing
         ofParameter<int> fontIndex{"Font", 0, 0, 0};
 
     private:
-        bool bDefinedMonospacedFonts = false;
+        bool bDoneDefinedMonospacedFonts = false;
 
         ofParameter<bool> bOptions{"OPTIONS", false};
         ofParameter<bool> bLimitedBuffered{"Limited", false};
@@ -703,7 +703,7 @@ namespace ofxImGuiSurfing
 
             //bFilter = bFilter;
 
-            // if (bDefinedMonospacedFonts) if (fontIndex < 4) fontIndex = 4;//set first mono-spaced by default
+            // if (bDoneDefinedMonospacedFonts) if (fontIndex < 4) fontIndex = 4;//set first mono-spaced by default
 
             bDoneStartup = true;
             ofLogNotice("ofxSurfingImGui:SurfingLog") << "Startup done";
@@ -1272,7 +1272,7 @@ namespace ofxImGuiSurfing
 #if 1
             i = index;
 #else//TODO: limit to mono-spaced
-			if (!bDefinedMonospacedFonts) i = index;
+			if (!bDoneDefinedMonospacedFonts) i = index;
 			else i = index + 4;
 #endif
             if (i < customFonts.size())

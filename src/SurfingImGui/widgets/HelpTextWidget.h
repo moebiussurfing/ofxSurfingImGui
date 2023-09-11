@@ -32,6 +32,7 @@ private:
 	bool bBg = true;
 
 	bool bHeader = false;
+	bool bHeaderTitle = true;
 	bool bBlink = 0;
 
 	bool bMouseLeft = false;
@@ -41,6 +42,7 @@ private:
 
 public:
 	void setEnableHeader(bool b = true) { bHeader = b; }
+	void setEnableHeaderTitle(bool b = true) { bHeaderTitle = b; }
 
 	ofParameter<bool> bGui{ "HelpTextWidget", true };
 
@@ -137,7 +139,14 @@ public:
 
 		// Window
 
-		ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, flags);
+		string sTitle;
+		
+		//sTitle = bTitleSettled ? title : bGui.getName();
+		sTitle = bGui.getName();
+		
+		if (!bHeaderTitle) sTitle = "##" + sTitle;//hide text
+
+		ImGui::Begin(sTitle.c_str(), (bool*)&tmp, flags);
 		{
 			// 1. Title
 

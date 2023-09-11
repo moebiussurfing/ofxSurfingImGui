@@ -1526,19 +1526,19 @@ private:
 
 	string pathFontMono = OFX_IM_FONT_DEFAULT_PATH_FONTS + (string)OFX_IM_FONT_DEFAULT_MONO_FILE;
 	float sizeFontMono = float(OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN);
-	bool bDefinedMonospacedFonts = false;
+	bool bDoneDefinedMonospacedFonts = false;
 
 public:
 	vector<int> fontsMonospacedIndexes; // queue the positions of the four mono fonts
 	bool isFontsMonospacedDefined()
 	{
-		return bDefinedMonospacedFonts;
+		return bDoneDefinedMonospacedFonts;
 	}
 
 	void clearFontsMonospaced()
 	{
 		fontsMonospacedIndexes.clear();
-		bDefinedMonospacedFonts = false;
+		bDoneDefinedMonospacedFonts = false;
 
 		log.setFontMonospacedDefined(false);
 
@@ -4787,8 +4787,8 @@ public:
 	//--
 
 public:
-	HelpTextWidget helpInternal;
-	HelpTextWidget helpApp;
+	HelpTextWidget helpApp; // related to the main app help/workflow.
+	HelpTextWidget helpInternal; // more related to the add-on internals but could be overwritten. 
 
 private:
 	//TODO: replace help boxes 
@@ -4823,6 +4823,12 @@ public:
 #else
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
+
+		//TODO: workflow. set monospaced font
+		if (customFonts.size() > 4 && bDoneDefinedMonospacedFonts)
+		{
+			helpInternal.setFontIndex(OFX_IM_FONT_DEFAULT_MONO);
+		}
 	}
 
 	// Must be called after ui.setup();
@@ -4853,7 +4859,7 @@ public:
 		bUseHelpApp = true;
 	}
 	//--------------------------------------------------------------
-	void setHelpAppFontIndex(int i) {
+	void setHelpAppFontStyle(int i) {
 		helpApp.setFontIndex(i);
 	}
 	//--------------------------------------------------------------
@@ -4871,6 +4877,11 @@ public:
 	void setHelpAppEnableHeader(bool b = true)
 	{
 		helpApp.setEnableHeader(b);
+	}
+	//--------------------------------------------------------------
+	void setHelpAppEnableHeaderTittle(bool b = true)
+	{
+		helpApp.setEnableHeaderTitle(b);
 	}
 
 	//-

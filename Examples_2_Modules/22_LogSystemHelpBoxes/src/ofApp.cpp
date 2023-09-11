@@ -114,12 +114,27 @@ void ofApp::setupHelp()
 	string s;
 
 	//ui.setEnableHelpApp();//is auto enabled when settled
+
 	s = "Hello help text box\n";
 	s += string(
 		"The mono-spaced fonts are very useful to avoid unaligned text rows. "
 		"For example on some parts of this UI addon, "
 		"as could be the Log Window and the Help Text Box Windows too!");
 	ui.setHelpAppText(s);
+
+	// Optional customizations
+
+	ui.setHelpAppTitle("Title Help");
+
+#if 1
+	ui.setHelpAppEnableHeader(true); // customize to show header
+	ui.setHelpAppEnableHeaderTittle(false); // customize to hide bar title
+#endif
+
+	ui.setHelpAppFontStyle(OFX_IM_FONT_HUGE_XXL); // customize font
+	// title font will be settled a step bigger.
+
+	//--
 
 	// Internal help 
 	// By default includes the addon main keystrokes!
@@ -242,6 +257,9 @@ void ofApp::drawImGui()
 				// A bundle of controls
 				// for a single param
 				ui.AddComboBundle(lineWidth, ui.bMinimize);
+				string s = "ui.AddComboBundle(lineWidth, ui.bMinimize);";
+				s += "\n\ntoggle minimize to customize more.";
+				ui.AddTooltipHelp(s);
 				ui.EndTree();
 			}
 
@@ -250,14 +268,16 @@ void ofApp::drawImGui()
 			//--
 
 			if (ui.AddButton("Reset UI Settings")) ui.resetUISettings();
-			ui.AddSpacingBigSeparated();
+			//ui.AddSpacingBigSeparated();
 
-			//--
+			ui.EndWindow();
+		}
 
-			// Help boxes and font sizes
-			ui.AddLabelBig("Help Text Boxes");
-			ui.AddSpacing();
+		//--
 
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+		ui.BeginWindow("Help Text Boxes");
+		{
 			// Help App
 			ui.AddHelpToggle();
 			if (ui.bHelp) {
@@ -266,15 +286,16 @@ void ofApp::drawImGui()
 				ui.AddSpacing();
 			}
 
+			ui.AddSpacingSeparated();
+
 			// Help Internal
 			ui.AddHelpInternalToggle();
 			if (ui.bHelpInternal) {
 				ui.DrawHelpInternalWidgetsFont();
 				ui.Add(ui.helpInternal.fontIndex);
 			}
-
-			ui.EndWindow();
 		}
+		ui.EndWindow();
 	}
 	ui.End();
 }
