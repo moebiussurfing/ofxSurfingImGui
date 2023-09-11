@@ -3599,13 +3599,14 @@ private:
 private:
 	// File Settings
 	string path_Root = "";
-	string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+	string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
 	string path_LayoutsImGui;
 	string path_AppSettings;
 	string path_LayoutSettings;
 
 	//string nameLabel = "SurfingGui";
 	string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
+	bool bDoneCustomNameLabel = false;
 
 	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
 	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
@@ -3638,6 +3639,8 @@ public:
 	//--------------------------------------------------------------
 	void setName(string name)
 	{
+		bDoneCustomNameLabel = true;
+
 		// Must call before setup! 
 		// To allow the correct behavior when multiple instances/windows settings. 
 		// Notice that each instance will have his own folder path for setting files! 
@@ -4489,16 +4492,16 @@ private:
 	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "LayoutsPresets" }; 
+	ofParameterGroup params_Layouts{ "LayoutsPresets" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" }; 
+	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsExtra{ "Extra Params" }; 
+	ofParameterGroup params_LayoutsExtra{ "Extra Params" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsExtraInternal{ "Internal" }; 
+	ofParameterGroup params_LayoutsExtraInternal{ "Internal" };
 	// add-on related params
 
 	int numPresetsDefault;

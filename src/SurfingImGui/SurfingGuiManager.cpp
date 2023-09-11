@@ -36,7 +36,7 @@ SurfingGuiManager::SurfingGuiManager()
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
 	autoSaveListener = params_AppSettings.parameterChangedE().newListener([&](ofAbstractParameter&) {
 		this->saveSettings();
-});
+		});
 #endif
 
 	//--
@@ -89,7 +89,7 @@ SurfingGuiManager::~SurfingGuiManager()
 		ofLogWarning("ofxSurfingImGui") << "exit() was already called before as expected.";
 		ofLogWarning("ofxSurfingImGui") << "It was already done!";
 		ofLogWarning("ofxSurfingImGui") << "So we successfully omitted calling exit() herre in destructor.";
-}
+	}
 #endif
 
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
@@ -276,6 +276,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 	//--
 
 	surfingImGuiMode = mode;
+	ofLogWarning("ofxSurfingImGui") << "surfingImGuiMode: " << surfingImGuiMode;
 
 	switch (surfingImGuiMode)
 	{
@@ -786,19 +787,22 @@ void SurfingGuiManager::setupImGui()
 
 	// Hard coded settings
 
+	// Docking
 	bool bIsDocked = bDockingLayoutPresetsEngine ||
 		surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW;
-
 	if (bIsDocked) flags += ImGuiConfigFlags_DockingEnable;
 
+	// Viewports (floating windows out of app window)
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
+
+	//--
 
 	// Setup ImGui with the appropriate config flags
 
 	if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 	else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 
-	if (bMouseCursorFromImGui) ofHideCursor();
+	//--
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
@@ -808,26 +812,45 @@ void SurfingGuiManager::setupImGui()
 	// Uncomment below to "force" all ImGui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
 
+	if (bMouseCursorFromImGui) ofHideCursor();
+
 	//--
 
 	// Load Fonts
-	
+
 	//TODO: improve not loading more fonts than required:
 	// multiple instances would use the same font files!
 	//if (this->isMasterInstance()) setupFontDefault();
+
 	setupFontDefault();
 
 	//--
 
-	//TODO:
-
 	// Assign a default font 
-	
+
 	// To be used everywhere when is not defined.
 	// (like when populating widgets without a declared window.)
+	if (customFonts.size() > 0) {
+		ImFont* font = customFonts[0];
+		GetIO().FontDefault = font;
+	}
 
-	ImFont* font = customFonts[0];
-	GetIO().FontDefault = font;
+	//--
+
+	//TODO: Auto separate instances data folders if is not done (setName) manually!
+	if (instanceCount > 1) {
+		if (!bDoneCustomNameLabel) {
+			if (instanceNumber != 0) {
+				//path_Global = "Gui/" + path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+
+				//string s = path_Global;
+				//s += ofToString(SURFING_IMGUI__DEFAULT_PATH_GLOBAL) + "_" + ofToString(instanceNumber);
+				//this->setName(s);
+
+				this->setName(nameLabel + "_" + ofToString(instanceNumber));
+			}
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -980,7 +1003,7 @@ void SurfingGuiManager::startup()
 	// workflow
 	// Force enable organizer by default.
 	// no need to call manually.
-	setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+	this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 
 	//--
 
@@ -989,7 +1012,7 @@ void SurfingGuiManager::startup()
 	if (bDockingLayoutPresetsEngine)
 	{
 		// Default Layout with 4 presets.
-		setupLayout(DEFAULT_AMOUNT_PRESETS);
+		this->setupLayout(DEFAULT_AMOUNT_PRESETS);
 
 		//--
 
@@ -1009,7 +1032,7 @@ void SurfingGuiManager::startup()
 
 	if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
 	{
-		initiateWindowsOrganizer();
+		this->initiateWindowsOrganizer();
 
 		//--
 
@@ -1837,7 +1860,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-}
+	}
 #endif
 
 	//--
@@ -2823,7 +2846,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-}
+	}
 #endif
 
 	//--

@@ -90,7 +90,7 @@
 // bin\data\Gui\SurfingGui_UI_Internal.json
 // bin\data\Gui\SurfingGui_UI_Organizer.json
 
-#define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui/"
+#define SURFING_IMGUI__DEFAULT_PATH_GLOBAL "Gui"
 #define SURFING_IMGUI__DEFAULT_NAME_LABEL "SurfingGui"
 
 // But, to allow multiple instances, it can be customized, 

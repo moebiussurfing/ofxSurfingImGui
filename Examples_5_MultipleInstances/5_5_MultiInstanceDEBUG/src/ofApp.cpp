@@ -27,15 +27,21 @@ void ofApp::setup()
 	params2.add(params3);
 	params.add(params2);
 
+	//--
+
 	ui_.setup();
 
 	for (size_t i = 0; i < NUM_INSTANCES; i++)
 	{
+#if 0
 		string s = "Instance_" + ofToString(i);
 		ui[i].setName(s);
+#endif
 
 		ui[i].setup();
-		ui[i].bGui = false;
+
+		//force
+		//ui[i].bGui = false;
 	}
 }
 
@@ -44,7 +50,7 @@ void ofApp::draw()
 {
 	if (!bGui) return;
 
-	// toggles
+	// Show toggles
 	ui_.Begin();
 	{
 		if (ui_.BeginWindow("ofApp"))
@@ -57,7 +63,7 @@ void ofApp::draw()
 			ui_.EndWindow();
 		}
 
-		// debug
+		// Debug
 		{
 			static bool m_Debug = false;
 			static bool m_Demo = false;
@@ -69,7 +75,7 @@ void ofApp::draw()
 	}
 	ui_.End();
 
-	// instances
+	// Instances window
 	for (size_t i = 0; i < NUM_INSTANCES; i++)
 	{
 		ui[i].Begin();
@@ -77,6 +83,8 @@ void ofApp::draw()
 			if (ui[i].BeginWindow(ui[i].bGui))
 			{
 				ui_.Add(ui[i].bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+				ui_.Add(ui[i].bMinimize, OFX_IM_TOGGLE_ROUNDED_MINI);
+				ui_.AddSpacingSeparated();
 
 				switch (i)
 				{
