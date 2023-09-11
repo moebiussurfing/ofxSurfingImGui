@@ -9,3 +9,6 @@
 
 ## 5_4_MultiInstanceMainApp
 ![](5_4_MultiInstanceMainApp/Capture.PNG)  
+
+## 5_5_MultiInstanceDEBUG
+![](5_5_MultiInstanceDEBUG/Capture.PNG)  
