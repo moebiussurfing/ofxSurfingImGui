@@ -33,7 +33,7 @@ void ofApp::setup()
 
 	for (size_t i = 0; i < NUM_INSTANCES; i++)
 	{
-#if 0
+#if 1
 		string s = "Instance_" + ofToString(i);
 		ui[i].setName(s);
 #endif

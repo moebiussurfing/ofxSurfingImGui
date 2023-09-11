@@ -163,6 +163,8 @@ void SurfingGuiManager::setupParams() {
 
 	// Most of these below params are handled into file settings!
 
+	params_Internal.add(bGui);
+
 	params_Internal.add(bAutoResize);
 	params_Internal.add(bExtra);
 	params_Internal.add(bMinimize);

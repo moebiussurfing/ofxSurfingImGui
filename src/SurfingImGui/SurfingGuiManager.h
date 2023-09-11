@@ -2513,12 +2513,10 @@ private:
 	// Exposed useful public params:
 
 public:
-	ofParameter<bool> bGui{ "Show Gui", true };
+	ofParameter<bool> bGui{ "Show Gui", true };//to be used externally. is not auto used internally!
+
 	ofParameter<bool> bMinimize{ "Minimize", true };
 	ofParameter<bool> bAutoResize{ "Auto Resize", true };
-	ofParameter<bool> bGlobalScaleWheel{ "Global Scale Wheel", false };
-	ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
-	//float globalScalePre = 1;
 	ofParameter<bool> bKeys{ "Keys", true };
 	ofParameter<bool> bLogKeys{ "Log Keys", false };
 	ofParameter<bool> bHelp{ "Help App", false };
@@ -2527,21 +2525,26 @@ public:
 	ofParameter<bool> bDebugDebugger{ "Debugger", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
+
 	ofParameter<bool> bReset{ "Reset", false };
-
-	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
-	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel", false }; //for natural direction
-	bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
-
-	ofParameter<bool> bThemeUIAlt{ "Theme UI", false };
-
-	ofParameter<bool> bLog{ "LOG", false }; //show log window
-	ofParameter<bool> bNotifier{ "NOTIFIER", true }; //show notifier
 
 	//to allow a type of super simple window for final user!
 	ofParameter<bool> bGui_GameMode{ "GAME", false };
 	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
+
+	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
+	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel", false }; //for natural direction
+	bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
+
+	ofParameter<bool> bGlobalScaleWheel{ "Global Scale Wheel", false };
+	ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
+	//float globalScalePre = 1;
+
+	ofParameter<bool> bThemeUIAlt{ "Theme UI", false };
+
+	ofParameter<bool> bLog{ "LOG", false }; //show log window
+	ofParameter<bool> bNotifier{ "NOTIFIER", true }; //show notifier
 
 	//TODO:
 	ofParameter<bool> bLockMove{ "Lock Move", false }; //TODO:
@@ -2573,7 +2576,8 @@ public:
 	ofParameterGroup params_Windows{ "Windows" };
 
 private:
-	void doBuildHelpInfo(bool bSlient = 1); //create or freshed the help info for the drawing help box
+	void doBuildHelpInfo(bool bSlient = 1); 
+	// Create or freshed the help info for the drawing help box
 
 	//--
 
@@ -3615,6 +3619,7 @@ public:
 	//--------------------------------------------------------------
 	string getPathRoot() const
 	{
+		//TODO
 		if (path_Root == "") return path_Global;
 		else return path_Root;
 	}
@@ -3649,9 +3654,12 @@ public:
 
 		bGui.setName(name);
 
-		// split possible instances on different folders
+		// To allow split possible instances on different folders
+		//path_Root = nameLabel + "/";
+		//path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+
 		path_Root = nameLabel + "/";
-		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
 
 		windowsOrganizer.setName(nameLabel);
 		windowsOrganizer.setPathGlobal(path_Global);
