@@ -1872,7 +1872,7 @@ void SurfingGuiManager::update()
 	{
 		bFlagSaveSettings = false;
 
-		ofLogNotice("ofxSurfingImGui") << "update() Attending save flag.";
+		ofLogVerbose("ofxSurfingImGui") << "update() Attending save flag.";
 
 		this->saveSettingsInternal();
 	}
