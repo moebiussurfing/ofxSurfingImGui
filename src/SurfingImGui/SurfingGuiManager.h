@@ -3657,13 +3657,17 @@ public:
 
 		bGui.setName(name);
 
-#if 1
-		path_Root = nameLabel + "/";
-		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
-#else
-		path_Root = nameLabel + "/";
-		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
-#endif
+//#if 1
+//		path_Root = nameLabel + "/";
+//		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+//#else
+//		path_Root = nameLabel + "/";
+//		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
+//#endif
+		path_Root = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+
+		//--
 
 		windowsOrganizer.setName(nameLabel);
 		windowsOrganizer.setPathGlobal(path_Global);

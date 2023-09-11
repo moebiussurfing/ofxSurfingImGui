@@ -33,7 +33,10 @@ void ofApp::setup()
 
 	for (size_t i = 0; i < NUM_INSTANCES; i++)
 	{
-#if 1
+		// Note that if it's disabled this,
+		// the addon will detect mthat there are multiple instance,
+		// and will create different names for the file settings.
+#if 0
 		string s = "Instance_" + ofToString(i);
 		ui[i].setName(s);
 #endif
