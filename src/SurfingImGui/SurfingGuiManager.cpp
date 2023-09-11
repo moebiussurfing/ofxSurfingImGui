@@ -844,12 +844,13 @@ void SurfingGuiManager::setupImGui()
 		if (!bDoneCustomNameLabel) {
 			if (instanceNumber != 0) {
 				//path_Global = "Gui/" + path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
-
-				//string s = path_Global;
-				//s += ofToString(SURFING_IMGUI__DEFAULT_PATH_GLOBAL) + "_" + ofToString(instanceNumber);
-				//this->setName(s);
-
+#if 1
 				this->setName(nameLabel + "_" + ofToString(instanceNumber));
+#else
+				string s = path_Global;
+				s += ofToString(SURFING_IMGUI__DEFAULT_PATH_GLOBAL) + "_" + ofToString(instanceNumber);
+				this->setName(s);
+#endif
 			}
 		}
 	}
@@ -1862,7 +1863,7 @@ void SurfingGuiManager::update()
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-	}
+}
 #endif
 
 	//--
@@ -2848,7 +2849,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--

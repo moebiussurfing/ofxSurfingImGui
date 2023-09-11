@@ -24,7 +24,7 @@
 
 #include "ofxSurfingImGui.h"
 
-//#define SURFING_USE_MANAGER
+#define SURFING_USE_MANAGER
 
 class ofApp : public ofBaseApp
 {

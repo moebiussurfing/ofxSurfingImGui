@@ -3603,7 +3603,8 @@ private:
 private:
 	// File Settings
 	string path_Root = "";
-	string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+	string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
+	//string path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
 	string path_LayoutsImGui;
 	string path_AppSettings;
 	string path_LayoutSettings;
@@ -3646,6 +3647,8 @@ public:
 	{
 		bDoneCustomNameLabel = true;
 
+		// To allow split possible instances on different folders
+		
 		// Must call before setup! 
 		// To allow the correct behavior when multiple instances/windows settings. 
 		// Notice that each instance will have his own folder path for setting files! 
@@ -3654,12 +3657,13 @@ public:
 
 		bGui.setName(name);
 
-		// To allow split possible instances on different folders
-		//path_Root = nameLabel + "/";
-		//path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
-
+#if 1
+		path_Root = nameLabel + "/";
+		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+#else
 		path_Root = nameLabel + "/";
 		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
+#endif
 
 		windowsOrganizer.setName(nameLabel);
 		windowsOrganizer.setPathGlobal(path_Global);

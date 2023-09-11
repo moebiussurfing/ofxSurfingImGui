@@ -181,12 +181,12 @@ void ofApp::drawImGuiSpecialWindows()
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
-			// Some useful sizes to help layouting in some scenarios.
-			// e.g. when using raw ImGui widgets without the full engine.
-			float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-			float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
-			float _h2 = 2 * _h1; // double height
+			//// Some useful sizes to help layouting in some scenarios.
+			//// e.g. when using raw ImGui widgets without the full engine.
+			//float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
+			//float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
+			//float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
+			//float _h2 = 2 * _h1; // double height
 
 			// if ui.bHelp enabled, activates help tooltips on this window!
 
@@ -226,7 +226,7 @@ void ofApp::drawImGuiSpecialWindows()
 
 				ImGui::SameLine();
 
-				if (ofxImGuiSurfing::AddBigButton(bNext, _w2, _h2))
+				if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
 				{
 					bNext = false;
 
@@ -241,7 +241,7 @@ void ofApp::drawImGuiSpecialWindows()
 
 			ui.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
 			ui.AddTooltip(ofToString(lineWidth));
-			ui.Add(lineWidth); 
+			ui.Add(lineWidth);
 			ui.AddTooltip(ofToString(lineWidth));
 			ui.Add(lineWidth, OFX_IM_STEPPER);
 			ui.AddTooltip(ofToString(lineWidth));
@@ -469,7 +469,7 @@ void ofApp::updateImGuiDockingHelpers()
 {
 	// Reset layout once o startup/first frame call.
 	// Called only once!
-	if(bStartupDockingReset)
+	if (bStartupDockingReset)
 	{
 		static bool binitiated = false;
 		if (!binitiated) {
@@ -504,21 +504,6 @@ void ofApp::updateImGuiDockingHelpers()
 	//TODO:
 
 #ifdef SURFING_USE_MANAGER
-	bool bDoRefresh = 0;
-
-	// Manager save/load
-	if (bFlagLoadLayout) {
-		bFlagLoadLayout = false;
-
-		loadLayoutImGuiIni();
-		bDoRefresh = 1;
-	}
-	if (bFlagSaveLayout) {
-		bFlagSaveLayout = false;
-
-		saveLayoutImGuiIni();
-		bDoRefresh = 1;
-	}
 
 #if 1
 	//if(bDoRefresh)
@@ -527,7 +512,7 @@ void ofApp::updateImGuiDockingHelpers()
 		ofRectangle rectangle_Central; // current free space viewport updated when changes
 		ofParameter<bool> bDrawView2{ "Draw View 2", false };
 
-
+		//--
 
 		ImGuiID dockNodeID;
 		ImGuiDockNode* dockNode;
@@ -638,6 +623,22 @@ void ofApp::updateImGuiDockingHelpers()
 	}
 #endif
 
+	bool bDoRefresh = 0;
+
+	// Manager save/load
+	if (bFlagLoadLayout) {
+		bFlagLoadLayout = false;
+
+		loadLayoutImGuiIni();
+		bDoRefresh = 1;
+	}
+	if (bFlagSaveLayout) {
+		bFlagSaveLayout = false;
+
+		saveLayoutImGuiIni();
+		bDoRefresh = 1;
+	}
+
 #endif
 }
 
@@ -696,13 +697,13 @@ void ofApp::drawImGuiDockingHelpers()
 		s = "Manager";
 		ui.AddLabelBig(s);
 
-		if (ui.AddButton("Load", OFX_IM_BUTTON, 2)) {
+		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2)) {
 			bFlagLoadLayout = true;
 			//loadLayoutImGuiIni();
 		}
 		ui.SameLine();
 
-		if (ui.AddButton("Save", OFX_IM_BUTTON, 2)) {
+		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2)) {
 			bFlagSaveLayout = true;
 			//saveLayoutImGuiIni();
 		}
@@ -768,10 +769,15 @@ void ofApp::doDockingReset()
 	// out_id_at_opposite_dir is in the opposite direction
 
 	// Fixed sizes
-	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.2f, nullptr, &dockspace_id);
-	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.34f, nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.13f, nullptr, &dockspace_id);
-	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.13f, nullptr, &dockspace_id);
+	const float v1 = 0.2f;
+	const float v2 = 0.34f;
+	const float v3 = 0.13f;
+	const float v4 = 0.13f;
+
+	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, v1, nullptr, &dockspace_id);
+	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, v2, nullptr, &dockspace_id);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, v3, nullptr, &dockspace_id);
+	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, v4, nullptr, &dockspace_id);
 
 	//--
 
@@ -809,10 +815,15 @@ void ofApp::doDockingRandom()
 	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
 
 	// Randomized sizes
-	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
-	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
-	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, ofRandom(0.2, 0.35), nullptr, &dockspace_id);
+	const float v1 = ofRandom(0.2, 0.35);
+	const float v2 = ofRandom(0.2, 0.35);
+	const float v3 = ofRandom(0.2, 0.35);
+	const float v4 = ofRandom(0.2, 0.35);
+
+	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, v1, nullptr, &dockspace_id);
+	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, v2, nullptr, &dockspace_id);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left,v3, nullptr, &dockspace_id);
+	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, v4, nullptr, &dockspace_id);
 
 	int idice = (int)ofRandom(3);
 
