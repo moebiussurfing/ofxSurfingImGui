@@ -188,8 +188,10 @@ void SurfingGuiManager::setupParams() {
 
 	// Help
 
-	params_HelpInternal.add(bHelpInternal, helpInternal.fontIndex);
-	params_HelpApp.add(bHelp, helpApp.fontIndex);
+	//params_HelpInternal.add(bHelpInternal, helpInternal.fontIndex);
+	//params_HelpApp.add(bHelp, helpApp.fontIndex);//this overwrites forced manual settings
+	params_HelpInternal.add(bHelpInternal);
+	params_HelpApp.add(bHelp);
 	params_Help.add(params_HelpInternal);
 	params_Help.add(params_HelpApp);
 	params_Modules.add(params_Help);
@@ -483,6 +485,26 @@ void SurfingGuiManager::setupInitiate()
 
 		// Finished prepared settings for persistent / JSON settings
 		params_AppSettings.add(params_Advanced);
+	}
+
+	//----
+
+	// Two Help Boxes
+	{
+		// A. Help Text Box internal
+
+		helpInternal.bGui.makeReferenceTo(bHelpInternal);//link
+		helpInternal.setTitle(bHelpInternal.getName());
+		//helpInternal.setEnableHeader();
+
+		doBuildHelpInfo(false);
+
+		//--
+
+		// B. Help Text Box app
+
+		helpApp.bGui.makeReferenceTo(bHelp);//link
+		helpApp.setTitle(bHelp.getName());
 	}
 }
 
@@ -1091,26 +1113,6 @@ void SurfingGuiManager::startup()
 #endif
 	notifier.setup();
 #endif
-
-	//----
-
-	// Two Help Boxes
-	{
-		// A. Help Text Box internal
-
-		helpInternal.bGui.makeReferenceTo(bHelpInternal);//link
-		helpInternal.setTitle(bHelpInternal.getName());
-		//helpInternal.setEnableHeader();
-
-		doBuildHelpInfo(false);
-
-		//--
-
-		// B. Help Text Box app
-
-		helpApp.bGui.makeReferenceTo(bHelp);//link
-		helpApp.setTitle(bHelp.getName());
-	}
 
 	//----
 

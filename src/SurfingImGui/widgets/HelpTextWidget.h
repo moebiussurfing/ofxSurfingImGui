@@ -2,8 +2,11 @@
 
 /*
 
-	- Allow resize boxes
-	- Make Example.
+	- fix title
+	- fix header
+	- add mode responsive. allow auto resize boxes
+	- add [x] button.
+	- make simple Example.
 */
 
 //--
@@ -39,7 +42,7 @@ private:
 public:
 	void setEnableHeader(bool b = true) { bHeader = b; }
 
-	ofParameter<bool> bGui{"HelpTextWidget", true};
+	ofParameter<bool> bGui{ "HelpTextWidget", true };
 
 	void setTitle(string _title, bool bCapitalize = true)
 	{
@@ -276,13 +279,18 @@ public:
 	ofParameter<int> fontIndex{ "Font", 0, 0, 0 };
 	vector<std::string> namesCustomFonts;
 	vector<std::string>* namesCustomFontsPtr = nullptr;
-
 private:
 	vector<ImFont*> customFonts;
 
 	//TODO: WIP
 	vector<ImFont*>* customFontsPtr = nullptr;
 	bool bUsingPtr = false;
+
+public:
+	void setFontIndex(int i) {
+		i = ofClamp(i, 0, customFonts.size() - 1);
+		fontIndex = i;
+	}
 
 public:
 	void setCustomFonts(vector<ImFont*> f, vector<std::string> namesCustomFonts_)

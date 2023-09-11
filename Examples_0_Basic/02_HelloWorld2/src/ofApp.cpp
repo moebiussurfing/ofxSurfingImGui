@@ -22,8 +22,36 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::setupGui()
 {
-	ui.setEnablebMouseCursorFromImGui(false);
 	ui.setup();
+
+	//--
+
+	// Help box
+
+	string s;
+	s = R"(TO LEARN A BIT MORE
+ABOUT THE API:
+
+- Spacing and separators.
+- Commonly useful minimizer toggle.
+- Tool - tips for widgets.
+- The Log and Notifier Windows.
+- Custom Log tags.
+- Mouse over gui getter.
+- Note persistence of previous sessions for some settings.
+- Text labels.
+- Some key - commands examples.
+- Make blink widgets.
+- Make font bigger on widgets.
+- Set a widget inactive.
+- Reset UI methods.
+- Quaternion parameter.
+- This Help info.
+)";
+
+	ui.setHelpAppTitle("HELP 02_HelloWorld2");//TODO
+	ui.setHelpAppText(s);
+	ui.setHelpAppFontIndex(2);//bigger font
 
 	//--
 
@@ -46,6 +74,10 @@ void ofApp::setupGui()
 	//--
 
 	tabs.setUiPtr(&ui);
+
+	//--
+	
+	//ui.startup(); // Optional for many scenarios!
 }
 
 //--------------------------------------------------------------
@@ -110,6 +142,7 @@ void ofApp::drawGuiMain()
 		s += "\n\nPress SPACE to show/hide the UI.";
 
 		// Easy populate toggles for useful internal params.
+		ui.AddHelpToggle();
 		ui.AddLogToggle();
 		ui.AddNotifierToggle();
 		ui.AddNotifierToggleEditor();
@@ -284,7 +317,7 @@ void ofApp::drawGuiTabs()
 	}
 	if (ui.BeginWindow(bGui_Tabs))
 	{
-		if (ui.isMaximized()) tabs.drawEditor();
+		if (ui.isMaximized() && ui.bDebug) tabs.drawEditor();
 
 		//IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
 
@@ -300,7 +333,6 @@ void ofApp::drawGuiTabs()
 
 			if (tabs.BeginTabItem("Tab0"))
 			{
-
 				ImGui::Text("hello0");
 				static float v0 = 0;
 				ImGui::SliderFloat("slider", &v0, 0, 1);
@@ -316,7 +348,6 @@ void ofApp::drawGuiTabs()
 			//IMGUI_SUGAR__DEBUG_POINT(ofColor::orange);
 			if (tabs.BeginTabItem("Tab1"))
 			{
-
 				ui.AddLabelBig("hello1");
 				static float v1 = 0;
 				ImGui::SliderFloat("slider1", &v1, 0, 1);

@@ -4853,6 +4853,10 @@ public:
 		bUseHelpApp = true;
 	}
 	//--------------------------------------------------------------
+	void setHelpAppFontIndex(int i) {
+		helpApp.setFontIndex(i);
+	}
+	//--------------------------------------------------------------
 	void setHelpAppName(string text)
 	{
 		helpApp.bGui.setName(text);
@@ -4861,7 +4865,7 @@ public:
 	void setHelpAppTitle(string text)
 	{
 		helpApp.setTitle(text);
-		setHelpAppEnableHeader();
+		//setHelpAppEnableHeader();
 	}
 	//--------------------------------------------------------------
 	void setHelpAppEnableHeader(bool b = true)
@@ -4882,6 +4886,10 @@ public:
 		bUseHelpInternal = true;
 	}
 	//--------------------------------------------------------------
+	void setHelpInternalFontIndex(int i) {
+		helpInternal.setFontIndex(i);
+	}
+	//--------------------------------------------------------------
 	void setHelpInternalName(string text)
 	{
 		helpInternal.bGui.setName(text);
@@ -4890,7 +4898,7 @@ public:
 	void setHelpInternalTitle(string text)
 	{
 		helpInternal.setTitle(text);
-		setHelpInternalEnableHeader();
+		//setHelpInternalEnableHeader();
 	}
 	//--------------------------------------------------------------
 	void setInternalEnableHelpHeader(bool b = true)
