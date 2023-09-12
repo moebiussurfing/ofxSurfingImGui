@@ -3,7 +3,9 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+#if 1//move app window to left monitor
 	setMonitorsLayout(-1, false, true);
+#endif
 
 	setupParams();
 
@@ -50,6 +52,11 @@ void ofApp::setupImGui()
 
 	// Help Text Boxes
 	setupHelp();
+
+	//--
+
+	/// Optional:
+	//ui.startup();
 }
 
 //--------------------------------------------------------------
@@ -112,9 +119,6 @@ void ofApp::setupFonts()
 void ofApp::setupHelp()
 {
 	string s;
-
-	//ui.setEnableHelpApp();//is auto enabled when settled
-
 	s = "Hello help text box\n";
 	s += string(
 		"The mono-spaced fonts are very useful to avoid unaligned text rows. "
@@ -126,13 +130,11 @@ void ofApp::setupHelp()
 
 	ui.setHelpAppTitle("Title Help");
 
-#if 1
-	ui.setHelpAppEnableHeader(true); // customize to show header
-	ui.setHelpAppEnableHeaderTittle(false); // customize to hide bar title
-#endif
+	if (0) ui.setHelpAppEnableHeaderTittle(false); // customize to hide bar title
+	if (0) ui.setHelpAppEnableBlink(true); // customize to blink
 
-	ui.setHelpAppFontStyle(OFX_IM_FONT_HUGE_XXL); // customize font
-	// title font will be settled a step bigger.
+	ui.setHelpAppFontStyle(OFX_IM_FONT_HUGE); // customize font
+	// title font will be auto settled a step bigger.
 
 	//--
 
@@ -141,7 +143,7 @@ void ofApp::setupHelp()
 #if 1
 	ui.setEnableHelpInternal();
 #else
-	// Can be modified. 
+	// But it can be modified. 
 	//s = "Hello this is internal help but overwritten\n";
 	//ui.setHelpInternalText(s);//is auto enabled when settled
 #endif
@@ -178,7 +180,8 @@ void ofApp::drawImGui()
 		if (ui.BeginWindow("ofApp"))
 		{
 			ui.Add(ui.bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
-			bool b = !ui.bMinimize; // is maximized alias
+			bool b = ui.isMaximized(); // is maximized / non minimized alias
+			ui.Add(ui.bAutoResize, OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL);
 
 			ui.AddSpacingBigSeparated();
 
@@ -194,7 +197,7 @@ void ofApp::drawImGui()
 			if (b) ui.AddSpacing();
 			ui.Add(bAnimate1, OFX_IM_TOGGLE_MEDIUM_BORDER_BLINK);
 			ui.AddTooltip("Animate and randomize params \nto feed the Log.\nGo look into the Log window!");
-			ui.AddSpacing();
+			//ui.AddSpacing();
 			if (bAnimate1) {
 				if (b) ui.AddLabelBig("MODIFIERS");
 				ui.Add(speed, OFX_IM_HSLIDER_SMALL);
@@ -251,14 +254,17 @@ void ofApp::drawImGui()
 
 			//--
 
-			if (ui.BeginTree("A combo widget", false))
+			if (ui.BeginTree("A Combo Widget", false))
 			{
 				// Width (combo bundle)
 				// A bundle of controls
 				// for a single param
 				ui.AddComboBundle(lineWidth, ui.bMinimize);
-				string s = "ui.AddComboBundle(lineWidth, ui.bMinimize);";
-				s += "\n\ntoggle minimize to customize more.";
+				ui.AddSpacing();
+				string s;
+				s= "Toggle minimize \nto customize more.";
+				s += "\n\n";
+				s += "ui.AddComboBundle\n(lineWidth, ui.bMinimize);";
 				ui.AddTooltipHelp(s);
 				ui.EndTree();
 			}
@@ -276,14 +282,15 @@ void ofApp::drawImGui()
 		//--
 
 		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
-		ui.BeginWindow("Help Text Boxes");
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_LOCKED_RESIZE;
+
+		if (ui.BeginWindow("Help Text Boxes"))
 		{
 			// Help App
 			ui.AddHelpToggle();
 			if (ui.bHelp) {
 				ui.DrawHelpWidgetsFont();
 				ui.Add(ui.helpApp.fontIndex);
-				ui.AddSpacing();
 			}
 
 			ui.AddSpacingSeparated();
@@ -294,8 +301,9 @@ void ofApp::drawImGui()
 				ui.DrawHelpInternalWidgetsFont();
 				ui.Add(ui.helpInternal.fontIndex);
 			}
+
+			ui.EndWindow();
 		}
-		ui.EndWindow();
 	}
 	ui.End();
 }

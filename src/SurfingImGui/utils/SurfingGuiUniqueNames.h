@@ -1,6 +1,5 @@
 
 #pragma once
-
 #include "ofMain.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS // Access to math operators
@@ -28,6 +27,7 @@ namespace ofxImGuiSurfing
 
 	public:
 
+		//TODO:
 		//--------------------------------------------------------------
 		void setOpen(bool b) {
 			if (bOpenGroups.size() == 0) return;

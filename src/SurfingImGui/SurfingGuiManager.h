@@ -1053,6 +1053,7 @@ public:
 	}
 
 	// Applied mainly to buttons
+	//--------------------------------------------------------------
 	float CalcWidgetWidth(const string s) {
 		float sp = this->CalcTextSize(s.c_str(), 0).x;
 		//sp += this->getWidgetsSpacingX();
@@ -4824,7 +4825,7 @@ public:
 		helpInternal.setCustomFonts(customFonts, namesCustomFonts);
 #endif
 
-		//TODO: workflow. set monospaced font
+		//TODO: workflow. set mono-spaced font
 		if (customFonts.size() > 4 && bDoneDefinedMonospacedFonts)
 		{
 			helpInternal.setFontIndex(OFX_IM_FONT_DEFAULT_MONO);
@@ -4871,7 +4872,6 @@ public:
 	void setHelpAppTitle(string text)
 	{
 		helpApp.setTitle(text);
-		//setHelpAppEnableHeader();
 	}
 	//--------------------------------------------------------------
 	void setHelpAppEnableHeader(bool b = true)
@@ -4882,6 +4882,11 @@ public:
 	void setHelpAppEnableHeaderTittle(bool b = true)
 	{
 		helpApp.setEnableHeaderTitle(b);
+	}
+	//--------------------------------------------------------------
+	void setHelpAppEnableBlink(bool b = true)
+	{
+		helpApp.setEnableBlink(b);
 	}
 
 	//-
@@ -4909,7 +4914,6 @@ public:
 	void setHelpInternalTitle(string text)
 	{
 		helpInternal.setTitle(text);
-		//setHelpInternalEnableHeader();
 	}
 	//--------------------------------------------------------------
 	void setInternalEnableHelpHeader(bool b = true)
@@ -5381,18 +5385,18 @@ public:
 			return false;
 		}
 
-		// label
+		// Label
 		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
 		else this->AddLabelBig(p.getName(), true, true);
 
-		// stepper
+		// Stepper
 		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
 		//bReturn += this->Add(p, bMinimized ? OFX_IM_STEPPER : OFX_IM_STEPPER_NO_LABEL);
 
-		// slider
+		// Slider
 		bReturn += this->Add(p, bMinimized ? OFX_IM_HSLIDER_MINI_NO_LABELS : OFX_IM_HSLIDER_SMALL_NO_LABELS);
 
-		// arrows
+		// Arrows
 		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
 		{
 			float step = 0;
@@ -5406,6 +5410,7 @@ public:
 				bReturn += true;
 			}
 			ImGui::SameLine();
+
 			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
 			{
 				p += step;
@@ -5417,7 +5422,7 @@ public:
 
 		if (!bMinimized)
 		{
-			// knob
+			// Knob
 			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
 			float w = this->getWidgetsWidth(1);
 			ImGuiKnobFlags flags = 0;
@@ -5427,15 +5432,15 @@ public:
 			//flags += ImGuiKnobFlags_DragHorizontal;
 			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
 
-			// mouse
+			// Mouse
 			if (this->bMouseWheel)
 			{
 				ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
-				ofxImGuiSurfing::GetMouseWheel();
+				//ofxImGuiSurfing::GetMouseWheel();
 				ofxImGuiSurfing::AddMouseClickRightReset(p);
 			}
 
-			// tooltip
+			// Tooltip
 			this->AddTooltip(p, true, false);
 		}
 

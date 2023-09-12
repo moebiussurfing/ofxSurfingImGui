@@ -1710,15 +1710,18 @@ void SurfingGuiManager::DrawWidgetsFonts(ofParameter<int>& index, bool bWithArro
 		float w = ofxImGuiSurfing::getWidgetsWidth();
 		if (bWithArrows)
 		{
-			if (w > 500)
+			if (w > 300)
 			{
 				ImGuiOldColumnFlags fc = ImGuiOldColumnFlags_NoBorder;
 				ImGui::BeginColumns("#cols", 2, fc);
-				ImGui::SetColumnWidth(1, w / 2);
+				ImGui::SetColumnWidth(0, 200);
+				//ImGui::SetColumnWidth(1, w / 2);
 				ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 				ImGui::Columns(1);
 			}
 			else ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
+
+			//ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 		}
 		else
 		{

@@ -15,13 +15,40 @@ namespace ofxImGuiSurfing
 {
 	//--------------------------------------------------------------
 	static auto vector_getter = [](void* vec, int idx, const char** out_text)
-	{
-		auto& vector = *static_cast<std::vector<std::string>*>(vec);
-		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		*out_text = vector.at(idx).c_str();
-		return true;
-	};
+		{
+			auto& vector = *static_cast<std::vector<std::string>*>(vec);
+			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+			*out_text = vector.at(idx).c_str();
+			return true;
+		};
 
+	//--------------------------------------------------------------
+	static bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false)
+	{
+		if (values.empty())
+		{
+			return false;
+		}
+		
+		//TODO
+#if 0
+		float spx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+		float w = ImGui::GetContentRegionAvail().x - spx;
+#else
+		float w = ImGui::GetContentRegionAvail().x;
+#endif
+
+		ImGui::PushItemWidth(w);
+
+		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
+
+		ImGui::PopItemWidth();
+
+		return b;
+	}
+
+	/*
+	//LEGACY
 	//--------------------------------------------------------------
 	static bool VectorCombo(const char* label, int* currIndex, std::vector<std::string>& values, bool bRaw = false)
 	{
@@ -46,7 +73,8 @@ namespace ofxImGuiSurfing
 		if (!bRaw) ImGui::PopItemWidth();
 
 		return b;
-	};
+	}
+	*/
 
 	//--------------------------------------------------------------
 	static bool VectorCombo(int* currIndex, std::vector<std::string>& values)
@@ -58,7 +86,7 @@ namespace ofxImGuiSurfing
 		//ImGui::PopItemWidth();
 
 		return b;
-	};
+	}
 
 	//----
 
@@ -318,15 +346,17 @@ namespace ofxImGuiSurfing
 	{
 		if (fileNames.empty()) return false;
 
-		float div = 0.7f;//proportion used for the combo
+		float div = 0.7f;
+		// proportion used for the combo
 		// 70% of the width is for the names and 30% for both arrows
 		// 1 - div (0.3) will be the proportion used by the arrows.
 
 		string t = "##COMBO" + pIndex.getName();
 		bool b = false;
 
-		float  __spcx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
-		float w = 0.5f * (ImGui::GetContentRegionAvail().x * (1 - div) - __spcx);
+		float w_ = ImGui::GetContentRegionAvail().x * (1 - div);
+		float  spx_ = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+		float w = (w_ / 2.f) - spx_;
 
 		string t1 = t + "<";
 		ImGui::PushID(t.c_str());
@@ -339,6 +369,7 @@ namespace ofxImGuiSurfing
 			b = true;
 		}
 		ImGui::PopID();
+
 		ImGui::SameLine();
 
 		string t2 = t + ">";
@@ -346,8 +377,7 @@ namespace ofxImGuiSurfing
 		if (ImGui::Button(">", ImVec2(w, 0)))
 		{
 			if (pIndex < pIndex.getMax()) pIndex++;
-			else if (bCycled)
-				pIndex = 0;
+			else if (bCycled) pIndex = 0;
 			b = true;
 		}
 		ImGui::PopID();
@@ -360,7 +390,9 @@ namespace ofxImGuiSurfing
 
 		int i = pIndex.get();
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 2 * spx_);
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - 40);
 		//ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * div);
 
 		b = (ofxImGuiSurfing::VectorCombo("", &i, fileNames, true));
@@ -375,7 +407,7 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopID();
 
-		ImGui::Spacing();
+		//ImGui::Spacing();
 
 		return b;
 	}
@@ -572,7 +604,7 @@ namespace ofxImGuiSurfing
 	*/
 
 	//--
-	
+
 	//--------------------------------------------------------------
 	inline bool VectorListBox(const char* label, int* currIndex, std::vector<std::string>& values)
 	{

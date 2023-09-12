@@ -5,7 +5,8 @@
 /*
 
 	This class has useful constants:
-	widgets sizes, default themes, fonts, ...etc.
+	widgets sizes, default themes, fonts, 
+	...etc.
 	To be used around many classes.
 
 */
@@ -35,7 +36,9 @@
 //#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE 
 // if undefined settings will be bundled into main settings.
 
-//#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR // DEBUG
+//#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR 
+// TODO: DEBUG: Using pointer should improve a bit the memory usage..
+// maybe is not important bc is a vector of pointers not the objects them selfs!
 
 #define SURFING_IMGUI__USE_GLOBAL_SCALE
 
@@ -47,10 +50,18 @@
 // We can disable automatic saving on exit and/or class destructor.
 // Then we should save manually.
 // Also implemented an approach to auto save when settings params change.
-//#define SURFING_IMGUI__CREATE_EXIT_LISTENER // To enable that ofApp exit will call exit and save settings.
-//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT // To enable auto save on exit.
-#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES // To enable auto save on every param change.
-//#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER // Made by Roy for RF
+
+//#define SURFING_IMGUI__CREATE_EXIT_LISTENER 
+// To enable that ofApp exit will call exit and save settings.
+ 
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT 
+// To enable auto save on exit.
+
+#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES 
+// To enable auto save on every param change.
+
+//#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER 
+// Made by Roy for RF
 // Code copied from: https://github.com/roymacdonald/RealityField/commit/115858b3cf3eb4baf6161ab06598fee78583fc21
 // but currently disabled as code from @moebiussurfing worked too and has 'max one save per frame'
 
@@ -60,13 +71,14 @@
 // To fix weird resizing behaviors 
 // when too big or too small resized windows
 
-#define WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL 300 
-//#define WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL 250 
+#define IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL 300 
+//#define IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL 250 
 // when a window width is less than that, 
 // we can consider that the window is too small.
 // we will use another layout pattern for some widgets.
 
-#define PADDING_COMBO 0 // to fix some weird label forcing oversize window
+// LEGACY
+//#define PADDING_COMBO 0 // to fix some weird label forcing oversize window
 
 //----
 
@@ -110,14 +122,10 @@
 // Notice that if not any font file is located, will work as ImGui default,
 // So you don't need to put any files on bin/data to compile right!
 
+#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" 
+// main container for all the font files!
 
-#define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" // main container for all the font files!
-
-// LEGACY font
-#define OFX_IM_FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
-#define OFX_IM_FONT_DEFAULT_FILE_LEGACY 11
-
-// New font
+// DEfault font
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_SIZE OFX_IM_FONT_DEFAULT_SIZE_MIN
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
@@ -125,6 +133,10 @@
 // Default mono-spaced font
 #define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_MONO_FILE "JetBrainsMono-Bold.ttf"
+
+// LEGACY font
+#define OFX_IM_FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
+#define OFX_IM_FONT_DEFAULT_FILE_LEGACY 11
 
 //----
 

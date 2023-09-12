@@ -1,26 +1,24 @@
 #pragma once
+#include "ofMain.h"
 
 //--
 
 /*
 
-	This example shows how to use the logging system.
-	and Help Boxes for internal and App.
+	This example shows how to use:
+	- the logging system.
+	- the Help Boxes for internal and App.
 
 */
 
 
 //--
 
-
-#include "ofMain.h"
-
 #include "ofxSurfingImGui.h"
 
 class ofApp : public ofBaseApp
 {
 public:
-
 	void setup();
 	void update();
 	void draw();

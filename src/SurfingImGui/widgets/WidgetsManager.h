@@ -10,7 +10,7 @@
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
-#include "GuiUniqueNames.h"
+#include "SurfingGuiUniqueNames.h"
 
 //--
 

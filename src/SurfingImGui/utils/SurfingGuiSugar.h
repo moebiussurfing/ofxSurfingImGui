@@ -61,12 +61,12 @@ namespace ofxImGuiSurfing
 	// less than threshold will make a ratio (half) window width
 
 #define IMGUI_SUGAR__WIDGETS_PUSH_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
 	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.7f); \
 	}
 
 #define IMGUI_SUGAR__WIDGETS_POP_WIDTH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { \
 	ImGui::PopItemWidth(); \
 	}
 
@@ -107,53 +107,54 @@ namespace ofxImGuiSurfing
 
 	// For OFX_IM_STEPPER
 
-#define STEP_FACTOR_WINDOW_IS_SMALL .67f // now using this. we centralized all types together (int/float)
+#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL .67f // now using this. we centralized all types together (int/float)
 
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
-	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
+#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .72f
+	//#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT .67f
 
-	//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
-#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
-//#define STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f
+	//#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .72f 
+#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .7f 
+//#define IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT .67f
 	// To allow see 3 visible decimals, 
 	// but requires preferably a short label name.
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH_FLOAT \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_FLOAT); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP_FLOAT \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
 
 	/*
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * IMGUI_STEP_FACTOR_WINDOW_IS_SMALL_FOR_INT); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
 	*/
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * STEP_FACTOR_WINDOW_IS_SMALL); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * IMGUI_STEP_FACTOR_WINDOW_IS_SMALL); }
 
 #define IMGUI_SUGAR__STEPPER_WIDTH_POP \
-	if (ImGui::GetContentRegionAvail().x < WINDOW_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
+	if (ImGui::GetContentRegionAvail().x < IMGUI_WIDTH_THRESHOLD_TO_CONSIDER_SMALL) { ImGui::PopItemWidth(); }
 
 	//--
 
-#define TEXT_LABEL_TO_RESIZE "0123456789"
-	//#define TEXT_LABEL_TO_RESIZE "----------" 
+	// Default label size
+#define IMGUI_TEXT_LABEL_TO_RESIZE "0123456789"
+	//#define IMGUI_TEXT_LABEL_TO_RESIZE "----------" 
 
 	//TODO:
 	// This is a 10 chars string that we will use as default label width, to name widgets.
-	// another approach depending on text label. or to use TEXT_LABEL_TO_RESIZE with a fixed chars long.
+	// another approach depending on text label. or to use IMGUI_TEXT_LABEL_TO_RESIZE with a fixed chars long.
 	// that could be weird because each slider will have a different width.
-	//const ImVec2 sz = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+	//const ImVec2 sz = ImGui::CalcTextSize(IMGUI_TEXT_LABEL_TO_RESIZE); \
      
 	//TODO:
 	// Fix auto resize loop grow...
 	// Using an standard text size for the widgets 
 	//#define IMGUI_SUGAR__STEPPER_WIDTH_PUSH \
-    //	const auto sztx = ImGui::CalcTextSize(TEXT_LABEL_TO_RESIZE); \
+    //	const auto sztx = ImGui::CalcTextSize(IMGUI_TEXT_LABEL_TO_RESIZE); \
     //	const float gap = 40; \
     //	ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x - sztx.x - gap);
 	//#define IMGUI_SUGAR__STEPPER_WIDTH_POP ImGui::PopItemWidth();
@@ -175,11 +176,11 @@ namespace ofxImGuiSurfing
 	//--
 
 	// Amount of steps per widgets. will calculate range between max/min.
-#define MOUSE_WHEEL_STEPS 100.f
+#define IMGUI_MOUSE_WHEEL_STEPS 100.f
 
 	// How more fine is when CTRL pressed 
-#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 0.20f
-	//#define MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
+#define IMGUI_MOUSE_WHEEL_FINETUNE_CTRL_RATIO 0.20f
+	//#define IMGUI_MOUSE_WHEEL_FINETUNE_CTRL_RATIO 5
 
 	//----
 
