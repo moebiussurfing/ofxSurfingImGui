@@ -1020,7 +1020,9 @@ void SurfingGuiManager::startup()
 
 	//--
 
-	setupImGuiTheme();
+	// Theme
+
+	this->setupImGuiTheme();
 
 	//--
 
@@ -1051,7 +1053,7 @@ void SurfingGuiManager::startup()
 		//this->setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 	}
 
-	//--
+	//----
 
 	// Special Windows Organizer
 
@@ -1066,6 +1068,7 @@ void SurfingGuiManager::startup()
 			//// workflow
 			//windowsOrganizer.setHideWindows(true);
 		}
+
 		else if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
 		{
 			//// workflow
@@ -1095,15 +1098,18 @@ void SurfingGuiManager::startup()
 
 	// Modules
 
+	//--
+
 	// Log
 
-	//TODO: Trying to redirect all logs to the imgui log window.
+	//TODO: 
+	// Trying to redirect all logs to the imgui log window.
 	//log.setRedirectConsole();
 
 	// Pass fonts to allow styles switching
 	log.setCustomFonts(customFonts, namesCustomFonts);
 
-	//----
+	//--
 
 	// Notifier
 
@@ -1126,43 +1132,32 @@ void SurfingGuiManager::startup()
 	// we set some default settings.
 
 	// Load some internal settings
-	bool bNoFileSettingsFound = !(this->loadSettings());
+	bool bDoneCheckNoFileSettingsFound = !(this->loadSettings());
 
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning!
-	if (bNoFileSettingsFound)
+	if (bDoneCheckNoFileSettingsFound)
 	{
 		ofLogWarning("ofxSurfingImGui") << "No file settings found! " << path_AppSettings;
 		ofLogWarning("ofxSurfingImGui") << "Probably the app is opening for the the first time.";
 		ofLogWarning("ofxSurfingImGui") << "We will reset the windows layout to avoid overlap of windows.";
 
-		// 
 		// Hide all the queued special windows (if they are queued).
 		this->setShowAllPanels(false);
 
-		// Forced default params
+		// Forced some default parameters
+		bHelp = true;
 		bHelpInternal = true;
 		bMinimize = false;
 
-		//// Help
-		//helpApp.setPosition(400, 10);
-		//helpInternal.setPosition(800, 10);
-
 		// workflow
 		// Will align the windows horizontally
-		bDoForceStartupResetLayout = true;
+		bFlagDoForceStartupResetLayout = true;
 	}
-
-	////--
-
-	//// Help
-	//setEnableHelpApp();
-	//setEnableHelpInternal();
-
-	//windowsOrganizer.bGui_ShowWindowsGlobal = true;
 
 	//--
 
+	//TODO
 	setDefaultFont();
 
 	//--
@@ -1186,7 +1181,7 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 
 	string l1 = "-----------------------------------\n"; //divider
 	string l2 = "\n" + l1 + "\n"; // spaced divider
-	//left indent
+	// left indent
 	//string l3 = "  ";
 	string l3 = "";
 	string l4 = "     "; // spacing 1st column
@@ -2624,7 +2619,7 @@ void SurfingGuiManager::End()
 	// if there's no settings files, it means that the app it's opened by first time,
 	// then probably the windows will be overlapped..
 	if (ofGetFrameNum() > 1)
-		if (!bDisableStartupReset && bDoForceStartupResetLayout && !bDoneDoForceStartupResetLayout)
+		if (!bDisableStartupReset && bFlagDoForceStartupResetLayout && !bDoneDoForceStartupResetLayout)
 		{
 			doResetLayout();
 			bDoneDoForceStartupResetLayout = true;

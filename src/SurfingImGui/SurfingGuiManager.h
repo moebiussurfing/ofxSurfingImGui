@@ -221,7 +221,7 @@ private:
 	//--
 
 private:
-	bool bDoForceStartupResetLayout = false; // will align the windows horizontally
+	bool bFlagDoForceStartupResetLayout = false; // will align the windows horizontally
 	bool bDoneDoForceStartupResetLayout = false;
 
 private:
@@ -1584,13 +1584,27 @@ public:
 	// Helpers to share the same Gui instance
 	// between/with other add-ons.
 
+	//REFACTOR
+	//--------------------------------------------------------------
+	ofxImGui::Gui* getImGuiPtr()
+	{
+		if (guiPtr == NULL) return &gui;
+		else return guiPtr;
+	}
+	//--------------------------------------------------------------
+	ofxImGui::Gui& getImGui()
+	{
+		if (guiPtr == NULL) return gui;
+		else return *guiPtr;
+	}
+
+	//LEGACY
 	//--------------------------------------------------------------
 	ofxImGui::Gui* getGuiPtr()
 	{
 		if (guiPtr == NULL) return &gui;
 		else return guiPtr;
 	}
-
 	//--------------------------------------------------------------
 	ofxImGui::Gui& getGui()
 	{
@@ -3261,6 +3275,18 @@ public:
 		this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 
 		DrawAdvancedSubPanel();
+	}
+
+	// Debug windows
+	//--------------------------------------------------------------
+	void DrawDebugImGuiContextsWindows()
+	{
+		static bool m_Debug = false;
+		static bool m_Demo = false;
+		ImGui::Checkbox("Debug", &m_Debug);
+		ImGui::Checkbox("Demo", &m_Demo);
+		if (m_Debug) ImGui::ShowMetricsWindow(&m_Debug);
+		if (m_Demo) ImGui::ShowDemoWindow(&m_Demo);
 	}
 
 private:
