@@ -730,7 +730,7 @@ namespace ofxImGuiSurfing
 			ImVec4 borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_Border, borderLineColor);
@@ -755,7 +755,7 @@ namespace ofxImGuiSurfing
 	{
 		if (bEnable)
 		{
-			float a = FACTOR_DARKEN;
+			float a = OFX_IM_FACTOR_DARKEN;
 
 			ImGuiStyle* style = &ImGui::GetStyle();
 			const ImVec4 c_ = style->Colors[ImGuiCol_Text];
@@ -786,7 +786,7 @@ namespace ofxImGuiSurfing
 			float v = 0;
 			if (!bSoft) {
 				v = getFadeBlink();
-				a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+				a = ofClamp(v, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 			}
 
 			else
@@ -830,7 +830,7 @@ namespace ofxImGuiSurfing
 			ImVec4 c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			float v = getFadeBlink();
-			a = ofClamp(v, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(v, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 			c = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 
 			ImGui::PushStyleColor(ImGuiCol_TextDisabled, c);

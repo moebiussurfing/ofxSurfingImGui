@@ -173,6 +173,7 @@ void SurfingGuiManager::setupParams() {
 	params_Internal.add(bSolo_GameMode);
 	params_Internal.add(bKeys);
 	params_Internal.add(bDebug);
+	params_Internal.add(bGui_TopMenuBar);
 
 	params_InternalConfig.add(bMouseWheel);
 	params_InternalConfig.add(bMouseWheelFlip);
@@ -225,9 +226,9 @@ void SurfingGuiManager::setupParams() {
 
 	// Profiler Debugger
 
-	params_ModulesWindows.add(bDebugDebugger);
+	params_ModulesWindows.add(bDebugDebuggerImGui);
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-	debugger.bGui.makeReferenceTo(bDebugDebugger);
+	debugger.bGui.makeReferenceTo(bDebugDebuggerImGui);
 	params_Modules.add(debugger.params);
 #endif
 
@@ -299,7 +300,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode)
 		//--
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING:
-		numPresetsDefault = DEFAULT_AMOUNT_PRESETS;
+		numPresetsDefault = SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS;
 		setupDockingWithLayoutPresetsEngine();
 		setupInitiate();
 		break;
@@ -494,7 +495,9 @@ void SurfingGuiManager::setupInitiate()
 		// A. Help Text Box internal
 
 		helpInternal.bGui.makeReferenceTo(bHelpInternal);//link
-		helpInternal.setTitle(bHelpInternal.getName());
+		//helpInternal.setTitle(bHelpInternal.getName());
+		helpInternal.setTitle("KEY COMMANDS");
+
 		//helpInternal.setEnableHeader();
 
 		doBuildHelpInfo(false);
@@ -893,8 +896,8 @@ void SurfingGuiManager::setupImGuiTheme()
 
 	//TODO:
 	// B. Loading a file
-	string pNight = THEME_NAME_NIGHT;
-	string pDay = THEME_NAME_DAY;
+	string pNight = SURFING_IMGUI__THEME_NAME_NIGHT;
+	string pDay = SURFING_IMGUI__THEME_NAME_DAY;
 	bool bLoaded = false;
 
 	//TODO: Why do not works?
@@ -1039,7 +1042,7 @@ void SurfingGuiManager::startup()
 	if (bDockingLayoutPresetsEngine)
 	{
 		// Default Layout with 4 presets.
-		this->setupLayout(DEFAULT_AMOUNT_PRESETS);
+		this->setupLayout(SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS);
 
 		//--
 
@@ -1199,15 +1202,14 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 
 	//TODO: check mode
 	//if (0) {
+
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
-		helpInternalText += "LAYOUTS PRESETS ENGINE \n";
-		helpInternalText += "\n";
+		helpInternalText += "LAYOUTS PRESETS ENGINE \n\n";
 		//helpInternalText += l2;
 	}
 
-	helpInternalText += l3 + "KEY COMMANDS \n";
-	helpInternalText += "\n";
+	//helpInternalText += l3 + "KEY COMMANDS \n\n";
 
 	string st = "  ";
 
@@ -1252,7 +1254,6 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
 		else
 			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
-
 
 		//helpInternalText += "\n";
 		//helpInternalText += l2;
@@ -1327,6 +1328,21 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 
 				//helpInternalText += "\n";
 			}
+		}
+	}
+
+	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
+	{
+		helpInternalText += "\n\n\n";
+		helpInternalText += l3 + "WINDOWS\n\n";
+
+		helpInternalText += l3 + tagModKey + "+\n";
+		for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
+		{
+			helpInternalText += "F" + ofToString(i + 1);
+			helpInternalText += ": ";
+			helpInternalText += getWindowSpecialGuiToggleName(i);
+			helpInternalText += "\n";
 		}
 	}
 
@@ -1859,11 +1875,11 @@ void SurfingGuiManager::update()
 
 	// Debug profiler
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-	if (bDebugDebugger)
+	if (bDebugDebuggerImGui)
 	{
 		debugger.updateProfileTasksCpu(); //call after (before) main ofApp update 
 		debugger.update();
-}
+	}
 #endif
 
 	//--
@@ -1891,7 +1907,7 @@ void SurfingGuiManager::draw()
 	//if (!bAutoDraw) if (customFont == nullptr) gui.draw();
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-	if (bDebugDebugger) debugger.updateProfileTasksGpu(); //call after main ofApp draw
+	if (bDebugDebuggerImGui) debugger.updateProfileTasksGpu(); //call after main ofApp draw
 #endif
 }
 
@@ -2234,9 +2250,9 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 
 					float ww = availableSpace.GetSize().x;
 					float hh = availableSpace.GetSize().y;
-					rectangle_Central_MAX = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
+					rectangleCentralMAX = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
 
-					bool bDebug_ = bDrawView2.get();
+					bool bDebug_ = bDrawViewportRectangleCentralDebug2.get();
 					if (bDebug_)
 					{
 						int _wl = 2;
@@ -2265,40 +2281,40 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 						rDebug = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
 						ofDrawRectangle(rDebug);
 
-						//ofDrawRectangle(rectangle_Central_MAX);
+						//ofDrawRectangle(rectangleCentralMAX);
 						ofSetRectMode(OF_RECTMODE_CORNER);
 						ofPopStyle();
 					}
 					// move to left corner mode
-					rectangle_Central_MAX.translate(-ww / 2, -hh / 2);
+					rectangleCentralMAX.translate(-ww / 2, -hh / 2);
 
 					//-
 
 					static ofRectangle rectangle_Central_MAX_PRE;
 
 					{
-						if (rectangle_Central_MAX_PRE != rectangle_Central_MAX)
+						if (rectangle_Central_MAX_PRE != rectangleCentralMAX)
 						{
 							// updates when layout changes..
-							rectangle_Central_MAX_PRE = rectangle_Central_MAX;
+							rectangle_Central_MAX_PRE = rectangleCentralMAX;
 
 							bool bSkip = false;
-							bSkip = (rectangle_Central.getWidth() == 0 || rectangle_Central.getHeight() == 0);
-							bSkip += (rectangle_Central_MAX.getWidth() == 0 || rectangle_Central_MAX.getHeight() == 0);
+							bSkip = (rectangleCentralDebug.getWidth() == 0 || rectangleCentralDebug.getHeight() == 0);
+							bSkip += (rectangleCentralMAX.getWidth() == 0 || rectangleCentralMAX.getHeight() == 0);
 							if (!bSkip)
 							{
 								// fit exact rectangle to borders and scaled to fit
-								//rectangle_Central = DEMO3_Svg.getRect();
-								//if (rectangle_Central_MAX.getWidth() != 0 && rectangle_Central_MAX.getHeight() != 0) // avoid crash
-								rectangle_Central.scaleTo(rectangle_Central_MAX, OF_ASPECT_RATIO_KEEP,
+								//rectangleCentralDebug = DEMO3_Svg.getRect();
+								//if (rectangleCentralMAX.getWidth() != 0 && rectangleCentralMAX.getHeight() != 0) // avoid crash
+								rectangleCentralDebug.scaleTo(rectangleCentralMAX, OF_ASPECT_RATIO_KEEP,
 									OF_ALIGN_HORZ_CENTER, OF_ALIGN_VERT_CENTER);
 
 								//// rescaled rectangle a bit
 								//float _scale = 0.7f;
-								//rectangle_Central_Transposed = rectangle_Central;
-								//rectangle_Central_Transposed.scaleFromCenter(_scale, _scale);//scale down to fit layout spacing better
-								//rectangle_Central_Transposed.translateY(rectangle_Central.getHeight() * 0.07);//move down a bit
-								//DEMO3_Svg.setRect(rectangle_Central_Transposed);
+								//rectangleCentralTransposed = rectangleCentralDebug;
+								//rectangleCentralTransposed.scaleFromCenter(_scale, _scale);//scale down to fit layout spacing better
+								//rectangleCentralTransposed.translateY(rectangleCentralDebug.getHeight() * 0.07);//move down a bit
+								//DEMO3_Svg.setRect(rectangleCentralTransposed);
 							}
 						}
 					}
@@ -2327,58 +2343,84 @@ void SurfingGuiManager::drawLayoutPresetsEngine()
 	}
 }
 
-#ifdef FIXING_DRAW_VIEWPORT
 //--------------------------------------------------------------
-void SurfingGuiManager::drawViewport_OF_Native()
+void SurfingGuiManager::updateCentralRect()
 {
-	//TODO: debug viewport. freew space for OF drawing
+	//TODO: 
+	// Debug central viewport. 
+	// Free space for OF drawing.
 
 	ImGuiDockNodeFlags __dockingFlags;
 	__dockingFlags = ImGuiDockNodeFlags_PassthruCentralNode;
 
-	//ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-	//auto dockNodeID = ImGui::DockSpaceOverViewport(NULL, __dockingFlags);
-	//auto dockNodeID = ImGui::GetID("DockSpace");
 	auto dockNodeID = ImGui::GetID("MyDockSpace");
 
 	ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
 	if (dockNode)
 	{
 		ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
+
+		//if (centralNode && centralNode->IsEmpty())
 		if (centralNode)
-			//if (centralNode && centralNode->IsEmpty())
 		{
 			ImRect availableSpace = centralNode->Rect();
-			//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
-			//ImGui::GetForegroundDrawList()->AddRect(availableSpace.GetTL() + ImVec2(8, 8), availableSpace.GetBR() - ImVec2(8, 8), IM_COL32(255, 50, 50, 255));
 
 			ImVec2 viewCenter = availableSpace.GetCenter();
 
-			// Depending on the viewports flag, the XY is either absolute or relative to the oF window.
+			// Depending on the viewports flag, 
+			// the XY is either absolute or relative to the oF window.
 			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-				viewCenter = viewCenter - ImVec2(
-					ofGetWindowPositionX(), ofGetWindowPositionY());
+				viewCenter = viewCenter - ImVec2(ofGetWindowPositionX(), ofGetWindowPositionY());
 
-			// create rectangle
-			rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, availableSpace.GetWidth(),
-				availableSpace.GetHeight());
+			// Debug rectangle
+			rectangleCentralDebug = ofRectangle(viewCenter.x, viewCenter.y,
+				availableSpace.GetWidth(), availableSpace.GetHeight());
 			float v = Bounce(1);
-			rectangle_Central.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
+			rectangleCentralDebug.setSize(availableSpace.GetWidth() * v, availableSpace.GetHeight() * v);
+
+			// Useful in OF to be used as viewport:
+			rectangleCentralViewport = ofRectangle(availableSpace.GetTL().x, availableSpace.GetTL().y,
+				availableSpace.GetWidth(), availableSpace.GetHeight());
+
+			// Fix some situations
+			if (rectangleCentralViewport == ofRectangle(0, 0, 0, 0))
+				rectangleCentralViewport = ofGetCurrentViewport();
+			if (rectangleCentralViewport == ofRectangle(0, 0, 0, 0))
+				rectangleCentralViewport = { 0,0,1920,1080 };
 		}
 	}
-	else // get the OF viewport
+	else // Get the OF viewport
 	{
 		auto view = ofGetCurrentViewport();
-		auto viewCenter = view.getCenter();
-		rectangle_Central = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
-		float v = Bounce(1);
-		rectangle_Central.setSize(view.getWidth() * v, view.getHeight() * v);
-	}
 
+		// Debug rect
+		auto viewCenter = view.getCenter();
+		rectangleCentralDebug = ofRectangle(viewCenter.x, viewCenter.y, view.getWidth(), view.getHeight());
+		float v = Bounce(1);
+		rectangleCentralDebug.setSize(view.getWidth() * v, view.getHeight() * v);
+
+		// Useful in OF to be used as viewport:
+		rectangleCentralViewport = view;
+
+		// Fix some situations
+		if (rectangleCentralViewport == ofRectangle(0, 0, 0, 0))
+			rectangleCentralViewport = ofGetCurrentViewport();
+		if (rectangleCentralViewport == ofRectangle(0, 0, 0, 0))
+			rectangleCentralViewport = { 0,0,1920,1080 };
+	}
+}
+
+#ifdef SURFING_IMGUI__FIXING_DRAW_VIEWPORT
+//--------------------------------------------------------------
+void SurfingGuiManager::drawViewportRectangleCentralDebug()
+{
+	// Requires that updateCentralRect() has been called on current/lat frame!
+
+	// Draw
 	ofPushStyle();
 	{
 		ofSetRectMode(OF_RECTMODE_CENTER);
+
 		ofSetLineWidth(4);
 		ofColor cl = ofColor::white;
 		//ofColor cl = ofColor::yellow;
@@ -2386,9 +2428,9 @@ void SurfingGuiManager::drawViewport_OF_Native()
 		ofColor c = ofColor(cl.r, cl.g, cl.b, a);
 		ofSetColor(c);
 		ofFill();
-		ofDrawCircle(rectangle_Central.getCenter().x, rectangle_Central.getCenter().y, 3);
+		ofDrawCircle(rectangleCentralDebug.getCenter().x, rectangleCentralDebug.getCenter().y, 3);
 		ofNoFill();
-		ofDrawRectangle(rectangle_Central);
+		ofDrawRectangle(rectangleCentralDebug);
 
 		ofSetRectMode(OF_RECTMODE_CORNER);
 	}
@@ -2498,7 +2540,7 @@ void SurfingGuiManager::Begin()
 	//--
 
 	// Font
-#ifdef SURFING_DEBUG_FONTS
+#ifdef SURFING_IMGUI__DEBUG_FONTS
 	// Reset font to default (#0).
 	// this clears all the push/pop queue.
 	if (customFonts.size() > 0)
@@ -2512,7 +2554,7 @@ void SurfingGuiManager::Begin()
 
 	//TODO:
 	// Fix
-	if (!bDockingLayoutPresetsEngine) if (bGui_TopMenuBar) drawMenu();
+	//if (!bDockingLayoutPresetsEngine) if (bGui_TopMenuBar) drawMenu();
 
 	//----
 
@@ -2549,7 +2591,7 @@ void SurfingGuiManager::Begin()
 	if (bGui_Aligners) drawWindowAligners();
 
 #ifndef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-	if (bDebugDebugger) ImGui::ShowMetricsWindow();
+	if (bDebugDebuggerImGui) ImGui::ShowMetricsWindow();
 #endif
 }
 
@@ -2577,14 +2619,14 @@ void SurfingGuiManager::drawWindowsExtraManager()
 	// Profiler
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-	if (bDebugDebugger) debugger.drawImGui();
-	//if (bDebugDebugger) debugger.draw(this);//TODO: how to pass ui?
+	if (bDebugDebuggerImGui) debugger.drawImGui();
+	//if (bDebugDebuggerImGui) debugger.draw(this);//TODO: how to pass ui?
 #endif
 
 	//--
 
-#ifdef FIXING_DRAW_VIEWPORT
-	if (bDrawView1) drawViewport_OF_Native();
+#ifdef SURFING_IMGUI__FIXING_DRAW_VIEWPORT
+	if (bDrawViewportRectangleCentralDebug) drawViewportRectangleCentralDebug();
 #endif
 
 	//--
@@ -2635,7 +2677,7 @@ void SurfingGuiManager::End()
 
 	//TODO: could set the default font instead of Pop..
 	// bc that will be prophylactic if pushed too many fonts by error!
-#ifdef SURFING_DEBUG_FONTS
+#ifdef SURFING_IMGUI__DEBUG_FONTS
 	if (customFonts.size() > 0)
 	{
 		if (customFont != nullptr) ImGui::PopFont();
@@ -2849,7 +2891,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-}
+	}
 #endif
 
 	//--
@@ -3211,11 +3253,18 @@ void SurfingGuiManager::BeginDocking()
 	{
 		drawLayoutsPresetsEngine();
 	}
+
+	//----
+
+	updateCentralRect();
+
+	bDoneBeginDocking = true;
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::EndDocking()
 {
+	//TODO
 	if (bGui_TopMenuBar) drawMenuDocked();
 
 	//--
@@ -3225,8 +3274,28 @@ void SurfingGuiManager::EndDocking()
 	//{
 	//}
 
+	//--
+
 	// End the parent window that contains the Dockspace:
 	ImGui::End(); // ?
+
+	bDoneEndDocking = true;
+
+	//TODO: to check if there's not central part / free space for the viewport!
+	/*
+	if (!dockNode || !ImGui::DockBuilderGetCentralNode(dockNodeID) || !ImGui::DockBuilderGetCentralNode(dockNodeID)->IsEmpty()) {
+		static int posX = 1, posY = 1, velX = 1, velY = 1;
+		ofDrawBitmapStringHighlight("No empty dock space, nowhere to draw for oF !", posX, posY);
+		posX += velX * 3;
+		posY += velY * 3;
+		ofBitmapFont f;
+		ofRectangle strSize = f.getBoundingBox("No empty dock space, nowhere to draw for oF !", posX, posY);
+		if (posX <= 0) velX = 1;
+		if (posY <= strSize.height) velY = 1;
+		if (posX >= ofGetWidth() - strSize.width) velX = -1;
+		if (posY >= ofGetHeight()) velY = -1;
+	}
+	*/
 }
 
 //----
@@ -3350,7 +3419,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	//params_AppSettingsLayout.add(bGui_SpecialWindows);
 
 	params_AppSettingsLayout.add(bAutoSave_Layout);
-	params_AppSettingsLayout.add(bDrawView1);
+	params_AppSettingsLayout.add(bDrawViewportRectangleCentralDebug);
 	params_AppSettingsLayout.add(appLayoutIndex);
 	params_AppSettingsLayout.add(bSolo);
 
@@ -3553,11 +3622,11 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 	//	{
 	//		// Forced inside a free viewport
 	//		//// Upper left
-	//		//glm::vec2 p = rectangle_Central_MAX.getTopLeft() + glm::vec2(-1, -1);
+	//		//glm::vec2 p = rectangleCentralMAX.getTopLeft() + glm::vec2(-1, -1);
 	//		// Center upper left
 	//		int _pad = 10;
-	//		int _xx = rectangle_Central_MAX.getTopLeft().x + _pad;
-	//		int _yy = rectangle_Central_MAX.getTopLeft().y + rectangle_Central_MAX.getHeight() / 2 - hw / 2;
+	//		int _xx = rectangleCentralMAX.getTopLeft().x + _pad;
+	//		int _yy = rectangleCentralMAX.getTopLeft().y + rectangleCentralMAX.getHeight() / 2 - hw / 2;
 	//		glm::vec2 p = glm::vec2(_xx, _yy);
 	//		// Shape
 	//		xw = p.x;
@@ -3914,6 +3983,13 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	// Log
 	else if (name == bLog.getName())
+	{
+		doBuildHelpInfo();
+		return;
+	}
+
+	// Notifier
+	else if (name == bNotifier.getName())
 	{
 		doBuildHelpInfo();
 		return;
@@ -4565,7 +4641,11 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 {
 	if (!bKeys || this->bOverInputText) return;
 
-	const int& key = eventArgs.key;
+	const int& key = eventArgs.key;//OF_KEY_* 
+	const int& keycode = eventArgs.keycode;//GLFW_KEY_*
+	//const int& scancode = eventArgs.scancode;//OS/hardware
+	//const uint32_t& codepoint = eventArgs.codepoint;//Unicode
+
 	ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
 
 	// Modifiers
@@ -4596,118 +4676,15 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	//----
 
-	//TODO:
-	// Keystroke Log helpers.
-	// should copy to surfingImGui
-
-	/*static*/
-	auto logKey = [this, key](const string& msg = "")
-		{
-			ofLogLevel l = OF_LOG_VERBOSE;
-			// ofLogLevel l = OF_LOG_WARNING;
-
-			string s = ofToString("Key ") + ofToString(char(key));
-
-			//TODO: filter not "known" chars
-			//include only a to z and numbers
-			if (!isalnum(char(key))) return;
-
-			if (msg == "")
-			{
-			}
-			else
-			{
-				s += msg;
-			}
-			this->AddToLog(s, l);
-		};
-
-	/*static*/
-	auto logKeyText = [this](const string& msg = "")
-		{
-			ofLogLevel l = OF_LOG_VERBOSE;
-			// ofLogLevel l = OF_LOG_WARNING;
-
-			this->AddToLog(msg, l);
-		};
-
-	/*static*/
-	auto logKeyParam = [this, key](const ofParameter<bool>& p, const string& msg = "")
-		{
-			ofLogLevel l = OF_LOG_VERBOSE;
-			// ofLogLevel l = OF_LOG_WARNING;
-
-			string s;
-
-			if (msg == "")
-			{
-				string sKey = "";
-				if (isalnum(char(key))) {
-					sKey = ofToString("Key " + ofToString(char(key)));
-					s = sKey + " - " + p.getName();
-				}
-				else s = p.getName();
-				s += "  | " + string(p.get() ? "ON " : "OFF");
-
-			}
-			else
-			{
-				string sKey;
-				sKey = ofToString("Key ") + msg;
-				s = sKey + " - " + p.getName();
-				s += "  | " + string(p.get() ? "ON " : "OFF");
-
-			}
-			this->AddToLog(s, l);
-		};
-
-	//----
-
-
-	// Help App
-	if (key == 'H')
+	if (!mod_CONTROL)
 	{
-		bHelp = !bHelp;
-		logKeyParam(bHelp);
-	}
-	// Help Internal
-	else if (key == 'I')
-	{
-		bHelpInternal = !bHelpInternal;
-		logKeyParam(bHelpInternal);
-	}
-
-	// Minimize
-	else if (key == '`')
-	{
-		bMinimize = !bMinimize;
-		logKeyParam(bMinimize);
-	}
-
-	// Extra
-	else if (key == 'E' && !mod_CONTROL)
-	{
-		bExtra = !bExtra;
-		logKeyParam(bExtra);
-	}
-
-	// Debug
-	else if (key == 'D' && !mod_CONTROL)
-	{
-		bDebug = !bDebug;
-		logKeyParam(bDebug);
-	}
-
-	// Log
-	else if (key == 'L' && !mod_CONTROL)
-	{
-		bLog = !bLog;
-	}
-
-	// Notifier
-	else if (key == 'N' && !mod_CONTROL)
-	{
-		bNotifier = !bNotifier;
+		if (toggleParam(key, 'H', bHelp, "H"));
+		if (toggleParam(key, 'I', bHelpInternal, "I"));
+		if (toggleParam(key, '`', bMinimize, "`"));
+		if (toggleParam(key, 'E', bExtra, "E"));
+		if (toggleParam(key, 'D', bDebug, "E"));
+		if (toggleParam(key, 'L', bLog, "E"));
+		if (toggleParam(key, 'N', bNotifier, "E"));
 	}
 
 	//--
@@ -4769,57 +4746,109 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		}
 		else // CTRL pressed
 		{
+			if (toggleParam(key, '`', bGui_ShowWindowsGlobal, "Ctrl+`"));
+
 			switch (key)
 			{
+				//case '0': // global momentary
+				//	if (getWindowsSpecialsSize() <= 0) break;
+				//	bGui_ShowWindowsGlobal = !bGui_ShowWindowsGlobal;
+				//	break;
+
+					//--
+
+					// all special windows
+
 			case OF_KEY_F1:
+				if (getWindowsSpecialsSize() <= 0) break;
 				doSpecialWindowToggleVisible(0);
-				logKeyParam(getWindowSpecialGuiToggle(0), "Ctrl + F1");
+				logKeyParam(getWindowSpecialGuiToggle(0), "Ctrl+F1");
 				break;
 
 			case OF_KEY_F2:
+				if (getWindowsSpecialsSize() < 1) break;
 				doSpecialWindowToggleVisible(1);
-				logKeyParam(getWindowSpecialGuiToggle(1), "Ctrl + F2");
+				logKeyParam(getWindowSpecialGuiToggle(1), "Ctrl+F2");
 				break;
 
 			case OF_KEY_F3:
+				if (getWindowsSpecialsSize() < 2) break;
 				doSpecialWindowToggleVisible(2);
-				logKeyParam(getWindowSpecialGuiToggle(2), "Ctrl + F3");
+				logKeyParam(getWindowSpecialGuiToggle(2), "Ctrl+F3");
 				break;
 
 			case OF_KEY_F4:
+				if (getWindowsSpecialsSize() < 3) break;
 				doSpecialWindowToggleVisible(3);
-				logKeyParam(getWindowSpecialGuiToggle(3), "Ctrl + F4");
+				logKeyParam(getWindowSpecialGuiToggle(3), "Ctrl+F4");
 				break;
 
 			case OF_KEY_F5:
+				if (getWindowsSpecialsSize() < 4) break;
 				doSpecialWindowToggleVisible(4);
-				logKeyParam(getWindowSpecialGuiToggle(4), "Ctrl + F5");
+				logKeyParam(getWindowSpecialGuiToggle(4), "Ctrl+F5");
 				break;
 
 			case OF_KEY_F6:
+				if (getWindowsSpecialsSize() < 5) break;
 				doSpecialWindowToggleVisible(5);
-				logKeyParam(getWindowSpecialGuiToggle(5), "Ctrl + F6");
+				logKeyParam(getWindowSpecialGuiToggle(5), "Ctrl+F6");
 				break;
 
 			case OF_KEY_F7:
+				if (getWindowsSpecialsSize() < 6) break;
 				doSpecialWindowToggleVisible(6);
-				logKeyParam(getWindowSpecialGuiToggle(6), "Ctrl + F7");
+				logKeyParam(getWindowSpecialGuiToggle(6), "Ctrl+F7");
 				break;
 
 			case OF_KEY_F8:
+				if (getWindowsSpecialsSize() < 7) break;
 				doSpecialWindowToggleVisible(7);
-				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl + F8");
+				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F8");
 				break;
 
-				//case OF_KEY_F9: doSpecialWindowToggleVisible(8); break;
-				//TODO: amount of panels is hard-coded
-			}
-		}
+			case OF_KEY_F9:
+				if (getWindowsSpecialsSize() < 8) break;
+				doSpecialWindowToggleVisible(8);
+				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F9");
+				break;
 
-		//else if (key == OF_KEY_F9) // Minimize
-		//{
-		//	bMinimize_Presets = !bMinimize_Presets;
-		//}
+			case OF_KEY_F10:
+				if (getWindowsSpecialsSize() < 9) break;
+				doSpecialWindowToggleVisible(9);
+				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F10");
+				break;
+
+			case OF_KEY_F11:
+				if (getWindowsSpecialsSize() < 10) break;
+				doSpecialWindowToggleVisible(10);
+				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F11");
+				break;
+
+			}
+
+			//TODO:
+			// From RF
+			/*
+			if (bModKeyCtrl)
+			{
+				string tagMod = "Ctrl+";
+
+				if (toggleParam(keycode, '0', ui->bGui_ShowWindowsGlobal, tagMod + "0")) return true;
+				if (toggleParam(keycode, '1', bGuiCameras, tagMod + "1")) return true;
+				if (toggleParam(keycode, '2', bGuiOutput, tagMod + "2")) return true;
+				if (toggleParam(keycode, '3', bGuiSync, tagMod + "3")) return true;
+				if (toggleParam(keycode, '4', bGuiTrackerData, tagMod + "4")) return true;
+				if (toggleParam(keycode, '5', bGuiTrackerInputs, tagMod + "5")) return true;
+				if (toggleParam(keycode, '6', bGuiData, tagMod + "6")) return true;
+
+				if (toggleParam(key, OF_KEY_F1, ui->bHelp, tagMod + "F1")) return true;
+				if (toggleParam(key, OF_KEY_F2, bGuiSettings, tagMod + "F2")) return true;
+				if (toggleParam(key, OF_KEY_F5, ui->bLog, tagMod + "F5")) return true;
+				if (toggleParam(key, OF_KEY_F6, ui->bNotifier, tagMod + "F6")) return true;
+			}
+			*/
+		}
 
 		//--
 
@@ -4831,18 +4860,20 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			bSolo = !bSolo;
 			logKeyParam(bSolo, "Ctrl + s");
 		}
+
 		//TODO: Bug: collides with some other keys like shift + drag docking...
 		//// All
 		//if ((key == 'a' && mod_CONTROL) || key == 1)
 		//{
 		//	this->setShowAllPanels(true);
 		//}
+
 		// None
-		if ((key == 'n' && mod_CONTROL) || key == 14)
-		{
-			this->setShowAllPanels(false);
-			logKeyText("Ctrl + n");
-		}
+		//if ((key == 'n' && mod_CONTROL) || key == 14)
+		//{
+		//	this->setShowAllPanels(false);
+		//	logKeyText("Ctrl + n");
+		//}
 
 		//// Unlock Dock
 		//else if (key == 'l')
@@ -4901,7 +4932,134 @@ void SurfingGuiManager::drawMenuDocked()
 
 	if (ImGui::BeginMenuBar())
 	{
+
 		if (ImGui::BeginMenu("File"))
+		{
+			if (MenuItemButton("Load"))
+			{
+				//loadSettingsProjectDialog();
+			}
+			string s = "Load Project.";
+			AddTooltipBlink(s);
+
+			if (MenuItemButton("Save"))
+			{
+				//saveSettingsProjectDialog();
+			}
+			s = "Save Project";
+			AddTooltipBlink(s);
+
+			if (ImGui::MenuItem("Save as.."))
+			{
+			}
+			s = "Save Project as";
+			AddTooltipBlink(s);
+
+			//if (ImGui::MenuItem("Exit", NULL, &opt_exit))
+			//{
+			//	ofExit();
+			//	//*opt_exit = false;
+			//}
+
+			// Exit. Blink if hover
+			static bool bExitHover = false;
+			bool bExit = this->MenuItemButtonBlinkingWithKeystrokeInfo("Exit", "ESC", bExitHover);
+			bExitHover = ImGui::IsItemHovered();
+			if (bExit)
+			{
+				ofExit();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		//--
+
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Copy", NULL))
+			{
+			}
+
+			if (ImGui::MenuItem("Paste", NULL))
+			{
+			}
+
+			ImGui::EndMenu();
+		}
+
+		//--
+
+		//TODO
+		// Layouts Engine
+
+		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+		{
+			if (ImGui::BeginMenu("Layouts"))
+			{
+				for (int i = 0; i < bLayoutPresets.size(); i++)
+				{
+					if (ImGui::MenuItem(bLayoutPresets[i].getName().c_str(), "", (bool*)&bLayoutPresets[i].get()))
+					{
+						bLayoutPresets[i] = bLayoutPresets[i]; // to trig
+					}
+				}
+				//this->AddSpacingSeparated();
+				//if (ImGui::MenuItem("All", NULL)) { this->setShowAllPanels(true); }
+				//if (ImGui::MenuItem("None", NULL)) { this->setShowAllPanels(false); }
+				ImGui::EndMenu();
+			}
+		}
+
+		//--
+
+		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING || surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
+		{
+			if (ImGui::BeginMenu("Docking"))
+			{
+				if (ImGui::MenuItem("WARNING", ""))
+				{
+				}
+				ofxImGuiSurfing::AddTooltip2(
+					"Don't pay attention for this! \nThis is not operative here. \nJust for testing menus!\nPotential CRASH!");
+
+				dockspace_flags = ImGui::GetIO().ConfigFlags;
+
+				if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))
+				{
+					dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
+				}
+				if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))
+				{
+					dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
+				}
+				if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "",
+					(dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
+				{
+					dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+				}
+				if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))
+				{
+					dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
+				}
+				if (ImGui::MenuItem("Flag: PassthruCentralNode", "",
+					(dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen))
+				{
+					dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
+				}
+				//if (ImGui::MenuItem("Flag: ConfigDockingWithShift", "", (dockspace_flags & ImGuiDockNodeFlags_) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
+				//this->AddSpacingSeparated();
+
+				ImGui::GetIO().ConfigFlags = dockspace_flags;
+				//ImGui::GetIO().ConfigDockingWithShift = true;
+
+				ImGui::EndMenu();
+			}
+		}
+
+		//--
+
+		if (ImGui::BeginMenu("Windows"))
 		{
 			// Disabling fullscreen would allow the window to be moved to the front of other windows,
 			// which we can't undo at the moment without finer window depth/z control.
@@ -4915,87 +5073,84 @@ void SurfingGuiManager::drawMenuDocked()
 				ofSetFullscreen(opt_fullscreen);
 			}
 
+			//TODO
+			if (ImGui::MenuItem("Reset Window"))
+			{
+				SurfingGui::setWindowShape(-1);//left monitor
+				//SurfingGui::setWindowShape(1, true);//right monitor portrait
+			}
+
+
 			this->AddSpacingSeparated();
 
-			if (ImGui::MenuItem("Exit", NULL, &opt_exit))
-			{
-				ofExit();
-				//*opt_exit = false;
-			}
-			ImGui::EndMenu();
-		}
+			//--
 
-		if (ImGui::BeginMenu("Edit"))
-		{
-			if (ImGui::MenuItem("Copy", NULL))
-			{
-			}
-			if (ImGui::MenuItem("Paste", NULL))
-			{
-			}
-			ImGui::EndMenu();
-		}
+			//TODO
+			string tagMod = tagModKey + "+";
 
-		if (ImGui::BeginMenu("Layouts"))
-		{
-			for (int i = 0; i < bLayoutPresets.size(); i++)
+			bool b = bGui_ShowWindowsGlobal.get(); // Catch before to avoid crash when modifying.
+			if (!b) BeginBlinkText();
+			string n = bGui_ShowWindowsGlobal.getName();
+			MenuItemToggleWithKeystrokeInfo(bGui_ShowWindowsGlobal, tagMod + "0");
+			string s = "Momentary Show/Hide \nall Windows.";
+			AddTooltip(s);
+			if (!b) EndBlinkText();
+
+			if (bGui_ShowWindowsGlobal)
 			{
-				if (ImGui::MenuItem(bLayoutPresets[i].getName().c_str(), "", (bool*)&bLayoutPresets[i].get()))
+				Indent();
+
+				static ofParameter<bool> bAllWindowsAreVisible{ "All", false };
+
+				bAllWindowsAreVisible = getAllWindowsSpecialAreVisible();
+
+				if (MenuItemToggle(bAllWindowsAreVisible))
 				{
-					bLayoutPresets[i] = bLayoutPresets[i]; // to trig
+					setShowAllWindowsSpecial(true);
+				}
+				s = "Show all Windows.";
+				AddTooltip(s);
+
+				if (MenuItemButton("None"))
+				{
+					setShowAllWindowsSpecial(false);
+				}
+				s = "Hide all Windows.";
+				AddTooltip(s);
+
+				Unindent();
+			}
+
+			if (b) // show global
+			{
+				AddSpacingSeparated();
+
+				for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
+				{
+					MenuItemToggleWithKeystrokeInfo(getWindowSpecialGuiToggle(i), tagMod + "F" + ofToString(i + 1));
 				}
 			}
-			//this->AddSpacingSeparated();
-			//if (ImGui::MenuItem("All", NULL)) { this->setShowAllPanels(true); }
-			//if (ImGui::MenuItem("None", NULL)) { this->setShowAllPanels(false); }
-			ImGui::EndMenu();
+
+			AddSpacingBigSeparated();
+
+			//--
+
+			MenuItemToggleWithKeystrokeInfo(bLog, "L");
+			s = "Show Log Window.";
+			AddTooltip(s);
+
+			MenuItemToggleWithKeystrokeInfo(bNotifier, "N");
+			s = "Show Notifier Messages.";
+			AddTooltip(s);
+
+			EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Docking"))
-		{
-			if (ImGui::MenuItem("WARNING", ""))
-			{
-			};
-			ofxImGuiSurfing::AddTooltip2(
-				"Don't pay attention for this! \nThis is not operative here. \nJust for testing menus!\nPotential CRASH!");
-
-			dockspace_flags = ImGui::GetIO().ConfigFlags;
-
-			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))
-			{
-				dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
-			}
-			if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))
-			{
-				dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
-			}
-			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "",
-				(dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
-			{
-				dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-			}
-			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))
-			{
-				dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
-			}
-			if (ImGui::MenuItem("Flag: PassthruCentralNode", "",
-				(dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen))
-			{
-				dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-			}
-			//if (ImGui::MenuItem("Flag: ConfigDockingWithShift", "", (dockspace_flags & ImGuiDockNodeFlags_) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-			//this->AddSpacingSeparated();
-
-			ImGui::GetIO().ConfigFlags = dockspace_flags;
-			//ImGui::GetIO().ConfigDockingWithShift = true;
-
-			ImGui::EndMenu();
-		}
+		//--
 
 		if (ImGui::BeginMenu("About"))
 		{
-			ofxImGuiSurfing::AddTooltipHelp(
-				"WARNING !\n\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
+			string s = "WARNING !\n\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
 				"\n\n"
 				"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 				"- Drag from window title bar or their tab to dock/undock." "\n"
@@ -5006,8 +5161,9 @@ void SurfingGuiManager::drawMenuDocked()
 				"\n\n"
 				"ImGui::DockSpace() comes with one hard constraint: it needs to be submitted _before_ any window which may be docked into it. Therefore, if you use a dock spot as the central point of your application, you'll probably want it to be part of the very first window you are submitting to imgui every frame."
 				"\n\n"
-				"(NB: because of this constraint, the implicit \"Debug\" window can not be docked into an explicit DockSpace() node, because that window is submitted as part of the NewFrame() call. An easy workaround is that you can create your own implicit \"Debug##2\" window after calling DockSpace() and leave it in the window stack for anyone to use.)"
-			);
+				"(NB: because of this constraint, the implicit \"Debug\" window can not be docked into an explicit DockSpace() node, because that window is submitted as part of the NewFrame() call. An easy workaround is that you can create your own implicit \"Debug##2\" window after calling DockSpace() and leave it in the window stack for anyone to use.)";
+
+			AddTooltipHelp(s);
 
 			ImGui::EndMenu();
 		}
@@ -5018,6 +5174,8 @@ void SurfingGuiManager::drawMenuDocked()
 
 //--
 
+//TODO
+/*
 //--------------------------------------------------------------
 void SurfingGuiManager::drawMenu()
 {
@@ -5103,6 +5261,7 @@ void SurfingGuiManager::drawMenu()
 	ImGui::EndMainMenuBar();
 
 }
+*/
 
 //--
 

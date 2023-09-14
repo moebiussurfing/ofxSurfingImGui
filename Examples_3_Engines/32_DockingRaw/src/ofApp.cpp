@@ -1,9 +1,20 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup() {
+void ofApp::setup()
+{
+#if 1
+	SurfingGui::setWindowShape(-1);//left monitor
+	//SurfingGui::setWindowShape(1, true);//right monitor portrait
+#endif
 
 	setupParameters();
+
+	cam.setupPerspective();
+	cam.setNearClip(0.0001);
+	cam.setFarClip(1000);
+	cam.setDistance(34);
+	cam.lookAt(glm::vec3(0, 0, 0));
 
 	//--
 
@@ -13,8 +24,6 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::setupParameters()
 {
-	// Scene Parameters
-
 	params1.setName("paramsGroup1");
 	params1.add(speed.set("speed1", 0.5f, 0, 1));
 	params1.add(bPrevious.set("<", false));
@@ -87,25 +96,22 @@ void ofApp::setupImGui()
 	// Optional: 
 	// After startup
 
-#if 0
-	// Subscribe an optional Reset button
-	// flagging a bool to true to reset. 
-	// Uses the internal add-on GUI Reset button 
-	// located on the Advanced section,
-	// But notice that it will call a local method on this scope (ofApp).
-	ui.setResetPtr(&bDockingRandom);
-	//ui.setResetPtr(&bDockingReset);
-#endif
+	//--
 
 	// Customize Help info
-	string s = "HELP ofApp\n\nThis is an Example to learn \nthe Docking features.\n\nEnjoy!";
+
+	string s = "This is an Example to learn \nthe Docking features.\n\nEnjoy!";
+	ui.setHelpAppTitle("Example 23_DockingRaw");
 	ui.setHelpAppText(s);
+
+	ui.setEnableHelpInternal();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
 	updateScene();
+	drawScene();
 
 	//----
 
@@ -133,6 +139,8 @@ void ofApp::drawImGui()
 
 		ui.BeginDocking();
 		{
+			// Our custom docking related functions 
+			// to customize the docking layout on runtime by code.
 			updateImGuiDockingHelpers();
 		}
 		ui.EndDocking();
@@ -158,7 +166,7 @@ void ofApp::drawImGui()
 			ui.EndWindow();
 		}
 
-		//----
+		//--
 
 		// 3. The Special Windows 
 
@@ -168,6 +176,8 @@ void ofApp::drawImGui()
 		{
 			drawImGuiSpecialWindows();
 		}
+
+		//--
 	}
 	ui.End();
 }
@@ -181,15 +191,6 @@ void ofApp::drawImGuiSpecialWindows()
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
-			//// Some useful sizes to help layouting in some scenarios.
-			//// e.g. when using raw ImGui widgets without the full engine.
-			//float _w1 = ofxImGuiSurfing::getWidgetsWidth(1); // full width
-			//float _w2 = ofxImGuiSurfing::getWidgetsWidth(2); // half width
-			//float _h1 = ofxImGuiSurfing::getWidgetsHeightUnit(); // standard height
-			//float _h2 = 2 * _h1; // double height
-
-			// if ui.bHelp enabled, activates help tooltips on this window!
-
 			ui.AddLabelHuge("Window 0", false);
 
 			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
@@ -266,9 +267,7 @@ void ofApp::drawImGuiSpecialWindows()
 		if (ui.BeginWindowSpecial(index))
 		{
 			ui.AddLabelHuge("Window 1", false);
-
 			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-
 			ui.AddGroup(params1);
 
 			//--
@@ -281,18 +280,26 @@ void ofApp::drawImGuiSpecialWindows()
 
 	index = 2;
 	{
+		/*
+		// Constraints do not works on docking!
+		if (ui.getIsWindowSpecialVisible(index))
+		{
+			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW;
+		}
+		*/
+
 		if (ui.BeginWindowSpecial(index))
 		{
-			ui.AddLabelHuge("Window 2", false);
+			ui.BeginColumns(3);
 
+			ui.AddLabelHuge("Window 2", false);
 			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+			ui.NextColumn();
 
 			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
-
-			ui.AddSpacingBigSeparated();
+			ui.NextColumn();
 
 			// Tabs
-
 			if (ImGui::BeginTabBar("_myTabs"))
 			{
 				if (ImGui::BeginTabItem("Video"))
@@ -336,6 +343,7 @@ It has survived not only five centuries, but also the leap into electronic types
 
 				ImGui::EndTabBar();
 			}
+			ui.EndColumns();
 
 			//--
 
@@ -349,18 +357,21 @@ It has survived not only five centuries, but also the leap into electronic types
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
+			ui.BeginColumns(3);
+
 			ui.AddLabelHuge("Window 3", false);
-
 			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
-
 			ui.AddLabelHuge("Hello, down Huge!", false, true);
+			ui.NextColumn();
+
 			ui.AddLabelBig("Hello, down Big!", false, true);
 			ui.AddLabelBig("Hello, down Big! Hello, down! Hello, down!");
-			ui.AddSpacingBigSeparated();
-			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-			ui.AddSpacingBigSeparated();
 			ui.AddLabelBig("Hello, down Big!", false, true);
+			ui.NextColumn();
+
+			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
 			ui.AddLabelHuge("Hello, down Huge! Hello, down! Hello, down!");
+			ui.EndColumns();
 
 			//--
 
@@ -382,13 +393,19 @@ It has survived not only five centuries, but also the leap into electronic types
 		{
 			ui.AddLabelHuge("Window 4", false);
 
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.BeginColumns(3);
 
+			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 			ui.AddLabelHuge("Hello, left Huge!", true, true);
+			ui.NextColumn();
+
 			ui.AddLabelHuge("Hello, left Huge!", false, false);
 			ui.AddLabelBig("Hello, left Big!");
+			ui.NextColumn();
+			
 			ui.AddLabel("Hello, left!", false, true);
 			ui.AddLabelBig("Hello, left Big!", false);
+			ui.EndColumns();
 
 			ui.EndWindowSpecial();
 		}
@@ -454,7 +471,9 @@ void ofApp::keyPressed(int key)
 {
 	ofLogNotice(__FUNCTION__) << " " << char(key);
 
-	if (key == 'g')bGui = !bGui;
+	if (key == 'g') bGui = !bGui;
+	if (key == ' ') bDockingRandom = true;
+	if (key == OF_KEY_BACKSPACE) bDockingReset = true;
 }
 
 //----
@@ -505,124 +524,6 @@ void ofApp::updateImGuiDockingHelpers()
 
 #ifdef SURFING_USE_MANAGER
 
-#if 1
-	//if(bDoRefresh)
-	{
-		ofRectangle rectangle_Central_MAX;
-		ofRectangle rectangle_Central; // current free space viewport updated when changes
-		ofParameter<bool> bDrawView2{ "Draw View 2", false };
-
-		//--
-
-		ImGuiID dockNodeID;
-		ImGuiDockNode* dockNode;
-
-		//----
-
-		// Get check free space
-		// central inter docks rectangle
-
-		ImGuiDockNodeFlags flagsDock = ImGuiDockNodeFlags_None;
-		//flagsDock += ImGuiDockNodeFlags_DockSpace;
-		flagsDock += ImGuiDockNodeFlags_PassthruCentralNode;
-
-		// A
-		dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
-		dockNode = ImGui::DockBuilderGetNode(dockNodeID);
-
-		// B
-		//ImGuiDockNode* dockNode = ImGui::DockBuilderGetNode(dockNodeID);
-
-		if (dockNode)
-		{
-			ImGuiDockNode* centralNode = ImGui::DockBuilderGetCentralNode(dockNodeID);
-
-			// Verifies if the central node is empty (visible empty space for oF)
-			if (centralNode && centralNode->IsEmpty())
-			{
-				ImRect availableSpace = centralNode->Rect();
-				//availableSpace.Max = availableSpace.Min + ImGui::GetContentRegionAvail();
-				//ImGui::GetForegroundDrawList()->AddRect(availableSpace.GetTL() + ImVec2(8, 8), availableSpace.GetBR() - ImVec2(8, 8), IM_COL32(255, 50, 50, 255));
-
-				ImVec2 viewCenter = availableSpace.GetCenter();
-				// Depending on the viewports flag, the XY is either absolute or relative to the oF window.
-				//if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) viewCenter = viewCenter - ImVec2(ofGetWindowPositionX(), ofGetWindowPositionY());
-
-				float ww = availableSpace.GetSize().x;
-				float hh = availableSpace.GetSize().y;
-				rectangle_Central_MAX = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
-
-				bool bDebug_ = bDrawView2.get();
-				if (bDebug_)
-				{
-					int _wl = 2;
-					int pad = 10;
-
-					ofPushStyle();
-					ofSetRectMode(OF_RECTMODE_CENTER);
-
-					int g = 0;
-					ofColor cl = ofColor::white;
-					//ofColor cl = ofColor::orange;
-
-					//int g = 255 * Bounce(0.5);
-					int a = 255.f * ofMap(Bounce(1), 0.0f, 1.0f, 0.2f, 1.0f, true);
-					ofColor c = ofColor(cl.r, cl.g, cl.b, a);
-					//ofColor c = ofColor(g, a);
-					ofSetColor(c);
-
-					ofNoFill();
-					ofSetLineWidth(_wl);
-
-					float ww = availableSpace.GetSize().x - pad;
-					float hh = availableSpace.GetSize().y - pad;
-
-					ofRectangle rDebug;
-					rDebug = ofRectangle(viewCenter.x, viewCenter.y, ww, hh);
-					ofDrawRectangle(rDebug);
-
-					//ofDrawRectangle(rectangle_Central_MAX);
-					ofSetRectMode(OF_RECTMODE_CORNER);
-					ofPopStyle();
-				}
-				// move to left corner mode
-				rectangle_Central_MAX.translate(-ww / 2, -hh / 2);
-
-				//-
-
-				static ofRectangle rectangle_Central_MAX_PRE;
-
-				{
-					if (rectangle_Central_MAX_PRE != rectangle_Central_MAX)
-					{
-						// updates when layout changes..
-						rectangle_Central_MAX_PRE = rectangle_Central_MAX;
-
-						bool bSkip = false;
-						bSkip = (rectangle_Central.getWidth() == 0 || rectangle_Central.getHeight() == 0);
-						bSkip += (rectangle_Central_MAX.getWidth() == 0 || rectangle_Central_MAX.getHeight() == 0);
-						if (!bSkip)
-						{
-							// fit exact rectangle to borders and scaled to fit
-							//rectangle_Central = DEMO3_Svg.getRect();
-							//if (rectangle_Central_MAX.getWidth() != 0 && rectangle_Central_MAX.getHeight() != 0) // avoid crash
-							rectangle_Central.scaleTo(rectangle_Central_MAX, OF_ASPECT_RATIO_KEEP,
-								OF_ALIGN_HORZ_CENTER, OF_ALIGN_VERT_CENTER);
-
-							//// rescaled rectangle a bit
-							//float _scale = 0.7f;
-							//rectangle_Central_Transposed = rectangle_Central;
-							//rectangle_Central_Transposed.scaleFromCenter(_scale, _scale);//scale down to fit layout spacing better
-							//rectangle_Central_Transposed.translateY(rectangle_Central.getHeight() * 0.07);//move down a bit
-							//DEMO3_Svg.setRect(rectangle_Central_Transposed);
-						}
-					}
-				}
-			}
-		}
-	}
-#endif
-
 	bool bDoRefresh = 0;
 
 	// Manager save/load
@@ -654,18 +555,12 @@ void ofApp::drawImGuiDockingHelpers()
 
 	if (ui.BeginWindow(bGui_DockingHelpers))
 	{
-		float _w = ofxImGuiSurfing::getWidgetsWidth();
-		float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
-		float _h = ofxImGuiSurfing::getWidgetsHeightUnit();
-
-		//--
-
 		s = "Layout";
 		ui.AddLabelBig(s);
 
 		// Reset docking layout
 
-		if (ImGui::Button("Reset", ImVec2(_w, _h)))
+		if (ui.AddButton("Reset", OFX_IM_BUTTON, 2, true))
 		{
 			bDockingReset = true;
 			// Flag to call on a precise draw point, 
@@ -678,7 +573,7 @@ void ofApp::drawImGuiDockingHelpers()
 
 		// Randomize docking layout
 
-		if (ImGui::Button("Random", ImVec2(_w, _h)))
+		if (ui.AddButton("Random", OFX_IM_BUTTON, 2))
 		{
 			bDockingRandom = true;
 			// Flag to call on a precise draw point,
@@ -697,13 +592,15 @@ void ofApp::drawImGuiDockingHelpers()
 		s = "Manager";
 		ui.AddLabelBig(s);
 
-		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2)) {
+		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2))
+		{
 			bFlagLoadLayout = true;
 			//loadLayoutImGuiIni();
 		}
 		ui.SameLine();
 
-		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2)) {
+		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2))
+		{
 			bFlagSaveLayout = true;
 			//saveLayoutImGuiIni();
 		}
@@ -717,14 +614,11 @@ void ofApp::drawImGuiDockingHelpers()
 		ui.AddLabelBig(s);
 
 		// Show/hide all Special Windows / Panels
-
-		if (ImGui::Button("All", ImVec2(_w2, _h)))
+		if (ui.AddButton("All", OFX_IM_BUTTON, 2, true))
 		{
 			ui.setShowAllPanels(true);
 		}
-		ui.SameLine();
-
-		if (ImGui::Button("None", ImVec2(_w2, _h)))
+		if (ui.AddButton("None", OFX_IM_BUTTON, 2))
 		{
 			ui.setShowAllPanels(false);
 		}
@@ -739,13 +633,59 @@ void ofApp::drawImGuiDockingHelpers()
 		ui.AddMinimizerToggle();
 		if (ui.isMaximized()) {
 			ui.AddAutoResizeToggle();
+			ui.AddDebugToggle();
+			ui.AddExtraToggle();
+			ui.AddHelpInternalToggle();
+			ui.AddMenuBarToggle();
+			ui.AddAdvancedToggle();
+
+			ui.AddSpacingSeparated();
+
 			ui.AddLogToggle();
 			ui.AddNotifierToggle();
 		}
 
 		ui.EndWindow();
+
+		// Debug
+		ui.DrawWindowAdvanced();
 	}
 }
+
+//--------------------------------------------------------------
+void ofApp::drawScene()
+{
+	auto& r = ui.getRectangleCentralViewport();
+
+	if (ui.isDebug())
+	{
+		// viewport rect
+		ofPushMatrix();
+		ofPushStyle();
+		ofSetRectMode(OF_RECTMODE_CENTER);
+		float l = 2;
+		float o = 1;//offset
+		ofSetLineWidth(l);
+		ofColor c = ofColor(ofColor::yellow, 255 * SurfingGui::Bounce());
+		ofSetColor(c);
+		ofNoFill();
+		ofRectangle r_ = ofRectangle(r.getCenter().x + o, r.getCenter().y + o, r.getWidth() - 2 * o, r.getHeight() - 2 * o);
+		ofDrawRectangle(r_);
+		ofPopStyle();
+		ofPopMatrix();
+	}
+
+	// cam using central docking space as viewport
+	if (cam.getMouseInputEnabled()) { if (ui.isMouseOverGui()) cam.disableMouseInput(); }
+	else if (!ui.isMouseOverGui()) cam.enableMouseInput();
+
+	cam.begin(r);
+	//ofDrawGrid();
+	ofDrawGridPlane();
+	cam.end();
+}
+
+//----
 
 //--------------------------------------------------------------
 void ofApp::doDockingReset()
@@ -791,7 +731,7 @@ void ofApp::doDockingReset()
 	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(3).c_str(), dock_id_top);
 	ImGui::DockBuilderDockWindow(ui.getWindowSpecialName(4).c_str(), dock_id_down);
 
-	// B hardcoded names
+	// B Hardcoded names
 	//ImGui::DockBuilderDockWindow("Main Window", dock_id_top);
 	//ImGui::DockBuilderDockWindow("Audio Window", dock_id_right);
 	//ImGui::DockBuilderDockWindow("Video 2", dock_id_down);
@@ -815,14 +755,16 @@ void ofApp::doDockingRandom()
 	ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->Size);
 
 	// Randomized sizes
-	const float v1 = ofRandom(0.2, 0.35);
-	const float v2 = ofRandom(0.2, 0.35);
-	const float v3 = ofRandom(0.2, 0.35);
-	const float v4 = ofRandom(0.2, 0.35);
+	float min = 0.2;
+	float max = 0.3;
+	const float v1 = ofRandom(min, max);
+	const float v2 = ofRandom(min, max);
+	const float v3 = ofRandom(min, max);
+	const float v4 = ofRandom(min, max);
 
 	auto dock_id_top = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, v1, nullptr, &dockspace_id);
 	auto dock_id_down = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, v2, nullptr, &dockspace_id);
-	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left,v3, nullptr, &dockspace_id);
+	auto dock_id_left = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, v3, nullptr, &dockspace_id);
 	auto dock_id_right = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, v4, nullptr, &dockspace_id);
 
 	int idice = (int)ofRandom(3);

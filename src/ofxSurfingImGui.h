@@ -50,3 +50,5 @@ using ofxImGuiSurfing::SurfingFontTypes;
 
 //using ofxSurfingGui = SurfingGuiManager; // TODO: fails..
 //typedef SurfingGuiManager ofxSurfingGui; // breaks all 
+
+#define SurfingGui ofxImGuiSurfing // rename the ofxImGuiSurfing namespace 

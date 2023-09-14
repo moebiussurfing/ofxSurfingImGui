@@ -208,8 +208,70 @@ private:
 	void draw(); // To manual draw.
 	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes. subscribed after app
 
+	//--
+
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void keyReleased(ofKeyEventArgs& eventArgs);
+	
+	string tagModKey = "Ctrl";
+
+	// Keystroke Log helpers.
+	//------------------------------------------------------------------------------------------
+	void logKey(int key, const std::string& msg)
+	{
+		ofLogLevel l = OF_LOG_VERBOSE;
+
+		string s = ofToString("Key ") + ofToString(char(key));
+
+		if (msg == "")
+		{
+			this->AddToLogAndNotifier(s);
+			//ThreadedLogger::log(l, s);
+		}
+		else
+		{
+			s += msg;
+			this->AddToLogAndNotifier(s);
+			//ThreadedLogger::log(l, s);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------
+	void logKeyParam(int key, const ofParameter<bool>& p, const std::string& msg = "")
+	{
+		ofLogLevel l = OF_LOG_VERBOSE;
+
+		if (msg == "")
+		{
+			string sKey = ofToString("Key " + ofToString(char(key)));
+			string s = sKey + ": " + p.getName();
+			s += " | " + string(p.get() ? "ON " : "OFF");
+
+			this->AddToLogAndNotifier(s);
+			//ThreadedLogger::log(l, s);
+		}
+		else
+		{
+			string sKey = ofToString("Key ") + msg;
+			string s = sKey + ": " + p.getName();
+			s += " | " + string(p.get() ? "ON " : "OFF");
+
+			this->AddToLogAndNotifier(s);
+			//ThreadedLogger::log(l, s);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------
+	bool toggleParam(int key, int target, ofParameter<bool>& p, const std::string& msg = "")
+	{
+		if (key == target)
+		{
+			p.set(!p.get());
+			logKeyParam(key, p, msg);
+			return true;
+		}
+		return false;
+	}
 
 	//----
 
@@ -231,7 +293,6 @@ public:
 	void setDisableStartupResetLayout(bool b = 1) { bDisableStartupReset = b; } // disables auto reset layout!
 
 private:
-	//protected:
 	float xSpacingDiff = 0;
 	float ySpacingDiff = 0;
 
@@ -1767,7 +1828,7 @@ public:
 	// Columns
 
 	//--------------------------------------------------------------
-	void BeginColumns(int amount, string labelID, bool border = false)
+	void BeginColumns(int amount, string labelID="##", bool border = false)
 	{
 		ImGui::PushID(labelID.c_str());
 
@@ -2517,8 +2578,9 @@ public:
 	//----
 
 private:
-	ofParameter<bool> bDrawView1{ "Draw View 1", false };
+	ofParameter<bool> bDrawViewportRectangleCentralDebug{ "Draw Viewport Central", false };
 	// debug drawing central zone for docking help
+	ofParameter<bool> bDrawViewportRectangleCentralDebug2{ "Draw Viewport 2", false };
 
 	bool bUseAdvancedSubPanel = true;
 	// enable advanced sub panel
@@ -2537,7 +2599,7 @@ public:
 	ofParameter<bool> bHelp{ "Help App", false };
 	ofParameter<bool> bHelpInternal{ "Help Internal", false };
 	ofParameter<bool> bDebug{ "Debug", false };
-	ofParameter<bool> bDebugDebugger{ "Debugger", false };
+	ofParameter<bool> bDebugDebuggerImGui{ "Debugger ImGui", false };
 	ofParameter<bool> bExtra{ "Extra", false };
 	ofParameter<bool> bAdvanced{ "Advanced", false };
 
@@ -2591,7 +2653,7 @@ public:
 	ofParameterGroup params_Windows{ "Windows" };
 
 private:
-	void doBuildHelpInfo(bool bSlient = 1); 
+	void doBuildHelpInfo(bool bSlient = 1);
 	// Create or freshed the help info for the drawing help box
 
 	//--
@@ -2739,11 +2801,11 @@ public:
 		if (bLabel) this->AddLabelBig(s);
 
 		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
-		//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, THEME_NAME_DAY, THEME_NAME_NIGHT);
+		//ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, SURFING_IMGUI__THEME_NAME_DAY, SURFING_IMGUI__THEME_NAME_NIGHT);
 
 		//string s;
-		//if (!bThemeUIAlt) s = THEME_NAME_NIGHT;
-		//else s = THEME_NAME_DAY;
+		//if (!bThemeUIAlt) s = SURFING_IMGUI__THEME_NAME_NIGHT;
+		//else s = SURFING_IMGUI__THEME_NAME_DAY;
 		//this->AddLabel(s);
 	}
 
@@ -3233,6 +3295,31 @@ public:
 	bool isExtraEnabled() const { return bExtra.get(); }
 	bool isExtraDisabled() const { return !bExtra.get(); }
 
+	//--
+
+	//--------------------------------------------------------------
+	bool AddMenuBar(bool bSeparated = false)
+	{
+		AddMenuBarToggle(bSeparated);
+		return bGui_TopMenuBar.get();
+	}
+
+	void AddMenuBarToggle(bool bSeparated = false)
+	{
+		this->Add(this->bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
+		if (bSeparated)this->AddSpacingSeparated();
+	}
+
+	void AddMenuBarToggle(SurfingGuiTypes style, bool bSeparated = false)
+	{
+		this->Add(this->bGui_TopMenuBar, style);
+		if (bSeparated)this->AddSpacingSeparated();
+	}
+
+	bool isMenuBar() const { return bGui_TopMenuBar.get(); }
+	bool isMenuBarEnabled() const { return bGui_TopMenuBar.get(); }
+	bool isMenuBarDisabled() const { return !bGui_TopMenuBar.get(); }
+
 	//----
 
 	// Advanced Window
@@ -3497,12 +3584,17 @@ private:
 							//drawSpecialWindowsPanel();
 							//ImGui::Separator();
 
-							Add(bDebugDebugger, OFX_IM_TOGGLE_ROUNDED_MINI);
+							Add(bDebugDebuggerImGui, OFX_IM_TOGGLE_ROUNDED_MINI);
 							this->AddSpacing();
+
+							string s = "Mouse Over";
+							AddLabelBig(s);
+							PushInactive();
 							Add(bOverInputText, OFX_IM_TOGGLE_ROUNDED_MINI);
 							Add(bMouseOverGui, OFX_IM_TOGGLE_ROUNDED_MINI);
+							PopInactive();
 
-							//AddToggleRoundedButton(bDrawView1);
+							//AddToggleRoundedButton(bDrawViewportRectangleCentralDebug);
 
 							//-
 
@@ -3559,9 +3651,9 @@ private:
 					// Docking
 					this->AddSpacing();
 
-					//if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING ||
-					//	surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
-					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+					//if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
+					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING ||
+						surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
 					{
 						this->AddSpacing();
 
@@ -3583,8 +3675,8 @@ private:
 									//ofxImGuiSurfing::AddToggleRoundedButton(bUseLayoutPresetsManager);
 									//ofxImGuiSurfing::AddToggleRoundedButton(bDockingLayoutPresetsEngine);
 									ofxImGuiSurfing::ToggleRoundedButton("Dock Center", &bDockingModeCentered);
-									ofxImGuiSurfing::AddToggleRoundedButton(bDrawView1);
-									ofxImGuiSurfing::AddToggleRoundedButton(bDrawView2);
+									ofxImGuiSurfing::AddToggleRoundedButton(bDrawViewportRectangleCentralDebug);
+									ofxImGuiSurfing::AddToggleRoundedButton(bDrawViewportRectangleCentralDebug2);
 								}
 								ImGui::Unindent();
 							}
@@ -3675,7 +3767,7 @@ public:
 		bDoneCustomNameLabel = true;
 
 		// To allow split possible instances on different folders
-		
+
 		// Must call before setup! 
 		// To allow the correct behavior when multiple instances/windows settings. 
 		// Notice that each instance will have his own folder path for setting files! 
@@ -3684,13 +3776,13 @@ public:
 
 		bGui.setName(name);
 
-//#if 1
-//		path_Root = nameLabel + "/";
-//		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
-//#else
-//		path_Root = nameLabel + "/";
-//		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
-//#endif
+		//#if 1
+		//		path_Root = nameLabel + "/";
+		//		path_Global = path_Root + SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/");
+		//#else
+		//		path_Root = nameLabel + "/";
+		//		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL + ofToString("/") + path_Root;
+		//#endif
 		path_Root = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
 		path_Global = SURFING_IMGUI__DEFAULT_PATH_GLOBAL;
 
@@ -4293,7 +4385,7 @@ public:
 	//--------------------------------------------------------------
 	float getWidgetHeightVerticalSlider()
 	{
-		float h = this->getWidgetsHeightUnit() * VERTICAL_AMOUNT_UNITS;
+		float h = this->getWidgetsHeightUnit() * OFX_IM_VERTICAL_AMOUNT_UNITS;
 		return h;
 	}
 
@@ -4367,6 +4459,15 @@ public:
 	ofParameter<bool>& getWindowSpecialGuiToggle(int index)
 	{
 		return getWindowSpecialVisible(index);
+	}
+	//--------------------------------------------------------------
+	string getWindowSpecialGuiToggleName(int index)
+	{
+		return getWindowSpecialVisible(index).getName();
+	}
+	//--------------------------------------------------------------
+	int getWindowsSpecialsSize() {
+		return windows.size();
 	}
 
 	//--------------------------------------------------------------
@@ -4503,6 +4604,11 @@ public:
 	void BeginDocking();
 	void EndDocking();
 
+private:
+	//TODO: flags to try to automatize these calls..
+	bool bDoneBeginDocking = 0;
+	bool bDoneEndDocking = 0;
+
 	//----
 
 	// Docking Layout Engine for Layout Presets Engine
@@ -4598,7 +4704,7 @@ private:
 
 public:
 	//-> Must call manually after adding windows and layout presets
-	void setupLayout(int numPresets = DEFAULT_AMOUNT_PRESETS);
+	void setupLayout(int numPresets = SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS);
 
 	//--------------------------------------------------------------
 	void startup();
@@ -4635,17 +4741,27 @@ public:
 	void drawWindowsExtraManager(); //will be called at End(), 
 	//to draw other internal and auto handled windows/modules.
 
-	void drawMenu();
+	//void drawMenu();
 	void drawMenuDocked();
 
 public:
-	// Get the central space to position other panels or gui elements
+	// Get the central space to position other panels or ui elements
 	// like video viewports or scenes previews
+	//--------------------------------------------------------------
+	ofRectangle& getRectangleCentralViewport()
+	{
+		return rectangleCentralViewport;
+	}
+	//--------------------------------------------------------------
+	ofRectangle& getRectangleCentral()
+	{
+		return rectangleCentralDebug;
+	}
 	//--------------------------------------------------------------
 	ofRectangle getRectangleCentralDocking()
 	{
-		return rectangle_Central_MAX;
-		//return rectangle_Central;
+		return rectangleCentralMAX;
+		//return rectangleCentralDebug;
 	}
 
 	//--
@@ -4658,8 +4774,11 @@ private:
 	void drawLayoutsLayoutPresets();
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
-	void drawViewport_OF_Native();
+	void drawViewportRectangleCentralDebug();
+public:
+	void updateCentralRect();
 
+private:
 	//TODO:
 	//// For different behavior. We can disable to save some windows positions to allow them locked when changing presets.
 	//ofParameter<bool> bModeFree{ "Free", true }; // A allows storing position for control windows too
@@ -4673,13 +4792,28 @@ private:
 
 	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
 
-	ofParameter<bool> bDrawView2{ "Draw View 2", false };
+	//--
 
-	ofRectangle rectangle_Central_MAX;
-	ofRectangle rectangle_Central; // current free space viewport updated when changes
-	ofRectangle rectangle_Central_Transposed;
+	// Current free rect space
+	// viewport updated when changes
 
-	//-
+	// Used by OF. Referenced to upper corner.
+	// Needs to non be 0,0,0,0 to avoid some exceptions 
+	// (ie when passing to cameras as viewport)
+	// bc it will be not defined until docking layout is done.
+	ofRectangle rectangleCentralViewport = { 0,0,1920,1080 };
+
+	ofRectangle rectangleCentralMAX;
+	ofRectangle rectangleCentralTransposed;
+	ofRectangle rectangleCentralDebug;
+
+	//ofNoFill();
+	//ofSetColor(255, 255, 255, 30);
+	//ofDrawRectangle(r.getCenter().x, r.getCenter().y,
+	//	(r.getWidth() - 20) * fmodf(abs(sin(ofGetElapsedTimef())), 1.f),
+	//	(r.getHeight() - 20) * fmodf(abs(sin(ofGetElapsedTimef())), 1.f));
+
+	//--
 
 	// Customize Titles
 
@@ -4702,11 +4836,19 @@ public:
 public:
 	ofParameter<bool> bGui_TopMenuBar{ "Menu", false };
 
-	ofParameter<bool> bLinked{ "Link Windows", false }; // Align windows engine. liked to the internal aligner.
 	//TODO: more to link with internal WindowsOrganizer
-	ofParameter<bool> bOrientation{ "Orientation", false }; // false=horizontal. true=vertical
-	ofParameter<bool> bGui_ShowWindowsGlobal{ "Show Windows", true }; // to force hide all windows or to show if visible
-	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true}; // to force hide all windows or to show if visible
+	ofParameter<bool> bLinked{ "Link Windows", false };
+	// Align windows engine. liked to the internal aligner.
+
+	ofParameter<bool> bOrientation{ "Orientation", false };
+	// false=horizontal. true=vertical
+
+	ofParameter<bool> bGui_ShowWindowsGlobal{ "Show Windows", true };
+	// to momentary force hide all windows or to show if visible.
+	 
+	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true};
+	// // to force hide all windows or to show if visible
+
 	ofParameter<bool> bAlignWindowsReset{ "Reset", false };
 	ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
 
@@ -4783,6 +4925,7 @@ public:
 		//bGui_LayoutsPresetsManual = false;
 	}
 
+	//LEGACY
 	//--------------------------------------------------------------
 	void setShowAllPanels(bool b)
 	{
@@ -4790,6 +4933,24 @@ public:
 		{
 			windows[i].bGui.set(b);
 		}
+	}
+	//--------------------------------------------------------------
+	void setShowAllWindowsSpecial(bool b)
+	{
+		for (int i = 0; i < windows.size(); i++)
+		{
+			windows[i].bGui.set(b);
+		}
+	}
+
+	//--------------------------------------------------------------
+	bool getAllWindowsSpecialAreVisible()
+	{
+		for (int i = 0; i < windows.size(); i++)
+		{
+			if (!windows[i].bGui) return false;
+		}
+		return true;
 	}
 
 	//--------------------------------------------------------------

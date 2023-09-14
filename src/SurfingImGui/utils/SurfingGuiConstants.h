@@ -16,7 +16,7 @@
 
 // DEBUG
 
-#define SURFING_DEBUG_FONTS
+#define SURFING_IMGUI__DEBUG_FONTS
 //TODO: comment to bypass set default font on Begin
 
 //--
@@ -91,10 +91,10 @@
 // ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 
 // Night Theme (Default)
-#define THEME_NAME_NIGHT "moebiusSurfing.ini"
+#define SURFING_IMGUI__THEME_NAME_NIGHT "moebiusSurfing.ini"
 
 // Day Theme
-#define THEME_NAME_DAY "moebiusSurfingDay.ini"
+#define SURFING_IMGUI__THEME_NAME_DAY "moebiusSurfingDay.ini"
 
 //--
 
@@ -151,7 +151,7 @@
 #define OFX_IM_WIDGETS_RATIO_MINI 0.16f
 
 // Window scrolling size on some windows/groups
-#define HEIGHT_SCROLL_GROUP 400
+#define OFX_IM_HEIGHT_SCROLL_GROUP 400
 
 //TODO: make it active 
 // Knobs format to 3 decimals
@@ -170,25 +170,25 @@
 // Constraint some window minimal shape sizes.
 
 // Layout Presets Engine
-#define DEFAULT_AMOUNT_PRESETS 4 
+#define SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS 4 
 
 //TODO:
 // Testing central view-port
-#define FIXING_DRAW_VIEWPORT // To debug free space
+#define SURFING_IMGUI__FIXING_DRAW_VIEWPORT // To debug free space
 
 //----
 
-#define TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
+#define OFX_IM_TEXT_INACTIVE_ALPHA 0.30f // for using on toggle buttons
 
-//#define BLINK_MIN 0.2f 
-//#define BLINK_MAX 1.0f 
-#define BLINK_MIN 0.35f 
-#define BLINK_MAX 1.0f 
+//#define OFX_IM_BLINK_MIN 0.2f 
+//#define OFX_IM_BLINK_MAX 1.0f 
+#define OFX_IM_BLINK_MIN 0.35f 
+#define OFX_IM_BLINK_MAX 1.0f 
 
-#define FACTOR_DARKEN 0.2f 
+#define OFX_IM_FACTOR_DARKEN 0.2f 
 
 //TODO: use another approach?
-#define VERTICAL_AMOUNT_UNITS 5.0f 
+#define OFX_IM_VERTICAL_AMOUNT_UNITS 5.0f 
 
 //----
 

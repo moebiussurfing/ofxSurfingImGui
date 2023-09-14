@@ -13,8 +13,7 @@
 
 	TODO
 
-	Fix handle persistence of bGui special windows states
-	Add manual save/load 
+	Add manual save/load layout.
 		(we could use the imgui.ini or another file)
 	Get center rectangle to draw a viewport.
 	Make some of these helpers internal to the GuiManger
@@ -24,7 +23,7 @@
 
 #include "ofxSurfingImGui.h"
 
-#define SURFING_USE_MANAGER
+//#define SURFING_USE_MANAGER
 
 class ofApp : public ofBaseApp
 {
@@ -121,4 +120,7 @@ public:
 	//--
 
 	void updateScene(); // Generates random messages to test the Log window.
+	void drawScene();// Draws a Central Rectangle getting from the docking layout.
+
+	ofEasyCam cam;
 };

@@ -89,7 +89,8 @@ public:
 		{
 			switch (fontIndex)
 			{
-			case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;//default
+			case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW; break;//default
+			//case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;//default
 			case 1: case 5: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG; break;//big
 			case 2: case 6: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL; break;//huge
 			case 3: case 7: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX; break;//hugeXXL

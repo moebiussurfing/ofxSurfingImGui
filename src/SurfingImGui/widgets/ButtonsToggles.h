@@ -21,10 +21,10 @@
 
 ////#include "ofxSurfing_ImGui_ofHelpers.h" //-> TODO: can't make work the above sugar here..
 //
-//#define BLINK_MIN 0.2f 
-//#define BLINK_MAX 0.5f 
+//#define OFX_IM_BLINK_MIN 0.2f 
+//#define OFX_IM_BLINK_MAX 0.5f 
 //
-//#define FACTOR_DARKEN 0.5f 
+//#define OFX_IM_FACTOR_DARKEN 0.5f 
 
 //------------------------------
 
@@ -47,7 +47,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -171,7 +171,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -313,7 +313,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -434,7 +434,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -514,7 +514,7 @@ namespace ofxImGuiSurfing
 
 				ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
 				colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
-					colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
+					colorTextDisabled.w * OFX_IM_TEXT_INACTIVE_ALPHA);
 
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 				ImGui::PushStyleColor(ImGuiCol_Button, colorOn);
@@ -605,7 +605,7 @@ namespace ofxImGuiSurfing
 			if (b) a = blinkValue;
 			else a = 1.0f;
 
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			if (b) ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(c_.x, c_.y, c_.z, c_.w * a));
 		}
@@ -1087,7 +1087,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -1158,7 +1158,7 @@ namespace ofxImGuiSurfing
 		if (bBlink)
 		{
 			float blinkValue = getFadeBlink();
-			a = ofClamp(blinkValue, BLINK_MIN, BLINK_MAX);
+			a = ofClamp(blinkValue, OFX_IM_BLINK_MIN, OFX_IM_BLINK_MAX);
 
 			borderLineColor = ImVec4(c_.x, c_.y, c_.z, c_.w * a);
 		}
@@ -1237,7 +1237,7 @@ namespace ofxImGuiSurfing
 
 				ImVec4 colorTextDisabled = style->Colors[ImGuiCol_Text];
 				colorTextDisabled = ImVec4(colorTextDisabled.x, colorTextDisabled.y, colorTextDisabled.z,
-					colorTextDisabled.w * TEXT_INACTIVE_ALPHA);
+					colorTextDisabled.w * OFX_IM_TEXT_INACTIVE_ALPHA);
 
 				ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
 				ImGui::PushStyleColor(ImGuiCol_Button, colorOn);
