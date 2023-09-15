@@ -13,7 +13,7 @@ void ofApp::setup()
 	cam.setupPerspective();
 	cam.setNearClip(0.0001);
 	cam.setFarClip(1000);
-	cam.setDistance(34);
+	cam.setDistance(35);
 	cam.lookAt(glm::vec3(0, 0, 0));
 
 	//--
@@ -85,6 +85,10 @@ void ofApp::setupImGui()
 	ui.addWindowSpecial("Video2"); // index 3
 	ui.addWindowSpecial("Expert"); // index 4
 
+	// Extra windows to be auto included in windows menu
+	ui.addWindowExtra(bGui);
+	ui.addWindowExtra(bGui_DockingHelp);
+
 	//--
 
 	// 3. Startup:
@@ -100,11 +104,14 @@ void ofApp::setupImGui()
 
 	// Customize Help info
 
+	// app
 	string s = "This is an Example to learn \nthe Docking features.\n\nEnjoy!";
+	//ui.setEnableHelpApp();//not required if text settled after
 	ui.setHelpAppTitle("Example 23_DockingRaw");
 	ui.setHelpAppText(s);
 
-	ui.setEnableHelpInternal();
+	// internal
+	ui.setEnableHelpInternal();//disabled/hidden by default
 }
 
 //--------------------------------------------------------------
@@ -151,7 +158,7 @@ void ofApp::drawImGui()
 
 		// An extra window with some triggers
 		// for hard-coded layout modifications. 
-		if (bGui_DockingHelpers) drawImGuiDockingHelpers();
+		if (bGui_DockingHelp) drawImGuiDockingHelp();
 
 		//--
 
@@ -162,7 +169,7 @@ void ofApp::drawImGui()
 		{
 			ui.drawWidgetsSpecialWindows();
 			ui.AddSpacingSeparated();
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
 			ui.EndWindow();
 		}
 
@@ -182,18 +189,40 @@ void ofApp::drawImGui()
 	ui.End();
 }
 
+//----
+
 //--------------------------------------------------------------
 void ofApp::drawImGuiSpecialWindows()
 {
-	int index;
+	drawImGuiSpecialWindow0();
 
-	index = 0;
+	//--
+
+	drawImGuiSpecialWindow1();
+
+	//--
+
+	drawImGuiSpecialWindow2();
+
+	//--
+
+	drawImGuiSpecialWindow3();
+
+	//--
+
+	drawImGuiSpecialWindow4();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindow0()
+{
+	int index = 0;
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
 			ui.AddLabelHuge("Window 0", false);
 
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 
 			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
 			ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
@@ -259,15 +288,17 @@ void ofApp::drawImGuiSpecialWindows()
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 1;
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindow1()
+{
+	int index = 1;
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
 			ui.AddLabelHuge("Window 1", false);
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 			ui.AddGroup(params1);
 
 			//--
@@ -275,10 +306,12 @@ void ofApp::drawImGuiSpecialWindows()
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 2;
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindow2()
+{
+	int index = 2;
 	{
 		/*
 		// Constraints do not works on docking!
@@ -290,10 +323,12 @@ void ofApp::drawImGuiSpecialWindows()
 
 		if (ui.BeginWindowSpecial(index))
 		{
-			ui.BeginColumns(3);
+			ui.BeginColumns(4);
 
 			ui.AddLabelHuge("Window 2", false);
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+			ui.NextColumn();
+
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
 			ui.NextColumn();
 
 			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
@@ -350,38 +385,45 @@ It has survived not only five centuries, but also the leap into electronic types
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 3;
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindow3()
+{
+	int index = 3;
 	{
 		if (ui.BeginWindowSpecial(index))
 		{
 			ui.BeginColumns(3);
+			ui.AddLabelHuge("Window 3");
+			ui.AddSpacingBig();
+			ui.NextColumn();
 
-			ui.AddLabelHuge("Window 3", false);
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
 			ui.AddLabelHuge("Hello, down Huge!", false, true);
 			ui.NextColumn();
 
 			ui.AddLabelBig("Hello, down Big!", false, true);
-			ui.AddLabelBig("Hello, down Big! Hello, down! Hello, down!");
+			ui.AddLabelBig("Hello, down Big! \nHello, down! Hello, down!");
 			ui.AddLabelBig("Hello, down Big!", false, true);
-			ui.NextColumn();
+			ui.EndColumns();
+
+			ui.AddSpacingHugeSeparated();
 
 			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-			ui.AddLabelHuge("Hello, down Huge! Hello, down! Hello, down!");
-			ui.EndColumns();
+			ui.AddLabelHuge("Hello, down Huge! \nHello, down! Hello, down!");
 
 			//--
 
 			ui.EndWindowSpecial();
 		}
 	}
+}
 
-	//----
-
-	index = 4;
+//--------------------------------------------------------------
+void ofApp::drawImGuiSpecialWindow4()
+{
+	int index = 4;
 	{
 		//TODO: Fix sizing bug
 		if (ui.getIsWindowSpecialVisible(index))
@@ -395,14 +437,14 @@ It has survived not only five centuries, but also the leap into electronic types
 
 			ui.BeginColumns(3);
 
-			ui.Add(bGui_DockingHelpers, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
 			ui.AddLabelHuge("Hello, left Huge!", true, true);
 			ui.NextColumn();
 
 			ui.AddLabelHuge("Hello, left Huge!", false, false);
 			ui.AddLabelBig("Hello, left Big!");
 			ui.NextColumn();
-			
+
 			ui.AddLabel("Hello, left!", false, true);
 			ui.AddLabelBig("Hello, left Big!", false);
 			ui.EndColumns();
@@ -419,6 +461,7 @@ It has survived not only five centuries, but also the leap into electronic types
 //--------------------------------------------------------------
 void ofApp::updateScene()
 {
+	if (!ui.isDebug()) return;
 	if (!bEnable) return;
 	if (!ui.bLog && !ui.bNotifier) return;
 
@@ -450,30 +493,30 @@ void ofApp::updateScene()
 		float _rnd = ofRandom(1);
 
 		if (_rnd < 0.2)
-			ui.AddToLogAndNotifier(ss);
+			ui.AddToLogAndNotifier(ss, OF_LOG_VERBOSE);
 
 		else if (_rnd < 0.4)
-			ui.AddToLogAndNotifier(ofToString(_rnd));
+			ui.AddToLogAndNotifier(ofToString(_rnd), OF_LOG_VERBOSE);
 
 		else if (_rnd < 0.6)
-			ui.AddToLogAndNotifier(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))));
+			ui.AddToLogAndNotifier(ofToString(ofToString((ofRandom(1) < 0.5 ? "..-." : "---.--..")) + "---------" + ofToString((ofRandom(1) < 0.5 ? ".--.-." : "...-.--.."))), OF_LOG_VERBOSE);
 
 		else if (_rnd < 0.8)
-			ui.AddToLogAndNotifier(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")));
+			ui.AddToLogAndNotifier(ofToString((ofRandom(1) < 0.5 ? "...-." : "--.--") + ofToString("===//...--//-----..")), OF_LOG_VERBOSE);
 
 		else
-			ui.AddToLogAndNotifier(ofGetTimestampString());
+			ui.AddToLogAndNotifier(ofGetTimestampString(), OF_LOG_VERBOSE);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	ofLogNotice(__FUNCTION__) << " " << char(key);
+	//ofLogNotice(__FUNCTION__) << " " << char(key);
 
 	if (key == 'g') bGui = !bGui;
-	if (key == ' ') bDockingRandom = true;
-	if (key == OF_KEY_BACKSPACE) bDockingReset = true;
+	if (key == ' ') bFlagDockingRandom = true;
+	if (key == OF_KEY_BACKSPACE) bFlagDockingReset = true;
 }
 
 //----
@@ -488,11 +531,11 @@ void ofApp::updateImGuiDockingHelpers()
 {
 	// Reset layout once o startup/first frame call.
 	// Called only once!
-	if (bStartupDockingReset)
+	if (bModeDockingResetAtStartup)
 	{
-		static bool binitiated = false;
-		if (!binitiated) {
-			binitiated = true;
+		static bool b = false;
+		if (!b) {
+			b = true;
 
 			doDockingReset();
 		}
@@ -501,9 +544,9 @@ void ofApp::updateImGuiDockingHelpers()
 	//----
 
 	// Reset layout by a button
-	if (bDockingReset)
+	if (bFlagDockingReset)
 	{
-		bDockingReset = false;
+		bFlagDockingReset = false;
 
 		doDockingReset();
 	}
@@ -511,9 +554,9 @@ void ofApp::updateImGuiDockingHelpers()
 	//--
 
 	// Random layout by a button
-	if (bDockingRandom)
+	if (bFlagDockingRandom)
 	{
-		bDockingRandom = false;
+		bFlagDockingRandom = false;
 
 		doDockingRandom();
 	}
@@ -544,17 +587,85 @@ void ofApp::updateImGuiDockingHelpers()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiDockingHelpers()
+void ofApp::drawScene()
 {
-	if (!bGui_DockingHelpers) return;
+	auto& r = ui.getRectangleCentralViewport();
+
+	if (ui.isDebug())
+	{
+		// viewport rect
+		ofPushMatrix();
+		ofPushStyle();
+		ofSetRectMode(OF_RECTMODE_CENTER);
+		float l = 2;
+		float o = 1;//offset
+		ofSetLineWidth(l);
+		ofColor c = ofColor(ofColor::yellow, 255 * SurfingGui::Bounce());
+		ofSetColor(c);
+		ofNoFill();
+		ofRectangle r_ = ofRectangle(r.getCenter().x + o, r.getCenter().y + o, r.getWidth() - 2 * o, r.getHeight() - 2 * o);
+		ofDrawRectangle(r_);
+		ofPopStyle();
+		ofPopMatrix();
+	}
+
+	// scene camera
+	{
+		// cam using central docking space as viewport
+		if (cam.getMouseInputEnabled()) { if (ui.isMouseOverGui()) cam.disableMouseInput(); }
+		else if (!ui.isMouseOverGui()) cam.enableMouseInput();
+
+		cam.begin(r);
+		ofPushMatrix();
+		float a = ofWrap(ofGetFrameNum(), 0, 359);
+		ofRotateYDeg(a + 90);
+		//ofColor c = ofColor(ofColor::white, ofMap(SurfingGui::Bounce(), 0, 1, 32, 150));
+		ofColor c = ofColor(ofColor::white, 150);
+		ofSetColor(c);
+		ofPushStyle();
+		//ofDrawGrid();
+		ofDrawGridPlane();
+		ofPopStyle();
+		ofPopMatrix();
+		cam.end();
+	}
+}
+
+//----
+
+// Custom Helpers widgets
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiDockingHelp()
+{
+	if (!bGui_DockingHelp) return;
 
 	string s;
 
 	//TODO: Fix sizing bug
 	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindow(bGui_DockingHelpers))
+	if (ui.BeginWindow(bGui_DockingHelp))
 	{
+		//--
+
+		s = "Windows";
+		ui.AddLabelBig(s);
+
+		// Show/hide all Special Windows / Panels
+		if (ui.AddButton("All", OFX_IM_BUTTON, 2, true))
+		{
+			ui.setShowAllPanels(true);
+		}
+		if (ui.AddButton("None", OFX_IM_BUTTON, 2))
+		{
+			ui.setShowAllPanels(false);
+		}
+
+		ui.AddSpacingSeparated();
+		
+		//--
+
 		s = "Layout";
 		ui.AddLabelBig(s);
 
@@ -562,7 +673,7 @@ void ofApp::drawImGuiDockingHelpers()
 
 		if (ui.AddButton("Reset", OFX_IM_BUTTON, 2, true))
 		{
-			bDockingReset = true;
+			bFlagDockingReset = true;
 			// Flag to call on a precise draw point, 
 			// inside the draw begin/end context
 		}
@@ -575,7 +686,7 @@ void ofApp::drawImGuiDockingHelpers()
 
 		if (ui.AddButton("Random", OFX_IM_BUTTON, 2))
 		{
-			bDockingRandom = true;
+			bFlagDockingRandom = true;
 			// Flag to call on a precise draw point,
 			// inside the draw begin/end context
 		}
@@ -607,24 +718,6 @@ void ofApp::drawImGuiDockingHelpers()
 
 		ui.AddSpacingSeparated();
 #endif
-
-		//--
-
-		s = "Windows";
-		ui.AddLabelBig(s);
-
-		// Show/hide all Special Windows / Panels
-		if (ui.AddButton("All", OFX_IM_BUTTON, 2, true))
-		{
-			ui.setShowAllPanels(true);
-		}
-		if (ui.AddButton("None", OFX_IM_BUTTON, 2))
-		{
-			ui.setShowAllPanels(false);
-		}
-
-		ui.AddSpacingSeparated();
-
 		//--
 
 		s = "Internal";
@@ -633,6 +726,7 @@ void ofApp::drawImGuiDockingHelpers()
 		ui.AddMinimizerToggle();
 		if (ui.isMaximized()) {
 			ui.AddAutoResizeToggle();
+			ui.AddKeysToggle();
 			ui.AddDebugToggle();
 			ui.AddExtraToggle();
 			ui.AddHelpInternalToggle();
@@ -652,40 +746,7 @@ void ofApp::drawImGuiDockingHelpers()
 	}
 }
 
-//--------------------------------------------------------------
-void ofApp::drawScene()
-{
-	auto& r = ui.getRectangleCentralViewport();
-
-	if (ui.isDebug())
-	{
-		// viewport rect
-		ofPushMatrix();
-		ofPushStyle();
-		ofSetRectMode(OF_RECTMODE_CENTER);
-		float l = 2;
-		float o = 1;//offset
-		ofSetLineWidth(l);
-		ofColor c = ofColor(ofColor::yellow, 255 * SurfingGui::Bounce());
-		ofSetColor(c);
-		ofNoFill();
-		ofRectangle r_ = ofRectangle(r.getCenter().x + o, r.getCenter().y + o, r.getWidth() - 2 * o, r.getHeight() - 2 * o);
-		ofDrawRectangle(r_);
-		ofPopStyle();
-		ofPopMatrix();
-	}
-
-	// cam using central docking space as viewport
-	if (cam.getMouseInputEnabled()) { if (ui.isMouseOverGui()) cam.disableMouseInput(); }
-	else if (!ui.isMouseOverGui()) cam.enableMouseInput();
-
-	cam.begin(r);
-	//ofDrawGrid();
-	ofDrawGridPlane();
-	cam.end();
-}
-
-//----
+// Custom Helpers functions
 
 //--------------------------------------------------------------
 void ofApp::doDockingReset()

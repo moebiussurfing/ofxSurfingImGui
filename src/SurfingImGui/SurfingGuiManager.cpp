@@ -42,6 +42,7 @@ SurfingGuiManager::SurfingGuiManager()
 	//--
 
 	ofAddListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
+	ofAddListener(ofEvents().keyReleased, this, &SurfingGuiManager::keyReleased);
 
 	// Auto call draw. Only to draw help boxes / OF native info. ?
 	ofAddListener(ofEvents().update, this, &SurfingGuiManager::update, OF_EVENT_ORDER_AFTER_APP);
@@ -125,6 +126,7 @@ void SurfingGuiManager::exit()
 	ofLogNotice("ofxSurfingImGui") << "exit()";
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
+	ofRemoveListener(ofEvents().keyReleased, this, &SurfingGuiManager::keyReleased);
 
 	ofRemoveListener(ofEvents().update, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
 	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
@@ -500,7 +502,7 @@ void SurfingGuiManager::setupInitiate()
 
 		//helpInternal.setEnableHeader();
 
-		doBuildHelpInfo(false);
+		doBuildHelpInternalInfo(false);
 
 		//--
 
@@ -1173,10 +1175,10 @@ void SurfingGuiManager::startup()
 // Help (Internal)
 
 //--------------------------------------------------------------
-void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
+void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent)
 {
-	if (bSilent) ofLogVerbose("ofxSurfingImGui") << "doBuildHelpInfo() - silent";
-	else ofLogNotice("ofxSurfingImGui") << "doBuildHelpInfo()";
+	if (bSilent) ofLogVerbose("ofxSurfingImGui") << "doBuildHelpInternalInfo() - silent";
+	else ofLogNotice("ofxSurfingImGui") << "doBuildHelpInternalInfo()";
 
 	//--
 
@@ -1188,6 +1190,7 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 	//string l3 = "  ";
 	string l3 = "";
 	string l4 = "     "; // spacing 1st column
+	string l5 = "    "; // spacing 1st column
 
 	//--
 
@@ -1209,69 +1212,76 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 		//helpInternalText += l2;
 	}
 
-	//helpInternalText += l3 + "KEY COMMANDS \n\n";
-
 	string st = "  ";
 
-	//if (!bMinimize)
-	{
-		if (bKeys)
-			helpInternalText += " " + l4 + "Keys          " + st + " ON  \n";
-		else
-			helpInternalText += " " + l4 + "Keys          " + st + " OFF \n";
+	if (bKeys)
+		helpInternalText += " " + l4 +
+		"Keys          " + st + " ON  \n";
+	else
+		helpInternalText += " " + l4 +
+		"Keys          " + st + " OFF \n";
 
-		if (bMinimize)
-			helpInternalText += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " ON  \n";
-		else
-			helpInternalText += string(bKeys ? "`" : " ") + l4 + "Minimize      " + st + " OFF \n";
+	if (bMinimize)
+		helpInternalText += string(bKeys ? "`" : " ") + l4 +
+		"Minimize      " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "`" : " ") + l4 +
+		"Minimize      " + st + " OFF \n";
 
-		if (bDebug)
-			helpInternalText += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " ON  \n";
-		else
-			helpInternalText += string(bKeys ? "D" : " ") + l4 + "Debug         " + st + " OFF \n";
+	if (bDebug)
+		helpInternalText += string(bKeys ? "D" : " ") + l4 +
+		"Debug         " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "D" : " ") + l4 +
+		"Debug         " + st + " OFF \n";
 
-		if (bExtra)
-			helpInternalText += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " ON  \n";
-		else
-			helpInternalText += string(bKeys ? "E" : " ") + l4 + "Extra         " + st + " OFF \n";
+	if (bExtra)
+		helpInternalText += string(bKeys ? "E" : " ") + l4 +
+		"Extra         " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "E" : " ") + l4 +
+		"Extra         " + st + " OFF \n";
 
-		if (bLog)
-			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " ON  \n";
-		else
-			helpInternalText += string(bKeys ? "L" : " ") + l4 + "Log           " + st + " OFF \n";
+	if (bLog)
+		helpInternalText += string(bKeys ? "L" : " ") + l4 +
+		"Log           " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "L" : " ") + l4 +
+		"Log           " + st + " OFF \n";
 
-		if (bNotifier)
-			helpInternalText += string(bNotifier ? "N" : " ") + l4 + "Notifier      " + st + " ON  \n";
-		else
-			helpInternalText += string(bNotifier ? "N" : " ") + l4 + "Notifier      " + st + " OFF \n";
+	if (bNotifier)
+		helpInternalText += string(bKeys ? "N" : " ") + l4 +
+		"Notifier      " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "N" : " ") + l4 +
+		"Notifier      " + st + " OFF \n";
 
-		if (bHelp)
-			helpInternalText += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " ON  \n";
-		else
-			helpInternalText += string(bKeys ? "H" : " ") + l4 + "Help App      " + st + " OFF \n";
+	if (bHelpInternal)
+		helpInternalText += string(bKeys ? "I" : " ") + l4 +
+		"Help Internal " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "I" : " ") + l4 +
+		"Help Internal " + st + " OFF \n";
 
-		if (bHelpInternal)
-			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " ON";
-		else
-			helpInternalText += string(bKeys ? "I" : " ") + l4 + "Help Internal " + st + " OFF";
+	if (bHelp)
+		helpInternalText += string(bKeys ? "H" : " ") + l4 +
+		"Help App      " + st + " ON  \n";
+	else
+		helpInternalText += string(bKeys ? "H" : " ") + l4 +
+		"Help App      " + st + " OFF \n";
 
-		//helpInternalText += "\n";
-		//helpInternalText += l2;
-	}
-	//else helpInternalText += "\n";
+	//--
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		if (bDockingLayoutPresetsEngine)
 		{
 			helpInternalText += l3 + "PRESETS \n";
-			//helpInternalText += "\n";
 
 			helpInternalText += "F1 F2 F3 F4 \n";
 			helpInternalText += "\n";
 
 			helpInternalText += l3 + "SECTIONS \n";
-			//helpInternalText += "\n";
 
 			helpInternalText += "F5          LAYOUTS \n";
 			helpInternalText += "F6          PANELS \n";
@@ -1279,7 +1289,6 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 			helpInternalText += "\n";
 
 			helpInternalText += l3 + "PANELS \n";
-			//helpInternalText += "\n";
 
 			helpInternalText += "Ctrl+ \n";
 			helpInternalText += "F1 .. F8    Panel # \n";
@@ -1298,51 +1307,96 @@ void SurfingGuiManager::doBuildHelpInfo(bool bSilent)
 				helpInternalText += l2;
 
 				helpInternalText += l3 + "HOW TO \n";
-				//helpInternalText += "\n";
 
 				helpInternalText += "1. Click on P1 P2 P3 P4 \nto pick a PRESET \n";
-				//helpInternalText += "\n";
 				helpInternalText += "2. Toggle the PANELS \nthat you want to be visible \nor hidden \n";
-				//helpInternalText += "\n";
 				helpInternalText += "3. Layout the PANELS around \nthe App view port \n";
-				//helpInternalText += "\n";
 				helpInternalText += "4. Pick another PRESET \n";
 
 				helpInternalText += "\n";
-				//helpInternalText += l2;
 
 				helpInternalText += l3 + "MORE TIPS \n";
-				//helpInternalText += "\n";
 
 				helpInternalText += "- Disable the Minimize toggle \nto show more controls. \n";
-				//helpInternalText += "\n";
 				helpInternalText += "- Explore more deep into \nLAYOUT, PANELS \nand MANAGER Windows. \n";
-				//helpInternalText += "\n";
 				helpInternalText +=
 					"- Each PRESET can be defined \nas a particular App Mode \nor an activated section. \n";
-				//helpInternalText += "\n";
 				helpInternalText += "- When no PRESET is enabled \nall PANELS will be hidden. \n";
-				//helpInternalText += "\n";
 				helpInternalText +=
 					"- On Docking Mode, \npress Shift when dragging \na window \nto lock to some viewport zone. \n";
-
-				//helpInternalText += "\n";
 			}
 		}
 	}
 
+	//--
+
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
 	{
-		helpInternalText += "\n\n\n";
+		helpInternalText += "\n\n";
 		helpInternalText += l3 + "WINDOWS\n\n";
 
-		helpInternalText += l3 + tagModKey + "+\n";
+		//--
+
+		// Special windows
+
+		if (bKeys) helpInternalText += l3 + tagModKey;
+		else helpInternalText += "";
+		helpInternalText += "+\n\n";
 		for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
 		{
-			helpInternalText += "F" + ofToString(i + 1);
-			helpInternalText += ": ";
-			helpInternalText += getWindowSpecialGuiToggleName(i);
+			if (bKeys) helpInternalText += "F" + ofToString(i + 1);
+			else helpInternalText += "  ";
+			helpInternalText += l5;
+			string n = getWindowSpecialGuiToggleName(i);
+			helpInternalText += n;
+			this->alignText(n, helpInternalText, 15);
+			helpInternalText += "  ";
+			helpInternalText += getIsWindowSpecialVisible(i) ? "ON " : "OFF";
 			helpInternalText += "\n";
+		}
+
+		helpInternalText += "\n";
+
+		//--
+
+		// Extra windows
+
+		if (windowsExtra.size() > 0)
+		{
+			for (size_t i = 0; i < windowsExtra.size(); i++)
+			{
+				int k = getWindowsSpecialsSize() + 1 + i;
+				if (bKeys) helpInternalText += "F" + ofToString(k);
+				else helpInternalText += "  ";
+				helpInternalText += l5;
+				string n = getWindowExtraGuiToggleName(i);
+				helpInternalText += n;
+				this->alignText(n, helpInternalText, 15);
+				helpInternalText += "  ";
+				helpInternalText += getIsWindowExtraVisible(i) ? "ON " : "OFF";
+				helpInternalText += "\n";
+			}
+		}
+
+		//--
+
+		helpInternalText += "\n\n";
+
+		// Monitor mod keys
+
+		if (bKeys) {
+			helpInternalText += l3 + "MOD KEYS\n";
+			helpInternalText += bMod_CONTROL ? "Ctrl" : "    ";
+			helpInternalText += " ";
+			helpInternalText += bMod_COMMAND ? "Cmd " : "    ";
+			helpInternalText += " ";
+			helpInternalText += bMod_ALT ? "Alt " : "    ";
+			helpInternalText += " ";
+			helpInternalText += bMod_SHIFT ? "Shift" : "     ";
+			helpInternalText += " ";
+		}
+		else {
+			helpInternalText += "\n\n";
 		}
 	}
 
@@ -1898,6 +1952,14 @@ void SurfingGuiManager::update()
 	//--
 
 	windowsOrganizer.update();
+
+	//--
+
+	// Build help info max one time per frame.
+	if (bFlagDoBuildHelpInternalInfo) {
+		bFlagDoBuildHelpInternalInfo = false;
+		doBuildHelpInternalInfo();
+	}
 }
 
 //--------------------------------------------------------------
@@ -3956,63 +4018,63 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 	// Help internal
 	else if (name == bHelpInternal.getName() && bHelpInternal)
 	{
-		doBuildHelpInfo(); //recreate info
+		doFlagBuildHelpInternalInfo(); //recreate info
 		return;
 	}
 
 	// Help App / global. To be handled externally
 	else if (name == bHelp.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Debug
 	else if (name == bDebug.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Extra
 	else if (name == bExtra.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Log
 	else if (name == bLog.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Notifier
 	else if (name == bNotifier.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Solo
 	else if (name == bSolo.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Keys
 	else if (name == bKeys.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	// Minimize
 	else if (name == bMinimize.getName())
 	{
-		doBuildHelpInfo();
+		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
@@ -4025,7 +4087,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 
 	//else if (name == bMinimize_Presets.getName())
 	//{
-	//	doBuildHelpInfo();
+	//	doFlagBuildHelpInternalInfo();
 	//}
 
 	//--
@@ -4646,258 +4708,371 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	//const int& scancode = eventArgs.scancode;//OS/hardware
 	//const uint32_t& codepoint = eventArgs.codepoint;//Unicode
 
-	ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
-
 	// Modifiers
-	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
-	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
-	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
-	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+	bool _bMod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+	bool _bMod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+	bool _bMod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+	bool _bMod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+
+	if (!_bMod_CONTROL && !_bMod_COMMAND && _bMod_ALT && _bMod_SHIFT)
+		ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
 
 	// Log
 	/*
 	if (bLogKeys)
-		if (key != OF_KEY_SHIFT && !mod_COMMAND && !mod_CONTROL && !mod_ALT && !mod_SHIFT)
+		if (key != OF_KEY_SHIFT && !bMod_COMMAND && !bMod_CONTROL && !bMod_ALT && !bMod_SHIFT)
 		{
 			string ss = "KEY " + ofToString((char)key) + "";
 			log.Add(ss, 3);
 		}
 	*/
 
-	//-
+	//--
 
-	if (0)
-	{
-		ofLogNotice("ofxSurfingImGui") << "mod_COMMAND : " << (mod_COMMAND ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << "mod_CONTROL : " << (mod_CONTROL ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << "mod_ALT     : " << (mod_ALT ? "ON" : "OFF");
-		ofLogNotice("ofxSurfingImGui") << "mod_SHIFT   : " << (mod_SHIFT ? "ON" : "OFF");
+	if (_bMod_CONTROL && !bMod_CONTROL) {
+		bMod_CONTROL = true;
+		ofLogNotice("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (_bMod_COMMAND && !bMod_COMMAND) {
+		bMod_COMMAND = true;
+		ofLogNotice("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (_bMod_ALT && !bMod_ALT) {
+		bMod_ALT = true;
+		ofLogNotice("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (_bMod_SHIFT && !bMod_SHIFT) {
+		bMod_SHIFT = true;
+		ofLogNotice("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
 	}
 
 	//----
 
-	if (!mod_CONTROL)
+	if (!bMod_CONTROL)
 	{
-		if (toggleParam(key, 'H', bHelp, "H"));
-		if (toggleParam(key, 'I', bHelpInternal, "I"));
-		if (toggleParam(key, '`', bMinimize, "`"));
-		if (toggleParam(key, 'E', bExtra, "E"));
-		if (toggleParam(key, 'D', bDebug, "E"));
-		if (toggleParam(key, 'L', bLog, "E"));
-		if (toggleParam(key, 'N', bNotifier, "E"));
+		if (toggleParamByKey(key, 'H', bHelp, "H")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, 'I', bHelpInternal, "I")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, '`', bMinimize, "`")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, 'E', bExtra, "E")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, 'D', bDebug, "D")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, 'L', bLog, "L")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+		if (toggleParamByKey(key, 'N', bNotifier, "N")) {
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
 	}
 
 	//--
 
 	// Layout Presets Engine
+
+	//if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
+
+	//--
+
+	//TODO: fix
+	// CONTROL not pressed
+	if (!bMod_CONTROL)
 	{
-		//if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
+		if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
+
+		switch (key)
+		{
+		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0];
+			logKeyParam(bLayoutPresets[0], "F1");
+			doFlagBuildHelpInternalInfo();
+			return;
+			break;
+
+		case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1];
+			logKeyParam(bLayoutPresets[1], "F2");
+			doFlagBuildHelpInternalInfo();
+			return;
+			break;
+
+		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2];
+			logKeyParam(bLayoutPresets[2], "F3");
+			doFlagBuildHelpInternalInfo();
+			return;
+			break;
+
+		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3];
+			logKeyParam(bLayoutPresets[3], "F4");
+			doFlagBuildHelpInternalInfo();
+			return;
+			break;
+			//TODO: amount of presets is hard-coded
+		}
 
 		//--
 
-		if (!mod_CONTROL) // CTRL not pressed
+		if (key == OF_KEY_F5) // Presets
 		{
-			if (!bDockingLayoutPresetsEngine && !bUseLayoutPresetsManager) return; //skip is not enabled!
-
-			switch (key)
-			{
-			case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0];
-				logKeyParam(bLayoutPresets[0], "F1");
-				break;
-
-			case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1];
-				logKeyParam(bLayoutPresets[1], "F2");
-				break;
-
-			case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2];
-				logKeyParam(bLayoutPresets[2], "F3");
-				break;
-
-			case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3];
-				logKeyParam(bLayoutPresets[3], "F4");
-				break;
-				//TODO: amount of presets is hard-coded
-			}
-
-			//--
-
-			if (key == OF_KEY_F5) // Presets
-			{
-				bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
-				logKeyParam(bGui_LayoutsPresetsSelector, "F5");
-			}
-
-			else if (key == OF_KEY_F6) // Panels
-			{
-				bGui_LayoutsPanels = !bGui_LayoutsPanels;
-				logKeyParam(bGui_LayoutsPanels, "F6");
-			}
-
-			else if (key == OF_KEY_F7) // Manager
-			{
-				bGui_LayoutsManager = !bGui_LayoutsManager;
-				logKeyParam(bGui_LayoutsManager, "F7");
-			}
-
-			//else if (key == OF_KEY_F8) // Tools
-			//{
-			//	bGui_LayoutsPresetsManual = !bGui_LayoutsPresetsManual;
-			//}
+			bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
+			logKeyParam(bGui_LayoutsPresetsSelector, "F5");
+			doFlagBuildHelpInternalInfo();
+			return;
 		}
-		else // CTRL pressed
-		{
-			if (toggleParam(key, '`', bGui_ShowWindowsGlobal, "Ctrl+`"));
 
+		else if (key == OF_KEY_F6) // Panels
+		{
+			bGui_LayoutsPanels = !bGui_LayoutsPanels;
+			logKeyParam(bGui_LayoutsPanels, "F6");
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+
+		else if (key == OF_KEY_F7) // Manager
+		{
+			bGui_LayoutsManager = !bGui_LayoutsManager;
+			logKeyParam(bGui_LayoutsManager, "F7");
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+
+		//else if (key == OF_KEY_F8) // Tools
+		//{
+		//	bGui_LayoutsPresetsManual = !bGui_LayoutsPresetsManual;
+		//}
+	}
+
+	// CONTROL pressed
+	else
+	{
+		// Special Windows
+
+		string s = "";
+
+		if (toggleParamByKey(key, '`', bGui_ShowWindowsGlobal, "Ctrl+`"))
+		{
+			doFlagBuildHelpInternalInfo();
+			return;
+		}
+
+		if (key >= OF_KEY_F1 && key <= OF_KEY_F11) {
 			switch (key)
 			{
+				//TODO: fix
 				//case '0': // global momentary
 				//	if (getWindowsSpecialsSize() <= 0) break;
 				//	bGui_ShowWindowsGlobal = !bGui_ShowWindowsGlobal;
 				//	break;
 
-					//--
+				//--
 
-					// all special windows
+				// All special windows
 
 			case OF_KEY_F1:
-				if (getWindowsSpecialsSize() <= 0) break;
-				doSpecialWindowToggleVisible(0);
-				logKeyParam(getWindowSpecialGuiToggle(0), "Ctrl+F1");
+				if (getWindowsSpecialsSize() > 0) {
+					doSpecialWindowToggleVisible(0);
+					s = tagModKey + string("+F1");
+					logKeyParam(key, getWindowSpecialGuiToggle(0), s);
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
+				//TODO: simplify by using a for loop
+
 			case OF_KEY_F2:
-				if (getWindowsSpecialsSize() < 1) break;
-				doSpecialWindowToggleVisible(1);
-				logKeyParam(getWindowSpecialGuiToggle(1), "Ctrl+F2");
+				if (getWindowsSpecialsSize() > 1) {
+					doSpecialWindowToggleVisible(1);
+					logKeyParam(key, getWindowSpecialGuiToggle(1), "Ctrl+F2");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F3:
-				if (getWindowsSpecialsSize() < 2) break;
-				doSpecialWindowToggleVisible(2);
-				logKeyParam(getWindowSpecialGuiToggle(2), "Ctrl+F3");
+				if (getWindowsSpecialsSize() > 2) {
+					doSpecialWindowToggleVisible(2);
+					logKeyParam(key, getWindowSpecialGuiToggle(2), "Ctrl+F3");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F4:
-				if (getWindowsSpecialsSize() < 3) break;
-				doSpecialWindowToggleVisible(3);
-				logKeyParam(getWindowSpecialGuiToggle(3), "Ctrl+F4");
+				if (getWindowsSpecialsSize() > 3) {
+					doSpecialWindowToggleVisible(3);
+					logKeyParam(key, getWindowSpecialGuiToggle(3), "Ctrl+F4");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F5:
-				if (getWindowsSpecialsSize() < 4) break;
-				doSpecialWindowToggleVisible(4);
-				logKeyParam(getWindowSpecialGuiToggle(4), "Ctrl+F5");
+				if (getWindowsSpecialsSize() > 4) {
+					doSpecialWindowToggleVisible(4);
+					logKeyParam(key, getWindowSpecialGuiToggle(4), "Ctrl+F5");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F6:
-				if (getWindowsSpecialsSize() < 5) break;
-				doSpecialWindowToggleVisible(5);
-				logKeyParam(getWindowSpecialGuiToggle(5), "Ctrl+F6");
+				if (getWindowsSpecialsSize() > 5) {
+					doSpecialWindowToggleVisible(5);
+					logKeyParam(key, getWindowSpecialGuiToggle(5), "Ctrl+F6");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F7:
-				if (getWindowsSpecialsSize() < 6) break;
-				doSpecialWindowToggleVisible(6);
-				logKeyParam(getWindowSpecialGuiToggle(6), "Ctrl+F7");
+				if (getWindowsSpecialsSize() > 6) {
+					doSpecialWindowToggleVisible(6);
+					logKeyParam(key, getWindowSpecialGuiToggle(6), "Ctrl+F7");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F8:
-				if (getWindowsSpecialsSize() < 7) break;
-				doSpecialWindowToggleVisible(7);
-				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F8");
+				if (getWindowsSpecialsSize() > 7) {
+					doSpecialWindowToggleVisible(7);
+					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F8");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F9:
-				if (getWindowsSpecialsSize() < 8) break;
-				doSpecialWindowToggleVisible(8);
-				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F9");
+				if (getWindowsSpecialsSize() > 8) {
+					doSpecialWindowToggleVisible(8);
+					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F9");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F10:
-				if (getWindowsSpecialsSize() < 9) break;
-				doSpecialWindowToggleVisible(9);
-				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F10");
+				if (getWindowsSpecialsSize() > 9) {
+					doSpecialWindowToggleVisible(9);
+					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F10");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
 			case OF_KEY_F11:
-				if (getWindowsSpecialsSize() < 10) break;
-				doSpecialWindowToggleVisible(10);
-				logKeyParam(getWindowSpecialGuiToggle(7), "Ctrl+F11");
+				if (getWindowsSpecialsSize() > 10) {
+					doSpecialWindowToggleVisible(10);
+					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F11");
+					doFlagBuildHelpInternalInfo();
+					return;
+				}
 				break;
 
+				//OF_KEY_F12 usually crashes OF
+				//TODO: limited as is hardcoded!
 			}
-
-			//TODO:
-			// From RF
-			/*
-			if (bModKeyCtrl)
-			{
-				string tagMod = "Ctrl+";
-
-				if (toggleParam(keycode, '0', ui->bGui_ShowWindowsGlobal, tagMod + "0")) return true;
-				if (toggleParam(keycode, '1', bGuiCameras, tagMod + "1")) return true;
-				if (toggleParam(keycode, '2', bGuiOutput, tagMod + "2")) return true;
-				if (toggleParam(keycode, '3', bGuiSync, tagMod + "3")) return true;
-				if (toggleParam(keycode, '4', bGuiTrackerData, tagMod + "4")) return true;
-				if (toggleParam(keycode, '5', bGuiTrackerInputs, tagMod + "5")) return true;
-				if (toggleParam(keycode, '6', bGuiData, tagMod + "6")) return true;
-
-				if (toggleParam(key, OF_KEY_F1, ui->bHelp, tagMod + "F1")) return true;
-				if (toggleParam(key, OF_KEY_F2, bGuiSettings, tagMod + "F2")) return true;
-				if (toggleParam(key, OF_KEY_F5, ui->bLog, tagMod + "F5")) return true;
-				if (toggleParam(key, OF_KEY_F6, ui->bNotifier, tagMod + "F6")) return true;
-			}
-			*/
 		}
 
 		//--
 
-		//TODO: not working ctrl
-
-		// Solo
-		if ((key == 's' && mod_CONTROL) || key == 19)
+		// Extra windows
+		if (windowsExtra.size() > 0)
 		{
-			bSolo = !bSolo;
-			logKeyParam(bSolo, "Ctrl + s");
+			if (key >= OF_KEY_F1 && key <= OF_KEY_F11) {
+				for (size_t i = 0; i < windowsExtra.size(); i++)
+				{
+					int k = int(OF_KEY_F1) + getWindowsSpecialsSize() + i;
+					int z = getWindowsSpecialsSize() + i + 1;
+					if (key == k)
+					{
+						s = tagModKey + "+F" + ofToString(z);
+						toggleParamByKey(key, k, getWindowExtraGuiToggle(i), s);
+						doFlagBuildHelpInternalInfo();
+						return;
+					}
+				}
+			}
 		}
 
-		//TODO: Bug: collides with some other keys like shift + drag docking...
-		//// All
-		//if ((key == 'a' && mod_CONTROL) || key == 1)
-		//{
-		//	this->setShowAllPanels(true);
-		//}
-
-		// None
-		//if ((key == 'n' && mod_CONTROL) || key == 14)
-		//{
-		//	this->setShowAllPanels(false);
-		//	logKeyText("Ctrl + n");
-		//}
-
-		//// Unlock Dock
-		//else if (key == 'l')
-		//{
-		//	bModeLock1 = !bModeLock1;
-		//}
-
-		//else if (key == 'L')
-		//{
-		//	bModeLockControls = !bModeLockControls;
-		//}
-
-		//----
-
-		//// Layout Modes
-
-		//else if (key == OF_KEY_TAB && !mod_CONTROL)
-		//{
-		//	if (appLayoutIndex > appLayoutIndex.getMin()) appLayoutIndex++;
-		//	else if (appLayoutIndex == appLayoutIndex.getMin()) appLayoutIndex = appLayoutIndex.getMax();
-		//	//if (appLayoutIndex < 3) loadAppLayout(AppLayouts(appLayoutIndex + 1));
-		//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
-		//}
+		//--
 	}
+
+	//----
+
+	//TODO: not working 
+
+	// Solo
+	if ((key == 's' && bMod_CONTROL) || key == 19)
+	{
+		bSolo = !bSolo;
+		logKeyParam(bSolo, "Ctrl + s");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	//TODO: Bug: collides with some other keys like shift + drag docking...
+	//// All
+	//if ((key == 'a' && bMod_CONTROL) || key == 1)
+	//{
+	//	this->setShowAllPanels(true);
+	//}
+
+	// None
+	//if ((key == 'n' && bMod_CONTROL) || key == 14)
+	//{
+	//	this->setShowAllPanels(false);
+	//	logKeyText("Ctrl + n");
+	//}
+
+	//// Unlock Dock
+	//else if (key == 'l')
+	//{
+	//	bModeLock1 = !bModeLock1;
+	//}
+
+	//else if (key == 'L')
+	//{
+	//	bModeLockControls = !bModeLockControls;
+	//}
+
+	//----
+
+	//// Layout Modes
+
+	//else if (key == OF_KEY_TAB && !bMod_CONTROL)
+	//{
+	//	if (appLayoutIndex > appLayoutIndex.getMin()) appLayoutIndex++;
+	//	else if (appLayoutIndex == appLayoutIndex.getMin()) appLayoutIndex = appLayoutIndex.getMax();
+	//	//if (appLayoutIndex < 3) loadAppLayout(AppLayouts(appLayoutIndex + 1));
+	//	//else if (appLayoutIndex == 3) loadAppLayout(AppLayouts(0));
+	//}
+
+	doFlagBuildHelpInternalInfo();
 }
 
 //--------------------------------------------------------------
@@ -4906,12 +5081,43 @@ void SurfingGuiManager::keyReleased(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;
-	ofLogNotice("ofxSurfingImGui") << "keyReleased: " << (char)key;
 
-	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
-	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
-	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
-	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+	// Modifiers
+	bool _bMod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+	bool _bMod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+	bool _bMod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+	bool _bMod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+
+	if (!_bMod_CONTROL && bMod_CONTROL) {
+		bMod_CONTROL = false;
+		ofLogNotice("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (!_bMod_COMMAND && bMod_COMMAND) {
+		bMod_COMMAND = false;
+		ofLogNotice("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (!_bMod_ALT && bMod_ALT) {
+		bMod_ALT = false;
+		ofLogNotice("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	if (!_bMod_SHIFT && bMod_SHIFT) {
+		bMod_SHIFT = false;
+		ofLogNotice("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
+		doFlagBuildHelpInternalInfo();
+		return;
+	}
+
+	ofLogNotice("ofxSurfingImGui") << "keyReleased: " << (char)key;
+	doFlagBuildHelpInternalInfo();
 }
 
 //--
@@ -4933,10 +5139,12 @@ void SurfingGuiManager::drawMenuDocked()
 	if (ImGui::BeginMenuBar())
 	{
 
-		if (ImGui::BeginMenu("File"))
+		if (BeginMenu("File"))
 		{
 			if (MenuItemButton("Load"))
 			{
+				//TODO
+				// add referenced functions
 				//loadSettingsProjectDialog();
 			}
 			string s = "Load Project.";
@@ -4961,7 +5169,8 @@ void SurfingGuiManager::drawMenuDocked()
 			//	//*opt_exit = false;
 			//}
 
-			// Exit. Blink if hover
+			// Exit. 
+			// Blink if hover
 			static bool bExitHover = false;
 			bool bExit = this->MenuItemButtonBlinkingWithKeystrokeInfo("Exit", "ESC", bExitHover);
 			bExitHover = ImGui::IsItemHovered();
@@ -4970,12 +5179,12 @@ void SurfingGuiManager::drawMenuDocked()
 				ofExit();
 			}
 
-			ImGui::EndMenu();
+			EndMenu();
 		}
 
 		//--
 
-		if (ImGui::BeginMenu("Edit"))
+		if (BeginMenu("Edit"))
 		{
 			if (ImGui::MenuItem("Copy", NULL))
 			{
@@ -4985,17 +5194,17 @@ void SurfingGuiManager::drawMenuDocked()
 			{
 			}
 
-			ImGui::EndMenu();
+			EndMenu();
 		}
 
 		//--
 
-		//TODO
 		// Layouts Engine
 
+		//TODO
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
-			if (ImGui::BeginMenu("Layouts"))
+			if (BeginMenu("Layouts"))
 			{
 				for (int i = 0; i < bLayoutPresets.size(); i++)
 				{
@@ -5007,15 +5216,17 @@ void SurfingGuiManager::drawMenuDocked()
 				//this->AddSpacingSeparated();
 				//if (ImGui::MenuItem("All", NULL)) { this->setShowAllPanels(true); }
 				//if (ImGui::MenuItem("None", NULL)) { this->setShowAllPanels(false); }
-				ImGui::EndMenu();
+
+				EndMenu();
 			}
 		}
 
 		//--
 
+		//TODO
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING || surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
-			if (ImGui::BeginMenu("Docking"))
+			if (BeginMenu("Docking"))
 			{
 				if (ImGui::MenuItem("WARNING", ""))
 				{
@@ -5053,13 +5264,18 @@ void SurfingGuiManager::drawMenuDocked()
 				ImGui::GetIO().ConfigFlags = dockspace_flags;
 				//ImGui::GetIO().ConfigDockingWithShift = true;
 
-				ImGui::EndMenu();
+				EndMenu();
 			}
 		}
 
 		//--
 
-		if (ImGui::BeginMenu("Windows"))
+		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_LOCKED_RESIZE;
+		float w = 210;
+		ImVec2 size_min = ImVec2(w, -1);
+		ImVec2 size_max = ImVec2(w, -1);
+		ImGui::SetNextWindowSizeConstraints(size_min, size_max);
+		if (BeginMenuBlink("Windows", bMod_CONTROL))
 		{
 			// Disabling fullscreen would allow the window to be moved to the front of other windows,
 			// which we can't undo at the moment without finer window depth/z control.
@@ -5080,10 +5296,11 @@ void SurfingGuiManager::drawMenuDocked()
 				//SurfingGui::setWindowShape(1, true);//right monitor portrait
 			}
 
-
 			this->AddSpacingSeparated();
 
 			//--
+
+			// Show global
 
 			//TODO
 			string tagMod = tagModKey + "+";
@@ -5121,19 +5338,42 @@ void SurfingGuiManager::drawMenuDocked()
 				Unindent();
 			}
 
-			if (b) // show global
+			if (b) // Show global
 			{
 				AddSpacingSeparated();
 
 				for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
 				{
-					MenuItemToggleWithKeystrokeInfo(getWindowSpecialGuiToggle(i), tagMod + "F" + ofToString(i + 1));
+					string s = tagMod + "F" + ofToString(i + 1);
+					MenuItemToggleWithKeystrokeInfo(getWindowSpecialGuiToggle(i), s);
 				}
 			}
 
-			AddSpacingBigSeparated();
+			//--
+
+			// Extra windows
+			if (windowsExtra.size() > 0)
+			{
+				AddSpacingBigSeparated();
+
+				//AddLabel("Extra Windows");
+				//Indent();
+
+				for (size_t i = 0; i < windowsExtra.size(); i++)
+				{
+					string s = tagMod + "F" + ofToString(i + 1 + getWindowsSpecialsSize());
+
+					MenuItemToggleWithKeystrokeInfo(getWindowExtraGuiToggle(i), s);
+				}
+
+				//Unindent();
+			}
 
 			//--
+
+			// Log and Notifier
+
+			AddSpacingBigSeparated();
 
 			MenuItemToggleWithKeystrokeInfo(bLog, "L");
 			s = "Show Log Window.";
@@ -5143,12 +5383,24 @@ void SurfingGuiManager::drawMenuDocked()
 			s = "Show Notifier Messages.";
 			AddTooltip(s);
 
+			if (this->isHelpAppEnable()) {
+				MenuItemToggleWithKeystrokeInfo(bHelp, "H");
+				s = "Help App";
+				AddTooltip(s);
+			}
+
+			if (this->isHelpInternalEnabled()) {
+			MenuItemToggleWithKeystrokeInfo(bHelpInternal, "I");
+			s = "Help Internal";
+			AddTooltip(s);
+			}
+
 			EndMenu();
 		}
 
 		//--
 
-		if (ImGui::BeginMenu("About"))
+		if (BeginMenu("About"))
 		{
 			string s = "WARNING !\n\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
 				"\n\n"
@@ -5165,7 +5417,7 @@ void SurfingGuiManager::drawMenuDocked()
 
 			AddTooltipHelp(s);
 
-			ImGui::EndMenu();
+			EndMenu();
 		}
 
 		ImGui::EndMenuBar();

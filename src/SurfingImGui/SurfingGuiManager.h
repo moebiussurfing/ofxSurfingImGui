@@ -68,76 +68,6 @@ using ofxImGuiSurfing::SurfingFontTypes;
 
 //----
 
-//TODO:
-// These arguments are to pass to setup(..) method 
-// to simplify instantiation and define settings.
-//--------------------------------------------------------------
-namespace ofxImGuiSurfing
-{
-	// Argument to be used on ui.setup(mode);
-
-	enum SurfingGuiMode
-	{
-		IM_GUI_MODE_UNKNOWN = 0,
-		// Could be undefined when using LEGACY API maybe.
-
-		IM_GUI_MODE_INSTANTIATED,
-		// To include the ImGui context 
-		// and requiring main begin/end.
-
-		//TODO: should rename or add presets engine + docking
-		IM_GUI_MODE_INSTANTIATED_DOCKING,
-		// Allows docking between multiple instances.
-
-		IM_GUI_MODE_INSTANTIATED_DOCKING_RAW,
-		// not using layout presets engine
-
-		IM_GUI_MODE_INSTANTIATED_SINGLE,
-		// To include the ImGui context and requiring begin/end 
-		// but a single ImGui instance, no other add-ons.
-
-		//IM_GUI_MODE_SPECIAL_WINDOWS, 
-		//TODO: could simplify API, bc it's duplicated from 
-		//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
-
-		IM_GUI_MODE_REFERENCED,
-		//TODO: -> To receive the parent (ofApp scope) 
-		// ImGui object as reference.
-
-		IM_GUI_MODE_NOT_INSTANTIATED
-		// To render windows and widgets only. 
-		// Inside an external ImGui context begin/end (newFrame).
-	};
-
-	//--
-
-	// To enable Special windows mode.
-	// Then handles Organizer and Align windows.
-	enum SurfingGuiModeWindows
-	{
-		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
-		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
-		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
-		//TODO: add other modes
-	};
-
-	//--
-
-	//TODO:
-	//// To help API memo..
-	//// Can we do that and avoid to create the class functions on GuiManager?
-	//#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
-	//#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
-	//#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
-	//#define ui.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
-	//#define ui.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
-	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
-	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
-	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
-} // namespace
-
-//----
-
 //--------------------------------------------------------------
 class SurfingGuiManager
 {
@@ -212,59 +142,84 @@ private:
 
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void keyReleased(ofKeyEventArgs& eventArgs);
-	
+
+	bool bMod_COMMAND = false;
+	bool bMod_CONTROL = false;
+	bool bMod_ALT = false;
+	bool bMod_SHIFT = false;
+
 	string tagModKey = "Ctrl";
+
+#define SURFING_STRING_CHARS_SPACING 12
+	//------------------------------------------------------------------------------------------
+	void alignText(string n, string& s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
+		const int sz_max = num_chars;//char spaces
+		for (size_t i = 0; i < MAX(0, sz_max - n.size()); i++)
+		{
+			s_tar += " ";
+		}
+	}
+	//------------------------------------------------------------------------------------------
+	void alignText(string& s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
+		const int sz_max = num_chars;//char spaces
+		const string n = s_tar;
+		const int sz = n.size();
+		for (size_t i = 0; i < MAX(0, sz_max - sz); i++)
+		{
+			s_tar += " ";
+		}
+	}
 
 	// Keystroke Log helpers.
 	//------------------------------------------------------------------------------------------
 	void logKey(int key, const std::string& msg)
 	{
-		ofLogLevel l = OF_LOG_VERBOSE;
+		ofLogLevel l = OF_LOG_WARNING;
 
-		string s = ofToString("Key ") + ofToString(char(key));
+		string s = ofToString("KEY  ") + ofToString(char(key));
 
 		if (msg == "")
 		{
-			this->AddToLogAndNotifier(s);
-			//ThreadedLogger::log(l, s);
+			this->AddToLogAndNotifier(s,l);
 		}
 		else
 		{
 			s += msg;
-			this->AddToLogAndNotifier(s);
-			//ThreadedLogger::log(l, s);
+			this->AddToLogAndNotifier(s,l);
 		}
 	}
 
 	//------------------------------------------------------------------------------------------
 	void logKeyParam(int key, const ofParameter<bool>& p, const std::string& msg = "")
 	{
-		ofLogLevel l = OF_LOG_VERBOSE;
+		ofLogLevel l = OF_LOG_WARNING;
 
 		if (msg == "")
 		{
-			string sKey = ofToString("Key " + ofToString(char(key)));
-			string s = sKey + ": " + p.getName();
-			s += " | " + string(p.get() ? "ON " : "OFF");
-
-			this->AddToLogAndNotifier(s);
-			//ThreadedLogger::log(l, s);
+			string sKey = ofToString("KEY  " + ofToString(char(key)));
+			string s = sKey + " " + p.getName();
+			s += "  ";
+			//this->alignText(s);
+			this->alignText(p.getName(), s);
+			s += string(p.get() ? "ON " : "OFF");
+			this->AddToLogAndNotifier(s,l);
 		}
 		else
 		{
-			string sKey = ofToString("Key ") + msg;
-			string s = sKey + ": " + p.getName();
-			s += " | " + string(p.get() ? "ON " : "OFF");
-
-			this->AddToLogAndNotifier(s);
-			//ThreadedLogger::log(l, s);
+			string sKey = ofToString("KEY  ") + msg;
+			string s = sKey + " " + p.getName();
+			s += "  ";
+			//this->alignText(s);
+			this->alignText(p.getName(), s);
+			s += string(p.get() ? "ON " : "OFF");
+			this->AddToLogAndNotifier(s,l);
 		}
 	}
 
 	//------------------------------------------------------------------------------------------
-	bool toggleParam(int key, int target, ofParameter<bool>& p, const std::string& msg = "")
+	bool toggleParamByKey(int key, int keyTarget, ofParameter<bool>& p, const std::string& msg = "")
 	{
-		if (key == target)
+		if (key == keyTarget)
 		{
 			p.set(!p.get());
 			logKeyParam(key, p, msg);
@@ -1828,7 +1783,7 @@ public:
 	// Columns
 
 	//--------------------------------------------------------------
-	void BeginColumns(int amount, string labelID="##", bool border = false)
+	void BeginColumns(int amount, string labelID = "##", bool border = false)
 	{
 		ImGui::PushID(labelID.c_str());
 
@@ -1871,6 +1826,19 @@ public:
 	{
 		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
 		if (b) this->refreshLayout();
+		return b;
+	}
+
+	//--------------------------------------------------------------
+	bool BeginMenuBlink(const string label, bool bBlink, bool enabled = true)
+	{
+		if (bBlink) BeginBlinkText();
+
+		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
+		if (b) this->refreshLayout();
+
+		if (bBlink) EndBlinkText();
+
 		return b;
 	}
 
@@ -2652,8 +2620,14 @@ public:
 
 	ofParameterGroup params_Windows{ "Windows" };
 
+	//--
+
 private:
-	void doBuildHelpInfo(bool bSlient = 1);
+	bool bFlagDoBuildHelpInternalInfo = false;
+	void doFlagBuildHelpInternalInfo() {
+		bFlagDoBuildHelpInternalInfo = 1;
+	}
+	void doBuildHelpInternalInfo(bool bSlient = 1);
 	// Create or freshed the help info for the drawing help box
 
 	//--
@@ -2928,8 +2902,8 @@ public:
 	//--------------------------------------------------------------
 	void AddToLogAndNotifier(string text)
 	{
-		log.Add(text);
-		notifier.Add(text);
+		log.Add(text, OF_LOG_NOTICE);
+		notifier.Add(text, OF_LOG_NOTICE);
 	}
 
 	//----
@@ -4486,7 +4460,7 @@ public:
 
 		if (index > windows.size() - 1 || index == -1)
 		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued windows, " <<
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued Special windows, " <<
 				index;
 			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
 			return b;
@@ -4562,6 +4536,57 @@ public:
 		}
 
 		windows[index].bGui = !windows[index].bGui;
+	}
+
+	//----
+
+	// Extra queued/added windows 
+	// Useful to auto populate on window/menu or other places.
+
+private:
+	vector<ofParameter<bool>> windowsExtra;
+	//ofParameterGroup params_WindowsPanelsExtra{ "_GuiToggles_Extra_" };//TODO
+
+public:
+	//--------------------------------------------------------------
+	void addWindowExtra(ofParameter<bool>& _bGui)
+	{
+		windowsExtra.emplace_back(_bGui);
+		//windowsExtra.push_back(_bGui);
+		//params_WindowsPanelsExtra.add(_bGui);
+	}
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowExtraGuiToggle(int index)
+	{
+		return getWindowExtraVisible(index);
+	}
+	//--------------------------------------------------------------
+	ofParameter<bool>& getWindowExtraVisible(int index) // return bool parameter visible toggle
+	{
+		//TODO: could this be problematic?
+		// bc we are not storing the param neither returning a reference?
+
+		if (index > windowsExtra.size() - 1 || index == -1)
+		{
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued Extra windows, " <<
+				index;
+			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
+			return b;
+		}
+
+		return windowsExtra[index];
+	}
+	//--------------------------------------------------------------
+	string getWindowExtraGuiToggleName(int index)
+	{
+		return getWindowExtraVisible(index).getName();
+	}
+	//--------------------------------------------------------------
+	bool getIsWindowExtraVisible(int index) const // return visible toggle state
+	{
+		if (windowsExtra.size() == 0) return false;
+		else if (index > windowsExtra.size() - 1 || index == -1) return false;
+		else return windowsExtra[index].get();
 	}
 
 	//----
@@ -4845,7 +4870,7 @@ public:
 
 	ofParameter<bool> bGui_ShowWindowsGlobal{ "Show Windows", true };
 	// to momentary force hide all windows or to show if visible.
-	 
+
 	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true};
 	// // to force hide all windows or to show if visible
 
@@ -5942,5 +5967,4 @@ public:
 
 		ImGui::EndTabItem();
 	}
-
 };

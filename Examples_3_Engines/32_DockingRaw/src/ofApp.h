@@ -3,19 +3,18 @@
 
 /*
 
-	This example show a docking mode
-	(without the layout presets engine activated)
+	This example shows a workflow for the docking mode
+	(Here without the layout presets engine activated)
+	Also to learn how the top menu is handled, with some automatic workflows,
+		adding some windows visibles toggles on there.
 
 	- Layout is persistent.
 	- We can reset layout to a default layout.
 	- We can randomize the layout.
 
-
 	TODO
 
-	Add manual save/load layout.
-		(we could use the imgui.ini or another file)
-	Get center rectangle to draw a viewport.
+	Add manual save/load layout. (we could use the imgui.ini or another file)
 	Make some of these helpers internal to the GuiManger
 
 */
@@ -23,7 +22,7 @@
 
 #include "ofxSurfingImGui.h"
 
-//#define SURFING_USE_MANAGER
+#define SURFING_USE_MANAGER // allow save/load
 
 class ofApp : public ofBaseApp
 {
@@ -68,24 +67,30 @@ public:
 	void setupImGui();
 	void drawImGui();
 	void drawImGuiSpecialWindows();
+	void drawImGuiSpecialWindow0();
+	void drawImGuiSpecialWindow1();
+	void drawImGuiSpecialWindow2();
+	void drawImGuiSpecialWindow3();
+	void drawImGuiSpecialWindow4();
 
-	ofParameter<bool> bGui{ "ofApp", true };
+	ofParameter<bool> bGui{ "APP", true };
 
 	//--
 
 	// Docking Helpers Stuff
 
-	// Mode/workflow Can be configured:
-	bool bStartupDockingReset = false;
+	// Mode/workflow 
+	// Can be configured:
+	bool bModeDockingResetAtStartup = false;
 	// false: the layout will be persistent and auto saved on exit and loaded on setup.
-	// true: the layout will be reseted on each startup.
+	// true: the layout will be reseted by code on each startup.
 
-	ofParameter<bool> bGui_DockingHelpers{ "myDockingHelpers", true };
+	ofParameter<bool> bGui_DockingHelp{ "DOCKING HELP", true };
 
 	// To learning purposes 
 	// but also to be used as template for your projects.
 	void updateImGuiDockingHelpers();
-	void drawImGuiDockingHelpers();
+	void drawImGuiDockingHelp();
 
 	// An extra window with some triggers
 	// for hard-coded layout modifications. 
@@ -93,12 +98,13 @@ public:
 	void doDockingRandom(); // Random the layout.
 
 	// Flags
-	bool bDockingReset = false;
-	bool bDockingRandom = false;
+	bool bFlagDockingReset = false;
+	bool bFlagDockingRandom = false;
 
 	//--
 
 	// Manager to Save/Load Layout manually
+
 #ifdef SURFING_USE_MANAGER
 	string path = "myLayout";
 	bool bFlagLoadLayout = 0;
@@ -118,6 +124,8 @@ public:
 #endif
 
 	//--
+
+	// Scene functions
 
 	void updateScene(); // Generates random messages to test the Log window.
 	void drawScene();// Draws a Central Rectangle getting from the docking layout.

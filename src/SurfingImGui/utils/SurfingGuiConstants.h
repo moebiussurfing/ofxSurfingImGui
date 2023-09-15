@@ -5,7 +5,7 @@
 /*
 
 	This class has useful constants:
-	widgets sizes, default themes, fonts, 
+	widgets sizes, default themes, fonts,
 	...etc.
 	To be used around many classes.
 
@@ -53,7 +53,7 @@
 
 //#define SURFING_IMGUI__CREATE_EXIT_LISTENER 
 // To enable that ofApp exit will call exit and save settings.
- 
+
 //#define SURFING_IMGUI__ENABLE_SAVE_ON_EXIT 
 // To enable auto save on exit.
 
@@ -229,7 +229,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	enum SurfingGuiTypes
 	{
-		OFX_IM_DEFAULT = 0, 
+		OFX_IM_DEFAULT = 0,
 		// Default style for each widget. (kind of like ofxImGui does)
 
 		OFX_IM_HIDDEN,
@@ -427,7 +427,7 @@ namespace ofxImGuiSurfing
 
 		//TODO: add button and fix callback to trig 
 		// when hitting enter or submit button clicked
-	
+
 
 		OFX_IM_TEXT_INPUT,
 		OFX_IM_TEXT_INPUT_NO_NAME,
@@ -504,7 +504,7 @@ namespace ofxImGuiSurfing
 	// Group Style
 	//TODO: kind of deprecated? replace by SurfingGuiGroupStyle_Collapsed?
 	//it's used internally in some methods.. make it private?
-	
+
 	//--------------------------------------------------------------
 	enum SurfingGuiTypesGroups
 	{
@@ -521,7 +521,7 @@ namespace ofxImGuiSurfing
 
 		OFX_IM_GROUP_NUM_TYPES
 	};
-	
+
 	//----
 
 	//TODO: 
@@ -568,5 +568,73 @@ namespace ofxImGuiSurfing
 	}
 
 	//---------------
+
+//----
+
+//TODO:
+// These arguments are to pass to setup(..) method 
+// to simplify instantiation and define settings.
+//--------------------------------------------------------------
+
+// Argument to be used on ui.setup(mode);
+
+	enum SurfingGuiMode
+	{
+		IM_GUI_MODE_UNKNOWN = 0,
+		// Could be undefined when using LEGACY API maybe.
+
+		IM_GUI_MODE_INSTANTIATED,
+		// To include the ImGui context 
+		// and requiring main begin/end.
+
+		//TODO: should rename or add presets engine + docking
+		IM_GUI_MODE_INSTANTIATED_DOCKING,
+		// Allows docking between multiple instances.
+
+		IM_GUI_MODE_INSTANTIATED_DOCKING_RAW,
+		// not using layout presets engine
+
+		IM_GUI_MODE_INSTANTIATED_SINGLE,
+		// To include the ImGui context and requiring begin/end 
+		// but a single ImGui instance, no other add-ons.
+
+		//IM_GUI_MODE_SPECIAL_WINDOWS, 
+		//TODO: could simplify API, bc it's duplicated from 
+		//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
+
+		IM_GUI_MODE_REFERENCED,
+		//TODO: -> To receive the parent (ofApp scope) 
+		// ImGui object as reference.
+
+		IM_GUI_MODE_NOT_INSTANTIATED
+		// To render windows and widgets only. 
+		// Inside an external ImGui context begin/end (newFrame).
+	};
+
+	//--
+
+	// To enable Special windows mode.
+	// Then handles Organizer and Align windows.
+	enum SurfingGuiModeWindows
+	{
+		IM_GUI_MODE_WINDOWS_SPECIAL_UNKNOWN = 0,
+		IM_GUI_MODE_WINDOWS_SPECIAL_DISABLED,
+		IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER
+		//TODO: add other modes
+	};
+
+	//--
+
+	//TODO:
+	//// To help API memo..
+	//// Can we do that and avoid to create the class functions on GuiManager?
+	//#define ui.AddSpacingSmall() ofxImGuiSurfing::AddSpacingSmall() 
+	//#define ui.AddSpacingDouble() ofxImGuiSurfing::AddSpacingDouble() 
+	//#define ui.AddSpacing() ofxImGuiSurfing::AddSpacing() 
+	//#define ui.AddSpacingBig() ofxImGuiSurfing::AddSpacingBig() 
+	//#define ui.AddSpacingBigSeparated() ofxImGuiSurfing::AddSpacingBigSeparated() 
+	//#define ui.AddSpacingSeparated() ofxImGuiSurfing::AddSpacingSeparated() 
+	//#define ui.AddSpacingHuge() ofxImGuiSurfing::AddSpacingHuge() 
+	//#define ui.AddSpacingHugeSeparated() ofxImGuiSurfing::AddSpacingHugeSeparated() 
 
 };

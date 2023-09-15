@@ -271,10 +271,10 @@ private:
 		ofLogVerbose("ofxSurfingImGui:SurfingThemeEditor") << "Key: " << (char)key;
 
 		// Modifiers
-		bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
-		//bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
-		//bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
-		//bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+		bool bMod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+		//bool bMod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+		//bool bMod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+		//bool bMod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 		if (0) {}
 
