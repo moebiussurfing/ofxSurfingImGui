@@ -55,18 +55,15 @@ SurfingGuiManager::SurfingGuiManager()
 	// Callbacks
 
 	ofAddListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+
 	ofAddListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
+	ofAddListener(params_WindowsPanelsExtra.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
+
+	params_WindowsPanelsExtra.add(bGui_ShowWindowsGlobal);
 
 	//--
 
 	setupParams();
-
-	//--
-
-	////TODO: BUG?
-	//// it seems than requires to be false when using multi-context/instances
-	//// if is settled to true, sometimes it hangs and gui do not refresh/freezes.
-	//bAutoDraw = false;
 }
 
 //--------------------------------------------------------------
@@ -132,9 +129,11 @@ void SurfingGuiManager::exit()
 	ofRemoveListener(ofEvents().draw, this, &SurfingGuiManager::draw, OF_EVENT_ORDER_BEFORE_APP);
 
 	ofRemoveListener(params_AppSettings.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
-	ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
 
 	ofRemoveListener(params_LayoutPresetsStates.parameterChangedE(), this, &SurfingGuiManager::Changed_Params);
+
+	ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
+	ofRemoveListener(params_WindowsPanelsExtra.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
@@ -1272,6 +1271,7 @@ void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent)
 
 	//--
 
+	//TODO
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
 	{
 		if (bDockingLayoutPresetsEngine)
@@ -1339,20 +1339,33 @@ void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent)
 
 		// Special windows
 
-		if (bKeys) helpInternalText += l3 + tagModKey;
+		if (bKeys) helpInternalText += l3 + tagModKey + "+";
 		else helpInternalText += "";
-		helpInternalText += "+\n\n";
-		for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
-		{
-			if (bKeys) helpInternalText += "F" + ofToString(i + 1);
-			else helpInternalText += "  ";
-			helpInternalText += l5;
-			string n = getWindowSpecialGuiToggleName(i);
-			helpInternalText += n;
-			this->alignText(n, helpInternalText, 15);
-			helpInternalText += "  ";
-			helpInternalText += getIsWindowSpecialVisible(i) ? "ON " : "OFF";
-			helpInternalText += "\n";
+		helpInternalText += "\n\n";
+
+		helpInternalText += "0 " + l5 + bGui_ShowWindowsGlobal.getName();
+		this->alignText(bGui_ShowWindowsGlobal.getName(), helpInternalText, 15);
+		helpInternalText += "  ";
+		helpInternalText += string(bGui_ShowWindowsGlobal.get() ? "ON " : "OFF");
+		helpInternalText += "\n\n";
+
+		if (bGui_ShowWindowsGlobal) {
+			for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
+			{
+				if (bKeys) helpInternalText += "F" + ofToString(i + 1);
+				else helpInternalText += "  ";
+				helpInternalText += l5;
+				string n = getWindowSpecialGuiToggleName(i);
+				helpInternalText += n;
+				this->alignText(n, helpInternalText, 15);
+				helpInternalText += "  ";
+				helpInternalText += getIsWindowSpecialVisible(i) ? "ON " : "OFF";
+				helpInternalText += "\n";
+			}
+		}
+		else {
+			for (size_t i = 0; i < getWindowsSpecialsSize(); i++)
+				helpInternalText += "\n";
 		}
 
 		helpInternalText += "\n";
@@ -1378,22 +1391,27 @@ void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent)
 			}
 		}
 
-		//--
-
 		helpInternalText += "\n\n";
+
+		//--
 
 		// Monitor mod keys
 
 		if (bKeys) {
-			helpInternalText += l3 + "MOD KEYS\n";
-			helpInternalText += bMod_CONTROL ? "Ctrl" : "    ";
-			helpInternalText += " ";
-			helpInternalText += bMod_COMMAND ? "Cmd " : "    ";
-			helpInternalText += " ";
-			helpInternalText += bMod_ALT ? "Alt " : "    ";
-			helpInternalText += " ";
-			helpInternalText += bMod_SHIFT ? "Shift" : "     ";
-			helpInternalText += " ";
+			if (bMod_CONTROL || bMod_COMMAND || bMod_ALT || bMod_SHIFT) {
+				helpInternalText += l3 + "MOD KEYS\n";
+				helpInternalText += bMod_CONTROL ? "Ctrl" : "    ";
+				helpInternalText += " ";
+				helpInternalText += bMod_COMMAND ? "Cmd " : "    ";
+				helpInternalText += " ";
+				helpInternalText += bMod_ALT ? "Alt " : "    ";
+				helpInternalText += " ";
+				helpInternalText += bMod_SHIFT ? "Shift" : "     ";
+				helpInternalText += " ";
+			}
+			else {
+				helpInternalText += "\n\n";
+			}
 		}
 		else {
 			helpInternalText += "\n\n";
@@ -1978,6 +1996,52 @@ void SurfingGuiManager::draw(ofEventArgs& args) // -> Auto called on each frame
 {
 	draw();
 }
+
+//--
+
+//--------------------------------------------------------------
+void SurfingGuiManager::updateAttendDockingPre()
+{
+	// Save/Load ini layout
+
+	// Load
+	if (bFlagDoLoadImGuiLayout) {
+		bFlagDoLoadImGuiLayout = false;
+
+		if (pathLayout != "") {
+			ImGui::LoadIniSettingsFromDisk(pathLayout.c_str());
+		}
+		else {
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui::LoadIniSettingsFromDisk(io.IniFilename);
+		}
+	}
+
+	// Save
+	if (bFlagDoSaveImGuiLayout) {
+		bFlagDoSaveImGuiLayout = false;
+
+		if (pathLayout != "") {
+			ImGui::SaveIniSettingsToDisk(pathLayout.c_str());
+		}
+		else {
+			ImGuiIO& io = ImGui::GetIO();
+			ImGui::SaveIniSettingsToDisk(io.IniFilename);
+		}
+	}
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::loadLayout(string path) {
+	bFlagDoLoadImGuiLayout = true;
+	pathLayout = ofToDataPath(path);
+}
+//--------------------------------------------------------------
+void SurfingGuiManager::saveLayout(string path) {
+	bFlagDoSaveImGuiLayout = true;
+	pathLayout = ofToDataPath(path);
+}
+
+//--
 
 //--------------------------------------------------------------
 void SurfingGuiManager::updateLayout()
@@ -2655,6 +2719,11 @@ void SurfingGuiManager::Begin()
 #ifndef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 	if (bDebugDebuggerImGui) ImGui::ShowMetricsWindow();
 #endif
+
+	//----
+
+	updateAttendDockingPre();
+
 }
 
 //--------------------------------------------------------------
@@ -2953,7 +3022,7 @@ bool SurfingGuiManager::BeginWindow(string name = "Window", bool* p_open = NULL,
 
 		// Default size
 		ImGui::SetNextWindowSize(ImVec2{ 100,100 }, ImGuiCond_FirstUseEver);
-	}
+}
 #endif
 
 	//--
@@ -3247,7 +3316,8 @@ void SurfingGuiManager::EndWindowAnyType(ofParameter<bool>& p)
 void SurfingGuiManager::BeginDocking()
 {
 	//dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 	// because it would be confusing to have two docking targets within each others.
@@ -3287,8 +3357,10 @@ void SurfingGuiManager::BeginDocking()
 	// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
 	// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
 	ImGui::Begin("DockSpace", nullptr, window_flags);
-	//ImGui::Begin("MyDockSpace", nullptr, window_flags);
+	//ImGui::Begin("MyDockSpace", nullptr, window_flags);//?
+
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar(2);
 
@@ -3341,8 +3413,6 @@ void SurfingGuiManager::EndDocking()
 	// End the parent window that contains the Dockspace:
 	ImGui::End(); // ?
 
-	bDoneEndDocking = true;
-
 	//TODO: to check if there's not central part / free space for the viewport!
 	/*
 	if (!dockNode || !ImGui::DockBuilderGetCentralNode(dockNodeID) || !ImGui::DockBuilderGetCentralNode(dockNodeID)->IsEmpty()) {
@@ -3358,6 +3428,8 @@ void SurfingGuiManager::EndDocking()
 		if (posY >= ofGetHeight()) velY = -1;
 	}
 	*/
+
+	bDoneEndDocking = true;
 }
 
 //----
@@ -3443,13 +3515,14 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 	//--
 
-	// 3. Populate some presets
+	// 3. Populate some presets 
+	// if the app is opened for first time or there's no presets yet!
 
 	for (int i = 0; i < numPresetsDefault; i++)
 	{
 		if (namesPresets.size() == 0)
 		{
-			// if names are not defined will be setled by default P0-P1-P2-P3
+			// if names are not defined will be settled by default P0-P1-P2-P3
 			createLayoutPreset();
 		}
 		else
@@ -3523,6 +3596,7 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 	rectangles_Windows.emplace_back(rect2_Manager);
 
 	// To store settings to disk
+
 	params_RectPanels.clear();
 	params_RectPanels.add(rect0_Presets);
 	params_RectPanels.add(rect1_Panels);
@@ -3610,7 +3684,7 @@ void SurfingGuiManager::saveSettings()
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::saveLayout(int _index)
+void SurfingGuiManager::saveLayoutPresetIndex(int _index)
 {
 	if (_index == -1) return;
 
@@ -3628,7 +3702,7 @@ void SurfingGuiManager::saveLayout(int _index)
 }
 
 //--------------------------------------------------------------
-void SurfingGuiManager::loadLayout(int _index)
+void SurfingGuiManager::loadLayoutPresetIndex(int _index)
 {
 	if (_index == -1) return;
 
@@ -3831,7 +3905,7 @@ void SurfingGuiManager::drawLayoutsLayoutPresets() // That's the window tittled 
 				ImGui::PushID("##SaveLayout");
 				if (ImGui::Button("Save", ImVec2(_w1, 0.5 * _h)))
 				{
-					saveLayout(appLayoutIndex.get());
+					saveLayoutPresetIndex(appLayoutIndex.get());
 				}
 				ImGui::PopID();
 			}
@@ -3950,7 +4024,7 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets()
 						windows[i].bGui.set(true);
 					}
 
-					saveLayout((appLayoutIndex.get()));
+					saveLayoutPresetIndex((appLayoutIndex.get()));
 				}
 				this->AddTooltip("Reset all the Presets");
 
@@ -3982,6 +4056,9 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets()
 void SurfingGuiManager::Changed_WindowsPanels(ofAbstractParameter& e)
 {
 	string name = e.getName();
+	ofLogNotice("ofxSurfingImGui") << "Changed_WindowsPanels: " << name << ": " << e;
+
+	doFlagBuildHelpInternalInfo();
 }
 
 //--------------------------------------------------------------
@@ -4227,7 +4304,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter& e)
 		//-
 
 		// 2. Load layout
-		loadLayout(appLayoutIndex.get());
+		loadLayoutPresetIndex(appLayoutIndex.get());
 
 		return;
 	}
@@ -4704,7 +4781,10 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	if (!bKeys || this->bOverInputText) return;
 
 	const int& key = eventArgs.key;//OF_KEY_* 
-	const int& keycode = eventArgs.keycode;//GLFW_KEY_*
+	const int& keycode = eventArgs.keycode;//GLFW_KEY_* 
+	// Note: when keystrokes like Ctrtl+0, 
+	// we need to use keycode instead of 0 to know if '0; is pressed.
+
 	//const int& scancode = eventArgs.scancode;//OS/hardware
 	//const uint32_t& codepoint = eventArgs.codepoint;//Unicode
 
@@ -4716,16 +4796,6 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 	if (!_bMod_CONTROL && !_bMod_COMMAND && _bMod_ALT && _bMod_SHIFT)
 		ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
-
-	// Log
-	/*
-	if (bLogKeys)
-		if (key != OF_KEY_SHIFT && !bMod_COMMAND && !bMod_CONTROL && !bMod_ALT && !bMod_SHIFT)
-		{
-			string ss = "KEY " + ofToString((char)key) + "";
-			log.Add(ss, 3);
-		}
-	*/
 
 	//--
 
@@ -4808,25 +4878,25 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		switch (key)
 		{
 		case OF_KEY_F1: bLayoutPresets[0] = !bLayoutPresets[0];
-			logKeyParam(bLayoutPresets[0], "F1");
+			logKeyParamToggle(bLayoutPresets[0], "F1");
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F2: bLayoutPresets[1] = !bLayoutPresets[1];
-			logKeyParam(bLayoutPresets[1], "F2");
+			logKeyParamToggle(bLayoutPresets[1], "F2");
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F3: bLayoutPresets[2] = !bLayoutPresets[2];
-			logKeyParam(bLayoutPresets[2], "F3");
+			logKeyParamToggle(bLayoutPresets[2], "F3");
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F4: bLayoutPresets[3] = !bLayoutPresets[3];
-			logKeyParam(bLayoutPresets[3], "F4");
+			logKeyParamToggle(bLayoutPresets[3], "F4");
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
@@ -4838,7 +4908,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		if (key == OF_KEY_F5) // Presets
 		{
 			bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
-			logKeyParam(bGui_LayoutsPresetsSelector, "F5");
+			logKeyParamToggle(bGui_LayoutsPresetsSelector, "F5");
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4846,7 +4916,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		else if (key == OF_KEY_F6) // Panels
 		{
 			bGui_LayoutsPanels = !bGui_LayoutsPanels;
-			logKeyParam(bGui_LayoutsPanels, "F6");
+			logKeyParamToggle(bGui_LayoutsPanels, "F6");
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4854,7 +4924,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 		else if (key == OF_KEY_F7) // Manager
 		{
 			bGui_LayoutsManager = !bGui_LayoutsManager;
-			logKeyParam(bGui_LayoutsManager, "F7");
+			logKeyParamToggle(bGui_LayoutsManager, "F7");
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4872,21 +4942,15 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 
 		string s = "";
 
-		if (toggleParamByKey(key, '`', bGui_ShowWindowsGlobal, "Ctrl+`"))
+		if (toggleParamByKey(keycode, '0', bGui_ShowWindowsGlobal, "Ctrl+0"))
 		{
-			doFlagBuildHelpInternalInfo();
+			//doFlagBuildHelpInternalInfo();
 			return;
 		}
 
 		if (key >= OF_KEY_F1 && key <= OF_KEY_F11) {
 			switch (key)
 			{
-				//TODO: fix
-				//case '0': // global momentary
-				//	if (getWindowsSpecialsSize() <= 0) break;
-				//	bGui_ShowWindowsGlobal = !bGui_ShowWindowsGlobal;
-				//	break;
-
 				//--
 
 				// All special windows
@@ -4895,8 +4959,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 				if (getWindowsSpecialsSize() > 0) {
 					doSpecialWindowToggleVisible(0);
 					s = tagModKey + string("+F1");
-					logKeyParam(key, getWindowSpecialGuiToggle(0), s);
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(0), s);
 					return;
 				}
 				break;
@@ -4906,8 +4969,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F2:
 				if (getWindowsSpecialsSize() > 1) {
 					doSpecialWindowToggleVisible(1);
-					logKeyParam(key, getWindowSpecialGuiToggle(1), "Ctrl+F2");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(1), "Ctrl+F2");
 					return;
 				}
 				break;
@@ -4915,8 +4977,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F3:
 				if (getWindowsSpecialsSize() > 2) {
 					doSpecialWindowToggleVisible(2);
-					logKeyParam(key, getWindowSpecialGuiToggle(2), "Ctrl+F3");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(2), "Ctrl+F3");
 					return;
 				}
 				break;
@@ -4924,8 +4985,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F4:
 				if (getWindowsSpecialsSize() > 3) {
 					doSpecialWindowToggleVisible(3);
-					logKeyParam(key, getWindowSpecialGuiToggle(3), "Ctrl+F4");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(3), "Ctrl+F4");
 					return;
 				}
 				break;
@@ -4933,8 +4993,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F5:
 				if (getWindowsSpecialsSize() > 4) {
 					doSpecialWindowToggleVisible(4);
-					logKeyParam(key, getWindowSpecialGuiToggle(4), "Ctrl+F5");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(4), "Ctrl+F5");
 					return;
 				}
 				break;
@@ -4942,8 +5001,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F6:
 				if (getWindowsSpecialsSize() > 5) {
 					doSpecialWindowToggleVisible(5);
-					logKeyParam(key, getWindowSpecialGuiToggle(5), "Ctrl+F6");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(5), "Ctrl+F6");
 					return;
 				}
 				break;
@@ -4951,8 +5009,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F7:
 				if (getWindowsSpecialsSize() > 6) {
 					doSpecialWindowToggleVisible(6);
-					logKeyParam(key, getWindowSpecialGuiToggle(6), "Ctrl+F7");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(6), "Ctrl+F7");
 					return;
 				}
 				break;
@@ -4960,8 +5017,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F8:
 				if (getWindowsSpecialsSize() > 7) {
 					doSpecialWindowToggleVisible(7);
-					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F8");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(7), "Ctrl+F8");
 					return;
 				}
 				break;
@@ -4969,8 +5025,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F9:
 				if (getWindowsSpecialsSize() > 8) {
 					doSpecialWindowToggleVisible(8);
-					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F9");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(7), "Ctrl+F9");
 					return;
 				}
 				break;
@@ -4978,7 +5033,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F10:
 				if (getWindowsSpecialsSize() > 9) {
 					doSpecialWindowToggleVisible(9);
-					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F10");
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(7), "Ctrl+F10");
 					doFlagBuildHelpInternalInfo();
 					return;
 				}
@@ -4987,8 +5042,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 			case OF_KEY_F11:
 				if (getWindowsSpecialsSize() > 10) {
 					doSpecialWindowToggleVisible(10);
-					logKeyParam(key, getWindowSpecialGuiToggle(7), "Ctrl+F11");
-					doFlagBuildHelpInternalInfo();
+					logKeyParamToggle(key, getWindowSpecialGuiToggle(7), "Ctrl+F11");
 					return;
 				}
 				break;
@@ -5012,7 +5066,6 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 					{
 						s = tagModKey + "+F" + ofToString(z);
 						toggleParamByKey(key, k, getWindowExtraGuiToggle(i), s);
-						doFlagBuildHelpInternalInfo();
 						return;
 					}
 				}
@@ -5030,7 +5083,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs& eventArgs)
 	if ((key == 's' && bMod_CONTROL) || key == 19)
 	{
 		bSolo = !bSolo;
-		logKeyParam(bSolo, "Ctrl + s");
+		logKeyParamToggle(bSolo, "Ctrl + s");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
@@ -5128,7 +5181,6 @@ void SurfingGuiManager::drawMenuDocked()
 	static bool opt_fullscreen = true;
 	static bool* p_open = NULL;
 	static bool opt_exit = false;
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 	//-
 
@@ -5223,7 +5275,11 @@ void SurfingGuiManager::drawMenuDocked()
 
 		//--
 
+		/*
+
 		//TODO
+		//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
 		if (surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING || surfingImGuiMode == IM_GUI_MODE_INSTANTIATED_DOCKING)
 		{
 			if (BeginMenu("Docking"))
@@ -5267,6 +5323,7 @@ void SurfingGuiManager::drawMenuDocked()
 				EndMenu();
 			}
 		}
+		*/
 
 		//--
 
@@ -5338,7 +5395,7 @@ void SurfingGuiManager::drawMenuDocked()
 				Unindent();
 			}
 
-			if (b) // Show global
+			if (b) // Show Global
 			{
 				AddSpacingSeparated();
 
@@ -5390,9 +5447,9 @@ void SurfingGuiManager::drawMenuDocked()
 			}
 
 			if (this->isHelpInternalEnabled()) {
-			MenuItemToggleWithKeystrokeInfo(bHelpInternal, "I");
-			s = "Help Internal";
-			AddTooltip(s);
+				MenuItemToggleWithKeystrokeInfo(bHelpInternal, "I");
+				s = "Help Internal";
+				AddTooltip(s);
 			}
 
 			EndMenu();
@@ -5402,7 +5459,7 @@ void SurfingGuiManager::drawMenuDocked()
 
 		if (BeginMenu("About"))
 		{
-			string s = "WARNING !\n\nDon't pay attention for this text! \nThis is not operative here. \nJust for testing menus!"
+			string s = "WARNING !\n\nDON'T PAY ATTENTION FOR THIS TEXT! \NTHIS IS NOT OPERATIVE HERE. \NJUST FOR TESTING MENUS!"
 				"\n\n"
 				"When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!" "\n"
 				"- Drag from window title bar or their tab to dock/undock." "\n"

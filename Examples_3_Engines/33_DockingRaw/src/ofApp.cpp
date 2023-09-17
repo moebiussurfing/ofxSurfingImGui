@@ -104,13 +104,13 @@ void ofApp::setupImGui()
 
 	// Customize Help info
 
-	// app
+	// App
 	string s = "This is an Example to learn \nthe Docking features.\n\nEnjoy!";
 	//ui.setEnableHelpApp();//not required if text settled after
 	ui.setHelpAppTitle("Example 23_DockingRaw");
 	ui.setHelpAppText(s);
 
-	// internal
+	// Internal
 	ui.setEnableHelpInternal();//disabled/hidden by default
 }
 
@@ -137,6 +137,8 @@ void ofApp::drawImGui()
 
 	ui.Begin();
 	{
+		//--
+
 		// 1. Docking magic
 
 		// We can access all the docking space
@@ -163,15 +165,7 @@ void ofApp::drawImGui()
 		//--
 
 		// 2.2 Populate the visible toggles
-
-		// for all the queued especial windows in setup()!
-		if (ui.BeginWindow(bGui))
-		{
-			ui.drawWidgetsSpecialWindows();
-			ui.AddSpacingSeparated();
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
-			ui.EndWindow();
-		}
+		drawImGuiApp();
 
 		//--
 
@@ -190,6 +184,20 @@ void ofApp::drawImGui()
 }
 
 //----
+
+//--------------------------------------------------------------
+void ofApp::drawImGuiApp()
+{
+	// for all the queued especial windows in setup()!
+	if (ui.BeginWindow(bGui))
+	{
+		ui.drawWidgetsSpecialWindowsManager();
+		ui.AddSpacingSeparated();
+
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXL_BORDER_BLINK);
+		ui.EndWindow();
+	}
+}
 
 //--------------------------------------------------------------
 void ofApp::drawImGuiSpecialWindows()
@@ -454,6 +462,61 @@ void ofApp::drawImGuiSpecialWindow4()
 	}
 }
 
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key)
+{
+	//ofLogNotice(__FUNCTION__) << " " << char(key);
+
+	if (key == 'g') bGui = !bGui;
+	if (key == ' ') bFlagDockingRandom = true;
+	if (key == OF_KEY_BACKSPACE) bFlagDockingReset = true;
+}
+
+//----
+
+// Useful Docking snippets
+
+// On runtime, the user session could design his layout using shift+mouse dragging.
+// But we can setup the docking layout using hard-coded methods.
+
+//--------------------------------------------------------------
+void ofApp::updateImGuiDockingHelpers()
+{
+#if 0
+	// Reset layout once o startup/first frame call.
+	// Called only once!
+	if (bModeDockingResetAtStartup)
+	{
+		static bool b = false;
+		if (!b) {
+			b = true;
+
+			doDockingReset();
+		}
+	}
+#endif
+
+	//----
+
+	// Reset layout by a button
+	if (bFlagDockingReset)
+	{
+		bFlagDockingReset = false;
+
+		doDockingReset();
+	}
+
+	//--
+
+	// Random layout by a button
+	if (bFlagDockingRandom)
+	{
+		bFlagDockingRandom = false;
+
+		doDockingRandom();
+	}
+}
+
 //----
 
 // Scene
@@ -510,83 +573,6 @@ void ofApp::updateScene()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
-	//ofLogNotice(__FUNCTION__) << " " << char(key);
-
-	if (key == 'g') bGui = !bGui;
-	if (key == ' ') bFlagDockingRandom = true;
-	if (key == OF_KEY_BACKSPACE) bFlagDockingReset = true;
-}
-
-//----
-
-// Useful Docking snippets
-
-// On runtime, the user session could design his layout using shift+mouse dragging.
-// But we can setup the docking layout using hard-coded methods.
-
-//--------------------------------------------------------------
-void ofApp::updateImGuiDockingHelpers()
-{
-	// Reset layout once o startup/first frame call.
-	// Called only once!
-	if (bModeDockingResetAtStartup)
-	{
-		static bool b = false;
-		if (!b) {
-			b = true;
-
-			doDockingReset();
-		}
-	}
-
-	//----
-
-	// Reset layout by a button
-	if (bFlagDockingReset)
-	{
-		bFlagDockingReset = false;
-
-		doDockingReset();
-	}
-
-	//--
-
-	// Random layout by a button
-	if (bFlagDockingRandom)
-	{
-		bFlagDockingRandom = false;
-
-		doDockingRandom();
-	}
-
-	//--
-
-	//TODO:
-
-#ifdef SURFING_USE_MANAGER
-
-	bool bDoRefresh = 0;
-
-	// Manager save/load
-	if (bFlagLoadLayout) {
-		bFlagLoadLayout = false;
-
-		loadLayoutImGuiIni();
-		bDoRefresh = 1;
-	}
-	if (bFlagSaveLayout) {
-		bFlagSaveLayout = false;
-
-		saveLayoutImGuiIni();
-		bDoRefresh = 1;
-	}
-
-#endif
-}
-
-//--------------------------------------------------------------
 void ofApp::drawScene()
 {
 	auto& r = ui.getRectangleCentralViewport();
@@ -620,7 +606,7 @@ void ofApp::drawScene()
 		float a = ofWrap(ofGetFrameNum(), 0, 359);
 		ofRotateYDeg(a + 90);
 		//ofColor c = ofColor(ofColor::white, ofMap(SurfingGui::Bounce(), 0, 1, 32, 150));
-		ofColor c = ofColor(ofColor::white, 150);
+		ofColor c = ofColor(ofColor::white, 64);
 		ofSetColor(c);
 		ofPushStyle();
 		//ofDrawGrid();
@@ -647,23 +633,6 @@ void ofApp::drawImGuiDockingHelp()
 
 	if (ui.BeginWindow(bGui_DockingHelp))
 	{
-		//--
-
-		s = "Windows";
-		ui.AddLabelBig(s);
-
-		// Show/hide all Special Windows / Panels
-		if (ui.AddButton("All", OFX_IM_BUTTON, 2, true))
-		{
-			ui.setShowAllPanels(true);
-		}
-		if (ui.AddButton("None", OFX_IM_BUTTON, 2))
-		{
-			ui.setShowAllPanels(false);
-		}
-
-		ui.AddSpacingSeparated();
-		
 		//--
 
 		s = "Layout";
@@ -697,27 +666,22 @@ void ofApp::drawImGuiDockingHelp()
 
 		//--
 
-		//TODO:
-
-#ifdef SURFING_USE_MANAGER
 		s = "Manager";
 		ui.AddLabelBig(s);
 
 		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2))
 		{
-			bFlagLoadLayout = true;
-			//loadLayoutImGuiIni();
+			ui.loadLayout(path);
 		}
 		ui.SameLine();
 
 		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2))
 		{
-			bFlagSaveLayout = true;
-			//saveLayoutImGuiIni();
+			ui.saveLayout(path);
 		}
 
 		ui.AddSpacingSeparated();
-#endif
+
 		//--
 
 		s = "Internal";

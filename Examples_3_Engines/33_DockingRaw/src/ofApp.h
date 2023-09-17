@@ -22,8 +22,6 @@
 
 #include "ofxSurfingImGui.h"
 
-#define SURFING_USE_MANAGER // allow save/load
-
 class ofApp : public ofBaseApp
 {
 public:
@@ -66,6 +64,7 @@ public:
 
 	void setupImGui();
 	void drawImGui();
+	void drawImGuiApp();
 	void drawImGuiSpecialWindows();
 	void drawImGuiSpecialWindow0();
 	void drawImGuiSpecialWindow1();
@@ -80,10 +79,13 @@ public:
 	// Docking Helpers Stuff
 
 	// Mode/workflow 
+	
+#if 0
 	// Can be configured:
-	bool bModeDockingResetAtStartup = false;
+	bool bModeDockingResetAtStartup = true;
 	// false: the layout will be persistent and auto saved on exit and loaded on setup.
 	// true: the layout will be reseted by code on each startup.
+#endif
 
 	ofParameter<bool> bGui_DockingHelp{ "DOCKING HELP", true };
 
@@ -105,24 +107,8 @@ public:
 
 	// Manager to Save/Load Layout manually
 
-#ifdef SURFING_USE_MANAGER
-	string path = "myLayout";
-	bool bFlagLoadLayout = 0;
-	bool bFlagSaveLayout = 0;
+	string path = "myLayout.ini";
 	
-	//--------------------------------------------------------------
-	void saveLayoutImGuiIni()
-	{
-		ImGui::SaveIniSettingsToDisk(ofToDataPath(path + ".ini", true).c_str());
-	}
-
-	//--------------------------------------------------------------
-	void loadLayoutImGuiIni()
-	{
-		ImGui::LoadIniSettingsFromDisk(ofToDataPath(path + ".ini", true).c_str());
-	}
-#endif
-
 	//--
 
 	// Scene functions

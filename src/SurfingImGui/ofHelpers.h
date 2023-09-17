@@ -53,6 +53,9 @@
 #include "SurfingGuiSugar.h"//includes "GuiConstants.h"
 #include "SurfingGuiConstants.h"
 
+#include "HelpTextWidget.h"
+//#include "Combos.h"
+
 //----
 
 namespace ofxImGuiSurfing

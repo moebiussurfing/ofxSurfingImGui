@@ -28,8 +28,8 @@
 Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and therefore this name cannot be used as a namespace name (compiling source file src\ofApp.cpp) Scene3dFloor \openFrameworks\addons\ofxSurfingHelpers\src\utils\surfingTimers.h	20
 */
 
-#include "HelpTextWidget.h"
-#include "Combos.h"
+//#include "HelpTextWidget.h"
+//#include "Combos.h"
 
 #include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
@@ -51,6 +51,9 @@ Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and ther
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
 #include "surfingDebugger.h"
 #endif
+
+#include <functional>
+using callback_t = std::function<void()>;
 
 //--
 
@@ -180,17 +183,17 @@ private:
 
 		if (msg == "")
 		{
-			this->AddToLogAndNotifier(s,l);
+			this->AddToLogAndNotifier(s, l);
 		}
 		else
 		{
 			s += msg;
-			this->AddToLogAndNotifier(s,l);
+			this->AddToLogAndNotifier(s, l);
 		}
 	}
 
 	//------------------------------------------------------------------------------------------
-	void logKeyParam(int key, const ofParameter<bool>& p, const std::string& msg = "")
+	void logKeyParamToggle(int key, const ofParameter<bool>& p, const std::string& msg = "")
 	{
 		ofLogLevel l = OF_LOG_WARNING;
 
@@ -202,7 +205,7 @@ private:
 			//this->alignText(s);
 			this->alignText(p.getName(), s);
 			s += string(p.get() ? "ON " : "OFF");
-			this->AddToLogAndNotifier(s,l);
+			this->AddToLogAndNotifier(s, l);
 		}
 		else
 		{
@@ -212,7 +215,7 @@ private:
 			//this->alignText(s);
 			this->alignText(p.getName(), s);
 			s += string(p.get() ? "ON " : "OFF");
-			this->AddToLogAndNotifier(s,l);
+			this->AddToLogAndNotifier(s, l);
 		}
 	}
 
@@ -222,7 +225,7 @@ private:
 		if (key == keyTarget)
 		{
 			p.set(!p.get());
-			logKeyParam(key, p, msg);
+			logKeyParamToggle(key, p, msg);
 			return true;
 		}
 		return false;
@@ -2959,6 +2962,25 @@ public:
 	// to speed up common usage:
 
 public:
+	//--------------------------------------------------------------
+	void DrawInternalToggles() {
+		AddMinimizerToggle();
+		if (isMaximized()) {
+			AddAutoResizeToggle();
+			AddKeysToggle();
+			AddDebugToggle();
+			AddExtraToggle();
+			AddHelpInternalToggle();
+			AddMenuBarToggle();
+			AddAdvancedToggle();
+
+			AddSpacingSeparated();
+
+			AddLogToggle();
+			AddNotifierToggle();
+		}
+	}
+
 	// Minimize state
 	//--------------------------------------------------------------
 	bool AddMinimize(bool bSeparated = false)
@@ -4505,6 +4527,34 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	void drawWidgetsSpecialWindowsManager()
+	{
+		//#if 0
+		//		string s = "Windows";
+		//		AddLabelBig(s);
+		//
+		//		// Show/hide all Special Windows / Panels
+		//		if (AddButton("All", OFX_IM_BUTTON, 2, true))
+		//		{
+		//			setShowAllPanels(true);
+		//		}
+		//		if (AddButton("None", OFX_IM_BUTTON, 2))
+		//		{
+		//			setShowAllPanels(false);
+		//		}
+		//		bool b = getAllWindowsSpecialAreNotVisible();
+		//		Add(bGui_ShowWindowsGlobal, b ? OFX_IM_TOGGLE : OFX_IM_TOGGLE_BORDER_BLINK);
+		//
+		//		AddSpacingSeparated();
+		//#endif
+
+				//--
+
+				// use the internal from WindowsOrganizer
+		windowsOrganizer.drawWidgetsWindows(bMinimize);
+	}
+
+	//--------------------------------------------------------------
 	void drawWindowSpecialWindows()
 	{
 		if (bGui_SpecialWindows) {
@@ -4545,15 +4595,14 @@ public:
 
 private:
 	vector<ofParameter<bool>> windowsExtra;
-	//ofParameterGroup params_WindowsPanelsExtra{ "_GuiToggles_Extra_" };//TODO
+	ofParameterGroup params_WindowsPanelsExtra{ "_GuiToggles_Extra_" };//TODO
 
 public:
 	//--------------------------------------------------------------
 	void addWindowExtra(ofParameter<bool>& _bGui)
 	{
 		windowsExtra.emplace_back(_bGui);
-		//windowsExtra.push_back(_bGui);
-		//params_WindowsPanelsExtra.add(_bGui);
+		params_WindowsPanelsExtra.add(_bGui);
 	}
 	//--------------------------------------------------------------
 	ofParameter<bool>& getWindowExtraGuiToggle(int index)
@@ -4625,6 +4674,9 @@ private:
 
 	// Docking Helpers
 
+	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+	//static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
+
 public:
 	void BeginDocking();
 	void EndDocking();
@@ -4633,6 +4685,19 @@ private:
 	//TODO: flags to try to automatize these calls..
 	bool bDoneBeginDocking = 0;
 	bool bDoneEndDocking = 0;
+
+	//----
+
+	// Layout Manager
+	// Sav/Load imgui.ini file
+public:
+	void loadLayout(string path = "");
+	void saveLayout(string path = "");
+private:
+	bool bFlagDoLoadImGuiLayout = false;
+	bool bFlagDoSaveImGuiLayout = false;
+	void updateAttendDockingPre();
+	string pathLayout = "";
 
 	//----
 
@@ -4651,8 +4716,8 @@ private:
 	string ini_to_load_Str;
 	string ini_to_save_Str;
 
-	void loadLayout(int mode);
-	void saveLayout(int mode);
+	void loadLayoutPresetIndex(int index);
+	void saveLayoutPresetIndex(int index);
 
 	void saveLayoutPreset(string path); //-> both group params and ImGui ini files
 	void loadLayoutPreset(string path);
@@ -4974,6 +5039,15 @@ public:
 		for (int i = 0; i < windows.size(); i++)
 		{
 			if (!windows[i].bGui) return false;
+		}
+		return true;
+	}
+	//--------------------------------------------------------------
+	bool getAllWindowsSpecialAreNotVisible()
+	{
+		for (int i = 0; i < windows.size(); i++)
+		{
+			if (windows[i].bGui) return false;
 		}
 		return true;
 	}

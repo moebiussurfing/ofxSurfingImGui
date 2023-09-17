@@ -34,6 +34,9 @@
 #include "myClassC.h"
 #include "myClassD.h"
 
+#include <functional>
+using callback_t = std::function<void()>;
+
 class ofApp : public ofBaseApp
 {
 public:
