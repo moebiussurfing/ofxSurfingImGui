@@ -4833,6 +4833,9 @@ public:
 
 	//void drawMenu();
 	void drawMenuDocked();
+	void setUseMenu(bool bUseMenu_) { bUseMenu = bUseMenu_; }
+private:
+	bool bUseMenu = true;
 
 public:
 	// Get the central space to position other panels or ui elements

@@ -54,6 +54,11 @@ void ofApp::setupImGui()
 
 	//--
 
+	// Optional
+	//ui.setUseMenu(false);//disable top menu
+
+	//--
+
 	// 3. Startup
 
 	ui.startup();
@@ -133,6 +138,7 @@ void ofApp::drawImGuiApp()
 	if (ui.BeginWindow(bGui))
 	{
 		ui.AddMinimizerToggle();
+		ui.AddMenuBarToggle();
 		ui.drawWidgetsSpecialWindowsManager();
 
 #ifndef SURFING__DOCKING_EXAMPLE_MINIMAL
@@ -225,9 +231,9 @@ void ofApp::keyPressed(int key)
 #endif
 }
 
-#ifndef SURFING__DOCKING_EXAMPLE_MINIMAL
-
 //----
+
+#ifndef SURFING__DOCKING_EXAMPLE_MINIMAL
 
 // Useful Docking snippets
 
