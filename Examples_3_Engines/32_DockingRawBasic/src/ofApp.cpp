@@ -85,8 +85,11 @@ void ofApp::drawImGui()
 		// 1. Docking magic
 
 #ifdef SURFING__DOCKING_EXAMPLE_MINIMAL
-		ui.BeginDocking();
-		ui.EndDocking();
+		// Not required to call manually when we don't need to use some docking stuff,
+		// like reseting or hard coding a layout by code.
+		// So it's auto handled internally!
+		//ui.BeginDocking();
+		//ui.EndDocking();
 #else
 		// We can access all the docking space
 		// here (between BeginDocking/EndDocking)

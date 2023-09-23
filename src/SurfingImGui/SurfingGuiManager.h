@@ -4682,6 +4682,8 @@ public:
 	void EndDocking();
 
 private:
+	bool bModeAutoDocking = false;
+
 	//TODO: flags to try to automatize these calls..
 	bool bDoneBeginDocking = 0;
 	bool bDoneEndDocking = 0;

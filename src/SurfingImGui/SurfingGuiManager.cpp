@@ -2724,6 +2724,13 @@ void SurfingGuiManager::Begin()
 
 	updateAttendDockingPre();
 
+	//----
+
+	//workflow
+	if (bModeAutoDocking) {
+		this->BeginDocking();
+		this->EndDocking();
+	}
 }
 
 //--------------------------------------------------------------
@@ -2841,6 +2848,13 @@ void SurfingGuiManager::End()
 	//TODO: Should add a new variable like bDrawInfront to draw back/foreground...
 	//TODO: Maybe it's an ofxImGui feature..
 	if (!bAutoDraw) gui.draw();
+
+	//--
+
+	//workflow
+	if (!bModeAutoDocking) {
+		if (bDoneBeginDocking && bDoneEndDocking)bModeAutoDocking = true;
+	}
 }
 
 //--
