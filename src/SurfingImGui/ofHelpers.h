@@ -1272,7 +1272,7 @@ namespace ofxImGuiSurfing
 
 	//TODO:
 	//public://added inline 
-	static bool bMouseWheel = true; //this was originally an internal from guiManager
+	static bool bMouseWheel = true; //this was originally an internal from ui
 
 	// Helpers to populate non ofParams,
 	// Raw CPP types instead an maintain global styles.

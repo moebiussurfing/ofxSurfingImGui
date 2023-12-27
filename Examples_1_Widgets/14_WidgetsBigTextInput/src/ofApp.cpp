@@ -120,7 +120,7 @@ void ofApp::drawImGui()
 void ofApp::keyPressed(int key)
 {
     // ignore keys
-    if (ui.isOverInputText()) return;
+	if (ui.isMouseOverInputText()) return;
     if (ui.isOverGui()) return; // could be commented if preferred
 
     if (key == 'g')
