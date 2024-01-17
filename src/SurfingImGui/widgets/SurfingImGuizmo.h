@@ -4,6 +4,36 @@
 * 
 */
 
+/*
+* EXAMPLE
+* 
+* 
+	//.h
+	ofNode node;
+	SurfingImGuizmo surfingImGuizmo;
+
+	//.cpp
+	// imgui begin/end
+	surfingImGuizmo.drawImGuiUser(ui);//controls in an imgui window
+	surfingImGuizmo.drawImGuizmo(camera, &node);//widget
+	
+	surfingImGuizmo.keyPressed(key);
+
+	//draw
+	camera.begin();
+	{
+		//node.draw();
+
+		// Applies the node's transformation matrix
+		ImGuizmo::beginGuizmoTransform(&node);
+		{
+			ofDrawBox(25);
+		}
+		ImGuizmo::endGuizmoTransform();
+	}
+	camera.end();
+*/
+
 //--
 
 #pragma once
@@ -11,8 +41,8 @@
 #include "ofMain.h"
 
 #include "ofxImGuizmo.h"
-#include "ofxSurfingHelpersLite.h"
 #include "ofxSurfingImGui.h"
+//#include "ofxSurfingHelpersLite.h"
 
 //----
 
