@@ -76,13 +76,16 @@ public:
     ofParameter<float> speed3;
     ofParameter<int> shapeType3;
 
+    ofEventListener listenerParams0;
+    ofEventListener listenerParams1;
+
 	//--
 
 	// Gui
 
 	SurfingGuiManager ui;
-
-	void setup_ImGui();
+	void setupImGui();
+	void drawImGui();
 
     // This is the only visible toggle 
     // that will not be added as special window.
@@ -109,8 +112,8 @@ public:
     ofParameter<bool> bGui_5;
 
     // Help info
-    void buildHelpInfo();
-    string helpInfo;
+    void buildHelp();
+    string sHelp;
 
     //--
 

@@ -3061,6 +3061,11 @@ public:
 		else this->AddSpacing();
 	}
 
+	//--------------------------------------------------------------
+	void AddLinekdWindowsToggle() {
+		this->Add(this->getGuiToggleLinked(), OFX_IM_TOGGLE_SMALL);
+	}
+
 	//--
 
 	// Fast toggle rendered for common internal toggles
@@ -4147,6 +4152,13 @@ public:
 	}
 
 	//--------------------------------------------------------------
+	void setLinkedSpecialWindows(bool b)//not working
+	{
+		//bLinked.set(b);//TODO: crashes
+		windowsOrganizer.bLinked.set(b);
+	}
+
+	//--------------------------------------------------------------
 	ofParameter<bool>& getGuiToggleOrganizer()
 	{
 		return bGui_Organizer;
@@ -4158,7 +4170,7 @@ public:
 		return bGui_Aligners;
 	}
 	//--------------------------------------------------------------
-	bool getShowWindowsGlobal()
+	bool getShowWindowsGlobal() const
 	{
 		return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	}
