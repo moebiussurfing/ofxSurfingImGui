@@ -2458,6 +2458,8 @@ void SurfingGuiManager::Begin() {
 	//TODO:
 	_indexLastBegin = -1;
 
+	rectangleLastWindowShape = ofRectangle();
+
 	//--
 
 	// Reset unique names
@@ -3093,6 +3095,8 @@ void SurfingGuiManager::EndWindowSpecial(int index) {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::EndWindow() {
+	rectangleLastWindowShape = getWindowShape();
+	
 	ImGui::End();
 }
 

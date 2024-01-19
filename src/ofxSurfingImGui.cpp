@@ -33,6 +33,7 @@
 		- Remake groups workflow.
 			- set firsUser mode to allow imgui internal .ini handling
 			- store styles for a group container.
+			- match ofxGui .minimize() api..
 
 		- Get an ofCamera ptr to control mouse enable mode.
 			add class helper from surfingHelpers?

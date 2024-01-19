@@ -1,6 +1,5 @@
 #pragma once
 
-
 /*
 
 	This is the main class that instantiates ofxImGui.
@@ -17,11 +16,11 @@
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
-#include "ofHelpers.h"
 #include "LayoutHelpers.h"
+#include "ofHelpers.h"
 
 #include "SurfingHelpers.h"
-//#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
+//#ifndef OF_APP_DEFINED_ofxSurfingHelpers
 //namespace ofxSurfingHelpers = ofxImGuiSurfing;
 //#endif
 /*
@@ -31,8 +30,8 @@ Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and ther
 //#include "HelpTextWidget.h"
 //#include "Combos.h"
 
-#include "WindowsOrganizer.h"
 #include "WidgetsManager.h"
+#include "WindowsOrganizer.h"
 
 //#include "SurfingThemeEditor.h"
 //TODO: breaks bc recursive including?
@@ -45,11 +44,11 @@ Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and ther
 //#include "SurfingImGui/WindowLog.h"
 
 #ifdef SURFING_IMGUI__USE_NOTIFIER
-#include "SurfingImGui/notifiers/surfingNotifier.h"
+	#include "SurfingImGui/notifiers/surfingNotifier.h"
 #endif
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
-#include "surfingDebugger.h"
+	#include "surfingDebugger.h"
 #endif
 
 #include <functional>
@@ -72,8 +71,7 @@ using ofxImGuiSurfing::SurfingFontTypes;
 //----
 
 //--------------------------------------------------------------
-class SurfingGuiManager
-{
+class SurfingGuiManager {
 public:
 	SurfingGuiManager();
 	~SurfingGuiManager();
@@ -85,6 +83,7 @@ private:
 	static int instanceCount;
 	int instanceNumber;
 	bool bIsMasterInstance = false;
+
 public:
 	int getInstanceCount() {
 		return instanceCount;
@@ -104,28 +103,28 @@ public:
 
 public:
 	void setup(); // We will use the most common mode, to avoid to have to require any argument.
-	void setup(ofxImGuiSurfing::SurfingGuiMode mode); // Allows fully personalize the manager features. 
+	void setup(ofxImGuiSurfing::SurfingGuiMode mode); // Allows fully personalize the manager features.
 
 	void setupParams();
 
 private:
-	// MODE A: 
-	// ofxImGui is instantiated inside the class, 
+	// MODE A:
+	// ofxImGui is instantiated inside the class,
 	// the we can forgot of declare ofxImGui here (ofApp scope).
 	void setupInitiate();
 	void setupInitiateWindowsOrganizer();
 
 public:
-	// MODE B: 
+	// MODE B:
 	//TODO: WIP: Not tested in depth.
 	// Can be instantiated out of the class, locally
-	void setup(ofxImGui::Gui& gui);
+	void setup(ofxImGui::Gui & gui);
 
 	//----
 
 private:
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
-	void exit(ofEventArgs& e);
+	void exit(ofEventArgs & e);
 #endif
 	void exit();
 
@@ -136,15 +135,15 @@ private:
 
 private:
 	void update(); // To manual update.
-	void update(ofEventArgs& args); // subscribed after app
+	void update(ofEventArgs & args); // subscribed after app
 
 	void draw(); // To manual draw.
-	void draw(ofEventArgs& args); // Auto draw but it's used only to draw help boxes. subscribed after app
+	void draw(ofEventArgs & args); // Auto draw but it's used only to draw help boxes. subscribed after app
 
 	//--
 
-	void keyPressed(ofKeyEventArgs& eventArgs);
-	void keyReleased(ofKeyEventArgs& eventArgs);
+	void keyPressed(ofKeyEventArgs & eventArgs);
+	void keyReleased(ofKeyEventArgs & eventArgs);
 
 	bool bMod_COMMAND = false;
 	bool bMod_CONTROL = false;
@@ -155,50 +154,42 @@ private:
 
 #define SURFING_STRING_CHARS_SPACING 12
 	//------------------------------------------------------------------------------------------
-	void alignText(string n, string& s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
-		const int sz_max = num_chars;//char spaces
-		for (size_t i = 0; i < MAX(0, sz_max - n.size()); i++)
-		{
+	void alignText(string n, string & s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
+		const int sz_max = num_chars; //char spaces
+		for (size_t i = 0; i < MAX(0, sz_max - n.size()); i++) {
 			s_tar += " ";
 		}
 	}
 	//------------------------------------------------------------------------------------------
-	void alignText(string& s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
-		const int sz_max = num_chars;//char spaces
+	void alignText(string & s_tar, int num_chars = SURFING_STRING_CHARS_SPACING) {
+		const int sz_max = num_chars; //char spaces
 		const string n = s_tar;
 		const int sz = n.size();
-		for (size_t i = 0; i < MAX(0, sz_max - sz); i++)
-		{
+		for (size_t i = 0; i < MAX(0, sz_max - sz); i++) {
 			s_tar += " ";
 		}
 	}
 
 	// Keystroke Log helpers.
 	//------------------------------------------------------------------------------------------
-	void logKey(int key, const std::string& msg)
-	{
+	void logKey(int key, const std::string & msg) {
 		ofLogLevel l = OF_LOG_WARNING;
 
 		string s = ofToString("KEY  ") + ofToString(char(key));
 
-		if (msg == "")
-		{
+		if (msg == "") {
 			this->AddToLogAndNotifier(s, l);
-		}
-		else
-		{
+		} else {
 			s += msg;
 			this->AddToLogAndNotifier(s, l);
 		}
 	}
 
 	//------------------------------------------------------------------------------------------
-	void logKeyParamToggle(int key, const ofParameter<bool>& p, const std::string& msg = "")
-	{
+	void logKeyParamToggle(int key, const ofParameter<bool> & p, const std::string & msg = "") {
 		ofLogLevel l = OF_LOG_WARNING;
 
-		if (msg == "")
-		{
+		if (msg == "") {
 			string sKey = ofToString("KEY  " + ofToString(char(key)));
 			string s = sKey + " " + p.getName();
 			s += "  ";
@@ -206,9 +197,7 @@ private:
 			this->alignText(p.getName(), s);
 			s += string(p.get() ? "ON " : "OFF");
 			this->AddToLogAndNotifier(s, l);
-		}
-		else
-		{
+		} else {
 			string sKey = ofToString("KEY  ") + msg;
 			string s = sKey + " " + p.getName();
 			s += "  ";
@@ -220,10 +209,8 @@ private:
 	}
 
 	//------------------------------------------------------------------------------------------
-	bool toggleParamByKey(int key, int keyTarget, ofParameter<bool>& p, const std::string& msg = "")
-	{
-		if (key == keyTarget)
-		{
+	bool toggleParamByKey(int key, int keyTarget, ofParameter<bool> & p, const std::string & msg = "") {
+		if (key == keyTarget) {
 			p.set(!p.get());
 			logKeyParamToggle(key, p, msg);
 			return true;
@@ -260,23 +247,21 @@ private:
 	// v2.0
 
 public:
-	// ofParameters 
+	// ofParameters
 
 	// Draw styled parameter into ImGui manager
 	//TODO:
 	// NOTE that 4 items per row is the limit yet!
 	// can be use the API methods passing width ratio
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
-		int spacing = -1)
-	{
+	bool Add(ofAbstractParameter & ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
+		int spacing = -1) {
 		return _ui.Add(ap, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//TODO:
 	//--------------------------------------------------------------
-	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags)
-	{
+	bool Add(ofAbstractParameter & ap, SurfingGuiTypes type, int amtPerRow, SurfingGuiFlags flags) {
 		return _ui.Add(ap, type, amtPerRow, flags);
 	}
 
@@ -284,9 +269,8 @@ public:
 	// New API v2
 	// Passing width ratio
 	//-----------------------------------------------------------------
-	bool Add(ofAbstractParameter& ap, SurfingGuiTypes type/* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/,
-		float ratioWidth /*= 1.f*/, bool bSameLine = false, SurfingGuiFlags flags = SurfingGuiFlags_None)
-	{
+	bool Add(ofAbstractParameter & ap, SurfingGuiTypes type /* = OFX_IM_DEFAULT*/, int amtPerRow /*= 1*/,
+		float ratioWidth /*= 1.f*/, bool bSameLine = false, SurfingGuiFlags flags = SurfingGuiFlags_None) {
 		return _ui.Add(ap, type, amtPerRow, ratioWidth, bSameLine, flags);
 	}
 
@@ -309,13 +293,13 @@ public:
 
 	////-----------------------------------------------------------------
 	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, float width = -1, SurfingGuiFlags flags = SurfingGuiFlags_None) {
-	//	bool bSameLine = false; 
+	//	bool bSameLine = false;
 	//	int spacing = -1;
 	//		return _ui.Add(ap, type, width, bSameLine, spacing, flags);
 	//}
 
 	////TODO avoid multiple ambiguous
-	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type) 
+	//bool Add(ofAbstractParameter& ap, SurfingGuiTypes type)
 	//{
 	//	return _ui.Add(ap, type, -1, false, -1, SurfingGuiFlags_None);
 	// }
@@ -326,106 +310,92 @@ public:
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
-	void AddStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
-		bool bSameLine = false, int spacing = -1)
-	{
+	void AddStyle(ofAbstractParameter & ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1) {
 		_ui.AddStyle(ap, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Queue style for the parameter
 	//--------------------------------------------------------------
 	void AddStyle(string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
-		int spacing = -1)
-	{
+		int spacing = -1) {
 		_ui.AddStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	// Update style for the parameter
 	//--------------------------------------------------------------
-	void UpdateStyle(ofAbstractParameter& ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
-		bool bSameLine = false, int spacing = -1)
-	{
+	void UpdateStyle(ofAbstractParameter & ap, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1) {
 		_ui.UpdateStyle(ap, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//--------------------------------------------------------------
 	void UpdateStyle(string name, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1, bool bSameLine = false,
-		int spacing = -1)
-	{
+		int spacing = -1) {
 		_ui.UpdateStyle(name, type, amtPerRow, bSameLine, spacing);
 	}
 
 	//--
 
 public:
-	// ofParametersGroup's 
+	// ofParametersGroup's
 
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-	{
+	void AddStyleGroup(ofParameterGroup & g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None) {
 		_ui.AddStyleGroup(g, type, flags);
 	}
 
 	//--------------------------------------------------------------
 	void AddStyleGroup(string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None) {
 		_ui.AddStyleGroup(name, type, flags);
 	}
 
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(ofParameterGroup& g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-	{
+	void UpdateStyleGroup(ofParameterGroup & g, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None) {
 		_ui.UpdateStyleGroup(g, type, flags);
 	}
 
 	//--------------------------------------------------------------
 	void UpdateStyleGroup(string name, SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT,
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None)
-	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None) {
 		_ui.UpdateStyleGroup(name, type, flags);
 	}
 
 	//TODO: New API
 	//--------------------------------------------------------------
-	void AddStyleGroup(string name, SurfingGuiGroupStyle flags)
-	{
+	void AddStyleGroup(string name, SurfingGuiGroupStyle flags) {
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		//TODO:
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden) {
 			type = OFX_IM_GROUP_HIDDEN;
 			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader) {
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE;
 			_ui.AddStyleGroup(name, type, flagst);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE_EX;
 			_ui.AddStyleGroup(name, type, flagst);
 			return;
@@ -436,42 +406,36 @@ public:
 
 	//TODO:
 	//--------------------------------------------------------------
-	void AddStyleGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags)
-	{
+	void AddStyleGroup(ofParameterGroup & g, SurfingGuiGroupStyle flags) {
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		//TODO:
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden) {
 			type = OFX_IM_GROUP_HIDDEN;
 			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader) {
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE;
 			_ui.AddStyleGroup(g, type, flagst);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE_EX;
 			_ui.AddStyleGroup(g, type, flagst);
 			return;
@@ -481,42 +445,36 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(string name, SurfingGuiGroupStyle flags)
-	{
+	void UpdateStyleGroup(string name, SurfingGuiGroupStyle flags) {
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		//TODO:
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden) {
 			type = OFX_IM_GROUP_HIDDEN;
 			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader) {
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE;
 			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE_EX;
 			_ui.UpdateStyleGroup(name, type, flagst);
 			return;
@@ -527,42 +485,36 @@ public:
 
 	//TODO:
 	//--------------------------------------------------------------
-	void UpdateStyleGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags)
-	{
+	void UpdateStyleGroup(ofParameterGroup & g, SurfingGuiGroupStyle flags) {
 		SurfingGuiTypesGroups type = OFX_IM_GROUP_DEFAULT;
 		ImGuiTreeNodeFlags flagst = ImGuiTreeNodeFlags_None;
 
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
 		//TODO:
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden) {
 			type = OFX_IM_GROUP_HIDDEN;
 			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader) {
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE;
 			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE_EX;
 			_ui.UpdateStyleGroup(g, type, flagst);
 			return;
@@ -576,13 +528,10 @@ public:
 	//TODO:
 	// Helper to auto populate the styles of each type (bool, floats, int's) contained on a g.
 	//--------------------------------------------------------------
-	void AddStyleGroupForBools(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_TOGGLE)
-	{
-		for (int i = 0; i < g.size(); i++)
-		{
-			ofAbstractParameter& ap = g[i];
-			if (ap.type() == typeid(ofParameter<bool>).name())
-			{
+	void AddStyleGroupForBools(ofParameterGroup & g, SurfingGuiTypes type = OFX_IM_TOGGLE) {
+		for (int i = 0; i < g.size(); i++) {
+			ofAbstractParameter & ap = g[i];
+			if (ap.type() == typeid(ofParameter<bool>).name()) {
 				_ui.AddStyle(ap, type);
 			}
 
@@ -594,26 +543,20 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddStyleGroupForFloats(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_HSLIDER)
-	{
-		for (int i = 0; i < g.size(); i++)
-		{
-			ofAbstractParameter& ap = g[i];
-			if (ap.type() == typeid(ofParameter<float>).name())
-			{
+	void AddStyleGroupForFloats(ofParameterGroup & g, SurfingGuiTypes type = OFX_IM_HSLIDER) {
+		for (int i = 0; i < g.size(); i++) {
+			ofAbstractParameter & ap = g[i];
+			if (ap.type() == typeid(ofParameter<float>).name()) {
 				_ui.AddStyle(ap, type);
 			}
 		}
 	}
 
 	//--------------------------------------------------------------
-	void AddStyleGroupForInts(ofParameterGroup& g, SurfingGuiTypes type = OFX_IM_HSLIDER)
-	{
-		for (int i = 0; i < g.size(); i++)
-		{
-			ofAbstractParameter& ap = g[i];
-			if (ap.type() == typeid(ofParameter<int>).name())
-			{
+	void AddStyleGroupForInts(ofParameterGroup & g, SurfingGuiTypes type = OFX_IM_HSLIDER) {
+		for (int i = 0; i < g.size(); i++) {
+			ofAbstractParameter & ap = g[i];
+			if (ap.type() == typeid(ofParameter<int>).name()) {
 				_ui.AddStyle(ap, type);
 			}
 		}
@@ -623,14 +566,12 @@ public:
 
 	// LEGACY
 	//--------------------------------------------------------------
-	void clearStyles()
-	{
+	void clearStyles() {
 		_ui.clear(); // update sizes to current window shape
 	}
 
 	//--------------------------------------------------------------
-	void ClearStyles()
-	{
+	void ClearStyles() {
 		_ui.clear(); // update sizes to current window shape
 	}
 
@@ -641,11 +582,10 @@ public:
 public:
 	//TODO: copy/move to ofHelpers
 	//--------------------------------------------------------------
-	inline void PushInactive()
-	{
+	inline void PushInactive() {
 		const float a = 0.5f;
 
-		ImGuiStyle* style = &ImGui::GetStyle();
+		ImGuiStyle * style = &ImGui::GetStyle();
 
 		const ImVec4 cFrameBg = style->Colors[ImGuiCol_FrameBg];
 		const ImVec4 cButton = style->Colors[ImGuiCol_Button];
@@ -665,8 +605,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline void PopInactive()
-	{
+	inline void PopInactive() {
 		ImGui::PopItemFlag();
 
 		ImGui::PopStyleColor(6);
@@ -676,19 +615,17 @@ public:
 
 public:
 	// Styles Engine
-	// 
+	//
 	// _ui
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup,
-		ImGuiCond cond = ImGuiCond_Once)
-	{
+	void AddGroup(ofParameterGroup & g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup,
+		ImGuiCond cond = ImGuiCond_Once) {
 		_ui.AddGroup(g, flags, typeGroup, cond);
 	}
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& g, bool bOpen, ImGuiCond cond = ImGuiCond_None)
-	{
+	void AddGroup(ofParameterGroup & g, bool bOpen, ImGuiCond cond = ImGuiCond_None) {
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
 		if (bOpen) flags = ImGuiTreeNodeFlags_DefaultOpen;
 		SurfingGuiTypesGroups typeGroup = OFX_IM_GROUP_DEFAULT;
@@ -698,14 +635,12 @@ public:
 
 	// Alias
 	//--------------------------------------------------------------
-	void Add(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
-	{
+	void Add(ofParameterGroup & g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None) {
 		AddGroup(g, flags);
 	}
 
 	//--------------------------------------------------------------
-	void AddGroup(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
-	{
+	void AddGroup(ofParameterGroup & g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None) {
 		////TODO: some sub folders make grow window width..
 		//refreshLayout();
 
@@ -715,24 +650,21 @@ public:
 		//TODO:
 		//if (flags & ImGuiKnobFlags_ValueTooltip &&
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_None)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_None) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_Hidden) {
 			type = OFX_IM_GROUP_HIDDEN;
 			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_NoHeader) {
 			type = OFX_IM_GROUP_HIDDEN_HEADER;
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 			_ui.AddGroup(g, flagst, type);
@@ -740,8 +672,7 @@ public:
 			return;
 		}
 
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_Collapsed) {
 			flagst = ImGuiTreeNodeFlags_DefaultOpen;
 
 			//// ? return ?
@@ -750,15 +681,13 @@ public:
 			//return;
 		}
 
-		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE;
 			_ui.AddGroup(g, flagst, type);
 
 			return;
 		}
-		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall)
-		{
+		if (flags & !ofxImGuiSurfing::SurfingGuiGroupStyle_HeaderSmall) {
 			type = OFX_IM_GROUP_TREE_EX;
 			_ui.AddGroup(g, flagst, type);
 
@@ -772,12 +701,10 @@ public:
 
 	//TODO: Auto creates a window for the group
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup)
-	{
+	void AddGroupWindowed(ofParameterGroup & g, ImGuiTreeNodeFlags flags, SurfingGuiTypesGroups typeGroup) {
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (this->BeginWindow((string)g.getName(), NULL, flags))
-		{
+		if (this->BeginWindow((string)g.getName(), NULL, flags)) {
 			_ui.AddGroup(g, flags, typeGroup);
 
 			this->EndWindow();
@@ -785,16 +712,14 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& g, ofParameter<bool>& _bGui, ImGuiTreeNodeFlags flags,
-		SurfingGuiTypesGroups typeGroup)
-	{
+	void AddGroupWindowed(ofParameterGroup & g, ofParameter<bool> & _bGui, ImGuiTreeNodeFlags flags,
+		SurfingGuiTypesGroups typeGroup) {
 		if (!_bGui) return;
 
 		if (bAutoResize) flags |= ImGuiWindowFlags_AlwaysAutoResize;
 
 		//if (this->BeginWindow((string)g.getName(), _bGui, flags))
-		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
-		{
+		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags)) {
 			_ui.AddGroup(g, flags, typeGroup);
 
 			this->EndWindow();
@@ -803,16 +728,14 @@ public:
 
 	//TODO: API update
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& g, ofParameter<bool>& _bGui,
-		SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
-	{
+	void AddGroupWindowed(ofParameterGroup & g, ofParameter<bool> & _bGui,
+		SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None) {
 		if (!_bGui) return;
 
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags))
-		{
+		if (this->BeginWindow((string)_bGui.getName(), _bGui, flags)) {
 			this->AddGroup(g, flags);
 			//_ui.AddGroup(g, flags);
 
@@ -821,13 +744,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddGroupWindowed(ofParameterGroup& g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None)
-	{
+	void AddGroupWindowed(ofParameterGroup & g, SurfingGuiGroupStyle flags = SurfingGuiGroupStyle_None) {
 		ImGuiWindowFlags f = ImGuiWindowFlags_None;
 		if (bAutoResize) f |= ImGuiWindowFlags_AlwaysAutoResize;
 
-		if (this->BeginWindow((string)g.getName(), NULL, f))
-		{
+		if (this->BeginWindow((string)g.getName(), NULL, f)) {
 			this->AddGroup(g, flags);
 			//_ui.AddGroup(g, flags);
 
@@ -842,8 +763,7 @@ public:
 	// Text with optional Uppercasing and Spacing
 
 	//--------------------------------------------------------------
-	void AddLabel(string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabel(string label, SurfingFontTypes fontType, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -853,12 +773,19 @@ public:
 			return;
 		}
 
-		switch (fontType)
-		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
+		switch (fontType) {
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:
+			this->pushStyleFont(0);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:
+			this->pushStyleFont(1);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:
+			this->pushStyleFont(2);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:
+			this->pushStyleFont(3);
+			break;
 		}
 
 		string t = bUppercase ? ofToUpper(label) : label;
@@ -866,18 +793,24 @@ public:
 		ImGui::TextWrapped("%s", t.c_str());
 		if (bSpacing) this->AddSpacing();
 
-		switch (fontType)
-		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
+		switch (fontType) {
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:
+			this->popStyleFont();
+			break;
 		}
 	}
 
 	//--------------------------------------------------------------
-	void AddLabel(const string label, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabel(const string label, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -890,8 +823,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -905,8 +837,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelStyled(const string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabelStyled(const string label, SurfingFontTypes style, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -919,8 +850,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -936,8 +866,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelNoStyled(const string label, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabelNoStyled(const string label, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -950,8 +879,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -963,8 +891,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelBig(const string label, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabelBig(const string label, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -977,8 +904,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -992,8 +918,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelHuge(const string label, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabelHuge(const string label, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -1006,8 +931,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -1021,8 +945,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddLabelHugeXXL(const string label, bool bUppercase = false, bool bSpacing = false)
-	{
+	void AddLabelHugeXXL(const string label, bool bUppercase = false, bool bSpacing = false) {
 		if (customFonts.size() == 0) {
 			//default font
 			string t = bUppercase ? ofToUpper(label) : label;
@@ -1035,8 +958,7 @@ public:
 		//TODO: remove after '##'
 		string n = label;
 		bool bHasID = ofIsStringInString(n, "##");
-		if (bHasID)
-		{
+		if (bHasID) {
 			auto ss = ofSplitString(n, "##", true, true);
 			n = ss[0];
 		}
@@ -1050,15 +972,13 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	ImVec2 CalcTextSize(const string s)
-	{
+	ImVec2 CalcTextSize(const string s) {
 		ImVec2 sz = ImGui::CalcTextSize(s.c_str());
 		return sz;
 	}
 
 	//--------------------------------------------------------------
-	ImVec2 CalcTextSize(const string s, int indexFont)
-	{
+	ImVec2 CalcTextSize(const string s, int indexFont) {
 		if (customFonts.size() == 0) {
 			//default font
 			ImVec2 sz0 = ImGui::CalcTextSize(s.c_str());
@@ -1083,35 +1003,46 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddLinkUrlButton(const string label, string url, bool bBlink = false)
-	{
+	void AddLinkUrlButton(const string label, string url, bool bBlink = false) {
 		ofxImGuiSurfing::AddLinkUrlButton(label.c_str(), url.c_str(), 1.0f, bBlink);
 	}
 
 	//--------------------------------------------------------------
 	void AddLabelLinkURL(const string label, string url, SurfingFontTypes fontType = OFX_IM_FONT_DEFAULT,
-		bool bBlink = true)
-	{
-		switch (fontType)
-		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->pushStyleFont(0); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->pushStyleFont(1); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->pushStyleFont(2); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->pushStyleFont(3); break;
+		bool bBlink = true) {
+		switch (fontType) {
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:
+			this->pushStyleFont(0);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:
+			this->pushStyleFont(1);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:
+			this->pushStyleFont(2);
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:
+			this->pushStyleFont(3);
+			break;
 		}
 
 		ofxImGuiSurfing::AddLabelLinkURL(label.c_str(), url.c_str(), bBlink);
 
-		switch (fontType)
-		{
-		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_BIG: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE: this->popStyleFont(); break;
-		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL: this->popStyleFont(); break;
+		switch (fontType) {
+		case ofxImGuiSurfing::OFX_IM_FONT_DEFAULT:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_BIG:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE:
+			this->popStyleFont();
+			break;
+		case ofxImGuiSurfing::OFX_IM_FONT_HUGE_XXL:
+			this->popStyleFont();
+			break;
 		}
 
-		if (ImGui::IsItemHovered())
-		{
+		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
 			ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
 			ImGui::TextWrapped("Open Internet Browser");
@@ -1143,20 +1074,17 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	void AddTooltipHelp(string text)
-	{
+	void AddTooltipHelp(string text) {
 		ofxImGuiSurfing::AddTooltipHelp(text.c_str());
 	}
 
 	//--------------------------------------------------------------
-	void AddTooltip(string text, bool bEnabled = true)
-	{
+	void AddTooltip(string text, bool bEnabled = true) {
 		ofxImGuiSurfing::AddTooltip(text, bEnabled);
 	}
 
 	//--------------------------------------------------------------
-	void AddTooltipBlink(string text, bool bBlink = true, bool bEnabled = true)
-	{
+	void AddTooltipBlink(string text, bool bBlink = true, bool bEnabled = true) {
 		ofxImGuiSurfing::AddTooltipBlink(text, bBlink, bEnabled);
 	}
 
@@ -1167,14 +1095,13 @@ public:
 	// 	ofxImGuiSurfing::AddTooltip(pindex, fileNames);
 	// }
 
-	//TODO: 
+	//TODO:
 	// To insert into ofParam widgets
 	// Showing the name and value.
 
 	//--------------------------------------------------------------
 	template <typename ParameterType>
-	void AddTooltip(ofParameter<ParameterType>& p, bool bEnabled = true, bool bNoName = true)
-	{
+	void AddTooltip(ofParameter<ParameterType> & p, bool bEnabled = true, bool bNoName = true) {
 		ofxImGuiSurfing::AddTooltip(p, bEnabled, bNoName);
 	}
 
@@ -1216,26 +1143,22 @@ public:
 	// kind of shortcuts..
 	// could be simplified using namespace's..
 	//--------------------------------------------------------------
-	inline void AddSpacingSmall()
-	{
+	inline void AddSpacingSmall() {
 		ofxImGuiSurfing::AddSpacingSmall();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingDouble()
-	{
+	inline void AddSpacingDouble() {
 		ofxImGuiSurfing::AddSpacingDouble();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacing()
-	{
+	inline void AddSpacing() {
 		ofxImGuiSurfing::AddSpacing();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSeparated()
-	{
+	inline void AddSeparated() {
 		ofxImGuiSurfing::AddSeparator();
 	}
 
@@ -1247,8 +1170,7 @@ public:
 
 	// Separator Text
 	//--------------------------------------------------------------
-	inline void AddSeparatorText(const string label, int index = 0, bool bNoline = 1)
-	{
+	inline void AddSeparatorText(const string label, int index = 0, bool bNoline = 1) {
 		ImGui::Spacing();
 
 		// line transparent
@@ -1263,8 +1185,7 @@ public:
 
 	//--------------------------------------------------------------
 	// void AddSeparatorText(string label, bool bUppercase = false, bool bSpacing = false)
-	inline void AddSeparatorText(string label, int index, bool bNoline, bool bUppercase, bool bSpacing)
-	{
+	inline void AddSeparatorText(string label, int index, bool bNoline, bool bUppercase, bool bSpacing) {
 		if (bUppercase) label = ofToUpper(label);
 
 		AddSeparatorText(label, index, bNoline);
@@ -1273,10 +1194,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSeparatedVertical(bool bSameLine = true)
-	{
+	inline void AddSeparatedVertical(bool bSameLine = true) {
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
-		if (bSameLine)this->SameLine();
+		if (bSameLine) this->SameLine();
 	}
 
 	//--------------------------------------------------------------
@@ -1292,46 +1212,39 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingBigSeparated()
-	{
+	inline void AddSpacingBigSeparated() {
 		ofxImGuiSurfing::AddSpacingBigSeparated();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingSeparated()
-	{
+	inline void AddSpacingSeparated() {
 		ofxImGuiSurfing::AddSpacingSeparated();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingHuge()
-	{
+	inline void AddSpacingHuge() {
 		ofxImGuiSurfing::AddSpacingHuge();
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacing(size_t amountLines)
-	{
+	inline void AddSpacing(size_t amountLines) {
 		ofxImGuiSurfing::AddSpacing(amountLines);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingHugeSeparated()
-	{
+	inline void AddSpacingHugeSeparated() {
 		ofxImGuiSurfing::AddSpacingHugeSeparated();
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	inline void AddSpacingX(float x)
-	{
+	inline void AddSpacingX(float x) {
 		ofxImGuiSurfing::AddSpacingX(x);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingY(float y)
-	{
+	inline void AddSpacingY(float y) {
 		ofxImGuiSurfing::AddSpacingY(y);
 	}
 
@@ -1340,70 +1253,58 @@ public:
 	// TODO: these methods made exceptions in RF..
 	// TODO: now removed from tabs class.
 	//--------------------------------------------------------------
-	void ResetSpacing()
-	{
+	void ResetSpacing() {
 		ResetSpacingX();
 		ResetSpacingY();
 	}
 	//--------------------------------------------------------------
-	void ResetSpacingX()
-	{
+	void ResetSpacingX() {
 		xSpacingDiff = 0;
 	}
 	//--------------------------------------------------------------
-	void ResetSpacingY()
-	{
+	void ResetSpacingY() {
 		ySpacingDiff = 0;
 	}
 	//--------------------------------------------------------------
-	void PushSpacingX(const float x)
-	{
+	void PushSpacingX(const float x) {
 		xSpacingDiff = x;
 		this->AddSpacingY(xSpacingDiff);
 	}
 	//--------------------------------------------------------------
-	void PopSpacingX()
-	{
+	void PopSpacingX() {
 		this->AddSpacingX(-xSpacingDiff);
 	}
 	//--------------------------------------------------------------
-	void PushSpacingY(const float y)
-	{
+	void PushSpacingY(const float y) {
 		ySpacingDiff = y;
 		this->AddSpacingY(ySpacingDiff);
 	}
 	//--------------------------------------------------------------
-	void PopSpacingY()
-	{
+	void PopSpacingY() {
 		this->AddSpacingY(-ySpacingDiff);
 	}
 
 public:
 	//--------------------------------------------------------------
-	inline void AddSpacingOffset(ImVec2 diff)
-	{
+	inline void AddSpacingOffset(ImVec2 diff) {
 		ofxImGuiSurfing::AddSpacingOffset(diff);
 	}
 
 	//--------------------------------------------------------------
-	inline void AddSpacingToRightAlign(float width = 100)
-	{
+	inline void AddSpacingToRightAlign(float width = 100) {
 		ofxImGuiSurfing::AddSpacingToRightAlign(width);
 	}
-
 
 	//--
 
 	// Button Repeats
 	//--------------------------------------------------------------
-	inline void PushButtonRepeat(bool b = true)
-	{
+	inline void PushButtonRepeat(bool b = true) {
 		ImGui::PushButtonRepeat(b);
 	}
 
 	//--------------------------------------------------------------
-	inline void PopButtonRepeat()
-	{
+	inline void PopButtonRepeat() {
 		ImGui::PopButtonRepeat();
 	}
 
@@ -1411,36 +1312,31 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void refreshLayout()
-	{
+	void refreshLayout() {
 		_ui.refreshLayout(); // update sizes to current window shape
 	}
 
 	//--------------------------------------------------------------
-	void resetUniqueNames()
-	{
+	void resetUniqueNames() {
 		_ui.resetUniqueNames(); // update sizes to current window shape
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	inline void Indent()
-	{
+	inline void Indent() {
 		ImGui::Indent();
 		refreshLayout(); //auto calculate widgets common sizes
 	}
 
 	//--------------------------------------------------------------
-	inline void Unindent()
-	{
+	inline void Unindent() {
 		ImGui::Unindent();
 		refreshLayout(); //auto calculate widgets common sizes
 	}
 
 	//--------------------------------------------------------------
-	inline void Separator()
-	{
+	inline void Separator() {
 		//ImGui::Separator();
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Horizontal);
 	}
@@ -1448,14 +1344,12 @@ public:
 	// Make widgets a bit smaller.
 	// Useful when sliders make to grow the window automatically.
 	//--------------------------------------------------------------
-	inline void PushWidth(float prc)
-	{
+	inline void PushWidth(float prc) {
 		ofxImGuiSurfing::PushWidth(prc);
 	}
 
 	//--------------------------------------------------------------
-	inline void PopWidth()
-	{
+	inline void PopWidth() {
 		ofxImGuiSurfing::PopWidth();
 	}
 
@@ -1468,8 +1362,7 @@ private:
 
 public:
 	//--------------------------------------------------------------
-	void setWindowsMode(SurfingGuiModeWindows mode)
-	{
+	void setWindowsMode(SurfingGuiModeWindows mode) {
 		// Call before setup.
 		specialsWindowsMode = mode;
 
@@ -1484,19 +1377,16 @@ public:
 
 	// Sorting z-order windows:
 	//--------------------------------------------------------------
-	void setWindowFocused(string windowName)
-	{
+	void setWindowFocused(string windowName) {
 		// Bring Window to the top of the z-order if it's not already in the front
-		if (!ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
-		{
+		if (!ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows)) {
 			ImGui::SetWindowFocus(windowName.c_str());
 			// ImGui::SetWindowFocus(nullptr);//un focus
 		}
 	}
 
 	//--------------------------------------------------------------
-	void setWindowFocused(ofParameter<bool>& p)
-	{
+	void setWindowFocused(ofParameter<bool> & p) {
 		setWindowFocused(p.getName());
 	}
 
@@ -1516,7 +1406,7 @@ private:
 	ofxImGui::Gui gui;
 
 	// B. To be used when ImGui is passed by reference in the parent scope (ofApp)
-	ofxImGui::Gui* guiPtr = NULL;
+	ofxImGui::Gui * guiPtr = NULL;
 
 	//--
 
@@ -1524,7 +1414,7 @@ private:
 	void setupImGui();
 
 public:
-	// Prepare some different font files and sizes 
+	// Prepare some different font files and sizes
 	// to use on labels or any widgets.
 	// (currently is only one ttf file with four styles!)
 	void setupFontDefault();
@@ -1550,13 +1440,11 @@ private:
 
 public:
 	vector<int> fontsMonospacedIndexes; // queue the positions of the four mono fonts
-	bool isFontsMonospacedDefined()
-	{
+	bool isFontsMonospacedDefined() {
 		return bDoneDefinedMonospacedFonts;
 	}
 
-	void clearFontsMonospaced()
-	{
+	void clearFontsMonospaced() {
 		fontsMonospacedIndexes.clear();
 		bDoneDefinedMonospacedFonts = false;
 
@@ -1569,7 +1457,7 @@ public:
 private:
 	// will create all the standard sizes starting as default for the passed sizeFont
 	void setupFontForDefaultStylesMonospacedInternal(string pathFont, float sizeFont);
-	bool bSetupFontForDefaultStylesMonospacedInternal = 0; //flag to apply out of imgui NewFrame 
+	bool bSetupFontForDefaultStylesMonospacedInternal = 0; //flag to apply out of imgui NewFrame
 public:
 	// Must be called after adding the default (maybe modern) font!
 	void setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont);
@@ -1577,27 +1465,24 @@ public:
 	//----
 
 private:
-	// Rebuild default styles by loading a default font 
+	// Rebuild default styles by loading a default font
 	// then generating the four styles: default, big, huge and huge_XXL.
 	void setupFonts(string pathFonts, string nameFont, float sizeFont);
 
 	void setupFontForDefaultStylesInternal(string pathFont, float sizeFont);
 
 public:
-	// Call after (all imgui related) setup()'s, 
-	// but before pushing extra fonts. 
+	// Call after (all imgui related) setup()'s,
+	// but before pushing extra fonts.
 	// The default style will use the passed size,
 	// 3 other font sizes will be auto created: Default/Big/Huge/HugeXXL
 	// the other three styles will be up scaled!
 	// It's an alias of BuildFontStyles().
-	void setupFontForDefaultStyles(string pathFont, float sizeFont)
-	{
+	void setupFontForDefaultStyles(string pathFont, float sizeFont) {
 		setupFontForDefaultStylesInternal(pathFont, sizeFont);
 	}
 
-
 	//----
-
 
 public:
 	// Helpers to share the same Gui instance
@@ -1605,30 +1490,34 @@ public:
 
 	//REFACTOR
 	//--------------------------------------------------------------
-	ofxImGui::Gui* getImGuiPtr()
-	{
-		if (guiPtr == NULL) return &gui;
-		else return guiPtr;
+	ofxImGui::Gui * getImGuiPtr() {
+		if (guiPtr == NULL)
+			return &gui;
+		else
+			return guiPtr;
 	}
 	//--------------------------------------------------------------
-	ofxImGui::Gui& getImGui()
-	{
-		if (guiPtr == NULL) return gui;
-		else return *guiPtr;
+	ofxImGui::Gui & getImGui() {
+		if (guiPtr == NULL)
+			return gui;
+		else
+			return *guiPtr;
 	}
 
 	//LEGACY
 	//--------------------------------------------------------------
-	ofxImGui::Gui* getGuiPtr()
-	{
-		if (guiPtr == NULL) return &gui;
-		else return guiPtr;
+	ofxImGui::Gui * getGuiPtr() {
+		if (guiPtr == NULL)
+			return &gui;
+		else
+			return guiPtr;
 	}
 	//--------------------------------------------------------------
-	ofxImGui::Gui& getGui()
-	{
-		if (guiPtr == NULL) return gui;
-		else return *guiPtr;
+	ofxImGui::Gui & getGui() {
+		if (guiPtr == NULL)
+			return gui;
+		else
+			return *guiPtr;
 	}
 
 	//----
@@ -1636,15 +1525,14 @@ public:
 	// Context getter shortcut
 	// sometimes useful,
 	// when requiring to access to some deep functions,
-	// like positioning windows on the view-port 
+	// like positioning windows on the view-port
 	// like on Aligners and Organizer sections.
 	//https://github.com/ocornut/imgui/issues/5287
 
 	//public:
 private:
 	//--------------------------------------------------------------
-	ImGuiContext* getContext()
-	{
+	ImGuiContext * getContext() {
 		return ImGui::GetCurrentContext();
 	}
 
@@ -1653,7 +1541,7 @@ private:
 public:
 	// API
 
-	// To the global context: 
+	// To the global context:
 	// All the windows MUST be populated in between!
 
 	// 1. Main BEGIN feed widgets!
@@ -1662,7 +1550,7 @@ public:
 	// 2. Main END feed widgets!
 	void End();
 
-	// Alias to psit with ofxImGui instations. 
+	// Alias to psit with ofxImGui instations.
 	// Makes it easier to replace
 	inline void begin() { this->Begin(); };
 	inline void end() { this->End(); };
@@ -1673,29 +1561,29 @@ public:
 
 	// 1. BEGINs a Window
 
-	bool BeginWindow(ofParameter<bool>& p);
+	bool BeginWindow(ofParameter<bool> & p);
 	// will use the bool param for show/hide
 	// and the param name for the window name
 
-	bool BeginWindow(string name, ofParameter<bool>& p);
+	bool BeginWindow(string name, ofParameter<bool> & p);
 	//  to change the name, and not use the param name.
 
-	bool BeginWindow(string name, ofParameter<bool>& p, ImGuiWindowFlags window_flags);
+	bool BeginWindow(string name, ofParameter<bool> & p, ImGuiWindowFlags window_flags);
 
-	bool BeginWindow(ofParameter<bool>& p, ImGuiWindowFlags window_flags);
+	bool BeginWindow(ofParameter<bool> & p, ImGuiWindowFlags window_flags);
 	// will use the bool param for show/hide and the param name for the window name
 
 	bool BeginWindow(string name);
-	bool BeginWindow(string name, bool* p_open);
-	bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags);
-	bool BeginWindow(char* name = "Window");
-	bool BeginWindow(char* name, ImGuiWindowFlags window_flags);
+	bool BeginWindow(string name, bool * p_open);
+	bool BeginWindow(string name, bool * p_open, ImGuiWindowFlags window_flags);
+	bool BeginWindow(char * name = "Window");
+	bool BeginWindow(char * name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
 
 	// Useful when we can decide afterwards which type to use for a window: special or not.
-	bool BeginWindowAnyType(ofParameter<bool>& p);
-	void EndWindowAnyType(ofParameter<bool>& p);
+	bool BeginWindowAnyType(ofParameter<bool> & p);
+	void EndWindowAnyType(ofParameter<bool> & p);
 
 	//--
 
@@ -1710,14 +1598,14 @@ public:
 	//TODO: could improve by doing open state handled by imgui.ini. Now is forced.
 	//bool BeginTree(const string label, bool bIndented = true, bool open = false, ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
 	//--------------------------------------------------------------
-	bool BeginTree(const string label)
-	{
+	bool BeginTree(const string label) {
 		bool bIndented = true;
 		bool b = (ofxImGuiSurfing::BeginTree(label));
-		if (b)
-		{
-			if (bIndented) this->Indent();
-			else this->refreshLayout();
+		if (b) {
+			if (bIndented)
+				this->Indent();
+			else
+				this->refreshLayout();
 		}
 
 		return b;
@@ -1725,32 +1613,32 @@ public:
 
 	//--------------------------------------------------------------
 	bool BeginTree(const string label, bool open /*= false*/, bool bIndented = true,
-		ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed)
-	{
+		ImGuiTreeNodeFlags flagsTree = ImGuiTreeNodeFlags_Framed) {
 		bool b = (ofxImGuiSurfing::BeginTree(label, open, flagsTree));
-		if (b)
-		{
-			if (bIndented) this->Indent();
-			else this->refreshLayout();
+		if (b) {
+			if (bIndented)
+				this->Indent();
+			else
+				this->refreshLayout();
 		}
 
 		return b;
 	}
 
 	//--------------------------------------------------------------
-	void EndTree(bool bIndented = true)
-	{
+	void EndTree(bool bIndented = true) {
 		ImGui::TreePop();
-		if (bIndented) this->Unindent();
-		else this->refreshLayout();
+		if (bIndented)
+			this->Unindent();
+		else
+			this->refreshLayout();
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	bool BeginChild(ImVec2 size_arg = ImVec2{ 0, 130 }, string label = "##child", bool border = true,
-		ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None)
-	{
+	bool BeginChild(ImVec2 size_arg = ImVec2 { 0, 130 }, string label = "##child", bool border = true,
+		ImGuiWindowFlags extra_flags = ImGuiWindowFlags_None) {
 		return ImGui::BeginChild(label.c_str(), size_arg, border, extra_flags);
 	}
 
@@ -1776,8 +1664,7 @@ public:
 	*/
 
 	//--------------------------------------------------------------
-	void EndChild()
-	{
+	void EndChild() {
 		ImGui::EndChild();
 	}
 
@@ -1786,8 +1673,7 @@ public:
 	// Columns
 
 	//--------------------------------------------------------------
-	void BeginColumns(int amount, string labelID = "##", bool border = false)
-	{
+	void BeginColumns(int amount, string labelID = "##", bool border = false) {
 		ImGui::PushID(labelID.c_str());
 
 		//this->refreshLayout();
@@ -1796,15 +1682,13 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void NextColumn()
-	{
+	void NextColumn() {
 		ImGui::NextColumn();
 		this->refreshLayout();
 	}
 
 	//--------------------------------------------------------------
-	void EndColumns(int amountDefault = 1)
-	{
+	void EndColumns(int amountDefault = 1) {
 		ImGui::Columns(amountDefault);
 		this->refreshLayout();
 
@@ -1812,8 +1696,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setColumnWidth(int indexColumn, float wNormalized)
-	{
+	void setColumnWidth(int indexColumn, float wNormalized) {
 		//refreshLayout();
 		float w = _ui.getWindowWidthAvail();
 		//float w = ofxImGuiSurfing::getWindowWidthAvail();
@@ -1825,16 +1708,14 @@ public:
 	// Menu
 
 	//--------------------------------------------------------------
-	bool BeginMenu(const string label, bool enabled = true)
-	{
+	bool BeginMenu(const string label, bool enabled = true) {
 		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
 		if (b) this->refreshLayout();
 		return b;
 	}
 
 	//--------------------------------------------------------------
-	bool BeginMenuBlink(const string label, bool bBlink, bool enabled = true)
-	{
+	bool BeginMenuBlink(const string label, bool bBlink, bool enabled = true) {
 		if (bBlink) BeginBlinkText();
 
 		bool b = BeginMenuEx(label.c_str(), NULL, enabled);
@@ -1846,38 +1727,34 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void EndMenu()
-	{
+	void EndMenu() {
 		ImGui::EndMenu();
 		this->refreshLayout();
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItem(const string label, ofParameter<bool>& b, bool enabled = true)
-	{
+	bool MenuItem(const string label, ofParameter<bool> & b, bool enabled = true) {
 		bool selected = b.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 
 		// return true when activated.
 		return ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItem(ofParameter<bool>& b, bool enabled = true)
-	{
+	bool MenuItem(ofParameter<bool> & b, bool enabled = true) {
 		string label = b.getName();
 		bool selected = b.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 
 		return ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggle(ofParameter<bool>& pb, bool enabled = true)
-	{
+	bool MenuItemToggle(ofParameter<bool> & pb, bool enabled = true) {
 		string label = pb.getName();
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1885,15 +1762,14 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleBlinkingIfEnabled(ofParameter<bool>& pb)
-	{
+	bool MenuItemToggleBlinkingIfEnabled(ofParameter<bool> & pb) {
 		bool bBlinking = pb.get();
 		if (bBlinking) this->BeginBlinkText();
 
 		bool enabled = true;
 		string label = pb.getName();
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1915,12 +1791,11 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamed(ofParameter<bool>& pb, string nameTrue, string nameFalse)
-	{
+	bool MenuItemToggleNamed(ofParameter<bool> & pb, string nameTrue, string nameFalse) {
 		bool enabled = true;
 		string label = pb.get() ? nameTrue : nameFalse;
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1928,12 +1803,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamed(ofParameter<bool>& pb, string name)
-	{
+	bool MenuItemToggleNamed(ofParameter<bool> & pb, string name) {
 		bool enabled = true;
 		string label = name;
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1941,12 +1815,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleWithKeystrokeInfo(ofParameter<bool>& pb, string keyInfo, bool enabled = true)
-	{
+	bool MenuItemToggleWithKeystrokeInfo(ofParameter<bool> & pb, string keyInfo, bool enabled = true) {
 		float w = ImGui::GetContentRegionAvail().x;
 		string label = pb.getName();
 		bool selected = pb.get();
-		const char* shortcut = keyInfo.c_str();
+		const char * shortcut = keyInfo.c_str();
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1954,11 +1827,10 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamedAppend(ofParameter<bool>& pb, string suffix, bool enabled = true)
-	{
+	bool MenuItemToggleNamedAppend(ofParameter<bool> & pb, string suffix, bool enabled = true) {
 		string label = pb.getName() + suffix;
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1966,11 +1838,10 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamedPrepend(ofParameter<bool>& pb, string prefix, bool enabled = true)
-	{
+	bool MenuItemToggleNamedPrepend(ofParameter<bool> & pb, string prefix, bool enabled = true) {
 		string label = prefix + pb.getName();
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1978,12 +1849,11 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemToggleNamedPrepend(ofParameter<bool>& pb, string nameTrue, string nameFalse)
-	{
+	bool MenuItemToggleNamedPrepend(ofParameter<bool> & pb, string nameTrue, string nameFalse) {
 		bool enabled = true;
 		string label = pb.get() ? nameTrue : nameFalse;
 		bool selected = pb.get();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool b = ImGui::MenuItem(label.c_str(), shortcut, selected, enabled);
 		if (b) pb = !pb;
 
@@ -1991,9 +1861,8 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemButton(const string label)
-	{
-		const char* shortcut = NULL;
+	bool MenuItemButton(const string label) {
+		const char * shortcut = NULL;
 		bool selected = false;
 		bool enabled = true;
 
@@ -2001,10 +1870,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemButtonBlinking(const string label, bool bEnable = true)
-	{
+	bool MenuItemButtonBlinking(const string label, bool bEnable = true) {
 		if (bEnable) this->BeginBlinkText();
-		const char* shortcut = NULL;
+		const char * shortcut = NULL;
 		bool selected = false;
 		bool enabled = true;
 		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
@@ -2013,10 +1881,9 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	bool MenuItemButtonBlinkingWithKeystrokeInfo(const string label, string keyInfo, bool bEnable = true)
-	{
+	bool MenuItemButtonBlinkingWithKeystrokeInfo(const string label, string keyInfo, bool bEnable = true) {
 		if (bEnable) this->BeginBlinkText();
-		const char* shortcut = keyInfo.c_str();
+		const char * shortcut = keyInfo.c_str();
 		bool selected = false;
 		bool enabled = true;
 		bool b = MenuItemEx(label.c_str(), NULL, shortcut, selected, enabled);
@@ -2028,95 +1895,81 @@ public:
 
 	// Blink Helpers
 
-	// Will blink the contained text 
+	// Will blink the contained text
 	// on widgets between begin/end
 	//--------------------------------------------------------------
-	inline void BeginBlinkFrame(bool bBlink = true)
-	{
+	inline void BeginBlinkFrame(bool bBlink = true) {
 		ofxImGuiSurfing::BeginBlinkFrame(bBlink);
 	}
 
 	//--------------------------------------------------------------
-	inline void EndBlinkFrame(bool bBlink = true)
-	{
+	inline void EndBlinkFrame(bool bBlink = true) {
 		ofxImGuiSurfing::EndBlinkFrame(bBlink);
 	}
 
 	// Will make darker the contained text on widgets between begin/end.
 	// Useful to look widget as it was disabled.
 	//--------------------------------------------------------------
-	inline void BeginDarkenText(bool bEnable = true)
-	{
+	inline void BeginDarkenText(bool bEnable = true) {
 		ofxImGuiSurfing::BeginDarkenText(bEnable);
 	}
 
 	//--------------------------------------------------------------
-	inline void EndDarkenText(bool bEnable = true)
-	{
+	inline void EndDarkenText(bool bEnable = true) {
 		ofxImGuiSurfing::EndDarkenText(bEnable);
 	}
 
 	//--------------------------------------------------------------
-	inline void BeginBlinkText(bool bBlink = true, bool bSoft = false)
-	{
+	inline void BeginBlinkText(bool bBlink = true, bool bSoft = false) {
 		ofxImGuiSurfing::BeginBlinkText(bBlink, bSoft);
 	}
 
 	//--------------------------------------------------------------
-	inline void EndBlinkText(bool bBlink = true)
-	{
+	inline void EndBlinkText(bool bBlink = true) {
 		ofxImGuiSurfing::EndBlinkText(bBlink);
 	}
 
 	// For text disabled or text inputs.
 	//--------------------------------------------------------------
-	inline void BeginBlinkTextDisabled(bool bBlink = true)
-	{
+	inline void BeginBlinkTextDisabled(bool bBlink = true) {
 		ofxImGuiSurfing::BeginBlinkTextDisabled(bBlink);
 	}
 
 	//--------------------------------------------------------------
-	inline void EndBlinkTextDisabled(bool bBlink = true)
-	{
+	inline void EndBlinkTextDisabled(bool bBlink = true) {
 		ofxImGuiSurfing::EndBlinkTextDisabled(bBlink);
 	}
 
 	// Change text color
 	//--------------------------------------------------------------
-	inline void PushColorText(ofColor color)
-	{
+	inline void PushColorText(ofColor color) {
 		ofxImGuiSurfing::PushColorText(color);
 	}
 
 	//--------------------------------------------------------------
-	inline void PopColorText()
-	{
+	inline void PopColorText() {
 		ofxImGuiSurfing::PopColorText();
 	}
 
 	// Border Highlight without blinking
 	//--------------------------------------------------------------
-	inline void BeginBorderFrame()
-	{
+	inline void BeginBorderFrame() {
 		ofxImGuiSurfing::BeginBorderFrame();
 	}
 
 	//--------------------------------------------------------------
-	inline void EndBorderFrame()
-	{
+	inline void EndBorderFrame() {
 		ofxImGuiSurfing::EndBorderFrame();
 	}
 
-	// Disable spacing between item 
+	// Disable spacing between item
 	//--------------------------------------------------------------
-	inline void BeginDisableItemSpacing()
-	{
+	inline void BeginDisableItemSpacing() {
 		ofxImGuiSurfing::BeginDisableItemSpacing();
 	}
 
 	//--------------------------------------------------------------
-	inline void EndDisableItemSpacing()
-	{
+	inline void EndDisableItemSpacing() {
 		ofxImGuiSurfing::EndDisableItemSpacing();
 	}
 
@@ -2138,8 +1991,8 @@ private:
 	bool bMouseCursorFromImGui = 0;
 #endif
 
-	// true (use the ImGui mouse cursor) or false (use default system mouse cursor, 
-	// note that some Windows capturers requires to force disable this 
+	// true (use the ImGui mouse cursor) or false (use default system mouse cursor,
+	// note that some Windows capturers requires to force disable this
 	// if you want to see mouse or other overlays!
 
 public:
@@ -2148,7 +2001,7 @@ public:
 	void setEnableRestoreIniSettings(bool b = 1) { bRestoreIniSettings = b; }
 
 private:
-	//TODO: 
+	//TODO:
 	// Should add another boolean as in front/background.
 	// separated from bAutoDraw
 
@@ -2156,16 +2009,16 @@ private:
 	//bool bAutoDraw = false; // default drawn in front
 
 public:
-	//TODO: 
-	// To be precise, 
+	//TODO:
+	// To be precise,
 	// we will use bAutoDraw not to draw manually but internally.
 	// we will call gui.draw() after gui.end()
 	// this way allows to draw upon the GUI panels.
-	// if is set to true, like is on default, 
+	// if is set to true, like is on default,
 	// you can't draw as natively/OF in front of the gui.
 
-	//TODO: 
-	// Must be false when multiple ImGui instances created ? 
+	//TODO:
+	// Must be false when multiple ImGui instances created ?
 	// Currently not important, kind of DEPRECATED.
 
 	void setEnablebAutoDraw(bool b) { bAutoDraw = b; }
@@ -2174,8 +2027,7 @@ public:
 	void setEnablebDrawInFront(bool b) { bAutoDraw = b; }
 
 	//--------------------------------------------------------------
-	void setToggleAutoDraw()
-	{
+	void setToggleAutoDraw() {
 		//TODO: do not works
 		// can be modified during runtime...
 
@@ -2189,15 +2041,17 @@ public:
 
 		//gui.exit();//crash
 
-		if (guiPtr != nullptr) guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
-		else gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+		if (guiPtr != nullptr)
+			guiPtr->setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
+		else
+			gui.setup(nullptr, bAutoDraw, flags, bRestoreIniSettings, bMouseCursorFromImGui);
 	}
 
 	//--
 
-//public:
+	//public:
 private:
-	// API 
+	// API
 	// Some options
 
 	// Force autodraw
@@ -2214,29 +2068,29 @@ private:
 
 public:
 	void setImGuiViewPort(bool b = 1) { bViewport = b; }
-	// Must be called before setup! 
+	// Must be called before setup!
 
 	void setImGuiDockingWithLayoutPresetsEngine(bool b = 1) { setDockingWithLayoutPresetsEngine(b); }
 	// Must call before setup! Enables mode to allow floating windows out of the OF app window.
 
 	void setImGuiDockingModeCentered(bool b = 1) { bDockingModeCentered = b; }
-	// Allows docking on bg window viewport. Default is enabled. Must be called before setup! 
+	// Allows docking on bg window viewport. Default is enabled. Must be called before setup!
 
 	void setImGuiDockingShift(bool b = 1) { ImGui::GetIO().ConfigDockingWithShift = b; }
 
 	//----
 
-	// Fonts Runtime Management 
+	// Fonts Runtime Management
 
 private:
-	ImFont* customFont = nullptr;
-	vector<ImFont*> customFonts;
-	bool bFlagIgnoreNextPopStyleFont = false;//this flag will be useful when no fonts added by mistake!
+	ImFont * customFont = nullptr;
+	vector<ImFont *> customFonts;
+	bool bFlagIgnoreNextPopStyleFont = false; //this flag will be useful when no fonts added by mistake!
 	vector<string> namesCustomFonts;
 	vector<string> pathsCustomFonts;
 
 public:
-	vector<ImFont*> getFontsPtr() { return customFonts; } // Warning: setup() must be called before!
+	vector<ImFont *> getFontsPtr() { return customFonts; } // Warning: setup() must be called before!
 	vector<string> getFontsNames() { return namesCustomFonts; } // Warning: setup() must be called before!
 
 	void clearFonts();
@@ -2278,6 +2132,7 @@ private:
 	// Take care not pushing a non existing index or it will crash!
 	void pushStyleFont(int index);
 	void popStyleFont();
+
 private:
 	// LEGACY
 	void PushFont(SurfingFontTypes style);
@@ -2287,11 +2142,11 @@ public:
 	void setDefaultFontIndex(int index);
 	void setDefaultFont();
 
-	ofParameter<int> fontIndex{ "Font", 0, 0, 3 }; // By default we use 4 font sizes/types
+	ofParameter<int> fontIndex { "Font", 0, 0, 3 }; // By default we use 4 font sizes/types
 	void DrawWidgetsFonts(); // uses internal index
 	void DrawWidgetsFontsMini(); // only combo. uses internal index
 
-	void DrawWidgetsFonts(ofParameter<int>& index, bool bWithArrows = true); // uses an external index
+	void DrawWidgetsFonts(ofParameter<int> & index, bool bWithArrows = true); // uses an external index
 
 	void DrawImGuiTextWithFontStyle(string text, int index, bool bShowName = 1);
 
@@ -2304,67 +2159,81 @@ public:
 
 	//----
 
-	// Scale Global 
-	// technically is the font scale, 
-	// that affects most widgets, 
+	// Scale Global
+	// technically is the font scale,
+	// that affects most widgets,
 	// but could break some window sizes layout.
 #ifdef SURFING_IMGUI__USE_GLOBAL_SCALE
 private:
-
-	class ScaleGlobalManager
-	{
+	class ScaleGlobalManager {
 	public:
 		ScaleGlobalManager() {
 			index.setMax(names.size() - 1);
 
-			eIndex = index.newListener([this](int& v) {
+			eIndex = index.newListener([this](int & v) {
 				switch (v) {
-				case 0: globalScale = 1.00f; break;
-				case 1: globalScale = 1.25f; break;
-				case 2: globalScale = 1.50f; break;
-				case 3: globalScale = 1.75f; break;
-				case 4: globalScale = 2.00f; break;
-				case 5: break;//custom
+				case 0:
+					globalScale = 1.00f;
+					break;
+				case 1:
+					globalScale = 1.25f;
+					break;
+				case 2:
+					globalScale = 1.50f;
+					break;
+				case 3:
+					globalScale = 1.75f;
+					break;
+				case 4:
+					globalScale = 2.00f;
+					break;
+				case 5:
+					break; //custom
 				}
-				});
+			});
 
-			eGlobalScale = globalScale.newListener([this](float& v) {
-				if (v == 1.00f) index = 0;
-				else if (v == 1.25f) index = 1;
-				else if (v == 1.50f) index = 2;
-				else if (v == 1.75f) index = 3;
-				else if (v == 2.00f) index = 4;
-				else index = 5;//custom
-				});
+			eGlobalScale = globalScale.newListener([this](float & v) {
+				if (v == 1.00f)
+					index = 0;
+				else if (v == 1.25f)
+					index = 1;
+				else if (v == 1.50f)
+					index = 2;
+				else if (v == 1.75f)
+					index = 3;
+				else if (v == 2.00f)
+					index = 4;
+				else
+					index = 5; //custom
+			});
 		}
 
 		~ScaleGlobalManager() {
 		}
 
 	public:
-		void setUiPtr(SurfingGuiManager* _ui)//only required to use the drawEditor!
+		void setUiPtr(SurfingGuiManager * _ui) //only required to use the drawEditor!
 		{
 			ui = _ui;
 		}
+
 	private:
-		SurfingGuiManager* ui = nullptr;
+		SurfingGuiManager * ui = nullptr;
 
 	public:
-		ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
-		vector<string> names{ "100%", "125%", "150%", "175%", "200%", "CUSTOM" };
-		ofParameter<int> index{ "Global Scale", 0, 0, 0 };
+		ofParameter<float> globalScale { "GlobalScale", 1, 0.5, 2 };
+		vector<string> names { "100%", "125%", "150%", "175%", "200%", "CUSTOM" };
+		ofParameter<int> index { "Global Scale", 0, 0, 0 };
 		//ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
 
 		float getScale() { return globalScale.get(); }
 		string getName() { return names[index]; }
 
 	private:
-
 		ofEventListener eIndex;
 		ofEventListener eGlobalScale;
 
 	public:
-
 		void DrawWidgetsGlobalScaleMini() {
 			if (ui == nullptr) return;
 
@@ -2407,16 +2276,15 @@ private:
 			ImGui::PopItemWidth();
 
 			// responsive
-			if ((ui->getWindowWidth() > 200) &&
-				(index == 0 ||
-					index == 1 ||
-					index == 2)) {
+			if ((ui->getWindowWidth() > 200) && (index == 0 || index == 1 || index == 2)) {
 				ImGui::SameLine();
 			}
 
 			float w3;
-			if (ui->getWindowWidth() < 200) w3 = ImGui::GetContentRegionAvail().x;
-			else w3 = 200;
+			if (ui->getWindowWidth() < 200)
+				w3 = ImGui::GetContentRegionAvail().x;
+			else
+				w3 = 200;
 			ImGui::PushItemWidth(w3);
 			ui->Add(ui->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
 			ImGui::PopItemWidth();
@@ -2442,7 +2310,6 @@ private:
 
 			ui->AddSpacingBigSeparated();
 		}
-
 	};
 
 	ScaleGlobalManager scaleGlobalManager;
@@ -2452,12 +2319,18 @@ private:
 		//TODO; could be improving getting the font size (ImGui::CalcText)..
 		float w_ = 60;
 		float w = w_;
-		if (scaleGlobalManager.index == 0) w = w_ * 1.f;
-		else if (scaleGlobalManager.index == 1) w = w_ * 1.2f;
-		else if (scaleGlobalManager.index == 2) w = w_ * 1.5f;
-		else if (scaleGlobalManager.index == 3) w = w_ * 1.75f;
-		else if (scaleGlobalManager.index == 4) w = w_ * 2.0;
-		else if (scaleGlobalManager.index == 5) w = w_ * 2.4f;//custom
+		if (scaleGlobalManager.index == 0)
+			w = w_ * 1.f;
+		else if (scaleGlobalManager.index == 1)
+			w = w_ * 1.2f;
+		else if (scaleGlobalManager.index == 2)
+			w = w_ * 1.5f;
+		else if (scaleGlobalManager.index == 3)
+			w = w_ * 1.75f;
+		else if (scaleGlobalManager.index == 4)
+			w = w_ * 2.0;
+		else if (scaleGlobalManager.index == 5)
+			w = w_ * 2.4f; //custom
 		return w;
 	}
 
@@ -2477,8 +2350,7 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void doCheckOverGui()
-	{
+	void doCheckOverGui() {
 		// Mouse lockers helpers
 		// Here we check if mouse is over gui to disable other external stuff
 		// e.g. easyCam draggable moving, text input boxes, key commands...
@@ -2501,7 +2373,7 @@ public:
 
 		// Text input
 
-		ImGuiIO& io = ImGui::GetIO();
+		ImGuiIO & io = ImGui::GetIO();
 		bOverInputText = io.WantTextInput;
 
 		//// Debug
@@ -2518,40 +2390,34 @@ public:
 
 	// To disable app interactions (like camera movements) when mouse is over any ui window.
 	//--------------------------------------------------------------
-	bool isOverGui() const
-	{
+	bool isOverGui() const {
 		return (bMouseOverGui.get() && bMouseOverGui.get());
 	}
 
 	//--------------------------------------------------------------
-	bool isMouseOverGui() const
-	{
+	bool isMouseOverGui() const {
 		return bMouseOverGui;
 	}
 
 	// To disable keyboard when typing into any ui widget.
 	//--------------------------------------------------------------
-	bool isMouseOverInputText() const
-	{
+	bool isMouseOverInputText() const {
 		return bOverInputText;
 	}
 
 	// Clicks helpers. Must call between begin/end render.
 	//--------------------------------------------------------------
-	bool isMouseOverAppWindowRightClicked() const
-	{
-		bool b = ImGui::IsMouseClicked(ImGuiMouseButton_Right) &&
-			ImGui::GetIO().MousePos.x >= 0 && ImGui::GetIO().MousePos.x < ImGui::GetIO().DisplaySize.x &&
-			ImGui::GetIO().MousePos.y >= 0 && ImGui::GetIO().MousePos.y < ImGui::GetIO().DisplaySize.y;
+	bool isMouseOverAppWindowRightClicked() const {
+		bool b = ImGui::IsMouseClicked(ImGuiMouseButton_Right) && ImGui::GetIO().MousePos.x >= 0 && ImGui::GetIO().MousePos.x < ImGui::GetIO().DisplaySize.x && ImGui::GetIO().MousePos.y >= 0 && ImGui::GetIO().MousePos.y < ImGui::GetIO().DisplaySize.y;
 		return b;
 	}
 
 	//----
 
 private:
-	ofParameter<bool> bDrawViewportRectangleCentralDebug{ "Draw Viewport Central", false };
+	ofParameter<bool> bDrawViewportRectangleCentralDebug { "Draw Viewport Central", false };
 	// debug drawing central zone for docking help
-	ofParameter<bool> bDrawViewportRectangleCentralDebug2{ "Draw Viewport 2", false };
+	ofParameter<bool> bDrawViewportRectangleCentralDebug2 { "Draw Viewport 2", false };
 
 	bool bUseAdvancedSubPanel = true;
 	// enable advanced sub panel
@@ -2561,67 +2427,67 @@ private:
 	// Exposed useful public params:
 
 public:
-	ofParameter<bool> bGui{ "Show Gui", true };//to be used externally. is not auto used internally!
+	ofParameter<bool> bGui { "Show Gui", true }; //to be used externally. is not auto used internally!
 
-	ofParameter<bool> bMinimize{ "Minimize", true };
-	ofParameter<bool> bAutoResize{ "Auto Resize", true };
-	ofParameter<bool> bKeys{ "Keys", true };
-	ofParameter<bool> bLogKeys{ "Log Keys", false };
-	ofParameter<bool> bHelp{ "Help App", false };
-	ofParameter<bool> bHelpInternal{ "Help Internal", false };
-	ofParameter<bool> bDebug{ "Debug", false };
-	ofParameter<bool> bDebugDebuggerImGui{ "Debugger ImGui", false };
-	ofParameter<bool> bExtra{ "Extra", false };
-	ofParameter<bool> bAdvanced{ "Advanced", false };
+	ofParameter<bool> bMinimize { "Minimize", true };
+	ofParameter<bool> bAutoResize { "Auto Resize", true };
+	ofParameter<bool> bKeys { "Keys", true };
+	ofParameter<bool> bLogKeys { "Log Keys", false };
+	ofParameter<bool> bHelp { "Help App", false };
+	ofParameter<bool> bHelpInternal { "Help Internal", false };
+	ofParameter<bool> bDebug { "Debug", false };
+	ofParameter<bool> bDebugDebuggerImGui { "Debugger ImGui", false };
+	ofParameter<bool> bExtra { "Extra", false };
+	ofParameter<bool> bAdvanced { "Advanced", false };
 
-	ofParameter<bool> bReset{ "Reset", false };
+	ofParameter<bool> bReset { "Reset", false };
 
 	//to allow a type of super simple window for final user!
-	ofParameter<bool> bGui_GameMode{ "GAME", false };
-	ofParameter<bool> bSolo_GameMode{ "GAME SOLO", false };
+	ofParameter<bool> bGui_GameMode { "GAME", false };
+	ofParameter<bool> bSolo_GameMode { "GAME SOLO", false };
 	//ofParameter<bool> bGui_GameMode{ "GAME MODE", false };
 
-	ofParameter<bool> bMouseWheel{ "Mouse Wheel", true };
-	ofParameter<bool> bMouseWheelFlip{ "Flip Wheel", false }; //for natural direction
+	ofParameter<bool> bMouseWheel { "Mouse Wheel", true };
+	ofParameter<bool> bMouseWheelFlip { "Flip Wheel", false }; //for natural direction
 	bool bDisableMouseWheelOnButtonsToggles = true; //TODO:
 
-	ofParameter<bool> bGlobalScaleWheel{ "Global Scale Wheel", false };
-	ofParameter<float> globalScale{ "GlobalScale", 1, 0.5, 2 };
+	ofParameter<bool> bGlobalScaleWheel { "Global Scale Wheel", false };
+	ofParameter<float> globalScale { "GlobalScale", 1, 0.5, 2 };
 	//float globalScalePre = 1;
 
-	ofParameter<bool> bThemeUIAlt{ "Theme UI", false };
+	ofParameter<bool> bThemeUIAlt { "Theme UI", false };
 
-	ofParameter<bool> bLog{ "LOG", false }; //show log window
-	ofParameter<bool> bNotifier{ "NOTIFIER", true }; //show notifier
+	ofParameter<bool> bLog { "LOG", false }; //show log window
+	ofParameter<bool> bNotifier { "NOTIFIER", true }; //show notifier
 
 	//TODO:
-	ofParameter<bool> bLockMove{ "Lock Move", false }; //TODO:
-	ofParameter<bool> bReset_Window{ "Reset Window", false }; //TODO:
-	ofParameter<bool> bNoScroll{ "No Scroll", false }; //TODO:
-	ofParameter<bool> bLandscape{ "Orientation", false }; //TODO:
+	ofParameter<bool> bLockMove { "Lock Move", false }; //TODO:
+	ofParameter<bool> bReset_Window { "Reset Window", false }; //TODO:
+	ofParameter<bool> bNoScroll { "No Scroll", false }; //TODO:
+	ofParameter<bool> bLandscape { "Orientation", false }; //TODO:
 	//TODO: could add a trigger to flip orientation
 
-	ofParameter<bool> bLinkGlobal{ "Link Global", true }; //TODO:
+	ofParameter<bool> bLinkGlobal { "Link Global", true }; //TODO:
 	//TODO: link windows between contexts/add-ons/ gui instances
 
-	ofParameter<bool> bGui_Organizer{ "ORGANIZER", false };
-	ofParameter<bool> bGui_Aligners{ "ALIGNERS", false };
-	ofParameter<bool> bGui_SpecialWindows{ "SPECIAL WINDOWS", false };
+	ofParameter<bool> bGui_Organizer { "ORGANIZER", false };
+	ofParameter<bool> bGui_Aligners { "ALIGNERS", false };
+	ofParameter<bool> bGui_SpecialWindows { "SPECIAL WINDOWS", false };
 
 	//--
 
-	ofParameterGroup params_Advanced{ "Advanced Settings" };
-	// These params are saved as settings when exit and loaded when reopen the app. 
+	ofParameterGroup params_Advanced { "Advanced Settings" };
+	// These params are saved as settings when exit and loaded when reopen the app.
 
-	ofParameterGroup params_Internal{ "Internal" };
-	ofParameterGroup params_InternalConfig{ "InternalConfig" };
-	ofParameterGroup params_Modules{ "Modules" };
-	ofParameterGroup params_ModulesWindows{ "ModulesWindows" };
-	ofParameterGroup params_Help{ "Module Help" };
-	ofParameterGroup params_HelpInternal{ "Help Internal" };
-	ofParameterGroup params_HelpApp{ "Help App" };
+	ofParameterGroup params_Internal { "Internal" };
+	ofParameterGroup params_InternalConfig { "InternalConfig" };
+	ofParameterGroup params_Modules { "Modules" };
+	ofParameterGroup params_ModulesWindows { "ModulesWindows" };
+	ofParameterGroup params_Help { "Module Help" };
+	ofParameterGroup params_HelpInternal { "Help Internal" };
+	ofParameterGroup params_HelpApp { "Help App" };
 
-	ofParameterGroup params_Windows{ "Windows" };
+	ofParameterGroup params_Windows { "Windows" };
 
 	//--
 
@@ -2635,28 +2501,28 @@ private:
 
 	//--
 
-	// Rectangles to handle main window sections 
+	// Rectangles to handle main window sections
 
-	// Positions and shape, bc we disable the ImGui management, 
+	// Positions and shape, bc we disable the ImGui management,
 	// to exclude storing on presets and imgui.ini!
 
 private:
-	ofParameterGroup params_RectPanels{ "Rectangles Windows" };
+	ofParameterGroup params_RectPanels { "Rectangles Windows" };
 	vector<ofParameter<ofRectangle>> rectangles_Windows;
 
-	ofParameter<ofRectangle> rect0_Presets{
+	ofParameter<ofRectangle> rect0_Presets {
 		"rect_Presets",
-			ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
+		ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
 	};
 
-	ofParameter<ofRectangle> rect1_Panels{
+	ofParameter<ofRectangle> rect1_Panels {
 		"rect_Panels",
-			ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
+		ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
 	};
 
-	ofParameter<ofRectangle> rect2_Manager{
+	ofParameter<ofRectangle> rect2_Manager {
 		"rect_Manager",
-			ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
+		ofRectangle(), ofRectangle(), ofRectangle(1920, 1080, 1920, 1080)
 	};
 
 	ImGuiWindowFlags flags_wPr;
@@ -2665,22 +2531,22 @@ private:
 	//--
 
 	// Presets windows
-	ofParameter<bool> bReset_PresetsWindow{ "Reset P", false };
-	ofParameter<bool> bAutoResize_PresetsWindows{ "Auto Resize P", true };
-	ofParameter<bool> bMinimize_Presets{ "Minimize P", true };
+	ofParameter<bool> bReset_PresetsWindow { "Reset P", false };
+	ofParameter<bool> bAutoResize_PresetsWindows { "Auto Resize P", true };
+	ofParameter<bool> bMinimize_Presets { "Minimize P", true };
 
 	// Panels windows
-	ofParameter<bool> bReset_WindowPanels{ "Reset", false };
-	ofParameter<bool> bAutoResize_Panels{ "Auto Resize", true };
+	ofParameter<bool> bReset_WindowPanels { "Reset", false };
+	ofParameter<bool> bAutoResize_Panels { "Auto Resize", true };
 	//ofParameter<bool> bMinimize_Panels{ "Minimize Panels", true };
 
-	ofParameterGroup params_WindowPresets{ "Window Presets" };
-	ofParameterGroup params_WindowPanels{ "Window Panels" };
-	ofParameterGroup params_WindowsEngine{ "Engine Windows" };
+	ofParameterGroup params_WindowPresets { "Window Presets" };
+	ofParameterGroup params_WindowPanels { "Window Panels" };
+	ofParameterGroup params_WindowsEngine { "Engine Windows" };
 
 public:
-	ofParameter<bool> bOverInputText{ "Input Text", false }; // user is over a text input
-	ofParameter<bool> bMouseOverGui{ "Mouse OverGui", false }; // mouse is over gui
+	ofParameter<bool> bOverInputText { "Input Text", false }; // user is over a text input
+	ofParameter<bool> bMouseOverGui { "Mouse OverGui", false }; // mouse is over gui
 
 private:
 	//ofParameter<bool> bAutoLockGuiToBorder{ "Lock GUI", false }; // force position
@@ -2693,8 +2559,7 @@ public:
 	// Some methods to reset windows layouts..
 
 	//--------------------------------------------------------------
-	void resetWindowImGui(bool pos = true, bool size = true)
-	{
+	void resetWindowImGui(bool pos = true, bool size = true) {
 		//float ww = PANEL_WIDGETS_WIDTH_MIN;
 		//float hh = PANEL_WIDGETS_HEIGHT;
 
@@ -2735,8 +2600,7 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void setLogFontSize(int indexFont)
-	{
+	void setLogFontSize(int indexFont) {
 		indexFont = ofClamp(indexFont, 0, 3); //hardcoded
 		log.setFontSize(indexFont);
 	}
@@ -2749,8 +2613,7 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void DrawWindowLogIfEnabled()
-	{
+	void DrawWindowLogIfEnabled() {
 		if (bLog) log.drawImGui(bLog);
 	}
 
@@ -2761,14 +2624,12 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void AddThemeToggle()
-	{
+	void AddThemeToggle() {
 		ofxImGuiSurfing::AddToggleRoundedButtonNamed(bThemeUIAlt, "Day", "Night");
 	}
 
 	//--------------------------------------------------------------
-	void DrawWidgetsTheme(bool bLabel = 1)
-	{
+	void DrawWidgetsTheme(bool bLabel = 1) {
 		//bool bToggled = true
 		//if (bToggled)
 		//	this->Add(bThemeUIAlt);
@@ -2788,8 +2649,7 @@ public:
 
 #ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
-	void DrawNotifierIfEnabled()
-	{
+	void DrawNotifierIfEnabled() {
 		if (bNotifier) notifier.draw();
 		//if (bNotifier) notifier.draw(true, &customFonts);
 		//if (bNotifier) notifier.draw(bDebug.get(), &customFonts);
@@ -2797,8 +2657,7 @@ public:
 #endif
 
 	//--------------------------------------------------------------
-	void DrawWindowLog()
-	{
+	void DrawWindowLog() {
 		log.drawImGui(bLog);
 	}
 
@@ -2813,22 +2672,19 @@ public:
 	void setLogLevelLog(ofLogLevel logLevel) { log.setLogLevel(logLevel); }
 
 	//--------------------------------------------------------------
-	void setLogRedirectConsole(bool b = true)
-	{
+	void setLogRedirectConsole(bool b = true) {
 		log.setRedirectConsole(b);
 	}
 
 	// Create a custom tag to be used after.
 	//--------------------------------------------------------------
-	void AddLogTag(SurfingLog::tagData tag)
-	{
+	void AddLogTag(SurfingLog::tagData tag) {
 		log.AddTag(tag);
 	}
 
 	//--------------------------------------------------------------
-	void AddLogTag(string name, ofColor color)
-	{
-		this->AddLogTag(SurfingLog::tagData{ name, color });
+	void AddLogTag(string name, ofColor color) {
+		this->AddLogTag(SurfingLog::tagData { name, color });
 	}
 
 	//--------------------------------------------------------------
@@ -2838,34 +2694,31 @@ public:
 		AddLogTag(name, color);
 	}
 
-	// Print message to log window passing the message and the tag name. 
+	// Print message to log window passing the message and the tag name.
 	// Must exist or been added previously.
 	//--------------------------------------------------------------
-	void AddToLog(string text, string nameTag)
-	{
+	void AddToLog(string text, string nameTag) {
 		// Log
 		log.Add(text, nameTag);
 	}
 
 	//--------------------------------------------------------------
-	void ExportLogToFile()
-	{
+	void ExportLogToFile() {
 		// Log
 		log.exportLogToFile();
 	}
 
 	//--------------------------------------------------------------
-	void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit. 
+	void ClearLogDefaultTags() // Remove default tags, VERBOSE, NOTICE, etc.. to clean the list a bit.
 	{
 		log.clearDefaultTags();
 	}
 
-	// Print message to log window passing the message and the tag index. 
+	// Print message to log window passing the message and the tag index.
 	// Must exist or been added previously.
 	// if there's no passed tag we will use no tag and default text color.
 	//--------------------------------------------------------------
-	void AddToLog(string text, int tag/* = -1*/)
-	{
+	void AddToLog(string text, int tag /* = -1*/) {
 		log.Add(text, tag);
 	}
 
@@ -2877,34 +2730,29 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddToLog(string text, ofLogLevel logLevel)
-	{
+	void AddToLog(string text, ofLogLevel logLevel) {
 		log.Add(text, logLevel);
 	}
 
 	//--------------------------------------------------------------
-	void ClearLog()
-	{
+	void ClearLog() {
 		log.Clear();
 	}
 
 	//--------------------------------------------------------------
-	void AddToLogAndNotifier(string text, ofLogLevel logLevel)
-	{
+	void AddToLogAndNotifier(string text, ofLogLevel logLevel) {
 		log.Add(text, logLevel);
 		notifier.Add(text, logLevel);
 	}
 
 	//--------------------------------------------------------------
-	void AddToLogAndNotifier(string text, string nameTag)
-	{
+	void AddToLogAndNotifier(string text, string nameTag) {
 		log.Add(text, nameTag);
 		notifier.Add(text, nameTag);
 	}
 
 	//--------------------------------------------------------------
-	void AddToLogAndNotifier(string text)
-	{
+	void AddToLogAndNotifier(string text) {
 		log.Add(text, OF_LOG_NOTICE);
 		notifier.Add(text, OF_LOG_NOTICE);
 	}
@@ -2914,20 +2762,17 @@ public:
 public:
 #ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
-	void doResetNotifier()
-	{
+	void doResetNotifier() {
 		notifier.doReset();
 	}
 
 	//--------------------------------------------------------------
-	void doClearNotifier()
-	{
+	void doClearNotifier() {
 		notifier.doClear();
 	}
 
 	//--------------------------------------------------------------
-	void AddToNotifier(string text, string nameTag)
-	{
+	void AddToNotifier(string text, string nameTag) {
 		notifier.Add(text, nameTag);
 	}
 
@@ -2938,8 +2783,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void AddToNotifier(string text, ofLogLevel logLevel)
-	{
+	void AddToNotifier(string text, ofLogLevel logLevel) {
 		notifier.Add(text, logLevel);
 	}
 
@@ -2983,16 +2827,14 @@ public:
 
 	// Minimize state
 	//--------------------------------------------------------------
-	bool AddMinimize(bool bSeparated = false)
-	{
+	bool AddMinimize(bool bSeparated = false) {
 		AddMinimizeToggle(bSeparated);
 		return bMinimize.get();
 	}
 
-	void AddMinimizeToggle(bool bSeparated = false)
-	{
+	void AddMinimizeToggle(bool bSeparated = false) {
 		this->Add(this->bMinimize, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isMinimized() const { return bMinimize.get(); }
@@ -3000,8 +2842,7 @@ public:
 	bool isGameMode() const { return bGui_GameMode.get(); }
 
 	// legacy
-	void AddMinimizerToggle(bool bSeparated = false)
-	{
+	void AddMinimizerToggle(bool bSeparated = false) {
 		AddMinimizeToggle(bSeparated);
 	}
 
@@ -3010,14 +2851,12 @@ public:
 	//TODO: add another mini xs rounded toggle
 	// WARNING: can use only one per window... bc no name no id tags!
 	//--------------------------------------------------------------
-	void AddMinimizerXsToggle()
-	{
+	void AddMinimizerXsToggle() {
 		AddMinimizerXsToggle(this->bMinimize);
 	}
 
 	//--------------------------------------------------------------
-	void AddMinimizerXsToggle(ofParameter<bool>& b, bool bSeparated = false, bool bNoLabel = true)
-	{
+	void AddMinimizerXsToggle(ofParameter<bool> & b, bool bSeparated = false, bool bNoLabel = true) {
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI_XS);
 
 		//TODO:
@@ -3035,8 +2874,7 @@ public:
 			w += this->getWidgetsSpacingX();
 			w += this->getWidgetsSpacingX();
 			//w += 2;
-		}
-		else // no label
+		} else // no label
 		{
 			//w -= getWidgetsSpacingX();
 			//w -= getWindowSpacingX();
@@ -3057,8 +2895,10 @@ public:
 
 		//this->Add(b, OFX_IM_TOGGLE_ROUNDED_MINI);
 
-		if (bSeparated) this->AddSpacingSeparated();
-		else this->AddSpacing();
+		if (bSeparated)
+			this->AddSpacingSeparated();
+		else
+			this->AddSpacing();
 	}
 
 	//--------------------------------------------------------------
@@ -3071,22 +2911,19 @@ public:
 	// Fast toggle rendered for common internal toggles
 
 	//--------------------------------------------------------------
-	bool AddKeys(bool bSeparated = false)
-	{
+	bool AddKeys(bool bSeparated = false) {
 		AddKeysToggle(bSeparated);
 		return this->isKeys();
 	}
 
-	void AddKeysToggle(bool bSeparated = false)
-	{
+	void AddKeysToggle(bool bSeparated = false) {
 		this->Add(this->bKeys, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddKeysToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddKeysToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bKeys, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isKeys() const { return bKeys.get() && !this->isMouseOverInputText(); }
@@ -3094,54 +2931,47 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool AddLog(bool bSeparated = false)
-	{
+	bool AddLog(bool bSeparated = false) {
 		AddLogToggle(bSeparated);
 		return bLog.get();
 	}
 
-	void AddLogToggle(bool bSeparated = false)
-	{
+	void AddLogToggle(bool bSeparated = false) {
 		this->Add(this->bLog, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddLogToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddLogToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bLog, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	//--
 
 	//#ifdef SURFING_IMGUI__USE_NOTIFIER
 	//--------------------------------------------------------------
-	bool AddNotifier(bool bSeparated = false)
-	{
+	bool AddNotifier(bool bSeparated = false) {
 		AddNotifierToggle(bSeparated);
 		return bNotifier.get();
 	}
 
-	void AddNotifierToggle(bool bSeparated = false)
-	{
+	void AddNotifierToggle(bool bSeparated = false) {
 		this->Add(this->bNotifier, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddNotifierToggleEditor(bool bSeparated = false)
-	{
+	void AddNotifierToggleEditor(bool bSeparated = false) {
 		if (!bNotifier || !bDebug) return;
 
 		this->Indent();
 		this->Add(this->notifier.bGui_Editor, OFX_IM_TOGGLE_ROUNDED_MINI);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 		this->Unindent();
 	}
 
-	void AddNotifierToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddNotifierToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bNotifier, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	//#endif
@@ -3149,43 +2979,37 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool AddAutoResize(bool bSeparated = false)
-	{
+	bool AddAutoResize(bool bSeparated = false) {
 		AddAutoResizeToggle(bSeparated);
 		return bAutoResize.get();
 	}
 
-	void AddAutoResizeToggle(bool bSeparated = false)
-	{
+	void AddAutoResizeToggle(bool bSeparated = false) {
 		this->Add(this->bAutoResize, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddAutoResizeToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddAutoResizeToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bAutoResize, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	bool AddDebug(bool bSeparated = false)
-	{
+	bool AddDebug(bool bSeparated = false) {
 		AddDebugToggle(bSeparated);
 		return bDebug.get();
 	}
 
-	void AddDebugToggle(bool bSeparated = false)
-	{
+	void AddDebugToggle(bool bSeparated = false) {
 		this->Add(this->bDebug, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddDebugToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddDebugToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bDebug, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isDebug() const { return bDebug.get(); }
@@ -3202,18 +3026,16 @@ public:
 	//	return bHelp.get();
 	//}
 
-	void AddHelpToggle(bool bSeparated = false)
-	{
+	void AddHelpToggle(bool bSeparated = false) {
 		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddHelpToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		//if (!bUseHelpApp) return;
 		this->Add(this->bHelp, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isHelp() const { return bHelp.get(); }
@@ -3228,18 +3050,16 @@ public:
 	//	return bHelpInternal.get();
 	//}
 
-	void AddHelpInternalToggle(bool bSeparated = false)
-	{
+	void AddHelpInternalToggle(bool bSeparated = false) {
 		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddHelpInternalToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		//if (!bUseHelpInternal) return;
 		this->Add(this->bHelpInternal, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isHelpInternal() const { return bHelpInternal.get(); }
@@ -3249,22 +3069,19 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool AddAdvanced(bool bSeparated = false)
-	{
+	bool AddAdvanced(bool bSeparated = false) {
 		AddAdvancedToggle(bSeparated);
 		return bAdvanced.get();
 	}
 
-	void AddAdvancedToggle(bool bSeparated = false)
-	{
+	void AddAdvancedToggle(bool bSeparated = false) {
 		this->Add(this->bAdvanced, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddAdvancedToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddAdvancedToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bAdvanced, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isAdvanced() const { return bAdvanced.get(); }
@@ -3274,22 +3091,19 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool AddExtra(bool bSeparated = false)
-	{
+	bool AddExtra(bool bSeparated = false) {
 		AddExtraToggle(bSeparated);
 		return bExtra.get();
 	}
 
-	void AddExtraToggle(bool bSeparated = false)
-	{
+	void AddExtraToggle(bool bSeparated = false) {
 		this->Add(this->bExtra, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddExtraToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddExtraToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bExtra, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isExtra() const { return bExtra.get(); }
@@ -3299,22 +3113,19 @@ public:
 	//--
 
 	//--------------------------------------------------------------
-	bool AddMenuBar(bool bSeparated = false)
-	{
+	bool AddMenuBar(bool bSeparated = false) {
 		AddMenuBarToggle(bSeparated);
 		return bGui_TopMenuBar.get();
 	}
 
-	void AddMenuBarToggle(bool bSeparated = false)
-	{
+	void AddMenuBarToggle(bool bSeparated = false) {
 		this->Add(this->bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
-	void AddMenuBarToggle(SurfingGuiTypes style, bool bSeparated = false)
-	{
+	void AddMenuBarToggle(SurfingGuiTypes style, bool bSeparated = false) {
 		this->Add(this->bGui_TopMenuBar, style);
-		if (bSeparated)this->AddSpacingSeparated();
+		if (bSeparated) this->AddSpacingSeparated();
 	}
 
 	bool isMenuBar() const { return bGui_TopMenuBar.get(); }
@@ -3330,20 +3141,19 @@ private:
 	// with some bool toggles commonly used.
 
 	//--------------------------------------------------------------
-	void DrawAdvancedControls()
-	{
+	void DrawAdvancedControls() {
 		DrawAdvancedBundle();
 	}
 
 public:
 	//--------------------------------------------------------------
-	void DrawWindowAdvanced(bool bForceVisible = false)
-	{
+	void DrawWindowAdvanced(bool bForceVisible = false) {
 		bool b;
-		if (!bForceVisible) b = BeginWindow(bAdvanced);
-		else b = BeginWindow(bAdvanced.getName());
-		if (b)
-		{
+		if (!bForceVisible)
+			b = BeginWindow(bAdvanced);
+		else
+			b = BeginWindow(bAdvanced.getName());
+		if (b) {
 			//if (!bForceVisible)this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
 			DrawAdvancedSubPanel(true, bForceVisible);
 			EndWindow();
@@ -3352,8 +3162,7 @@ public:
 
 	// Simpler call. Should use this one.
 	//--------------------------------------------------------------
-	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false)
-	{
+	void DrawAdvancedBundle(bool bSeparator = false, bool bSpacing = false, bool bListenToMinimize = false) {
 		if (bMinimize && bListenToMinimize) return;
 
 		if (bSpacing) ImGui::Spacing();
@@ -3367,8 +3176,7 @@ public:
 
 	// Debug windows
 	//--------------------------------------------------------------
-	void DrawDebugImGuiContextsWindows()
-	{
+	void DrawDebugImGuiContextsWindows() {
 		static bool m_Debug = false;
 		static bool m_Demo = false;
 		ImGui::Checkbox("Debug", &m_Debug);
@@ -3380,8 +3188,7 @@ public:
 private:
 	// LEGACY API
 	//--------------------------------------------------------------
-	void DrawAdvanced(bool bSeparator = false, bool bSpacing = false)
-	{
+	void DrawAdvanced(bool bSeparator = false, bool bSpacing = false) {
 		DrawAdvancedBundle(bSeparator, bSpacing);
 	}
 
@@ -3389,10 +3196,8 @@ private:
 
 private:
 	//--------------------------------------------------------------
-	void DrawAdvancedSubPanel(bool bHeader = true, bool bForceVisible = false)
-	{
-		if (!bForceVisible)
-		{
+	void DrawAdvancedSubPanel(bool bHeader = true, bool bForceVisible = false) {
+		if (!bForceVisible) {
 			if (!bAdvanced) return;
 			if (!bUseAdvancedSubPanel) return;
 		}
@@ -3402,11 +3207,10 @@ private:
 		this->Indent();
 		{
 			bool b = false;
-			if (!bUseAdvancedSubPanel)
-			{
+			if (!bUseAdvancedSubPanel) {
 				if (bHeader) b = ImGui::CollapsingHeader(params_Advanced.getName().c_str(), ImGuiTreeNodeFlags_None);
-			}
-			else b = true;
+			} else
+				b = true;
 
 			// Keys
 			this->Add(bKeys, OFX_IM_TOGGLE_ROUNDED);
@@ -3428,19 +3232,17 @@ private:
 			// Main Reset
 			// that can be linked using a pointer to an external trigger!
 			// Example: ui.setReset(&bResetDocking);
-			if (bResetPtr != nullptr)
-			{
+			if (bResetPtr != nullptr) {
 				Add(bReset, OFX_IM_BUTTON_SMALL);
 				//this->AddTooltip("Must be assigned \nfrom parent scope \nby passing a bool \ntrigger as reference!");
 			}
 
-			if (ImGui::TreeNode("Windows"))
-			{
+			if (ImGui::TreeNode("Windows")) {
 				this->refreshLayout();
 
 				//--
 
-				// Window 
+				// Window
 
 				/*
 				if (ImGui::TreeNode("_"))
@@ -3460,8 +3262,7 @@ private:
 
 				// Window Layouts
 
-				if (ImGui::TreeNode("LAYOUTS"))
-				{
+				if (ImGui::TreeNode("LAYOUTS")) {
 					this->refreshLayout();
 					Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
 					Add(bReset_PresetsWindow, OFX_IM_BUTTON_SMALL);
@@ -3471,10 +3272,9 @@ private:
 
 				//--
 
-				// Window Panels 
+				// Window Panels
 
-				if (ImGui::TreeNode("PANELS"))
-				{
+				if (ImGui::TreeNode("PANELS")) {
 					this->refreshLayout();
 					Add(bAutoResize_Panels, OFX_IM_TOGGLE_ROUNDED_SMALL);
 					Add(bReset_WindowPanels, OFX_IM_BUTTON_SMALL);
@@ -3497,17 +3297,14 @@ private:
 
 			// Extra
 			Add(bExtra, OFX_IM_TOGGLE_ROUNDED);
-			if (bExtra)
-			{
+			if (bExtra) {
 				//--
 
-				if (!bHeader || (bHeader && b))
-				{
+				if (!bHeader || (bHeader && b)) {
 					// Windows
 					this->AddSpacing();
 
-					if (ImGui::TreeNode("MORE"))
-					{
+					if (ImGui::TreeNode("MORE")) {
 						this->Indent();
 
 						this->AddSpacing();
@@ -3557,8 +3354,7 @@ private:
 					// Gui
 					this->AddSpacing();
 
-					if (ImGui::TreeNode("GUI"))
-					{
+					if (ImGui::TreeNode("GUI")) {
 						this->Indent();
 
 						this->AddSpacing();
@@ -3576,8 +3372,7 @@ private:
 
 						// Debug
 						Add(bDebug, OFX_IM_TOGGLE_ROUNDED);
-						if (bDebug)
-						{
+						if (bDebug) {
 							this->Indent();
 
 							//--
@@ -3602,8 +3397,7 @@ private:
 							this->AddSpacing();
 							this->AddSpacing();
 
-							if (ImGui::TreeNode("ELEMENTS"))
-							{
+							if (ImGui::TreeNode("ELEMENTS")) {
 								this->Indent();
 								{
 									this->AddSpacing();
@@ -3653,13 +3447,10 @@ private:
 					this->AddSpacing();
 
 					//if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING)
-					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING ||
-						surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW)
-					{
+					if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING || surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW) {
 						this->AddSpacing();
 
-						if (ImGui::TreeNode("DOCKING"))
-						{
+						if (ImGui::TreeNode("DOCKING")) {
 							this->Indent();
 
 							this->AddSpacing();
@@ -3669,8 +3460,7 @@ private:
 							//ImGui::Text("Docking");
 							ofxImGuiSurfing::AddToggleRoundedButton(bDebugDocking);
 							//TODO:
-							if (bDebugDocking)
-							{
+							if (bDebugDocking) {
 								ImGui::Indent();
 								{
 									//ofxImGuiSurfing::AddToggleRoundedButton(bUseLayoutPresetsManager);
@@ -3695,8 +3485,7 @@ private:
 
 public:
 	//--------------------------------------------------------------
-	void setUseAdvancedSubPanel(bool b)
-	{
+	void setUseAdvancedSubPanel(bool b) {
 		bUseAdvancedSubPanel = b;
 	}
 
@@ -3704,21 +3493,21 @@ public:
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
 private:
-	ofParameter<bool> bAutoSaveSettings{ "Auto Save", true };
+	ofParameter<bool> bAutoSaveSettings { "Auto Save", true };
 
 	//--------------------------------------------------------------
-	void saveSettingsFlag()
-	{
-		if (bAutoSaveSettings) bFlagSaveSettings = true;
-		else
-		{
+	void saveSettingsFlag() {
+		if (bAutoSaveSettings)
+			bFlagSaveSettings = true;
+		else {
 			ofLogWarning("ofxSurfingImGui") << "GuiManager:saveSettingsFlag()";
 			ofLogWarning("ofxSurfingImGui") << "Skipped saveSettingsFlag() bc bAutoSaveSettings was disabled!";
 		}
 	}
+
 private:
 	bool bFlagSaveSettings = 0;
-#endif	
+#endif
 
 private:
 	// File Settings
@@ -3733,27 +3522,26 @@ private:
 	string nameLabel = SURFING_IMGUI__DEFAULT_NAME_LABEL;
 	bool bDoneCustomNameLabel = false;
 
-	ofParameterGroup params_AppSettings{ "ofxSurfingGui" }; // Features states
-	ofParameterGroup params_AppSettingsLayout{ "LayoutSettings" }; // Layout states
+	ofParameterGroup params_AppSettings { "ofxSurfingGui" }; // Features states
+	ofParameterGroup params_AppSettingsLayout { "LayoutSettings" }; // Layout states
 
 public:
 	//--------------------------------------------------------------
-	string getPathRoot() const
-	{
+	string getPathRoot() const {
 		//TODO
-		if (path_Root == "") return path_Global;
-		else return path_Root;
+		if (path_Root == "")
+			return path_Global;
+		else
+			return path_Root;
 	}
 
 	//--------------------------------------------------------------
-	string getPathGlobal() const
-	{
+	string getPathGlobal() const {
 		return path_Global;
 	}
 
 	//--------------------------------------------------------------
-	string getPath() const
-	{
+	string getPath() const {
 		return path_Global;
 	}
 
@@ -3763,15 +3551,14 @@ public:
 
 	// API
 	//--------------------------------------------------------------
-	void setName(string name)
-	{
+	void setName(string name) {
 		bDoneCustomNameLabel = true;
 
 		// To allow split possible instances on different folders
 
-		// Must call before setup! 
-		// To allow the correct behavior when multiple instances/windows settings. 
-		// Notice that each instance will have his own folder path for setting files! 
+		// Must call before setup!
+		// To allow the correct behavior when multiple instances/windows settings.
+		// Notice that each instance will have his own folder path for setting files!
 		// This name will be used on the folder name too.
 		nameLabel = name;
 
@@ -3794,8 +3581,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setMouseWheelFlip(bool bFlip = true)
-	{
+	void setMouseWheelFlip(bool bFlip = true) {
 		bMouseWheelFlip = bFlip;
 	}
 
@@ -3804,15 +3590,12 @@ public:
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES
 private:
 	//--------------------------------------------------------------
-	void setAutosaveSettings(bool b)
-	{
+	void setAutosaveSettings(bool b) {
 		bAutoSaveSettings = b;
 	}
 #endif
 
-
 private:
-
 	////--------------------------------------------------------------
 	//void setAutoResize(bool b)
 	//{
@@ -3821,8 +3604,7 @@ private:
 	//}
 
 	//--------------------------------------------------------------
-	void setDockingWithLayoutPresetsEngine(bool b)
-	{
+	void setDockingWithLayoutPresetsEngine(bool b) {
 		// must call before setup
 		bDockingLayoutPresetsEngine = b;
 	}
@@ -3834,13 +3616,13 @@ private:
 	//private:
 
 	//TODO:
-	// 
+	//
 	// That simplifies the API a bit.
 	// When calling EndWindowSpecial,
 	// there's no need to pass what window/toggle/name is.
 	// Thats bc memorizes last index called on previous BeginWindowSpecial.
 	// That must coincided if API is well used!
-	//  
+	//
 	// Should remove. DEPRECATED
 	// To simplify a bit more the API workflow.
 	// Allows to omit the index argument on begin a window...
@@ -3852,7 +3634,7 @@ private:
 	//--
 
 public:
-	// Main Important 
+	// Main Important
 	// API methods to populate widgets in between,
 	// inside previously queued Special Windows!
 	// to be called on DrawImGui()
@@ -3865,34 +3647,33 @@ public:
 	bool BeginWindowSpecial(string name);
 	// If you added windows to the engine you can begin the window passing his SAME name.
 
-	bool BeginWindowSpecial(ofParameter<bool>& _bGui);
+	bool BeginWindowSpecial(ofParameter<bool> & _bGui);
 
 	//-
 
 	// End
 
-	// Notice that when you don't pass an argument or -1, 
+	// Notice that when you don't pass an argument or -1,
 	// it will use the last BeginWindowSpecial index!
 	// Use it with care!
 	void EndWindowSpecial(int index);
 	//--------------------------------------------------------------
-	void EndWindowSpecial()
-	{
+	void EndWindowSpecial() {
 		EndWindowSpecial(-1);
 	}
 
-	// Notice that preferred usage is 
-	// by passing the bool toggle or the window name, 
-	// not only like when opening/BeginWindowSpecial, 
+	// Notice that preferred usage is
+	// by passing the bool toggle or the window name,
+	// not only like when opening/BeginWindowSpecial,
 	// but also when closing/EndWindowSpecial too!
-	void EndWindowSpecial(ofParameter<bool>& _bGui);
+	void EndWindowSpecial(ofParameter<bool> & _bGui);
 
 	//--
 
 	// Rarely useful Helpers but internal too.
 	//private:
 public:
-	int getWindowSpecialIndexForToggle(ofParameter<bool>& _bGui);
+	int getWindowSpecialIndexForToggle(ofParameter<bool> & _bGui);
 	// to get the index of an special window passing the toggle
 
 	int getWindowSpecialIndexForName(string name);
@@ -3902,8 +3683,7 @@ public:
 	// that's useful when using passed as reference ui's
 	// when using multiple ui instances sharing the same object instance!
 	//--------------------------------------------------------------
-	bool isThereSpecialWindowFor(ofParameter<bool>& _bGui)
-	{
+	bool isThereSpecialWindowFor(ofParameter<bool> & _bGui) {
 		bool b = this->getWindowSpecialIndexForName(_bGui.getName()) != -1;
 		return b;
 	}
@@ -3918,8 +3698,7 @@ public:
 	{
 		if (bGui_Organizer) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-		if (this->BeginWindow(bGui_Organizer))
-		{
+		if (this->BeginWindow(bGui_Organizer)) {
 			this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			this->AddSpacingSeparated();
 
@@ -3931,26 +3710,22 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setWindowsSpecialsOrientation(bool b)
-	{
+	void setWindowsSpecialsOrientation(bool b) {
 		// Set orientation of window special alignment! horz/vert
 		windowsOrganizer.bOrientation = b;
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowAligners()
-	{
+	void drawWindowAligners() {
 		if (bGui_Aligners) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-		if (this->BeginWindow(bGui_Aligners))
-		{
+		if (this->BeginWindow(bGui_Aligners)) {
 			//this->Add(bMinimize, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 			//this->AddSpacingSeparated();
 
 			windowsOrganizer.drawWidgetsAligners(bMinimize);
 
-			if (!bMinimize && !bGui_Organizer)
-			{
+			if (!bMinimize && !bGui_Organizer) {
 				this->AddSpacing();
 				this->Add(windowsOrganizer.pad, OFX_IM_STEPPER);
 			}
@@ -3963,14 +3738,13 @@ public:
 
 	//TODO: WIP:
 	//--------------------------------------------------------------
-	struct SurfingImWindow
-	{
-		// We queue here the bool params 
+	struct SurfingImWindow {
+		// We queue here the bool params
 		// that enables the show/hide for each queued window
-		ofParameter<bool> bGui{ "_bGui", true };
+		ofParameter<bool> bGui { "_bGui", true };
 
 		//TODO: per window
-		ofParameter<bool> bAutoResize{ "Auto Resize", true };
+		ofParameter<bool> bAutoResize { "Auto Resize", true };
 
 		////TODO: could be removed...not used yet..
 		//ofParameter<bool> bExtra{ "Extra", false };
@@ -3982,11 +3756,10 @@ public:
 		//TODO:
 		// Only one special window can be flagged as master anchor,
 		// then will be force to be the first window always!
-		ofParameter<bool> bMasterAnchor{ "MasterAnchor", false };
+		ofParameter<bool> bMasterAnchor { "MasterAnchor", false };
 
 		//--------------------------------------------------------------
-		void setMasterAnchor(bool b)
-		{
+		void setMasterAnchor(bool b) {
 			bMasterAnchor = b;
 		}
 
@@ -4009,14 +3782,12 @@ public:
 
 public:
 	//--------------------------------------------------------------
-	void clearSpecialWindows()
-	{
+	void clearSpecialWindows() {
 		windows.clear();
 	}
 
 	//--------------------------------------------------------------
-	SurfingGuiModeWindows getModeSpecial() const
-	{
+	SurfingGuiModeWindows getModeSpecial() const {
 		return specialsWindowsMode;
 	}
 
@@ -4032,8 +3803,7 @@ public:
 	//ui.startup();
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(ofParameter<bool>& _bGui, bool _bAutoResize = true, bool _bMaster = false)
-	{
+	void addWindowSpecial(ofParameter<bool> & _bGui, bool _bAutoResize = true, bool _bMaster = false) {
 		SurfingImWindow win;
 		win.bGui.makeReferenceTo(_bGui);
 		win.bAutoResize = _bAutoResize;
@@ -4046,20 +3816,17 @@ public:
 		params_WindowsPanels.add(_bGui);
 
 		// Queue Toggle
-		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-		{
+		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
 			windowsOrganizer.add(_bGui);
 		}
 	}
 
 	//--------------------------------------------------------------
-	void addWindowSpecial(string name, bool _bAutoResize = true, bool _bPowered = false)
-	{
+	void addWindowSpecial(string name, bool _bAutoResize = true, bool _bPowered = false) {
 		// "Sanity" Checks. Special windows organizer mode will be forced when adding special windows.
 
 		// Special windows mode
-		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-		{
+		if (specialsWindowsMode != IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Special Windows mode was not initiated.");
 			ofLogWarning("ofxSurfingImGui") << ("Force Special Windows mode to allow add special Windows!");
 
@@ -4067,20 +3834,19 @@ public:
 		}
 
 		// Also to simplify a bit the API.
-		if (!bDoneSetup)
-		{
+		if (!bDoneSetup) {
 			ofLogWarning("ofxSurfingImGui") << (__FUNCTION__) << ("Setup was not previously done!");
 			ofLogWarning("ofxSurfingImGui") << ("Force run SurfingGuiManager::setup() now!");
 
 			setup();
 		}
 
-		ofParameter<bool> _bGui{ name, true };
+		ofParameter<bool> _bGui { name, true };
 
 		SurfingImWindow win;
 		win.bGui.makeReferenceTo(_bGui);
-		win.bAutoResize = _bAutoResize;//TODO: not used
-		win.setMasterAnchor(_bPowered);//TODO: not used
+		win.bAutoResize = _bAutoResize; //TODO: not used
+		win.setMasterAnchor(_bPowered); //TODO: not used
 
 		// Queue
 
@@ -4089,19 +3855,16 @@ public:
 
 		bWindowSpecials.push_back(_bGui);
 
-		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER)
-		{
+		if (specialsWindowsMode == IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER) {
 			windowsOrganizer.add(_bGui);
 		}
 	}
 
 	//--------------------------------------------------------------
-	string getWindowSpecialName(int index)
-	{
-		if (index > windows.size() - 1 || index == -1)
-		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued windows, " <<
-				index;
+	string getWindowSpecialName(int index) {
+		if (index > windows.size() - 1 || index == -1) {
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
+										  << "Out of range index for queued windows, " << index;
 
 			return "-1";
 		}
@@ -4124,8 +3887,7 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	void initiateWindowsOrganizer()
-	{
+	void initiateWindowsOrganizer() {
 		ofLogNotice("ofxSurfingImGui") << "initiateWindowsOrganizer()";
 		windowsOrganizer.setupInitiate();
 	}
@@ -4134,73 +3896,84 @@ public:
 
 public:
 	//private:
-		// DEPRECATED
-		// Exposed helpers to external GUIs / scope.
+	// DEPRECATED
+	// Exposed helpers to external GUIs / scope.
 
-		//--------------------------------------------------------------
-	ofParameter<bool>& getGuiToggleGlobal()
-	{
+	//--------------------------------------------------------------
+	ofParameter<bool> & getGuiToggleGlobal() {
 		// global toggle to show/hide the all panels
 		return windowsOrganizer.bGui_ShowWindowsGlobal;
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getGuiToggleLinked()
-	{
+	ofParameter<bool> & getGuiToggleLinked() {
 		// toggle to enable or disable
 		return windowsOrganizer.bLinked;
 	}
 
 	//--------------------------------------------------------------
-	void setLinkedSpecialWindows(bool b)//not working
+	void setLinkedSpecialWindows(bool b) //not working
 	{
 		//bLinked.set(b);//TODO: crashes
 		windowsOrganizer.bLinked.set(b);
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getGuiToggleOrganizer()
-	{
+	ofParameter<bool> & getGuiToggleOrganizer() {
 		return bGui_Organizer;
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getGuiToggleAligner()
-	{
+	ofParameter<bool> & getGuiToggleAligner() {
 		return bGui_Aligners;
 	}
 	//--------------------------------------------------------------
-	bool getShowWindowsGlobal() const
-	{
+	bool getShowWindowsGlobal() const {
 		return windowsOrganizer.bGui_ShowWindowsGlobal.get();
 	}
 
 	//----
 
+	// Windows shape helpers.
+	// useful to link object to the ImGui windows,
+	// as could be text boxes or OF images and raw OF drawing
+	// or othe UI panels like ofxPanel's from ofxGui.
+private:
+	ofRectangle rectangleLastWindowShape;
 public:
-	// Helpers to position ImGui windows 
+	const ofRectangle getLastWindowRectangle() {
+		return rectangleLastWindowShape;
+	}
+		//public:
+//	const ofRectangle getWindowShape() {
+//		ofRectangle r;
+//		auto p = ImGui::GetWindowPos();
+//		auto sz = ImGui::GetWindowSize();
+//		r.setPosition(p.x, p.y);
+//		r.setSize(sz.x, sz.y);
+//		return r;
+//	}
+
+public:
+	// Helpers to position ImGui windows
 	// on the main ImGui viewport / canvas:
 
 	// Call to auto place to queue. to the right of the last window populated on the viewport!
 	// Could be weird bc some window can could be populated from other scopes...
 	// This is improved using the Special Windows Engine!
 	//--------------------------------------------------------------
-	ImVec2 getTopRightWindowLast()
-	{
-		ImVec2 posTopRight{ 0, 0 };
+	ImVec2 getTopRightWindowLast() {
+		ImVec2 posTopRight { 0, 0 };
 
-		ImGuiContext* g = ImGui::GetCurrentContext();
-		ImVector<ImGuiWindow*> windows;
+		ImGuiContext * g = ImGui::GetCurrentContext();
+		ImVector<ImGuiWindow *> windows;
 
-		for (ImGuiWindow* window : g->WindowsFocusOrder)
-		{
-			if (window->WasActive)
-			{
+		for (ImGuiWindow * window : g->WindowsFocusOrder) {
+			if (window->WasActive) {
 				ImVec2 base_pos = ImGui::GetMainViewport()->Pos;
 				ImVec2 wTopRight = base_pos + window->Pos + ImVec2(window->Size.x, 0);
 
-				if (posTopRight.x < wTopRight.x)
-				{
+				if (posTopRight.x < wTopRight.x) {
 					posTopRight = ImVec2(wTopRight.x, wTopRight.y);
 				}
 			}
@@ -4209,26 +3982,24 @@ public:
 		return posTopRight;
 	}
 
-	// Set next window position after last window. 
+	// Set next window position after last window.
 	// Notice that could be chaotic bc don't know from which add-on is each ImGui populated window.
 	//TODO: working ?
 	//--------------------------------------------------------------
-	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing)
-	{
+	void setNextWindowOnViewport(ImGuiCond cond = ImGuiCond_Appearing) {
 		// can't be settled to ImGuiCond_Always bc will feedback/apply with the same window!
 		ImGui::SetNextWindowPos(getTopRightWindowLast(), cond);
 	}
 
 	// Set next window position after the window named as the passed named and with the layout type distribution.
-	// layoutType = 0 : top right 
+	// layoutType = 0 : top right
 	// layoutType = 1 : bottom left
 	// layoutType = 2 : top left //TODO: BUG
 	// layoutType = 3 : top up //TODO:
 	//TODO: add vec2 offset...
 	//--------------------------------------------------------------
 	void setNextWindowAfterWindowNamed(string nameAnchorWindow /*= "-1"*/, int layoutType = 0,
-		ImGuiCond cond = ImGuiCond_Always)
-	{
+		ImGuiCond cond = ImGuiCond_Always) {
 		//// Default for unnamed is queued after last window on screen..
 		//if (nameAnchorWindow == "-1") {
 		//	setNextWindowOnViewport();
@@ -4238,34 +4009,29 @@ public:
 		// ImGuiCond_Always is for forced linking!
 
 		ImVec2 p;
-		ImGuiContext* GImGui = ImGui::GetCurrentContext();
-		ImGuiContext& g = *GImGui;
+		ImGuiContext * GImGui = ImGui::GetCurrentContext();
+		ImGuiContext & g = *GImGui;
 		bool bready = false;
 		int _pad = windowsOrganizer.pad;
 
-		for (ImGuiWindow* window : g.WindowsFocusOrder)
-		{
-			if (window->WasActive && window->Name == nameAnchorWindow)
-			{
+		for (ImGuiWindow * window : g.WindowsFocusOrder) {
+			if (window->WasActive && window->Name == nameAnchorWindow) {
 				// To the top right
-				if (layoutType == 0)
-				{
+				if (layoutType == 0) {
 					p = window->Pos + ImVec2(window->Size.x + _pad, 0);
 					bready = true;
 				}
 
 				// To the bottom left
-				else if (layoutType == 1)
-				{
+				else if (layoutType == 1) {
 					p = window->Pos + ImVec2(0, window->Size.y);
 					bready = true;
 				}
 
-				//TODO: BUG: 
+				//TODO: BUG:
 				// we don't know the width of next window...
-				// To the top left 
-				else if (layoutType == 2)
-				{
+				// To the top left
+				else if (layoutType == 2) {
 					p = window->Pos + ImVec2(window->Size.x - _pad - window->Size.x, 0);
 					bready = true;
 				}
@@ -4287,8 +4053,7 @@ public:
 
 	// Passed anchor bGui / visible toggle to position next window next to passed window.
 	//--------------------------------------------------------------
-	void setNextWindowAfterWindowNamed(ofParameter<bool>& bGui)
-	{
+	void setNextWindowAfterWindowNamed(ofParameter<bool> & bGui) {
 		//TODO:
 		if (!bGui.get()) return;
 
@@ -4303,15 +4068,13 @@ public:
 
 	// Get the name of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
-	string getWindowSpecialLast() const
-	{
+	string getWindowSpecialLast() const {
 		return windowsOrganizer.getWindowSpecialLast();
 	}
 
 	// Get the position of the last special window (the window at the end of current drawn queue)
 	//--------------------------------------------------------------
-	glm::vec2 getWindowSpecialLastTopRight() const
-	{
+	glm::vec2 getWindowSpecialLastTopRight() const {
 		return windowsOrganizer.getWindowSpecialLastTopRight();
 	}
 
@@ -4319,94 +4082,80 @@ public:
 
 	// Get anchor from first window taken from the parent scope
 	//--------------------------------------------------------------
-	glm::vec2 getWindowSpecialLastTopLeft() const
-	{
+	glm::vec2 getWindowSpecialLastTopLeft() const {
 		return windowsOrganizer.getWindowSpecialLastTopLeft();
 	}
 
 	// Set the anchor position from the parent scope
 	//--------------------------------------------------------------
-	void setWindowSpecialFirstPosition(glm::vec2 pos)
-	{
+	void setWindowSpecialFirstPosition(glm::vec2 pos) {
 		windowsOrganizer.setWindowSpecialFirstPosition(pos);
 	}
 
-	//--	
+	//--
 
 	//--------------------------------------------------------------
-	inline ofRectangle getWindowShape()
-	{
+	inline ofRectangle getWindowShape() {
 		return ofxImGuiSurfing::getWindowShape();
 	}
 
-	//--	
+	//--
 
 	//--------------------------------------------------------------
-	float getWidth()
-	{
+	float getWidth() {
 		return ImGui::GetContentRegionAvail().x;
 	}
 
 	//--------------------------------------------------------------
-	float getWindowWidth()
-	{
+	float getWindowWidth() {
 		return ImGui::GetContentRegionAvail().x;
 	}
 
 	//--------------------------------------------------------------
-	float getWidgetsWidth(int amnt = 1)
-	{
+	float getWidgetsWidth(int amnt = 1) {
 		return ofxImGuiSurfing::getWidgetsWidth(amnt);
 	}
 
 	//--------------------------------------------------------------
-	float getWidgetsHeight()
-	{
+	float getWidgetsHeight() {
 		return ofxImGuiSurfing::getWidgetsHeight();
 	}
 
 	//--------------------------------------------------------------
-	float getFontSize()
-	{
+	float getFontSize() {
 		return ofxImGuiSurfing::getFontSize();
 	}
 
 	// LEGACY
 	//--------------------------------------------------------------
-	float getWidgetsHeightUnit()
-	{
+	float getWidgetsHeightUnit() {
 		return ofxImGuiSurfing::getWidgetsHeightUnit();
 	}
 
 	//--------------------------------------------------------------
-	float getWidgetsSpacingX()
-	{
+	float getWidgetsSpacingX() {
 		return ImGui::GetStyle().ItemSpacing.x;
 	}
 
 	//--------------------------------------------------------------
-	float getWidgetsSpacingY()
-	{
+	float getWidgetsSpacingY() {
 		return ImGui::GetStyle().ItemSpacing.y;
 	}
 
 	//--------------------------------------------------------------
-	float getWidgetHeightVerticalSlider()
-	{
+	float getWidgetHeightVerticalSlider() {
 		float h = this->getWidgetsHeightUnit() * OFX_IM_VERTICAL_AMOUNT_UNITS;
 		return h;
 	}
 
 	//--------------------------------------------------------------
-	float getWindowSpacingX()
-	{
+	float getWindowSpacingX() {
 		return ImGui::GetStyle().WindowPadding.x;
 	}
 
 	// LEGACY API
 	//--------------------------------------------------------------
-	void refreshWidgetsSizes(float& _w100, float& _w50, float& _w33, float& _w25, float& _h)
-	{
+	void refreshWidgetsSizes(float & _w100, float & _w50, float & _w33, float & _w25, float & _h) {
 		ofxImGuiSurfing::refreshImGui_WidgetsSizes(_w100, _w50, _w33, _w25, _h);
 	}
 
@@ -4420,40 +4169,34 @@ public:
 	// but we can add more from our ofApp
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameterGroup& g)
-	{
+	void addExtraParamToLayoutPresets(ofParameterGroup & g) {
 		params_LayoutsExtra.add(g);
 	}
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameter<bool>& param)
-	{
+	void addExtraParamToLayoutPresets(ofParameter<bool> & param) {
 		params_LayoutsExtra.add(param);
 	}
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameter<int>& param)
-	{
+	void addExtraParamToLayoutPresets(ofParameter<int> & param) {
 		params_LayoutsExtra.add(param);
 	}
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameter<float>& param)
-	{
+	void addExtraParamToLayoutPresets(ofParameter<float> & param) {
 		params_LayoutsExtra.add(param);
 	}
 
 	//--------------------------------------------------------------
-	void addExtraParamToLayoutPresets(ofParameter<ofRectangle>& param)
-	{
+	void addExtraParamToLayoutPresets(ofParameter<ofRectangle> & param) {
 		params_LayoutsExtra.add(param);
 	}
 
 	//--
 
 	//--------------------------------------------------------------
-	int getWindowSpecialPadSize() const
-	{
+	int getWindowSpecialPadSize() const {
 		int pad = windowsOrganizer.pad;
 		//glm::vec2 p(pad, pad);
 		return pad;
@@ -4464,13 +4207,11 @@ public:
 	// Getter for the internal show GUI toggles for each queued special Windows!
 	// Both does the same! Just to beauty method name...
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowSpecialGuiToggle(int index)
-	{
+	ofParameter<bool> & getWindowSpecialGuiToggle(int index) {
 		return getWindowSpecialVisible(index);
 	}
 	//--------------------------------------------------------------
-	string getWindowSpecialGuiToggleName(int index)
-	{
+	string getWindowSpecialGuiToggleName(int index) {
 		return getWindowSpecialVisible(index).getName();
 	}
 	//--------------------------------------------------------------
@@ -4481,22 +4222,24 @@ public:
 	//--------------------------------------------------------------
 	bool getIsWindowSpecialVisible(int index) const // return visible toggle state
 	{
-		if (windows.size() == 0) return false;
-		else if (index > windows.size() - 1 || index == -1) return false;
-		else return windows[index].bGui.get();
+		if (windows.size() == 0)
+			return false;
+		else if (index > windows.size() - 1 || index == -1)
+			return false;
+		else
+			return windows[index].bGui.get();
 	}
 
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowSpecialVisible(int index) // return bool parameter visible toggle
+	ofParameter<bool> & getWindowSpecialVisible(int index) // return bool parameter visible toggle
 	{
 		//TODO: could this be problematic?
 		// bc we are not storing the param neither returning a reference?
 
-		if (index > windows.size() - 1 || index == -1)
-		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued Special windows, " <<
-				index;
-			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
+		if (index > windows.size() - 1 || index == -1) {
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
+										  << "Out of range index for queued Special windows, " << index;
+			ofParameter<bool> b = ofParameter<bool> { "-1", false };
 			return b;
 		}
 
@@ -4505,42 +4248,35 @@ public:
 
 	// Easy populate all the Special Windows toggles. Call inside a window.
 	//--------------------------------------------------------------
-	void drawWidgetsSpecialWindowsToggles(SurfingGuiTypes style = OFX_IM_TOGGLE_ROUNDED)
-	{
-		for (size_t i = 0; i < windows.size(); i++)
-		{
+	void drawWidgetsSpecialWindowsToggles(SurfingGuiTypes style = OFX_IM_TOGGLE_ROUNDED) {
+		for (size_t i = 0; i < windows.size(); i++) {
 			this->Add(getWindowSpecialGuiToggle(i), style);
 		}
 	}
 
-	// Creates a Helper Window 
-	// with auto populated all the Special Windows toggles. 
+	// Creates a Helper Window
+	// with auto populated all the Special Windows toggles.
 	// To be called outside a window, just between the main begin/end!
 	//--------------------------------------------------------------
-	void drawWidgetsSpecialWindows(bool bFoldered)
-	{
-		if (bFoldered)
-		{
+	void drawWidgetsSpecialWindows(bool bFoldered) {
+		if (bFoldered) {
 			bool b = this->BeginTree("Windows");
-			if (b)
-			{
+			if (b) {
 				drawWidgetsSpecialWindows();
 				this->EndTree();
 			}
-		}
-		else drawWidgetsSpecialWindows();
+		} else
+			drawWidgetsSpecialWindows();
 	}
 
 	//--------------------------------------------------------------
-	void drawWidgetsSpecialWindows()
-	{
+	void drawWidgetsSpecialWindows() {
 		// use the internal from WindowsOrganizer
 		windowsOrganizer.drawWidgetsWindows(bMinimize);
 	}
 
 	//--------------------------------------------------------------
-	void drawWidgetsSpecialWindowsManager()
-	{
+	void drawWidgetsSpecialWindowsManager() {
 		//#if 0
 		//		string s = "Windows";
 		//		AddLabelBig(s);
@@ -4560,20 +4296,18 @@ public:
 		//		AddSpacingSeparated();
 		//#endif
 
-				//--
+		//--
 
-				// use the internal from WindowsOrganizer
+		// use the internal from WindowsOrganizer
 		windowsOrganizer.drawWidgetsWindows(bMinimize);
 	}
 
 	//--------------------------------------------------------------
-	void drawWindowSpecialWindows()
-	{
+	void drawWindowSpecialWindows() {
 		if (bGui_SpecialWindows) {
 			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 		}
-		if (this->BeginWindow(bGui_SpecialWindows))
-		{
+		if (this->BeginWindow(bGui_SpecialWindows)) {
 			drawWidgetsSpecialWindows();
 
 			this->EndWindow();
@@ -4581,18 +4315,15 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void setWindowSpecialToggleVisibleAllGlobal()
-	{
+	void setWindowSpecialToggleVisibleAllGlobal() {
 		windowsOrganizer.bGui_ShowWindowsGlobal = !windowsOrganizer.bGui_ShowWindowsGlobal;
 	}
 
 	//--------------------------------------------------------------
-	void setWindowSpecialToggleVisible(int index)
-	{
-		if (index > windows.size() - 1 || index == -1)
-		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued windows, " <<
-				index;
+	void setWindowSpecialToggleVisible(int index) {
+		if (index > windows.size() - 1 || index == -1) {
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
+										  << "Out of range index for queued windows, " << index;
 
 			return;
 		}
@@ -4602,58 +4333,57 @@ public:
 
 	//----
 
-	// Extra queued/added windows 
+	// Extra queued/added windows
 	// Useful to auto populate on window/menu or other places.
 
 private:
 	vector<ofParameter<bool>> windowsExtra;
-	ofParameterGroup params_WindowsPanelsExtra{ "_GuiToggles_Extra_" };//TODO
+	ofParameterGroup params_WindowsPanelsExtra { "_GuiToggles_Extra_" }; //TODO
 
 public:
 	//--------------------------------------------------------------
-	void addWindowExtra(ofParameter<bool>& _bGui)
-	{
+	void addWindowExtra(ofParameter<bool> & _bGui) {
 		windowsExtra.emplace_back(_bGui);
 		params_WindowsPanelsExtra.add(_bGui);
 	}
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowExtraGuiToggle(int index)
-	{
+	ofParameter<bool> & getWindowExtraGuiToggle(int index) {
 		return getWindowExtraVisible(index);
 	}
 	//--------------------------------------------------------------
-	ofParameter<bool>& getWindowExtraVisible(int index) // return bool parameter visible toggle
+	ofParameter<bool> & getWindowExtraVisible(int index) // return bool parameter visible toggle
 	{
 		//TODO: could this be problematic?
 		// bc we are not storing the param neither returning a reference?
 
-		if (index > windowsExtra.size() - 1 || index == -1)
-		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Out of range index for queued Extra windows, " <<
-				index;
-			ofParameter<bool> b = ofParameter<bool>{ "-1", false };
+		if (index > windowsExtra.size() - 1 || index == -1) {
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
+										  << "Out of range index for queued Extra windows, " << index;
+			ofParameter<bool> b = ofParameter<bool> { "-1", false };
 			return b;
 		}
 
 		return windowsExtra[index];
 	}
 	//--------------------------------------------------------------
-	string getWindowExtraGuiToggleName(int index)
-	{
+	string getWindowExtraGuiToggleName(int index) {
 		return getWindowExtraVisible(index).getName();
 	}
 	//--------------------------------------------------------------
 	bool getIsWindowExtraVisible(int index) const // return visible toggle state
 	{
-		if (windowsExtra.size() == 0) return false;
-		else if (index > windowsExtra.size() - 1 || index == -1) return false;
-		else return windowsExtra[index].get();
+		if (windowsExtra.size() == 0)
+			return false;
+		else if (index > windowsExtra.size() - 1 || index == -1)
+			return false;
+		else
+			return windowsExtra[index].get();
 	}
 
 	//----
 
 private:
-	// We store many internal stuff like: minimize, advanced, extra, debug states...etc.	
+	// We store many internal stuff like: minimize, advanced, extra, debug states...etc.
 	// Will return false if settings file do not exist.
 	// That happens when started for first time or after OF_APP/bin cleaning
 	// Then we can reset to some default variables and layout positions of our windows.
@@ -4661,8 +4391,8 @@ private:
 
 public:
 	// Required to save the UI internal settings. The window positions and many stuff is handled bi imgui.ini itself.
-	void saveSettings();// Saves all the settings: both settings parts: GuiManager and WindowsOrganizer
-	void save() { this->saveSettings(); }// LEGACY/alias
+	void saveSettings(); // Saves all the settings: both settings parts: GuiManager and WindowsOrganizer
+	void save() { this->saveSettings(); } // LEGACY/alias
 
 private:
 	void saveSettingsInternal();
@@ -4707,6 +4437,7 @@ private:
 public:
 	void loadLayout(string path = "");
 	void saveLayout(string path = "");
+
 private:
 	bool bFlagDoLoadImGuiLayout = false;
 	bool bFlagDoSaveImGuiLayout = false;
@@ -4725,8 +4456,8 @@ private:
 private:
 	void drawLayoutsManager();
 
-	const char* ini_to_load = NULL;
-	const char* ini_to_save = NULL;
+	const char * ini_to_load = NULL;
+	const char * ini_to_save = NULL;
 	string ini_to_load_Str;
 	string ini_to_save_Str;
 
@@ -4741,20 +4472,20 @@ private:
 	void saveLayoutPresetGroup(string path);
 	void loadLayoutPresetGroup(string path);
 
-	ofParameter<int> appLayoutIndex{ "Layout Preset", -1, -1, 0 };
+	ofParameter<int> appLayoutIndex { "Layout Preset", -1, -1, 0 };
 	// index for the selected preset. -1 is none selected, useful too.
 	int appLayoutIndex_PRE = -1;
 
-	ofParameterGroup params_Layouts{ "LayoutsPresets" };
+	ofParameterGroup params_Layouts { "LayoutsPresets" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsVisible{ "PanelsVisible" };
+	ofParameterGroup params_LayoutsVisible { "PanelsVisible" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsExtra{ "Extra Params" };
+	ofParameterGroup params_LayoutsExtra { "Extra Params" };
 	// all these params will be stored on each layout preset
 
-	ofParameterGroup params_LayoutsExtraInternal{ "Internal" };
+	ofParameterGroup params_LayoutsExtraInternal { "Internal" };
 	// add-on related params
 
 	int numPresetsDefault;
@@ -4762,19 +4493,18 @@ private:
 
 	//-
 
-	vector<ofParameter<bool>> bLayoutPresets{ "bLayoutPresets" }; // each window show toggles
-	void Changed_Params(ofAbstractParameter& e);
-	ofParameterGroup params_LayoutsPanel{ "Layouts Panel" };
+	vector<ofParameter<bool>> bLayoutPresets { "bLayoutPresets" }; // each window show toggles
+	void Changed_Params(ofAbstractParameter & e);
+	ofParameterGroup params_LayoutsPanel { "Layouts Panel" };
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER
 	ofEventListener autoSaveListener;
 #endif
 
-	void Changed_WindowsPanels(ofAbstractParameter& e);
+	void Changed_WindowsPanels(ofAbstractParameter & e);
 
 	//--------------------------------------------------------------
-	string getLayoutName(int mode)
-	{
+	string getLayoutName(int mode) {
 		string s = "";
 
 		if (mode > bLayoutPresets.size() - 1) return "-1";
@@ -4792,11 +4522,10 @@ public:
 	// that are P1-P2-P3-P4 by default.
 
 	//--------------------------------------------------------------
-	void setPresetsNames(vector<string> names)
-	{
-		if (names.size() != 4)
-		{
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n" << "Names sizes are not equals to 4";
+	void setPresetsNames(vector<string> names) {
+		if (names.size() != 4) {
+			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
+										  << "Names sizes are not equals to 4";
 		}
 
 		namesPresets.clear();
@@ -4818,6 +4547,7 @@ public:
 	// Reset Settings
 	void DrawWidgetsResetUI(bool bMenuMode = 0);
 	void resetUISettings();
+
 private:
 	bool bFlagResetUIProgramed = false;
 
@@ -4834,20 +4564,20 @@ private:
 	void setupDockingRaw();
 
 	//--------------------------------------------------------------
-	void setImGuiLayoutPresets(bool b)
-	{
+	void setImGuiLayoutPresets(bool b) {
 		bUseLayoutPresetsManager = b;
 	}
 
 	//--
 
 public:
-	void drawWindowsExtraManager(); //will be called at End(), 
+	void drawWindowsExtraManager(); //will be called at End(),
 	//to draw other internal and auto handled windows/modules.
 
 	//void drawMenu();
 	void drawMenuDocked();
 	void setUseMenu(bool bUseMenu_) { bUseMenu = bUseMenu_; }
+
 private:
 	bool bUseMenu = true;
 
@@ -4855,18 +4585,15 @@ public:
 	// Get the central space to position other panels or ui elements
 	// like video viewports or scenes previews
 	//--------------------------------------------------------------
-	ofRectangle& getRectangleCentralViewport()
-	{
+	ofRectangle & getRectangleCentralViewport() {
 		return rectangleCentralViewport;
 	}
 	//--------------------------------------------------------------
-	ofRectangle& getRectangleCentral()
-	{
+	ofRectangle & getRectangleCentral() {
 		return rectangleCentralDebug;
 	}
 	//--------------------------------------------------------------
-	ofRectangle getRectangleCentralDocking()
-	{
+	ofRectangle getRectangleCentralDocking() {
 		return rectangleCentralMAX;
 		//return rectangleCentralDebug;
 	}
@@ -4882,6 +4609,7 @@ private:
 	void drawLayoutsPanels();
 	void drawLayoutPresetsEngine();
 	void drawViewportRectangleCentralDebug();
+
 public:
 	void updateCentralRect();
 
@@ -4894,10 +4622,10 @@ private:
 	//ofParameter<bool> bModeLockControls{ "Lock C", false }; // Cant be moved. To be used to lock to free viewport scenarios
 	//ofParameter<bool> bModeLockPreset{ "Lock A", false }; // Cant be moved. To be used to lock to free viewport scenarios
 
-	//TODO: 
+	//TODO:
 	// It's a problem if .ini files are already present... We must ingore loading.
 
-	ofParameter<bool> bDebugDocking{ "Debug Docking", false };
+	ofParameter<bool> bDebugDocking { "Debug Docking", false };
 
 	//--
 
@@ -4905,10 +4633,10 @@ private:
 	// viewport updated when changes
 
 	// Used by OF. Referenced to upper corner.
-	// Needs to non be 0,0,0,0 to avoid some exceptions 
+	// Needs to non be 0,0,0,0 to avoid some exceptions
 	// (ie when passing to cameras as viewport)
 	// bc it will be not defined until docking layout is done.
-	ofRectangle rectangleCentralViewport = { 0,0,1920,1080 };
+	ofRectangle rectangleCentralViewport = { 0, 0, 1920, 1080 };
 
 	ofRectangle rectangleCentralMAX;
 	ofRectangle rectangleCentralTransposed;
@@ -4926,58 +4654,56 @@ private:
 
 public:
 	//--------------------------------------------------------------
-	void setLabelLayoutPanels(string label)
-	{
+	void setLabelLayoutPanels(string label) {
 		// Customize the app name for panels window label tittle
 		bGui_LayoutsPanels.setName(label);
 	}
 
 	//--------------------------------------------------------------
-	void setLabelLayoutMainWindow(string label)
-	{
+	void setLabelLayoutMainWindow(string label) {
 		bGui_LayoutsManager.setName(label);
 	}
 
 	//-
 
 public:
-	ofParameter<bool> bGui_TopMenuBar{ "Menu", false };
+	ofParameter<bool> bGui_TopMenuBar { "Menu", false };
 
 	//TODO: more to link with internal WindowsOrganizer
-	ofParameter<bool> bLinked{ "Link Windows", false };
+	ofParameter<bool> bLinked { "Link Windows", false };
 	// Align windows engine. liked to the internal aligner.
 
-	ofParameter<bool> bOrientation{ "Orientation", false };
+	ofParameter<bool> bOrientation { "Orientation", false };
 	// false=horizontal. true=vertical
 
-	ofParameter<bool> bGui_ShowWindowsGlobal{ "Show Windows", true };
+	ofParameter<bool> bGui_ShowWindowsGlobal { "Show Windows", true };
 	// to momentary force hide all windows or to show if visible.
 
 	//ofParameter<bool> bGui_ShowWindowsGlobal{"Show Global", true};
 	// // to force hide all windows or to show if visible
 
-	ofParameter<bool> bAlignWindowsReset{ "Reset", false };
-	ofParameter<bool> bAlignWindowsCascade{ "Cascade", false };
+	ofParameter<bool> bAlignWindowsReset { "Reset", false };
+	ofParameter<bool> bAlignWindowsCascade { "Cascade", false };
 
 private:
-	ofParameter<bool> bGui_LayoutsPanels{ "PANELS", true };
-	ofParameter<bool> bGui_LayoutsPresetsSelector{ "LAYOUTS", true };
-	ofParameter<bool> bGui_LayoutsManager{ "MANAGER", false };
+	ofParameter<bool> bGui_LayoutsPanels { "PANELS", true };
+	ofParameter<bool> bGui_LayoutsPresetsSelector { "LAYOUTS", true };
+	ofParameter<bool> bGui_LayoutsManager { "MANAGER", false };
 
-	ofParameter<bool> bAutoSave_Layout{ "Auto Save", true };
-	ofParameter<bool> bUseLayoutPresetsManager{ "Layout Engine", false };
+	ofParameter<bool> bAutoSave_Layout { "Auto Save", true };
+	ofParameter<bool> bUseLayoutPresetsManager { "Layout Engine", false };
 	// Can't be changed on runtime. cant include into settings
 
-	ofParameter<bool> bDockingLayoutPresetsEngine{ "Dock Engine", false };
+	ofParameter<bool> bDockingLayoutPresetsEngine { "Dock Engine", false };
 
-	ofParameter<bool> bSolo{ "Solo", false }; //TODO: for presets layouts engine
+	ofParameter<bool> bSolo { "Solo", false }; //TODO: for presets layouts engine
 
 	//-
 
 private:
-	ofParameterGroup params_LayoutPresetsStates{ "LayoutPanels" };
+	ofParameterGroup params_LayoutPresetsStates { "LayoutPanels" };
 
-	ofParameterGroup params_WindowsPanels{ "_GuiToggles_" };
+	ofParameterGroup params_WindowsPanels { "_GuiToggles_" };
 	//TODO:
 	// To store the gui show toggles for each added special window. ?
 	// Only for callbacks!
@@ -4992,35 +4718,32 @@ private:
 
 	//--
 
-	//TODO: 
+	//TODO:
 	// Learn to use lambda functions
 	// To callback reset
-	// Subscribe an optional reset flagging a bool to true to reset. 
+	// Subscribe an optional reset flagging a bool to true to reset.
 	// Uses the gui Reset button on the Presets Extra panel.
 	// #include <functional>
 	//std::function<void()> doCallback = nullptr
 
 private:
-	bool* bResetPtr = nullptr; // to be used for many functions like for example reseting docking layout.
+	bool * bResetPtr = nullptr; // to be used for many functions like for example reseting docking layout.
 
 public:
 	//--------------------------------------------------------------
-	void setResetPtr(bool* b)
-	{
+	void setResetPtr(bool * b) {
 		// link to an external / parent scope bool to assing to the internal reset button.
 		bResetPtr = b;
 	}
 	// LEGACY
 	//--------------------------------------------------------------
-	void setReset(bool* b)
-	{
+	void setReset(bool * b) {
 		// link to an external / parent scope bool to assing to the internal reset button.
 		bResetPtr = b;
 	}
 
 	//--------------------------------------------------------------
-	void setShowAllWindows(bool b)
-	{
+	void setShowAllWindows(bool b) {
 		//show main internal windows and panels too
 		setShowAllPanels(b);
 
@@ -5034,44 +4757,35 @@ public:
 
 	//LEGACY
 	//--------------------------------------------------------------
-	void setShowAllPanels(bool b)
-	{
-		for (int i = 0; i < windows.size(); i++)
-		{
+	void setShowAllPanels(bool b) {
+		for (int i = 0; i < windows.size(); i++) {
 			windows[i].bGui.set(b);
 		}
 	}
 	//--------------------------------------------------------------
-	void setShowAllWindowsSpecial(bool b)
-	{
-		for (int i = 0; i < windows.size(); i++)
-		{
+	void setShowAllWindowsSpecial(bool b) {
+		for (int i = 0; i < windows.size(); i++) {
 			windows[i].bGui.set(b);
 		}
 	}
 
 	//--------------------------------------------------------------
-	bool getAllWindowsSpecialAreVisible()
-	{
-		for (int i = 0; i < windows.size(); i++)
-		{
+	bool getAllWindowsSpecialAreVisible() {
+		for (int i = 0; i < windows.size(); i++) {
 			if (!windows[i].bGui) return false;
 		}
 		return true;
 	}
 	//--------------------------------------------------------------
-	bool getAllWindowsSpecialAreNotVisible()
-	{
-		for (int i = 0; i < windows.size(); i++)
-		{
+	bool getAllWindowsSpecialAreNotVisible() {
+		for (int i = 0; i < windows.size(); i++) {
 			if (windows[i].bGui) return false;
 		}
 		return true;
 	}
 
 	//--------------------------------------------------------------
-	void doRemoveDataFiles()
-	{
+	void doRemoveDataFiles() {
 		// Remove all the settings folder
 		const filesystem::path path = path_Global;
 		ofDirectory::removeDirectory(path, true, true);
@@ -5082,8 +4796,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void doSpecialWindowToggleVisible(int index)
-	{
+	void doSpecialWindowToggleVisible(int index) {
 		if (index >= windows.size()) return; //ignore
 		windows[index].bGui = !windows[index].bGui;
 	}
@@ -5092,10 +4805,10 @@ public:
 
 public:
 	HelpTextWidget helpApp; // related to the main app help/workflow.
-	HelpTextWidget helpInternal; // more related to the add-on internals but could be overwritten. 
+	HelpTextWidget helpInternal; // more related to the add-on internals but could be overwritten.
 
 private:
-	//TODO: replace help boxes 
+	//TODO: replace help boxes
 	// with new ImGui classes
 
 	// We have to independent help boxes.
@@ -5106,7 +4819,7 @@ private:
 	// Help Internal: How to use the add-on itself
 	string helpInternalText = "";
 
-	// Help App: How to use our App 
+	// Help App: How to use our App
 	string helpAppText = "";
 
 	// main help disablers
@@ -5118,8 +4831,7 @@ private:
 public:
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setEnableHelpInternal(bool b = true)
-	{
+	void setEnableHelpInternal(bool b = true) {
 		bUseHelpInternal = b;
 
 #ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
@@ -5129,16 +4841,14 @@ public:
 #endif
 
 		//TODO: workflow. set mono-spaced font
-		if (customFonts.size() > 4 && bDoneDefinedMonospacedFonts)
-		{
+		if (customFonts.size() > 4 && bDoneDefinedMonospacedFonts) {
 			helpInternal.setFontIndex(OFX_IM_FONT_DEFAULT_MONO);
 		}
 	}
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setEnableHelpApp(bool b = true)
-	{
+	void setEnableHelpApp(bool b = true) {
 		bUseHelpApp = b;
 
 #ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
@@ -5151,11 +4861,10 @@ public:
 	}
 
 	// Must be called after ui.setup();
-	// If we are using mono-spaced fonts, 
+	// If we are using mono-spaced fonts,
 	// it must be called after be have been added the mono-spaced fonts.
 	//--------------------------------------------------------------
-	void setHelpAppText(string text)
-	{
+	void setHelpAppText(string text) {
 		//if (!bUseHelpApp) setEnableHelpApp();
 		setEnableHelpApp(); //force
 		helpAppText = text;
@@ -5167,28 +4876,23 @@ public:
 		helpApp.setFontIndex(i);
 	}
 	//--------------------------------------------------------------
-	void setHelpAppName(string text)
-	{
+	void setHelpAppName(string text) {
 		helpApp.bGui.setName(text);
 	}
 	//--------------------------------------------------------------
-	void setHelpAppTitle(string text)
-	{
+	void setHelpAppTitle(string text) {
 		helpApp.setTitle(text);
 	}
 	//--------------------------------------------------------------
-	void setHelpAppEnableHeader(bool b = true)
-	{
+	void setHelpAppEnableHeader(bool b = true) {
 		helpApp.setEnableHeader(b);
 	}
 	//--------------------------------------------------------------
-	void setHelpAppEnableHeaderTittle(bool b = true)
-	{
+	void setHelpAppEnableHeaderTittle(bool b = true) {
 		helpApp.setEnableHeaderTitle(b);
 	}
 	//--------------------------------------------------------------
-	void setHelpAppEnableBlink(bool b = true)
-	{
+	void setHelpAppEnableBlink(bool b = true) {
 		helpApp.setEnableBlink(b);
 	}
 
@@ -5196,8 +4900,7 @@ public:
 
 	// Must be called after ui.setup();
 	//--------------------------------------------------------------
-	void setHelpInternalText(string text)
-	{
+	void setHelpInternalText(string text) {
 		//if (!bUseHelpInternal) setEnableHelpInternal();
 		setEnableHelpInternal(); //force
 		helpInternalText = text;
@@ -5209,23 +4912,19 @@ public:
 		helpInternal.setFontIndex(i);
 	}
 	//--------------------------------------------------------------
-	void setHelpInternalName(string text)
-	{
+	void setHelpInternalName(string text) {
 		helpInternal.bGui.setName(text);
 	}
 	//--------------------------------------------------------------
-	void setHelpInternalTitle(string text)
-	{
+	void setHelpInternalTitle(string text) {
 		helpInternal.setTitle(text);
 	}
 	//--------------------------------------------------------------
-	void setInternalEnableHelpHeader(bool b = true)
-	{
+	void setInternalEnableHelpHeader(bool b = true) {
 		helpInternal.setEnableHeader(b);
 	}
 	//--------------------------------------------------------------
-	void setHelpInternalEnableHeader(bool b = true)
-	{
+	void setHelpInternalEnableHeader(bool b = true) {
 		helpInternal.setEnableHeader(b);
 	}
 
@@ -5235,8 +4934,7 @@ public:
 
 	// Widgets to select font
 	//--------------------------------------------------------------
-	void DrawHelpWidgetsFont()
-	{
+	void DrawHelpWidgetsFont() {
 		if (!helpApp.bGui) return;
 		string s = helpApp.bGui.getName() + "##DRAWHELPWIDGETSFONT";
 		ImGui::PushID(s.c_str());
@@ -5245,8 +4943,7 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	void DrawHelpInternalWidgetsFont()
-	{
+	void DrawHelpInternalWidgetsFont() {
 		if (!helpInternal.bGui) return;
 		string s = helpInternal.bGui.getName() + "##DRAWHELPINTERNALWIDGETSFONT";
 		ImGui::PushID(s.c_str());
@@ -5291,8 +4988,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 
 	//--------------------------------------------------------------
-	inline bool AddButton(string label, ImVec2 sz)
-	{
+	inline bool AddButton(string label, ImVec2 sz) {
 		bool bReturn = false;
 
 		float _ww = sz.x;
@@ -5304,21 +5000,18 @@ public:
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButtonRawMini(string label)
-	{
+	inline bool AddButtonRawMini(string label) {
 		return ImGui::Button(label.c_str());
 	}
 
 	//--------------------------------------------------------------
-	inline bool AddButtonRaw(string label, ImVec2 sz)
-	{
+	inline bool AddButtonRaw(string label, ImVec2 sz) {
 		return ImGui::Button(label.c_str(), sz);
 	}
 
 	//--------------------------------------------------------------
 	inline bool AddButton(string label, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
-		bool bSameLine = false, int spacing = -1)
-	{
+		bool bSameLine = false, int spacing = -1) {
 		// fixes
 
 		//--
@@ -5333,8 +5026,7 @@ public:
 		//TODO: BUG: here we don't have access to manager!
 		//float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
 
-		switch (type)
-		{
+		switch (type) {
 		case OFX_IM_DEFAULT:
 		case OFX_IM_BUTTON_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h);
@@ -5370,7 +5062,7 @@ public:
 
 			// Adding more styles
 
-			// Border 
+			// Border
 
 		case OFX_IM_BUTTON_SMALL_BORDER:
 			bReturn = ofxImGuiSurfing::AddBigButton(label, _ww, _h, true);
@@ -5436,8 +5128,7 @@ public:
 			if (bMouseWheel && !bDisableMouseWheelOnButtonsToggles) bReturn |= GetMouseWheel();
 			break;
 
-		default:
-		{
+		default: {
 			ofLogWarning(__FUNCTION__) << "Could not create passed style for that widget button!";
 			ofLogWarning(__FUNCTION__) << "Widget is ignored and not drawn!";
 			break;
@@ -5451,8 +5142,7 @@ public:
 		// - Final y spacing.
 
 		if (bSameLine) ImGui::SameLine();
-		if (spacing != -1 && spacing != 0)
-		{
+		if (spacing != -1 && spacing != 0) {
 			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 		}
 
@@ -5468,8 +5158,7 @@ public:
 	// To speed up populate widgets without requiring to create ofParameters first.
 	// A toggle passing a name and a boolean to show and get the boolean state.
 	//--------------------------------------------------------------
-	inline bool AddToggle(string label, bool& bState, ImVec2 sz)
-	{
+	inline bool AddToggle(string label, bool & bState, ImVec2 sz) {
 		bool bReturn = false;
 
 		float _ww = sz.x;
@@ -5495,9 +5184,8 @@ public:
 	//}
 
 	//--------------------------------------------------------------
-	inline bool AddToggle(string label, bool& bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
-		bool bSameLine = false, int spacing = -1)
-	{
+	inline bool AddToggle(string label, bool & bState, SurfingGuiTypes type = OFX_IM_DEFAULT, int amtPerRow = 1,
+		bool bSameLine = false, int spacing = -1) {
 		bool bReturn = false;
 
 		float _h = getWidgetsHeightUnit();
@@ -5507,12 +5195,10 @@ public:
 		//float _ww = ofxImGuiSurfing::getWidgetsWidth(amtPerRow);//fix
 		float _ww = _ui.getWidgetWidthOnRowPerAmount(amtPerRow); //original
 
-		switch (type)
-		{
+		switch (type) {
 		case OFX_IM_CHECKBOX:
 			bReturn = ImGui::Checkbox(label.c_str(), &bState);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5522,8 +5208,7 @@ public:
 		case OFX_IM_BUTTON_SMALL:
 		case OFX_IM_TOGGLE_SMALL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5532,8 +5217,7 @@ public:
 		case OFX_IM_BUTTON:
 		case OFX_IM_TOGGLE:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.25f);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5542,8 +5226,7 @@ public:
 		case OFX_IM_BUTTON_MEDIUM:
 		case OFX_IM_TOGGLE_MEDIUM:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 1.5f);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5552,8 +5235,7 @@ public:
 		case OFX_IM_BUTTON_BIG:
 		case OFX_IM_TOGGLE_BIG:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 2);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5562,8 +5244,7 @@ public:
 		case OFX_IM_BUTTON_BIG_XXL:
 		case OFX_IM_TOGGLE_BIG_XXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 3);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5572,8 +5253,7 @@ public:
 		case OFX_IM_BUTTON_BIG_XXXL:
 		case OFX_IM_TOGGLE_BIG_XXXL:
 			bReturn = ofxImGuiSurfing::AddBigToggle(label, bState, _ww, _h * 4);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5587,8 +5267,7 @@ public:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
 				ImVec2(1.15f * _h, 1.15f * (2 / 3.f) * _h));
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5598,8 +5277,7 @@ public:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_SMALL: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState,
 				ImVec2(1.35f * _h, 1.35f * (2 / 3.f) * _h));
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5608,8 +5286,7 @@ public:
 		case OFX_IM_TOGGLE_ROUNDED:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState);
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5618,8 +5295,7 @@ public:
 		case OFX_IM_TOGGLE_ROUNDED_MEDIUM:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2 * _h, 2 * (2 / 3.f) * _h));
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5628,8 +5304,7 @@ public:
 		case OFX_IM_TOGGLE_ROUNDED_BIG:
 		case OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG: // LEGACY
 			bReturn = ofxImGuiSurfing::AddToggleRoundedButton(label, bState, ImVec2(2.5f * _h, 2.5f * (2 / 3.f) * _h));
-			if (!bDisableMouseWheelOnButtonsToggles)
-			{
+			if (!bDisableMouseWheelOnButtonsToggles) {
 				if (bMouseWheel) AddMouseWheel(bState);
 				if (bMouseWheel) bReturn |= GetMouseWheel();
 			}
@@ -5650,8 +5325,7 @@ public:
 		// - Final y spacing.
 
 		if (bSameLine) ImGui::SameLine();
-		if (spacing != -1 && spacing != 0)
-		{
+		if (spacing != -1 && spacing != 0) {
 			ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 		}
 
@@ -5662,8 +5336,8 @@ public:
 
 	// Bundle
 
-	// A bundle of different widgets 
-	// but for a single ofParam: int or float. 
+	// A bundle of different widgets
+	// but for a single ofParam: int or float.
 	/*
 	template<typename ParameterType>
 	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false) {
@@ -5672,25 +5346,25 @@ public:
 	*/
 	//--------------------------------------------------------------
 	template <typename ParameterType>
-	bool AddComboBundle(ofParameter<ParameterType>& p, bool bMinimized = false)
-	{
+	bool AddComboBundle(ofParameter<ParameterType> & p, bool bMinimized = false) {
 		string name = p.getName();
 
 		bool bReturn = false;
 
-		const auto& t = typeid(ParameterType);
+		const auto & t = typeid(ParameterType);
 		const bool isFloat = (t == typeid(float));
 		const bool isInt = (t == typeid(int));
 
-		if (!isFloat && !isInt)
-		{
+		if (!isFloat && !isInt) {
 			ofLogWarning("ofxSurfingImGui") << "AddComboBundle: ofParam type named " + name + " is not a Float or Int";
 			return false;
 		}
 
 		// Label
-		if (!bMinimized) this->AddLabelHuge(p.getName(), true, true);
-		else this->AddLabelBig(p.getName(), true, true);
+		if (!bMinimized)
+			this->AddLabelHuge(p.getName(), true, true);
+		else
+			this->AddLabelBig(p.getName(), true, true);
 
 		// Stepper
 		bReturn += this->Add(p, OFX_IM_STEPPER_NO_LABEL);
@@ -5703,19 +5377,19 @@ public:
 		ImGui::PushButtonRepeat(true); // -> pushing to repeat trigs
 		{
 			float step = 0;
-			if (isInt) step = 1;
-			else if (isFloat) step = (p.getMax() - p.getMin()) / 100.f;
+			if (isInt)
+				step = 1;
+			else if (isFloat)
+				step = (p.getMax() - p.getMin()) / 100.f;
 
-			if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			{
+			if (this->AddButton("<", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2)) {
 				p -= step;
 				p = ofClamp(p, p.getMin(), p.getMax());
 				bReturn += true;
 			}
 			ImGui::SameLine();
 
-			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2))
-			{
+			if (this->AddButton(">", bMinimized ? OFX_IM_BUTTON_MEDIUM : OFX_IM_BUTTON_BIG, 2)) {
 				p += step;
 				p = ofClamp(p, p.getMin(), p.getMax());
 				bReturn += true;
@@ -5723,8 +5397,7 @@ public:
 		}
 		ImGui::PopButtonRepeat();
 
-		if (!bMinimized)
-		{
+		if (!bMinimized) {
 			// Knob
 			//this->Add(p, OFX_IM_KNOB_DOTKNOB);
 			float w = this->getWidgetsWidth(1);
@@ -5736,8 +5409,7 @@ public:
 			bReturn += ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_DOTKNOB, w, OFX_IM_FORMAT_KNOBS, flags);
 
 			// Mouse
-			if (this->bMouseWheel)
-			{
+			if (this->bMouseWheel) {
 				ofxImGuiSurfing::AddMouseWheel(p, this->bMouseWheelFlip.get());
 				//ofxImGuiSurfing::GetMouseWheel();
 				ofxImGuiSurfing::AddMouseClickRightReset(p);
@@ -5754,51 +5426,42 @@ public:
 
 	// Combos
 
-	inline bool AddCombo(ofParameter<int> pIndex, std::vector<string> fileNames, bool bRaw = false)
-	{
+	inline bool AddCombo(ofParameter<int> pIndex, std::vector<string> fileNames, bool bRaw = false) {
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	inline bool AddCombo(ofParameter<size_t> pIndex, std::vector<string> fileNames, bool bRaw = false)
-	{
+	inline bool AddCombo(ofParameter<size_t> pIndex, std::vector<string> fileNames, bool bRaw = false) {
 		return ofxImGuiSurfing::AddCombo(pIndex, fileNames, bRaw);
 	}
 
-	inline bool AddComboButton(ofParameter<int>& pIndex, std::vector<string>& fileNames)
-	{
+	inline bool AddComboButton(ofParameter<int> & pIndex, std::vector<string> & fileNames) {
 		return ofxImGuiSurfing::AddComboButton(pIndex, fileNames);
 	}
 
-	inline bool AddComboButtonDual(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
-	{
+	inline bool AddComboButtonDual(ofParameter<int> & pIndex, std::vector<string> & fileNames, bool bCycled = false) {
 		return ofxImGuiSurfing::AddComboButtonDual(pIndex, fileNames, bCycled);
 	}
 
-	inline bool AddComboButtonDualLefted(ofParameter<int>& pIndex, std::vector<string>& fileNames, bool bCycled = false)
-	{
+	inline bool AddComboButtonDualLefted(ofParameter<int> & pIndex, std::vector<string> & fileNames, bool bCycled = false) {
 		return ofxImGuiSurfing::AddComboButtonDualLefted(pIndex, fileNames, bCycled);
 	}
 
-	inline bool AddComboButtonDualCenteredNames(ofParameter<int>& pIndex, std::vector<string>& fileNames,
-		bool bCycled = false)
-	{
+	inline bool AddComboButtonDualCenteredNames(ofParameter<int> & pIndex, std::vector<string> & fileNames,
+		bool bCycled = false) {
 		return ofxImGuiSurfing::AddComboButtonDualCenteredNames(pIndex, fileNames, bCycled);
 	}
 
-	inline int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL)
-	{
+	inline int AddComboArrows(SurfingGuiTypes style = OFX_IM_BUTTON_SMALL) {
 		return ofxImGuiSurfing::AddComboArrows(style);
 	}
 
-	inline void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false)
-	{
+	inline void AddComboArrows(ofParameter<int> paramIndex, SurfingGuiTypes style = OFX_IM_BUTTON_SMALL, bool cycled = false) {
 		return ofxImGuiSurfing::AddComboArrows(paramIndex, style, cycled);
 	}
 
 	//----
 
-	inline void AddComboFontsSelector(ofParameter<int>& index)
-	{
+	inline void AddComboFontsSelector(ofParameter<int> & index) {
 		ofxImGuiSurfing::AddComboButtonDualLefted(index, namesCustomFonts);
 	}
 
@@ -5808,25 +5471,21 @@ public:
 		ofxImGuiSurfing::AddProgressBar(prc);
 	}
 
-	inline void AddMatrixClicker(ofParameter<int>& _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "")
-	{
+	inline void AddMatrixClicker(ofParameter<int> & _index, bool bResponsive = true, int amountBtRow = 3, const bool bDrawBorder = false, float __h = -1, string toolTip = "") {
 		ofxImGuiSurfing::AddMatrixClicker(_index, bResponsive, amountBtRow, bDrawBorder, __h, toolTip);
 	}
-
 };
 
 //----
 
 // ImGui Tabs Helpers
 
-//TODO: Natively ImGui don not support tabs customization. 
+//TODO: Natively ImGui don not support tabs customization.
 // The theme styles easy push/pop method will affects contained widgets!
 // https://github.com/ocornut/imgui/issues/3497
 
-class SurfingTabsManager
-{
+class SurfingTabsManager {
 public:
-
 	//------------------------------------------------------------------------------------------
 	SurfingTabsManager() {
 		// moved to allow getting the theme style, bc we will call this after ImGui context has been created!
@@ -5845,7 +5504,7 @@ public:
 		customItemInnerSpacing = glm::ivec2(3, 10);
 		customItemSpacing = glm::ivec2(0, 10);
 		//customTabRounding = 5;
-		customTabRounding = ImGui::GetStyle().FrameRounding;//get from theme same from buttons
+		customTabRounding = ImGui::GetStyle().FrameRounding; //get from theme same from buttons
 		customLineThickness = 1;
 		bRawImGui = false;
 	}
@@ -5888,25 +5547,27 @@ public:
 
 public:
 	//------------------------------------------------------------------------------------------
-	void setUiPtr(SurfingGuiManager* _ui)//only required to use the drawEditor!
+	void setUiPtr(SurfingGuiManager * _ui) //only required to use the drawEditor!
 	{
 		ui = _ui;
 	}
+
 private:
-	SurfingGuiManager* ui = nullptr;
+	SurfingGuiManager * ui = nullptr;
 	bool bDoneSetup = false;
+
 private:
 	int active_tab = 0;
 	string current_tab = "";
 
 	// customization
-public://TODO:
-	ofParameter<glm::ivec2> customFramePadding{ "FramePadding", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<glm::ivec2> customItemInnerSpacing{ "ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<glm::ivec2> customItemSpacing{ "ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
-	ofParameter<int> customTabRounding{ "TabRounding", 0, 0, 12 };
-	ofParameter<int> customLineThickness{ "LineThickness", 0, 0, 5 };
-	ofParameter<bool> bRawImGui{ "Raw ImGui", false };
+public: //TODO:
+	ofParameter<glm::ivec2> customFramePadding { "FramePadding", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+	ofParameter<glm::ivec2> customItemInnerSpacing { "ItemInnerSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+	ofParameter<glm::ivec2> customItemSpacing { "ItemSpacing", glm::ivec2(0), glm::ivec2(0), glm::ivec2(20) };
+	ofParameter<int> customTabRounding { "TabRounding", 0, 0, 12 };
+	ofParameter<int> customLineThickness { "LineThickness", 0, 0, 5 };
+	ofParameter<bool> bRawImGui { "Raw ImGui", false };
 
 private:
 	ImVec2 themeFramePadding;
@@ -5916,8 +5577,7 @@ private:
 
 public:
 	//------------------------------------------------------------------------------------------
-	bool BeginTabBar(string id = "##TABBAR")
-	{
+	bool BeginTabBar(string id = "##TABBAR") {
 		if (!bDoneSetup) {
 			resetDefaults();
 			bDoneSetup = true;
@@ -5934,7 +5594,7 @@ public:
 		flags += ImGuiTabBarFlags_NoTooltip;
 
 		// Store theme style
-		ImGuiStyle& style = ImGui::GetStyle();
+		ImGuiStyle & style = ImGui::GetStyle();
 		themeFramePadding = style.FramePadding;
 		themeItemInnerSpacing = style.ItemInnerSpacing;
 		themeItemSpacing = style.ItemSpacing;
@@ -5984,7 +5644,7 @@ public:
 		}
 
 		// Pop style
-		ImGuiStyle& style = ImGui::GetStyle();
+		ImGuiStyle & style = ImGui::GetStyle();
 		style.FramePadding = themeFramePadding;
 		style.ItemInnerSpacing = themeItemInnerSpacing;
 		style.ItemSpacing = themeItemSpacing;
@@ -5995,8 +5655,7 @@ public:
 	}
 
 	//------------------------------------------------------------------------------------------
-	inline bool BeginTabItem(const string& tabName)
-	{
+	inline bool BeginTabItem(const string & tabName) {
 		if (bRawImGui) {
 			bool bOpen = ImGui::BeginTabItem(tabName.c_str());
 			if (bOpen) current_tab = tabName;
@@ -6006,7 +5665,7 @@ public:
 		//--
 
 		// Push style
-		ImGuiStyle& style = ImGui::GetStyle();
+		ImGuiStyle & style = ImGui::GetStyle();
 		style.FramePadding = ImVec2(customFramePadding.get());
 		style.ItemInnerSpacing = ImVec2(customItemInnerSpacing.get());
 		style.ItemSpacing = ImVec2(customItemSpacing.get());
@@ -6017,8 +5676,7 @@ public:
 		bool isActive = (current_tab == tabName);
 
 		// Customize colors
-		if (!isActive)
-		{
+		if (!isActive) {
 			static float a = 0.3f;
 			static ImVec4 c1 = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 			static ImVec4 c2 = ImVec4(c1.x, c1.y, c1.z, c1.w * a);
@@ -6030,15 +5688,13 @@ public:
 		}
 		bool bOpen = ImGui::BeginTabItem(tabName.c_str());
 
-		if (!isActive)
-		{
+		if (!isActive) {
 			ImGui::PopStyleColor(); // text color
 
 			//ImGui::PopStyleColor(); // tab color
 		}
 
-		if (bOpen)
-		{
+		if (bOpen) {
 			current_tab = tabName;
 
 			// Pop style

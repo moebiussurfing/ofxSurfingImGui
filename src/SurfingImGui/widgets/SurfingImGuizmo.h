@@ -13,6 +13,8 @@
 	SurfingImGuizmo surfingImGuizmo;
 
 	//.cpp
+	surfingImGuizmo.setup("NodeGizmo");
+
 	// imgui begin/end
 	surfingImGuizmo.drawImGuiUser(ui);//controls in an imgui window
 	surfingImGuizmo.drawImGuizmo(camera, &node);//widget
@@ -51,20 +53,37 @@ public:
 	SurfingImGuizmo() { setup(); }
 	~SurfingImGuizmo() { }
 
-	vector<string> namesTools { "Translate", "Scale", "Rotate" };
+	ofParameterGroup parameters;
+	ofParameter<bool> bEnableShow { "b", true };
 	ofParameter<int> indexTool { "Tool", 0, 0, 2 };
+	vector<string> namesTools { "Translate", "Scale", "Rotate" };
 	ofParameter<bool> mode { "Mode", true };
-	ofParameter<bool> bEnableShow { "Gizmo", true };
 	ofParameter<bool> bKeys { "Keys", true };
 
 private:
+	bool bDoneSetup = false;
 	ImGuizmo::OPERATION op_;
 	ImGuizmo::MODE mode_;
 
 	ofEventListener listenerIndex;
 	ofEventListener listenerMode;
+	string name = "";
+
+public:
+	void setup(string name_) {
+		name = name_;
+		setup();
+	}
 
 	void setup() {
+		if (name == "") name = "Gizmo";
+		bEnableShow.setName(name);
+
+		parameters.add(bEnableShow);
+		parameters.add(indexTool);
+		parameters.add(mode);
+		parameters.add(bKeys);
+
 		op_ = ImGuizmo::TRANSLATE;
 		listenerIndex = indexTool.newListener([this](int & i) {
 			ofLogNotice("SurfingGuizmo") << "indexTool: " << i;
@@ -80,26 +99,35 @@ private:
 				break;
 			}
 		});
+
 		listenerMode = mode.newListener([this](bool & b) {
 			ofLogNotice("SurfingGuizmo") << "mode: " << (b ? "Local" : "Global");
 		});
+
+		bDoneSetup = true;
 	}
 
 public:
 	void drawImGuiUser(ofxSurfingGui & ui) {
+		if (!bDoneSetup) setup();
+
 		//ui.AddLabelBig("Node Gizmo");
 		ui.Add(bEnableShow, OFX_IM_TOGGLE_ROUNDED);
-		ui.AddSpacing();
+
 		if (bEnableShow) {
+			ui.AddSpacing();
 			//ui.AddComboButton(indexTool, namesTools);//TODO: missing button
 			ui.AddCombo(indexTool, namesTools);
+			if (ui.AddButton("Next", OFX_IM_BUTTON_SMALL)) {
+				nextTool();
+			}
 			ui.Add(bKeys);
 			string s = "";
 			if (bKeys) {
 				s += "w: Translate\n";
 				s += "e: Scale\n";
 				s += "r: Rotate\n";
-				s += "Tab: Next Tool\n";
+				s += "Tab: Next\n";
 				s += "Space: World/Local";
 			}
 			ui.AddTooltip(s);
@@ -108,6 +136,8 @@ public:
 
 public:
 	bool drawImGuizmo(ofCamera * camera, ofNode * node) {
+		if (!bDoneSetup) setup();
+
 		if (camera == nullptr) return false;
 		if (!bEnableShow) return false;
 		ImGuizmo::BeginFrame();
@@ -117,6 +147,8 @@ public:
 
 public:
 	void keyPressed(int key) {
+		if (!bDoneSetup) setup();
+
 		if (!bKeys) return;
 		switch (key) {
 		case 'w':
@@ -131,16 +163,20 @@ public:
 			//op_ = ImGuizmo::ROTATE;
 			indexTool.set(2);
 			break;
-		case OF_KEY_TAB: {
-			int t = indexTool;
-			t++;
-			if (t > indexTool.getMax()) t = 0;
-			indexTool.set(t);
-		} break;
+		case OF_KEY_TAB:
+			nextTool();
+			break;
 		case ' ':
 			//mode_ = mode_ == ImGuizmo::LOCAL ? ImGuizmo::WORLD : ImGuizmo::LOCAL;
 			mode = !mode;
 			break;
 		}
+	}
+
+	void nextTool() {
+		int t = indexTool;
+		t++;
+		if (t > indexTool.getMax()) t = 0;
+		indexTool.set(t);
 	}
 };
