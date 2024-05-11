@@ -171,7 +171,7 @@ namespace ofxImGuiSurfing
 	//--
 
 	//// macOS fix
-	//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
+	#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
 
 	//--
 

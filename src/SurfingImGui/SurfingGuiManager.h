@@ -1439,6 +1439,11 @@ private:
 	bool bDoneDefinedMonospacedFonts = false;
 
 public:
+	bool isDoneDefinedMonospacedFonts() {
+		return bDoneDefinedMonospacedFonts;
+	}
+
+public:
 	vector<int> fontsMonospacedIndexes; // queue the positions of the four mono fonts
 	bool isFontsMonospacedDefined() {
 		return bDoneDefinedMonospacedFonts;
@@ -2082,11 +2087,13 @@ public:
 
 	// Fonts Runtime Management
 
+public:
+	vector<ImFont *> customFonts;
+	vector<string> namesCustomFonts;
+
 private:
 	ImFont * customFont = nullptr;
-	vector<ImFont *> customFonts;
 	bool bFlagIgnoreNextPopStyleFont = false; //this flag will be useful when no fonts added by mistake!
-	vector<string> namesCustomFonts;
 	vector<string> pathsCustomFonts;
 
 public:
@@ -3939,20 +3946,11 @@ public:
 	// as could be text boxes or OF images and raw OF drawing
 	// or othe UI panels like ofxPanel's from ofxGui.
 private:
-	ofRectangle rectangleLastWindowShape;
+	ofRectangle rectangleLastWindowShape; //to store the last window shape as I don't know if ImGui stores this...
 public:
 	const ofRectangle getLastWindowRectangle() {
 		return rectangleLastWindowShape;
 	}
-		//public:
-//	const ofRectangle getWindowShape() {
-//		ofRectangle r;
-//		auto p = ImGui::GetWindowPos();
-//		auto sz = ImGui::GetWindowSize();
-//		r.setPosition(p.x, p.y);
-//		r.setSize(sz.x, sz.y);
-//		return r;
-//	}
 
 public:
 	// Helpers to position ImGui windows
