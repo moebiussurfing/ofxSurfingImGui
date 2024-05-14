@@ -2276,25 +2276,27 @@ private:
 			ui->AddLabelBig(s);
 			ui->AddSpacing();
 
-			float w = ui->getWidgetWidthFromIndex();
+			//ui->AddCombo(index, names);
 
+			float w = ui->getWidgetWidthFromIndex();
 			ImGui::PushItemWidth(w);
 			ui->AddCombo(index, names, true);
 			ImGui::PopItemWidth();
 
-			// responsive
-			if ((ui->getWindowWidth() > 200) && (index == 0 || index == 1 || index == 2)) {
-				ImGui::SameLine();
-			}
+			//// responsive
+			//if ((ui->getWindowWidth() > 200) && (index == 0 || index == 1 || index == 2)) {
+			//	ImGui::SameLine();
+			//}
 
-			float w3;
-			if (ui->getWindowWidth() < 200)
-				w3 = ImGui::GetContentRegionAvail().x;
-			else
-				w3 = 200;
-			ImGui::PushItemWidth(w3);
+			//float w3;
+			//if (ui->getWindowWidth() < 200)
+			//	w3 = ImGui::GetContentRegionAvail().x;
+			//else
+			//	w3 = 200;
+			//ImGui::PushItemWidth(w3);
+			//ui->Add(ui->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
+			//ImGui::PopItemWidth();
 			ui->Add(ui->globalScale, OFX_IM_STEPPER_RAW_NO_LABEL);
-			ImGui::PopItemWidth();
 
 			s = "Global Scale is applied\n";
 			s += "to all the UI context.\n";
