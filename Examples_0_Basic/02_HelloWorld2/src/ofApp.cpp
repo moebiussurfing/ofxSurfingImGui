@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofSetWindowPosition(-1920, 26);
+	//ofSetWindowPosition(-1920, 26);
 
 	names.clear();
 	names.push_back("zero");
@@ -51,7 +51,7 @@ ABOUT THE API:
 
 	ui.setHelpAppTitle("HELP 02_HelloWorld2");//TODO
 	ui.setHelpAppText(s);
-	ui.setHelpAppFontIndex(2);//bigger font
+	ui.setHelpAppFontStyle(2);//bigger font
 
 	//--
 
@@ -146,7 +146,7 @@ void ofApp::drawGuiMain()
 		ui.AddLogToggle();
 		ui.AddNotifierToggle();
 		ui.AddNotifierToggleEditor();
-		ui.Add(ui.bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
+		//ui.Add(ui.bGui_TopMenuBar, OFX_IM_TOGGLE_ROUNDED);
 		ui.AddSpacingSeparated();
 		ui.AddMinimizerToggle();
 		ui.AddSpacing();
@@ -396,17 +396,9 @@ void ofApp::drawGuiCombos()
 		ui.AddSpacing();
 
 		string s = "hello";
-#if 0
+
 		ui.AddCombo(index, names);
 		ui.AddTooltipHelp(s);
-#else
-		//ui.PushWidth(0.5f); // window percent
-		ImGui::PushItemWidth(60); // pixels
-		ui.AddCombo(index, names, true); // use raw
-		ui.PopWidth();
-		ui.SameLine();
-		ui.AddTooltipHelp(s);
-#endif
 
 		ui.EndWindow();
 	}
