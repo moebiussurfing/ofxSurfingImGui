@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-#if 1
+#if 0
 	SurfingGui::setWindowShape(-1);//left monitor
 #endif
 	setupImGui();

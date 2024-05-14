@@ -110,7 +110,8 @@ namespace ImGuiEx {
 		ImGui::ItemSize(total_bb, style.FramePadding.y);
 		if (!ImGui::ItemAdd(total_bb, 0, &frame_bb))
 			return status;
-		const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+		//const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+		const bool hovered = ImGui::ItemHoverable(frame_bb, id,ImGuiActivateFlags_None);
 
 		// Bg
 		ImGui::RenderFrame(
