@@ -92,15 +92,12 @@ void ofApp::draw()
 			ui.AddSpacingBigSeparated();
 
 			ui.AddHelpInternalToggle();
-
 			ui.AddHelpToggle();
 			ui.AddSpacing();
+
 			ui.DrawHelpWidgetsFont();
 
-			ui.AddSpacingBigSeparated();
-
 			ui.DrawWidgetsGlobalScale();
-			ui.AddSpacingBigSeparated();
 
 			//--
 
@@ -111,12 +108,10 @@ void ofApp::draw()
 			// Check the state of the internal toggle minimize
 			if (ui.isMaximized())
 			{
-				// This is an ofParameterGroup
-				// contained params are populated 
+				// This is an ofParameterGroup.
+				// Contained params are populated 
 				// as their default widgets styles
-				ui.PushGlobalScale(2.0);
 				ui.AddGroup(params, SurfingGuiGroupStyle_Collapsed);
-				ui.PopGlobalScale();
 
 				// This is a separator line 
 				ui.AddSpacingBigSeparated();
@@ -178,7 +173,7 @@ void ofApp::draw()
 
 				// Some useful methods to help a bit on align
 
-				if (vIn > 0 && vIn < 0.1)
+				if (vIn >= 0 && vIn < 0.1)
 				{
 					// Align left Default 
 				}
@@ -191,7 +186,7 @@ void ofApp::draw()
 						ofxImGuiSurfing::AddSpacingToRightAlign(sz + w / 2);
 					}
 				}
-				else if (vIn < 1) {
+				else if (vIn <= 1) {
 					// Align right
 					{
 						float sz = ImGui::CalcTextSize(">").x;
