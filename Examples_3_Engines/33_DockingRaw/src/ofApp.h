@@ -12,6 +12,8 @@
 	- We can reset layout to a default layout.
 	- We can save/load the layout.
 	- We can randomize the layout.
+	- we can use the free zone / available viewport space to draw a 3d scene.
+	- Menus are automatically filled with the special windows.
 
 	TODO
 

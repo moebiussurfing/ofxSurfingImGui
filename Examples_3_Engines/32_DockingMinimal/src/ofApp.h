@@ -8,14 +8,11 @@
 	Also to learn how the top menu is handled, with some automatic workflow,
 		adding some windows visible toggles on there.
 	Note that:
-	- Layout is persistent.
-	- We can reset layout to a default layout.
+	- Layout is persistent on exit and startup app.
+	- Menus are automatically filled with the special windows.
 
 */
 
-// Uncomment/enable this line
-// to show the minimal expression of a simple docking workflow.
-// without the reset and save/load methods.
 
 #include "ofxSurfingImGui.h"
 

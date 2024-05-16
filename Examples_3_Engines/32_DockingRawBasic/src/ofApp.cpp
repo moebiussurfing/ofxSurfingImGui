@@ -23,6 +23,8 @@ void ofApp::setupImGui()
 	// is mandatory to pass an argument: 
 	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
 
+	//--
+
 	string s = "Shift drag windows \nto different windows zones to dock.";
 	ui.setHelpAppText(s);
 	ui.setEnableHelpInternal();

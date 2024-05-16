@@ -2555,7 +2555,7 @@ void SurfingGuiManager::Begin() {
 
 	//----
 
-#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 	//workflow
 	if (bModeAutoDocking) {
 		this->BeginDocking();
@@ -2678,12 +2678,12 @@ void SurfingGuiManager::End() {
 
 		//--
 
-#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
-	//workflow
-	if (!bModeAutoDocking) {
-		if (bDoneBeginDocking && bDoneEndDocking) bModeAutoDocking = true;
-	}
-#endif
+//#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
+//	//workflow
+//	if (!bModeAutoDocking) {
+//		if (bDoneBeginDocking && bDoneEndDocking) bModeAutoDocking = true;
+//	}
+//#endif
 }
 
 //--
@@ -3203,7 +3203,7 @@ void SurfingGuiManager::BeginDocking() {
 
 	updateCentralRect();
 
-#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 	bDoneBeginDocking = true;
 #endif
 }
@@ -3241,7 +3241,7 @@ void SurfingGuiManager::EndDocking() {
 	}
 	*/
 
-#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 	bDoneEndDocking = true;
 #endif
 }

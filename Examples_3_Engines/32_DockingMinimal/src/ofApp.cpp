@@ -22,7 +22,11 @@ void ofApp::setupImGui()
 	// To enable the "raw docking" workflow
 	// is mandatory to pass an argument: 
 	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
-	
+
+	ui.setAutoDockingMode(true);
+
+	//--
+
 	string s = "Shift drag windows \nto different windows zones to dock.";
 	ui.setHelpAppText(s);
 
@@ -53,7 +57,6 @@ void ofApp::setupImGui()
 	//TODO
 	// Optional
 	//ui.setUseMenu(false);//disable top menu
-	////ui.setUseMenu(true);//enable top menu
 
 	//--
 
@@ -80,13 +83,14 @@ void ofApp::drawImGui()
 
 	ui.Begin();
 	{
+#ifndef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 		// 1. Docking magic
-
 		// Not required to call manually when we don't need to use some docking stuff,
 		// like reseting or hard coding a layout by code.
-		// So it's auto handled internally also! TODO
+		// So it's auto handled internally also! 
 		ui.BeginDocking();
 		ui.EndDocking();
+#endif
 
 		//--
 

@@ -48,7 +48,7 @@
 // Required disabled to allow overlay on windows capturer app.
 
 // DOCKING HELPERS
-//#define SURFING__DOCKING_WORKFLOW_HANDLER
+#define SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 
 //----
 

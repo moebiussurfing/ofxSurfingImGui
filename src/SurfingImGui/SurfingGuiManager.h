@@ -4423,10 +4423,16 @@ public:
 	void BeginDocking();
 	void EndDocking();
 
-#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 private:
 	bool bModeAutoDocking = false;
 
+public:
+	void setAutoDockingMode(bool b) {
+		bModeAutoDocking = b;
+	}
+
+private:
 	//TODO: flags to try to automatize these calls..
 	bool bDoneBeginDocking = 0;
 	bool bDoneEndDocking = 0;

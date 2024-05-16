@@ -11,6 +11,7 @@
 	- Layout is persistent.
 	- We can reset layout to a default layout.
 	- We can save current layout and recall. load/save
+	- Menus are automatically filled with the special windows.
 
 */
 
