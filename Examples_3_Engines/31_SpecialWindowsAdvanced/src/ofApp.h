@@ -4,7 +4,7 @@
 
 /*
 
-	This example complements the previous 10_SpecialWindows example,
+	This example complements the previous 30_SpecialWindows example,
     but also shows two instances of the ofxSurfingImGui Toolkit add-on,
     both working together without colliding their ImGui windows nor widgets,
     nor the extra engine features neither.
@@ -17,11 +17,10 @@
     TODO: 
 
     change key callbacks lambdas to RF from Roy.
-        keys for pannels 0 global, 1-9
+        keys for panels 0 global, 1-9
     fix last two windows width made stretch..
     move keyboard commands to the addon
     fix multi instance class
-
 */
 
 

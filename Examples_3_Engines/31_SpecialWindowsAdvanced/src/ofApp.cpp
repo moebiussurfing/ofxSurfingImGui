@@ -2,9 +2,6 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofSetWindowPosition(-1920, 20);
-
-	//--
 
 	// Parameters
 
@@ -72,6 +69,8 @@ void ofApp::setupParams() {
 		ofLogLevel logLevel;
 		int r = ofRandom(4);
 		ui.AddToLogAndNotifier(ss.str(), ofLogLevel(r));
+		//boolean state will no be reading well being always 1.
+		//we should cast bool type to improve.
 	});
 
 	listenerParams1 = params_1.parameterChangedE().newListener([this](ofAbstractParameter & p) {

@@ -10,9 +10,12 @@
 	Note that:
 	- Layout is persistent.
 	- We can reset layout to a default layout.
-	- We can save current layout and recall. load/save
 
 */
+
+// Uncomment/enable this line
+// to show the minimal expression of a simple docking workflow.
+// without the reset and save/load methods.
 
 #include "ofxSurfingImGui.h"
 
@@ -40,27 +43,4 @@ public:
 	void drawImGuiSpecialWindow4();
 
 	ofParameter<bool> bGui { "APP", true };
-
-	//--
-
-	// Docking Helpers Stuff
-
-	ofParameter<bool> bGui_DockingHelp { "DOCKING HELP", true };
-
-	// To learning purposes
-	// but also to be used as template for your projects.
-	void updateImGuiDockingHelpers();
-	void drawImGuiDockingHelp();
-
-	// An extra window with some triggers
-	// for hard-coded layout modifications.
-	void doDockingReset(); // Reset the layout to a hard-coded default layout.
-
-	// Flags
-	bool bFlagDockingReset = false;
-
-	//--
-
-	// Manager to Save/Load Layout manually
-	string path = "myLayout.ini";
 };

@@ -47,6 +47,9 @@
 // Includes much mouse behaviors from imgui, as resize, waiting, text input etc
 // Required disabled to allow overlay on windows capturer app.
 
+// DOCKING HELPERS
+//#define SURFING__DOCKING_WORKFLOW_HANDLER
+
 //----
 
 // SETTINGS MANAGEMENT

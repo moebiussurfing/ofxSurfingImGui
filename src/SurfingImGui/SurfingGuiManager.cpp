@@ -2555,11 +2555,13 @@ void SurfingGuiManager::Begin() {
 
 	//----
 
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
 	//workflow
 	if (bModeAutoDocking) {
 		this->BeginDocking();
 		this->EndDocking();
 	}
+#endif
 }
 
 //--------------------------------------------------------------
@@ -2674,12 +2676,14 @@ void SurfingGuiManager::End() {
 	//TODO: Maybe it's an ofxImGui feature..
 	if (!bAutoDraw) gui.draw();
 
-	//--
+		//--
 
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
 	//workflow
 	if (!bModeAutoDocking) {
 		if (bDoneBeginDocking && bDoneEndDocking) bModeAutoDocking = true;
 	}
+#endif
 }
 
 //--
@@ -3096,7 +3100,7 @@ void SurfingGuiManager::EndWindowSpecial(int index) {
 //--------------------------------------------------------------
 void SurfingGuiManager::EndWindow() {
 	rectangleLastWindowShape = getWindowShape();
-	
+
 	ImGui::End();
 }
 
@@ -3199,7 +3203,9 @@ void SurfingGuiManager::BeginDocking() {
 
 	updateCentralRect();
 
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
 	bDoneBeginDocking = true;
+#endif
 }
 
 //--------------------------------------------------------------
@@ -3235,7 +3241,9 @@ void SurfingGuiManager::EndDocking() {
 	}
 	*/
 
+#ifdef SURFING__DOCKING_WORKFLOW_HANDLER
 	bDoneEndDocking = true;
+#endif
 }
 
 //----

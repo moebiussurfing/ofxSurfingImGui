@@ -3,11 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-#if 1
-	SurfingGui::setWindowShape(-1);//left monitor
-	//SurfingGui::setWindowShape(1, true);//right monitor portrait
-#endif
-
 	setupParameters();
 
 	cam.setupPerspective();
@@ -105,7 +100,10 @@ void ofApp::setupImGui()
 	// Customize Help info
 
 	// App
-	string s = "This is an Example to learn \nthe Docking features.\n\nEnjoy!";
+	string s = "This is an Example to learn \nthe Docking features.\n";
+	s += "\nShift drag windows \nto different windows zones to dock.\n";
+	s += "\nEnjoy!";
+
 	//ui.setEnableHelpApp();//not required if text settled after
 	ui.setHelpAppTitle("Example 23_DockingRaw");
 	ui.setHelpAppText(s);

@@ -10,6 +10,7 @@
 
 	- Layout is persistent.
 	- We can reset layout to a default layout.
+	- We can save/load the layout.
 	- We can randomize the layout.
 
 	TODO
