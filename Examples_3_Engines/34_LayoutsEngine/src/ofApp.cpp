@@ -3,14 +3,6 @@
 //----------------------------------------------------------
 void ofApp::setup() {
 
-	// Windows position and size
-#if 1
-	ofSetFrameRate(60);
-	ofSetWindowPosition(-1920, 25);
-#endif
-
-	//----
-
 	// Parameters
 
 	setupScene();

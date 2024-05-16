@@ -17,8 +17,6 @@
 
 #include "ofxSurfingImGui.h"
 
-#include "ofxWindowApp.h" // -> Not required
-
 /*
 
 	Docking features is a WIP yet!
@@ -95,6 +93,4 @@ public:
 	//-
 
 	void updateScene(); // Generates random messages to test the Log window.
-
-	ofxWindowApp windowApp;
 };
