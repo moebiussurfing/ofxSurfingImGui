@@ -4,7 +4,7 @@
 void ofApp::setup()
 {
     // move window to my left monitor and portrait
-    ofxImGuiSurfing::setMonitorsLayout(-1, true, true);
+    //ofxImGuiSurfing::setMonitorsLayout(-1, true, true);
 
     //--
 

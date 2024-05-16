@@ -30,19 +30,19 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 		
-		//TODO
-#if 0
-		float spx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
-		float w = ImGui::GetContentRegionAvail().x - spx;
-#else
-		float w = ImGui::GetContentRegionAvail().x;
-#endif
-
-		ImGui::PushItemWidth(w);
+//		//TODO: fix weird layout when autoresize enabled
+//#if 0
+//		float spx = ImGui::GetStyle().ItemSpacing.x; // x spacing between widgets
+//		float w = ImGui::GetContentRegionAvail().x - spx;
+//#else
+//		float w = ImGui::GetContentRegionAvail().x;
+//#endif
+//
+//		ImGui::PushItemWidth(w);
 
 		bool b = ImGui::Combo(label, currIndex, vector_getter, static_cast<void*>(&values), values.size());
 
-		ImGui::PopItemWidth();
+		//ImGui::PopItemWidth();
 
 		return b;
 	}

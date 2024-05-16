@@ -5,7 +5,7 @@
     This example shows how to explore many fonts and styles on runtime, 
     to fine tune your app ui.
     Default font file and size will be serialized into data folder:
-    \Examples\09_ThemeEditorFull\bin\data\Gui\DefaultFont.json
+    \bin\data\Gui\DefaultFont.json
 
     BTW, is not necessary to instantiate SurfingThemeEditor to change
     the default font. It's just a kind of tool for exploring possibilities,

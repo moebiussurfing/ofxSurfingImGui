@@ -1,8 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 	ofxSurfingHelpers::setMonitorsLayout(1, true, true);
 
 	ui.setup();
@@ -24,16 +23,14 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
+void ofApp::draw() {
 	ui.Begin();
 	{
 		// There is a toggle to alternate Night/Day themes.
-		// This toggle is available always, 
+		// This toggle is available always,
 		// and it will work only if the default files are on bin/data/..
 		//IMGUI_SUGAR__WINDOWS_CONSTRAINTS_MEDIUM;
-		if (ui.BeginWindow("ofApp"))
-		{
+		if (ui.BeginWindow("ofApp")) {
 			ui.Add(e.bGui, OFX_IM_TOGGLE_ROUNDED);
 			ui.AddSpacingSeparated();
 
@@ -41,8 +38,10 @@ void ofApp::draw()
 			ofxImGuiSurfing::AddToggleRoundedButtonNamed(ui.bThemeUIAlt, "Day", "Night");
 
 			string s;
-			if (!ui.bThemeUIAlt) s = THEME_NAME_NIGHT;
-			else s = THEME_NAME_DAY;
+			if (!ui.bThemeUIAlt)
+				s = SURFING_IMGUI__THEME_NAME_NIGHT;
+			else
+				s = SURFING_IMGUI__THEME_NAME_DAY;
 			ui.AddLabel(s);
 
 			ui.EndWindow();
@@ -64,21 +63,20 @@ void ofApp::keyPressed(int key) {
 	// Do not requires to instantiate the editor in every app to use the themes.
 	// We will see different approaches.
 
-	if (0) {}
+	if (0) {
+	}
 
-	else if (key == '1')
-	{
+	else if (key == '1') {
 		// Standalone without the editor instantiated.
 		// Loading from default themes path:
-		// \09_ThemeEditor\bin\data\Gui\themes
+		// \bin\data\Gui\themes
 		string p = "mygoo.ini";
 		ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(p);
 	}
 
-	else if (key == '2')
-	{
+	else if (key == '2') {
 		// To load this file theme:
-		// \09_ThemeEditor\bin\data\Gui\themes\t22222.ini
+		// \bin\data\Gui\themes\t22222.ini
 
 		// We can pass just the filename without path:
 		string p = "t22222.ini";
@@ -91,8 +89,7 @@ void ofApp::keyPressed(int key) {
 		ofxImGuiSurfing::SurfingThemes::loadThemeFileByName(p);
 	}
 
-	else if (key == '3')
-	{
+	else if (key == '3') {
 		// Standalone without the editor instantiated:
 		// bin/data
 		string p = "mytheme2.ini";

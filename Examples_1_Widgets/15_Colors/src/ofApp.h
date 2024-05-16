@@ -1,3 +1,10 @@
+/*
+
+	Testing colors and some internal features.
+	We can represent color widgets using different styles.
+
+*/
+
 #pragma once
 
 #include "ofMain.h"

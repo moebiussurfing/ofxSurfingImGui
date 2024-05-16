@@ -187,8 +187,8 @@ public:
 	ofParameter<bool> bWaiting{"Waiting", 0}; // to be commanded from parent scope!
 	int typeWaiting = 0;
 
-	ofParameter<ofColor> colorBubble{"ColBg", ofColor::grey, ofColor(), ofColor()};
-	ofParameter<ofColor> colorTxt{"ColTxt", ofColor::grey, ofColor(), ofColor()};
+	ofParameter<ofColor> colorBubble { "ColBg", ofColor(64), ofColor(), ofColor() };
+	ofParameter<ofColor> colorTxt { "ColTxt", ofColor(255), ofColor(), ofColor() };
 
 	ofParameterGroup paramsPreset{ "BigTextInput" };
 	ofParameter<bool> bBottomTextInput{"Bottom", false}; //flip y direction

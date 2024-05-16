@@ -3,9 +3,9 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-#if 1//move app window to left monitor
-	setMonitorsLayout(-1, false, true);
-#endif
+//#if 1//move app window to left monitor
+//	setMonitorsLayout(-1, false, true);
+//#endif
 
 	setupParams();
 
@@ -215,7 +215,7 @@ void ofApp::drawImGui()
 					{
 						ui.Indent();
 
-						ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
+						ui.Add(ui.bDebugDebuggerImGui, OFX_IM_TOGGLE_BUTTON_ROUNDED_MINI);
 
 						//make all smaller heights
 						ImGuiStyle* style = &ImGui::GetStyle();

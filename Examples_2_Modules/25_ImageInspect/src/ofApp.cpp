@@ -5,8 +5,6 @@ void ofApp::setup()
 {
 	ofLogNotice("ofApp") << "setup()";
 
-	ofxImGuiSurfing::SurfSetMyMonitor(1);
-
 	ui.setup();
 
 	eventIndex = index.newListener([&](int& value)

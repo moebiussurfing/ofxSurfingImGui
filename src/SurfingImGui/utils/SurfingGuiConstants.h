@@ -19,32 +19,37 @@
 #define SURFING_IMGUI__DEBUG_FONTS
 //TODO: comment to bypass set default font on Begin
 
-//--
+//----
 
 
 // MODES, FEATURES, WORKFLOW, WIP STUFF OR DEBUG
 
-//#define SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW 
-// Mouse handled by ImGui Instead of the OF/GLFW. 
-// Includes much mouse behaviors from imgui, as resize, waiting, text input etc
-// Required disabled to allow overlay on windows capturer app.
-
+// DEBUG PROFILER ENGINE
 //#define SURFING_IMGUI__USE_PROFILE_DEBUGGER // comment to exclude some classes
 
+// NOTIFIER ENGINE
 #define SURFING_IMGUI__USE_NOTIFIER
 #define SURFING_IMGUI__NOTIFIER_DEFAULT_DURATION 5000
 //#define SURFING_IMGUI__NOTIFIER_SETTINGS_STANDALONE 
 // if undefined settings will be bundled into main settings.
 
+// GLOBAL SCALER ENGINE
+#define SURFING_IMGUI__USE_GLOBAL_SCALE
+
+// FONTS MODE
 //#define SURFING_IMGUI__USE_CUSTOM_FONTS_PTR 
 // TODO: DEBUG: Using pointer should improve a bit the memory usage..
 // maybe is not important bc is a vector of pointers not the objects them selfs!
 
-#define SURFING_IMGUI__USE_GLOBAL_SCALE
+// MOUSE CONTROL MODE
+//#define SURFING_IMGUI__USE_MOUSE_HANDLING_BY_IMGUI_INSTEAD_OF_GLFW 
+// Mouse handled by ImGui Instead of the OF/GLFW. 
+// Includes much mouse behaviors from imgui, as resize, waiting, text input etc
+// Required disabled to allow overlay on windows capturer app.
 
-//--
+//----
 
-// Settings Management
+// SETTINGS MANAGEMENT
 
 // Improved fixing exceptions when closing ofApp.
 // We can disable automatic saving on exit and/or class destructor.
@@ -62,7 +67,6 @@
 
 //#define SURFING_IMGUI__ENABLE_SAVE_ON_CHANGES_USING_LISTENER 
 // Made by Roy for RF
-// Code copied from: https://github.com/roymacdonald/RealityField/commit/115858b3cf3eb4baf6161ab06598fee78583fc21
 // but currently disabled as code from @moebiussurfing worked too and has 'max one save per frame'
 
 //----
@@ -115,7 +119,7 @@
 
 //----
 
-// Default Font
+// DEFAULT FONT
 
 //TODO: could think about include fonts in themes or to create a JSON to allow customization.
 
@@ -125,7 +129,7 @@
 #define OFX_IM_FONT_DEFAULT_PATH_FONTS "assets/fonts/" 
 // main container for all the font files!
 
-// DEfault font
+// Default font
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_SIZE OFX_IM_FONT_DEFAULT_SIZE_MIN
 #define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
@@ -140,7 +144,7 @@
 
 //----
 
-// Ratio Sizes between sizes of a widget type. 
+// RATIO SIZES BETWEEN SIZES OF A WIDGET TYPE. 
 
 //TODO:
 // fix for HSLIDERS.. 

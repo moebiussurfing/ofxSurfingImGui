@@ -1,8 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 	namesStylesColor.push_back("OFX_IM_COLOR");
 	namesStylesColor.push_back("OFX_IM_COLOR_INPUTS");
 	namesStylesColor.push_back("OFX_IM_COLOR_INPUTS_NO_ALPHA");
@@ -16,11 +15,10 @@ void ofApp::setup()
 	namesStylesColor.push_back("OFX_IM_COLOR_BOX_FULL_WIDTH_BIG_NO_ALPHA");
 
 	index.setMax(namesStylesColor.size() - 1);
-	listener = index.newListener([this](int& i)
-		{
-			styleColor = SurfingGuiTypes(i + (int)OFX_IM_COLOR);
-	ofLogNotice() << "Style: #" << i << " " << namesStylesColor[i];
-		});
+	listener = index.newListener([this](int & i) {
+		styleColor = SurfingGuiTypes(i + (int)OFX_IM_COLOR);
+		ofLogNotice() << "Style: #" << i << " " << namesStylesColor[i];
+	});
 
 	// trig callback
 	index = 0;
@@ -44,18 +42,17 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
+void ofApp::draw() {
 	ui.Begin();
 	{
-		if (ui.BeginWindow(bGui))
-		{
+		if (ui.BeginWindow(bGui)) {
 			ui.AddLabelBig("Debugger / Tester\nfor ofParam \ncolor widgets");
 			ui.AddSpacingBigSeparated();
 
 			ui.Add(ui.bAutoResize);
 			ui.AddSpacingBigSeparated();
 
+			ui.AddLabelBig("Style selector");
 			ui.Add(index, OFX_IM_HSLIDER_SMALL_NO_LABELS);
 			ui.AddComboButtonDualCenteredNames(index, namesStylesColor);
 			SurfingGuiTypes _style = SurfingGuiTypes(styleColor);
@@ -96,13 +93,11 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
+void ofApp::keyPressed(int key) {
 	if (key == 'g') {
 		bGui = !bGui;
 	}
 
 	if (key == ' ') {
-
 	}
 }

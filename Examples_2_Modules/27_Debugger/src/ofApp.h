@@ -1,3 +1,11 @@
+/*
+
+	To enable the debugger engine we need to enable the line
+	#define SURFING_IMGUI__USE_PROFILE_DEBUGGER // comment to exclude some classes
+	into \ofxSurfingImGui\src\SurfingImGui\utils\SurfingGuiConstants.h
+
+*/
+
 #pragma once
 #include "ofMain.h"
 

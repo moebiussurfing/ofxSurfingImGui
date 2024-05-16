@@ -111,10 +111,10 @@ void ofApp::setup()
 	ofAddListener(params1.parameterChangedE(), this, &ofApp::Changed);
 
 	// Load session settings
-	ofxSurfingHelpers::load(params1);
-	ofxSurfingHelpers::load(params2);
-	ofxSurfingHelpers::load(params3);
-	ofxSurfingHelpers::load(params4);
+	ofxImGuiSurfing::load(params1);
+	ofxImGuiSurfing::load(params2);
+	ofxImGuiSurfing::load(params3);
+	ofxImGuiSurfing::load(params4);
 }
 
 //--------------------------------------------------------------
@@ -484,7 +484,7 @@ void ofApp::keyPressed(int key)
 		ofxImGuiSurfing::ImGui_ThemeMoebiusSurfingV2();
 	}
 	if (key == '2') {
-		ofxImGuiSurfing::ImGui_Xemu();
+		ofxImGuiSurfing::ImGui_ThemeXemu();
 	}
 	if (key == '3') {
 		ofxImGuiSurfing::ImGui_ThemeYave();
@@ -504,10 +504,10 @@ void ofApp::keyPressed(int key)
 void ofApp::exit() {
 
 	// Save session settings
-	ofxSurfingHelpers::save(params1);
-	ofxSurfingHelpers::save(params2);
-	ofxSurfingHelpers::save(params3);
-	ofxSurfingHelpers::save(params4);
+	ofxImGuiSurfing::save(params1);
+	ofxImGuiSurfing::save(params2);
+	ofxImGuiSurfing::save(params3);
+	ofxImGuiSurfing::save(params4);
 
 	ofRemoveListener(params1.parameterChangedE(), this, &ofApp::Changed);
 }

@@ -23,23 +23,22 @@
 
 #include "ofxSurfingImGui.h"
 
-#include "surfingThemeEditor.h"
 #include "SurfingFonts.h"
+#include "surfingThemeEditor.h"
 
-class ofApp : public ofBaseApp
-{
+class ofApp : public ofBaseApp {
 public:
-    void setup();
-    void update();
-    void draw();
-    void keyPressed(int key);
+	void setup();
+	void update();
+	void draw();
+	void keyPressed(int key);
 
-    ofxSurfingGui ui;
+	ofxSurfingGui ui;
 
-    SurfingThemeEditor e;
-    SurfingFonts f;
+	SurfingThemeEditor e;
+	SurfingFonts f;
 
 	void drawMyDemoWindow();
-	bool bUseFontMonospaced=0;
-	bool bUseFontIndex=0;
+	bool bUseFontMonospaced = 0;
+	bool bUseFontIndex = 0;
 };
