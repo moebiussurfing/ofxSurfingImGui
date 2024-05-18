@@ -1,14 +1,18 @@
-#pragma once
-
 /*
+* SurfingImGui\SurfingGuiManager.h
 
-	This is the main class that instantiates ofxImGui.
+	This is the main class 
+	that instantiates ofxImGui internally.
 	So ImGui context "is here".
 	Handles the API workflow too,
 	helping populating windows and widgets.
-	Handles some internal params too, like minimize, auto resize... or extra booleans.
+	Handles some internal params too, 
+	like minimize, auto resize... or extra booleans.
+	Docking helpers and Layout Presets operate here too.
 
 */
+
+#pragma once
 
 #include "ofMain.h"
 
@@ -3178,7 +3182,7 @@ public:
 		if (bSeparator) ImGui::Separator();
 		ImGui::Spacing();
 
-		this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+		this->Add(bAdvanced, OFX_IM_TOGGLE_BUTTON_ROUNDED);
 
 		DrawAdvancedSubPanel();
 	}

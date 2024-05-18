@@ -30,7 +30,7 @@ void ofApp::setupImGui()
 
 	// NOTICE that
 	// To enable the "Layout Presets Engine"
-	// is mandatory to pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument !
+	// it requires to pass IM_GUI_MODE_INSTANTIATED_DOCKING as argument!
 	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING);
 
 	//-
@@ -46,7 +46,7 @@ void ofApp::setupImGui()
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
 
-	ui.addWindowSpecial("Main"); // remember index 0
+	ui.addWindowSpecial("Main"); // index 0 (remember)
 	ui.addWindowSpecial("Audio"); // index 1
 	ui.addWindowSpecial("Video1"); // index 2
 	ui.addWindowSpecial("Video2"); // index 3
@@ -135,8 +135,7 @@ void ofApp::draw()
 
 	ui.Begin();
 	{
-		//TODO: currently required but not used.
-		// should remove to simplify.
+		// Required to call as ImGui workflow requires. 
 		drawImGuiDocking();
 
 		//--
@@ -162,8 +161,8 @@ void ofApp::draw()
 //----------------------------------------------------------
 void ofApp::drawImGuiDocking()
 {
-	//TODO: this cant be removed for the moment...
-	// Should allow to disable!
+	// This requeriment can be removed 
+	// using IM_GUI_MODE_INSTANTIATED_DOCKING_RAW_AUTOHANDLER as setup mode 
 
 	// Here (between beginDocking/endDocking) 
 	// we can access all the docking space.

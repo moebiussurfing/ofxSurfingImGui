@@ -277,7 +277,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 	switch (surfingImGuiMode) {
 	case ofxImGuiSurfing::IM_GUI_MODE_UNKNOWN:
-		// Nothing to custom setup 
+		// Nothing to custom setup
 		break;
 
 		//--
@@ -1949,7 +1949,8 @@ void SurfingGuiManager::updateLayout() {
 void SurfingGuiManager::drawLayoutsManager() {
 	ImGuiWindowFlags flagsMng = ImGuiWindowFlags_None;
 
-	// Exclude from imgui.ini settings
+	// Exclude from imgui.ini settings.
+	// will be independent from layout presets.
 	flagsMng |= ImGuiWindowFlags_NoSavedSettings;
 
 	if (bAutoResize) flagsMng |= ImGuiWindowFlags_AlwaysAutoResize;
@@ -1987,7 +1988,9 @@ void SurfingGuiManager::drawLayoutsManager() {
 	} else {
 	}
 
-	//-
+	//--
+
+	// 1. Layouts window
 
 	if (bGui_LayoutsManager) {
 		//IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL;
@@ -2024,7 +2027,7 @@ void SurfingGuiManager::drawLayoutsManager() {
 
 		//--
 
-		// Panels
+		// 1. Panels window
 
 		// Show a mini version when the main panel is hidden!
 
@@ -2037,7 +2040,6 @@ void SurfingGuiManager::drawLayoutsManager() {
 				this->AddSpacing();
 
 				// All the queued special windows aka panels
-
 				for (int i = 0; i < windows.size(); i++) {
 					AddToggleRoundedButton(windows[i].bGui);
 				}
@@ -2045,7 +2047,6 @@ void SurfingGuiManager::drawLayoutsManager() {
 				this->AddSpacing();
 
 				// All, None
-
 				float _w2 = ofxImGuiSurfing::getWidgetsWidth(2);
 				if (ImGui::Button("All", ImVec2(_w2, _h / 2))) {
 					this->setShowAllPanels(true);
@@ -2062,8 +2063,9 @@ void SurfingGuiManager::drawLayoutsManager() {
 
 		//--
 
-		// Window Layouts
+		// 2. Layout/Manager windows
 
+		// Layouts tree
 		if (ImGui::TreeNode("LAYOUTS")) {
 			this->refreshLayout();
 			Add(bAutoResize_PresetsWindows, OFX_IM_TOGGLE_ROUNDED_SMALL);
@@ -2074,10 +2076,7 @@ void SurfingGuiManager::drawLayoutsManager() {
 
 		this->AddSpacingSeparated();
 
-		//--
-
-		// Window Panels
-
+		// Panels tree
 		ImGui::PushID("##PANELS2");
 		if (ImGui::TreeNode("PANELS")) {
 			this->refreshLayout();
@@ -2111,7 +2110,7 @@ void SurfingGuiManager::drawLayoutsManager() {
 			this->AddSpacingSeparated();
 
 			// a toggle that expands the other widgets
-			DrawAdvancedBundle();
+			this->DrawAdvancedBundle();
 		}
 
 		this->EndWindow();
@@ -2129,6 +2128,7 @@ void SurfingGuiManager::drawLayoutsPresetsEngine() {
 	// How to make all windows dockeable in the same space ?
 
 	// Main Layout Presets clicker
+	// and Manager linked windows
 	if (bGui_LayoutsPresetsSelector) {
 		drawLayoutsLayoutPresets();
 
@@ -2526,6 +2526,7 @@ void SurfingGuiManager::Begin() {
 	// Extra Tools / Engines
 
 	// 1. Layout Presets Engine
+	// Layout and Panels windows.
 
 	if (bDockingLayoutPresetsEngine) drawLayoutPresetsEngine();
 	// false by default as/when docking has not been initiated.
@@ -2684,14 +2685,14 @@ void SurfingGuiManager::End() {
 	//TODO: Maybe it's an ofxImGui feature..
 	if (!bAutoDraw) gui.draw();
 
-		//--
+	//--
 
-//#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
-//	//workflow
-//	if (!bModeDockingAutohandler) {
-//		if (bDoneBeginDocking && bDoneEndDocking) bModeDockingAutohandler = true;
-//	}
-//#endif
+	//#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
+	//	//workflow
+	//	if (!bModeDockingAutohandler) {
+	//		if (bDoneBeginDocking && bDoneEndDocking) bModeDockingAutohandler = true;
+	//	}
+	//#endif
 }
 
 //--
@@ -4254,7 +4255,7 @@ void SurfingGuiManager::drawLayoutsPanels() {
 	float ww = 450;
 	float hh = 300;
 
-	// set variable sizes to make all text (all/none) visible!
+	// set variable sizes to make all the text visible! (specially all/none) 
 	if (NUM_WIDGETS > 5) {
 		ww = 600 + 200;
 		hh = 450;
@@ -4267,23 +4268,22 @@ void SurfingGuiManager::drawLayoutsPanels() {
 	}
 
 	// Landscape
-	if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, 100));
-
-	//if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(450, 100));
-	//if (_bLandscape) ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(700, 150));
+	if (_bLandscape)
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, 100));
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(450, 100));
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(700, 150));
 
 	// Portrait
 	else
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, hh));
-
-		//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, 300));
-		//else ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(105, 300));
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(95, 300));
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(105, 300));
 
 #endif
 
 	//--
 
-	// Reset window
+	// Reset window trigger
 
 	ImGuiCond pnCond = ImGuiCond_None;
 	pnCond += ImGuiCond_Appearing;
@@ -4306,7 +4306,8 @@ void SurfingGuiManager::drawLayoutsPanels() {
 	const int i = 1;
 
 	if (bGui_LayoutsPanels) {
-		ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(), rectangles_Windows[i].get().getY()),
+		ImGui::SetNextWindowPos(ofVec2f(rectangles_Windows[i].get().getX(),
+									rectangles_Windows[i].get().getY()),
 			pnCond);
 		ImGui::SetNextWindowSize(ofVec2f(rectangles_Windows[i].get().getWidth(),
 									 rectangles_Windows[i].get().getHeight()),
@@ -4317,7 +4318,8 @@ void SurfingGuiManager::drawLayoutsPanels() {
 
 	// Draw window
 
-	if (this->BeginWindow(bGui_LayoutsPanels, flags_wPanels)) {
+	if (this->BeginWindow(bGui_LayoutsPanels, flags_wPanels))
+	{
 		const int i = 1;
 		rectangles_Windows[i].setWithoutEventNotifications(ofRectangle(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
 			ImGui::GetWindowWidth(),
@@ -4381,7 +4383,8 @@ void SurfingGuiManager::drawLayoutsPanels() {
 
 		//-
 
-		// 1. Populate all windows (aka panels) toggles
+		// 1. Panels big toggles
+		// Populate all windows (aka panels)
 
 		for (int i = 0; i < windows.size(); i++) {
 			ofxImGuiSurfing::AddBigToggle(windows[i].bGui, _w, _h);
@@ -4394,17 +4397,13 @@ void SurfingGuiManager::drawLayoutsPanels() {
 		float _w50;
 
 		// Landscape
-
 		if (_bLandscape) {
 			ImGui::SameLine();
 			_w100 = _w;
 			_w50 = (_w - _spcx) / 2.0f;
 		}
 
-		//-
-
 		// Portrait
-
 		else {
 			//this->AddSpacing();
 			this->AddSeparator();
@@ -4417,16 +4416,16 @@ void SurfingGuiManager::drawLayoutsPanels() {
 		//-
 
 		// Landscape
-
 		if (_bLandscape) {
 			ImGui::NextColumn();
 			ImGui::SetColumnWidth(1, _w100 + 2 * _spcx);
 		}
 
-		//-
+		//--
 
-		// 2. Extra widgets
+		// 2. More extra widgets
 
+		// all
 		if (ImGui::Button("All", ImVec2(_w50, _hWid))) {
 			// workflow
 			if (bSolo) bSolo.set(false);
@@ -4437,14 +4436,16 @@ void SurfingGuiManager::drawLayoutsPanels() {
 
 		ImGui::SameLine();
 
+		// none
 		if (ImGui::Button("None", ImVec2(_w50, _hWid))) {
 			bool b = false;
 			this->setShowAllPanels(b);
 		}
 
-		ofxImGuiSurfing::AddBigToggle(bSolo, _w100, _hWid, true);
+		// solo
+		ofxImGuiSurfing::AddBigToggle(bSolo, _w100, _hWid, true, true);
 
-		//-
+		//--
 
 		// 3. Panels Toggles
 
@@ -4482,6 +4483,16 @@ void SurfingGuiManager::drawLayoutsPanels() {
 
 		if (_bLandscape) {
 			ImGui::Columns();
+		}
+
+		//--
+
+		//TODO
+		// weird layout fixes for looped resizing..
+		if (bAutoResize_Panels) {
+			this->AddSpacing();
+			this->AddSpacing();
+			this->AddSpacing();
 		}
 
 		this->EndWindow();

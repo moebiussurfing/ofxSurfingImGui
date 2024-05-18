@@ -2,7 +2,7 @@
 #include "ofMain.h"
 
 /*
-
+	TODO
 	- make simpler Example.
 
 */
@@ -84,13 +84,13 @@ public:
 			}
 		}
 
-		// Adapt window size to font size
+		// Adapt window size to font sizes and mono types
 		//if (!bResponsive) 
 		{
 			switch (fontIndex)
 			{
-			case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW; break;//default
-			//case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;//default
+			//case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW; break;//default
+			case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;//default. better for big text examples
 			case 1: case 5: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG; break;//big
 			case 2: case 6: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL; break;//huge
 			case 3: case 7: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX; break;//hugeXXL

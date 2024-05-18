@@ -3,8 +3,8 @@
 
 /*
 
-	This example shows how to use the
-	LAYOUT PRESETS ENGINE
+	This example shows how to use
+	the layout presets engine
 	Activate Help toggle to read the floating help box info.
 
 */
@@ -26,7 +26,13 @@ public:
 	void drawWindow3();
 	void drawWindow4();
 
-	// Another approach using toggle params instead of just names.
+	//--
+
+	// Another better approach using toggle params instead of just names:
+	// ui.addWindowSpecial("Main");
+	// ui.addWindowSpecial("Audio");
+	// //...
+	// This would be passing param booleans/toggles instead of just names.
 	//ofParameter<bool> bGui_Main{"Main", false};
 	//ofParameter<bool> bGui_Audio{"Audio", false};
 	//ofParameter<bool> bGui_Video1{"Video1", false};
