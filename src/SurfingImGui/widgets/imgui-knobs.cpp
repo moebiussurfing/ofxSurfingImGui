@@ -350,8 +350,11 @@ namespace ImGuiKnobs {
 		case ImGuiKnobVariant_Dot: {
 			//knob.draw_circle(0.85, detail::GetSecondaryColorSet(), true, 32);
 			//knob.draw_dot(0.12, 0.6, knob.angle, detail::GetPrimaryColorSet(), true, 12);
-			knob.draw_circle(0.85, detail::GetPrimaryColorSet(), true, 32);
-			knob.draw_dot(0.12, 0.6, knob.angle, detail::GetSecondaryColorSet(), true, 12);
+			//knob.draw_circle(0.85, detail::GetPrimaryColorSet(), true, 32);
+			//knob.draw_dot(0.12, 0.6, knob.angle, detail::GetSecondaryColorSet(), true, 12);
+			//more resolution for circles
+			knob.draw_circle(0.85, detail::GetPrimaryColorSet(), true, 48);
+			knob.draw_dot(0.12, 0.6, knob.angle, detail::GetSecondaryColorSet(), true, 32);
 			break;
 		}
 

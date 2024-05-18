@@ -594,12 +594,20 @@ namespace ofxImGuiSurfing
 		// To include the ImGui context 
 		// and requiring main begin/end.
 
-		//TODO: should rename or add presets engine + docking
 		IM_GUI_MODE_INSTANTIATED_DOCKING,
-		// Allows docking between multiple instances.
+		//TODO: should rename
+		// Uses docking and the layout presets engine.
+		// Allows docking between multiple instances too.
 
 		IM_GUI_MODE_INSTANTIATED_DOCKING_RAW,
-		// not using layout presets engine
+		// not using layout presets engine.
+		// For advanced users accessing more internal ImGui stuff.
+		// Requiring to call BeginDocking/EndDocking manually.
+
+		IM_GUI_MODE_INSTANTIATED_DOCKING_RAW_AUTOHANDLER,
+		// not using layout presets engine. 
+		// Some auto-handled internal workflow.
+		// will auto call BeginDocking/EndDocking internally.
 
 		IM_GUI_MODE_INSTANTIATED_SINGLE,
 		// To include the ImGui context and requiring begin/end 

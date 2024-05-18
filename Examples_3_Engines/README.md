@@ -4,17 +4,20 @@
 ## 31_SpecialWindowsAdvanced
 ![](31_SpecialWindowsAdvanced/Capture.PNG)  
 
-## 32_DockingRawBasic
-![](32_DockingRawBasic/Capture.PNG)  
+## 32_DockingMinimal
+![](32_DockingMinimal/Capture.PNG)  
 
-## 33_DockingRaw
-![](33_DockingRaw/Capture.PNG)  
+## 33_DockingRawBasic
+![](33_DockingRawBasic/Capture.PNG)  
 
-## 34_LayoutsEngine
-![](34_LayoutsEngine/Capture.PNG)  
+## 34_DockingRaw
+![](34_DockingRaw/Capture.PNG)  
 
-## 35_LayoutsEngineDocking
-![](35_LayoutsEngineDocking/Capture.PNG)  
+## 35_LayoutsEngine
+![](35_LayoutsEngine/Capture.PNG)  
+
+## 36_LayoutsEngineDocking
+![](36_LayoutsEngineDocking/Capture.PNG)  
 
 <br>
 

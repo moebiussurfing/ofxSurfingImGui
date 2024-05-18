@@ -277,7 +277,7 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 	switch (surfingImGuiMode) {
 	case ofxImGuiSurfing::IM_GUI_MODE_UNKNOWN:
-		// Nothing to do
+		// Nothing to custom setup 
 		break;
 
 		//--
@@ -300,6 +300,14 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 
 	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW:
 		setupDockingRaw();
+		setupInitiate();
+		break;
+
+		//--
+
+	case ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW_AUTOHANDLER:
+		setupDockingRaw();
+		setDockingAutohandlerMode(true);
 		setupInitiate();
 		break;
 
@@ -2557,7 +2565,7 @@ void SurfingGuiManager::Begin() {
 
 #ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 	//workflow
-	if (bModeAutoDocking) {
+	if (bModeDockingAutohandler) {
 		this->BeginDocking();
 		this->EndDocking();
 	}
@@ -2680,8 +2688,8 @@ void SurfingGuiManager::End() {
 
 //#ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 //	//workflow
-//	if (!bModeAutoDocking) {
-//		if (bDoneBeginDocking && bDoneEndDocking) bModeAutoDocking = true;
+//	if (!bModeDockingAutohandler) {
+//		if (bDoneBeginDocking && bDoneEndDocking) bModeDockingAutohandler = true;
 //	}
 //#endif
 }

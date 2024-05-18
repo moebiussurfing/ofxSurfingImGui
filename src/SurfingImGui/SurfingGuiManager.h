@@ -4425,11 +4425,11 @@ public:
 
 #ifdef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
 private:
-	bool bModeAutoDocking = false;
+	bool bModeDockingAutohandler = false;
 
 public:
-	void setAutoDockingMode(bool b) {
-		bModeAutoDocking = b;
+	void setDockingAutohandlerMode(bool b) {
+		bModeDockingAutohandler = b;
 	}
 
 private:

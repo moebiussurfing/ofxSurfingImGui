@@ -1,8 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 	setupParameters();
 
 	cam.setupPerspective();
@@ -17,8 +16,7 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::setupParameters()
-{
+void ofApp::setupParameters() {
 	params1.setName("paramsGroup1");
 	params1.add(speed.set("speed1", 0.5f, 0, 1));
 	params1.add(bPrevious.set("<", false));
@@ -46,8 +44,7 @@ void ofApp::setupParameters()
 }
 
 //--------------------------------------------------------------
-void ofApp::setupImGui()
-{
+void ofApp::setupImGui() {
 	// Docking Raw mode
 	// (Without Layout Presets engine)
 	// Setup steps:
@@ -58,7 +55,7 @@ void ofApp::setupImGui()
 
 	// NOTICE that
 	// To enable the "raw docking" workflow
-	// is mandatory to pass an argument: 
+	// is mandatory to pass an argument:
 	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
 
 	//--
@@ -66,10 +63,10 @@ void ofApp::setupImGui()
 	// 2. Queue Special Windows
 
 	// Add the "target" windows just with a name:
-	// You will use these added windows easily, 
+	// You will use these added windows easily,
 	// but you must remember his index order!
 	// Each window will be added to the "Layout Presets Engine" and auto handled too.
-	// The engine will auto create internal bool param toggles 
+	// The engine will auto create internal bool param toggles
 	// (like the bGui we used before)
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
@@ -92,7 +89,7 @@ void ofApp::setupImGui()
 
 	//--
 
-	// Optional: 
+	// Optional:
 	// After startup
 
 	//--
@@ -109,12 +106,11 @@ void ofApp::setupImGui()
 	ui.setHelpAppText(s);
 
 	// Internal
-	ui.setEnableHelpInternal();//disabled/hidden by default
+	ui.setEnableHelpInternal(); //disabled/hidden by default
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
+void ofApp::draw() {
 	updateScene();
 	drawScene();
 
@@ -124,10 +120,9 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGui()
-{
+void ofApp::drawImGui() {
 	// Gui Manager with Docking features:
-	// In between here (Begin/End) 
+	// In between here (Begin/End)
 	// we can render ImGui windows and widgets,
 	// and all the docking magic.
 
@@ -141,12 +136,12 @@ void ofApp::drawImGui()
 
 		// We can access all the docking space
 		// here (between BeginDocking/EndDocking)
-		// but just after the main ui.Begin call. 
+		// but just after the main ui.Begin call.
 		// This snippet it's required to be copied into our projects.
 
 		ui.BeginDocking();
 		{
-			// Our custom docking related functions 
+			// Our custom docking related functions
 			// to customize the docking layout on runtime by code.
 			updateImGuiDockingHelpers();
 		}
@@ -157,7 +152,7 @@ void ofApp::drawImGui()
 		// 2.1 An extra window with helpers
 
 		// An extra window with some triggers
-		// for hard-coded layout modifications. 
+		// for hard-coded layout modifications.
 		if (bGui_DockingHelp) drawImGuiDockingHelp();
 
 		//--
@@ -167,7 +162,7 @@ void ofApp::drawImGui()
 
 		//--
 
-		// 3. The Special Windows 
+		// 3. The Special Windows
 
 		// The windows previously queued to the manager on setup(),
 		// that are controlled by the Layout Presets Engine.
@@ -184,11 +179,9 @@ void ofApp::drawImGui()
 //----
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiApp()
-{
+void ofApp::drawImGuiApp() {
 	// for all the queued especial windows in setup()!
-	if (ui.BeginWindow(bGui))
-	{
+	if (ui.BeginWindow(bGui)) {
 		ui.drawWidgetsSpecialWindowsManager();
 		ui.AddSpacingSeparated();
 
@@ -198,8 +191,8 @@ void ofApp::drawImGuiApp()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindows()
-{
+void ofApp::drawImGuiSpecialWindows() {
+
 	drawImGuiSpecialWindow0();
 
 	//--
@@ -220,106 +213,93 @@ void ofApp::drawImGuiSpecialWindows()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow0()
-{
-	int index = 0;
-	{
-		if (ui.BeginWindowSpecial(index))
+void ofApp::drawImGuiSpecialWindow0() {
+
+	if (ui.BeginWindowSpecial(0)) {
+		ui.AddLabelHuge("Window 0", false);
+
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+
+		ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
+		ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
+		ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
+		ui.AddTooltip("Activate sep1 animation");
+		ui.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"));
+		ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_BORDER);
+		ui.AddTooltip("Show Log Window");
+
+		ui.AddSpacingBigSeparated();
+
+		ui.Add(speed, OFX_IM_HSLIDER_BIG);
+		ui.AddTooltip("Speed controls the auto populated Log window speed");
+		ui.Add(amount, OFX_IM_HSLIDER);
+		ui.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE");
+
+		ui.AddSpacingBigSeparated();
+
+		ImGui::PushButtonRepeat(true); // pushing for repeats trigs
 		{
-			ui.AddLabelHuge("Window 0", false);
+			ui.refreshLayout();
 
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+			if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2)) {
+				bPrevious = false;
 
-			ui.Add(ui.bHelp, OFX_IM_TOGGLE_BUTTON_ROUNDED_BIG);
-			ui.AddTooltip("Help enables some Tooltips \nand the Help Box on this Window!");
-			ui.Add(bEnable, OFX_IM_TOGGLE_BUTTON_ROUNDED_MEDIUM);
-			ui.AddTooltip("Activate sep1 animation");
-			ui.AddTooltip("This is a Help Tool tip! \nIt's " + (string)(bEnable ? "TRUE" : "FALSE"));
-			ui.Add(ui.bLog, OFX_IM_TOGGLE_BIG_BORDER);
-			ui.AddTooltip("Show Log Window");
-
-			ui.AddSpacingBigSeparated();
-
-			ui.Add(speed, OFX_IM_HSLIDER_BIG);
-			ui.AddTooltip("Speed controls the auto populated Log window speed");
-			ui.Add(amount, OFX_IM_HSLIDER);
-			ui.AddTooltip("Speed up separation animator \nwhen bEnable is TRUE");
-
-			ui.AddSpacingBigSeparated();
-
-			ImGui::PushButtonRepeat(true); // pushing for repeats trigs
-			{
-				ui.refreshLayout();
-
-				if (ui.Add(bPrevious, OFX_IM_BUTTON_BIG, 2))
-				{
-					bPrevious = false;
-
-					lineWidth -= 0.1f;
-					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-				}
-				ui.AddTooltip("Decrease lineWidth " + ofToString(lineWidth));
-
-				ImGui::SameLine();
-
-				if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2))
-				{
-					bNext = false;
-
-					lineWidth += 0.1f;
-					lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
-				}
-				ui.AddTooltip("Increase lineWidth " + ofToString(lineWidth));
+				lineWidth -= 0.1f;
+				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
 			}
-			ImGui::PopButtonRepeat();
+			ui.AddTooltip("Decrease lineWidth " + ofToString(lineWidth));
 
-			ui.AddSpacingBigSeparated();
+			ImGui::SameLine();
 
-			ui.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
-			ui.AddTooltip(ofToString(lineWidth));
-			ui.Add(lineWidth);
-			ui.AddTooltip(ofToString(lineWidth));
-			ui.Add(lineWidth, OFX_IM_STEPPER);
-			ui.AddTooltip(ofToString(lineWidth));
-			ui.Add(lineWidth, OFX_IM_KNOB_DOTKNOB);
-			ui.AddTooltip(ofToString(lineWidth));
+			if (ui.Add(bNext, OFX_IM_BUTTON_BIG, 2)) {
+				bNext = false;
 
-			ui.AddSpacingBigSeparated();
-
-			ui.Add(separation, OFX_IM_HSLIDER_BIG); // default style
-			ui.AddTooltip(ofToString(separation));
-
-			//--
-
-			ui.EndWindowSpecial();
+				lineWidth += 0.1f;
+				lineWidth = ofClamp(lineWidth, lineWidth.getMin(), lineWidth.getMax());
+			}
+			ui.AddTooltip("Increase lineWidth " + ofToString(lineWidth));
 		}
+		ImGui::PopButtonRepeat();
+
+		ui.AddSpacingBigSeparated();
+
+		ui.Add(lineWidth, OFX_IM_HSLIDER_SMALL);
+		ui.AddTooltip(ofToString(lineWidth));
+		ui.Add(lineWidth);
+		ui.AddTooltip(ofToString(lineWidth));
+		ui.Add(lineWidth, OFX_IM_STEPPER);
+		ui.AddTooltip(ofToString(lineWidth));
+		ui.Add(lineWidth, OFX_IM_KNOB_DOTKNOB);
+		ui.AddTooltip(ofToString(lineWidth));
+
+		ui.AddSpacingBigSeparated();
+
+		ui.Add(separation, OFX_IM_HSLIDER_BIG); // default style
+		ui.AddTooltip(ofToString(separation));
+
+		//--
+
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow1()
-{
-	int index = 1;
-	{
-		if (ui.BeginWindowSpecial(index))
-		{
-			ui.AddLabelHuge("Window 1", false);
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-			ui.AddGroup(params1);
+void ofApp::drawImGuiSpecialWindow1() {
 
-			//--
+	if (ui.BeginWindowSpecial(1)) {
+		ui.AddLabelHuge("Window 1", false);
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+		ui.AddGroup(params1);
 
-			ui.EndWindowSpecial();
-		}
+		//--
+
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow2()
-{
-	int index = 2;
-	{
-		/*
+void ofApp::drawImGuiSpecialWindow2() {
+	/*
 		// Constraints do not works on docking!
 		if (ui.getIsWindowSpecialVisible(index))
 		{
@@ -327,142 +307,124 @@ void ofApp::drawImGuiSpecialWindow2()
 		}
 		*/
 
-		if (ui.BeginWindowSpecial(index))
-		{
-			ui.BeginColumns(4);
+	if (ui.BeginWindowSpecial(2)) {
+		ui.BeginColumns(4);
 
-			ui.AddLabelHuge("Window 2", false);
-			ui.NextColumn();
+		ui.AddLabelHuge("Window 2", false);
+		ui.NextColumn();
 
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
-			ui.NextColumn();
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+		ui.NextColumn();
 
-			ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
-			ui.NextColumn();
+		ui.AddGroup(params2, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_DEFAULT);
+		ui.NextColumn();
 
-			// Tabs
-			if (ImGui::BeginTabBar("_myTabs"))
-			{
-				if (ImGui::BeginTabItem("Video"))
-				{
-					ui.AddLabelBig("Blah Blah");
-					string str = R"(
+		// Tabs
+		if (ImGui::BeginTabBar("_myTabs")) {
+			if (ImGui::BeginTabItem("Video")) {
+				ui.AddLabelBig("Blah Blah");
+				string str = R"(
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
 )";
-					ui.AddLabel(str.c_str());
-					ui.AddSpacingBigSeparated();
-					ui.AddGroup(params1);
+				ui.AddLabel(str.c_str());
+				ui.AddSpacingBigSeparated();
+				ui.AddGroup(params1);
 
-					ImGui::EndTabItem();
-				}
+				ImGui::EndTabItem();
+			}
 
-				if (ImGui::BeginTabItem("Audio"))
-				{
-					ui.AddSpacingBig();
-					ui.AddLabelHuge("Blah Blah");
-					string str = R"(
+			if (ImGui::BeginTabItem("Audio")) {
+				ui.AddSpacingBig();
+				ui.AddLabelHuge("Blah Blah");
+				string str = R"(
 It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 )";
-					ui.AddLabelBig(str.c_str());
+				ui.AddLabelBig(str.c_str());
 
-					ImGui::EndTabItem();
-				}
-
-				if (ImGui::BeginTabItem("Controls"))
-				{
-					ui.AddSpacingBig();
-					ui.AddLabelHuge("Pump Up");
-					ui.AddLabelBig("the Volume!");
-					ui.AddSpacingBig();
-
-					ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-
-					ui.DrawAdvancedBundle();
-
-					ImGui::EndTabItem();
-				}
-
-				ImGui::EndTabBar();
+				ImGui::EndTabItem();
 			}
-			ui.EndColumns();
 
-			//--
+			if (ImGui::BeginTabItem("Controls")) {
+				ui.AddSpacingBig();
+				ui.AddLabelHuge("Pump Up");
+				ui.AddLabelBig("the Volume!");
+				ui.AddSpacingBig();
 
-			ui.EndWindowSpecial();
+				ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+
+				ui.DrawAdvancedBundle();
+
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
 		}
+		ui.EndColumns();
+
+		//--
+
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow3()
-{
-	int index = 3;
-	{
-		if (ui.BeginWindowSpecial(index))
-		{
-			ui.BeginColumns(3);
-			ui.AddLabelHuge("Window 3");
-			ui.AddSpacingBig();
-			ui.NextColumn();
+void ofApp::drawImGuiSpecialWindow3() {
+	if (ui.BeginWindowSpecial(3)) {
+		ui.BeginColumns(3);
+		ui.AddLabelHuge("Window 3");
+		ui.AddSpacingBig();
+		ui.NextColumn();
 
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
-			ui.AddLabelHuge("Hello, down Huge!", false, true);
-			ui.NextColumn();
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_XXXL_BORDER_BLINK);
+		ui.AddLabelHuge("Hello, down Huge!", false, true);
+		ui.NextColumn();
 
-			ui.AddLabelBig("Hello, down Big!", false, true);
-			ui.AddLabelBig("Hello, down Big! \nHello, down! Hello, down!");
-			ui.AddLabelBig("Hello, down Big!", false, true);
-			ui.EndColumns();
+		ui.AddLabelBig("Hello, down Big!", false, true);
+		ui.AddLabelBig("Hello, down Big! \nHello, down! Hello, down!");
+		ui.AddLabelBig("Hello, down Big!", false, true);
+		ui.EndColumns();
 
-			ui.AddSpacingHugeSeparated();
+		ui.AddSpacingHugeSeparated();
 
-			ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
-			ui.AddLabelHuge("Hello, down Huge! \nHello, down! Hello, down!");
+		ui.AddGroup(params3, ImGuiTreeNodeFlags_DefaultOpen, OFX_IM_GROUP_HIDDEN_HEADER);
+		ui.AddLabelHuge("Hello, down Huge! \nHello, down! Hello, down!");
 
-			//--
+		//--
 
-			ui.EndWindowSpecial();
-		}
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow4()
-{
-	int index = 4;
-	{
-		//TODO: Fix sizing bug
-		if (ui.getIsWindowSpecialVisible(index))
-		{
-			IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
-		}
+void ofApp::drawImGuiSpecialWindow4() {
+	//TODO: Fix sizing bug
+	if (ui.getIsWindowSpecialVisible(4)) {
+		IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
+	}
 
-		if (ui.BeginWindowSpecial(index))
-		{
-			ui.AddLabelHuge("Window 4", false);
+	if (ui.BeginWindowSpecial(4)) {
+		ui.AddLabelHuge("Window 4", false);
 
-			ui.BeginColumns(3);
+		ui.BeginColumns(3);
 
-			ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
-			ui.AddLabelHuge("Hello, left Huge!", true, true);
-			ui.NextColumn();
+		ui.Add(bGui_DockingHelp, OFX_IM_TOGGLE_BIG_BORDER_BLINK);
+		ui.AddLabelHuge("Hello, left Huge!", true, true);
+		ui.NextColumn();
 
-			ui.AddLabelHuge("Hello, left Huge!", false, false);
-			ui.AddLabelBig("Hello, left Big!");
-			ui.NextColumn();
+		ui.AddLabelHuge("Hello, left Huge!", false, false);
+		ui.AddLabelBig("Hello, left Big!");
+		ui.NextColumn();
 
-			ui.AddLabel("Hello, left!", false, true);
-			ui.AddLabelBig("Hello, left Big!", false);
-			ui.EndColumns();
+		ui.AddLabel("Hello, left!", false, true);
+		ui.AddLabelBig("Hello, left Big!", false);
+		ui.EndColumns();
 
-			ui.EndWindowSpecial();
-		}
+		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
+void ofApp::keyPressed(int key) {
 	//ofLogNotice(__FUNCTION__) << " " << char(key);
 
 	if (key == 'g') bGui = !bGui;
@@ -478,8 +440,7 @@ void ofApp::keyPressed(int key)
 // But we can setup the docking layout using hard-coded methods.
 
 //--------------------------------------------------------------
-void ofApp::updateImGuiDockingHelpers()
-{
+void ofApp::updateImGuiDockingHelpers() {
 #if 0
 	// Reset layout once o startup/first frame call.
 	// Called only once!
@@ -497,8 +458,7 @@ void ofApp::updateImGuiDockingHelpers()
 	//----
 
 	// Reset layout by a button
-	if (bFlagDockingReset)
-	{
+	if (bFlagDockingReset) {
 		bFlagDockingReset = false;
 
 		doDockingReset();
@@ -507,8 +467,7 @@ void ofApp::updateImGuiDockingHelpers()
 	//--
 
 	// Random layout by a button
-	if (bFlagDockingRandom)
-	{
+	if (bFlagDockingRandom) {
 		bFlagDockingRandom = false;
 
 		doDockingRandom();
@@ -520,8 +479,7 @@ void ofApp::updateImGuiDockingHelpers()
 // Scene
 
 //--------------------------------------------------------------
-void ofApp::updateScene()
-{
+void ofApp::updateScene() {
 	if (!ui.isDebug()) return;
 	if (!bEnable) return;
 	if (!ui.bLog && !ui.bNotifier) return;
@@ -546,8 +504,7 @@ void ofApp::updateScene()
 
 	// Auto populate random log messages.
 	int m = ofMap(speed, 1, 0, 2, ofRandom(1) > 0.5 ? 60 : 40);
-	if (ofGetFrameNum() % m == 0)
-	{
+	if (ofGetFrameNum() % m == 0) {
 		if (ofNoise(ofGetElapsedTimef()) < 0.4f) return; // skip one third
 
 		std::string ss = ofToString(ofGetFrameNum());
@@ -571,18 +528,16 @@ void ofApp::updateScene()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawScene()
-{
-	auto& r = ui.getRectangleCentralViewport();
+void ofApp::drawScene() {
+	auto & r = ui.getRectangleCentralViewport();
 
-	if (ui.isDebug())
-	{
+	if (ui.isDebug()) {
 		// viewport rect
 		ofPushMatrix();
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
 		float l = 2;
-		float o = 1;//offset
+		float o = 1; //offset
 		ofSetLineWidth(l);
 		ofColor c = ofColor(ofColor::yellow, 255 * SurfingGui::Bounce());
 		ofSetColor(c);
@@ -596,8 +551,10 @@ void ofApp::drawScene()
 	// scene camera
 	{
 		// cam using central docking space as viewport
-		if (cam.getMouseInputEnabled()) { if (ui.isMouseOverGui()) cam.disableMouseInput(); }
-		else if (!ui.isMouseOverGui()) cam.enableMouseInput();
+		if (cam.getMouseInputEnabled()) {
+			if (ui.isMouseOverGui()) cam.disableMouseInput();
+		} else if (!ui.isMouseOverGui())
+			cam.enableMouseInput();
 
 		cam.begin(r);
 		ofPushMatrix();
@@ -620,8 +577,7 @@ void ofApp::drawScene()
 // Custom Helpers widgets
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiDockingHelp()
-{
+void ofApp::drawImGuiDockingHelp() {
 	if (!bGui_DockingHelp) return;
 
 	string s;
@@ -629,8 +585,7 @@ void ofApp::drawImGuiDockingHelp()
 	//TODO: Fix sizing bug
 	IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindow(bGui_DockingHelp))
-	{
+	if (ui.BeginWindow(bGui_DockingHelp)) {
 		//--
 
 		s = "Layout";
@@ -638,10 +593,9 @@ void ofApp::drawImGuiDockingHelp()
 
 		// Reset docking layout
 
-		if (ui.AddButton("Reset", OFX_IM_BUTTON, 2, true))
-		{
+		if (ui.AddButton("Reset", OFX_IM_BUTTON, 2, true)) {
 			bFlagDockingReset = true;
-			// Flag to call on a precise draw point, 
+			// Flag to call on a precise draw point,
 			// inside the draw begin/end context
 		}
 		s = "Layout Reset Docking \nto a hard-coded layout.";
@@ -651,8 +605,7 @@ void ofApp::drawImGuiDockingHelp()
 
 		// Randomize docking layout
 
-		if (ui.AddButton("Random", OFX_IM_BUTTON, 2))
-		{
+		if (ui.AddButton("Random", OFX_IM_BUTTON, 2)) {
 			bFlagDockingRandom = true;
 			// Flag to call on a precise draw point,
 			// inside the draw begin/end context
@@ -667,14 +620,12 @@ void ofApp::drawImGuiDockingHelp()
 		s = "Manager";
 		ui.AddLabelBig(s);
 
-		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2))
-		{
+		if (ui.AddButton("Load", OFX_IM_BUTTON_SMALL, 2)) {
 			ui.loadLayout(path);
 		}
 		ui.SameLine();
 
-		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2))
-		{
+		if (ui.AddButton("Save", OFX_IM_BUTTON_SMALL, 2)) {
 			ui.saveLayout(path);
 		}
 
@@ -711,11 +662,10 @@ void ofApp::drawImGuiDockingHelp()
 // Custom Helpers functions
 
 //--------------------------------------------------------------
-void ofApp::doDockingReset()
-{
+void ofApp::doDockingReset() {
 	ofLogNotice(__FUNCTION__);
 
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGuiViewport * viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
@@ -765,11 +715,10 @@ void ofApp::doDockingReset()
 }
 
 //--------------------------------------------------------------
-void ofApp::doDockingRandom()
-{
+void ofApp::doDockingRandom() {
 	ofLogNotice(__FUNCTION__);
 
-	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGuiViewport * viewport = ImGui::GetMainViewport();
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 

@@ -1,17 +1,15 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
+void ofApp::setup() {
 	setupImGui();
 }
 
 //--------------------------------------------------------------
-void ofApp::setupImGui()
-{
+void ofApp::setupImGui() {
 	// Docking Raw mode
 	// (Without Layout Presets engine)
-	 
+
 	// Setup steps:
 
 	//--
@@ -20,10 +18,8 @@ void ofApp::setupImGui()
 
 	// NOTICE that
 	// To enable the "raw docking" workflow
-	// is mandatory to pass an argument: 
-	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
-
-	ui.setAutoDockingMode(true);
+	// is mandatory to pass an argument:
+	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW_AUTOHANDLER);
 
 	//--
 
@@ -35,10 +31,10 @@ void ofApp::setupImGui()
 	// 2. Queue Special Windows
 
 	// Add the "target" windows just with a name:
-	// You will use these added windows easily, 
+	// You will use these added windows easily,
 	// but you must remember his index order!
 	// Each window will be added to the "Layout Presets Engine" and auto handled too.
-	// The engine will auto create internal bool param toggles 
+	// The engine will auto create internal bool param toggles
 	// (like the bGui we used before)
 	// to handle the show/hide window states.
 	// Notice that is important to remember the index sorting when queuing!
@@ -66,16 +62,14 @@ void ofApp::setupImGui()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
+void ofApp::draw() {
 	drawImGui();
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGui()
-{
+void ofApp::drawImGui() {
 	// Gui Manager with Docking features:
-	// In between here (Begin/End) 
+	// In between here (Begin/End)
 	// we can render ImGui windows and widgets,
 	// and all the docking magic.
 
@@ -83,24 +77,13 @@ void ofApp::drawImGui()
 
 	ui.Begin();
 	{
-#ifndef SURFING__DOCKING_WORKFLOW_HANDLER_AUTODOCKING
-		// 1. Docking magic
-		// Not required to call manually when we don't need to use some docking stuff,
-		// like reseting or hard coding a layout by code.
-		// So it's auto handled internally also! 
-		ui.BeginDocking();
-		ui.EndDocking();
-#endif
-
-		//--
-
-		// 2.2 Populate the visible toggles
+		// Populate the visible toggles
 
 		drawImGuiApp();
 
 		//--
 
-		// 3. The Special Windows 
+		// The Special Windows
 
 		// The windows previously queued to the manager on setup(),
 		// that are controlled by the Layout Presets Engine.
@@ -113,22 +96,20 @@ void ofApp::drawImGui()
 //----
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiApp()
-{
+void ofApp::drawImGuiApp() {
 	// For all the queued especial windows in setup()!
-	if (ui.BeginWindow(bGui))
-	{
+	if (ui.BeginWindow(bGui)) {
 		ui.AddMinimizerToggle();
 		ui.AddMenuBarToggle();
-		ui.drawWidgetsSpecialWindowsManager();
+
+		ui.drawWidgetsSpecialWindowsManager(); //draw all special windows added during setup
 
 		ui.EndWindow();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindows()
-{
+void ofApp::drawImGuiSpecialWindows() {
 	drawImGuiSpecialWindow0();
 	drawImGuiSpecialWindow1();
 	drawImGuiSpecialWindow2();
@@ -137,69 +118,103 @@ void ofApp::drawImGuiSpecialWindows()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow0()
-{
-	// fix to forcing a minimum width for empty window. 
+void ofApp::drawImGuiSpecialWindow0() {
+	// fix to forcing a minimum width for empty window.
 	// as they are auto resized as default.
 	if (ui.getIsWindowSpecialVisible(0)) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindowSpecial(0))
-	{
+	if (ui.BeginWindowSpecial(0)) {
 		ui.AddLabelHuge("Window 0");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow1()
-{
+void ofApp::drawImGuiSpecialWindow1() {
 	if (ui.getIsWindowSpecialVisible(1)) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindowSpecial(1))
-	{
+	if (ui.BeginWindowSpecial(1)) {
 		ui.AddLabelHuge("Window 1");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow2()
-{
+void ofApp::drawImGuiSpecialWindow2() {
 	if (ui.getIsWindowSpecialVisible(2)) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindowSpecial(2))
-	{
+	if (ui.BeginWindowSpecial(2)) {
 		ui.AddLabelHuge("Window 2");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow3()
-{
+void ofApp::drawImGuiSpecialWindow3() {
 	//if (ui.getIsWindowSpecialVisible(3)) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindowSpecial(3))
-	{
+	if (ui.BeginWindowSpecial(3)) {
 		ui.AddLabelHuge("Window 3");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawImGuiSpecialWindow4()
-{
+void ofApp::drawImGuiSpecialWindow4() {
 	//if (ui.getIsWindowSpecialVisible(4)) IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_SMALL_LOCKED_RESIZE;
 
-	if (ui.BeginWindowSpecial(4))
-	{
+	if (ui.BeginWindowSpecial(4)) {
 		ui.AddLabelHuge("Window 4");
+		
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
-{
+void ofApp::keyPressed(int key) {
 	if (key == 'g') bGui = !bGui;
 }

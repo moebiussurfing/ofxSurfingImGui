@@ -164,6 +164,15 @@ void ofApp::drawImGuiSpecialWindow0()
 	if (ui.BeginWindowSpecial(0))
 	{
 		ui.AddLabelHuge("Window 0");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+		
 		ui.EndWindowSpecial();
 	}
 }
@@ -176,6 +185,15 @@ void ofApp::drawImGuiSpecialWindow1()
 	if (ui.BeginWindowSpecial(1))
 	{
 		ui.AddLabelHuge("Window 1");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
@@ -188,6 +206,15 @@ void ofApp::drawImGuiSpecialWindow2()
 	if (ui.BeginWindowSpecial(2))
 	{
 		ui.AddLabelHuge("Window 2");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
@@ -200,6 +227,15 @@ void ofApp::drawImGuiSpecialWindow3()
 	if (ui.BeginWindowSpecial(3))
 	{
 		ui.AddLabelHuge("Window 3");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
@@ -212,6 +248,15 @@ void ofApp::drawImGuiSpecialWindow4()
 	if (ui.BeginWindowSpecial(4))
 	{
 		ui.AddLabelHuge("Window 4");
+
+		//raw imgui
+		static float v = 0;
+		if (ImGui::Button("Button")) {
+			v = 0;
+		}
+		ImGui::SliderFloat("Slider", &v, 0, 1);
+		ImGui::Text("Text");
+
 		ui.EndWindowSpecial();
 	}
 }
