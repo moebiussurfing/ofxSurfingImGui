@@ -1,14 +1,13 @@
 #pragma once
+#include "ofMain.h"
 
 /*
+	TODO
+	- make simpler Example.
 
-	- Allow resize boxes
-	- Make Example.
 */
 
 //--
-
-#include "ofMain.h"
 
 class HelpTextWidget
 {
@@ -26,20 +25,27 @@ private:
 	std::string text = "HelpTextWidget\nEmpty content";
 	std::string title = "myHelpWidget KeyCommands";
 
-	bool bBg = true;
-
-	bool bHeader = false;
+	bool bBg = true; // transparent Bg
+	bool bHeader = true;
+	bool bHeaderTitle = true;
+	bool bTitleSettled = false;
 	bool bBlink = 0;
 
 	bool bMouseLeft = false;
 	bool bMouseRight = false;
 	bool bMouseDrag = false;
-	bool bTitleSettled = false;
+
+	//TODO
+	//public:
+	//	bool bResponsive = true;//autoresize window to text paragraph width
+	//	void setEnableResponsive(bool b = true) { bResponsive = b; }
 
 public:
+	void setEnableBlink(bool b = true) { bBlink = b; }
 	void setEnableHeader(bool b = true) { bHeader = b; }
+	void setEnableHeaderTitle(bool b = true) { bHeaderTitle = b; }
 
-	ofParameter<bool> bGui{"HelpTextWidget", true};
+	ofParameter<bool> bGui{ "HelpTextWidget", true };
 
 	void setTitle(string _title, bool bCapitalize = true)
 	{
@@ -69,57 +75,75 @@ public:
 
 		//TODO:
 		// Combination mouse clicks (left+right) to close window
-		if (bMouseLeft && bMouseRight)
+		if (!bHeader)
 		{
-			bMouseLeft = bMouseRight = bMouseDrag = false;
-			bGui = false;
+			if (bMouseLeft && bMouseRight)
+			{
+				bMouseLeft = bMouseRight = bMouseDrag = false;
+				bGui = false;
+			}
 		}
 
-		// adapt window size to font size
-		switch (fontIndex)
+		// Adapt window size to font sizes and mono types
+		//if (!bResponsive) 
 		{
-		case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;
-		case 1: case 5: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG; break;
-		case 2: case 6: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL; break;
-		case 3: case 7: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX; break;
+			switch (fontIndex)
+			{
+			//case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW; break;//default
+			case 0: case 4: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MEDIUM; break;//default. better for big text examples
+			case 1: case 5: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_BIG; break;//big
+			case 2: case 6: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_FULL; break;//huge
+			case 3: case 7: IMGUI_SUGAR__WINDOWS_CONSTRAINTSW_MAX; break;//hugeXXL
+			}
 		}
 
-		float r = 3; // window rounded 
+		// Window rounded 
+#if 0
+		float r = 3;
+#else
+		float r = ImGui::GetStyle().WindowRounding;
+#endif
+
 		float p = 25; // window padding to borders
 
 		// Spacing after title
 		string sp = "\n";
-		//string sp = "\n\n";
 
 		//--
 
 		ImGuiWindowFlags flags = ImGuiWindowFlags_None;
 		if (!bHeader) flags += ImGuiWindowFlags_NoDecoration;
 		if (!bBg) flags += ImGuiWindowFlags_NoBackground;
-		flags += ImGuiWindowFlags_AlwaysAutoResize;
 
-		// bg color
+		//if (bResponsive)
+		{
+			flags += ImGuiWindowFlags_AlwaysAutoResize;
+		}
+
+		// Bg color
+		ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_TitleBgActive);
+		//ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_Header);
+		//ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive);
 		//ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_FrameBgHovered);
 
-		ImVec4 cbg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive);
-
-		//// alpha
-		//float a = 0.8f;
-		//cbg = ImVec4(cbg.x, cbg.y, cbg.z, cbg.w * a);
-
-		// no alpha
-		//float abg = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive).w;
-
-		// alpha bg
-		float abg = 0.88;//less opacity than window bg color style,
-		// float abg = 0.84;//less opacity than window bg color style,
+#if 1
+		// No alpha Bg
+		//float cbga = 1.f;
+		float cbga = ImGui::GetStyleColorVec4(ImGuiCol_TitleBgActive).w;
+		//float cbga = ImGui::GetStyleColorVec4(ImGuiCol_Header).w;
+		//float cbga = ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive).w;
+#else
+		// Alpha Bg
+		float cbga = 0.88;//less opacity than window bg color style,
+		// float cbga = 0.84;//less opacity than window bg color style,
+#endif
 
 		// Push
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(cbg.x, cbg.y, cbg.z, abg));
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(cbg.x, cbg.y, cbg.z, cbga));
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ p, p });
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, r);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
 		if (bBlink)
 		{
@@ -134,8 +158,17 @@ public:
 
 		// Window
 
-		ImGui::Begin(bGui.getName().c_str(), (bool*)&tmp, flags);
+		string sTitle;
+
+		//sTitle = bTitleSettled ? title : bGui.getName();
+		sTitle = bGui.getName();
+
+		if (!bHeaderTitle) sTitle = "##" + sTitle;//hide text
+
+		ImGui::Begin(sTitle.c_str(), (bool*)&tmp, flags);
 		{
+			//--
+
 			// 1. Title
 
 			if (!bHeader || bTitleSettled)
@@ -143,6 +176,26 @@ public:
 				string s = title;
 				//string s = title + sp;
 
+				//TODO
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+				if (customFontsPtr != nullptr)
+				{
+					if (fontIndex.get() < customFontsPtr->size())
+					{
+						std::vector<ImFont*>& cf = *customFontsPtr;
+						int i = MIN(fontIndex.get() + 1, cf.size() - 1);//make it bigger
+						ImGui::PushFont(cf[i]);
+						//if(bResponsive) 
+						//ImGui::Text(s.c_str());
+						ImGui::TextWrapped(s.c_str());
+						ImGui::PopFont();
+						cf.clear();
+						//delete customFontsPtr;//?
+					}
+					else ImGui::TextWrapped(s.c_str());
+				}
+				else ImGui::TextWrapped(s.c_str());//use default font only
+#else
 				if (!bUsingPtr)
 				{
 					if (fontIndex.get() < customFonts.size())
@@ -150,33 +203,14 @@ public:
 						int i;
 						if (fontIndex.get() == 3 || fontIndex.get() == 7) i = fontIndex.get();
 						else i = MIN(fontIndex.get() + 1, customFonts.size() - 1);
-
 						ImGui::PushFont(customFonts[i]);
+						//ImGui::Text(s.c_str());
 						ImGui::TextWrapped(s.c_str());
 						ImGui::PopFont();
 					}
 					else ImGui::TextWrapped(s.c_str());
 				}
-				else
-				{
-					if (customFontsPtr != nullptr)
-					{
-						if (fontIndex.get() < customFontsPtr->size())
-						{
-							std::vector<ImFont*>& cf = *customFontsPtr;
-							int i = MIN(fontIndex.get() + 1, cf.size() - 1);//make it bigger
-
-							ImGui::PushFont(cf[i]);
-							ImGui::TextWrapped(s.c_str());
-							ImGui::PopFont();
-
-							cf.clear();
-							delete customFontsPtr;
-						}
-						else ImGui::TextWrapped(s.c_str());
-					}
-					else ImGui::TextWrapped(s.c_str());
-				}
+#endif
 			}
 
 			//--
@@ -187,45 +221,45 @@ public:
 				string s = sp + text;
 				//string s = text;
 
+				//TODO
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
+				if (customFontsPtr != nullptr)
+				{
+					if (fontIndex.get() < customFontsPtr->size())
+					{
+						std::vector<ImFont*>& cf = *customFontsPtr;
+						int i = MIN(fontIndex.get(), cf.size() - 1);
+						ImGui::PushFont(cf[i]);
+						ImGui::TextWrapped(s.c_str());
+						ImGui::PopFont();
+						cf.clear();
+						//delete customFontsPtr;//?
+					}
+					else ImGui::TextWrapped(s.c_str());//use default font only
+				}
+				else ImGui::TextWrapped(s.c_str());
+#else
 				if (!bUsingPtr)
 				{
 					if (fontIndex.get() < customFonts.size())
 					{
 						int i = MIN(fontIndex.get(), customFonts.size() - 1);
-
 						ImGui::PushFont(customFonts[i]);
 						ImGui::TextWrapped(s.c_str());
 						ImGui::PopFont();
 					}
 					else ImGui::TextWrapped(s.c_str());
 				}
-				else
-				{
-					if (customFontsPtr != nullptr)
-					{
-						if (fontIndex.get() < customFontsPtr->size())
-						{
-							std::vector<ImFont*>& cf = *customFontsPtr;
-							int i = MIN(fontIndex.get(), cf.size() - 1);
-
-							ImGui::PushFont(cf[i]);
-							ImGui::TextWrapped(s.c_str());
-							ImGui::PopFont();
-
-							cf.clear();
-							delete customFontsPtr;
-						}
-						else ImGui::TextWrapped(s.c_str());
-					}
-					else ImGui::TextWrapped(s.c_str());
-				}
+#endif
 			}
 
 			//--
 
 			//TODO:
 			// Left + right mouse closes window
+			if (!bHeader)
 			{
+				//TODO
 				// set keystroke order
 				//if()
 				//{
@@ -262,11 +296,10 @@ public:
 		if (bGui.get() != tmp) bGui.set(tmp);
 
 		// Pop
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
+		ImGui::PopStyleVar(3);
+
 		ImGui::PopStyleColor();
+
 		if (bBlink) ImGui::PopStyleColor();
 	}
 
@@ -276,13 +309,18 @@ public:
 	ofParameter<int> fontIndex{ "Font", 0, 0, 0 };
 	vector<std::string> namesCustomFonts;
 	vector<std::string>* namesCustomFontsPtr = nullptr;
-
 private:
 	vector<ImFont*> customFonts;
 
 	//TODO: WIP
 	vector<ImFont*>* customFontsPtr = nullptr;
 	bool bUsingPtr = false;
+
+public:
+	void setFontIndex(int i) {
+		i = ofClamp(i, 0, customFonts.size() - 1);
+		fontIndex = i;
+	}
 
 public:
 	void setCustomFonts(vector<ImFont*> f, vector<std::string> namesCustomFonts_)
@@ -297,10 +335,12 @@ public:
 		namesCustomFonts = namesCustomFonts_;
 	}
 
+#ifdef SURFING_IMGUI__USE_CUSTOM_FONTS_PTR
 	//TODO; to avoid update when new font are added!
 	void setCustomFontsPtr(vector<ImFont*>* f, vector<std::string>* namesCustomFontsPtr_)
 	{
-		if (customFontsPtr == nullptr) return;
+		if (customFontsPtr == nullptr) return;//skip if already done?
+
 		customFontsPtr = f;
 		bUsingPtr = true;
 
@@ -312,6 +352,7 @@ public:
 
 		if (namesCustomFontsPtr_ == nullptr) namesCustomFontsPtr = namesCustomFontsPtr_;
 	}
+#endif
 
 private:
 	// Cleanup function to delete the vector

@@ -17,7 +17,7 @@
 // Must be added if < C++17
 // fix for Windows 11? or OF master?
 // Note that currently in 2023/06 GitHub OF master is C++17 and OF patch-release is C++14
-#if 1 
+#if 0 
 namespace std
 {
 	template<typename T>

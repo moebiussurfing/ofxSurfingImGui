@@ -3,13 +3,11 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofxSurfingHelpers::SurfSetMyMonitor(0);
-
 	setupParams();
 
 	setupImGui();
 
-	ofxSurfingHelpers::loadGroup(params);
+	ofxImGuiSurfing::loadGroup(params);
 }
 
 //--------------------------------------------------------------
@@ -170,7 +168,7 @@ void ofApp::keyPressed(int key)
 //--------------------------------------------------------------
 void ofApp::exit() {
 	ofRemoveListener(params.parameterChangedE(), this, &ofApp::Changed_Params);
-	ofxSurfingHelpers::saveGroup(params);
+	ofxImGuiSurfing::saveGroup(params);
 }
 
 //--
@@ -202,7 +200,7 @@ void ofApp::doRandomNotifyLog()
 	{
 		ofxSurfingHelpers::logData d;
 		d.log = OF_LOG_VERBOSE;
-		d.text = getTextRandomSentence();
+		d.text = ofxSurfingHelpers::getTextRandomSentence();
 		this->AddNotifyLog(d.text, d.log);
 	}
 };

@@ -301,7 +301,8 @@ namespace ofxImGuiSurfing
 			return false;
 		}
 
-		const bool hovered = ItemHoverable(frame_bb, id);
+		//const bool hovered = ItemHoverable(frame_bb, id);
+		const bool hovered = ItemHoverable(frame_bb, id, ImGuiItemFlags_None);
 		if (hovered) SetHoveredID(id);
 
 		if (!display_format) display_format = "(%.3f, %.3f)";

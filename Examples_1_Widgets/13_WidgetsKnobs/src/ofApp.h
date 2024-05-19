@@ -1,6 +1,6 @@
 /*
 
-	Test knobs and styles
+	Test knobs and their styles
 
 */
 

@@ -4,7 +4,7 @@
 void ofApp::setup()
 {
 	//ofxSurfingHelpers::setMonitorsLayout(-1, false, true);
-	ofxSurfingHelpers::setMonitorsLayout(1, true, true);
+	ofxSurfingHelpers::setMonitorsLayout(1, true, true);//right monitor and portrait
 
 	ui.setup();
 

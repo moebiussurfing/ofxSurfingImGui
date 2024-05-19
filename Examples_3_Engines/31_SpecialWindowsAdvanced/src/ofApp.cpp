@@ -1,11 +1,7 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup()
-{
-	ofSetWindowPosition(-1920, 20);
-
-	//--
+void ofApp::setup() {
 
 	// Parameters
 
@@ -15,12 +11,12 @@ void ofApp::setup()
 
 	// Gui Stuff
 
-	bGui.set("ofApp", true); // visible toggle for all the gui 
+	bGui.set("ofApp", true); // visible toggle for all the gui
 
 	// The first window don't have a visible bool toggle,
 	// and it's creating by passing a name, and drawn by passing his index when was created.
 
-	// Visible Toggles for all the other windows, 
+	// Visible Toggles for all the other windows,
 	// who are special windows!
 	bGui_1.set("Window 1", true);
 	bGui_2.set("Window 2", true);
@@ -30,16 +26,15 @@ void ofApp::setup()
 
 	//--
 
-	setup_ImGui();
+	setupImGui();
 
 	//--
 
-	buildHelpInfo();
+	buildHelp();
 }
 
 //--------------------------------------------------------------
-void ofApp::setupParams()
-{
+void ofApp::setupParams() {
 	params_0.setName("paramsGroup0");
 	params_0.add(bEnable0.set("Enable0", false));
 	params_0.add(speed0.set("speed0", 0.5, 0, 1));
@@ -64,11 +59,33 @@ void ofApp::setupParams()
 	params_3.add(lineWidth3.set("lineWidth3", 0.5, 0, 1));
 	params_3.add(speed3.set("speed3", 0.5, 0, 1));
 	params_3.add(separation3.set("separation3", 50, 1, 100));
+
+	//--
+
+	// add simple loggers for any param change
+	listenerParams0 = params_0.parameterChangedE().newListener([this](ofAbstractParameter & p) {
+		stringstream ss;
+		ss << p.getName() << ": " << p;
+		ofLogLevel logLevel;
+		int r = ofRandom(4);
+		ui.AddToLogAndNotifier(ss.str(), ofLogLevel(r));
+		//boolean state will no be reading well being always 1.
+		//we should cast bool type to improve.
+	});
+
+	listenerParams1 = params_1.parameterChangedE().newListener([this](ofAbstractParameter & p) {
+		stringstream ss;
+		ss << p.getName() << ": " << p;
+		ofLogLevel logLevel;
+		int r = ofRandom(4);
+		ui.AddToLogAndNotifier(ss.str(), ofLogLevel(r));
+	});
 }
 
 //--------------------------------------------------------------
-void ofApp::setup_ImGui()
-{
+void ofApp::setupImGui() {
+	ofLogNotice("ofApp") << "setupImGui()";
+
 	// Optional:
 	// Like it's happening here:
 	// Recommended to set a name when using multiple instances of the Gui Manager!
@@ -81,7 +98,7 @@ void ofApp::setup_ImGui()
 	// Setup, and Startup is auto called when addWindowsSpecial is called!
 	// We can omit them to speed up initialization.
 	// The internal steps, or how we call the initialization process is like:
-	//ui.setName("ofApp"); 
+	//ui.setName("ofApp");
 	//ui.setWindowsMode(IM_GUI_MODE_WINDOWS_SPECIAL_ORGANIZER);
 	//ui.setup();
 	//ui.addWindowSpecial(..
@@ -114,34 +131,22 @@ void ofApp::setup_ImGui()
 	//ui.addWindowSpecial(myClassObject.bGui);
 #endif
 
+	//--
 
-	//ui.startup();
+	//ui.startup();//Optional in many scenarios.
 }
 
 //--------------------------------------------------------------
-void ofApp::draw()
-{
-	//buildHelpInfo();//its better to call it once or when info update is required.
+void ofApp::draw() {
+	//buildHelp();//its better to call it once or when info update is required.
 
 	if (!bGui) return;
 
-	ui.Begin();
-	{
-		draw_MainWindow();
-
-		draw_SurfingWidgets_0();
-		draw_SurfingWidgets_1();
-		draw_SurfingWidgets_2();
-		draw_SurfingWidgets_3();
-		draw_SurfingWidgets_4();
-		draw_SurfingWidgets_5();
-	}
-	ui.End();
+	drawImGui();
 
 	//--
 
 	// Another ImGui instance / context
-
 
 #ifdef OF_APP_USE_CLASS
 	//if (1)
@@ -162,10 +167,26 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
+void ofApp::drawImGui() {
+
+	ui.Begin();
+	{
+		draw_MainWindow();
+
+		draw_SurfingWidgets_0();
+		draw_SurfingWidgets_1();
+		draw_SurfingWidgets_2();
+		draw_SurfingWidgets_3();
+		draw_SurfingWidgets_4();
+		draw_SurfingWidgets_5();
+	}
+	ui.End();
+}
+
+//--------------------------------------------------------------
 void ofApp::draw_MainWindow() {
 
-	if (ui.BeginWindow(bGui))
-	{
+	if (ui.BeginWindow(bGui)) {
 		ui.AddLabelBig("Main Window", true, true);
 
 		ui.AddMinimizerToggle();
@@ -179,7 +200,7 @@ void ofApp::draw_MainWindow() {
 
 		ui.AddSpacingBigSeparated();
 
-		// Optional: 
+		// Optional:
 		// Some internal useful common toggles are exposed:
 		ui.AddLabel("These are internal windows toggles \
 					useful to populate related Windows \
@@ -194,7 +215,7 @@ void ofApp::draw_MainWindow() {
 
 		ui.AddSpacingBigSeparated();
 
-		// Auto populate all the toggles for all added Special Windows 
+		// Auto populate all the toggles for all added Special Windows
 		ui.AddLabelBig("Auto populate all the toggles for all added Special Windows", true, true);
 		ui.drawWidgetsSpecialWindowsToggles(OFX_IM_TOGGLE_SMALL_BORDER_BLINK);
 
@@ -230,21 +251,19 @@ void ofApp::draw_MainWindow() {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_0()
-{
-	// NOTICE that 
-	// we need to recall and pass the index of this first window! 
+void ofApp::draw_SurfingWidgets_0() {
+	// NOTICE that
+	// we need to recall and pass the index of this first window!
 	// That's because, instead of the other windows,
 	// for this window, we queued the window by adding a name.
-	// 
-	// So, there's two ways of adding and drawing Special Windows: 
+	//
+	// So, there's two ways of adding and drawing Special Windows:
 	// 1. by passing a bool param (acting as a visible toggle)
 	// 2. by passing a name when adding and passing which index was to drawing!
 
-	if (ui.BeginWindowSpecial(0))
-	{
+	if (ui.BeginWindowSpecial(0)) {
 		ui.AddLabelBig("> Special \nWindow 0");
-		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true);//next on same line
+		ui.Add(bPrevious0, OFX_IM_TOGGLE_BIG, 2, true); //next on same line
 		ui.Add(bNext0, OFX_IM_TOGGLE_BIG, 2);
 		ui.AddGroup(params_0);
 		ui.Add(speed0, OFX_IM_VSLIDER_NO_LABELS); // hide labels
@@ -255,18 +274,16 @@ void ofApp::draw_SurfingWidgets_0()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_1()
-{
+void ofApp::draw_SurfingWidgets_1() {
 	//if (!bGui_1) return;
 
 	//// A. we can begin the window passing the index, that we want to remember!
-	//if (ui.BeginWindowSpecial(1)) 
+	//if (ui.BeginWindowSpecial(1))
 
 	// B. but we can remember the name used on setup too.
 	// it's the same that use the index 1. (as first starts with zero)
 
-	if (ui.BeginWindowSpecial(bGui_1))
-	{
+	if (ui.BeginWindowSpecial(bGui_1)) {
 		ui.AddLabelBig("> Special \nWindow 1");
 		ui.AddGroup(params_1);
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS, 4, true);
@@ -280,12 +297,10 @@ void ofApp::draw_SurfingWidgets_1()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_2()
-{
+void ofApp::draw_SurfingWidgets_2() {
 	//if (!bGui_2) return;
 
-	if (ui.BeginWindowSpecial(bGui_2))
-	{
+	if (ui.BeginWindowSpecial(bGui_2)) {
 		ui.AddLabelBig("> Special \nWindow 2");
 		ui.Add(shapeType2, OFX_IM_KNOB_STEPPEDKNOB, 2, true);
 		ui.Add(amount2, OFX_IM_KNOB_SPACEKNOB, 2);
@@ -299,12 +314,10 @@ void ofApp::draw_SurfingWidgets_2()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_3()
-{
+void ofApp::draw_SurfingWidgets_3() {
 	//if (!bGui_3) return;
 
-	if (ui.BeginWindowSpecial(bGui_3))
-	{
+	if (ui.BeginWindowSpecial(bGui_3)) {
 		ui.AddLabelBig("> Special \nWindow 3");
 		ui.AddGroup(params_3);
 		ui.AddSpacingSeparated();
@@ -319,14 +332,12 @@ void ofApp::draw_SurfingWidgets_3()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_4()
-{
+void ofApp::draw_SurfingWidgets_4() {
 	//TODO: fix
 	if (!bGui_4) return;
-	ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2 { 200, -1 }, ImGuiCond_Appearing);
 
-	if (ui.BeginWindowSpecial(bGui_4))
-	{
+	if (ui.BeginWindowSpecial(bGui_4)) {
 		ui.AddLabelBig("> Special \nWindow 4");
 		ui.Add(lineWidth1, OFX_IM_VSLIDER_NO_LABELS);
 		ui.Add(bEnable1, OFX_IM_BUTTON_BIG);
@@ -337,14 +348,12 @@ void ofApp::draw_SurfingWidgets_4()
 }
 
 //--------------------------------------------------------------
-void ofApp::draw_SurfingWidgets_5()
-{
+void ofApp::draw_SurfingWidgets_5() {
 	//TODO: fix
 	if (!bGui_5) return;
-	ImGui::SetNextWindowSize(ImVec2{ 200,-1 }, ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2 { 200, -1 }, ImGuiCond_Appearing);
 
-	if (ui.BeginWindowSpecial(bGui_5))
-	{
+	if (ui.BeginWindowSpecial(bGui_5)) {
 		ui.AddLabelBig("> Special \nWindow 5");
 		ui.Add(amount2, OFX_IM_KNOB_WIPERDOTKNOB);
 		ui.Add(bEnable2, OFX_IM_BUTTON_BIG);
@@ -357,7 +366,8 @@ void ofApp::draw_SurfingWidgets_5()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 
-	if (false) {}
+	if (false) {
+	}
 
 	else if (key == 'g') {
 		bGui = !bGui;
@@ -369,56 +379,50 @@ void ofApp::keyPressed(int key) {
 
 	else if (key == '1') {
 		ui.setWindowSpecialToggleVisible(0);
-	}
-	else if (key == '2') {
+	} else if (key == '2') {
 		ui.setWindowSpecialToggleVisible(1);
-	}
-	else if (key == '3') {
+	} else if (key == '3') {
 		ui.setWindowSpecialToggleVisible(2);
-	}
-	else if (key == '4') {
+	} else if (key == '4') {
 		ui.setWindowSpecialToggleVisible(3);
-	}
-	else if (key == '5') {
+	} else if (key == '5') {
 		ui.setWindowSpecialToggleVisible(4);
-	}
-	else if (key == '6') {
+	} else if (key == '6') {
 		ui.setWindowSpecialToggleVisible(5);
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::buildHelpInfo()
-{
-	helpInfo = "";
-	helpInfo += "11_SpecialWindowsAdvanced \n\n";
-	helpInfo += "\n";
-	helpInfo += "KEY COMMANDS \n\n";
-	helpInfo += "g      GUI ";
+void ofApp::buildHelp() {
+	sHelp = "";
+	sHelp += "11_SpecialWindowsAdvanced \n\n";
+	sHelp += "\n";
+	sHelp += "KEY COMMANDS \n\n";
+	sHelp += "g      GUI ";
 
 	/*
-	helpInfo += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
+	sHelp += "g      GUI " + ofToString(bGui.get() ? "ON" : "OFF");
 	if (bGui)
 	{
-		helpInfo += "\n\n";
-		helpInfo += "0      SHOW WINDOWS " + ofToString(ui.getShowWindowsGlobal() ? "ON" : "OFF") + "\n";
+		sHelp += "\n\n";
+		sHelp += "0      SHOW WINDOWS " + ofToString(ui.getShowWindowsGlobal() ? "ON" : "OFF") + "\n";
 
 		if (ui.getShowWindowsGlobal())
 		{
-			helpInfo += "\n";
-			helpInfo += "1      WINDOW 1 " + ofToString(ui.getIsWindowSpecialVisible(0) ? "ON" : "OFF") + "\n";
-			helpInfo += "2      WINDOW 2 " + ofToString(ui.getIsWindowSpecialVisible(1) ? "ON" : "OFF") + "\n";
-			helpInfo += "3      WINDOW 3 " + ofToString(ui.getIsWindowSpecialVisible(2) ? "ON" : "OFF") + "\n";
-			helpInfo += "4      WINDOW 4 " + ofToString(ui.getIsWindowSpecialVisible(3) ? "ON" : "OFF") + "\n";
-			helpInfo += "5      WINDOW 5 " + ofToString(ui.getIsWindowSpecialVisible(4) ? "ON" : "OFF") + "\n";
-			helpInfo += "6      WINDOW 6 " + ofToString(ui.getIsWindowSpecialVisible(5) ? "ON" : "OFF") + "\n";
+			sHelp += "\n";
+			sHelp += "1      WINDOW 1 " + ofToString(ui.getIsWindowSpecialVisible(0) ? "ON" : "OFF") + "\n";
+			sHelp += "2      WINDOW 2 " + ofToString(ui.getIsWindowSpecialVisible(1) ? "ON" : "OFF") + "\n";
+			sHelp += "3      WINDOW 3 " + ofToString(ui.getIsWindowSpecialVisible(2) ? "ON" : "OFF") + "\n";
+			sHelp += "4      WINDOW 4 " + ofToString(ui.getIsWindowSpecialVisible(3) ? "ON" : "OFF") + "\n";
+			sHelp += "5      WINDOW 5 " + ofToString(ui.getIsWindowSpecialVisible(4) ? "ON" : "OFF") + "\n";
+			sHelp += "6      WINDOW 6 " + ofToString(ui.getIsWindowSpecialVisible(5) ? "ON" : "OFF") + "\n";
 		}
 	}
 	*/
 
 	// We can use an internal Help Manager on the Gui Manager
 	// Enabler toggle will be auto integrated in the common panels.
-	ui.setHelpAppText(helpInfo);
+	ui.setHelpAppText(sHelp);
 }
 
 //--------------------------------------------------------------

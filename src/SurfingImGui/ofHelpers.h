@@ -53,6 +53,9 @@
 #include "SurfingGuiSugar.h"//includes "GuiConstants.h"
 #include "SurfingGuiConstants.h"
 
+#include "HelpTextWidget.h"
+//#include "Combos.h"
+
 //----
 
 namespace ofxImGuiSurfing
@@ -287,7 +290,7 @@ namespace ofxImGuiSurfing
 
 								//TODO: workflow should be improved..
 
-								if (_range < MOUSE_WHEEL_STEPS)
+								if (_range < IMGUI_MOUSE_WHEEL_STEPS)
 								{
 									if (bCtrl)
 									{
@@ -302,7 +305,7 @@ namespace ofxImGuiSurfing
 								{
 									// Step resolution to guaranties 
 									// that 100 steps walks the full range!
-									float _resolution = _range / MOUSE_WHEEL_STEPS;
+									float _resolution = _range / IMGUI_MOUSE_WHEEL_STEPS;
 									resolution = MAX(1, _resolution);
 
 									if (!bCtrl)
@@ -311,11 +314,11 @@ namespace ofxImGuiSurfing
 									}
 									else
 									{
-										_step = resolution * MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
+										_step = resolution * IMGUI_MOUSE_WHEEL_FINETUNE_CTRL_RATIO;
 									}
 								}
 
-								// MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
+								// IMGUI_MOUSE_WHEEL_STEPS is 100 or 1000 steps for all the param range
 							}
 
 							// Minimum step is one unit!
@@ -357,13 +360,13 @@ namespace ofxImGuiSurfing
 
 							if (resolution == -1)
 							{
-								// MOUSE_WHEEL_STEPS is 100 steps spread into all the param range
-								resolution = (p.getMax() - p.getMin()) / MOUSE_WHEEL_STEPS;
+								// IMGUI_MOUSE_WHEEL_STEPS is 100 steps spread into all the param range
+								resolution = (p.getMax() - p.getMin()) / IMGUI_MOUSE_WHEEL_STEPS;
 							}
 
 							float step = wheel * (!bCtrl
 								? resolution
-								: resolution * (float)MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
+								: resolution * (float)IMGUI_MOUSE_WHEEL_FINETUNE_CTRL_RATIO);
 
 							if (bFlip) p -= step;
 							else p += step;
@@ -1269,7 +1272,7 @@ namespace ofxImGuiSurfing
 
 	//TODO:
 	//public://added inline 
-	static bool bMouseWheel = true; //this was originally an internal from guiManager
+	static bool bMouseWheel = true; //this was originally an internal from ui
 
 	// Helpers to populate non ofParams,
 	// Raw CPP types instead an maintain global styles.

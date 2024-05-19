@@ -3,8 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofxImGuiSurfing::SurfSetMyMonitor(0);//optional. just to set window position 
-
 	ui.setup();
 
 	T_CPU_SETUP(4);
@@ -128,7 +126,7 @@ void ofApp::drawGui()
 	{
 		if (ui.BeginWindow("ofApp")) 
 		{
-			ui.Add(ui.bDebugDebugger, OFX_IM_TOGGLE);
+			ui.Add(ui.bDebugDebuggerImGui, OFX_IM_TOGGLE);
 			ui.AddSpacingBigSeparated();
 
 			ui.Add(bStressGpu, OFX_IM_TOGGLE_BIG_BORDER_BLINK);

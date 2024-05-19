@@ -2,7 +2,7 @@
 
 	TODO
 
-	ofParams string
+	fix ofParams string
 	substract window header to correlate hide/show header
 	add anim show/hide
 

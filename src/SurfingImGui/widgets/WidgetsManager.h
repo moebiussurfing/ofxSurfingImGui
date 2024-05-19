@@ -10,7 +10,7 @@
 
 #include "ofHelpers.h"
 #include "LayoutHelpers.h"
-#include "GuiUniqueNames.h"
+#include "SurfingGuiUniqueNames.h"
 
 //--
 
@@ -1670,7 +1670,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0; //fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							false, false));
 						if (bMouseWheel)
 							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1690,7 +1690,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0; //fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							true, false));
 						if (bMouseWheel)
 							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1704,7 +1704,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0; //fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							false, true));
 						if (bMouseWheel)
 							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1718,7 +1718,7 @@ namespace ofxImGuiSurfing
 						const float gap = 0; //fix oversize
 						//const float gap = 2;//fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							true, true));
 						if (bMouseWheel)
 							IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
@@ -1908,7 +1908,7 @@ namespace ofxImGuiSurfing
 
 					case OFX_IM_KNOB_STEPPEDKNOB:
 					{
-						const int steps = abs(p.getMax() - p.getMin());
+						const int steps = abs(p.getMax() - p.getMin())*.01f;
 						bReturn = ofxImGuiSurfing::AddKnobStyled(p, OFX_IM_KNOB_STEPPEDKNOB, _ww,OFX_IM_FORMAT_KNOBS, flags, steps);
 						if (bMouseWheel) IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -2255,7 +2255,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2; //fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							false, false));
 						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -2267,7 +2267,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2; //fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							true, false));
 						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -2279,7 +2279,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2; //fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							false, true));
 						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -2291,7 +2291,7 @@ namespace ofxImGuiSurfing
 					{
 						const float gap = 2; //fix oversize
 						//std::string name = p.getName();
-						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * VERTICAL_AMOUNT_UNITS),
+						bReturn = (ofxImGuiSurfing::AddVSlider(p, ImVec2(_ww - gap, _h * OFX_IM_VERTICAL_AMOUNT_UNITS),
 							true, true));
 						if (bMouseWheel)IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(p, bMouseWheelFlip.get());
 						if (bMouseWheel) bReturn |= GetMouseWheel();
@@ -3029,7 +3029,7 @@ namespace ofxImGuiSurfing
 							//int hhh = pGroup->size() * hratio * hh;
 
 							// B. Height hardcoded
-							int hhh = HEIGHT_SCROLL_GROUP;
+							int hhh = OFX_IM_HEIGHT_SCROLL_GROUP;
 							bIsOpen = ImGui::CollapsingHeader(group.getName().c_str(), flags);
 							bMustCloseTree = false;
 
@@ -3204,7 +3204,7 @@ namespace ofxImGuiSurfing
 								//int hhh = pGroup->size() * hratio * hh;
 
 								// B. Height hardcoded
-								int hhh = HEIGHT_SCROLL_GROUP;
+								int hhh = OFX_IM_HEIGHT_SCROLL_GROUP;
 
 								//-
 

@@ -192,10 +192,10 @@ void SurfingGradient::exit() {
 //	const int key = eventArgs.key;
 //
 //	// modifiers
-//	bool mod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
-//	bool mod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
-//	bool mod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
-//	bool mod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
+//	bool bMod_COMMAND = eventArgs.hasModifier(OF_KEY_COMMAND);
+//	bool bMod_CONTROL = eventArgs.hasModifier(OF_KEY_CONTROL);
+//	bool bMod_ALT = eventArgs.hasModifier(OF_KEY_ALT);
+//	bool bMod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 //
 //	ofLogNotice(__FUNCTION__) << " : " << key;
 //
@@ -203,7 +203,7 @@ void SurfingGradient::exit() {
 //
 //	if (false) {}
 //
-//	else if (key == 'G' && !mod_ALT)
+//	else if (key == 'G' && !bMod_ALT)
 //	{
 //	}
 //}

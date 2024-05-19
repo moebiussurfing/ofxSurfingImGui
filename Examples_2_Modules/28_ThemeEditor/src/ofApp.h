@@ -1,3 +1,11 @@
+/*
+
+	This example shows how to browse themes.
+	We can explore what settings defines a theme,
+	and start make our own theme.
+
+*/
+
 #pragma once
 
 #include "ofMain.h"

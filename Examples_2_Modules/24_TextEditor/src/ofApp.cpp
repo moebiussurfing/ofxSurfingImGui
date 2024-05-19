@@ -42,7 +42,7 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	if (ui.isOverInputText()) return; // skip when editing
+	if (ui.isMouseOverInputText()) return; // skip when editing
 
 	ofLogNotice(__FUNCTION__) << key;
 

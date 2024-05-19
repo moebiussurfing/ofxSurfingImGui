@@ -1,119 +1,129 @@
 #include "ofxSurfingImGui.h"
 
-
 //----
 
 /*
+	TODO:
+	BUGS
 
-	BUGS:
+		- Fix string param callback!
 	
-	- Remove mouse wheel tool-tip when fine-tuning/ctrl enabled!
+		- Fix linked toggle crashes!
 
-	- Add organizer reset/cascade orientation. Now is horizontal only.
+		- Fix default window width constraints!
+			Fails when reopening collapsed groups..
+			seems it's bc group header width!
 
-	- Fix special windows width affecting auto resize and default sliders.
-	- Fix int H sliders?
+		- Remove mouse wheel tool-tip when fine-tuning/ctrl enabled!
 
-	- It seems than special windows engine
-		puts all toggles to false by default ?
-		should store state to simply handling that manually/externally
+		- Add organizer reset/cascade orientation. Now is horizontal only.
 
+		- Fix special windows width affecting auto resize and default sliders.
+		- Fix int H sliders?
+
+		- It seems than special windows engine
+			puts all toggles to false by default ?
+			should store state to simply handling that manually/externally
 */
 
 /*	
-	
 	TODO:
-
 	IDEAS
 
-	- Fix stepper step too small sometimes, then requires more clicks to increment one decimal.
+		- Remake groups workflow.
+			- set firsUser mode to allow imgui internal .ini handling
+			- store styles for a group container.
+			- match ofxGui .minimize() api..
 
-	- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
-		could store if the new addFontStyle is monospace, then store the monospaced indexes
+		- Get an ofCamera ptr to control mouse enable mode.
+			add class helper from surfingHelpers?
 
-	- Make drop-down struct? index + names
-	- add layout with child/header similar to menus.
-	- context menu / right mouse click
-		expose auto resize/minimize/etc
-		add debug info pos,sz for each window.
-	- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
-	- add isFirsTimeStartup() to allow force default settings.
+		- Fix stepper step too small sometimes, then requires more clicks to increment one decimal.
+
+		- Add extra font 4th mono-space. 2 sizes. To be used for console or in some gui zones.
+			could store if the new addFontStyle is monospace, then store the monospaced indexes
+
+		- Make drop-down struct? index + names
+		- add layout with child/header similar to menus.
+		- context menu / right mouse click
+			expose auto resize/minimize/etc
+			add debug info pos,sz for each window.
+		- remove use namespace ImGui global or split from ofxImGuiSurfing.. to clarify auto complete.
+		- add isFirsTimeStartup() to allow force default settings.
 
 	STYLE
-	+ check toggles color theme. correlate with slider grab.
-		hover do not change color!
-		the fix the knobs colors too.
-		push buttons could be darken as if it was a 3D button..
-	+ enable floating windows/context.
-	+ fix param colors.
-	+ fix param string not drawn.
-	+ remake theme loader using void * functions.
-	+ add tooltip with paragraph/ wrapped.
+		+ check toggles color theme. correlate with slider grab.
+			hover do not change color!
+			the fix the knobs colors too.
+			push buttons could be darken as if it was a 3D button..
+		+ enable floating windows/context.
+		+ fix param colors.
+		+ fix param string not drawn.
+		+ remake theme loader using void * functions.
+		+ add tooltip with paragraph/ wrapped.
 
-	API UPDATE v3
-	/ ofParams helpers.
-	+ pass ImVec2 to all widgets.
-	+ make templated for all types.
-	+ add multi choice flags.
-	+ add a mode to show all tooltips at same time,
-		kind of a help mode.
-		that requires deep remake of the core.
+		API UPDATE v3
+		/ ofParams helpers.
+		+ pass ImVec2 to all widgets.
+		+ make templated for all types.
+		+ add multi choice flags.
+		+ add a mode to show all tooltips at same time,
+			kind of a help mode.
+			that requires deep remake of the core.
 
-	HELPERS
-	+ fix range slider to a new widget.
-		add drag from range center.
-	+ useful for multi dim params.
-	https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
-	+ fix toggles do not trigs/return true when changes ?
-	+ add clickable label toggle widget.
-	+ add tool-tip types on styles on a new ui.Add(..arg
-	https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
-	+ API v2: fix nested groups with different styles
-		+ next / nested groups headers are weird hidden sometimes ?
-		+ nested groups are (inheriting) expanded when parent is expanded.
+	PARAMS HELPERS
+		+ fix range slider to a new widget.
+			add drag from range center.
+		+ useful for multi dim params.
+		https://github.com/yumataesu/ofxImGui_v3/blob/master/src/Helper.cpp
+		+ fix toggles do not trigs/return true when changes ?
+		+ add clickable label toggle widget.
+		+ add tool-tip types on styles on a new ui.Add(..arg
+		https://github.com/d3cod3/ofxMosaicPlugin/blob/master/src/core/imgui_helpers.h
+		+ API v2: fix nested groups with different styles
+			+ next / nested groups headers are weird hidden sometimes ?
+			+ nested groups are (inheriting) expanded when parent is expanded.
 
 	GENERAL
-	+ add disabler for avoid store settings.
-	+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
-		something WIP with bAutoDraw..
-	+ fix workflow handling layout presets breaks when Link is enabled.
-	+ fix reset aligners that populates out of the view port.
-		must apply only over special windows maybe ?
+		+ add disabler for avoid store settings.
+		+ fix draw in front the ImGui. not working drawing OF_EVENT_ORDER_AFTER_APP.
+			something WIP with bAutoDraw..
+		+ fix workflow handling layout presets breaks when Link is enabled.
+		+ fix reset aligners that populates out of the view port.
+			must apply only over special windows maybe ?
 
-	DOCKING ( WIP )
-	+ allow panel and presets dockeable too!
-	+ fix make dockeable all windows on same space.
-	+ fix multiple dock spaces that are colliding/one over another.
-	+ fix view-port rectangle preview.
-	+ add video view-port example.
-	+ docking overlaps sometimes on layout management.
+		DOCKING ( WIP )
+		+ allow panel and presets dockeable too!
+		+ fix make dockeable all windows on same space.
+		+ fix multiple dock spaces that are colliding/one over another.
+		+ fix view-port rectangle preview.
+		+ add video view-port example.
+		+ docking overlaps sometimes on layout management.
 
 	SMALL THINGS
-	+ remake mode free move and move locked simpler.
-		a flag for each window ?
-	+ aspect ratio/fit modes for game view port.
-	+ fix log ofxImGuiSurfing::WindowsOrganizer::isInitiated:
+		+ remake mode free move and move locked simpler.
+			a flag for each window ?
+		+ aspect ratio/fit modes for game view port.
+		+ fix log ofxImGuiSurfing::WindowsOrganizer::isInitiated:
 
 	NEW FEATURES
-	+ auto midi knobs to FX:
-		set the master 6 knobs.
-		auto assign to these 6 knobs.
-		from current GUI editing / first plane page.
+		+ auto midi knobs to FX:
+			set the master 6 knobs.
+			auto assign to these 6 knobs.
+			from current GUI editing / first plane page.
 
 	FEATURE
-	+ Probably not required.
-		But could think about linking multiple instances.
-		Or populate as a kind of static to share between instances ?
-		for example, to share organizer windows:
-		// Link internal stuff
-		ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
-		Probably a better fix/workaround is to rename each common windows on each gui manager instance
-		or the pad between windows setting. we could pass pointers to all instances.
-
+		+ Probably not required.
+			But could think about linking multiple instances.
+			Or populate as a kind of static to share between instances ?
+			for example, to share organizer windows:
+			// Link internal stuff
+			ui.getGuiToggleOrganizer().makeReferenceTo(myClassObject.ui.getGuiToggleOrganizer());
+			Probably a better fix/workaround is to rename each common windows on each gui manager instance
+			or the pad between windows setting. we could pass pointers to all instances.
 */
 
 /*
-
 	NOTES:
 
 	Docking Help
@@ -124,32 +134,24 @@
 
 	Tool-Bar Example
 	https://gist.github.com/moebiussurfing/b7652ba1ecbd583b7c4f18e25a598551
-
 */
-
 
 //----
 
-
 /*
-
 	DOCUMENTATION
 
 	NOTE: 
 	I recommend to see the Examples/ instead of looking too much here!
-
 */
-
 
 //--
 
-
-//TODO: 
+//TODO:
 // Make an index/summary/list of
 // all the below EXAMPLES aNd SNIPPETS
 
 /*
-
 		MORE EXAMPLE SNIPPETS
 		---------------------
 
@@ -160,17 +162,13 @@
 		AND SUB PANELS
 		AND DIFFERENT TREES MODES
 		...etc
-
 */
 
-
 //----
-
 
 // 0. TOP SNIPPETS HERE !
 
 /*
-
 	// HOW TO
 	// MINIMAL SNIPPET
 
@@ -188,15 +186,13 @@
 		}
 		ui.End();
 	}
-
 / *
 
 
 //--
 
 
-/ *
-
+/*
 	// HOW TO
 	// COMMON USAGE
 
@@ -241,12 +237,9 @@
 	}
 */
 
-
 //----
 
-
 /*
-
 	//--------------------------------------------------------------
 
 	// 1. HOW TO CREATE A WINDOW ?
@@ -287,7 +280,6 @@
 	if (ofxImGui::BeginWindow(_name.c_str(), mainSettings, _flagw))
 	{ }
 	ofxImGui::EndWindow(mainSettings);
-
 / *
 
 
@@ -296,7 +288,6 @@
 
 
 / *
-
 	SNIPPET
 	FORCE WINDOW POSITION & SHAPE
 
@@ -347,15 +338,11 @@
 		}
 		ImGui::End();
 	}
-
 */
-
 
 //----
 
-
 /*
-
 	EXAMPLE
 	ANOTHER WINDOW WITH SNAPPING TO A GRID
 	AN EXTRA BEGIN/END PAIR.
@@ -414,15 +401,11 @@
 	{
 		ImGui::End();
 	}
-
 */
-
 
 //----
 
-
 /*
-
 	EXAMPLE
 	GET WINDOW SHAPE.
 	CALL BETWEEN BEGIN/END
@@ -430,15 +413,11 @@
 	ofRectangle r = ofRectangle(
 		ImGui::GetWindowPos().x, ImGui::GetWindowPos().y,
 		ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-
 */
-
 
 //--------------------------------------------------------------
 
-
 /*
-
 	// 2. TREES / Folders
 
 	// 2.0 Simple TREE (RECOMMENDED)
@@ -497,18 +476,14 @@
 			ImGui::TreePop();
 		}
 	}
-
 */
 
-
 //----
-
 
 //--------------------------------------------------------------
 // RAW IMGUI EXAMPLES
 
 /*
-
 	EXAMPLE
 	HOW TO SET COLORS?
 
@@ -517,12 +492,9 @@
 	static int i = 3; // hue colors are from 0 to 7
 	ImVec4 _color1 = (ImVec4)ImColor::HSV(i / 7.0f, b, b);
 	ImVec4 _color2 = (ImVec4)ImColor::HSV(i / 7.0f, c, c);
-
 */
 
-
 /*
-
 	EXAMPLE
 	IMGUI INFOS
 
@@ -531,12 +503,9 @@
 	const auto size = ImGui::CalcTextSize(label.c_str());
 	ImGui::ItemSize(ImVec2(ImGui::GetContentRegionAvail().x - size.x - ImGui::GetStyle().FramePadding.x * 2.0f, 0));
 	ImGui::Text("%s", label.c_str());
-
 */
 
-
 /*
-
 	EXAMPLE
 	TABS
 
@@ -566,32 +535,24 @@
 		}
 		ImGui::EndTabBar();
 	}
-
 */
-
 
 //--
 
-
 //--------------------------------------------------------------
 // EXAMPLES AND SNIPPETS
-// MAINLY NOT IMGUI / RAW: 
+// MAINLY NOT IMGUI / RAW:
 // USING THE ADD-ON API AND HELPERS
 
-
 /*
-
 	EXAMPLE
 	COMBO USING A PARAM INT WITH DEFINED NAMES
 
 	static vector<string>names{ "IGNORE","LEFT","RIGHT","CENTER" };
 	ui.AddCombo(indexParam, names);
-
 */
 
-
 /*
-
 	EXAMPLE
 	PREV / NEXT DUAL BUTTONS
 	THAT IS IMPLEMENTED NOW
@@ -616,12 +577,9 @@
 			index_FX = ofClamp(index_FX + 1, index_FX.getMin(), index_FX.getMax());
 		}
 	}
-
 */
 
-
 /*
-
 	EXAMPLE
 	ADD MOUSE WHEEL
 	TO TWEAK A FLOAT PARAM
@@ -645,12 +603,9 @@
 			p = ofClamp(p, p.getMin(), p.getMax()); // clamp
 		}
 	}
-
 */
 
-
 /*
-
 	EXAMPLE
 	RESPONSIVE LAYOUT
 
@@ -675,12 +630,9 @@
 	ImGui::Button("B4", ImVec2(w * 1 / 3.f - _spx, h));
 	ImGui::SameLine();
 	ImGui::Button("B5", ImVec2(w * 1 / 3.f - _spx, h));
-
 */
 
-
 /*
-
 	EXAMPLE
 	INPUT TEXT
 	WITH HUGE FONT
@@ -691,12 +643,9 @@
 	{
 	};
 	ui.PopFont();
-
 */
 
-
 /*
-
 	EXAMPLE
 	HOW TO CUSTOMIZE FONTS
 	AND USE DIFFERENT FONT STYLES?
@@ -740,12 +689,9 @@
 		}
 		if (bCustomFont) ui.popStyleFont();
 	}
-
 */
 
-
 /*
-
 	EXAMPLE
 	COMMON LEFT RIGHT ARROWS
 	TO BROWSE AN INDEX
@@ -768,12 +714,9 @@
 			//limited
 			if (index < index.getMax()) index++;
 		};
-
 */
 
-
 /*
-
 	EXAMPLE
 	IMPROVE LAYOUT ENGINE
 	WITH TABLES/COLUMNS
@@ -839,12 +782,9 @@
 
 	ui.AddSpacingBigSeparated();
 }
-
 */
 
-
 /*
-
 	TODO: WIP:
 
 	EXAMPLE
@@ -895,12 +835,9 @@
 	ImGui::Columns(1);
 
 	//--
-
 */
 
-
 /*
-
 	EXAMPLE
 	THREE COLUMNS
 	WITH A KNOB AND
@@ -934,9 +871,7 @@
 
 */
 
-
 /*
-
 	EXAMPLE
 	A BIG COMBO SELECTOR
 	WITH AN INDEX PARAM,
@@ -979,7 +914,6 @@
 
 */
 
-
 /*
 
 	EXAMPLE
@@ -1017,12 +951,9 @@
 
 		ui.Unindent();
 	}
-
 */
 
-
 /*
-
 	EXAMPLE
 	AN INPUT TEXT
 	BUT WITH A BIG FONT
@@ -1034,12 +965,9 @@
 		//..
 	};
 	ui.PopFont();
-
 */
 
-
 /*
-
 	SNIPPET
 
 	RESPONSIVE LAYOUT
@@ -1058,12 +986,9 @@
 	// -n is the distance you want to be available for labels.
 	float w = ImGui::GetWindowContentRegionWidth() - ImGui::CalcItemWidth();
 	ImGui::PushItemWidth(-w);
-
 */
 
-
 /*
-
 	SNIPPET
 
 	RIGHT
@@ -1105,12 +1030,9 @@
 
 		ui.EndWindow();
 	}
-
 */
 
-
 /*
-
 	EXAMPLE
 	POP UP.
 	CONTEXT MENU
@@ -1156,21 +1078,14 @@
 		}
 		ImGui::TreePop();
 	}
-
 */
 
-
-
-
 //--------------------------------------------------------------
-// RAM IMGUI 
-
+// RAM IMGUI
 
 // WIDGET DESIGN
 
-
 /*
-
 	DEBUG HELPERS
 	USEFUL WHEN CREATING
 	YOUR OWN WIDGETS FROM SCRATCH.
@@ -1178,12 +1093,9 @@
 
 	IMGUI_SUGAR__DEBUG_POINT(bDebug);
 	IMGUI_SUGAR__DEBUG_POINT2;
-
 */
 
-
 /*
-
 	SNIPPET
 	DUAL TOOLTIP
 
@@ -1203,17 +1115,12 @@
 		ImGui::End();
 	}
 	ImGui::End();
-
 */
-
-
 
 //--------------------------------------------------------------
 // DRAFT NOTES
 
-
 /*
-
 	GRADIENT
 	COLORED
 	BUTTONS
@@ -1221,18 +1128,12 @@
 	ofxImGuiSurfing::ColoredButtonV1("Hello", ImVec2(-FLT_MIN, 0.0f), IM_COL32(255, 255, 255, 255), IM_COL32(200, 60, 60, 255), IM_COL32(180, 40, 90, 255));
 
 	ofxImGuiSurfing::ColoredButtonV1("You", ImVec2(-FLT_MIN, 50), IM_COL32(255, 255, 255, 255), IM_COL32(50, 220, 60, 255), IM_COL32(69, 150, 255, 255));
-
 */
-
-
-
 
 //--------------------------------------------------------------
 // DOCKSPACE
 
-
 /*
-
 	DOCKING FLAGS
 
 	// Flags for ImGui::DockSpace()
@@ -1247,12 +1148,9 @@
 		ImGuiDockNodeFlags_PassthruCentralNode          = 1 << 5,   // Enable passthru dockspace: 1) DockSpace() will render a ImGuiCol_WindowBg background covering everything excepted the Central Node when empty. Meaning the host window should probably use SetNextWindowBgAlpha(0.0f) prior to Begin() when using this. 2) When Central Node is empty: let inputs pass-through + won't display a DockingEmptyBg background. See demo for details.
 		ImGuiDockNodeFlags_AutoHideTabBar               = 1 << 6    // Tab bar will automatically hide when there is a single window in the dock node.
 	};
-
 */
 
-
 /*
-
 	DOCKING
 	NOTES
 
@@ -1268,12 +1166,9 @@
 	SetNextWindowClass()
 
 	https://github.com/ocornut/imgui/issues/2423#issuecomment-473539196
-
 */
 
-
 /*
-
 	SNIPPET
 	VARIOUS WINDOW FLAGS.
 	TYPICALLY YOU WOULD JUST USE THE DEFAULT!
@@ -1301,14 +1196,10 @@
 	if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
 	if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 	if (no_docking)         window_flags |= ImGuiWindowFlags_NoDocking;
-
 */
-
-
 
 //--------------------------------------------------------------
 // RARE DEMOS
-
 
 /*
 	EXAMPLE
@@ -1332,13 +1223,10 @@
 	}
 */
 
-
 //--------------------------------------------------------------
 // MISCELLANEOUS
 
-
 /*
-
 	 SNIPPET
 	 Allows to make exact width of n widgets
 	 to fit panel size for two buttons or columns per row:
@@ -1348,12 +1236,9 @@
 	 if (ImGui::Button("A", ImVec2(w, h))) { }
 	 ImGui::SameLine();
 	 if (ImGui::Button("B", ImVec2(w, h))) { }
-
 */
 
-
 /*
-
 	ADVANCED WINDOW
 
 	EXAMPLE
@@ -1365,58 +1250,18 @@
 	EXAMPLE
 	ofxImGuiSurfing::AddToggleRoundedButton(ui.bAdvanced);
 	ui.DrawAdvancedSubPanel();
-
 */
 
-
 /*
-
 	NOTES
 
 	Trying rare chars text
 	string s = "hello";
 	ofUTF8Append(s, '▽');
 	ui.AddLabel(s);
-
 */
 
-
-//TODO: blur fx
 /*
-
-	//TODO: not works..
-	// Helper function to apply blur effect on an ImGui window
-	inline void ApplyBlur(ImGuiWindow *window)
-	{
-		auto g = ImGui::GetCurrentContext();
-		//ImGuiContext& g = ImGui::GetCurrentContext();
-		//ImGuiContext& g = GImGui;
-
-		//auto window = ImGui::GetCurrentWindow();
-		ImVec2 pad_pos = window->DC.CursorPos;
-		ImVec2 pad_size = window->Size;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		ImGui::BeginChild("##blur", pad_size, true, 0);
-		ImGui::PopStyleVar();
-		ImGui::GetWindowDrawList()->AddRectFilled(pad_pos, ImVec2(pad_pos.x + pad_size.x, pad_pos.y + pad_size.y), ImColor(0, 0, 0, 128));
-		ImGui::EndChild();
-	}
-
-	// Usage example
-	inline void Example() {
-		ImGui::Begin("Blurred window");
-
-		ImGui::Text("This window has a blur effect applied to it.");
-
-		auto window = ImGui::GetCurrentWindow();
-		ApplyBlur(window);
-
-*/
-
-
-/*
-
 		// SNIPPET
 		// WIDGET SLIDE WITH NAME
 		// EXACTLY ALIGNED
@@ -1430,5 +1275,4 @@
 			ImGui::SliderFloat(n.c_str(), &scale, 0, 1);
 			ImGui::PopItemWidth();
 		}
-
 */

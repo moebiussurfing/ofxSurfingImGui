@@ -174,7 +174,7 @@ namespace ofxImGuiSurfing
     // A template to create a new V2 template. 
     // It could be a day/lighter color scheme.
     //--------------------------------------------------------------
-    inline void ImGui_ThemeMoebiusSurfingV2(bool bEnableLayout, bool bEnableColors)
+    inline void ImGui_ThemeMoebiusSurfingV2(bool bEnableLayout=true, bool bEnableColors=true)
     {
         ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingV2";
         ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors);

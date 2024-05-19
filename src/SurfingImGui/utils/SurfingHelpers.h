@@ -15,7 +15,7 @@ using namespace std;
 //namespace ofxSurfingHelpers//TODO:
 /*
 #include "SurfingHelpers.h"
-#ifndef OF_APP_DEFINED_ofxSurfingHelpers 
+#ifndef OF_APP_DEFINED_ofxSurfingHelpers
 namespace ofxSurfingHelpers = ofxImGuiSurfing;
 #endif
 */
@@ -24,6 +24,62 @@ namespace ofxSurfingHelpers = ofxImGuiSurfing;
 namespace ofxImGuiSurfing
 {
 	// Monitors helpers
+
+	/*
+	#if 1
+	float w = 1500;
+	float h = w / (16 / 9.f);
+	ofSetWindowShape(w, h);
+
+	float x = (1920 - w) / 2;
+	x -= 1920;//left monitor
+	float y = (1080 - h) / 2;
+	y += 25;//add header
+	ofSetWindowPosition(x , y);
+	#endif
+	*/
+
+	// WIP
+	// Center app window for FHD monitors. 
+	// Center monitor is landscape.
+	// Left monitor is landscape.
+	// Right monitor is portrait.
+	//--------------------------------------------------------------
+	inline void setWindowShape(int posMonitor = 0, bool bPortrait = false, float sz = 1700) {
+		float w;
+		float h;
+		if (bPortrait) {
+			h = sz;
+			w = h / (16 / 9.f);
+		}
+		else {
+			w = sz;
+			h = w / (16 / 9.f);
+		}
+		ofSetWindowShape(w, h);
+
+		float x = 0;
+		if (posMonitor == -1) bPortrait ? x -= 1920 : x -= 1920;//left monitor
+		else if (posMonitor == 1) bPortrait ? x += 1920 : x += 1920;//right monitor
+
+		//center x
+		if (bPortrait) {
+			x += (1080 - h) / 2;
+		}
+		else {
+			x += (1920 - w) / 2;
+		}
+
+		//center y
+		float y;
+		if (bPortrait) y = (1920 - h) / 2;
+		else y = (1080 - h) / 2;
+
+		y += 25;//add header
+
+		ofSetWindowPosition(x, y);
+	}
+
 
 	// WARNING! For my personal setup!
 	// I have three FHD monitors: 

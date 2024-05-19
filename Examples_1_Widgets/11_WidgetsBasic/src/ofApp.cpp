@@ -233,10 +233,10 @@ void ofApp::drawImWindow2()
 		ui.AddSpacingBig();
 
 		// We can make the header bigger
-		ui.PushFont(OFX_IM_FONT_BIG);
+		ui.PushFontStyle(OFX_IM_FONT_BIG);
 		bool b = ImGui::TreeNodeEx("EXPAND", ImGuiTreeNodeFlags_DefaultOpen);
 		ui.AddSpacingBig();
-		ui.PopFont();
+		ui.PopFontStyle();
 
 		if (b) // This is a raw ImGui tree
 		{

@@ -1,18 +1,15 @@
-#pragma once
-
-//--
 
 /*
 
 	This example shows how to use the Notifier system.
 	Most settings are customizable.
-	
 	Also will show the Log system together.
 
 */
 
-
 //--
+
+#pragma once
 
 #include "ofMain.h"
 

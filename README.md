@@ -1,11 +1,13 @@
 <br>
-
+  
 <h1>
-  
-ofxSurfingImGui.  
+
+ofxSurfingImGui.
+
 A [Dear ImGui](https://github.com/ocornut/imgui) **Toolkit**  
-for [openFrameworks](https://openframeworks.cc/) app projects.  
-  
+for [openFrameworks](https://openframeworks.cc/)  
+desktop app projects.  
+
 </h1>
 
 <h3>
@@ -25,30 +27,32 @@ WORK IN PROGRESS!
 
 <br>
 
-## OVERVIEW
-- Bundled batteries for your full OF Apps.
-- ofParameter Widgets.
-- Layout and Style Helpers.
-- Useful Modules/Systems.
-- Workflow Engines for the final user.
+# OVERVIEW
+- **Bundled batteries** for your full **Desktop OF Apps**.
+- **ofParameter** Widgets.
+- **Layout** and **Style** Helpers.
+- Useful **Modules**/**Systems**.
+- **Workflow Engines** for the final user.
+
+<br>
 
 ## FEATURES
-- **ofParameter Helpers**:
-  - Many RAW **DearImGui widgets** adapted.
-  - Added custom useful widgets.
 - **Simple Setup**:
-  - Simplified user **workflow**.
+  - Simplified coder and user **workflow**.
   - Many useful **Internal states** and persistent settings:
-    - Minimize, debug, extra, advanced, auto resize...
+    - Minimize, debug, extra, advanced, windows auto resize...
     - Log, Notifier, and windows visibility and distribution. 
     - Global Scale.
-- **Multiple instances**:
-  - Many windows around your classes and **ofxAddons**.
-  - All together without colliding.
 - Useful **API methods** and **Snippets**: 
   - Help on populate **Windows** and **Widgets**.
   - **Speed-Up** responsive **Layout Helpers**.
-- Four active **Font Sizes** for labels, widgets and text paragraphs.
+- **ofParameter Helpers**:
+  - Many RAW **DearImGui widgets** adapted.
+  - Added custom useful widgets.
+- **Multiple instances**:
+  - Many windows around your classes and **ofxAddons**.
+  - All together without colliding.
+- Four active **Font Sizes** for labels, widgets, and text paragraphs.
   - Four optional extra fonts for alternate **monospaced** and **non-monospaced**.
 - Extra **Mouse Control**: 
   - Wheel for tweaking:
@@ -59,7 +63,7 @@ WORK IN PROGRESS!
     - _+Alt_ to Reset to **Max**.
 - **Themes Editor** example:  ( WIP )
     - **20+ bundled themes** compilation. 
-    - Hardcoded and `ini` files.
+    - Hardcoded and `.ini` files.
     - File serializers, A-B compare, sizes and/or colors.
     - **Manager**, **Demo Window** and **Tester Widgets**.
 
@@ -72,35 +76,32 @@ WORK IN PROGRESS!
     - Metrics: frame rate and frame time.
     - Profiler: Cpu and Gpu measurements.
 - **Text Editor System**: 
-    - Language marks with custom marked **keyworks**.
+    - Language marks with custom marked **keywords**.
     - Font sizes, color themes.
     - **Clipboard** access and **undo/redo** history.
+- **Image Inspector System**:
+    - Zoom with pixel color picker.
 - **Console System**: ( WIP )
     - Basic console/**terminal** module.
     - Call methods/**commands** by typing into the console.
-- **Image Inspector System**:
-    - With pixel color picker.
 
 ## ENGINES
 - **Windows Organizer**:
-    - Aligner, cascade and Group/Linker.
+    - Aligner, cascade, and Group/Linker.
 - **Layout Presets Engine**. ( WIP )
 - **Docking Helpers**. ( WIP )
  
 <br>
 
-## EXAMPLES SCREENSHOTS
+# SCREENSHOTS
 
-[Examples_0_Basic](/Examples_0_Basic/README.md)  
-[Examples_1_Widgets](/Examples_1_Widgets/README.md)  
-[Examples_2_Modules](/Examples_2_Modules/README.md)  
-[Examples_3_Engines](/Examples_3_Engines/README.md)  
-[Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
+- [Examples_0_Basic](/Examples_0_Basic/README.md)  
+- [Examples_1_Widgets](/Examples_1_Widgets/README.md)  
+- [Examples_2_Modules](/Examples_2_Modules/README.md)  
+- [Examples_3_Engines](/Examples_3_Engines/README.md)  
+- [Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
 
-<br>
-
-### EXAMPLE: 01_HelloWorld
-
+## EXAMPLE: 00_HelloWorld
 ![](/Examples_0_Basic/01_HelloWorld/Capture.PNG)
 <details>
   <summary>CODE</summary>
@@ -122,7 +123,8 @@ class ofApp : public ofBaseApp
   ofParameter<float> speed{ "Speed", .5f, 0.f, 1.f };
   ofParameterGroup params{ "MyGroup", bEnable, speed };
 
-  ofParameter<bool> bGui{ "Show", true };	
+  ofParameter<bool> bGui{ "Show", true };
+
   ofxSurfingGui ui;
 };
 ```
@@ -159,43 +161,47 @@ void ofApp::draw()
 
 <br>
 
-## DEPENDENCIES
+# REQUERIMENTS
 
-### ImGui BACKEND
+## IMGUI OF BACKEND
 
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop):
-  - Dear [ImGui v1.89.4](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
-  - The **AWESOME** [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
-  - You **MUST use this one**! Use instead of the [@jvcleave REPOSITORY](https://github.com/jvcleave/ofxImGui).
-
-### DATA ASSET FILES
-
-* Recommended: [JetBrainsMono-Bold.ttf](JetBrainsMono-Bold.ttf)
-  - The monospaced font file for the default theme.
-  - Put into `/bin/data/assets/fonts/`.  
-* Optional: [data.zip](data.zip)
-  - More font files (non monospaced alternative) from the same family. To put into each OF project `OF_APP/bin/data/`.  
+* Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
+  - Dear [ImGui v1.90](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+    - You **MUST use this one**! 
+    - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
 
 <details>
-  <summary>NOTE ABOUT THE FONTS</summary>  
-  
-The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, then it will search for a legacy font called **telegrama_render.otf**. If none of that fonts are located, it will work too, but using the default bundled font from **ImGui**. (So `/data` can also be completely empty too.) 
-
-</details>
-  
-<details>
-  <summary>WHY ANOTHER ofxImGui FORK?</summary>
+  <summary>WHY ANOTHER BACKEND FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
-  - Multi context / instances: 
+- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
+  - Multi context/instances: 
     - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
-    Currently this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
+    Currently, this fork is linked to the original [develop branch from @jvcleave](https://github.com/jvcleave/ofxImGui/tree/develop).  
     And will be probably merged into the master branch someday.  
     
  </p>
 </details>
+
+## DATA ASSET FILES
+
+* Recommended: [JetBrainsMono-Bold.ttf](data/assets/fonts/JetBrainsMono-Bold.ttf)
+  - The monospaced font file for the default theme.
+  - Put into `OF_APP/bin/data/assets/fonts/`.  
+* Optional: [data.zip](data.zip)
+  - More font files (non-monospaced alternative) from the same family.
+  - Put into each **OF project** `OF_APP/bin/data/`.  
+
+<details>
+  <summary>ABOUT THE FONTS</summary>  
+  
+The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, it will search for a legacy font called **telegrama_render.otf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
+
+</details>
+
+<br>
 
 <details>
   <summary>RELATED LINKS</summary>  
@@ -217,18 +223,11 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 
 ## CURRENT SYSTEMS
 
-- **Windows 11** / **Visual Studio 2022**
+- **Windows 11** / **Visual Studio 2022**.
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [OF 0.11.2](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**  
-    * Not tested on **M1/M2 Apple Silicon/iOS** yet. Testers are welcome!.
-
-<br>
-
-# AUTHOR
-
-An addon by **moebiusSurfing**.  
-*( ManuMolina ) 2021-2023*  
+    * Last official release [OF 0.12](https://openframeworks.cc/download/).
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
+- **M1/M2 Apple Silicon/iOS**.
 
 <br>
 
@@ -241,6 +240,13 @@ _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AW
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
+
+<br>
+
+# AUTHOR
+
+An addon by **moebiusSurfing**.  
+*( ManuMolina ) 2021-2024*  
 
 <br>
 
