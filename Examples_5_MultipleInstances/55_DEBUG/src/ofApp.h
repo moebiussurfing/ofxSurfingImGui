@@ -6,7 +6,7 @@
     This example is for testing purposes
     Allows debugging about how to handles many ui instances:
     - Look how the fonts are added to the ImGui context.
-    - Look how bin/data/ settings are created.
+    - Look how bin/data/ settings are created with separated folders for each instance.
     - Debug how ofxImGui handles internal master/slave instances and the context management.
 
 */

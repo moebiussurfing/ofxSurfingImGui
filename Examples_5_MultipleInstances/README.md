@@ -1,14 +1,14 @@
-## 51_MultiInstanceSimple
-![](51_MultiInstanceSimple/Capture.PNG)  
+## 51_Simple
+![](51_Simple/Capture.PNG)  
 
-## 52_MultiInstanceOneContext
-![](52_MultiInstanceOneContext/Capture.PNG)  
+## 52_OneContext
+![](52_OneContext/Capture.PNG)  
 
-## 53_MultiInstanceAdvanced
-![](53_MultiInstanceAdvanced/Capture.PNG)  
+## 53_Advanced
+![](53_Advanced/Capture.PNG)  
 
-## 54_MultiInstanceMainApp
-![](54_MultiInstanceMainApp/Capture.PNG)  
+## 54_MainApp
+![](54_MainApp/Capture.PNG)  
 
-## 55_MultiInstanceDEBUG
-![](55_MultiInstanceDEBUG/Capture.PNG)  
+## 55_DEBUG
+![](55_DEBUG/Capture.PNG)  
