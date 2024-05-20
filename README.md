@@ -166,7 +166,7 @@ void ofApp::draw()
 ## IMGUI OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
-  - Dear [ImGui v1.90](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
   - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
     - You **MUST use this one**! 
     - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
@@ -227,7 +227,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.12](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
-- **M1/M2 Apple Silicon/iOS**.
+- **M1/M2 Apple Silicon/iOS** requires testing.
 
 <br>
 
