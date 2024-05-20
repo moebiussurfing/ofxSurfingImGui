@@ -438,7 +438,7 @@ namespace ofxImGuiSurfing
 		// No bool
 		if (typeid(ParameterType) != typeid(bool))
 		{
-			ofxImGuiSurfing::AddMouseClickRightReset(ap);
+			//ofxImGuiSurfing::AddMouseClickRightReset(ap);
 		}
 	}
 

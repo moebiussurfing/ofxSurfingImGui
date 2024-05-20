@@ -48,7 +48,7 @@
 
 #pragma once
 #include "imgui.h"
-//#include <list>
+#include <list>//macOS
 
 #include "ofParameter.h"
 
