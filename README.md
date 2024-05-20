@@ -166,7 +166,7 @@ void ofApp::draw()
 ## IMGUI OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
-  - Dear [ImGui v1.90](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
   - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
     - You **MUST use this one**! 
     - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
