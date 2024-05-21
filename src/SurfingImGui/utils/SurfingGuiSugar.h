@@ -165,12 +165,9 @@ namespace ofxImGuiSurfing
 
 	// Adds mouse wheel control to the last/previous ofParam widget (float/int) rendered.
 
+	/// macOS fix
 	//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2, arg3) ofxImGuiSurfing::AddMouseWheel(arg1, arg2, arg3);
     //#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1, arg2) ofxImGuiSurfing::AddMouseWheel(arg1, arg2); // param, flip
-
-	//--
-
-	/// macOS fix
 	//#define IMGUI_SUGAR__SLIDER_ADD_MOUSE_WHEEL(arg1) ofxImGuiSurfing::AddMouseWheel(arg1, false); // param, flip
 
 	//--

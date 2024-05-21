@@ -4535,9 +4535,9 @@ public:
 
 	//--------------------------------------------------------------
 	void setPresetsNames(vector<string> names) {
-		if (names.size() != 4) {
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
-										  << "Names sizes are not equals to 4";
+		ofLogNotice("ofxSurfingImGui") << "setPresetsNames() " << ofToString(names);
+		if (names.size() != SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS) {
+			ofLogError("ofxSurfingImGui") << "setPresetsNames() Names sizes must be equal to " << SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS;
 		}
 
 		namesPresets.clear();
