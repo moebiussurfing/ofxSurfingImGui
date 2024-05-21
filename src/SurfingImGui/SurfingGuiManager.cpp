@@ -5162,7 +5162,7 @@ void SurfingGuiManager::drawMenuDocked() {
 		//--
 
 		if (BeginMenu("About")) {
-			string s = "WARNING !\n\nDON'T PAY ATTENTION FOR THIS TEXT! \NTHIS IS NOT OPERATIVE HERE. \NJUST FOR TESTING MENUS!"
+			string s = "WARNING !\n\nDON'T PAY ATTENTION FOR THIS TEXT! \nTHIS IS NOT OPERATIVE HERE. \nJUST FOR TESTING MENUS!"
 					   "\n\n"
 					   "When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!"
 					   "\n"
