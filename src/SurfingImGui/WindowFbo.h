@@ -18,11 +18,10 @@
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
-//#include "ofHelpers.h"
-//#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
-
 #include "SurfingHelpers.h"
 
+//#include "ofHelpers.h"
+//#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
 
 //#include "ofxInteractiveRect.h"
 ////#include "ofxSurfingBox.h"
@@ -371,7 +370,7 @@ public:
 public:
 
 	ofParameter<bool> bGui_MiniPreview{ "MINI", true };
-	ofParameter<bool> bGui_PreviewBig{ "BIG", false };//big preview can be full screen, docked or draggable.
+	ofParameter<bool> bGui_PreviewBig{ "BIG", true };//big preview can be full screen, docked or draggable.
 	ofParameter<bool> bGui_Extra{ "PREVIEW EXTRA", false };//extra window for settings
 
 	ofParameter<bool> bFullScreen{ "Full Screen", true };//big preview will be drawn on the full screen
