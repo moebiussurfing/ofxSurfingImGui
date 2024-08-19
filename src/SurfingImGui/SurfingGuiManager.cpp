@@ -932,10 +932,10 @@ void SurfingGuiManager::resetUISettings() {
 		ofFile f(p);
 		if (f.exists()) {
 			f.remove();
-			s = "Removed file " + ofToDataPath(p);
+			s = ofToString("Removed file ") + ofToDataPath(p).c_str();
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = "File " + ofToDataPath(p) + " not found.";
+			s = ofToString("File ") + ofToDataPath(p).c_str() + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -948,10 +948,10 @@ void SurfingGuiManager::resetUISettings() {
 		ofDirectory d(ofToDataPath(p));
 		if (d.exists()) {
 			d.remove(true);
-			s = "Removed folder " + ofToDataPath(p);
+			s = ofToString("Removed folder ") + ofToDataPath(p).c_str();
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = "Folder " + ofToDataPath(p) + " not found.";
+			s = ofToString("Folder ") + ofToDataPath(p).c_str() + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -2204,7 +2204,7 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 			flagsDock += ImGuiDockNodeFlags_PassthruCentralNode;
 
 			// A
-			dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
+			dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, flagsDock);
 			dockNode = ImGui::DockBuilderGetNode(dockNodeID);
 
 			// B
