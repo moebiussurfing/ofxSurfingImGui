@@ -2204,7 +2204,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 			flagsDock += ImGuiDockNodeFlags_PassthruCentralNode;
 
 			// A
-			dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, flagsDock);
+			//dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, flagsDock);
+			dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, NULL);//TODO: workaround fix. must test and remake.
 			dockNode = ImGui::DockBuilderGetNode(dockNodeID);
 
 			// B
