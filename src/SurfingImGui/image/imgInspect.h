@@ -331,7 +331,7 @@ namespace ImageInspect
 						ImGui::Text("r,g,b:  %d,%d,%d", int(color.x * 255.f), int(color.y * 255.f), int(color.z * 255.f));
 
 						// alpha
-						ImGui::Text("alpha:  %d", INT(color.w * 255.f));
+						ImGui::Text("alpha:  %d", int(color.w * 255.f));
 
 						//--
 
