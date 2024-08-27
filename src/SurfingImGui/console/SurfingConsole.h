@@ -209,7 +209,7 @@ private:
 	{
 		data->lastCommand = "just printArgs";
 
-		std::cout << "  args: " << args << endl;
+		std::cout << "  args: " << args.str() << endl;
 		std::cout << endl;
 
 		setScroll();

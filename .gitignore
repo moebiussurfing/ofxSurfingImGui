@@ -584,3 +584,6 @@ Examples_2_Modules/22_LogSystemHelpBoxes/bin/data/.gitkeep
 Examples_2_Modules/22_LogSystemHelpBoxes/of.entitlements
 Examples_2_Modules/23_NotifierSystem/bin/data/.gitkeep
 Examples_2_Modules/23_NotifierSystem/of.entitlements
+of.entitlements
+/bin/data/**/*.gitkeep
+.gitkeep
