@@ -68,7 +68,7 @@ namespace ofxImGuiSurfing
 //macOS
 
 
-	auto mult = [](const ImVec4& vec, const float value) {
+	inline auto mult = [](const ImVec4& vec, const float value) {
 		return ImVec4{ vec.x * value, vec.y * value, vec.z * value, vec.w };
 	};
 
