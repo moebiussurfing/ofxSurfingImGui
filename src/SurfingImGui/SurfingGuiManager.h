@@ -41,14 +41,14 @@ Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and ther
 //TODO: breaks bc recursive including?
 
 #include "imgui_styles.h"
-#include "surfingThemesHelpers.h"
+#include "./themes/SurfingThemesHelpers.h"
 
 //TODO: move here! now breaks!
 //#include "SurfingImGui/WindowFbo.h"
 //#include "SurfingImGui/WindowLog.h"
 
 #ifdef SURFING_IMGUI__USE_NOTIFIER
-	#include "SurfingImGui/notifiers/surfingNotifier.h"
+	#include "./notifiers/SurfingNotifier.h"
 #endif
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
