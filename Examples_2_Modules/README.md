@@ -27,6 +27,8 @@
 ## 30_ThemeEditorFull
 ![](30_ThemeEditorFull/Capture.PNG)  
 
+## 31_FileBrowser
+![](31_FileBrowser/Capture.PNG)  
 
 # VIDEOS
 
