@@ -393,7 +393,7 @@ namespace ofxImGuiSurfing
                 dir.listDir(path);
                 for (auto& f : dir)
                 {
-                    ret |= AddFileSelector(f.path(), selected, ext);
+					ret |= AddFileSelector(f.path().string(), selected, ext);
                 }
                 ImGui::TreePop();
             }
@@ -458,7 +458,7 @@ namespace ofxImGuiSurfing
                     bool b = (i == _index.get());
                     ofxImGuiSurfing::BeginBlinkFrame(b);
 
-                    bool bp = AddFilesPicker(f.path(), _selected, _index, ext);
+                    bool bp = AddFilesPicker(f.path().string(), _selected, _index, ext);
                     ret |= bp;
 
                     ofxImGuiSurfing::EndBlinkFrame(b);
