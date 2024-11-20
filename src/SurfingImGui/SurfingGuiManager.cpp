@@ -571,7 +571,8 @@ void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float
 
 	clearFonts();
 
-	string pathFonts = f.getEnclosingDirectory().string();
+	//string pathFonts = f.getEnclosingDirectory().string();
+	string pathFonts = f.getEnclosingDirectory();
 	string nameFont = f.getFileName();
 	setupFontDefault(pathFonts, nameFont, sizeFont);
 
@@ -890,7 +891,8 @@ void SurfingGuiManager::setupImGuiTheme() {
 	string pathThemes = path_Global + "themes/";
 	//string pathThemes = "Gui/themes/";
 	string pathTheme = pathThemes + name;
-	string p = ofToDataPath(pathTheme).string();
+	string p = ofToDataPath(pathTheme);
+	//string p = ofToDataPath(pathTheme).string();
 	ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 	ImGui::LoadStyleFrom(p.c_str());
 	ofFile f;
@@ -933,10 +935,12 @@ void SurfingGuiManager::resetUISettings() {
 		if (f.exists()) {
 			f.remove();
 			//s = ofToString("Removed file ") + ofToDataPath(p).c_str();
-			s = ofToString("Removed file ") + ofToDataPath(p).string();
+			//s = ofToString("Removed file ") + ofToDataPath(p).string();
+			s = ofToString("Removed file ") + ofToDataPath(p);
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = ofToString("File ") + ofToDataPath(p).string() + ofToString(" not found.");
+			//s = ofToString("File ") + ofToDataPath(p).string() + ofToString(" not found.");
+			s = ofToString("File ") + ofToDataPath(p) + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -949,10 +953,12 @@ void SurfingGuiManager::resetUISettings() {
 		ofDirectory d(ofToDataPath(p));
 		if (d.exists()) {
 			d.remove(true);
-			s = ofToString("Removed folder ") + ofToDataPath(p).string();
+			s = ofToString("Removed folder ") + ofToDataPath(p);
+			//s = ofToString("Removed folder ") + ofToDataPath(p).string();
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = ofToString("Folder ") + ofToDataPath(p).string() + ofToString(" not found.");
+			s = ofToString("Folder ") + ofToDataPath(p) + ofToString(" not found.");
+			//s = ofToString("Folder ") + ofToDataPath(p).string() + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -1512,20 +1518,24 @@ bool SurfingGuiManager::LoadFontsFromFolder(string path, float size, bool bMulti
 	for (int i = 0; i < dir.size(); i++) {
 		string label = dir[i].getBaseName();
 		if (!bMultisize)
-			b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 		else // multi size
 		{
 			// size -1
 			label = dir[i].getBaseName() + ", " + ofToString(size - 1) + "px";
-			b = b && addFontStyle(dir[i].getAbsolutePath().string(), size - 1, label);
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size - 1, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size - 1, label);
 
 			// size
 			label = dir[i].getBaseName() + ", " + ofToString(size) + "px";
-			b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 
 			// size +1
 			label = dir[i].getBaseName() + ", " + ofToString(size + 1) + "px";
-			b = b && addFontStyle(dir[i].getAbsolutePath().string(), size + 1, label);
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size + 1, label);
+			b = b && addFontStyle(dir[i].getAbsolutePath(), size + 1, label);
 		}
 	}
 
@@ -1911,12 +1921,14 @@ void SurfingGuiManager::updateAttendDockingPre() {
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayout(string path) {
 	bFlagDoLoadImGuiLayout = true;
-	pathLayout = ofToDataPath(path).string();
+	//pathLayout = ofToDataPath(path).string();
+	pathLayout = ofToDataPath(path);
 }
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayout(string path) {
 	bFlagDoSaveImGuiLayout = true;
-	pathLayout = ofToDataPath(path).string();
+	//pathLayout = ofToDataPath(path).string();
+	pathLayout = ofToDataPath(path);
 }
 
 //--
@@ -4194,12 +4206,14 @@ void SurfingGuiManager::loadLayoutPreset(string path) {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutImGuiIni(string path) {
-	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
+	//ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
+	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutImGuiIni(string path) {
-	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
+	//ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
+	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
