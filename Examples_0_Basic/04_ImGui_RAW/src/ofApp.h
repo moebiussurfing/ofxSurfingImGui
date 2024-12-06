@@ -14,8 +14,6 @@ public:
 	ofxSurfingGui ui;
 	ofParameter<bool> bGui{ "ofApp", true };
 
-	void ShowExampleTable();
-
 	struct Data {
 		int id; 
 		std::string name; 
@@ -24,6 +22,7 @@ public:
 		int anotherInt; 
 		std::string description;
 	};
-
 	std::vector<Data> data;
+
+	void ShowExampleTable();
 };
