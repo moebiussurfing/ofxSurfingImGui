@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	// Fill data
+	// Fill table data
 	data.resize(20);
 	for (int i = 0; i < data.size(); ++i) {
 		data[i] = { i + 1, "Name " + std::to_string(i + 1), i * 10.0f, i * 1.0e5, i * 100, "Description " + std::to_string(i + 1) };
@@ -19,20 +19,23 @@ void ofApp::draw()
 	{
 		/* Put windows here */
 
-		if (ui.BeginWindow(bGui))
+		if (ui.BeginWindow(bGui)) // Handles windows management. No need to use RAW ImGui window/frame.
 		{
+			/* Put RAW Dear ImGui or custom ofxSurfingImGui widgets here. */
+
 			ui.AddAutoResizeToggle();
 			ui.AddSpacing();
 
-			/* Put RAW Dear ImGui widgets here. */
-			/* No need to handle the window as we are using ofxSurfingImGui */
-
+			// No need to handle the window as we are using ofxSurfingImGui
 			ShowExampleTable();
+
+			// Another RAW Dear ImGui 
+			ShowAngledHeaders();
 
 			ui.EndWindow();
 		}
 
-		// RAW Dear ImGui with his window management
+		// RAW Dear ImGui with his own window/frame management
 		ImGui::ShowDemoWindow();
 	}
 	ui.End();
@@ -47,8 +50,7 @@ void ofApp::keyPressed(int key)
 // Function to display a table with data
 //--------------------------------------------------------------
 void ofApp::ShowExampleTable() {
-	//// Dear ImGui window also usable
-	//// Begin the ImGui frame
+	//// Begin the ImGui frame/window
 	//ImGui::Begin("Example Table");
 
 	// Create a table with 10 columns
@@ -87,8 +89,81 @@ void ofApp::ShowExampleTable() {
 		ImGui::EndTable();
 	}
 
-	//// Dear ImGui window also usable
-	//// End the ImGui frame
+	//// End the ImGui frame/window
 	//ImGui::End();
 }
 
+// Another function to display a table with data
+//--------------------------------------------------------------
+void ofApp::ShowAngledHeaders() {
+	// Using those as a base value to create width/height that are factor of the size of our font
+	const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
+	const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+
+	if (ImGui::TreeNode("Angled headers"))
+	{
+		const char* column_names[] = { "Track", "cabasa", "ride", "smash", "tom-hi", "tom-mid", "tom-low", "hihat-o", "hihat-c", "snare-s", "snare-c", "clap", "rim", "kick" };
+		const int columns_count = IM_ARRAYSIZE(column_names);
+		const int rows_count = 12;
+
+		static ImGuiTableFlags table_flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_HighlightHoveredColumn;
+		static ImGuiTableColumnFlags column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed;
+		static bool bools[columns_count * rows_count] = {}; // Dummy storage selection storage
+		static int frozen_cols = 1;
+		static int frozen_rows = 2;
+		if (ImGui::TreeNode("Settings"))
+		{
+		ImGui::CheckboxFlags("_ScrollX", &table_flags, ImGuiTableFlags_ScrollX);
+		ImGui::CheckboxFlags("_ScrollY", &table_flags, ImGuiTableFlags_ScrollY);
+		ImGui::CheckboxFlags("_Resizable", &table_flags, ImGuiTableFlags_Resizable);
+		ImGui::CheckboxFlags("_NoBordersInBody", &table_flags, ImGuiTableFlags_NoBordersInBody);
+		ImGui::CheckboxFlags("_HighlightHoveredColumn", &table_flags, ImGuiTableFlags_HighlightHoveredColumn);
+		ImGui::SetNextItemWidth(ImGui::GetFontSize() * 8);
+		ImGui::SliderInt("Frozen columns", &frozen_cols, 0, 2);
+		ImGui::SetNextItemWidth(ImGui::GetFontSize() * 8);
+		ImGui::SliderInt("Frozen rows", &frozen_rows, 0, 2);
+		ImGui::CheckboxFlags("Disable header contributing to column width", &column_flags, ImGuiTableColumnFlags_NoHeaderWidth);
+		ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Style settings"))
+		{
+			ImGui::SameLine();
+			//HelpMarker("Giving access to some ImGuiStyle value in this demo for convenience.");
+			ImGui::SetNextItemWidth(ImGui::GetFontSize() * 8);
+			ImGui::SliderAngle("style.TableAngledHeadersAngle", &ImGui::GetStyle().TableAngledHeadersAngle, -50.0f, +50.0f);
+			ImGui::SetNextItemWidth(ImGui::GetFontSize() * 8);
+			ImGui::SliderFloat2("style.TableAngledHeadersTextAlign", (float*)&ImGui::GetStyle().TableAngledHeadersTextAlign, 0.0f, 1.0f, "%.2f");
+			ImGui::TreePop();
+		}
+
+		if (ImGui::BeginTable("table_angled_headers", columns_count, table_flags, ImVec2(0.0f, TEXT_BASE_HEIGHT * 12)))
+		{
+			ImGui::TableSetupColumn(column_names[0], ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder);
+			for (int n = 1; n < columns_count; n++)
+				ImGui::TableSetupColumn(column_names[n], column_flags);
+			ImGui::TableSetupScrollFreeze(frozen_cols, frozen_rows);
+
+			ImGui::TableAngledHeadersRow(); // Draw angled headers for all columns with the ImGuiTableColumnFlags_AngledHeader flag.
+			ImGui::TableHeadersRow();       // Draw remaining headers and allow access to context-menu and other functions.
+			for (int row = 0; row < rows_count; row++)
+			{
+				ImGui::PushID(row);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text("Track %d", row);
+				for (int column = 1; column < columns_count; column++)
+					if (ImGui::TableSetColumnIndex(column))
+					{
+						ImGui::PushID(column);
+						ImGui::Checkbox("", &bools[row * columns_count + column]);
+						ImGui::PopID();
+					}
+				ImGui::PopID();
+			}
+			ImGui::EndTable();
+		}
+		ImGui::TreePop();
+	}
+}
