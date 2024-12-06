@@ -239,6 +239,8 @@ _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AW
 
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 
+_Thanks to [@AndyJarosz](https://github.com/MadlyFX) for using the lib and financing for his [Reality Field Virtual Production System](https://loledvirtual.gumroad.com/l/realityfield) project for [LOLED VIRTUAL](https://loledvirtual.com/)._  
+
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 
 <br>
