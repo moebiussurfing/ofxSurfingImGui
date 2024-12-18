@@ -1315,8 +1315,8 @@ namespace ofxImGuiSurfing
 			return false;
 
 		ImGuiButtonFlags flags = ImGuiButtonFlags_None;
-			flags |= ImGuiButtonFlags_Repeat;
 		if (g.LastItemData.ItemFlags & ImGuiItemFlags_ButtonRepeat)
+			flags |= ImGuiItemFlags_ButtonRepeat;
 
 		bool hovered, held;
 		bool pressed = ButtonBehavior(bb, id, &hovered, &held, flags);
