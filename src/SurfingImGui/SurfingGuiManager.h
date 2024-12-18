@@ -4505,7 +4505,7 @@ private:
 
 	//-
 
-	vector<ofParameter<bool>> bLayoutPresets { "bLayoutPresets" }; // each window show toggles
+	vector<ofParameter<bool>> bLayoutPresets {  }; // each window show toggles
 	void Changed_Params(ofAbstractParameter & e);
 	ofParameterGroup params_LayoutsPanel { "Layouts Panel" };
 
