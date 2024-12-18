@@ -4624,28 +4624,28 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		switch (key) {
 		case OF_KEY_F1:
 			bLayoutPresets[0] = !bLayoutPresets[0];
-			logKeyParamToggle(bLayoutPresets[0], "F1");
+				logKeyParamToggle(bLayoutPresets[0], {"F1", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F2:
 			bLayoutPresets[1] = !bLayoutPresets[1];
-			logKeyParamToggle(bLayoutPresets[1], "F2");
+				logKeyParamToggle(bLayoutPresets[1], {"F2", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F3:
 			bLayoutPresets[2] = !bLayoutPresets[2];
-			logKeyParamToggle(bLayoutPresets[2], "F3");
+				logKeyParamToggle(bLayoutPresets[2], {"F3", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F4:
 			bLayoutPresets[3] = !bLayoutPresets[3];
-			logKeyParamToggle(bLayoutPresets[3], "F4");
+				logKeyParamToggle(bLayoutPresets[3], {"F4", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
@@ -4657,7 +4657,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		if (key == OF_KEY_F5) // Presets
 		{
 			bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
-			logKeyParamToggle(bGui_LayoutsPresetsSelector, "F5");
+			logKeyParamToggle(bGui_LayoutsPresetsSelector, {"F5", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4665,7 +4665,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		else if (key == OF_KEY_F6) // Panels
 		{
 			bGui_LayoutsPanels = !bGui_LayoutsPanels;
-			logKeyParamToggle(bGui_LayoutsPanels, "F6");
+			logKeyParamToggle(bGui_LayoutsPanels, {"F6", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4673,7 +4673,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		else if (key == OF_KEY_F7) // Manager
 		{
 			bGui_LayoutsManager = !bGui_LayoutsManager;
-			logKeyParamToggle(bGui_LayoutsManager, "F7");
+			logKeyParamToggle(bGui_LayoutsManager, {"F7", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4825,7 +4825,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 	// Solo
 	if ((key == 's' && bMod_CONTROL) || key == 19) {
 		bSolo = !bSolo;
-		logKeyParamToggle(bSolo, "Ctrl + s");
+		logKeyParamToggle(bSolo, {"Ctrl + s", true});
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
