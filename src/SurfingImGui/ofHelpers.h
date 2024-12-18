@@ -72,7 +72,8 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline bool GetMouseWheel()
 	{
-		ImGui::SetItemUsingMouseWheel();
+		ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
+
 		bool bReturn = false;
 
 		if (ImGui::IsItemHovered())
@@ -199,7 +200,7 @@ namespace ofxImGuiSurfing
 #endif
 			}
 
-			ImGui::SetItemUsingMouseWheel();
+			ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
 
 			if (ImGui::IsItemHovered())
 			{
@@ -406,7 +407,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void AddMouseWheel(bool& p) // toggle boolean state with mouse wheel
 	{
-		ImGui::SetItemUsingMouseWheel();
+		ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
 
 		if (ImGui::IsItemHovered())
 		{
