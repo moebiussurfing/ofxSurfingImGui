@@ -128,9 +128,9 @@ IMGUI_API void ImGui::SaveStylesTo(const char* fileName) {
 IMGUI_API void ImGui::LoadStyleFrom(const char* fileName) {
 	ini_t* ini_style = ini_load(fileName);
 	if (ini_style == NULL) return;
-
+	
 	ImGuiStyle& style = ImGui::GetStyle();
-
+	
 #define LOAD_FLOAT(name) { \
 		const char* Str_##name  = ini_get(ini_style, "ImGuiStyles", #name); \
 		style.name = Str_##name != NULL ? atof(Str_##name) : style.name; \
@@ -160,13 +160,18 @@ IMGUI_API void ImGui::LoadStyleFrom(const char* fileName) {
 	LOAD_FLOAT(MouseCursorScale);
 	LOAD_FLOAT(CurveTessellationTol);
 	LOAD_FLOAT(CircleTessellationMaxError);
-
+	
 	// Directions
 #define LOAD_DIRECTION(name) { \
-		const char* str  = ini_get(ini_style, "ImGuiStyles", #name); \
+		const char* str = ini_get(ini_style, "ImGuiStyles", #name); \
 		if (str != NULL) { \
-			int direction = ImGuiTextToDir(str); \
-			if (direction >= 0) style.name = direction; \
+		ImGuiDir direction = ImGuiDir_None; \
+		if (strcmp(str, "Left") == 0) direction = ImGuiDir_Left; \
+		else if (strcmp(str, "Right") == 0) direction = ImGuiDir_Right; \
+		else if (strcmp(str, "Up") == 0) direction = ImGuiDir_Up; \
+		else if (strcmp(str, "Down") == 0) direction = ImGuiDir_Down; \
+		else direction = ImGuiDir_None; \
+		style.name = direction; \
 		} \
 	}
 	LOAD_DIRECTION(WindowMenuButtonPosition);

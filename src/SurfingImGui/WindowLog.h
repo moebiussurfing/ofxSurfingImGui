@@ -1134,6 +1134,7 @@ namespace ofxImGuiSurfing
         {
             ofLogNotice("ofxSurfingImGui:SurfingLog") << "exportLogToFile:" << path;
 
+            //if (path == "") path = ofToDataPath("", true).string();
             if (path == "") path = ofToDataPath("", true);
             path += "\\logs"; //add subfolder
             CheckFolder(path); //create folder if required

@@ -60,13 +60,15 @@ namespace ofxImGuiSurfing
 	};
 
 	const float lightness = 1.0f;
-	auto rgbLightness = [=](int r, int g, int b, float alpha = 1.0f)
-	{
-		ImVec4 c = ImVec4(r / 255.0f * lightness, g / 255.0f * lightness, b / 255.0f * lightness, alpha);
-		return c;
-	};
+//	auto rgbLightness = [=](int r, int g, int b, float alpha = 1.0f)
+//	{
+//		ImVec4 c = ImVec4(r / 255.0f * lightness, g / 255.0f * lightness, b / 255.0f * lightness, alpha);
+//		return c;
+//	};
+//macOS
 
-	auto mult = [](const ImVec4& vec, const float value) {
+
+	inline auto mult = [](const ImVec4& vec, const float value) {
 		return ImVec4{ vec.x * value, vec.y * value, vec.z * value, vec.w };
 	};
 

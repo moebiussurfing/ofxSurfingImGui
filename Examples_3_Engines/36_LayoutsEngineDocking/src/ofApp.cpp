@@ -258,7 +258,7 @@ void ofApp::drawImGuiWindows()
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 			ui.Add(lineWidth, OFX_IM_STEPPER);
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
-			ui.Add(lineWidth, OFX_IM_KNOB);
+//			ui.Add(lineWidth, OFX_IM_KNOB);
 			ui.AddTooltip(ofToString(lineWidth, ui.bHelp));
 
 			ui.AddSpacingBigSeparated();

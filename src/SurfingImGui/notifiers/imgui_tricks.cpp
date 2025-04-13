@@ -1,5 +1,28 @@
 #include "imgui_tricks.hpp"
 
+//--
+
+//fix macOS
+#include <iostream>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <sys/time.h>
+#endif
+
+uint64_t GetTickCount64Equivalent() {
+#ifdef _WIN32
+    return GetTickCount64();
+#else
+    struct timeval tv;
+    gettimeofday(&tv, nullptr);
+    return static_cast<uint64_t>(tv.tv_sec) * 1000 + static_cast<uint64_t>(tv.tv_usec) / 1000;
+#endif
+}
+
+//--
+
 namespace ImTricks {
 	
 	//TODO: should test original sample if animations works on there!
@@ -335,7 +358,7 @@ namespace ImTricks {
 
 		void AddNotify(std::string message, NotifyState state)
 		{
-			uint64_t t = GetTickCount64();//TODO: WIN_32 only!
+			uint64_t t = GetTickCount64Equivalent();//TODO: WIN_32 only!
 			notifies.push_back({ message, state, t + duration });//store end time
 		}
 
@@ -429,9 +452,14 @@ namespace ImTricks {
 
 				//1. bbox bg
 				if (bBg) {
+                    float r=0;
+                    bool b = (round == 0);
+                    if (b) r=ImGui::GetStyle().PopupRounding;
+                    else r=round;
+                    //float r= (float)(b ? (ImGui::GetStyle().PopupRounding) : (round));
 					draw->AddRectFilled(NotifyPos_, NotifyEndPos,
 						ImGui::GetColorU32(ImGuiCol_PopupBg),
-						((round == 0) ? ImGui::GetStyle().PopupRounding : round));
+						r);
 				}
 
 				ImColor colorState;
@@ -486,7 +514,7 @@ namespace ImTricks {
 
 			//--
 
-			uint64_t t = GetTickCount64();//TODO: WIN_32 only!
+			uint64_t t = GetTickCount64Equivalent();//TODO: WIN_32 only!
 
 			// iterate all notes
 			for (auto& n : notifies)

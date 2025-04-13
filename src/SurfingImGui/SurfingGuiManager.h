@@ -41,14 +41,14 @@ Error	C2757	'ofxSurfingHelpers': a symbol with this name already exists and ther
 //TODO: breaks bc recursive including?
 
 #include "imgui_styles.h"
-#include "surfingThemesHelpers.h"
+#include "./themes/SurfingThemesHelpers.h"
 
 //TODO: move here! now breaks!
 //#include "SurfingImGui/WindowFbo.h"
 //#include "SurfingImGui/WindowLog.h"
 
 #ifdef SURFING_IMGUI__USE_NOTIFIER
-	#include "SurfingImGui/notifiers/surfingNotifier.h"
+	#include "./notifiers/SurfingNotifier.h"
 #endif
 
 #ifdef SURFING_IMGUI__USE_PROFILE_DEBUGGER
@@ -1585,7 +1585,7 @@ public:
 	bool BeginWindow(string name);
 	bool BeginWindow(string name, bool * p_open);
 	bool BeginWindow(string name, bool * p_open, ImGuiWindowFlags window_flags);
-	bool BeginWindow(char * name = "Window");
+	bool BeginWindow(char * name );
 	bool BeginWindow(char * name, ImGuiWindowFlags window_flags);
 	//bool BeginWindow(string name, bool* p_open, ImGuiWindowFlags window_flags, ImGuiCond cond);
 	//bool BeginWindow(char* name, ImGuiWindowFlags window_flags, ImGuiCond cond);
@@ -4243,8 +4243,8 @@ public:
 		if (index > windows.size() - 1 || index == -1) {
 			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
 										  << "Out of range index for queued Special windows, " << index;
-			ofParameter<bool> b = ofParameter<bool> { "-1", false };
-			return b;
+			throw std::out_of_range("Index out of range"); // or handle it as appropriate
+			   
 		}
 
 		return windows[index].bGui;
@@ -4363,8 +4363,8 @@ public:
 		if (index > windowsExtra.size() - 1 || index == -1) {
 			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
 										  << "Out of range index for queued Extra windows, " << index;
-			ofParameter<bool> b = ofParameter<bool> { "-1", false };
-			return b;
+			throw std::out_of_range("Index out of range"); // or handle it as appropriate
+			   
 		}
 
 		return windowsExtra[index];
@@ -4505,7 +4505,7 @@ private:
 
 	//-
 
-	vector<ofParameter<bool>> bLayoutPresets { "bLayoutPresets" }; // each window show toggles
+	vector<ofParameter<bool>> bLayoutPresets {  }; // each window show toggles
 	void Changed_Params(ofAbstractParameter & e);
 	ofParameterGroup params_LayoutsPanel { "Layouts Panel" };
 
@@ -4535,9 +4535,9 @@ public:
 
 	//--------------------------------------------------------------
 	void setPresetsNames(vector<string> names) {
-		if (names.size() != 4) {
-			ofLogError("ofxSurfingImGui") << (__FUNCTION__) << "\n"
-										  << "Names sizes are not equals to 4";
+		ofLogNotice("ofxSurfingImGui") << "setPresetsNames() " << ofToString(names);
+		if (names.size() != SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS) {
+			ofLogError("ofxSurfingImGui") << "setPresetsNames() Names sizes must be equal to " << SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS;
 		}
 
 		namesPresets.clear();

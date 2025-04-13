@@ -166,7 +166,7 @@ void ofApp::draw()
 ## IMGUI OF BACKEND
 
 * Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
-  - Dear [ImGui v1.90](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
+  - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
   - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
     - You **MUST use this one**! 
     - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
@@ -227,7 +227,7 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
     * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
     * Last official release [OF 0.12](https://openframeworks.cc/download/).
 - **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
-- **M1/M2 Apple Silicon/iOS**.
+- **macOS 14.5 Sonoma** / **Xcode 15.4** / [OF 0.12+] / **M1/M2 Apple Silicon**. **iOS** requires testing.
 
 <br>
 
@@ -238,6 +238,8 @@ _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImG
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
 
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
+
+_Thanks to [@AndyJarosz](https://github.com/MadlyFX) for financing and using the lib for his [Reality Field Virtual Production System](https://loledvirtual.gumroad.com/l/realityfield) project for [LOLED VIRTUAL](https://loledvirtual.com/)._  
 
 _All source snippets and widgets from other authors are linked into header files as credits. Thanks!_  
 

@@ -571,6 +571,7 @@ void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float
 
 	clearFonts();
 
+	//string pathFonts = f.getEnclosingDirectory().string();
 	string pathFonts = f.getEnclosingDirectory();
 	string nameFont = f.getFileName();
 	setupFontDefault(pathFonts, nameFont, sizeFont);
@@ -891,6 +892,7 @@ void SurfingGuiManager::setupImGuiTheme() {
 	//string pathThemes = "Gui/themes/";
 	string pathTheme = pathThemes + name;
 	string p = ofToDataPath(pathTheme);
+	//string p = ofToDataPath(pathTheme).string();
 	ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 	ImGui::LoadStyleFrom(p.c_str());
 	ofFile f;
@@ -932,10 +934,13 @@ void SurfingGuiManager::resetUISettings() {
 		ofFile f(p);
 		if (f.exists()) {
 			f.remove();
-			s = "Removed file " + ofToDataPath(p);
+			//s = ofToString("Removed file ") + ofToDataPath(p).c_str();
+			//s = ofToString("Removed file ") + ofToDataPath(p).string();
+			s = ofToString("Removed file ") + ofToDataPath(p);
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = "File " + ofToDataPath(p) + " not found.";
+			//s = ofToString("File ") + ofToDataPath(p).string() + ofToString(" not found.");
+			s = ofToString("File ") + ofToDataPath(p) + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -948,10 +953,12 @@ void SurfingGuiManager::resetUISettings() {
 		ofDirectory d(ofToDataPath(p));
 		if (d.exists()) {
 			d.remove(true);
-			s = "Removed folder " + ofToDataPath(p);
+			s = ofToString("Removed folder ") + ofToDataPath(p);
+			//s = ofToString("Removed folder ") + ofToDataPath(p).string();
 			AddToLog(s, OF_LOG_WARNING);
 		} else {
-			s = "Folder " + ofToDataPath(p) + " not found.";
+			s = ofToString("Folder ") + ofToDataPath(p) + ofToString(" not found.");
+			//s = ofToString("Folder ") + ofToDataPath(p).string() + ofToString(" not found.");
 			AddToLog(s, OF_LOG_ERROR);
 		}
 	}
@@ -1511,19 +1518,23 @@ bool SurfingGuiManager::LoadFontsFromFolder(string path, float size, bool bMulti
 	for (int i = 0; i < dir.size(); i++) {
 		string label = dir[i].getBaseName();
 		if (!bMultisize)
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
 			b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 		else // multi size
 		{
 			// size -1
 			label = dir[i].getBaseName() + ", " + ofToString(size - 1) + "px";
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size - 1, label);
 			b = b && addFontStyle(dir[i].getAbsolutePath(), size - 1, label);
 
 			// size
 			label = dir[i].getBaseName() + ", " + ofToString(size) + "px";
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size, label);
 			b = b && addFontStyle(dir[i].getAbsolutePath(), size, label);
 
 			// size +1
 			label = dir[i].getBaseName() + ", " + ofToString(size + 1) + "px";
+			//b = b && addFontStyle(dir[i].getAbsolutePath().string(), size + 1, label);
 			b = b && addFontStyle(dir[i].getAbsolutePath(), size + 1, label);
 		}
 	}
@@ -1910,11 +1921,13 @@ void SurfingGuiManager::updateAttendDockingPre() {
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayout(string path) {
 	bFlagDoLoadImGuiLayout = true;
+	//pathLayout = ofToDataPath(path).string();
 	pathLayout = ofToDataPath(path);
 }
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayout(string path) {
 	bFlagDoSaveImGuiLayout = true;
+	//pathLayout = ofToDataPath(path).string();
 	pathLayout = ofToDataPath(path);
 }
 
@@ -2204,7 +2217,8 @@ void SurfingGuiManager::drawLayoutPresetsEngine() {
 			flagsDock += ImGuiDockNodeFlags_PassthruCentralNode;
 
 			// A
-			dockNodeID = ImGui::DockSpaceOverViewport(NULL, flagsDock);
+			//dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, flagsDock);
+			dockNodeID = ImGui::DockSpaceOverViewport(NULL, NULL, NULL);//TODO: workaround fix. must test and remake.
 			dockNode = ImGui::DockBuilderGetNode(dockNodeID);
 
 			// B
@@ -4192,11 +4206,13 @@ void SurfingGuiManager::loadLayoutPreset(string path) {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::saveLayoutImGuiIni(string path) {
+	//ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
 	ImGui::SaveIniSettingsToDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::loadLayoutImGuiIni(string path) {
+	//ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).string().c_str());
 	ImGui::LoadIniSettingsFromDisk(ofToDataPath(path_LayoutsImGui + path + ".ini", true).c_str());
 }
 
@@ -4608,28 +4624,28 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		switch (key) {
 		case OF_KEY_F1:
 			bLayoutPresets[0] = !bLayoutPresets[0];
-			logKeyParamToggle(bLayoutPresets[0], "F1");
+				logKeyParamToggle(bLayoutPresets[0], {"F1", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F2:
 			bLayoutPresets[1] = !bLayoutPresets[1];
-			logKeyParamToggle(bLayoutPresets[1], "F2");
+				logKeyParamToggle(bLayoutPresets[1], {"F2", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F3:
 			bLayoutPresets[2] = !bLayoutPresets[2];
-			logKeyParamToggle(bLayoutPresets[2], "F3");
+				logKeyParamToggle(bLayoutPresets[2], {"F3", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
 
 		case OF_KEY_F4:
 			bLayoutPresets[3] = !bLayoutPresets[3];
-			logKeyParamToggle(bLayoutPresets[3], "F4");
+				logKeyParamToggle(bLayoutPresets[3], {"F4", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 			break;
@@ -4641,7 +4657,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		if (key == OF_KEY_F5) // Presets
 		{
 			bGui_LayoutsPresetsSelector = !bGui_LayoutsPresetsSelector;
-			logKeyParamToggle(bGui_LayoutsPresetsSelector, "F5");
+			logKeyParamToggle(bGui_LayoutsPresetsSelector, {"F5", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4649,7 +4665,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		else if (key == OF_KEY_F6) // Panels
 		{
 			bGui_LayoutsPanels = !bGui_LayoutsPanels;
-			logKeyParamToggle(bGui_LayoutsPanels, "F6");
+			logKeyParamToggle(bGui_LayoutsPanels, {"F6", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4657,7 +4673,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 		else if (key == OF_KEY_F7) // Manager
 		{
 			bGui_LayoutsManager = !bGui_LayoutsManager;
-			logKeyParamToggle(bGui_LayoutsManager, "F7");
+			logKeyParamToggle(bGui_LayoutsManager, {"F7", true});
 			doFlagBuildHelpInternalInfo();
 			return;
 		}
@@ -4809,7 +4825,7 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 	// Solo
 	if ((key == 's' && bMod_CONTROL) || key == 19) {
 		bSolo = !bSolo;
-		logKeyParamToggle(bSolo, "Ctrl + s");
+		logKeyParamToggle(bSolo, {"Ctrl + s", true});
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
@@ -5162,7 +5178,7 @@ void SurfingGuiManager::drawMenuDocked() {
 		//--
 
 		if (BeginMenu("About")) {
-			string s = "WARNING !\n\nDON'T PAY ATTENTION FOR THIS TEXT! \NTHIS IS NOT OPERATIVE HERE. \NJUST FOR TESTING MENUS!"
+			string s = "WARNING !\n\nDON'T PAY ATTENTION FOR THIS TEXT! \nTHIS IS NOT OPERATIVE HERE. \nJUST FOR TESTING MENUS!"
 					   "\n\n"
 					   "When docking is enabled, you can ALWAYS dock MOST window into another! Try it now!"
 					   "\n"

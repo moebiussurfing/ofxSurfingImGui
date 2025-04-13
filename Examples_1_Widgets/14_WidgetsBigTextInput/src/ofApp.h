@@ -30,7 +30,7 @@ public:
     BigTextInput bigTextInput;
 
     void doAttendCallback();
-#ifndef def USE_ADVANCED_CALLBACK
+#ifndef USE_ADVANCED_CALLBACK
     ofEventListener e;
 #endif
 

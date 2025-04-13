@@ -18,11 +18,10 @@
 #include "imgui_internal.h"
 #include "ofxImGui.h"
 
-//#include "ofHelpers.h"
-//#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
-
 #include "SurfingHelpers.h"
 
+//#include "ofHelpers.h"
+//#include "ofxSurfingImGui.h"//can't be enabled bc it's recursive, as WindowFbo.h is included too inside it!
 
 //#include "ofxInteractiveRect.h"
 ////#include "ofxSurfingBox.h"
@@ -97,6 +96,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void BasicInfosWindow()
 	{
+		// debug current imgui window info.
 		string str1 = "Size " + ofToString(ImGui::GetWindowSize().x, 0) + "," + ofToString(ImGui::GetWindowSize().y, 0);
 		string str2 = "Pos  " + ofToString(ImGui::GetWindowPos().x, 0) + "," + ofToString(ImGui::GetWindowPos().y, 0);
 		ImGui::Text("%s", str2.c_str());
@@ -370,9 +370,9 @@ public:
 
 public:
 
-	ofParameter<bool> bGui_MiniPreview{ "MINI", true };
-	ofParameter<bool> bGui_PreviewBig{ "BIG", false };//big preview can be full screen, docked or draggable.
-	ofParameter<bool> bGui_Extra{ "PREVIEW EXTRA", false };//extra window for settings
+	ofParameter<bool> bGui_PreviewMini{ "MINI", true };
+	ofParameter<bool> bGui_PreviewBig{ "BIG", true };//big preview can be full screen, docked or draggable.
+	ofParameter<bool> bGui_PreviewExtra{ "PREVIEW EXTRA", false };//extra window for settings
 
 	ofParameter<bool> bFullScreen{ "Full Screen", true };//big preview will be drawn on the full screen
 	ofParameter<bool> bInDocked{ "Docked", false };//will occupy the space between docking panels
@@ -413,6 +413,8 @@ public:
 public:
 
 	ofScaleMode scaleMode;//what is applied to the viewport
+	ofRectangle rectPreviewViewport;
+
 
 public:
 
@@ -425,9 +427,9 @@ public:
 	{
 		// Params
 		params.setName("SurfingPreview");
-		params.add(bGui_MiniPreview);
+		params.add(bGui_PreviewMini);
 		params.add(bGui_PreviewBig);
-		params.add(bGui_Extra);
+		params.add(bGui_PreviewExtra);
 		params.add(bAutoResize_Preview);
 		params.add(bFullScreen);
 		params.add(scaleModeIndex);
@@ -524,13 +526,13 @@ public:
 	};
 
 	/*
-	void draw_ImGui_Preview(bool _bMinimize = false, string label = "") // minimized hides extra window
+	void draw_ImGui_MiniPreview(bool _bMinimize = false, string label = "") // minimized hides extra window
 	{
 		//--
 
 		// 1. Preview Floating window
 
-		if (bGui_MiniPreview)
+		if (bGui_PreviewMini)
 		{
 			ImGuiCond flagsCond = ImGuiCond_None;
 			flagsCond |= ImGuiCond_Appearing;
@@ -538,12 +540,12 @@ public:
 			ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
 			if (bAutoResize_Preview) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 
-			string n = bGui_MiniPreview.getName();
+			string n = bGui_PreviewMini.getName();
 
 			//if (label != "") n += (" | " + label);
 			// Notice that if we change the window name on runtime. ini settings store one layout position for each used name...
 
-			ImGui::Begin(n.c_str(), (bool*)&bGui_MiniPreview.get(), flagsw);
+			ImGui::Begin(n.c_str(), (bool*)&bGui_PreviewMini.get(), flagsw);
 			{
 				ofxImGuiSurfing::DrawFboPreview(fboPreview);
 
@@ -557,7 +559,7 @@ public:
 		// 2. Preview Extra stuff window
 
 		if (!_bMinimize)
-			if (bGui_Extra)
+			if (bGui_PreviewExtra)
 			{
 				ImGuiCond flagsCond = ImGuiCond_None;
 				flagsCond |= ImGuiCond_Appearing;
@@ -565,7 +567,7 @@ public:
 				ImGuiWindowFlags flagsw = ImGuiWindowFlags_None;
 				if (bAutoResize) flagsw |= ImGuiWindowFlags_AlwaysAutoResize;
 
-				ImGui::Begin(bGui_Extra.getName().c_str(), (bool*)&bGui_Extra.get(), flagsw);
+				ImGui::Begin(bGui_PreviewExtra.getName().c_str(), (bool*)&bGui_PreviewExtra.get(), flagsw);
 				{
 					ImGui::Indent();
 					{
@@ -608,8 +610,8 @@ public:
 
 						// Preview Floating
 
-						ofxImGuiSurfing::AddToggleRounded(bGui_MiniPreview);
-						if (bGui_MiniPreview)
+						ofxImGuiSurfing::AddToggleRounded(bGui_PreviewMini);
+						if (bGui_PreviewMini)
 						{
 							ImGui::Indent();
 							ofxImGuiSurfing::AddToggleRounded(bAutoResize_Preview);
@@ -617,7 +619,7 @@ public:
 						}
 
 						// Debug only for floating window active
-						if (bGui_MiniPreview)
+						if (bGui_PreviewMini)
 						{
 							ImGui::Separator();
 

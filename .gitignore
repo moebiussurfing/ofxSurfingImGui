@@ -574,3 +574,16 @@ Examples/00_HelloWorld2/enc_temp_folder/2e9971d07872fcc4ec70135f892eaa34/GuiMana
 src/sync.ffs_db
 Examples_3_Engines/32_DockingRawBasic/bin/data/.gitkeep
 Examples_1_Widgets/14_WidgetsBigTextInput/bin/data/.gitkeep
+Examples_3_Engines/36_LayoutsEngineDocking/bin/data/.gitkeep
+Examples_3_Engines/36_LayoutsEngineDocking/of.entitlements
+Examples_0_Basic/01_HelloWorld/bin/data/.gitkeep
+Examples_0_Basic/01_HelloWorld/of.entitlements
+Examples_1_Widgets/13_WidgetsKnobs/bin/data/.gitkeep
+Examples_1_Widgets/13_WidgetsKnobs/of.entitlements
+Examples_2_Modules/22_LogSystemHelpBoxes/bin/data/.gitkeep
+Examples_2_Modules/22_LogSystemHelpBoxes/of.entitlements
+Examples_2_Modules/23_NotifierSystem/bin/data/.gitkeep
+Examples_2_Modules/23_NotifierSystem/of.entitlements
+of.entitlements
+/bin/data/**/*.gitkeep
+.gitkeep
