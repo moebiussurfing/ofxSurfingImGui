@@ -135,15 +135,14 @@
 // Default font
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_SIZE OFX_IM_FONT_DEFAULT_SIZE_MIN
-#define OFX_IM_FONT_DEFAULT_FILE "JetBrainsMono-Bold.ttf"
+#define OFX_IM_FONT_DEFAULT_FILE "Geist-Bold.ttf"
 
 // Default mono-spaced font
 #define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
-#define OFX_IM_FONT_DEFAULT_MONO_FILE "JetBrainsMono-Bold.ttf"
+#define OFX_IM_FONT_DEFAULT_MONO_FILE "GeistMono-Bold.ttf"
 
 // LEGACY font
-#define OFX_IM_FONT_DEFAULT_FILE_LEGACY "telegrama_render.otf"
-#define OFX_IM_FONT_DEFAULT_FILE_LEGACY 11
+#define OFX_IM_FONT_DEFAULT_FILE_LEGACY "JetBrainsMono-Bold.ttf"
 
 //----
 
