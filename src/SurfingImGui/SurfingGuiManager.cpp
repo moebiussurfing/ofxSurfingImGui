@@ -1372,9 +1372,14 @@ void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent) {
 //--------------------------------------------------------------
 void SurfingGuiManager::setDefaultFontIndex(int index) {
 	if (customFonts.size() == 0) {
-		if (ofGetFrameNum() % (4 * 60) == 0) {
+		static bool bDone = 0;
+		if (!bDone)
+		//if (ofGetFrameNum() % (4 * 60) == 0)//slowed timed
+		{
 			ofLogNotice("ofxSurfingImGui") << "setDefaultFontIndex(): " << index;
-			ofLogError("ofxSurfingImGui") << "customFonts.size() = 0"; //slowed timed
+			ofLogError("ofxSurfingImGui") << "customFonts.size() = 0"; 
+			ofLogError("ofxSurfingImGui") << "Probably default font ttf files in bin/data/assets/fonts not found!";
+			bDone = 1;
 		}
 		return;
 	}
