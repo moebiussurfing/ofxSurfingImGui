@@ -165,11 +165,11 @@ void ofApp::draw()
 
 ## IMGUI OF BACKEND
 
-* Required: [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop). **@jvcleave**'s REPOSITORY **develop** branch.
+* Required: [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop) from **@jvcleave**'s repository and **develop** branch.
   - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
-  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop). [Now mirrored to @jvcleave's DEVELOP branch!]
+  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop). (Now mirrored to **@jvcleave**'s develop branch!)
     - You **MUST use this one**! 
-    - Do not use the **master branch** [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
+    - **WARNING!** Do not use the **master branch** [@jvcleave's respository](https://github.com/jvcleave/ofxImGui)!
 
 <details>
   <summary>WHY ANOTHER BACKEND FORK?</summary>
