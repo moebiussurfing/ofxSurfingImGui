@@ -12,7 +12,7 @@ desktop app projects.
 
 <h3>
   
-An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
+An extension for [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop).    
   
 </h3>
 
@@ -165,17 +165,17 @@ void ofApp::draw()
 
 ## IMGUI OF BACKEND
 
-* Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
+* Required: [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop). **@jvcleave**'s REPOSITORY **develop** branch.
   - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
-  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop). [Now mirrored to @jvcleave's DEVELOP branch!]
     - You **MUST use this one**! 
-    - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
+    - Do not use the **master branch** [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
 
 <details>
   <summary>WHY ANOTHER BACKEND FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
+- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY (master branch)](https://github.com/jvcleave/ofxImGui)? 
   - Multi context/instances: 
     - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
@@ -223,11 +223,13 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 
 ## CURRENT SYSTEMS
 
-- **Windows 11** / **Visual Studio 2022**.
-    * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [OF 0.12](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
+- **Windows 11** / **Visual Studio 2022**. (Main develop)
+    * [GitHub](https://github.com/openframeworks/openFrameworks) master branch. (Could break sometimes!)
+    * Last official release [OF 0.12.1](https://openframeworks.cc/download/).
+    * Previous release **OF 0.12.0**.
+- **macOS 15.5 Sequoia** / **Xcode 16.4** / [OF 0.12.1] / **M1/M2 Apple Silicon**. **iOS** requires testing.
 - **macOS 14.5 Sonoma** / **Xcode 15.4** / [OF 0.12+] / **M1/M2 Apple Silicon**. **iOS** requires testing.
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
 
 <br>
 
@@ -248,7 +250,7 @@ _All source snippets and widgets from other authors are linked into header files
 # AUTHOR
 
 An addon by **moebiusSurfing**.  
-*( ManuMolina ) 2021-2024*  
+*( ManuMolina ) 2021-2025*  
 
 <br>
 
