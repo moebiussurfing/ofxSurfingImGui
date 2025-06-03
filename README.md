@@ -169,7 +169,7 @@ void ofApp::draw()
   - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
   - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop). (Now mirrored to **@jvcleave**'s develop branch!)
     - You **MUST use this one**! 
-    - **WARNING!** Do not use the **master branch** [@jvcleave's respository](https://github.com/jvcleave/ofxImGui)!
+    - **WARNING!** Do not use the [@jvcleave's respository](https://github.com/jvcleave/ofxImGui) **master branch**!
 
 <details>
   <summary>WHY ANOTHER BACKEND FORK?</summary>
