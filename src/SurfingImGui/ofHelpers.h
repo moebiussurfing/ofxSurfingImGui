@@ -104,7 +104,7 @@ namespace ofxImGuiSurfing
 	{
 		//TODO:
 		// add feature #define SURFING_IMGUI__DISABLE__USE_MOUSE_WHEEL
-		return;
+//		return;
 		
 		//#define SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID
 		// Disable to avoid that mouse wheel dragging scroll windows,
