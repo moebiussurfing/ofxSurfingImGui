@@ -102,7 +102,11 @@ namespace ofxImGuiSurfing
 	template <typename ParameterType>
 	inline void AddMouseWheel(ofParameter<ParameterType>& ap, bool bFlip = false)
 	{
-		//#define SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID 
+		//TODO:
+		// add feature #define SURFING_IMGUI__DISABLE__USE_MOUSE_WHEEL
+		return;
+		
+		//#define SURFING_IMGUI__USE_MOUSE_WHEEL_AT_BOOLEANS_VOID
 		// Disable to avoid that mouse wheel dragging scroll windows,
 		// trigs button by error!
 
@@ -1273,7 +1277,9 @@ namespace ofxImGuiSurfing
 
 	//TODO:
 	//public://added inline 
-	static bool bMouseWheel = true; //this was originally an internal from ui
+	static bool bMouseWheel = true;
+	// this was originally an internal from ui
+	// Can't be disabled here!
 
 	// Helpers to populate non ofParams,
 	// Raw CPP types instead an maintain global styles.

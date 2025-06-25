@@ -5,7 +5,9 @@
 /*
 	TODO:
 	BUGS
-
+		
+		- Add feature #define SURFING_IMGUI__DISABLE__USE_MOUSE_WHEEL
+ 
 		- Fix string param callback!
 	
 		- Fix linked toggle crashes!
