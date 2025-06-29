@@ -2180,26 +2180,35 @@ private:
 	public:
 		ScaleGlobalManager() {
 			index.setMax(names.size() - 1);
-
+			
 			eIndex = index.newListener([this](int & v) {
 				switch (v) {
-				case 0:
-					globalScale = 1.00f;
-					break;
-				case 1:
-					globalScale = 1.25f;
-					break;
-				case 2:
-					globalScale = 1.50f;
-					break;
-				case 3:
-					globalScale = 1.75f;
-					break;
-				case 4:
-					globalScale = 2.00f;
-					break;
-				case 5:
-					break; //custom
+					case 0:
+						globalScale = 1.00f;
+						break;
+					case 1:
+						globalScale = 1.25f;
+						break;
+					case 2:
+						globalScale = 1.50f;
+						break;
+					case 3:
+						globalScale = 1.75f;
+						break;
+					case 4:
+						globalScale = 2.00f;
+						break;
+					case 5:
+						globalScale = 3.00f;
+						break;
+					case 6:
+						globalScale = 4.00f;
+						break;
+					case 7:
+						globalScale = 5.00f;
+						break;
+					case 8:
+						break; //custom
 				}
 			});
 
@@ -2214,8 +2223,14 @@ private:
 					index = 3;
 				else if (v == 2.00f)
 					index = 4;
+				else if (v == 3.00f)
+					index = 5;
+				else if (v == 4.00f)
+					index = 6;
+				else if (v == 5.00f)
+					index = 7;
 				else
-					index = 5; //custom
+					index = names.size() - 1; //custom
 			});
 		}
 
@@ -2232,11 +2247,10 @@ private:
 		SurfingGuiManager * ui = nullptr;
 
 	public:
-		ofParameter<float> globalScale { "GlobalScale", 1, 0.5, 2 };
-		vector<string> names { "100%", "125%", "150%", "175%", "200%", "CUSTOM" };
+		ofParameter<float> globalScale { "GlobalScale", 1, 0.5, 10 };
+		vector<string> names { "100%", "125%", "150%", "175%", "200%", "300%", "400%", "500%", "CUSTOM" };
 		ofParameter<int> index { "Global Scale", 0, 0, 0 };
-		//ofParameter<int> index {"Global Scale", 0, 0, names.size() - 1};
-
+		
 		float getScale() { return globalScale.get(); }
 		string getName() { return names[index]; }
 
@@ -2253,13 +2267,17 @@ private:
 			float w = ui->getWidgetWidthFromIndex();
 
 			ImGui::PushItemWidth(w);
+			ImGui::PushID("###SCALE_MINI");
 			ui->AddCombo(index, names, true);
+			ImGui::PopID();
 			ImGui::PopItemWidth();
 			string s = "Global Scale";
 			//s += "\n" + scaleGlobalManager.getName();
-			ui->AddTooltip(s);
-
-			if (index == 5) { // custom
+//			ui->AddTooltip(s);
+			ui->SameLine();
+			ui->AddLabel(s);
+			
+			if (index == names.size()) { // custom
 				float w3 = ImGui::GetContentRegionAvail().x;
 				if (w3 > 200) {
 					ui->SameLine();
@@ -2275,8 +2293,7 @@ private:
 			if (ui == nullptr) return;
 
 			ui->AddSpacingBigSeparated();
-			string s;
-			s = "Global Scale";
+			string s = "Global Scale";
 			ui->AddLabelBig(s);
 			ui->AddSpacing();
 
@@ -2284,7 +2301,9 @@ private:
 
 			float w = ui->getWidgetWidthFromIndex();
 			ImGui::PushItemWidth(w);
+			ImGui::PushID("###GLOBAL_SCALE");
 			ui->AddCombo(index, names, true);
+			ImGui::PopID();
 			ImGui::PopItemWidth();
 
 			//// responsive
@@ -2343,6 +2362,12 @@ private:
 		else if (scaleGlobalManager.index == 4)
 			w = w_ * 2.0;
 		else if (scaleGlobalManager.index == 5)
+			w = w_ * 3.0;
+		else if (scaleGlobalManager.index == 6)
+			w = w_ * 4.0;
+		else if (scaleGlobalManager.index == 7)
+			w = w_ * 5.0;
+		else if (scaleGlobalManager.index == 8)
 			w = w_ * 2.4f; //custom
 		return w;
 	}
