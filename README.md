@@ -250,7 +250,7 @@ _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImG
 
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
 
-_Thanks to [@roymacdonald](https://github.com/roymacdonald) for **iOS ofxImgui** fixing._  
+_Thanks to [@roymacdonald](https://github.com/roymacdonald) for **iOS ofxImGui** fixing._  
 
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 
