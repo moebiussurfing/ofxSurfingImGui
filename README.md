@@ -33,7 +33,7 @@ WORK IN PROGRESS!
 - **Layout** and **Style** Helpers.
 - Useful **Modules**/**Systems**.
 - **Workflow Engines** for the final user.
-- **NEW!** iOS support.
+- **NEW!** iOS support. ( WIP )
 
 <br>
 

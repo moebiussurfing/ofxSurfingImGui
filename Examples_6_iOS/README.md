@@ -1,6 +1,13 @@
-# WIP - IN DEVOLOPMENT
+# WIP - CURRENTLY IN DEVOLOPMENT
 
-Using a pending [PR / fork](https://github.com/Daandelange/ofxImGui/pull/24) for *ofxImGui*!  
+## TODO
+
+- Fix data path behavior for persistent settings.
+- Replace/improve scaling (blur) by loading bigger fonts (better resolution).
+
+### HOW TO USE
+
+Using a pending [PR / Fork](https://github.com/Daandelange/ofxImGui/pull/24) for *ofxImGui*!  
 https://github.com/jvcleave/ofxImGui/tree/develop  
 (Mirrored to https://github.com/Daandelange/ofxImGui)  
 
@@ -14,7 +21,9 @@ Working in the simulator _iPad(A16)_ and in my _iPad (10th / iOS 18.6)_ device t
 # EXAMPLES
 
 ## 61_iOS_Simple
-![](61_iOS_Simple/Capture.PNG)  
+<img src="61_iOS_Simple/Capture.PNG" width="25%">
 
 ## 62_iOS_BigWidgets
 ![](62_iOS_BigWidgets/Capture.PNG)  
+
+
