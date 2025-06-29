@@ -4,6 +4,9 @@
 
 - Fix data path behavior for persistent settings.
 - Replace/improve scaling (blur) by loading bigger fonts (better resolution).
+- Add API to improve layout editing 
+    - Move widgets manually, lock, and persistent layout.
+    - Responsive layout distribution.
 
 ### HOW TO USE
 
