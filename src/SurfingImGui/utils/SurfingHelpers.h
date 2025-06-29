@@ -252,7 +252,11 @@ namespace ofxImGuiSurfing
 
 		ofJson settings;
 		ofSerialize(settings, g);
+		
 		bool b = ofSavePrettyJson(path, settings);
+		
+		//test iOS Fix
+//		bool b = ofSavePrettyJson(ofToDataPath(path), settings);
 
 		if (b) ofLogVerbose("ofxSurfingHelpers") << "Save: `" << g.getName() << "` at " << path;
 		else ofLogError("ofxSurfingHelpers") << "Error saving: `" << g.getName() << "` at " << path;

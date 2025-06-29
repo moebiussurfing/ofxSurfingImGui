@@ -819,6 +819,13 @@ void SurfingGuiManager::setupImGui() {
 	if (bMouseCursorFromImGui) ofHideCursor();
 
 	//--
+	
+	// iOS
+#ifdef TARGET_OPENGLES
+	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
+#endif
+	
+	//--
 
 	// Load Fonts
 
@@ -3485,7 +3492,7 @@ bool SurfingGuiManager::loadSettings() {
 								   << " " << path_AppSettings;
 	bool b = loadGroup(params_AppSettings, path_AppSettings, false);
 	if (!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
-
+	else ofLogNotice("ofxSurfingImGui") << "Successfully loaded settings: " << path_AppSettings;
 	return b;
 
 	// Will return false if settings file do not exist.

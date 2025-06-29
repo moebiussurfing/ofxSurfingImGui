@@ -2253,7 +2253,9 @@ private:
 		
 		float getScale() { return globalScale.get(); }
 		string getName() { return names[index]; }
-
+		
+		void setGlobalScale(float scale) {  globalScale.set(scale); }
+		
 	private:
 		ofEventListener eIndex;
 		ofEventListener eGlobalScale;
@@ -2382,6 +2384,9 @@ public:
 	void DrawWidgetsGlobalScale() {
 		scaleGlobalManager.DrawWidgetsGlobalScale();
 	}
+	void setGlobalScale(float scale) {  scaleGlobalManager.setGlobalScale(scale);
+	}
+	
 #endif
 
 	//----

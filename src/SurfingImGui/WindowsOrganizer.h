@@ -181,8 +181,7 @@ namespace ofxImGuiSurfing
 			}
 			else
 			{
-				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer::saveSettings() Skipped Saving settings";
-				ofLogWarning("ofxSurfingImGui") << "WindowsOrganizer::saveSettings() bDoneInitialized was unexpectedly false!";
+				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings(): Skipped Saving WindowsOrganizer settings. Not using SpecialWindows so not required.";
 			}
 		}
 
