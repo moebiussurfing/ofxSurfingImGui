@@ -1,1 +1,1 @@
-<img src="Capture.PNG" width="25%">
+<img src="Capture.PNG" width="35%">

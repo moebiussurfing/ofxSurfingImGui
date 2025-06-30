@@ -25,8 +25,7 @@ Working in the simulator _iPad(A16)_ and in _iPad (10th / iOS 18.6)_ device.
 # EXAMPLES
 
 ## 61_iOS_Simple
-<img src="61_iOS_Simple/Capture.PNG" width="25%">
+<img src="61_iOS_Simple/Capture.PNG" width="35%">
 
-## 62_iOS_BigWidgets
-![](62_iOS_BigWidgets/Capture.PNG)  
-
+## 62_iOS_BigWidgets 
+<img src="62_iOS_BigWidgets/Capture.PNG" width="35%">
