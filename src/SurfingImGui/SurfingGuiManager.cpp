@@ -810,9 +810,16 @@ void SurfingGuiManager::setupImGui() {
 
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
-
+	
+	
+	//TODO: Test
+	// iOS
+#ifdef TARGET_OPENGLES
+	if (bIsDocked) ImGui::GetIO().ConfigDockingWithShift = false;
+#else
 	if (bIsDocked) ImGui::GetIO().ConfigDockingWithShift = true;
-
+#endif
+	
 	// Uncomment below to "force" all ImGui windows to be standalone
 	//ImGui::GetIO().ConfigViewportsNoAutoMerge=true;
 

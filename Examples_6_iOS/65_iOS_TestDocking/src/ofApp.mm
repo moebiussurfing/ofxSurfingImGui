@@ -177,8 +177,11 @@ void ofApp::drawImGuiSpecialWindow0()
 		static float v = 0;
 		if (ImGui::Button("Button")) {
 			v = 0;
+			ui.AddToNotifier("Button Window0", OF_LOG_WARNING);
 		}
-		ImGui::SliderFloat("Slider", &v, 0, 1);
+		if(ImGui::SliderFloat("Slider", &v, 0, 1)){
+			ui.AddToLog("Slider Window0 " + ofToString(v), OF_LOG_NOTICE);
+		}
 		ImGui::Text("Text");
 		
 		ui.EndWindowSpecial();
@@ -198,8 +201,12 @@ void ofApp::drawImGuiSpecialWindow1()
 		static float v = 0;
 		if (ImGui::Button("Button")) {
 			v = 0;
+			ui.AddToNotifier("Button Window1", OF_LOG_WARNING);
 		}
-		ImGui::SliderFloat("Slider", &v, 0, 1);
+		if(ImGui::SliderFloat("Slider", &v, 0, 1))
+		{
+			ui.AddToLog("Slider Window1" + ofToString(v), OF_LOG_WARNING);
+		}
 		ImGui::Text("Text");
 
 		ui.EndWindowSpecial();
@@ -219,8 +226,11 @@ void ofApp::drawImGuiSpecialWindow2()
 		static float v = 0;
 		if (ImGui::Button("Button")) {
 			v = 0;
+			ui.AddToNotifier("Button Window2", OF_LOG_WARNING);
 		}
-		ImGui::SliderFloat("Slider", &v, 0, 1);
+		if(ImGui::SliderFloat("Slider", &v, 0, 1)){
+			ui.AddToLog("Slider Window2 " + ofToString(v), OF_LOG_ERROR);
+		}
 		ImGui::Text("Text");
 
 		ui.EndWindowSpecial();
@@ -240,8 +250,11 @@ void ofApp::drawImGuiSpecialWindow3()
 		static float v = 0;
 		if (ImGui::Button("Button")) {
 			v = 0;
+			ui.AddToNotifier("Button Window3", OF_LOG_WARNING);
 		}
-		ImGui::SliderFloat("Slider", &v, 0, 1);
+		if(ImGui::SliderFloat("Slider", &v, 0, 1)){
+			ui.AddToNotifier("Slider Window3 " + ofToString(v), OF_LOG_NOTICE);
+		}
 		ImGui::Text("Text");
 
 		ui.EndWindowSpecial();
@@ -261,8 +274,11 @@ void ofApp::drawImGuiSpecialWindow4()
 		static float v = 0;
 		if (ImGui::Button("Button")) {
 			v = 0;
+			ui.AddToNotifier("Button Window4", OF_LOG_WARNING);
 		}
-		ImGui::SliderFloat("Slider", &v, 0, 1);
+		if(ImGui::SliderFloat("Slider", &v, 0, 1)){
+			ui.AddToNotifier("Slider Window4 " + ofToString(v), OF_LOG_NOTICE);
+		}
 		ImGui::Text("Text");
 
 		ui.EndWindowSpecial();
