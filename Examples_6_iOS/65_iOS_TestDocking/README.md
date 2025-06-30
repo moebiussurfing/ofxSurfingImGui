@@ -1,5 +1,3 @@
 <img src="Capture.PNG" width="35%">
 
-[![Watch](https://i.imgur.com/fac5KWq.png)](https://imgur.com/a/ulbLIFs)
-
-https://imgur.com/a/65-ios-testdocking-ulbLIFs
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/fac5KWq" data-context="false" ><a href="//imgur.com/a/fac5KWq"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
