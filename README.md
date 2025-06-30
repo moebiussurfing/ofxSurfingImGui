@@ -12,7 +12,7 @@ desktop app projects.
 
 <h3>
   
-An extension for [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop).    
+An extension for [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop).    
   
 </h3>
 
@@ -33,6 +33,7 @@ WORK IN PROGRESS!
 - **Layout** and **Style** Helpers.
 - Useful **Modules**/**Systems**.
 - **Workflow Engines** for the final user.
+- **NEW!** iOS support. ( WIP )
 
 <br>
 
@@ -100,6 +101,7 @@ WORK IN PROGRESS!
 - [Examples_2_Modules](/Examples_2_Modules/README.md)  
 - [Examples_3_Engines](/Examples_3_Engines/README.md)  
 - [Examples_5_MultipleInstances](/Examples_5_MultipleInstances/README.md)  
+- [Examples_6_iOS](/Examples_6_iOS/README.md)  
 
 ## EXAMPLE: 00_HelloWorld
 ![](/Examples_0_Basic/01_HelloWorld/Capture.PNG)
@@ -165,17 +167,17 @@ void ofApp::draw()
 
 ## IMGUI OF BACKEND
 
-* Required: [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/develop)
+* Required: [ofxImGui](https://github.com/jvcleave/ofxImGui/tree/develop) from **@jvcleave**'s repository and **develop** branch.
   - Dear [ImGui v1.91](https://github.com/ocornut/imgui) BackEnd for [OF](https://openframeworks.cc/).
-  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop).
+  - Is the **AWESOME** [@Daandelange's FORK](https://github.com/Daandelange/ofxImGui/tree/develop). (Now mirrored to **@jvcleave**'s develop branch!)
     - You **MUST use this one**! 
-    - Do not use the [@jvcleave's REPOSITORY](https://github.com/jvcleave/ofxImGui)!
+    - **WARNING!** Do not use the [@jvcleave's respository](https://github.com/jvcleave/ofxImGui) **master branch**!
 
 <details>
   <summary>WHY ANOTHER BACKEND FORK?</summary>
   <p>
 
-- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY](https://github.com/jvcleave/ofxImGui)? 
+- What's new on the [@Daandelange's ofxImGui FORK](https://github.com/Daandelange/ofxImGui/tree/develop) vs the [@jvcleave's ORIGINAL REPOSITORY (master branch)](https://github.com/jvcleave/ofxImGui)? 
   - Multi context/instances: 
     - Several ImGui windows from different addons without colliding.  
   - Easy to update to future **NEW ImGui** releases.  
@@ -187,17 +189,18 @@ void ofApp::draw()
 
 ## DATA ASSET FILES
 
-* Recommended: [JetBrainsMono-Bold.ttf](data/assets/fonts/JetBrainsMono-Bold.ttf)
+* Recommended: [Geist-Bold.ttf](data/assets/fonts/Geist-Bold.ttf)
   - The monospaced font file for the default theme.
   - Put into `OF_APP/bin/data/assets/fonts/`.  
 * Optional: [data.zip](data.zip)
   - More font files (non-monospaced alternative) from the same family.
   - Put into each **OF project** `OF_APP/bin/data/`.  
+* Extras: [dataExtras.zip](dataExtras.zip) - More fonts, theme files...etc
 
 <details>
   <summary>ABOUT THE FONTS</summary>  
   
-The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**. If that font is not located, it will search for a legacy font called **telegrama_render.otf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
+The single font file for the currently used theme is **Geist-Bold.ttf**. If that font is not located, it will search for a legacy font called **JetBrainsMono-Bold.ttf**. If none of those fonts are located, it will work too, but using the default embedded **ProggyClean.ttf** font from **ImGui**. (So `OF_APP/bin/data/` can also be completely empty too!) 
 
 </details>
 
@@ -223,11 +226,21 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 
 ## CURRENT SYSTEMS
 
-- **Windows 11** / **Visual Studio 2022**.
-    * GitHub [OF patch-release](https://github.com/openframeworks/openFrameworks/tree/patch-release) branch.
-    * Last official release [OF 0.12](https://openframeworks.cc/download/).
-- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
+- **Windows 11** / **Visual Studio 2022**. (Main develop)
+    * [GitHub](https://github.com/openframeworks/openFrameworks) master branch. (Could break sometimes!)
+    * Last official release [OF 0.12.1](https://openframeworks.cc/download/).
+    * Previous release **OF 0.12.0** and **OF 0.11.2** have they own branches.
+- NEW! iOS simulators and device running iOS 18.5. Simulator _iPad(A16)_ and _iPad (10th / iOS 18.6)_ device.  
+- **macOS 16.0 Tahoe beta** / **Xcode 16.4** / Silicon Apple M1. / [OF 0.12.1] 
+
+<details>
+  <summary>Older</summary>  
+
+- **macOS 15.5 Sequoia** / **Xcode 16.4** / [OF 0.12.1] / **M1/M2 Apple Silicon**. **iOS** requires testing.
 - **macOS 14.5 Sonoma** / **Xcode 15.4** / [OF 0.12+] / **M1/M2 Apple Silicon**. **iOS** requires testing.
+- **macOS 12.5 Monterey** / **Xcode 14.2** [OF 0.11.2](https://openframeworks.cc/download/). **Intel**.  
+
+</details>
 
 <br>
 
@@ -236,6 +249,8 @@ The single font file for the currently used theme is **JetBrainsMono-Bold.ttf**.
 _Thanks to [Omar Cornut](https://github.com/ocornut) for the fantastic [Dear ImGui](https://github.com/ocornut/imgui)._  
 
 _**SUPER THANKS** to [@Daandelange](https://github.com/Daandelange) for **HIS AWESOME ofxImGui (maintained) FORK**, and some **macOS** fixes._  
+
+_Thanks to [@roymacdonald](https://github.com/roymacdonald) for **iOS ofxImGui** fixing._  
 
 _Thanks to [@alptugan](https://github.com/alptugan) for **macOS** testing and some fixes._  
 
@@ -248,7 +263,7 @@ _All source snippets and widgets from other authors are linked into header files
 # AUTHOR
 
 An addon by **moebiusSurfing**.  
-*( ManuMolina ) 2021-2024*  
+*( ManuMolina ) 2021-2025*  
 
 <br>
 

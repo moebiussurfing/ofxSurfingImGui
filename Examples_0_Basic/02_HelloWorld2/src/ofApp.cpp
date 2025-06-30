@@ -85,7 +85,7 @@ void ofApp::update()
 {
 	// Log/Notify every second
 	int d = ofMap(speed, 0, 1, 120, 15);
-	if (ofGetFrameNum() % d == 0) {
+	if ((ofGetFrameNum() % d == 0) && (ofRandom()>0.7f)) {
 		static int count = 0;
 		string s = "COUNT " + ofToString(++count);
 

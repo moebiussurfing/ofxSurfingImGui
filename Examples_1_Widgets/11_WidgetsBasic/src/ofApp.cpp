@@ -8,9 +8,9 @@ void ofApp::setup()
 	// These toggles are very useful to handle the windows show/hide states.
 	// Improves and speed-up also the API and some Layout Presets Engine aspects.
 	bGui_1.set("Window 1", true);
-	bGui_2.set("Window 2", true);
-	bGui_3.set("Window 3", true);
-	bGui_4.set("Window 4", true);
+	bGui_2.set("Window 2", false);
+	bGui_3.set("Window 3", false);
+	bGui_4.set("Window 4", false);
 
 	//--
 
@@ -180,6 +180,9 @@ void ofApp::drawImWindow1()
 
 			ui.AddLabelBig("> One Multidim \nSplitted");
 			ui.Add(rotation, OFX_IM_MULTIDIM_SPLIT_SLIDERS); // split components
+			if (ui.AddButtonRawMini("Reset")) {
+				rotation.set(glm::vec3(0, 0, 0));
+			}
 			ui.AddSpacingBigSeparated();
 
 			ui.AddLabelBig("> One Multidim \nSplitted and foldered");
