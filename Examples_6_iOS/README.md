@@ -29,3 +29,11 @@ Working in the simulator _iPad(A16)_ and in _iPad (10th / iOS 18.6)_ device.
 
 ## 62_iOS_BigWidgets 
 <img src="62_iOS_BigWidgets/Capture.PNG" width="35%">
+
+## 63_iOS_ofxImGui_RAW
+
+## 64_iOS_TextInput ( WIP )
+
+## 65_iOS_TestDocking
+<img src="Capture.PNG" width="35%">
+[![Watch](https://i.imgur.com/fac5KWq.png)](https://imgur.com/a/ulbLIFs)
