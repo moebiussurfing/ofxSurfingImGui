@@ -3,6 +3,7 @@
 #include "ofxiOS.h"
 
 #include "ofxSurfingImGui.h"
+
 #include "imgui_stdlib.h"
 #include "BigTextInput.h"
 #define RATIO_WIDGETS_FONTS 0.25f
@@ -27,6 +28,7 @@ public:
 	void deviceOrientationChanged(int newOrientation) override;
 	void launchedWithURL(std::string url) override;
 	
+	//--
 	
 	ofxSurfingGui ui;
 	void setupImGui();
@@ -36,7 +38,9 @@ public:
 	ofParameter<bool> bGui_Headers{ "Headers", true };
 	ofParameter<bool> bGui_Bg{ "Bg", true };
 	ofParameter<bool> bGui_ResizePin{ "Resizer", true };
-	ofParameter<bool> bGui_LockMove{ "Lock", false };
+	ofParameter<bool> bGui_UnlockMove{ "Unlock", true };
+	ofParameter<bool> bGui_EditLayout{ "EDIT LAYOUT", false };
+	ofEventListener listener_bGui_EditLayout;
 
 	void drawImGui_Slider();
 	void doResetSlider();

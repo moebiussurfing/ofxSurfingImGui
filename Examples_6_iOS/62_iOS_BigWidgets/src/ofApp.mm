@@ -3,18 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setupImGui()
 {
-	ui.setImGuiViewPort(true); // Allow floating window out the app window.
-
-	//ui.setup();
-	ui.setup(IM_GUI_MODE_INSTANTIATED_DOCKING_RAW);
-
-	g.add(bGui_Headers);
-	g.add(bGui_Bg);
-	g.add(bGui_ResizePin);
-	g.add(bGui_LockMove);
-	g.add(bGui_Toggle);
-	g.add(bGui_Button);
-	g.add(bGui_Slider);
+	ui.setup();
 
 	bigTextInput.setHint("Type search");
 }
@@ -22,11 +11,30 @@ void ofApp::setupImGui()
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	setupImGui();
+	// parameters
+	
+	listener_bGui_EditLayout = bGui_EditLayout.newListener([this](bool &b) {
+		bGui_Headers = bGui_EditLayout;
+		bGui_Bg = bGui_EditLayout;
+		bGui_ResizePin = bGui_EditLayout;
+		bGui_UnlockMove = bGui_EditLayout;
+	  });
 
-	//--
-
+	g.add(bGui_EditLayout);
+	g.add(bGui_Headers);
+	g.add(bGui_Bg);
+	g.add(bGui_ResizePin);
+	g.add(bGui_UnlockMove);
+	
+	g.add(bGui_Toggle);
+	g.add(bGui_Button);
+	g.add(bGui_Slider);
+	
 	ofxImGuiSurfing::loadGroup(g);
+	
+	//--
+	
+	setupImGui();
 }
 
 //--------------------------------------------------------------
@@ -61,12 +69,16 @@ void ofApp::drawImGui()
 				ui.AddAutoResizeToggle();
 				ui.AddSpacingBigSeparated();
 
-				ui.AddLabelBig("Windows");
+				ui.AddLabelBig("Widgets/Windows Layout Editor");
+				ui.Add(bGui_EditLayout, OFX_IM_TOGGLE_MEDIUM_BORDER);
 				ui.Add(bGui_Headers, OFX_IM_TOGGLE_ROUNDED);
 				ui.Add(bGui_Bg, OFX_IM_TOGGLE_ROUNDED);
 				ui.Add(bGui_ResizePin, OFX_IM_TOGGLE_ROUNDED);
-				ui.Add(bGui_LockMove, OFX_IM_TOGGLE_ROUNDED);
+				ui.Add(bGui_UnlockMove, OFX_IM_TOGGLE_ROUNDED);
+				
+				ui.AddSpacingBig();
 				ui.AddSpacingBigSeparated();
+				ui.AddSpacingBig();
 
 				ui.AddLabelBig("Toggle");
 				ui.Add(bGui_Toggle);
@@ -93,7 +105,9 @@ void ofApp::drawImGui()
 				ui.Add(bigTextInput.bGui);
 				ui.Add(bigTextInput.bGui_Config);
 			}
-
+			else{
+				ui.Add(bGui_EditLayout, OFX_IM_TOGGLE_MEDIUM_BORDER);
+			}
 			ui.EndWindow();
 		}
 
@@ -131,7 +145,9 @@ void ofApp::drawImGui_Slider()
 		if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
 		if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
 		if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
-		if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+		if (!bGui_UnlockMove) window_flags |= ImGuiWindowFlags_NoMove;
+	
+		ImGui::SetNextWindowSize({ 400,2000 }, ImGuiCond_FirstUseEver);
 
 		if (ui.BeginWindow(bGui_Slider, window_flags))
 		{
@@ -221,7 +237,9 @@ void ofApp::drawImGui_Toggle()
 		if (!bGui_Bg) window_flags |= ImGuiWindowFlags_NoBackground;
 		if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
 		if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
-		if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+		if (!bGui_UnlockMove) window_flags |= ImGuiWindowFlags_NoMove;
+
+		ImGui::SetNextWindowSize({ 400,400 }, ImGuiCond_FirstUseEver);
 
 		if (ui.BeginWindow(bGui_Toggle, window_flags))
 		{
@@ -269,9 +287,11 @@ void ofApp::drawImGui_Button()
 		//if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoDecoration;
 		if (!bGui_Headers) window_flags |= ImGuiWindowFlags_NoTitleBar;
 		if (!bGui_ResizePin) window_flags |= ImGuiWindowFlags_NoResize;
-		if (bGui_LockMove) window_flags |= ImGuiWindowFlags_NoMove;
+		if (!bGui_UnlockMove) window_flags |= ImGuiWindowFlags_NoMove;
 
 		//BeginNoDecoration();
+		
+		ImGui::SetNextWindowSize({ 400,400 }, ImGuiCond_FirstUseEver);
 
 		if (ui.BeginWindow(bGui_Button, window_flags))
 		{
@@ -311,19 +331,6 @@ void ofApp::drawImGui_Button()
 	}
 	ImGui::PopStyleVar();
 }
-
-////--------------------------------------------------------------
-//void ofApp::keyPressed(int key)
-//{
-//	if (ui.isMouseOverInputText()) return;
-//	//if (ui.isOverGui()) return;
-//
-//	if (key == 'g') bGui = !bGui;
-//	if (key == 'h') bGui_Headers = !bGui_Headers;
-//	if (key == 'b') bGui_Bg = !bGui_Bg;
-//	if (key == 'r') bGui_ResizePin = !bGui_ResizePin;
-//	if (key == 'l') bGui_LockMove = !bGui_LockMove;
-//}
 
 //--------------------------------------------------------------
 void ofApp::BeginNoDecoration()
@@ -412,3 +419,16 @@ void ofApp::deviceOrientationChanged(int newOrientation){
 void ofApp::launchedWithURL(std::string url){
 	
 }
+
+////--------------------------------------------------------------
+//void ofApp::keyPressed(int key)
+//{
+//	if (ui.isMouseOverInputText()) return;
+//	//if (ui.isOverGui()) return;
+//
+//	if (key == 'g') bGui = !bGui;
+//	if (key == 'h') bGui_Headers = !bGui_Headers;
+//	if (key == 'b') bGui_Bg = !bGui_Bg;
+//	if (key == 'r') bGui_ResizePin = !bGui_ResizePin;
+//	if (key == 'l') bGui_LockMove = !bGui_LockMove;
+//}
