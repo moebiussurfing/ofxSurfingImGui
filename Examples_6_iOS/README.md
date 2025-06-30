@@ -35,5 +35,5 @@ Working in the simulator _iPad(A16)_ and in _iPad (10th / iOS 18.6)_ device.
 ## 64_iOS_TextInput ( WIP )
 
 ## 65_iOS_TestDocking
-<img src="Capture.PNG" width="35%">
-[![Watch](https://i.imgur.com/fac5KWq.png)](https://imgur.com/a/ulbLIFs)
+<img src="65_iOS_TestDocking/Capture.PNG" width="35%">
+- VIDEO: https://imgur.com/a/ulbLIFs
