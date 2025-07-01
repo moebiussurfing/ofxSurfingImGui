@@ -796,7 +796,13 @@ void SurfingGuiManager::setupImGui() {
 
 	// Viewports (floating windows out of app window)
 	if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
-
+	
+	// TODO: iOS disable viewport
+#ifdef TARGET_OPENGLES
+	// To remove ImGuiConfigFlags_ViewportsEnable:
+	flags &= ~ImGuiConfigFlags_ViewportsEnable;
+#endif
+	
 	//--
 
 	// Setup ImGui with the appropriate config flags
@@ -811,8 +817,6 @@ void SurfingGuiManager::setupImGui() {
 	// Uncomment below to perform docking with SHIFT key
 	// Gives a better user experience, matter of opinion.
 	
-	
-	//TODO: Test
 	// iOS
 #ifdef TARGET_OPENGLES
 	if (bIsDocked) ImGui::GetIO().ConfigDockingWithShift = false;

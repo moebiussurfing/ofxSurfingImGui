@@ -5,7 +5,7 @@ void ofApp::setup(){
 	ui.setup();
 	
 	//TODO: Not working. Must fix bc overloaded.
-	ui.setGlobalScale(3);
+//	ui.setGlobalScale(3);
 }
 
 //--------------------------------------------------------------
@@ -35,21 +35,40 @@ void ofApp::draw(){
 			ui.AddMinimizeToggle();
 			if(ui.isMaximized()) ui.DrawWidgetsGlobalScale();
 			else ui.DrawWidgetsGlobalScaleMini();
-			ui.AddSpacingSeparated();
 			
-#if 1
+			//--
+			
+#ifdef OFXIMGUI_DEBUG
 			ui.AddDebugToggle();
-			if(ui.isDebug()) drawDebug();
+			if(ui.isDebug()) {
+				drawDebug();
+				// DemoWindow
+				static bool showDemo = false;
+				ImGui::Checkbox("Show demo window", &showDemo);
+				if( showDemo ){
+					ImGui::ShowDemoWindow();
+				}
+				static bool showMetrics = false;
+				ImGui::Checkbox("Show metrics window", &showMetrics);
+				if( showMetrics ){
+					ImGui::ShowMetricsWindow();
+				}
+			}
 #endif
+			
 			ui.EndWindow();
 		}
+		
+#ifdef OFXIMGUI_DEBUG
+		if(ui.isDebug()) ui.getImGuiPtr()->drawOfxImGuiDebugWindow();
+#endif
 	}
 	ui.End();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawDebug(){
-	//TODO: Test fix /data/ file settings...
+	//TODO: Test fix bin/data/ file settings persistence...
 	if(ui.AddButton("Save UI Settings"))
 		ui.saveSettings();
 	

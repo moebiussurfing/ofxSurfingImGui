@@ -2,6 +2,9 @@
 
 #include "ofxiOS.h"
 
+// To enable full debug uncomment
+//#define OFXIMGUI_DEBUG
+// in ofxImGui/src/ofxImGuiConstants.h
 #include "ofxSurfingImGui.h"
 
 class ofApp : public ofxiOSApp {

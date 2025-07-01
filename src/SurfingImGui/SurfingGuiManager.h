@@ -2048,6 +2048,12 @@ public:
 		if (bDockingLayoutPresetsEngine) flags += ImGuiConfigFlags_DockingEnable;
 		if (bViewport) flags += ImGuiConfigFlags_ViewportsEnable;
 
+		// TODO: iOS disable viewport
+	#ifdef TARGET_OPENGLES
+		// To remove ImGuiConfigFlags_ViewportsEnable:
+		flags &= ~ImGuiConfigFlags_ViewportsEnable;
+	#endif
+		
 		//gui.exit();//crash
 
 		if (guiPtr != nullptr)
