@@ -36,4 +36,4 @@ Working in the simulator _iPad(A16)_ and in _iPad (10th / iOS 18.6)_ device.
 
 ## 65_iOS_TestDocking
 <img src="65_iOS_TestDocking/Capture.PNG" width="35%">
-- VIDEO: https://imgur.com/a/ulbLIFs
+VIDEO: https://imgur.com/a/ulbLIFs
