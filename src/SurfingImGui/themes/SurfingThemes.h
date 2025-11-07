@@ -251,7 +251,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 20.0f;
 			style.TabRounding = 20.0f;
 			style.TabBorderSize = 1.0f;
-			style.TabMinWidthForCloseButton = 20.0f;
+//			style.TabMinWidthForCloseButton = 20.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			//style.FramePadding = ImVec2(20.0f, 20.0f);
 			//style.ItemSpacing = ImVec2(20.0f, 4.0f);
@@ -1169,7 +1169,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 0.0f;
 			style.TabRounding = 4.0f;
 			style.TabBorderSize = 0.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1273,7 +1273,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 2.0f;
 			style.TabRounding = 3.5f;
 			style.TabBorderSize = 0.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1378,7 +1378,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 0.0f;
 			style.TabRounding = 0.0f;
 			style.TabBorderSize = 0.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1482,7 +1482,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 0.0f;
 			style.TabRounding = 0.0f;
 			style.TabBorderSize = 1.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1586,7 +1586,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 0.0f;
 			style.TabRounding = 0.0f;
 			style.TabBorderSize = 0.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Left;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1690,7 +1690,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 1.0f;
 			style.TabRounding = 4.0f;
 			style.TabBorderSize = 0.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
@@ -1793,7 +1793,7 @@ namespace ofxImGuiSurfing
 			style.GrabRounding = 3.0f;
 			style.TabRounding = 4.0f;
 			style.TabBorderSize = 1.0f;
-			style.TabMinWidthForCloseButton = 0.0f;
+//			style.TabMinWidthForCloseButton = 0.0f;
 			style.ColorButtonPosition = ImGuiDir_Right;
 			style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
 			style.SelectableTextAlign = ImVec2(0.0f, 0.0f);

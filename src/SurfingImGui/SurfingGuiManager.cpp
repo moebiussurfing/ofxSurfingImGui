@@ -1667,7 +1667,7 @@ float SurfingGuiManager::getFontSizeForIndex(int index) {
 	float sz = -1;
 
 	if (index < customFonts.size()) {
-		if (customFonts[index] != nullptr) sz = (customFonts[index]->ConfigData->SizePixels);
+    if (customFonts[index] != nullptr) sz = (customFonts[index]->LegacySize);
 		return sz;
 	}
 
@@ -1680,7 +1680,7 @@ string SurfingGuiManager::getFontName(int index) {
 
 	if (index < customFonts.size()) {
 		if (customFonts[index] != nullptr)
-			s = (customFonts[index]->ConfigData->Name);
+			s = (customFonts[index]->GetDebugName());
 		return s;
 	}
 
@@ -3147,6 +3147,7 @@ void SurfingGuiManager::EndWindowSpecial(int index) {
 void SurfingGuiManager::EndWindow() {
 	rectangleLastWindowShape = getWindowShape();
 
+  ImGui::Dummy(ImVec2(0, 0)); // see ImGui::ErrorCheckUsingSetCursorPosToExtendParentBoundaries
 	ImGui::End();
 }
 

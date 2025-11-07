@@ -50,7 +50,8 @@ namespace ofxImGuiSurfing
             //TODO:
             style->TabRounding = 2; // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
             style->TabBorderSize = 1.f; // Thickness of border around tabs.
-            style->TabMinWidthForCloseButton = 0; // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
+// TabMinWidthForCloseButton is not available in current ImGui versions
+//            style->TabMinWidthForCloseButton = 0; // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
             // style->Tab
 
             style->FrameRounding = 4;

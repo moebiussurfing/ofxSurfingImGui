@@ -578,7 +578,8 @@ namespace ofxImGuiSurfing
 					if (spacing != -1)
 					{
 						//TODO: could be take from style argument, not hard coded like that
-						float h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+//            float h = (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+            float h = (ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2);
 						ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
 						ImGui::Dummy(ImVec2(0.0f, (float)spacing)); // spacing
 					}
@@ -599,7 +600,8 @@ namespace ofxImGuiSurfing
 					//TODO: 
 					//could be take from style argument, 
 					//not hard coded like that
-					float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+//          float h = 0.25f * (ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2);
+          float h = 0.25f * (ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2);
 					ImGui::InvisibleButton("_inv_", ImVec2(10, h), ImGuiButtonFlags_None);
 
 					if (spacing != -1)
