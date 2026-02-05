@@ -1515,6 +1515,7 @@ namespace ImSpinner
     inline void SpinnerAsciiSymbolPoints(const char* label, const char* text, float radius, float thickness,
                                          const ImColor& color = white, float speed = 2.8f)
     {
+		//TODO: fix ugly workaround
         //SPINNER_HEADER(pos, size, centre, num_segments);
 
         //if (!text || !*text)
