@@ -1515,38 +1515,38 @@ namespace ImSpinner
     inline void SpinnerAsciiSymbolPoints(const char* label, const char* text, float radius, float thickness,
                                          const ImColor& color = white, float speed = 2.8f)
     {
-        SPINNER_HEADER(pos, size, centre, num_segments);
+        //SPINNER_HEADER(pos, size, centre, num_segments);
 
-        if (!text || !*text)
-            return;
+        //if (!text || !*text)
+        //    return;
 
-        const float start = ImFmod((float)ImGui::GetTime() * speed, (float)strlen(text));
-        const ImFontGlyph* glyph = ImGui::GetCurrentContext()->Font->FindGlyph(text[(int)start]);
+        //const float start = ImFmod((float)ImGui::GetTime() * speed, (float)strlen(text));
+        //const ImFontGlyph* glyph = ImGui::GetCurrentContext()->Font->FindGlyph(text[(int)start]);
 
-        ImVec2 pp(centre.x - radius, centre.y - radius);
-        ImFontAtlas* atlas = ImGui::GetIO().Fonts;
-        unsigned char* bitmap;
-        int out_width, out_height;
-        atlas->GetTexDataAsAlpha8(&bitmap, &out_width, &out_height);
+        //ImVec2 pp(centre.x - radius, centre.y - radius);
+        //ImFontAtlas* atlas = ImGui::GetIO().Fonts;
+        //unsigned char* bitmap;
+        //int out_width, out_height;
+        //atlas->GetTexDataAsAlpha8(&bitmap, &out_width, &out_height);
 
-        const int U1 = (int)(glyph->U1 * out_width);
-        const int U0 = (int)(glyph->U0 * out_width);
-        const int V1 = (int)(glyph->V1 * out_height);
-        const int V0 = (int)(glyph->V0 * out_height);
-        const float px = size.x / (U1 - U0);
-        const float py = size.y / (V1 - V0);
+        //const int U1 = (int)(glyph->U1 * out_width);
+        //const int U0 = (int)(glyph->U0 * out_width);
+        //const int V1 = (int)(glyph->V1 * out_height);
+        //const int V0 = (int)(glyph->V0 * out_height);
+        //const float px = size.x / (U1 - U0);
+        //const float py = size.y / (V1 - V0);
 
-        for (int x = U0, ppx = 0; x < U1; x++, ppx++)
-        {
-            for (int y = V0, ppy = 0; y < V1; y++, ppy++)
-            {
-                ImVec2 point(pp.x + (ppx * px), pp.y + (ppy * py));
-                const unsigned char alpha = bitmap[out_width * y + x];
-                window->DrawList->AddCircleFilled(point, thickness * 1.5f,
-                                                  color_alpha({.5f, .5f, .5f, .5f}, alpha / 255.f));
-                window->DrawList->AddCircleFilled(point, thickness, color_alpha(color, alpha / 255.f));
-            }
-        }
+        //for (int x = U0, ppx = 0; x < U1; x++, ppx++)
+        //{
+        //    for (int y = V0, ppy = 0; y < V1; y++, ppy++)
+        //    {
+        //        ImVec2 point(pp.x + (ppx * px), pp.y + (ppy * py));
+        //        const unsigned char alpha = bitmap[out_width * y + x];
+        //        window->DrawList->AddCircleFilled(point, thickness * 1.5f,
+        //                                          color_alpha({.5f, .5f, .5f, .5f}, alpha / 255.f));
+        //        window->DrawList->AddCircleFilled(point, thickness, color_alpha(color, alpha / 255.f));
+        //    }
+        //}
     }
 
     inline void SpinnerSevenSegments(const char* label, const char* text, float radius, float thickness,
