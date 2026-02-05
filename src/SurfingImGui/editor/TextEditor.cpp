@@ -1523,7 +1523,8 @@ bool TextEditor::Render(const char* aTitle, bool aParentIsFocused, const ImVec2&
 	if (mHandleKeyboardInputs)
 	{
 		HandleKeyboardInputs(aParentIsFocused);
-		ImGui::PushAllowKeyboardFocus(true);
+		//TODO: workaround deprecated
+		//ImGui::PushAllowKeyboardFocus(true);
 	}
 
 	if (mHandleMouseInputs)
@@ -1533,7 +1534,8 @@ bool TextEditor::Render(const char* aTitle, bool aParentIsFocused, const ImVec2&
 	Render(aParentIsFocused);
 
 	if (mHandleKeyboardInputs)
-		ImGui::PopAllowKeyboardFocus();
+		//TODO: workaround deprecated
+		//ImGui::PopAllowKeyboardFocus();
 
 	if (!mIgnoreImGuiChild)
 		ImGui::EndChild();

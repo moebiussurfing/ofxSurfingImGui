@@ -890,7 +890,10 @@ namespace ofxImGuiSurfing
     inline void AddVoidWidget()
     {
         // Unit height
-        float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+        //float h = ImGui::GetIO().FontDefault->FontSize + ImGui::GetStyle().FramePadding.y * 2;
+		//TODO: workaround ugly fix
+		float h = ImGui::GetStyle().FontSizeBase + ImGui::GetStyle().FramePadding.y * 2;
+
         float w = 10;
 
         //TODO:

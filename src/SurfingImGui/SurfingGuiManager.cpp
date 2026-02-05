@@ -1667,7 +1667,9 @@ float SurfingGuiManager::getFontSizeForIndex(int index) {
 	float sz = -1;
 
 	if (index < customFonts.size()) {
-		if (customFonts[index] != nullptr) sz = (customFonts[index]->ConfigData->SizePixels);
+		//if (customFonts[index] != nullptr) sz = (customFonts[index]->ConfigData->SizePixels);
+		//TODO: deprecated ugly fix workaround
+		if (customFonts[index] != nullptr) sz = (customFonts[index]->Sources[0]->SizePixels);
 		return sz;
 	}
 
@@ -1680,7 +1682,9 @@ string SurfingGuiManager::getFontName(int index) {
 
 	if (index < customFonts.size()) {
 		if (customFonts[index] != nullptr)
-			s = (customFonts[index]->ConfigData->Name);
+			//TODO: deprecated ugly fix workaround
+			//s = (customFonts[index]->ConfigData->Name);
+			s = (customFonts[index]->GetDebugName());
 		return s;
 	}
 

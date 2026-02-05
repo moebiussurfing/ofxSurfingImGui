@@ -508,8 +508,11 @@ namespace ofxImGuiSurfing
 
 		// Right clicked
 
-		bool bModCtrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
-		bool bModAlt = ImGui::IsKeyDown(ImGuiKey_ModAlt);
+		//bool bModCtrl = ImGui::IsKeyDown(ImGuiKey_ModCtrl);
+		//bool bModAlt = ImGui::IsKeyDown(ImGuiKey_ModAlt);
+		//TODO: fix ugly workaround
+		bool bModCtrl = ImGui::IsKeyDown(ImGuiKey_LeftCtrl);
+		bool bModAlt = ImGui::IsKeyDown(ImGuiKey_LeftAlt);
 
 		bool bChanged = false;
 

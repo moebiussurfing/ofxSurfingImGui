@@ -80,7 +80,7 @@ IMGUI_API void ImGui::SaveStylesTo(const char* fileName) {
 	WRITE_FLOAT(LogSliderDeadzone);
 	WRITE_FLOAT(TabRounding);
 	WRITE_FLOAT(TabBorderSize);
-	WRITE_FLOAT(TabMinWidthForCloseButton);
+	//WRITE_FLOAT(TabMinWidthForCloseButton);
 	WRITE_FLOAT(MouseCursorScale);
 	WRITE_FLOAT(CurveTessellationTol);
 	WRITE_FLOAT(CircleTessellationMaxError);
@@ -156,7 +156,7 @@ IMGUI_API void ImGui::LoadStyleFrom(const char* fileName) {
 	LOAD_FLOAT(LogSliderDeadzone);
 	LOAD_FLOAT(TabRounding);
 	LOAD_FLOAT(TabBorderSize);
-	LOAD_FLOAT(TabMinWidthForCloseButton);
+	//LOAD_FLOAT(TabMinWidthForCloseButton);
 	LOAD_FLOAT(MouseCursorScale);
 	LOAD_FLOAT(CurveTessellationTol);
 	LOAD_FLOAT(CircleTessellationMaxError);
