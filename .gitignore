@@ -587,3 +587,4 @@ Examples_2_Modules/23_NotifierSystem/of.entitlements
 of.entitlements
 /bin/data/**/*.gitkeep
 .gitkeep
+Examples_2_Modules/21_LogSystem/21_LogSystem.code-workspace
