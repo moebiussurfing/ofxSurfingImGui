@@ -221,7 +221,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeImStyle()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeImStyle";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeImStyle";
 
 		resetTheme();
 
@@ -332,7 +332,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeMoebiusSurfingBlue()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingBlue";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingBlue";
 
 		resetTheme();
 
@@ -409,7 +409,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeModernDark()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeModernDark";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeModernDark";
 
 		resetTheme();
 
@@ -492,7 +492,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeDarcula()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeDarcula";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeDarcula";
 
 		resetTheme();
 
@@ -570,7 +570,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeGrey()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeGrey";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeGrey";
 
 		resetTheme();
 
@@ -653,7 +653,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	inline void ImGui_ThemeOlekristensen()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeOlekristensen";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeOlekristensen";
 
 		resetTheme();
 
@@ -727,7 +727,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeXemu()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeXemu";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeXemu";
 
 		resetTheme();
 
@@ -807,7 +807,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeYave()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeYave";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeYave";
 
 		resetTheme();
 
@@ -930,7 +930,7 @@ namespace ofxImGuiSurfing
 
 	static void ImGui_ThemeBlender(ImGuiStyle* dst = NULL)
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeBlender";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeBlender";
 
 		resetTheme();
 
@@ -999,7 +999,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeCyberpunk(ImGuiStyle* dst = NULL)
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeCyberpunk";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeCyberpunk";
 
 		resetTheme();
 
@@ -1065,7 +1065,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeNord(ImGuiStyle* dst = NULL)
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeNord";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeNord";
 
 		resetTheme();
 
@@ -1135,7 +1135,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeUnreal()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeUnreal";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeUnreal";
 
 		resetTheme();
 
@@ -1239,7 +1239,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeVisualStudioRounded()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeVisualStudioRounded";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeVisualStudioRounded";
 
 		resetTheme();
 
@@ -1344,7 +1344,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeVisualStudio()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeVisualStudio";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeVisualStudio";
 
 		resetTheme();
 
@@ -1448,7 +1448,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemePhotoshop()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemePhotoshop";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemePhotoshop";
 
 		resetTheme();
 
@@ -1552,7 +1552,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeMaterialFlat()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMaterialFlat";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeMaterialFlat";
 
 		resetTheme();
 
@@ -1655,7 +1655,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeEnemymouse()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeEnemymouse";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeEnemymouse";
 
 		resetTheme();
 
@@ -1758,7 +1758,7 @@ namespace ofxImGuiSurfing
 
 	static void ImGui_ThemeDeepDark()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeDeepDark";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeDeepDark";
 
 		resetTheme();
 
@@ -1865,7 +1865,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeFlatDryWineGreen()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeFlatDryWineGreen";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeFlatDryWineGreen";
 
 		resetTheme();
 
@@ -1991,7 +1991,7 @@ namespace ofxImGuiSurfing
 
 	static void ImGui_ThemeSequentity()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeSequentity";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeSequentity";
 
 		resetTheme();
 
@@ -2109,7 +2109,7 @@ namespace ofxImGuiSurfing
 
 	static void ImGui_ThemeT3()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeT3";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeT3";
 
 		resetTheme();
 
@@ -2208,7 +2208,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeAiekickGreenBlue()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeAiekickGreenBlue";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeAiekickGreenBlue";
 
 		resetTheme();
 
@@ -2281,7 +2281,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeAiekickRedDark()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeAiekickRedDark";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeAiekickRedDark";
 
 		resetTheme();
 
@@ -2357,7 +2357,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeDraculaStyle()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeDraculaStyle";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeDraculaStyle";
 
 		resetTheme();
 
@@ -2452,7 +2452,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeMaksasj()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMaksasj";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeMaksasj";
 
 		resetTheme();
 
@@ -2518,7 +2518,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeSimongeilfusCinder()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeSimongeilfusCinder";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeSimongeilfusCinder";
 
 		resetTheme();
 
@@ -2780,7 +2780,7 @@ namespace ofxImGuiSurfing
 	//--------------------------------------------------------------
 	static void ImGui_ThemeAdobeSpectrum()
 	{
-		ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeAdobeSpectrum";
+		ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeAdobeSpectrum";
 
 		resetTheme();
 

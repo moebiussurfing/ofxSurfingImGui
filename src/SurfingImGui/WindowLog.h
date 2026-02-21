@@ -419,7 +419,7 @@ namespace ofxImGuiSurfing
                         b = ImGui::InputText("##Filter", &s);
                         if (b)
                         {
-                            ofLogNotice("ofxSurfingImGui:SurfingLog") << "InputText:" << s.c_str();
+                            ofLogVerbose("ofxSurfingImGui:SurfingLog") << "InputText:" << s.c_str();
                             strFilterKeyword.set(s);
                         }
                         ImGui::PopItemWidth();
@@ -580,7 +580,7 @@ namespace ofxImGuiSurfing
                     //		bReturn = ImGui::InputText("##Filter", &s);
                     //		if (bReturn)
                     //		{
-                    //			ofLogNotice("ofxSurfingImGui:SurfingLog") << "InputText:" << s.c_str();
+                    //			ofLogVerbose("ofxSurfingImGui:SurfingLog") << "InputText:" << s.c_str();
                     //			strFilterKeyword.set(s);
                     //		}
                     //		ImGui::PopItemWidth();
@@ -706,7 +706,7 @@ namespace ofxImGuiSurfing
             // if (bDoneDefinedMonospacedFonts) if (fontIndex < 4) fontIndex = 4;//set first mono-spaced by default
 
             bDoneStartup = true;
-            ofLogNotice("ofxSurfingImGui:SurfingLog") << "Startup done";
+            ofLogVerbose("ofxSurfingImGui:SurfingLog") << "Startup done";
         }
 
     private:
@@ -715,7 +715,7 @@ namespace ofxImGuiSurfing
             std::string n = e.getName();
             if (n != amountLinesLimitedBuffered.getName())
             {
-                ofLogNotice("ofxSurfingImGui:SurfingLog") << n << ": " << e;
+                ofLogVerbose("ofxSurfingImGui:SurfingLog") << n << ": " << e;
             }
 
             //workaround to fix combo behavior
@@ -761,7 +761,7 @@ namespace ofxImGuiSurfing
                             bufferBufferedLimited.pop_front();
                         }
                     }
-                    ofLogNotice("ofxSurfingImGui:SurfingLog") << n << ": " << e;
+                    ofLogVerbose("ofxSurfingImGui:SurfingLog") << n << ": " << e;
                 }
                 return;
             }
@@ -1132,7 +1132,7 @@ namespace ofxImGuiSurfing
         // pass path folder. the name will be auto settled by timestamp
         void exportLogToFile(string path = "")
         {
-            ofLogNotice("ofxSurfingImGui:SurfingLog") << "exportLogToFile:" << path;
+            ofLogVerbose("ofxSurfingImGui:SurfingLog") << "exportLogToFile:" << path;
 
             //if (path == "") path = ofToDataPath("", true).string();
             if (path == "") path = ofToDataPath("", true);

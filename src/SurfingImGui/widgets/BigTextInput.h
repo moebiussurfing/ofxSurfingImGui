@@ -359,7 +359,7 @@ private:
 	void doSubmit(string s)
 	{
 		textInput = s;
-		ofLogNotice("ofxSurfingImGui::doSubmit") << s;
+		ofLogVerbose("ofxSurfingImGui::doSubmit") << s;
 
 		// Trigs callback to parent / ofApp
 		if (functionCallbackSubmit != nullptr) functionCallbackSubmit();

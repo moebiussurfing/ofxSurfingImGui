@@ -43,7 +43,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Constructor";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::Constructor";
 
 			ofAddListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
 			ofAddListener(params_Controls.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
@@ -77,7 +77,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		~WindowsOrganizer()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Destructor!";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::Destructor!";
 
 			ofRemoveListener(params_WindowsPanels.parameterChangedE(), this, &WindowsOrganizer::Changed_WindowsPanels);
 			ofRemoveListener(params_Controls.parameterChangedE(), this, &WindowsOrganizer::Changed_Settings);
@@ -93,7 +93,7 @@ namespace ofxImGuiSurfing
 			}
 			else
 			{
-				ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) <<
+				ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) <<
 					"Succesfully omitted calling exit() in destructor. It was already done!";
 			}
 #endif
@@ -107,7 +107,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void update()
 		{
-			//ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+			//ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__);
 			//if (!bDoneStartupDelayed) return;
 
 			if (bFlagSaveSettings) {
@@ -130,7 +130,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void exit(ofEventArgs& e)
 		{
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "exit(ofEventArgs& e)";
 
 			exit();
 		}
@@ -140,7 +140,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void exit()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::exit()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::exit()";
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 			saveSettings();
@@ -174,21 +174,21 @@ namespace ofxImGuiSurfing
 		{
 			if (bDoneInitialized)
 			{
-				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings()";
+				ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::saveSettings()";
 
 				// Save
 				saveGroup(params_AppSettings, path_Settings, false);
 			}
 			else
 			{
-				ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::saveSettings(): Skipped Saving WindowsOrganizer settings. Not using SpecialWindows so not required.";
+				ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::saveSettings(): Skipped Saving WindowsOrganizer settings. Not using SpecialWindows so not required.";
 			}
 		}
 
 		//--------------------------------------------------------------
 		void resetSettings()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::resetSettings()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::resetSettings()";
 
 			bLinked = false;
 			bOrientation = false;
@@ -202,7 +202,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void reset()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::reset()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::reset()";
 
 			bGui_Organizer = false;
 			bGui_Aligners = false;
@@ -237,7 +237,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsY()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsY()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsY()";
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -295,7 +295,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsX()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsX()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsX()";
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -425,7 +425,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setPathGlobal(string path)
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::sePathGlobal:" << path;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::sePathGlobal:" << path;
 
 			path_Global = path;
 			path_Settings = path_Global + nameLabel + "_" + pathSuffix;
@@ -445,7 +445,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setHideWindows(bool b)
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::setHideWindows:" << b;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::setHideWindows:" << b;
 
 			bHideWindowsToggles = b;
 
@@ -480,7 +480,7 @@ namespace ofxImGuiSurfing
 
 			string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Settings: " << name << " : " << e;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::Changed_Settings: " << name << " : " << e;
 
 			//--
 
@@ -515,7 +515,7 @@ namespace ofxImGuiSurfing
 
 			string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_Callbacks: " << name << " : " << e;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::Changed_Callbacks: " << name << " : " << e;
 
 			//--
 
@@ -571,7 +571,7 @@ namespace ofxImGuiSurfing
 
 			string name = e.getName();
 
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::Changed_WindowsPanels: " << name << " : " << e;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::Changed_WindowsPanels: " << name << " : " << e;
 
 			//--			
 
@@ -587,7 +587,7 @@ namespace ofxImGuiSurfing
 
 				if (p.bGui.getName() == name)
 				{
-					ofLogNotice("ofxSurfingImGui") << "id:" << p.id <<
+					ofLogVerbose("ofxSurfingImGui") << "id:" << p.id <<
 						" indexPos:" << p.indexPos << " bGui:" << (p.bGui.get() ? "TRUE" : "FALSE");
 
 					//--
@@ -717,7 +717,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doReOrganize()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::doReOrganize()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::doReOrganize()";
 
 			if (queueWindowsVisible.size() == 0 || windowsPanels.size() == 0) return;
 
@@ -752,7 +752,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsReset()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsReset()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsReset()";
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -847,7 +847,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void doAlignWindowsCascade()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsCascade()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::doAlignWindowsCascade()";
 
 			float _padx = 117;
 			float _pady = 25;
@@ -960,7 +960,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		string getWindowMoreLefted()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::getWindowMoreLefted()";
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::getWindowMoreLefted()";
 
 			ImGuiContext* GImGui = ImGui::GetCurrentContext();
 			ImGuiContext& g = *GImGui;
@@ -1021,7 +1021,7 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void add(ofParameter<bool>& e) // Will be called when Add Special Windows. 
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::add() " << e.getName();
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::add() " << e.getName();
 
 			// Queue toggle
 			params_WindowsPanels.add(e);
@@ -1069,8 +1069,8 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void setupInitiate()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::setupInitiate()";
-			ofLogNotice("ofxSurfingImGui") << nameLabel;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::setupInitiate()";
+			ofLogVerbose("ofxSurfingImGui") << nameLabel;
 
 			//--
 
@@ -1111,8 +1111,8 @@ namespace ofxImGuiSurfing
 		//--------------------------------------------------------------
 		void startup()
 		{
-			ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::startup()";
-			ofLogNotice("ofxSurfingImGui") << nameLabel;
+			ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::startup()";
+			ofLogVerbose("ofxSurfingImGui") << nameLabel;
 
 			//--
 
@@ -1154,8 +1154,8 @@ namespace ofxImGuiSurfing
 		//{
 		//	// Force some fixes
 
-		//	ofLogNotice("ofxSurfingImGui") << "WindowsOrganizer::startupDelayed()";
-		//	ofLogNotice("ofxSurfingImGui") << nameLabel;
+		//	ofLogVerbose("ofxSurfingImGui") << "WindowsOrganizer::startupDelayed()";
+		//	ofLogVerbose("ofxSurfingImGui") << nameLabel;
 
 		//	// Load Settings
 		//	if (bDoneInitialized) loadSettings();

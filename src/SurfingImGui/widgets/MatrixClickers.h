@@ -194,7 +194,7 @@ namespace ofxImGuiSurfing
 		ImGui::PopID();
 		//ImGui::Spacing();
 
-		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogVerbose("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		return cChanged;
 	}
@@ -382,7 +382,7 @@ namespace ofxImGuiSurfing
 		}
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogVerbose("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		return cChanged;
 	}
@@ -587,7 +587,7 @@ namespace ofxImGuiSurfing
 		}
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogVerbose("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		return cChanged;
 	}
@@ -765,7 +765,7 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogVerbose("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		//if (bSpaced) ImGui::Spacing();
 		//if (bSpaced) ImGui::Spacing();
@@ -973,7 +973,7 @@ namespace ofxImGuiSurfing
 
 		ImGui::PopID();
 
-		if (cChanged) ofLogNotice("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
+		if (cChanged) ofLogVerbose("ofxSurfingImGui") << "Clicked Matrix " << _index.get();
 
 		//if (bSpaced) ImGui::Spacing();
 		//if (bSpaced) ImGui::Spacing();

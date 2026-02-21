@@ -48,10 +48,10 @@ namespace ofxImGuiSurfing
 		static THEME_STYLE themeStyle = THEME_NIGHT;
 
 		inline bool loadThemeFileByName(string name) {
-			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << name;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFileByName") << name;
 			string pathTheme = pathThemes + name;
 			string p = ofToDataPath(pathTheme);
-			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
 
 			ofFile f;
@@ -59,11 +59,11 @@ namespace ofxImGuiSurfing
 		};
 
 		inline bool loadThemeFile(string path, bool bAbsolute = false) {
-			ofLogNotice("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
 			string p;
 			if (bAbsolute) p = path;
 			else p = ofToDataPath(path);
-			ofLogNotice("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
 
 			ofFile f;
@@ -177,7 +177,7 @@ namespace ofxImGuiSurfing
 			i--;
 			i = ofClamp(i, 0, names.size() - 1);
 			indexThemeHardcoded = i;
-			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
+			ofLogVerbose("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
 		ImGui::SameLine();
@@ -185,7 +185,7 @@ namespace ofxImGuiSurfing
 			i++;
 			i = ofClamp(i, 0, names.size() - 1);
 			indexThemeHardcoded = i;
-			ofLogNotice("ofxSurfingImGui") << "Index: " << i;
+			ofLogVerbose("ofxSurfingImGui") << "Index: " << i;
 			b1 = true;
 		}
 		ImGui::PopButtonRepeat();
@@ -203,7 +203,7 @@ namespace ofxImGuiSurfing
 
 			i = ofClamp(i, 0, names.size() - 1);//avoid crashes
 			indexThemeHardcoded = i;
-			ofLogNotice("ofxSurfingImGui") << "Combo: " << i;
+			ofLogVerbose("ofxSurfingImGui") << "Combo: " << i;
 
 			switch (indexThemeHardcoded)
 			{

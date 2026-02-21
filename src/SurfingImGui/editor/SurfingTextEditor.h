@@ -304,7 +304,7 @@ public:
 
 		//-
 
-		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
+		ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "load ifstream fileToEdit: " << ofToString(fileToEdit);
 
 		std::ifstream t(fileToEdit);
 		if (t.good())
@@ -314,10 +314,10 @@ public:
 			textRaw = str;
 			this->setText(str);
 
-			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
+			ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "loaded file: " << ofToString(fileToEdit);
 		}
 		else {
-			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
+			ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "file not found! " << ofToString(fileToEdit);
 		}
 	};
 
@@ -326,7 +326,7 @@ public:
 	void Changed_Params(ofAbstractParameter& e)
 	{
 		string name = e.getName();
-		ofLogNotice("ofxSurfingImGui::surfingTextEditor:Changed_Params") << " : " << name << " : " << e;
+		ofLogVerbose("ofxSurfingImGui::surfingTextEditor:Changed_Params") << " : " << name << " : " << e;
 
 		if (name == themeIndex.getName())
 		{
@@ -943,28 +943,28 @@ public:
 		// Check if the user opened a file
 		if (openFileResult.bSuccess) {
 
-			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User selected a file";
+			ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "User selected a file";
 
 			//We have a file, check it and process it
 			processOpenFile(openFileResult);
 		}
 		else {
-			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "User hit cancel";
+			ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "User hit cancel";
 		}
 	};
 
 	//--------------------------------------------------------------
 	void processOpenFile(ofFileDialogResult openFileResult) {
 
-		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Name: " + openFileResult.getName();
-		ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "Path: " + openFileResult.getPath();
+		ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "Name: " + openFileResult.getName();
+		ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "Path: " + openFileResult.getPath();
 
 		string path = openFileResult.getPath();
 		ofFile file(openFileResult.getPath());
 
 		if (file.exists())
 		{
-			ofLogNotice("ofxSurfingImGui::surfingTextEditor") << "The file exists - now checking the type via file extension.";
+			ofLogVerbose("ofxSurfingImGui::surfingTextEditor") << "The file exists - now checking the type via file extension.";
 			string fileExtension = ofToUpper(file.getExtension());
 
 			// We only want 

@@ -27,25 +27,25 @@ private:
 public:
 	// Must call before setup()! Requires a local instantiated ui
 	void setUiPtr(ofxSurfingGui* _ui) {
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:setUiPtr()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:setUiPtr()";
 		ui = _ui;
 	}
 
 public:
 	SurfingFonts()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:Constructor()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:Constructor()";
 	}
 
 	~SurfingFonts()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:Destructor()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:Destructor()";
 		exit();
 	}
 
 	void setup()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:setup()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:setup()";
 
 		// Theme Default Font
 		paramsDefaultFont.add(pathFontDefault);
@@ -68,7 +68,7 @@ public:
 	}
 
 	void loadSettings() {
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:loadSettings()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:loadSettings()";
 
 		ofxImGuiSurfing::loadGroup(params, pathSettingsHelpers);
 
@@ -99,7 +99,7 @@ public:
 	}
 
 	void exit() {
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:exit()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:exit()";
 
 		ofxImGuiSurfing::saveGroup(params, pathSettingsHelpers);
 
@@ -582,13 +582,13 @@ private:
 public:
 
 	void setPathForExtraFonts(string path) {
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:setPathForExtraFonts() " << path;
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:setPathForExtraFonts() " << path;
 		pathFolderExtraFonts = path;
 	}
 
 	void doBuildStylesFromFont()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doBuildStylesFromFont()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doBuildStylesFromFont()";
 
 		// Recreate and build default fonts. 
 		string p;
@@ -612,7 +612,7 @@ public:
 
 	void doBuildStylesFromFontByPath(string path, float size)
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doBuildStylesFromFontByPath()" << path << ", " << size;
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doBuildStylesFromFontByPath()" << path << ", " << size;
 
 		sizeFont = size;
 
@@ -628,7 +628,7 @@ public:
 	}
 
 	void doLoadFontsFromFolder(string path) {
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doLoadFontsFromFolder()" << path;
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doLoadFontsFromFolder()" << path;
 
 		if (path != "") pathFolderExtraFonts = path;
 		bLoadFontsFromFolder = 1;
@@ -637,7 +637,7 @@ public:
 	//TODO:
 	void doClearFonts()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doClearFonts()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doClearFonts()";
 
 		ui->clearFonts();
 
@@ -660,7 +660,7 @@ public:
 
 	void doLoadFontsFromFolder()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doLoadFontsFromFolder()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doLoadFontsFromFolder()";
 
 		//workflow
 		if (pathFolderExtraFonts == "") {
@@ -679,7 +679,7 @@ public:
 	// An Example to see how to load some fonts
 	void doPreloadSomeFonts()
 	{
-		ofLogNotice("ofxSurfingImGui") << "SurfingFonts:doPreloadSomeFonts()";
+		ofLogVerbose("ofxSurfingImGui") << "SurfingFonts:doPreloadSomeFonts()";
 
 		string label;
 		float size;

@@ -3937,7 +3937,7 @@ public:
 
 	//--------------------------------------------------------------
 	void initiateWindowsOrganizer() {
-		ofLogNotice("ofxSurfingImGui") << "initiateWindowsOrganizer()";
+		ofLogVerbose("ofxSurfingImGui") << "initiateWindowsOrganizer()";
 		windowsOrganizer.setupInitiate();
 	}
 
@@ -4571,7 +4571,7 @@ public:
 
 	//--------------------------------------------------------------
 	void setPresetsNames(vector<string> names) {
-		ofLogNotice("ofxSurfingImGui") << "setPresetsNames() " << ofToString(names);
+		ofLogVerbose("ofxSurfingImGui") << "setPresetsNames() " << ofToString(names);
 		if (names.size() != SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS) {
 			ofLogError("ofxSurfingImGui") << "setPresetsNames() Names sizes must be equal to " << SURFING_IMGUI__DEFAULT_AMOUNT_PRESETS;
 		}

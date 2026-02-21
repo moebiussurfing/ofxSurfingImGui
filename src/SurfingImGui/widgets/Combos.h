@@ -203,7 +203,7 @@ namespace ofxImGuiSurfing
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::PopID();
@@ -223,7 +223,7 @@ namespace ofxImGuiSurfing
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::PopID();
@@ -251,7 +251,7 @@ namespace ofxImGuiSurfing
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 		ImGui::PopItemWidth();
 
@@ -298,7 +298,7 @@ namespace ofxImGuiSurfing
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 		ImGui::PopItemWidth();
 
@@ -400,7 +400,7 @@ namespace ofxImGuiSurfing
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::PopItemWidth();
@@ -457,7 +457,7 @@ namespace ofxImGuiSurfing
 		{
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::PopItemWidth();
@@ -592,7 +592,7 @@ namespace ofxImGuiSurfing
 		if (b) {
 			i = ofClamp(i, pIndex.getMin(), pIndex.getMax());//avoid crashes
 			pIndex.set(i);
-			ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
+			ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << "Combo: " << pIndex.getName() << " " << ofToString(pIndex);
 		}
 
 		ImGui::Spacing();

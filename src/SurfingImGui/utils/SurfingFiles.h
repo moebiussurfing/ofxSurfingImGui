@@ -107,12 +107,12 @@ public:
 		size_t sz = dir.size();
 
 		if (dir.numFiles() == 0) ofLogWarning("ofxSurfingImGui:SurfingFiles") << "Folder " << pathFiles << " is empty.";
-		else ofLogNotice("ofxSurfingImGui:SurfingFiles") << "Folder " << pathFiles << " opened.";
+		else ofLogVerbose("ofxSurfingImGui:SurfingFiles") << "Folder " << pathFiles << " opened.";
 
 		for (size_t i = 0; i < sz; i++)
 		{
 			string n = dir[i].getBaseName();
-			ofLogNotice("ofxSurfingImGui:SurfingFiles") << "#" << i << " " << n << "." << ext;
+			ofLogVerbose("ofxSurfingImGui:SurfingFiles") << "#" << i << " " << n << "." << ext;
 		}
 	};
 
@@ -131,7 +131,7 @@ public:
 	void deleteThemeFile() {
 		int i = index;
 		string p = dir[i].getAbsolutePath();
-		ofLogNotice("ofxSurfingImGui:SurfingFiles") << "Delete file " << p;
+		ofLogVerbose("ofxSurfingImGui:SurfingFiles") << "Delete file " << p;
 
 		ofFile f(p);
 		f.remove();
@@ -156,7 +156,7 @@ public:
 		string p2 = dir[i].getBaseName() + ofToString("_.") + ext;
 		string pCopy = ofToDataPath(p2);
 		//string pCopy = ofToDataPath(dir[i].getBaseName() + "_" + ext);
-		ofLogNotice("ofxSurfingImGui:SurfingFiles") << "Copy file to " << pCopy;
+		ofLogVerbose("ofxSurfingImGui:SurfingFiles") << "Copy file to " << pCopy;
 
 		ofFile f(p);
 		f.copyTo(pCopy);

@@ -79,10 +79,10 @@ namespace ofxImGuiSurfing
 		static THEME_STYLE themeStyle = THEME_NIGHT;
 
 		inline bool loadThemeFileByName(string name) {
-			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << name;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFileByName") << name;
 			string pathTheme = pathThemes + name;
 			string p = ofToDataPath(pathTheme);
-			ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
 
 			ofFile f;
@@ -90,11 +90,11 @@ namespace ofxImGuiSurfing
 		};
 
 		inline bool loadThemeFile(string path, bool bAbsolute = false) {
-			ofLogNotice("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFile") << path << " bAbsolute:" << bAbsolute;
 			string p;
 			if (bAbsolute) p = path;
 			else p = ofToDataPath(path);
-			ofLogNotice("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
+			ofLogVerbose("ofxSurfingImGui::loadThemeFile") << "Load from " << p;
 			ImGui::LoadStyleFrom(p.c_str());
 
 			ofFile f;
@@ -219,7 +219,7 @@ private:
 
 	void Changed(ofAbstractParameter& e) {
 		std::string name = e.getName();
-		ofLogNotice("ofxSurfingImGui:SurfingThemeEditor") << "Changed: " << name << ": " << e;
+		ofLogVerbose("ofxSurfingImGui:SurfingThemeEditor") << "Changed: " << name << ": " << e;
 
 		if (0) {}
 
@@ -445,7 +445,7 @@ public:
 	void saveThemeFile(string path) {
 		string p = ofToDataPath(path);
 		ImGui::SaveStylesTo(p.c_str());
-		ofLogNotice("ofxSurfingImGui") << "Save to " << path;
+		ofLogVerbose("ofxSurfingImGui") << "Save to " << path;
 
 		files.refreshFiles();
 
@@ -456,30 +456,30 @@ public:
 	};
 
 	void loadThemeFileByName(string name) {
-		ofLogNotice("ofxSurfingImGui") << "Load named " << name;
+		ofLogVerbose("ofxSurfingImGui") << "Load named " << name;
 
 		filename = name;
 		pathTheme = pathThemes + filename;
 
 		string p = ofToDataPath(pathTheme);
-		ofLogNotice("ofxSurfingImGui") << "Load from " << p;
+		ofLogVerbose("ofxSurfingImGui") << "Load from " << p;
 		ImGui::LoadStyleFrom(p.c_str());
 	}
 
 	void loadThemeFile(string path) {
-		ofLogNotice("ofxSurfingImGui") << "Load from " << path;
+		ofLogVerbose("ofxSurfingImGui") << "Load from " << path;
 		string p = ofToDataPath(path);
 		ImGui::LoadStyleFrom(p.c_str());
 	}
 
 	void reloadThemeFile() {
-		ofLogNotice("ofxSurfingImGui") << "Reload from " << pathTheme;
+		ofLogVerbose("ofxSurfingImGui") << "Reload from " << pathTheme;
 		string p = ofToDataPath(pathTheme);
 		ImGui::LoadStyleFrom(p.c_str());
 	}
 
 	void deleteThemeFile() {
-		ofLogNotice("ofxSurfingImGui") << "Delete from " << pathTheme;
+		ofLogVerbose("ofxSurfingImGui") << "Delete from " << pathTheme;
 
 		files.deleteThemeFile();
 
@@ -490,7 +490,7 @@ public:
 	}
 
 	void copyThemeFile() {
-		ofLogNotice("ofxSurfingImGui") << "Copy from " << pathTheme;
+		ofLogVerbose("ofxSurfingImGui") << "Copy from " << pathTheme;
 		string pFrom = pathTheme;
 
 		filename = nameTheme.get() + "_.ini";
@@ -631,7 +631,7 @@ public:
 			if (ImGui::Button("A", sz)) {
 				if (bKeyCtrl) ImGui::SaveStylesTo(pathA.c_str());
 				else ImGui::LoadStyleFrom(pathA.c_str());
-				ofLogNotice("ofxSurfingImGui") << (bKeyCtrl ? "Saved Config A" : "Loaded Config A");
+				ofLogVerbose("ofxSurfingImGui") << (bKeyCtrl ? "Saved Config A" : "Loaded Config A");
 			}
 			s = ofToString(bKeyCtrl ? "Save A" : "Load A");
 			ui->AddTooltip(s);
@@ -641,7 +641,7 @@ public:
 			if (ImGui::Button("B", sz)) {
 				if (bKeyCtrl) ImGui::SaveStylesTo(pathB.c_str());
 				else ImGui::LoadStyleFrom(pathB.c_str());
-				ofLogNotice("ofxSurfingImGui") << (bKeyCtrl ? "Saved Config B" : "Loaded Config B");
+				ofLogVerbose("ofxSurfingImGui") << (bKeyCtrl ? "Saved Config B" : "Loaded Config B");
 			}
 			s = ofToString(bKeyCtrl ? "Save B" : "Load B");
 			ui->AddTooltip(s);

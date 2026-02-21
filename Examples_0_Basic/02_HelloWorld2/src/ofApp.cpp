@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	ofSetLogLevel("ofxSurfingImGui", OF_LOG_SILENT);
+
 	//ofSetWindowPosition(-1920, 26);
 
 	names.clear();

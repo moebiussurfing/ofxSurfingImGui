@@ -1321,7 +1321,7 @@ namespace ofxImGuiSurfing
 						bReturn = ImGui::InputText(n.c_str(), &s);
 						if (bReturn)
 						{
-							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+							ofLogVerbose("ofxSurfingImGui") << "InputText:" << s.c_str();
 							p.set(s);
 						}
 					}
@@ -1337,7 +1337,7 @@ namespace ofxImGuiSurfing
 						bReturn = ImGui::InputText(n.c_str(), &s);
 						if (bReturn)
 						{
-							ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+							ofLogVerbose("ofxSurfingImGui") << "InputText:" << s.c_str();
 							p.set(s);
 						}
 
@@ -1355,7 +1355,7 @@ namespace ofxImGuiSurfing
 							bReturn = ImGui::InputText("##NAME", &s);
 							if (bReturn)
 							{
-								ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+								ofLogVerbose("ofxSurfingImGui") << "InputText:" << s.c_str();
 								p.set(s);
 							}
 						}
@@ -1373,7 +1373,7 @@ namespace ofxImGuiSurfing
 							bReturn = ImGui::InputText("##NAME", &s);
 							if (bReturn)
 							{
-								ofLogNotice("ofxSurfingImGui") << "InputText:" << s.c_str();
+								ofLogVerbose("ofxSurfingImGui") << "InputText:" << s.c_str();
 								p.set(s);
 							}
 						}

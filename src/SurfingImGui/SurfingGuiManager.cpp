@@ -67,8 +67,8 @@ SurfingGuiManager::SurfingGuiManager() {
 
 //--------------------------------------------------------------
 SurfingGuiManager::~SurfingGuiManager() {
-	ofLogNotice("ofxSurfingImGui") << "Destructor! Instance #" << instanceNumber;
-	ofLogNotice("ofxSurfingImGui") << "Name: " << nameLabel;
+	ofLogVerbose("ofxSurfingImGui") << "Destructor! Instance #" << instanceNumber;
+	ofLogVerbose("ofxSurfingImGui") << "Name: " << nameLabel;
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
 	// Force saving but would expect to be already called
@@ -98,9 +98,9 @@ SurfingGuiManager::~SurfingGuiManager() {
 #ifdef SURFING_IMGUI__CREATE_EXIT_LISTENER
 //--------------------------------------------------------------
 void SurfingGuiManager::exit(ofEventArgs & e) {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " > exit(ofEventArgs& e)";
-	ofLogNotice("ofxSurfingImGui") << "Called by ofEvents().exit with maximum priority! Now calling exit().";
-	ofLogNotice("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " > exit(ofEventArgs& e)";
+	ofLogVerbose("ofxSurfingImGui") << "Called by ofEvents().exit with maximum priority! Now calling exit().";
+	ofLogVerbose("ofxSurfingImGui") << "Then we avoid that is been called by the object destructor.";
 
 	exit();
 }
@@ -113,7 +113,7 @@ void SurfingGuiManager::exit() {
 		return;
 	}
 
-	ofLogNotice("ofxSurfingImGui") << "exit()";
+	ofLogVerbose("ofxSurfingImGui") << "exit()";
 
 	ofRemoveListener(ofEvents().keyPressed, this, &SurfingGuiManager::keyPressed);
 	ofRemoveListener(ofEvents().keyReleased, this, &SurfingGuiManager::keyReleased);
@@ -129,7 +129,7 @@ void SurfingGuiManager::exit() {
 	ofRemoveListener(params_WindowsPanelsExtra.parameterChangedE(), this, &SurfingGuiManager::Changed_WindowsPanels);
 
 #ifdef SURFING_IMGUI__ENABLE_SAVE_ON_EXIT
-	ofLogNotice("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
+	ofLogVerbose("ofxSurfingImGui") << "Listeners has been removed. Now we are going to save the session settings.";
 	this->saveSettingsInternal();
 #endif
 
@@ -140,7 +140,7 @@ void SurfingGuiManager::exit() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupParams() {
-	ofLogNotice("ofxSurfingImGui") << "setupParams()";
+	ofLogVerbose("ofxSurfingImGui") << "setupParams()";
 
 	//--
 
@@ -359,14 +359,14 @@ void SurfingGuiManager::setup(ofxImGuiSurfing::SurfingGuiMode mode) {
 //--------------------------------------------------------------
 void SurfingGuiManager::setup() // We will use the most common mode, to avoid to have to require any argument.
 {
-	ofLogNotice("ofxSurfingImGui") << "setup()";
+	ofLogVerbose("ofxSurfingImGui") << "setup()";
 
 	setup(IM_GUI_MODE_INSTANTIATED);
 }
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupDockingWithLayoutPresetsEngine() {
-	ofLogNotice("ofxSurfingImGui") << "setupDockingWithLayoutPresetsEngine()";
+	ofLogVerbose("ofxSurfingImGui") << "setupDockingWithLayoutPresetsEngine()";
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING;
 
@@ -376,7 +376,7 @@ void SurfingGuiManager::setupDockingWithLayoutPresetsEngine() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupDockingRaw() {
-	ofLogNotice("ofxSurfingImGui") << "setupDockingRaw()";
+	ofLogVerbose("ofxSurfingImGui") << "setupDockingRaw()";
 
 	surfingImGuiMode = ofxImGuiSurfing::IM_GUI_MODE_INSTANTIATED_DOCKING_RAW;
 
@@ -387,7 +387,7 @@ void SurfingGuiManager::setupDockingRaw() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupInitiate() {
-	ofLogNotice("ofxSurfingImGui") << "setupInitiate()";
+	ofLogVerbose("ofxSurfingImGui") << "setupInitiate()";
 
 	// For using internal instantiated GUI.
 	// Called by all modes except when using the external scope modes aka not instantiated.
@@ -533,7 +533,7 @@ void SurfingGuiManager::setupInitiateWindowsOrganizer() {
 //--------------------------------------------------------------
 void SurfingGuiManager::setup(ofxImGui::Gui & _gui) {
 	//TODO: should be tested. For using external instantiated ImGui
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__);
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -560,7 +560,7 @@ void SurfingGuiManager::doLoadNextFont() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float sizeFont) {
-	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesInternal: " << pathFont << ", " << sizeFont;
+	ofLogVerbose("ofxSurfingImGui") << "setupFontForDefaultStylesInternal: " << pathFont << ", " << sizeFont;
 
 	ofFile f;
 	bool b = f.open(pathFont);
@@ -586,7 +586,7 @@ void SurfingGuiManager::setupFontForDefaultStylesInternal(string pathFont, float
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float sizeFont) {
-	ofLogNotice("ofxSurfingImGui") << "setupImGuiFonts() " << pathFonts << ", " << nameFont << ", " << sizeFont;
+	ofLogVerbose("ofxSurfingImGui") << "setupImGuiFonts() " << pathFonts << ", " << nameFont << ", " << sizeFont;
 
 	clearFonts();
 	setupFontDefault(pathFonts, nameFont, sizeFont);
@@ -594,7 +594,7 @@ void SurfingGuiManager::setupFonts(string pathFonts, string nameFont, float size
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, float sizeFont) {
-	ofLogNotice("ofxSurfingImGui") << "setupFontDefault() " << pathFonts << ", " << nameFont << ", " << sizeFont;
+	ofLogVerbose("ofxSurfingImGui") << "setupFontDefault() " << pathFonts << ", " << nameFont << ", " << sizeFont;
 
 	//TODO: pathFonts + nameFont could be merged..
 
@@ -656,7 +656,7 @@ void SurfingGuiManager::setupFontDefault(string pathFonts, string nameFont, floa
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontForDefaultStylesMonospaced(string pathFont, float sizeFont) {
-	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesMonospaced()" << pathFont << ", " << sizeFont;
+	ofLogVerbose("ofxSurfingImGui") << "setupFontForDefaultStylesMonospaced()" << pathFont << ", " << sizeFont;
 
 	pathFontMono = pathFont;
 	sizeFontMono = sizeFont;
@@ -666,7 +666,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospaced(string pathFont, flo
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathFont, float sizeFont) {
-	ofLogNotice("ofxSurfingImGui") << "setupFontForDefaultStylesMonospacedInternal()" << pathFont << ", " << sizeFont;
+	ofLogVerbose("ofxSurfingImGui") << "setupFontForDefaultStylesMonospacedInternal()" << pathFont << ", " << sizeFont;
 
 	// We create four different sizes but for the same font type/file
 
@@ -762,7 +762,7 @@ void SurfingGuiManager::setupFontForDefaultStylesMonospacedInternal(string pathF
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupFontDefault() {
-	ofLogNotice("ofxSurfingImGui") << "setupFontDefault()";
+	ofLogVerbose("ofxSurfingImGui") << "setupFontDefault()";
 
 	// WARNING:
 	// Could not crash or notify you
@@ -780,7 +780,7 @@ void SurfingGuiManager::setupFontDefault() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGui() {
-	ofLogNotice("ofxSurfingImGui") << "setupImGui()";
+	ofLogVerbose("ofxSurfingImGui") << "setupImGui()";
 
 	if (surfingImGuiMode == ofxImGuiSurfing::IM_GUI_MODE_NOT_INSTANTIATED) return;
 
@@ -878,7 +878,7 @@ void SurfingGuiManager::setupImGui() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::setupImGuiTheme() {
-	ofLogNotice("ofxSurfingImGui") << "setupImGuiTheme()";
+	ofLogVerbose("ofxSurfingImGui") << "setupImGuiTheme()";
 
 	//--
 
@@ -911,7 +911,7 @@ void SurfingGuiManager::setupImGuiTheme() {
 	string pathTheme = pathThemes + name;
 	string p = ofToDataPath(pathTheme);
 	//string p = ofToDataPath(pathTheme).string();
-	ofLogNotice("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
+	ofLogVerbose("ofxSurfingImGui::loadThemeFileByName") << "Load from " << p;
 	ImGui::LoadStyleFrom(p.c_str());
 	ofFile f;
 	bLoaded = f.doesFileExist(p);
@@ -927,7 +927,7 @@ void SurfingGuiManager::setupImGuiTheme() {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::resetUISettings() {
-	ofLogNotice("ofxSurfingImGui") << "resetUISettings()";
+	ofLogVerbose("ofxSurfingImGui") << "resetUISettings()";
 
 	//TODO: should disable ini handling on imgui to disable saving on app exit!
 	//then on the next app startup windows
@@ -1010,7 +1010,7 @@ void SurfingGuiManager::DrawWidgetsResetUI(bool bMenuMode) {
 
 //--------------------------------------------------------------
 void SurfingGuiManager::startup() {
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__);
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__);
 
 	//--
 
@@ -1162,7 +1162,7 @@ void SurfingGuiManager::doBuildHelpInternalInfo(bool bSilent) {
 	if (bSilent)
 		ofLogVerbose("ofxSurfingImGui") << "doBuildHelpInternalInfo() - silent";
 	else
-		ofLogNotice("ofxSurfingImGui") << "doBuildHelpInternalInfo()";
+		ofLogVerbose("ofxSurfingImGui") << "doBuildHelpInternalInfo()";
 
 	//--
 
@@ -1394,7 +1394,7 @@ void SurfingGuiManager::setDefaultFontIndex(int index) {
 		if (!bDone)
 		//if (ofGetFrameNum() % (4 * 60) == 0)//slowed timed
 		{
-			ofLogNotice("ofxSurfingImGui") << "setDefaultFontIndex(): " << index;
+			ofLogVerbose("ofxSurfingImGui") << "setDefaultFontIndex(): " << index;
 			ofLogError("ofxSurfingImGui") << "customFonts.size() = 0"; 
 			ofLogError("ofxSurfingImGui") << "Probably default font ttf files in bin/data/assets/fonts not found!";
 			bDone = 1;
@@ -1409,7 +1409,7 @@ void SurfingGuiManager::setDefaultFontIndex(int index) {
 //--------------------------------------------------------------
 void SurfingGuiManager::setDefaultFont() //will apply the first added font file
 {
-	//ofLogNotice("ofxSurfingImGui") << "setDefaultFont()";
+	//ofLogVerbose("ofxSurfingImGui") << "setDefaultFont()";
 
 	setDefaultFontIndex(0);
 }
@@ -1417,7 +1417,7 @@ void SurfingGuiManager::setDefaultFont() //will apply the first added font file
 //TODO: make it work on runtime..
 //--------------------------------------------------------------
 void SurfingGuiManager::clearFonts() {
-	ofLogNotice("ofxSurfingImGui") << "clearFonts()";
+	ofLogVerbose("ofxSurfingImGui") << "clearFonts()";
 
 	customFonts.clear();
 
@@ -1447,7 +1447,7 @@ bool SurfingGuiManager::addFontStyle(string path, float size, string label) {
 	// to allow hot reloading..
 	// if not, last added font will be used as default.
 
-	//ofLogNotice("ofxSurfingImGui") << "addFontStyle: " << path << " : " << size;
+	//ofLogVerbose("ofxSurfingImGui") << "addFontStyle: " << path << " : " << size;
 
 	auto & io = ImGui::GetIO();
 	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
@@ -1481,7 +1481,7 @@ bool SurfingGuiManager::addFontStyle(string path, float size, string label) {
 			pathsCustomFonts.push_back(path);
 		}
 
-		ofLogNotice("ofxSurfingImGui") << "addFontStyle() File path: " << path << " size: " << size;
+		ofLogVerbose("ofxSurfingImGui") << "addFontStyle() File path: " << path << " size: " << size;
 	} else {
 		ofLogError("ofxSurfingImGui") << "addFontStyle() File path: " << path << " not found!";
 	}
@@ -1510,7 +1510,7 @@ bool SurfingGuiManager::addFontStyle(string path, float size, string label) {
 //		if (guiPtr != nullptr) customFont = guiPtr->addFont(path, size, nullptr, normalCharRanges);
 //		else customFont = gui.addFont(path, size, nullptr, normalCharRanges);
 //
-//		ofLogNotice("ofxSurfingImGui") << "addFont: " << path << " size: " << size;
+//		ofLogVerbose("ofxSurfingImGui") << "addFont: " << path << " size: " << size;
 //	}
 //	else ofLogError("ofxSurfingImGui") << "Font not found: " << path;
 //
@@ -1522,7 +1522,7 @@ bool SurfingGuiManager::addFontStyle(string path, float size, string label) {
 //--------------------------------------------------------------
 bool SurfingGuiManager::LoadFontsFromFolder(string path, float size, bool bMultisize) {
 	// Load dragged images folder
-	ofLogNotice("ofxSurfingImGui") << "addFonts from: " << path << " size: " << size;
+	ofLogVerbose("ofxSurfingImGui") << "addFonts from: " << path << " size: " << size;
 
 	ofDirectory dir;
 	dir.listDir(path);
@@ -1787,20 +1787,20 @@ void SurfingGuiManager::processOpenFileSelection(ofFileDialogResult openFileResu
 
 	string path = openFileResult.getPath();
 
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " Name:" << openFileResult.getName();
-	ofLogNotice("ofxSurfingImGui") << " Path:" << path;
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " Name:" << openFileResult.getName();
+	ofLogVerbose("ofxSurfingImGui") << " Path:" << path;
 
 	ofFile file(path);
 
 	if (file.exists())
 	{
-		ofLogNotice("ofxSurfingImGui") << (" The file exists - now checking the type via file extension");
+		ofLogVerbose("ofxSurfingImGui") << (" The file exists - now checking the type via file extension");
 		string fileExtension = ofToUpper(file.getExtension());
 
 		// We only want ttf/otf
 		if (fileExtension == "TTF" || fileExtension == "ttf" || fileExtension == "OTF" || fileExtension == "otf")
 		{
-			ofLogNotice("ofxSurfingImGui") << "TTF or OTF found!";
+			ofLogVerbose("ofxSurfingImGui") << "TTF or OTF found!";
 
 				addFontStyle(path, size);
 		}
@@ -1817,13 +1817,13 @@ void SurfingGuiManager::openFontFileDialog(int size)
 	// Check if the user picked a file
 	if (openFileResult.bSuccess) {
 
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << (" User selected a file");
+		ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << (" User selected a file");
 
 		// We have a file, check it and process it
 		processOpenFileSelection(openFileResult, size);
 	}
 	else {
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << (" User hit cancel");
+		ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << (" User hit cancel");
 	}
 }
 */
@@ -1961,7 +1961,7 @@ void SurfingGuiManager::updateLayout() {
 	// Layouts
 
 	if (ini_to_load) {
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " LOAD! " << ini_to_load;
+		ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " LOAD! " << ini_to_load;
 
 		loadLayoutImGuiIni(ini_to_load);
 
@@ -1969,7 +1969,7 @@ void SurfingGuiManager::updateLayout() {
 	}
 
 	if (ini_to_save) {
-		ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " SAVE! " << ini_to_save;
+		ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " SAVE! " << ini_to_save;
 
 		if (ini_to_save != "-1") {
 			saveLayoutPreset(ini_to_save);
@@ -3500,11 +3500,11 @@ void SurfingGuiManager::setupLayout(int numPresets) //-> must call manually afte
 
 //--------------------------------------------------------------
 bool SurfingGuiManager::loadSettings() {
-	ofLogNotice("ofxSurfingImGui") << "loadSettings()"
+	ofLogVerbose("ofxSurfingImGui") << "loadSettings()"
 								   << " " << path_AppSettings;
 	bool b = loadGroup(params_AppSettings, path_AppSettings, false);
 	if (!b) ofLogWarning("ofxSurfingImGui") << "Not found " << path_AppSettings;
-	else ofLogNotice("ofxSurfingImGui") << "Successfully loaded settings: " << path_AppSettings;
+	else ofLogVerbose("ofxSurfingImGui") << "Successfully loaded settings: " << path_AppSettings;
 	return b;
 
 	// Will return false if settings file do not exist.
@@ -3517,7 +3517,7 @@ void SurfingGuiManager::saveSettingsInternal() {
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
 
-	ofLogNotice("ofxSurfingImGui") << "saveSettingsInternal()"
+	ofLogVerbose("ofxSurfingImGui") << "saveSettingsInternal()"
 								   << " " << path_AppSettings;
 	saveGroup(params_AppSettings, path_AppSettings, false);
 }
@@ -3528,7 +3528,7 @@ void SurfingGuiManager::saveSettings() {
 	// Respect not saving settings on exit.
 	// Then next startup will have default settings
 
-	ofLogNotice("ofxSurfingImGui") << "saveAppSettings()";
+	ofLogVerbose("ofxSurfingImGui") << "saveAppSettings()";
 
 	// Save GuiManager
 	this->saveSettingsInternal();
@@ -3545,7 +3545,7 @@ void SurfingGuiManager::saveLayoutPresetIndex(int _index) {
 
 	ini_to_save_Str = getLayoutName(_index);
 
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << ini_to_save_Str;
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " " << ini_to_save_Str;
 
 	if (ini_to_save_Str == "-1") return; // skip
 
@@ -3565,7 +3565,7 @@ void SurfingGuiManager::loadLayoutPresetIndex(int _index) {
 	appLayoutIndex = ofClamp(_index, appLayoutIndex.getMin(), appLayoutIndex.getMax());
 
 	string _name = getLayoutName(appLayoutIndex.get());
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " " << appLayoutIndex << ":" << _name;
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " " << appLayoutIndex << ":" << _name;
 
 	//string _label = APP_RELEASE_NAME;
 	string _label = "";
@@ -3586,8 +3586,8 @@ void SurfingGuiManager::loadLayoutPresetIndex(int _index) {
 	// Group
 	loadLayoutPresetGroup(ini_to_load_Str);
 
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " ------------------------------------";
-	ofLogNotice("ofxSurfingImGui") << (__FUNCTION__) << " ini_to_load    : " << ini_to_load;
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " ------------------------------------";
+	ofLogVerbose("ofxSurfingImGui") << (__FUNCTION__) << " ini_to_load    : " << ini_to_load;
 }
 
 //--------------------------------------------------------------
@@ -3885,7 +3885,7 @@ void SurfingGuiManager::drawLayoutsPresetsManualWidgets() {
 //--------------------------------------------------------------
 void SurfingGuiManager::Changed_WindowsPanels(ofAbstractParameter & e) {
 	string name = e.getName();
-	ofLogNotice("ofxSurfingImGui") << "Changed_WindowsPanels: " << name << ": " << e;
+	ofLogVerbose("ofxSurfingImGui") << "Changed_WindowsPanels: " << name << ": " << e;
 
 	doFlagBuildHelpInternalInfo();
 }
@@ -3898,7 +3898,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter & e) {
 	if (name != "position" && name != log.amountLinesLimitedBuffered.getName() && //workaround
 		name != "rect_Manager") {
 		bskip = false;
-		ofLogNotice("ofxSurfingImGui") << "Changed_Params: " << name << ": " << e;
+		ofLogVerbose("ofxSurfingImGui") << "Changed_Params: " << name << ": " << e;
 	}
 	if (bskip) return;
 
@@ -4056,7 +4056,7 @@ void SurfingGuiManager::Changed_Params(ofAbstractParameter & e) {
 		//if (appLayoutIndex != appLayoutIndex_PRE /*&& appLayoutIndex_PRE != -1*/)
 
 		if (appLayoutIndex != appLayoutIndex_PRE) {
-			ofLogNotice("ofxSurfingImGui") << "Changed: " << appLayoutIndex;
+			ofLogVerbose("ofxSurfingImGui") << "Changed: " << appLayoutIndex;
 
 			//-
 
@@ -4567,34 +4567,34 @@ void SurfingGuiManager::keyPressed(ofKeyEventArgs & eventArgs) {
 	bool _bMod_SHIFT = eventArgs.hasModifier(OF_KEY_SHIFT);
 
 	if (!_bMod_CONTROL && !_bMod_COMMAND && _bMod_ALT && _bMod_SHIFT)
-		ofLogNotice("ofxSurfingImGui") << "keyPressed: " << (char)key;
+		ofLogVerbose("ofxSurfingImGui") << "keyPressed: " << (char)key;
 
 	//--
 
 	if (_bMod_CONTROL && !bMod_CONTROL) {
 		bMod_CONTROL = true;
-		ofLogNotice("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (_bMod_COMMAND && !bMod_COMMAND) {
 		bMod_COMMAND = true;
-		ofLogNotice("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (_bMod_ALT && !bMod_ALT) {
 		bMod_ALT = true;
-		ofLogNotice("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (_bMod_SHIFT && !bMod_SHIFT) {
 		bMod_SHIFT = true;
-		ofLogNotice("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
@@ -4908,33 +4908,33 @@ void SurfingGuiManager::keyReleased(ofKeyEventArgs & eventArgs) {
 
 	if (!_bMod_CONTROL && bMod_CONTROL) {
 		bMod_CONTROL = false;
-		ofLogNotice("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "CONTROL " << (bMod_CONTROL ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (!_bMod_COMMAND && bMod_COMMAND) {
 		bMod_COMMAND = false;
-		ofLogNotice("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "COMMAND " << (bMod_COMMAND ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (!_bMod_ALT && bMod_ALT) {
 		bMod_ALT = false;
-		ofLogNotice("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "ALT " << (bMod_ALT ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
 	if (!_bMod_SHIFT && bMod_SHIFT) {
 		bMod_SHIFT = false;
-		ofLogNotice("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
+		ofLogVerbose("ofxSurfingImGui") << "SHIFT " << (bMod_SHIFT ? "ON" : "OFF");
 		doFlagBuildHelpInternalInfo();
 		return;
 	}
 
-	ofLogNotice("ofxSurfingImGui") << "keyReleased: " << (char)key;
+	ofLogVerbose("ofxSurfingImGui") << "keyReleased: " << (char)key;
 	doFlagBuildHelpInternalInfo();
 }
 
@@ -5324,11 +5324,11 @@ void SurfingGuiManager::drawMenu()
 
 //--------------------------------------------------------------
 void SurfingGuiManager::doResetLayout() {
-	ofLogNotice("ofxSurfingImGui") << "Reset layout of windows.";
+	ofLogVerbose("ofxSurfingImGui") << "Reset layout of windows.";
 
 	windowsOrganizer.doAlignWindowsReset();
 
-	ofLogNotice("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
+	ofLogVerbose("ofxSurfingImGui") << "The more lefted window is named: " << windowsOrganizer.getWindowMoreLefted();
 }
 
 //----

@@ -49,7 +49,7 @@ public:
 
 	void setTitle(string _title, bool bCapitalize = true)
 	{
-		ofLogNotice("ofxSurfingImGui:HelpTextWidget") << "Title: " << _title;
+		ofLogVerbose("ofxSurfingImGui::HelpTextWidget") << "Title: " << _title;
 		title = _title;
 		if (bCapitalize) title = ofToUpper(title);
 		bTitleSettled = true;
@@ -57,8 +57,8 @@ public:
 
 	void setText(string _text, bool bSlient = true)
 	{
-		if (bSlient) ofLogVerbose("ofxSurfingImGui:HelpTextWidget") << "Text: " << _text;
-		else ofLogNotice("ofxSurfingImGui:HelpTextWidget") << "Text: " << _text;
+		if (bSlient) ofLogVerbose("ofxSurfingImGui::HelpTextWidget") << "Text: " << _text;
+		else ofLogVerbose("ofxSurfingImGui::HelpTextWidget") << "Text: " << _text;
 
 		text = _text;
 	}
@@ -328,7 +328,7 @@ public:
 		customFonts = f;
 		if (customFonts.size() == 0)
 		{
-			ofLogError("ofxSurfingImGui:HelpTextWidget") << "It looks that not any extra font styles are added!";
+			ofLogError("ofxSurfingImGui::HelpTextWidget") << "It looks that not any extra font styles are added!";
 		}
 		fontIndex.setMax(customFonts.size() - 1);
 
@@ -346,7 +346,7 @@ public:
 
 		if (customFontsPtr->size() == 0)
 		{
-			ofLogError("ofxSurfingImGui:HelpTextWidget") << "It looks that not any extra font styles are added!";
+			ofLogError("ofxSurfingImGui::HelpTextWidget") << "It looks that not any extra font styles are added!";
 		}
 		fontIndex.setMax(customFontsPtr->size() - 1);
 

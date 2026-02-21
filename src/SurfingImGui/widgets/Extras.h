@@ -232,7 +232,7 @@ namespace ofxImGuiSurfing
 
             if (is_clicked)
             {
-                ofLogNotice("ofxSurfingImGui") << "Clicked " << ofToString(desc);
+                ofLogVerbose("ofxSurfingImGui") << "Clicked " << ofToString(desc);
                 ofLaunchBrowser(url);
             }
 

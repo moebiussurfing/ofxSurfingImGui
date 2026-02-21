@@ -18,7 +18,7 @@ namespace ofxImGuiSurfing
     //--------------------------------------------------------------
     inline void ImGui_ThemeMoebiusSurfing(bool bEnableLayout, bool bEnableColors)
     {
-        ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfing";
+        ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfing";
 
         //resetTheme();
         ImGui::GetStyle() = ImGuiStyle();
@@ -177,7 +177,7 @@ namespace ofxImGuiSurfing
     //--------------------------------------------------------------
     inline void ImGui_ThemeMoebiusSurfingV2(bool bEnableLayout=true, bool bEnableColors=true)
     {
-        ofLogNotice("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingV2";
+        ofLogVerbose("ofxSurfingImGui") << "ImGui_ThemeMoebiusSurfingV2";
         ImGui_ThemeMoebiusSurfing(bEnableLayout, bEnableColors);
     }
 }; // namespace
