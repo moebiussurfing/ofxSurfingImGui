@@ -135,7 +135,8 @@
 // Default font
 #define OFX_IM_FONT_DEFAULT_SIZE_MIN 14
 #define OFX_IM_FONT_DEFAULT_SIZE OFX_IM_FONT_DEFAULT_SIZE_MIN
-#define OFX_IM_FONT_DEFAULT_FILE "Geist-Bold.ttf"
+#define OFX_IM_FONT_DEFAULT_FILE "GeistMono-Bold.ttf"
+//#define OFX_IM_FONT_DEFAULT_FILE "Geist-Bold.ttf"//can be used instead
 
 // Default mono-spaced font
 #define OFX_IM_FONT_DEFAULT_MONO_SIZE_MIN 14
