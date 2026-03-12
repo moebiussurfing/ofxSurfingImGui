@@ -41,7 +41,8 @@ void ofApp::drawGui() {
 //--------------------------------------------------------------
 void ofApp::drawImGuiBangs() {
 	if (ui.BeginWindow(bGui_ofApp)) {
-		ui.Add(sequencer.bGui, OFX_IM_TOGGLE_ROUNDED);
+		//ui.Add(sequencer.bGui, OFX_IM_TOGGLE_ROUNDED);
+		sequencer.drawImGuiMainWidgets();
 		ui.AddSeparated();
 
 		ui.AddLabelBig("Bang Actions");
@@ -95,6 +96,9 @@ void ofApp::onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromT
 		break;
 	case 7:
 		ui.AddToLog("action: lane 7", "VERBOSE");
+		break;
+	case 8:
+		ui.AddToLog("action: lane 8", "VERBOSE");
 		break;
 	default:
 		break;

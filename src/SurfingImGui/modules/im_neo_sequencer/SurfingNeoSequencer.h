@@ -15,20 +15,23 @@
 #include "imgui_neo_sequencer.h"
 #include "ofxSurfingImGui.h"
 
-class ofApp;
-
 class SurfingNeoSequencer {
 public:
-	static constexpr std::size_t kBangCount = 8;
+	static constexpr std::size_t kBangCount = 9;
 	using BangCallback = std::function<void(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline)>;
 
 	ofParameter<bool> bGuiTransport { "Transport", true };
 	ofParameter<bool> bGuiTimeline { "Timeline", true };
 	ofParameter<bool> bGui { "NeoSequencer", true };
 
-	void setup(ofApp * app, ofxSurfingGui * ui) {
-		app_ = app;
+	double lastUpdateTime_ = 0.0;
+
+	void setUiPtr(ofxSurfingGui * ui) {
 		ui_ = ui;
+	}
+
+	void setup(ofxSurfingGui * ui) {
+		setUiPtr(ui);
 
 		setupBangParameters();
 		setupBangListeners();
@@ -47,7 +50,8 @@ public:
 			ofFloatColor::fromHex(0x06B6D4),
 			ofFloatColor::fromHex(0x3B82F6),
 			ofFloatColor::fromHex(0x8B5CF6),
-			ofFloatColor::fromHex(0xEC4899)
+			ofFloatColor::fromHex(0xEC4899),
+			ofFloatColor::fromHex(0x14B8A6)
 		};
 
 		timelineKeys_[0] = { 0, 8, 16, 24, 32, 40, 48, 56 };
@@ -71,6 +75,16 @@ public:
 		style.Colors[ImGuiNeoSequencerCol_ZoomBarSliderEnds] = ImVec4(0.24f, 0.24f, 0.24f, 0.90f);
 		style.Colors[ImGuiNeoSequencerCol_ZoomBarSliderEndsHovered] = ImVec4(0.34f, 0.34f, 0.34f, 0.95f);
 		style.Colors[ImGuiNeoSequencerCol_SelectedTimeline] = ImVec4(0.0f, 0.0f, 0.0f, 0.34f);
+
+		lastUpdateTime_ = ofGetElapsedTimef();
+	}
+
+	void update() {
+		const double now = ofGetElapsedTimef();
+		const double deltaSeconds = std::max(0.0, now - lastUpdateTime_);
+		lastUpdateTime_ = now;
+
+		update(deltaSeconds);
 	}
 
 	void update(double deltaSeconds) {
@@ -88,13 +102,13 @@ public:
 	}
 
 	void keyPressed(int key) {
-		if (key == ' ') play_ = !play_;
-		if (key == 'r' || key == 'R') currentFrame_ = startFrame_;
-		if (key == 's' || key == 'S') stopTransport();
+		//if (key == ' ') play_ = !play_;
+		//if (key == 'r' || key == 'R') currentFrame_ = startFrame_;
+		//if (key == 's' || key == 'S') stopTransport();
 
-		if (key >= '0' && key <= '7') {
-			triggerBang(static_cast<std::size_t>(key - '0'));
-		}
+		//if (key >= '0' && key <= '7') {
+		//	triggerBang(static_cast<std::size_t>(key - '0'));
+		//}
 	}
 
 	void exit() {
@@ -134,14 +148,13 @@ public:
 	}
 
 private:
-	ofApp * app_ = nullptr;
 	ofxSurfingGui * ui_ = nullptr;
 
 	BangCallback bangCallback_;
 
 	std::vector<ofParameter<void>> bangs_;
 	std::array<ofEventListener, kBangCount> bangListeners_;
-	std::array<ofEventListener, 5> actionListeners_;
+	std::array<ofEventListener, 6> actionListeners_;
 
 	std::vector<std::vector<ImGui::FrameIndexType>> timelineKeys_;
 	std::vector<bool> lanesOpen_;
@@ -153,13 +166,14 @@ private:
 	ofParameter<float> bpm_ { "BPM", 120.0f, 40.0f, 240.0f };
 	ofParameter<int> bars_ { "Bars", 4, 1, 32 };
 	ofParameter<bool> play_ { "Play", false };
+	ofParameter<bool> replay_ { "Replay", false };
 	ofParameter<bool> loop_ { "Loop", true };
 
 	ofParameter<void> stop_ { "Stop" };
-	ofParameter<void> clearAll_ { "Clear All Tracks" };
-	ofParameter<void> clearSelected_ { "Clear Selected Track" };
-	ofParameter<void> saveScene_ { "Save Scene JSON" };
-	ofParameter<void> loadScene_ { "Load Scene JSON" };
+	ofParameter<void> clearAll_ { "Clear All" };
+	ofParameter<void> clearSelected_ { "Clear Selected" };
+	ofParameter<void> saveScene_ { "Save Scene" };
+	ofParameter<void> loadScene_ { "Load Scene" };
 
 	ImGui::FrameIndexType currentFrame_ = 0;
 	ImGui::FrameIndexType startFrame_ = 0;
@@ -168,6 +182,8 @@ private:
 	bool channelsGroupOpen_ = true;
 	bool timelineTriggerContext_ = false;
 	ImGui::FrameIndexType timelineTriggerStep_ = 0;
+	ImGui::FrameIndexType previousScrubFrame_ = 0;
+	bool hasPreviousScrubFrame_ = false;
 
 	int selectedLane_ = -1;
 	int pendingSelectedLane_ = -1;
@@ -209,6 +225,17 @@ private:
 	}
 
 public:
+	void drawImGuiMainWidgets() {
+		ui_->Add(bGui, OFX_IM_TOGGLE_ROUNDED);
+		ui_->Indent();
+		ui_->Add(bGuiTimeline, OFX_IM_TOGGLE_ROUNDED);
+		ui_->Add(bGuiTransport, OFX_IM_TOGGLE_ROUNDED);
+		ui_->Unindent();
+		ui_->Add(ui_->bAutoResize, OFX_IM_TOGGLE_ROUNDED_MINI);
+		ui_->Add(ui_->bLog, OFX_IM_TOGGLE_ROUNDED_MINI);
+		//ui_->AddSpacingBigSeparated();
+	}
+
 	void drawImGui() {
 		if (!bGui) return;
 
@@ -218,6 +245,12 @@ public:
 			ui_->EndWindow();
 		}
 
+		if (bGuiTimeline) {
+			ImGuiCond cond = ImGuiCond_FirstUseEver;
+			//ImGuiCond cond = ImGuiCond_Always;
+			ImGui::SetNextWindowPos(ImVec2(100, 100), cond);
+			ImGui::SetNextWindowSize(ImVec2(600, 400), cond);
+		}
 		if (ui_->BeginWindow(bGuiTimeline)) {
 			drawImGuiTimeline();
 			ui_->EndWindow();
@@ -227,12 +260,19 @@ public:
 private:
 	void drawTransportControls() {
 		ui_->AddLabel("Transport");
-		ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 3, true);
-		ui_->Add(stop_, OFX_IM_BUTTON_BIG, 3, true);
-		ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 3);
+		ui_->Add(play_, OFX_IM_TOGGLE_BIG_BORDER_BLINK, 4, true);
+		ui_->Add(replay_, OFX_IM_TOGGLE_BIG, 4, true);
+		ui_->Add(stop_, OFX_IM_BUTTON_BIG, 4, true);
+		ui_->Add(loop_, OFX_IM_TOGGLE_BIG_BORDER, 4);
 
-		ui_->Add(bpm_, OFX_IM_HSLIDER_BIG);
+		ui_->AddLabel("Duration");
 		ui_->Add(bars_, OFX_IM_STEPPER);
+
+		//ui_->Add(bpm_, OFX_IM_HSLIDER);
+		ui_->Add(bpm_);
+		if (ui_->AddButton("Reset")) {
+			bpm_.set(120);
+		}
 
 		ui_->AddLabel("Scene");
 		ui_->Add(saveScene_, OFX_IM_BUTTON_BORDER, 2, true);
@@ -242,6 +282,7 @@ private:
 		ImGui::BeginDisabled(selectedLane_ < 0);
 		ui_->Add(clearSelected_, OFX_IM_BUTTON_BORDER, 2);
 		ImGui::EndDisabled();
+		ui_->AddSpacing();
 		ui_->AddDebug();
 		if (ui_->isDebug()) {
 			if (selectedLane_ >= 0) {
@@ -264,23 +305,29 @@ private:
 	}
 
 	void setupActionListeners() {
-		actionListeners_[0] = stop_.newListener([this](const void *) {
+		actionListeners_[0] = replay_.newListener([this](bool & value) {
+			if (!value) return;
+			replayTransport();
+			replay_ = false;
+		});
+
+		actionListeners_[1] = stop_.newListener([this](const void *) {
 			stopTransport();
 		});
 
-		actionListeners_[1] = clearAll_.newListener([this](const void *) {
+		actionListeners_[2] = clearAll_.newListener([this](const void *) {
 			clearAllLanes();
 		});
 
-		actionListeners_[2] = clearSelected_.newListener([this](const void *) {
+		actionListeners_[3] = clearSelected_.newListener([this](const void *) {
 			clearSelectedLane();
 		});
 
-		actionListeners_[3] = saveScene_.newListener([this](const void *) {
+		actionListeners_[4] = saveScene_.newListener([this](const void *) {
 			saveSceneToDisk();
 		});
 
-		actionListeners_[4] = loadScene_.newListener([this](const void *) {
+		actionListeners_[5] = loadScene_.newListener([this](const void *) {
 			loadSceneFromDisk();
 		});
 	}
@@ -343,6 +390,7 @@ private:
 		if (ImGui::Button(getLaneLabel(laneIndex).c_str(), ImVec2(labelWidth, frameHeight))) {
 			pendingSelectedLane_ = static_cast<int>(laneIndex);
 			selectedLane_ = static_cast<int>(laneIndex);
+			triggerBang(laneIndex);
 		}
 		ImGui::PopStyleColor(4);
 
@@ -359,6 +407,11 @@ private:
 
 		if (!ImGui::BeginNeoSequencer("BangSequencer", &currentFrame_, &startFrame_, &endFrame_, size, flags)) {
 			return;
+		}
+
+		if (!hasPreviousScrubFrame_) {
+			previousScrubFrame_ = currentFrame_;
+			hasPreviousScrubFrame_ = true;
 		}
 
 		if (pendingSelectedLane_ >= 0 && pendingSelectedLane_ < static_cast<int>(kBangCount)) {
@@ -441,7 +494,34 @@ private:
 			sanitizeAllLanes();
 		}
 
+		if (!play_) {
+			const bool scrubbingWithMouse = ImGui::IsMouseDown(ImGuiMouseButton_Left);
+			if (scrubbingWithMouse && currentFrame_ != previousScrubFrame_) {
+				processTimelineRange(previousScrubFrame_, currentFrame_);
+			}
+			previousScrubFrame_ = currentFrame_;
+		} else {
+			previousScrubFrame_ = currentFrame_;
+		}
+
 		ImGui::EndNeoSequencer();
+	}
+
+	void processTimelineRange(ImGui::FrameIndexType fromStep, ImGui::FrameIndexType toStep) {
+		if (fromStep == toStep) return;
+
+		const int64_t from = static_cast<int64_t>(fromStep);
+		const int64_t to = static_cast<int64_t>(toStep);
+
+		if (from < to) {
+			for (int64_t step = from + 1; step <= to; ++step) {
+				processTimelineStep(static_cast<ImGui::FrameIndexType>(step));
+			}
+		} else {
+			for (int64_t step = from - 1; step >= to; --step) {
+				processTimelineStep(static_cast<ImGui::FrameIndexType>(step));
+			}
+		}
 	}
 
 	void onBangTriggered(std::size_t index) {
@@ -483,6 +563,13 @@ private:
 		currentFrame_ = startFrame_;
 		transportAccumulator_ = 0.0;
 		wasPlaying_ = false;
+	}
+
+	void replayTransport() {
+		currentFrame_ = startFrame_;
+		transportAccumulator_ = 0.0;
+		wasPlaying_ = false;
+		play_ = true;
 	}
 
 	void updateTransport(double deltaSeconds) {

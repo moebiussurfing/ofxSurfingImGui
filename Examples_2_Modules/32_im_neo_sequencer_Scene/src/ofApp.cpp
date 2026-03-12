@@ -11,7 +11,7 @@ void ofApp::setup() {
 	//ui.bAutoResize = false;
 	//ui.bLog = true;
 
-	sequencer_.setup(this, &ui);
+	sequencer_.setup(&ui);
 	laneColors_ = sequencer_.getLaneColors();
 	particles_.reserve(256);
 
@@ -27,9 +27,9 @@ void ofApp::update() {
 	const double now = ofGetElapsedTimef();
 	const double deltaSeconds = std::max(0.0, now - lastUpdateTime_);
 	lastUpdateTime_ = now;
-
-	sequencer_.update(deltaSeconds);
 	updateParticles(static_cast<float>(deltaSeconds));
+
+	sequencer_.update();
 }
 
 //--------------------------------------------------------------
