@@ -1,0 +1,4 @@
+interface:
+  display_name: "ofxSurfingImGui GUI Builder"
+  short_description: "Build robust ofxSurfingImGui GUIs quickly"
+  default_prompt: "Use $ofxsurfingimgui-gui-builder to design and implement a maintainable GUI for this openFrameworks project."
