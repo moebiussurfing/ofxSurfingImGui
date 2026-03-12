@@ -10,18 +10,16 @@ void ofApp::setup() {
 	ui.setup();
 	ui.bLog = true;
 
-	sequencer_.setup(this, &ui);
-
-	sequencer_.setBangCallback([this](std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline) {
+	sequencer.setup(&ui);
+	sequencer.setBangCallback([this](std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline) {
 		onBangEvent(lane, step, fromTimeline);
 	});
-
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 
-	sequencer_.update();
+	sequencer.update();
 }
 
 //--------------------------------------------------------------
@@ -35,7 +33,7 @@ void ofApp::drawGui() {
 	{
 		drawImGuiBangs();
 
-		sequencer_.drawImGui();
+		sequencer.drawImGui();
 	}
 	ui.End();
 }
@@ -43,7 +41,7 @@ void ofApp::drawGui() {
 //--------------------------------------------------------------
 void ofApp::drawImGuiBangs() {
 	if (ui.BeginWindow(bGui_ofApp)) {
-		ui.Add(sequencer_.bGui, OFX_IM_TOGGLE_ROUNDED);
+		ui.Add(sequencer.bGui, OFX_IM_TOGGLE_ROUNDED);
 		ui.AddSeparated();
 
 		ui.AddLabelBig("Bang Actions");
@@ -54,7 +52,7 @@ void ofApp::drawImGuiBangs() {
 
 		ui.AddLabelBig("Manual Bang Buttons");
 
-		auto & bangs = sequencer_.getBangParameters();
+		auto & bangs = sequencer.getBangParameters();
 		for (std::size_t i = 0; i < bangs.size(); ++i) {
 			const bool sameLine = (i % 2 == 0);
 			ui.Add(bangs[i], OFX_IM_BUTTON_BIG, 2, sameLine);
@@ -105,15 +103,15 @@ void ofApp::onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromT
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-	sequencer_.exit();
+	sequencer.exit();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-	sequencer_.keyPressed(key);
+	sequencer.keyPressed(key);
 
 	if (key == 'g' || key == 'G') bGui_ofApp = !bGui_ofApp;
 
-	if (key == 'u' || key == 'U') sequencer_.bGuiTransport = !sequencer_.bGuiTransport;
-	if (key == 't' || key == 'T') sequencer_.bGuiTimeline = !sequencer_.bGuiTimeline;
+	if (key == 'u' || key == 'U') sequencer.bGuiTransport = !sequencer.bGuiTransport;
+	if (key == 't' || key == 'T') sequencer.bGuiTimeline = !sequencer.bGuiTimeline;
 }

@@ -15,8 +15,6 @@
 #include "imgui_neo_sequencer.h"
 #include "ofxSurfingImGui.h"
 
-class ofApp;
-
 class SurfingNeoSequencer {
 public:
 	static constexpr std::size_t kBangCount = 8;
@@ -28,9 +26,12 @@ public:
 
 	double lastUpdateTime_ = 0.0;
 
-	void setup(ofApp * app, ofxSurfingGui * ui) {
-		app_ = app;
+	void setUiPtr(ofxSurfingGui * ui) {
 		ui_ = ui;
+	}
+
+	void setup(ofxSurfingGui * ui) {
+		setUiPtr(ui);
 
 		setupBangParameters();
 		setupBangListeners();
@@ -146,7 +147,6 @@ public:
 	}
 
 private:
-	ofApp * app_ = nullptr;
 	ofxSurfingGui * ui_ = nullptr;
 
 	BangCallback bangCallback_;

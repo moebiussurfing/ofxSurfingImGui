@@ -21,12 +21,9 @@ public:
 	void keyPressed(int key);
 
 private:
-	SurfingNeoSequencer sequencer_;
-
+	SurfingNeoSequencer sequencer;
+	void onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline);
 	ofParameter<int> targetBangsInt { "Bang Int", 0, 0, static_cast<int>(SurfingNeoSequencer::kBangCount) - 1 };
 
-	std::array<ofFloatColor, SurfingNeoSequencer::kBangCount> laneColors_ {};
-
 	void drawImGuiBangs();
-	void onBangEvent(std::size_t lane, ImGui::FrameIndexType step, bool fromTimeline);
 };
