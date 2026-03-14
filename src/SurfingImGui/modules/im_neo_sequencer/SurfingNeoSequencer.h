@@ -558,6 +558,7 @@ private:
 		return !laneMute_[index];
 	}
 
+public:
 	void stopTransport() {
 		play_ = false;
 		currentFrame_ = startFrame_;
@@ -572,6 +573,7 @@ private:
 		play_ = true;
 	}
 
+private:
 	void updateTransport(double deltaSeconds) {
 		updateTimelineBounds();
 
